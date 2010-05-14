@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.FileOperation;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.FileOperationFilter;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.FileOperationFilter;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.SplitFileDialog;
 import com.mucommander.ui.main.MainFrame;

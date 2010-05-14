@@ -19,11 +19,11 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.archiver.Archiver;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.archiver.Archiver;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.ArchiveJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;

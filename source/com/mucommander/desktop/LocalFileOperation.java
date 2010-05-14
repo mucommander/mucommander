@@ -18,10 +18,10 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.impl.local.SpecialWindowsLocation;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.impl.local.SpecialWindowsLocation;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,8 +128,8 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * <ul>
      *   <li>has a length of 1.</li>
      *   <li>
-     *     contains an instance of either <code>java.io.File</code>, {@link com.mucommander.file.impl.local.LocalFile}, <code>String</code>
-     *     or {@link com.mucommander.file.impl.local.SpecialWindowsLocation}.
+     *     contains an instance of either <code>java.io.File</code>, {@link com.mucommander.commons.file.impl.local.LocalFile}, <code>String</code>
+     *     or {@link com.mucommander.commons.file.impl.local.SpecialWindowsLocation}.
      *   </li>
      * </ul>
      * </p>
@@ -137,7 +137,7 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * This behaviour can be overridden by implementations to fit their own needs, although it's probably not a great idea.
      * </p>
      * @param  target operation parameters.
-     * @return        <code>null</code> if the parameters are not legal, a {@link com.mucommander.file.AbstractFile} instance instead.
+     * @return        <code>null</code> if the parameters are not legal, a {@link com.mucommander.commons.file.AbstractFile} instance instead.
      */
     protected AbstractFile extractTarget(Object[] target) {
         // We only deal with arrays containing 1 element.

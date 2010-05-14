@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;

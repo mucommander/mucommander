@@ -19,7 +19,7 @@
 package com.mucommander.desktop;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;

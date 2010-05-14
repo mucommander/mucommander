@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.main.table;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.impl.CachedFile;
+import com.mucommander.commons.file.util.FileComparator;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.impl.CachedFile;
-import com.mucommander.file.util.FileComparator;
-import com.mucommander.file.util.FileSet;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 
@@ -122,7 +122,7 @@ public class FileTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the current folder, i.e. the last folder set using {@link #setCurrentFolder(com.mucommander.file.AbstractFile, com.mucommander.file.AbstractFile[])}.
+     * Returns the current folder, i.e. the last folder set using {@link #setCurrentFolder(com.mucommander.commons.file.AbstractFile, com.mucommander.commons.file.AbstractFile[])}.
      *
      * @return the current folder
      */
@@ -131,7 +131,7 @@ public class FileTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the date of the current folder, when it was set using {@link #setCurrentFolder(com.mucommander.file.AbstractFile, com.mucommander.file.AbstractFile[])}.
+     * Returns the date of the current folder, when it was set using {@link #setCurrentFolder(com.mucommander.commons.file.AbstractFile, com.mucommander.commons.file.AbstractFile[])}.
      * In other words, the returned date is a snapshot of the current folder's date which is never updated.
      *
      * @return Returns the date of the current folder, when it was set using #setCurrentFolder(Abstract, Abstract[])
@@ -521,7 +521,7 @@ public class FileTableModel extends AbstractTableModel {
 
 
     /**
-     * Returns a {@link com.mucommander.file.util.FileSet FileSet} with all currently marked files.
+     * Returns a {@link com.mucommander.commons.file.util.FileSet FileSet} with all currently marked files.
      * <p>
      * The returned <code>FileSet</code> is a freshly created instance, so it can be safely modified.
      & However, it won't be kept current : the returned FileSet is just a snapshot

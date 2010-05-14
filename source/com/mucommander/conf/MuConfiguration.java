@@ -20,7 +20,7 @@ package com.mucommander.conf;
 
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.conf.*;
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;

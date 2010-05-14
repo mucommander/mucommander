@@ -19,8 +19,8 @@
 package com.mucommander.bonjour;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;

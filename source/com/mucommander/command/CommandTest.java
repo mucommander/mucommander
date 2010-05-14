@@ -18,8 +18,8 @@
 
 package com.mucommander.command;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import junit.framework.TestCase;
 
 import java.io.File;

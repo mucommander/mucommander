@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 

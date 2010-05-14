@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.AbstractFilenameFilter;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
-import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.AbstractFilenameFilter;
+import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
+import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -127,7 +127,7 @@ public class MarkExtensionAction extends MuAction {
     // - Action code ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Creates a {@link com.mucommander.file.filter.FilenameFilter} that should be applied to all current files.
+     * Creates a {@link com.mucommander.commons.file.filter.FilenameFilter} that should be applied to all current files.
      * <p>
      * If the action has been configured using the <code>file.extension</code> property, the returned filter
      * will match that extension. Otherwise, the currently selected file's extension will be used. If it doesn't

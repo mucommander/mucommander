@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
@@ -29,7 +29,7 @@ import java.util.Hashtable;
  * when at least one file is marked, or when a file other than the parent folder file '..' is selected.
  * When none of those conditions is satisfied, this action is disabled.
  *
- * <p>Optionally, a FileFilter can be specified using {@link #setSelectedFileFilter(com.mucommander.file.filter.FileFilter) setSelectedFileFilter}
+ * <p>Optionally, a FileFilter can be specified using {@link #setSelectedFileFilter(com.mucommander.commons.file.filter.FileFilter) setSelectedFileFilter}
  * to further restrict the enabled condition to files that match the filter.</p>
  *
  * @author Maxence Bernard

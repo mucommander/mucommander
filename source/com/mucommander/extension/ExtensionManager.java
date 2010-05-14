@@ -19,10 +19,10 @@
 package com.mucommander.extension;
 
 import com.mucommander.PlatformManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractFileClassLoader;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFileClassLoader;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.StringTokenizer;
  * <p>
  * Extensions are loaded through a custom <code>ClassLoader</code>. The optimal situation is for that <code>ClassLoader</code>
  * to be the system one, which can only be achieved through setting the <code>java.system.class.loader</code> system property
- * to <code>com.mucommander.file.AbstractFileClassLoader</code> at boot time.<br>
+ * to <code>com.mucommander.commons.file.AbstractFileClassLoader</code> at boot time.<br>
  * However, if for some reason such is not the case, we'll use a separate instance of that class. This will work in most cases, but
  * might cause conflicts under rare circumstances. Extension writers are advised to load resources through the <code>ClassLoader</code>
  * returned by {@link #getClassLoader()}, as not doing so might result in using the bootstrap classloader which doesn't have access to
@@ -59,7 +59,7 @@ import java.util.StringTokenizer;
  * Unfortunately, this is not always sufficient. Some Look&Feels suffer from a peculiar behaviour in Swing that might cause resources to be loaded
  * through the system class loader rather than the one specified at initialisation time. This happens with Look&Feels that extend system ones, such
  * as <code>Quaqua</code>. The only way to get these to load properly is to make sure the system classloader is an instance of
- * {@link com.mucommander.file.AbstractFileClassLoader}.
+ * {@link com.mucommander.commons.file.AbstractFileClassLoader}.
  * </p>
  * @author Nicolas Rinaudo
  */

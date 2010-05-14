@@ -20,10 +20,10 @@ package com.mucommander.auth;
 
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.util.Chmod;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.util.Chmod;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.runtime.OsFamily;
 import com.mucommander.util.AlteredVector;
@@ -295,11 +295,11 @@ public class CredentialsManager implements VectorChangeListener {
 
     /**
      * Looks for the best set of credentials matching the given location (if any) and use it to authenticate the
-     * URL by calling {@link #authenticate(com.mucommander.file.FileURL, CredentialsMapping)}.
+     * URL by calling {@link #authenticate(com.mucommander.commons.file.FileURL, CredentialsMapping)}.
      * Returns <code>true</code> if a set of credentials was found and used to authenticate the URL, <code>false</code>
      * otherwise.
      *
-     * <p>Credentials are first looked for using {@link #getMatchingCredentials(com.mucommander.file.FileURL)}.
+     * <p>Credentials are first looked for using {@link #getMatchingCredentials(com.mucommander.commons.file.FileURL)}.
      * If there is no match, guest credentials are retrieved from the URL and used (if any).</p>
      *
      * @param location the FileURL to authenticate

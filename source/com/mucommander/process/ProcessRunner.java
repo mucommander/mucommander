@@ -18,9 +18,9 @@
 
 package com.mucommander.process;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.impl.local.LocalFile;
 
 import java.io.IOException;
 import java.util.StringTokenizer;

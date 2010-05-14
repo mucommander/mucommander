@@ -18,8 +18,8 @@
 
 package com.mucommander.command;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.FileSet;
 
 import java.io.File;
 import java.util.Vector;

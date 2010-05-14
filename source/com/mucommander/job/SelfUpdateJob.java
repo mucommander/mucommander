@@ -19,15 +19,15 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.EqualsFilenameFilter;
+import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
+import com.mucommander.commons.file.filter.OrFileFilter;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.EqualsFilenameFilter;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
-import com.mucommander.file.filter.OrFileFilter;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.ResourceLoader;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;

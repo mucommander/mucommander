@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 
 import java.util.EventListener;
 

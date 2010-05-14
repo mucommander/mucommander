@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.viewer.text;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.EncodingDetector;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.bom.BOMInputStream;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileOperation;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.InformationDialog;

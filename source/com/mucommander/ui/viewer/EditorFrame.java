@@ -19,27 +19,22 @@
 
 package com.mucommander.ui.viewer;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
-
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 
 /**

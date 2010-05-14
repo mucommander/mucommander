@@ -19,12 +19,12 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.conf.MuConfiguration;
 import com.mucommander.extension.ClassFinder;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.extension.LookAndFeelFilter;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;

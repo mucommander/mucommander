@@ -19,18 +19,18 @@
 
 package com.mucommander.ui.viewer;
 
-import java.awt.Frame;
-import java.awt.Image;
-import java.util.Vector;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import java.awt.Frame;
+import java.awt.Image;
+import java.util.Vector;
 
 /**
  * EditorRegistrar maintains a list of registered file editors and provides methods to dynamically register file editors

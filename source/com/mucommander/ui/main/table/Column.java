@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.file.util.FileComparator;
+import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.text.Translator;
 
 import java.util.HashMap;

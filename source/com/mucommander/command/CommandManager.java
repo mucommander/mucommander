@@ -20,13 +20,13 @@ package com.mucommander.command;
 
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.PermissionTypes;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.ChainedFileFilter;
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.filter.RegexpFilenameFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.ChainedFileFilter;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 

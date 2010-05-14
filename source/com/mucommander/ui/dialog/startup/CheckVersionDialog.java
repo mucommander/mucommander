@@ -20,9 +20,9 @@ package com.mucommander.ui.dialog.startup;
 
 import com.mucommander.AppLogger;
 import com.mucommander.VersionChecker;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.conf.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.FileFactory;
 import com.mucommander.job.SelfUpdateJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;

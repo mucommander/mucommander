@@ -19,9 +19,9 @@
 package com.mucommander.text;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.bom.BOMReader;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.file.util.ResourceLoader;
 
 import java.io.*;
 import java.util.*;
@@ -315,7 +315,7 @@ public class Translator {
         String langs[] = new String[langsV.size()];
         langsV.toArray(langs);
 			
-        com.mucommander.file.AbstractFile sourceFolder = com.mucommander.file.AbstractFile.getFile(args[0]);
+        com.mucommander.commons.file.AbstractFile sourceFolder = com.mucommander.commons.file.AbstractFile.getFile(args[0]);
 		
         System.out.println("\n##### Looking for missing entries #####");
         checkMissingEntries(sourceFolder, langs);
@@ -346,9 +346,9 @@ public class Translator {
      * that the request entry has a value in each language's dictionary.
      */ 
     /*
-      private static void checkMissingEntries(com.mucommander.file.AbstractFile file, String languages[]) throws IOException {
+      private static void checkMissingEntries(com.mucommander.commons.file.AbstractFile file, String languages[]) throws IOException {
       if(file.isDirectory()) {
-      com.mucommander.file.AbstractFile children[] = file.ls();
+      com.mucommander.commons.file.AbstractFile children[] = file.ls();
       for(int i=0; i<children.length; i++)
       checkMissingEntries(children[i], languages);
       }
@@ -385,7 +385,7 @@ public class Translator {
      * in or under the supplied folder, and reports unused entries on the standard output.
      */ 
     /*
-      private static void checkUnusedEntries(com.mucommander.file.AbstractFile sourceFolder, String languages[]) throws IOException {
+      private static void checkUnusedEntries(com.mucommander.commons.file.AbstractFile sourceFolder, String languages[]) throws IOException {
       Enumeration entries;
       String entry;
       for(int i=0; i<languages.length; i++) {
@@ -404,9 +404,9 @@ public class Translator {
      * Checks if the given entry is used in the supplied file or folder.
      */
     /*
-      private static boolean isEntryUsed(String entry, com.mucommander.file.AbstractFile file) throws IOException {
+      private static boolean isEntryUsed(String entry, com.mucommander.commons.file.AbstractFile file) throws IOException {
       if(file.isDirectory()) {
-      com.mucommander.file.AbstractFile children[] = file.ls();
+      com.mucommander.commons.file.AbstractFile children[] = file.ls();
       for(int i=0; i<children.length; i++)
       if(isEntryUsed(entry, children[i]))
       return true;

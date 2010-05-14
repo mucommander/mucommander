@@ -18,7 +18,7 @@
 
 package com.mucommander.bonjour;
 
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileURL;
 
 /**
  * A simple container for a Bonjour service described by a name and URL.

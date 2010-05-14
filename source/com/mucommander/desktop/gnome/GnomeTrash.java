@@ -19,10 +19,10 @@
 package com.mucommander.desktop.gnome;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.QueuedTrash;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.FileSet;
 import com.mucommander.job.DeleteJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;

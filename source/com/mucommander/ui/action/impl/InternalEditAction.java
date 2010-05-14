@@ -19,10 +19,10 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileOperation;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.FileOperationFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.FileOperationFilter;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;

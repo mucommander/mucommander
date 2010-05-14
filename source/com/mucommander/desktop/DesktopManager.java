@@ -19,6 +19,7 @@
 package com.mucommander.desktop;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.desktop.gnome.ConfiguredGnomeDesktopAdapter;
 import com.mucommander.desktop.gnome.GuessedGnomeDesktopAdapter;
 import com.mucommander.desktop.kde.ConfiguredKde3DesktopAdapter;
@@ -29,7 +30,6 @@ import com.mucommander.desktop.openvms.OpenVMSDesktopAdapter;
 import com.mucommander.desktop.osx.OSXDesktopAdapter;
 import com.mucommander.desktop.windows.Win9xDesktopAdapter;
 import com.mucommander.desktop.windows.WinNtDesktopAdapter;
-import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.JavaVersion;
 
 import java.awt.event.MouseEvent;

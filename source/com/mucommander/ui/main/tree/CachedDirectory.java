@@ -20,8 +20,8 @@
 package com.mucommander.ui.main.tree;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.ProxyFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.ProxyFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;

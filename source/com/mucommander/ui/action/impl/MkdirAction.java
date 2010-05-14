@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileOperation;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileOperation;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.MkdirDialog;
 import com.mucommander.ui.main.MainFrame;

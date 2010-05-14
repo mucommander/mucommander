@@ -20,10 +20,10 @@ package com.mucommander.ui.main;
 
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.FileFilter;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 
 /**

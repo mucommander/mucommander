@@ -20,9 +20,9 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;

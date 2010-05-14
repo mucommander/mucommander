@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.PathUtils;
 import com.mucommander.job.CalculateChecksumJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;

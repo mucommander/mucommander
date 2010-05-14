@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.theme.ThemeCache;
 
 import javax.swing.JTree;

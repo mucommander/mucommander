@@ -19,8 +19,8 @@
 package com.mucommander.ui.dnd;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.CopyJob;
 import com.mucommander.job.MoveJob;
 import com.mucommander.runtime.OsFamilies;

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.util.FileSet;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -58,7 +58,7 @@ public class ClipboardSupport {
 
 
     /**
-     * Returns the files contained by the system clipboard as a {@link com.mucommander.file.util.FileSet}, <code>null</code>
+     * Returns the files contained by the system clipboard as a {@link com.mucommander.commons.file.util.FileSet}, <code>null</code>
      * if it currently has no contents or if the item(s) contained are not files.
      */
     public static FileSet getClipboardFiles() {
@@ -72,7 +72,7 @@ public class ClipboardSupport {
     }
 
     /**
-     * Transfers the files contained in the specified {@link com.mucommander.file.util.FileSet} to the system clipboard.
+     * Transfers the files contained in the specified {@link com.mucommander.commons.file.util.FileSet} to the system clipboard.
      * The data will be transferred as a {@link TransferableFileSet}.
      *
      * @param fileSet the files to transfer to the system clipboard.

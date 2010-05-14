@@ -19,11 +19,11 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.PermissionAccesses;
+import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.PermissionAccesses;
-import com.mucommander.file.PermissionTypes;
-import com.mucommander.file.util.FileSet;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;

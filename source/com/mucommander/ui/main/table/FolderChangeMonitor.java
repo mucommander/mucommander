@@ -19,12 +19,12 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.filter.AbstractFileFilter;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.OrFileFilter;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.filter.AbstractFileFilter;
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.filter.OrFileFilter;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;

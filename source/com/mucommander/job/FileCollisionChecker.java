@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 
 /**
  * The purpose of this class is to check for collisions between a source and destination file used in a file transfer.
@@ -27,11 +27,11 @@ import com.mucommander.file.AbstractFile;
  * <ul>
  * <li>{@link #DESTINATION_FILE_ALREADY_EXISTS}: the destination file already exists
  * <li>{@link #SAME_SOURCE_AND_DESTINATION}: source and destination files are the same, according to {@link AbstractFile#equalsCanonical(Object)}
- * <li>{@link #SOURCE_PARENT_OF_DESTINATION}: source is a folder (as returned by {@link com.mucommander.file.AbstractFile#isBrowsable()}
+ * <li>{@link #SOURCE_PARENT_OF_DESTINATION}: source is a folder (as returned by {@link com.mucommander.commons.file.AbstractFile#isBrowsable()}
  * and a parent of destination.
  * </ul>
  *
- * <p>The value returned by {@link #checkForCollision(com.mucommander.file.AbstractFile, com.mucommander.file.AbstractFile)}
+ * <p>The value returned by {@link #checkForCollision(com.mucommander.commons.file.AbstractFile, com.mucommander.commons.file.AbstractFile)}
  * can be used to create a {@link com.mucommander.ui.dialog.file.FileCollisionDialog} in order to inform the user of the collision
  * and ask him how to resolve it.
  *

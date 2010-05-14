@@ -21,9 +21,9 @@ package com.mucommander.bookmark.file;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.commons.file.*;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.file.*;
 
 import java.io.IOException;
 import java.io.InputStream;

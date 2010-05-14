@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.commons.file.AbstractArchiveEntryFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.file.AbstractArchiveEntryFile;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;

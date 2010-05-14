@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.list;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.FileSet;
 
 import javax.swing.*;
 import java.awt.Component;

@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 
 import java.awt.Desktop;
 import java.io.File;

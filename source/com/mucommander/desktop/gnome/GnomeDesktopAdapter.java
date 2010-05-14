@@ -22,11 +22,11 @@ import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.filter.RegexpFilenameFilter;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard

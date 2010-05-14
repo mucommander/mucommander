@@ -19,14 +19,14 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.EqualsFilenameFilter;
-import com.mucommander.file.filter.StartsWithFilenameFilter;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.PathUtils;
-import com.mucommander.file.util.PathUtils.ResolvedDestination;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.EqualsFilenameFilter;
+import com.mucommander.commons.file.filter.StartsWithFilenameFilter;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.file.util.PathUtils.ResolvedDestination;
 import com.mucommander.job.CombineFilesJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.text.Translator;

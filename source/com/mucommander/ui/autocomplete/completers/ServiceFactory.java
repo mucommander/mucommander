@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.autocomplete.completers;
 
-import com.mucommander.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.ui.autocomplete.completers.services.*;
 
 /**

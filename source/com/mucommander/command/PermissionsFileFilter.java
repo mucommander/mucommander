@@ -18,10 +18,10 @@
 
 package com.mucommander.command;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.PermissionAccesses;
-import com.mucommander.file.PermissionTypes;
-import com.mucommander.file.filter.AbstractFileFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.PermissionAccesses;
+import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.filter.AbstractFileFilter;
 import com.mucommander.runtime.JavaVersions;
 
 /**
@@ -34,7 +34,7 @@ public class PermissionsFileFilter extends AbstractFileFilter implements Permiss
 
     /**
      * Creates a new <code>PermissionsFileFilter</code>.
-     * @param permission permission that will be checked against as defined in {@link com.mucommander.file.FilePermissions}.
+     * @param permission permission that will be checked against as defined in {@link com.mucommander.commons.file.FilePermissions}.
      * @param filter     whether or not the specified permission flag must be set for a file to be accepted.
      */
     public PermissionsFileFilter(int permission, boolean filter) {

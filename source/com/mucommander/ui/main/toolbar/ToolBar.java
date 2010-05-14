@@ -20,9 +20,9 @@ package com.mucommander.ui.main.toolbar;
 
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.FileURL;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;

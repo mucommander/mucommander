@@ -19,9 +19,9 @@
 package com.mucommander.ui.dialog.server;
 
 import com.mucommander.auth.Credentials;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.connection.ConnectionHandler;
-import com.mucommander.file.connection.ConnectionPool;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.connection.ConnectionHandler;
+import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowServerConnectionsAction;

@@ -19,12 +19,12 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileOperation;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.FileOperationFilter;
-import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.FileOperationFilter;
+import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;

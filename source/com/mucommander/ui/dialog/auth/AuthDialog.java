@@ -23,7 +23,7 @@ package com.mucommander.ui.dialog.auth;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.EditableComboBoxListener;

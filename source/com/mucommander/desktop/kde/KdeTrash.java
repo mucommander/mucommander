@@ -19,9 +19,9 @@
 package com.mucommander.desktop.kde;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.process.ProcessRunner;
 
 import java.util.Vector;

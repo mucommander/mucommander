@@ -20,12 +20,12 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractArchiveFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractRWArchiveFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractArchiveFile;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractRWArchiveFile;
-import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

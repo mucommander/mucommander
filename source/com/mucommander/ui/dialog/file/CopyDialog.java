@@ -19,12 +19,12 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractArchiveEntryFile;
-import com.mucommander.file.AbstractArchiveFile;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.ArchiveEntry;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.PathUtils;
+import com.mucommander.commons.file.AbstractArchiveEntryFile;
+import com.mucommander.commons.file.AbstractArchiveFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.ArchiveEntry;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.CopyJob;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.job.UnpackJob;

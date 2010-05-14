@@ -18,8 +18,8 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.FileFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.FileFilter;
 
 import java.awt.event.MouseEvent;
 

@@ -20,7 +20,7 @@ package com.mucommander.ui.dialog.bookmark;
 
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.AddBookmarkAction;

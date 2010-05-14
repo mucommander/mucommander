@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.WindowManager;
@@ -29,7 +29,7 @@ import java.util.Vector;
  * QueuedTrash is an {@link AbstractTrash} which moves files to the trash asynchroneously.
  *
  * <p>
- * When {@link #moveToTrash(com.mucommander.file.AbstractFile)} is called, the file is added to a queue.
+ * When {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} is called, the file is added to a queue.
  * The file is not moved to the trash immediately: the trash will wait a period of {@link #QUEUE_PERIOD} milliseconds
  * for additional files to be added. If files were added during that period, the trash will wait another period and
  * so on. When no more files are added were added during the period, {@link #moveToTrash(java.util.Vector)} is called
@@ -38,9 +38,9 @@ import java.util.Vector;
  *
  * <p>
  * This mechanism allows to group calls to the underlying trash. It is effective when the atomic operation
- * of moving a file to the trash has a high cost and {@link #moveToTrash(com.mucommander.file.AbstractFile)} is called
+ * of moving a file to the trash has a high cost and {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} is called
  * repeatedly. One thing to note is since the move is performed asynchroneously,
- * {@link #moveToTrash(com.mucommander.file.AbstractFile)} returns immediately without waiting for the file to be moved,
+ * {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} returns immediately without waiting for the file to be moved,
  * {@link #waitForPendingOperations()} can be used to wait for the files to have effectively been moved.
  * </p>
  *
@@ -78,7 +78,7 @@ public abstract class QueuedTrash extends AbstractTrash {
     /**
      * Implementation notes: this method adds the given file to the queue of files to be moved to the trash and returns
      * immediately, i.e. without waiting for the file to be moved. The specified file will only be added to the queue if
-     * {@link #canMoveToTrash(com.mucommander.file.AbstractFile)} returned <code>true</code> for it. 
+     * {@link #canMoveToTrash(com.mucommander.commons.file.AbstractFile)} returned <code>true</code> for it.
      * Since the actual move is performed asynchroneously, this method has no way of
      * knowing if the file was successfully moved to the trash. So this method will return <code>true</code> if the
      * given file has been scheduled to be moved to the trash, but it may end up failing to be moved for whatever reason.

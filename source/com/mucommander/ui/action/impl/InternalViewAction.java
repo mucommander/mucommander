@@ -19,7 +19,7 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;

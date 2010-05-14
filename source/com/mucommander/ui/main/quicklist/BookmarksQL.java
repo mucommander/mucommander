@@ -21,7 +21,7 @@ package com.mucommander.ui.main.quicklist;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.FileFactory;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowBookmarksQLAction;

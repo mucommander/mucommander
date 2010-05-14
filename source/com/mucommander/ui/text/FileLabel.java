@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.text;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.icon.FileIcons;
 
 import javax.swing.JLabel;
@@ -27,7 +27,7 @@ import javax.swing.JLabel;
  * A simple JLabel that displays information about a file:
  * <ul>
  *  <li>the label's text is set to the file's name or canonical path (specified in the constructor)</li>
- *  <li>the label's icon is set to the file's icon, as returned by {@link FileIcons#getFileIcon(com.mucommander.file.AbstractFile)}</li>
+ *  <li>the label's icon is set to the file's icon, as returned by {@link FileIcons#getFileIcon(com.mucommander.commons.file.AbstractFile)}</li>
  *  <li>the label's tooltip is set to the file's canonical path, only if the label's text is the file's name</li>
  * </ul>
  *

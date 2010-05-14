@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.impl.TestFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.impl.TestFile;
 import com.mucommander.ui.dialog.file.BatchRenameDialog.*;
 import junit.framework.TestCase;
 

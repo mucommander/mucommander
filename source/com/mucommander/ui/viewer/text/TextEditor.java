@@ -19,11 +19,11 @@
 package com.mucommander.ui.viewer.text;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.bom.BOM;
 import com.mucommander.commons.io.bom.BOMInputStream;
 import com.mucommander.commons.io.bom.BOMWriter;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileOperation;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.InformationDialog;

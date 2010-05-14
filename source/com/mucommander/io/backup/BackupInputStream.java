@@ -18,9 +18,9 @@
 
 package com.mucommander.io.backup;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 
 import java.io.File;
 import java.io.FilterInputStream;

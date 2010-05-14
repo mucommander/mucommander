@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.filter.*;
+import com.mucommander.commons.file.filter.*;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;

@@ -18,11 +18,11 @@
 
 package com.mucommander.extension;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.AbstractFileClassLoader;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
-import com.mucommander.file.filter.OrFileFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFileClassLoader;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
+import com.mucommander.commons.file.filter.OrFileFilter;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -30,7 +30,7 @@ import java.util.Vector;
 /**
  * Finds specific classes within a browsable file.
  * <p>
- * This class will explore the content of a browsable {@link com.mucommander.file.AbstractFile} and match
+ * This class will explore the content of a browsable {@link com.mucommander.commons.file.AbstractFile} and match
  * all discovered classes to a {@link ClassFilter}.
  * </p>
  * <p>
@@ -38,7 +38,7 @@ import java.util.Vector;
  * <ul>
  *   <li>By using a custom class loader through {@link #find(AbstractFile,ClassFilter,ClassLoader)}.</li>
  *   <li>
- *     By using an {@link com.mucommander.file.AbstractFileClassLoader}
+ *     By using an {@link com.mucommander.commons.file.AbstractFileClassLoader}
  * </ul>
  * </p>
  * @author Nicolas Rinaudo
@@ -110,7 +110,7 @@ public class ClassFinder {
     /**
      * Explores the content of the specified file and looks for classes that match the specified class filter.
      * <p>
-     * The <code>browsable</code> argument must be browsable as defined by {@link com.mucommander.file.AbstractFile#isBrowsable()}.
+     * The <code>browsable</code> argument must be browsable as defined by {@link com.mucommander.commons.file.AbstractFile#isBrowsable()}.
      * If such is not the case, the returned vector will be empty.
      * </p>
      * @param  browsable   file in which to look for classes.

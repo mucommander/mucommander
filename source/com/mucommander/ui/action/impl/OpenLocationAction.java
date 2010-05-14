@@ -20,9 +20,9 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;

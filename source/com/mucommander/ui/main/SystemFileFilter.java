@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.AbstractFileFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.AbstractFileFilter;
 
 /**
  * Filter used to filter out system files and folders that should not be displayed to inexperienced users.

@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;

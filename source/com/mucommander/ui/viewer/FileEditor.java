@@ -18,23 +18,9 @@
 
 package com.mucommander.ui.viewer;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileProtocols;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -42,6 +28,11 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 
 /**

@@ -25,11 +25,11 @@ import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfiguration;
 import com.mucommander.extension.ExtensionManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileURL;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.main.commandbar.CommandBar;
 

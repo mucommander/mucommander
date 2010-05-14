@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
@@ -63,7 +63,7 @@ public class OpenAction extends MuAction {
      * <code>file</code> will be opened using the following rules:
      * <ul>
      *   <li>
-     *     If <code>file</code> is {@link com.mucommander.file.AbstractFile#isBrowsable() browsable},
+     *     If <code>file</code> is {@link com.mucommander.commons.file.AbstractFile#isBrowsable() browsable},
      *     it will be opened in <code>destination</code>.
      *   </li>
      *   <li>

@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.icon.FileIconProvider;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.icon.FileIconProvider;
 import com.mucommander.runtime.OsFamilies;
 
 import javax.swing.Icon;
@@ -93,7 +93,7 @@ public class FileIcons {
 
 
     /**
-     * Shorthand for {@link #getFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} called with the
+     * Shorthand for {@link #getFileIcon(com.mucommander.commons.file.AbstractFile, java.awt.Dimension)} called with the
      * icon dimension returned by {@link #getIconDimension()}.
      *
      * @param file the AbstractFile instance for which an icon will be returned
@@ -138,7 +138,7 @@ public class FileIcons {
 
 
     /**
-     * Shorthand for {@link #getCustomFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} called with the
+     * Shorthand for {@link #getCustomFileIcon(com.mucommander.commons.file.AbstractFile, java.awt.Dimension)} called with the
      * icon dimension returned by {@link #getIconDimension()}.
      *
      * @param file the file for which an icon is to be returned
@@ -163,7 +163,7 @@ public class FileIcons {
     }
 
     /**
-     * Shorthand for {@link #getSystemFileIcon(com.mucommander.file.AbstractFile, java.awt.Dimension)} called with the
+     * Shorthand for {@link #getSystemFileIcon(com.mucommander.commons.file.AbstractFile, java.awt.Dimension)} called with the
      * icon dimension returned by {@link #getIconDimension()}.
      *
      * @param file the file for which an icon is to be returned
@@ -175,7 +175,7 @@ public class FileIcons {
 
     /**
      * Returns an icon of the specified dimension for the given file. The returned icon is provided by the
-     * underlying OS/desktop manager, using the {@link com.mucommander.file.icon.FileIconProvider} currently set.
+     * underlying OS/desktop manager, using the {@link com.mucommander.commons.file.icon.FileIconProvider} currently set.
      * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist or for
      * any other reason.
      *
@@ -212,7 +212,7 @@ public class FileIcons {
 
 
     /**
-     * Returns the {@link com.mucommander.file.icon.FileIconProvider} instance that provides 'custom' file icons.
+     * Returns the {@link com.mucommander.commons.file.icon.FileIconProvider} instance that provides 'custom' file icons.
      *
      * @return the FileIconProvider instance that provides 'custom' file icons.
      */
@@ -221,7 +221,7 @@ public class FileIcons {
     }
 
     /**
-     * Sets the {@link com.mucommander.file.icon.FileIconProvider} instance that provides 'custom' file icons.
+     * Sets the {@link com.mucommander.commons.file.icon.FileIconProvider} instance that provides 'custom' file icons.
      *
      * @param fip the FileIconProvider instance that provides 'custom' file icons
      */
@@ -230,7 +230,7 @@ public class FileIcons {
     }
 
     /**
-     * Returns the {@link com.mucommander.file.icon.FileIconProvider} instance that provides 'system' file icons.
+     * Returns the {@link com.mucommander.commons.file.icon.FileIconProvider} instance that provides 'system' file icons.
      *
      * @return the FileIconProvider instance that provides 'custom' file icons.
      */
@@ -239,7 +239,7 @@ public class FileIcons {
     }
 
     /**
-     * Sets the {@link com.mucommander.file.icon.FileIconProvider} instance that provides 'custom' file icons.
+     * Sets the {@link com.mucommander.commons.file.icon.FileIconProvider} instance that provides 'custom' file icons.
      *
      * @param fip the FileIconProvider instance that provides 'custom' file icons
      */
@@ -308,8 +308,8 @@ public class FileIcons {
 
     /**
      * Returns <code>true</code> if the current platform is able to retrieve system icons that match the ones used in
-     * the OS's default file manager. If <code>false</code> is returned and {@link #getSystemFileIcon(com.mucommander.file.AbstractFile)}
-     * is used or {@link #getFileIcon(com.mucommander.file.AbstractFile)} together with a system policy different from
+     * the OS's default file manager. If <code>false</code> is returned and {@link #getSystemFileIcon(com.mucommander.commons.file.AbstractFile)}
+     * is used or {@link #getFileIcon(com.mucommander.commons.file.AbstractFile)} together with a system policy different from
      * {@link #USE_SYSTEM_ICONS_NEVER}, the returned icon will probably look very bad. 
      *
      * @return true if the current platform is able to retrieve system icons that match the ones used in the OS's

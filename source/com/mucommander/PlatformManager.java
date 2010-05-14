@@ -18,8 +18,8 @@
 
 package com.mucommander;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.runtime.JavaVersions;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;

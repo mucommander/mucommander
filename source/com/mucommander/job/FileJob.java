@@ -20,9 +20,9 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.CachedFile;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.CachedFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.progress.JobProgress;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.job.ui.UserInputHelper;

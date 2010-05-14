@@ -33,7 +33,7 @@ import java.io.OutputStream;
  * </p>
  * <p>
  * Note that abstract processes should not be created directly. They should be
- * instantiated through {@link com.mucommander.process.ProcessRunner#execute(String[],com.mucommander.file.AbstractFile,ProcessListener)}.
+ * instantiated through {@link com.mucommander.process.ProcessRunner#execute(String[], com.mucommander.commons.file.AbstractFile,ProcessListener)}.
  * </p>
  * @author Nicolas Rinaudo
  */

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.PropertiesDialog;
 import com.mucommander.ui.main.MainFrame;

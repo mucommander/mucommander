@@ -18,7 +18,7 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileURL;
 
 /**
  * CredentialsMapping associates a {@link Credentials} instance with a 'realm' , that is the location to a server.

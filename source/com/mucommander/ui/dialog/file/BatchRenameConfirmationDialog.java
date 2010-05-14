@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.BatchRenameAction;

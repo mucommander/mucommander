@@ -18,8 +18,8 @@
 
 package com.mucommander;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.ResourceLoader;
 import junit.framework.TestCase;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;

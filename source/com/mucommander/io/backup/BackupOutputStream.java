@@ -18,8 +18,8 @@
 
 package com.mucommander.io.backup;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 
 import java.io.File;
 import java.io.IOException;

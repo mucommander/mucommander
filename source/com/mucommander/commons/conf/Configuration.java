@@ -71,7 +71,7 @@ import java.util.*;
  * Note that a default implementation, {@link FileConfigurationSource}, is provided. It covers the most
  * common case of configuration sources, a local configuration file.<br>
  * For application writers who wish to be able to retrieve configuration files through a variety of file systems,
- * we suggest creating a source using the <code>com.mucommander.file</code> API.
+ * we suggest creating a source using the <code>com.mucommander.commons.file</code> API.
  * </p>
  * <p>
  * <h3>Monitoring configuration changes</h3>

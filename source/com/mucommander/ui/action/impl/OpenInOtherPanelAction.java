@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -31,7 +31,7 @@ import java.util.Hashtable;
  * Opens browsable files in the inactive panel.
  * <p>
  * This action is only enabled if the current selection is browsable as defined by
- * {@link com.mucommander.file.AbstractFile#isBrowsable()}.
+ * {@link com.mucommander.commons.file.AbstractFile#isBrowsable()}.
  * </p>
  * @author Nicolas Rinaudo
  */

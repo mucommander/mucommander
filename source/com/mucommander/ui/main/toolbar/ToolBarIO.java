@@ -20,8 +20,8 @@ package com.mucommander.ui.main.toolbar;
 
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.File;

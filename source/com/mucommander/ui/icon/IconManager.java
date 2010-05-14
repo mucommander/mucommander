@@ -20,7 +20,7 @@
 package com.mucommander.ui.icon;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.commons.file.util.ResourceLoader;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;

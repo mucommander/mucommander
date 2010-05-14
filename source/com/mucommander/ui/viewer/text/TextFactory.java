@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.viewer.text;
 
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.io.BinaryDetector;
-import com.mucommander.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.viewer.*;
 

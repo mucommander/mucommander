@@ -18,8 +18,8 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.OrFileFilter;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.OrFileFilter;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.UnpackDialog;
 import com.mucommander.ui.main.MainFrame;

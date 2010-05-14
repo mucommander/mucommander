@@ -21,10 +21,10 @@ package com.mucommander.desktop.osx;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
 import com.mucommander.runtime.OsFamily;
 
 import java.awt.event.MouseEvent;

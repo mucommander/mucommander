@@ -18,8 +18,8 @@
 
 package com.mucommander.command;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.FileFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.FileFilter;
 
 /**
  * Associates a command to a set of file filters.

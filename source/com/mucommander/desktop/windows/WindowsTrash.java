@@ -18,13 +18,13 @@
 
 package com.mucommander.desktop.windows;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.impl.local.SpecialWindowsLocation;
+import com.mucommander.commons.file.util.Shell32;
+import com.mucommander.commons.file.util.Shell32API;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.desktop.QueuedTrash;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.impl.local.SpecialWindowsLocation;
-import com.mucommander.file.util.Shell32;
-import com.mucommander.file.util.Shell32API;
 
 import java.io.IOException;
 import java.util.Vector;
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * <p>Native methods in the Shell32 Windows API are used to access the Recycle Bin. There is an overhead associated with
  * invoking those methods (via JNA), so for performance reasons, this trash is implemented as a {@link com.mucommander.desktop.QueuedTrash}
- * in order to group calls to {@link #moveToTrash(com.mucommander.file.AbstractFile)}.</p> 
+ * in order to group calls to {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)}.</p>
  *
  * @see WindowsTrashProvider
  * @author Maxence Bernard

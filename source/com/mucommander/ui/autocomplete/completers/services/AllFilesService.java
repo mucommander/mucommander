@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 
 import java.io.IOException;
 

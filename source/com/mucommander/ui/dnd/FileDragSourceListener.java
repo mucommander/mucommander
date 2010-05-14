@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;

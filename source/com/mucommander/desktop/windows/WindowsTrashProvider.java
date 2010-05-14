@@ -18,9 +18,9 @@
 
 package com.mucommander.desktop.windows;
 
+import com.mucommander.commons.file.util.Shell32;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.TrashProvider;
-import com.mucommander.file.util.Shell32;
 import com.mucommander.runtime.OsFamilies;
 
 /**

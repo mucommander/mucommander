@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.FileFilter;
-import com.mucommander.file.util.FileComparator;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.SpinningDial;
 

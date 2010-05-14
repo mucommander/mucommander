@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.TableSelectionListener;

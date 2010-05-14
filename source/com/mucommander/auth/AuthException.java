@@ -19,7 +19,7 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileURL;
 
 import java.io.IOException;
 

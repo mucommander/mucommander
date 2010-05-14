@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.icon.FileIconProvider;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.icon.FileIconProvider;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -28,7 +28,7 @@ import java.awt.Dimension;
 import java.util.Hashtable;
 
 /**
- * This {@link com.mucommander.file.icon.FileIconProvider} returns icons from the
+ * This {@link com.mucommander.commons.file.icon.FileIconProvider} returns icons from the
  * {@link IconManager#FILE_ICON_SET IconManager's custom file icon set}, based on files' extension and type.
  * No caching is performed by this class as {@link IconManager} already takes care of this. 
  *

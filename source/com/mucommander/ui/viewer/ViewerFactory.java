@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.viewer;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 
 /**
  * A common interface for instanciating {@link FileViewer} implementations, and finding out if a viewer is capable

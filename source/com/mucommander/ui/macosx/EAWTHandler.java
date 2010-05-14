@@ -23,8 +23,8 @@ import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
 import com.mucommander.Launcher;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.WindowManager;
 

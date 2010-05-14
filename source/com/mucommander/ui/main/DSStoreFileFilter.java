@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.file.filter.AbstractFilenameFilter;
-import com.mucommander.file.filter.FilenameFilter;
+import com.mucommander.commons.file.filter.AbstractFilenameFilter;
+import com.mucommander.commons.file.filter.FilenameFilter;
 
 
 /**

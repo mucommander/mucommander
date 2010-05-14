@@ -19,10 +19,10 @@
 package com.mucommander.desktop.osx;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.ui.macosx.AppleScript;
 
 import java.io.IOException;
@@ -169,7 +169,7 @@ public class OSXTrash extends QueuedTrash {
      * that period, the thread will wait an additional {@link OSXTrash#QUEUE_PERIOD}, and so on.<p>
      *
      * <p>There are several reasons for doing that instead of executing an AppleScript synchroneously for each file
-     * passed to {@link OSXTrash#moveToTrash(com.mucommander.file.AbstractFile)} :
+     * passed to {@link OSXTrash#moveToTrash(com.mucommander.commons.file.AbstractFile)} :
      * <ul>
      *  <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it. Calling
      * moveToTrash repeatedly would play the sound as many times as the method has been called (believe me it's ugly

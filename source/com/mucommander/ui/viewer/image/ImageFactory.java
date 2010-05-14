@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.viewer.image;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.filter.ExtensionFilenameFilter;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.ui.viewer.ViewerFactory;
 

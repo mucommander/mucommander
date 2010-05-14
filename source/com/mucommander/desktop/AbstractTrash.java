@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 
 /**
  * AbstractTrash is an abstract representation of a file trash, i.e. a temporary place where deleted files are stored
@@ -39,7 +39,7 @@ public abstract class AbstractTrash {
 
     /**
      * Returns <code>true</code> if the specified file is eligible for being moved to the trash. This doesn't mean that
-     * a call to {@link #moveToTrash(com.mucommander.file.AbstractFile)} will necessarily succeed, but it should at least ensure that basic
+     * a call to {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} will necessarily succeed, but it should at least ensure that basic
      * prerequisites are met. 
      *
      * @param file the file to test

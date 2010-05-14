@@ -20,9 +20,9 @@ package com.mucommander.shell;
 
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 

@@ -20,7 +20,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
-import com.mucommander.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.io.backup.BackupInputStream;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

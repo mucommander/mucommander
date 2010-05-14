@@ -20,10 +20,10 @@ package com.mucommander.bookmark.file;
 
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.ProtocolProvider;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.ProtocolProvider;
 
 import java.io.IOException;
 

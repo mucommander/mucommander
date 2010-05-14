@@ -22,7 +22,7 @@ import com.mucommander.AppLogger;
 import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileURL;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

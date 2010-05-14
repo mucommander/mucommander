@@ -19,38 +19,22 @@
 
 package com.mucommander.ui.viewer.image;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.helper.MenuToolkit;
+import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.theme.*;
+import com.mucommander.ui.viewer.FileFrame;
+import com.mucommander.ui.viewer.FileViewer;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
-import com.mucommander.file.AbstractFile;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
-import com.mucommander.ui.viewer.FileFrame;
-import com.mucommander.ui.viewer.FileViewer;
 
 
 /**

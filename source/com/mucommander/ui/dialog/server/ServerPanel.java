@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.dialog.server;
 
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.main.MainFrame;
 

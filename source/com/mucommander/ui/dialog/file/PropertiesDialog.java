@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.OSXFileUtils;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.OSXFileUtils;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.PropertiesJob;
 import com.mucommander.runtime.OsFamilies;

@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.file.FileOperation;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.FileOperationFilter;
-import com.mucommander.file.filter.OrFileFilter;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.FileOperationFilter;
+import com.mucommander.commons.file.filter.OrFileFilter;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.BatchRenameDialog;
 import com.mucommander.ui.main.MainFrame;

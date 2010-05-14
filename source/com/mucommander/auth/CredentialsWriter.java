@@ -20,7 +20,7 @@ package com.mucommander.auth;
 
 import com.mucommander.RuntimeConstants;
 import com.mucommander.bookmark.XORCipher;
-import com.mucommander.file.FileURL;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 

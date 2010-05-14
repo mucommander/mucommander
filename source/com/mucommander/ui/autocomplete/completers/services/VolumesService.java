@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.impl.local.LocalFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.local.LocalFile;
 
 import java.util.Arrays;
 import java.util.Vector;

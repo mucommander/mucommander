@@ -21,10 +21,10 @@ package com.mucommander.ui.main.table;
 import com.mucommander.AppLogger;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.util.FileSet;
 import com.mucommander.job.MoveJob;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
@@ -311,7 +311,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Returns the file that is currently selected (highlighted), wrapped in a {@link com.mucommander.file.impl.CachedFile}
+     * Returns the file that is currently selected (highlighted), wrapped in a {@link com.mucommander.commons.file.impl.CachedFile}
      * instance if the corresponding parameter is <code>true</code>. If the currently selected file is the
      * parent folder '..', the parent folder is returned only if the corresponding parameter is <code>true</code>.
      *

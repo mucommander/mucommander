@@ -20,12 +20,12 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileFactory;
-import com.mucommander.file.FileOperation;
-import com.mucommander.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;

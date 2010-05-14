@@ -18,7 +18,7 @@
 
 package com.mucommander;
 
-import com.mucommander.file.util.ResourceLoader;
+import com.mucommander.commons.file.util.ResourceLoader;
 
 import java.io.IOException;
 import java.io.InputStream;

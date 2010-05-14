@@ -20,8 +20,8 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.*;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

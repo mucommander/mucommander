@@ -1,10 +1,9 @@
 package com.mucommander.ui.viewer;
 
-import java.io.IOException;
+import com.mucommander.commons.file.AbstractFile;
 
 import javax.swing.JComponent;
-
-import com.mucommander.file.AbstractFile;
+import java.io.IOException;
 
 /**
  * Interface that serves as a common base for the file presenter objects (above FileViewer, FileEditor).

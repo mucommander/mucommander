@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.PermissionAccesses;
-import com.mucommander.file.PermissionTypes;
-import com.mucommander.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.PermissionAccesses;
+import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;

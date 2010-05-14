@@ -19,10 +19,10 @@
 
 package com.mucommander.job;
 
-import com.mucommander.file.*;
-import com.mucommander.file.impl.ProxyFile;
-import com.mucommander.file.util.FileSet;
-import com.mucommander.file.util.PathUtils;
+import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.impl.ProxyFile;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.UnmarkAllAction;
@@ -36,7 +36,7 @@ import java.util.Vector;
 
 /**
  * This job unpacks a set of archive files to a base destination folder. Archive entries are extracted in their natural
- * order using {@link com.mucommander.file.AbstractArchiveFile#getEntryIterator()}, to traverse the archive only once
+ * order using {@link com.mucommander.commons.file.AbstractArchiveFile#getEntryIterator()}, to traverse the archive only once
  * and achieve optimal performance.
  *
  * @author Maxence Bernard

@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.shell;
 
 import com.mucommander.AppLogger;
-import com.mucommander.file.FileProtocols;
+import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;

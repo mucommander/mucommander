@@ -20,11 +20,11 @@ package com.mucommander.ui.main;
 
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.file.AbstractFile;
-import com.mucommander.file.FileProtocols;
-import com.mucommander.file.FileURL;
-import com.mucommander.file.impl.local.LocalFile;
-import com.mucommander.file.util.PathUtils;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;

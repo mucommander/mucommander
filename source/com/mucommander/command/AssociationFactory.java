@@ -18,10 +18,10 @@
 
 package com.mucommander.command;
 
-import com.mucommander.file.PermissionTypes;
-import com.mucommander.file.filter.AndFileFilter;
-import com.mucommander.file.filter.AttributeFileFilter;
-import com.mucommander.file.filter.RegexpFilenameFilter;
+import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 
 /**
  * @author Nicolas Rinaudo
