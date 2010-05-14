@@ -20,12 +20,12 @@ package com.mucommander.ui.main;
 
 import com.mucommander.AppLogger;
 import com.mucommander.ShutdownHook;
-import com.mucommander.auth.AuthException;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfiguration;

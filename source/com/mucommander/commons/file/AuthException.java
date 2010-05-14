@@ -17,9 +17,7 @@
  */
 
 
-package com.mucommander.auth;
-
-import com.mucommander.commons.file.FileURL;
+package com.mucommander.commons.file;
 
 import java.io.IOException;
 

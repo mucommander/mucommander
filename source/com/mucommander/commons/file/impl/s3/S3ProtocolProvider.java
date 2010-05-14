@@ -18,9 +18,9 @@
 
 package com.mucommander.commons.file.impl.s3;
 
-import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.ProtocolProvider;
 import org.apache.commons.logging.LogFactory;

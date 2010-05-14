@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.auth;
+package com.mucommander.commons.file;
 
 /**
  * Defines the different types of authentication a file protocol may use.
  *
+ * @see FileURL#getAuthenticationType()
  * @author Maxence Bernard
  */
 public enum AuthenticationType {

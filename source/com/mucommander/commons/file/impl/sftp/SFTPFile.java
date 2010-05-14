@@ -19,7 +19,6 @@
 
 package com.mucommander.commons.file.impl.sftp;
 
-import com.mucommander.auth.AuthException;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionPool;

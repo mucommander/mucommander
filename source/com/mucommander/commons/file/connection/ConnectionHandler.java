@@ -18,8 +18,8 @@
 
 package com.mucommander.commons.file.connection;
 
-import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileLogger;
 import com.mucommander.commons.file.FileURL;
 

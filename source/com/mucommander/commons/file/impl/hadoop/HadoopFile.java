@@ -18,7 +18,6 @@
 
 package com.mucommander.commons.file.impl.hadoop;
 
-import com.mucommander.auth.AuthException;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.io.*;

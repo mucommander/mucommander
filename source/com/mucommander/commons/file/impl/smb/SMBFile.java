@@ -18,7 +18,6 @@
 
 package com.mucommander.commons.file.impl.smb;
 
-import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.filter.FilenameFilter;

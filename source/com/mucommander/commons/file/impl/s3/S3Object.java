@@ -18,7 +18,6 @@
 
 package com.mucommander.commons.file.impl.s3;
 
-import com.mucommander.auth.AuthException;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.FileTransferException;

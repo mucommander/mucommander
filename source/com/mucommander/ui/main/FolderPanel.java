@@ -19,14 +19,9 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.AppLogger;
-import com.mucommander.auth.AuthException;
-import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;

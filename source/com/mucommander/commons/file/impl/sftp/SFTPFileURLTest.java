@@ -18,8 +18,8 @@
 
 package com.mucommander.commons.file.impl.sftp;
 
-import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
+import com.mucommander.commons.file.AuthenticationType;
 import com.mucommander.commons.file.FileURLTestCase;
 
 /**

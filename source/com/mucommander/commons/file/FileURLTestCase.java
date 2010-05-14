@@ -18,7 +18,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 import junit.framework.TestCase;
 
