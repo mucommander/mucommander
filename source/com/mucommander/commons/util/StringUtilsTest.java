@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.util;
+package com.mucommander.commons.util;
 
 import junit.framework.TestCase;
 

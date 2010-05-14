@@ -22,6 +22,7 @@ import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.job.BatchRenameJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -31,7 +32,6 @@ import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

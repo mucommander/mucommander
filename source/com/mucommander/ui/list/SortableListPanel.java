@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.list;
 
+import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.ArrowButton;
-import com.mucommander.util.AlteredVector;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -42,7 +42,7 @@ public class SortableListPanel<E> extends JPanel {
 
 
     /**
-     * Creates a new SortableListPanel with a {@link DynamicList} that uses the provided items {@link com.mucommander.util.AlteredVector}.
+     * Creates a new SortableListPanel with a {@link DynamicList} that uses the provided items {@link AlteredVector}.
      *
      * @param items the items Vector used by DynamicList
      */

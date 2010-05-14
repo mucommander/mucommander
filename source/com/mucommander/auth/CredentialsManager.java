@@ -20,14 +20,14 @@ package com.mucommander.auth;
 
 import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
+import com.mucommander.commons.collections.AlteredVector;
+import com.mucommander.commons.collections.VectorChangeListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.Chmod;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.io.backup.BackupOutputStream;
-import com.mucommander.util.AlteredVector;
-import com.mucommander.util.VectorChangeListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.list;
 
-import com.mucommander.util.AlteredVector;
+import com.mucommander.commons.collections.AlteredVector;
 
 import javax.swing.JList;
 import java.awt.Container;

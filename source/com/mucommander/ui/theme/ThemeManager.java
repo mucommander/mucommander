@@ -26,11 +26,11 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.conf.MuConfiguration;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.text.Translator;
-import com.mucommander.util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Font;

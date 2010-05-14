@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.util;
+package com.mucommander.commons.collections;
 
 /**
  * Interface to be implemented by classes that wish to be notified of changes made to an {@link AlteredVector}.

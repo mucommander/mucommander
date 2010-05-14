@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.customization;
 
+import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
@@ -30,7 +31,6 @@ import com.mucommander.ui.main.commandbar.CommandBarAttributes;
 import com.mucommander.ui.main.commandbar.CommandBarButtonForDisplay;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.text.RecordingKeyStrokeTextField;
-import com.mucommander.util.AlteredVector;
 
 import javax.swing.*;
 import javax.swing.Box.Filler;

@@ -18,7 +18,7 @@
 
 package com.mucommander.commons.file.filter;
 
-import com.mucommander.util.StringUtils;
+import com.mucommander.commons.util.StringUtils;
 
 /**
  * This filter matches files whose criterion values start with a specified string.

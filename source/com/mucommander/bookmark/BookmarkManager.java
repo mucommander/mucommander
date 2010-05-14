@@ -19,12 +19,12 @@
 package com.mucommander.bookmark;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.commons.collections.AlteredVector;
+import com.mucommander.commons.collections.VectorChangeListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
-import com.mucommander.util.AlteredVector;
-import com.mucommander.util.VectorChangeListener;
 
 import java.io.*;
 import java.util.WeakHashMap;

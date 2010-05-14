@@ -24,6 +24,7 @@ import com.mucommander.auth.Credentials;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.EditableComboBoxListener;
@@ -35,7 +36,6 @@ import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.util.StringUtils;
 
 import javax.swing.*;
 import java.awt.BorderLayout;

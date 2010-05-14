@@ -22,7 +22,7 @@ import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.impl.tar.provider.TarEntry;
 import com.mucommander.commons.file.impl.tar.provider.TarInputStream;
 import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.util.StringUtils;
+import com.mucommander.commons.util.StringUtils;
 import org.apache.tools.bzip2.CBZip2InputStream;
 
 import java.io.BufferedInputStream;

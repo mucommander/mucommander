@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.list;
 
+import com.mucommander.commons.collections.AlteredVector;
+import com.mucommander.commons.collections.VectorChangeListener;
 import com.mucommander.text.Translator;
-import com.mucommander.util.AlteredVector;
-import com.mucommander.util.VectorChangeListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -20,6 +20,7 @@ package com.mucommander.ui.dialog.bookmark;
 
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.EditBookmarksAction;
@@ -32,7 +33,6 @@ import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.list.SortableListPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
-import com.mucommander.util.AlteredVector;
 
 import javax.swing.Box;
 import javax.swing.JButton;

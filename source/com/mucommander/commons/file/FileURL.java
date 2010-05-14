@@ -24,7 +24,7 @@ import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.compat.CompatURLStreamHandler;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.util.StringUtils;
+import com.mucommander.commons.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;

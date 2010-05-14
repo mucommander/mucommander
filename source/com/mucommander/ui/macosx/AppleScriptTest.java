@@ -19,7 +19,7 @@
 package com.mucommander.ui.macosx;
 
 import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.util.StringUtils;
+import com.mucommander.commons.util.StringUtils;
 import junit.framework.TestCase;
 
 import java.util.Locale;
