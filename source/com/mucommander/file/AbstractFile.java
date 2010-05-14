@@ -18,11 +18,11 @@
 
 package com.mucommander.file;
 
+import com.mucommander.commons.io.*;
 import com.mucommander.file.compat.CompatURLStreamHandler;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.impl.ProxyFile;
-import com.mucommander.io.*;
 
 import javax.swing.Icon;
 import java.awt.Dimension;
@@ -342,7 +342,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * reasons, this buffer is provided by {@link BufferPool}. Thus, there is no need to surround the InputStream
      * with a {@link java.io.BufferedInputStream}.</p>
      *
-     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.io.CounterInputStream}.</p>
+     * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.commons.io.CounterInputStream}.</p>
      *
      * @param in the InputStream to read from
      * @param append if true, data written to the OutputStream will be appended to the end of this file. If false, any

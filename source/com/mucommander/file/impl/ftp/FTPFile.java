@@ -21,14 +21,14 @@ package com.mucommander.file.impl.ftp;
 
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.commons.io.ByteUtils;
+import com.mucommander.commons.io.FilteredOutputStream;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionHandlerFactory;
 import com.mucommander.file.connection.ConnectionPool;
-import com.mucommander.io.ByteUtils;
-import com.mucommander.io.FilteredOutputStream;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;

@@ -18,11 +18,11 @@
 
 package com.mucommander.file.impl.zip;
 
+import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.file.*;
 import com.mucommander.file.impl.zip.provider.ZipConstants;
 import com.mucommander.file.impl.zip.provider.ZipEntry;
 import com.mucommander.file.impl.zip.provider.ZipFile;
-import com.mucommander.io.FilteredOutputStream;
 
 import java.io.*;
 import java.util.Iterator;

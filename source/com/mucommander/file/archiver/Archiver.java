@@ -19,12 +19,12 @@
 
 package com.mucommander.file.archiver;
 
+import com.mucommander.commons.io.BufferedRandomOutputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileAttributes;
 import com.mucommander.file.FileOperation;
 import com.mucommander.file.UnsupportedFileOperationException;
-import com.mucommander.io.BufferedRandomOutputStream;
-import com.mucommander.io.RandomAccessOutputStream;
 import org.apache.tools.bzip2.CBZip2OutputStream;
 
 import java.io.BufferedOutputStream;

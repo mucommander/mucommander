@@ -18,9 +18,9 @@
 
 package com.mucommander.file.impl.iso;
 
+import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.WrapperArchiveEntryIterator;
-import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.IOException;
 import java.util.Iterator;

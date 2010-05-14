@@ -3,8 +3,8 @@ package com.mucommander.file.impl.sevenzip;
 import SevenZip.Archive.IInArchive;
 import SevenZip.Archive.SevenZip.Handler;
 import SevenZip.Archive.SevenZipEntry;
+import com.mucommander.commons.io.FailSafePipedInputStream;
 import com.mucommander.file.*;
-import com.mucommander.io.FailSafePipedInputStream;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;

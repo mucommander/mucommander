@@ -18,10 +18,10 @@
 
 package com.mucommander.file.impl.zip.provider;
 
+import com.mucommander.commons.io.*;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.UnsupportedFileOperationException;
-import com.mucommander.io.*;
 
 import java.io.*;
 import java.util.Hashtable;

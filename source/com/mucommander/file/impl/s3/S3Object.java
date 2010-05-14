@@ -19,11 +19,11 @@
 package com.mucommander.file.impl.s3;
 
 import com.mucommander.auth.AuthException;
+import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.FileTransferException;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.file.*;
-import com.mucommander.io.BufferPool;
-import com.mucommander.io.FileTransferException;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.StreamUtils;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.model.S3Owner;

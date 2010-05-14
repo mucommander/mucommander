@@ -18,11 +18,11 @@
 
 package com.mucommander.file.impl.iso;
 
+import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
-import com.mucommander.io.BufferPool;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.StreamUtils;
 
 import java.io.IOException;
 import java.util.Calendar;

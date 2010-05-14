@@ -19,10 +19,10 @@
 package com.mucommander.bookmark;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.commons.io.BackupInputStream;
+import com.mucommander.commons.io.BackupOutputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
-import com.mucommander.io.BackupInputStream;
-import com.mucommander.io.BackupOutputStream;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
 

@@ -18,9 +18,9 @@
 
 package com.mucommander.file.util;
 
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
-import com.mucommander.io.StreamUtils;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersions;
 

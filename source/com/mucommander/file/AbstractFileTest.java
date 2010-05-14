@@ -18,9 +18,9 @@
 
 package com.mucommander.file;
 
+import com.mucommander.commons.io.*;
+import com.mucommander.commons.io.security.MuProvider;
 import com.mucommander.file.util.PathUtilsTest;
-import com.mucommander.io.*;
-import com.mucommander.io.security.MuProvider;
 import com.mucommander.test.ConditionalTest;
 import com.mucommander.test.ConditionalTestRunner;
 import com.mucommander.util.StringUtils;
@@ -1436,7 +1436,7 @@ public abstract class AbstractFileTest implements ConditionalTest {
     //////////////////
 
     /**
-     * Tests {@link AbstractFile#calculateChecksum(java.security.MessageDigest)} and {@link com.mucommander.io.ByteUtils#toHexString(byte[])}
+     * Tests {@link AbstractFile#calculateChecksum(java.security.MessageDigest)} and {@link com.mucommander.commons.io.ByteUtils#toHexString(byte[])}
      * by computing file digests using different algorithms (MD5, SHA-1, ...) and comparing them against known values.
      *
      * @throws IOException should not happen

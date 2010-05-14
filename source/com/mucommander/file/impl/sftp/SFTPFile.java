@@ -20,10 +20,10 @@
 package com.mucommander.file.impl.sftp;
 
 import com.mucommander.auth.AuthException;
+import com.mucommander.commons.io.*;
 import com.mucommander.file.*;
 import com.mucommander.file.connection.ConnectionHandler;
 import com.mucommander.file.connection.ConnectionPool;
-import com.mucommander.io.*;
 import com.sshtools.j2ssh.io.UnsignedInteger32;
 import com.sshtools.j2ssh.sftp.FileAttributes;
 import com.sshtools.j2ssh.sftp.*;

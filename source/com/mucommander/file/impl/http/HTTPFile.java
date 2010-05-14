@@ -20,11 +20,11 @@ package com.mucommander.file.impl.http;
 
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.commons.io.BlockRandomInputStream;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.commons.io.base64.Base64Encoder;
 import com.mucommander.file.*;
-import com.mucommander.io.BlockRandomInputStream;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
-import com.mucommander.io.base64.Base64Encoder;
 
 import java.io.*;
 import java.net.HttpURLConnection;

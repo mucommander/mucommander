@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.ar;
 
+import com.mucommander.commons.io.BoundedInputStream;
 import com.mucommander.file.*;
-import com.mucommander.io.BoundedInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

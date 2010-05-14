@@ -19,9 +19,9 @@
 package com.mucommander.job;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.util.FileSet;
-import com.mucommander.io.StreamUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

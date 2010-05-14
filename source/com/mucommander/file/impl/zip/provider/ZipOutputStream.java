@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.zip.provider;
 
-import com.mucommander.io.BufferPool;
-import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -18,8 +18,8 @@
 
 package com.mucommander.file;
 
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 
 import java.io.InputStream;
 import java.io.OutputStream;

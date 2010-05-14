@@ -18,7 +18,7 @@
 
 package com.mucommander.file.impl.tar.provider;
 
-import com.mucommander.io.BufferPool;
+import com.mucommander.commons.io.BufferPool;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;

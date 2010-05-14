@@ -18,10 +18,10 @@
 
 package com.mucommander.file.impl.nfs;
 
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
 import com.sun.xfile.XFile;
 import com.sun.xfile.XFileInputStream;
 import com.sun.xfile.XFileOutputStream;

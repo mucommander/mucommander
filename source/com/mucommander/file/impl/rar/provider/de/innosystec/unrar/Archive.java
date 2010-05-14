@@ -18,37 +18,18 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
+import com.mucommander.commons.io.BufferPool;
 import com.mucommander.file.impl.rar.provider.RarDebug;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.AVHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.BaseBlock;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.BlockHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.CommentHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.EAHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.EndArcHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.MacInfoHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.MainHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.MarkHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.ProtectHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.SignHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.SubBlockHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.SubBlockHeaderType;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.UnixOwnersHeader;
-import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.UnrarHeadertype;
+import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.*;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.ComprDataIO;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.Unpack;
-import com.mucommander.io.BufferPool;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.*;
 
 /**
  * DOCUMENT ME

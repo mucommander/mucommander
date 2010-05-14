@@ -18,6 +18,7 @@
 
 package com.mucommander.file.impl.rar.provider;
 
+import com.mucommander.commons.io.FailSafePipedInputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.UnsupportedFileOperationException;
@@ -25,7 +26,6 @@ import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.Archive;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarException;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.exception.RarExceptionType;
 import com.mucommander.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
-import com.mucommander.io.FailSafePipedInputStream;
 
 import java.io.*;
 import java.util.Collection;

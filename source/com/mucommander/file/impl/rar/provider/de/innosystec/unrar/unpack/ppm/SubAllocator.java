@@ -17,9 +17,9 @@
  */
 package com.mucommander.file.impl.rar.provider.de.innosystec.unrar.unpack.ppm;
 
-import java.util.Arrays;
+import com.mucommander.commons.io.BufferPool;
 
-import com.mucommander.io.BufferPool;
+import java.util.Arrays;
 
 /**
  * DOCUMENT ME

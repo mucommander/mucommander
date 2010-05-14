@@ -18,8 +18,8 @@
 
 package com.mucommander.file.util;
 
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.io.StreamUtils;
 import junit.framework.TestCase;
 
 import java.io.IOException;

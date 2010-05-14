@@ -18,8 +18,8 @@
 
 package com.mucommander.file;
 
-import com.mucommander.io.ByteCounter;
-import com.mucommander.io.CounterOutputStream;
+import com.mucommander.commons.io.ByteCounter;
+import com.mucommander.commons.io.CounterOutputStream;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.IOException;

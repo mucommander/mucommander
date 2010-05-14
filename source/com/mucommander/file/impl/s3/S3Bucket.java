@@ -19,8 +19,8 @@
 package com.mucommander.file.impl.s3;
 
 import com.mucommander.auth.AuthException;
+import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.file.*;
-import com.mucommander.io.RandomAccessInputStream;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
 

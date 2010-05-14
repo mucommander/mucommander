@@ -18,11 +18,11 @@
 
 package com.mucommander.file;
 
+import com.mucommander.commons.io.ByteUtils;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.ByteUtils;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

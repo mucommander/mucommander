@@ -18,9 +18,9 @@
 
 package com.mucommander.file.impl.iso;
 
+import com.mucommander.commons.io.FilterRandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.file.*;
-import com.mucommander.io.FilterRandomAccessInputStream;
-import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

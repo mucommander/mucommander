@@ -18,10 +18,10 @@
 
 package com.mucommander.file.impl.tar;
 
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.file.*;
 import com.mucommander.file.impl.tar.provider.TarEntry;
 import com.mucommander.file.impl.tar.provider.TarInputStream;
-import com.mucommander.io.StreamUtils;
 import com.mucommander.util.StringUtils;
 import org.apache.tools.bzip2.CBZip2InputStream;
 

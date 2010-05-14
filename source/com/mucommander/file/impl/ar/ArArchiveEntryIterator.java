@@ -18,10 +18,10 @@
 
 package com.mucommander.file.impl.ar;
 
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.file.ArchiveEntry;
 import com.mucommander.file.ArchiveEntryIterator;
 import com.mucommander.file.FileLogger;
-import com.mucommander.io.StreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

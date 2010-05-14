@@ -18,6 +18,7 @@
 
 package com.mucommander.file.icon.impl;
 
+import com.mucommander.commons.io.SilenceableOutputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileLogger;
 import com.mucommander.file.FileProtocols;
@@ -27,7 +28,6 @@ import com.mucommander.file.icon.IconCache;
 import com.mucommander.file.icon.LocalFileIconProvider;
 import com.mucommander.file.impl.local.LocalFile;
 import com.mucommander.file.util.ResourceLoader;
-import com.mucommander.io.SilenceableOutputStream;
 import com.mucommander.runtime.OsFamilies;
 import com.mucommander.runtime.OsVersion;
 

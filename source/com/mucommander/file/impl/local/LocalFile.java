@@ -18,15 +18,15 @@
 
 package com.mucommander.file.impl.local;
 
+import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.FilteredOutputStream;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
 import com.mucommander.file.util.Kernel32;
 import com.mucommander.file.util.Kernel32API;
 import com.mucommander.file.util.PathUtils;
-import com.mucommander.io.BufferPool;
-import com.mucommander.io.FilteredOutputStream;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
 import com.mucommander.runtime.*;
 import com.sun.jna.ptr.LongByReference;
 
@@ -1151,7 +1151,7 @@ public class LocalFile extends ProtocolFile {
      *
      * <p>This class simply delegates all its methods to a
      * {@link com.mucommander.file.impl.local.LocalFile.LocalRandomAccessInputStream} instance. Therefore, this class
-     * does not derive from {@link com.mucommander.io.RandomAccessInputStream}, preventing random-access methods from
+     * does not derive from {@link com.mucommander.commons.io.RandomAccessInputStream}, preventing random-access methods from
      * being used.</p>
      *
      */
@@ -1169,7 +1169,7 @@ public class LocalFile extends ProtocolFile {
      *
      * <p>This class simply delegates all its methods to a
      * {@link com.mucommander.file.impl.local.LocalFile.LocalRandomAccessOutputStream} instance. Therefore, this class
-     * does not derive from {@link com.mucommander.io.RandomAccessOutputStream}, preventing random-access methods from
+     * does not derive from {@link com.mucommander.commons.io.RandomAccessOutputStream}, preventing random-access methods from
      * being used.</p>
      *
      */

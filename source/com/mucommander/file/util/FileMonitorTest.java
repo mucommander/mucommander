@@ -18,11 +18,11 @@
 
 package com.mucommander.file.util;
 
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.PermissionAccesses;
 import com.mucommander.file.PermissionTypes;
-import com.mucommander.io.RandomAccessOutputStream;
 import junit.framework.TestCase;
 
 import java.io.IOException;

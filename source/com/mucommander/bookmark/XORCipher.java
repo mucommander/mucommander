@@ -18,8 +18,8 @@
 
 package com.mucommander.bookmark;
 
-import com.mucommander.io.base64.Base64Decoder;
-import com.mucommander.io.base64.Base64Encoder;
+import com.mucommander.commons.io.base64.Base64Decoder;
+import com.mucommander.commons.io.base64.Base64Encoder;
 
 import java.io.IOException;
 

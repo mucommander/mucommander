@@ -19,9 +19,9 @@
 package com.mucommander.file.impl.hadoop;
 
 import com.mucommander.auth.AuthException;
+import com.mucommander.commons.io.*;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.*;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.permission.FsPermission;

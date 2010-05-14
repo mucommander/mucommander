@@ -20,7 +20,7 @@ package com.mucommander.ui.action;
 
 import com.mucommander.AppLogger;
 import com.mucommander.RuntimeConstants;
-import com.mucommander.io.BackupOutputStream;
+import com.mucommander.commons.io.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;

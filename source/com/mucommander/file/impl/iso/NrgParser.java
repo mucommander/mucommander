@@ -18,8 +18,8 @@
 
 package com.mucommander.file.impl.iso;
 
+import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.file.AbstractFile;
-import com.mucommander.io.RandomAccessInputStream;
 
 import java.io.IOException;
 import java.util.Vector;

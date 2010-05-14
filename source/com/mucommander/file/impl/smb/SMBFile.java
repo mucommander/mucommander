@@ -20,10 +20,10 @@ package com.mucommander.file.impl.smb;
 
 import com.mucommander.auth.AuthException;
 import com.mucommander.auth.Credentials;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.file.*;
 import com.mucommander.file.filter.FilenameFilter;
-import com.mucommander.io.RandomAccessInputStream;
-import com.mucommander.io.RandomAccessOutputStream;
 import jcifs.smb.*;
 
 import java.io.IOException;
