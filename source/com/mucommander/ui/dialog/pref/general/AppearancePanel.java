@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.AppLogger;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.extension.ClassFinder;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.extension.LookAndFeelFilter;

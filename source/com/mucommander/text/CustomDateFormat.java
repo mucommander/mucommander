@@ -18,9 +18,9 @@
 
 package com.mucommander.text;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.conf.MuConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.shutdown;
 
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.QuitAction;

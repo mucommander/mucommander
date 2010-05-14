@@ -21,7 +21,7 @@ package com.mucommander;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.main.commandbar.CommandBarIO;

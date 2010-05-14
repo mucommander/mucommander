@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.file.AbstractArchiveEntryFile;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;

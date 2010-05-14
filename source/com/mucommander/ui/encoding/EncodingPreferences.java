@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.encoding;
 
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 
 import java.nio.charset.Charset;
 import java.util.Vector;

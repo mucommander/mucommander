@@ -20,7 +20,7 @@ package com.mucommander.ui.dialog.startup;
 
 import com.mucommander.AppLogger;
 import com.mucommander.VersionChecker;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.FileFactory;
 import com.mucommander.job.SelfUpdateJob;

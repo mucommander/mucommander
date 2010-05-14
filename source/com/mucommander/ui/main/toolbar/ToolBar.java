@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.conf.ConfigurationEvent;
-import com.mucommander.conf.ConfigurationListener;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.file.FileURL;
 import com.mucommander.runtime.OsFamilies;

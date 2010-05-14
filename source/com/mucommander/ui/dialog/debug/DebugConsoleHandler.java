@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.debug;
 
 import com.mucommander.commons.log.SingleLineFormatter;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 
 import java.util.LinkedList;
 import java.util.logging.Handler;

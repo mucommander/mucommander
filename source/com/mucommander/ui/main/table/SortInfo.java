@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 
 /**
  * This class holds information describes how a {@link FileTable} is currently sorted: sort criterion,

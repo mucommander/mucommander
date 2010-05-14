@@ -31,8 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Minor version of the muCommander conf API.              -->
   <property name="conf.subversion"     value=".0"/>
   <patternset id="conf.sources">
-    <exclude name="com/mucommander/conf/impl/**"/>
-    <include name="com/mucommander/conf/**"/>
+    <exclude name="com/mucommander/commons/conf/impl/**"/>
+    <include name="com/mucommander/commons/conf/**"/>
     <include name="com/mucommander/xml/**"/>
   </patternset>
 
@@ -197,7 +197,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
       <!-- 'Static' sources, excluding JUnit test cases.       -->
       <packageset dir="${source}" defaultexcludes="yes">
-        <include name="com/mucommander/conf"/>
+        <include name="com/mucommander/commons/conf"/>
         <include name="com/mucommander/xml/**"/>
       </packageset>
     </javadoc>
@@ -223,7 +223,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <exclude name="org.*"/>
       <classespath>
         <dirset dir="${conf.classes.normal}">
-          <include name="com/mucommander/conf"/>
+          <include name="com/mucommander/commons/conf"/>
           <include name="com/mucommander/xml"/>
         </dirset>
       </classespath>
@@ -321,7 +321,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Creating Configuration API documentation...</echo>
     <mkdir dir="${conf.doc}"/>
     <javadoc destdir="${conf.doc}" author="true" windowtitle="muCommander Configuration API" encoding="UTF-8" access="protected">
-      <fileset dir="${source}/com/mucommander/conf/">
+      <fileset dir="${source}/com/mucommander/commons/conf/">
         <patternset refid="non-test-sources"/>
         <exclude name="impl/**"/>
       </fileset>
@@ -390,7 +390,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="conf-do-javancss" if="javancss.available">
     <echo>Generating Configuration API JavaNCSS report...</echo>
     <mkdir dir="${conf.javancss.reports}"/>
-    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="com/mucommander/conf/*.java,com/mucommander/xml/*.java"
+    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="com/mucommander/commons/conf/*.java,com/mucommander/xml/*.java"
               outputfile="${conf.javancss.reports}/javancss.xml" format="xml"/>
 
     <echo>Formatting Configuration API JavaNCSS report...</echo>

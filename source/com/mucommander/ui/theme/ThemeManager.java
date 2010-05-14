@@ -22,7 +22,7 @@ import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileFactory;
 import com.mucommander.file.filter.ExtensionFilenameFilter;
@@ -1101,7 +1101,7 @@ public class ThemeManager {
     // -----------------------------------------------------------------------------------
     /**
      * Returns a valid type identifier from the specified configuration type definition.
-     * @param  label label of the theme type as defined in {@link com.mucommander.conf.impl.MuConfiguration}.
+     * @param  label label of the theme type as defined in {@link MuConfiguration}.
      * @return       a valid theme type identifier.
      */
     private static int getThemeTypeFromLabel(String label) {

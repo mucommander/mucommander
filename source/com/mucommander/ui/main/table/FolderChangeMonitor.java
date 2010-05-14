@@ -19,7 +19,7 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.AppLogger;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.FileProtocols;
 import com.mucommander.file.filter.AbstractFileFilter;

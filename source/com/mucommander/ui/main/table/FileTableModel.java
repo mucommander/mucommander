@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.file.AbstractFile;
 import com.mucommander.file.filter.FileFilter;
 import com.mucommander.file.impl.CachedFile;

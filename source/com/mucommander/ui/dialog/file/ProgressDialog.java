@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.AppLogger;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
 import com.mucommander.job.TransferFileJob;

@@ -20,7 +20,7 @@ package com.mucommander.text;
 
 import com.mucommander.AppLogger;
 import com.mucommander.commons.io.bom.BOMReader;
-import com.mucommander.conf.impl.MuConfiguration;
+import com.mucommander.conf.MuConfiguration;
 import com.mucommander.file.util.ResourceLoader;
 
 import java.io.*;
