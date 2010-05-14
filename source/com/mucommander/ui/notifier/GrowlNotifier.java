@@ -19,7 +19,7 @@
 package com.mucommander.ui.notifier;
 
 import com.mucommander.AppLogger;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
 

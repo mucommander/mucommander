@@ -22,7 +22,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccesses;
 import com.mucommander.commons.file.PermissionTypes;
 import com.mucommander.commons.file.filter.AbstractFileFilter;
-import com.mucommander.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersions;
 
 /**
  * Filter on a file's permissions.

@@ -21,7 +21,7 @@ package com.mucommander.commons.file.impl.s3;
 import com.mucommander.auth.AuthException;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersions;
 import org.jets3t.service.Constants;
 import org.jets3t.service.S3ObjectsChunk;
 import org.jets3t.service.S3Service;

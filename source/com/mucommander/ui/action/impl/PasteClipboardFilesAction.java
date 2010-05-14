@@ -20,8 +20,8 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.job.CopyJob;
-import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;

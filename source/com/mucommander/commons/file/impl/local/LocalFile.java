@@ -27,7 +27,7 @@ import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.runtime.*;
+import com.mucommander.commons.runtime.*;
 import com.sun.jna.ptr.LongByReference;
 
 import java.io.*;

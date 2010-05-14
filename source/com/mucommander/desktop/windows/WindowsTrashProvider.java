@@ -19,9 +19,9 @@
 package com.mucommander.desktop.windows;
 
 import com.mucommander.commons.file.util.Shell32;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.TrashProvider;
-import com.mucommander.runtime.OsFamilies;
 
 /**
  * This class is a trash provider for the {@link WindowsTrash Windows trash}.

@@ -21,7 +21,7 @@ package com.mucommander.ui.icon;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.FileIconProvider;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;

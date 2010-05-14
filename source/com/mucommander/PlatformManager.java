@@ -20,9 +20,9 @@ package com.mucommander;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.runtime.JavaVersions;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
+import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 
 import java.io.File;
 import java.io.IOException;

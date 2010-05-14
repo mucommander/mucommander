@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.text;
 
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;

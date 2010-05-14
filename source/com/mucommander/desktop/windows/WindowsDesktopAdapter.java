@@ -19,10 +19,10 @@
 package com.mucommander.desktop.windows;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.runtime.OsFamily;
 
 /**
  * @author Nicolas Rinaudo

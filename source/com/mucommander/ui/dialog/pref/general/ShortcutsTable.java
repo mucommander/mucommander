@@ -19,8 +19,8 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.AppLogger;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionKeymap;

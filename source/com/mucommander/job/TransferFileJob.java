@@ -28,7 +28,7 @@ import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.*;
 import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

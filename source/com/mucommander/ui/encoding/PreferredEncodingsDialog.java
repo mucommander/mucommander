@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.encoding;
 
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;

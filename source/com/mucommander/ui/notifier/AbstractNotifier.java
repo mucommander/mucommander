@@ -19,8 +19,8 @@
 package com.mucommander.ui.notifier;
 
 import com.mucommander.AppLogger;
-import com.mucommander.runtime.JavaVersions;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.SwingUtilities;

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 
 import javax.swing.Action;
 import javax.swing.Icon;

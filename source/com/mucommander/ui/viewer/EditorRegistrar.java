@@ -21,8 +21,8 @@ package com.mucommander.ui.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;

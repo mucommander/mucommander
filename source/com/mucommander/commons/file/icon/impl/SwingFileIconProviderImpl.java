@@ -28,8 +28,8 @@ import com.mucommander.commons.file.icon.LocalFileIconProvider;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.SilenceableOutputStream;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersion;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersion;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;

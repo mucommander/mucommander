@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.combobox;
 
-import com.mucommander.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersions;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JTextField;

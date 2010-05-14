@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.runtime;
+package com.mucommander.commons.runtime;
 
 /**
  * This abstract class represents a property of the runtime environment. A runtime property has a finite number of

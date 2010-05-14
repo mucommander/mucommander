@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.runtime;
+package com.mucommander.commons.runtime;
 
 /**
  * ComparableRuntimeProperty is a runtime property for which the values have a natural order. This class provides

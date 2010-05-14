@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.encoding;
 
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.DialogOwner;
 

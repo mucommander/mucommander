@@ -18,8 +18,8 @@
 
 package com.mucommander.desktop.openvms;
 
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.desktop.DefaultDesktopAdapter;
-import com.mucommander.runtime.OsFamilies;
 
 /**
  * A desktop adapter for OpenVMS.

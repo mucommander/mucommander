@@ -20,7 +20,7 @@
 package com.mucommander.ui.dialog;
 
 import com.mucommander.AppLogger;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.helper.FocusRequester;
 
 import javax.swing.*;

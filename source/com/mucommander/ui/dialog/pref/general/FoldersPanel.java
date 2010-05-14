@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;

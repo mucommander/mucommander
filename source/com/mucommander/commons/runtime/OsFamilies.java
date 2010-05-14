@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.runtime;
+package com.mucommander.commons.runtime;
 
 /**
  * This interface contains a list of all major OS families where a Java runtime environment is available.

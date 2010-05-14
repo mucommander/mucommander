@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.runtime;
+package com.mucommander.commons.runtime;
 
 import com.mucommander.commons.CommonsLogger;
 
@@ -24,7 +24,7 @@ import com.mucommander.commons.CommonsLogger;
  * This class represents a major version of an operating system, like <code>Mac OS X 10.5</code> or
  * <code>Windows XP</code>. The current runtime value is determined using the value of the <code>os.version</code>
  * system property and the current {@link OsFamily} instance.
- * Being a {@link com.mucommander.runtime.ComparableRuntimeProperty}, OS versions are ordered and can be compared
+ * Being a {@link com.mucommander.commons.runtime.ComparableRuntimeProperty}, OS versions are ordered and can be compared
  * against each other.
  *
  * @see OsVersions

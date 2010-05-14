@@ -19,7 +19,7 @@
 package com.mucommander.process;
 
 import com.mucommander.AppLogger;
-import com.mucommander.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersions;
 
 import java.io.File;
 import java.io.IOException;

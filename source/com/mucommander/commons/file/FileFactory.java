@@ -27,8 +27,8 @@ import com.mucommander.commons.file.impl.local.LocalProtocolProvider;
 import com.mucommander.commons.file.util.FilePool;
 import com.mucommander.commons.file.util.PathTokenizer;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.runtime.JavaVersions;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.OsFamilies;
 
 import java.io.IOException;
 import java.util.*;

@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;

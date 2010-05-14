@@ -21,8 +21,8 @@ package com.mucommander.desktop.windows;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
+import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.desktop.DesktopInitialisationException;
-import com.mucommander.runtime.OsVersion;
 
 /**
  * @author Nicolas Rinaudo

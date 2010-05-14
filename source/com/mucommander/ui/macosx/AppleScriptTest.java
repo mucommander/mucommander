@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.macosx;
 
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.util.StringUtils;
 import junit.framework.TestCase;
 

@@ -19,11 +19,11 @@
 package com.mucommander.ui.macosx;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

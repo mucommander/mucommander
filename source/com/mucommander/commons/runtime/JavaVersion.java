@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.runtime;
+package com.mucommander.commons.runtime;
 
 import com.mucommander.commons.CommonsLogger;
 
 /**
  * This class represents a major version of Java, like <code>Java 1.5</code> for instance. The current runtime instance
  * is determined using the value of the <code>java.version</code> system property.
- * Being a {@link com.mucommander.runtime.ComparableRuntimeProperty}, versions of Java are ordered and can be compared
+ * Being a {@link com.mucommander.commons.runtime.ComparableRuntimeProperty}, versions of Java are ordered and can be compared
  * against each other.
  *
  * @see JavaVersions

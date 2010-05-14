@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.macosx;
 
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.about.AboutDialog;
 import com.mucommander.ui.dialog.shutdown.QuitDialog;

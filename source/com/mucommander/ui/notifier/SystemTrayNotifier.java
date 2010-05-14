@@ -19,7 +19,7 @@
 package com.mucommander.ui.notifier;
 
 import com.mucommander.AppLogger;
-import com.mucommander.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.ui.action.AWTActionProxy;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;

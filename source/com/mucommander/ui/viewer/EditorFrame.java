@@ -21,7 +21,7 @@ package com.mucommander.ui.viewer;
 
 import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;

@@ -24,8 +24,8 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.Chmod;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.io.backup.BackupOutputStream;
-import com.mucommander.runtime.OsFamily;
 import com.mucommander.util.AlteredVector;
 import com.mucommander.util.VectorChangeListener;
 

@@ -21,8 +21,8 @@ package com.mucommander.commons.file.util;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileLogger;
 import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

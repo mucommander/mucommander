@@ -18,7 +18,7 @@
 
 package com.mucommander.commons.file.util;
 
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.sun.jna.Native;
 
 /**

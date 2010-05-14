@@ -22,7 +22,7 @@ import com.mucommander.auth.AuthenticationType;
 import com.mucommander.auth.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.FileURLTestCase;
-import com.mucommander.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamilies;
 
 import java.net.MalformedURLException;
 

@@ -20,9 +20,9 @@ package com.mucommander.ui.main.commandbar;
 
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.runtime.OsFamilies;
-import com.mucommander.runtime.OsVersions;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
