@@ -180,7 +180,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <echo>Compiling sources...</echo>
     <mkdir dir="${classes.normal}"/>
     <javac destdir="${classes.normal}" debug="on" deprecation="on"
-           encoding="utf-8" source="${app.jvm}" target="${app.jvm}" excludes="com/mucommander/ant/**">
+           encoding="utf-8" source="${app.jvm}" target="${app.jvm}" excludes="com/mucommander/commons/ant/**">
       <src path="${source}"/>
       <!-- Includes the application's libraries in the         -->
       <!-- classpath.                                          -->
@@ -408,7 +408,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <packageset dir="${source}" defaultexcludes="yes">
         <include name="com/mucommander/**"/>
         <patternset refid="non-test-sources"/>
-        <exclude name="com/mucommander/ant/**"/>
+        <exclude name="com/mucommander/commons/ant/**"/>
       </packageset>
     </javadoc>
   </target>
@@ -465,7 +465,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="do-javancss" if="javancss.available">
     <echo>Generating JavaNCSS report...</echo>
     <mkdir dir="${javancss.reports}"/>
-    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="**/*.java" excludes="com/mucommander/ant/**/*"
+    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="**/*.java" excludes="com/mucommander/commons/ant/**/*"
               outputfile="${javancss.reports}/javancss.xml" format="xml"/>
 
     <echo>Formatting JavaNCSS report...</echo>
@@ -1032,7 +1032,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <!-- test cases.                                         -->
       <fileset dir="${source}">
         <patternset refid="non-test-sources"/>
-        <exclude name="com/mucommander/ant/**"/>
+        <exclude name="com/mucommander/commons/ant/**"/>
       </fileset>
     </javadoc>
   </target>

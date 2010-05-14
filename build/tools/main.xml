@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <!-- Defines the sources that must be included at compile    -->
   <!-- time.                                                   -->
   <patternset id="tools.sources">
-    <include name="com/mucommander/ant/**"/>
+    <include name="com/mucommander/commons/ant/**"/>
     <include name="com/mucommander/xml/**"/>
   </patternset>
 
@@ -72,7 +72,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Loads the Ant tools as defined in their XML           -->
     <!-- description file.                                     -->
-    <taskdef resource="com/mucommander/ant/antlib.xml" classpath="${anttools.path}"/>
+    <taskdef resource="com/mucommander/commons/ant/antlib.xml" classpath="${anttools.path}"/>
   </target>
 
   <!-- Stores the path to the JDK classes in ${java.lib}.      -->
@@ -117,7 +117,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   <target name="check-tools" unless="tools.force-compile">
     <echo>Checking whether the Ant tools are up-to-date...</echo>
     <uptodate property="tools.up-to-date" targetfile="${tools.jar.cmp}">
-      <srcfiles dir="${source}/com/mucommander/ant" includes="**/*.java"/>
+      <srcfiles dir="${source}/com/mucommander/commons/ant" includes="**/*.java"/>
       <srcfiles file="${tools.res}/antlib.xml"/>
     </uptodate>
   </target>
@@ -172,7 +172,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <!-- Includes resources.                                 -->
       <fileset file="${tools.res}/JavaApplicationStub"/>
       <fileset file="${tools.license}"/>
-      <zipfileset prefix="com/mucommander/ant" file="${tools.res}/antlib.xml"/>
+      <zipfileset prefix="com/mucommander/commons/ant" file="${tools.res}/antlib.xml"/>
 
       <!-- Generates the correct manifest.                     -->
       <manifest>
@@ -432,7 +432,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <!-- that all classes belong to an '(anonymous)'         -->
       <!-- package.                                            -->
       <packageset dir="${source}" defaultexcludes="yes">
-        <include name="com/mucommander/ant/**"/>
+        <include name="com/mucommander/commons/ant/**"/>
         <include name="com/mucommander/xml/**"/>
       </packageset>
     </javadoc>
@@ -491,7 +491,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <!-- Includes all relevant muCommander classes.          -->
       <classespath>
         <dirset dir="${tools.classes.normal}">
-          <include name="com/mucommander/ant"/>
+          <include name="com/mucommander/commons/ant"/>
           <include name="com/mucommander/xml"/>
         </dirset>
       </classespath>
@@ -543,7 +543,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <mkdir dir="${tools.javancss.reports}"/>
 
     <!-- Generates the JavaNCSS XML reports.                   -->
-    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="com/mucommander/ant/**/*.java,com/mucommander/xml/*.java"
+    <javancss generatereport="true" srcdir="${source}" abortOnFail="false" includes="com/mucommander/commons/ant/**/*.java,com/mucommander/xml/*.java"
               outputfile="${tools.javancss.reports}/javancss.xml" format="xml"/>
 
     <!-- Formats the XML into human readable HTML reports.     -->
@@ -856,7 +856,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
              destdir="${tools.doc}" encoding="UTF-8" docletpath="${ant.lib}:${antdoclet.lib}:${velocity.lib}:${tools.jar.cmp}">
 
       <!-- Excludes all non test sources.                      -->
-      <fileset dir="${source}/com/mucommander/ant">
+      <fileset dir="${source}/com/mucommander/commons/ant">
         <patternset refid="non-test-sources"/>
       </fileset>
       <fileset dir="${source}/com/mucommander/xml">
