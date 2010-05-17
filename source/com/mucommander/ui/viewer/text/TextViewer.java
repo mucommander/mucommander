@@ -184,7 +184,6 @@ class TextViewer extends FileViewer implements EncodingListener {
         startEditing(file, null);
     }
     
-    @Override
 	public JComponent getViewedComponent() {
 		return textEditorImpl.getTextArea();
 	}

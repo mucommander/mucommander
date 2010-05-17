@@ -131,7 +131,6 @@ public abstract class FileViewer implements FilePresenter, ActionListener {
     // FilePresenter implementation //
     //////////////////////////////////
     
-    @Override
     public void open(AbstractFile file) throws IOException {
     	show(file);
     	setCurrentFile(file);

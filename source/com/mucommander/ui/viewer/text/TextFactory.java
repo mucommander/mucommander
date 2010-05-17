@@ -33,22 +33,18 @@ import java.io.InputStream;
  */
 public class TextFactory implements ViewerFactory, EditorFactory {
 
-	@Override
     public boolean canViewFile(AbstractFile file) throws WarnUserException {
         return doGenericChecks(file);
     }
 
-	@Override
     public boolean canEditFile(AbstractFile file) throws WarnUserException {
         return doGenericChecks(file);
     }
 
-	@Override
     public FileViewer createFileViewer() {
         return new TextViewer();
     }
 
-	@Override
     public FileEditor createFileEditor() {
         return new TextEditor();
     }

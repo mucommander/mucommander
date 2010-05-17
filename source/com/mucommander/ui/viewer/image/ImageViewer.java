@@ -194,7 +194,6 @@ class ImageViewer extends FileViewer implements ActionListener {
         loadImage(file);
     }
     
-    @Override
 	public JComponent getViewedComponent() {
 		return imageViewerImpl;
 	}
@@ -277,7 +276,6 @@ class ImageViewer extends FileViewer implements ActionListener {
         /**
          * Receives theme color changes notifications.
          */
-        @Override
         public void colorChanged(ColorChangedEvent event) {
             if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
                 backgroundColor = event.getColor();
@@ -288,7 +286,6 @@ class ImageViewer extends FileViewer implements ActionListener {
         /**
          * Not used, implemented as a no-op.
          */
-        @Override
         public void fontChanged(FontChangedEvent event) {}
     }
 }
