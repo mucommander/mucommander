@@ -8,7 +8,7 @@
     <!-- = API properties ========================================================================================== -->
     <!-- =========================================================================================================== -->
     <!-- Library's name                                                                                              -->
-    <property name="api.name"    value="muCommander Configuration"/>
+    <property name="api.name"    value="muCommander commons Configuration"/>
     <!-- Library's vendor.                                                                                           -->
     <property name="api.vendor"  value="Maxence Bernard"/>
     <!-- Library's version.                                                                                          -->
@@ -28,45 +28,47 @@
     <!-- = Project structure ======================================================================================= -->
     <!-- =========================================================================================================== -->
     <!-- Source directory.                                                                                           -->
-    <property name="src"                location="src"/>
+    <property name="src"                  location="src"/>
     <!-- Test sources directory.                                                                                     -->
-    <property name="src.test"           location="${src}/test"/>
+    <property name="src.test"             location="${src}/test"/>
     <!-- Main sources directory.                                                                                     -->
-    <property name="src.main"           location="${src}/main"/>
+    <property name="src.main"             location="${src}/main"/>
     <!-- External libraries directory.                                                                               -->
-    <property name="lib"                location="lib"/>
+    <property name="lib"                  location="lib"/>
     <!-- External libraries used for tests.                                                                          -->
-    <property name="lib.test"           location="${lib}/test"/>
+    <property name="lib.test"             location="${lib}/test"/>
     <!-- External tools.                                                                                             -->
-    <property name="lib.tools"          location="${lib}/tools"/>
+    <property name="lib.tools"            location="${lib}/tools"/>
     <!-- Where to store temporary files.                                                                             -->
-    <property name="tmp"                location="tmp"/>
+    <property name="tmp"                  location="tmp"/>
     <!-- Where to store the main source's code compilation output.                                                   -->
-    <property name="tmp.main"           location="${tmp}/main"/>
+    <property name="tmp.main"             location="${tmp}/main"/>
     <!-- Where to store the test source's code compilation output.                                                   -->
-    <property name="tmp.test"           location="${tmp}/test"/>
+    <property name="tmp.test"             location="${tmp}/test"/>
     <!-- Where to store temporary Cobertura files.                                                                   -->
-    <property name="tmp.cobertura"      location="${tmp}/cobertura"/>
+    <property name="tmp.cobertura"        location="${tmp}/cobertura"/>
     <!-- Where to store various project reports.                                                                     -->
-    <property name="reports"            location="reports"/>
+    <property name="reports"              location="reports"/>
     <!-- Where to store TestNG reports.                                                                              -->
-    <property name="testng.reports"     location="${reports}/testng"/>
+    <property name="testng.reports"       location="${reports}/testng"/>
     <!-- Where to store Cobertura reports.                                                                           -->
-    <property name="cobertura.reports"  location="${reports}/cobertura"/>
+    <property name="cobertura.reports"    location="${reports}/cobertura"/>
     <!-- Where to store Checkstyle reports.                                                                          -->
-    <property name="checkstyle.reports" location="${reports}/checkstyle"/>
+    <property name="checkstyle.reports"   location="${reports}/checkstyle"/>
+    <!-- Where to store PMD reports.                                                                                 -->
+    <property name="pmd.reports"          location="${reports}/pmd"/>
     <!-- Where to store Ivy dependency reports.                                                                      -->
     <property name="ivy.reports"          location="${reports}/ivy"/>
     <!-- Where to store the API's Javadoc.                                                                           -->
-    <property name="docs"               location="docs"/>
+    <property name="docs"                 location="docs"/>
     <!-- Where to store distribution files.                                                                          -->
-    <property name="dist"               location="dist"/>
+    <property name="dist"                 location="dist"/>
     <!-- JAR distribution file.                                                                                      -->
-    <property name="dist.jar"           location="${dist}/com.mucommander.conf.jar"/>
+    <property name="dist.jar"             location="${dist}/com.mucommander.commons.conf.jar"/>
     <!-- Documentation distribution file.                                                                            -->
-    <property name="dist.doc"           location="${dist}/com.mucommander.conf-javadoc.jar"/>
+    <property name="dist.doc"             location="${dist}/com.mucommander.commons.conf-javadoc.jar"/>
     <!-- Source distribution file.                                                                                   -->
-    <property name="dist.source"        location="${dist}/com.mucommander.conf-sources.jar"/>
+    <property name="dist.source"          location="${dist}/com.mucommander.commons.conf-sources.jar"/>
     <!-- Ivy dependencies retrieval pattern.                                                                         -->
     <property name="ivy.retrieve.pattern" value="${lib}/[conf]/[organisation]/[artifact].[ext]"/>
 
@@ -199,7 +201,14 @@
         <jar jarfile="${dist.doc}" basedir="${docs}"/>
     </target>
 
-    <target name="checkstyle" depends="compile,retrieve-tools">
+
+
+    <!-- = Reports targets ========================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <target name="reports" depends="checkstyle,pmd,ivy,test" description="Generates all available reports."/>
+    
+    <target name="checkstyle" depends="compile,retrieve-tools" description='Generates CheckStyle reports.'>
+        <echo>Generating CheckStyle reports...</echo>
         <mkdir dir="${checkstyle.reports}"/>
         <taskdef resource="checkstyletask.properties" classpathref="lib.tools"/>
         <checkstyle config="checkstyle.xml" failOnViolation="false">
@@ -211,10 +220,40 @@
         </checkstyle>
     </target>
 
+    <target name="pmd" depends="retrieve-tools" description="Generates PMD reports.">
+        <echo>Generating PMD report...</echo>
+        <taskdef classpathref="lib.tools" name="pmd" classname="net.sourceforge.pmd.ant.PMDTask"/>
+        <mkdir dir="${pmd.reports}"/>
+        <pmd encoding="${source.encoding}">
+            <ruleset>basic</ruleset>
+            <ruleset>unusedcode</ruleset>
+            <ruleset>design</ruleset>
+            <ruleset>imports</ruleset>
+            <ruleset>junit</ruleset>
+            <ruleset>strings</ruleset>
+            <ruleset>codesize</ruleset>
+            <ruleset>coupling</ruleset>
+            <ruleset>strictexception</ruleset>
+            <formatter type="html" toFile="${pmd.reports}/pmd.html"/>
+            <formatter type="xml"  toFile="${pmd.reports}/pmd.xml"/>
+            <fileset dir="${src.main}">
+                <include name="**/*.java"/>
+            </fileset>
+        </pmd>
+    </target>
+
+    <target name="ivy" depends="ivy-config" description="Generates Ivy dependency reports.">
+        <echo>Generating Ivy dependency report...</echo>
+        <mkdir dir="${ivy.reports}"/>
+        <ivy:report todir="${ivy.reports}" xml="true" graph="false" conf="test,tools"/>
+    </target>
+    
 
 
     <!-- = Maintenance targets ===================================================================================== -->
     <!-- =========================================================================================================== -->
+    <target name="all" description="Generates all reports and release files." depends="reports,release"/>
+
     <target name="clean" description="Deletes all temporary files.">
         <echo>Deleting temporary files...</echo>
         <delete dir="${tmp}"/>
@@ -225,6 +264,7 @@
             <fileset dir="." includes="**/*~" defaultexcludes="no"/>
         </delete>
     </target>
+
 
 
 
@@ -252,12 +292,4 @@
         <echo>Retrieving test dependencies...</echo>
         <ivy:retrieve symlink="true" conf="test" type="jar"/>
     </target>
-
-
-    <target name="dep-report" depends="ivy-config">
-        <echo>Generating Ivy dependency report...</echo>
-        <mkdir dir="${ivy.reports}"/>
-        <ivy:report todir="${ivy.reports}" graph="false" conf="test,tools"/>
-    </target>
-
 </project>

@@ -42,5 +42,6 @@
         <dependency org="testng"      name="testng"     rev="latest.integration" conf="test"/>
         <dependency org="sourceforge" name="cobertura"  rev="latest.integration" conf="test"/>
         <dependency org="checkstyle"  name="checkstyle" rev="latest.integration" conf="tools"/>
+        <dependency org="pmd"         name="pmd"        rev="latest.integration" conf="tools"/>
     </dependencies>
 </ivy-module>
