@@ -18,6 +18,7 @@
 
 package com.mucommander;
 
+import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
@@ -627,8 +628,11 @@ public class Launcher {
         // Use the FTP configuration option that controls whether to force the display of hidden files, or leave it for
         // the servers to decide whether to show them.
         FTPProtocolProvider.setForceHiddenFilesListing(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));        
+        
+        // Use CredentialsManager for file URL authentication
+        FileFactory.setDefaultAuthenticator(CredentialsManager.getAuthenticator());
 
-        // Register the application-specific 'bookmark' protocol. 
+        // Register the application-specific 'bookmark' protocol.
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
     }
 

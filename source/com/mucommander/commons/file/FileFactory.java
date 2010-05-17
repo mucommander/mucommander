@@ -18,7 +18,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.auth.CredentialsManager;
 import com.mucommander.commons.file.icon.FileIconProvider;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.commons.file.impl.local.LocalFile;
@@ -100,6 +99,9 @@ public class FileFactory {
 
     /** Default file icon provider, initialized in static block */
     private static FileIconProvider defaultFileIconProvider;
+
+    /** Default authenticator, used when none is specified */
+    private static Authenticator defaultAuthenticator;
 
     static {
         // Register built-in file protocols.
@@ -394,11 +396,8 @@ public class FileFactory {
     }
 
     /**
-     * Creates and returns an instance of AbstractFile for the given FileURL and uses the specified parent file (if any)
-     * as the created file's parent.
-     *
-     * <p>Specifying the file parent if an instance already exists allows to recycle the AbstractFile instance
-     * instead of creating a new one when the parent file is requested.
+     * Shorthand for {@link #getFile(FileURL, AbstractFile, Authenticator, Object...)} called with the
+     * {@link #getDefaultAuthenticator() default authenticator}.
      *
      * @param fileURL the file URL representing the file to be created
      * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
@@ -406,6 +405,25 @@ public class FileFactory {
      * @throws java.io.IOException if something went wrong during file creation.
      */
     public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Object... instantiationParams) throws IOException {
+        return getFile(fileURL, parent, defaultAuthenticator, instantiationParams);
+    }
+
+    /**
+     * Creates and returns an instance of AbstractFile for the given FileURL and uses the specified parent file (if any)
+     * as the created file's parent.
+     *
+     * <p>Specifying the file parent if an instance already exists allows to recycle the AbstractFile instance
+     * instead of creating a new one when the parent file is requested.
+     *
+     * @param fileURL the file URL representing the file to be created
+     * @param authenticator used to authenticate the specified location if its protocol
+     * {@link FileURL#getAuthenticationType() is authenticated} and the loction contains no credentials already.
+     * If the value is <code>null</code>, no {@link Authenticator} will be used, not even the default one.
+     * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
+     * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
+     * @throws java.io.IOException if something went wrong during file creation.
+     */
+    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Authenticator authenticator, Object... instantiationParams) throws IOException {
         String protocol = fileURL.getScheme();
         if(!isRegisteredProtocol(protocol))
             throw new IOException("Unsupported file protocol: "+protocol);
@@ -441,7 +459,7 @@ public class FileFactory {
                     // Create a fresh FileURL with the current path
                     FileURL clonedURL = (FileURL)fileURL.clone();
                     clonedURL.setPath(currentPath);
-                    currentFile = wrapArchive(createRawFile(clonedURL, instantiationParams));
+                    currentFile = wrapArchive(createRawFile(clonedURL, authenticator, instantiationParams));
 
                     lastFileResolved = true;
                 }
@@ -471,7 +489,7 @@ public class FileFactory {
             if(currentFile==null || !(currentFile instanceof AbstractArchiveFile)) {
                 FileURL clonedURL = (FileURL)fileURL.clone();
                 clonedURL.setPath(currentPath);
-                currentFile = createRawFile(clonedURL, instantiationParams);
+                currentFile = createRawFile(clonedURL, authenticator, instantiationParams);
             }
             else {          // currentFile is an AbstractArchiveFile
                 currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length()), pathSeparator));
@@ -485,7 +503,7 @@ public class FileFactory {
         return currentFile;
     }
 
-    private static AbstractFile createRawFile(FileURL fileURL, Object... instantiationParams) throws IOException {
+    private static AbstractFile createRawFile(FileURL fileURL, Authenticator authenticator, Object... instantiationParams) throws IOException {
         String scheme = fileURL.getScheme().toLowerCase();
         FilePool rawFilePool = rawFilePoolMap.get(scheme);
 
@@ -515,10 +533,10 @@ public class FileFactory {
         }
         // Use the protocol hashtable for any other file protocol
         else {
-            // If the specified FileURL doesn't contain any credentials, use CredentialsManager to find
-            // any credentials matching the url and use them.
-            if(!fileURL.containsCredentials())
-                CredentialsManager.authenticateImplicit(fileURL);
+            // If an Authenticator has been specified and the specified FileURL's protocol is authenticated and the
+            // FileURL doesn't contain any credentials, use it to authenticate the FileURL.
+            if(authenticator!=null && fileURL.getAuthenticationType()!=AuthenticationType.NO_AUTHENTICATION && !fileURL.containsCredentials())
+                authenticator.authenticate(fileURL);
 
             // Finds the right file protocol provider
             ProtocolProvider provider = getProtocolProvider(scheme);
@@ -697,5 +715,28 @@ public class FileFactory {
      */
     public static void setDefaultFileIconProvider(FileIconProvider fip) {
         defaultFileIconProvider = fip;
+    }
+
+    /**
+     * Returns the default {@link Authenticator} that is used for authenticating {@link FileURL} instances prior
+     * to resolving the corresponding file.
+     *
+     * @return the default {@link Authenticator} that is used for authenticating {@link FileURL} instances prior
+     * to resolving the corresponding file
+     * @see Authenticator
+     */
+    public static Authenticator getDefaultAuthenticator() {
+        return defaultAuthenticator;
+    }
+
+    /**
+     * Sets the default {@link Authenticator} that is used for authenticating {@link FileURL} instances prior
+     * to resolving the corresponding file.
+     *
+     * @param authenticator the new default {@link Authenticator}
+     * @see Authenticator
+     */
+    public static void setDefaultAuthenticator(Authenticator authenticator) {
+        defaultAuthenticator = authenticator;
     }
 }

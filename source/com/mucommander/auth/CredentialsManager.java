@@ -22,10 +22,7 @@ import com.mucommander.AppLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.collections.VectorChangeListener;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.util.Chmod;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.io.backup.BackupOutputStream;
@@ -54,7 +51,7 @@ import java.util.Vector;
  *
  * @author Maxence Bernard
  */
-public class CredentialsManager implements VectorChangeListener {
+public class CredentialsManager {
 
     /** Contains volatile CredentialsMapping instances, lost when the application terminates */
     private static Vector<CredentialsMapping> volatileCredentialMappings = new Vector<CredentialsMapping>();
@@ -62,6 +59,9 @@ public class CredentialsManager implements VectorChangeListener {
     /** Contains persistent CredentialsMapping instances, stored to an XML file when the application
      * terminates, and loaded the next time the application is started */
     private static AlteredVector<CredentialsMapping> persistentCredentialMappings = new AlteredVector<CredentialsMapping>();
+
+    /** Singleton CredentialsManagerAuthenticator instance */
+    private final static Authenticator AUTHENTICATOR = new CredentialsManagerAuthenticator();
 
     /** Credentials file location */
     private static AbstractFile credentialsFile;
@@ -78,12 +78,25 @@ public class CredentialsManager implements VectorChangeListener {
     
     static {
         // Listen to changes made to the persistent entries vector
-        persistentCredentialMappings.addVectorChangeListener(singleton);
+        persistentCredentialMappings.addVectorChangeListener(new VectorChangeListener() {
+            public void elementsAdded(int startIndex, int nbAdded) {
+                saveNeeded = true;
+            }
+
+            public void elementsRemoved(int startIndex, int nbRemoved) {
+                saveNeeded = true;
+            }
+
+            public void elementChanged(int index) {
+                saveNeeded = true;
+            }
+        });
     }
 
 
     /**
      * Returns the path to the credentials file.
+     *
      * @return the path to the credentials file.
      * @throws IOException if there was some problem locating the default credentials file.
      */
@@ -95,6 +108,7 @@ public class CredentialsManager implements VectorChangeListener {
 
     /**
      * Sets the path to the credentials file.
+     *
      * @param  path                  path to the credentials file
      * @throws FileNotFoundException if <code>path</code> is not available.
      */
@@ -109,13 +123,17 @@ public class CredentialsManager implements VectorChangeListener {
 
     /**
      * Sets the path to the credentials file.
+     *
      * @param  file                  path to the credentials file
      * @throws FileNotFoundException if <code>path</code> is not available.
      */
-    public static void setCredentialsFile(File file) throws FileNotFoundException {setCredentialsFile(FileFactory.getFile(file.getAbsolutePath()));}
+    public static void setCredentialsFile(File file) throws FileNotFoundException {
+        setCredentialsFile(FileFactory.getFile(file.getAbsolutePath()));
+    }
 
     /**
      * Sets the path to the credentials file.
+     *
      * @param  file                  path to the credentials file
      * @throws FileNotFoundException if <code>path</code> is not available.
      */
@@ -125,9 +143,9 @@ public class CredentialsManager implements VectorChangeListener {
         credentialsFile = file;
     }
 
-
     /**
      * Tries to load credentials from the credentials file if it exists. Does nothing if it doesn't.
+     *
      * @throws Exception if an error occurs while loading the credentials file.
      */
     public static void loadCredentials() throws Exception {
@@ -205,6 +223,16 @@ public class CredentialsManager implements VectorChangeListener {
         return matches;
     }
 
+    /**
+     * Returns an {@link Authenticator} that authenticates {@link FileURL} instances using the credentials and realm
+     * properties stored by {@link CredentialsManager}.
+     *
+     * @return an {@link Authenticator} that authenticates {@link FileURL} instances using the credentials and realm
+     * properties stored by {@link CredentialsManager}.
+     */
+    public static Authenticator getAuthenticator() {
+        return AUTHENTICATOR;
+    }
 
     /**
      * Returns a Vector of CredentialsMapping matching the given URL's scheme and host, best match at the first position.
@@ -304,26 +332,20 @@ public class CredentialsManager implements VectorChangeListener {
      * If there is no match, guest credentials are retrieved from the URL and used (if any).</p>
      *
      * @param location the FileURL to authenticate
-     * @return <code>true</code> if a set of credentials was found and used to authenticate the URL, <code>false</code>
-     * otherwise
      */
-    public static boolean authenticateImplicit(FileURL location) {
+    private static void authenticateImplicit(FileURL location) {
         AppLogger.finest("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
 
         CredentialsMapping creds[] = getMatchingCredentials(location);
         if(creds.length>0) {
             authenticate(location, creds[0]);
-            return true;
         }
         else {
             Credentials guestCredentials = location.getGuestCredentials();
             if(guestCredentials!=null) {
                 authenticate(location, new CredentialsMapping(guestCredentials, location.getRealm(), false));
-                return true;
             }
         }
-
-        return false;
     }
 
 
@@ -465,21 +487,20 @@ public class CredentialsManager implements VectorChangeListener {
     }
 
 
-    /////////////////////////////////////////
-    // VectorChangeListener implementation //
-    /////////////////////////////////////////
+    ///////////////////
+    // Inner classes //
+    ///////////////////
 
-    // Detects changes made to the persistent credentials AlteredVector
+    /**
+     * An {@link Authenticator} implementation that uses {@link CredentialsManager#authenticateImplicit(FileURL)} to
+     * authenticate the specified {@link FileURL} instances.
+     *
+     * @author Maxence Bernard
+     */
+    private static class CredentialsManagerAuthenticator implements Authenticator {
 
-    public void elementsAdded(int startIndex, int nbAdded) {
-        saveNeeded = true;
-    }
-
-    public void elementsRemoved(int startIndex, int nbRemoved) {
-        saveNeeded = true;
-    }
-
-    public void elementChanged(int index) {
-        saveNeeded = true;
+        public void authenticate(FileURL fileURL) {
+            CredentialsManager.authenticateImplicit(fileURL);
+        }
     }
 }
