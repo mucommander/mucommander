@@ -57,6 +57,8 @@ Localization:
 Bug fixes:
 - Pack dialog now implements the same filename selection algorithm as other dialogs (ticket #167).
 - When an invalid destination was entered in a transfer dialog, the spinning dial icon would keep spinning.
+- Fixed an issue that would occur when creating directories whose extension match that of one of the supported archive
+  formats (see ticket #360).
 
 Known issues:
 - Some translations may not be up-to-date. Refer to

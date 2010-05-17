@@ -31,8 +31,8 @@ import java.util.WeakHashMap;
 /**
  * <code>AbstractArchiveFile</code> is the superclass of all archive files. It allows archive file to be browsed as if
  * they were regular directories, independently of the underlying protocol used to access the actual file.
- *
- * <p><code>AbstractArchiveFile</code> extends {@link ProxyFile} to delegate the <code>AbstractFile</code>
+ * <p>
+ * <code>AbstractArchiveFile</code> extends {@link ProxyFile} to delegate the <code>AbstractFile</code>
  * implementation to the actual archive file and overrides some methods to provide the added functionality.<br>
  * There are two kinds of <code>AbstractArchiveFile</code>, both of which extend this class:
  * <ul>
@@ -59,7 +59,13 @@ import java.util.WeakHashMap;
  * associated <code>AbstractArchiveFile</code> to list their content.
  * <br>From an implementation perspective, one only needs to deal with {@link ArchiveEntry} instances, all the nuts
  * and bolts are taken care of by this class.</p>
-
+ *
+ * <p>Note that an instance of <code>AbstractArchiveFile</code> may or may not actually be an archive:
+ * {@link #isArchive()} returns <code>true</code> only if the file currently exists and is not a directory. The value
+ * returned by {@link #isArchive()} may change over time as the file is modified. When an
+ * <code>AbstractArchiveFile</code> is not currently an archive, it acts just as a 'normal' file and delegates
+ * <code>ls()</code> methods to the underlying {@link AbstractFile}</p>
+ *
  * @see com.mucommander.commons.file.FileFactory
  * @see com.mucommander.commons.file.ArchiveFormatProvider
  * @see com.mucommander.commons.file.ArchiveEntry
@@ -99,7 +105,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * underlying file protocol.
      */
     protected void createEntriesTree() throws IOException, UnsupportedFileOperationException {
-        // TODO: this method is not thread-safe and must be synchronized
+        // TODO: this method is not thread-safe and needs to be synchronized
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
         archiveEntryFiles = new WeakHashMap<ArchiveEntry, AbstractArchiveEntryFile>();
 
@@ -215,7 +221,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
      * underlying file protocol.
      */
-    protected AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException, UnsupportedFileOperationException {
+    private AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException, UnsupportedFileOperationException {
         AbstractFile files[];
         int nbChildren = treeNode.getChildCount();
 
@@ -456,6 +462,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      */
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
+        // Delegate to the ancestor if this file isn't actually an archive
+        if(!isArchive())
+            return super.ls();
+
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 
@@ -475,6 +485,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      */
     @Override
     public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
+        // Delegate to the ancestor if this file isn't actually an archive
+        if(!isArchive())
+            return super.ls(filter);
+
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 
@@ -493,6 +507,10 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      */
     @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
+        // Delegate to the ancestor if this file isn't actually an archive
+        if(!isArchive())
+            return super.ls(filter);
+
         // Make sure the entries tree is created and up-to-date
         checkEntriesTree();
 

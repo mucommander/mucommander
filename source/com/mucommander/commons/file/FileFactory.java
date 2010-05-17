@@ -88,14 +88,11 @@ public class FileFactory {
     /** Array of registered FileProtocolMapping instances, for quicker access */
     private static ArchiveFormatProvider[] archiveFormatProviders;
 
-    /** Contains raw file (as opposed to archives) pools for each registered scheme */
-    private final static HashMap<String, FilePool> rawFilePoolMap = new HashMap<String, FilePool>();
-
-    /** Contains archive file pools for each registered archive format */
-    private final static HashMap<String, FilePool> archiveFilePoolMap = new HashMap<String, FilePool>();
+    /** Contains a FilePool instance for each registered scheme */
+    private static final HashMap<String, FilePool> FILE_POOL_MAP = new HashMap<String, FilePool>();
 
     /** System temp directory */
-    private final static AbstractFile TEMP_DIRECTORY;
+    private static final AbstractFile TEMP_DIRECTORY;
 
     /** Default file icon provider, initialized in static block */
     private static FileIconProvider defaultFileIconProvider;
@@ -175,8 +172,7 @@ public class FileFactory {
         protocol = protocol.toLowerCase();
 
         // Create raw and archive file pools
-        rawFilePoolMap.put(protocol, new FilePool());
-        archiveFilePoolMap.put(protocol, new FilePool());
+        FILE_POOL_MAP.put(protocol, new FilePool());
 
         // Special case for local file provider.
         // Note that the local file provider is also added to the provider hashtable.
@@ -196,8 +192,7 @@ public class FileFactory {
         protocol = protocol.toLowerCase();
 
         // Remove raw and archive file pools
-        rawFilePoolMap.remove(protocol);
-        archiveFilePoolMap.remove(protocol);
+        FILE_POOL_MAP.remove(protocol);
 
         // Special case for local file provider
         if(protocol.equals(FileProtocols.FILE))
@@ -428,6 +423,18 @@ public class FileFactory {
         if(!isRegisteredProtocol(protocol))
             throw new IOException("Unsupported file protocol: "+protocol);
 
+        // Lookup the pool for an existing AbstractFile instance, only if there are no instantiationParams.
+        // If there are instantiationParams (the file was created by the AbstractFile implementation directly, that is
+        // by ls()), any existing file in the pool must be replaced with a new, more up-to-date one.
+        FilePool filePool = FILE_POOL_MAP.get(fileURL.getScheme().toLowerCase());
+        if(instantiationParams.length==0) {
+            // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties and are
+            // trailing slash insensitive (e.g. '/root' and '/root/' URLS are one and the same)
+            AbstractFile file = filePool.get(fileURL);
+            if(file!=null)
+                return file;
+        }
+
         String filePath = fileURL.getPath();
         // For local paths under Windows (e.g. "/C:\temp"), remove the leading '/' character
         if(OsFamilies.WINDOWS.isCurrent() && FileProtocols.FILE.equals(protocol))
@@ -443,36 +450,43 @@ public class FileFactory {
         boolean lastFileResolved = false;
 
         // Extract every filename from the path from left to right and for each of them, see if it looks like an archive.
-        // If it does, create the appropriate protocol file and wrap it into an archive file.
+        // If it does, create the appropriate protocol file and wrap it with an archive file.
         while(pt.hasMoreFilenames()) {
-
             // Test if the filename's extension looks like a supported archive format...
-            // Note that the archive can also be a directory with an archive extension
+            // Note that the archive can also be a directory with an archive extension.
             if(isArchiveFilename(pt.nextFilename())) {
                 // Remove trailing separator of file, some file protocols such as SFTP don't like trailing separators.
                 // On the contrary, directories without a trailing slash are fine.
                 String currentPath = PathUtils.removeTrailingSeparator(pt.getCurrentPath(), pathSeparator);
 
-                // Test if current file is an archive file and if it is, create an archive entry file instead of a raw
+                // Test if current file is an archive and if it is, create an archive entry file instead of a raw
                 // protocol file
-                if(currentFile==null || !(currentFile instanceof AbstractArchiveFile)) {
+                if(currentFile==null || !currentFile.isArchive()) {
                     // Create a fresh FileURL with the current path
                     FileURL clonedURL = (FileURL)fileURL.clone();
                     clonedURL.setPath(currentPath);
-                    currentFile = wrapArchive(createRawFile(clonedURL, authenticator, instantiationParams));
+
+                    // Look for a cached file instance before creating a new one
+                    currentFile = filePool.get(clonedURL);
+                    if(currentFile==null) {
+                        currentFile = wrapArchive(createRawFile(clonedURL, authenticator, instantiationParams));
+                        // Add the intermediate file instance to the cache
+                        filePool.put(clonedURL, currentFile);
+                    }
 
                     lastFileResolved = true;
                 }
                 else {          // currentFile is an AbstractArchiveFile
                     // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
                     AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length()), pathSeparator));
-                    if(tempEntryFile instanceof AbstractArchiveFile) {
+                    if(tempEntryFile.isArchive()) {
                         currentFile = tempEntryFile;
                         lastFileResolved = true;
                     }
                     else {
                         lastFileResolved = false;
                     }
+                    // Note: don't cache the entry file
                 }
             }
             else {
@@ -481,18 +495,23 @@ public class FileFactory {
         }
 
         // Create last file if it hasn't been already (if the last filename was not an archive), same routine as above
-        // except that it doesn't wrap the file into an archive file
+        // except that it doesn't wrap the file with an archive file
         if(!lastFileResolved) {
             // Note: DON'T strip out the trailing separator, as this would cause problems with root resources
             String currentPath = pt.getCurrentPath();
 
-            if(currentFile==null || !(currentFile instanceof AbstractArchiveFile)) {
+            if(currentFile==null || !currentFile.isArchive()) {
                 FileURL clonedURL = (FileURL)fileURL.clone();
                 clonedURL.setPath(currentPath);
+
+                // Note: no need to look a cached file instance, we have already looked for it at the very beginning.
                 currentFile = createRawFile(clonedURL, authenticator, instantiationParams);
+                // Add the final file instance to the cache
+                filePool.put(currentFile.getURL(), currentFile);
             }
             else {          // currentFile is an AbstractArchiveFile
                 currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length()), pathSeparator));
+                // Note: don't cache the entry file
             }
         }
 
@@ -505,20 +524,6 @@ public class FileFactory {
 
     private static AbstractFile createRawFile(FileURL fileURL, Authenticator authenticator, Object... instantiationParams) throws IOException {
         String scheme = fileURL.getScheme().toLowerCase();
-        FilePool rawFilePool = rawFilePoolMap.get(scheme);
-
-        AbstractFile file;
-        // Lookup the pool for an existing AbstractFile instance, only if there are no instantiationParams.
-        // If there are instantiationParams (the file was created by the AbstractFile implementation directly, that is
-        // by ls()), any existing file in the pool must be replaced with a new, more up-to-date one.
-        if(instantiationParams.length==0) {
-            // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties and are
-            // trailing slash insensitive (e.g. '/root' and '/root/' URLS are one and the same)
-            file = rawFilePool.get(fileURL);
-
-            if(file!=null)
-                return file;
-        }
 
         // Special case for local files to avoid provider hashtable lookup and other unnecessary checks
         // (for performance reasons)
@@ -526,7 +531,7 @@ public class FileFactory {
             if(localFileProvider == null)
                 throw new IOException("Unknown file protocol: " + scheme);
 
-            file = localFileProvider.getFile(fileURL, instantiationParams);
+            return localFileProvider.getFile(fileURL, instantiationParams);
 
             // Uncomment this line and comment the previous one to simulate a slow filesystem
             //file = new DebugFile(file, 0, 50);
@@ -542,17 +547,9 @@ public class FileFactory {
             ProtocolProvider provider = getProtocolProvider(scheme);
             if(provider == null)
                 throw new IOException("Unknown file protocol: " + scheme);
-            file = provider.getFile(fileURL, instantiationParams);
+
+            return provider.getFile(fileURL, instantiationParams);
         }
-
-        // Note: Creating an archive file on top of the file must be done after adding the file to the pool,
-        // this could otherwise lead to weird behaviors, for example if a directory with the same filename
-        // of a former archive was created, the directory would be considered as an archive.
-        // Note: the URL should always be free of a trailing separator
-        rawFilePool.put(fileURL, file);
-        FileLogger.finest("Added to file pool: "+file);
-
-        return file;
     }
 
     /**
@@ -614,7 +611,7 @@ public class FileFactory {
      * @param deleteOnExit if <code>true</code>, the temporary file will be deleted upon normal termination of the JVM
      * @return the temporary file, may be a LocalFile or an AbstractArchiveFile if the filename's extension corresponds
      * to a registered archive format.
-     * @throws IOException if an error occurred while instanciating the temporary file. This should not happen under
+     * @throws IOException if an error occurred while instantiating the temporary file. This should not happen under
      * normal circumstances.
      */
     public static AbstractFile getTemporaryFile(boolean deleteOnExit) throws IOException {
@@ -643,10 +640,15 @@ public class FileFactory {
     }
 
     /**
-     * Tests based on the given file's extension, if the file corresponds to a registered archive format.
-     * If it does, an appropriate {@link AbstractArchiveFile} instance is created on top of the provided file
-     * and returned. If it doesn't (the file's extension doesn't correspond to a registered archive format or is a
-     * directory), the provided <code>AbstractFile</code> instance is returned.
+     * Tests if the given file's extension matches that of one of the registered archive formats.
+     * If it does, a corresponding {@link AbstractArchiveFile} instance is created on top of the provided file
+     * and returned. If it doesn't, the provided <code>AbstractFile</code> instance is simply returned.
+     * <p>
+     * Note that return {@link AbstractArchiveFile} instances may not actually be archives according to
+     * {@link AbstractFile#isArchive()}. An {@link AbstractArchiveFile} instance that is not currently an archive 
+     * (either non-existent or a directory) will behave as a regular (non-archive) file. This allows file instances to
+     * go from being an archive to not being an archive (and vice-versa), without having to re-resolve the file.
+     * </p>
      */
     public static AbstractFile wrapArchive(AbstractFile file) throws IOException {
         String filename = file.getName();
@@ -655,35 +657,10 @@ public class FileFactory {
         // Comparing the filename against each and every archive extension has a cost, so we only perform the test if
         // the filename contains a dot '.' character, since most of the time this method is called with a filename that
         // doesn't match any of the filters.
-        if(!file.isDirectory() && filename.indexOf('.')!=-1) {
-            AbstractFile archiveFile;
-
-            // Do not use the file pool for archive entries
-            FilePool archiveFilePool;
-            if(file instanceof AbstractArchiveEntryFile)
-                archiveFilePool = null;
-            else
-                archiveFilePool = archiveFilePoolMap.get(file.getURL().getScheme());
-
-
-            if(archiveFilePool!=null) {
-                archiveFile = archiveFilePool.get(file.getURL());
-                if(archiveFile!=null) {
-//                    FileLogger.finest("Found pooled archive file for: "+file.getAbsolutePath());
-                    return archiveFile;
-                }
-
-//                FileLogger.finest("No pooled archive file found for: "+file.getAbsolutePath());
-            }
-
+        if(filename.indexOf('.')!=-1) {
             ArchiveFormatProvider provider;
             if((provider = getArchiveFormatProvider(filename)) != null) {
-                archiveFile = provider.getFile(file);
-                if(archiveFilePool!=null) {
-                    FileLogger.finest("Adding archive file to pool: "+file.getAbsolutePath());
-                    archiveFilePool.put(file.getURL(), archiveFile);
-                }
-                return archiveFile;
+                return provider.getFile(file);
             }
         }
 

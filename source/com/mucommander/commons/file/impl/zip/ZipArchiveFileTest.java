@@ -25,6 +25,9 @@ import org.junit.Before;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * An {@link AbstractFileTest} implementation, which performs tests on {@link AbstractArchiveEntryFile}
  * entries located inside a {@link ZipArchiveFile} residing in a temporary {@link com.mucommander.commons.file.impl.local.LocalFile}.
@@ -48,6 +51,7 @@ public class ZipArchiveFileTest extends AbstractFileTest {
         return true;
     }
 
+    
     /////////////////////////////////////
     // AbstractFileTest implementation //
     /////////////////////////////////////
@@ -84,10 +88,16 @@ public class ZipArchiveFileTest extends AbstractFileTest {
     @Override
     @Before
     public void setUp() throws IOException {
+        entryNum = 0;
         tempZipFile = (ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
+
+        // Assert that the file is not an actual archive yet
+        assertFalse(tempZipFile.isArchive());
+
         tempZipFile.mkfile();
 
-        entryNum = 0;
+        // Assert that the file is now an archive
+        assertTrue(tempZipFile.isArchive());
 
         super.setUp();
     }
@@ -98,9 +108,16 @@ public class ZipArchiveFileTest extends AbstractFileTest {
     @Override
     @After
     public void tearDown() throws IOException {
+        // Delete all archive entries
         super.tearDown();
 
+        // Assert that the file is still an archive
+        assertTrue(tempZipFile.isArchive());
+
         tempZipFile.delete();
+
+        // Assert that the file is no longer an archive
+        assertFalse(tempZipFile.isArchive());
     }
 
     @Override
@@ -108,7 +125,7 @@ public class ZipArchiveFileTest extends AbstractFileTest {
         // TODO
         // Test temporarily disabled because if fails. The failure seems to be caused by archive file caching:
         // the change is made to the archive file denoted by its absolute path ; when accessed by the canonical path,
-        // the archive file is another instance which isn't aware of the change, because the file date hasn't changed (?). 
+        // the archive file is another instance which isn't aware of the change, because the file date hasn't changed (?).
     }
 
 //    /**
