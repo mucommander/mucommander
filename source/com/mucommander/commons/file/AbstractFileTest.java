@@ -18,12 +18,12 @@
 
 package com.mucommander.commons.file;
 
+import com.mucommander.commons.file.test.ConditionalTest;
+import com.mucommander.commons.file.test.ConditionalTestRunner;
 import com.mucommander.commons.file.util.PathUtilsTest;
 import com.mucommander.commons.io.*;
 import com.mucommander.commons.io.security.MuProvider;
 import com.mucommander.commons.util.StringUtils;
-import com.mucommander.test.ConditionalTest;
-import com.mucommander.test.ConditionalTestRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

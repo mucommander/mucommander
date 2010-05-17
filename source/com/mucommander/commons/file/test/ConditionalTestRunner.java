@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.test;
+package com.mucommander.commons.file.test;
 
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
