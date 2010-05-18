@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!-- =============================================================================================================== -->
-<!-- Build file for the muCommander Configuration API.                                                               -->
+<!-- Build file for the muCommander Util API.                                                                        -->
 <!--                                                                                                                 -->
 <!-- Author: Nicolas Rinaudo                                                                                         -->
 <!-- =============================================================================================================== -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander Configuration" default="release">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander Util" default="release">
     <!-- = API properties ========================================================================================== -->
     <!-- =========================================================================================================== -->
     <!-- Library's name                                                                                              -->
