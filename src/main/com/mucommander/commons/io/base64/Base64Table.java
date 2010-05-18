@@ -30,9 +30,6 @@ package com.mucommander.commons.io.base64;
  *   <li>{@link #REGEXP_SAFE_TABLE}</li>
  * </ul>
  * </p>
- *
- * {@link
- *
  * @author Maxence Bernard
  */
 public class Base64Table {

@@ -39,7 +39,8 @@ import java.io.Reader;
  * See {@link IteratorCompoundReader} for an <code>Iterator</code>-backed implementation.
  * </p>
  *
- * @see IteratorCompoundReader, CompoundInputStream
+ * @see IteratorCompoundReader
+ * @see CompoundInputStream
  * @author Maxence Bernard
  */
 public abstract class CompoundReader extends Reader {

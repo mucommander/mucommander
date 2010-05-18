@@ -194,7 +194,7 @@
 
     <!-- = Documentation targets =================================================================================== -->
     <!-- =========================================================================================================== -->
-    <target name="javadoc">
+    <target name="javadoc" depends="retrieve-runtime">
         <echo>Creating API javadoc...</echo>
         <mkdir dir="${docs}"/>
         <javadoc destdir="${docs}" author="true" windowtitle="${api.name}" doctitle="${api.name}" encoding="UTF-8"

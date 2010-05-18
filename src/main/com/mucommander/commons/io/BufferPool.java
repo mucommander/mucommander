@@ -34,7 +34,7 @@ import java.util.Vector;
  *  <li>Byte array buffers (<code>byte[]</code>)</li>
  *  <li><code>java.nio.ByteBuffer</code></li>
  * </ul>
- *
+ * </p>
  * <p>
  * Usage of this class is similar to malloc/free:
  * <ul>
@@ -78,7 +78,7 @@ public class BufferPool {
      * Convenience method that has the same effect as calling {@link #getByteArray(int)} with
      * a length equal to {@link #getDefaultBufferSize()}.
      *
-     * @return a byte array with a length of {@link # getDefaultBufferSize ()}
+     * @return a byte array with a length of {@link #getDefaultBufferSize()}
      */
     public static synchronized byte[] getByteArray() {
         return getByteArray(getDefaultBufferSize());
@@ -106,7 +106,7 @@ public class BufferPool {
      * Convenience method that has the same effect as calling {@link #getCharArray(int)} with
      * a length equal to {@link #getDefaultBufferSize()}.
      *
-     * @return a char array with a length of {@link # getDefaultBufferSize}
+     * @return a char array with a length of {@link #getDefaultBufferSize()}
      */
     public static synchronized char[] getCharArray() {
         return getCharArray(getDefaultBufferSize());
@@ -134,7 +134,7 @@ public class BufferPool {
      * Convenience method that has the same effect as calling {@link #getByteBuffer(int)} with
      * a buffer capacity of {@link #getDefaultBufferSize()}.
      *
-     * @return a ByteBuffer with a capacity equal to {@link # getDefaultBufferSize}
+     * @return a ByteBuffer with a capacity equal to {@link #getDefaultBufferSize()}
      */
     public static synchronized ByteBuffer getByteBuffer() {
         return getByteBuffer(getDefaultBufferSize());
@@ -163,7 +163,7 @@ public class BufferPool {
      * Convenience method that has the same effect as calling {@link #getCharBuffer(int)} with
      * a buffer capacity of {@link #getDefaultBufferSize()}.
      *
-     * @return a CharBuffer with a capacity equal to {@link # getDefaultBufferSize}
+     * @return a CharBuffer with a capacity equal to {@link #getDefaultBufferSize()}
      */
     public static synchronized CharBuffer getCharBuffer() {
         return getCharBuffer(getDefaultBufferSize());
@@ -193,7 +193,7 @@ public class BufferPool {
      * with a size equal to {@link #getDefaultBufferSize()}.
      *
      * @param factory BufferFactory used to identify the target buffer class and create a new buffer (if necessary)
-     * @return a buffer with a size equal to {@link # getDefaultBufferSize}
+     * @return a buffer with a size equal to {@link #getDefaultBufferSize()}
      */
     public static synchronized Object getBuffer(BufferFactory factory) {
         return getBuffer(factory, getDefaultBufferSize());

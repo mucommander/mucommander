@@ -39,7 +39,8 @@ import java.io.InputStream;
  * See {@link IteratorCompoundInputStream} for an <code>Iterator</code>-backed implementation.
  * </p>
  *
- * @see IteratorCompoundInputStream, CompoundReader
+ * @see IteratorCompoundInputStream
+ * @see CompoundReader
  * @author Maxence Bernard
  */
 public abstract class CompoundInputStream extends InputStream {
