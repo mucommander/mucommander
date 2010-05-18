@@ -2,7 +2,7 @@
 <suite verbose="1" name="all">
     <test name="conf">
         <packages>
-            <package name="com.mucommander.commons.conf.*"/>
+            <package name="com.mucommander.commons.collections.*"/>
         </packages>
     </test>
 </suite>
