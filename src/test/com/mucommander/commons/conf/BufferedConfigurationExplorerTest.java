@@ -28,8 +28,8 @@ public class BufferedConfigurationExplorerTest extends ConfigurationExplorerTest
     // - Helper methods ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
-     * Returns an instance of BufferedConfigurationExplorer.
-     * @return an instance of BufferedConfigurationExplorer.
+     * Returns an instance of {@link BufferedConfigurationExplorer}.
+     * @return an instance of {@link BufferedConfigurationExplorer}.
      */
     @Override
     protected ConfigurationExplorer getExplorer() {
