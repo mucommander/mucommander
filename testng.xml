@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite verbose="1" name="all">
+    <test name="conf">
+        <packages>
+            <package name="com.mucommander.commons.util.*"/>
+        </packages>
+    </test>
+</suite>

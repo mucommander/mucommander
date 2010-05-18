@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- =============================================================================================================== -->
+<!-- Build file for the muCommander Configuration API.                                                               -->
+<!--                                                                                                                 -->
+<!-- Author: Nicolas Rinaudo                                                                                         -->
+<!-- =============================================================================================================== -->
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander Configuration" default="release">
+    <!-- = API properties ========================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <!-- Library's name                                                                                              -->
+    <property name="api.name"    value="muCommander commons Util"/>
+    <!-- Library's vendor.                                                                                           -->
+    <property name="api.vendor"  value="Maxence Bernard"/>
+    <!-- Library's version.                                                                                          -->
+    <property name="api.version" value="1.0.0"/>
+
+
+
+    <!-- = Java properties ========================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <!-- Required version of the Java language.                                                                      -->
+    <property name="source.version"  value="1.5"/>
+    <!-- Character encoding of the source files.                                                                     -->
+    <property name="source.encoding" value="UTF-8"/>
+
+
+
+    <!-- = Project structure ======================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <!-- Source directory.                                                                                           -->
+    <property name="src"                  location="src"/>
+    <!-- Test sources directory.                                                                                     -->
+    <property name="src.test"             location="${src}/test"/>
+    <!-- Main sources directory.                                                                                     -->
+    <property name="src.main"             location="${src}/main"/>
+    <!-- External libraries directory.                                                                               -->
+    <property name="lib"                  location="lib"/>
+    <!-- External libraries used for tests.                                                                          -->
+    <property name="lib.test"             location="${lib}/test"/>
+    <!-- External tools.                                                                                             -->
+    <property name="lib.tools"            location="${lib}/tools"/>
+    <!-- Where to store temporary files.                                                                             -->
+    <property name="tmp"                  location="tmp"/>
+    <!-- Where to store the main source's code compilation output.                                                   -->
+    <property name="tmp.main"             location="${tmp}/main"/>
+    <!-- Where to store the test source's code compilation output.                                                   -->
+    <property name="tmp.test"             location="${tmp}/test"/>
+    <!-- Where to store temporary Cobertura files.                                                                   -->
+    <property name="tmp.cobertura"        location="${tmp}/cobertura"/>
+    <!-- Where to store various project reports.                                                                     -->
+    <property name="reports"              location="reports"/>
+    <!-- Where to store TestNG reports.                                                                              -->
+    <property name="testng.reports"       location="${reports}/testng"/>
+    <!-- Where to store Cobertura reports.                                                                           -->
+    <property name="cobertura.reports"    location="${reports}/cobertura"/>
+    <!-- Where to store Checkstyle reports.                                                                          -->
+    <property name="checkstyle.reports"   location="${reports}/checkstyle"/>
+    <!-- Where to store PMD reports.                                                                                 -->
+    <property name="pmd.reports"          location="${reports}/pmd"/>
+    <!-- Where to store Ivy dependency reports.                                                                      -->
+    <property name="ivy.reports"          location="${reports}/ivy"/>
+    <!-- Where to store JavaNCSS reports.                                                                            -->
+    <property name="javancss.reports"   location="${reports}/javancss"/>
+    <!-- Where to store the API's Javadoc.                                                                           -->
+    <property name="docs"                 location="docs"/>
+    <!-- Where to store distribution files.                                                                          -->
+    <property name="dist"                 location="dist"/>
+    <!-- JAR distribution file.                                                                                      -->
+    <property name="dist.jar"             location="${dist}/com.mucommander.commons.util.jar"/>
+    <!-- Documentation distribution file.                                                                            -->
+    <property name="dist.doc"             location="${dist}/com.mucommander.commons.util-javadoc.jar"/>
+    <!-- Source distribution file.                                                                                   -->
+    <property name="dist.source"          location="${dist}/com.mucommander.commons.util-sources.jar"/>
+    <!-- Ivy dependencies retrieval pattern.                                                                         -->
+    <property name="ivy.retrieve.pattern" value="${lib}/[conf]/[organisation]/[artifact].[ext]"/>
+
+    <!-- Test classpath.                                                                                             -->
+    <path id="lib.test">
+        <fileset dir="${lib.test}" includes="**/*.jar"/>
+    </path>
+
+    <!-- Tools classpath.                                                                                            -->
+    <path id="lib.tools">
+        <fileset dir="${lib.tools}" includes="**/*.jar"/>
+    </path>
+
+
+
+    <!-- = Compilation targets ===================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="compile" description="Compiles the library's sources">
+        <echo>Compiling sources...</echo>
+        <mkdir dir="${tmp.main}"/>
+        <javac destdir="${tmp.main}" debug="on" deprecation="on"
+               encoding="${source.encoding}" source="${source.version}" target="${source.version}"
+               srcdir="${src.main}"/>
+    </target>
+
+    <target name="compile-tests" depends="compile,retrieve-test">
+        <echo>Compiling test sources...</echo>
+        <mkdir dir="${tmp.test}"/>
+        <javac destdir="${tmp.test}" debug="on" deprecation="on"
+               encoding="${source.encoding}" source="${source.version}" target="${source.version}"
+               srcdir="${src.test}">
+            <classpath>
+                <pathelement location="${tmp.main}"/>
+                <path refid="lib.test"/>
+            </classpath>
+        </javac>
+
+        <!-- Defines the Cobertura Ant task and instruments the non-test code. -->
+        <taskdef classpathref="lib.test" resource="net/sourceforge/cobertura/ant/antlib.xml"/>
+        <echo>Instrumenting source code...</echo>
+        <mkdir dir="${tmp.cobertura}"/>
+        <mkdir dir="${cobertura.reports}"/>
+        <instrument todir="${tmp.cobertura}" datafile="${tmp.cobertura}/cobertura.ser">
+            <fileset dir="${tmp.main}"/>
+        </instrument>
+    </target>
+
+
+
+    <!-- = Test targets ============================================================================================ -->
+    <!-- =========================================================================================================== -->
+    <target name="check-failed-tests">
+        <condition property="testng.suite" value="${testng.reports}/testng-failed.xml">
+            <available file="${testng.reports}/testng-failed.xml"/>
+        </condition>
+        <property name="testng.suite" value="testng.xml"/>
+    </target>
+
+    <target name="test" depends="compile-tests,check-failed-tests" description="Runs the library's tests.">
+        <echo>Running self-tests...</echo>
+        <taskdef classpathref="lib.test" resource="testngtasks"/>
+        <mkdir dir="${testng.reports}"/>
+        <testng outputdir="${testng.reports}" haltonfailure="true">
+            <jvmarg value="-Xmx256m" />
+            <sysproperty key="test.repository" file="${test.data}"/>
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${tmp.cobertura}/cobertura.ser"/>
+            <sysproperty key="java.awt.headless" value="true"/>
+            <classpath>
+                <pathelement location="${tmp.cobertura}"/>
+                <pathelement location="${tmp.main}"/>
+                <pathelement location="${tmp.test}"/>
+                <path refid="lib.test"/>
+            </classpath>
+            <xmlfileset file="${testng.suite}"/>
+        </testng>
+
+        <echo>Generating coverage report...</echo>
+        <report format="xml" destdir="${cobertura.reports}"
+                srcdir="${src.main}" datafile="${tmp.cobertura}/cobertura.ser" encoding="${source.encoding}"/>
+        <report format="html" destdir="${cobertura.reports}"
+                srcdir="${src.main}" datafile="${tmp.cobertura}/cobertura.ser" encoding="${source.encoding}"/>
+    </target>
+
+
+
+    <!-- = Packaging targets ======================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <target name="release" depends="compile,javadoc,jar" description="Generates the library's release artifacts.">
+        <echo>Packaging sources...</echo>
+        <jar jarfile="${dist.source}" basedir="${src.main}"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist}"/>
+
+        <!-- Retrieves the implementation version.                                                                   -->
+        <exec executable="svnversion" failifexecutionfails="no" outputproperty="svn.version">
+            <arg value="."/>
+            <arg value="-n"/>
+        </exec>
+
+        <echo>Creating JAR file...</echo>
+        <jar jarfile="${dist.jar}" basedir="${tmp.main}">
+            <manifest>
+                <attribute name="Specification-Title"    value="${api.name}"/>
+                <attribute name="Specification-Vendor"   value="${api.vendor}"/>
+                <attribute name="Specification-Version"  value="${api.version}"/>
+                <attribute name="Implementation-Title"   value="${api.name}"/>
+                <attribute name="Implementation-Vendor"  value="${api.vendor}"/>
+                <attribute name="Implementation-Version" value="${svn.version}"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+
+    <!-- = Documentation targets =================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="javadoc">
+        <echo>Creating API javadoc...</echo>
+        <mkdir dir="${docs}"/>
+        <javadoc destdir="${docs}" author="true" windowtitle="${api.name}" doctitle="${api.name}" encoding="UTF-8"
+                 access="protected">
+            <packageset dir="${src.main}" defaultexcludes="yes"/>
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+        </javadoc>
+
+        <echo>Packaging API javadoc...</echo>
+        <mkdir dir="${dist}"/>
+        <jar jarfile="${dist.doc}" basedir="${docs}"/>
+    </target>
+
+
+
+    <!-- = Reports targets ========================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <target name="reports" depends="checkstyle,pmd,javancss,ivy,test" description="Generates all available reports."/>
+
+    <target name="javancss" depends="retrieve-tools" description='Generates JavaNCSS reports.'>
+        <echo>Generating JavaNCSS reports...</echo>
+        <taskdef name="javancss" classname="javancss.JavancssAntTask" classpathref="lib.tools"/>
+        <mkdir dir="${javancss.reports}"/>
+        <javancss srcdir="${src.main}" includes="**/*.java" generateReport="true"
+                  outputfile="${javancss.reports}/javancss.xml" format="xml"/>
+    </target>
+
+    <target name="checkstyle" depends="compile,retrieve-tools" description='Generates CheckStyle reports.'>
+        <echo>Generating CheckStyle reports...</echo>
+        <mkdir dir="${checkstyle.reports}"/>
+        <taskdef resource="checkstyletask.properties" classpathref="lib.tools"/>
+        <checkstyle config="checkstyle.xml" failOnViolation="false">
+            <fileset dir="${src.main}" includes="**/*.java"/>
+            <formatter type="xml" toFile="${checkstyle.reports}/checkstyle.xml"/>
+            <classpath>
+                <pathelement location="${tmp.main}"/>
+            </classpath>
+        </checkstyle>
+    </target>
+
+    <target name="pmd" depends="retrieve-tools" description="Generates PMD reports.">
+        <echo>Generating PMD report...</echo>
+        <taskdef classpathref="lib.tools" name="pmd" classname="net.sourceforge.pmd.ant.PMDTask"/>
+        <mkdir dir="${pmd.reports}"/>
+        <pmd encoding="${source.encoding}">
+            <ruleset>basic</ruleset>
+            <ruleset>unusedcode</ruleset>
+            <ruleset>design</ruleset>
+            <ruleset>imports</ruleset>
+            <ruleset>junit</ruleset>
+            <ruleset>strings</ruleset>
+            <ruleset>codesize</ruleset>
+            <ruleset>coupling</ruleset>
+            <ruleset>strictexception</ruleset>
+            <ruleset>unusedcode</ruleset>
+            <ruleset>sunsecure</ruleset>
+            <ruleset>optimizations</ruleset>
+            <ruleset>finalizers</ruleset>
+            <formatter type="html" toFile="${pmd.reports}/pmd.html"/>
+            <formatter type="xml"  toFile="${pmd.reports}/pmd.xml"/>
+            <fileset dir="${src.main}">
+                <include name="**/*.java"/>
+            </fileset>
+        </pmd>
+    </target>
+
+    <target name="ivy" depends="ivy-config" description="Generates Ivy dependency reports.">
+        <echo>Generating Ivy dependency report...</echo>
+        <mkdir dir="${ivy.reports}"/>
+        <ivy:report todir="${ivy.reports}" xml="true" graph="false" conf="test,tools"/>
+    </target>
+
+
+
+    <!-- = Maintenance targets ===================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="all" description="Generates all reports and release files." depends="reports,release"/>
+
+    <target name="clean" description="Deletes all temporary files.">
+        <echo>Deleting temporary files...</echo>
+        <delete dir="${tmp}"/>
+        <delete dir="${dist}"/>
+        <delete dir="${reports}"/>
+        <delete dir="${docs}"/>
+        <delete includeEmptyDirs="true">
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+        </delete>
+    </target>
+
+
+
+
+    <!-- = Dependencies targets ==================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="offline" description="Forces usage of the ivy cache.">
+        <property name="ivy.cache.ttl.default" value="eternal"/>
+    </target>
+
+    <target name="synchronize" description="Forces synchronisation of all dependencies."
+            depends="retrieve-test,retrieve-tools"/>
+
+    <target name="ivy-config">
+        <echo>Resolving dependencies repository...</echo>
+        <ivy:configure/>
+        <ivy:resolve haltonfailure="false"/>
+    </target>
+
+    <target name="retrieve-tools" depends="ivy-config">
+        <echo>Retrieving external tools...</echo>
+        <ivy:retrieve symlink="true" conf="tools" type="jar"/>
+    </target>
+
+    <target name="retrieve-test" depends="ivy-config">
+        <echo>Retrieving test dependencies...</echo>
+        <ivy:retrieve symlink="true" conf="test" type="jar"/>
+    </target>
+</project>
