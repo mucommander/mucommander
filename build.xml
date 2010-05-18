@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!-- =============================================================================================================== -->
-<!-- Build file for the muCommander Configuration API.                                                               -->
+<!-- Build file for the muCommander IO API.                                                                          -->
 <!--                                                                                                                 -->
 <!-- Author: Nicolas Rinaudo                                                                                         -->
 <!-- =============================================================================================================== -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander Configuration" default="release">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander IO" default="release">
     <!-- = API properties ========================================================================================== -->
     <!-- =========================================================================================================== -->
     <!-- Library's name                                                                                              -->
@@ -68,11 +68,11 @@
     <!-- Where to store distribution files.                                                                          -->
     <property name="dist"                 location="dist"/>
     <!-- JAR distribution file.                                                                                      -->
-    <property name="dist.jar"             location="${dist}/com.mucommander.commons.conf.jar"/>
+    <property name="dist.jar"             location="${dist}/com.mucommander.commons.io.jar"/>
     <!-- Documentation distribution file.                                                                            -->
-    <property name="dist.doc"             location="${dist}/com.mucommander.commons.conf-javadoc.jar"/>
+    <property name="dist.doc"             location="${dist}/com.mucommander.commons.io-javadoc.jar"/>
     <!-- Source distribution file.                                                                                   -->
-    <property name="dist.source"          location="${dist}/com.mucommander.commons.conf-sources.jar"/>
+    <property name="dist.source"          location="${dist}/com.mucommander.commons.io-sources.jar"/>
     <!-- Ivy dependencies retrieval pattern.                                                                         -->
     <property name="ivy.retrieve.pattern" value="${lib}/[conf]/[organisation]/[artifact].[ext]"/>
 
