@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+    <module name="FileTabCharacter"/>
+    <module name="JavadocPackage"/>
+
+    <module name="TreeWalker">
+        <module name="WriteTag">
+            <property name="tag" value="@author"/>
+            <property name="tagFormat" value="\S"/>
+            <property name="severity" value="ignore"/>
+        </module>
+        
+        <module name="ConstantName"/>
+        <module name="LocalFinalVariableName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName"/>
+        <module name="JavadocType"/>
+        <module name="JavadocVariable"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+        <module name="ModifierOrder"/>
+        <!-- <module name="RedundantModifier"/> -->
+
+        <module name="JavadocMethod">
+            <property name="allowUndeclaredRTE"           value="true"/>
+            <property name="allowThrowsTagsForSubclasses" value="true"/>
+        </module>
+
+        <module name="JavadocStyle">
+            <property name="checkEmptyJavadoc" value="true"/>
+        </module>
+    </module>
+</module>

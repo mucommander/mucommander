@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="http://www.jayasoft.fr/org/ivyrep/ivy-doc.xsl"?>
+<!-- =============================================================================================================== -->
+<!-- Project dependencies                                                                                            -->
+<!--                                                                                                                 -->
+<!-- Author: Nicolas Rinaudo                                                                                         -->
+<!-- =============================================================================================================== -->
+<ivy-module version="2.0">
+    <!-- = Project information ===================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <info organisation="mucommander" module="mucommander-commons-collections">
+        <license name="LGPL" url="http://www.gnu.org/licenses/lgpl.html"/>
+        <ivyauthor name="muCommander" url="http://www.mucommander.com/"/>
+        <description homepage="http://www.mucommander.com">
+            Various collection based utils.
+        </description>
+    </info>
+
+
+    <!-- = Project configurations ================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <configurations defaultconfmapping="test->test(*);tools->tools(*)">
+        <conf visibility="private" name="test"  description="Test dependencies."/>
+        <conf visibility="private" name="tools" description="External tools."/>
+    </configurations>
+
+
+
+    <!-- = Project artifacts ======================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <publications>
+        <artifact name="com.mucommander.commons.collections"         ext="jar" type="jar"/>
+        <artifact name="com.mucommander.commons.collections-javadoc" ext="jar" type="doc"/>
+        <artifact name="com.mucommander.commons.collections-sources" ext="jar" type="source"/>
+    </publications>
+
+
+
+    <!-- = Project dependencies ==================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <dependencies>
+        <dependency org="testng"      name="testng"     rev="latest.integration" conf="test"/>
+        <dependency org="sourceforge" name="cobertura"  rev="latest.integration" conf="test"/>
+        <dependency org="checkstyle"  name="checkstyle" rev="latest.integration" conf="tools"/>
+        <dependency org="pmd"         name="pmd"        rev="latest.integration" conf="tools"/>
+        <dependency org="codehaus"    name="javancss"   rev="latest.integration" conf="tools"/>
+    </dependencies>
+</ivy-module>
