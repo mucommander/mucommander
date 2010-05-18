@@ -206,7 +206,7 @@
     <!-- = Reports targets ========================================================================================= -->
     <!-- =========================================================================================================== -->
     <target name="reports" depends="checkstyle,pmd,ivy,test" description="Generates all available reports."/>
-    
+
     <target name="checkstyle" depends="compile,retrieve-tools" description='Generates CheckStyle reports.'>
         <echo>Generating CheckStyle reports...</echo>
         <mkdir dir="${checkstyle.reports}"/>
@@ -234,6 +234,10 @@
             <ruleset>codesize</ruleset>
             <ruleset>coupling</ruleset>
             <ruleset>strictexception</ruleset>
+            <ruleset>unusedcode</ruleset>
+            <ruleset>sunsecure</ruleset>
+            <ruleset>optimizations</ruleset>
+            <ruleset>finalizers</ruleset>
             <formatter type="html" toFile="${pmd.reports}/pmd.html"/>
             <formatter type="xml"  toFile="${pmd.reports}/pmd.xml"/>
             <fileset dir="${src.main}">
@@ -247,7 +251,7 @@
         <mkdir dir="${ivy.reports}"/>
         <ivy:report todir="${ivy.reports}" xml="true" graph="false" conf="test,tools"/>
     </target>
-    
+
 
 
     <!-- = Maintenance targets ===================================================================================== -->

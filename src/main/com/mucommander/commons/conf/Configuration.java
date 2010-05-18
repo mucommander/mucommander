@@ -130,7 +130,8 @@ public class Configuration {
      * invoked, calls to read or write methods without a stream parameter will fail.
      * </p>
      */
-    public Configuration() {}
+    public Configuration() {
+    }
 
     /**
      * Creates a new instance of <code>Configuration</code> using the specified source.
@@ -140,7 +141,9 @@ public class Configuration {
      * </p>
      * @param source where the resulting instance will look for its configuration data.
      */
-    public Configuration(ConfigurationSource source) {setSource(source);}
+    public Configuration(ConfigurationSource source) {
+        setSource(source);
+    }
 
     /**
      * Creates a new instance of <code>Configuration</code> using the specified format.
