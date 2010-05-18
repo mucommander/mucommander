@@ -33,6 +33,10 @@
     <property name="src.test"             location="${src}/test"/>
     <!-- Main sources directory.                                                                                     -->
     <property name="src.main"             location="${src}/main"/>
+    <!-- Main resources directory.                                                                                   -->
+    <property name="res"                  location="res"/>
+    <!-- Runtime resources directory.                                                                                -->
+    <property name="res.runtime"          location="${res}/runtime"/>
     <!-- External libraries directory.                                                                               -->
     <property name="lib"                  location="lib"/>
     <!-- Libraries required at runtime.                                                                              -->
@@ -180,7 +184,9 @@
         </exec>
 
         <echo>Creating JAR file...</echo>
-        <jar jarfile="${dist.jar}" basedir="${tmp.main}">
+        <jar jarfile="${dist.jar}">
+            <fileset dir="${tmp.main}"/>
+            <fileset dir="${res.runtime}"/>
             <manifest>
                 <attribute name="Specification-Title"    value="${api.name}"/>
                 <attribute name="Specification-Vendor"   value="${api.vendor}"/>
