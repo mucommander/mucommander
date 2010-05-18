@@ -61,6 +61,8 @@
     <property name="pmd.reports"          location="${reports}/pmd"/>
     <!-- Where to store Ivy dependency reports.                                                                      -->
     <property name="ivy.reports"          location="${reports}/ivy"/>
+    <!-- Where to store JavaNCSS reports.                                                                            -->
+    <property name="javancss.reports"   location="${reports}/javancss"/>
     <!-- Where to store the API's Javadoc.                                                                           -->
     <property name="docs"                 location="docs"/>
     <!-- Where to store distribution files.                                                                          -->
@@ -212,7 +214,15 @@
 
     <!-- = Reports targets ========================================================================================= -->
     <!-- =========================================================================================================== -->
-    <target name="reports" depends="checkstyle,pmd,ivy,test" description="Generates all available reports."/>
+    <target name="reports" depends="checkstyle,pmd,javancss,ivy,test" description="Generates all available reports."/>
+
+    <target name="javancss" depends="retrieve-tools" description='Generates JavaNCSS reports.'>
+        <echo>Generating JavaNCSS reports...</echo>
+        <taskdef name="javancss" classname="javancss.JavancssAntTask" classpathref="lib.tools"/>
+        <mkdir dir="${javancss.reports}"/>
+        <javancss srcdir="${src.main}" includes="**/*.java" generateReport="true"
+                  outputfile="${javancss.reports}/javancss.xml" format="xml"/>
+    </target>
 
     <target name="checkstyle" depends="compile,retrieve-tools" description='Generates CheckStyle reports.'>
         <echo>Generating CheckStyle reports...</echo>

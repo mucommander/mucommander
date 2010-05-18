@@ -47,5 +47,6 @@
         <dependency org="sourceforge" name="cobertura"  rev="latest.integration" conf="test"/>
         <dependency org="pmd"         name="pmd"        rev="latest.integration" conf="tools"/>
         <dependency org="checkstyle"  name="checkstyle" rev="latest.integration" conf="tools"/>
+        <dependency org="codehaus"    name="javancss"   rev="latest.integration" conf="tools"/>
     </dependencies>
 </ivy-module>
