@@ -162,10 +162,11 @@ public class S3Object extends S3File {
         try {
             // Make sure that the directory is empty, abort if not.
             // Note that we must not count the parent directory (this file).
-            if(service.listObjectsChunked(bucketName, getObjectKey(isDirectory()), "/", 2, null, false).getObjects().length>=2) {
+            boolean isDirectory = isDirectory();
+            if(isDirectory && service.listObjectsChunked(bucketName, getObjectKey(true), "/", 2, null, false).getObjects().length>1)
                 throw new IOException("Directory not empty");
-            }
-            service.deleteObject(bucketName, getObjectKey(isDirectory()));
+
+            service.deleteObject(bucketName, getObjectKey(isDirectory));
 
             // Update file attributes locally
             atts.setExists(false);

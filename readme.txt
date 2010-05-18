@@ -59,6 +59,7 @@ Bug fixes:
 - When an invalid destination was entered in a transfer dialog, the spinning dial icon would keep spinning.
 - Fixed an issue that would occur when creating directories whose extension match that of one of the supported archive
   formats (see ticket #360).
+- Fixed a bug that could prevent the deletion of S3 files to fail.
 
 Known issues:
 - Some translations may not be up-to-date. Refer to
