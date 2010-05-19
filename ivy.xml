@@ -19,9 +19,10 @@
 
     <!-- = Project configurations ================================================================================== -->
     <!-- =========================================================================================================== -->
-    <configurations defaultconfmapping="test->test(*);tools->tools(*)">
-        <conf visibility="private" name="test"  description="Test dependencies."/>
-        <conf visibility="private" name="tools" description="External tools."/>
+    <configurations defaultconfmapping="runtime->runtime(*);test->test(*);tools->tools(*)">
+        <conf visibility="public"  name="runtime"                   description="Test dependencies."/>
+        <conf visibility="private" name="test"    extends="runtime" description="Test dependencies."/>
+        <conf visibility="private" name="tools"                     description="External tools."/>
     </configurations>
 
 
