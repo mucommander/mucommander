@@ -69,16 +69,21 @@ public class CredentialsManager {
     /** Default credentials file name */
     private static final String DEFAULT_CREDENTIALS_FILE_NAME = "credentials.xml";
 
+    /** Tracks changes made to the persistent credentials vector.
+     * We keep a reference to the listener so it doesn't get garbage collected. */
+    private static final VectorChangeListener PERSISTENT_CREDENTIALS_VECTOR_CHANGE_LISTENER;    // Don't remove me!
+
     /** True when changes were made after the credentials file was last saved */
     private static boolean saveNeeded;
 
     /** Create a singleton instance, needs to be referenced so that it's not garbage collected (AlteredVector
       * stores VectorChangeListener as weak references) */
     private static CredentialsManager singleton = new CredentialsManager();
-    
+
     static {
-        // Listen to changes made to the persistent entries vector
-        persistentCredentialMappings.addVectorChangeListener(new VectorChangeListener() {
+        // Listen to changes made to the persistent entries vector.
+        // Note: we must keep a reference to the listener, as it would otherwise be garbage collected.
+        persistentCredentialMappings.addVectorChangeListener(PERSISTENT_CREDENTIALS_VECTOR_CHANGE_LISTENER = new VectorChangeListener() {
             public void elementsAdded(int startIndex, int nbAdded) {
                 saveNeeded = true;
             }
