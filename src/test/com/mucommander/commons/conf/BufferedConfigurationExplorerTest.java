@@ -25,8 +25,8 @@ import org.testng.annotations.Test;
  * @author Nicolas Rinaudo
  */
 public class BufferedConfigurationExplorerTest extends ConfigurationExplorerTest {
-    // - Helper methods ------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+    // - Helper methods ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Returns an instance of {@link BufferedConfigurationExplorer}.
      * @return an instance of {@link BufferedConfigurationExplorer}.
@@ -49,8 +49,8 @@ public class BufferedConfigurationExplorerTest extends ConfigurationExplorerTest
 
 
 
-    // - Test code -----------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+    // - Test code -----------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Tests path bufferisation when the requested sections are found.
      */

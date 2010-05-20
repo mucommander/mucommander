@@ -139,7 +139,6 @@
         <mkdir dir="${testng.reports}"/>
         <testng outputdir="${testng.reports}" haltonfailure="true">
             <jvmarg value="-Xmx256m" />
-            <sysproperty key="test.repository" file="${test.data}"/>
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${tmp.cobertura}/cobertura.ser"/>
             <sysproperty key="java.awt.headless" value="true"/>
             <classpath>
