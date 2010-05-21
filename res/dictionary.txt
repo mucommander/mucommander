@@ -11673,6 +11673,9 @@ text_viewer.view:EN:View
 text_viewer.wrap:EN:Word wrap
 # Translation missing (New!)
 
+text_viewer.line_numbers:EN:Line numbers
+# Translation missing (New!)
+
 text_viewer.binary_file_warning:EN:This appears to be a binary file
 text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
 text_viewer.binary_file_warning:HU:Ez a fájl valószínűleg bináris fájl
@@ -11993,6 +11996,8 @@ text_editor.select_all:EN:$[text_viewer.select_all]
 text_editor.view:EN:$[text_viewer.view]
 
 text_editor.wrap:EN:$[text_viewer.wrap]
+
+text_editor.line_numbers:EN:$[text_viewer.line_numbers]
 
 ####################
 # Shortcuts dialog #
