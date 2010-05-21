@@ -37,7 +37,7 @@ public class EditorFrame extends FileFrame {
 
     private FileEditor editor;
 	
-    private final static Dimension MIN_DIMENSION = new Dimension(480, 360);
+    private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
 
     /**
      * Creates a new EditorFrame to start viewing the given file.

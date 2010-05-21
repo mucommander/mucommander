@@ -36,7 +36,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ViewerFrame extends FileFrame {
 	
-    private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
+    private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
 	
     /**
      * Creates a new ViewerFrame to start viewing the given file.
