@@ -16,27 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.ui.viewer;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
-import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
-import com.mucommander.ui.helper.FocusRequester;
-import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
 
 
@@ -46,7 +33,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public class EditorFrame extends ViewerFrame {
+public class EditorFrame extends FileFrame {
 
     private FileEditor editor;
 	
@@ -60,67 +47,6 @@ public class EditorFrame extends ViewerFrame {
      */
     EditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         super(mainFrame, file, icon);
-    }
-
-    protected void initContentPane(final AbstractFile file) {
-        AsyncPanel asyncPanel = new AsyncPanel() {
-            @Override
-            public JComponent getTargetComponent() {
-                try {
-                    editor = EditorRegistrar.createFileEditor(file, EditorFrame.this);
-
-                    // Ask the editor to edit the file
-                    editor.open(file);
-                }
-                catch(Exception e) {
-                    AppLogger.fine("Exception caught", e);
-
-                    // May be a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
-                    if(!(e instanceof UserCancelledException))
-                        showGenericErrorDialog();
-
-                    dispose();
-                    return editor==null?new JPanel():editor;
-                }
-
-                setJMenuBar(editor.getMenuBar());
-
-                // Catch Apple+W keystrokes under Mac OS X to try and close the window
-                if(OsFamilies.MAC_OS_X.isCurrent()) {
-                	editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
-                	editor.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
-                		public void actionPerformed(ActionEvent e){
-                			dispose();
-                		}
-                	});
-                }
-
-                return editor;
-            }
-
-            @Override
-            protected void updateLayout() {
-                super.updateLayout();
-
-                // Request focus on the viewer when it is visible
-                FocusRequester.requestFocus(editor);
-            }
-        };
-
-        // Add the AsyncPanel to the content pane
-        JPanel contentPane = new JPanel(new BorderLayout());
-        contentPane.add(asyncPanel, BorderLayout.CENTER);
-        setContentPane(contentPane);
-
-        // Sets panel to preferred size, without exceeding a maximum size and with a minimum size
-        pack();
-        setVisible(true);
-    }
-
-    public void setSaveNeeded(boolean saveNeeded) {
-    	// Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
-    	if(OsFamilies.MAC_OS_X.isCurrent())
-    		this.getRootPane().putClientProperty("windowModified", saveNeeded?Boolean.TRUE:Boolean.FALSE);
     }
 
     ////////////////////////
@@ -142,4 +68,9 @@ public class EditorFrame extends ViewerFrame {
     protected void showGenericErrorDialog() {
         InformationDialog.showErrorDialog(getMainFrame(), Translator.get("file_editor.edit_error_title"), Translator.get("file_editor.edit_error"));
     }
+    
+    @Override
+	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException, Exception {
+		return editor = EditorRegistrar.createFileEditor(file, EditorFrame.this);
+	}
 }

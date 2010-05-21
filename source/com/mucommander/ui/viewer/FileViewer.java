@@ -27,7 +27,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
@@ -42,10 +41,10 @@ import com.mucommander.ui.helper.MnemonicHelper;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public abstract class FileViewer extends JScrollPane implements FilePresenter, ActionListener {
+public abstract class FileViewer extends FilePresenter implements ActionListener {
 	
     /** ViewerFrame instance that contains this viewer (may be null). */
-    private ViewerFrame frame;
+    private FileFrame frame;
 
     /** File currently being viewed. */
     private AbstractFile file;
@@ -56,9 +55,7 @@ public abstract class FileViewer extends JScrollPane implements FilePresenter, A
     /**
      * Creates a new FileViewer.
      */
-    public FileViewer() {
-    	super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    }
+    public FileViewer() {}
 	
 
     /**
@@ -69,7 +66,7 @@ public abstract class FileViewer extends JScrollPane implements FilePresenter, A
      * @return the frame which contains this viewer.
      * @see    #setFrame(ViewerFrame)
      */
-    protected ViewerFrame getFrame() {
+    protected FileFrame getFrame() {
         return frame;
     }
 
@@ -78,7 +75,7 @@ public abstract class FileViewer extends JScrollPane implements FilePresenter, A
      * @param frame frame that contains this <code>FileViewer</code>.
      * @see         #getFrame()
      */
-    final void setFrame(ViewerFrame frame) {
+    void setFrame(FileFrame frame) {
         this.frame = frame;
     }
 
@@ -120,7 +117,7 @@ public abstract class FileViewer extends JScrollPane implements FilePresenter, A
      *
      * @return the menu bar that controls the viewer's frame.
      */
-    protected JMenuBar getMenuBar() {
+    public JMenuBar getMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();

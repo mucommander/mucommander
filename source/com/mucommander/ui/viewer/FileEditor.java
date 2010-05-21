@@ -34,6 +34,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -52,9 +53,6 @@ import com.mucommander.ui.helper.MnemonicHelper;
  */
 public abstract class FileEditor extends FileViewer {
 	
-    /** EditorFrame instance that contains this editor (may be null). */
-    private EditorFrame frame;
-
     /** Menu items */
     private JMenuItem saveItem;
     private JMenuItem saveAsItem;
@@ -69,20 +67,13 @@ public abstract class FileEditor extends FileViewer {
     public FileEditor() {}
 	
 
-    /**
-     * Sets the EditorFrame (separate window) that contains this FileEditor.
-     * @param frame frame that contains this <code>FileEditor</code>.
-     * @see         #getFrame()
-     */
-    final void setFrame(EditorFrame frame) {
-        this.frame = frame;
-        super.setFrame(frame);
-    }
-
     protected void setSaveNeeded(boolean saveNeeded) {
-    	if(frame!=null && this.saveNeeded!=saveNeeded) {
+    	if(getFrame()!=null && this.saveNeeded!=saveNeeded) {
             this.saveNeeded = saveNeeded;
-            frame.setSaveNeeded(saveNeeded);
+
+            // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
+        	if(OsFamilies.MAC_OS_X.isCurrent())
+        		getFrame().getRootPane().putClientProperty("windowModified", saveNeeded?Boolean.TRUE:Boolean.FALSE);
     	}
     }
     
@@ -93,7 +84,7 @@ public abstract class FileEditor extends FileViewer {
         if(currentFile.getURL().getScheme().equals(FileProtocols.FILE))
             fileChooser.setSelectedFile(new java.io.File(currentFile.getAbsolutePath()));
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-        int ret = fileChooser.showSaveDialog(frame);
+        int ret = fileChooser.showSaveDialog(getFrame());
 		
         if (ret==JFileChooser.APPROVE_OPTION) {
             AbstractFile destFile;
@@ -101,7 +92,7 @@ public abstract class FileEditor extends FileViewer {
                 destFile = FileFactory.getFile(fileChooser.getSelectedFile().getAbsolutePath(), true);
             }
             catch(IOException e) {
-                InformationDialog.showErrorDialog(frame, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
+                InformationDialog.showErrorDialog(getFrame(), Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
                 return;
             }
 
@@ -110,7 +101,7 @@ public abstract class FileEditor extends FileViewer {
             if(collision!=FileCollisionChecker.NO_COLLOSION) {
                 // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                 // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-                int action = new FileCollisionDialog(frame, frame/*mainFrame*/, collision, null, destFile, false, false).getActionValue();
+                int action = new FileCollisionDialog(getFrame(), getFrame()/*mainFrame*/, collision, null, destFile, false, false).getActionValue();
 
                 // User chose to overwrite the file
                 if (action== FileCollisionDialog.OVERWRITE_ACTION) {
@@ -135,7 +126,7 @@ public abstract class FileEditor extends FileViewer {
             return true;
         }
         catch(IOException e) {
-            InformationDialog.showErrorDialog(frame, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
+            InformationDialog.showErrorDialog(getFrame(), Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
             return false;
         }
     }
@@ -146,7 +137,7 @@ public abstract class FileEditor extends FileViewer {
         if(!saveNeeded)
             return true;
 
-        QuestionDialog dialog = new QuestionDialog(frame, null, Translator.get("file_editor.save_warning"), frame,
+        QuestionDialog dialog = new QuestionDialog(getFrame(), null, Translator.get("file_editor.save_warning"), getFrame(),
                                                    new String[] {Translator.get("save"), Translator.get("dont_save"), Translator.get("cancel")},
                                                    new int[]  {JOptionPane.YES_OPTION, JOptionPane.NO_OPTION, JOptionPane.CANCEL_OPTION},
                                                    0);
@@ -166,7 +157,7 @@ public abstract class FileEditor extends FileViewer {
      *
      * @return the menu bar that controls the editor's frame.
      */
-    protected JMenuBar getMenuBar() {
+    public JMenuBar getMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
@@ -198,7 +189,7 @@ public abstract class FileEditor extends FileViewer {
             trySaveAs();
         }		
         else if (source==closeItem) {
-            frame.dispose();
+        	getFrame().dispose();
         }			
     }
 
