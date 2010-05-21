@@ -21,7 +21,6 @@ package com.mucommander.ui.viewer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -29,7 +28,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
@@ -43,11 +41,7 @@ import com.mucommander.ui.helper.MnemonicHelper;
  */
 public abstract class FileViewer extends FilePresenter implements ActionListener {
 	
-    /** ViewerFrame instance that contains this viewer (may be null). */
-    private FileFrame frame;
-
-    /** File currently being viewed. */
-    private AbstractFile file;
+    
 	
     /** Close menu item */
     private JMenuItem closeItem;
@@ -57,60 +51,6 @@ public abstract class FileViewer extends FilePresenter implements ActionListener
      */
     public FileViewer() {}
 	
-
-    /**
-     * Returns the frame which contains this viewer.
-     * <p>
-     * This method may return <code>null</code>if the viewer is not inside a ViewerFrame.
-     * </p>
-     * @return the frame which contains this viewer.
-     * @see    #setFrame(ViewerFrame)
-     */
-    protected FileFrame getFrame() {
-        return frame;
-    }
-
-    /**
-     * Sets the ViewerFrame (separate window) that contains this FileViewer.
-     * @param frame frame that contains this <code>FileViewer</code>.
-     * @see         #getFrame()
-     */
-    void setFrame(FileFrame frame) {
-        this.frame = frame;
-    }
-
-
-    /**
-     * Returns a description of the file currently being viewed which will be used as a window title.
-     * This method returns the file's name but it can be overridden to provide more information.
-     * @return this dialog's title.
-     */
-    protected String getTitle() {
-        return file.getAbsolutePath();
-    }
-	
-
-    /**
-     * Returns the file that is being viewed.
-     *
-     * @return the file that is being viewed.
-     */
-    protected AbstractFile getCurrentFile() {
-        return file;
-    }
-
-    /**
-     * Sets the file that is to be viewed.
-     * This method will automatically be called after a file viewer is created and should not be called directly.
-     * 
-     * @param file file that is to be viewed.
-     */
-    protected final void setCurrentFile(AbstractFile file) {
-        this.file = file;
-        // Update frame's title
-        getFrame().setTitle(getTitle());
-    }
-    
     /**
      * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and
      * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
@@ -132,35 +72,12 @@ public abstract class FileViewer extends FilePresenter implements ActionListener
         return menuBar;
     }
     
-    //////////////////////////////////
-    // FilePresenter implementation //
-    //////////////////////////////////
-    
-    public void open(AbstractFile file) throws IOException {
-    	show(file);
-    	setCurrentFile(file);
-    }
-    
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==closeItem)
-            frame.dispose();
+            getFrame().dispose();
     }
-
-
-    //////////////////////
-    // Abstract methods //
-    //////////////////////
-	
-    /**
-     * This method is invoked when the specified file is about to be opened.
-     * This method should retrieve the file and do the necessary so that this component can be displayed.
-     *
-     * @param  file        the file that is about to be viewed.
-     * @throws IOException if an I/O error occurs.
-     */
-    public abstract void show(AbstractFile file) throws IOException;
 }

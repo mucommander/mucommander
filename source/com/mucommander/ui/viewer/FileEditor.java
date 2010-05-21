@@ -19,6 +19,7 @@
 package com.mucommander.ui.viewer;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
@@ -51,7 +52,7 @@ import com.mucommander.ui.helper.MnemonicHelper;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public abstract class FileEditor extends FileViewer {
+public abstract class FileEditor extends FilePresenter implements ActionListener {
 	
     /** Menu items */
     private JMenuItem saveItem;
