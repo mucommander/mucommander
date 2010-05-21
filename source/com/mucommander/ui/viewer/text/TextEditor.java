@@ -18,6 +18,21 @@
 
 package com.mucommander.ui.viewer.text;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
@@ -33,18 +48,11 @@ import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.viewer.FileEditor;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.*;
-
 
 /**
- * A simple text editor. Most of the implementation is located in {@link TextEditorImpl}.
+ * A simple text editor.
  *
- * @author Maxence Bernard, Nicolas Rinaudo
+ * @author Maxence Bernard, Nicolas Rinaudo, Arik Hadas
  */
 class TextEditor extends FileEditor implements DocumentListener, EncodingListener {
 
@@ -60,7 +68,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem wrapItem;
+    private JMenuItem toggleWrapItem;
 
     private BOM bom;
     
@@ -70,6 +78,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     public TextEditor() {
     	textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true));
 
+    	getViewport().add(textEditorImpl.getTextArea());
+    	
         // Edit menu
         editMenu = new JMenu(Translator.get("text_editor.edit"));
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
@@ -87,7 +97,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
         
         viewMenu = new JMenu(Translator.get("text_editor.view"));
-        wrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.wrap"), menuItemMnemonicHelper, null, this);
+        toggleWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.wrap"), menuItemMnemonicHelper, null, this);
     }
     
     void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
@@ -167,12 +177,6 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     	textViewerDelegate.startEditing(file, this);
     }
     
-    @Override
-	public JComponent getViewedComponent() {
-		return textViewerDelegate.getViewedComponent();
-	}
-
-
     /////////////////////////////////////
     // DocumentListener implementation //
     /////////////////////////////////////
@@ -210,8 +214,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         	textEditorImpl.findNext();
         else if(source == findPreviousItem)
         	textEditorImpl.findPrevious();
-        else if(source == wrapItem)
-        	textEditorImpl.wrap(wrapItem.isSelected());
+        else if(source == toggleWrapItem)
+        	textEditorImpl.wrap(toggleWrapItem.isSelected());
         else
         	super.actionPerformed(e);
     }

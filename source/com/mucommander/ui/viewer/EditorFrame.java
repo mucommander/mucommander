@@ -19,6 +19,17 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
 import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.OsFamilies;
@@ -27,14 +38,6 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 
 /**
@@ -77,29 +80,22 @@ public class EditorFrame extends ViewerFrame {
                         showGenericErrorDialog();
 
                     dispose();
-                    return editor==null?new JPanel():editor.getViewedComponent();
+                    return editor==null?new JPanel():editor;
                 }
 
                 setJMenuBar(editor.getMenuBar());
 
-                JScrollPane scrollPane = new JScrollPane(editor.getViewedComponent(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED) {
-                	@Override
-                	public Insets getInsets() {
-                		return new Insets(0, 0, 0, 0);
-                	}
-                };
-
                 // Catch Apple+W keystrokes under Mac OS X to try and close the window
                 if(OsFamilies.MAC_OS_X.isCurrent()) {
-                	scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
-                	scrollPane.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
+                	editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
+                	editor.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
                 		public void actionPerformed(ActionEvent e){
                 			dispose();
                 		}
                 	});
                 }
 
-                return scrollPane;
+                return editor;
             }
 
             @Override
@@ -107,7 +103,7 @@ public class EditorFrame extends ViewerFrame {
                 super.updateLayout();
 
                 // Request focus on the viewer when it is visible
-                FocusRequester.requestFocus(editor.getViewedComponent());
+                FocusRequester.requestFocus(editor);
             }
         };
 

@@ -18,6 +18,22 @@
 
 package com.mucommander.ui.viewer.text;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentListener;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.EncodingDetector;
@@ -31,13 +47,6 @@ import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.viewer.FileViewer;
-
-import javax.swing.*;
-import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.*;
-import java.nio.charset.Charset;
 
 
 /**
@@ -59,7 +68,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem wrapItem;
+    private JMenuItem toggleWrapItem;
     
     private String encoding;
     
@@ -70,6 +79,8 @@ class TextViewer extends FileViewer implements EncodingListener {
     TextViewer(TextEditorImpl textEditorImpl) {
     	this.textEditorImpl = textEditorImpl;
 
+    	getViewport().add(textEditorImpl.getTextArea());
+    	
     	// Edit menu
     	editMenu = new JMenu(Translator.get("text_viewer.edit"));
     	MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
@@ -86,7 +97,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     	// View menu
     	viewMenu = new JMenu(Translator.get("text_viewer.view"));
     	
-    	wrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.wrap"), menuItemMnemonicHelper, null, this);
+    	toggleWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.wrap"), menuItemMnemonicHelper, null, this);
     }
     
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
@@ -184,10 +195,6 @@ class TextViewer extends FileViewer implements EncodingListener {
         startEditing(file, null);
     }
     
-	public JComponent getViewedComponent() {
-		return textEditorImpl.getTextArea();
-	}
-    
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
@@ -205,8 +212,8 @@ class TextViewer extends FileViewer implements EncodingListener {
         	textEditorImpl.findNext();
         else if(source == findPreviousItem)
         	textEditorImpl.findPrevious();
-        else if(source == wrapItem)
-        	textEditorImpl.wrap(wrapItem.isSelected());
+        else if(source == toggleWrapItem)
+        	textEditorImpl.wrap(toggleWrapItem.isSelected());
         else
         	super.actionPerformed(e);
     }

@@ -18,6 +18,19 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileProtocols;
@@ -28,11 +41,6 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 
 /**
@@ -207,11 +215,4 @@ public abstract class FileEditor extends FileViewer {
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void saveAs(AbstractFile saveAsFile) throws IOException;
-    
-    /**
-     * This method returns the JComponent in which the file is presented.
-     * 
-     * @return The UI component in which the file is presented.
-     */
-    public abstract JComponent getViewedComponent();
 }

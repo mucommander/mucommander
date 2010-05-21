@@ -18,16 +18,22 @@
 
 package com.mucommander.ui.viewer;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.helper.MenuToolkit;
+import com.mucommander.ui.helper.MnemonicHelper;
 
 /**
  * An abstract class to be subclassed by file viewer implementations.
@@ -36,7 +42,7 @@ import java.io.IOException;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public abstract class FileViewer implements FilePresenter, ActionListener {
+public abstract class FileViewer extends JScrollPane implements FilePresenter, ActionListener {
 	
     /** ViewerFrame instance that contains this viewer (may be null). */
     private ViewerFrame frame;
@@ -50,7 +56,9 @@ public abstract class FileViewer implements FilePresenter, ActionListener {
     /**
      * Creates a new FileViewer.
      */
-    public FileViewer() {}
+    public FileViewer() {
+    	super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    }
 	
 
     /**
