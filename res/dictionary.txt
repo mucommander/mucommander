@@ -11670,7 +11670,7 @@ text_viewer.find_previous:BE:Шукаць папярэдні
 text_viewer.view:EN:View
 # Translation missing (New!)
 
-text_viewer.wrap:EN:Word wrap
+text_viewer.word_wrap:EN:Word wrap
 # Translation missing (New!)
 
 text_viewer.line_numbers:EN:Line numbers
@@ -11995,7 +11995,13 @@ text_editor.select_all:EN:$[text_viewer.select_all]
 
 text_editor.view:EN:$[text_viewer.view]
 
-text_editor.wrap:EN:$[text_viewer.wrap]
+text_editor.find:EN:$[text_viewer.find]
+
+text_editor.find_next:EN:$[text_viewer.find_next]
+
+text_editor.find_previous:EN:$[text_viewer.find_previous]
+
+text_editor.word_wrap:EN:$[text_viewer.word_wrap]
 
 text_editor.line_numbers:EN:$[text_viewer.line_numbers]
 
