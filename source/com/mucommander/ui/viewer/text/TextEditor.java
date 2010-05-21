@@ -69,6 +69,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
     private JMenuItem toggleWrapItem;
+    private JMenuItem toggleLineNumbersItem;
 
     private BOM bom;
     
@@ -98,6 +99,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         
         viewMenu = new JMenu(Translator.get("text_editor.view"));
         toggleWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.wrap"), menuItemMnemonicHelper, null, this);
+        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_numbers"), menuItemMnemonicHelper, null, this);
     }
     
     void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
@@ -216,6 +218,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         	textEditorImpl.findPrevious();
         else if(source == toggleWrapItem)
         	textEditorImpl.wrap(toggleWrapItem.isSelected());
+        else if(source == toggleLineNumbersItem)
+        	setRowHeaderView(toggleLineNumbersItem.isSelected() ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
         else
         	super.actionPerformed(e);
     }

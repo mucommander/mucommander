@@ -69,6 +69,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
     private JMenuItem toggleWrapItem;
+    private JMenuItem toggleLineNumbersItem;
     
     private String encoding;
     
@@ -98,6 +99,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     	viewMenu = new JMenu(Translator.get("text_viewer.view"));
     	
     	toggleWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.wrap"), menuItemMnemonicHelper, null, this);
+    	toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.line_numbers"), menuItemMnemonicHelper, null, this);
     }
     
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
@@ -214,6 +216,8 @@ class TextViewer extends FileViewer implements EncodingListener {
         	textEditorImpl.findPrevious();
         else if(source == toggleWrapItem)
         	textEditorImpl.wrap(toggleWrapItem.isSelected());
+        else if(source == toggleLineNumbersItem)
+        	setRowHeaderView(toggleLineNumbersItem.isSelected() ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
         else
         	super.actionPerformed(e);
     }
