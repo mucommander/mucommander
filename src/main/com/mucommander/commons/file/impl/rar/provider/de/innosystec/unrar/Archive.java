@@ -72,8 +72,8 @@ public class Archive {
 //    private long totalPackedRead = 0L;
  
     /**
-     * create a new archive object using the given file
-     * @param file the file to extract
+     * create a new archive object using the given stream
+     * @param in the stream to extract
      * @throws RarException
      */
     public Archive(InputStream in) throws RarException, IOException {
@@ -333,8 +333,9 @@ public class Archive {
 	 * @param header - given FileHeader.
 	 * @param in1 - input stream to the archive file.
 	 * @param os 
-	 * @param in2 - if isSolid==true, is an input stream to the archive file. null otherwise.
-	 * @throws Exception.
+	 * @param in2 - if isSolid==true, is an input stream to the
+     *  archive file. null otherwise.
+	 * @throws Exception
 	 */
 	public void extractEntry(boolean isHeaderSolid, FileHeader header, InputStream in1, OutputStream os, InputStream in2) throws Exception {
 		if (isHeaderSolid) {

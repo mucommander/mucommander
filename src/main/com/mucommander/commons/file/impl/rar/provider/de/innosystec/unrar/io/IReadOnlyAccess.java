@@ -35,7 +35,6 @@ public interface IReadOnlyAccess {
 		
 	/**
 	 * @param pos the position in the file
-	 * @return success ? true : false 
 	 */
 	public void setPosition(long pos) throws IOException;
 

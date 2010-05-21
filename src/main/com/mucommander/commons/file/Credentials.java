@@ -24,8 +24,6 @@ package com.mucommander.commons.file;
  * This class is a container for a login and password pair, used to authenticate a location on a filesystem.
  *
  * @see com.mucommander.commons.file.FileURL
- * @see com.mucommander.auth.CredentialsMapping
- * @see com.mucommander.auth.CredentialsManager
  * @author Maxence Bernard
  */
 public final class Credentials {

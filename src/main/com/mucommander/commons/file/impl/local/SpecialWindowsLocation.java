@@ -28,12 +28,10 @@ import java.net.MalformedURLException;
 
 /**
  * Represents special Windows locations such as 'My Computer', 'Network Neighborhood', 'Recycle Bin', ... as dummy
- * <code>AbstractFile</code> instances, for the sole purpose of being opened with
- * {@link com.mucommander.desktop.DesktopManager}.
+ * <code>AbstractFile</code> instances.
  *
  * <p>This class is totally useless on platforms other than Windows.</p>
  *
- * @see com.mucommander.desktop.DesktopManager
  * @author Maxence Bernard
  */
 public class SpecialWindowsLocation extends DummyFile {

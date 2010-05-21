@@ -40,7 +40,6 @@ import com.mucommander.commons.file.icon.LocalFileIconProvider;
  * creation, using their extension as the cache's key.
  * </p>
  *
- * @see com.mucommander.ui.icon.FileIcons#hasProperSystemIcons()
  * @author Maxence Bernard
  */
 public class SwingFileIconProvider extends CachedFileIconProvider {

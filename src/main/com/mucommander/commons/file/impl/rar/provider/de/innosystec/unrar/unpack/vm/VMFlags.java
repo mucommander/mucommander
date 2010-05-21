@@ -40,7 +40,7 @@ public class VMFlags {
 		this.flag = flag;
 	}
 	
-	/**
+	/*
 	 * Returns the VMFlags Type of the given int or null
 	 * @param flag as int
 	 * @return VMFlag of the int value

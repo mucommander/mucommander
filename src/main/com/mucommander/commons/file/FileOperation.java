@@ -33,56 +33,56 @@ public enum FileOperation {
     /**
      * Represents a 'read' operation, as specified by {@link AbstractFile#getInputStream()}.
      *
-     * @see {@link AbstractFile#getInputStream()}.
+     * @see AbstractFile#getInputStream()
      **/
     READ_FILE,
 
     /**
      * Represents a 'random read' operation, as specified by {@link AbstractFile#getRandomAccessInputStream()}.
      *
-     * @see {@link AbstractFile#getRandomAccessInputStream()}.
+     * @see AbstractFile#getRandomAccessInputStream()
      **/
     RANDOM_READ_FILE,
 
     /**
      * Represents a 'write' operation, as specified by {@link AbstractFile#getOutputStream()}.
      *
-     * @see {@link AbstractFile#getOutputStream()}.
+     * @see AbstractFile#getOutputStream()
      **/
     WRITE_FILE,
 
     /**
      * Represents an 'append' operation, as specified by {@link AbstractFile#getAppendOutputStream()}.
      *
-     * @see {@link AbstractFile#getAppendOutputStream()}.
+     * @see AbstractFile#getAppendOutputStream()
      **/
     APPEND_FILE,
 
     /**
      * Represents a 'random write' operation, as specified by {@link AbstractFile#getRandomAccessOutputStream()}.
      *
-     * @see {@link AbstractFile#getRandomAccessOutputStream()}.
+     * @see AbstractFile#getRandomAccessOutputStream()
      **/
     RANDOM_WRITE_FILE,
 
     /**
      * Represents an 'mkdir' operation, as specified by {@link AbstractFile#mkdir()}.
      *
-     * @see {@link AbstractFile#mkdir()}.
+     * @see AbstractFile#mkdir()
      **/
     CREATE_DIRECTORY,
 
     /**
      * Represents an 'ls' operation, as specified by {@link AbstractFile#ls()}.
      *
-     * @see {@link AbstractFile#ls()}.
+     * @see AbstractFile#ls()
      **/
     LIST_CHILDREN,
 
     /**
      * Represents a 'delete' operation, as specified by {@link AbstractFile#delete()}.
      *
-     * @see {@link AbstractFile#delete()}.
+     * @see AbstractFile#delete()
      **/
     DELETE,
 
@@ -99,7 +99,7 @@ public enum FileOperation {
     /**
      * Represents a 'change date' operation, as specified by {@link AbstractFile#changeDate(long)}.
      *
-     * @see {@link AbstractFile#changeDate(long)}.
+     * @see AbstractFile#changeDate(long)
      **/
     CHANGE_DATE,
 

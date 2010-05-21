@@ -69,11 +69,6 @@ public class RarFile {
         }
     }
 
-    /**
-     * 
-     * @return
-     * @throws IOException
-     */
     public Collection getEntries() {
     	return archive.getFileHeaders();
     }
