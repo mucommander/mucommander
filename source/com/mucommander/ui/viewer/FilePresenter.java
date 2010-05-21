@@ -2,6 +2,7 @@ package com.mucommander.ui.viewer;
 
 import java.io.IOException;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
@@ -23,6 +24,15 @@ public abstract class FilePresenter extends JScrollPane {
 	
 	public FilePresenter() {
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	}
+	
+	/**
+	 * Add component to be presented in the ScrollPane viewport
+	 * 
+	 * @param component the component to be presented
+	 */
+	protected void addComponentToPresent(JComponent component) {
+		getViewport().add(component);
 	}
 	
 	/**
@@ -86,6 +96,11 @@ public abstract class FilePresenter extends JScrollPane {
     	show(file);
     	setCurrentFile(file);
     }
+    
+    /**
+     * Hook operation that can be override to make operations just before the presenter is disposed
+     */
+    public void beforeCloseHook() { }
 	
 	//////////////////////
     // Abstract methods //

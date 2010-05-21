@@ -30,6 +30,10 @@ public abstract class FileFrame extends JFrame {
 	
 	protected final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
 	
+	// The file presenter within this frame
+	private FilePresenter filePresenter;
+	
+	// The main frame from which this frame was initiated
 	private MainFrame mainFrame;
 	
 	FileFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
@@ -47,8 +51,6 @@ public abstract class FileFrame extends JFrame {
 	
 	protected void initContentPane(final AbstractFile file) {
         AsyncPanel asyncPanel = new AsyncPanel() {
-        	
-        	private FilePresenter filePresenter;
         	
             @Override
             public JComponent getTargetComponent() {
@@ -119,6 +121,13 @@ public abstract class FileFrame extends JFrame {
         DialogToolkit.fitToMinDimension(this, getMinimumSize());
 
         DialogToolkit.centerOnWindow(this, getMainFrame());
+    }
+    
+    @Override
+    public void dispose() {
+    	if (filePresenter != null)
+    		filePresenter.beforeCloseHook();
+    	super.dispose();
     }
     
     //////////////////////

@@ -407,7 +407,18 @@ public class MuConfiguration {
     /** Default split pane orientation. */
     public static final String DEFAULT_SPLIT_ORIENTATION          = VERTICAL_SPLIT_ORIENTATION;
 
-
+    // - File presenter (viewer\editor) variables ----------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing information about features used by the last file presenter instance. */
+    public static final String  FILE_PRESENTER_SECTION            = "file_presenter";
+    /** Whether or not to wrap long lines. */
+    public static final String  WRAP                              = FILE_PRESENTER_SECTION + "." + "wrap";
+    /** Default wrap value. */
+    public static final boolean DEFAULT_WRAP                      = true;
+    /** Whether or not to show line numbers. */
+    public static final String  LINE_NUMBERS                      = FILE_PRESENTER_SECTION + "." + "line_numbers";
+    /** Default line numbers value. */
+    public static final boolean DEFAULT_LINE_NUMBERS              = true;
 
     // - Folder monitoring variables -----------------------------------------
     // -----------------------------------------------------------------------

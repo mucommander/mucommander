@@ -38,7 +38,6 @@ public class ViewerFrame extends FileFrame {
 	
     private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
 	
-	
     /**
      * Creates a new ViewerFrame to start viewing the given file.
      *

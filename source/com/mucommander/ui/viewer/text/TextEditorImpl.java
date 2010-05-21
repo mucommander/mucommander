@@ -53,6 +53,7 @@ class TextEditorImpl implements ThemeListener {
     ////////////////////
     // Initialization //
     ////////////////////
+    
     public TextEditorImpl(boolean isEditable) {
         // Initialize text area
         initTextArea(isEditable);
@@ -81,8 +82,6 @@ class TextEditorImpl implements ThemeListener {
         
         textArea.setWrapStyleWord(true);
     }
-
-
 
     /////////////////
     // Search code //
@@ -141,6 +140,9 @@ class TextEditorImpl implements ThemeListener {
         }
     }
 
+    public boolean isWrap() {
+    	return textArea.getLineWrap();
+    }
 
     ////////////////////////////
     // Package-access methods //
@@ -148,6 +150,7 @@ class TextEditorImpl implements ThemeListener {
 
     void wrap(boolean isWrap) {
     	textArea.setLineWrap(isWrap);
+    	textArea.repaint();
     }
     
     void copy() {

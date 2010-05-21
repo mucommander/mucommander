@@ -76,7 +76,7 @@ class ImageViewer extends FileViewer implements ActionListener {
     public ImageViewer() {
     	imageViewerImpl = new ImageViewerImpl();
     	
-    	getViewport().add(imageViewerImpl);
+    	addComponentToPresent(imageViewerImpl);
     	
     	// Create Go menu
     	MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
