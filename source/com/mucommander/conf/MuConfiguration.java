@@ -411,12 +411,14 @@ public class MuConfiguration {
     // -----------------------------------------------------------------------
     /** Section describing information about features used by the last file presenter instance. */
     public static final String  FILE_PRESENTER_SECTION            = "file_presenter";
+    /** Section describing information specific to text file presenter. */
+    public static final String  TEXT_FILE_PRESENTER_SECTION       = FILE_PRESENTER_SECTION + "." + "text";
     /** Whether or not to wrap long lines. */
-    public static final String  WRAP                              = FILE_PRESENTER_SECTION + "." + "wrap";
+    public static final String  WORD_WRAP                         = TEXT_FILE_PRESENTER_SECTION + "." + "word_wrap";
     /** Default wrap value. */
-    public static final boolean DEFAULT_WRAP                      = true;
+    public static final boolean DEFAULT_WORD_WRAP                 = true;
     /** Whether or not to show line numbers. */
-    public static final String  LINE_NUMBERS                      = FILE_PRESENTER_SECTION + "." + "line_numbers";
+    public static final String  LINE_NUMBERS                      = TEXT_FILE_PRESENTER_SECTION + "." + "line_numbers";
     /** Default line numbers value. */
     public static final boolean DEFAULT_LINE_NUMBERS              = true;
 

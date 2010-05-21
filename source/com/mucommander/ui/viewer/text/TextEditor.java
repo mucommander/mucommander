@@ -70,7 +70,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleWrapItem;
+    private JMenuItem toggleWordWrapItem;
     private JMenuItem toggleLineNumbersItem;
 
     private BOM bom;
@@ -111,8 +111,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     	        
     	        viewMenu = new JMenu(Translator.get("text_editor.view"));
     	        
-    	        toggleWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.wrap"), menuItemMnemonicHelper, null, TextEditor.this);
-    	        toggleWrapItem.setSelected(textEditorImpl.isWrap());
+    	        toggleWordWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.word_wrap"), menuItemMnemonicHelper, null, TextEditor.this);
+    	        toggleWordWrapItem.setSelected(textEditorImpl.isWrap());
     	        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_numbers"), menuItemMnemonicHelper, null, TextEditor.this);
     	        toggleLineNumbersItem.setSelected(TextEditor.this.getRowHeader().getView() != null);
     		}
@@ -162,7 +162,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     
     @Override
     public void beforeCloseHook() {
-    	MuConfiguration.setVariable(MuConfiguration.WRAP, textEditorImpl.isWrap());
+    	MuConfiguration.setVariable(MuConfiguration.WORD_WRAP, textEditorImpl.isWrap());
     	MuConfiguration.setVariable(MuConfiguration.LINE_NUMBERS, getRowHeader().getView() != null);
     }
 
@@ -245,8 +245,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         	textEditorImpl.findNext();
         else if(source == findPreviousItem)
         	textEditorImpl.findPrevious();
-        else if(source == toggleWrapItem)
-        	textEditorImpl.wrap(toggleWrapItem.isSelected());
+        else if(source == toggleWordWrapItem)
+        	textEditorImpl.wrap(toggleWordWrapItem.isSelected());
         else if(source == toggleLineNumbersItem)
         	setRowHeaderView(toggleLineNumbersItem.isSelected() ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
         else
