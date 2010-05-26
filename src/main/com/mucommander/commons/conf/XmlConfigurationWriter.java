@@ -109,12 +109,12 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
 
     // - Builder methods -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    private void startElement(String name) throws ConfigurationException {
+    protected void startElement(String name) throws ConfigurationException {
         try {out.startElement("", name, name, EMPTY_ATTRIBUTES);}
         catch(SAXException e) {throw new ConfigurationException(e);}
     }
 
-    private void endElement(String name) throws ConfigurationException {
+    protected void endElement(String name) throws ConfigurationException {
         try {out.endElement("", name, name);}
         catch(SAXException e) {throw new ConfigurationException(e);}
     }
