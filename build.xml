@@ -1,46 +1,945 @@
-<!--
-This file is part of muCommander, http://www.mucommander.com
-Copyright (C) 2002-2010 Maxence Bernard
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- TODO: default target must be run. -->
+<!-- =============================================================================================================== -->
+<!-- Build file for muCommander.                                                                                     -->
+<!--                                                                                                                 -->
+<!-- Author: Nicolas Rinaudo                                                                                         -->
+<!-- =============================================================================================================== -->
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander" default="all">
+    <!-- = Project structure ======================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <!-- Source directory.                                                                                           -->
+    <property name="src"                  location="src"/>
+    <!-- Test sources directory.                                                                                     -->
+    <property name="src.test"             location="${src}/test"/>
+    <!-- Main sources directory.                                                                                     -->
+    <property name="src.main"             location="${src}/main"/>
+    <!-- Main resources directory.                                                                                   -->
+    <property name="res"                  location="res"/>
+    <!-- Runtime resources directory.                                                                                -->
+    <property name="res.runtime"          location="${res}/runtime"/>
+    <!-- Resources required for muCommander packaging.                                                               -->
+    <property name="res.package"          location="${res}/package"/>
+    <!-- External libraries directory.                                                                               -->
+    <property name="lib"                  location="lib"/>
+    <!-- Libraries required at runtime.                                                                              -->
+    <property name="lib.runtime"          location="${lib}/runtime"/>
+    <!-- External libraries used for tests.                                                                          -->
+    <property name="lib.test"             location="${lib}/test"/>
+    <!-- External tools.                                                                                             -->
+    <property name="lib.tools"            location="${lib}/tools"/>
+    <!-- Compile time dependencies.                                                                                  -->
+    <property name="lib.compile"          location="${lib}/compile"/>
+    <!-- Where to store temporary files.                                                                             -->
+    <property name="tmp"                  location="tmp"/>
+    <property name="tmp.deb"              location="${tmp}/deb"/>
+    <property name="jar.normal"           location="${tmp}/mucommander-normal.jar"/>
+    <property name="jar.obf"              location="${tmp}/mucommander-obf.jar"/>
+    <property name="tmp.nsis"             location="${tmp}/nsis"/>
+    <property name="tmp.portable"         location="${tmp}/portable"/>
+    <property name="tmp.unix"             location="${tmp}/unix"/>
+    <!-- Where to store the main source's code compilation output.                                                   -->
+    <property name="tmp.main"             location="${tmp}/main"/>
+    <!-- Where to store the test source's code compilation output.                                                   -->
+    <property name="tmp.test"             location="${tmp}/test"/>
+    <!-- Where to store the obfuscated bytecode.                                                                     -->
+    <property name="tmp.obf"              location="${tmp}/obf"/>
+    <!-- Where to store external libraries' bytecode.                                                                -->
+    <property name="tmp.libs"             location="${tmp}/libs"/>
+    <!-- Where to store temporary Cobertura files.                                                                   -->
+    <property name="tmp.cobertura"        location="${tmp}/cobertura"/>
+    <!-- Where to store various project reports.                                                                     -->
+    <property name="reports"              location="reports"/>
+    <!-- Where to store ProGuard reports.                                                                            -->
+    <property name="reports.proguard"     location="${reports}/proguard"/>
+    <!-- Where to store TestNG reports.                                                                              -->
+    <property name="testng.reports"       location="${reports}/testng"/>
+    <!-- Where to store Cobertura reports.                                                                           -->
+    <property name="cobertura.reports"    location="${reports}/cobertura"/>
+    <!-- Where to store Checkstyle reports.                                                                          -->
+    <property name="checkstyle.reports"   location="${reports}/checkstyle"/>
+    <!-- Where to store PMD reports.                                                                                 -->
+    <property name="pmd.reports"          location="${reports}/pmd"/>
+    <!-- Where to store Ivy dependency reports.                                                                      -->
+    <property name="ivy.reports"          location="${reports}/ivy"/>
+    <!-- Where to store JavaNCSS reports.                                                                            -->
+    <property name="javancss.reports"     location="${reports}/javancss"/>
+    <!-- Where to store the API's Javadoc.                                                                           -->
+    <property name="docs"                 location="docs"/>
+    <!-- Where to store distribution files.                                                                          -->
+    <property name="dist"                 location="dist"/>
+    <!-- JAR distribution file.                                                                                      -->
+    <property name="dist.jar"             location="${dist}/mucommander.jar"/>
+    <!-- Signed JAR distribution file.                                                                               -->
+    <property name="dist.jar.signed"      location="${dist}/mucommander_signed.jar"/>
+    <!-- Where to store the Win32 executable.                                                                        -->
+    <property name="dist.exe"             value="${dist}/muCommander.exe"/>
+    <!-- Where to store the OS X executable.                                                                         -->
+    <property name="dist.app.name"        value="muCommander.app"/>
+    <property name="dist.app"             value="${dist}/${dist.app.name}"/>
+    <!-- Ivy dependencies retrieval pattern.                                                                         -->
+    <property name="ivy.retrieve.pattern" value="${lib}/[conf]/[organisation]/[artifact].[ext]"/>
+    <!-- Name of the icon used by the JNLP file.                                                                     -->
+    <property name="jnlp.icon"            value="icon.gif"/>
+    <!-- Name of the muCommander JNLP file.                                                                          -->
+    <property name="jnlp.file"            value="mucommander.jnlp"/>
 
-muCommander is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
-(at your option) any later version.
+    <!-- Runtime classpath.                                                                                          -->
+    <path id="lib.runtime">
+        <fileset dir="${lib.runtime}" includes="**/*.jar"/>
+    </path>
 
-muCommander is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+    <!-- Test classpath.                                                                                             -->
+    <path id="lib.test">
+        <fileset dir="${lib.test}" includes="**/*.jar"/>
+    </path>
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
+    <!-- Tools classpath.                                                                                            -->
+    <path id="lib.tools">
+        <fileset dir="${lib.tools}" includes="**/*.jar"/>
+    </path>
 
-<!-- ========================================================= -->
-<!-- Main muCommander buildfile.                               -->
-<!--                                                           -->
-<!-- This file acts as a proxy to all other necessary          -->
-<!-- buildfiles:                                               -->
-<!-- - directory structure.                                    -->
-<!-- - common targets.                                         -->
-<!-- - mucommander specific targets.                           -->
-<!-- - Ant tools specific targets.                             -->
-<!-- - Configuration API specific targets.                     -->
-<!-- - if available, local configuration.                      -->
-<!--                                                           -->
-<!-- Author: Nicolas Rinaudo                                   -->
-<!-- ========================================================= -->
-<project name="mucommander" default="run" basedir=".">
-  <!-- Common targets and directory structure.                 -->
-  <import file="build/common.xml"/>
-  <!-- muCommander specific directory structure.               -->
-  <import file="build/mucommander/structure.xml"/>
-  <!-- Paths to local tools.                                   -->
-  <import file="local.xml" optional="true"/>
-  <!-- Ant tools specific targets.                             -->
-  <import file="build/tools/main.xml"/>
-  <!-- Configuration API specific targets.                     -->
-  <import file="build/conf/main.xml"/>
-  <!-- muCommander specific targets.                           -->
-  <import file="build/mucommander/main.xml"/>
+    <!-- Compile time classpath.                                                                                     -->
+    <path id="lib.compile">
+        <fileset dir="${lib.compile}" includes="**/*.jar"/>
+    </path>
+
+
+
+    <!-- = Compilation targets ===================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="compile" depends="load-properties,retrieve-runtime,retrieve-compile"
+            description="Compiles the library's sources">
+        <echo>Compiling sources...</echo>
+        <mkdir dir="${tmp.main}"/>
+        <javac destdir="${tmp.main}" debug="on" deprecation="on"
+               encoding="${source.encoding}" source="${source.version}" target="${source.version}"
+               srcdir="${src.main}" classpathref="lib.runtime">
+            <classpath>
+                <path refid="lib.runtime"/>
+                <path refid="lib.compile"/>
+            </classpath>
+        </javac>
+        <copy todir="${tmp.main}">
+            <fileset dir="${res.runtime}"/>
+        </copy>
+    </target>
+
+    <target name="compile-tests" depends="compile,retrieve-test">
+        <echo>Compiling test sources...</echo>
+        <mkdir dir="${tmp.test}"/>
+        <javac destdir="${tmp.test}" debug="on" deprecation="on"
+               encoding="${source.encoding}" source="${source.version}" target="${source.version}"
+               srcdir="${src.test}">
+            <classpath>
+                <pathelement location="${tmp.main}"/>
+                <path refid="lib.test"/>
+            </classpath>
+        </javac>
+
+        <taskdef classpathref="lib.test" resource="net/sourceforge/cobertura/ant/antlib.xml"/>
+        <echo>Instrumenting source code...</echo>
+        <mkdir dir="${tmp.cobertura}"/>
+        <mkdir dir="${cobertura.reports}"/>
+        <instrument todir="${tmp.cobertura}" datafile="${tmp.cobertura}/cobertura.ser">
+            <fileset dir="${tmp.main}"/>
+        </instrument>
+    </target>
+
+
+
+    <!-- = Test targets ============================================================================================ -->
+    <!-- =========================================================================================================== -->
+    <target name="check-failed-tests">
+        <condition property="testng.suite" value="${testng.reports}/testng-failed.xml">
+            <available file="${testng.reports}/testng-failed.xml"/>
+        </condition>
+        <property name="testng.suite" value="testng.xml"/>
+    </target>
+
+    <target name="test" depends="compile-tests,check-failed-tests" description="Runs the library's tests.">
+        <echo>Running self-tests...</echo>
+        <taskdef classpathref="lib.test" resource="testngtasks"/>
+        <mkdir dir="${testng.reports}"/>
+        <testng outputdir="${testng.reports}" haltonfailure="true">
+            <jvmarg value="-Xmx256m" />
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${tmp.cobertura}/cobertura.ser"/>
+            <sysproperty key="java.awt.headless" value="true"/>
+            <classpath>
+                <pathelement location="${tmp.cobertura}"/>
+                <pathelement location="${tmp.main}"/>
+                <pathelement location="${tmp.test}"/>
+                <path refid="lib.test"/>
+            </classpath>
+            <xmlfileset file="${testng.suite}"/>
+        </testng>
+
+        <echo>Generating coverage report...</echo>
+        <report format="xml" destdir="${cobertura.reports}"
+                srcdir="${src.main}" datafile="${tmp.cobertura}/cobertura.ser" encoding="${source.encoding}"/>
+        <report format="html" destdir="${cobertura.reports}"
+                srcdir="${src.main}" datafile="${tmp.cobertura}/cobertura.ser" encoding="${source.encoding}"/>
+    </target>
+
+
+    <!-- = Portable packaging ====================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="portable-exe" depends="load-launch4j" if="launch4j.available">
+        <echo>Creating Win32 launcher...</echo>
+        <mkdir dir="${tmp.portable}"/>
+        <launch4j>
+            <config outfile="${tmp.portable}/mucommander.exe" jarpath="mucommander.jar"
+                    icon="${res.package}/windows/mucommander.ico" dontwrapjar="true" cmdline="-p .mucommander"
+                    chdir=".">
+                <jre minversion="${source.version}.0">
+                    <opt>-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader</opt>
+                </jre>
+            </config>
+        </launch4j>
+    </target>
+
+    <target name="portable" depends="compress,portable-exe,release-prefixes">
+        <echo>Packaging portable distribution file...</echo>
+
+        <copy todir="${tmp.portable}" overwrite="true">
+            <fileset file="${res.package}/unix/mucommander.sh"/>
+            <filterset>
+                <filter token="ARGS" value="-p $0/../.mucommander"/>
+                <filter token="JAVA_ARGS"
+                        value="-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader"/>
+            </filterset>
+        </copy>
+
+        <!-- Generates the TGZ file, keeping execution flags.      -->
+        <tar destfile="${dist}/${package.prefix}-portable.tar.gz" compression="gzip">
+            <tarfileset file="${tmp.portable}/mucommander.sh"  prefix="${archive.prefix}" mode="755"/>
+            <tarfileset file="${tmp.portable}/mucommander.exe" prefix="${archive.prefix}"/>
+            <tarfileset file="${res.runtime}/license.txt"      prefix="${archive.prefix}"/>
+            <tarfileset file="readme.txt"                      prefix="${archive.prefix}"/>
+            <tarfileset file="${dist.jar}"                     prefix="${archive.prefix}"/>
+        </tar>
+    </target>
+
+
+    <!-- = OS X packaging ========================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="app.tgz" depends="app,release-prefixes">
+        <echo>Packaging Mac OS X distribution file...</echo>
+        <tar destfile="${dist}/${package.prefix}.app.tar.gz" compression="gzip">
+            <tarfileset dir="${dist.app}" prefix="${archive.prefix}/${dist.app.name}">
+                <include name="**"/>
+                <exclude name="**/JavaApplicationStub"/>
+            </tarfileset>
+            <tarfileset dir="${dist.app}" prefix="${archive.prefix}/${dist.app.name}" mode="755">
+                <include name="**/JavaApplicationStub"/>
+            </tarfileset>
+            <tarfileset file="${res.runtime}/license.txt" prefix="${archive.prefix}"/>
+            <tarfileset file="readme.txt"  prefix="${archive.prefix}"/>
+        </tar>
+    </target>
+
+    <target name="app" depends="load-muant,compress">
+        <echo>Creating Mac OS X application...</echo>
+        <mkapp jar="${dist.jar}" dest="${dist.app}" type="APPL" creator="MUCO" icon="${res.package}/osx/icon.icns"
+               infoversion="0.9" classpath="/System/Library/Java">
+            <string  name="CFBundleName"                    value="muCommander"/>
+            <string  name="CFBundleIdentifier"              value="com.mucommander.muCommander"/>
+            <string  name="CFBundleVersion"                 value="${app.version}"/>
+            <boolean name="CFBundleAllowMixedLocalizations" value="true"/>
+            <string  name="CFBundleDevelopmentRegion"       value="English"/>
+            <string  name="CFBundleShortVersionString"      value="${app.version}"/>
+            <string  name="CFBundleGetInfoString"
+                     value="muCommander ${app.version}, (c) ${app.copyright} ${app.vendor}, ${url.homepage}"/>
+            <string  name="CFBundleInfoDictionaryVersion"   value="6.0"/>
+            <array name="CFBundleDocumentTypes">
+                <dict>
+                    <array name="CFBundleTypeExtensions">
+                        <string value="*"/>
+                    </array>
+                    <array name="CFBundleTypeMIMETypes">
+                        <string value="*/*"/>
+                    </array>
+                    <array name="CFBundleTypeOSTypes">
+                        <string value="****"/>
+                    </array>
+                    <string name="CFBundleTypeName" value="All"/>
+                    <string name="CFBundleTypeRole" value="Viewer"/>
+                </dict>
+            </array>
+            <dict    name="Java">
+                <string name="MainClass"                      value="${app.main}"/>
+                <string name="JVMVersion"                     value="${source.version}+"/>
+                <array name="JVMArchs">
+                    <string value="x86_64"/>
+                    <string value="i386"/>
+                    <string value="ppc"/>
+                </array>
+                <string name="VMOptions"                      value="-Xmx128m"/>
+                <dict name="Properties">
+                    <string name="java.system.class.loader"
+                            value="com.mucommander.commons.file.AbstractFileClassLoader"/>
+                    <string name="com.apple.smallTabs"          value="true"/>
+                    <string name="com.apple.hwaccel"            value="true"/>
+                    <string name="apple.laf.useScreenMenuBar"   value="true"/>
+                    <string name="file.encoding"                value="UTF-8"/>
+                </dict>
+            </dict>
+        </mkapp>
+    </target>
+
+
+
+    <!-- = Win32 packaging ========================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <target name="check-launch4j" depends="load-properties">
+        <condition property="launch4j.available" value="true">
+            <and>
+                <available file="${launch4j.dir}" type="dir"/>
+                <!-- If the property is defined but empty, it will  default to ${user.dir}. We must make sure this   -->
+                <!-- doesn't happen.                                                                                 -->
+                <not>
+                    <equals arg1="${launch4j.dir}" arg2="${user.dir}" trim="true"/>
+                </not>
+            </and>
+        </condition>
+
+        <fail message="Launch4j not configured">
+            <condition>
+                <and>
+                    <istrue value="${build.pedantic}"/>
+                    <not>
+                        <istrue value="${launch4j.available}"/>
+                    </not>
+                </and>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="load-launch4j" depends="check-launch4j" if="launch4j.available">
+        <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
+                 classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/xstream.jar"/>
+    </target>
+
+    <target name="skip-launch4j" unless="launch4j.available">
+        <echo>Launch4j not available, skipping executable generation...</echo>
+    </target>
+
+    <target name="make-launch4j" depends="compress" if="launch4j.available">
+        <echo>Creating Win32 executable...</echo>
+
+
+        <launch4j>
+            <config headertype="gui" outfile="${dist.exe}" jarpath="mucommander.jar"
+                    icon="${res.package}/windows/mucommander.ico" dontwrapjar="true" chdir="." customprocname="true"
+                    supporturl="${url.homepage}">
+                <jre minversion="${source.version}.0">
+                    <opt>-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader</opt>
+                </jre>
+            </config>
+        </launch4j>
+    </target>
+
+    <target name="launch4j" depends="load-launch4j,make-launch4j,skip-launch4j"/>
+
+    <target name="check-nsis" depends="load-properties">
+        <condition property="nsis.available" value="true">
+            <and>
+                <available file="${nsis.dir}" type="dir"/>
+                <available file="${nsis.bin}" type="file"/>
+            </and>
+        </condition>
+
+        <fail message="NSIS not available.">
+            <condition>
+                <and>
+                    <istrue value="${build.pedantic}"/>
+                    <not>
+                        <istrue value="${nsis.available}"/>
+                    </not>
+                </and>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="make-nsis" depends="launch4j,release-prefixes" if="nsis.available">
+        <echo>Creating Win32 installer...</echo>
+
+        <mkdir dir="${tmp.nsis}"/>
+        <copy file="${dist.exe}"                            tofile="${tmp.nsis}/muCommander.exe" overwrite="true"/>
+        <copy file="${dist.jar}"                            tofile="${tmp.nsis}/mucommander.jar" overwrite="true"/>
+        <copy file="${res.package}/windows/mucommander.ico" tofile="${tmp.nsis}/mucommander.ico" overwrite="true"/>
+
+        <!-- Makes sure readme.txt and license.txt contain proper windows linebreaks.                                -->
+        <fixcrlf srcdir="." destdir="${tmp.nsis}" includes="readme.txt" eol="crlf"/>
+        <fixcrlf srcdir="${res.runtime}" destdir="${tmp.nsis}" includes="license.txt" eol="crlf"/>
+
+        <copy file="${res.package}/windows/mucommander.nsi" tofile="${tmp.nsis}/mucommander.nsi">
+            <filterset>
+                <filter token="MU_VERSION" value="${app.version}"/>
+                <filter token="MU_EXE"     value="muCommander.exe"/>
+                <filter token="MU_JAR"     value="mucommander.jar"/>
+                <filter token="MU_ICON"    value="mucommander.ico"/>
+                <filter token="MU_OUT"     value="mucommander-setup.exe"/>
+                <filter token="MU_README"  value="readme.txt"/>
+                <filter token="MU_LICENSE" value="license.txt"/>
+            </filterset>
+        </copy>
+
+        <exec executable="${nsis.bin}" failonerror="true">
+            <arg value="${tmp.nsis}/mucommander.nsi"/>
+
+            <!-- Set the NSISDIR environment variable, required for includes to work properly.                       -->
+            <env key="NSISDIR" value="${nsis.dir}"/>
+        </exec>
+
+        <copy file="${tmp.nsis}/mucommander-setup.exe" tofile="${dist}/${package.prefix}-setup.exe" overwrite="true"/>
+    </target>
+
+    <target name="skip-nsis" unless="nsis.available">
+        <echo>Setup generation unavailable, skipping...</echo>
+    </target>
+
+    <target name="nsis" depends="check-nsis,make-nsis,skip-nsis"/>
+
+
+
+    <!-- = Unix packaging ========================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="tgz" depends="compress,release-prefixes">
+        <echo>Packaging Unix release file...</echo>
+
+        <mkdir dir="${tmp.unix}"/>
+        <copy todir="${tmp.unix}" overwrite="true">
+            <fileset file="${res.package}/unix/mucommander.sh"/>
+            <filterset>
+                <filter token="ARGS"      value=""/>
+                <filter token="JAVA_ARGS"
+                        value="-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader"/>
+            </filterset>
+        </copy>
+
+        <tar destfile="${dist}/${package.prefix}.tar.gz" compression="gzip">
+            <tarfileset file="${tmp.unix}/mucommander.sh" prefix="${archive.prefix}" mode="755"/>
+            <tarfileset file="${res.runtime}/license.txt" prefix="${archive.prefix}"/>
+            <tarfileset file="readme.txt"                 prefix="${archive.prefix}"/>
+            <tarfileset file="${dist.jar}"                prefix="${archive.prefix}"/>
+        </tar>
+    </target>
+
+    <!-- Generates the muCommander debian package.               -->
+    <!-- Output will be stored in ${dist}/${deb.name}.           -->
+    <!-- This target will only be executed if JDeb is properly   -->
+    <!-- configured.                                             -->
+    <target name="deb" depends="load-muant,compress">
+        <tstamp/>
+        <condition property="deb.version" value="${app.version}-${DSTAMP}" else="${app.version}">
+            <istrue value="${build.snapshot}"/>
+        </condition>
+
+        <condition property="deb.name" value="mucommander_current_all.deb"
+                   else="mucommander_${deb.version}_all.deb">
+            <istrue value="${build.snapshot}"/>
+        </condition>
+
+        <!-- Creates the required directories.                     -->
+        <echo>Creating debian release file...</echo>
+        <mkdir dir="${tmp.deb}"/>
+        <mkdir dir="${tmp.deb}/control"/>
+        <mkdir dir="${tmp.deb}/data"/>
+        <mkdir dir="${tmp.deb}/data/usr/share/mucommander"/>
+
+        <taskdef name="jdeb" classname="org.vafer.jdeb.DebAntTask" classpathref="lib.tools"/>
+
+        <!-- Copies the debian data files.                         -->
+        <copy todir="${tmp.deb}/data/usr/share/mucommander" overwrite="true">
+            <fileset file="${res.package}/unix/mucommander.sh"/>
+            <filterset>
+                <filter token="ARGS"      value=""/>
+                <filter token="JAVA_ARGS"
+                        value="-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader"/>
+            </filterset>
+        </copy>
+        <copy todir="${tmp.deb}/data/usr/share/mucommander" overwrite="true">
+            <fileset file="${res.runtime}/license.txt"/>
+            <fileset file="readme.txt"/>
+            <fileset file="${dist.jar}"/>
+        </copy>
+
+        <!-- Generates the data.tar.gz file.                       -->
+        <tar destfile="${tmp.deb}/data.tar.gz" compression="gzip">
+            <tarfileset dir="${tmp.deb}/data/">
+                <include name="**"/>
+                <exclude name="**/usr/share/mucommander/mucommander.sh"/>
+            </tarfileset>
+            <tarfileset dir="${tmp.deb}/data/" mode="755">
+                <include name="**/usr/share/mucommander/mucommander.sh"/>
+            </tarfileset>
+        </tar>
+
+        <!-- Computes the install size.                            -->
+        <mksize name="deb.size">
+            <fileset dir="${tmp.deb}/data"/>
+        </mksize>
+
+        <copy todir="${tmp.deb}/control" overwrite="true">
+            <fileset dir="${res.package}/unix/deb"/>
+            <filterset>
+                <filter token="VERSION" value="${deb.version}"/>
+                <filter token="SIZE" value="${deb.size}"/>
+            </filterset>
+        </copy>
+
+        <jdeb destfile="${dist}/${deb.name}" control="${tmp.deb}/control">
+            <data src="${tmp.deb}/data.tar.gz"/>
+        </jdeb>
+    </target>
+
+
+
+
+    <!-- = Packaging targets ======================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <target name="release-prefixes" depends="load-ant-contribs,load-properties">
+        <condition property="package.prefix.tmp" value="mucommander-${app.version}" else="mucommander-current">
+            <not>
+                <istrue value="${build.snapshot}"/>
+            </not>
+        </condition>
+
+        <propertyregex property="package.prefix" input="${package.prefix.tmp}" regexp="[ .]" replace="_"/>
+        <!-- propertyregex doesn't set the property if the regexp isn't matched.                                     -->
+        <condition property="package.prefix" value="${package.prefix.tmp}">
+            <not>
+                <isset property="package.prefix"/>
+            </not>
+        </condition>
+        <echo message="Using package prefix: ${package.prefix}"/>
+
+        <propertyregex property="archive.prefix" input="muCommander-${app.version}" regexp="[ .]" replace="_"/>
+        <!-- propertyregex doesn't set the property if the regexp isn't matched.                                     -->
+        <condition property="archive.prefix" value="muCommander-${app.version}">
+            <not>
+                <isset property="archive.prefix"/>
+            </not>
+        </condition>
+        <echo message="Using archive prefix: ${archive.prefix}"/>
+    </target>
+
+    <target name="release" depends="release-prefixes,compile,javadoc,jnlp,version,nsis,app.tgz,portable,tgz,deb"
+            description="Generates the library's release artifacts.">
+        <echo>Packaging sources...</echo>
+        <tar destfile="${dist}/${package.prefix}-src.tar.gz" compression="gzip">
+            <tarfileset dir="${src}" prefix="${archive.prefix}"/>
+        </tar>
+    </target>
+
+    <target name="version">
+        <echo>Creating version file...</echo>
+        <tstamp/>
+        <copy file="${res.package}/version.xml" tofile="${dist}/version.xml">
+            <filterset>
+                <filter token="VERSION"      value="${app.version}"/>
+                <filter token="DATE"         value="${DSTAMP}"/>
+                <filter token="DOWNLOAD_URL" value="${url.download}"/>
+                <filter token="JAR_URL"      value="${url.jar}"/>
+            </filterset>
+        </copy>
+    </target>
+
+    <target name="jnlp" depends="sign,load-muant">
+        <echo>Creating JNLP file...</echo>
+
+        <mkjnlp out="${dist}/${jnlp.file}" spec="1.0+" version="${app.version}" codebase="${url.jnlp}"
+                href="${jnlp.file}" allpermissions="true">
+            <information homepage="${url.homepage}" title="muCommander" vendor="Maxence Bernard" offline="true">
+                <description>A cross-platform file manager.</description>
+                <description kind="short">A cross-platform file manager.</description>
+                <icon href="icon.gif" />
+            </information>
+            <resources os="Mac OS X">
+                <property name="com.apple.smallTabs" value="true"/>
+                <property name="com.apple.hwaccel" value="true"/>
+                <property name="apple.laf.useScreenMenuBar" value="true"/>
+                <property name="file.encoding" value="UTF-8"/>
+            </resources>
+            <resources>
+                <j2se version="1.5"/>
+                <jar  href="mucommander.jar"/>
+            </resources>
+            <applicationdesc main="com.mucommander.Launcher"/>
+        </mkjnlp>
+    </target>
+
+
+
+    <!-- = JAR compression ========================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <target name="check-7za" depends="load-properties">
+        <condition property="7za.available" value="true">
+            <available file="${7za.executable}" type="file"/>
+        </condition>
+
+        <fail message="7za compression unavailable.">
+            <condition>
+                <and>
+                    <istrue value="${build.pedantic}"/>
+                    <not>
+                        <istrue value="${7za.available}"/>
+                    </not>
+                </and>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="copy-obfuscated" unless="7za.available">
+        <echo>7za unavailable, using standard compression...</echo>
+        <copy file="${jar.obf}" tofile="${dist.jar}"/>
+    </target>
+
+    <target name="compress-obfuscated" if="7za.available">
+        <echo>Compressing JAR file...</echo>
+        <mkdir dir="${dist}"/>
+        <unjar src="${jar.obf}" dest="${tmp.obf}"/>
+        <exec executable="${7za.executable}" dir="${tmp.obf}" failonerror="true">
+            <arg value="a"/>
+            <arg value="-tzip"/>
+            <arg value="-mm=Deflate"/>
+            <arg value="-mx9"/>
+            <arg value="-mfb=258"/>
+            <arg value="-mpass=15"/>
+            <arg value="${dist.jar}"/>
+            <arg value="*"/>
+        </exec>
+    </target>
+
+    <target name="compress" depends="obfuscate,check-7za,copy-obfuscated,compress-obfuscated"/>
+
+
+
+    <!-- = JAR signature =========================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="check-keystore" depends="load-properties">
+        <condition property="keystore.available" value="true">
+            <and>
+                <isset property="store.pass"/>
+                <not>
+                    <equals arg1="${store.pass}" arg2="" trim="true"/>
+                </not>
+            </and>
+        </condition>
+
+        <fail message="Keystore password unavailable.">
+            <condition>
+                <and>
+                    <istrue value="${build.pedantic}"/>
+                    <not>
+                        <istrue value="${keystore.available}"/>
+                    </not>
+                </and>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="skip-sign" unless="keystore.available">
+        <echo>Keystore password unavailable, skipping JAR signing...</echo>
+    </target>
+
+    <target name="do-sign" if="keystore.available">
+        <echo>Creating signed JAR file...</echo>
+        <signjar jar="${dist.jar}" signedjar="${dist.jar.signed}" alias="maxence" keystore="${res.package}/keystore"
+                 storepass="${store.pass}"/>
+    </target>
+
+    <target name="sign" depends="compress,check-keystore,skip-sign,do-sign"/>
+
+
+
+    <!-- = JAR generation ========================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="obfuscate" depends="jar,load-muant">
+        <libpath property="java.lib" library="rt.jar:classes.jar"/>
+        <libpath property="jsse.lib" library="jsse.jar"/>
+        <libpath property="jce.lib"  library="jce.jar"/>
+
+        <echo>Creating obfuscated JAR file...</echo>
+        <mkdir dir="${reports.proguard}"/>
+        <taskdef resource="proguard/ant/task.properties" classpathref="lib.tools"/>
+        <proguard overloadaggressively="false" ignorewarnings="true" optimize="false" shrink="true" obfuscate="false"
+                  printmapping="${reports.proguard}/mapping.txt" printusage="${reports.proguard}/usage.txt"
+                  printseeds="${reports.proguard}/seeds.txt" allowaccessmodification="false" repackageclasses=""
+                  skipnonpubliclibraryclasses="true" target="${source.version}">
+            <injar  name="${jar.normal}"/>
+            <outjar name="${jar.obf}"/>
+
+            <libraryjar path="${java.lib}"/>
+            <libraryjar path="${jsse.lib}"/>
+            <libraryjar path="${jce.lib}"/>
+
+            <libraryjar refid="lib.compile"/>
+
+            <keepattribute name="exceptions"/>
+
+            <!-- Action API uses reflection.                                                                         -->
+            <keepclasseswithmembers extends="com.mucommander.ui.action.MuAction">
+                <constructor access="public" name="*"/>
+            </keepclasseswithmembers>
+            <!-- Yanfs uses reflection.                                                                              -->
+            <keep name="com.sun.nfs.XFileAccessor"/>
+            <keep name="com.sun.nfs.XFileExtensionAccessor"/>
+            <!-- Main class.                                                                                         -->
+            <keep name="${app.main}">
+                <method access="public static" type="void" name="main" parameters="java.lang.String[]"/>
+            </keep>
+            <!-- Class loader.                                                                                       -->
+            <keep name="com.mucommander.commons.file.AbstractFileClassLoader">
+                <field access="public,protected"/>
+                <method access="public,protected"/>
+                <constructor access="public,protected"/>
+            </keep>
+            <!-- Don't obfuscate the JNA library.                                                                    -->
+            <keep name="com.sun.jna.**">
+                <field name="*"/>
+                <method name="*"/>
+                <constructor name="*"/>
+            </keep>
+            <keep name="com.sun.jna.ptr.**">
+                <field name="*"/>
+                <method name="*"/>
+                <constructor name="*"/>
+            </keep>
+            <keep name="com.sun.jna.win32.**">
+                <field name="*"/>
+                <method name="*"/>
+                <constructor name="*"/>
+            </keep>
+            <keep name="com.sun.jna.examples.win32.**">
+                <field name="*"/>
+                <method name="*"/>
+                <constructor name="*"/>
+            </keep>
+            <!-- Don't obfuscate Classes that use JNA.                                                               -->
+            <keep extends="com.sun.jna.**">
+                <field name="*"/>
+                <method name="*"/>
+                <constructor name="*"/>
+            </keep>
+            <!-- Hadoop HDFS.                                                                                        -->
+            <keep name="org.apache.hadoop.hdfs.DistributedFileSystem"/>
+            <keep name="org.apache.hadoop.net.StandardSocketFactory"/>
+            <keep name="org.apache.hadoop.hdfs.protocol.DatanodeInfo$AdminStates"/>
+            <!-- Apache Commons logging (Hadoop + JetS3t dependency).                                                -->
+            <keep name="org.apache.commons.logging.impl.LogFactoryImpl"/>
+            <keep name="org.apache.commons.logging.impl.Jdk14Logger">
+                <constructor/>
+            </keep>
+            <keep name="org.apache.commons.logging.Log"/>
+            <!-- Keep Enum methods so that they are still considered as Enum at runtime (Hadoop dependency).         -->
+            <keepclassmembers extends="java.lang.Enum">
+                <method access="public static"
+                        type="**[]"
+                        name="values"
+                        parameters="" />
+                <method access="public static"
+                        type="**"
+                        name="valueOf"
+                        parameters="java.lang.String" />
+            </keepclassmembers>
+        </proguard>
+    </target>
+
+    <target name="jar" depends="compile">
+        <tstamp/>
+
+        <!-- Extract external libraries to be packed with muCommander, exclusing non-bytecode files.                 -->
+        <echo>Unpacking external libraries...</echo>
+        <mkdir dir="${tmp.libs}"/>
+        <unjar dest="${tmp.libs}">
+            <path refid="lib.runtime"/>
+            <patternset>
+                <exclude name="**/*.html"/>
+                <exclude name="**/*.css"/>
+                <exclude name="**/*.gif"/>
+                <exclude name="**/*.MF"/>
+                <exclude name="jcifs/util/mime.map"/>
+                <exclude name="META-INF/**/*"/>
+            </patternset>
+        </unjar>
+
+        <mkdir dir="${dist}"/>
+
+        <!-- Retrieves the implementation version.                                                                   -->
+        <exec executable="svnversion" failifexecutionfails="no" outputproperty="svn.version">
+            <arg value="."/>
+            <arg value="-n"/>
+        </exec>
+
+        <echo>Creating JAR file...</echo>
+        <property name="version.url" value="${url.version}"/>
+        <jar jarfile="${jar.normal}">
+            <fileset dir="${tmp.main}"/>
+            <fileset dir="${tmp.libs}"/>
+            <manifest>
+                <attribute name="Main-Class"             value="${app.main}"/>
+                <attribute name="Specification-Title"    value="${app.name}"/>
+                <attribute name="Specification-Vendor"   value="${app.vendor}"/>
+                <attribute name="Specification-Version"  value="${app.version}"/>
+                <attribute name="Implementation-Title"   value="${app.name}"/>
+                <attribute name="Implementation-Vendor"  value="${app.vendor}"/>
+                <attribute name="Implementation-Version" value="${svn.version}"/>
+                <attribute name="Build-Date"             value="${DSTAMP}"/>
+                <attribute name="Build-URL"              value="${version.url}"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+
+    <!-- = Documentation targets =================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="javadoc" depends="retrieve-runtime,release-prefixes">
+        <echo>Creating API javadoc...</echo>
+        <mkdir dir="${docs}"/>
+        <javadoc destdir="${docs}" author="true" windowtitle="${app.name}" doctitle="${app.name}" encoding="UTF-8"
+                 access="protected" classpathref="lib.runtime">
+            <packageset dir="${src.main}" defaultexcludes="yes"/>
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+        </javadoc>
+
+        <mkdir dir="${dist}"/>
+        <tar destfile="${dist}/${package.prefix}-docs.tar.gz" compression="gzip">
+            <tarfileset dir="${docs}" prefix="${archive.prefix}"/>
+        </tar>
+    </target>
+
+
+
+    <!-- = Reports targets ========================================================================================= -->
+    <!-- =========================================================================================================== -->
+    <target name="reports" depends="checkstyle,pmd,javancss,ivy,test" description="Generates all available reports."/>
+
+    <target name="javancss" depends="retrieve-tools" description='Generates JavaNCSS reports.'>
+        <echo>Generating JavaNCSS reports...</echo>
+        <taskdef name="javancss" classname="javancss.JavancssAntTask" classpathref="lib.tools"/>
+        <mkdir dir="${javancss.reports}"/>
+        <javancss srcdir="${src.main}" includes="**/*.java" generateReport="true"
+                  outputfile="${javancss.reports}/javancss.xml" format="xml"/>
+    </target>
+
+    <target name="checkstyle" depends="compile,retrieve-tools" description='Generates CheckStyle reports.'>
+        <echo>Generating CheckStyle reports...</echo>
+        <mkdir dir="${checkstyle.reports}"/>
+        <taskdef resource="checkstyletask.properties" classpathref="lib.tools"/>
+        <checkstyle config="checkstyle.xml" failOnViolation="false">
+            <fileset dir="${src.main}" includes="**/*.java"/>
+            <formatter type="xml" toFile="${checkstyle.reports}/checkstyle.xml"/>
+            <classpath>
+                <path refid="lib.runtime"/>
+                <pathelement location="${tmp.main}"/>
+            </classpath>
+        </checkstyle>
+    </target>
+
+    <target name="pmd" depends="retrieve-tools" description="Generates PMD reports.">
+        <echo>Generating PMD reports...</echo>
+        <taskdef classpathref="lib.tools" name="pmd" classname="net.sourceforge.pmd.ant.PMDTask"/>
+        <mkdir dir="${pmd.reports}"/>
+        <pmd encoding="${source.encoding}">
+            <ruleset>basic</ruleset>
+            <ruleset>unusedcode</ruleset>
+            <ruleset>design</ruleset>
+            <ruleset>imports</ruleset>
+            <ruleset>junit</ruleset>
+            <ruleset>strings</ruleset>
+            <ruleset>codesize</ruleset>
+            <ruleset>coupling</ruleset>
+            <ruleset>strictexception</ruleset>
+            <ruleset>unusedcode</ruleset>
+            <ruleset>sunsecure</ruleset>
+            <ruleset>optimizations</ruleset>
+            <ruleset>finalizers</ruleset>
+            <formatter type="html" toFile="${pmd.reports}/pmd.html"/>
+            <formatter type="xml"  toFile="${pmd.reports}/pmd.xml"/>
+            <fileset dir="${src.main}">
+                <include name="**/*.java"/>
+            </fileset>
+        </pmd>
+    </target>
+
+    <target name="ivy" depends="ivy-config" description="Generates Ivy dependency reports.">
+        <echo>Generating Ivy dependency report...</echo>
+        <mkdir dir="${ivy.reports}"/>
+        <ivy:report todir="${ivy.reports}" xml="true" graph="false" conf="runtime,compile,test,tools"/>
+    </target>
+
+
+
+    <!-- = Maintenance targets ===================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="all" description="Generates all reports and release files." depends="reports,release"/>
+
+    <target name="load-properties">
+        <condition property="build.properties" value="build.properties">
+            <available file="build.properties"/>
+        </condition>
+        <property name="build.properties" value="build_template.properties"/>
+        <echo message="Using properties file: ${build.properties}"/>
+        <property file="${build.properties}"/>
+    </target>
+
+    <target name="load-muant" depends="retrieve-tools">
+        <taskdef resource="com/mucommander/commons/ant/antlib.xml" classpathref="lib.tools"/>
+    </target>
+
+    <target name="load-ant-contribs" depends="retrieve-tools">
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="lib.tools"/>
+    </target>
+
+    <target name="clean" description="Deletes all temporary files.">
+        <echo>Deleting temporary files...</echo>
+        <delete dir="${tmp}"/>
+        <delete dir="${dist}"/>
+        <delete dir="${reports}"/>
+        <delete dir="${docs}"/>
+        <delete includeEmptyDirs="true">
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+        </delete>
+    </target>
+
+
+
+
+    <!-- = Dependencies targets ==================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="offline" description="Forces usage of the ivy cache.">
+        <property name="ivy.cache.ttl.default" value="eternal"/>
+    </target>
+
+    <target name="synchronize" description="Forces synchronisation of all dependencies."
+            depends="retrieve-runtime,retrieve-test,retrieve-tools,retrieve-compile"/>
+
+    <target name="ivy-config">
+        <echo>Resolving dependencies repository...</echo>
+        <ivy:configure/>
+        <ivy:resolve haltonfailure="false"/>
+    </target>
+
+    <target name="retrieve-runtime" depends="ivy-config">
+        <echo>Retrieving runtime libraries...</echo>
+        <ivy:retrieve symlink="true" conf="runtime" type="jar"/>
+    </target>
+
+    <target name="retrieve-compile" depends="ivy-config">
+        <echo>Retrieving compile time libraries...</echo>
+        <ivy:retrieve symlink="true" conf="compile" type="jar"/>
+    </target>
+
+    <target name="retrieve-tools" depends="ivy-config">
+        <echo>Retrieving external tools...</echo>
+        <ivy:retrieve symlink="true" conf="tools" type="jar"/>
+    </target>
+
+    <target name="retrieve-test" depends="ivy-config">
+        <echo>Retrieving test dependencies...</echo>
+        <ivy:retrieve symlink="true" conf="test" type="jar"/>
+    </target>
 </project>

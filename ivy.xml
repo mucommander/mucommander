@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="http://www.jayasoft.fr/org/ivyrep/ivy-doc.xsl"?>
+<!-- =============================================================================================================== -->
+<!-- Project dependencies                                                                                            -->
+<!--                                                                                                                 -->
+<!-- Author: Nicolas Rinaudo                                                                                         -->
+<!-- =============================================================================================================== -->
+<ivy-module version="2.0">
+    <!-- = Project information ===================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <info organisation="mucommander" module="mucommander">
+        <license name="LGPL" url="http://www.gnu.org/licenses/lgpl.html"/>
+        <ivyauthor name="muCommander" url="http://www.mucommander.com/"/>
+        <description homepage="http://www.mucommander.com">
+          Lightweight file manager.
+        </description>
+    </info>
+
+
+    <!-- = Project configurations ================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <configurations defaultconfmapping="runtime->runtime(*);test->test(*);tools->tools(*)">
+        <conf visibility="public"  name="runtime"                   description="Runtime dependencies."/>
+        <conf visibility="private" name="test"    extends="runtime" description="Test dependencies."/>
+        <conf visibility="private" name="compile"                   description="Compile time dependencies."/>
+        <conf visibility="private" name="tools"                     description="External tools."/>
+    </configurations>
+
+
+
+    <!-- = Project dependencies ==================================================================================== -->
+    <!-- =========================================================================================================== -->
+    <dependencies>
+        <dependency org="mucommander" name="mucommander-commons-file"        rev="latest.integration" conf="runtime->*"/>
+        <dependency org="mucommander" name="mucommander-commons-collections" rev="latest.integration" conf="runtime->*"/>
+        <dependency org="mucommander" name="mucommander-commons-conf"        rev="latest.integration" conf="runtime->*"/>
+        <dependency org="jmdns"       name="jmdns"                           rev="latest.integration" conf="runtime->*"/>
+        <dependency org="slf4j"       name="slf4j"                           rev="latest.integration" conf="runtime->default"/>
+        <dependency org="logback"     name="logback"                         rev="latest.integration" conf="runtime->default"/>
+
+        <dependency org="apple"       name="java-extension"                  rev="latest.integration" conf="compile->default"/>
+        
+        <dependency org="testng"      name="testng"                          rev="latest.integration" conf="test"/>
+        <dependency org="sourceforge" name="cobertura"                       rev="latest.integration" conf="test"/>
+
+        <dependency org="jdeb"        name="jdeb"                            rev="latest.integration" conf="tools"/>
+        <dependency org="proguard"    name="proguard"                        rev="latest.integration" conf="tools"/>
+        <dependency org="ant-contrib" name="ant-contrib"                     rev="latest.integration" conf="tools"/>
+        <dependency org="pmd"         name="pmd"                             rev="latest.integration" conf="tools"/>
+        <dependency org="checkstyle"  name="checkstyle"                      rev="latest.integration" conf="tools"/>
+        <dependency org="codehaus"    name="javancss"                        rev="latest.integration" conf="tools"/>
+        <dependency org="mucommander" name="mucommander-commons-ant"         rev="latest.integration" conf="tools->runtime"/>
+    </dependencies>
+</ivy-module>
