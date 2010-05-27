@@ -35,7 +35,7 @@
         <dependency org="mucommander" name="mucommander-commons-collections" rev="latest.integration" conf="runtime->*"/>
         <dependency org="mucommander" name="mucommander-commons-conf"        rev="latest.integration" conf="runtime->*"/>
         <dependency org="jmdns"       name="jmdns"                           rev="latest.integration" conf="runtime->*"/>
-        <dependency org="slf4j"       name="slf4j"                           rev="latest.integration" conf="runtime->default"/>
+        <dependency org="slf4j"       name="slf4j"                           rev="latest.integration" conf="runtime->jul,log4j"/>
         <dependency org="logback"     name="logback"                         rev="latest.integration" conf="runtime->default"/>
 
         <dependency org="apple"       name="java-extension"                  rev="latest.integration" conf="compile->default"/>
