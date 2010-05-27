@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- TODO: default target must be run. -->
 <!-- =============================================================================================================== -->
 <!-- Build file for muCommander.                                                                                     -->
 <!--                                                                                                                 -->
 <!-- Author: Nicolas Rinaudo                                                                                         -->
 <!-- =============================================================================================================== -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander" default="all">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="muCommander" default="run">
     <!-- = Project structure ======================================================================================= -->
     <!-- =========================================================================================================== -->
     <!-- Source directory.                                                                                           -->
@@ -299,6 +298,9 @@
                 <!-- doesn't happen.                                                                                 -->
                 <not>
                     <equals arg1="${launch4j.dir}" arg2="${user.dir}" trim="true"/>
+                </not>
+                <not>
+                    <equals arg1="${launch4j.dir}" arg2="" trim="true"/>
                 </not>
             </and>
         </condition>
@@ -941,5 +943,29 @@
     <target name="retrieve-test" depends="ivy-config">
         <echo>Retrieving test dependencies...</echo>
         <ivy:retrieve symlink="true" conf="test" type="jar"/>
+    </target>
+
+
+
+    <!-- = Application launching targets =========================================================================== -->
+    <!-- =========================================================================================================== -->
+    <target name="stress-test" depends="compile" description="Starts muCommander in stress test mode.">
+        <java classname="com.mucommander.StressTester" fork="true">
+            <sysproperty key="java.system.class.loader" value="com.mucommander.commons.file.AbstractFileClassLoader"/>
+            <classpath>
+                <pathelement location="${tmp.main}"/>
+                <path refid="lib.runtime"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run" depends="compile" description="Starts muCommander.">
+        <java classname="${app.main}" fork="true">
+            <sysproperty key="java.system.class.loader" value="com.mucommander.commons.file.AbstractFileClassLoader"/>
+            <classpath>
+                <pathelement location="${tmp.main}"/>
+                <path refid="lib.runtime"/>
+            </classpath>
+        </java>
     </target>
 </project>
