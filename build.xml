@@ -388,6 +388,7 @@
         </copy>
 
         <exec executable="${nsis.bin}" failonerror="true">
+            <arg value="-V3"/>
             <arg value="${tmp.nsis}/mucommander.nsi"/>
 
             <!-- Set the NSISDIR environment variable, required for includes to work properly.                       -->
