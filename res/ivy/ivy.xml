@@ -12,7 +12,7 @@
         <license name="LGPL" url="http://www.gnu.org/licenses/lgpl.html"/>
         <ivyauthor name="muCommander" url="http://www.mucommander.com/"/>
         <description homepage="http://www.mucommander.com">
-          Lightweight file manager.
+            Lightweight file manager.
         </description>
     </info>
 
@@ -39,16 +39,14 @@
         <dependency org="logback"     name="logback"                         rev="latest.integration" conf="runtime->default"/>
 
         <dependency org="apple"       name="java-extension"                  rev="latest.integration" conf="compile->default"/>
-        
+
         <dependency org="testng"      name="testng"                          rev="latest.integration" conf="test"/>
         <dependency org="sourceforge" name="cobertura"                       rev="latest.integration" conf="test"/>
 
         <dependency org="jdeb"        name="jdeb"                            rev="latest.integration" conf="tools"/>
         <dependency org="proguard"    name="proguard"                        rev="latest.integration" conf="tools"/>
         <dependency org="ant-contrib" name="ant-contrib"                     rev="latest.integration" conf="tools"/>
-        <dependency org="pmd"         name="pmd"                             rev="latest.integration" conf="tools"/>
-        <dependency org="checkstyle"  name="checkstyle"                      rev="latest.integration" conf="tools"/>
-        <dependency org="codehaus"    name="javancss"                        rev="latest.integration" conf="tools"/>
+        <dependency org="mucommander" name="code-metrics" rev="latest.integration" conf="tools"/>
         <dependency org="mucommander" name="mucommander-commons-ant"         rev="latest.integration" conf="tools->runtime"/>
     </dependencies>
 </ivy-module>
