@@ -12,7 +12,7 @@
         <license name="LGPL" url="http://www.gnu.org/licenses/lgpl.html"/>
         <ivyauthor name="muCommander" url="http://www.mucommander.com/"/>
         <description homepage="http://www.mucommander.com">
-          File abstraction API.
+            File abstraction API.
         </description>
     </info>
 
@@ -57,8 +57,8 @@
         <dependency org="slf4j"       name="slf4j"                       rev="latest.integration" conf="test->nop"/>
         <dependency org="testng"      name="testng"                      rev="latest.integration" conf="test"/>
         <dependency org="sourceforge" name="cobertura"                   rev="latest.integration" conf="test"/>
-        <dependency org="pmd"         name="pmd"                         rev="latest.integration" conf="tools"/>
-        <dependency org="checkstyle"  name="checkstyle"                  rev="latest.integration" conf="tools"/>
-        <dependency org="codehaus"    name="javancss"                    rev="latest.integration" conf="tools"/>
+
+        <!-- External tools.                                                                                         -->
+        <dependency org="mucommander" name="code-metrics" rev="latest.integration" conf="tools"/>
     </dependencies>
 </ivy-module>
