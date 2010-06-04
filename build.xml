@@ -51,6 +51,8 @@
     <property name="tmp.cobertura"        location="${tmp}/cobertura"/>
     <!-- Where to store various project reports.                                                                     -->
     <property name="reports"              location="reports"/>
+    <!-- Where to store Javac reports.                                                                               -->
+    <property name="javac.reports"        location="${reports}/javac"/>
     <!-- Where to store ProGuard reports.                                                                            -->
     <property name="reports.proguard"     location="${reports}/proguard"/>
     <!-- Where to store TestNG reports.                                                                              -->
@@ -59,6 +61,8 @@
     <property name="cobertura.reports"    location="${reports}/cobertura"/>
     <!-- Where to store Checkstyle reports.                                                                          -->
     <property name="checkstyle.reports"   location="${reports}/checkstyle"/>
+    <!-- Where to store CPD reports.                                                                                 -->
+    <property name="cpd.reports"          location="${reports}/cpd"/>
     <!-- Where to store PMD reports.                                                                                 -->
     <property name="pmd.reports"          location="${reports}/pmd"/>
     <!-- Where to store Ivy dependency reports.                                                                      -->
@@ -115,14 +119,14 @@
             description="Compiles the library's sources">
         <echo>Compiling sources...</echo>
         <mkdir dir="${tmp.main}"/>
+        <mkdir dir="${javac.reports}"/>
+        <record name="${javac.reports}/javac.log" action="start"/>
         <javac destdir="${tmp.main}" debug="on" deprecation="on"
                encoding="${source.encoding}" source="${source.version}" target="${source.version}"
                srcdir="${src.main}" classpathref="lib.runtime">
-            <classpath>
-                <path refid="lib.runtime"/>
-                <path refid="lib.compile"/>
-            </classpath>
+            <compilerarg value="-Xlint:unchecked"/>
         </javac>
+        <record name="${javac.reports}/javac.log" action="stop"/>
         <copy todir="${tmp.main}">
             <fileset dir="${res.runtime}"/>
         </copy>
@@ -822,7 +826,7 @@
 
     <!-- = Reports targets ========================================================================================= -->
     <!-- =========================================================================================================== -->
-    <target name="reports" depends="checkstyle,pmd,javancss,ivy,test" description="Generates all available reports."/>
+    <target name="reports" depends="checkstyle,pmd,cpd,javancss,ivy,test" description="Generates all available reports."/>
 
     <target name="javancss" depends="retrieve-tools" description='Generates JavaNCSS reports.'>
         <echo>Generating JavaNCSS reports...</echo>
@@ -846,7 +850,9 @@
             </classpath>
         </checkstyle>
         <xslt in="${checkstyle.reports}/checkstyle.xml" out="${checkstyle.reports}/checkstyle.html"
-              style="${lib.tools}/mucommander/checkstyle.xsl"/>
+              style="${lib.tools}/mucommander/checkstyle.xsl">
+            <param name="root" expression="${src.main}/"/>
+        </xslt>
     </target>
 
     <target name="pmd" depends="retrieve-tools,compile" description="Generates PMD reports.">
@@ -863,13 +869,32 @@
             </fileset>
         </pmd>
         <xslt in="${pmd.reports}/pmd.xml" out="${pmd.reports}/pmd.html"
-              style="${lib.tools}/mucommander/pmd.xsl"/>
+              style="${lib.tools}/mucommander/pmd.xsl">
+            <param name="root" expression="${src.main}/"/>
+        </xslt>
+    </target>
+
+    <target name="cpd" depends="retrieve-tools" description="Generates CPD reports.">
+        <echo>Generating CPD reports...</echo>
+        <taskdef name="cpd" classpathref="lib.tools" classname="net.sourceforge.pmd.cpd.CPDTask" />
+        <property file="${lib.tools}/mucommander/cpd.properties"/>
+        <mkdir dir="${cpd.reports}"/>
+        <cpd minimumTokenCount="${cpd.tokens}" encoding="${source.encoding}" format="xml" outputFile="${cpd.reports}/cpd.xml"
+             ignoreidentifiers="${cpd.ignoreIdentifiers}" ignoreliterals="${cpd.ignoreLiterals}">
+            <fileset dir="${src.main}">
+                <include name="**/*.java"/>
+            </fileset>
+        </cpd>
+        <xslt in="${cpd.reports}/cpd.xml" out="${cpd.reports}/cpd.html"
+              style="${lib.tools}/mucommander/cpd.xsl">
+            <param name="root" expression="${src.main}/"/>
+        </xslt>
     </target>
 
     <target name="ivy" depends="ivy-config" description="Generates Ivy dependency reports.">
         <echo>Generating Ivy dependency report...</echo>
         <mkdir dir="${ivy.reports}"/>
-        <ivy:report todir="${ivy.reports}" xml="true" graph="false" conf="runtime,compile,test,tools"/>
+        <ivy:report todir="${ivy.reports}" xml="true" graph="false" conf="runtime,test,tools"/>
     </target>
 
 
