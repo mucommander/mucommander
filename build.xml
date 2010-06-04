@@ -57,6 +57,8 @@
     <property name="tmp.cobertura"        location="${tmp}/cobertura"/>
     <!-- Where to store various project reports.                                                                     -->
     <property name="reports"              location="reports"/>
+    <!-- Where to store Javac reports.                                                                               -->
+    <property name="javac.reports"        location="${reports}/javac"/>
     <!-- Where to store TestNG reports.                                                                              -->
     <property name="testng.reports"       location="${reports}/testng"/>
     <!-- Where to store Cobertura reports.                                                                           -->
@@ -108,9 +110,14 @@
     <target name="compile" depends="retrieve-runtime" description="Compiles the library's sources">
         <echo>Compiling sources...</echo>
         <mkdir dir="${tmp.main}"/>
+        <mkdir dir="${javac.reports}"/>
+        <record name="${javac.reports}/javac.log" action="start"/>
         <javac destdir="${tmp.main}" debug="on" deprecation="on"
                encoding="${source.encoding}" source="${source.version}" target="${source.version}"
-               srcdir="${src.main}" classpathref="lib.runtime"/>
+               srcdir="${src.main}" classpathref="lib.runtime">
+            <compilerarg value="-Xlint:unchecked"/>
+        </javac>
+        <record name="${javac.reports}/javac.log" action="stop"/>
     </target>
 
     <target name="compile-tests" depends="compile,retrieve-test">
@@ -225,7 +232,7 @@
 
     <!-- = Reports targets ========================================================================================= -->
     <!-- =========================================================================================================== -->
-        <target name="reports" depends="checkstyle,pmd,cpd,javancss,ivy,test" description="Generates all available reports."/>
+    <target name="reports" depends="checkstyle,pmd,cpd,javancss,ivy,test" description="Generates all available reports."/>
 
     <target name="javancss" depends="retrieve-tools" description='Generates JavaNCSS reports.'>
         <echo>Generating JavaNCSS reports...</echo>
