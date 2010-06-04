@@ -123,7 +123,9 @@
         <record name="${javac.reports}/javac.log" action="start"/>
         <javac destdir="${tmp.main}" debug="on" deprecation="on"
                encoding="${source.encoding}" source="${source.version}" target="${source.version}"
-               srcdir="${src.main}" classpathref="lib.runtime">
+               srcdir="${src.main}">
+            <classpath refid="lib.runtime"/>
+            <classpath refid="lib.compile"/>
             <compilerarg value="-Xlint:unchecked"/>
         </javac>
         <record name="${javac.reports}/javac.log" action="stop"/>
