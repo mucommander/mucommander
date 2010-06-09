@@ -252,6 +252,7 @@
             <fileset dir="${src.main}" includes="**/*.java"/>
             <formatter type="xml" toFile="${checkstyle.reports}/checkstyle.xml"/>
             <classpath>
+                <path refid="lib.runtime"/>
                 <pathelement location="${tmp.main}"/>
             </classpath>
         </checkstyle>
