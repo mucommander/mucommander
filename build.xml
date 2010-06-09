@@ -253,6 +253,8 @@
             <formatter type="xml" toFile="${checkstyle.reports}/checkstyle.xml"/>
             <classpath>
                 <pathelement location="${tmp.main}"/>
+                <path refid="lib.runtime"/>
+
             </classpath>
         </checkstyle>
         <xslt in="${checkstyle.reports}/checkstyle.xml" out="${checkstyle.reports}/checkstyle.html"
