@@ -50,6 +50,8 @@ Improvements:
 - Upgraded the jCIFS library (used for SMB support) to version 1.3.14.
 
 Localization:
+- New: Turkish translation, contributed by Emre Aytaç
+- New: Catalan translation, contributed by Jordi Plantalech
 - New: Belarusian translation, contributed by vboo.
 - New: Norwegian translation, contributed by Ingrid Amundsen.
 - Russian translation updated. Update contributed by Alexey Sirotov.
