@@ -38,6 +38,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.io.*;
 
@@ -73,8 +75,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     	textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true)) {
     		
     		@Override
-    		protected void addComponentToPresent(JComponent component) {
-    			TextEditor.this.addComponentToPresent(component);
+    		protected void setComponentToPresent(JComponent component) {
+    			TextEditor.this.setComponentToPresent(component);
     		}
     		
     		@Override
@@ -109,10 +111,10 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     		}
     	};
     	
-    	addComponentToPresent(textEditorImpl.getTextArea());
+    	setComponentToPresent(textEditorImpl.getTextArea());
     }
     
-    protected void addComponentToPresent(JComponent component) {
+    protected void setComponentToPresent(JComponent component) {
 		getViewport().add(component);
 	}
     

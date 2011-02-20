@@ -1,9 +1,16 @@
 package com.mucommander.ui.viewer;
 
-import com.mucommander.commons.file.AbstractFile;
-
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.IOException;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JScrollPane;
+
+import com.mucommander.commons.file.AbstractFile;
 
 /**
  * Abstract class that serves as a common base for the file presenter objects (FileViewer, FileEditor).
@@ -20,14 +27,28 @@ public abstract class FilePresenter extends JScrollPane {
 	
 	public FilePresenter() {
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// Delegate the focus to the JComponent that actually present the file
+				Component component = FilePresenter.this.getViewport().getComponent(0);
+				if (component != null)
+					component.requestFocus();
+			}
+		});
 	}
 	
 	/**
-	 * Add component to be presented in the ScrollPane viewport
+	 * Set component to be presented in the ScrollPane viewport
 	 * 
 	 * @param component the component to be presented
 	 */
-	protected void addComponentToPresent(JComponent component) {
+	protected void setComponentToPresent(JComponent component) {
+		getViewport().removeAll();
 		getViewport().add(component);
 	}
 	

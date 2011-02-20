@@ -31,11 +31,14 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.viewer.FilePresenter;
 import com.mucommander.ui.viewer.FileViewer;
 
 import javax.swing.*;
 import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.nio.charset.Charset;
@@ -71,7 +74,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     TextViewer(TextEditorImpl textEditorImpl) {
     	this.textEditorImpl = textEditorImpl;
 
-    	addComponentToPresent(textEditorImpl.getTextArea());
+    	setComponentToPresent(textEditorImpl.getTextArea());
     	
     	showLineNumbers(MuConfiguration.getVariable(MuConfiguration.LINE_NUMBERS, MuConfiguration.DEFAULT_LINE_NUMBERS));
     	textEditorImpl.wrap(MuConfiguration.getVariable(MuConfiguration.WORD_WRAP, MuConfiguration.DEFAULT_WORD_WRAP));
