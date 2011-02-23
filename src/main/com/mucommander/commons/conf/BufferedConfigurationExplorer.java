@@ -32,7 +32,7 @@ class BufferedConfigurationExplorer extends ConfigurationExplorer {
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Sections that have been passed through. */
-    private Stack<ConfigurationSection> sections;
+    private final Stack<ConfigurationSection> sections;
 
 
 

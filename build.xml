@@ -65,6 +65,8 @@
     <property name="checkstyle.reports"   location="${reports}/checkstyle"/>
     <!-- Where to store CPD reports.                                                                                 -->
     <property name="cpd.reports"          location="${reports}/cpd"/>
+    <!-- Where to store FindBugs reports.                                                                            -->
+    <property name="findbugs.reports"     location="${reports}/findbugs"/>
     <!-- Where to store PMD reports.                                                                                 -->
     <property name="pmd.reports"          location="${reports}/pmd"/>
     <!-- Where to store Ivy dependency reports.                                                                      -->
@@ -107,7 +109,7 @@
         <record name="${javac.reports}/javac.log" action="start"/>
         <javac destdir="${tmp.main}" debug="on" deprecation="on"
                encoding="${source.encoding}" source="${source.version}" target="${source.version}"
-               srcdir="${src.main}">
+               srcdir="${src.main}" includeantruntime="false">
             <compilerarg value="-Xlint:unchecked"/>
         </javac>
         <record name="${javac.reports}/javac.log" action="stop"/>
@@ -118,7 +120,7 @@
         <mkdir dir="${tmp.test}"/>
         <javac destdir="${tmp.test}" debug="on" deprecation="on"
                encoding="${source.encoding}" source="${source.version}" target="${source.version}"
-               srcdir="${src.test}">
+               srcdir="${src.test}" includeantruntime="false">
             <classpath>
                 <pathelement location="${tmp.main}"/>
                 <path refid="lib.test"/>
@@ -225,7 +227,7 @@
 
     <!-- = Reports targets ========================================================================================= -->
     <!-- =========================================================================================================== -->
-    <target name="reports" depends="checkstyle,pmd,cpd,javancss,ivy,test" description="Generates all available reports."/>
+    <target name="reports" depends="checkstyle,pmd,cpd,javancss,findbugs,ivy,test" description="Generates all available reports."/>
 
     <target name="javancss" depends="retrieve-tools" description='Generates JavaNCSS reports.'>
         <echo>Generating JavaNCSS reports...</echo>
@@ -287,6 +289,22 @@
               style="${lib.tools}/mucommander/cpd.xsl">
             <param name="root" expression="${src.main}/"/>
         </xslt>
+    </target>
+
+    <target name="findbugs" depends="retrieve-tools" description="Generates FindBugs reports.">
+        <echo>Generating FindBugs reports...</echo>
+        <taskdef classpathref="lib.tools" name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
+        <mkdir dir="${findbugs.reports}"/>
+        <findbugs classpathref="lib.tools" output="xml:withMessages" outputFile="${findbugs.reports}/findbugs.xml"
+                  effort="max" jvmargs="-Xmx512m" excludefilter="${lib.tools}/mucommander/findbugs.xml">
+            <auxClasspath>
+                <path refid="lib.runtime"/>
+            </auxClasspath>
+            <sourcePath path="${src.main}"/>
+            <class location="${tmp.main}"/>
+        </findbugs>
+        <xslt in="${findbugs.reports}/findbugs.xml" out="${findbugs.reports}/findbugs.html"
+              style="${lib.tools}/mucommander/findbugs.xsl"/>
     </target>
 
     <target name="ivy" depends="ivy-config" description="Generates Ivy dependency reports.">

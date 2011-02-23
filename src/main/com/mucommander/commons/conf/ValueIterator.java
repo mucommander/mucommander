@@ -32,7 +32,7 @@ public class ValueIterator implements Iterator<String> {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Wrapped iterator. */
-    private Iterator<String> iterator;
+    private final Iterator<String> iterator;
 
 
 

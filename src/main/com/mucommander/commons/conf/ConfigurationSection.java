@@ -30,9 +30,9 @@ class ConfigurationSection {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Contains all the variables defined in the section. */
-    private Hashtable<String, String>               variables;
+    private final Hashtable<String, String>               variables;
     /** Contains all the subsections defined the section. */
-    private Hashtable<String, ConfigurationSection> sections;
+    private final Hashtable<String, ConfigurationSection> sections;
 
 
 
@@ -125,8 +125,9 @@ class ConfigurationSection {
      * <p>
      * If <code>value</code> is <code>null</code>, this method will return <code>null</code>.
      * </p>
-     * @param value value to cast to a value list.
-     * @return <code>value</code> as a value list.
+     * @param  value     value to cast to a value list.
+     * @param  separator string used to separate data in tokens.
+     * @return           <code>value</code> as a value list.
      */
     public static ValueList getListValue(String value, String separator) {
         return value == null ? null : new ValueList(value, separator);
@@ -153,7 +154,7 @@ class ConfigurationSection {
      * @return <code>value</code> as an boolean.
      */
     public static boolean getBooleanValue(String value) {
-        return value != null && Boolean.TRUE.toString().equals(value);
+        return Boolean.TRUE.toString().equals(value);
     }
 
     /**

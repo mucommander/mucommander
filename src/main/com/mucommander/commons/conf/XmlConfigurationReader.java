@@ -76,17 +76,17 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Current depth in the configuration tree. */
-    private   int                  depth;
+    private       int                  depth;
     /** Buffer for each element's CDATA. */
-    private   StringBuffer         buffer;
+    private final StringBuilder        buffer;
     /** Name of the item being parsed. */
-    private   String               itemName;
+    private       String               itemName;
     /** Class notified whenever a new configuration item is found. */
-    protected ConfigurationBuilder builder;
+    protected     ConfigurationBuilder builder;
     /** Whether the current element is a variable. */
-    private   boolean              isVariable;
+    private       boolean              isVariable;
     /** Used to track the parser's position in the XML file. */
-    private   Locator              locator;
+    private       Locator              locator;
 
 
 
@@ -96,7 +96,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
      * Creates a new instance of XML configuration reader.
      */
     public XmlConfigurationReader() {
-        buffer = new StringBuffer();
+        buffer = new StringBuilder();
     }
 
 
@@ -164,7 +164,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
             value = buffer.toString().trim();
 
             // Ignores empty values, otherwise notifies the builder of a new variable.
-            if(!value.equals("")) {
+            if(!value.isEmpty()) {
                 try {builder.addVariable(qName, value);}
                 catch(Exception e) {throw new SAXParseException(e.getMessage(), locator, e);}
             }

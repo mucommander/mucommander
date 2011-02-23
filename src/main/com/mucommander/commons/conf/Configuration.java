@@ -80,7 +80,7 @@ import java.util.*;
  * interface and register themselves through
  * {@link #addConfigurationListener(ConfigurationListener) addConfigurationListener}. This guarantees that they
  * will receive configuration events whenever a modification occurs.<br>
- * Note that listeners are stored as weak references, meaning that application writers must ensure that they keep
+ * Note that LISTENERS are stored as weak references, meaning that application writers must ensure that they keep
  * direct references to the listener instances they register if they do not want them to be garbaged collected
  * out of existence randomly.
  * </p>
@@ -90,15 +90,15 @@ public class Configuration {
     // - Class variables -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Used to get access to the configuration source's input and output streams. */
-    private ConfigurationSource        source;
+    private ConfigurationSource                                source;
     /** Used to create objects that will read from the configuration source. */
-    private ConfigurationReaderFactory readerFactory;
+    private ConfigurationReaderFactory                         readerFactory;
     /** Used to create objects that will write to the configuration source. */
-    private ConfigurationWriterFactory writerFactory;
+    private ConfigurationWriterFactory                         writerFactory;
     /** Holds the content of the configuration file. */
-    private final ConfigurationSection root = new ConfigurationSection();
-    /** Contains all registered configuration listeners, stored as weak references */
-    private static final WeakHashMap<ConfigurationListener, ?> listeners;
+    private final ConfigurationSection                         root = new ConfigurationSection();
+    /** Contains all registered configuration LISTENERS, stored as weak references. */
+    private static final WeakHashMap<ConfigurationListener, ?> LISTENERS;
 
 
 
@@ -116,7 +116,7 @@ public class Configuration {
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
-        listeners = new WeakHashMap<ConfigurationListener, Object>();
+        LISTENERS = new WeakHashMap<ConfigurationListener, Object>();
     }
     
     /**
@@ -582,7 +582,7 @@ public class Configuration {
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed
-     * to all listeners.
+     * to all LISTENERS.
      * </p>
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
@@ -615,7 +615,7 @@ public class Configuration {
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed
-     * to all listeners.
+     * to all LISTENERS.
      * </p>
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
@@ -637,7 +637,7 @@ public class Configuration {
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed to all
-     * listeners.
+     * LISTENERS.
      * </p>
      * @param  name      fully qualified name of the variable to set.
      * @param  value     new value for the variable.
@@ -660,7 +660,7 @@ public class Configuration {
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed
-     * to all listeners.
+     * to all LISTENERS.
      * </p>
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
@@ -680,7 +680,7 @@ public class Configuration {
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed
-     * to all listeners.
+     * to all LISTENERS.
      * </p>
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
@@ -702,7 +702,7 @@ public class Configuration {
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed
-     * to all listeners.
+     * to all LISTENERS.
      * </p>
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
@@ -724,7 +724,7 @@ public class Configuration {
      * </p>
      * <p>
      * If the value of the specified variable is actually modified, an {@link ConfigurationEvent event} will be passed
-     * to all listeners.
+     * to all LISTENERS.
      * </p>
      * @param  name  fully qualified name of the variable to set.
      * @param  value new value for the variable.
@@ -867,7 +867,7 @@ public class Configuration {
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
-     * all registered listeners.
+     * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>null</code> if it wasn't set.
@@ -893,7 +893,7 @@ public class Configuration {
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
-     * all registered listeners.
+     * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
      * @param  separator character used to split the variable's value into a list.
@@ -907,7 +907,7 @@ public class Configuration {
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
-     * all registered listeners.
+     * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
@@ -920,7 +920,7 @@ public class Configuration {
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
-     * all registered listeners.
+     * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
@@ -933,7 +933,7 @@ public class Configuration {
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
-     * all registered listeners.
+     * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
@@ -946,7 +946,7 @@ public class Configuration {
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
-     * all registered listeners.
+     * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
@@ -959,7 +959,7 @@ public class Configuration {
      * Deletes the specified variable from the configuration.
      * <p>
      * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
-     * all registered listeners.
+     * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>false</code> if it wasn't set.
@@ -977,7 +977,7 @@ public class Configuration {
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
-     * be sent to all registered listeners.
+     * be sent to all registered LISTENERS.
      * </p>
      * @param  name         name of the variable to retrieve.
      * @param  defaultValue value to use if <code>name</code> is not set.
@@ -1008,7 +1008,7 @@ public class Configuration {
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
-     * be sent to all registered listeners.
+     * be sent to all registered LISTENERS.
      * </p>
      * @param  name         name of the variable to retrieve.
      * @param  defaultValue value to use if variable <code>name</code> is not set.
@@ -1028,7 +1028,7 @@ public class Configuration {
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
-     * be sent to all registered listeners.
+     * be sent to all registered LISTENERS.
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
@@ -1046,7 +1046,7 @@ public class Configuration {
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
-     * be sent to all registered listeners.
+     * be sent to all registered LISTENERS.
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
@@ -1064,7 +1064,7 @@ public class Configuration {
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
-     * be sent to all registered listeners.
+     * be sent to all registered LISTENERS.
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
@@ -1082,7 +1082,7 @@ public class Configuration {
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
-     * be sent to all registered listeners.
+     * be sent to all registered LISTENERS.
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
@@ -1099,7 +1099,7 @@ public class Configuration {
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
      * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
-     * be sent to all registered listeners.
+     * be sent to all registered LISTENERS.
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
@@ -1146,25 +1146,27 @@ public class Configuration {
     // - Configuration listening ---------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
-     * Adds the specified object to the list of registered configuration listeners.
+     * Adds the specified object to the list of registered configuration LISTENERS.
      * @param listener object to register as a configuration listener.
      * @see            #removeConfigurationListener(ConfigurationListener)
      */
-    public static void addConfigurationListener(ConfigurationListener listener) {listeners.put(listener, null);}
+    public static void addConfigurationListener(ConfigurationListener listener) {
+        LISTENERS.put(listener, null);}
 
     /**
-     * Removes the specified object from the list of registered configuration listeners.
-     * @param listener object to remove from the list of registered configuration listeners.
+     * Removes the specified object from the list of registered configuration LISTENERS.
+     * @param listener object to remove from the list of registered configuration LISTENERS.
      * @see            #addConfigurationListener(ConfigurationListener)
      */
-    public static void removeConfigurationListener(ConfigurationListener listener) {listeners.remove(listener);}
+    public static void removeConfigurationListener(ConfigurationListener listener) {
+        LISTENERS.remove(listener);}
 
     /**
-     * Passes the specified event to all registered configuration listeners.
+     * Passes the specified event to all registered configuration LISTENERS.
      * @param event event to propagate.
      */
     private static void triggerEvent(ConfigurationEvent event) {
-        for(ConfigurationListener listener : listeners.keySet())
+        for(ConfigurationListener listener : LISTENERS.keySet())
             listener.configurationChanged(event);
     }
 
@@ -1182,6 +1184,10 @@ public class Configuration {
 
     // - Loading -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Used to load configuration.
+     * @author Nicolas Rinaudo
+     */
     private class ConfigurationLoader implements ConfigurationBuilder {
         // - Instance variables ----------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------

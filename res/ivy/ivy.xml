@@ -42,6 +42,7 @@
     <dependencies>
         <dependency org="testng"      name="testng"     rev="latest.integration" conf="test"/>
         <dependency org="sourceforge" name="cobertura"  rev="latest.integration" conf="test"/>
+
         <!-- External tools.                                                                                         -->
         <dependency org="mucommander" name="code-metrics" rev="latest.integration" conf="tools"/>
     </dependencies>

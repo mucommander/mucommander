@@ -52,7 +52,7 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
     /** Writer on the destination XML stream. */
     protected       ContentHandler out;
     /** Empty XML attributes (avoids creating a new instance on each <code>startElement</code> call). */
-    private   final Attributes     EMPTY_ATTRIBUTES = new AttributesImpl();
+    private   final Attributes     emptyAttributes = new AttributesImpl();
 
 
 
@@ -110,7 +110,7 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
     // - Builder methods -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     protected void startElement(String name) throws ConfigurationException {
-        try {out.startElement("", name, name, EMPTY_ATTRIBUTES);}
+        try {out.startElement("", name, name, emptyAttributes);}
         catch(SAXException e) {throw new ConfigurationException(e);}
     }
 

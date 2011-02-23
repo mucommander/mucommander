@@ -37,7 +37,7 @@ public class ConfigurationEvent {
     /** Variable's new value. */
     private final String        value;
     /** Configuration to which the event relates. */
-    private       Configuration configuration;
+    private  final Configuration configuration;
 
 
 
