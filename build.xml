@@ -110,7 +110,7 @@
         <record name="${javac.reports}/javac.log" action="start"/>
         <javac destdir="${tmp.main}" debug="on" deprecation="on"
                encoding="${source.encoding}" source="${source.version}" target="${source.version}"
-               srcdir="${src.main}">
+               srcdir="${src.main}" includeantruntime="false">
             <compilerarg value="-Xlint:unchecked"/>
         </javac>
         <record name="${javac.reports}/javac.log" action="stop"/>
@@ -121,7 +121,7 @@
         <mkdir dir="${tmp.test}"/>
         <javac destdir="${tmp.test}" debug="on" deprecation="on"
                encoding="${source.encoding}" source="${source.version}" target="${source.version}"
-               srcdir="${src.test}">
+               srcdir="${src.test}" includeantruntime="false">
             <classpath>
                 <pathelement location="${tmp.main}"/>
                 <path refid="lib.test"/>

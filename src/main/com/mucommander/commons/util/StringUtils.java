@@ -23,14 +23,14 @@ import java.util.Locale;
 
 /**
  * This class contains convenience methods for working with strings.
- *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class StringUtils {
+public final class StringUtils {
     /**
-     * Prevents instanciation of this class.
+     * Prevents instantiation of this class.
      */
-    private StringUtils() {}
+    private StringUtils() {
+    }
 
     /**
      * Returns <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case.
@@ -47,7 +47,9 @@ public class StringUtils {
      * @param b suffix to test for.
      * @return <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.
      */
-    public static boolean endsWithIgnoreCase(String a, String b) {return matchesIgnoreCase(a, b, a.length());}
+    public static boolean endsWithIgnoreCase(String a, String b) {
+        return matchesIgnoreCase(a, b, a.length());
+    }
 
     /**
      * Returns <code>true</code> if the substring of <code>a</code> starting at <code>posA</code> matches <code>b</code> regardless of the case.
@@ -63,7 +65,7 @@ public class StringUtils {
      * @param  a                              string to test.
      * @param  b                              suffix to test for.
      * @param  posA                           position in <code>a</code> at which to look for <code>b</code>
-     * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.
      * @throws ArrayIndexOutOfBoundsException if <code>a.length</code> is smaller than <code>posA</code>.
      */
     public static boolean matchesIgnoreCase(String a, String b, int posA) {
@@ -120,7 +122,7 @@ public class StringUtils {
      * @param  a                              string to test.
      * @param  b                              suffix to test for.
      * @param  posA                           position in <code>a</code> at which to look for <code>b</code>
-     * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.</code>.
+     * @return                                <code>true</code> if <code>a</code> ends with <code>b</code> regardless of the case, <code>false</code> otherwise.
      * @throws ArrayIndexOutOfBoundsException if <code>a.length</code> is smaller than <code>posA</code>.
      */
     public static boolean matchesIgnoreCase(String a, char[] b, int posA) {
@@ -149,14 +151,16 @@ public class StringUtils {
      * @param  b suffix to test.
      * @return   <code>true</code> if <code>a</code> ends with <code>b</code>.
      */
-    public static boolean endsWith(String a, char[] b) {return matches(a, b, a.length());}
+    public static boolean endsWith(String a, char[] b) {
+        return matches(a, b, a.length());
+    }
 
     /**
-     * Returns <code>true</code> if the substring of <code>a</code> starting at <code>posA</code> matches <code>b</code>.
+     * Returns <code>true</code> if the substring of <code>a</code> ending at <code>posA</code> matches <code>b</code>.
      * @param  a    String to test.
      * @param  b    substring to look for.
      * @param  posA position in <code>a</code> at which to look for <code>b</code>
-     * @return      <code>true</code> if <code>a</code> contains <code>b</code> at position <code>posA</code>, <code>false</code> otherwise..
+     * @return      <code>true</code> if <code>a</code> contains <code>b</code> at position <code>posA - b.length()</code>, <code>false</code> otherwise..
      */
     public static boolean matches(String a, char[] b, int posA) {
         int posB;
@@ -215,13 +219,12 @@ public class StringUtils {
      * @return <code>true</code> if strings are equal or both null
      */
     public static boolean equals(String s1, String s2, boolean caseSensitive) {
-        if(s1==null && s2==null)
+        if(s1 == null && s2 == null)
             return true;
 
         if(caseSensitive)
-            return (s1!=null && s1.equals(s2)) || (s2!=null && s2.equals(s1));
-
-        return (s1!=null && s1.equalsIgnoreCase(s2)) || (s2!=null && s2.equalsIgnoreCase(s1));
+            return s1 != null && s1.equals(s2);
+        return s1 != null && s1.equalsIgnoreCase(s2);
     }
 
     /**
@@ -247,15 +250,16 @@ public class StringUtils {
      * @return the capitalized string
      */
     public static String capitalize(String s) {
-        if(s==null || s.equals(""))
+        if(s == null || s.isEmpty())
             return "";
 
-        String capedS = ""+Character.toUpperCase(s.charAt(0));
-        int len = s.length();
-        if(len>1)
-            capedS += s.substring(1, len).toLowerCase();
+        StringBuilder out;
 
-        return capedS;
+        out = new StringBuilder(s.length());
+        out.append(Character.toUpperCase(s.charAt(0)));
+        if(s.length() > 1)
+            out.append(s.substring(1).toLowerCase());
+        return out.toString();
     }
 
 
@@ -284,7 +288,7 @@ public class StringUtils {
         if(s==null)
             return null;
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int sLen = s.length;
         boolean first = true;
         String el;

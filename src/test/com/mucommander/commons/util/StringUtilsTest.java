@@ -18,202 +18,471 @@
 
 package com.mucommander.commons.util;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Tests the {@link StringUtils} class.
  * @author Nicolas Rinaudo
  */
 public class StringUtilsTest {
+    // - endsWith tests ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
-     * Runs through a variety of {@link StringUtils#endsWithIgnoreCase(String,String)} test cases.
+     * Provides test cases for {@link #testEndsWith(String, String, boolean)}.
+     * @return test cases for {@link #testEndsWith(String, String, boolean)}.
      */
-    @Test
-    public void testEndsWithString() {
-        assert StringUtils.endsWithIgnoreCase("this is a test", "a test");
-        assert StringUtils.endsWithIgnoreCase("this is a test", "a TeSt");
-        assert StringUtils.endsWithIgnoreCase("this is a test", "A TEST");
+    @DataProvider(name = "endsWith")
+    public Iterator<Object[]> endsWithTestCases() {
+      List<Object[]> data;
 
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "a test");
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "a TeSt");
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "A TEST");
+        data = new ArrayList<Object[]>();
 
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "a test");
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "a TeSt");
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "A TEST");
+        data.add(new Object[] {"abc", "c",   true});
+        data.add(new Object[] {"abc", "bc",  true});
+        data.add(new Object[] {"abc", "abc", true});
+        data.add(new Object[] {"abc", "",    true});
 
-        assert StringUtils.endsWithIgnoreCase("this is a test", "this is a test");
-        assert StringUtils.endsWithIgnoreCase("this is a test", "ThIs Is A TeSt");
-        assert StringUtils.endsWithIgnoreCase("this is a test", "THIS IS A TEST");
+        data.add(new Object[] {"abc", "C",   false});
+        data.add(new Object[] {"abc", "BC",  false});
+        data.add(new Object[] {"abc", "ABC", false});
 
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "this is a test");
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "ThIs Is A TeSt");
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "THIS IS A TEST");
+        data.add(new Object[] {"abc", "d",   false});
+        data.add(new Object[] {"abc", "de",  false});
+        data.add(new Object[] {"abc", "def", false});
 
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "this is a test");
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "ThIs Is A TeSt");
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "THIS IS A TEST");
-
-        assert StringUtils.endsWithIgnoreCase("this is a test", "");
-
-        assert !StringUtils.endsWithIgnoreCase("this is a test", "test a is this");
-        assert !StringUtils.endsWithIgnoreCase("this is a test", "tEsT a Is ThIs");
-        assert !StringUtils.endsWithIgnoreCase("this is a test", "TEST A IS THIS");
-
-        assert !StringUtils.endsWithIgnoreCase("THIS IS A TEST", "test a is this");
-        assert !StringUtils.endsWithIgnoreCase("THIS IS A TEST", "tEsT a Is ThIs");
-        assert !StringUtils.endsWithIgnoreCase("THIS IS A TEST", "TEST A IS THIS");
-
-        assert !StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "test a is this");
-        assert !StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "tEsT a Is ThIs");
-        assert !StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "TEST A IS THIS");
+        return data.iterator();
     }
 
     /**
-     * Runs through a variety of {@link StringUtils#endsWithIgnoreCase(String,char[])} test cases.
+     * Tests the {@link StringUtils#endsWith(String, char[])} method.
+     * @param a        string to compare.
+     * @param b        char array to test.
+     * @param expected expected return value of {@link StringUtils#endsWith(String, char[])}.
      */
-    @Test
-    public void testEndsWithCharArray() {
-        assert StringUtils.endsWithIgnoreCase("this is a test", "a test".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("this is a test", "a TeSt".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("this is a test", "A TEST".toCharArray());
+    @Test(dataProvider = "endsWith")
+    public void testEndsWith(String a, String b, boolean expected) {
+        assert StringUtils.endsWith(a, b.toCharArray()) == expected;
+    }
 
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "a test".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "a TeSt".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "A TEST".toCharArray());
 
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "a test".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "a TeSt".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "A TEST".toCharArray());
 
-        assert StringUtils.endsWithIgnoreCase("this is a test", "this is a test".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("this is a test", "ThIs Is A TeSt".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("this is a test", "THIS IS A TEST".toCharArray());
+    // - matchesIgnoreCase tests ---------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    @DataProvider(name = "matchesIgnoreCase")
+    public Iterator<Object[]> matchesIgnoreCaseTestCases() {
+      List<Object[]> data;
 
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "this is a test".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "ThIs Is A TeSt".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("THIS IS A TEST", "THIS IS A TEST".toCharArray());
+        data = new ArrayList<Object[]>();
 
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "this is a test".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "ThIs Is A TeSt".toCharArray());
-        assert StringUtils.endsWithIgnoreCase("ThIs Is A TeSt", "THIS IS A TEST".toCharArray());
+        data.add(new Object[] {"abc", "C", 3, true});
+        data.add(new Object[] {"abc", "B", 2, true});
+        data.add(new Object[] {"abc", "A", 1, true});
+        data.add(new Object[] {"abc", "",  0, true});
 
-        assert StringUtils.endsWithIgnoreCase("this is a test", "".toCharArray());
+        data.add(new Object[] {"abc", "ABC", 3, true});
+        data.add(new Object[] {"abc", "AB",  2, true});
+        data.add(new Object[] {"abc", "A",   1, true});
+        data.add(new Object[] {"abc", "",    0, true});
 
-        assert !StringUtils.endsWithIgnoreCase("this is a test", "test a is this".toCharArray());
-        assert !StringUtils.endsWithIgnoreCase("this is a test", "tEsT a Is ThIs".toCharArray());
-        assert !StringUtils.endsWithIgnoreCase("this is a test", "TEST A IS THIS".toCharArray());
+        data.add(new Object[] {"abc", "abc", 2, false});
 
-        assert !StringUtils.endsWithIgnoreCase("THIS IS A TEST", "test a is this".toCharArray());
-        assert !StringUtils.endsWithIgnoreCase("THIS IS A TEST", "tEsT a Is ThIs".toCharArray());
-        assert !StringUtils.endsWithIgnoreCase("THIS IS A TEST", "TEST A IS THIS".toCharArray());
+        data.add(new Object[] {"abc", "123", 3, false});
+        data.add(new Object[] {"abc", "123", 2, false});
+        data.add(new Object[] {"abc", "123", 1, false});
+        data.add(new Object[] {"abc", "123", 0, false});
 
-        assert !StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "test a is this".toCharArray());
-        assert !StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "tEsT a Is ThIs".toCharArray());
-        assert !StringUtils.endsWithIgnoreCase("ThIs Is A tEst", "TEST A IS THIS".toCharArray());
+        return data.iterator();
+    }
+
+    @Test(dataProvider = "matchesIgnoreCase")
+    public void testMatchesIgnoreCaseCharArray(String a, String b, int pos, boolean expected) {
+        assert StringUtils.matchesIgnoreCase(a, b.toCharArray(), pos) == expected;
+    }
+
+    @Test(dataProvider = "matchesIgnoreCase")
+    public void testMatchesIgnoreCase(String a, String b, int pos, boolean expected) {
+        assert StringUtils.matchesIgnoreCase(a, b, pos) == expected;
+    }
+
+
+
+    // - matches tests -------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Provides test cases for {@link #testMatches(String, String, int, boolean)}.
+     * @return test cases for {@link #testMatches(String, String, int, boolean)}.
+     */
+    @DataProvider(name = "matches")
+    public Iterator<Object[]> matchesTestCases() {
+      List<Object[]> data;
+
+        data = new ArrayList<Object[]>();
+
+        data.add(new Object[] {"abc", "c", 3, true});
+        data.add(new Object[] {"abc", "b", 2, true});
+        data.add(new Object[] {"abc", "a", 1, true});
+        data.add(new Object[] {"abc", "",  0, true});
+
+        data.add(new Object[] {"abc", "abc", 3, true});
+        data.add(new Object[] {"abc", "ab",  2, true});
+        data.add(new Object[] {"abc", "a",   1, true});
+        data.add(new Object[] {"abc", "",    0, true});
+
+        data.add(new Object[] {"abc", "abc", 2, false});
+        
+        data.add(new Object[] {"abc", "aBC", 3, false});
+        data.add(new Object[] {"abc", "ABC", 2, false});
+        data.add(new Object[] {"abc", "aBc", 1, false});
+        data.add(new Object[] {"abc", "ABc", 0, false});
+
+        return data.iterator();
     }
 
     /**
-     * Runs through a variety of {@link StringUtils#startsWithIgnoreCase(String,String)} test cases.
+     * Tests the {@link StringUtils#matches(String, char[], int)} method.
+     * @param a        first string.
+     * @param b        second string.
+     * @param pos      position at which to start the comparison.
+     * @param expected expected return value of {@link StringUtils#matches(String, char[], int)}
      */
-    @Test
-    public void testStartsWith() {
-        assert StringUtils.startsWithIgnoreCase("this is a test", "this is");
-        assert StringUtils.startsWithIgnoreCase("this is a test", "ThIs Is");
-        assert StringUtils.startsWithIgnoreCase("this is a test", "THIS IS");
+    @Test(dataProvider = "matches")
+    public void testMatches(String a, String b, int pos, boolean expected) {
+        assert StringUtils.matches(a, b.toCharArray(), pos) == expected;
+    }
 
-        assert StringUtils.startsWithIgnoreCase("THIS IS A TEST", "this is");
-        assert StringUtils.startsWithIgnoreCase("THIS IS A TEST", "ThIs Is");
-        assert StringUtils.startsWithIgnoreCase("THIS IS A TEST", "THIS IS");
 
-        assert StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "this is");
-        assert StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "ThIs Is");
-        assert StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "THIS IS");
 
-        assert StringUtils.startsWithIgnoreCase("this is a test", "this is a test");
-        assert StringUtils.startsWithIgnoreCase("this is a test", "THIS IS A TEST");
-        assert StringUtils.startsWithIgnoreCase("this is a test", "ThIs Is A tEsT");
+    // - parseIntDef tests ---------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Provides test cases for {@link #testParseIntDef(String, int, int)}.
+     * @return test cases for {@link #testParseIntDef(String, int, int)}.
+     */
+    @DataProvider(name = "parseIntDef")
+    public Iterator<Object[]> parseIntDefTestCases() {
+      List<Object[]> data;
 
-        assert StringUtils.startsWithIgnoreCase("THIS IS A TEST", "this is a test");
-        assert StringUtils.startsWithIgnoreCase("THIS IS A TEST", "THIS IS A TEST");
-        assert StringUtils.startsWithIgnoreCase("THIS IS A TEST", "ThIs Is A tEsT");
+        data = new ArrayList<Object[]>();
 
-        assert StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "this is a test");
-        assert StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "THIS IS A TEST");
-        assert StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "ThIs Is A tEsT");
+        for(int i = 0; i < 10; i++) {
+            data.add(new Object[] {Integer.toString(i), 0, i});
+            data.add(new Object[] {"foobar", i, i});
+        }
 
-        assert StringUtils.startsWithIgnoreCase("this is a test", "");
-        assert StringUtils.startsWithIgnoreCase("THIS IS A TEST", "");
-        assert StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "");
-
-        assert !StringUtils.startsWithIgnoreCase("this is a test", "test a is this");
-        assert !StringUtils.startsWithIgnoreCase("this is a test", "TEST A IS THIS");
-        assert !StringUtils.startsWithIgnoreCase("this is a test", "TeSt A iS tHiS");
-
-        assert !StringUtils.startsWithIgnoreCase("THIS IS A TEST", "test a is this");
-        assert !StringUtils.startsWithIgnoreCase("THIS IS A TEST", "TEST A IS THIS");
-        assert !StringUtils.startsWithIgnoreCase("THIS IS A TEST", "TeSt A iS tHiS");
-
-        assert !StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "test a is this");
-        assert !StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "TEST A IS THIS");
-        assert !StringUtils.startsWithIgnoreCase("ThIs Is A tEsT", "TeSt A iS tHiS");
+        return data.iterator();
     }
 
     /**
-     * Tests {@link StringUtils#equals(String, String, boolean)}.
+     * Tests the {@link StringUtils#parseIntDef(String, int)} method.
+     * @param input    string to parse.
+     * @param def      default value.
+     * @param expected expected return value of {@link StringUtils#parseIntDef(String, int)}.
      */
-    @Test
-    public void testEquals() {
-        assert StringUtils.equals("a", "a", true);
-        assert StringUtils.equals("A", "A", true);
-        assert StringUtils.equals("a", "a", false);
-        assert StringUtils.equals("A", "A", false);
-        assert StringUtils.equals("A", "a", false);
-        assert StringUtils.equals("a", "A", false);
+    @Test(dataProvider = "parseIntDef")
+    public void testParseIntDef(String input, int def, int expected) {
+        assert StringUtils.parseIntDef(input, def) == expected;
+    }
 
-        assert !StringUtils.equals("a", "A", true);
-        assert !StringUtils.equals("A", "a", true);
-        assert !StringUtils.equals("a", "z", false);
-        assert !StringUtils.equals("a", "z", true);
+
+    // - endsWithIgnoreCase tests --------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Provides test cases for {@link #testEndsWithIgnoreCaseCharArray(String, String, boolean)} and {@link #testEndsWithIgnoreCase(String, String, boolean)}.
+     * @return test cases for {@link #testEndsWithIgnoreCaseCharArray(String, String, boolean)} and {@link #testEndsWithIgnoreCase(String, String, boolean)}.
+     */
+    @DataProvider(name = "endsWithIgnoreCase")
+    public Iterator<Object[]> endsWithIgnoreCaseTestCases() {
+        List<Object[]> data;
+        
+        data = new ArrayList<Object[]>();
+        
+        data.add(new Object[] {"this is a test", "a test", true});
+        data.add(new Object[] {"this is a test", "a TeSt", true});
+        data.add(new Object[] {"this is a test", "A TEST", true});
+
+        data.add(new Object[] {"THIS IS A TEST", "a test", true});
+        data.add(new Object[] {"THIS IS A TEST", "a TeSt", true});
+        data.add(new Object[] {"THIS IS A TEST", "A TEST", true});
+
+        data.add(new Object[] {"ThIs Is A TeSt", "a test", true});
+        data.add(new Object[] {"ThIs Is A TeSt", "a TeSt", true});
+        data.add(new Object[] {"ThIs Is A TeSt", "A TEST", true});
+
+        data.add(new Object[] {"this is a test", "this is a test", true});
+        data.add(new Object[] {"this is a test", "ThIs Is A TeSt", true});
+        data.add(new Object[] {"this is a test", "THIS IS A TEST", true});
+
+        data.add(new Object[] {"THIS IS A TEST", "this is a test", true});
+        data.add(new Object[] {"THIS IS A TEST", "ThIs Is A TeSt", true});
+        data.add(new Object[] {"THIS IS A TEST", "THIS IS A TEST", true});
+
+        data.add(new Object[] {"ThIs Is A TeSt", "this is a test", true});
+        data.add(new Object[] {"ThIs Is A TeSt", "ThIs Is A TeSt", true});
+        data.add(new Object[] {"ThIs Is A TeSt", "THIS IS A TEST", true});
+
+        data.add(new Object[] {"this is a test", "", true});
+        
+        data.add(new Object[] {"this is a test", "test a is this", false});
+        data.add(new Object[] {"this is a test", "tEsT a Is ThIs", false});
+        data.add(new Object[] {"this is a test", "TEST A IS THIS", false});
+
+        data.add(new Object[] {"THIS IS A TEST", "test a is this", false});
+        data.add(new Object[] {"THIS IS A TEST", "tEsT a Is ThIs", false});
+        data.add(new Object[] {"THIS IS A TEST", "TEST A IS THIS", false});
+
+        data.add(new Object[] {"ThIs Is A tEst", "test a is this", false});
+        data.add(new Object[] {"ThIs Is A tEst", "tEsT a Is ThIs", false});
+        data.add(new Object[] {"ThIs Is A tEst", "TEST A IS THIS", false});
+        
+        return data.iterator();
     }
 
     /**
-     * Tests {@link StringUtils#capitalize(String)}.
+     * Test the {@link StringUtils#endsWithIgnoreCase(String, String)} method.
+     * @param a        first string to compare.
+     * @param b        second string to compare.
+     * @param expected expected return value of {@link StringUtils#endsWithIgnoreCase(String, String)}
      */
-    @Test
-    public void testCapitalize() {
-        assert "Bob".equals(StringUtils.capitalize("bob"));
-        assert "Bob".equals(StringUtils.capitalize("BOB"));
-        assert "Bob".equals(StringUtils.capitalize("bOB"));
-        assert "Bob".equals(StringUtils.capitalize("bOB"));
-        assert "Bob servant".equals(StringUtils.capitalize("Bob Servant"));
-
-        assert "B".equals(StringUtils.capitalize("b"));
-
-        assert "".equals(StringUtils.capitalize(""));
-        assert "".equals(StringUtils.capitalize(null));
-
-        assert "7".equals(StringUtils.capitalize("7"));
+    @Test(dataProvider = "endsWithIgnoreCase")
+    public void testEndsWithIgnoreCase(String a, String b, boolean expected) {
+        assert StringUtils.endsWithIgnoreCase(a, b) == expected;
     }
 
     /**
-     * Tests {@link StringUtils#flatten(String[], String)} and {@link StringUtils#flatten(String[])}.
+     * Test the {@link StringUtils#endsWithIgnoreCase(String, char[])} method.
+     * @param a        first string to compare.
+     * @param b        second string to compare.
+     * @param expected expected return value of {@link StringUtils#endsWithIgnoreCase(String, char[])}
+     */
+    @Test(dataProvider = "endsWithIgnoreCase")
+    public void testEndsWithIgnoreCaseCharArray(String a, String b, boolean expected) {
+        assert StringUtils.endsWithIgnoreCase(a, b.toCharArray()) == expected;
+    }
+
+
+
+    // - startsWithIgnoreCase tests ------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Provides test cases for {@link #testStartsWithIgnoreCase(String, String, boolean)}.
+     * @return test cases for {@link #testStartsWithIgnoreCase(String, String, boolean)}.
+     */
+    @DataProvider(name = "startsWithIgnoreCase")
+    public Iterator<Object[]> startsWithIgnoreCaseTestCases() {
+        List<Object[]> data;
+
+        data = new ArrayList<Object[]>();
+
+        data.add(new Object[] {"this is a test", "this is", true});
+        data.add(new Object[] {"this is a test", "ThIs Is", true});
+        data.add(new Object[] {"this is a test", "THIS IS", true});
+
+        data.add(new Object[] {"THIS IS A TEST", "this is", true});
+        data.add(new Object[] {"THIS IS A TEST", "ThIs Is", true});
+        data.add(new Object[] {"THIS IS A TEST", "THIS IS", true});
+
+        data.add(new Object[] {"ThIs Is a tEsT", "this is", true});
+        data.add(new Object[] {"ThIs Is a tEsT", "ThIs Is", true});
+        data.add(new Object[] {"ThIs Is a tEsT", "THIS IS", true});
+
+        data.add(new Object[] {"this is a test", "this is a test", true});
+        data.add(new Object[] {"this is a test", "THIS IS A TEST", true});
+        data.add(new Object[] {"this is a test", "ThIs Is a tEsT", true});
+
+        data.add(new Object[] {"THIS IS A TEST", "this is a test", true});
+        data.add(new Object[] {"THIS IS A TEST", "THIS IS A TEST", true});
+        data.add(new Object[] {"THIS IS A TEST", "ThIs Is a tEsT", true});
+
+        data.add(new Object[] {"ThIs Is a tEsT", "this is a test", true});
+        data.add(new Object[] {"ThIs Is a tEsT", "THIS IS A TEST", true});
+        data.add(new Object[] {"ThIs Is a tEsT", "ThIs Is a tEsT", true});
+
+        data.add(new Object[] {"ThIs Is a tEsT", "", true});
+        data.add(new Object[] {"THIS IS A TEST", "", true});
+        data.add(new Object[] {"ThIs Is a tEsT", "", true});
+
+        data.add(new Object[] {"this is a test", "test a is this", false});
+        data.add(new Object[] {"this is a test", "TEST A IS THIS", false});
+        data.add(new Object[] {"this is a test", "TeSt A iS tHiS", false});
+
+        data.add(new Object[] {"THIS IS A TEST", "test a is this", false});
+        data.add(new Object[] {"THIS IS A TEST", "TEST A IS THIS", false});
+        data.add(new Object[] {"THIS IS A TEST", "TeSt A iS tHiS", false});
+
+        data.add(new Object[] {"ThIs Is A tEsT", "test a is this", false});
+        data.add(new Object[] {"ThIs Is A tEsT", "TEST A IS THIS", false});
+        data.add(new Object[] {"ThIs Is A tEsT", "TeSt A iS tHiS", false});
+
+        return data.iterator();
+    }
+
+    /**
+     * Tests {@link StringUtils#startsWithIgnoreCase(String, String)}.
+     * @param a        first string to compare.
+     * @param b        second string to compare.
+     * @param expected expected return value of {@link StringUtils#startsWithIgnoreCase(String, String)}.
+     */
+    @Test(dataProvider = "startsWithIgnoreCase")
+    public void testStartsWithIgnoreCase(String a, String b, boolean expected) {
+        assert StringUtils.startsWithIgnoreCase(a, b) == expected;
+    }
+
+
+
+    // - equals tests --------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Provides test cases for {@link #testCaseInsensitiveEquals(String, String, boolean)}.
+     * @return test cases for {@link #testCaseInsensitiveEquals(String, String, boolean)}.
+     */
+    @DataProvider(name = "caseInsensitiveEquals")
+    public Iterator<Object[]> caseInsensitiveEqualsTestCases() {
+        List<Object[]> data;
+
+        data = new ArrayList<Object[]>();
+
+        data.add(new Object[] {"a",  "a",  true});
+        data.add(new Object[] {"A",  "A",  true});
+        data.add(new Object[] {"a",  "A",  true});
+        data.add(new Object[] {"A",  "a",  true});
+        data.add(new Object[] {null, null, true});
+        data.add(new Object[] {null, "a",  false});
+        data.add(new Object[] {"a",  null, false});
+        data.add(new Object[] {"a",  "z",  false});
+
+        return data.iterator();
+    }
+
+    /**
+     * Provides test cases for {@link #testCaseSensitiveEquals(String, String, boolean)}.
+     * @return test cases for {@link #testCaseSensitiveEquals(String, String, boolean)}.
+     */
+    @DataProvider(name = "caseSensitiveEquals")
+    public Iterator<Object[]> caseSensitiveEqualsTestCases() {
+        List<Object[]> data;
+
+        data = new ArrayList<Object[]>();
+
+        data.add(new Object[] {"a",  "a",  true});
+        data.add(new Object[] {"A",  "A",  true});
+        data.add(new Object[] {null, null, true});
+        data.add(new Object[] {null, "a",  false});
+        data.add(new Object[] {"a",  null, false});
+        data.add(new Object[] {"a",  "A",  false});
+        data.add(new Object[] {"A",  "a",  false});
+
+
+        return data.iterator();
+    }
+
+    /**
+     * Tests the {@link StringUtils#equals(String, String, boolean)} method (case insensitive).
+     * @param a        first string to compare.
+     * @param b        second string to compare
+     * @param expected expected return value of {@link StringUtils#equals(String, String, boolean)}
+     */
+    @Test(dataProvider = "caseSensitiveEquals")
+    public void testCaseSensitiveEquals(String a, String b, boolean expected) {
+        assert StringUtils.equals(a, b, true) == expected;
+    }
+
+    /**
+     * Tests the {@link StringUtils#equals(String, String, boolean)} method (case sensitive).
+     * @param a        first string to compare.
+     * @param b        second string to compare
+     * @param expected expected return value of {@link StringUtils#equals(String, String, boolean)}
+     */
+    @Test(dataProvider = "caseInsensitiveEquals")
+    public void testCaseInsensitiveEquals(String a, String b, boolean expected) {
+        assert StringUtils.equals(a, b, false) == expected;
+    }
+
+
+
+    // - capitalize tests ----------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Provides test cases for {@link #testCapitalize(String, String)}.
+     * @return test cases for {@link #testCapitalize(String, String)}.
+     */
+    @DataProvider(name = "capitalize")
+    public Iterator<String[]> capitalizeTestCases() {
+        List<String[]> data;
+
+        data = new ArrayList<String[]>();
+
+        data.add(new String[] {"bob",         "Bob"});
+        data.add(new String[] {"BOB",         "Bob"});
+        data.add(new String[] {"bOB",         "Bob"});
+        data.add(new String[] {"boB",         "Bob"});
+        data.add(new String[] {"Bob",         "Bob"});
+        data.add(new String[] {"Bob Servant", "Bob servant"});
+        data.add(new String[] {"b",           "B"});
+        data.add(new String[] {"",            ""});
+        data.add(new String[] {null,          ""});
+        data.add(new String[] {"7",           "7"});
+
+        return data.iterator();
+    }
+
+    /**
+     * Tests the {@link StringUtils#capitalize(String)} method.
+     * @param input    string to capitalize.
+     * @param expected expected result of the capitalization.
+     */
+    @Test(dataProvider = "capitalize")
+    public void testCapitalize(String input, String expected) {
+        assert expected.equals(StringUtils.capitalize(input));
+    }
+
+
+
+    // - flatten tests -------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Provides test cases for {@link #testFlatten(String, String[], String)}.
+     * @return test cases for {@link #testFlatten(String, String[], String)}.
+     */
+    @DataProvider(name = "flatten")
+    public Iterator<Object[]> flattenTestCases() {
+        List<Object[]> data;
+
+        data = new ArrayList<Object[]>();
+
+        data.add(new Object[] {"a b c", new String[] {"a", "b", "c"}, " "});
+        data.add(new Object[] {"a*b*c", new String[] {"a", "b", "c"}, "*"});
+        data.add(new Object[] {"a*c", new String[] {"a", "", "c"}, "*"});
+        data.add(new Object[] {"a*c", new String[] {"a", null, "c"}, "*"});
+        data.add(new Object[] {"b", new String[] {null, "b", null}, "*"});
+        data.add(new Object[] {"", new String[] {null, null, null}, "*"});
+
+        return data.iterator();
+    }
+
+    /**
+     * Tests {@link StringUtils#flatten(String[], String)}.
+     * @param expected  expected returned value of {@link StringUtils#flatten(String[], String)}.
+     * @param data      data to flatten.
+     * @param separator separator to use when flattening.
+     */
+    @Test(dataProvider = "flatten")
+    public void testFlatten(String expected, String[] data, String separator) {
+        assert expected.equals(StringUtils.flatten(data, separator));
+        if(separator.equals(" "))
+            assert expected.equals(StringUtils.flatten(data));
+    }
+
+    /**
+     * Tests {@link StringUtils#flatten(String[], String)}
      */
     @Test
     public void testFlatten() {
-        assert "a b c".equals(StringUtils.flatten(new String[]{"a", "b", "c"}));
-        assert "a b c".equals(StringUtils.flatten(new String[]{"a", "b", "c"}, " "));
-
-        assert "a*b*c".equals(StringUtils.flatten(new String[]{"a", "b", "c"}, "*"));
-
-        assert "a*c".equals(StringUtils.flatten(new String[]{"a", "", "c"}, "*"));
-
-        assert "a*c".equals(StringUtils.flatten(new String[]{"a", null, "c"}, "*"));
-
-        assert "b".equals(StringUtils.flatten(new String[]{null, "b", null}, "*"));
-
-        assert "".equals(StringUtils.flatten(new String[]{null, null, null}, "*"));
-
         assert null == StringUtils.flatten(null, "*");
+        assert null == StringUtils.flatten(null);
     }
 }
