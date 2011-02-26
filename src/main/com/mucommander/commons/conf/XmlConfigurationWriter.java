@@ -28,9 +28,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.io.Writer;
 
 /**
  * Implementation of {@link ConfigurationWriter} used to write XML configuration streams.
@@ -68,12 +66,9 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
 
     // - Writer methods ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    private static ContentHandler createHandler(OutputStream out) {
+    private static ContentHandler createHandler(Writer out) {
         SAXTransformerFactory factory;
         TransformerHandler    transformer;
-        Charset               charset;
-
-        charset = Charset.forName("UTF-8");
 
         // Initialises the transformer factory.
         factory = (SAXTransformerFactory)SAXTransformerFactory.newInstance();
@@ -86,14 +81,11 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
         // Enables indentation.
         transformer.getTransformer().setOutputProperty(OutputKeys.INDENT, "yes");
 
-        // Sets the encoding parameter if necessary.
-        transformer.getTransformer().setOutputProperty(OutputKeys.ENCODING, charset.name());
-
         // Sets the standalone property.
         transformer.getTransformer().setOutputProperty(OutputKeys.STANDALONE, "yes");
 
         // Plugs the transformer into the specified stream.
-        transformer.setResult(new StreamResult(new OutputStreamWriter(out, charset)));
+        transformer.setResult(new StreamResult(out));
 
         return transformer;
     }
@@ -101,7 +93,7 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
      * Sets the output stream in which to write the XML data.
      * @param  out where to write the XML data.
      */
-    public void setOutputStream(OutputStream out) {
+    public void setWriter(Writer out) {
         this.out = createHandler(out);
     }
 

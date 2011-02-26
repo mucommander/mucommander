@@ -18,9 +18,8 @@
 
 package com.mucommander.commons.conf;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -42,7 +41,7 @@ import java.util.*;
  * </p>
  * <p>
  * <h3>Variable types</h3>
- * While the <code>com.mucommander.conf</code> really only handles one type of variables, strings, it offers
+ * While the <code>com.mucommander.commons.conf</code> really only handles one type of variables, strings, it offers
  * tools to cast them as primitive Java types (int, long, float, double, boolean). This is done through the use
  * of the various primitive types' class implementation <code>parseXXX</code> method.<br>
  * When a variable hasn't been set but ant attempt is made to cast it, the standard Java default value will
@@ -312,7 +311,7 @@ public class Configuration {
      * @see                                    #read(ConfigurationReader)
      * @see                                    #read()
      */
-    synchronized void read(InputStream in, ConfigurationReader reader) throws IOException, ConfigurationException {
+    synchronized void read(Reader in, ConfigurationReader reader) throws IOException, ConfigurationException {
         reader.read(in, new ConfigurationLoader(root));
     }
 
@@ -331,9 +330,33 @@ public class Configuration {
      * @see                                    #write(OutputStream)
      * @see                                    #read()
      * @see                                    #read(ConfigurationReader)
-     * @see                                    #read(InputStream,ConfigurationReader)
+     * @see                                    #read(Reader,ConfigurationReader)
+     * @deprecated Application developers should use {@link #read(Reader)} instead. This method assumes the specified
+     *             {@link InputStream} to be <code>UTF-8</code> encoded.
      */
+    @Deprecated
     public void read(InputStream in) throws ConfigurationException, IOException {
+        read(new InputStreamReader(in, Charset.forName("utf-8")), getReader());
+    }
+
+    /**
+     * Loads configuration from the specified reader.
+     * <p>
+     * This method will use the configuration reader set by {@link #setReaderFactory(ConfigurationReaderFactory)} if any,
+     * or an {@link XmlConfigurationReader} instance if not.
+     * </p>
+     * @param  in                              where to read the configuration from.
+     * @throws ConfigurationException          if a configuration error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @throws ReaderConfigurationException    if the {@link ConfigurationReaderFactory} isn't properly configured.
+     * @throws IOException                     if an I/O error occurs.
+     * @see                                    #write(OutputStream)
+     * @see                                    #read()
+     * @see                                    #read(ConfigurationReader)
+     * @see                                    #read(Reader,ConfigurationReader)
+     */
+    public void read(Reader in) throws ConfigurationException, IOException {
         read(in, getReader());
     }
 
@@ -352,10 +375,10 @@ public class Configuration {
      * @see                                    #write(ConfigurationWriter)
      * @see                                    #read(InputStream)
      * @see                                    #read()
-     * @see                                    #read(InputStream,ConfigurationReader)
+     * @see                                    #read(Reader,ConfigurationReader)
      */
     public void read(ConfigurationReader reader) throws IOException, ConfigurationException {
-        InputStream         in;     // Input stream on the configuration source.
+        Reader              in;     // Input stream on the configuration source.
         ConfigurationSource source; // Configuration source.
 
         in = null;
@@ -365,7 +388,7 @@ public class Configuration {
             throw new SourceConfigurationException("Configuration source hasn't been set.");
 
         // Reads the configuration data.
-        try {read(in = source.getInputStream(), reader);}
+        try {read(in = source.getReader(), reader);}
         finally {
             if(in != null) {
                 try {in.close();}
@@ -394,7 +417,7 @@ public class Configuration {
      * @see                                    #write()
      * @see                                    #read(InputStream)
      * @see                                    #read(ConfigurationReader)
-     * @see                                    #read(InputStream,ConfigurationReader)
+     * @see                                    #read(Reader,ConfigurationReader)
      */
     public void read() throws ConfigurationException, IOException {
         read(getReader());
@@ -411,13 +434,32 @@ public class Configuration {
      * @throws ConfigurationException          if any error occurs.
      * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
      * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
-     * @see                                    #read(InputStream,ConfigurationReader)
+     * @see                                    #read(Reader,ConfigurationReader)
+     * @see                                    #write(OutputStream)
+     * @see                                    #write(ConfigurationWriter)
+     * @see                                    #write()
+     * @deprecated Application writer should use {@link #write(Writer, ConfigurationWriter)} instead. This method
+     *             will always encode its output in <code>UTF-8</code>.
+     */
+    @Deprecated
+    public void write(OutputStream out, ConfigurationWriter writer) throws ConfigurationException {
+        write(new OutputStreamWriter(out, Charset.forName("utf-8")), writer);
+    }
+
+    /**
+     * Writes configuration to the specified output stream using the specified writer.
+     * @param out                              where to write the configuration to.
+     * @param writer                           writer that will be used to format the configuration.
+     * @throws ConfigurationException          if any error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @see                                    #read(Reader,ConfigurationReader)
      * @see                                    #write(OutputStream)
      * @see                                    #write(ConfigurationWriter)
      * @see                                    #write()
      */
-    public void write(OutputStream out, ConfigurationWriter writer) throws ConfigurationException {
-        writer.setOutputStream(out);
+    public void write(Writer out, ConfigurationWriter writer) throws ConfigurationException {
+        writer.setWriter(out);
         build(writer);
     }
 
@@ -436,8 +478,31 @@ public class Configuration {
      * @see                                    #write(OutputStream,ConfigurationWriter)
      * @see                                    #write(ConfigurationWriter)
      * @see                                    #write()
+     * @deprecated Application developers should use {@link #write(Writer)} instead. This method will always encode
+     *             its output in <code>UTF-8</code>.
      */
+    @Deprecated
     public void write(OutputStream out) throws ConfigurationException {
+        write(out, getWriter());
+    }
+
+    /**
+     * Writes configuration to the specified output stream.
+     * <p>
+     * If a writer was specified through {@link #setWriterFactory(ConfigurationWriterFactory)}, this will be
+     * used to format the configuration. Otherwise, an {@link XmlConfigurationWriter} will be used.
+     * </p>
+     * @param out                              where to write the configuration to.
+     * @throws ConfigurationException          if any error occurs.
+     * @throws ConfigurationFormatException    if a syntax error occurs in the configuration data.
+     * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
+     * @throws WriterConfigurationException    if the {@link ConfigurationWriterFactory} isn't properly configured.
+     * @see                                    #read(InputStream)
+     * @see                                    #write(OutputStream,ConfigurationWriter)
+     * @see                                    #write(ConfigurationWriter)
+     * @see                                    #write()
+     */
+    public void write(Writer out) throws ConfigurationException {
         write(out, getWriter());
     }
 
@@ -459,7 +524,7 @@ public class Configuration {
      * @see                                    #write()
      */
     public void write(ConfigurationWriter writer) throws IOException, ConfigurationException {
-        OutputStream        out;    // Where to write the configuration data.
+        Writer              out;    // Where to write the configuration data.
         ConfigurationSource source; // Configuration source.
 
         out = null;
@@ -469,7 +534,7 @@ public class Configuration {
             throw new SourceConfigurationException("No configuration source has been set");
 
         // Writes the configuration data.
-        try {write(out = source.getOutputStream(), writer);}
+        try {write(out = source.getWriter(), writer);}
         finally {
             if(out != null) {
                 try {out.close();}
@@ -514,19 +579,19 @@ public class Configuration {
      * @throws ConfigurationException if any error occurs.
      */
     private synchronized void build(ConfigurationBuilder builder, ConfigurationSection root) throws ConfigurationException {
-        Enumeration<String>  enumeration; // Enumeration on the section's variables, then subsections.
+        Iterator<String>     enumeration; // Enumeration on the section's variables, then subsections.
         String               name;        // Name of the current variable, then section.
         ConfigurationSection section;     // Current section.
 
         // Explores the section's variables.
         enumeration = root.variableNames();
-        while(enumeration.hasMoreElements())
-            builder.addVariable(name = enumeration.nextElement(), root.getVariable(name));
+        while(enumeration.hasNext())
+            builder.addVariable(name = enumeration.next(), root.getVariable(name));
 
         // Explores the section's subsections.
         enumeration = root.sectionNames();
-        while(enumeration.hasMoreElements()) {
-            name    = enumeration.nextElement();
+        while(enumeration.hasNext()) {
+            name    = enumeration.next();
             section = root.getSection(name);
 
             // We only go through subsections if contain either variables or subsections of their own.

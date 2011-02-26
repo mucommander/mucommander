@@ -19,16 +19,19 @@
 package com.mucommander.commons.conf;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 /**
- * Configuration source that open input and output streams on a local file.
+ * Configuration source that work on a {@link File} instance.
  * @author Nicolas Rinaudo
  */
 public class FileConfigurationSource implements ConfigurationSource {
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Path to the file on which to open input and output streams. */
-    private File file;
+    private final File    file;
+    /** File's charset. */
+    private final Charset charset;
 
 
 
@@ -36,43 +39,82 @@ public class FileConfigurationSource implements ConfigurationSource {
     // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a source that will open streams on the specified file.
-     * @param file path to the file on which streams should be opened.
+     * @param file file in which the configuration data is located.
+     * @deprecated Application developers should use {@link #FileConfigurationSource(File, Charset)} instead. This
+     *             constructor assumes the specified file to be <code>UTF-8</code> encoded.
      */
-    public FileConfigurationSource(File file) {setFile(file);}
+    @Deprecated
+    public FileConfigurationSource(File file) {
+        this(file, "utf-8");
+    }
+
+    /**
+     * Creates a source on the specified file and charset.
+     * @param file file in which the configuration data is located.
+     * @param charset charset in which the file is encoded.
+     */
+    public FileConfigurationSource(File file, Charset charset) {
+        this.file    = file;
+        this.charset = charset;
+    }
+
+    /**
+     * Creates a source on the specified file and charset.
+     * @param file file in which the configuration data is located.
+     * @param charset charset in which the file is encoded.
+     */
+    public FileConfigurationSource(File file, String charset) {
+        this(file, Charset.forName(charset));
+    }
 
     /**
      * Creates a source that will open streams on the specified file.
-     * @param path path to the file on which streams should be opened.
+     * @param path  path to the file in which the configuration data is located.
+     * @deprecated Application developers should use {@link #FileConfigurationSource(String, Charset)} instead. This
+     *             constructor assumes the specified file to be <code>UTF-8</code> encoded.
      */
-    public FileConfigurationSource(String path) {setFile(path);}
+    @Deprecated
+    public FileConfigurationSource(String path) {
+        this(new File(path));
+    }
+
+    /**
+     * Creates a source on the specified file and charset.
+     * @param path  path to the file in which the configuration data is located.
+     * @param charset charset in which the file is encoded.
+     */
+    public FileConfigurationSource(String path, String charset) {
+        this(new File(path), charset);
+    }
+
+    /**
+     * Creates a source on the specified file and charset.
+     * @param path  path to the file in which the configuration data is located.
+     * @param charset charset in which the file is encoded.
+     */
+    public FileConfigurationSource(String path, Charset charset) {
+        this(new File(path), charset);
+    }
 
 
 
     // - File access ---------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
-     * Sets the file on which input and output streams will be opened.
-     * @param file path to the file on which input and output streams will be opened.
-     * @see        #setFile(String)
-     * @see        #getFile()
-     */
-    public synchronized void setFile(File file) {this.file = file;}
-
-    /**
-     * Sets the file on which input and output streams will be opened.
-     * @param path path to the file on which input and output streams will be opened.
-     * @see        #setFile(File)
-     * @see        #getFile()
-     */
-    public synchronized void setFile(String path) {file = new File(path);}
-
-    /**
      * Returns the file on which input and output streams are opened.
      * @return the file on which input and output streams are opened.
-     * @see    #setFile(File)
-     * @see    #setFile(String)
      */
-    public synchronized File getFile() {return file;}
+    public File getFile() {
+        return file;
+    }
+
+    /**
+     * Returns the charset in which the {@link #getFile() configuration file} is encoded.
+     * @return the charset in which the {@link #getFile() configuration file} is encoded.
+     */
+    public Charset getCharset() {
+        return charset;
+    }
 
 
 
@@ -83,12 +125,16 @@ public class FileConfigurationSource implements ConfigurationSource {
      * @return             an input stream on the configuration file.
      * @throws IOException if an I/O error occurs.
      */
-    public synchronized InputStream getInputStream() throws IOException {return new FileInputStream(file);}
+    public Reader getReader() throws IOException {
+        return new InputStreamReader(new FileInputStream(file), charset);
+    }
 
     /**
      * Returns an output stream on the configuration file.
      * @return             an output stream on the configuration file.
      * @throws IOException if an I/O error occurs.
      */
-    public synchronized OutputStream getOutputStream() throws IOException {return new FileOutputStream(file);}
+    public Writer getWriter() throws IOException {
+        return new OutputStreamWriter(new FileOutputStream(file), charset);
+    }
 }

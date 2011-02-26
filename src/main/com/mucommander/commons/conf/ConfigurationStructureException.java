@@ -21,7 +21,7 @@ package com.mucommander.commons.conf;
 /**
  * Encapsulate a configuration structure error.
  * <p>
- * Within the scope of the <code>com.mucommander.conf</code> API, structure errors
+ * Within the scope of the <code>com.mucommander.commons.conf</code> API, structure errors
  * are inconsistencies in the structure of the configuration tree - a section closed more
  * than once, for example, or never closed at all.
  * </p>

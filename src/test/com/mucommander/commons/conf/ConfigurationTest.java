@@ -21,8 +21,8 @@ package com.mucommander.commons.conf;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -1200,7 +1200,8 @@ public class ConfigurationTest implements ConfigurationListener, ConfigurationRe
     /**
      * Ignored.
      */
-    public void read(InputStream in, ConfigurationBuilder builder) {}
+    public void read(Reader in, ConfigurationBuilder builder) {
+    }
 
     /**
      * Returns the current instance.
@@ -1231,13 +1232,14 @@ public class ConfigurationTest implements ConfigurationListener, ConfigurationRe
     /**
      * Ignored.
      */
-    public InputStream getInputStream() {return null;}
+    public Reader getReader() {
+        return null;
+    }
 
     /**
      * Ignored.
-     * @see #setOutputStream(OutputStream)
      */
-    public OutputStream getOutputStream() {return null;}
+    public Writer getWriter() {return null;}
 
     /**
      * Makes sure configuration source registration works as expected.
@@ -1258,33 +1260,38 @@ public class ConfigurationTest implements ConfigurationListener, ConfigurationRe
     /**
      * Ignored.
      */
-    public void startConfiguration() {}
+    public void startConfiguration() {
+    }
 
     /**
      * Ignored.
      */
-    public void endConfiguration() {}
+    public void endConfiguration() {
+    }
 
     /**
      * Ignored.
      */
-    public void startSection(String name) {}
+    public void startSection(String name) {
+    }
 
     /**
      * Ignored.
      */
-    public void endSection(String name) {}
+    public void endSection(String name) {
+    }
 
     /**
      * Ignored.
      */
-    public void addVariable(String name, String value) {}
+    public void addVariable(String name, String value) {
+    }
 
     /**
      * Ignored.
-     * @see #getOutputStream()
      */
-    public void setOutputStream(OutputStream out) {}
+    public void setWriter(Writer out) {
+    }
 
 
     /**

@@ -21,7 +21,7 @@ package com.mucommander.commons.conf;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -62,8 +62,8 @@ public class ConfigurationSectionTest {
      */
     @Test
     public void testVariables() {
-        Enumeration<String> variables;
-        String              name;
+        Iterator<String> variables;
+        String           name;
 
         assert !section.hasVariables();
 
@@ -77,26 +77,26 @@ public class ConfigurationSectionTest {
         assert section.hasVariables();
 
         variables = section.variableNames();
-        assert variables.hasMoreElements();
-        assert VARIABLE1.equals(variables.nextElement());
-        assert !variables.hasMoreElements();
+        assert variables.hasNext();
+        assert VARIABLE1.equals(variables.next());
+        assert !variables.hasNext();
 
         assert VALUE2.equals(section.removeVariable(VARIABLE1));
         assert !section.hasVariables();
-        assert !section.variableNames().hasMoreElements();
+        assert !section.variableNames().hasNext();
 
         assert section.setVariable(VARIABLE1, VALUE1);
         assert section.setVariable(VARIABLE2, VALUE2);
         assert section.hasVariables();
 
         variables = section.variableNames();
-        assert variables.hasMoreElements();
-        name = variables.nextElement();
-        assert variables.hasMoreElements();
+        assert variables.hasNext();
+        name = variables.next();
+        assert variables.hasNext();
         if(name.equals(VARIABLE1))
-            assert VARIABLE2.equals(variables.nextElement());
+            assert VARIABLE2.equals(variables.next());
         else if(name.equals(VARIABLE2))
-            assert VARIABLE1.equals(variables.nextElement());
+            assert VARIABLE1.equals(variables.next());
         else
             throw new AssertionError();
 
@@ -111,7 +111,7 @@ public class ConfigurationSectionTest {
     @Test
     public void testSections() {
         ConfigurationSection subSection1;
-        Enumeration<String>  sections;
+        Iterator<String>     sections;
         String               name;
 
         assert !section.hasSections();
@@ -131,19 +131,19 @@ public class ConfigurationSectionTest {
 
         assert section.addSection(SECTION1) != null;
         sections = section.sectionNames();
-        assert sections.hasMoreElements();
-        assert SECTION1.equals(sections.nextElement());
-        assert !sections.hasMoreElements();
+        assert sections.hasNext();
+        assert SECTION1.equals(sections.next());
+        assert !sections.hasNext();
 
         assert section.addSection(SECTION2) != null;
         sections = section.sectionNames();
-        assert sections.hasMoreElements();
-        name = sections.nextElement();
-        assert sections.hasMoreElements();
+        assert sections.hasNext();
+        name = sections.next();
+        assert sections.hasNext();
         if(name.equals(SECTION1))
-            assert SECTION2.equals(sections.nextElement());
+            assert SECTION2.equals(sections.next());
         else if(name.equals(SECTION2))
-            assert SECTION1.equals(sections.nextElement());
+            assert SECTION1.equals(sections.next());
         else
             throw new AssertionError();
     }

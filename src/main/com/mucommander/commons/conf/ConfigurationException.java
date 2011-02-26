@@ -21,9 +21,9 @@ package com.mucommander.commons.conf;
 /**
  * Encapsulates a general configuration error.
  * <p>
- * This class can contain basic error information from either the <code>com.mucommander.conf</code> API
+ * This class can contain basic error information from either the <code>com.mucommander.commons.conf</code> API
  * or the application. Application writers can subclass it to provide additional functionality. Different
- * classes of the <code>com.mucommander.conf</code> API may throw this exception or any exception subclassed
+ * classes of the <code>com.mucommander.commons.conf</code> API may throw this exception or any exception subclassed
  * from it.
  * </p>
  * <p>

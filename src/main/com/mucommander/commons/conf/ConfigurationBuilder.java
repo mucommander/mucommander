@@ -28,7 +28,7 @@ package com.mucommander.commons.conf;
  * variable declarations.
  * </p>
  * <p>
- * The <code>com.mucommander.conf</code> API comes with a default <i>no-op</i> implementation,
+ * The <code>com.mucommander.commons.conf</code> API comes with a default <i>no-op</i> implementation,
  * {@link DefaultConfigurationBuilder}. This can be used instead of <code>ConfigurationBuilder</code>
  * when only a subset of the possible events are of interest.
  * </p>

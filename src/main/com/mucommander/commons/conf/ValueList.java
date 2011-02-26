@@ -125,10 +125,10 @@ public class ValueList extends Vector<String> {
      * @return           a string representation of the specified list.
      */
     public static String toString(List<?> data, String separator) {
-        StringBuffer     buffer;
-        Iterator<?> values;
+        StringBuilder buffer;
+        Iterator<?>   values;
 
-        buffer = new StringBuffer();
+        buffer = new StringBuilder();
         values = data.iterator();
 
         // Deals with the first value separately.

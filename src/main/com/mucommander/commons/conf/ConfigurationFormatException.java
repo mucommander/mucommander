@@ -21,7 +21,7 @@ package com.mucommander.commons.conf;
 /**
  * Encapsulate a configuration format error.
  * <p>
- * Within the scope of the <code>com.mucommander.conf</code> API, format errors
+ * Within the scope of the <code>com.mucommander.commons.conf</code> API, format errors
  * are syntax errors in a configuration source.
  * </p>
  * <p>

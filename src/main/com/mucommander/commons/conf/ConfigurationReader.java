@@ -19,7 +19,7 @@
 package com.mucommander.commons.conf;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * Interface for reading from a configuration source using callbacks.
@@ -29,16 +29,17 @@ import java.io.InputStream;
  * relevant callback methods of {@link ConfigurationBuilder}.
  * </p>
  * <p>
- * The <code>com.mucommander.conf</code> package comes with a default implementation, {@link XmlConfigurationReader},
- * which handles the standard muCommander configuration file format.
+ * The <code>com.mucommander.commons.conf</code> package comes with a default implementation,
+ * {@link XmlConfigurationReader}, which handles the standard muCommander configuration file format.
  * </p>
  * <p>
- * In order for an implementation of <code>ConfigurationReader</code> to be useable by {@link Configuration configuration}
- * instances, it must come with an associated implementation of {@link ConfigurationReaderFactory}.
+ * In order for an implementation of <code>ConfigurationReader</code> to be usable by
+ * {@link Configuration configuration} instances, it must come with an associated implementation of
+ * {@link ConfigurationReaderFactory}.
  * </p>
  * <p>
- * In addition, most readers will have an associated {@link ConfigurationWriter} used to write configuration files in a format
- * that the reader will understand.
+ * In addition, most readers will have an associated {@link ConfigurationWriter} used to write configuration files in a
+ * format that the reader will understand.
  * </p>
  * @author Nicolas Rinaudo
  * @see    ConfigurationReaderFactory
@@ -48,14 +49,14 @@ public interface ConfigurationReader {
     /**
      * Reads configuration information from the specified input stream and invokes the specified builder's callback methods.
      * <p>
-     * When applicable, this method is expected to throw {@link ConfigurationFormatException format} exceptions rather than
-     * {@link ConfigurationException configuration} exceptions. This will allow applications to report errors in a way that is
-     * useful for users.
+     * When applicable, this method is expected to throw {@link ConfigurationFormatException format} exceptions rather
+     * than {@link ConfigurationException configuration} exceptions. This will allow applications to report errors in a
+     * way that is useful for users.
      * </p>
      * @param in                      where to read the configuration information from.
      * @param builder                 where to send configuration messages to.
      * @throws IOException            if an I/O error occurs.
      * @throws ConfigurationException if another type of error occurs, in which case that error must be returned by <code>ConfigurationException.getCause()</code>.
      */
-    public void read(InputStream in, ConfigurationBuilder builder) throws ConfigurationException, IOException;
+    public void read(Reader in, ConfigurationBuilder builder) throws ConfigurationException, IOException;
 }

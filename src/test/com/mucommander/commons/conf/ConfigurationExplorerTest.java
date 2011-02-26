@@ -55,9 +55,9 @@ public class ConfigurationExplorerTest {
      */
     @BeforeMethod
     public void setUp() {
-        StringBuffer buffer;
+        StringBuilder buffer;
 
-        buffer = new StringBuffer();
+        buffer = new StringBuilder();
         conf   = new Configuration();
         for(int i = 0; i < DEPTH; i++) {
             conf.setVariable(buffer.toString() + VARIABLE_NAME + i, VARIABLE_VALUE + i);

@@ -30,8 +30,9 @@ package com.mucommander.commons.conf;
  * </pre>
  * </p>
  * <p>
- * The <code>com.mucommander.conf</code> package comes with a default implementation, {@link XmlConfigurationReaderFactory},
- * which creates readers meant to handle the standard muCommander configuration file format.
+ * The <code>com.mucommander.commons.conf</code> package comes with a default implementation,
+ * {@link XmlConfigurationReaderFactory}, which creates readers meant to handle the standard muCommander configuration
+ * file format.
  * </p>
  * @author Nicolas Rinaudo
  * @see    ConfigurationReader

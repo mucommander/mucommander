@@ -19,14 +19,14 @@
 package com.mucommander.commons.conf;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 
 /**
  * Provides instances of {@link Configuration} with streams to configuration data.
  * <p>
- * Application writers that need to retrieve configuration data from a non-standard source
- * (over the network, from a database, ...) need to subclass this.
+ * Application writers that need to retrieve configuration data from a non-standard source (over the network, from a
+ * database, ...) need to subclass this.
  * </p>
  * <p>
  * Implementations of this interface can be registered through {@link Configuration}'s
@@ -36,7 +36,8 @@ import java.io.OutputStream;
  * in a database, ...
  * </p>
  * <p>
- * The <code>com.mucommander.conf</code> package comes with a default implementation, {@link FileConfigurationSource},
+ * The <code>com.mucommander.commons.conf</code> package comes with a default implementation,
+ * {@link FileConfigurationSource},
  * which will open input and output streams on a local file.
  * </p>
  * @author Nicolas Rinaudo
@@ -48,12 +49,12 @@ public interface ConfigurationSource {
      * @return             an input stream on the configuration source.
      * @throws IOException if any I/O error occurs.
      */
-    public InputStream getInputStream() throws IOException;
+    public Reader getReader() throws IOException;
 
     /**
      * Returns an output stream on the configuration source.
      * @return             an output stream on the configuration source.
      * @throws IOException if any I/O error occurs.
      */
-    public OutputStream getOutputStream() throws IOException;
+    public Writer getWriter() throws IOException;
 }

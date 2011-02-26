@@ -18,7 +18,7 @@
 
 package com.mucommander.commons.conf;
 
-import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * Interface for writing to a configuration source using callbacks.
@@ -28,8 +28,8 @@ import java.io.OutputStream;
  * to an output stream.
  * </p>
  * <p>
- * The <code>com.mucommander.conf</code> packages comes with a default implementation, {@link XmlConfigurationWriter},
- * which handles the standard muCommander configuration file format.
+ * The <code>com.mucommander.commons.conf</code> packages comes with a default implementation,
+ * {@link XmlConfigurationWriter}, which handles the standard muCommander configuration file format.
  * </p>
  * <p>
  * In order for an implementation of <code>ConfigurationWriter</code> to be useable by instances of {@link Configuration},
@@ -43,13 +43,13 @@ import java.io.OutputStream;
  */
 public interface ConfigurationWriter extends ConfigurationBuilder {
     /**
-     * Sets the output stream in which the writer should write its data.
+     * Sets the writer in which the writer should write its data.
      * <p>
      * This method will be invoked once, before any call to the callback methods
      * inherited from {@link ConfigurationBuilder}.
      * </p>
-     * @param  out                    output stream in which to write the configuration data.
+     * @param  out                    writer in which to write the configuration data.
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception. 
      */
-    public void setOutputStream(OutputStream out) throws ConfigurationException;
+    public void setWriter(Writer out) throws ConfigurationException;
 }
