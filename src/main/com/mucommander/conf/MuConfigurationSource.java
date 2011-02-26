@@ -26,6 +26,7 @@ import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 /**
  * @author Nicolas Rinaudo
@@ -108,11 +109,15 @@ class MuConfigurationSource implements ConfigurationSource {
      * Returns an input stream on the configuration file.
      * @return an input stream on the configuration file.
      */
-    public synchronized InputStream getInputStream() throws IOException {return new BackupInputStream(getConfigurationFile());}
+    public synchronized Reader getReader() throws IOException {
+        return new InputStreamReader(new BackupInputStream(getConfigurationFile()), Charset.forName("utf-8"));
+    }
 
     /**
      * Returns an output stream on the configuration file.
      * @return an output stream on the configuration file.
      */
-    public synchronized OutputStream getOutputStream() throws IOException {return new BackupOutputStream(getConfigurationFile());}
+    public synchronized Writer getWriter() throws IOException {
+        return new OutputStreamWriter(new BackupOutputStream(getConfigurationFile()), Charset.forName("utf-8"));
+    }
 }
