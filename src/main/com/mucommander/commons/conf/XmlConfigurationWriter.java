@@ -50,9 +50,9 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Writer on the destination XML stream. */
-    private final ContentHandler out;
+    protected final ContentHandler out;
     /** Empty XML attributes (avoids creating a new instance on each <code>startElement</code> call). */
-    private final Attributes     emptyAttributes = new AttributesImpl();
+    private   final Attributes     emptyAttributes = new AttributesImpl();
 
 
 
