@@ -56,7 +56,7 @@
  * Application writers who wish to change this can do so by:
  * <ul>
  * <li>
- * Creating custom {@link com.mucommander.commons.conf.ConfigurationWriter writers} and
+ * Creating custom {@link com.mucommander.commons.conf.ConfigurationBuilder writers} and
  * {@link com.mucommander.commons.conf.ConfigurationReader readers}.
  * </li>
  * <li>

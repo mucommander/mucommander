@@ -31,13 +31,13 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.Writer;
 
 /**
- * Implementation of {@link ConfigurationWriter} used to write XML configuration streams.
+ * Implementation of {@link ConfigurationBuilder} used to write XML configuration streams.
  * <p>
  * Information on the XML file format can be found {@link XmlConfigurationReader here}.
  * </p>
  * @author Nicolas Rinaudo
  */
-public class XmlConfigurationWriter implements ConfigurationWriter {
+public class XmlConfigurationWriter implements ConfigurationBuilder {
     // - Class constants -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Factory used to create instances of {@link XmlConfigurationWriter}. */
@@ -50,9 +50,9 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Writer on the destination XML stream. */
-    protected       ContentHandler out;
+    private final ContentHandler out;
     /** Empty XML attributes (avoids creating a new instance on each <code>startElement</code> call). */
-    private   final Attributes     emptyAttributes = new AttributesImpl();
+    private final Attributes     emptyAttributes = new AttributesImpl();
 
 
 
@@ -60,16 +60,18 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
     // -----------------------------------------------------------------------------------------------------------------
     static {
         FACTORY = new ConfigurationWriterFactory<XmlConfigurationWriter>() {
-            public XmlConfigurationWriter getWriterInstance() throws WriterConfigurationException {
-                return new XmlConfigurationWriter();
+            public XmlConfigurationWriter getWriterInstance(Writer out) {
+                return new XmlConfigurationWriter(out);
             }
         };
     }
 
     /**
      * Creates a new instance of XML configuration writer.
+     * @param out where to write the configuration data.
      */
-    public XmlConfigurationWriter() {
+    public XmlConfigurationWriter(Writer out) {
+        this.out = createHandler(out);
     }
 
 
@@ -98,13 +100,6 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
         transformer.setResult(new StreamResult(out));
 
         return transformer;
-    }
-    /**
-     * Sets the output stream in which to write the XML data.
-     * @param  out where to write the XML data.
-     */
-    public void setWriter(Writer out) {
-        this.out = createHandler(out);
     }
 
 

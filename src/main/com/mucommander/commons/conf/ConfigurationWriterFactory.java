@@ -18,10 +18,12 @@
 
 package com.mucommander.commons.conf;
 
+import java.io.Writer;
+
 /**
- * Interface used to provide interfaces of {@link Configuration} with a way of creating {@link ConfigurationWriter writer} instances.
+ * Interface used to provide interfaces of {@link Configuration} with a way of creating writer instances.
  * <p>
- * A <code>ConfigurationWriterFactory</code>'s sole purpose is to create instances of {@link ConfigurationWriter}. In most cases, a
+ * A <code>ConfigurationWriterFactory</code>'s sole purpose is to create instances of writer. In most cases, a
  * factory class will be associated with a writer class, and its code will look something like:
  * <pre>
  * public class MyWriterFactory implements ConfigurationWriterFactory {
@@ -30,13 +32,16 @@ package com.mucommander.commons.conf;
  * </pre>
  * </p>
  * @author Nicolas Rinaudo
- * @see    ConfigurationWriter
  */
-public interface ConfigurationWriterFactory<T extends ConfigurationWriter> {
+public interface ConfigurationWriterFactory<T extends ConfigurationBuilder> {
     /**
-     * Creates an instance of {@link ConfigurationWriter}.
-     * @return                              an instance of {@link ConfigurationWriter}.
+     * Creates an instance of {@link ConfigurationBuilder}.
+     * <p>
+     * The returned builder instance will serialize configuration events to the specified writer.
+     * </p>
+     * @param  out                          where to write the configuration data.
+     * @return                              an instance of {@link ConfigurationBuilder}.
      * @throws WriterConfigurationException if the factory wasn't properly configured.
      */
-    public T getWriterInstance() throws WriterConfigurationException;
+    public T getWriterInstance(Writer out) throws WriterConfigurationException;
 }

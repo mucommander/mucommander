@@ -23,7 +23,7 @@ package com.mucommander.commons.conf;
  * <p>
  * If a class needs to be informed of the logical structure of a configuration instance,
  * it implements this interface and registers an instance with the {@link Configuration} using
- * its {@link Configuration#build(ConfigurationBuilder) build} method. The {@link Configuration}
+ * its {@link Configuration#write(ConfigurationBuilder) build} method. The {@link Configuration}
  * uses the instance to report configuration related events such as the start of sections and
  * variable declarations.
  * </p>

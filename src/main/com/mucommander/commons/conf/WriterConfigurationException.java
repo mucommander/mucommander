@@ -21,8 +21,8 @@ package com.mucommander.commons.conf;
 /**
  * Encapsulate a writer configuration error.
  * <p>
- * This exception is mostly meant to be used by implementations of {@link ConfigurationWriterFactory},
- * as they're the ones who will configure instances of {@link ConfigurationWriter}.
+ * This exception is mostly meant to be used by implementations of writer,
+ * as they're the ones who will configure instances of {@link ConfigurationBuilder}.
  * </p>
  * <p>
  * Since <code>WriterConfigurationException</code> subclasses {@link ConfigurationException}, it
@@ -35,7 +35,9 @@ public class WriterConfigurationException extends ConfigurationException {
      * Creates a new writer configuration exception.
      * @param message the error message.
      */
-    public WriterConfigurationException(String message) {super(message);}
+    public WriterConfigurationException(String message) {
+        super(message);
+    }
 
     /**
      * Creates a new writer configuration exception wrapping an existing exception.
@@ -45,7 +47,9 @@ public class WriterConfigurationException extends ConfigurationException {
      * </p>
      * @param cause the exception to be wrapped in a <code>WriterConfigurationException</code>.
      */
-    public WriterConfigurationException(Throwable cause) {super(cause);}
+    public WriterConfigurationException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * Creates a new writer configuration exception from an existing exception.
@@ -55,5 +59,7 @@ public class WriterConfigurationException extends ConfigurationException {
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>WriterConfigurationException</code>.
      */
-    public WriterConfigurationException(String message, Throwable cause) {super(message, cause);}
+    public WriterConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

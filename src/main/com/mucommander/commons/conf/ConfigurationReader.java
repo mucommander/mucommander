@@ -38,12 +38,11 @@ import java.io.Reader;
  * {@link ConfigurationReaderFactory}.
  * </p>
  * <p>
- * In addition, most readers will have an associated {@link ConfigurationWriter} used to write configuration files in a
+ * In addition, most readers will have an associated writer used to write configuration files in a
  * format that the reader will understand.
  * </p>
  * @author Nicolas Rinaudo
  * @see    ConfigurationReaderFactory
- * @see    ConfigurationWriter
  */
 public interface ConfigurationReader {
     /**
