@@ -18,15 +18,17 @@
 
 package com.mucommander.conf;
 
-import com.mucommander.commons.conf.ConfigurationWriter;
+import com.mucommander.commons.conf.ConfigurationBuilder;
 import com.mucommander.commons.conf.ConfigurationWriterFactory;
 import com.mucommander.commons.conf.WriterConfigurationException;
+
+import java.io.Writer;
 
 /**
 * @author Maxence Bernard
 */
 class VersionedXmlConfigurationWriterFactory implements ConfigurationWriterFactory {
-    public ConfigurationWriter getWriterInstance() throws WriterConfigurationException {
-        return new VersionedXmlConfigurationWriter();
+    public ConfigurationBuilder getWriterInstance(Writer out) throws WriterConfigurationException {
+        return new VersionedXmlConfigurationWriter(out);
     }
 }

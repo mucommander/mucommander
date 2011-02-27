@@ -24,6 +24,8 @@ import com.mucommander.commons.conf.XmlConfigurationWriter;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import java.io.Writer;
+
 /**
  * @author Maxence Bernard
  */
@@ -32,6 +34,10 @@ class VersionedXmlConfigurationWriter extends XmlConfigurationWriter {
     ////////////////////////
     // Overridden methods //
     ////////////////////////
+
+    public VersionedXmlConfigurationWriter(Writer out) {
+        super(out);
+    }
 
     @Override
     public void startConfiguration() throws ConfigurationException {

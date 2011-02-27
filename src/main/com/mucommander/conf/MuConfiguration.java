@@ -86,7 +86,7 @@ public class MuConfiguration {
 
     // - Log variables -------------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the log configuration. */
+    /** Section describing the log CONFIGURATION. */
     public static final String  LOG_SECTION                       = "log";
     /** Log level. */
     public static final String  LOG_LEVEL                         = LOG_SECTION + '.' + "level";
@@ -101,7 +101,7 @@ public class MuConfiguration {
 
     // - Shell variables -----------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the shell configuration. */
+    /** Section describing the shell CONFIGURATION. */
     public static final String  SHELL_SECTION                     = "shell";
     /** Shell invocation command (in case muCommander is not using the default one). */
     public static final String  CUSTOM_SHELL                      = SHELL_SECTION + '.' + "custom_command";
@@ -124,7 +124,7 @@ public class MuConfiguration {
 
     // - Mail variables ------------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing mail configuration. */
+    /** Section describing mail CONFIGURATION. */
     public static final String MAIL_SECTION                       = "mail";
     /** Address of the SMTP server that should be used when sending mails. */
     public static final String SMTP_SERVER                        = MAIL_SECTION + '.' + "smtp_server";
@@ -141,7 +141,7 @@ public class MuConfiguration {
 
     // - Command bar variables -----------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the command bar configuration. */
+    /** Section describing the command bar CONFIGURATION. */
     public static final String  COMMAND_BAR_SECTION               = "command_bar";
     /** Whether or not the command bar is visible. */
     public static final String  COMMAND_BAR_VISIBLE               = COMMAND_BAR_SECTION + '.' + "visible";
@@ -156,7 +156,7 @@ public class MuConfiguration {
 
     // - Status bar variables ------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the status bar configuration. */
+    /** Section describing the status bar CONFIGURATION. */
     public static final String STATUS_BAR_SECTION                 = "status_bar";
     /** Whether or not the status bar is visible. */
     public static final String STATUS_BAR_VISIBLE                 = STATUS_BAR_SECTION + '.' + "visible";
@@ -167,7 +167,7 @@ public class MuConfiguration {
 
     // - Toolbar variables ---------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the toolbar configuration. */
+    /** Section describing the toolbar CONFIGURATION. */
     public static final String TOOLBAR_SECTION                    = "toolbar";
     /** Whether or not the toolbar is visible. */
     public static final String TOOLBAR_VISIBLE                    = TOOLBAR_SECTION + '.' + "visible";
@@ -181,7 +181,7 @@ public class MuConfiguration {
 
     // - Volume list ---------------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the volume list configuration. */
+    /** Section describing the volume list CONFIGURATION. */
     public static final String VOLUME_LIST_SECTION                 = "volume_list";
     /** Regexp that allows volumes to be excluded from the list. */
     public static final String VOLUME_EXCLUDE_REGEXP               = VOLUME_LIST_SECTION + '.' + "exclude_regexp";
@@ -189,7 +189,7 @@ public class MuConfiguration {
 
     // - FileTable variables ---------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the folders view configuration. */
+    /** Section describing the folders view CONFIGURATION. */
     public static final String  FILE_TABLE_SECTION                 = "file_table";
     /** Whether or not to display hidden files. */
     public static final String  SHOW_HIDDEN_FILES                  = FILE_TABLE_SECTION + '.' + "show_hidden_files";
@@ -227,15 +227,15 @@ public class MuConfiguration {
     public static final String  LEFT                               = "left";
     /** Identifier of the right file table. */
     public static final String  RIGHT                              = "right";
-    /** Section describing the left table's configuration. */
+    /** Section describing the left table's CONFIGURATION. */
     public static final String  LEFT_FILE_TABLE_SECTION            = FILE_TABLE_SECTION + '.' + LEFT;
-    /** Section describing the right table's configuration. */
+    /** Section describing the right table's CONFIGURATION. */
     public static final String  RIGHT_FILE_TABLE_SECTION           = FILE_TABLE_SECTION + '.' + RIGHT;
-    /** Identifier of the sort section in a file table's configuration. */
+    /** Identifier of the sort section in a file table's CONFIGURATION. */
     public static final String  SORT                               = "sort";
-    /** Identifier of the sort criteria in a file table's configuration. */
+    /** Identifier of the sort criteria in a file table's CONFIGURATION. */
     public static final String  SORT_BY                            = "by";
-    /** Identifier of the sort order in a file table's configuration. */
+    /** Identifier of the sort order in a file table's CONFIGURATION. */
     public static final String  SORT_ORDER                         = "order";
     /** Section described the sort order of the right file table. */
     public static final String  RIGHT_FILE_TABLE_SORT_SECTION      = LEFT_FILE_TABLE_SECTION + '.' + SORT;
@@ -265,28 +265,28 @@ public class MuConfiguration {
     /** Default 'sort by' column for the file table. */
     public static final String  DEFAULT_SORT_BY                    = "name";
 
-    /** Name of the root element's attribute that contains the version of muCommander used to write the configuration file. */
+    /** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
     static final String VERSION_ATTRIBUTE = "version";
 
 
     /**
-     * Returns the configuration section corresponding to the specified {@link com.mucommander.ui.main.table.FileTable},
+     * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.table.FileTable},
      * left or right one.
      *
      * @param left true for the left FileTable, false for the right one
-     * @return the configuration section corresponding to the specified FileTable
+     * @return the CONFIGURATION section corresponding to the specified FileTable
      */
     private static String getFileTableSection(boolean left) {
         return FILE_TABLE_SECTION + "." + (left?LEFT:RIGHT);
     }
 
     /**
-     * Returns the configuration section corresponding to the specified column in the left or right
+     * Returns the CONFIGURATION section corresponding to the specified column in the left or right
      * {@link com.mucommander.ui.main.table.FileTable}.
      *
      * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
-     * @return the configuration section corresponding to the specified FileTable
+     * @return the CONFIGURATION section corresponding to the specified FileTable
      */
     private static String getColumnSection(Column column, boolean left) {
         return getFileTableSection(left) + "." + column.toString().toLowerCase();
@@ -509,7 +509,7 @@ public class MuConfiguration {
 
     // - Tree variables ------------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing the tree configuration. */
+    /** Section describing the tree CONFIGURATION. */
     public static final String  TREE_SECTION                      = "tree";
     public static final String  LEFT_TREE_VISIBLE                 = TREE_SECTION + "." + LEFT + "." + "visible";
     public static final String  RIGHT_TREE_VISIBLE                = TREE_SECTION + "." + RIGHT + "." + "visible";
@@ -519,12 +519,17 @@ public class MuConfiguration {
 
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    private static final Configuration configuration = new Configuration(new MuConfigurationSource());
+    private static final Configuration CONFIGURATION;
 
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+    static {
+        CONFIGURATION = new Configuration(new MuConfigurationSource(), new VersionedXmlConfigurationReaderFactory(),
+                                          new VersionedXmlConfigurationWriterFactory());
+    }
+
     /**
      * Prevents instanciation of this class.
      */
@@ -535,15 +540,16 @@ public class MuConfiguration {
     // - Configuration reading / writing -------------------------------------
     // -----------------------------------------------------------------------
     /**
-     * Loads the muCommander configuration.
+     * Loads the muCommander CONFIGURATION.
      * @throws IOException            if an I/O error occurs.
-     * @throws ConfigurationException if a configuration related error occurs.
+     * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
     public static void read() throws IOException, ConfigurationException {
         String configurationVersion;
 
         VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
-        try {configuration.read(reader);}
+        try {
+            CONFIGURATION.read(reader);}
         finally {
             configurationVersion = reader.getVersion();
             if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
@@ -565,11 +571,13 @@ public class MuConfiguration {
     }
 
     /**
-     * Saves the muCommander configuration.
+     * Saves the muCommander CONFIGURATION.
      * @throws IOException            if an I/O error occurs.
-     * @throws ConfigurationException if a configuration related error occurs.
+     * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
-    public static void write() throws IOException, ConfigurationException {configuration.write(new VersionedXmlConfigurationWriter());}
+    public static void write() throws IOException, ConfigurationException {
+        CONFIGURATION.write();
+    }
 
 
 
@@ -592,7 +600,8 @@ public class MuConfiguration {
      * @param fromVar fully qualified name of the variable to rename.
      * @param toVar   fully qualified name of the variable that will receive <code>fromVar</code>'s value.
      */
-    public static void renameVariable(String fromVar, String toVar) {configuration.renameVariable(fromVar, toVar);}
+    public static void renameVariable(String fromVar, String toVar) {
+        CONFIGURATION.renameVariable(fromVar, toVar);}
 
     /**
      * Sets the value of the specified variable.
@@ -610,7 +619,7 @@ public class MuConfiguration {
      * @see          #getVariable(String)
      * @see          #getVariable(String,String)
      */
-    public static boolean setVariable(String name, String value) {return configuration.setVariable(name, value);}
+    public static boolean setVariable(String name, String value) {return CONFIGURATION.setVariable(name, value);}
 
     /**
      * Sets the value of the specified variable.
@@ -629,7 +638,7 @@ public class MuConfiguration {
      * @see          #getIntegerVariable(String)
      * @see          #getVariable(String,int)
      */
-    public static boolean setVariable(String name, int value) {return configuration.setVariable(name, value);}
+    public static boolean setVariable(String name, int value) {return CONFIGURATION.setVariable(name, value);}
 
     /**
      * Sets the value of the specified variable.
@@ -648,7 +657,7 @@ public class MuConfiguration {
      * @see          #getFloatVariable(String)
      * @see          #getVariable(String,float)
      */
-    public static boolean setVariable(String name, float value) {return configuration.setVariable(name, value);}
+    public static boolean setVariable(String name, float value) {return CONFIGURATION.setVariable(name, value);}
 
     /**
      * Sets the value of the specified variable.
@@ -667,7 +676,7 @@ public class MuConfiguration {
      * @see          #getBooleanVariable(String)
      * @see          #getVariable(String,boolean)
      */
-    public static boolean setVariable(String name, boolean value) {return configuration.setVariable(name, value);}
+    public static boolean setVariable(String name, boolean value) {return CONFIGURATION.setVariable(name, value);}
 
     /**
      * Sets the value of the specified variable.
@@ -686,7 +695,7 @@ public class MuConfiguration {
      * @see          #getLongVariable(String)
      * @see          #getVariable(String,long)
      */
-    public static boolean setVariable(String name, long value) {return configuration.setVariable(name, value);}
+    public static boolean setVariable(String name, long value) {return CONFIGURATION.setVariable(name, value);}
 
     /**
      * Sets the value of the specified variable.
@@ -705,7 +714,7 @@ public class MuConfiguration {
      * @see          #getDoubleVariable(String)
      * @see          #getVariable(String,double)
      */
-    public static boolean setVariable(String name, double value) {return configuration.setVariable(name, value);}
+    public static boolean setVariable(String name, double value) {return CONFIGURATION.setVariable(name, value);}
 
     /**
      * Sets the value of the specified variable.
@@ -725,7 +734,7 @@ public class MuConfiguration {
      * @see              #getListVariable(String,String)
      * @see              #getVariable(String,List,String)
      */
-    public static boolean setVariable(String name, List<String> value, String separator) {return configuration.setVariable(name, value, separator);}
+    public static boolean setVariable(String name, List<String> value, String separator) {return CONFIGURATION.setVariable(name, value, separator);}
 
 
 
@@ -738,7 +747,7 @@ public class MuConfiguration {
      * @see         #setVariable(String,String)
      * @see         #getVariable(String,String)
      */
-    public static String getVariable(String name) {return configuration.getVariable(name);}
+    public static String getVariable(String name) {return CONFIGURATION.getVariable(name);}
 
     /**
      * Returns the value of the specified variable as an integer.
@@ -748,7 +757,7 @@ public class MuConfiguration {
      * @see                          #setVariable(String,int)
      * @see                          #getVariable(String,int)
      */
-    public static int getIntegerVariable(String name) {return configuration.getIntegerVariable(name);}
+    public static int getIntegerVariable(String name) {return CONFIGURATION.getIntegerVariable(name);}
 
     /**
      * Returns the value of the specified variable as a long.
@@ -758,7 +767,7 @@ public class MuConfiguration {
      * @see                          #setVariable(String,long)
      * @see                          #getVariable(String,long)
      */
-    public static long getLongVariable(String name) {return configuration.getLongVariable(name);}
+    public static long getLongVariable(String name) {return CONFIGURATION.getLongVariable(name);}
 
     /**
      * Returns the value of the specified variable as a float.
@@ -768,7 +777,7 @@ public class MuConfiguration {
      * @see                          #setVariable(String,float)
      * @see                          #getVariable(String,float)
      */
-    public static float getFloatVariable(String name) {return configuration.getFloatVariable(name);}
+    public static float getFloatVariable(String name) {return CONFIGURATION.getFloatVariable(name);}
 
     /**
      * Returns the value of the specified variable as a double.
@@ -778,7 +787,7 @@ public class MuConfiguration {
      * @see                          #setVariable(String,double)
      * @see                          #getVariable(String,double)
      */
-    public static double getDoubleVariable(String name) {return configuration.getDoubleVariable(name);}
+    public static double getDoubleVariable(String name) {return CONFIGURATION.getDoubleVariable(name);}
 
     /**
      * Returns the value of the specified variable as a boolean.
@@ -787,7 +796,7 @@ public class MuConfiguration {
      * @see                          #setVariable(String,boolean)
      * @see                          #getVariable(String,boolean)
      */
-    public static boolean getBooleanVariable(String name) {return configuration.getBooleanVariable(name);}
+    public static boolean getBooleanVariable(String name) {return CONFIGURATION.getBooleanVariable(name);}
 
     /**
      * Returns the value of the specified variable as a {@link ValueList}.
@@ -797,96 +806,96 @@ public class MuConfiguration {
      * @see              #setVariable(String,List,String)
      * @see              #getVariable(String,List,String)
      */
-    public static ValueList getListVariable(String name, String separator) {return configuration.getListVariable(name, separator);}
+    public static ValueList getListVariable(String name, String separator) {return CONFIGURATION.getListVariable(name, separator);}
 
     /**
      * Checks whether the specified variable has been set.
      * @param  name fully qualified name of the variable to check for.
      * @return      <code>true</code> if the variable is set, <code>false</code> otherwise.
      */
-    public static boolean isVariableSet(String name) {return configuration.isVariableSet(name);}
+    public static boolean isVariableSet(String name) {return CONFIGURATION.isVariableSet(name);}
 
 
 
     // - Variable removal ------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Deletes the specified variable from the configuration.
+     * Deletes the specified variable from the CONFIGURATION.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a CONFIGURATION {@link ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>null</code> if it wasn't set.
      */
-    public static String removeVariable(String name) {return configuration.removeVariable(name);}
+    public static String removeVariable(String name) {return CONFIGURATION.removeVariable(name);}
 
     /**
-     * Deletes the specified variable from the configuration.
+     * Deletes the specified variable from the CONFIGURATION.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a CONFIGURATION {@link ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static int removeIntegerVariable(String name) {return configuration.removeIntegerVariable(name);}
+    public static int removeIntegerVariable(String name) {return CONFIGURATION.removeIntegerVariable(name);}
 
     /**
-     * Deletes the specified variable from the configuration.
+     * Deletes the specified variable from the CONFIGURATION.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a CONFIGURATION {@link ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static long removeLongVariable(String name) {return configuration.removeLongVariable(name);}
+    public static long removeLongVariable(String name) {return CONFIGURATION.removeLongVariable(name);}
 
     /**
-     * Deletes the specified variable from the configuration.
+     * Deletes the specified variable from the CONFIGURATION.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a CONFIGURATION {@link ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static float removeFloatVariable(String name) {return configuration.removeFloatVariable(name);}
+    public static float removeFloatVariable(String name) {return CONFIGURATION.removeFloatVariable(name);}
 
     /**
-     * Deletes the specified variable from the configuration.
+     * Deletes the specified variable from the CONFIGURATION.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a CONFIGURATION {@link ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>0</code> if it wasn't set.
      */
-    public static double removeDoubleVariable(String name) {return configuration.removeDoubleVariable(name);}
+    public static double removeDoubleVariable(String name) {return CONFIGURATION.removeDoubleVariable(name);}
 
     /**
-     * Deletes the specified variable from the configuration.
+     * Deletes the specified variable from the CONFIGURATION.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a CONFIGURATION {@link ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
      * @return      the variable's old value, or <code>false</code> if it wasn't set.
      */
-    public static boolean removeBooleanVariable(String name) {return configuration.removeBooleanVariable(name);}
+    public static boolean removeBooleanVariable(String name) {return CONFIGURATION.removeBooleanVariable(name);}
 
     /**
-     * Deletes the specified variable from the configuration.
+     * Deletes the specified variable from the CONFIGURATION.
      * <p>
-     * If the variable was set, a configuration {@link ConfigurationEvent event} will be passed to
+     * If the variable was set, a CONFIGURATION {@link ConfigurationEvent event} will be passed to
      * all registered listeners.
      * </p>
      * @param  name name of the variable to remove.
      * @param  separator character used to split the variable's value into a list.
      * @return      the variable's old value, or <code>null</code> if it wasn't set.
      */
-    public static ValueList removeListVariable(String name, String separator) {return configuration.removeListVariable(name, separator);}
+    public static ValueList removeListVariable(String name, String separator) {return CONFIGURATION.removeListVariable(name, separator);}
 
 
 
@@ -896,7 +905,7 @@ public class MuConfiguration {
      * Retrieves the value of the specified variable.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a CONFIGURATION {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name         name of the variable to retrieve.
@@ -905,13 +914,13 @@ public class MuConfiguration {
      * @see                 #setVariable(String,String)
      * @see                 #getVariable(String)
      */
-    public static String getVariable(String name, String defaultValue) {return configuration.getVariable(name, defaultValue);}
+    public static String getVariable(String name, String defaultValue) {return CONFIGURATION.getVariable(name, defaultValue);}
 
     /**
      * Retrieves the value of the specified variable as an integer.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a CONFIGURATION {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -921,13 +930,13 @@ public class MuConfiguration {
      * @see                          #setVariable(String,int)
      * @see                          #getIntegerVariable(String)
      */
-    public static int getVariable(String name, int defaultValue) {return configuration.getVariable(name, defaultValue);}
+    public static int getVariable(String name, int defaultValue) {return CONFIGURATION.getVariable(name, defaultValue);}
 
     /**
      * Retrieves the value of the specified variable as a long.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a CONFIGURATION {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -937,13 +946,13 @@ public class MuConfiguration {
      * @see                          #setVariable(String,long)
      * @see                          #getLongVariable(String)
      */
-    public static long getVariable(String name, long defaultValue) {return configuration.getVariable(name, defaultValue);}
+    public static long getVariable(String name, long defaultValue) {return CONFIGURATION.getVariable(name, defaultValue);}
 
     /**
      * Retrieves the value of the specified variable as a float.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a CONFIGURATION {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -953,13 +962,13 @@ public class MuConfiguration {
      * @see                          #setVariable(String,float)
      * @see                          #getFloatVariable(String)
      */
-    public static float getVariable(String name, float defaultValue) {return configuration.getVariable(name, defaultValue);}
+    public static float getVariable(String name, float defaultValue) {return CONFIGURATION.getVariable(name, defaultValue);}
 
     /**
      * Retrieves the value of the specified variable as a boolean.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a CONFIGURATION {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -968,13 +977,13 @@ public class MuConfiguration {
      * @see                          #setVariable(String,boolean)
      * @see                          #getBooleanVariable(String)
      */
-    public static boolean getVariable(String name, boolean defaultValue) {return configuration.getVariable(name, defaultValue);}
+    public static boolean getVariable(String name, boolean defaultValue) {return CONFIGURATION.getVariable(name, defaultValue);}
 
     /**
      * Retrieves the value of the specified variable as a double.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a CONFIGURATION {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name                  name of the variable to retrieve.
@@ -984,13 +993,13 @@ public class MuConfiguration {
      * @see                          #setVariable(String,double)
      * @see                          #getDoubleVariable(String)
      */
-    public static double getVariable(String name, double defaultValue) {return configuration.getVariable(name, defaultValue);}
+    public static double getVariable(String name, double defaultValue) {return CONFIGURATION.getVariable(name, defaultValue);}
 
     /**
      * Retrieves the value of the specified variable as a {@link ValueList}.
      * <p>
      * If the variable isn't set, this method will set it to <code>defaultValue</code> before
-     * returning it. If this happens, a configuration {@link ConfigurationEvent event} will
+     * returning it. If this happens, a CONFIGURATION {@link ConfigurationEvent event} will
      * be sent to all registered listeners.
      * </p>
      * @param  name         name of the variable to retrieve.
@@ -1000,21 +1009,21 @@ public class MuConfiguration {
      * @see                 #setVariable(String,List,String)
      * @see                 #getListVariable(String,String)
      */
-    public static ValueList getVariable(String name, List<String> defaultValue, String separator) {return configuration.getVariable(name, defaultValue, separator);}
+    public static ValueList getVariable(String name, List<String> defaultValue, String separator) {return CONFIGURATION.getVariable(name, defaultValue, separator);}
 
 
     // - Configuration listening -----------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Adds the specified object to the list of registered configuration listeners.
-     * @param listener object to register as a configuration listener.
+     * Adds the specified object to the list of registered CONFIGURATION listeners.
+     * @param listener object to register as a CONFIGURATION listener.
      * @see            #removeConfigurationListener(ConfigurationListener)
      */
     public static void addConfigurationListener(ConfigurationListener listener) {Configuration.addConfigurationListener(listener);}
 
     /**
-     * Removes the specified object from the list of registered configuration listeners.
-     * @param listener object to remove from the list of registered configuration listeners.
+     * Removes the specified object from the list of registered CONFIGURATION listeners.
+     * @param listener object to remove from the list of registered CONFIGURATION listeners.
      * @see            #addConfigurationListener(ConfigurationListener)
      */
     public static void removeConfigurationListener(ConfigurationListener listener) {Configuration.removeConfigurationListener(listener);}
@@ -1023,16 +1032,17 @@ public class MuConfiguration {
     // - Configuration source --------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Sets the path to the configuration file.
-     * @param  file                  path to the file that should be used for configuration storage.
+     * Sets the path to the CONFIGURATION file.
+     * @param  file                  path to the file that should be used for CONFIGURATION storage.
      * @throws FileNotFoundException if the specified file is not a valid file.
      * @see                          #getConfigurationFile()
      */
-    public static void setConfigurationFile(String file) throws FileNotFoundException {configuration.setSource(new MuConfigurationSource(file));}
+    public static void setConfigurationFile(String file) throws FileNotFoundException {
+        CONFIGURATION.setSource(new MuConfigurationSource(file));}
 
     /**
-     * Returns the path to the configuration file.
-     * @return             the path to the configuration file.
+     * Returns the path to the CONFIGURATION file.
+     * @return             the path to the CONFIGURATION file.
      * @throws IOException if an error occured.
      * @see                #setConfigurationFile(String)
      */
