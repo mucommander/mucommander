@@ -26,7 +26,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 import java.util.WeakHashMap;
 
 /**
@@ -120,7 +119,7 @@ public class EncodingSelectBox extends JPanel {
      * @param selectEncoding the encoding that will be selected, <code>null</code> for the first one
      */
     protected void populateComboBox(String selectEncoding) {
-        Vector<String> encodings = EncodingPreferences.getPreferredEncodings();
+        java.util.List<String> encodings = EncodingPreferences.getPreferredEncodings();
 
         // Ignore the specified encoding if it is not in the list of preferred encodings
         if(selectEncoding!=null && !encodings.contains(selectEncoding))
@@ -128,15 +127,15 @@ public class EncodingSelectBox extends JPanel {
 
         // Add preferred encodings to the combo box
         int nbEncodings = encodings.size();
-        for(int i=0; i<nbEncodings; i++)
-            comboBox.addItem(encodings.elementAt(i));
+        for(String encoding: encodings)
+            comboBox.addItem(encoding);
 
         if(selectEncoding!=null) {
             comboBox.setSelectedItem(selectEncoding);
             currentEncoding = selectEncoding;
         }
         else if(nbEncodings>0) {
-            comboBox.setSelectedItem(encodings.elementAt(0));
+            comboBox.setSelectedItem(encodings.get(0));
             currentEncoding = selectEncoding;
         }
     }

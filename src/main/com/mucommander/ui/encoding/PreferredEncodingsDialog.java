@@ -153,7 +153,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
      *
      * @param selectedEncodings list of encodings to select
      */
-    protected void selectCheckboxes(Vector<String> selectedEncodings) {
+    protected void selectCheckboxes(java.util.List<String> selectedEncodings) {
         JCheckBox checkbox;
         int nbCheckboxes = checkboxes.size();
         for(int i=0; i<nbCheckboxes; i++) {

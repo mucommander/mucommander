@@ -25,7 +25,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 import java.util.WeakHashMap;
 
 /**
@@ -80,19 +79,17 @@ public class EncodingMenu extends JMenu {
      * that allows the list of preferred encodings to be customized.
      */
     protected void populateMenu() {
-        Vector<String> encodings = EncodingPreferences.getPreferredEncodings();
+        java.util.List<String> encodings = EncodingPreferences.getPreferredEncodings();
 
         // Add the current encoding if it is not in the list of preferred encodings
         if(selectedEncoding!=null && !encodings.contains(selectedEncoding))
-            encodings.insertElementAt(selectedEncoding, 0);
+            encodings.add(0, selectedEncoding);
 
         // Add preferred encodings to the menu
         int nbEncodings = encodings.size();
-        String enc;
         JCheckBoxMenuItem item;
         ButtonGroup group = new ButtonGroup();
-        for(int i=0; i<nbEncodings; i++) {
-            enc = encodings.elementAt(i);
+        for(String enc: encodings) {
             item = new JCheckBoxMenuItem(enc);
 
             // Select the current encoding, if there is one
@@ -104,7 +101,6 @@ public class EncodingMenu extends JMenu {
                 public void actionPerformed(ActionEvent e) {
                     String oldEncoding = selectedEncoding;
                     selectedEncoding = ((JCheckBoxMenuItem)e.getSource()).getText();
-
                     if(!oldEncoding.equals(selectedEncoding)) {
                         // Notify listeners of the new encoding
                         fireEncodingListener(oldEncoding, EncodingMenu.this.selectedEncoding);

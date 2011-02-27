@@ -21,6 +21,7 @@ package com.mucommander.ui.encoding;
 import com.mucommander.conf.MuConfiguration;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -55,8 +56,8 @@ public class EncodingPreferences {
      *
      * @return a user-defined list of preferred encodings.
      */
-    public static Vector<String> getPreferredEncodings() {
-        Vector<String> vector = MuConfiguration.getListVariable(MuConfiguration.PREFERRED_ENCODINGS, ",");
+    public static List<String> getPreferredEncodings() {
+        List<String> vector = MuConfiguration.getListVariable(MuConfiguration.PREFERRED_ENCODINGS, ",");
         if(vector==null) {
             vector = getDefaultPreferredEncodings();
             MuConfiguration.setVariable(MuConfiguration.PREFERRED_ENCODINGS, vector, ",");
