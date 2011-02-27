@@ -71,7 +71,9 @@ public class ConfigurationEvent {
      * Returns the configuration to which the event relates.
      * @return the configuration to which the event relates.
      */
-    public Configuration getConfiguration() {return configuration;}
+    public Configuration getConfiguration() {
+        return configuration;
+    }
 
     /**
      * Returns the name of the variable that was modified.
@@ -82,7 +84,9 @@ public class ConfigurationEvent {
      * </p>
      * @return the name of the variable that was modified.
      */
-    public String getVariable() {return name;}
+    public String getVariable() {
+        return name;
+    }
 
     /**
      * Returns the new value for the modified variable.
@@ -91,7 +95,9 @@ public class ConfigurationEvent {
      * </p>
      * @return the new value for the modified variable.
      */
-    public String getValue() {return value;}
+    public String getValue() {
+        return value;
+    }
 
     /**
      * Returns the new value for the modified variable cast as an integer.
@@ -101,7 +107,9 @@ public class ConfigurationEvent {
      * @return                       the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as an integer.
      */
-    public int getIntegerValue() throws NumberFormatException {return ConfigurationSection.getIntegerValue(value);}
+    public int getIntegerValue() throws NumberFormatException {
+        return ConfigurationSection.getIntegerValue(value);
+    }
 
     /**
      * Returns the new value for the modified variable cast as a float.
@@ -111,7 +119,9 @@ public class ConfigurationEvent {
      * @return                       the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as a float
      */
-    public float getFloatValue() throws NumberFormatException {return ConfigurationSection.getFloatValue(value);}
+    public float getFloatValue() throws NumberFormatException {
+        return ConfigurationSection.getFloatValue(value);
+    }
 
     /**
      * Returns the new value for the modified variable cast as a boolean.
@@ -120,7 +130,9 @@ public class ConfigurationEvent {
      * </p>
      * @return the new value for the modified variable.
      */
-    public boolean getBooleanValue() {return ConfigurationSection.getBooleanValue(value);}
+    public boolean getBooleanValue() {
+        return ConfigurationSection.getBooleanValue(value);
+    }
 
     /**
      * Returns the new value for the modified variable as a long.
@@ -130,7 +142,9 @@ public class ConfigurationEvent {
      * @return                       the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as a long.
      */
-    public long getLongValue() throws NumberFormatException {return ConfigurationSection.getLongValue(value);}
+    public long getLongValue() throws NumberFormatException {
+        return ConfigurationSection.getLongValue(value);
+    }
 
     /**
      * Returns the new value for the modified variable cast as a double.
@@ -140,7 +154,9 @@ public class ConfigurationEvent {
      * @return                       the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as a double.
      */
-    public double getDoubleValue() {return ConfigurationSection.getDoubleValue(value);}
+    public double getDoubleValue() {
+        return ConfigurationSection.getDoubleValue(value);
+    }
 
     /**
      * Returns the new value for the modified variable cast as a {@link ValueList}.
@@ -150,5 +166,7 @@ public class ConfigurationEvent {
      * @param  separator string used to tokenise the variable's value.
      * @return           the new value for the modified variable.
      */
-    public ValueList getListValue(String separator) {return ConfigurationSection.getListValue(value, separator);}
+    public ValueList getListValue(String separator) {
+        return ConfigurationSection.getListValue(value, separator);
+    }
 }

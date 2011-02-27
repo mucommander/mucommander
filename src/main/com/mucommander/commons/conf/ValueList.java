@@ -18,10 +18,10 @@
 
 package com.mucommander.commons.conf;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * Provides support for variables whose value is a list of tokens.
@@ -35,7 +35,7 @@ import java.util.Vector;
  * </p>
  * @author Nicolas Rinaudo
  */
-public class ValueList extends Vector<String> {
+public class ValueList extends ArrayList<String> {
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
@@ -52,6 +52,7 @@ public class ValueList extends Vector<String> {
     }
 
 
+
     // - Value casting -------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
@@ -59,7 +60,9 @@ public class ValueList extends Vector<String> {
      * @param  index index of the value to retrieve.
      * @return       the value found at the specified index of the list as a string.
      */
-    public String valueAt(int index) {return elementAt(index);}
+    public String valueAt(int index) {
+        return get(index);
+    }
 
     /**
      * Returns the value found at the specified index of the list as an integer.
@@ -67,7 +70,9 @@ public class ValueList extends Vector<String> {
      * @return                       the value found at the specified index of the list as an integer.
      * @throws NumberFormatException if the value cannot be cast to an integer.
      */
-    public int integerValueAt(int index) {return ConfigurationSection.getIntegerValue(valueAt(index));}
+    public int integerValueAt(int index) {
+        return ConfigurationSection.getIntegerValue(valueAt(index));
+    }
 
     /**
      * Returns the value found at the specified index of the list as a float.
@@ -75,7 +80,9 @@ public class ValueList extends Vector<String> {
      * @return                       the value found at the specified index of the list as a float.
      * @throws NumberFormatException if the value cannot be cast to a float.
      */
-    public float floatValueAt(int index) {return ConfigurationSection.getFloatValue(valueAt(index));}
+    public float floatValueAt(int index) {
+        return ConfigurationSection.getFloatValue(valueAt(index));
+    }
 
     /**
      * Returns the value found at the specified index of the list as a double.
@@ -83,7 +90,9 @@ public class ValueList extends Vector<String> {
      * @return                       the value found at the specified index of the list as a double.
      * @throws NumberFormatException if the value cannot be cast to a double.
      */
-    public double doubleValueAt(int index) {return ConfigurationSection.getDoubleValue(valueAt(index));}
+    public double doubleValueAt(int index) {
+        return ConfigurationSection.getDoubleValue(valueAt(index));
+    }
 
     /**
      * Returns the value found at the specified index of the list as a long.
@@ -91,14 +100,18 @@ public class ValueList extends Vector<String> {
      * @return                       the value found at the specified index of the list as a long.
      * @throws NumberFormatException if the value cannot be cast to a long.
      */
-    public long longValueAt(int index) {return ConfigurationSection.getLongValue(valueAt(index));}
+    public long longValueAt(int index) {
+        return ConfigurationSection.getLongValue(valueAt(index));
+    }
 
     /**
      * Returns the value found at the specified index of the list as a boolean.
      * @param  index index of the value to retrieve.
      * @return       the value found at the specified index of the list as a boolean.
      */
-    public boolean booleanValueAt(int index) {return ConfigurationSection.getBooleanValue(valueAt(index));}
+    public boolean booleanValueAt(int index) {
+        return ConfigurationSection.getBooleanValue(valueAt(index));
+    }
 
     /**
      * Returns the value found at the specified index of the list as a {@link ValueList}.
@@ -106,13 +119,17 @@ public class ValueList extends Vector<String> {
      * @param  separator string used to split the value into tokens.
      * @return           the value found at the specified index of the list as a {@link ValueList}.
      */
-    public ValueList listValueAt(int index, String separator) {return ConfigurationSection.getListValue(valueAt(index), separator);}
+    public ValueList listValueAt(int index, String separator) {
+        return ConfigurationSection.getListValue(valueAt(index), separator);
+    }
 
     /**
      * Returns a {@link ValueIterator} on the list.
      * @return a {@link ValueIterator} on the list.
      */
-    public ValueIterator valueIterator() {return new ValueIterator(iterator());}
+    public ValueIterator valueIterator() {
+        return new ValueIterator(iterator());
+    }
 
 
 

@@ -56,14 +56,18 @@ class ConfigurationSection {
      * @param name name of the variable to remove.
      * @return the value to which this variable was previously set, <code>null</code> if none.
      */
-    public String removeVariable(String name) {return variables.remove(name);}
+    public String removeVariable(String name) {
+        return variables.remove(name);
+    }
 
     /**
      * Returns the value of the specified variable.
      * @param name name of the variable whose value should be returned.
      * @return the value of the specified variable, or <code>null</code> if it wasn't set.
      */
-    public String getVariable(String name) {return variables.get(name);}
+    public String getVariable(String name) {
+        return variables.get(name);
+    }
 
     /**
      * Sets the specified variable to the specified value.
@@ -71,9 +75,10 @@ class ConfigurationSection {
      * If <code>value</code> is either <code>null</code> or an empty string,
      * the call will be equivalent to {@link #removeVariable(String)}.
      * </p>
-     * @param name name of the variable to set.
-     * @param value value for the variable.
-     * @return <code>true</code> if the variable's value was changed as a result of this call, <code>false</code> otherwise.
+     * @param  name  name of the variable to set.
+     * @param  value value for the variable.
+     * @return       <code>true</code> if the variable's value was changed as a result of this call, <code>false</code>
+     *               otherwise.
      */
     public boolean setVariable(String name, String value) {
         // If the specified value is empty, deletes the variable.
@@ -94,8 +99,12 @@ class ConfigurationSection {
     }
 
     /**
-     * Returns an enumeration on the names of the variables that are defined in the section.
-     * @return an enumeration on the names of the variables that are defined in the section.
+     * Returns an iterator on the names of the variables that are defined in the section.
+     * <p>
+     * Note that the order in which variable names are returned needs not be that in which they were added to the
+     * section. Callers should not rely on the order being consistent over time.
+     * </p>
+     * @return an iterator on the names of the variables that are defined in the section.
      */
     public Iterator<String> variableNames() {
         return variables.keySet().iterator();
@@ -105,7 +114,9 @@ class ConfigurationSection {
      * Returns <code>true</code> if the section contains any variable.
      * @return <code>true</code> if the section contains any variable, <code>false</code> otherwise.
      */
-    public boolean hasVariables() {return !variables.isEmpty();}
+    public boolean hasVariables() {
+        return !variables.isEmpty();
+    }
 
 
 
@@ -268,16 +279,19 @@ class ConfigurationSection {
      * @param  name name of the section to delete.
      * @return      the section that was deleted if any, <code>null</code> otherwise.
      */
-    public ConfigurationSection removeSection(String name) {return sections.remove(name);}
+    public ConfigurationSection removeSection(String name) {
+        return sections.remove(name);
+    }
 
     /**
      * Deletes the specified section.
      * <p>
      * Note that this method is very inefficient and should only be called when strictly necessary.
      * </p>
-     * @param section section to remove.
+     * @param  section section to remove.
+     * @return         <code>true</code> if the specified section was removed, <code>false</code> if it didn't exist.
      */
-    public void removeSection(ConfigurationSection section) {
+    public boolean removeSection(ConfigurationSection section) {
         String           name;
         Iterator<String> sectionNames;
 
@@ -291,9 +305,11 @@ class ConfigurationSection {
             // If we have, remove it and break.
             if(getSection(name).equals(section)) {
                 removeSection(name);
-                break;
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
@@ -307,6 +323,10 @@ class ConfigurationSection {
 
     /**
      * Returns an enumeration on all of this section's subsections' names.
+     * <p>
+     * Note that the order in which section names are returned needs not be that in which they were added to the
+     * section. Callers should not rely on the order being consistent over time.
+     * </p>
      * @return an enumeration on all of this section's subsections' names.
      */
     public Iterator<String> sectionNames() {
@@ -333,5 +353,7 @@ class ConfigurationSection {
      * @return <code>true</code> if the section doesn't contain either variables or sub-sections, <code>false</code>
      *         otherwise.
      */
-    public boolean isEmpty() {return !hasSections() && !hasVariables();}
+    public boolean isEmpty() {
+        return !hasSections() && !hasVariables();
+    }
 }
