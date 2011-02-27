@@ -121,8 +121,8 @@ public class Configuration {
     /**
      * Creates a new instance of <code>Configuration</code>.
      * <p>
-     * The resulting instance will use the default reader and writer factories,
-     * {@link XmlConfigurationReaderFactory} and {@link XmlConfigurationWriterFactory}.
+     * The resulting instance will use default {@link XmlConfigurationReader readers} and
+     * {@link XmlConfigurationWriter writers}.
      * </p>
      * <p>
      * Note that until the {@link #setSource(ConfigurationSource) setSource} method has been
@@ -135,8 +135,8 @@ public class Configuration {
     /**
      * Creates a new instance of <code>Configuration</code> using the specified source.
      * <p>
-     * The resulting instance will use the default reader and writer factories,
-     * {@link XmlConfigurationReaderFactory} and {@link XmlConfigurationWriterFactory}.
+     * The resulting instance will use the default {@link XmlConfigurationReader readers} and
+     * {@link XmlConfigurationWriter writers}.
      * </p>
      * @param source where the resulting instance will look for its configuration data.
      */
@@ -199,8 +199,8 @@ public class Configuration {
     /**
      * Sets the factory that will be used to create {@link ConfigurationReader reader} instances.
      * <p>
-     * In order to reset the configuration to its default reader factory ({@link XmlConfigurationReaderFactory}),
-     * application writers can call <code>setReaderFactory(null);</code>.
+     * In order to reset the configuration to its default reader factory, application writers can call this method
+     * with a <code>null</code> parameter.
      * </p>
      * @param f factory that will be used to create reader instances.
      * @see     #getReader()
@@ -213,8 +213,8 @@ public class Configuration {
     /**
      * Returns the factory that is being used to create {@link ConfigurationReader reader} instances.
      * <p>
-     * By default, this method will return an instance of {@link XmlConfigurationReaderFactory}. However,
-     * this can be modified by calling {@link #setReaderFactory(ConfigurationReaderFactory) setReaderFactory}.
+     * By default, this method will return an {@link XmlConfigurationReader XML reader} factory.
+     * This can be modified by calling {@link #setReaderFactory(ConfigurationReaderFactory) setReaderFactory}.
      * </p>
      * @return the factory that is being used to create reader instances.
      * @see    #getReader()
@@ -223,7 +223,7 @@ public class Configuration {
     public ConfigurationReaderFactory getReaderFactory() {
         synchronized(readerLock) {
             if(readerFactory == null)
-                return new XmlConfigurationReaderFactory();
+                return XmlConfigurationReader.FACTORY;
             return readerFactory;
         }
     }
@@ -250,8 +250,8 @@ public class Configuration {
     /**
      * Sets the factory that will be used to create {@link ConfigurationWriter writer} instances.
      * <p>
-     * In order to reset the configuration to its default writer factory ({@link XmlConfigurationWriterFactory}),
-     * application writers can call <code>setWriterFactory(null);</code>.
+     * In order to reset the configuration to its default writer factory, application writers can call
+     * this method will a <code>null</code> parameter.
      * </p>
      * @param f factory that will be used to create writer instances.
      * @see     #getWriterFactory()
@@ -264,7 +264,7 @@ public class Configuration {
     /**
      * Returns the factory that is being used to create {@link ConfigurationWriter writer} instances.
      * <p>
-     * By default, this method will return an instance of {@link XmlConfigurationWriterFactory}. However, this
+     * By default, this method will return an {@link XmlConfigurationWriter} factory. However, this
      * can be modified by calling {@link #setWriterFactory(ConfigurationWriterFactory) setWriterFactory}.
      * </p>
      * @return the factory that is being used to create writer instances.
@@ -274,7 +274,7 @@ public class Configuration {
     public ConfigurationWriterFactory getWriterFactory() {
         synchronized(writerLock) {
             if(writerFactory == null)
-                return new XmlConfigurationWriterFactory();
+                return XmlConfigurationWriter.FACTORY;
             return writerFactory;
         }
     }

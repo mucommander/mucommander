@@ -40,6 +40,8 @@ import java.io.Writer;
 public class XmlConfigurationWriter implements ConfigurationWriter {
     // - Class constants -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    /** Factory used to create instances of {@link XmlConfigurationWriter}. */
+    public static final ConfigurationWriterFactory<XmlConfigurationWriter> FACTORY;
     /** Root element name. */
     public static final String ROOT_ELEMENT = "prefs";
 
@@ -56,6 +58,14 @@ public class XmlConfigurationWriter implements ConfigurationWriter {
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    static {
+        FACTORY = new ConfigurationWriterFactory<XmlConfigurationWriter>() {
+            public XmlConfigurationWriter getWriterInstance() throws WriterConfigurationException {
+                return new XmlConfigurationWriter();
+            }
+        };
+    }
+
     /**
      * Creates a new instance of XML configuration writer.
      */

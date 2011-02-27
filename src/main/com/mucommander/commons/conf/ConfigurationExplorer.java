@@ -36,7 +36,9 @@ class ConfigurationExplorer {
      * Creates a new explorer on the specified section.
      * @param root section from which to start exploring.
      */
-    public ConfigurationExplorer(ConfigurationSection root) {section = root;}
+    public ConfigurationExplorer(ConfigurationSection root) {
+        section = root;
+    }
 
 
 

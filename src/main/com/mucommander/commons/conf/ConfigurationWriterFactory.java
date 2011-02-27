@@ -29,18 +29,14 @@ package com.mucommander.commons.conf;
  * }
  * </pre>
  * </p>
- * <p>
- * The <code>com.mucommander.commons.conf</code> package comes with a default implementation,
- * {@link XmlConfigurationWriterFactory}, which creates writers meant to handle the standard muCommander configuration file format.
- * </p>
  * @author Nicolas Rinaudo
  * @see    ConfigurationWriter
  */
-public interface ConfigurationWriterFactory {
+public interface ConfigurationWriterFactory<T extends ConfigurationWriter> {
     /**
      * Creates an instance of {@link ConfigurationWriter}.
      * @return                              an instance of {@link ConfigurationWriter}.
      * @throws WriterConfigurationException if the factory wasn't properly configured.
      */
-    public ConfigurationWriter getWriterInstance() throws WriterConfigurationException;
+    public T getWriterInstance() throws WriterConfigurationException;
 }

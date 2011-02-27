@@ -29,19 +29,14 @@ package com.mucommander.commons.conf;
  * }
  * </pre>
  * </p>
- * <p>
- * The <code>com.mucommander.commons.conf</code> package comes with a default implementation,
- * {@link XmlConfigurationReaderFactory}, which creates readers meant to handle the standard muCommander configuration
- * file format.
- * </p>
  * @author Nicolas Rinaudo
  * @see    ConfigurationReader
  */
-public interface ConfigurationReaderFactory {
+public interface ConfigurationReaderFactory<T extends ConfigurationReader> {
     /**
      * Creates an instance of {@link ConfigurationReader}.
      * @return                              an instance of {@link ConfigurationReader}.
      * @throws ReaderConfigurationException if the factory wasn't properly configured.
      */
-    public ConfigurationReader getReaderInstance() throws ReaderConfigurationException;
+    public T getReaderInstance() throws ReaderConfigurationException;
 }

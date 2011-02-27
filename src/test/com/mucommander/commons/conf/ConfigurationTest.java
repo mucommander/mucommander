@@ -1221,7 +1221,7 @@ public class ConfigurationTest implements ConfigurationListener, ConfigurationRe
 
         // Makes sure that setting the reader factory to null restores default behaviour.
         conf.setReaderFactory(null);
-        assert conf.getReaderFactory() instanceof XmlConfigurationReaderFactory;
+        assert conf.getReaderFactory() == XmlConfigurationReader.FACTORY;
         assert conf.getReader() instanceof XmlConfigurationReader;
     }
 
@@ -1312,7 +1312,7 @@ public class ConfigurationTest implements ConfigurationListener, ConfigurationRe
 
         // Makes sure that setting the writer factory to null restores default behaviour.
         conf.setWriterFactory(null);
-        assert conf.getWriterFactory() instanceof XmlConfigurationWriterFactory;
+        assert conf.getWriterFactory() == XmlConfigurationWriter.FACTORY;
         assert conf.getWriter() instanceof XmlConfigurationWriter;
     }
 

@@ -66,10 +66,16 @@ import java.io.Reader;
  * </ul>
  * </p>
  * @author Nicolas Rinaudo
- * @see    XmlConfigurationReaderFactory
  * @see    XmlConfigurationWriter
  */
 public class XmlConfigurationReader extends DefaultHandler implements ConfigurationReader {
+    // - Class fields --------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /** Factory used to create {@link XmlConfigurationReader} instances. */
+    public static final ConfigurationReaderFactory<XmlConfigurationReader> FACTORY;
+
+
+
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Current depth in the configuration tree. */
@@ -89,6 +95,14 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    static {
+        FACTORY = new ConfigurationReaderFactory<XmlConfigurationReader>() {
+            public XmlConfigurationReader getReaderInstance() throws ReaderConfigurationException {
+                return new XmlConfigurationReader();
+            }
+        };
+    }
+
     /**
      * Creates a new instance of XML configuration reader.
      */
