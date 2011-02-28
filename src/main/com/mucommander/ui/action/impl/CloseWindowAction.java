@@ -24,7 +24,7 @@ import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * If there is more than one window currently open, this action disposes the currently active MainFrame
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class CloseWindowAction extends MuAction {
 
-    public CloseWindowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public CloseWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -52,7 +52,7 @@ public class CloseWindowAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CloseWindowAction(mainFrame, properties);
 		}
     }

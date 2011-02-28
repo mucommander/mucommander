@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -41,9 +42,9 @@ import java.util.Vector;
 class CommandBarReader extends CommandBarIO {
 
     /** Temporarily used for XML parsing */
-    private Vector<String> actionsIdsV;
+    private List<String> actionsIdsV;
     /** Temporarily used for XML parsing */
-    private Vector<String> alternateActionsIdsV;
+    private List<String> alternateActionsIdsV;
     /** Temporarily used for XML parsing */
     private KeyStroke modifier;
 

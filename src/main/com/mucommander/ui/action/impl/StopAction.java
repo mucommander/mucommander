@@ -26,7 +26,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action is invoked to stop a running location change.
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class StopAction extends MuAction implements LocationListener {
 
-    public StopAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public StopAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // This action is initially disabled and enabled only during a folder change
@@ -81,7 +81,7 @@ public class StopAction extends MuAction implements LocationListener {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new StopAction(mainFrame, properties);
 		}
     }

@@ -33,7 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by a specified criterion.
@@ -50,7 +50,7 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
     /** FileTable column this action operates on */
     protected Column column;
 
-    public SortByAction(MainFrame mainFrame, Hashtable<String,Object> properties, Column column) {
+    public SortByAction(MainFrame mainFrame, Map<String,Object> properties, Column column) {
         super(mainFrame, properties);
 
         this.column = column;

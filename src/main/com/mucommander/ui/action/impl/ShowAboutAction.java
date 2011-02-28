@@ -23,7 +23,7 @@ import com.mucommander.ui.dialog.about.AboutDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action displays the 'About' dialog.
@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public class ShowAboutAction extends MuAction {
 
-    public ShowAboutAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ShowAboutAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,7 +43,7 @@ public class ShowAboutAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ShowAboutAction(mainFrame, properties);
 		}
     }

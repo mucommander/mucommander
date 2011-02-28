@@ -25,7 +25,7 @@ import com.mucommander.ui.main.table.Column;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by owner.
@@ -35,13 +35,13 @@ import java.util.Hashtable;
  */
 public class SortByOwnerAction extends SortByAction {
 
-    public SortByOwnerAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SortByOwnerAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties, Column.OWNER);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SortByOwnerAction(mainFrame, properties);
 		}
     }

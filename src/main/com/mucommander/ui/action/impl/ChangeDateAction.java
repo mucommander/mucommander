@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Brings up a dialog that allows the user to change the date of the currently selected/marked files.
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class ChangeDateAction extends SelectedFilesAction implements InvokesDialog {
 
-    public ChangeDateAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ChangeDateAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.CHANGE_DATE));
@@ -50,7 +50,7 @@ public class ChangeDateAction extends SelectedFilesAction implements InvokesDial
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ChangeDateAction(mainFrame, properties);
 		}
     }

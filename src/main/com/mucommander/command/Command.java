@@ -22,6 +22,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 
 import java.io.File;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -215,10 +216,10 @@ public class Command implements Comparable<Command> {
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified files.
      */
     public static String[] getTokens(String command, AbstractFile[] files) {
-        Vector<String> tokens;        // All tokens.
-        char[]         buffer;        // All the characters that compose command.
-        StringBuffer   currentToken;  // Buffer for the current token.
-        boolean        isInQuotes;    // Whether we're currently within quotes or not.
+        List<String> tokens;        // All tokens.
+        char[]       buffer;        // All the characters that compose command.
+        StringBuffer currentToken;  // Buffer for the current token.
+        boolean      isInQuotes;    // Whether we're currently within quotes or not.
 
         // Initialises parsing.
         tokens       = new Vector<String>();

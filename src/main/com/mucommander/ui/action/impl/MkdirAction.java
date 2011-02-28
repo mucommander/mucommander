@@ -26,7 +26,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action brings up the 'Make directory' dialog which allows to create a new directory in the currently active folder.
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class MkdirAction extends ParentFolderAction {
 
-    public MkdirAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MkdirAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Listen to active table change events
@@ -68,7 +68,7 @@ public class MkdirAction extends ParentFolderAction {
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MkdirAction(mainFrame, properties);
 		}
     }

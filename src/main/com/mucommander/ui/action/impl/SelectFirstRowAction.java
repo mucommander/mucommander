@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action selects the first row/file in the current FileTable.
@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public class SelectFirstRowAction extends MuAction {
 
-    public SelectFirstRowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SelectFirstRowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,7 +43,7 @@ public class SelectFirstRowAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SelectFirstRowAction(mainFrame, properties);
 		}
     }

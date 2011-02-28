@@ -24,7 +24,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Marks/unmarks the previous block's rows in the current {@link FileTable}, starting with the
@@ -38,7 +38,7 @@ public class MarkPreviousBlockAction extends MarkBackwardAction {
     // TODO: make this value configurable
     private static final int BLOCK_SIZE = 5;
 
-    public MarkPreviousBlockAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkPreviousBlockAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,7 +48,7 @@ public class MarkPreviousBlockAction extends MarkBackwardAction {
     }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkPreviousBlockAction(mainFrame, properties);
 		}
     }

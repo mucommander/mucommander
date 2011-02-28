@@ -26,7 +26,7 @@ import com.mucommander.ui.main.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Opens the currently selected file and its equivalent in the inactive folder panel if it exists.
@@ -64,7 +64,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public OpenInBothPanelsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public OpenInBothPanelsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Perform this action in a separate thread, to avoid locking the event thread
@@ -138,7 +138,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new OpenInBothPanelsAction(mainFrame, properties);
 		}
     }

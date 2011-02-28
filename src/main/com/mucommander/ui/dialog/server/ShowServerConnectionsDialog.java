@@ -34,7 +34,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 
 /**
  * This dialog shows a list of server connections and allows the user to close/disconnect them.
@@ -46,7 +45,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
     private MainFrame mainFrame;
 
     private JList connectionList;
-    private Vector<ConnectionHandler> connections;
+    private java.util.List<ConnectionHandler> connections;
 
     private JButton disconnectButton;
     private JButton goToButton;
@@ -76,7 +75,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
             }
 
             public Object getElementAt(int i) {
-                ConnectionHandler connHandler = connections.elementAt(i);
+                ConnectionHandler connHandler = connections.get(i);
 
                 // Show login (but not password) in the URL
                 // Note: realm returned by ConnectionHandler does not contain credentials
@@ -160,7 +159,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
             int selectedIndex = connectionList.getSelectedIndex();
 
             if(selectedIndex>=0 && selectedIndex<connections.size()) {
-                final ConnectionHandler connHandler = connections.elementAt(selectedIndex);
+                final ConnectionHandler connHandler = connections.get(selectedIndex);
 
                 // Close connection in a separate thread as I/O can lock.
                 // Todo: Add a confirmation dialog if the connection is active as it will stop whatever the connection is currently doing
@@ -172,7 +171,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
                 }.start();
 
                 // Remove connection from the list
-                connections.removeElementAt(selectedIndex);
+                connections.remove(selectedIndex);
                 connectionList.setSelectedIndex(Math.min(selectedIndex, connections.size()));
                 connectionList.repaint();
 
@@ -190,7 +189,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
             int selectedIndex = connectionList.getSelectedIndex();
             if(selectedIndex>=0 && selectedIndex<connections.size())
-                mainFrame.getActivePanel().tryChangeCurrentFolder(connections.elementAt(selectedIndex).getRealm());
+                mainFrame.getActivePanel().tryChangeCurrentFolder(connections.get(selectedIndex).getRealm());
         }
         // Dispose the dialog
         else if (source==closeButton)  {

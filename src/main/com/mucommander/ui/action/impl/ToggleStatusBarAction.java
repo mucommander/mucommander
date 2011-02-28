@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.StatusBar} depending on its
@@ -40,7 +40,7 @@ import java.util.Hashtable;
  */
 public class ToggleStatusBarAction extends MuAction {
 
-    public ToggleStatusBarAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleStatusBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
     }
@@ -64,7 +64,7 @@ public class ToggleStatusBarAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleStatusBarAction(mainFrame, properties);
 		}
     }

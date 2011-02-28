@@ -29,7 +29,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action invokes the 'Batch-Rename' dialog which allows to
@@ -39,7 +39,7 @@ import java.util.Hashtable;
  */
 public class BatchRenameAction extends SelectedFilesAction implements InvokesDialog {
 
-    public BatchRenameAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public BatchRenameAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new OrFileFilter(
@@ -58,7 +58,7 @@ public class BatchRenameAction extends SelectedFilesAction implements InvokesDia
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new BatchRenameAction(mainFrame, properties);
 		}
     }

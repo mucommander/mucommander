@@ -499,7 +499,10 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		private HashMap<String, HashMap<Integer, Object>> db;
 		
 		public ShortcutsTableData() {
-			allActionIds = Collections.list(ActionManager.getActionIds());
+            allActionIds = new ArrayList<String>();
+            Iterator<String> iterator = ActionManager.getActionIds();
+            while(iterator.hasNext())
+                allActionIds.add(iterator.next());
 			Collections.sort(allActionIds, ACTIONS_COMPARATOR);
 			
 			final int nbActions = allActionIds.size();

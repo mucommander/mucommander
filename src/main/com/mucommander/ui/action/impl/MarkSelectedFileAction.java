@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Marks or unmarks the current selected file (current row) and advance current row to the next one,
@@ -39,7 +39,7 @@ import java.util.Hashtable;
  */
 public class MarkSelectedFileAction extends MuAction {
 
-    public MarkSelectedFileAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkSelectedFileAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -51,7 +51,7 @@ public class MarkSelectedFileAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkSelectedFileAction(mainFrame, properties);
 		}
     }

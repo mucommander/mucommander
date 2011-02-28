@@ -24,7 +24,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action moves the current {@link FileTable}'s selection to the next row.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class SelectNextRowAction extends SelectForwardAction {
 
-    public SelectNextRowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SelectNextRowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,7 +43,7 @@ public class SelectNextRowAction extends SelectForwardAction {
     }
 
     public static class Factory implements ActionFactory {
-        public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
             return new SelectNextRowAction(mainFrame, properties);
         }
     }

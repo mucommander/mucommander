@@ -26,7 +26,7 @@ import com.mucommander.ui.main.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action compares the content of the 2 MainFrame's file tables and marks the files that are different.
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class CompareFoldersAction extends MuAction {
 
-    public CompareFoldersAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public CompareFoldersAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -95,7 +95,7 @@ public class CompareFoldersAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CompareFoldersAction(mainFrame, properties);
 		}
     }

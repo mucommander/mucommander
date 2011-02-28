@@ -73,7 +73,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
 
     /** MainFrame (main muCommander window) instances */
-    private static Vector<MainFrame> mainFrames;
+    private static List<MainFrame> mainFrames;
     
     /** MainFrame currently being used (that has focus),
      * or last frame to have been used if muCommander doesn't have focus */	
@@ -271,7 +271,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *
      * @return a <code>Vector</code> of all <code>MainFrame</code> instances currently displaying
      */
-    public static Vector<MainFrame> getMainFrames() {
+    public static List<MainFrame> getMainFrames() {
         return mainFrames;
     }
 
@@ -401,7 +401,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // So if a second window was just created, we update first window's title so that it shows window number (#1).
         newMainFrame.updateWindowTitle();
         if(mainFrames.size()==2)
-            mainFrames.elementAt(0).updateWindowTitle();
+            mainFrames.get(0).updateWindowTitle();
 
         // Make this new frame visible
         newMainFrame.setVisible(true);
@@ -464,12 +464,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // Dispose all MainFrames but the current one
             for(int i=0; i<nbFrames; i++) {
                 if(i!=currentMainFrameIndex)
-                    mainFrames.elementAt(i).dispose();
+                    mainFrames.get(i).dispose();
             }
 
             // Dispose current MainFrame last so that its attributes (last folders, window position...) are saved last
             // in the preferences
-            mainFrames.elementAt(currentMainFrameIndex).dispose();
+            mainFrames.get(currentMainFrameIndex).dispose();
         }
 
         // Dispose all other frames (viewers, editors...)
@@ -497,7 +497,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static void switchToNextWindow() {
         int frameIndex = mainFrames.indexOf(currentMainFrame);
-        MainFrame mainFrame = mainFrames.elementAt(frameIndex==mainFrames.size()-1?0:frameIndex+1);
+        MainFrame mainFrame = mainFrames.get(frameIndex==mainFrames.size()-1?0:frameIndex+1);
         mainFrame.toFront();
     }
 
@@ -506,7 +506,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static void switchToPreviousWindow() {
         int frameIndex = mainFrames.indexOf(currentMainFrame);
-        MainFrame mainFrame = mainFrames.elementAt(frameIndex==0?mainFrames.size()-1:frameIndex-1);
+        MainFrame mainFrame = mainFrames.get(frameIndex==0?mainFrames.size()-1:frameIndex-1);
         mainFrame.toFront();
     }
 
@@ -541,7 +541,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             currentThread.setContextClassLoader(oldLoader);
 
             for(int i=0; i<mainFrames.size(); i++)
-                SwingUtilities.updateComponentTreeUI(mainFrames.elementAt(i));
+                SwingUtilities.updateComponentTreeUI(mainFrames.get(i));
         }
         catch(Throwable e) {
             AppLogger.fine("Exception caught", e);
@@ -608,12 +608,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // So if there is only one window left, we update first window's title so that it removes window number (#1).
             int nbFrames = mainFrames.size();
             if(nbFrames==1) {
-                mainFrames.elementAt(0).updateWindowTitle();
+                mainFrames.get(0).updateWindowTitle();
             }
             else {
                 if(frameIndex!=-1) {
                     for(int i=frameIndex; i<nbFrames; i++)
-                        mainFrames.elementAt(i).updateWindowTitle();
+                        mainFrames.get(i).updateWindowTitle();
                 }
             }
         }

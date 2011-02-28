@@ -25,7 +25,7 @@ import com.mucommander.ui.main.table.Column;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by name.
@@ -35,13 +35,13 @@ import java.util.Hashtable;
  */
 public class SortByNameAction extends SortByAction {
 
-    public SortByNameAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SortByNameAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties, Column.NAME);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SortByNameAction(mainFrame, properties);
 		}
     }

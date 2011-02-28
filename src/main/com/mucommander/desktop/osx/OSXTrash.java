@@ -27,7 +27,7 @@ import com.mucommander.ui.macosx.AppleScript;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * OSXTrash provides access to the Mac OS X Finder's trash. Only local files (or locally mounted files) can be moved
@@ -179,7 +179,7 @@ public class OSXTrash extends QueuedTrash {
      * </ul>
      */
     @Override
-    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
+    protected boolean moveToTrash(List<AbstractFile> queuedFiles) {
         String appleScript;
 
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
@@ -188,7 +188,7 @@ public class OSXTrash extends QueuedTrash {
             int nbFiles = queuedFiles.size();
             appleScript = "tell application \"Finder\" to move {";
             for(int i=0; i<nbFiles; i++) {
-                appleScript += "posix file \""+queuedFiles.elementAt(i).getAbsolutePath()+"\"";
+                appleScript += "posix file \""+queuedFiles.get(i).getAbsolutePath()+"\"";
                 if(i<nbFiles-1)
                     appleScript += ", ";
             }
@@ -209,7 +209,7 @@ public class OSXTrash extends QueuedTrash {
                 tmpOut = new OutputStreamWriter(tmpFile.getOutputStream(), "utf-8");
 
                 for(int i=0; i<nbFiles; i++) {
-                    tmpOut.write(queuedFiles.elementAt(i).getAbsolutePath());
+                    tmpOut.write(queuedFiles.get(i).getAbsolutePath());
                     if(i<nbFiles-1)
                         tmpOut.write("\n");
                 }

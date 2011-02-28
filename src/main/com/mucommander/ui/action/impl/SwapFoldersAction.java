@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action swaps both FileTable's current folders: the left table's current folder becomes the right table's one
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class SwapFoldersAction extends MuAction {
 
-    public SwapFoldersAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SwapFoldersAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class SwapFoldersAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SwapFoldersAction(mainFrame, properties);
 		}
     }

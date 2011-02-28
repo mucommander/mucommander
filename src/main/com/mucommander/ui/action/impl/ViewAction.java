@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * User configurable variant of {@link InternalViewAction}.
@@ -39,7 +39,7 @@ public class ViewAction extends InternalViewAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public ViewAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ViewAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,7 +56,7 @@ public class ViewAction extends InternalViewAction {
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ViewAction(mainFrame, properties);
 		}
     }

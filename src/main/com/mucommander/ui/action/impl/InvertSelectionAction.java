@@ -26,7 +26,7 @@ import com.mucommander.ui.main.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action .
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class InvertSelectionAction extends MuAction {
 
-    public InvertSelectionAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public InvertSelectionAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -60,7 +60,7 @@ public class InvertSelectionAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new InvertSelectionAction(mainFrame, properties);
 		}
     }

@@ -30,7 +30,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * This quick list shows existing bookmarks.
@@ -68,7 +68,7 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
      * @return a sorted array of bookmarks
      */
     private Bookmark[] getSortedBookmarks() {
-    	Vector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
+    	List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
         Bookmark[] bookmarkArray = new Bookmark[bookmarks.size()];
         bookmarks.toArray(bookmarkArray);
         Arrays.sort(bookmarkArray, new Comparator<Bookmark>() {

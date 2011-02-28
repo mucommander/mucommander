@@ -42,7 +42,7 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 	private static final int PADDING = 2;
 	protected HeaderMenuItem headerMenuItem;
 	protected FolderPanel folderPanel;
-	private Vector<Component> items = new Vector<Component>();
+	private java.util.List<Component> items = new Vector<Component>();
 	
 	protected QuickList(String header) {
 		super();
@@ -89,8 +89,8 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 		double width = PADDING, height = PADDING;
 		int nbItems = items.size();
 		for (int i=0; i<nbItems; i++) {
-			width = Math.max(width, items.elementAt(i).getPreferredSize().getWidth());
-			height += items.elementAt(i).getPreferredSize().getHeight();
+			width = Math.max(width, items.get(i).getPreferredSize().getWidth());
+			height += items.get(i).getPreferredSize().getHeight();
 		}
 		return new Dimension((int) Math.ceil(
 				Math.max(folderPanel == null ? 0 : folderPanel.getWidth() / 2, width * 1.05))

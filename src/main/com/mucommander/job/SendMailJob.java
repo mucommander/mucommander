@@ -30,6 +30,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -137,11 +138,11 @@ public class SendMailJob extends TransferFileJob {
         // address is provided
         readWriteLine("MAIL FROM: "+fromAddress);
 		
-        Vector<String> recipients = new Vector<String>();
+        List<String> recipients = new Vector<String>();
         recipientString = splitRecipientString(recipientString, recipients);
         int nbRecipients = recipients.size();
         for(int i=0; i<nbRecipients; i++)
-            readWriteLine("RCPT TO: <"+recipients.elementAt(i)+">" );
+            readWriteLine("RCPT TO: <"+recipients.get(i)+">" );
         readWriteLine("DATA");
         writeLine("MIME-Version: 1.0");
         writeLine("Subject: "+this.mailSubject);
@@ -163,7 +164,7 @@ public class SendMailJob extends TransferFileJob {
      *
      * @param recipientsStr String containing one or several recipients that need to be separated by ',' and/or ';' characters.
      */
-    private String splitRecipientString(String recipientsStr, Vector<String> recipients) {
+    private String splitRecipientString(String recipientsStr, List<String> recipients) {
 
         // /!\ this piece of code is far from being bullet proof but I'm too lazy now to rewrite it
         StringBuffer newRecipientsSb = new StringBuffer();

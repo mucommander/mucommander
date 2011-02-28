@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action invokes a Delete confirmation dialog to delete currently the selected / marked files
@@ -40,7 +40,7 @@ import java.util.Hashtable;
  */
 public class DeleteAction extends SelectedFilesAction {
 
-    public DeleteAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public DeleteAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.DELETE));
@@ -53,7 +53,7 @@ public class DeleteAction extends SelectedFilesAction {
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new DeleteAction(mainFrame, properties);
 		}
     }

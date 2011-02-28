@@ -25,7 +25,7 @@ import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This class is an abstract {@link MuAction} that operates on the current folder. It monitors changes in the active
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public abstract class ParentFolderAction extends MuAction implements ActivePanelListener, LocationListener {
 
-    public ParentFolderAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ParentFolderAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Listen to active table change events

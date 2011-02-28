@@ -48,7 +48,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
     /** Cache for the table's total width. */
     private int                                      widthCache = CACHE_OUT_OF_DATE;
     /** All available columns. */
-    private Vector<TableColumn>                      columns    = new Vector<TableColumn>(Column.values().length);
+    private List<TableColumn>                        columns    = new Vector<TableColumn>(Column.values().length);
     /** Enabled state of each column. */
     private boolean[]     enabled = new boolean[Column.values().length];
     /** Visibility state of each column. */
@@ -268,7 +268,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         // and removes that column
         index  = getInternalIndex(from);
         column = columns.get(index);
-        columns.removeElementAt(index);
+        columns.remove(index);
 
         // If the column needs to be moved at the end of the set,
         // no need to locate its correct index.
@@ -279,7 +279,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         // it there.
         else {
             index  = getInternalIndex(to);
-            columns.insertElementAt(column, index);
+            columns.add(index, column);
         }
 
         // Notifies listeners and stores the new configuration.
@@ -472,8 +472,8 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         return new ColumnEnumeration();
     }
 
-    public Enumeration<TableColumn> getAllColumns() {
-        return columns.elements();
+    public Iterator<TableColumn> getAllColumns() {
+        return columns.iterator();
     }
 
     /**

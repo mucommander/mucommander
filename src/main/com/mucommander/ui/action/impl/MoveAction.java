@@ -29,7 +29,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action invokes the 'Move dialog' which allows to move the currently selected/marked files
@@ -39,7 +39,7 @@ import java.util.Hashtable;
  */
 public class MoveAction extends SelectedFilesAction {
 
-    public MoveAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MoveAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new OrFileFilter(
@@ -58,7 +58,7 @@ public class MoveAction extends SelectedFilesAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MoveAction(mainFrame, properties);
 		}
     }

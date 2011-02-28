@@ -107,8 +107,8 @@ public class FileCollisionDialog extends QuestionDialog {
 
         // Init choices
 
-        Vector<String> choicesTextV = new Vector<String>();
-        Vector<Integer> choicesActionsV = new Vector<Integer>();
+        java.util.List<String> choicesTextV = new Vector<String>();
+        java.util.List<Integer> choicesActionsV = new Vector<Integer>();
 
         choicesTextV.add(CANCEL_TEXT);
         choicesActionsV.add(CANCEL_ACTION);
@@ -151,7 +151,7 @@ public class FileCollisionDialog extends QuestionDialog {
 
         int choicesActions[] = new int[nbChoices];
         for(int i=0; i<nbChoices; i++)
-            choicesActions[i] = choicesActionsV.elementAt(i);
+            choicesActions[i] = choicesActionsV.get(i);
 
         // Init UI
 

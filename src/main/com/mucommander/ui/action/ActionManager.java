@@ -23,10 +23,7 @@ import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,10 +47,10 @@ import java.util.regex.Pattern;
 public class ActionManager {
 
     /** MuAction id -> factory map */
-    private static Hashtable<String, ActionFactory> actionFactories = new Hashtable<String, ActionFactory>();
+    private static Map<String, ActionFactory> actionFactories = new Hashtable<String, ActionFactory>();
     
     /** MainFrame -> MuAction map */
-    private static WeakHashMap<MainFrame, Hashtable<ActionParameters, ActionAndIdPair>> mainFrameActionsMap = new WeakHashMap<MainFrame, Hashtable<ActionParameters, ActionAndIdPair>>();
+    private static WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>> mainFrameActionsMap = new WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>>();
     
     /** Pattern to resolve the action ID from action class path */
     private final static Pattern pattern = Pattern.compile(".*\\.(.*)?Action");
@@ -221,8 +218,8 @@ public class ActionManager {
      * 
      * @return Enumeration of all registered actions' ids.
      */
-    public static Enumeration<String> getActionIds() {
-    	return actionFactories.keys();
+    public static Iterator<String> getActionIds() {
+    	return actionFactories.keySet().iterator();
     }
     
     /**
@@ -280,7 +277,7 @@ public class ActionManager {
      * MuAction action denoted by the ActionParameters could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(ActionParameters actionParameters, MainFrame mainFrame) {
-        Hashtable<ActionParameters, ActionAndIdPair> mainFrameActions = mainFrameActionsMap.get(mainFrame);
+        Map<ActionParameters, ActionAndIdPair> mainFrameActions = mainFrameActionsMap.get(mainFrame);
         if(mainFrameActions==null) {
             mainFrameActions = new Hashtable<ActionParameters, ActionAndIdPair>();
             mainFrameActionsMap.put(mainFrame, mainFrameActions);
@@ -300,7 +297,7 @@ public class ActionManager {
             	return null;
             }
 
-            Hashtable<String,Object> properties = actionParameters.getInitProperties();
+            Map<String,Object> properties = actionParameters.getInitProperties();
             // If no properties hashtable is specified in the action descriptor
             if(properties==null) {
             	properties = new Hashtable<String,Object>();
@@ -308,7 +305,11 @@ public class ActionManager {
             // else clone the hashtable to ensure that it doesn't get modified by action instances.
             // Since cloning is an expensive operation, this is done only if the hashtable is not empty.
             else if(!properties.isEmpty()) {
-            	properties = (Hashtable<String,Object>)properties.clone();
+                Map<String,Object> buffer;
+
+                buffer = new Hashtable<String,Object>();
+                buffer.putAll(properties);
+                properties = buffer;
             }
 
             // Instantiate the MuAction class
@@ -364,11 +365,11 @@ public class ActionManager {
      * @param muActionId the MuAction id to compare instances against
      * @return  a Vector of all MuAction instances matching the specified action id
      */
-    public static Vector<MuAction> getActionInstances(String muActionId) {
-        Vector<MuAction> actionInstances = new Vector<MuAction>();
+    public static List<MuAction> getActionInstances(String muActionId) {
+        List<MuAction> actionInstances = new Vector<MuAction>();
 
         // Iterate on all MainFrame instances
-        for (Hashtable<ActionParameters, ActionAndIdPair> actionParametersActionAndIdPairHashtable : mainFrameActionsMap.values()) {
+        for (Map<ActionParameters, ActionAndIdPair> actionParametersActionAndIdPairHashtable : mainFrameActionsMap.values()) {
             // Iterate on all the MainFrame's actions and their ids pairs
             for (ActionAndIdPair actionAndIdPair : actionParametersActionAndIdPairHashtable.values()) {
                 if (actionAndIdPair.getId().equals(muActionId)) {

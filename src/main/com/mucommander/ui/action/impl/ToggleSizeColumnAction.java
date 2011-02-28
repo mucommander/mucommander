@@ -23,7 +23,7 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Shows/hides the 'Size' column of the currently active FileTable. If the column is currently visible, this action
@@ -33,13 +33,13 @@ import java.util.Hashtable;
  */
 public class ToggleSizeColumnAction extends ToggleColumnAction {
 
-    public ToggleSizeColumnAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleSizeColumnAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties, Column.SIZE);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleSizeColumnAction(mainFrame, properties);
 		}
     }

@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.table;
 
 import com.mucommander.AppLogger;
+import com.mucommander.commons.collections.Enumerator;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
@@ -54,7 +55,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.WeakHashMap;
 
 
@@ -985,26 +986,26 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     // - Layout management ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private void doAutoLayout(boolean respectSize) {
-        Enumeration<TableColumn> columns;
-        TableColumn              column;
-        TableColumn              nameColumn;
-        Column                   c;
-        int                      remainingWidth;
-        int                      columnWidth;
-        int                      rowCount;
-        FontMetrics              fm;
-        String                   val;
-        int                      dirStringWidth;
-        int                      stringWidth;
+        Iterator<TableColumn> columns;
+        TableColumn           column;
+        TableColumn           nameColumn;
+        Column                c;
+        int                   remainingWidth;
+        int                   columnWidth;
+        int                   rowCount;
+        FontMetrics           fm;
+        String                val;
+        int                   dirStringWidth;
+        int                   stringWidth;
 
         fm             = getFontMetrics(FileTableCellRenderer.getCellFont());
         dirStringWidth = fm.stringWidth(FileTableModel.DIRECTORY_SIZE_STRING);
         remainingWidth = getSize().width - RESERVED_NAME_COLUMN_WIDTH;
-        columns        = respectSize ? getColumnModel().getColumns() : getFileTableColumnModel().getAllColumns();
+        columns        = respectSize ? new Enumerator<TableColumn>(getColumnModel().getColumns()) : getFileTableColumnModel().getAllColumns();
         nameColumn     = null;
 
-        while(columns.hasMoreElements()) {
-            column = columns.nextElement();
+        while(columns.hasNext()) {
+            column = columns.next();
             c = Column.valueOf(column.getModelIndex());
 
             if(c == Column.NAME)

@@ -30,7 +30,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 
 /**
@@ -41,7 +41,7 @@ import java.util.Hashtable;
  */
 public class RevealInDesktopAction extends ParentFolderAction {
 
-    public RevealInDesktopAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public RevealInDesktopAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setEnabled(DesktopManager.canOpenInFileManager());
@@ -68,7 +68,7 @@ public class RevealInDesktopAction extends ParentFolderAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new RevealInDesktopAction(mainFrame, properties);
 		}
     }

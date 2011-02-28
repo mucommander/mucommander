@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * A descriptor class for {@link MuAction} instances. An ActionParameters is the combination of a MuAction
@@ -48,11 +48,11 @@ public class ActionParameters {
     private String actionId;
 
     /** Initialization properties, null if there are no initialization properties */
-    private Hashtable<String,Object> properties;
+    private Map<String,Object> properties;
 
 
     /**
-     * Convenience constructor which has the same effect as calling {@link #ActionParameters(String, Hashtable)}
+     * Convenience constructor which has the same effect as calling {@link #ActionParameters(String, Map)}
      * with a null value for the <code>properties</code> parameter.
      *
      * @param actionId a MuAction id
@@ -69,7 +69,7 @@ public class ActionParameters {
      * @param actionId a MuAction id
      * @param initProperties a Hashtable containing the properties that will be used to instantiate the specified MuAction class
      */
-    public ActionParameters(String actionId, Hashtable<String,Object> initProperties) {
+    public ActionParameters(String actionId, Map<String,Object> initProperties) {
         this.actionId = actionId;
         this.properties = initProperties;
     }
@@ -90,7 +90,7 @@ public class ActionParameters {
      * @return the list of properties that are to be used to instantiate the MuAction class, or <code>null</code> if
      * there are none
      */
-    public Hashtable<String,Object> getInitProperties() {
+    public Map<String,Object> getInitProperties() {
         return properties;
     }
 

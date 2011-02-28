@@ -37,6 +37,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -111,13 +113,13 @@ public class DesktopManager {
     // - Class fields ----------------------------------------------------
     // -------------------------------------------------------------------
     /** All available desktop operations. */
-    private static Hashtable<String, Vector<DesktopOperation>>[] operations;
+    private static Map<String, List<DesktopOperation>>[] operations;
     /** All known desktops. */
-    private static Vector<DesktopAdapter>                        desktops;
+    private static Vector<DesktopAdapter>                desktops;
     /** Current desktop. */
-    private static DesktopAdapter                                desktop;
+    private static DesktopAdapter                        desktop;
     /** Object used to create instances of {@link AbstractTrash}. */
-    private static TrashProvider                                 trashProvider;
+    private static TrashProvider                         trashProvider;
 
 
 
@@ -248,11 +250,11 @@ public class DesktopManager {
      * Registers the specified operation for the specified type and priority.
      */
     private static void innerRegisterOperation(String type, int priority, DesktopOperation operation) {
-        Vector<DesktopOperation> container;
+        List<DesktopOperation> container;
 
         // Makes sure we have a container for operations of the specified priority.
         if(operations[priority] == null)
-            operations[priority] = new Hashtable<String, Vector<DesktopOperation>>();
+            operations[priority] = new Hashtable<String, List<DesktopOperation>>();
 
         // Makes sure we have a container for operations of the specified type.
         if((container = operations[priority].get(type)) == null)
@@ -272,7 +274,7 @@ public class DesktopManager {
 
     // - Operation support -----------------------------------------------
     // -------------------------------------------------------------------
-    private static Vector<DesktopOperation> getOperations(String type, int priority) {
+    private static List<DesktopOperation> getOperations(String type, int priority) {
         if(operations[priority] == null)
             return null;
 
@@ -280,25 +282,25 @@ public class DesktopManager {
     }
 
     private static DesktopOperation getAvailableOperation(String type, int priority) {
-        DesktopOperation         operation;
-        Vector<DesktopOperation> container;
+        DesktopOperation       operation;
+        List<DesktopOperation> container;
 
         // If the operation vector is null, no need to look further.
         if((container = getOperations(type, priority)) != null)
             for(int i = container.size() - 1; i >= 0; i--)
-                if((operation = container.elementAt(i)).isAvailable())
+                if((operation = container.get(i)).isAvailable())
                     return operation;
         return null;
     }
 
     private static DesktopOperation getSupportedOperation(String type, int priority, Object[] target) {
-        DesktopOperation         operation;
-        Vector<DesktopOperation> container;
+        DesktopOperation       operation;
+        List<DesktopOperation> container;
 
         // If the operation vector is null, no need to look further.
         if((container = getOperations(type, priority)) != null)
             for(int i = container.size() - 1; i >= 0; i--)
-                if((operation = container.elementAt(i)).canExecute(target))
+                if((operation = container.get(i)).canExecute(target))
                     return operation;
         return null;
     }

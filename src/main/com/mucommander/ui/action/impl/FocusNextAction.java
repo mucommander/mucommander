@@ -27,7 +27,7 @@ import com.mucommander.ui.main.table.FileTable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action allows to cycle forward through the current FolderPanel's focusable components: file table, folder tree
@@ -37,7 +37,7 @@ import java.util.Hashtable;
  */
 public class FocusNextAction extends MuAction {
 
-    public FocusNextAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public FocusNextAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Perform the action also when in 'no events' mode
@@ -73,7 +73,7 @@ public class FocusNextAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new FocusNextAction(mainFrame, properties);
 		}
     }

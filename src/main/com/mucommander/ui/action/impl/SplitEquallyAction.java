@@ -22,7 +22,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Positions the split pane divider in the middle so that both folder panels have the same space.
@@ -31,7 +31,7 @@ import java.util.Hashtable;
  */
 public class SplitEquallyAction extends MuAction {
 
-    public SplitEquallyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SplitEquallyAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -42,7 +42,7 @@ public class SplitEquallyAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SplitEquallyAction(mainFrame, properties);
 		}
     }

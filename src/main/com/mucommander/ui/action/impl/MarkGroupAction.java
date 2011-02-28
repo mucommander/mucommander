@@ -24,7 +24,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action brings up the 'File selection' dialog which allows to mark a group of files that match a specified expression.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class MarkGroupAction extends MuAction implements InvokesDialog {
 
-    public MarkGroupAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkGroupAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class MarkGroupAction extends MuAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkGroupAction(mainFrame, properties);
 		}
     }

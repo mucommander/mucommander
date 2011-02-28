@@ -24,7 +24,7 @@ import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action creates a new muCommander window.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class NewWindowAction extends MuAction {
 
-    public NewWindowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public NewWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // This action must be performed in a separate thread as it will otherwise lock the AWT event thread
@@ -47,7 +47,7 @@ public class NewWindowAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new NewWindowAction(mainFrame, properties);
 		}
     }

@@ -61,7 +61,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     private ServerPanel currentServerPanel;
 
     private JTabbedPane tabbedPane;
-    private Vector<ServerPanel> serverPanels = new Vector<ServerPanel>();
+    private java.util.List<ServerPanel> serverPanels = new Vector<ServerPanel>();
 
     private JLabel urlLabel;
     private JCheckBox saveCredentialsCheckBox;
@@ -168,7 +168,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     }
 
     private ServerPanel getCurrentServerPanel() {
-        return serverPanels.elementAt(tabbedPane.getSelectedIndex());
+        return serverPanels.get(tabbedPane.getSelectedIndex());
     }
 	
 	

@@ -24,7 +24,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Marks/unmarks the next page's rows in the current {@link FileTable}, starting with the
@@ -34,7 +34,7 @@ import java.util.Hashtable;
  */
 public class MarkNextPageAction extends MarkForwardAction {
 
-    public MarkNextPageAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkNextPageAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -45,7 +45,7 @@ public class MarkNextPageAction extends MarkForwardAction {
     }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkNextPageAction(mainFrame, properties);
 		}
     }

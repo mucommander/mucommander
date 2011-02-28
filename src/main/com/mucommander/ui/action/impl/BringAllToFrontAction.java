@@ -23,8 +23,8 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Brings all MainFrame windows to front, from the last window index to the first, except for the current
@@ -43,19 +43,19 @@ import java.util.Vector;
  */
 public class BringAllToFrontAction extends MuAction {
 
-    public BringAllToFrontAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public BringAllToFrontAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-        Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
+        List<MainFrame> mainFrames = WindowManager.getMainFrames();
         MainFrame currentMainFrame = WindowManager.getCurrentMainFrame();
 
         int nbMainFrames = mainFrames.size();
         MainFrame mainFrame;
         for(int i=nbMainFrames-1; i>=0; i--) {
-            mainFrame = mainFrames.elementAt(i);
+            mainFrame = mainFrames.get(i);
             if(mainFrame!=currentMainFrame) {
                 mainFrame.toFront();
             }
@@ -66,7 +66,7 @@ public class BringAllToFrontAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new BringAllToFrontAction(mainFrame, properties);
 		}
     }

@@ -26,8 +26,8 @@ import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Brings a {@link MainFrame} window to the front. This action operates on a specific window number specified in the
@@ -45,7 +45,7 @@ public class RecallWindowAction extends MuAction {
     public final static String WINDOW_NUMBER_PROPERTY_KEY = "window_number";
 
 
-    public RecallWindowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public RecallWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         Object windowNumberValue = getValue(WINDOW_NUMBER_PROPERTY_KEY);
@@ -58,7 +58,7 @@ public class RecallWindowAction extends MuAction {
             throw new IllegalArgumentException(WINDOW_NUMBER_PROPERTY_KEY+" ("+windowNumberValue+")");
     }
 
-    public RecallWindowAction(MainFrame mainFrame, Hashtable<String,Object> properties, int windowNumber) {
+    public RecallWindowAction(MainFrame mainFrame, Map<String,Object> properties, int windowNumber) {
         super(mainFrame, properties);
 
         this.windowNumber = windowNumber;
@@ -68,7 +68,7 @@ public class RecallWindowAction extends MuAction {
 
     @Override
     public void performAction() {
-        Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
+        List<MainFrame> mainFrames = WindowManager.getMainFrames();
 
         // Checks that the window number currently exists
         if(windowNumber<=0 || windowNumber>mainFrames.size()) {
@@ -77,12 +77,12 @@ public class RecallWindowAction extends MuAction {
         }
 
         // Brings the MainFrame to front
-        mainFrames.elementAt(windowNumber-1).toFront();
+        mainFrames.get(windowNumber-1).toFront();
     }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new RecallWindowAction(mainFrame, properties);
 		}
     }

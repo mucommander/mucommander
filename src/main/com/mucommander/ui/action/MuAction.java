@@ -26,7 +26,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
-
+import java.util.Map;
 
 /**
  * MuAction extends <code>AbstractAction</code> to add more functionalities and make it easier to integrate within
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  *
  * <p>The MuAction class is abstract. MuAction subclasses must implement the {@link #performAction()} method
  * to provide a response to the action trigger, and must provide a constructor with the
- * {@link #MuAction(MainFrame, java.util.Hashtable)} signature.
+ * {@link #MuAction(MainFrame, Map)} signature.
  *
  * <p>MuAction subclasses should not be instantiated directly, {@link ActionManager}'s <code>getActionInstance</code>
  * methods should be used instead. Using {@link ActionManager} to retrieve a MuAction ensures that only one instance
@@ -73,7 +73,7 @@ public abstract class MuAction extends AbstractAction {
      * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
      * properties are specified.
      */
-    public MuAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MuAction(MainFrame mainFrame, Map<String,Object> properties) {
         this.mainFrame = mainFrame;
         
         // Add properties to this Action.

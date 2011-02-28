@@ -28,7 +28,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Opens the current file in edit mode.
@@ -42,7 +42,7 @@ public class InternalEditAction extends AbstractViewerAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public InternalEditAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public InternalEditAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Edit requires being able to write the file (in addition to view requirements)
@@ -77,7 +77,7 @@ public class InternalEditAction extends AbstractViewerAction {
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new InternalEditAction(mainFrame, properties);
 		}
     }

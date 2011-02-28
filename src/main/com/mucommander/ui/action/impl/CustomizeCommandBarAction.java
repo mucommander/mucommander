@@ -23,7 +23,7 @@ import com.mucommander.ui.dialog.customization.CommandBarDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action opens the dialog which allows the user to customize the command-bar.
@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public class CustomizeCommandBarAction extends MuAction implements InvokesDialog {
 	
-	public CustomizeCommandBarAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+	public CustomizeCommandBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -41,7 +41,7 @@ public class CustomizeCommandBarAction extends MuAction implements InvokesDialog
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CustomizeCommandBarAction(mainFrame, properties);
 		}
     }

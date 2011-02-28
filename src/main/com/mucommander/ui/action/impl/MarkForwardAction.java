@@ -22,7 +22,7 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Marks/Unmarks a range of file/rows in the active {@link FileTable}, from the currently selected row to the
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public abstract class MarkForwardAction extends MuAction {
 
-    public MarkForwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkForwardAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 

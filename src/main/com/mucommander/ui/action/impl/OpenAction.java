@@ -34,7 +34,7 @@ import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action 'opens' the currently selected file or folder in the active FileTable.
@@ -53,7 +53,7 @@ public class OpenAction extends MuAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public OpenAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public OpenAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -121,7 +121,7 @@ public class OpenAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new OpenAction(mainFrame, properties);
 		}
     }

@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action pops up the 'Pack files' dialog that allows to create an archive file with the currently marked files.
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class PackAction extends SelectedFilesAction implements InvokesDialog {
 
-    public PackAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public PackAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
@@ -49,7 +49,7 @@ public class PackAction extends SelectedFilesAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new PackAction(mainFrame, properties);
 		}
     }

@@ -24,7 +24,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Marks/unmarks files in the active FileTable, from the currently selected row to the last row (inclusive).
@@ -37,7 +37,7 @@ import java.util.Hashtable;
  */
 public class MarkToLastRowAction extends MarkForwardAction {
 
-    public MarkToLastRowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkToLastRowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -49,7 +49,7 @@ public class MarkToLastRowAction extends MarkForwardAction {
     }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkToLastRowAction(mainFrame, properties);
 		}
     }

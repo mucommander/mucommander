@@ -19,10 +19,7 @@
 package com.mucommander.ui.action;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Class that maintains properties of the registered MuAction-s:
@@ -35,7 +32,7 @@ import java.util.TreeSet;
 public class ActionProperties {
 	
 	/* Maps action id -> action descriptor */
-	private static Hashtable<String, ActionDescriptor> actionDescriptors = new Hashtable<String, ActionDescriptor>();
+	private static Map<String, ActionDescriptor> actionDescriptors = new Hashtable<String, ActionDescriptor>();
 
 	private static ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
 	

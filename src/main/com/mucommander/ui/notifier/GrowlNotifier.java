@@ -24,6 +24,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
 
 import java.util.Hashtable;
+import java.util.Map;
 //import com.growl.Growl;
 
 /**
@@ -49,7 +50,7 @@ public class GrowlNotifier extends AbstractNotifier {
     private static boolean isRegistered;
 
     /** Dictionary keys for the different notification types */
-    private final static Hashtable<NotificationType, String> NOTIFICATION_KEYS;
+    private final static Map<NotificationType, String> NOTIFICATION_KEYS;
 
     /** Name of the application to be registered with Growl, as spelled in the .app */
     private final static String APP_NAME = "muCommander";

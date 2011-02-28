@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Opens the current file in view mode.
@@ -39,7 +39,7 @@ public class InternalViewAction extends AbstractViewerAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public InternalViewAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public InternalViewAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         ImageIcon icon;
@@ -66,7 +66,7 @@ public class InternalViewAction extends AbstractViewerAction {
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new InternalViewAction(mainFrame, properties);
 		}
     }

@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action changes the current folder of the currently active FolderPanel to the current folder's parent.
@@ -39,7 +39,7 @@ public class GoToParentAction extends ParentFolderAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public GoToParentAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public GoToParentAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -108,7 +108,7 @@ public class GoToParentAction extends ParentFolderAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new GoToParentAction(mainFrame, properties);
 		}
     }

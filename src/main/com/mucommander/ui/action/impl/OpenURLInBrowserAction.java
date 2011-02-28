@@ -28,7 +28,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.net.URL;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action opens a URL in the system's default browser. This action is enabled only if the OS/Window manager
@@ -41,7 +41,7 @@ public class OpenURLInBrowserAction extends MuAction {
     /** Key to the URL property */
     public final static String URL_PROPERTY_KEY = "url";
 
-    public OpenURLInBrowserAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public OpenURLInBrowserAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Enable this action only if the current platform is capable of opening URLs in the default browser.
@@ -64,7 +64,7 @@ public class OpenURLInBrowserAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new OpenURLInBrowserAction(mainFrame, properties);
 		}
     }

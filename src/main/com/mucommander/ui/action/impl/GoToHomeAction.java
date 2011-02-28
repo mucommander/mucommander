@@ -24,7 +24,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action changes the current folder of the currently active FolderPanel to the user home folder.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class GoToHomeAction extends MuAction {
 
-    public GoToHomeAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public GoToHomeAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -47,7 +47,7 @@ public class GoToHomeAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new GoToHomeAction(mainFrame, properties);
 		}
     }

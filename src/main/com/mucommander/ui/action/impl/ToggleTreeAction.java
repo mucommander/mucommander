@@ -25,7 +25,7 @@ import com.mucommander.ui.main.tree.FoldersTreePanel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action toggles the visibility of a directory tree.
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class ToggleTreeAction extends MuAction {
 
-    public ToggleTreeAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleTreeAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -47,7 +47,7 @@ public class ToggleTreeAction extends MuAction {
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleTreeAction(mainFrame, properties);
 		}
     }

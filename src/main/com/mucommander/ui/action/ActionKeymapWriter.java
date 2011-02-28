@@ -28,9 +28,9 @@ import com.mucommander.xml.XmlWriter;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * This class is responsible for writing the actions.
@@ -55,7 +55,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 	}
 	
 	void write() throws IOException {
-		Hashtable<String, KeyStroke[]> combinedMapping = new Hashtable<String, KeyStroke[]>();
+		Map<String, KeyStroke[]> combinedMapping = new Hashtable<String, KeyStroke[]>();
 		Iterator<String> modifiedActionsIterator = ActionKeymap.getCustomizedActions();
 
 		while(modifiedActionsIterator.hasNext()) {
@@ -86,7 +86,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
     		this.writer = new XmlWriter(stream);
     	}
     	
-    	private void writeKeyMap(Hashtable<String, KeyStroke[]> actionMap) throws IOException {
+    	private void writeKeyMap(Map<String, KeyStroke[]> actionMap) throws IOException {
     		try {
     			writer.writeCommentLine("See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file");
     			
@@ -96,11 +96,8 @@ class ActionKeymapWriter extends ActionKeymapIO {
     			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
 
     			if (actionMap != null) {
-    				Enumeration<String> enumeration = actionMap.keys();
-    				while (enumeration.hasMoreElements()) {
-    					String actionId = enumeration.nextElement();
+                    for(String actionId: actionMap.keySet())
     					addMapping(actionId, actionMap.get(actionId));
-    				}
     			}
 
     		} finally {

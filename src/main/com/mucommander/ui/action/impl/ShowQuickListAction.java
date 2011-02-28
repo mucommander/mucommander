@@ -21,7 +21,7 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * ShowFileTablePopupAction is an abstract action that shows pop up corresponding to the given
@@ -31,7 +31,7 @@ import java.util.Hashtable;
  */
 abstract class ShowQuickListAction extends MuAction {
 
-	public ShowQuickListAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+	public ShowQuickListAction(MainFrame mainFrame, Map<String,Object> properties) {
 		super(mainFrame, properties);		
 	}
 	

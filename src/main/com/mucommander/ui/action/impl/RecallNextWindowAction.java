@@ -24,7 +24,7 @@ import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action brings the next window (next window number) to the front.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class RecallNextWindowAction extends MuAction {
 
-    public RecallNextWindowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public RecallNextWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class RecallNextWindowAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new RecallNextWindowAction(mainFrame, properties);
 		}
     }

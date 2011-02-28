@@ -24,7 +24,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Empties the system trash. This action is enabled only if the current platform has an
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class EmptyTrashAction extends MuAction {
 
-    public EmptyTrashAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public EmptyTrashAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         AbstractTrash trash = DesktopManager.getTrash();
@@ -49,7 +49,7 @@ public class EmptyTrashAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new EmptyTrashAction(mainFrame, properties);
 		}
     }

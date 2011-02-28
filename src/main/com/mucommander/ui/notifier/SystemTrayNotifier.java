@@ -34,6 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * SystemTrayNotifier implements a notifier that uses the System Tray to display notifications. When enabled, this
@@ -62,7 +63,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     private final static int TRAY_ICON_HEIGHT = 16;
 
     /** System tray message types for the different notification types */
-    private final static Hashtable<NotificationType, TrayIcon.MessageType> MESSAGE_TYPES;
+    private final static Map<NotificationType, TrayIcon.MessageType> MESSAGE_TYPES;
 
     static {
         MESSAGE_TYPES = new Hashtable<NotificationType, TrayIcon.MessageType>();

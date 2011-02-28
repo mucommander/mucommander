@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action changes the current folder of the currently active FolderPanel to the current folder's root.
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class GoToRootAction extends GoToParentAction {
 
-    public GoToRootAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public GoToRootAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -50,7 +50,7 @@ public class GoToRootAction extends GoToParentAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new GoToRootAction(mainFrame, properties);
 		}
     }

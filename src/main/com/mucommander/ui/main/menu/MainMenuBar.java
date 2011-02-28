@@ -52,7 +52,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Vector;
 import java.util.WeakHashMap;
 
 
@@ -429,11 +428,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 bookmarksMenu.remove(bookmarksOffset);
 
             // Add bookmarks menu items
-            Vector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
+            java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
             int nbBookmarks = bookmarks.size();
             if(nbBookmarks>0) {
                 for(int i=0; i<nbBookmarks; i++)
-                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmarks.elementAt(i)), null);
+                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmarks.get(i)), null);
             }
             else {
                 // Show 'No bookmark' as a disabled menu item instead showing nothing
@@ -461,12 +460,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             
             // Create a menu item for each of the MainFrame instances, that displays the MainFrame's path
             // and a keyboard accelerator to recall the frame (for the first 10 frames only).
-            java.util.Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
+            java.util.List<MainFrame> mainFrames = WindowManager.getMainFrames();
             MainFrame mainFrame;
             JCheckBoxMenuItem checkBoxMenuItem;
             int nbFrames = mainFrames.size();
             for(int i=0; i<nbFrames; i++) {
-                mainFrame = mainFrames.elementAt(i);
+                mainFrame = mainFrames.get(i);
                 checkBoxMenuItem = new JCheckBoxMenuItem();
 
                 // If frame number is less than 10, use the corresponding action class (accelerator will be displayed in the menu item)

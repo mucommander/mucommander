@@ -21,6 +21,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
@@ -724,13 +725,13 @@ public class ThemeData {
     // - Registered colors & fonts -------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** All registered colors. */
-    private static final Hashtable<Integer, DefaultColor> COLORS;
+    private static final Map<Integer, DefaultColor> COLORS;
     /** All registered default colors. */
-    private static final Hashtable<String, DefaultColor>  DEFAULT_COLORS;
+    private static final Map<String, DefaultColor>  DEFAULT_COLORS;
     /** All registered fonts. */
-    private static final Hashtable<Integer, DefaultFont>  FONTS;
+    private static final Map<Integer, DefaultFont>  FONTS;
     /** All registered default fonts. */
-    private static final Hashtable<String, DefaultFont>   DEFAULT_FONTS;
+    private static final Map<String, DefaultFont>   DEFAULT_FONTS;
 
 
 

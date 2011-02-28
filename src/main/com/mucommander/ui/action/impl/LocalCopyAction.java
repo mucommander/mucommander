@@ -33,7 +33,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action invokes the 'Copy dialog' which allows to copy the currently selected/marked files to a specified destination.
@@ -45,7 +45,7 @@ import java.util.Hashtable;
  */
 public class LocalCopyAction extends SelectedFileAction {
 
-    public LocalCopyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public LocalCopyAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new AndFileFilter(
@@ -67,7 +67,7 @@ public class LocalCopyAction extends SelectedFileAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new LocalCopyAction(mainFrame, properties);
 		}
     }

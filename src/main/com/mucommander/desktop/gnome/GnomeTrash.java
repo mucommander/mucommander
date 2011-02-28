@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * This class handles with GNOME Trash (deleting to trash, empty the trash, go to trash etc.)
@@ -42,7 +42,7 @@ import java.util.Vector;
  * <p>
  * <b>Implementation notes:</b><br>
  * <br>
- * This Trash class has the same possibilies as <code>KDETrash</code>, but is adapted to a GNOME environment, where the
+ * This Trash class has the same possibilities as <code>KDETrash</code>, but is adapted to a GNOME environment, where the
  * trash is simple directory ~/.Trash. So working with trash means working with this directory.
  * </p>
  *
@@ -257,14 +257,14 @@ public class GnomeTrash extends QueuedTrash {
      * @return <code>true</code> if movement has been successful or <code>false</code> otherwise
      */
     @Override
-    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
+    protected boolean moveToTrash(List<AbstractFile> queuedFiles) {
         int nbFiles = queuedFiles.size();
         String fileInfoContent;
         String trashFileName;
         boolean retVal = true;     // overall return value (if everything went OK or at least one file wasn't moved properly
         
         for(int i=0; i<nbFiles; i++) {
-            AbstractFile fileToDelete = queuedFiles.elementAt(i);
+            AbstractFile fileToDelete = queuedFiles.get(i);
             // generate content of info file and new filename
             try {
                 fileInfoContent = getFileInfoContent(fileToDelete);

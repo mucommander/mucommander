@@ -33,7 +33,7 @@ import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action opens the currently selected file or folder with native file associations.
@@ -42,7 +42,7 @@ import java.util.Hashtable;
  */
 public class OpenNativelyAction extends MuAction {
 
-    public OpenNativelyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public OpenNativelyAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -74,7 +74,7 @@ public class OpenNativelyAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new OpenNativelyAction(mainFrame, properties);
 		}
     }

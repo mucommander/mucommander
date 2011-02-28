@@ -43,7 +43,7 @@ import java.util.Vector;
 public class PreferredEncodingsDialog extends FocusDialog {
 
     /** Contains all the checkbox added to this dialog */
-    private Vector<JCheckBox> checkboxes;
+    private java.util.List<JCheckBox> checkboxes;
 
     /** Minimum dimensions of this dialog */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(300,0);
@@ -135,10 +135,10 @@ public class PreferredEncodingsDialog extends FocusDialog {
             public void windowClosing(WindowEvent e) {
                 JCheckBox checkbox;
                 int nbCheckboxes = checkboxes.size();
-                Vector<String> preferredEncodings = new Vector<String>();
+                java.util.List<String> preferredEncodings = new Vector<String>();
 
                 for(int i=0; i<nbCheckboxes; i++) {
-                    checkbox = checkboxes.elementAt(i);
+                    checkbox = checkboxes.get(i);
                     if(checkbox.isSelected())
                         preferredEncodings.add(checkbox.getText());
                 }
@@ -157,7 +157,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
         JCheckBox checkbox;
         int nbCheckboxes = checkboxes.size();
         for(int i=0; i<nbCheckboxes; i++) {
-            checkbox = checkboxes.elementAt(i);
+            checkbox = checkboxes.get(i);
             checkbox.setSelected(selectedEncodings.contains(checkbox.getText()));
         }
     }

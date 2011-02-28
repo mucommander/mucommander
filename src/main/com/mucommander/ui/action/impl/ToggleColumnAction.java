@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Shows/hides a specified column of the currently active FileTable. If the column is currently visible, this action
@@ -40,7 +40,7 @@ public abstract class ToggleColumnAction extends MuAction {
     /** Index of the FileTable column this action operates on */
     protected Column column;
 
-    public ToggleColumnAction(MainFrame mainFrame, Hashtable<String,Object> properties, Column column) {
+    public ToggleColumnAction(MainFrame mainFrame, Map<String,Object> properties, Column column) {
         super(mainFrame, properties);
 
         this.column = column;

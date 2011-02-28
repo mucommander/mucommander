@@ -26,7 +26,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action brings up the 'Make file' dialog which allows to create a new file in the currently active folder.
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class MkfileAction extends ParentFolderAction {
 
-    public MkfileAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MkfileAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,7 +56,7 @@ public class MkfileAction extends ParentFolderAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MkfileAction(mainFrame, properties);
 		}
     }

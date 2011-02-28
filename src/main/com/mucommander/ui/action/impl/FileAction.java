@@ -26,7 +26,7 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * FileAction is an abstract action that operates on the currently active FileTable. It is enabled only when
@@ -48,7 +48,7 @@ public abstract class FileAction extends MuAction implements TableSelectionListe
     protected FileFilter filter;
 
 
-    public FileAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public FileAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
         init(mainFrame);
     }

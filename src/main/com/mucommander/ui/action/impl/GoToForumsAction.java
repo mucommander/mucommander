@@ -22,7 +22,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action opens the mucommander.com forums URL in the system's default browser.
@@ -31,7 +31,7 @@ import java.util.Hashtable;
  */
 public class GoToForumsAction extends OpenURLInBrowserAction {
 
-    public GoToForumsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public GoToForumsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.FORUMS_URL);
@@ -39,7 +39,7 @@ public class GoToForumsAction extends OpenURLInBrowserAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new GoToForumsAction(mainFrame, properties);
 		}
     }

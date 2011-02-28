@@ -18,6 +18,7 @@
 
 package com.mucommander.process;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -28,7 +29,7 @@ public class ProcessListenerList implements ProcessListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** All registered listeners. */
-    private Vector<ProcessListener> listeners;
+    private List<ProcessListener> listeners;
 
 
 
@@ -37,7 +38,9 @@ public class ProcessListenerList implements ProcessListener {
     /**
      * Creates a new process listener list.
      */
-    public ProcessListenerList() {listeners = new Vector<ProcessListener>();}
+    public ProcessListenerList() {
+        listeners = new Vector<ProcessListener>();
+    }
 
 
 

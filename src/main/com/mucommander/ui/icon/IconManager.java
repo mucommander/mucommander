@@ -27,6 +27,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * IconManager takes care of loading, caching, rescaling the icons contained inside the application's JAR file.
@@ -35,7 +36,7 @@ import java.util.Hashtable;
  */
 public class IconManager {
     /** Caches for the different icon sets */
-    private final static Hashtable<String, ImageIcon> caches[];
+    private final static Map<String, ImageIcon> caches[];
 
     /** Designates the file icon set */
     public final static int FILE_ICON_SET        = 0;
@@ -164,7 +165,7 @@ public class IconManager {
      * <code>null</code> if the image wasn't found or couldn't be loaded
      */
     public static ImageIcon getIcon(int iconSet, String iconName, float scaleFactor) {
-        Hashtable<String, ImageIcon> cache = caches[iconSet];
+        Map<String, ImageIcon> cache = caches[iconSet];
         ImageIcon icon;
 
         if(cache==null) {

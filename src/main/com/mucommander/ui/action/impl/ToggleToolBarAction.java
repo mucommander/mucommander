@@ -24,7 +24,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.toolbar.ToolBar} depending on its
@@ -39,7 +39,7 @@ import java.util.Hashtable;
  */
 public class ToggleToolBarAction extends MuAction {
 
-    public ToggleToolBarAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleToolBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
     }
@@ -63,7 +63,7 @@ public class ToggleToolBarAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleToolBarAction(mainFrame, properties);
 		}
     }

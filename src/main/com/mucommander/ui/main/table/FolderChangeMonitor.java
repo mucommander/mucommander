@@ -31,6 +31,7 @@ import com.mucommander.ui.main.FolderPanel;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -85,7 +86,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private static Thread monitorThread;
 
     /** FolderChangeMonitor instances */
-    private static Vector<FolderChangeMonitor> instances;
+    private static List<FolderChangeMonitor> instances;
 
     private static OrFileFilter disableAutoRefreshFilter = new OrFileFilter();
 		
@@ -173,7 +174,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
             // Loop on instances
             nbInstances = instances.size();
             for(int i=0; i<nbInstances; i++) {
-                try { monitor = instances.elementAt(i); }
+                try { monitor = instances.get(i); }
                 catch(Exception e) { continue; } // Exception may be raised when an instance is removed
 				
                 // Check for changes in current folder and refresh it only if :

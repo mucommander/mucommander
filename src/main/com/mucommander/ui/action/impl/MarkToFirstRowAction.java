@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Marks/unmarks files in the active FileTable, from the currently selected row to the first row (inclusive).
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class MarkToFirstRowAction extends MarkBackwardAction {
 
-    public MarkToFirstRowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkToFirstRowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -46,7 +46,7 @@ public class MarkToFirstRowAction extends MarkBackwardAction {
     }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkToFirstRowAction(mainFrame, properties);
 		}
     }

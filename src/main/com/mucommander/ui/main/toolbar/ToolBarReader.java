@@ -29,6 +29,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -39,7 +40,7 @@ import java.util.Vector;
 public class ToolBarReader extends ToolBarIO {
 
     /** Temporarily used for XML parsing */
-    private Vector<String> actionIdsV;
+    private List<String> actionIdsV;
 
     /**
      * Starts parsing the XML description file.

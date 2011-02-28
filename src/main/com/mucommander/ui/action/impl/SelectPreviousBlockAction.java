@@ -24,7 +24,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action moves the current {@link FileTable}'s selection to the previous 'block'.
@@ -37,7 +37,7 @@ public class SelectPreviousBlockAction extends SelectBackwardAction {
     // TODO: make this value configurable
     private static final int BLOCK_SIZE = 5;
 
-    public SelectPreviousBlockAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SelectPreviousBlockAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -47,7 +47,7 @@ public class SelectPreviousBlockAction extends SelectBackwardAction {
     }
 
     public static class Factory implements ActionFactory {
-        public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
             return new SelectPreviousBlockAction(mainFrame, properties);
         }
     }

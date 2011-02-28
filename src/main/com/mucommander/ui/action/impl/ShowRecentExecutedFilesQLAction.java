@@ -24,7 +24,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action shows RecentExecutedFilesQL on the current active FileTable.
@@ -34,7 +34,7 @@ import java.util.Hashtable;
 
 public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
 	
-	public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+	public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Map<String,Object> properties) {
 		super(mainFrame, properties);
 	}
 	
@@ -45,7 +45,7 @@ public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
 	
 	public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ShowRecentExecutedFilesQLAction(mainFrame, properties);
 		}
     }

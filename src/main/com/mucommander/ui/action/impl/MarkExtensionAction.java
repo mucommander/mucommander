@@ -29,7 +29,7 @@ import com.mucommander.ui.main.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Action that marks / unmarks all files with a specific extension.
@@ -78,7 +78,7 @@ public class MarkExtensionAction extends MuAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public MarkExtensionAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkExtensionAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -196,7 +196,7 @@ public class MarkExtensionAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String, Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
 			return new MarkExtensionAction(mainFrame, properties);
 		}
     }

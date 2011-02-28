@@ -25,6 +25,7 @@ import com.mucommander.commons.file.icon.FileIconProvider;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This {@link com.mucommander.commons.file.icon.FileIconProvider} returns icons from the
@@ -39,7 +40,7 @@ public class CustomFileIconProvider implements FileIconProvider {
     private static boolean initialized;
 
     /** Hashtable that associates file extensions with icon names */
-    private static Hashtable<String, String> extensionMap;
+    private static Map<String, String> extensionMap;
 
     /** Icon for directories */
     public final static String FOLDER_ICON_NAME = "folder.png";

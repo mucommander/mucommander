@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * User configurable variant of {@link InternalEditAction}.
@@ -39,7 +39,7 @@ public class EditAction extends InternalEditAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public EditAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public EditAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -57,7 +57,7 @@ public class EditAction extends InternalEditAction {
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new EditAction(mainFrame, properties);
 		}
     }

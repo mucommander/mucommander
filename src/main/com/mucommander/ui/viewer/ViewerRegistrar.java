@@ -39,7 +39,7 @@ import java.util.Vector;
 public class ViewerRegistrar {
 	
     /** List of registered file viewers */ 
-    private final static Vector<ViewerFactory> viewerFactories = new Vector<ViewerFactory>();
+    private final static java.util.List<ViewerFactory> viewerFactories = new Vector<ViewerFactory>();
 
     static {
         registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());

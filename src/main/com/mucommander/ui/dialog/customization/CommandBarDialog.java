@@ -41,6 +41,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 /**
  * Dialog used to customize the command-bar.
@@ -366,9 +367,9 @@ public class CommandBarDialog extends CustomizeDialog {
 	}
 	
 	private void initActionsPoolList(Set<String> usedActions) {
-		Enumeration<String> actionIds = ActionManager.getActionIds();
-		while(actionIds.hasMoreElements()) {
-			String actionId = actionIds.nextElement();
+		Iterator<String> actionIds = ActionManager.getActionIds();
+		while(actionIds.hasNext()) {
+            String actionId = actionIds.next();
             // Filter out actions that are currently used in the command bar, and those that are parameterized
 			if (!usedActions.contains(actionId) && !ActionProperties.getActionDescriptor(actionId).isParameterized())
 				insertInOrder(commandBarAvailableButtons, CommandBarButtonForDisplay.create(actionId));			
@@ -549,7 +550,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		return filler;
 	}
 	
-	private static int insertInOrder(Vector<JButton> vector, JButton element) {
+	private static int insertInOrder(List<JButton> vector, JButton element) {
 		if (vector.size() != 0) {
 			int index = findPlace(vector, element, BUTTONS_COMPARATOR, 0, vector.size() - 1);
 			vector.add(index, element);
@@ -561,16 +562,16 @@ public class CommandBarDialog extends CustomizeDialog {
 		}
 	}
 	
-	private static int findPlace(Vector<JButton> vector, JButton element, Comparator<JButton> comparator, int first, int last) {
-		if (comparator.compare(vector.elementAt(last), element) < 0)
+	private static int findPlace(List<JButton> vector, JButton element, Comparator<JButton> comparator, int first, int last) {
+		if (comparator.compare(vector.get(last), element) < 0)
 			return last + 1;
-		if (comparator.compare(vector.elementAt(first), element) > 0)
+		if (comparator.compare(vector.get(first), element) > 0)
 			return first;
 		if (last - first == 1)
 			return last;
 		
 		int middle = (first + last) / 2;
-		int result = comparator.compare(vector.elementAt(middle), element);
+		int result = comparator.compare(vector.get(middle), element);
 		return result > 0 ?
 				findPlace(vector, element, comparator, first, middle) :
 				findPlace(vector, element, comparator, middle, last);

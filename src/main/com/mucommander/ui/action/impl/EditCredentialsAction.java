@@ -23,7 +23,7 @@ import com.mucommander.ui.dialog.auth.EditCredentialsDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action brings up the 'Edit credentials' dialog that allows to edit persistent credentials (the ones stored
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class EditCredentialsAction extends MuAction implements InvokesDialog {
 
-    public EditCredentialsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public EditCredentialsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class EditCredentialsAction extends MuAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new EditCredentialsAction(mainFrame, properties);
 		}
     }

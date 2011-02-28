@@ -23,14 +23,14 @@ import com.mucommander.ui.dialog.debug.DebugConsoleDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * @author Maxence Bernard
  */
 public class ShowDebugConsoleAction extends MuAction {
 
-    public ShowDebugConsoleAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ShowDebugConsoleAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -42,7 +42,7 @@ public class ShowDebugConsoleAction extends MuAction {
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ShowDebugConsoleAction(mainFrame, properties);
 		}
     }

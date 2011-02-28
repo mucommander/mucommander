@@ -149,8 +149,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         // Set title
         setTitle(title);
 
-        Vector<Integer> actionsV = new Vector<Integer>();
-        Vector<String> labelsV = new Vector<String>();
+        java.util.List<Integer> actionsV = new Vector<Integer>();
+        java.util.List<String> labelsV = new Vector<String>();
 
         // 'OK' choice
         actionsV.add(OK_ACTION);
@@ -173,8 +173,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         int actions[] = new int[nbChoices];
         String labels[] = new String[nbChoices];
         for(int i=0; i<nbChoices; i++) {
-            actions[i] = actionsV.elementAt(i);
-            labels[i] = labelsV.elementAt(i);
+            actions[i] = actionsV.get(i);
+            labels[i] = labelsV.get(i);
         }
 
         init(new InformationPane(message, null, Font.PLAIN, InformationPane.INFORMATION_ICON),

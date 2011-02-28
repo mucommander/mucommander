@@ -52,7 +52,7 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
     /** Name of the preview component's property that gets updated with the current color of this button (can be null) */
     private String previewColorPropertyName;
 
-    private Vector<JComponent> updatedPreviewComponents;
+    private java.util.List<JComponent> updatedPreviewComponents;
 
     /** Button's border. */
     private Border border = BorderFactory.createEtchedBorder();
@@ -142,7 +142,7 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
         if(updatedPreviewComponents != null && previewColorPropertyName != null) {
             int nbPreviewComponents = updatedPreviewComponents.size();
             for(int i = 0; i < nbPreviewComponents; i++)
-                updatedPreviewComponents.elementAt(i).putClientProperty(previewColorPropertyName, color);
+                updatedPreviewComponents.get(i).putClientProperty(previewColorPropertyName, color);
         }
         
         if (initiatedByUser)

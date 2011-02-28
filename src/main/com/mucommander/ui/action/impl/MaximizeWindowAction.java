@@ -24,7 +24,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Maximizes the {@link MainFrame} this action is associated with.
@@ -34,7 +34,7 @@ import java.util.Hashtable;
  */
 public class MaximizeWindowAction extends MuAction {
 
-    public MaximizeWindowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MaximizeWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -45,7 +45,7 @@ public class MaximizeWindowAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MaximizeWindowAction(mainFrame, properties);
 		}
     }

@@ -24,7 +24,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action toggles the 'Show folders first' option, which controls whether folders are displayed first in the
@@ -34,7 +34,7 @@ import java.util.Hashtable;
  */
 public class ToggleShowFoldersFirstAction extends MuAction {
 
-    public ToggleShowFoldersFirstAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleShowFoldersFirstAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,7 +48,7 @@ public class ToggleShowFoldersFirstAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleShowFoldersFirstAction(mainFrame, properties);
 		}
     }

@@ -22,7 +22,7 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * SelectedFilesAction is an abstract action that operates on the currently active FileTable, and is enabled only
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public abstract class SelectedFilesAction extends SelectedFileAction {
 
-    public SelectedFilesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SelectedFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 

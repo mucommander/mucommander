@@ -24,7 +24,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action pops up the 'Run command' dialog that is used to execute a shell command.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class RunCommandAction extends MuAction implements InvokesDialog {
 
-    public RunCommandAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public RunCommandAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class RunCommandAction extends MuAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new RunCommandAction(mainFrame, properties);
 		}
     }

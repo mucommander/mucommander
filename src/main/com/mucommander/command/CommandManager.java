@@ -34,10 +34,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Manages custom commands and associations.
@@ -73,30 +70,30 @@ public class CommandManager implements CommandBuilder {
     // - Association definitions -----------------------------------------------
     // -------------------------------------------------------------------------
     /** System dependent file associations. */
-    private static final Vector<CommandAssociation> systemAssociations;
+    private static final List<CommandAssociation> systemAssociations;
     /** All known file associations. */
-    private static final Vector<CommandAssociation> associations;
+    private static final List<CommandAssociation> associations;
     /** Path to the custom association file, <code>null</code> if the default one should be used. */
-    private static       AbstractFile               associationFile;
+    private static       AbstractFile             associationFile;
     /** Whether the associations were modified since the last time they were saved. */
-    private static       boolean                    wereAssociationsModified;
+    private static       boolean                  wereAssociationsModified;
     /** Default name of the association XML file. */
-    public  static final String                     DEFAULT_ASSOCIATION_FILE_NAME = "associations.xml";
+    public  static final String                   DEFAULT_ASSOCIATION_FILE_NAME = "associations.xml";
 
 
 
     // - Commands definition ---------------------------------------------------
     // -------------------------------------------------------------------------
     /** All known commands. */
-    private static       Hashtable<String, Command> commands;
+    private static       Map<String, Command> commands;
     /** Path to the custom commands XML file, <code>null</code> if the default one should be used. */
-    private static       AbstractFile               commandsFile;
+    private static       AbstractFile         commandsFile;
     /** Whether the custom commands have been modified since the last time they were saved. */
-    private static       boolean                    wereCommandsModified;
+    private static       boolean              wereCommandsModified;
     /** Default name of the custom commands file. */
-    public  static final String                     DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
+    public  static final String               DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
     /** Default command used when no other command is found for a specific file type. */
-    private static       Command                    defaultCommand;
+    private static       Command              defaultCommand;
 
 
 
@@ -200,7 +197,7 @@ public class CommandManager implements CommandBuilder {
      * @return an iterator on all registered commands.
      */
     public static Iterator<Command> commands() {
-        Vector<Command> list;
+        List<Command> list;
 
         // Sorts the list.
         list = new Vector<Command>(commands.size());

@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Brings up a dialog that allows the user to change the file permissions the currently selected/marked files.
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class ChangePermissionsAction extends SelectedFilesAction implements InvokesDialog {
 
-    public ChangePermissionsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ChangePermissionsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.CHANGE_PERMISSION));
@@ -50,7 +50,7 @@ public class ChangePermissionsAction extends SelectedFilesAction implements Invo
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ChangePermissionsAction(mainFrame, properties);
 		}
     }

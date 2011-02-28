@@ -22,7 +22,7 @@ import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Recalls window number 1 (brings it to the front). 
@@ -31,13 +31,13 @@ import java.util.Hashtable;
  */
 public class RecallWindow1Action extends RecallWindowAction {
 
-    public RecallWindow1Action(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public RecallWindow1Action(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties, 1);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new RecallWindow1Action(mainFrame, properties);
 		}
     }

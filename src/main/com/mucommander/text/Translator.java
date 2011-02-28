@@ -40,13 +40,13 @@ import java.util.*;
 public class Translator {
 
     /** Contains key/value pairs for the current language */
-    private static Hashtable<String, String> dictionary;
+    private static Map<String, String> dictionary;
 
     /** Contains key/value pairs for the default language, for entries that are not defined in the current language */
-    private static Hashtable<String, String> defaultDictionary;
+    private static Map<String, String> defaultDictionary;
     
     /** List of all available languages in the dictionary file */
-    private static Vector<String> availableLanguages;
+    private static List<String> availableLanguages;
 
     /** Current language */
     private static String language;
@@ -73,7 +73,7 @@ public class Translator {
      *
      * @param availableLanguages list of available languages
      */
-    private static void setCurrentLanguage(Vector<String> availableLanguages) {
+    private static void setCurrentLanguage(List<String> availableLanguages) {
         String lang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
 
         if(lang==null) {
@@ -91,9 +91,9 @@ public class Translator {
         boolean containsLanguage = false;
         int nbAvailableLanguages = availableLanguages.size();
         for(int i=0; i<nbAvailableLanguages; i++) {
-            if(availableLanguages.elementAt(i).equalsIgnoreCase(lang)) {
+            if(availableLanguages.get(i).equalsIgnoreCase(lang)) {
                 containsLanguage = true;
-                lang = availableLanguages.elementAt(i);   // Use the proper case variation
+                lang = availableLanguages.get(i);   // Use the proper case variation
                 break;
             }
         }
@@ -453,7 +453,7 @@ public class Translator {
         String lang;
         String text;
         StringTokenizer st;
-        Hashtable<String, String> newLanguageEntries = new Hashtable<String, String>();
+        Map<String, String> newLanguageEntries = new Hashtable<String, String>();
         while ((line = newLanguageFileReader.readLine())!=null) {
             try {
                 if (!line.trim().startsWith("#") && !line.trim().equals("")) {

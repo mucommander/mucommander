@@ -487,7 +487,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         private static final int STROKE_WIDTH = 1;
 
-        private Vector<Long> samples = new Vector<Long>(NB_SAMPLES_MAX);
+        private java.util.List<Long> samples = new Vector<Long>(NB_SAMPLES_MAX);
 
         private Stroke lineStroke = new BasicStroke(STROKE_WIDTH);
 
@@ -500,7 +500,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             synchronized(samples) {     // Ensures that paint() is not currently accessing the Vector
                 // Capacity reached, remove first sample
                 if(samples.size()==NB_SAMPLES_MAX)
-                    samples.removeElementAt(0);
+                    samples.remove(0);
 
                 // Add sample to the vector
                 samples.add(bytesPerSecond);
@@ -539,7 +539,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                 // Calculate the maximum bytes per second of all the samples to be displayed
                 long maxBps = 0;
                 for(int i=firstSample; i<firstSample+nbLines; i++) {
-                    long sample = samples.elementAt(i);
+                    long sample = samples.get(i);
                     if(sample>maxBps)
                         maxBps = sample;
                 }
@@ -561,7 +561,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                 Polygon p = new Polygon();
                 int sampleOffset = firstSample;
                 for(int l=0; l<nbLines; l++) {
-                    p.addPoint(x, height-STROKE_WIDTH-(int)((Long) samples.elementAt(sampleOffset++) /yRatio));
+                    p.addPoint(x, height-STROKE_WIDTH-(int)((Long) samples.get(sampleOffset++) /yRatio));
                     x+=LINE_SPACING;
                 }
                 p.addPoint(x-LINE_SPACING, height-1);
@@ -573,8 +573,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                 x = STROKE_WIDTH;
                 sampleOffset = firstSample;
                 for(int l=0; l<nbLines-1; l++) {
-                    g.drawLine(x, height-STROKE_WIDTH-(int)((Long) samples.elementAt(sampleOffset) /yRatio),
-                              (x+=LINE_SPACING), height-STROKE_WIDTH-(int)((Long) samples.elementAt(++sampleOffset) /yRatio));
+                    g.drawLine(x, height-STROKE_WIDTH-(int)((Long) samples.get(sampleOffset) /yRatio),
+                              (x+=LINE_SPACING), height-STROKE_WIDTH-(int)((Long) samples.get(++sampleOffset) /yRatio));
                 }
 
                 // Draw an horizontal line at the bottom of the graph

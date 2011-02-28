@@ -22,7 +22,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Splits the folder panels vertically (top/bottom) within the MainFrame.
@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public class SplitVerticallyAction extends MuAction {
 
-    public SplitVerticallyAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SplitVerticallyAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,7 +43,7 @@ public class SplitVerticallyAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SplitVerticallyAction(mainFrame, properties);
 		}
     }

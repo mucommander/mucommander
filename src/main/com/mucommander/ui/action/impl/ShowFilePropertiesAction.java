@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action pops up the file Properties dialog.
@@ -34,7 +34,7 @@ import java.util.Hashtable;
  */
 public class ShowFilePropertiesAction extends SelectedFilesAction {
 
-    public ShowFilePropertiesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ShowFilePropertiesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -45,7 +45,7 @@ public class ShowFilePropertiesAction extends SelectedFilesAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ShowFilePropertiesAction(mainFrame, properties);
 		}
     }

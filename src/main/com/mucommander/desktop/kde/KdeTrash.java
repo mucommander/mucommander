@@ -24,7 +24,7 @@ import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.process.ProcessRunner;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * This class provides access to the KDE trash. Only local files (or locally mounted files) can be moved to the trash.
@@ -150,7 +150,7 @@ class KdeTrash extends QueuedTrash {
     ////////////////////////////////
 
     @Override
-    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
+    protected boolean moveToTrash(List<AbstractFile> queuedFiles) {
         int nbFiles = queuedFiles.size();
         String tokens[] = new String[nbFiles+3];
 
@@ -158,7 +158,7 @@ class KdeTrash extends QueuedTrash {
         tokens[1] = "move";
 
         for(int i=0; i<nbFiles; i++) {
-            tokens[i+2] = queuedFiles.elementAt(i).getAbsolutePath();
+            tokens[i+2] = queuedFiles.get(i).getAbsolutePath();
         }
 
         tokens[nbFiles+2] = "trash:/";

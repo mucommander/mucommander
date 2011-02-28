@@ -25,7 +25,7 @@ import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * A simple action that toggles hidden files visibility on and off.
@@ -37,7 +37,7 @@ public class ToggleHiddenFilesAction extends MuAction {
     /**
      * Creates a new <code>ToggleHiddenFilesAction</code>.
      */
-    public ToggleHiddenFilesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleHiddenFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,7 +56,7 @@ public class ToggleHiddenFilesAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleHiddenFilesAction(mainFrame, properties);
 		}
     }

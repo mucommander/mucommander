@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action pops up the 'Email files' dialog that allows to email the currently marked files as attachment.
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class EmailAction extends SelectedFilesAction implements InvokesDialog {
 
-    public EmailAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public EmailAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
@@ -46,17 +46,17 @@ public class EmailAction extends SelectedFilesAction implements InvokesDialog {
     public void performAction(FileSet files) {
         new EmailFilesDialog(mainFrame, files).showDialog();
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new EmailAction(mainFrame, properties);
 		}
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "Email";
-    	
+
 		public String getId() { return ACTION_ID; }
 
 		public ActionCategory getCategory() { return ActionCategories.FILES; }

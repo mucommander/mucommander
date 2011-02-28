@@ -33,6 +33,7 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CopyAction;
 import com.mucommander.ui.main.MainFrame;
 
+import java.util.List;
 import java.util.Vector;
 
 
@@ -76,7 +77,7 @@ public class CopyDialog extends AbstractCopyDialog {
         if(parentArchiveFile!=null) {
             // Add all selected archive entries to a vector
             int nbFiles = files.size();
-            Vector<ArchiveEntry> selectedEntries = new Vector<ArchiveEntry>();
+            List<ArchiveEntry> selectedEntries = new Vector<ArchiveEntry>();
             for(int i=0; i<nbFiles; i++) {
                 selectedEntries.add((ArchiveEntry)files.elementAt(i).getAncestor(AbstractArchiveEntryFile.class).getUnderlyingFileObject());
             }

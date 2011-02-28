@@ -24,7 +24,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Displays a dialog which shows a list of open server connections and allows the user to close them.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class ShowServerConnectionsAction extends MuAction implements InvokesDialog {
 
-    public ShowServerConnectionsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ShowServerConnectionsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class ShowServerConnectionsAction extends MuAction implements InvokesDial
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ShowServerConnectionsAction(mainFrame, properties);
 		}
     }

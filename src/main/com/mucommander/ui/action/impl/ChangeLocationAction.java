@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action transfers focus to the location field of the currently active FolderPanel to edit or type in
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class ChangeLocationAction extends MuAction {
 
-    public ChangeLocationAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ChangeLocationAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class ChangeLocationAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ChangeLocationAction(mainFrame, properties);
 		}
     }

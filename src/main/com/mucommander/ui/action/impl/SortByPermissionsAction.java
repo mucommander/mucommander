@@ -25,7 +25,7 @@ import com.mucommander.ui.main.table.Column;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by permissions.
@@ -35,13 +35,13 @@ import java.util.Hashtable;
  */
 public class SortByPermissionsAction extends SortByAction {
 
-    public SortByPermissionsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SortByPermissionsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties, Column.PERMISSIONS);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SortByPermissionsAction(mainFrame, properties);
 		}
     }

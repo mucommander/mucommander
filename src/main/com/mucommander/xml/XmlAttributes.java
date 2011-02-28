@@ -21,6 +21,7 @@ package com.mucommander.xml;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Container for XML attributes.
@@ -36,7 +37,7 @@ public class XmlAttributes {
     // - Instance fields -------------------------------------------------
     // -------------------------------------------------------------------
     /** Contains the XML attributes. */
-    private Hashtable<String, String> attributes;
+    private Map<String, String> attributes;
     /** Contains the XML attribute names in the order they were added */
     private LinkedList<String> names;
     
@@ -60,23 +61,31 @@ public class XmlAttributes {
      * @return the value associated with the specified attribute name if found,
      *         <code>null</code> otherwise.
      */
-    public String getValue(String name) {return attributes.get(name);}
+    public String getValue(String name) {
+        return attributes.get(name);
+    }
 
     /**
      * Clears the list of all previously defined attributes.
      */
-    public void clear() {names.clear(); attributes.clear();}
+    public void clear() {
+        names.clear(); attributes.clear();
+    }
 
     /**
      * Adds the specified attribute to this container.
      * @param name  name of the attribute to whose value should be set.
      * @param value value to which the attribute should be set.
      */
-    public void add(String name, String value) {names.add(name); attributes.put(name, value);}
+    public void add(String name, String value) {
+        names.add(name); attributes.put(name, value);
+    }
 
     /**
      * Returns an iterator on the attributes contained by this instance.
      * @return an iterator on the attributes contained by this instance.
      */
-    public Iterator<String> names() {return names.iterator();}
+    public Iterator<String> names() {
+        return names.iterator();
+    }
 }

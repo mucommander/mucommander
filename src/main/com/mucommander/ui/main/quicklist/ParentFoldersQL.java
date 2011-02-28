@@ -28,6 +28,7 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
 import javax.swing.*;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -36,7 +37,7 @@ import java.util.Vector;
  * @author Arik Hadas
  */
 public class ParentFoldersQL extends QuickListWithIcons implements LocationListener {
-	protected Vector<AbstractFile> parents = new Vector<AbstractFile>();
+	protected List<AbstractFile> parents = new Vector<AbstractFile>();
 	protected boolean updated = true;
 		
 	public ParentFoldersQL(FolderPanel folderPanel) {

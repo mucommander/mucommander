@@ -26,6 +26,7 @@ import com.mucommander.ui.main.MainFrame;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This is a contextual 'Help' button to be used wherever help is available or needed. When clicked, it opens
@@ -56,7 +57,7 @@ public class HelpButton extends JButton {
      * @param helpTopic the help topic this button will open when clicked, <code>null</code> to open the base documentation URL
      */
     public HelpButton(MainFrame mainFrame, String helpTopic) {
-        Hashtable<String, Object> properties = new Hashtable<String, Object>();
+        Map<String, Object> properties = new Hashtable<String, Object>();
 
         GoToDocumentationAction action = new GoToDocumentationAction(mainFrame, properties);
         setAction(action);

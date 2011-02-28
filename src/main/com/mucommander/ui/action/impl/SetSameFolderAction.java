@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action equalizes both FileTable's current folders: the 'inactive' FileTable's current folder becomes
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class SetSameFolderAction extends MuAction {
 
-    public SetSameFolderAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SetSameFolderAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class SetSameFolderAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SetSameFolderAction(mainFrame, properties);
 		}
     }

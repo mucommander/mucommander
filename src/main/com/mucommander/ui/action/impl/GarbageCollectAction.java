@@ -25,7 +25,7 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action invokes the garbage collector and is here for debugging purposes only.
@@ -34,7 +34,7 @@ import java.util.Hashtable;
  */
 public class GarbageCollectAction extends MuAction {
 
-    public GarbageCollectAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public GarbageCollectAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -45,7 +45,7 @@ public class GarbageCollectAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new GarbageCollectAction(mainFrame, properties);
 		}
     }

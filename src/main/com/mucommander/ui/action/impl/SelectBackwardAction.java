@@ -22,7 +22,7 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Moves the current {@link FileTable}'s selection backward, {@link #getRowDecrement} rows at a time.
@@ -31,7 +31,7 @@ import java.util.Hashtable;
  */
 public abstract class SelectBackwardAction extends MuAction {
 
-    public SelectBackwardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SelectBackwardAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 

@@ -54,7 +54,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.Map;
 import java.util.regex.PatternSyntaxException;
 
 
@@ -76,10 +76,10 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     private static FileSystemView fileSystemView;
 
     /** Caches extended drive names, has a (non-null) value only under Windows */
-    private static Hashtable<AbstractFile, String> extendedNameCache;
+    private static Map<AbstractFile, String> extendedNameCache;
     
     /** Caches drive icons */
-    private static Hashtable<AbstractFile, Icon> iconCache = new Hashtable<AbstractFile, Icon>();
+    private static Map<AbstractFile, Icon> iconCache = new Hashtable<AbstractFile, Icon>();
     
 
     /** Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp
@@ -153,11 +153,11 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
 //        String newToolTip = null;
 
         // First tries to find a bookmark matching the specified folder
-        Vector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
+        java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
         Bookmark b;
         for(int i=0; i<nbBookmarks; i++) {
-            b = bookmarks.elementAt(i);
+            b = bookmarks.get(i);
             if(currentPath.equals(b.getLocation())) {
                 // Note: if several bookmarks match current folder, the first one will be used
                 newLabel = b.getName();
@@ -321,13 +321,13 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         popupMenu.add(new JSeparator());
 
         // Add boookmarks
-        Vector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
+        java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
         int nbBookmarks = bookmarks.size();
         Bookmark b;   
 
         if(nbBookmarks>0) {
             for(int i=0; i<nbBookmarks; i++) {
-                b = bookmarks.elementAt(i);
+                b = bookmarks.get(i);
                 item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), b));
                 setMnemonic(item, mnemonicHelper);
             }
@@ -529,15 +529,15 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
      */
     private class CustomOpenLocationAction extends OpenLocationAction {
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable<String,Object> properties, Bookmark bookmark) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, Bookmark bookmark) {
             super(mainFrame, properties, bookmark);
         }
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable<String,Object> properties, AbstractFile file) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, AbstractFile file) {
             super(mainFrame, properties, file);
         }
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Hashtable<String,Object> properties, BonjourService bs) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, BonjourService bs) {
             super(mainFrame, properties, bs);
         }
 

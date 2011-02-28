@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.commandbar.CommandBar;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.commandbar.CommandBar} depending on its
@@ -40,7 +40,7 @@ import java.util.Hashtable;
  */
 public class ToggleCommandBarAction extends MuAction {
 
-    public ToggleCommandBarAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleCommandBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
         updateLabel(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
     }
@@ -64,7 +64,7 @@ public class ToggleCommandBarAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleCommandBarAction(mainFrame, properties);
 		}
     }

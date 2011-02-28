@@ -29,7 +29,7 @@ import com.mucommander.ui.dialog.file.CombineFilesDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action invokes the merge file dialog which allows to combine file parts into the original file.
@@ -38,7 +38,7 @@ import java.util.Hashtable;
  */
 public class CombineFilesAction extends SelectedFilesAction implements InvokesDialog {
 	
-    public CombineFilesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public CombineFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
@@ -59,7 +59,7 @@ public class CombineFilesAction extends SelectedFilesAction implements InvokesDi
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CombineFilesAction(mainFrame, properties);
 		}
     }

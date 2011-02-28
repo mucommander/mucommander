@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action invokes the {@link com.mucommander.ui.dialog.file.CalculateChecksumDialog} which allows to calculate
@@ -37,7 +37,7 @@ import java.util.Hashtable;
  */
 public class CalculateChecksumAction extends SelectedFilesAction implements InvokesDialog  {
 
-    public CalculateChecksumAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public CalculateChecksumAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
@@ -50,7 +50,7 @@ public class CalculateChecksumAction extends SelectedFilesAction implements Invo
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CalculateChecksumAction(mainFrame, properties);
 		}
     }

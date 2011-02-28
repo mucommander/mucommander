@@ -23,7 +23,7 @@ import com.mucommander.ui.dialog.pref.general.GeneralPreferencesDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action shows up the preferences dialog.
@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public class ShowPreferencesAction extends MuAction implements InvokesDialog {
 
-    public ShowPreferencesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ShowPreferencesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -41,7 +41,7 @@ public class ShowPreferencesAction extends MuAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ShowPreferencesAction(mainFrame, properties);
 		}
     }

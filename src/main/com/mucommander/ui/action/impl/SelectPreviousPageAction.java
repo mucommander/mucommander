@@ -24,7 +24,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action moves the current {@link FileTable}'s selection to the previous page.
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class SelectPreviousPageAction extends SelectBackwardAction {
 
-    public SelectPreviousPageAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SelectPreviousPageAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class SelectPreviousPageAction extends SelectBackwardAction {
     }
 
     public static class Factory implements ActionFactory {
-        public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
             return new SelectPreviousPageAction(mainFrame, properties);
         }
     }

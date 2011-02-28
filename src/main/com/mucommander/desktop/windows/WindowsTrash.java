@@ -27,7 +27,7 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.desktop.QueuedTrash;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * WindowsTrash is an <code>AbstractTrash</code> implementation for the <i>Microsoft Windows' Recycle Bin</i>.
@@ -125,7 +125,7 @@ public class WindowsTrash extends QueuedTrash {
     ////////////////////////////////
 
     @Override
-    protected boolean moveToTrash(Vector<AbstractFile> queuedFiles) {
+    protected boolean moveToTrash(List<AbstractFile> queuedFiles) {
         if(!Shell32.isAvailable())
             return false;
 
@@ -139,7 +139,7 @@ public class WindowsTrash extends QueuedTrash {
         String[] paths = new String[nbFiles];
         for(int i=0; i<nbFiles; i++) {
             // Directories (and regular files) must not end with a trailing slash or the operation will fail.
-            paths[i] = queuedFiles.elementAt(i).getAbsolutePath(false);
+            paths[i] = queuedFiles.get(i).getAbsolutePath(false);
         }
 
         // The encodePaths method takes care of encoding the paths in a special way.

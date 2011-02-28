@@ -29,6 +29,7 @@ import javax.jmdns.ServiceListener;
 import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -47,7 +48,7 @@ public class BonjourDirectory implements ServiceListener {
     /** Does all the hard work */
     private static JmDNS jmDNS;
     /** List of discovered and currently active Bonjour services */
-    private static Vector<BonjourService> services = new Vector<BonjourService>();
+    private static List<BonjourService> services = new Vector<BonjourService>();
 
     /** Known Bonjour/Zeroconf service types and their corresponding protocol */
     private final static String KNOWN_SERVICE_TYPES[][] = {

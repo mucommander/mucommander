@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action unmarks all files in the current file table.
@@ -32,13 +32,13 @@ import java.util.Hashtable;
  */
 public class UnmarkAllAction extends MarkAllAction {
 
-    public UnmarkAllAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public UnmarkAllAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties, false);
     }
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new UnmarkAllAction(mainFrame, properties);
 		}
     }

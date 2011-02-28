@@ -32,7 +32,7 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Provides a common base for viewer and editor actions.
@@ -47,7 +47,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public AbstractViewerAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public AbstractViewerAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Enable this action only if the currently selected file is not a directory and can be read.

@@ -23,7 +23,7 @@ import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action checks for a new version of muCommander.
@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
 
-    public CheckForUpdatesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public CheckForUpdatesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,7 +43,7 @@ public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CheckForUpdatesAction(mainFrame, properties);
 		}
     }

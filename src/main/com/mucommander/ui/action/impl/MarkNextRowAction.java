@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Marks/unmarks the current row and moves the selection to the next row.
@@ -32,7 +32,7 @@ import java.util.Hashtable;
  */
 public class MarkNextRowAction extends MarkForwardAction {
 
-    public MarkNextRowAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkNextRowAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -42,7 +42,7 @@ public class MarkNextRowAction extends MarkForwardAction {
     }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkNextRowAction(mainFrame, properties);
 		}
     }

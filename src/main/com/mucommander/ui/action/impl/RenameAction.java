@@ -29,7 +29,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action triggers in-table renaming of the currently selected file, if no file is marked.
@@ -39,7 +39,7 @@ import java.util.Hashtable;
  */
 public class RenameAction extends SelectedFileAction {
 
-    public RenameAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public RenameAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new OrFileFilter(
@@ -65,7 +65,7 @@ public class RenameAction extends SelectedFileAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new RenameAction(mainFrame, properties);
 		}
     }

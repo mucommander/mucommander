@@ -23,7 +23,7 @@ import com.mucommander.ui.dialog.bookmark.EditBookmarksDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 
 /**
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class EditBookmarksAction extends MuAction implements InvokesDialog {
 
-    public EditBookmarksAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public EditBookmarksAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class EditBookmarksAction extends MuAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new EditBookmarksAction(mainFrame, properties);
 		}
     }

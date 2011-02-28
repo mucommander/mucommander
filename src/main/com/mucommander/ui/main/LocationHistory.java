@@ -25,6 +25,7 @@ import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
 
+import java.util.List;
 import java.util.Vector;
 
 
@@ -45,7 +46,7 @@ public class LocationHistory {
     private final static int HISTORY_CAPACITY = 100;
 
     /** List of visited locations, ordered by last visit date */
-    private Vector<FileURL> history = new Vector<FileURL>(HISTORY_CAPACITY+1);
+    private List<FileURL> history = new Vector<FileURL>(HISTORY_CAPACITY+1);
 
     /** Index of current folder in history */
     private int historyIndex = -1;
@@ -75,17 +76,17 @@ public class LocationHistory {
         FileURL folderURL = folder.getURL();
 
         // Do not add folder to history if new current folder is the same as previous folder
-        if (historyIndex<0 || !folderURL.equals(history.elementAt(historyIndex), false, false)) {
+        if (historyIndex<0 || !folderURL.equals(history.get(historyIndex), false, false)) {
             historyIndex++;
 
             // Delete 'forward' history items if any
             for(int i=historyIndex; i<historySize; i++) {
-                history.removeElementAt(historyIndex);
+                history.remove(historyIndex);
             }
 
             // If capacity is reached, remove first folder
             if(history.size()>=HISTORY_CAPACITY) {
-                history.removeElementAt(0);
+                history.remove(0);
                 historyIndex--;
             }
 
@@ -113,7 +114,7 @@ AppLogger.finest("folder="+folder+" root="+folder.getRoot());
         if (historyIndex==0)
             return;
 		
-        folderPanel.tryChangeCurrentFolder(history.elementAt(--historyIndex));
+        folderPanel.tryChangeCurrentFolder(history.get(--historyIndex));
     }
 	
     /**
@@ -124,7 +125,7 @@ AppLogger.finest("folder="+folder+" root="+folder.getRoot());
         if (historyIndex==history.size()-1)
             return;
 		
-        folderPanel.tryChangeCurrentFolder(history.elementAt(++historyIndex));
+        folderPanel.tryChangeCurrentFolder(history.get(++historyIndex));
     }
 
 
@@ -156,7 +157,7 @@ AppLogger.finest("folder="+folder+" root="+folder.getRoot());
 
         int cur = 0;
         for(int i=historyIndex-1; i>=0; i--)
-            urls[cur++] = history.elementAt(i);
+            urls[cur++] = history.get(i);
 
         return urls;
     }
@@ -175,7 +176,7 @@ AppLogger.finest("folder="+folder+" root="+folder.getRoot());
 
         int cur = 0;
         for(int i=historyIndex+1; i<historySize; i++)
-            urls[cur++] = history.elementAt(i);
+            urls[cur++] = history.get(i);
 
         return urls;
     }

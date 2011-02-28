@@ -24,7 +24,7 @@ import com.mucommander.ui.main.table.FileTable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action switches the currently active FileTable, that is gives focus to the FileTable that currently doesn't
@@ -34,7 +34,7 @@ import java.util.Hashtable;
  */
 public class SwitchActiveTableAction extends MuAction {
 
-    public SwitchActiveTableAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public SwitchActiveTableAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -51,7 +51,7 @@ public class SwitchActiveTableAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new SwitchActiveTableAction(mainFrame, properties);
 		}
     }

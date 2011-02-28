@@ -23,7 +23,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Pops up the DrivePopupButton (the drop down button that allows to quickly select a volume or bookmark)
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class PopupLeftDriveButtonAction extends MuAction {
 
-    public PopupLeftDriveButtonAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public PopupLeftDriveButtonAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public class PopupLeftDriveButtonAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new PopupLeftDriveButtonAction(mainFrame, properties);
 		}
     }

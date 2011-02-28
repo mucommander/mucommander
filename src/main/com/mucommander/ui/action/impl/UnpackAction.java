@@ -27,7 +27,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action pops up the 'Unpack files' dialog that allows to unpack the currently marked files.
@@ -36,7 +36,7 @@ import java.util.Hashtable;
  */
 public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
 
-    public UnpackAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public UnpackAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Unpack job operates on archives and directories
@@ -53,7 +53,7 @@ public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new UnpackAction(mainFrame, properties);
 		}
     }

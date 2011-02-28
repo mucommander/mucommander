@@ -21,7 +21,6 @@ package com.mucommander.ui.action;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,11 +49,11 @@ public class ActionKeymap {
      * @param mainFrame - MainFrame instance to which all action shortcuts would be registered.
      */
     public static void registerActions(MainFrame mainFrame) {
-        Enumeration<String> actionIds = ActionManager.getActionIds();
+        Iterator<String> actionIds = ActionManager.getActionIds();
         String actionId;
         ActionDescriptor actionDescriptor;
-        while(actionIds.hasMoreElements()) {
-            actionId = actionIds.nextElement();
+        while(actionIds.hasNext()) {
+            actionId = actionIds.next();
             actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 
             // Instantiate the action only if it is not parameterized: parameterized actions should only be instantiated

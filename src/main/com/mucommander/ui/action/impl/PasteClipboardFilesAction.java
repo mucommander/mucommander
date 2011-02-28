@@ -32,7 +32,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action pastes the files contained by the system clipboard to the currently active folder.
@@ -45,7 +45,7 @@ import java.util.Hashtable;
  */
 public class PasteClipboardFilesAction extends MuAction {
 
-    public PasteClipboardFilesAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public PasteClipboardFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         // Allows this action to be dynamically enabled when the clipboard contains files, and disabled otherwise.
@@ -67,17 +67,17 @@ public class PasteClipboardFilesAction extends MuAction {
         CopyJob job = new CopyJob(progressDialog, mainFrame, clipboardFiles, destFolder, null, CopyJob.COPY_MODE, FileCollisionDialog.ASK_ACTION);
         progressDialog.start(job);
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new PasteClipboardFilesAction(mainFrame, properties);
 		}
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "PasteClipboardFiles";
-    	
+
 		public String getId() { return ACTION_ID; }
 
 		public ActionCategory getCategory() { return ActionCategories.SELECTION; }

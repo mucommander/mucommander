@@ -48,13 +48,13 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Edited theme data. */
-    protected ThemeData themeData;
+    protected ThemeData                      themeData;
     /** Holds references to listeners to prevent them from being garbage collected. */
-    private   Vector<ChangeListener> listenerReferences = new Vector<ChangeListener>();
+    private   java.util.List<ChangeListener> listenerReferences = new Vector<ChangeListener>();
     /** Font used to display caption labels. */
-    private   Font                   captionLabelFont;
+    private   Font                           captionLabelFont;
     /** Color used to display caption labels. */
-    private   Color                  captionTextColor = new Color(48, 48, 48);
+    private   Color                           captionTextColor = new Color(48, 48, 48);
 
 
 

@@ -40,7 +40,7 @@ import java.util.Vector;
 public class EditorRegistrar {
 	
     /** List of registered file editors */ 
-    private final static Vector<EditorFactory> editorFactories = new Vector<EditorFactory>();
+    private final static java.util.List<EditorFactory> editorFactories = new Vector<EditorFactory>();
 
     static {
         registerFileEditor(new com.mucommander.ui.viewer.text.TextFactory());

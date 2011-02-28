@@ -25,7 +25,7 @@ import com.mucommander.ui.main.table.FileTableModel;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action marks all files in the current file table.
@@ -35,12 +35,12 @@ import java.util.Hashtable;
 public class MarkAllAction extends MuAction {
     private boolean mark;
 
-    protected MarkAllAction(MainFrame mainFrame, Hashtable<String,Object> properties, boolean mark) {
+    protected MarkAllAction(MainFrame mainFrame, Map<String,Object> properties, boolean mark) {
         super(mainFrame, properties);
         this.mark = mark;
     }
 
-    public MarkAllAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public MarkAllAction(MainFrame mainFrame, Map<String,Object> properties) {
         this(mainFrame, properties, true);
     }
 
@@ -60,7 +60,7 @@ public class MarkAllAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new MarkAllAction(mainFrame, properties);
 		}
     }

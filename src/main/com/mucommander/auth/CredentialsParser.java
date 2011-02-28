@@ -32,8 +32,8 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This class takes care of parsing the credentials XML file and adding parsed {@link CredentialsMapping} instances
@@ -46,7 +46,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
     // Variables used for XML parsing
     private FileURL url;
-    private Hashtable<String, String> urlProperties;
+    private Map<String, String> urlProperties;
     private String login;
     private String password;
     private StringBuffer characters;
@@ -133,12 +133,8 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
             // Copy properties into FileURL instance (if any)
             if(urlProperties!=null) {
-                Enumeration<String> propertyKeys = urlProperties.keys();
-                String key;
-                while(propertyKeys.hasMoreElements()) {
-                    key = propertyKeys.nextElement();
+                for(String key: urlProperties.keySet())
                     url.setProperty(key, urlProperties.get(key));
-                }
             }
 
             // Decrypt password

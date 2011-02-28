@@ -25,7 +25,7 @@ import com.mucommander.ui.main.WindowManager;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action pops up the Quit confirmation dialog (if it hasn't been disabled) and if quit has been confirmed,
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class QuitAction extends MuAction {
 
-    public QuitAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public QuitAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -47,7 +47,7 @@ public class QuitAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new QuitAction(mainFrame, properties);
 		}
     }

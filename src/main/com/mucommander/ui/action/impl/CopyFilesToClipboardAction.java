@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action copies the selected / marked files to the system clipboard, allowing to paste
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class CopyFilesToClipboardAction extends SelectedFilesAction {
 
-    public CopyFilesToClipboardAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public CopyFilesToClipboardAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,17 +43,17 @@ public class CopyFilesToClipboardAction extends SelectedFilesAction {
     public void performAction(FileSet files) {
         ClipboardSupport.setClipboardFiles(files);
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CopyFilesToClipboardAction(mainFrame, properties);
 		}
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "CopyFilesToClipboard";
-    	
+
 		public String getId() { return ACTION_ID; }
 
 		public ActionCategory getCategory() { return ActionCategories.SELECTION; }

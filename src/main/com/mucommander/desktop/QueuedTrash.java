@@ -23,6 +23,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.WindowManager;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -49,7 +50,7 @@ import java.util.Vector;
 public abstract class QueuedTrash extends AbstractTrash {
 
     /** Contains the files that are waiting to be moved to the trash */
-    private final static Vector<AbstractFile> queuedFiles = new Vector<AbstractFile>();
+    private final static List<AbstractFile> queuedFiles = new Vector<AbstractFile>();
 
     /** Use to synchronize access to the trash */
     protected final static Object moveToTrashLock = new Object();
@@ -68,7 +69,7 @@ public abstract class QueuedTrash extends AbstractTrash {
      * @param queuedFiles a Vector of AbstractFile to move to the trash
      * @return true if all files were moved successfully
      */
-    protected abstract boolean moveToTrash(Vector<AbstractFile> queuedFiles);
+    protected abstract boolean moveToTrash(List<AbstractFile> queuedFiles);
 
 
     //////////////////////////////////
@@ -124,7 +125,7 @@ public abstract class QueuedTrash extends AbstractTrash {
      * Performs the actual job of moving files to the trash.
      *
      * <p>The thread starts by waiting {@link com.mucommander.desktop.osx.OSXTrash#QUEUE_PERIOD} milliseconds before moving them to give additional
-     * files a chance to be queued and regrouped as a single call to {@link QueuedTrash#moveToTrash(java.util.Vector)}.
+     * files a chance to be queued and regrouped as a single call to {@link QueuedTrash#moveToTrash(java.util.List)}.
      * If more files were queued during that period, the thread will wait an additional {@link com.mucommander.desktop.osx.OSXTrash# QUEUE_PERIOD},
      * and so on.<p>
      */

@@ -31,7 +31,7 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * @author Nicolas Rinaudo
@@ -52,7 +52,7 @@ public class CommandAction extends MuAction {
      * @param properties ignored.
      * @param command    command to run when this action is called.
      */
-    public CommandAction(MainFrame mainFrame, Hashtable<String,Object> properties, Command command) {
+    public CommandAction(MainFrame mainFrame, Map<String,Object> properties, Command command) {
         super(mainFrame, properties);
         this.command = command;
         setLabel(command.getDisplayName());

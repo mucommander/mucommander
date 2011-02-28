@@ -108,7 +108,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Use Java 1.6 's new Window#setIconImages(List<Image>) when available
         if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
-            Vector<Image> icons = new Vector<Image>();
+            java.util.List<Image> icons = new Vector<Image>();
 
             // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.
             icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_8.png").getImage());
@@ -661,7 +661,7 @@ public class MainFrame extends JFrame implements LocationListener {
     public void updateWindowTitle() {
         // Update window title
         String title = activeTable.getCurrentFolder().getAbsolutePath();
-        Vector<MainFrame> mainFrames = WindowManager.getMainFrames();
+        java.util.List<MainFrame> mainFrames = WindowManager.getMainFrames();
         if(mainFrames.size()>1)
             title += " ["+(mainFrames.indexOf(this)+1)+"]";
         setTitle(title);

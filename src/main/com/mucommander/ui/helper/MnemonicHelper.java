@@ -20,6 +20,7 @@
 package com.mucommander.ui.helper;
 
 import javax.swing.*;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -35,7 +36,7 @@ import java.util.Vector;
 public class MnemonicHelper {
 
     /** Current list of previously assigned mnemonics */
-    private Vector<Character> takenMnemonics;
+    private List<Character> takenMnemonics;
 	
 	
     /**

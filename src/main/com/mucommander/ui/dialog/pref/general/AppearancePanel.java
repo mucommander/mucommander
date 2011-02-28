@@ -722,7 +722,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     }
 
     public void run() {
-        Vector<Class<?>> newLookAndFeels;
+        java.util.List<Class<?>> newLookAndFeels;
 
         setLookAndFeelsLoading(true);
         try {
@@ -738,7 +738,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
                 // Adds all new instances to the list of custom look&feels.
                 for(int i = 0; i < newLookAndFeels.size(); i++) {
-                    currentName = newLookAndFeels.elementAt(i).getName();
+                    currentName = newLookAndFeels.get(i).getName();
                     if(!customLookAndFeels.contains(currentName)) {
                         customLookAndFeels.add(currentName);
                         try {WindowManager.installLookAndFeel(currentName);}

@@ -23,7 +23,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action toggles the 'auto-size columns' option on the currently active FileTable, which automatically resizes
@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public class ToggleAutoSizeAction extends MuAction {
 
-    public ToggleAutoSizeAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public ToggleAutoSizeAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -47,7 +47,7 @@ public class ToggleAutoSizeAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new ToggleAutoSizeAction(mainFrame, properties);
 		}
     }

@@ -40,15 +40,15 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Displays the different panels. */
-    private JTabbedPane              tabbedPane;
+    private JTabbedPane                      tabbedPane;
     /** Stores the different panels. */
-    private Vector<PreferencesPanel> prefPanels;
+    private java.util.List<PreferencesPanel> prefPanels;
     /** Apply button. */
-    private JButton                  applyButton;
+    private JButton                          applyButton;
     /** OK button. */
-    private JButton                  okButton;
+    private JButton                          okButton;
     /** Cancel button. */
-    private JButton                  cancelButton;
+    private JButton                          cancelButton;
 
 
 
@@ -172,7 +172,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         // Ask pref panels to commit changes
         int nbPanels = prefPanels.size();
         for(int i = 0; i < nbPanels; i++)
-            prefPanels.elementAt(i).commit();
+            prefPanels.get(i).commit();
         setCommitButtonsEnabled(false);
     }
 
@@ -188,7 +188,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         // Ask pref panels to commit changes
         int nbPanels = prefPanels.size();
         for(int i = 0; i < nbPanels; i++)
-            if(!prefPanels.elementAt(i).checkCommit())
+            if(!prefPanels.get(i).checkCommit())
                 return false;
         return true;
     }

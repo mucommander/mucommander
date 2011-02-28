@@ -24,7 +24,7 @@ import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Opens the trash in the default file manager of the current OS/Desktop manager. This action is enabled only
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class OpenTrashAction extends MuAction {
 
-    public OpenTrashAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public OpenTrashAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         AbstractTrash trash = DesktopManager.getTrash();
@@ -49,7 +49,7 @@ public class OpenTrashAction extends MuAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new OpenTrashAction(mainFrame, properties);
 		}
     }

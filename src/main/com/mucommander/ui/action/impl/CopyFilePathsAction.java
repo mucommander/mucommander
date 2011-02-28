@@ -26,7 +26,7 @@ import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This action copies the path(s) of the currently selected / marked files(s) to the system clipboard.
@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public class CopyFilePathsAction extends SelectedFilesAction {
 
-    public CopyFilePathsAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public CopyFilePathsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -55,7 +55,7 @@ public class CopyFilePathsAction extends SelectedFilesAction {
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new CopyFilePathsAction(mainFrame, properties);
 		}
     }

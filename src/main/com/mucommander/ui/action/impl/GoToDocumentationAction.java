@@ -25,7 +25,7 @@ import com.mucommander.ui.main.MainFrame;
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Opens the muCommander online documentation in the system's default browser. The {@link #TOPIC_PROPERTY_KEY}
@@ -39,7 +39,7 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
     /** Key to the topic property */
     public final static String TOPIC_PROPERTY_KEY = "topic";
 
-    public GoToDocumentationAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+    public GoToDocumentationAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
         setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, "help.png"));
@@ -85,7 +85,7 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
     
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Hashtable<String,Object> properties) {
+		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
 			return new GoToDocumentationAction(mainFrame, properties);
 		}
     }
