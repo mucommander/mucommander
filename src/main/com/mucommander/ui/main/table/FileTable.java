@@ -1168,12 +1168,19 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
+     * Overridden to ensure that the table is always visible.
+     */
+    @Override
+    public void setVisible(boolean visible) {
+    }
+    
+    /**
      * Overridden for debugging purposes.
      */
+    @Override
     public String toString() {
         return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+hasFocus()+" currentRow="+currentRow;
     }
-
 
     ///////////////////////////
     // MouseListener methods //
