@@ -19,6 +19,9 @@
 package com.mucommander.ui.action;
 
 import javax.swing.*;
+
+import com.mucommander.commons.util.Pair;
+
 import java.util.HashMap;
 
 /**
@@ -32,8 +35,8 @@ public class AcceleratorMap {
 	public final static int PRIMARY_ACCELERATOR = 1;
     public final static int ALTERNATIVE_ACCELERATOR = 2;
     
-    // Maps KeyStrokes to ActionIdAndAcceleratorType instance.
-	private static HashMap<KeyStroke, ActionIdAndAcceleratorType> map = new HashMap<KeyStroke, ActionIdAndAcceleratorType>();
+    // Maps KeyStrokes to MuAction id and accelerator type (PRIMARY_ACCELERATOR/ALTERNATIVE_ACCELERATOR) pair.
+	private static HashMap<KeyStroke, Pair<String, Integer>> map = new HashMap<KeyStroke, Pair<String, Integer>>();
     
 	/**
 	 * Register KeyStroke to MuAction as primary accelerator.
@@ -62,8 +65,8 @@ public class AcceleratorMap {
 	 * @return id of MuAction that the given accelerator is registered to.
 	 */
     public String getActionId(KeyStroke ks) {
-    	ActionIdAndAcceleratorType idAndType = get(ks);
-    	return idAndType != null ? idAndType.getActionId() : null;
+    	Pair<String, Integer> idAndType = getActionIdAndAcceleratorTypeOfKeyStroke(ks);
+    	return idAndType != null ? idAndType.first : null;
     }
     
     /**
@@ -73,8 +76,8 @@ public class AcceleratorMap {
      * @return the type of the given accelerator (primary(1)/alternative(2)/not registered(0)).
      */
     public int getAcceleratorType(KeyStroke ks) {
-    	ActionIdAndAcceleratorType idAndType = get(ks);
-    	return idAndType != null ? idAndType.getAcceleratorType() : 0;
+    	Pair<String, Integer> idAndType = getActionIdAndAcceleratorTypeOfKeyStroke(ks);
+    	return idAndType != null ? idAndType.second : 0;
     }
     
     /**
@@ -95,34 +98,10 @@ public class AcceleratorMap {
     
     private void put(KeyStroke ks, String actionId, int acceleratorType) {
     	if (ks != null)
-    		map.put(ks, ActionIdAndAcceleratorType.create(actionId, acceleratorType));
+    		map.put(ks, new Pair<String, Integer>(actionId, acceleratorType));
     }
     
-    private ActionIdAndAcceleratorType get(KeyStroke ks) {
+    private Pair<String, Integer> getActionIdAndAcceleratorTypeOfKeyStroke(KeyStroke ks) {
     	return map.get(ks);
-    }
-    
-    /**
-     * Pair of MuAction id and accelerator type (PRIMARY_ACCELERATOR/ALTERNATIVE_ACCELERATOR)
-     */
-    private static class ActionIdAndAcceleratorType {
-    	private String actionId;
-    	private int acceleratorType;
-    	
-    	/**
-    	 * Factory method.
-    	 */
-    	public static ActionIdAndAcceleratorType create(String actionId, int acceleratorType) {
-    		return new ActionIdAndAcceleratorType(actionId, acceleratorType);
-    	}
-    	
-    	private ActionIdAndAcceleratorType(String actionId, int acceleratorType) {
-    		this.actionId = actionId;
-    		this.acceleratorType = acceleratorType;
-    	}
-    	
-    	public String getActionId() { return actionId; }
-    	
-    	public int getAcceleratorType() { return acceleratorType; }
     }
 }

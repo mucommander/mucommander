@@ -18,9 +18,49 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+
 import com.mucommander.AppLogger;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.commons.util.Pair;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionKeymap;
@@ -32,25 +72,11 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.table.CenteredTableHeaderRenderer;
 import com.mucommander.ui.text.KeyStrokeUtils;
-import com.mucommander.ui.theme.*;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
-import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.List;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeCache;
+import com.mucommander.ui.theme.ThemeListener;
 
 /**
  * This class is the table in which the actions and their shortcuts are
@@ -521,9 +547,13 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 					actionIcon = transparentIcon;
 				String actionLabel = actionDescriptor.getLabel();
 				
-				actionProperties.put(description, new ActionDescription(IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)), actionLabel));
+				/* 0 -> action's icon & name pair */
+				actionProperties.put(description, new Pair<ImageIcon, String>(IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)), actionLabel));
+				/* 1 -> action's accelerator */
 				actionProperties.put(accelerator, ActionKeymap.getAccelerator(actionId));
+				/* 2 -> action's alternate accelerator */
 				actionProperties.put(alt_accelerator, ActionKeymap.getAlternateAccelerator(actionId));
+				/* 3 -> action's description */
 				actionProperties.put(tooltips, actionDescriptor.getDescription());
 				
 				db.put(actionId, actionProperties);
@@ -684,9 +714,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			
 			// action's icon column: return ImageIcon instance
 			if(columnId == ACTION_DESCRIPTION_COLUMN_INDEX) {
-				ActionDescription description = (ActionDescription) value;
-				label.setIcon(description.icon);
-				label.setText(description.text);
+				Pair<ImageIcon, String> description = (Pair<ImageIcon, String>) value;
+				label.setIcon(description.first);
+				label.setText(description.second);
 				
 				// set cell's foreground color
 				label.setForeground(ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.PLAIN_FILE]);
@@ -757,16 +787,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		@Override
         protected void paintOutline(Graphics g) {
             paintDottedBorder(g, getWidth(), getHeight(), outlineColor);
-		}
-	}
-	
-	private class ActionDescription {
-		private ImageIcon icon;
-		private String text;
-		
-		public ActionDescription(ImageIcon icon, String text) {
-			this.icon = icon;
-			this.text = text;
 		}
 	}
 }
