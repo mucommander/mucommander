@@ -19,14 +19,13 @@
 
 package com.mucommander.ui.main.menu;
 
+import javax.swing.JSeparator;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
+import com.mucommander.ui.popup.MuActionsPopupMenu;
 
 /**
  * Contextual popup menu invoked by FileTable when right-clicking on a file or a group of files.
@@ -52,11 +51,7 @@ import java.awt.event.KeyEvent;
  * 
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class TablePopupMenu extends JPopupMenu {
-
-    /** Parent MainFrame instance */
-    private MainFrame mainFrame;
-
+public class TablePopupMenu extends MuActionsPopupMenu {
 
     /**
      * Creates a new TablePopupMenu.
@@ -68,11 +63,12 @@ public class TablePopupMenu extends JPopupMenu {
      * @param markedFiles list of marked files, can be empty but never null
      */
     public TablePopupMenu(MainFrame mainFrame, AbstractFile currentFolder, AbstractFile clickedFile, boolean parentFolderClicked, FileSet markedFiles) {
-        this.mainFrame = mainFrame;
+        super(mainFrame);
         
         // 'Open' displayed if a single file was clicked
         if(clickedFile!=null || parentFolderClicked) {
             addAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID);
+            addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID);
 
             // Creates the 'Open with...' menu.
@@ -110,31 +106,5 @@ public class TablePopupMenu extends JPopupMenu {
         addAction(com.mucommander.ui.action.impl.ShowFilePropertiesAction.Descriptor.ACTION_ID);
         addAction(com.mucommander.ui.action.impl.ChangePermissionsAction.Descriptor.ACTION_ID);
         addAction(com.mucommander.ui.action.impl.ChangeDateAction.Descriptor.ACTION_ID);
-    }
-
-
-    /**
-     * Adds the MuAction denoted by the given ID to this popup menu, as a <code>JMenuItem</code>.
-     * <p>
-     * No icon will be displayed, regardless of whether the action has one or not.
-     * </p>
-     * <p>
-     * If the action has a keyboard shortcut that conflicts with the menu's internal ones (enter, space and escape),
-     * they will not be used.
-     * </p>
-     * @param actionId action ID
-     */
-    private void addAction(String actionId) {
-        JMenuItem item;
-        KeyStroke stroke;
-
-        item = add(ActionManager.getActionInstance(actionId, mainFrame));
-        item.setIcon(null);
-
-        stroke = item.getAccelerator();
-        if(stroke != null)
-            if(stroke.getModifiers() == 0 &&
-               (stroke.getKeyCode() == KeyEvent.VK_ENTER || stroke.getKeyCode() == KeyEvent.VK_SPACE || stroke.getKeyCode() == KeyEvent.VK_ESCAPE))
-                item.setAccelerator(null);
     }
 }
