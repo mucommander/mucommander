@@ -68,7 +68,7 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         // 'Open' displayed if a single file was clicked
         if(clickedFile!=null || parentFolderClicked) {
             addAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
+//            addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID);
 
             // Creates the 'Open with...' menu.
