@@ -18,6 +18,38 @@
 
 package com.mucommander.ui.main.table;
 
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Iterator;
+import java.util.WeakHashMap;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 import com.mucommander.AppLogger;
 import com.mucommander.commons.collections.Enumerator;
 import com.mucommander.commons.conf.ConfigurationEvent;
@@ -46,17 +78,11 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
-import com.mucommander.ui.theme.*;
-
-import javax.swing.*;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Iterator;
-import java.util.WeakHashMap;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 
 /**
@@ -145,6 +171,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /** Interval to wait for the double-click */
     private static int DOUBLE_CLICK_INTERVAL = DesktopManager.getMultiClickInterval();
 
+    /** Wrapper of presentation adjustments for the file-table */
+    private FileTableWrapperForDisplay scrollpaneWrapper;
 
     public FileTable(MainFrame mainFrame, FolderPanel folderPanel, FileTableConfiguration conf) {
         super(new FileTableModel(), new FileTableColumnModel(conf));
@@ -165,7 +193,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         inputMap.clear();
         inputMap.setParent(null);
 
-        // Initialises the table.
+        // Initializes the table.
         cellRenderer     = new FileTableCellRenderer(this);
         getColumnModel().getColumn(convertColumnIndexToView(Column.NAME.ordinal())).setCellEditor(filenameEditor = new FilenameEditor(new JTextField()));
         getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -175,7 +203,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         setRowHeight();
         setAutoSizeColumnsEnabled(MuConfiguration.getVariable(MuConfiguration.AUTO_SIZE_COLUMNS, MuConfiguration.DEFAULT_AUTO_SIZE_COLUMNS));
 
-        // Initialises event listening.
+        // Initializes event listening.
         addMouseListener(this);
         folderPanel.addMouseListener(this);
         addMouseMotionListener(this);
@@ -188,8 +216,21 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // instead of a custom header renderer.
         if(usesTableHeaderRenderingProperties())
             setTableHeaderRenderingProperties();
+        
+        // Initialize a wrapper of presentation adjustments for the file-table
+        scrollpaneWrapper = new FileTableWrapperForDisplay(this, mainFrame);
     }
 
+    /**
+     * Returns the FileTable as a UI component for display purpose.
+     * The UI component is actually a JScrollPane that allows the FileTable to scroll and
+     * responsible to set its viewing properties as needed.
+     *
+     * @return the FileTable as a UI component for display purpose
+     */
+    public JComponent getAsUIComponent() {
+        return scrollpaneWrapper;
+    }
 
     /**
      * Under Mac OS X 10.5 (Leopard) and up, sets client properties on this table's JTableHeader to indicate the current
@@ -1075,14 +1116,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         Rectangle visibleRect = getVisibleRect();
         final Rectangle cellRect = getCellRect(currentRow, 0, false);
         if(cellRect.y<visibleRect.y || cellRect.y+getRowHeight()>visibleRect.y+visibleRect.height) {
-            final JScrollPane scrollPane = folderPanel.getScrollPane();
-            if(scrollPane!=null) {
+            if(scrollpaneWrapper!=null) {
                 // At this point JViewport is not yet aware of the new FileTable dimensions, calling setViewPosition
                 // would not work. Instead, SwingUtilities.invokeLater is used to delay the call after all pending
                 // UI events (including JViewport revalidation) have been processed.
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        scrollPane.getViewport().setViewPosition(new java.awt.Point(0, Math.max(0, cellRect.y-scrollPane.getHeight()/2-getRowHeight()/2)));
+                    	scrollpaneWrapper.getViewport().setViewPosition(new java.awt.Point(0, Math.max(0, cellRect.y-scrollpaneWrapper.getHeight()/2-getRowHeight()/2)));
                     }
                 });
             }
@@ -1617,7 +1657,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 lastSearchStringChange = System.currentTimeMillis();
 
                 // Repaint the table to add the 'dim' effect on non-matching files
-                FileTable.this.folderPanel.dimBackground();
+                scrollpaneWrapper.dimBackground();
             }
         }
 
@@ -1630,7 +1670,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 timeoutThread = null;
 
                 // Removes the 'dim' effect on non-matching files.
-                FileTable.this.folderPanel.undimBackground();
+                scrollpaneWrapper.undimBackground();
             }
         }
 

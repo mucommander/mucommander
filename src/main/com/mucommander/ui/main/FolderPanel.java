@@ -18,21 +18,44 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.AWTKeyStroke;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
+import java.awt.dnd.DropTarget;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashSet;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+
 import com.mucommander.AppLogger;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.AuthenticationType;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfiguration;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.FocusNextAction;
 import com.mucommander.ui.action.impl.FocusPreviousAction;
-import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.auth.AuthDialog;
@@ -40,7 +63,6 @@ import com.mucommander.ui.dialog.file.DownloadDialog;
 import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationManager;
-import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.main.quicklist.BookmarksQL;
 import com.mucommander.ui.main.quicklist.ParentFoldersQL;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
@@ -50,16 +72,6 @@ import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
-import com.mucommander.ui.theme.*;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.dnd.DropTarget;
-import java.awt.event.*;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.HashSet;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -67,7 +79,7 @@ import java.util.HashSet;
  *
  * @author Maxence Bernard
  */
-public class FolderPanel extends JPanel implements FocusListener, ThemeListener {
+public class FolderPanel extends JPanel implements FocusListener {
 
     private MainFrame  mainFrame;
 
@@ -86,19 +98,12 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     private DrivePopupButton driveButton;
     private LocationTextField locationTextField;
     private FileTable fileTable;
-    private JScrollPane scrollPane;
     private FoldersTreePanel foldersTreePanel;
     private JSplitPane treeSplitPane;
 	
     private LocationHistory folderHistory = new LocationHistory(this);
     
     private FileDragSourceListener fileDragSourceListener;
-
-    private Color borderColor;
-    private Color unfocusedBorderColor;
-    private Color backgroundColor;
-    private Color unfocusedBackgroundColor;
-    private Color unmatchedBackgroundColor;
 
     /** Filters out unwanted files when listing folder contents */
     private ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
@@ -201,55 +206,16 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         // Create the FolderChangeMonitor that monitors changes in the current folder and automatically refreshes it
         folderChangeMonitor = new FolderChangeMonitor(this);
 
-        // Put the FileTable in a scroll pane with vertical scrolling when needed and no horizontal scrolling
-        scrollPane = new JScrollPane(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        // Sets the table border.
-        scrollPane.setBorder(new MutableLineBorder(unfocusedBorderColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_BORDER_COLOR), 1));
-        borderColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BORDER_COLOR);
-
-        // Set scroll pane's background color to match the one of this panel and FileTable
-        scrollPane.getViewport().setBackground(unfocusedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR));
-        fileTable.setBackground(unfocusedBackgroundColor);
-        backgroundColor          = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
-        unmatchedBackgroundColor = ThemeManager.getCurrentColor(Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR);
-
-        // Remove default action mappings that conflict with corresponding mu actions
-        InputMap inputMap = scrollPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        inputMap.clear();
-        inputMap.setParent(null);
-
-        // Catch mouse events on the ScrollPane
-        scrollPane.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                // Left-click requests focus on the FileTable
-                if (DesktopManager.isLeftMouseButton(e)) {
-                    fileTable.requestFocus();
-                }
-                // Right-click brings a contextual popup menu
-                else if (DesktopManager.isRightMouseButton(e)) {
-                    if(!fileTable.hasFocus())
-                        fileTable.requestFocus();
-                    AbstractFile currentFolder = getCurrentFolder();
-                    new TablePopupMenu(FolderPanel.this.mainFrame, currentFolder, null, false, fileTable.getFileTableModel().getMarkedFiles()).show(scrollPane, e.getX(), e.getY());
-                }
-            }
-        });
-
         // create folders tree on a JSplitPane 
         foldersTreePanel = new FoldersTreePanel(this);
         foldersTreePanel.setVisible(false);
-        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel, scrollPane);
+        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel, fileTable.getAsUIComponent());
         treeSplitPane.setDividerSize(0);
         treeSplitPane.setDividerLocation(0);
         // Remove default border
         treeSplitPane.setBorder(null);
         add(treeSplitPane, BorderLayout.CENTER);
                 
-        // Listens to theme events
-        ThemeManager.addCurrentThemeListener(this);
-
         // Disable Ctrl+Tab and Shift+Ctrl+Tab focus traversal keys
         disableCtrlFocusTraversalKeys(locationTextField);
         disableCtrlFocusTraversalKeys(foldersTreePanel.getTree());
@@ -268,13 +234,8 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
         this.fileDragSourceListener = new FileDragSourceListener(this);
         fileDragSourceListener.enableDrag(fileTable);
 
-        // Enable drop support to copy/move/change current folder when files are dropped on the FileTable
-        FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, false);
-        fileTable.setDropTarget(new DropTarget(fileTable, dropTargetListener));
-        scrollPane.setDropTarget(new DropTarget(scrollPane, dropTargetListener));
-
         // Allow the location field to change the current directory when a file/folder is dropped on it
-        dropTargetListener = new FileDropTargetListener(this, true);
+        FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, true);
         locationTextField.setDropTarget(new DropTarget(locationTextField, dropTargetListener));
         driveButton.setDropTarget(new DropTarget(driveButton, dropTargetListener));
     }
@@ -338,15 +299,6 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
      */
     public FileTable getFileTable() {
         return this.fileTable;
-    }
-
-    /**
-     * Returns the JScrollPane that contains the FileTable component and allows it to scroll.
-     *
-     * @return the JScrollPane that contains the FileTable component and allows it to scroll
-     */
-    public JScrollPane getScrollPane() {
-        return scrollPane;
     }
 
     /**
@@ -697,40 +649,6 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     }
 
 
-    /**
-     * Dims the scrollpane's background, called by {@link com.mucommander.ui.main.table.FileTable.QuickSearch} when a quick search is started.
-     */
-    public void dimBackground() {
-        fileTable.setBackground(unmatchedBackgroundColor);
-        scrollPane.getViewport().setBackground(unmatchedBackgroundColor);
-    }
-
-    /**
-     * Stops dimming the scrollpane's background (returns to a normal background color), called by
-     * {@link com.mucommander.ui.main.table.FileTable.QuickSearch} when a quick search is over.
-     */
-    public void undimBackground() {
-        Color newColor;
-
-        // Identifies the new background color.
-        if(fileTable.hasFocus())
-            newColor = backgroundColor;
-        else
-            newColor = unfocusedBackgroundColor;
-
-        // If the old and new background color differ, set the new background
-        // color.
-        // Otherwise, repaint the table - if we were to skip that step, quicksearch
-        // cancellation might result in a corrupt display.
-        if(newColor.equals(scrollPane.getViewport().getBackground()))
-            fileTable.repaint();
-        else {
-            fileTable.setBackground(newColor);
-            scrollPane.getViewport().setBackground(newColor);
-        }
-    }
-
-
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -746,30 +664,13 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
     ///////////////////////////
     // FocusListener methods //
     ///////////////////////////
-    public void setBorderColor(Color color) {
-        Border border;
-        // Some (rather evil) look and feels will change borders outside of muCommander's control,
-        // this check is necessary to ensure no exception is thrown.
-        if((border = scrollPane.getBorder()) instanceof MutableLineBorder)
-            ((MutableLineBorder)border).setLineColor(color);
-    }
-
+    
     public void focusGained(FocusEvent e) {
         // Notify MainFrame that we are in control now! (our table/location field is active)
         mainFrame.setActiveTable(fileTable);
-        if(e.getSource() == fileTable) {
-            setBorderColor(borderColor);
-            scrollPane.getViewport().setBackground(backgroundColor);
-            fileTable.setBackground(backgroundColor);
-        }
     }
 
     public void focusLost(FocusEvent e) {
-        if(e.getSource() == fileTable) {
-            setBorderColor(unfocusedBorderColor);
-            scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
-            fileTable.setBackground(unfocusedBackgroundColor);
-        }
         fileTable.getQuickSearch().stop();
     }
 
@@ -1334,53 +1235,6 @@ public class FolderPanel extends JPanel implements FocusListener, ThemeListener 
             return super.toString()+" folderURL="+folderURL+" folder="+folder;
         }
     }
-
-    // - Theme listening -------------------------------------------------------------
-    // -------------------------------------------------------------------------------
-    /**
-     * Receives theme color changes notifications.
-     */
-    public void colorChanged(ColorChangedEvent event) {
-        switch(event.getColorId()) {
-        case Theme.FILE_TABLE_BORDER_COLOR:
-            borderColor = event.getColor();
-            if(fileTable.hasFocus()) {
-                setBorderColor(borderColor);
-                scrollPane.repaint();
-            }
-            break;
-        case Theme.FILE_TABLE_INACTIVE_BORDER_COLOR:
-            unfocusedBorderColor = event.getColor();
-            if(!fileTable.hasFocus()) {
-                setBorderColor(unfocusedBorderColor);
-                scrollPane.repaint();
-            }
-            break;
-        case Theme.FILE_TABLE_BACKGROUND_COLOR:
-            backgroundColor = event.getColor();
-            if(fileTable.hasFocus()) {
-                scrollPane.getViewport().setBackground(backgroundColor);
-                fileTable.setBackground(backgroundColor);
-            }
-            break;
-        case Theme.FILE_TABLE_INACTIVE_BACKGROUND_COLOR:
-            unfocusedBackgroundColor = event.getColor();
-            if(!fileTable.hasFocus()) {
-                scrollPane.getViewport().setBackground(unfocusedBackgroundColor);
-                fileTable.setBackground(unfocusedBackgroundColor);
-            }
-            break;
-
-        case Theme.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR:
-            unmatchedBackgroundColor = event.getColor();
-            break;
-        }
-    }
-
-    /**
-     * Not used.
-     */
-    public void fontChanged(FontChangedEvent event) {}
 
     /**
      * Shows the pop up which is located the given index in fileTablePopups.
