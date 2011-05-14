@@ -34,7 +34,8 @@ import java.util.LinkedList;
  * 
  * @author Arik Hadas
  */
-public class RecentLocationsQL extends QuickListWithIcons implements LocationListener{
+public class RecentLocationsQL extends QuickListWithIcons implements LocationListener {
+	
 	private static int MAX_ELEMENTS = 15;
 	private LinkedList<AbstractFile> linkedList;
 
@@ -48,20 +49,6 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
     protected void acceptListItem(Object item) {
 		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
 	}
-
-	public void locationCancelled(LocationEvent locationEvent) {}
-
-	public void locationChanged(LocationEvent locationEvent) {
-		AbstractFile currentFolder = locationEvent.getFolderPanel().getCurrentFolder();
-			
-		if (!linkedList.remove(currentFolder) && linkedList.size() > MAX_ELEMENTS)
-			linkedList.removeLast();
-		linkedList.addFirst(currentFolder);
-	}
-
-	public void locationChanging(LocationEvent locationEvent) {}
-
-	public void locationFailed(LocationEvent locationEvent) {}
 
 	@Override
     public Object[] getData() {
@@ -77,4 +64,26 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
     protected Icon itemToIcon(Object item) {
 		return getIconOfFile((AbstractFile)item);
 	}
+	
+	/*******************
+	 * LocationListener
+	 *******************/
+	
+	@Override
+	public void locationChanged(LocationEvent locationEvent) {
+		AbstractFile currentFolder = locationEvent.getFolderPanel().getCurrentFolder();
+			
+		if (!linkedList.remove(currentFolder) && linkedList.size() > MAX_ELEMENTS)
+			linkedList.removeLast();
+		linkedList.addFirst(currentFolder);
+	}
+
+	@Override
+	public void locationCancelled(LocationEvent locationEvent) {}
+	
+	@Override
+	public void locationChanging(LocationEvent locationEvent) {}
+
+	@Override
+	public void locationFailed(LocationEvent locationEvent) {}
 }

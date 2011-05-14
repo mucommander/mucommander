@@ -18,6 +18,22 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileSystemView;
+
 import com.mucommander.AppLogger;
 import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bonjour.BonjourService;
@@ -40,22 +56,19 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.button.PopupButton;
-import com.mucommander.ui.dialog.server.*;
+import com.mucommander.ui.dialog.server.FTPPanel;
+import com.mucommander.ui.dialog.server.HTTPPanel;
+import com.mucommander.ui.dialog.server.NFSPanel;
+import com.mucommander.ui.dialog.server.SFTPPanel;
+import com.mucommander.ui.dialog.server.SMBPanel;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.regex.PatternSyntaxException;
 
 
 /**
@@ -64,7 +77,7 @@ import java.util.regex.PatternSyntaxException;
  *
  * @author Maxence Bernard
  */
-public class DrivePopupButton extends PopupButton implements LocationListener, BookmarkListener, ConfigurationListener {
+public class DrivePopupButton extends PopupButton implements BookmarkListener, ConfigurationListener {
 
     /** FolderPanel instance that contains this button */
     private FolderPanel folderPanel;
@@ -118,7 +131,13 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
         this.folderPanel = folderPanel;
 		
         // Listen to location events to update the button when the current folder changes
-        folderPanel.getLocationManager().addLocationListener(this);
+        folderPanel.getLocationManager().addLocationListener(new LocationAdapter() {
+        	@Override
+        	public void locationChanged(LocationEvent e) {
+                // Update the button's label to reflect the new current folder
+                updateButton();
+            }
+		});
 
         // Listen to bookmark changes to update the button if a bookmark corresponding to the current folder
         // has been added/edited/removed
@@ -440,25 +459,6 @@ public class DrivePopupButton extends PopupButton implements LocationListener, B
     }
 
 
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-	
-    public void locationChanged(LocationEvent e) {
-        // Update the button's label to reflect the new current folder
-        updateButton();
-    }
-	
-    public void locationChanging(LocationEvent e) {
-    }
-	
-    public void locationCancelled(LocationEvent e) {
-    }
-
-    public void locationFailed(LocationEvent e) {
-    }
-
-    
     //////////////////////////////
     // BookmarkListener methods //
     //////////////////////////////

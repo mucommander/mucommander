@@ -18,14 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.ActivePanelListener;
+import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.Map;
 
 /**
  * This class is an abstract {@link MuAction} that operates on the current folder. It monitors changes in the active
@@ -34,7 +34,7 @@ import java.util.Map;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public abstract class ParentFolderAction extends MuAction implements ActivePanelListener, LocationListener {
+public abstract class ParentFolderAction extends MuAction implements ActivePanelListener {
 
     public ParentFolderAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
@@ -43,8 +43,14 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
         mainFrame.addActivePanelListener(this);
 
         // Listen to location change events
-        mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
-        mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
+        LocationAdapter locationAdapter = new LocationAdapter() {
+        	@Override
+            public void locationChanged(LocationEvent e) {
+                toggleEnabledState();
+            }
+		};
+        mainFrame.getLeftPanel().getLocationManager().addLocationListener(locationAdapter);
+        mainFrame.getRightPanel().getLocationManager().addLocationListener(locationAdapter);
 
         toggleEnabledState();
     }
@@ -69,23 +75,5 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
 
     public void activePanelChanged(FolderPanel folderPanel) {
         toggleEnabledState();
-    }
-
-
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-
-    public void locationChanged(LocationEvent e) {
-        toggleEnabledState();
-    }
-
-    public void locationChanging(LocationEvent e) {
-    }
-
-    public void locationCancelled(LocationEvent e) {
-    }
-
-    public void locationFailed(LocationEvent e) {
     }
 }

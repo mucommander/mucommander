@@ -63,18 +63,22 @@ public class StopAction extends MuAction implements LocationListener {
     // LocationListener methods //
     //////////////////////////////
 
+    @Override
     public void locationChanged(LocationEvent e) {
         setEnabled(false);
     }
 
+    @Override
     public void locationChanging(LocationEvent e) {
         setEnabled(true);
     }
 
+    @Override
     public void locationCancelled(LocationEvent e) {
         setEnabled(false);
     }
 
+    @Override
     public void locationFailed(LocationEvent e) {
         setEnabled(false);
     }

@@ -22,6 +22,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
+import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
@@ -36,23 +37,25 @@ import java.util.Vector;
  * 
  * @author Arik Hadas
  */
-public class ParentFoldersQL extends QuickListWithIcons implements LocationListener {
+public class ParentFoldersQL extends QuickListWithIcons {
+	
 	protected List<AbstractFile> parents = new Vector<AbstractFile>();
 	protected boolean updated = true;
 		
 	public ParentFoldersQL(FolderPanel folderPanel) {
 		super(ActionProperties.getActionLabel(ShowParentFoldersQLAction.Descriptor.ACTION_ID), Translator.get("parent_folders_quick_list.empty_message"));
 		
-		folderPanel.getLocationManager().addLocationListener(this);		
+		folderPanel.getLocationManager().addLocationListener(new LocationAdapter() {
+			@Override
+			public void locationChanged(LocationEvent locationEvent) {
+				updated = false;
+			}
+		});
 	}
 	
 	@Override
     protected void acceptListItem(Object item) {
 		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
-	}
-	
-	public void locationChanged(LocationEvent locationEvent) {
-		updated = false;
 	}
 	
 	protected void populateParentFolders(AbstractFile folder) {
@@ -62,12 +65,6 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
             parents.add(folder);
     }
 	
-	public void locationCancelled(LocationEvent locationEvent) {}
-
-	public void locationChanging(LocationEvent locationEvent) {}
-
-	public void locationFailed(LocationEvent locationEvent) {}	
-
 	@Override
     public Object[] getData() {
 		if (!updated && (updated = true))

@@ -463,23 +463,27 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /////////////////////////////////////
     // LocationListener implementation //
     /////////////////////////////////////
-	
+
+    @Override
     public void locationChanged(LocationEvent e) {
         dial.setAnimated(false);
         updateStatusInfo();
     }
 
+    @Override
     public void locationChanging(LocationEvent e) {
         // Show a message in the status bar saying that folder is being changed
         setStatusInfo(Translator.get("status_bar.connecting_to_folder"), dial, true);
         dial.setAnimated(true);
     }
 	
+    @Override
     public void locationCancelled(LocationEvent e) {
         dial.setAnimated(false);
         updateStatusInfo();
     }
 
+    @Override
     public void locationFailed(LocationEvent e) {
         dial.setAnimated(false);
         updateStatusInfo();

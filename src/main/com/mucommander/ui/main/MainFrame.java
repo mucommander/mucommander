@@ -18,6 +18,28 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Vector;
+import java.util.WeakHashMap;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.WindowConstants;
+import javax.swing.table.TableColumnModel;
+
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
@@ -30,8 +52,8 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.CloseWindowAction;
 import com.mucommander.ui.button.ToolbarMoreButton;
 import com.mucommander.ui.event.ActivePanelListener;
+import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -44,20 +66,12 @@ import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 
-import javax.swing.*;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Vector;
-import java.util.WeakHashMap;
-
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements LocationListener {
+public class MainFrame extends JFrame {
 	
     private ProportionalSplitPane splitPane;
 
@@ -177,9 +191,16 @@ public class MainFrame extends JFrame implements LocationListener {
         // Below the toolbar there is the pane with insets
         contentPane.add(insetsPane, BorderLayout.CENTER);
 
-        // Lister to location change events to display the current folder in the window's title
-        leftFolderPanel.getLocationManager().addLocationListener(this);
-        rightFolderPanel.getLocationManager().addLocationListener(this);
+        // Listen to location change events to display the current folder in the window's title
+        LocationAdapter locationAdapter = new LocationAdapter() {
+        	@Override
+            public void locationChanged(LocationEvent e) {
+                // Update window title to reflect the new current folder
+                updateWindowTitle();
+            }
+		};
+        leftFolderPanel.getLocationManager().addLocationListener(locationAdapter);
+        rightFolderPanel.getLocationManager().addLocationListener(locationAdapter);
 
         // Create menu bar (has to be created after toolbar)
         MainMenuBar menuBar = new MainMenuBar(this);
@@ -692,27 +713,8 @@ public class MainFrame extends JFrame implements LocationListener {
     }
     
 
-    //////////////////////////////
-    // LocationListener methods //
-    //////////////////////////////
-	
-    public void locationChanged(LocationEvent e) {
-        // Update window title to reflect the new current folder
-        updateWindowTitle();
-    }
-
-    public void locationChanging(LocationEvent e) {
-    }
-	
-    public void locationCancelled(LocationEvent e) {
-    }
-
-    public void locationFailed(LocationEvent e) {
-    }
-
-
     ///////////////////////
-    // Overriden methods //
+    // Overridden methods //
     ///////////////////////
 
     /**
