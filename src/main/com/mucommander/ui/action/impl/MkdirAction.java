@@ -40,12 +40,9 @@ public class MkdirAction extends ParentFolderAction {
 
         // Listen to active table change events
         mainFrame.addActivePanelListener(this);
-
-        // Listen to location change events
-        mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
-        mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
     }
 
+    @Override
     protected void toggleEnabledState() {
         AbstractFile firstFile = mainFrame.getActiveTable().getFileTableModel().getFileAt(0);
 
