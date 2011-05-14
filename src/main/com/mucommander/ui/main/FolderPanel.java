@@ -70,6 +70,7 @@ import com.mucommander.ui.main.quicklist.RecentLocationsQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
+import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
 
@@ -98,6 +99,7 @@ public class FolderPanel extends JPanel implements FocusListener {
     private DrivePopupButton driveButton;
     private LocationTextField locationTextField;
     private FileTable fileTable;
+    private FileTableTabs tabs;
     private FoldersTreePanel foldersTreePanel;
     private JSplitPane treeSplitPane;
 	
@@ -174,7 +176,7 @@ public class FolderPanel extends JPanel implements FocusListener {
         // Create the FileTable
         fileTable = new FileTable(mainFrame, this, conf);
         
-        // Init quick lists
+        // Initialize quick lists
     	locationManager.addLocationListener(recentLocationsQL);
     	fileTablePopups = new QuickList[]{
     			new ParentFoldersQL(this),
@@ -203,13 +205,16 @@ public class FolderPanel extends JPanel implements FocusListener {
             }
         }
 
+        // Create the Tabs (Must be called after the fileTable was created and current folder was set)
+        tabs = new FileTableTabs(this);
+        
         // Create the FolderChangeMonitor that monitors changes in the current folder and automatically refreshes it
         folderChangeMonitor = new FolderChangeMonitor(this);
 
         // create folders tree on a JSplitPane 
         foldersTreePanel = new FoldersTreePanel(this);
         foldersTreePanel.setVisible(false);
-        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel, fileTable.getAsUIComponent());
+        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel, tabs);
         treeSplitPane.setDividerSize(0);
         treeSplitPane.setDividerLocation(0);
         // Remove default border
@@ -220,6 +225,7 @@ public class FolderPanel extends JPanel implements FocusListener {
         disableCtrlFocusTraversalKeys(locationTextField);
         disableCtrlFocusTraversalKeys(foldersTreePanel.getTree());
         disableCtrlFocusTraversalKeys(fileTable);
+        disableCtrlFocusTraversalKeys(tabs);
         registerCycleThruFolderPanelAction(locationTextField);
         registerCycleThruFolderPanelAction(foldersTreePanel.getTree());
         // No need to register cycle actions for FileTable, they already are 
@@ -227,6 +233,7 @@ public class FolderPanel extends JPanel implements FocusListener {
         // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
         fileTable.addFocusListener(this);
         locationTextField.addFocusListener(this);
+        tabs.addFocusListener(this);
 
         // Drag and Drop support
 
@@ -299,6 +306,15 @@ public class FolderPanel extends JPanel implements FocusListener {
      */
     public FileTable getFileTable() {
         return this.fileTable;
+    }
+
+    /**
+     * Returns the FileTable tabs contained by this panel.
+     *
+     * @return the FileTable tabs contained by this panel
+     */
+    public FileTableTabs getTabs() {
+        return this.tabs;
     }
 
     /**

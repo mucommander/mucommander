@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
@@ -117,6 +118,17 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
                 }
             }
         });
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		if (visible)
+			super.setVisible(true);
+	}
+	
+	@Override
+	public boolean requestFocusInWindow() {
+		return fileTable.requestFocusInWindow();
 	}
 	
 	/**

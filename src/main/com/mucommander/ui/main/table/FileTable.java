@@ -1131,7 +1131,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Method overriden to return a custom TableCellRenderer.
+     * Method overridden to return a custom TableCellRenderer.
      */
     @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
@@ -1140,7 +1140,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Method overriden to consume keyboard events when quick search is active or when a row is being editing
+     * Method overridden to consume keyboard events when quick search is active or when a row is being editing
      * in order to prevent registered actions from being fired.
      */
     @Override
@@ -1212,6 +1212,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      */
     @Override
     public void setVisible(boolean visible) {
+    	if (visible)
+    		super.setVisible(true);
     }
     
     /**

@@ -64,7 +64,9 @@ public class ActionManager {
     	registerAction(new ChangeLocationAction.Descriptor(),               new ChangeLocationAction.Factory());
     	registerAction(new ChangePermissionsAction.Descriptor(),            new ChangePermissionsAction.Factory());
     	registerAction(new CheckForUpdatesAction.Descriptor(),              new CheckForUpdatesAction.Factory());
+    	registerAction(new CloseOtherTabsAction.Descriptor(),				new CloseOtherTabsAction.Factory());
     	registerAction(new CloseWindowAction.Descriptor(),                  new CloseWindowAction.Factory());
+    	registerAction(new CloseTabAction.Descriptor(),						new CloseTabAction.Factory());
 //    	registerAction(new CommandAction.Descriptor(),           		     new CommandAction.Factory());
     	registerAction(new CompareFoldersAction.Descriptor(),               new CompareFoldersAction.Factory());
     	registerAction(new ConnectToServerAction.Descriptor(),              new ConnectToServerAction.Factory());
@@ -116,8 +118,10 @@ public class ActionManager {
     	registerAction(new MkfileAction.Descriptor(),		                new MkfileAction.Factory());
     	registerAction(new MoveAction.Descriptor(),		                    new MoveAction.Factory());
     	registerAction(new NewWindowAction.Descriptor(),     		        new NewWindowAction.Factory());
+    	registerAction(new NextTabAction.Descriptor(),						new NextTabAction.Factory());
     	registerAction(new OpenAction.Descriptor(),          				new OpenAction.Factory());
     	registerAction(new OpenInBothPanelsAction.Descriptor(),             new OpenInBothPanelsAction.Factory());
+    	registerAction(new OpenInNewTabAction.Descriptor(),					new OpenInNewTabAction.Factory());
     	registerAction(new OpenInOtherPanelAction.Descriptor(),             new OpenInOtherPanelAction.Factory());
 //    	registerAction(new OpenLocationAction.Descriptor(),          	    new OpenLocationAction.Factory());
     	registerAction(new OpenNativelyAction.Descriptor(),       		    new OpenNativelyAction.Factory());
@@ -128,6 +132,7 @@ public class ActionManager {
     	registerAction(new PermanentDeleteAction.Descriptor(),              new PermanentDeleteAction.Factory());
     	registerAction(new PopupLeftDriveButtonAction.Descriptor(),         new PopupLeftDriveButtonAction.Factory());
     	registerAction(new PopupRightDriveButtonAction.Descriptor(),        new PopupRightDriveButtonAction.Factory());
+    	registerAction(new PreviousTabAction.Descriptor(),					new PreviousTabAction.Factory());
     	registerAction(new QuitAction.Descriptor(),              			new QuitAction.Factory());
     	registerAction(new RecallNextWindowAction.Descriptor(),             new RecallNextWindowAction.Factory());
     	registerAction(new RecallPreviousWindowAction.Descriptor(),         new RecallPreviousWindowAction.Factory());
