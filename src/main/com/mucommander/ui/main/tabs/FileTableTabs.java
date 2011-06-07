@@ -19,8 +19,8 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.tabs.HideableTabbedPane;
 
@@ -29,7 +29,7 @@ import com.mucommander.ui.tabs.HideableTabbedPane;
 * 
 * @author Arik Hadas
 */
-public class FileTableTabs extends HideableTabbedPane<FileTableTab> {
+public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements LocationListener {
 
 	/** FolderPanel containing those tabs */
 	private FolderPanel folderPanel;
@@ -38,12 +38,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> {
 		super(new FileTableTabsDisplayFactory(folderPanel.getFileTable()));
 		
 		this.folderPanel = folderPanel;
-		folderPanel.getLocationManager().addLocationListener(new LocationAdapter() {
-			@Override
-			public void locationChanged(LocationEvent locationEvent) {
-				updateTab(FileTableTab.create(FileTableTabs.this.folderPanel.getCurrentFolder()));
-			}
-		});
+		folderPanel.getLocationManager().addLocationListener(this);
 		
 		addTab(folderPanel.getCurrentFolder());
 	}
@@ -63,4 +58,23 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> {
 	public void closeOtherTabs() {
 		removeOtherTabs();
 	}
+
+	/*******************
+	 * LocationListener
+	 *******************/
+	
+	@Override
+	public void locationChanged(LocationEvent locationEvent) {
+//		System.out.println("change location to: " + FileTableTabs.this.folderPanel.getCurrentFolder());
+		updateTab(FileTableTab.create(FileTableTabs.this.folderPanel.getCurrentFolder()));
+	}
+
+	@Override
+	public void locationCancelled(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationFailed(LocationEvent locationEvent) { }
+	
+	@Override
+	public void locationChanging(LocationEvent locationEvent) { }
 }
