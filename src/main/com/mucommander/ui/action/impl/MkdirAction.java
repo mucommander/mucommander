@@ -37,9 +37,6 @@ public class MkdirAction extends ParentFolderAction {
 
     public MkdirAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
-
-        // Listen to active table change events
-        mainFrame.addActivePanelListener(this);
     }
 
     @Override
