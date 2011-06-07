@@ -18,6 +18,21 @@
 
 package com.mucommander.ui.viewer.text;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentListener;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.EncodingDetector;
@@ -31,17 +46,7 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
-import com.mucommander.ui.viewer.FilePresenter;
 import com.mucommander.ui.viewer.FileViewer;
-
-import javax.swing.*;
-import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.io.*;
-import java.nio.charset.Charset;
 
 /**
  * A simple text viewer. Most of the implementation is located in {@link TextEditorImpl}.

@@ -18,6 +18,22 @@
 
 package com.mucommander.ui.viewer.text;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
@@ -33,15 +49,6 @@ import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.viewer.FileEditor;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.io.*;
 
 
 /**

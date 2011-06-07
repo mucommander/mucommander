@@ -19,7 +19,6 @@
 package com.mucommander.ui.tabs;
 
 import javax.swing.JComponent;
-import javax.swing.JScrollPane;
 
 /**
 * Component that present single tab
