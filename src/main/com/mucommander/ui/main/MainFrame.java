@@ -52,8 +52,8 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.CloseWindowAction;
 import com.mucommander.ui.button.ToolbarMoreButton;
 import com.mucommander.ui.event.ActivePanelListener;
-import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -71,7 +71,7 @@ import com.mucommander.ui.quicklist.QuickListFocusableComponent;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements LocationListener {
 	
     private ProportionalSplitPane splitPane;
 
@@ -164,7 +164,7 @@ public class MainFrame extends JFrame {
         JPanel contentPane = new JPanel(new BorderLayout());
         setContentPane(contentPane);
 
-        // Initialises the folder panels and file tables.
+        // Initializes the folder panels and file tables.
         this.leftFolderPanel = leftFolderPanel;
         this.rightFolderPanel = rightFolderPanel;
         leftTable = leftFolderPanel.getFileTable();
@@ -192,15 +192,8 @@ public class MainFrame extends JFrame {
         contentPane.add(insetsPane, BorderLayout.CENTER);
 
         // Listen to location change events to display the current folder in the window's title
-        LocationAdapter locationAdapter = new LocationAdapter() {
-        	@Override
-            public void locationChanged(LocationEvent e) {
-                // Update window title to reflect the new current folder
-                updateWindowTitle();
-            }
-		};
-        leftFolderPanel.getLocationManager().addLocationListener(locationAdapter);
-        rightFolderPanel.getLocationManager().addLocationListener(locationAdapter);
+        leftFolderPanel.getLocationManager().addLocationListener(this);
+        rightFolderPanel.getLocationManager().addLocationListener(this);
 
         // Create menu bar (has to be created after toolbar)
         MainMenuBar menuBar = new MainMenuBar(this);
@@ -859,4 +852,23 @@ public class MainFrame extends JFrame {
         leftTable.setAutoSizeColumnsEnabled(b);
         rightTable.setAutoSizeColumnsEnabled(b);
     }
+    
+    /*******************
+	 * LocationListener
+	 *******************/
+
+    @Override
+    public void locationChanged(LocationEvent e) {
+        // Update window title to reflect the new current folder
+        updateWindowTitle();
+    }
+    
+	@Override
+	public void locationChanging(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationCancelled(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationFailed(LocationEvent locationEvent) { }
 }

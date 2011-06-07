@@ -63,8 +63,8 @@ import com.mucommander.ui.dialog.server.SFTPPanel;
 import com.mucommander.ui.dialog.server.SMBPanel;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
@@ -77,7 +77,7 @@ import com.mucommander.ui.icon.IconManager;
  *
  * @author Maxence Bernard
  */
-public class DrivePopupButton extends PopupButton implements BookmarkListener, ConfigurationListener {
+public class DrivePopupButton extends PopupButton implements BookmarkListener, ConfigurationListener, LocationListener {
 
     /** FolderPanel instance that contains this button */
     private FolderPanel folderPanel;
@@ -131,13 +131,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         this.folderPanel = folderPanel;
 		
         // Listen to location events to update the button when the current folder changes
-        folderPanel.getLocationManager().addLocationListener(new LocationAdapter() {
-        	@Override
-        	public void locationChanged(LocationEvent e) {
-                // Update the button's label to reflect the new current folder
-                updateButton();
-            }
-		});
+        folderPanel.getLocationManager().addLocationListener(this);
 
         // Listen to bookmark changes to update the button if a bookmark corresponding to the current folder
         // has been added/edited/removed
@@ -550,4 +544,23 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             return folderPanel;
         }
     }
+
+	/*******************
+	 * LocationListener
+	 *******************/
+	
+    @Override
+	public void locationChanged(LocationEvent e) {
+        // Update the button's label to reflect the new current folder
+        updateButton();
+    }
+    
+    @Override
+	public void locationChanging(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationCancelled(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationFailed(LocationEvent locationEvent) {}
 }

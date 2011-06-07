@@ -22,8 +22,8 @@ import java.util.Map;
 
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.ActivePanelListener;
-import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -34,7 +34,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public abstract class ParentFolderAction extends MuAction implements ActivePanelListener {
+public abstract class ParentFolderAction extends MuAction implements ActivePanelListener, LocationListener {
 
     public ParentFolderAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
@@ -43,14 +43,8 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
         mainFrame.addActivePanelListener(this);
 
         // Listen to location change events
-        LocationAdapter locationAdapter = new LocationAdapter() {
-        	@Override
-            public void locationChanged(LocationEvent e) {
-                toggleEnabledState();
-            }
-		};
-        mainFrame.getLeftPanel().getLocationManager().addLocationListener(locationAdapter);
-        mainFrame.getRightPanel().getLocationManager().addLocationListener(locationAdapter);
+        mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
+        mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
 
         toggleEnabledState();
     }
@@ -76,4 +70,22 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
     public void activePanelChanged(FolderPanel folderPanel) {
         toggleEnabledState();
     }
+    
+    /*******************
+	 * LocationListener
+	 *******************/
+
+    @Override
+    public void locationChanged(LocationEvent e) {
+        toggleEnabledState();
+    }
+    
+	@Override
+	public void locationChanging(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationCancelled(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationFailed(LocationEvent locationEvent) { }
 }

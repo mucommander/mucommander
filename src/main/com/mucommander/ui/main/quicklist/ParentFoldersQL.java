@@ -18,26 +18,26 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.Icon;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
-import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-
-import javax.swing.*;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * This quick list shows the parent folders of the current location in the FileTable.
  * 
  * @author Arik Hadas
  */
-public class ParentFoldersQL extends QuickListWithIcons {
+public class ParentFoldersQL extends QuickListWithIcons implements LocationListener {
 	
 	protected List<AbstractFile> parents = new Vector<AbstractFile>();
 	protected boolean updated = true;
@@ -45,12 +45,7 @@ public class ParentFoldersQL extends QuickListWithIcons {
 	public ParentFoldersQL(FolderPanel folderPanel) {
 		super(ActionProperties.getActionLabel(ShowParentFoldersQLAction.Descriptor.ACTION_ID), Translator.get("parent_folders_quick_list.empty_message"));
 		
-		folderPanel.getLocationManager().addLocationListener(new LocationAdapter() {
-			@Override
-			public void locationChanged(LocationEvent locationEvent) {
-				updated = false;
-			}
-		});
+		folderPanel.getLocationManager().addLocationListener(this);
 	}
 	
 	@Override
@@ -77,4 +72,22 @@ public class ParentFoldersQL extends QuickListWithIcons {
     protected Icon itemToIcon(Object item) {
 		return getIconOfFile((AbstractFile)item);
 	}
+
+	/*******************
+	 * LocationListener
+	 *******************/
+
+	@Override
+	public void locationChanged(LocationEvent locationEvent) {
+		updated = false;
+	}
+	
+	@Override
+	public void locationChanging(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationCancelled(LocationEvent locationEvent) { }
+
+	@Override
+	public void locationFailed(LocationEvent locationEvent) { }
 }
