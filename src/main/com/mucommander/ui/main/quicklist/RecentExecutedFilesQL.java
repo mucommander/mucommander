@@ -41,7 +41,7 @@ import java.util.LinkedList;
  * @author Arik Hadas
  */
 
-public class RecentExecutedFilesQL extends QuickListWithIcons {
+public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
 	public static LinkedList<AbstractFile> list = new LinkedList<AbstractFile>();
 	private static final int MAX_NUM_OF_ELEMENTS = 10;
 
@@ -50,19 +50,18 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 	}
 	
 	@Override
-    protected void acceptListItem(Object item) {
-		AbstractFile file = (AbstractFile)item;
+    protected void acceptListItem(AbstractFile item) {
 		MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
-		if(file.getURL().getScheme().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
-            try { DesktopManager.open(file); }
+		if(item.getURL().getScheme().equals(FileProtocols.FILE) && (item.hasAncestor(LocalFile.class))) {
+            try { DesktopManager.open(item); }
             catch(IOException e) {}
         }
 
         // Copies non-local file in a temporary local file and opens them using their native association.
         else {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-            TempExecJob job = new TempExecJob(progressDialog, mainFrame, file);
+            TempExecJob job = new TempExecJob(progressDialog, mainFrame, item);
             progressDialog.start(job);
         }
 	}
@@ -74,12 +73,12 @@ public class RecentExecutedFilesQL extends QuickListWithIcons {
 	}
 
 	@Override
-    protected Object[] getData() {
-		return list.toArray();
+    protected AbstractFile[] getData() {
+		return list.toArray(new AbstractFile[0]);
 	}
 
 	@Override
-    protected Icon itemToIcon(Object item) {
-		return getIconOfFile((AbstractFile)item);
+    protected Icon itemToIcon(AbstractFile item) {
+		return getIconOfFile(item);
 	}
 }

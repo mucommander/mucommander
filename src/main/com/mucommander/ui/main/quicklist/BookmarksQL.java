@@ -37,7 +37,7 @@ import java.util.List;
  * 
  * @author Arik Hadas
  */
-public class BookmarksQL extends QuickListWithIcons implements BookmarkListener {
+public class BookmarksQL extends QuickListWithIcons<Bookmark> implements BookmarkListener {
 	protected Bookmark[] sortedBookmarks;
 
 	public BookmarksQL() {
@@ -48,18 +48,18 @@ public class BookmarksQL extends QuickListWithIcons implements BookmarkListener 
 	}
 
 	@Override
-    protected void acceptListItem(Object item) {
-		folderPanel.tryChangeCurrentFolder(((Bookmark)item).getLocation()); //change with text validate
+    protected void acceptListItem(Bookmark item) {
+		folderPanel.tryChangeCurrentFolder(item.getLocation()); //change with text validate
 	}
 
 	@Override
-    protected Object[] getData() {
+    protected Bookmark[] getData() {
 		return sortedBookmarks;
 	}
 	
 	@Override
-    protected Icon itemToIcon(Object item) {
-		return getIconOfFile(FileFactory.getFile(((Bookmark)item).getLocation()));
+    protected Icon itemToIcon(Bookmark item) {
+		return getIconOfFile(FileFactory.getFile(item.getLocation()));
 	}
 
 	/**

@@ -34,7 +34,7 @@ import java.util.LinkedList;
  * 
  * @author Arik Hadas
  */
-public class RecentLocationsQL extends QuickListWithIcons implements LocationListener {
+public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> implements LocationListener {
 	
 	private static int MAX_ELEMENTS = 15;
 	private LinkedList<AbstractFile> linkedList;
@@ -46,23 +46,23 @@ public class RecentLocationsQL extends QuickListWithIcons implements LocationLis
 	}
 
 	@Override
-    protected void acceptListItem(Object item) {
-		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
+    protected void acceptListItem(AbstractFile item) {
+		folderPanel.tryChangeCurrentFolder(item);
 	}
 
 	@Override
-    public Object[] getData() {
+    public AbstractFile[] getData() {
 		LinkedList<AbstractFile> list = (LinkedList<AbstractFile>)linkedList.clone();
 
 		if (!list.remove(folderPanel.getCurrentFolder()))
 			list.removeLast();
 		
-		return list.toArray();
+		return list.toArray(new AbstractFile[0]);
 	}
 
 	@Override
-    protected Icon itemToIcon(Object item) {
-		return getIconOfFile((AbstractFile)item);
+    protected Icon itemToIcon(AbstractFile item) {
+		return getIconOfFile(item);
 	}
 	
 	/*******************

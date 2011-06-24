@@ -27,16 +27,16 @@ import java.awt.*;
  * 
  * @author Arik Hadas
  */
-public abstract class GenericPopupDataListWithIcons extends DataList {
+public abstract class GenericPopupDataListWithIcons<T> extends DataList {
 	
-	public abstract Icon getImageIconOfItem(final Object item);
+	public abstract Icon getImageIconOfItem(final T item);
 	
 	public GenericPopupDataListWithIcons() {
 		super();
 		setCellRenderer(new CellWithIconRenderer());
 	}
 	
-	public GenericPopupDataListWithIcons(Object[] data) {
+	public GenericPopupDataListWithIcons(T[] data) {
 		super(data);
 		setCellRenderer(new CellWithIconRenderer());
 	}
@@ -50,7 +50,7 @@ public abstract class GenericPopupDataListWithIcons extends DataList {
 
 			// Add its icon
 			Object item = list.getModel().getElementAt(index);
-			Icon icon = getImageIconOfItem(item);
+			Icon icon = getImageIconOfItem((T) item);
 			setIcon(resizeIcon(icon));
 
 			return this;

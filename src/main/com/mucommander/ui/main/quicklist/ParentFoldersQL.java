@@ -37,7 +37,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  * 
  * @author Arik Hadas
  */
-public class ParentFoldersQL extends QuickListWithIcons implements LocationListener {
+public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> implements LocationListener {
 	
 	protected List<AbstractFile> parents = new Vector<AbstractFile>();
 	protected boolean updated = true;
@@ -49,8 +49,8 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
 	}
 	
 	@Override
-    protected void acceptListItem(Object item) {
-		folderPanel.tryChangeCurrentFolder((AbstractFile)item);
+    protected void acceptListItem(AbstractFile item) {
+		folderPanel.tryChangeCurrentFolder(item);
 	}
 	
 	protected void populateParentFolders(AbstractFile folder) {
@@ -61,16 +61,16 @@ public class ParentFoldersQL extends QuickListWithIcons implements LocationListe
     }
 	
 	@Override
-    public Object[] getData() {
+    public AbstractFile[] getData() {
 		if (!updated && (updated = true))
 			populateParentFolders(folderPanel.getCurrentFolder());
 		
-		return parents.toArray();
+		return parents.toArray(new AbstractFile[0]);
 	}
 
 	@Override
-    protected Icon itemToIcon(Object item) {
-		return getIconOfFile((AbstractFile)item);
+    protected Icon itemToIcon(AbstractFile item) {
+		return getIconOfFile(item);
 	}
 
 	/*******************

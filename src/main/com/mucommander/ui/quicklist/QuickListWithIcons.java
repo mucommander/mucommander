@@ -37,9 +37,9 @@ import java.util.HashMap;
  * @author Arik Hadas
  */
 
-public abstract class QuickListWithIcons extends QuickListWithDataList {
+public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	// This HashMap's keys are items and its objects are the corresponding icon.
-	private final HashMap<Object, Icon> itemToIconCacheMap = new HashMap<Object, Icon>();
+	private final HashMap<T, Icon> itemToIconCacheMap = new HashMap<T, Icon>();
 	// This SpinningDial will appear until the icon fetching of an item is over.
 	private static final SpinningDial waitingIcon = new SpinningDial();
 	// If the icon fetching fails for some item, the following icon will appear for it. 
@@ -83,9 +83,9 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 	
 	@Override
     protected DataList getList() {
-		return new GenericPopupDataListWithIcons() {
+		return new GenericPopupDataListWithIcons<T>() {
 			@Override
-            public Icon getImageIconOfItem(Object item) {
+            public Icon getImageIconOfItem(T item) {
 				return getImageIconOfItemImp(item);
 			}
 		};
@@ -97,7 +97,7 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 	 * @param item a list item
      * @return an icon for the specified item
 	 */
-	protected abstract Icon itemToIcon(Object item);
+	protected abstract Icon itemToIcon(T item);
 	
 	/**
 	 * This function return an icon for the specified file.
@@ -110,7 +110,7 @@ public abstract class QuickListWithIcons extends QuickListWithDataList {
 			IconManager.getImageIcon(FileIcons.getFileIcon(file)) : null; 
 	}
 	
-	private Icon getImageIconOfItemImp(final Object item) {
+	private Icon getImageIconOfItemImp(final T item) {
 		boolean found;
 		synchronized(itemToIconCacheMap) {
 			if (!(found = itemToIconCacheMap.containsKey(item))) {

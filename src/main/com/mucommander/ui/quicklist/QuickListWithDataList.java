@@ -28,7 +28,7 @@ import javax.swing.*;
  * @author Arik Hadas
  */
 
-public abstract class QuickListWithDataList extends QuickList {	
+public abstract class QuickListWithDataList<T> extends QuickList {	
 	protected DataList dataList;	
 	private QuickListWithEmptyMsg emptyPopup;
 	
@@ -54,14 +54,14 @@ public abstract class QuickListWithDataList extends QuickList {
         emptyPopup = new QuickListWithEmptyMsg(header, emptyPopupHeader);
 	}
 	
-	protected abstract Object[] getData();
+	protected abstract T[] getData();
 	
 	/**
 	 * This function will be called when an element from the data list will be selected.
 	 * 
 	 * @param item - The selected item from the data list.
 	 */
-	public void itemSelected(Object item) {
+	public void itemSelected(T item) {
 		setVisible(false);
 		acceptListItem(item);
 	}		
@@ -70,7 +70,7 @@ public abstract class QuickListWithDataList extends QuickList {
     protected boolean prepareForShowing() {
 		boolean toShow = false;
 		// if data list contains at least 1 element, show this popup.
-		Object[] data;
+		T[] data;
 		if ((data = getData()).length > 0) {
 			dataList.setListData(data);
 			// transfer the focus to the data list.
@@ -89,7 +89,7 @@ public abstract class QuickListWithDataList extends QuickList {
 	 * 
 	 * @param item - The selected item from the data list.
 	 */
-	protected abstract void acceptListItem(Object item);
+	protected abstract void acceptListItem(T item);
 	
 	protected abstract DataList getList();
 }
