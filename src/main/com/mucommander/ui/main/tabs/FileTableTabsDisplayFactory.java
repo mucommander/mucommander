@@ -18,7 +18,8 @@
 
 package com.mucommander.ui.main.tabs;
 
-import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.MultipleTabsDisplay;
 import com.mucommander.ui.tabs.SingleTabDisplay;
 import com.mucommander.ui.tabs.TabsCollection;
@@ -31,10 +32,12 @@ import com.mucommander.ui.tabs.TabsDisplayFactory;
 */
 public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTableTab> {
 
-	private FileTable fileTable;
+	private FolderPanel folderPanel;
+	private MainFrame mainFrame;
 	
-	public FileTableTabsDisplayFactory(FileTable fileTable) {
-		this.fileTable = fileTable;
+	public FileTableTabsDisplayFactory(MainFrame mainFrame, FolderPanel folderPanel) {
+		this.folderPanel = folderPanel;
+		this.mainFrame = mainFrame;
 	}
 
 	@Override
@@ -44,13 +47,13 @@ public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTable
 	
 	@Override
 	public MultipleTabsDisplay<FileTableTab> createMultipleTabsDisplay(TabsCollection<FileTableTab> tabs, int selectedTabIndex) {
-		MultipleTabsDisplay<FileTableTab> multipleTabsDisplay = new MultipleTabsDisplay<FileTableTab>(tabs, new FileTableTabbedPane(fileTable.getAsUIComponent()));
+		MultipleTabsDisplay<FileTableTab> multipleTabsDisplay = new MultipleTabsDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
 		multipleTabsDisplay.setSelectedTabIndex(selectedTabIndex);
 		return multipleTabsDisplay;
 	}
 
 	@Override
 	public SingleTabDisplay<FileTableTab> createSingleTabsDisplay(TabsCollection<FileTableTab> tabs) {
-		return new SingleTabDisplay<FileTableTab>(tabs, fileTable.getAsUIComponent());
+		return new SingleTabDisplay<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
 	}
 }

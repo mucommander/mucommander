@@ -19,6 +19,7 @@
 package com.mucommander.ui.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JComponent;
 
@@ -88,10 +89,17 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	/* Actions that depended on the display type (single/multiple tabs) */
 
 	/**
+	 * Remove tab with the given header
+	 */
+	public void removeTab(Component header) {
+		display.removeTab(header);
+	}
+	
+	/**
 	 * Remove current displayed tab
 	 */
 	public void removeTab() {
-		display.removeTab();
+		display.removeCurrentTab();
 	}
 	
 	/**

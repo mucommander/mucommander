@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.tabs;
 
+import java.awt.Component;
+
 import javax.swing.JLabel;
 
 /**
@@ -55,8 +57,11 @@ class NullableTabsDisplay<T extends Tab> extends TabsDisplay<T> {
 	public void show(T t) { }
 
 	@Override
-	public void removeTab() { }
+	public void removeCurrentTab() { }
 
 	@Override
 	public void removeOtherTabs() { }
+
+	@Override
+	public void removeTab(Component header) { }
 }

@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.tabs;
 
+import java.awt.Component;
+
 import javax.swing.JComponent;
 
 /**
@@ -66,8 +68,11 @@ public class SingleTabDisplay<T extends Tab> extends TabsDisplay<T> {
 	public void add(T tab) { }
 
 	@Override
-	public void removeTab() { }
+	public void removeCurrentTab() { }
 
 	@Override
 	public void removeOtherTabs() { }
+
+	@Override
+	public void removeTab(Component header) { }
 }

@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.tabs;
 
+import java.awt.Component;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -125,7 +127,7 @@ public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implement
 	}
 
 	@Override
-	public void removeTab() {
+	public void removeCurrentTab() {
 		tabs.remove(getSelectedTabIndex());		
 	}
 
@@ -138,5 +140,10 @@ public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implement
 
 		for(int i=tabs.count()-1; i>0; --i)
 			tabs.remove(1);		
+	}
+
+	@Override
+	public void removeTab(Component header) {
+		tabs.remove(pane.indexOfTabComponent(header));
 	}
 }

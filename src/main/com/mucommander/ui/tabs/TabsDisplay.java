@@ -19,6 +19,7 @@
 package com.mucommander.ui.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JComponent;
 
@@ -57,9 +58,11 @@ abstract class TabsDisplay<T extends Tab> extends JComponent {
 
 	public abstract void show(T t);
 	
-	public abstract void removeTab();
+	public abstract void removeCurrentTab();
 	
 	public abstract void removeOtherTabs();
+
+	public abstract void removeTab(Component header);
 	
 	public void nextTab() {
 		setSelectedTabIndex((getSelectedTabIndex()+1) % tabs.count());

@@ -20,6 +20,7 @@ package com.mucommander.ui.main.tabs;
 
 import com.mucommander.ui.action.impl.CloseOtherTabsAction;
 import com.mucommander.ui.action.impl.CloseTabAction;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
 
@@ -30,8 +31,8 @@ import com.mucommander.ui.popup.MuActionsPopupMenu;
 */
 class FileTableTabPopupMenu extends MuActionsPopupMenu {
 
-	public FileTableTabPopupMenu() {
-		super(WindowManager.getCurrentMainFrame());
+	public FileTableTabPopupMenu(MainFrame mainFrame) {
+		super(mainFrame);
 		
 //		addAction("duplicate");
 		addAction(CloseTabAction.Descriptor.ACTION_ID);

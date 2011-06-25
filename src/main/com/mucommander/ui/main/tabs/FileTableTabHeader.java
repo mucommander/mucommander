@@ -33,16 +33,23 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import com.mucommander.ui.main.FolderPanel;
+
 /**
-* Not in use yet
+* This panel is the header of the presented tabs under Java 1.6 and above.
+* The panel contains a button for closing the tab.
 * 
 * @author Arik Hadas
 */
-abstract class FileTableTabHeader extends JPanel implements ActionListener {
+class FileTableTabHeader extends JPanel implements ActionListener {
 	
-    public FileTableTabHeader(String title) {
+	private FolderPanel folderPanel;
+	
+    public FileTableTabHeader(FolderPanel folderPanel) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+        this.folderPanel = folderPanel;
         
         setOpaque(false);
         
@@ -57,8 +64,6 @@ abstract class FileTableTabHeader extends JPanel implements ActionListener {
         add(button);
         //add more space to the top of the component
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0)); // TODO: needed?
-        
-        setTitle(title);
     }
     
     public void setTitle(String title) {
@@ -67,8 +72,15 @@ abstract class FileTableTabHeader extends JPanel implements ActionListener {
     	validate();
     }
     
-//    @Override
-    public abstract void actionPerformed(ActionEvent e);
+    public String getTitle() {
+    	JLabel label = (JLabel)getComponent(0); 
+    	return label.getText();
+    }
+    
+    @Override
+	public void actionPerformed(ActionEvent e) {
+    	folderPanel.getTabs().close(this);
+	}
     
     /**********************
 	 * 

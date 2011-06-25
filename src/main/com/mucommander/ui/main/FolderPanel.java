@@ -210,7 +210,7 @@ public class FolderPanel extends JPanel implements FocusListener {
         }
 
         // Create the Tabs (Must be called after the fileTable was created and current folder was set)
-        tabs = new FileTableTabs(this);
+        tabs = new FileTableTabs(mainFrame, this);
         
         // Create the FolderChangeMonitor that monitors changes in the current folder and automatically refreshes it
         folderChangeMonitor = new FolderChangeMonitor(this);

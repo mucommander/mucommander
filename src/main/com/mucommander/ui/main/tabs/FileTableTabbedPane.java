@@ -26,8 +26,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
+import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.TabbedPane;
 
 /**
@@ -44,11 +46,16 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 	/** The FileTable instance presented in each tab */
 	private JComponent fileTableComponent;
 	
-	public FileTableTabbedPane(JComponent fileTableComponent) {
+	private MainFrame mainFrame;
+	private FolderPanel folderPanel;
+	
+	public FileTableTabbedPane(MainFrame mainFrame, FolderPanel folderPanel, JComponent fileTableComponent) {
 		this.fileTableComponent = fileTableComponent;
-		
+		this.mainFrame = mainFrame;
+		this.folderPanel = folderPanel;
+
 		setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		
+
 		addMouseListener(new MouseAdapter() {
 			
 			public void mouseClicked(MouseEvent e) {
@@ -57,7 +64,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 				if (selectedTabIndex != -1) {
 					if (DesktopManager.isRightMouseButton(e)) {
 						setSelectedIndex(selectedTabIndex);
-						new FileTableTabPopupMenu().show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y);
+						new FileTableTabPopupMenu(FileTableTabbedPane.this.mainFrame).show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y);
 					}
 				}
 			}
@@ -111,9 +118,34 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 	@Override
 	public void set(FileTableTab tab, int index) {
 		add(getTabCount() == 0 ? fileTableComponent : new JLabel(), index);
-		
+
 		setTitleAt(index, tab.getLocation().getName());
 		setToolTipTextAt(index, tab.getLocation().getAbsolutePath());
+	}
+	
+	@Override
+	public void setTitleAt(int index, String title) {
+		if (JavaVersions.JAVA_1_5.isCurrentOrLower())
+			super.setTitleAt(index, title);
+		else {
+			FileTableTabHeader header = getTabHeader(index);
+			if (header == null) {
+				header = new FileTableTabHeader(folderPanel);
+				setTabHeader(index, header);
+			}
+				
+			header.setTitle(title);
+		}
+	}
+	
+	@Override
+	public String getTitleAt(int index) {
+		if (JavaVersions.JAVA_1_5.isCurrentOrLower())
+			return super.getTitleAt(index);
+		else {
+			FileTableTabHeader header = getTabHeader(index);
+			return header!=null ? header.getTitle() : "";
+		}
 	}
 	
 	@Override
@@ -132,7 +164,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 
 	@Override
 	public void show(FileTableTab t) {
-		WindowManager.getCurrentMainFrame().getActivePanel().tryChangeCurrentFolder(t.getLocation());
+		folderPanel.tryChangeCurrentFolder(t.getLocation());
 		validate();
 	}
 }
