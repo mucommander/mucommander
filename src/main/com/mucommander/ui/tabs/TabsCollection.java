@@ -160,10 +160,6 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
      */
     public synchronized void fireTabRemoved(int index) {
     	Set<TabsChangeListener> listeners = tabsListeners.keySet();
-    	System.out.println("found listeners: " + tabsListeners.size());
-    	for (TabsChangeListener listener : listeners) {
-    		System.out.println(System.identityHashCode(listener));
-    	}
         for(TabsChangeListener listener : listeners)
             listener.tabRemoved(index);
     }
