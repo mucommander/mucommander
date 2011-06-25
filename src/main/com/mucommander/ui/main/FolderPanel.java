@@ -67,6 +67,7 @@ import com.mucommander.ui.main.quicklist.BookmarksQL;
 import com.mucommander.ui.main.quicklist.ParentFoldersQL;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 import com.mucommander.ui.main.quicklist.RecentLocationsQL;
+import com.mucommander.ui.main.quicklist.RootFoldersQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
@@ -132,12 +133,14 @@ public class FolderPanel extends JPanel implements FocusListener {
     protected static RecentLocationsQL recentLocationsQL = new RecentLocationsQL();
     protected static RecentExecutedFilesQL recentExecutedFilesQL = new RecentExecutedFilesQL();
     protected static BookmarksQL bookmarksQL = new BookmarksQL();
-
+    protected static RootFoldersQL rootsQL = new RootFoldersQL();
+    
     public static final int PARENT_FOLDERS_QUICK_LIST_INDEX = 0;
     public static final int RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX = 1;
     public static final int RECENT_EXECUTED_FILES_QUICK_LIST_INDEX = 2;
     public static final int BOOKMARKS_QUICK_LIST_INDEX = 3;
-
+    public static final int ROOTS_QUICK_LIST_INDEX = 4;
+    
     /* TODO branch private boolean branchView; */
 
 
@@ -182,7 +185,8 @@ public class FolderPanel extends JPanel implements FocusListener {
     			new ParentFoldersQL(this),
     			recentLocationsQL,
                 recentExecutedFilesQL,
-                bookmarksQL};
+                bookmarksQL,
+                rootsQL};
 
         try {
             // Set initial folder to current directory

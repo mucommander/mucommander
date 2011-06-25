@@ -171,6 +171,7 @@ public class ActionManager {
     	registerAction(new ShowPreferencesAction.Descriptor(),              new ShowPreferencesAction.Factory());
     	registerAction(new ShowRecentExecutedFilesQLAction.Descriptor(),    new ShowRecentExecutedFilesQLAction.Factory());
     	registerAction(new ShowRecentLocationsQLAction.Descriptor(),        new ShowRecentLocationsQLAction.Factory());
+    	registerAction(new ShowRootsQLAction.Descriptor(), 					new ShowRootsQLAction.Factory());
     	registerAction(new ShowServerConnectionsAction.Descriptor(),        new ShowServerConnectionsAction.Factory());
         registerAction(new ShowDebugConsoleAction.Descriptor(),             new ShowDebugConsoleAction.Factory());
     	registerAction(new SortByDateAction.Descriptor(),             		new SortByDateAction.Factory());
