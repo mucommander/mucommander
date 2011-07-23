@@ -18,9 +18,30 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.ui.action.impl.*;
-
 import java.util.WeakHashMap;
+
+import com.mucommander.ui.action.impl.AddBookmarkAction;
+import com.mucommander.ui.action.impl.ConnectToServerAction;
+import com.mucommander.ui.action.impl.EditBookmarksAction;
+import com.mucommander.ui.action.impl.EditCredentialsAction;
+import com.mucommander.ui.action.impl.EmailAction;
+import com.mucommander.ui.action.impl.GoBackAction;
+import com.mucommander.ui.action.impl.GoForwardAction;
+import com.mucommander.ui.action.impl.GoToHomeAction;
+import com.mucommander.ui.action.impl.GoToParentAction;
+import com.mucommander.ui.action.impl.MarkGroupAction;
+import com.mucommander.ui.action.impl.NewWindowAction;
+import com.mucommander.ui.action.impl.PackAction;
+import com.mucommander.ui.action.impl.RevealInDesktopAction;
+import com.mucommander.ui.action.impl.RunCommandAction;
+import com.mucommander.ui.action.impl.SetSameFolderAction;
+import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
+import com.mucommander.ui.action.impl.ShowPreferencesAction;
+import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
+import com.mucommander.ui.action.impl.StopAction;
+import com.mucommander.ui.action.impl.SwapFoldersAction;
+import com.mucommander.ui.action.impl.UnmarkGroupAction;
+import com.mucommander.ui.action.impl.UnpackAction;
 
 /**
  * This class is responsible to handle the attributes of ToolBars - their actions and separators.
@@ -119,6 +140,9 @@ public class ToolBarAttributes {
      * @return true if the default attributes are used, false otherwise.
      */
     public static boolean areDefaultAttributes() {
+    	if (useDefaultActions)
+    		return true;
+    		
     	int nbActions = actionIds.length;
     	
     	if (nbActions != DEFAULT_TOOLBAR_ACTIONS.length)
