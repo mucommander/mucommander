@@ -118,7 +118,7 @@ public class ActionManager {
     	registerAction(new MkdirAction.Descriptor(),           			    new MkdirAction.Factory());
     	registerAction(new MkfileAction.Descriptor(),		                new MkfileAction.Factory());
     	registerAction(new MoveAction.Descriptor(),		                    new MoveAction.Factory());
-//    	registerAction(new MoveTabToOtherPanelAction.Descriptor(),			new MoveTabToOtherPanelAction.Factory());
+    	registerAction(new MoveTabToOtherPanelAction.Descriptor(),			new MoveTabToOtherPanelAction.Factory());
     	registerAction(new NewWindowAction.Descriptor(),     		        new NewWindowAction.Factory());
     	registerAction(new NextTabAction.Descriptor(),						new NextTabAction.Factory());
     	registerAction(new OpenAction.Descriptor(),          				new OpenAction.Factory());
