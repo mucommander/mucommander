@@ -168,17 +168,12 @@ public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implement
 		}
 		
 		// remove all other duplicated tabs
-		int removedTabsCount = 0;
-		int tabsCount = tabs.count();
-		for (int i = 0; i < tabsCount - removedTabsCount; ++i) {
+		for (int i = 0; i < tabs.count(); ++i) {
 			T currentTab = tabs.get(i);
 			if (duplicatedTabs.remove(currentTab)) {
-				int removedTabsInIterationCount = 0;
-				for (int j = i + 1; j < tabsCount; ++j)
-					if (currentTab.equals(tabs.get(j - removedTabsInIterationCount))) {
-						tabs.remove(j - removedTabsInIterationCount++);
-						++removedTabsCount;
-					}
+				for (int j = i + 1; j < tabs.count(); ++j)
+					if (currentTab.equals(tabs.get(j)))
+						tabs.remove(j--);
 			}
 		}
 	}
