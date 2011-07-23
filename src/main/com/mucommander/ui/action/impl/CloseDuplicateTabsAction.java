@@ -18,65 +18,42 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 
 /**
- * Opens browsable file in a new tab.
- * <p>
- * This action is only enabled if the current selection is browsable as defined by
- * {@link com.mucommander.commons.file.AbstractFile#isBrowsable()}.
- * </p>
+ * Close duplicate tabs in the tabbedpane
+ * 
  * @author Arik Hadas
  */
-public class OpenInNewTabAction extends SelectedFileAction {
-
-	public OpenInNewTabAction(MainFrame mainFrame, Map<String,Object> properties) {
+public class CloseDuplicateTabsAction extends MuAction {
+	
+	public CloseDuplicateTabsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
-	
-	/**
-     * This method is overridden to enable this action when the parent folder is selected.
-     */
-    @Override
-    protected boolean getFileTableCondition(FileTable fileTable) {
-        AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
 
-        return selectedFile!=null && selectedFile.isBrowsable();
+    @Override
+    public void performAction() {
+    	mainFrame.getActivePanel().getTabs().closeDuplicateTabs();
     }
     
-	@Override
-	public void performAction() {
-		AbstractFile file;
-
-        // Retrieves the currently selected file, aborts if none (should not normally happen).
-        if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
-            return;
-
-        // Opens the currently selected file in the inactive panel.
-        mainFrame.getActivePanel().getTabs().add(file);
-	}
-	
-	public static class Factory implements ActionFactory {
+    public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new OpenInNewTabAction(mainFrame, properties);
+			return new CloseDuplicateTabsAction(mainFrame, properties);
 		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenInNewTab";
+    	public static final String ACTION_ID = "CloseDuplicateTabs";
     	
 		public String getId() { return ACTION_ID; }
 
@@ -84,6 +61,6 @@ public class OpenInNewTabAction extends SelectedFileAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK); }
+		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

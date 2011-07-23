@@ -57,11 +57,14 @@ class NullableTabsDisplay<T extends Tab> extends TabsDisplay<T> {
 	public void show(T t) { }
 
 	@Override
-	public void removeCurrentTab() { }
+	public T removeCurrentTab() { return null; }
 
 	@Override
 	public void removeOtherTabs() { }
 
 	@Override
 	public void removeTab(Component header) { }
+
+	@Override
+	public void removeDuplicateTabs() { }
 }

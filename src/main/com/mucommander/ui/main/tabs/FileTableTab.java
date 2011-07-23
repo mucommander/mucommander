@@ -61,4 +61,16 @@ public class FileTableTab implements Tab {
 	 public AbstractFile getLocation() {
 		 return location;
 	 }
+	 
+	 @Override
+	 public boolean equals(Object obj) {
+		 if (obj instanceof FileTableTab)
+			 return location.getAbsolutePath().equals(((FileTableTab) obj).getLocation().getAbsolutePath());
+		 return false;
+	 }
+	 
+	 @Override
+	 public int hashCode() {
+	    return location.hashCode();
+	}
 }

@@ -68,11 +68,14 @@ public class SingleTabDisplay<T extends Tab> extends TabsDisplay<T> {
 	public void add(T tab) { }
 
 	@Override
-	public void removeCurrentTab() { }
+	public T removeCurrentTab() { return null; }
 
 	@Override
 	public void removeOtherTabs() { }
 
 	@Override
 	public void removeTab(Component header) { }
+
+	@Override
+	public void removeDuplicateTabs() { }
 }

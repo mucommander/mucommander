@@ -58,7 +58,9 @@ abstract class TabsDisplay<T extends Tab> extends JComponent {
 
 	public abstract void show(T t);
 	
-	public abstract void removeCurrentTab();
+	public abstract T removeCurrentTab();
+	
+	public abstract void removeDuplicateTabs();
 	
 	public abstract void removeOtherTabs();
 

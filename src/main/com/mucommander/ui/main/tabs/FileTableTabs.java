@@ -41,19 +41,27 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		this.folderPanel = folderPanel;
 		folderPanel.getLocationManager().addLocationListener(this);
 		
-		addTab(folderPanel.getCurrentFolder());
+		add(folderPanel.getCurrentFolder());
 	}
 	
 	/********************
 	 * MuActions support
 	 ********************/
 	
-	public void addTab(AbstractFile file) {
+	public void add(AbstractFile file) {
 		addTab(FileTableTab.create(file));
 	}
 	
-	public void closeCurrentTab() {
-		removeTab();
+	public void add(FileTableTab tab) {
+		addTab(tab);
+	}
+	
+	public FileTableTab closeCurrentTab() {
+		return removeTab();
+	}
+	
+	public void closeDuplicateTabs() {
+		removeDuplicateTabs();
 	}
 	
 	public void closeOtherTabs() {

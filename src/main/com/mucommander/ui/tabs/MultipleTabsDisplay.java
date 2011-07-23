@@ -19,6 +19,9 @@
 package com.mucommander.ui.tabs;
 
 import java.awt.Component;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -127,8 +130,57 @@ public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implement
 	}
 
 	@Override
-	public void removeCurrentTab() {
-		tabs.remove(getSelectedTabIndex());		
+	public T removeCurrentTab() {
+		T tab = tabs.get(getSelectedTabIndex());
+		tabs.remove(getSelectedTabIndex());
+		return tab;
+	}
+
+	@Override
+	public void removeDuplicateTabs() {
+		// a Set that will contain the tabs we've seen
+		Set<T> visitedTabs = new HashSet<T>();
+		// a Set that will contain the tabs which are duplicated
+		Set<T> duplicatedTabs = new HashSet<T>(); 
+		// The index of the selected tab
+		int selectedTabIndex = getSelectedTabIndex();
+		
+		// add all duplicated tabs to the duplicatedTab Set
+		Iterator<T> existingTabsIterator = tabs.iterator();
+		while (existingTabsIterator.hasNext()) {
+			T tab = existingTabsIterator.next();
+			if (!visitedTabs.add(tab))
+				duplicatedTabs.add(tab);
+		}
+		
+		// remove all duplicated tabs which are identical to the selected tab without
+		// changing the tab selection
+		T selectedTab = tabs.get(selectedTabIndex);
+		if (duplicatedTabs.remove(selectedTab)) {
+			int removedTabsCount = 0;
+			int tabsCount = tabs.count();
+			for (int i=0; i<tabsCount; ++i) {
+				if (i == selectedTabIndex) // do not remove the selected tab
+					continue;
+				if (selectedTab.equals(tabs.get(i-removedTabsCount)))
+					tabs.remove(i-removedTabsCount++);
+			}
+		}
+		
+		// remove all other duplicated tabs
+		int removedTabsCount = 0;
+		int tabsCount = tabs.count();
+		for (int i = 0; i < tabsCount - removedTabsCount; ++i) {
+			T currentTab = tabs.get(i);
+			if (duplicatedTabs.remove(currentTab)) {
+				int removedTabsInIterationCount = 0;
+				for (int j = i + 1; j < tabsCount; ++j)
+					if (currentTab.equals(tabs.get(j - removedTabsInIterationCount))) {
+						tabs.remove(j - removedTabsInIterationCount++);
+						++removedTabsCount;
+					}
+			}
+		}
 	}
 
 	@Override

@@ -98,8 +98,15 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	/**
 	 * Remove current displayed tab
 	 */
-	public void removeTab() {
-		display.removeCurrentTab();
+	public T removeTab() {
+		return display.removeCurrentTab();
+	}
+	
+	/**
+	 * Remove duplicate tabs
+	 */
+	public void removeDuplicateTabs() {
+		display.removeDuplicateTabs();
 	}
 	
 	/**
