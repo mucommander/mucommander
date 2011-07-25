@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MuRandomAccessFile  extends IInStream {
+public class MuRandomAccessFile extends IInStream {
     private static final Logger LOGGER = LoggerFactory.getLogger(MuRandomAccessFile.class);
 	
 	private AbstractFile file;
@@ -33,6 +33,7 @@ public class MuRandomAccessFile  extends IInStream {
 	@Override
     public long Seek(long offset, int seekOrigin) throws IOException {
 		if (seekOrigin == STREAM_SEEK_SET) {
+				stream.close();
                 stream = file.getInputStream();
                 stream.skip(offset);
                 position = offset;
