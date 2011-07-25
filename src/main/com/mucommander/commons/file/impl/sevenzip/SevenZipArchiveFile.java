@@ -73,8 +73,18 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
 			public void run() {
 		        BufferedOutputStream bufferedOut = new BufferedOutputStream(out);
 		        try {
+//		        	int arrays []  = new int[1];
+//		            for(int i = 0 ; i < sevenZipFile.size() ; i++) {
+//		                	System.out.println("check " + sevenZipFile.getEntry(i).getName());
+//		                if (entry.getPath().equals(sevenZipFile.getEntry(i).getName())) {
+//		                	System.out.println("entry.getPath = " + entry.getPath() + ", sevenZipFile.getEntry(i).getName() " + sevenZipFile.getEntry(i).getName());
+//		                    arrays[0] = i;
+//		                }
+//		            }
+		        	
 					MuArchiveExtractCallback extractCallbackSpec = new MuArchiveExtractCallback(bufferedOut, entry.getPath());
 			        extractCallbackSpec.Init(sevenZipFile);
+//			        sevenZipFile.Extract(arrays, 1, IInArchive.NExtract_NAskMode_kExtract , extractCallbackSpec);
 			        sevenZipFile.Extract(null, -1, IInArchive.NExtract_NAskMode_kExtract , extractCallbackSpec);
 			        
 					bufferedOut.flush();

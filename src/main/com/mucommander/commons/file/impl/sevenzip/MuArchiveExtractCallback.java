@@ -28,14 +28,11 @@ public class MuArchiveExtractCallback extends ArchiveExtractCallback {
     public int GetStream(int index,
             java.io.OutputStream [] outStream,
             int askExtractMode) throws java.io.IOException {
-        
         outStream[0] = null;
         
         SevenZipEntry item = _archiveHandler.getEntry(index);
         _filePath = item.getName();
-        
         File file = new File(_filePath);
-        
         switch (askExtractMode) {
             case IInArchive.NExtract_NAskMode_kTest:
                 return HRESULT.S_OK;
@@ -43,7 +40,6 @@ public class MuArchiveExtractCallback extends ArchiveExtractCallback {
             case IInArchive.NExtract_NAskMode_kExtract:
                 
                     boolean isDirectory = item.isDirectory();
-                    
                     if (isDirectory) {
                         if (file.isDirectory()) {
                             return HRESULT.S_OK;
@@ -57,20 +53,17 @@ public class MuArchiveExtractCallback extends ArchiveExtractCallback {
 //                    System.out.println("filename = " + filename);
 //                    System.out.println("_filePath = " + _filePath);
                     if (!filename.equals(_filePath))
-                    	return HRESULT.S_FALSE;
-                    
+                    	return HRESULT.S_OK;
                     File dirs = file.getParentFile();
                     if (dirs != null) {
                         if (!dirs.isDirectory())
                             if (!dirs.mkdirs())
                                 return HRESULT.S_FALSE;
                     }
-                    
                     long pos = item.getPosition();
                     if (pos == -1) {
                         file.delete();
                     }
-                    
                     outStream[0] = this.out;
                 
                 return HRESULT.S_OK;
@@ -78,7 +71,6 @@ public class MuArchiveExtractCallback extends ArchiveExtractCallback {
         }
         
         // other case : skip ...
-        
         return HRESULT.S_OK;
     }
 }
