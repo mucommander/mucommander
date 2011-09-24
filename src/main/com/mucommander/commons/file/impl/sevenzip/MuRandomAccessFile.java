@@ -1,14 +1,38 @@
-package com.mucommander.commons.file.impl.sevenzip;
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ * Copyright (C) 2002-2010 Maxence Bernard
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import SevenZip.IInStream;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.mucommander.commons.file.impl.sevenzip;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.IInStream;
+
+/**
+ * TODO: comment
+ * 
+ * @author Arik Hadas
+ */
 public class MuRandomAccessFile extends IInStream {
     private static final Logger LOGGER = LoggerFactory.getLogger(MuRandomAccessFile.class);
 	
@@ -25,7 +49,6 @@ public class MuRandomAccessFile extends IInStream {
 		try {
 			stream = file.getInputStream();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			LOGGER.trace("Error", e);
 		}
 	}
@@ -33,10 +56,10 @@ public class MuRandomAccessFile extends IInStream {
 	@Override
     public long Seek(long offset, int seekOrigin) throws IOException {
 		if (seekOrigin == STREAM_SEEK_SET) {
-				stream.close();
-                stream = file.getInputStream();
-                stream.skip(offset);
-                position = offset;
+			stream.close();
+            stream = file.getInputStream();
+            stream.skip(offset);
+            position = offset;
         }
         else if (seekOrigin == STREAM_SEEK_CUR) {
             stream.skip(offset);
@@ -72,23 +95,23 @@ public class MuRandomAccessFile extends IInStream {
     
     @Override
     public long skip(long offset) {
+    	long skipped = 0;
     	try {
-			return stream.skip(offset);
+			skipped = stream.skip(offset);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
             LOGGER.trace("Error", e);
-			return 0;
 		}
+		return skipped;
     }
     
     @Override
     public int available () {
+    	int available = 0;
     	try {
-			return stream.available();
+			available = stream.available();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
             LOGGER.trace("Error", e);
-			return 0;
 		}
+		return available;
     }
 }
