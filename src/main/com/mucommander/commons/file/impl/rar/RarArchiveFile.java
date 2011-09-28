@@ -19,14 +19,19 @@
 
 package com.mucommander.commons.file.impl.rar;
 
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.impl.rar.provider.RarFile;
-import com.mucommander.commons.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractROArchiveFile;
+import com.mucommander.commons.file.ArchiveEntry;
+import com.mucommander.commons.file.ArchiveEntryIterator;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.WrapperArchiveEntryIterator;
+
+import de.innosystec.unrar.exception.RarException;
+import de.innosystec.unrar.rarfile.FileHeader;
 
 /**
  * RarArchiveFile provides read-only access to archives in the Rar format.
@@ -55,8 +60,9 @@ public class RarArchiveFile extends AbstractROArchiveFile {
      * @throws IOException if an error occurred while reloading
      * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
      * or is not implemented.
+	 * @throws RarException 
      */
-    private void checkRarFile() throws IOException, UnsupportedFileOperationException {
+    private void checkRarFile() throws IOException, UnsupportedFileOperationException, RarException {
         long currentDate = file.getDate();
         
         if (rarFile==null || currentDate != lastRarFileDate) {
@@ -96,7 +102,11 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     
     @Override
     public synchronized ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
-        checkRarFile();
+        try {
+			checkRarFile();
+		} catch (RarException e) {
+			throw new IOException();
+		}
 
         Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
         for (Object o : rarFile.getEntries())
@@ -107,8 +117,16 @@ public class RarArchiveFile extends AbstractROArchiveFile {
 
     @Override
     public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
-		checkRarFile();
+		try {
+			checkRarFile();
+		} catch (RarException e) {
+			throw new IOException();
+		}
 		
-		return rarFile.getEntryInputStream(entry.getPath().replace('/', '\\'));
+		try {
+			return rarFile.getEntryInputStream(entry.getPath().replace('/', '\\'));
+		} catch (RarException e) {
+			throw new IOException();
+		}
 	}
 }
