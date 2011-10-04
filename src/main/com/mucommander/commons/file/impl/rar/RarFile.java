@@ -24,7 +24,7 @@ import java.util.Collection;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
-import com.mucommander.commons.file.impl.sevenzip.CircularByteBuffer;
+import com.mucommander.commons.util.CircularByteBuffer;
 
 import de.innosystec.unrar.Archive;
 import de.innosystec.unrar.exception.RarException;

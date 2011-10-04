@@ -18,24 +18,23 @@
 
 package com.mucommander.commons.file.impl.sevenzip;
 
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.IInStream;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.MyRandomAccessFile;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip.Handler;
-import com.mucommander.commons.io.FailSafePipedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PipedOutputStream;
-import java.util.Vector;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractROArchiveFile;
+import com.mucommander.commons.file.ArchiveEntry;
+import com.mucommander.commons.file.ArchiveEntryIterator;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.WrapperArchiveEntryIterator;
+import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
+import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
+import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip.Handler;
+import com.mucommander.commons.util.CircularByteBuffer;
 
 
 /**
