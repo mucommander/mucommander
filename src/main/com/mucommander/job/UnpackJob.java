@@ -171,7 +171,7 @@ public class UnpackJob extends AbstractCopyJob {
             return false;
 
         // 'Cast' the file as an archive file
-        AbstractArchiveFile archiveFile = (AbstractArchiveFile)file.getAncestor(AbstractArchiveFile.class);
+        AbstractArchiveFile archiveFile = file.getAncestor(AbstractArchiveFile.class);
         ArchiveEntryIterator iterator = null;
 
         ArchiveEntry entry;
