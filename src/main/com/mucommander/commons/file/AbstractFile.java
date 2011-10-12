@@ -874,13 +874,13 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * Class, or <code>this</code> if this instance's class matches those criteria. Returns <code>null</code> if this
      * file has no such ancestor.
      */
-    public final AbstractFile getAncestor(Class<? extends AbstractFile> abstractFileClass) {
-        AbstractFile ancestor = this;
+    public final <T extends AbstractFile> T getAncestor(Class<T> abstractFileClass) {
+    	AbstractFile ancestor = this;
         AbstractFile lastAncestor;
 
         do {
             if(abstractFileClass.isAssignableFrom(ancestor.getClass()))
-                return ancestor;
+                return (T) ancestor;
 
             lastAncestor = ancestor;
             ancestor = ancestor.getAncestor();
@@ -968,9 +968,9 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      */
     public final AbstractArchiveFile getParentArchive() {
         if(hasAncestor(AbstractArchiveFile.class))
-            return (AbstractArchiveFile)getAncestor(AbstractArchiveFile.class);
+            return getAncestor(AbstractArchiveFile.class);
         else if(hasAncestor(AbstractArchiveEntryFile.class))
-            return ((AbstractArchiveEntryFile)getAncestor(AbstractArchiveEntryFile.class)).getArchiveFile();
+            return getAncestor(AbstractArchiveEntryFile.class).getArchiveFile();
 
         return null;
     }

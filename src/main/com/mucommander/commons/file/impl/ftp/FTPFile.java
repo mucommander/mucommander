@@ -396,7 +396,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     @Override
     public FilePermissions getPermissions() {
         if(isSymlink())
-            return ((FTPFile)getCanonicalFile().getAncestor(FTPFile.class)).permissions;
+            return getCanonicalFile().getAncestor(FTPFile.class).permissions;
 
         return permissions;
     }

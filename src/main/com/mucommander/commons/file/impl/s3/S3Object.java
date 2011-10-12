@@ -192,7 +192,7 @@ public class S3Object extends S3File {
     public void copyRemotelyTo(AbstractFile destFile) throws IOException {
         checkCopyRemotelyPrerequisites(destFile, true, false);
 
-        S3Object destObjectFile = (S3Object)destFile.getAncestor(S3Object.class);
+        S3Object destObjectFile = destFile.getAncestor(S3Object.class);
 
         try {
             // Let the COPY request fail if both objects are not located in the same region, saves 2 HEAD BUCKET requests.
