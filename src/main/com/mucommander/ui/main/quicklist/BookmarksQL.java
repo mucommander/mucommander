@@ -21,6 +21,7 @@ package com.mucommander.ui.main.quicklist;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -38,7 +39,7 @@ import java.util.List;
  * @author Arik Hadas
  */
 public class BookmarksQL extends QuickListWithIcons<Bookmark> implements BookmarkListener {
-	protected Bookmark[] sortedBookmarks;
+	protected Bookmark[] cachedBookmarks;
 
 	public BookmarksQL() {
 		super(ActionProperties.getActionLabel(ShowBookmarksQLAction.Descriptor.ACTION_ID), Translator.get("bookmarks_menu.no_bookmark"));
@@ -54,7 +55,7 @@ public class BookmarksQL extends QuickListWithIcons<Bookmark> implements Bookmar
 
 	@Override
     protected Bookmark[] getData() {
-		return sortedBookmarks;
+		return cachedBookmarks;
 	}
 	
 	@Override
@@ -62,25 +63,9 @@ public class BookmarksQL extends QuickListWithIcons<Bookmark> implements Bookmar
 		return getIconOfFile(FileFactory.getFile(item.getLocation()));
 	}
 
-	/**
-     * Returns a sorted array of bookmarks.
-     *
-     * @return a sorted array of bookmarks
-     */
-    private Bookmark[] getSortedBookmarks() {
-    	List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
-        Bookmark[] bookmarkArray = new Bookmark[bookmarks.size()];
-        bookmarks.toArray(bookmarkArray);
-        Arrays.sort(bookmarkArray, new Comparator<Bookmark>() {
-            public int compare(Bookmark b1, Bookmark b2) {
-                return String.CASE_INSENSITIVE_ORDER.compare(b1.getName(), b2.getName());
-            }
-        });
-
-    	return bookmarkArray;
-    }
-	
 	public void bookmarksChanged() {
-		sortedBookmarks = getSortedBookmarks();
+		AlteredVector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
+		cachedBookmarks = new Bookmark[bookmarks.size()];
+		bookmarks.toArray(cachedBookmarks);
 	}
 }
