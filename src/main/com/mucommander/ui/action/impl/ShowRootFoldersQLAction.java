@@ -36,9 +36,9 @@ import com.mucommander.ui.main.MainFrame;
  * 
  * @author Arik Hadas
  */
-public class ShowRootsQLAction extends ShowQuickListAction {
+public class ShowRootFoldersQLAction extends ShowQuickListAction {
 
-	public ShowRootsQLAction(MainFrame mainFrame, Map<String,Object> properties) {
+	public ShowRootFoldersQLAction(MainFrame mainFrame, Map<String,Object> properties) {
 		super(mainFrame, properties);
 	}
 	
@@ -50,12 +50,12 @@ public class ShowRootsQLAction extends ShowQuickListAction {
 	public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ShowRootsQLAction(mainFrame, properties);
+			return new ShowRootFoldersQLAction(mainFrame, properties);
 		}
     }
 	
 	public static class Descriptor extends AbstractActionDescriptor {
-		public static final String ACTION_ID = "ShowRootsQL";
+		public static final String ACTION_ID = "ShowRootFoldersQL";
 		
 		public String getId() { return ACTION_ID; }
 

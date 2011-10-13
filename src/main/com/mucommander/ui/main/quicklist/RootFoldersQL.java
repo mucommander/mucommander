@@ -25,7 +25,7 @@ import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
-import com.mucommander.ui.action.impl.ShowRootsQLAction;
+import com.mucommander.ui.action.impl.ShowRootFoldersQLAction;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
@@ -37,7 +37,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
 public class RootFoldersQL extends QuickListWithIcons<AbstractFile> {
 	
 	public RootFoldersQL() {
-		super(ActionProperties.getActionLabel(ShowRootsQLAction.Descriptor.ACTION_ID), Translator.get("roots_quick_list.empty_message"));
+		super(ActionProperties.getActionLabel(ShowRootFoldersQLAction.Descriptor.ACTION_ID), Translator.get("roots_quick_list.empty_message"));
 	}
 	
 	@Override
