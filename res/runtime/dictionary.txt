@@ -7257,6 +7257,9 @@ ShowRecentExecutedFilesQL.label:TR:Son çalıştırılan dosyalar
 ShowRecentExecutedFilesQL.label:CA:Fitxers executats recentment
 # Translation missing (ES, KO)
 
+ShowRootFoldersQL.label:EN:Root folders
+# Translation missing (New!)
+
 SplitFile.label:EN:$[split]
 
 SplitFile.tooltip:EN:Split a file into multiple parts
