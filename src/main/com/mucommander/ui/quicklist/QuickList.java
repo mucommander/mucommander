@@ -87,11 +87,12 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 	@Override
     public Dimension getPreferredSize() {
 		double width = PADDING, height = PADDING;
-		int nbItems = items.size();
-		for (int i=0; i<nbItems; i++) {
-			width = Math.max(width, items.get(i).getPreferredSize().getWidth());
-			height += items.get(i).getPreferredSize().getHeight();
+
+		for (Component item : items) {
+			width = Math.max(width, item.getPreferredSize().getWidth());
+			height += item.getPreferredSize().getHeight();
 		}
+		
 		return new Dimension((int) Math.ceil(
 				Math.max(folderPanel == null ? 0 : folderPanel.getWidth() / 2, width * 1.05))
 				, (int) Math.ceil(height));

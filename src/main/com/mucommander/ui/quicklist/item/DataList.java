@@ -18,17 +18,24 @@
 
 package com.mucommander.ui.quicklist.item;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
+
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 import com.mucommander.ui.quicklist.QuickListWithDataList;
-import com.mucommander.ui.theme.*;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.ThemeData;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 /**
  * This class represent a data list for FileTablePopupWithDataList.
@@ -68,8 +75,8 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
     public void setListData(Object[] data) {
 		super.setListData(data);
 	
-		int numOfRowsInList;
-		if ((numOfRowsInList = getModel().getSize()) > 0) {
+		int numOfRowsInList = getModel().getSize();
+		if (numOfRowsInList > 0) {
 			setVisibleRowCount(Math.min(numOfRowsInList, VISIBLE_ROWS_COUNT));
 			setSelectedIndex(0);
 			ensureIndexIsVisible(0);
@@ -119,7 +126,7 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 	}
 	
 	protected void addMouseListenerToList() {
-    	addMouseListener(new MouseListener() {
+    	addMouseListener(new MouseAdapter() {
         		
 			public void mouseClicked(MouseEvent e) {
 				// If there was double click on item of the popup's list, 
@@ -130,15 +137,7 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 		             ((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected(getSelectedValue());
 				}
 			}
-
-			public void mouseReleased(MouseEvent e) {}
-			
-			public void mouseEntered(MouseEvent e) {}
-
-			public void mouseExited(MouseEvent e) {}
-			
-			public void mousePressed(MouseEvent e) {}
-        });
+    	});
     }
 	
 	public void getFocus(){
@@ -153,6 +152,7 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 		return ((QuickListWithDataList)(getParent().getParent().getParent())).getPanel().getFileTable(); 
 	}
 	
+	@Override
 	public void colorChanged(ColorChangedEvent event) {		
 		if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR)
 			setBackground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR));
@@ -173,6 +173,7 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 		setFixedCellHeight((int) (getFontMetrics(getFont()).getHeight() * 1.5));
 	}
 
+	@Override
 	public void fontChanged(FontChangedEvent event) {
 		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));		
 	}
