@@ -5499,6 +5499,9 @@ OpenNatively.tooltip:NB:Åpne markert fil med systemets filassosiasjoner
 OpenNatively.tooltip:TR:Seçilen dosyayı sistemin dosya uzantı ayarlarıyla çalıştır
 OpenNatively.tooltip:CA:Executa el fitxer seleccionat amb el programa associat al sistema
 
+OpenInNewTab.label:EN:Open in new tab
+# Translation missing (New!)
+
 OpenInOtherPanel.label:EN:Open in other panel
 OpenInOtherPanel.label:FR:Ouvrir dans l'autre panneau
 OpenInOtherPanel.label:NL:Openen in nieuw scherm
@@ -8307,6 +8310,27 @@ table.download_or_browse:NB:Vil du utforske eller laste ned filen?
 table.download_or_browse:TR:Bu dosyaya gözatmak mı yoksa indirmek mi istersiniz ?
 table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 
+########
+# Tabs #
+########
+
+CloseDuplicateTabs.label:EN:Close duplicate tabs
+# Translation missing (New!)
+
+CloseOtherTabs.label:EN:Close other tabs
+# Translation missing (New!)
+
+CloseTab.label:EN:Close tab
+# Translation missing (New!)
+
+MoveTabToOtherPanel.label:EN:Move tab to other panel
+# Translation missing (New!)
+
+NextTab.label:EN:Next tab
+# Translation missing (New!)
+
+PreviousTab.label:EN:Previous tab
+# Translation missing (New!)
 
 ##################
 # Version dialog #
