@@ -43,11 +43,6 @@ public abstract class CustomizeDialog extends FocusDialog implements ActionListe
     /** Cancel button. */
     private JButton     cancelButton;
 
-    // Abstract methods:
-    protected abstract JPanel createCustomizationPanel();
-    protected abstract void commit();
-    protected abstract void componentChanged();
-	
 	public CustomizeDialog(Frame parent, String title) {
         super(parent, title, parent);
         initUI();
@@ -97,6 +92,16 @@ public abstract class CustomizeDialog extends FocusDialog implements ActionListe
         // Set preferred size
         setPreferredSize(PREFERRED_SIZE);
     }
+
+    //////////////////////
+    // Abstract methods //
+    //////////////////////
+
+    protected abstract JPanel createCustomizationPanel();
+
+    protected abstract void commit();
+    
+    protected abstract void componentChanged();
     
     // - Listener code ----------------------------------------------------------
     // --------------------------------------------------------------------------
