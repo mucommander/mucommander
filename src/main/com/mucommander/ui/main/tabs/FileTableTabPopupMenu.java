@@ -37,11 +37,11 @@ class FileTableTabPopupMenu extends MuActionsPopupMenu {
 		
 //		addAction("duplicate");
 		addAction(CloseTabAction.Descriptor.ACTION_ID);
-		addAction(CloseDuplicateTabsAction.Descriptor.ACTION_ID);
 		addAction(CloseOtherTabsAction.Descriptor.ACTION_ID);
+		addAction(CloseDuplicateTabsAction.Descriptor.ACTION_ID);
+		add(new Separator());
 		addAction(MoveTabToOtherPanelAction.Descriptor.ACTION_ID);
 //		addAction("lock");
-		add(new Separator());
 //		addAction("Move To Other Panel");
 //		addAction("Clone To Other Panel");
 	}
