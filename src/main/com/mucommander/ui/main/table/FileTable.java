@@ -78,6 +78,7 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
+import com.mucommander.ui.quicksearch.QuickSearch;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
@@ -147,7 +148,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private boolean autoSizeColumnsEnabled;
 
     /** Instance of the inner class that handles quick search */
-    private QuickSearch quickSearch = new QuickSearch();
+    private QuickSearch quickSearch = new FileTableQuickSearch();
 
     /** TableSelectionListener instances registered to receive selection change events */
     private WeakHashMap<TableSelectionListener, ?> tableSelectionListeners = new WeakHashMap<TableSelectionListener, Object>();
@@ -325,7 +326,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      *
      * @return the QuickSearch inner class instance used by this FileTable
      */
-    public FileTable.QuickSearch getQuickSearch() {
+    public QuickSearch getQuickSearch() {
         return quickSearch;
     }
 
@@ -1614,77 +1615,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * This inner class adds 'quick search' functionality to the FileTable, selecting file rows that match the
      * user's keyboard input.
      */
-    public class QuickSearch implements KeyListener, Runnable {
-
-        /** Quick search string */
-        private String searchString;
-
-        /** Timestamp of the last search string change, used when quick search is active */
-        private long lastSearchStringChange;
-
-        /** Thread that's responsible for cancelling the quick search on timeout,
-         * has a null value when quick search is not active */
-        private Thread timeoutThread;
-
-        /** Quick search timeout in ms */
-        private final static int QUICK_SEARCH_TIMEOUT = 2000;
-
-        /** Icon that is used to indicate in the status bar that quick search has failed */
-        private final static String QUICK_SEARCH_KO_ICON = "quick_search_ko.png";
-
-        /** Icon that is used to indicate in the status bar that quick search has found a match */
-        private final static String QUICK_SEARCH_OK_ICON = "quick_search_ok.png";
-
+    private class FileTableQuickSearch extends QuickSearch {
 
         /**
          * Creates a new QuickSearch instance, only one instance per FileTable should be created.
          */
-        private QuickSearch() {
-            // Listener to key events to start quick search or update search string when it is active
-            FileTable.this.addKeyListener(this);
+        private FileTableQuickSearch() {
+        	super(FileTable.this);
         }
-
-        /**
-         * Turns on quick search mode. This method has no effect if the quick search is already active.
-         * {@link #isActive() isActive()} will return <code>true</code> after this call, and until the quick search has
-         * timed out or has been cancelled by user.
-         */
-        private synchronized void start() {
-            if(!isActive()) {
-                // Reset search string
-                searchString = "";
-                // Start the thread that's responsible for cancelling the quick search on timeout
-                timeoutThread = new Thread(this, "QuickSearch timeout thread");
-                timeoutThread.start();
-                lastSearchStringChange = System.currentTimeMillis();
-
-                // Repaint the table to add the 'dim' effect on non-matching files
-                scrollpaneWrapper.dimBackground();
-            }
-        }
-
-        /**
-         * Stops the current quick search. This method has no effect if the quick search is not currently active.
-         */
-        public synchronized void stop() {
-            if(isActive()) {
-                mainFrame.getStatusBar().updateSelectedFilesInfo();
-                timeoutThread = null;
-
-                // Removes the 'dim' effect on non-matching files.
-                scrollpaneWrapper.undimBackground();
-            }
-        }
-
-        /**
-         * Returns <code>true</code> if a quick search is being performed.
-         *
-         * @return true if a quick search is being performed
-         */
-        public synchronized boolean isActive() {
-            return timeoutThread != null;
-        }
-
+        
         /**
          * Finds a match (if any) for the current quick search string and selects the corresponding row.
          *
@@ -1692,7 +1631,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
          * @param descending specifies whether rows should be tested in ascending or descending order
          * @param findBestMatch if <code>true</code>, all rows will be tested in the specified order, looking for the best match. If not, it will stop to the first match (not necessarily the best).
          */
-        private void findMatch(int startRow, boolean descending, boolean findBestMatch) {
+        protected void findMatch(int startRow, boolean descending, boolean findBestMatch) {
             AppLogger.finest("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
 
             int searchStringLen = searchString.length();
@@ -1703,7 +1642,28 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 return;
             }
 
-            String searchStringLC = searchString.toLowerCase();
+            int bestMatch = getBestMatch(startRow, descending, findBestMatch, searchStringLen);
+
+            if(bestMatch!=-1) {
+                // Select best match's row
+                if(bestMatch!=currentRow) {
+                    selectRow(bestMatch);
+                    //centerRow();
+                }
+
+                // Display the new search string in the status bar
+                // that indicates that the search has yielded a match
+                mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_OK_ICON), false);
+            }
+            else {
+                // No file matching the search string, display the new search string with an icon
+                // that indicates that the search has failed
+                mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_KO_ICON), false);
+            }
+        }
+        
+        private int getBestMatch(int startRow, boolean descending, boolean findBestMatch, int searchStringLen) {
+        	String searchStringLC = searchString.toLowerCase();
             AbstractFile file;
             String filename;
             String filenameLC;
@@ -1713,8 +1673,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             int containsCaseMatch = -1;
             int containsNoCaseMatch = -1;
             int nbRows = tableModel.getRowCount();
-
-            // Iterate on rows and look the first file to match one of the following tests,
+            
+        	// Iterate on rows and look the first file to match one of the following tests,
             // in the following order of importance :
             // - search string matches the beginning of the filename with the same case
             // - search string matches the beginning of the filename with a different case
@@ -1776,94 +1736,38 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     continue;
                 }
             }
-
+        	
             // Determines what the best match is, based on all the matches we found
             int bestMatch = startsWithCaseMatch!=-1?startsWithCaseMatch
                 :startsWithNoCaseMatch!=-1?startsWithNoCaseMatch
                 :containsCaseMatch!=-1?containsCaseMatch
                 :containsNoCaseMatch!=-1?containsNoCaseMatch
                 :-1;
-
+            
             AppLogger.finest("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
             AppLogger.finest("bestMatch="+bestMatch);
-
-            if(bestMatch!=-1) {
-                // Select best match's row
-                if(bestMatch!=currentRow) {
-                    selectRow(bestMatch);
-                    //centerRow();
-                }
-
-                // Display the new search string in the status bar
-                // that indicates that the search has yielded a match
-                mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_OK_ICON), false);
-            }
-            else {
-                // No file matching the search string, display the new search string with an icon
-                // that indicates that the search has failed
-                mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_KO_ICON), false);
-            }
+            
+            return bestMatch;
         }
+        
+        @Override
+		protected void searchStarted() {
+        	// Repaint the table to add the 'dim' effect on non-matching files
+            scrollpaneWrapper.dimBackground();
+		}
 
-        /**
-         * Returns <code>true</code> the current quick search string matches the given filename.
-         * Always returns <code>false</code> when the quick search is inactive.
-         *
-         * @param filename the filename to test against the quick search string
-         * @return true if the current quick search string matches the given filename
-         */
-        public boolean matches(String filename) {
-            return isActive() && filename.toLowerCase().indexOf(searchString.toLowerCase())!=-1;
-        }
-
-
-        /**
-         * Returns <code>true</code> if the given <code>KeyEvent</code> corresponds to a valid quick search input,
-         * <code>false</code> in any of the following cases:
-         *
-         * <ul>
-         *   <li>has any of the Alt, Ctrl or Meta modifier keys down (Shift is OK)</li>
-         *   <li>is an ASCII control character (<32 or ==127)</li>
-         *   <li>is not a valid Unicode character</li>
-         * </ul>
-         *
-         * @param e the KeyEvent to test
-         * @return true if the given <code>KeyEvent</code> corresponds to a valid quick search input
-         */
-        private boolean isValidQuickSearchInput(KeyEvent e) {
-            if((e.getModifiersEx()&(KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0)
-                return false;
-
-            char keyChar = e.getKeyChar();
-            return keyChar>=32 && keyChar!=127 && Character.isDefined(keyChar);
-        }
-
-
-        //////////////////////
-        // Runnable methods //
-        //////////////////////
-
-        public void run() {
-            do {
-                try { Thread.sleep(100); }
-                catch(InterruptedException e) {
-                    // No problemo
-                }
-
-                synchronized(this) {
-                    if(timeoutThread!=null && System.currentTimeMillis()-lastSearchStringChange >= QUICK_SEARCH_TIMEOUT) {
-                        stop();
-                    }
-                }
-            }
-            while(timeoutThread!=null);
-        }
-
+		@Override
+		protected void searchStopped() {
+			mainFrame.getStatusBar().updateSelectedFilesInfo();
+            // Removes the 'dim' effect on non-matching files.
+            scrollpaneWrapper.undimBackground();
+		}
 
         ///////////////////////////////
         // KeyAdapter implementation //
         ///////////////////////////////
 
+        @Override
         public synchronized void keyPressed(KeyEvent e) {
             // Discard key events while in 'no events mode'
             if(mainFrame.getNoEventsMode())
@@ -1975,9 +1879,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
 
             // Update last search string's change timestamp
-            lastSearchStringChange = System.currentTimeMillis();
+            setLastSearchStringChange(System.currentTimeMillis());
         }
-
+        
+        @Override
         public synchronized void keyReleased(KeyEvent e) {
             // Cancel quick search if backspace key has been pressed and search string is empty.
             // This check is done on key release, so that if backspace key is maintained pressed
@@ -1989,6 +1894,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
         }
 
+        @Override
         public void keyTyped(KeyEvent e) {
         }
     }

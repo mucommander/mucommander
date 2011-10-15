@@ -24,6 +24,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.quicksearch.QuickSearch;
 import com.mucommander.ui.theme.*;
 
 import javax.swing.*;
@@ -149,7 +150,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         CellLabel             label;
         AbstractFile          file;
         boolean               matches;
-        FileTable.QuickSearch search;
+        QuickSearch 		  search;
 
         // Need to check that row index is not out of bounds because when the folder
         // has just been changed, the JTable may try to repaint the old folder and
