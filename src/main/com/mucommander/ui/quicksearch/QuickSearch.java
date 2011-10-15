@@ -18,21 +18,27 @@
 
 package com.mucommander.ui.quicksearch;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JComponent;
 
+import com.mucommander.AppLogger;
+
 /**
+ * This class contains 'quick search' common functionality - selection of rows that match
+ * the user's keyboard input.
+ * This class is abstract, and should be inherited by subclasses that define 'quick search' 
+ * functionality for specific components. 
  * 
  * @author Arik Hadas
  */
-public abstract class QuickSearch implements KeyListener, Runnable {
+public abstract class QuickSearch extends KeyAdapter implements Runnable {
 
 	/** Quick search string */
-    protected String searchString;
+    private String searchString;
 
-    /** Timestamp of the last search string change, used when quick search is active */
+	/** Timestamp of the last search string change, used when quick search is active */
     private long lastSearchStringChange;
 
     /** Thread that's responsible for canceling the quick search on timeout,
@@ -48,11 +54,13 @@ public abstract class QuickSearch implements KeyListener, Runnable {
     /** Icon that is used to indicate in the status bar that quick search has found a match */
     protected final static String QUICK_SEARCH_OK_ICON = "quick_search_ok.png";
     
+    private JComponent component;
     
-    protected QuickSearch(JComponent compoenent) {
+    protected QuickSearch(JComponent component) {
+    	this.component = component;
     	
     	// Listener to key events to start quick search or update search string when it is active
-        compoenent.addKeyListener(this);
+    	component.addKeyListener(this);
     }
     
     /**
@@ -136,6 +144,138 @@ public abstract class QuickSearch implements KeyListener, Runnable {
 		this.lastSearchStringChange = lastSearchStringChange;
 	}
 
+	protected boolean isSearchStringEmpty() {
+		return searchString.length() == 0;
+	}
+	
+	protected void removeLastCharacterFromSearchString() {
+		// Remove last character from the search string
+        // Since the search string has been updated, match information has changed as well
+        // and we need to repaint the table.
+        // Note that we only repaint if the search string is not empty: if it's empty,
+        // the cancel() method will be called, and repainting twice would result in an
+        // unpleasant graphical artifact.
+        searchString = searchString.substring(0, searchString.length()-1);
+        if(searchString.length() != 0)
+            component.repaint();
+	}
+	
+	protected void appendCharacterToSearchString(char keyChar) {
+		// Update search string with the key that has just been typed
+        // Since the search string has been updated, match information has changed as well
+        // and we need to repaint the table.
+        searchString += keyChar;
+        component.repaint();
+	}
+	
+	/**
+     * Finds a match (if any) for the current quick search string and selects the corresponding row.
+     *
+     * @param startRow first row to be tested
+     * @param descending specifies whether rows should be tested in ascending or descending order
+     * @param findBestMatch if <code>true</code>, all rows will be tested in the specified order, looking for the best match. If not, it will stop to the first match (not necessarily the best).
+     */
+    protected void findMatch(int startRow, boolean descending, boolean findBestMatch) {
+        AppLogger.finest("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
+
+        // If search string is empty, update status bar without any icon and return
+        if(searchString.length()==0) {
+            searchStringBecameEmpty(searchString);
+        }
+        else {
+        	int bestMatch = getBestMatch(startRow, descending, findBestMatch);
+
+            if (bestMatch != -1)
+                matchFound(bestMatch, searchString);
+            else
+                matchNotFound(searchString);
+        }
+    }
+	
+	private int getBestMatch(int startRow, boolean descending, boolean findBestMatch) {
+    	String searchStringLC = searchString.toLowerCase();
+    	int searchStringLen = searchString.length();
+        int startsWithCaseMatch = -1;
+        int startsWithNoCaseMatch = -1;
+        int containsCaseMatch = -1;
+        int containsNoCaseMatch = -1;
+        int nbRows = getNumOfItems();
+        
+    	// Iterate on rows and look the first file to match one of the following tests,
+        // in the following order of importance :
+        // - search string matches the beginning of the filename with the same case
+        // - search string matches the beginning of the filename with a different case
+        // - filename contains search string with the same case
+        // - filename contains search string with a different case
+        for(int i=startRow; descending?i<nbRows:i>=0; i=descending?i+1:i-1) {
+            // if findBestMatch was not specified, stop to the first match
+            if(!findBestMatch && (startsWithCaseMatch!=-1 || startsWithNoCaseMatch!=-1 || containsCaseMatch!=-1 || containsNoCaseMatch!=-1))
+                break;
+
+            String item = getItemString(i);
+            int itemLen = item.length();
+
+            // No need to compare strings if quick search string is longer than filename,
+            // they won't match
+            if(itemLen<searchStringLen)
+                continue;
+
+            // Compare quick search string against
+            if (item.startsWith(searchString)) {
+                // We've got the best match we could ever have, let's get out of this loop!
+                startsWithCaseMatch = i;
+                break;
+            }
+
+            // If we already have a match on this test case, let's skip to the next file
+            if(startsWithNoCaseMatch!=-1)
+                continue;
+
+            String itemLC = item.toLowerCase();
+            if(itemLC.startsWith(searchStringLC)) {
+                // We've got a match, let's see if we can find a better match on the next file
+                startsWithNoCaseMatch = i;
+            }
+
+            // No need to check if filename contains search string if both size are equal,
+            // in the case startsWith test yields the same result
+            if(itemLen==searchStringLen)
+                continue;
+
+            // If we already have a match on this test case, let's skip to the next file
+            if(containsCaseMatch!=-1)
+                continue;
+
+            if(item.indexOf(searchString)!=-1) {
+                // We've got a match, let's see if we can find a better match on the next file
+                containsCaseMatch = i;
+                continue;
+            }
+
+            // If we already have a match on this test case, let's skip to the next file
+            if(containsNoCaseMatch!=-1)
+                continue;
+
+            if(itemLC.indexOf(searchStringLC)!=-1) {
+                // We've got a match, let's see if we can find a better match on the next file
+                containsNoCaseMatch = i;
+                continue;
+            }
+        }
+    	
+        // Determines what the best match is, based on all the matches we found
+        int bestMatch = startsWithCaseMatch!=-1?startsWithCaseMatch
+            :startsWithNoCaseMatch!=-1?startsWithNoCaseMatch
+            :containsCaseMatch!=-1?containsCaseMatch
+            :containsNoCaseMatch!=-1?containsNoCaseMatch
+            :-1;
+        
+        AppLogger.finest("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
+        AppLogger.finest("bestMatch="+bestMatch);
+        
+        return bestMatch;
+    }
+
 	//////////////////////
 	// Abstract methods //
 	//////////////////////
@@ -149,6 +289,43 @@ public abstract class QuickSearch implements KeyListener, Runnable {
 	 * Hook that is called after the search is stopped
 	 */
 	protected abstract void searchStopped();
+	
+	/**
+	 * Return number of items to be searched in
+	 * 
+	 * @return number of items
+	 */
+	protected abstract int getNumOfItems();
+	
+	/**
+	 * Return item at a given index as String
+	 * 
+	 * @param index - index of item
+	 * @return item at index as String
+	 */
+	protected abstract String getItemString(int index);
+	
+	/**
+	 * Hook that is called after a search was done for an empty string
+	 * 
+	 * @param searchString
+	 */
+	protected abstract void searchStringBecameEmpty(String searchString);
+	
+	/**
+	 * Hook that is called after a search was done and an item was found
+	 * 
+	 * @param row - the row of the item that was found
+	 * @param searchString - the string that was being searched
+	 */
+	protected abstract void matchFound(int row, String searchString);
+	
+	/**
+	 * Hood that is called after a search was done and no item was found
+	 * 
+	 * @param searchString - the string that was being searched
+	 */
+	protected abstract void matchNotFound(String searchString);
 
     //////////////////////
     // Runnable methods //
@@ -168,5 +345,21 @@ public abstract class QuickSearch implements KeyListener, Runnable {
             }
         }
         while(timeoutThread!=null);
+    }
+
+    ///////////////////////////////
+    // KeyAdapter implementation //
+    ///////////////////////////////
+    
+    @Override
+    public synchronized void keyReleased(KeyEvent e) {
+        // Cancel quick search if backspace key has been pressed and search string is empty.
+        // This check is done on key release, so that if backspace key is maintained pressed
+        // to remove all the search string, it does not trigger FileTable's back action which is
+        // mapped on backspace too
+        if(isActive() && e.getKeyCode()==KeyEvent.VK_BACK_SPACE && searchString.equals("")) {
+            e.consume();
+            stop();
+        }
     }
 }

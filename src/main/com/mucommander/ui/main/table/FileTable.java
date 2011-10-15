@@ -1612,8 +1612,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * This inner class adds 'quick search' functionality to the FileTable, selecting file rows that match the
-     * user's keyboard input.
+     * This inner class adds 'quick search' functionality to the FileTable
      */
     private class FileTableQuickSearch extends QuickSearch {
 
@@ -1622,132 +1621,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
          */
         private FileTableQuickSearch() {
         	super(FileTable.this);
-        }
-        
-        /**
-         * Finds a match (if any) for the current quick search string and selects the corresponding row.
-         *
-         * @param startRow first row to be tested
-         * @param descending specifies whether rows should be tested in ascending or descending order
-         * @param findBestMatch if <code>true</code>, all rows will be tested in the specified order, looking for the best match. If not, it will stop to the first match (not necessarily the best).
-         */
-        protected void findMatch(int startRow, boolean descending, boolean findBestMatch) {
-            AppLogger.finest("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
-
-            int searchStringLen = searchString.length();
-
-            // If search string is empty, update status bar without any icon and return
-            if(searchStringLen==0) {
-                mainFrame.getStatusBar().setStatusInfo(searchString);
-                return;
-            }
-
-            int bestMatch = getBestMatch(startRow, descending, findBestMatch, searchStringLen);
-
-            if(bestMatch!=-1) {
-                // Select best match's row
-                if(bestMatch!=currentRow) {
-                    selectRow(bestMatch);
-                    //centerRow();
-                }
-
-                // Display the new search string in the status bar
-                // that indicates that the search has yielded a match
-                mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_OK_ICON), false);
-            }
-            else {
-                // No file matching the search string, display the new search string with an icon
-                // that indicates that the search has failed
-                mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_KO_ICON), false);
-            }
-        }
-        
-        private int getBestMatch(int startRow, boolean descending, boolean findBestMatch, int searchStringLen) {
-        	String searchStringLC = searchString.toLowerCase();
-            AbstractFile file;
-            String filename;
-            String filenameLC;
-            int filenameLen;
-            int startsWithCaseMatch = -1;
-            int startsWithNoCaseMatch = -1;
-            int containsCaseMatch = -1;
-            int containsNoCaseMatch = -1;
-            int nbRows = tableModel.getRowCount();
-            
-        	// Iterate on rows and look the first file to match one of the following tests,
-            // in the following order of importance :
-            // - search string matches the beginning of the filename with the same case
-            // - search string matches the beginning of the filename with a different case
-            // - filename contains search string with the same case
-            // - filename contains search string with a different case
-            for(int i=startRow; descending?i<nbRows:i>=0; i=descending?i+1:i-1) {
-                // if findBestMatch was not specified, stop to the first match
-                if(!findBestMatch && (startsWithCaseMatch!=-1 || startsWithNoCaseMatch!=-1 || containsCaseMatch!=-1 || containsNoCaseMatch!=-1))
-                    break;
-
-                file = tableModel.getFileAtRow(i);
-                filename = (i==0 && tableModel.hasParentFolder())?"..":file.getName();
-                filenameLen = filename.length();
-
-                // No need to compare strings if quick search string is longer than filename,
-                // they won't match
-                if(filenameLen<searchStringLen)
-                    continue;
-
-                // Compare quick search string against
-                if (filename.startsWith(searchString)) {
-                    // We've got the best match we could ever have, let's get out of this loop!
-                    startsWithCaseMatch = i;
-                    break;
-                }
-
-                // If we already have a match on this test case, let's skip to the next file
-                if(startsWithNoCaseMatch!=-1)
-                    continue;
-
-                filenameLC = filename.toLowerCase();
-                if(filenameLC.startsWith(searchStringLC)) {
-                    // We've got a match, let's see if we can find a better match on the next file
-                    startsWithNoCaseMatch = i;
-                }
-
-                // No need to check if filename contains search string if both size are equal,
-                // in the case startsWith test yields the same result
-                if(filenameLen==searchStringLen)
-                    continue;
-
-                // If we already have a match on this test case, let's skip to the next file
-                if(containsCaseMatch!=-1)
-                    continue;
-
-                if(filename.indexOf(searchString)!=-1) {
-                    // We've got a match, let's see if we can find a better match on the next file
-                    containsCaseMatch = i;
-                    continue;
-                }
-
-                // If we already have a match on this test case, let's skip to the next file
-                if(containsNoCaseMatch!=-1)
-                    continue;
-
-                if(filenameLC.indexOf(searchStringLC)!=-1) {
-                    // We've got a match, let's see if we can find a better match on the next file
-                    containsNoCaseMatch = i;
-                    continue;
-                }
-            }
-        	
-            // Determines what the best match is, based on all the matches we found
-            int bestMatch = startsWithCaseMatch!=-1?startsWithCaseMatch
-                :startsWithNoCaseMatch!=-1?startsWithNoCaseMatch
-                :containsCaseMatch!=-1?containsCaseMatch
-                :containsNoCaseMatch!=-1?containsNoCaseMatch
-                :-1;
-            
-            AppLogger.finest("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
-            AppLogger.finest("bestMatch="+bestMatch);
-            
-            return bestMatch;
         }
         
         @Override
@@ -1762,144 +1635,147 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // Removes the 'dim' effect on non-matching files.
             scrollpaneWrapper.undimBackground();
 		}
+		
+		@Override
+		protected int getNumOfItems() {
+			return tableModel.getRowCount();
+		}
 
+		@Override
+		protected String getItemString(int index) {
+            return (index==0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(index).getName();
+		}
+
+		@Override
+		protected void searchStringBecameEmpty(String searchString) {
+			mainFrame.getStatusBar().setStatusInfo(searchString); // TODO: is needed?			
+		}
+
+		@Override
+		protected void matchFound(int row, String searchString) {
+			// Select best match's row
+            if(row!=currentRow) {
+                selectRow(row);
+                //centerRow();
+            }
+
+            // Display the new search string in the status bar
+            // that indicates that the search has yielded a match
+            mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_OK_ICON), false);
+		}
+
+		@Override
+		protected void matchNotFound(String searchString) {
+			// No file matching the search string, display the new search string with an icon
+            // that indicates that the search has failed
+            mainFrame.getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_KO_ICON), false);
+		}
+		
         ///////////////////////////////
         // KeyAdapter implementation //
         ///////////////////////////////
 
-        @Override
-        public synchronized void keyPressed(KeyEvent e) {
-            // Discard key events while in 'no events mode'
-            if(mainFrame.getNoEventsMode())
-                return;
+		@Override
+	    public synchronized void keyPressed(KeyEvent e) {
+	    	// Discard key events while in 'no events mode'
+	        if(mainFrame.getNoEventsMode())
+	            return;
+	        
+	        char keyChar = e.getKeyChar();
 
-            char keyChar = e.getKeyChar();
+	        // If quick search is not active...
+	        if (!isActive()) {
+	            // Return (do not start quick search) if the key is not a valid quick search input
+	            if(!isValidQuickSearchInput(e))
+	                return;
 
-            // If quick search is not active...
-            if (!isActive()) {
-                // Return (do not start quick search) if the key is not a valid quick search input
-                if(!isValidQuickSearchInput(e))
-                    return;
+	            // Return (do not start quick search) if the typed key corresponds to a registered action's accelerator
+	            if(ActionKeymap.isKeyStrokeRegistered(KeyStroke.getKeyStrokeForEvent(e)))
+	                return;
 
-                // Return (do not start quick search) if the typed key corresponds to a registered action's accelerator
-                if(ActionKeymap.isKeyStrokeRegistered(KeyStroke.getKeyStrokeForEvent(e)))
-                    return;
+	            // Start the quick search and continue to process the current key event
+	            start();
+	        }
 
-                // Start the quick search and continue to process the current key event
-                start();
-            }
+	        // At this point, quick search is active
+	        int keyCode = e.getKeyCode();
+	        boolean keyHasModifiers = (e.getModifiersEx()&(KeyEvent.SHIFT_DOWN_MASK|KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0;
 
-            // At this point, quick search is active
-            int keyCode = e.getKeyCode();
-            boolean keyHasModifiers = (e.getModifiersEx()&(KeyEvent.SHIFT_DOWN_MASK|KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0;
+	        // Backspace removes the last character of the search string
+	        if(keyCode==KeyEvent.VK_BACK_SPACE && !keyHasModifiers) {
 
-            // Backspace removes the last character of the search string
-            if(keyCode==KeyEvent.VK_BACK_SPACE && !keyHasModifiers) {
-                int searchStringLen = searchString.length();
+	            // Search string is empty already
+	            if(isSearchStringEmpty())
+	                return;
 
-                // Search string is empty already
-                if(searchStringLen==0)
-                    return;
+	            removeLastCharacterFromSearchString();
 
-                // Remove last character from the search string
-                // Since the search string has been updated, match information has changed as well
-                // and we need to repaint the table.
-                // Note that we only repaint if the search string is not empty: if it's empty,
-                // the cancel() method will be called, and repainting twice would result in an
-                // unpleasant graphical artifact.
-                searchString = searchString.substring(0, searchStringLen-1);
-                if(searchString.length() != 0)
-                    FileTable.this.repaint();
+	            // Find the row that best matches the new search string and select it
+	            findMatch(0, true, true);
+	        }
+	        // Escape immediately cancels the quick search
+	        else if(keyCode==KeyEvent.VK_ESCAPE && !keyHasModifiers) {
+	            stop();
+	        }
+	        // Up/Down jumps to previous/next match
+	        // Shift+Up/Shift+Down marks currently selected file and jumps to previous/next match
+	        else if((keyCode==KeyEvent.VK_UP || keyCode==KeyEvent.VK_DOWN) && !keyHasModifiers) {
+	            // Find the first row before/after the current row that matches the search string
+	            boolean down = keyCode==KeyEvent.VK_DOWN;
+	            findMatch(currentRow + (down ? 1 : -1), down, false);
+	        }
+	        // MarkSelectedFileAction and MarkNextRowAction mark the current row and moves to the next match
+	        else if(ActionManager.getActionInstance(MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))
+	             || ActionManager.getActionInstance(MarkNextRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
 
-                // Find the row that best matches the new search string and select it
-                findMatch(0, true, true);
-            }
-            // Escape immediately cancels the quick search
-            else if(keyCode==KeyEvent.VK_ESCAPE && !keyHasModifiers) {
-                stop();
-            }
-            // Up/Down jumps to previous/next match
-            // Shift+Up/Shift+Down marks currently selected file and jumps to previous/next match
-            else if((keyCode==KeyEvent.VK_UP || keyCode==KeyEvent.VK_DOWN) && !keyHasModifiers) {
-                // Find the first row before/after the current row that matches the search string
-                if(keyCode==KeyEvent.VK_UP)
-                    findMatch(currentRow-1, false, false);
-                else
-                    findMatch(currentRow+1, true, false);
-            }
-            // MarkSelectedFileAction and MarkNextRowAction mark the current row and moves to the next match
-            else if(ActionManager.getActionInstance(MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))
-                 || ActionManager.getActionInstance(MarkNextRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
+	            if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
+	                setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
 
-                if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
-                    setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
+	            // Find the first the next row that matches the search string
+	            findMatch(currentRow+1, true, false);
+	        }
+	        // MarkPreviousRowAction marks the current row and moves to the previous match
+	        else if(ActionManager.getActionInstance(MarkPreviousRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
 
-                // Find the first the next row that matches the search string
-                findMatch(currentRow+1, true, false);
-            }
-            // MarkPreviousRowAction marks the current row and moves to the previous match
-            else if(ActionManager.getActionInstance(MarkPreviousRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
+	            if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
+	                setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
 
-                if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
-                    setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
+	            // Find the first the previous row that matches the search string
+	            findMatch(currentRow-1, false, false);
+	        }
+	        // If no modifier other than Shift is pressed and the typed character is not a control character (space is ok)
+	        // and a valid Unicode character, add it to the current search string
+	        else if(isValidQuickSearchInput(e)) {
+	            appendCharacterToSearchString(keyChar);
 
-                // Find the first the previous row that matches the search string
-                findMatch(currentRow-1, false, false);
-            }
-            // If no modifier other than Shift is pressed and the typed character is not a control character (space is ok)
-            // and a valid Unicode character, add it to the current search string
-            else if(isValidQuickSearchInput(e)) {
-                // Update search string with the key that has just been typed
-                // Since the search string has been updated, match information has changed as well
-                // and we need to repaint the table.
-                searchString += keyChar;
-                FileTable.this.repaint();
+	            // Find the row that best matches the new search string and select it
+	            findMatch(0, true, true);
+	        }
+	        else {
+	            // Test if the typed key combination corresponds to a registered action.
+	            // If that's the case, the quick search is canceled and the action is performed.
+	            String muActionId = ActionKeymap.getRegisteredActionIdForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
+	            if(muActionId!=null) {
+	                // Consume the key event otherwise it would be fired again on the FileTable
+	                // (or any other KeyListener on this FileTable)
+	                e.consume();
 
-                // Find the row that best matches the new search string and select it
-                findMatch(0, true, true);
-            }
-            else {
-                // Test if the typed key combination corresponds to a registered action.
-                // If that's the case, the quick search is canceled and the action is performed.
-                String muActionId = ActionKeymap.getRegisteredActionIdForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
-                if(muActionId!=null) {
-                    // Consume the key event otherwise it would be fired again on the FileTable
-                    // (or any other KeyListener on this FileTable)
-                    e.consume();
+	                // Cancel quick search
+	                stop();
 
-                    // Cancel quicksearch
-                    stop();
+	                // Perform the action
+	                ActionManager.getActionInstance(muActionId, mainFrame).performAction();
+	            }
 
-                    // Perform the action
-                    ActionManager.getActionInstance(muActionId, mainFrame).performAction();
-                }
+	            // Do not update last search string's change timestamp
+	            return;
+	        }
 
-                // Do not update last search string's change timestamp
-                return;
-            }
-
-            // Update last search string's change timestamp
-            setLastSearchStringChange(System.currentTimeMillis());
-        }
-        
-        @Override
-        public synchronized void keyReleased(KeyEvent e) {
-            // Cancel quick search if backspace key has been pressed and search string is empty.
-            // This check is done on key release, so that if backspace key is maintained pressed
-            // to remove all the search string, it does not trigger FileTable's back action which is
-            // mapped on backspace too
-            if(isActive() && e.getKeyCode()==KeyEvent.VK_BACK_SPACE && searchString.equals("")) {
-                e.consume();
-                stop();
-            }
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
+	        // Update last search string's change timestamp
+	        setLastSearchStringChange(System.currentTimeMillis());
+	    }
     }
     // End of QuickSearch class
-
 
 
     // - Theme listening -------------------------------------------------------------
