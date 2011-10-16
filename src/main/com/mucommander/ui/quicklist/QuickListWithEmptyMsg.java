@@ -19,7 +19,7 @@
 package com.mucommander.ui.quicklist;
 
 import com.mucommander.ui.main.table.FileTable;
-import com.mucommander.ui.quicklist.item.EmptyMessageMenuItem;
+import com.mucommander.ui.quicklist.item.QuickListEmptyMessageItem;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -32,12 +32,12 @@ import java.awt.event.KeyListener;
  */
 
 class QuickListWithEmptyMsg extends QuickList implements QuickListFocusableComponent {
-	protected EmptyMessageMenuItem emptyMenuItem;
+	protected QuickListEmptyMessageItem emptyMenuItem;
 	
 	public QuickListWithEmptyMsg(String header, String emptyPopupHeader) {
 		super(header);
 		
-		add(emptyMenuItem = new EmptyMessageMenuItem(emptyPopupHeader));
+		add(emptyMenuItem = new QuickListEmptyMessageItem(emptyPopupHeader));
 		
 		addKeyListenerToList();
 		addFocusListener(this);

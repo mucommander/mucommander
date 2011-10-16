@@ -24,6 +24,7 @@ import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.quicklist.item.DataList;
+import com.mucommander.ui.quicklist.item.DataListWithIcons;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
@@ -83,7 +84,7 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	
 	@Override
     protected DataList getList() {
-		return new GenericPopupDataListWithIcons<T>() {
+		return new DataListWithIcons<T>() {
 			@Override
             public Icon getImageIconOfItem(T item) {
 				return getImageIconOfItemImp(item);

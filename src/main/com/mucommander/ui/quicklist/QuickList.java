@@ -19,7 +19,7 @@
 package com.mucommander.ui.quicklist;
 
 import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.quicklist.item.HeaderMenuItem;
+import com.mucommander.ui.quicklist.item.QuickListHeaderItem;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -40,7 +40,7 @@ import java.util.Vector;
 
 public abstract class QuickList extends JPopupMenu implements FocusListener {
 	private static final int PADDING = 2;
-	protected HeaderMenuItem headerMenuItem;
+	protected QuickListHeaderItem headerMenuItem;
 	protected FolderPanel folderPanel;
 	private java.util.List<Component> items = new Vector<Component>();
 	
@@ -48,7 +48,7 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 		super();
 				
 		setBorder(new PopupsBorder());
-		add(headerMenuItem = new HeaderMenuItem(header));		
+		add(headerMenuItem = new QuickListHeaderItem(header));		
 		setFocusTraversalKeysEnabled(false);
 	}
 	

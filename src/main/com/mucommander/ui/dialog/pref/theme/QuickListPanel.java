@@ -26,10 +26,10 @@ import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.quicklist.GenericPopupDataListWithIcons;
 import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.quicklist.item.DataList;
-import com.mucommander.ui.quicklist.item.HeaderMenuItem;
+import com.mucommander.ui.quicklist.item.DataListWithIcons;
+import com.mucommander.ui.quicklist.item.QuickListHeaderItem;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
 
@@ -49,7 +49,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 	private JPanel quickListPreviewPanel;
 	
 	/** The header of the sample quick list */
-    private HeaderMenuItem header = new HeaderMenuItem(Translator.get("sample_text"));
+    private QuickListHeaderItem header = new QuickListHeaderItem(Translator.get("sample_text"));
 
     /** The items of the sample quick list */
     private final static Object[] sampleData;
@@ -65,7 +65,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
     }
 
     /** The list of items of the sample quick list */
-    private DataList list = new GenericPopupDataListWithIcons(sampleData) {
+    private DataList list = new DataListWithIcons(sampleData) {
 		@Override
         public Icon getImageIconOfItem(Object item) {
 			return sampleIcon;

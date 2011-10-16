@@ -43,7 +43,7 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Arik Hadas
  */
 
-public class DataList extends JList implements QuickListFocusableComponent, ThemeListener {	
+public class DataList<T> extends JList implements QuickListFocusableComponent, ThemeListener {	
 	private final static int VISIBLE_ROWS_COUNT = 10;
 	
 	public DataList(){
@@ -62,7 +62,7 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 		ThemeManager.addCurrentThemeListener(this);
 	}
 	
-	public DataList(Object[] data) {
+	public DataList(T[] data) {
 		this();
 		setListData(data);
 	}
@@ -153,6 +153,26 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 	}
 	
 	@Override
+    public void setFont(Font font) {
+		super.setFont(font);
+		setFixedCellHeight((int) (getFontMetrics(getFont()).getHeight() * 1.5));
+	}
+	
+	public void setForegroundColors(Color foreground, Color selectedForeground) {
+		setForeground(foreground);
+		setSelectionForeground(selectedForeground);
+	}
+
+	public void setBackgroundColors(Color background, Color selectedBackground) {
+		setBackground(background);
+		setSelectionBackground(selectedBackground);
+	}
+
+	//////////////////////////////////
+	// ThemeListener implementation //
+	//////////////////////////////////
+	
+	@Override
 	public void colorChanged(ColorChangedEvent event) {		
 		if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR)
 			setBackground(ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR));
@@ -168,23 +188,8 @@ public class DataList extends JList implements QuickListFocusableComponent, Them
 	}
 	
 	@Override
-    public void setFont(Font font) {
-		super.setFont(font);
-		setFixedCellHeight((int) (getFontMetrics(getFont()).getHeight() * 1.5));
-	}
-
-	@Override
 	public void fontChanged(FontChangedEvent event) {
 		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));		
 	}
-	
-	public void setForegroundColors(Color foreground, Color selectedForeground) {
-		setForeground(foreground);
-		setSelectionForeground(selectedForeground);
-	}
 
-	public void setBackgroundColors(Color background, Color selectedBackground) {
-		setBackground(background);
-		setSelectionBackground(selectedBackground);
-	}
 }
