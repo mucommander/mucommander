@@ -18,6 +18,22 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
@@ -30,14 +46,7 @@ import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.quicklist.item.DataList;
 import com.mucommander.ui.quicklist.item.DataListWithIcons;
 import com.mucommander.ui.quicklist.item.QuickListHeaderItem;
-import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * @author Arik Hadas
@@ -72,21 +81,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 		}
 		
 		@Override
-        public void colorChanged(ColorChangedEvent event) {
-			super.colorChanged(event);
-			repaint();
-		}
-		
-		@Override
-        protected void addMouseListenerToList() {
-	    	addMouseListener(new MouseListener() {
-				public void mouseClicked(MouseEvent e) {}
-				public void mouseReleased(MouseEvent e) {}
-				public void mouseEntered(MouseEvent e) {}
-				public void mouseExited(MouseEvent e) {}
-				public void mousePressed(MouseEvent e) {}
-	        });
-	    }
+        protected void addMouseListenerToList() { }
 		
 		@Override
         protected void addKeyListenerToList() {
@@ -151,7 +146,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
         return panel;
     }
     
-	// - Initialisation ------------------------------------------------------------------
+	// - Initialization ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
      * Creates a new quick list editor.
@@ -163,7 +158,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
         initUI();
     }
 	
-	// - UI initialisation ---------------------------------------------------------------
+	// - UI initialization ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
      * Creates the JPanel that contains all of the item's color configuration elements.
@@ -208,7 +203,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
         JPanel                colorsPanel; // Used to wrap the colors panel in a flow layout.
         PreviewLabel          label;
 
-        // Initialisation.
+        // Initialization.
         gridPanel = new ProportionalGridPanel(3);
 
         // Header.
@@ -239,7 +234,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
     }
 
 	/**
-     * Initialises the panel's UI.
+     * Initializes the panel's UI.
      */
     private void initUI() {
         YBoxPanel   headerConfigurationPanel; // Contains all the configuration elements.

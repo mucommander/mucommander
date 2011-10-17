@@ -19,8 +19,15 @@
 package com.mucommander.ui.quicklist.item;
 
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Image;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JList;
+
+import com.mucommander.ui.main.table.CellLabel;
 
 /**
  * 
@@ -30,12 +37,15 @@ public abstract class DataListWithIcons<T> extends DataList<T> {
 	
 	public DataListWithIcons() {
 		super();
-		setCellRenderer(new CellWithIconRenderer());
 	}
 	
 	public DataListWithIcons(T[] data) {
 		super(data);
-		setCellRenderer(new CellWithIconRenderer());
+	}
+	
+	@Override
+	protected DataListItemRenderer getItemRenderer() {
+		return new DataListItemWithIconRenderer();
 	}
 	
 	//////////////////////
@@ -44,19 +54,19 @@ public abstract class DataListWithIcons<T> extends DataList<T> {
 
 	public abstract Icon getImageIconOfItem(final T item);
 
-	private class CellWithIconRenderer extends DefaultListCellRenderer {
+	protected class DataListItemWithIconRenderer extends DataListItemRenderer {
 		
 		@Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 			// Let superclass deal with most of it...
-			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			CellLabel label = (CellLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
 			// Add its icon
-			Object item = list.getModel().getElementAt(index);
-			Icon icon = getImageIconOfItem((T) item);
-			setIcon(resizeIcon(icon));
+			T item = getListItem(index);
+			Icon icon = getImageIconOfItem(item);
+			label.setIcon(resizeIcon(icon));
 
-			return this;
+			return label;
 		}
 		
 		private Icon resizeIcon(Icon icon) {
