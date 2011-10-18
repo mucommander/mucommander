@@ -75,6 +75,12 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 
     /** The list of items of the sample quick list */
     private DataList<String> list = new DataListWithIcons<String>(sampleData) {
+    	
+    	{
+    		for (KeyListener listener : getKeyListeners())
+    			removeKeyListener(listener);
+    	}
+    	
 		@Override
         public Icon getImageIconOfItem(String item) {
 			return sampleIcon;
@@ -82,40 +88,6 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 		
 		@Override
         protected void addMouseListenerToList() { }
-		
-		@Override
-        protected void addKeyListenerToList() {
-			addKeyListener(new KeyListener() {
-
-				public void keyPressed(KeyEvent e) {			
-					switch(e.getKeyCode()) {
-					case KeyEvent.VK_UP:
-						{
-							int numOfItems = getModel().getSize();				
-							if (numOfItems > 0 && getSelectedIndex() == 0) {
-								setSelectedIndex(numOfItems - 1);
-								ensureIndexIsVisible(numOfItems - 1);
-								e.consume();
-							}
-						}
-						break;
-					case KeyEvent.VK_DOWN:
-						{
-							int numOfItems = getModel().getSize();
-							if (numOfItems > 0 && getSelectedIndex() == numOfItems - 1) {				
-								setSelectedIndex(0);
-								ensureIndexIsVisible(0);
-								e.consume();
-							}						
-						}
-						break;
-					}
-				}
-
-				public void keyReleased(KeyEvent e) {}
-				public void keyTyped(KeyEvent e) {}
-			});
-		}
     };
     
     /**

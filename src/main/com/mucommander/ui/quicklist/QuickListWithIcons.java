@@ -83,7 +83,7 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	}
 	
 	@Override
-    protected DataList getList() {
+    protected DataList<T> getList() {
 		return new DataListWithIcons<T>() {
 			@Override
             public Icon getImageIconOfItem(T item) {

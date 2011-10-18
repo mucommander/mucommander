@@ -22,7 +22,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -30,12 +29,15 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
+import com.mucommander.AppLogger;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 import com.mucommander.ui.quicklist.QuickListWithDataList;
+import com.mucommander.ui.quicksearch.QuickSearch;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.ThemeCache;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
@@ -50,12 +52,13 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 
 	private final static int VISIBLE_ROWS_COUNT = 10;
 
+	private QuickSearch<T> quickSearch = new QuickListQuickSearch();
 
 	public DataList(){
+
 		setFocusTraversalKeysEnabled(false);
 
 		addMouseListenerToList();
-		addKeyListenerToList();
 
 		DataListItemRenderer itemRenderer = getItemRenderer();
 		ThemeManager.addCurrentThemeListener(itemRenderer);
@@ -70,7 +73,15 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 	protected DataListItemRenderer getItemRenderer() {
 		return new DataListItemRenderer();
 	}
+
+	public QuickSearch<T> getQuickSearch() { 
+		return quickSearch;
+	}
 	
+	public String getItemAsString(T item) {
+		return ""+item;
+	}
+
 	/**
 	 * This function is called before showing TablePopupWithDataList.
 	 * It does the required steps before the popup is shown.	
@@ -92,48 +103,6 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 			return null;
 
 		return (T) getModel().getElementAt(index);
-	}
-
-	protected void addKeyListenerToList() {
-		addKeyListener(new KeyListener() {
-
-			public void keyPressed(KeyEvent e) {			
-				switch(e.getKeyCode()) {
-				case KeyEvent.VK_ENTER:
-					((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected(getSelectedValue());
-					break;
-				case KeyEvent.VK_UP:
-				{
-					int numOfItems = getModel().getSize();				
-					if (numOfItems > 0 && getSelectedIndex() == 0) {
-						setSelectedIndex(numOfItems - 1);
-						ensureIndexIsVisible(numOfItems - 1);
-						e.consume();
-					}
-				}
-				break;
-				case KeyEvent.VK_DOWN:
-				{
-					int numOfItems = getModel().getSize();
-					if (numOfItems > 0 && getSelectedIndex() == numOfItems - 1) {				
-						setSelectedIndex(0);
-						ensureIndexIsVisible(0);
-						e.consume();
-					}						
-				}
-				break;
-				case KeyEvent.VK_TAB:
-					getInvokerFileTable().requestFocus();
-					break;
-				}				
-			}
-
-			public void keyReleased(KeyEvent e) {
-			}
-
-			public void keyTyped(KeyEvent e) {
-			}
-		});
 	}
 
 	protected void addMouseListenerToList() {
@@ -175,13 +144,16 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 		cellRenderer.setSelectedItemBackgound(selectedBackground);
 	}
 
+	/**
+	 * 
+	 */
 	protected class DataListItemRenderer extends DefaultListCellRenderer implements ThemeListener {
 
 		private Color selectedItemBackgound = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR);
 		private Color selectedItemForeground = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR);
 		private Color itemBackgound = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR);
 		private Color itemForeground = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR);
-		
+
 		private Font itemFont = ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT);
 
 		protected DataListItemRenderer() { }
@@ -193,42 +165,34 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 
 			T item = getListItem(rowIndex);
 
-			/*			
-			boolean matches = false;
+			// Sanity check.
+			if(item==null) {
+				AppLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
+				return null;
+			}
 
-	        // Sanity check.
-	        T file = (T) list.getModel().getElementAt(rowIndex);
-	        if(file==null) {
-	            AppLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
-	            return null;
-	        }
-	        System.out.println("file: " + file + " at " + rowIndex);
+			QuickSearch<T> search = DataList.this.getQuickSearch();
+			boolean matches = search.isActive() ? search.matches(getItemAsString(item)) : true;
 
-	        DataList myList = (DataList) list;
-
-	        FileTableQuickSearch search = myList.getQuickSearch();
-	        if(!myList.hasFocus())
-	            matches = true;
-	        else {
-	            if(search.isActive())
-	                matches = search.matches(myList.name(file));
-	            else
-	                matches = true;
-	        }
-			 */	        
 			CellLabel label = new CellLabel();
 			label.setFont(itemFont);
 
-			label.setText(""+item);
+			label.setText(getItemAsString(item));
 			//label.setToolTipText(""+item);
 
 			// Set background color depending on whether the row is selected or not, and whether the table has focus or not
-			label.setBackground(isSelected ? selectedItemBackgound : itemBackgound);
-			label.setForeground(isSelected ? selectedItemForeground : itemForeground);
-
+			if (isSelected) {
+				label.setBackground(selectedItemBackgound);
+				label.setForeground(selectedItemForeground);
+			}
+			else {
+				label.setBackground(matches ? itemBackgound : ThemeCache.unmatchedBackground);
+				label.setForeground(matches ? itemForeground : ThemeCache.unmatchedForeground);
+			}
+			
 			return label;
 		}
-		
+
 		public void setSelectedItemBackgound(Color selectedItemBackgound) {
 			this.selectedItemBackgound = selectedItemBackgound;
 		}
@@ -267,6 +231,145 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 		@Override
 		public void fontChanged(FontChangedEvent event) {
 			itemFont = ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT);		
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public class QuickListQuickSearch extends QuickSearch<T> {
+
+		public QuickListQuickSearch() {
+			super(DataList.this);
+		}
+
+		@Override
+		protected void searchStarted() {
+		}
+
+		@Override
+		protected void searchStopped() {
+			DataList.this.repaint();
+		}
+
+		@Override
+		protected int getNumOfItems() {
+			return DataList.this.getModel().getSize();
+		}
+
+		@Override
+		protected String getItemString(int index) {
+			return getItemAsString(getListItem(index));
+		}
+
+		@Override
+		protected void searchStringBecameEmpty(String searchString) {
+		}
+
+		@Override
+		protected void matchFound(int row, String searchString) {
+			if(row!=getSelectedIndex()) {
+				setSelectedIndex(row);
+				ensureIndexIsVisible(row);
+			}
+		}
+
+		@Override
+		protected void matchNotFound(String searchString) {
+		}
+
+		@Override
+		public synchronized void keyPressed(KeyEvent e) {
+			char keyChar = e.getKeyChar();
+
+			// If quick search is not active...
+			if (!isActive()) {
+				// Return (do not start quick search) if the key is not a valid quick search input
+				if(!isValidQuickSearchInput(e)) {
+					if (keyChar == KeyEvent.VK_ENTER)
+						((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected(getSelectedValue());
+
+					return;
+				}
+
+				// Start the quick search and continue to process the current key event
+				start();
+			}
+
+			// At this point, quick search is active
+			int keyCode = e.getKeyCode();
+			boolean keyHasModifiers = (e.getModifiersEx()&(KeyEvent.SHIFT_DOWN_MASK|KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0;
+
+			// Backspace removes the last character of the search string
+			if(keyCode==KeyEvent.VK_BACK_SPACE && !keyHasModifiers) {
+				// Search string is empty already
+				if(isSearchStringEmpty())
+					return;
+
+				removeLastCharacterFromSearchString();
+
+				// Find the row that best matches the new search string and select it
+				findMatch(0, true, true);
+			}
+			// Escape immediately cancels the quick search
+			else if(keyCode==KeyEvent.VK_ESCAPE && !keyHasModifiers) {
+				stop();
+			}
+			// Up/Down jumps to previous/next match
+			// Shift+Up/Shift+Down marks currently selected file and jumps to previous/next match
+			else if((keyCode==KeyEvent.VK_UP || keyCode==KeyEvent.VK_DOWN) && !keyHasModifiers) {
+				// Find the first row before/after the current row that matches the search string
+				boolean down = keyCode==KeyEvent.VK_DOWN;
+				findMatch(getSelectedIndex() + (down ? 1 : -1), down, false);
+			}
+			// If no modifier other than Shift is pressed and the typed character is not a control character (space is ok)
+			// and a valid Unicode character, add it to the current search string
+			else if(isValidQuickSearchInput(e)) {
+				appendCharacterToSearchString(keyChar);
+
+				// Find the row that best matches the new search string and select it
+				findMatch(0, true, true);
+			}
+			else {
+				switch(e.getKeyCode()) {
+				case KeyEvent.VK_ENTER:
+					((QuickListWithDataList)(getParent().getParent().getParent())).itemSelected(getSelectedValue());
+					stop();
+					break;
+				case KeyEvent.VK_UP:
+				{
+					int numOfItems = getModel().getSize();				
+					if (numOfItems > 0 && getSelectedIndex() == 0) {
+						setSelectedIndex(numOfItems - 1);
+						ensureIndexIsVisible(numOfItems - 1);
+						e.consume();
+					}
+				}
+				break;
+				case KeyEvent.VK_DOWN:
+				{
+					int numOfItems = getModel().getSize();
+					if (numOfItems > 0 && getSelectedIndex() == numOfItems - 1) {				
+						setSelectedIndex(0);
+						ensureIndexIsVisible(0);
+						e.consume();
+					}						
+				}
+				break;
+				case KeyEvent.VK_TAB:
+					getInvokerFileTable().requestFocus();
+					stop();
+					break;
+				}
+
+				// Do not update last search string's change timestamp
+				return;
+			}
+
+			// Update last search string's change timestamp
+			setLastSearchStringChange(System.currentTimeMillis());
+
+			e.consume();
 		}
 	}
 }

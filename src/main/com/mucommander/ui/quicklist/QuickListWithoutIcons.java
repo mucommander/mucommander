@@ -27,12 +27,12 @@ import com.mucommander.ui.quicklist.item.DataList;
  * @author Arik Hadas
  */
 
-public abstract class QuickListWithoutIcons extends QuickListWithDataList {
+public abstract class QuickListWithoutIcons<T> extends QuickListWithDataList<T> {
 
 	public QuickListWithoutIcons(String header, String emptyPopupHeader) {
 		super(header, emptyPopupHeader);
 	}
 	
 	@Override
-    protected DataList getList() { return new DataList(); }
+    protected DataList<T> getList() { return new DataList<T>(); }
 }

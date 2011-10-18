@@ -101,18 +101,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
         return timeoutThread != null;
     }
 
-    /**
-     * Returns <code>true</code> if the current quick search string matches the given item.
-     * Always returns <code>false</code> when the quick search is inactive.
-     * The comparison is made between the quick search string and the item's string representation (toString)
-     * 
-     * @param item - the item to test against the quick search string
-     * @return true if the current quick search string matches the given item
-     */
-    public boolean matches(T item) {
-        return matches(item.toString());
-    }
-    
+
     /**
      * Returns <code>true</code> if the current quick search string matches the given string.
      * Always returns <code>false</code> when the quick search is inactive.
@@ -211,8 +200,8 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
         int containsCaseMatch = -1;
         int containsNoCaseMatch = -1;
         int nbRows = getNumOfItems();
-        
-    	// Iterate on rows and look the first strings to match one of the following tests,
+
+        // Iterate on rows and look the first strings to match one of the following tests,
         // in the following order of importance :
         // - search string matches the beginning of the string with the same case
         // - search string matches the beginning of the string with a different case

@@ -19,17 +19,23 @@
 
 package com.mucommander.ui.main.table;
 
+import java.awt.Component;
+import java.awt.Font;
+
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+
 import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.quicksearch.QuickSearch;
-import com.mucommander.ui.theme.*;
-
-import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeCache;
+import com.mucommander.ui.theme.ThemeListener;
 
 
 /**
@@ -170,7 +176,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             matches = true;
         else {
             if(search.isActive())
-                matches = search.matches((rowIndex == 0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(rowIndex).getName());
+                matches = search.matches(this.table.getFileNameAtRow(rowIndex));
             else
                 matches = true;
         }

@@ -148,7 +148,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private boolean autoSizeColumnsEnabled;
 
     /** Instance of the inner class that handles quick search */
-    private QuickSearch quickSearch = new FileTableQuickSearch();
+    private QuickSearch<AbstractFile> quickSearch = new FileTableQuickSearch();
 
     /** TableSelectionListener instances registered to receive selection change events */
     private WeakHashMap<TableSelectionListener, ?> tableSelectionListeners = new WeakHashMap<TableSelectionListener, Object>();
@@ -220,6 +220,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         
         // Initialize a wrapper of presentation adjustments for the file-table
         scrollpaneWrapper = new FileTableWrapperForDisplay(this, mainFrame);
+    }
+    
+    public String getFileNameAtRow(int index) {
+    	return (index==0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(index).getName();
     }
 
     /**
@@ -326,7 +330,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      *
      * @return the QuickSearch inner class instance used by this FileTable
      */
-    public QuickSearch getQuickSearch() {
+    public QuickSearch<AbstractFile> getQuickSearch() {
         return quickSearch;
     }
 
@@ -1643,7 +1647,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 		@Override
 		protected String getItemString(int index) {
-            return (index==0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(index).getName();
+            return getFileNameAtRow(index);
 		}
 
 		@Override
@@ -1703,7 +1707,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 	        // Backspace removes the last character of the search string
 	        if(keyCode==KeyEvent.VK_BACK_SPACE && !keyHasModifiers) {
-
 	            // Search string is empty already
 	            if(isSearchStringEmpty())
 	                return;
