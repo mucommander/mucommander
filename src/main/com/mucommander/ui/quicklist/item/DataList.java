@@ -30,6 +30,8 @@ import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
 import com.mucommander.AppLogger;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.quicklist.QuickListFocusableComponent;
@@ -249,6 +251,7 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 
 		@Override
 		protected void searchStopped() {
+			WindowManager.getCurrentMainFrame().getStatusBar().updateSelectedFilesInfo();
 			DataList.this.repaint();
 		}
 
@@ -264,6 +267,7 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 
 		@Override
 		protected void searchStringBecameEmpty(String searchString) {
+			WindowManager.getCurrentMainFrame().getStatusBar().setStatusInfo(searchString); // TODO: is needed?
 		}
 
 		@Override
@@ -272,10 +276,17 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 				setSelectedIndex(row);
 				ensureIndexIsVisible(row);
 			}
+			
+			// Display the new search string in the status bar
+            // that indicates that the search has yielded a match
+			WindowManager.getCurrentMainFrame().getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_OK_ICON), false);
 		}
 
 		@Override
 		protected void matchNotFound(String searchString) {
+			// No file matching the search string, display the new search string with an icon
+            // that indicates that the search has failed
+			WindowManager.getCurrentMainFrame().getStatusBar().setStatusInfo(searchString, IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, QUICK_SEARCH_KO_ICON), false);
 		}
 
 		@Override
