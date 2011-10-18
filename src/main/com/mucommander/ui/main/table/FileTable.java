@@ -1614,7 +1614,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /**
      * This inner class adds 'quick search' functionality to the FileTable
      */
-    private class FileTableQuickSearch extends QuickSearch {
+    private class FileTableQuickSearch extends QuickSearch<AbstractFile> {
 
         /**
          * Creates a new QuickSearch instance, only one instance per FileTable should be created.

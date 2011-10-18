@@ -33,7 +33,7 @@ import com.mucommander.AppLogger;
  * 
  * @author Arik Hadas
  */
-public abstract class QuickSearch extends KeyAdapter implements Runnable {
+public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
 
 	/** Quick search string */
     private String searchString;
@@ -101,16 +101,27 @@ public abstract class QuickSearch extends KeyAdapter implements Runnable {
         return timeoutThread != null;
     }
 
-
     /**
-     * Returns <code>true</code> the current quick search string matches the given filename.
+     * Returns <code>true</code> if the current quick search string matches the given item.
+     * Always returns <code>false</code> when the quick search is inactive.
+     * The comparison is made between the quick search string and the item's string representation (toString)
+     * 
+     * @param item - the item to test against the quick search string
+     * @return true if the current quick search string matches the given item
+     */
+    public boolean matches(T item) {
+        return matches(item.toString());
+    }
+    
+    /**
+     * Returns <code>true</code> if the current quick search string matches the given string.
      * Always returns <code>false</code> when the quick search is inactive.
      *
-     * @param filename the filename to test against the quick search string
-     * @return true if the current quick search string matches the given filename
+     * @param string the string to test against the quick search string
+     * @return true if the current quick search string matches the given string
      */
-    public boolean matches(String filename) {
-        return isActive() && filename.toLowerCase().indexOf(searchString.toLowerCase())!=-1;
+    public boolean matches(String string) {
+        return isActive() && string.toLowerCase().indexOf(searchString.toLowerCase())!=-1;
     }
 
 
@@ -201,12 +212,12 @@ public abstract class QuickSearch extends KeyAdapter implements Runnable {
         int containsNoCaseMatch = -1;
         int nbRows = getNumOfItems();
         
-    	// Iterate on rows and look the first file to match one of the following tests,
+    	// Iterate on rows and look the first strings to match one of the following tests,
         // in the following order of importance :
-        // - search string matches the beginning of the filename with the same case
-        // - search string matches the beginning of the filename with a different case
-        // - filename contains search string with the same case
-        // - filename contains search string with a different case
+        // - search string matches the beginning of the string with the same case
+        // - search string matches the beginning of the string with a different case
+        // - string contains search string with the same case
+        // - string contains search string with a different case
         for(int i=startRow; descending?i<nbRows:i>=0; i=descending?i+1:i-1) {
             // if findBestMatch was not specified, stop to the first match
             if(!findBestMatch && (startsWithCaseMatch!=-1 || startsWithNoCaseMatch!=-1 || containsCaseMatch!=-1 || containsNoCaseMatch!=-1))
@@ -215,7 +226,7 @@ public abstract class QuickSearch extends KeyAdapter implements Runnable {
             String item = getItemString(i);
             int itemLen = item.length();
 
-            // No need to compare strings if quick search string is longer than filename,
+            // No need to compare strings if quick search string is longer than compared string,
             // they won't match
             if(itemLen<searchStringLen)
                 continue;
@@ -227,37 +238,37 @@ public abstract class QuickSearch extends KeyAdapter implements Runnable {
                 break;
             }
 
-            // If we already have a match on this test case, let's skip to the next file
+            // If we already have a match on this test case, let's skip to the next string
             if(startsWithNoCaseMatch!=-1)
                 continue;
 
             String itemLC = item.toLowerCase();
             if(itemLC.startsWith(searchStringLC)) {
-                // We've got a match, let's see if we can find a better match on the next file
+                // We've got a match, let's see if we can find a better match on the next string
                 startsWithNoCaseMatch = i;
             }
 
-            // No need to check if filename contains search string if both size are equal,
+            // No need to check if the compared string contains search string if both size are equal,
             // in the case startsWith test yields the same result
             if(itemLen==searchStringLen)
                 continue;
 
-            // If we already have a match on this test case, let's skip to the next file
+            // If we already have a match on this test case, let's skip to the next string
             if(containsCaseMatch!=-1)
                 continue;
 
             if(item.indexOf(searchString)!=-1) {
-                // We've got a match, let's see if we can find a better match on the next file
+                // We've got a match, let's see if we can find a better match on the next string
                 containsCaseMatch = i;
                 continue;
             }
 
-            // If we already have a match on this test case, let's skip to the next file
+            // If we already have a match on this test case, let's skip to the next string
             if(containsNoCaseMatch!=-1)
                 continue;
 
             if(itemLC.indexOf(searchStringLC)!=-1) {
-                // We've got a match, let's see if we can find a better match on the next file
+                // We've got a match, let's see if we can find a better match on the next string
                 containsNoCaseMatch = i;
                 continue;
             }
@@ -355,8 +366,8 @@ public abstract class QuickSearch extends KeyAdapter implements Runnable {
     public synchronized void keyReleased(KeyEvent e) {
         // Cancel quick search if backspace key has been pressed and search string is empty.
         // This check is done on key release, so that if backspace key is maintained pressed
-        // to remove all the search string, it does not trigger FileTable's back action which is
-        // mapped on backspace too
+        // to remove all the search string, it does not trigger the JComponent's back action 
+    	// which is mapped on backspace too
         if(isActive() && e.getKeyCode()==KeyEvent.VK_BACK_SPACE && searchString.equals("")) {
             e.consume();
             stop();

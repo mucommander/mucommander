@@ -61,22 +61,22 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
     private QuickListHeaderItem header = new QuickListHeaderItem(Translator.get("sample_text"));
 
     /** The items of the sample quick list */
-    private final static Object[] sampleData;
+    private final static String[] sampleData;
     
     /** The icon of the sample items */
     private final Icon sampleIcon = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FOLDER_ICON_NAME);
 
     static {
         String sampleText = Translator.get("sample_text");
-        sampleData = new Object[10];
+        sampleData = new String[10];
         for(int i=0; i<sampleData.length; i++)
             sampleData[i] = sampleText + " " + (i+1)+"   ";
     }
 
     /** The list of items of the sample quick list */
-    private DataList list = new DataListWithIcons(sampleData) {
+    private DataList<String> list = new DataListWithIcons<String>(sampleData) {
 		@Override
-        public Icon getImageIconOfItem(Object item) {
+        public Icon getImageIconOfItem(String item) {
 			return sampleIcon;
 		}
 		
