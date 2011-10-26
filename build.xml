@@ -309,7 +309,7 @@
               style="${lib.tools}/mucommander/findbugs.xsl"/>
     </target>
 
-    <target name="ivy" depends="ivy-config" description="Generates Ivy dependency reports.">
+    <target name="ivy" depends="ivy-config" description="Generates Ivy dependency reports." unless="ivy.offline">
         <echo>Generating Ivy dependency report...</echo>
         <mkdir dir="${ivy.reports}"/>
         <ivy:report todir="${ivy.reports}" xml="true" graph="false" conf="runtime,test,tools"/>
@@ -344,23 +344,24 @@
     <!-- =========================================================================================================== -->
     <target name="offline" description="Forces usage of the ivy cache.">
         <property name="ivy.cache.ttl.default" value="eternal"/>
+        <property name="ivy.offline"           value="true"/>
     </target>
 
     <target name="synchronize" description="Forces synchronisation of all dependencies."
             depends="retrieve-test,retrieve-tools"/>
 
-    <target name="ivy-config">
+    <target name="ivy-config" unless="ivy.offline">
         <echo>Resolving dependencies repository...</echo>
         <ivy:configure/>
         <ivy:resolve file="${res.ivy}/ivy.xml" haltonfailure="false"/>
     </target>
 
-    <target name="retrieve-tools" depends="ivy-config">
+    <target name="retrieve-tools" depends="ivy-config" unless="ivy.offline">
         <echo>Retrieving external tools...</echo>
         <ivy:retrieve symlink="true" conf="tools" type="jar,conf"/>
     </target>
 
-    <target name="retrieve-test" depends="ivy-config">
+    <target name="retrieve-test" depends="ivy-config" unless="ivy.offline">
         <echo>Retrieving test dependencies...</echo>
         <ivy:retrieve symlink="true" conf="test" type="jar"/>
     </target>
