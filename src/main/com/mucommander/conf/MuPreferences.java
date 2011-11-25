@@ -526,8 +526,8 @@ public class MuPreferences {
      * Prevents instantiation of this class from outside of this package.
      */
     MuPreferences() {
-    	configuration = new Configuration(new MuPreferencesSource(), new VersionedXmlConfigurationReaderFactory(),
-                new VersionedXmlConfigurationWriterFactory());
+    	configuration = new Configuration(MuPreferencesFile.getPreferencesFile(), new VersionedXmlConfigurationReaderFactory(),
+    			new VersionedXmlConfigurationWriterFactory());
     }
     
     Configuration getConfiguration() {
@@ -602,7 +602,7 @@ public class MuPreferences {
      * @see                          #getConfigurationFile()
      */
     void setConfigurationFile(String file) throws FileNotFoundException {
-        configuration.setSource(new MuPreferencesSource(file));
+        configuration.setSource(MuPreferencesFile.getPreferencesFile(file));
     }
 
     /**
@@ -611,6 +611,6 @@ public class MuPreferences {
      * @throws IOException if an error occured.
      */
     boolean isFileExists() throws IOException {
-    	return MuPreferencesSource.getConfigurationFile().exists();
+    	return configuration.getSource().isExists();
     }
 }

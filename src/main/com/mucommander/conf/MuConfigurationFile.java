@@ -29,29 +29,30 @@ import java.io.*;
 import java.nio.charset.Charset;
 
 /**
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Arik Hadas
  */
-class MuPreferencesSource implements ConfigurationSource {
+abstract class MuConfigurationFile implements ConfigurationSource {
     // - Class fields ---------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /** Path to the configuration file. */
-    private static       AbstractFile configurationFile;
+    private 		     AbstractFile configurationFile;
     /** Default configuration file name. */
-    private static final String       DEFAULT_CONFIGURATION_FILE_NAME = "preferences.xml";
+    private final String DEFAULT_CONFIGURATION_FILE_NAME;
 
 
 
-    // - Initialisation -------------------------------------------------------------
+    // - Initialization -------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /**
      * Creates a new <code>MuConfigurationSource</code> on the specified file.
      * @param path path to the configuration file.
      * @throws FileNotFoundException if <code>path</code> is not accessible.
      */
-    public MuPreferencesSource(String path) throws FileNotFoundException {setConfigurationFile(path);}
-
-    public MuPreferencesSource() {}
-
+    public MuConfigurationFile(String path, String defaultFilename) throws FileNotFoundException {
+    	DEFAULT_CONFIGURATION_FILE_NAME = defaultFilename;
+    	if (path != null)
+    		setConfigurationFile(path);
+    }
 
 
     // - Configuration file handling ------------------------------------------------
@@ -61,7 +62,7 @@ class MuPreferencesSource implements ConfigurationSource {
      * @return             the path to the configuration file.
      * @throws IOException if an error occured while locating the default configuration file.
      */
-    public static synchronized AbstractFile getConfigurationFile() throws IOException {
+    private synchronized AbstractFile getConfigurationFile() throws IOException {
         if(configurationFile == null)
             return PlatformManager.getPreferencesFolder().getChild(DEFAULT_CONFIGURATION_FILE_NAME);
         return configurationFile;
@@ -72,7 +73,7 @@ class MuPreferencesSource implements ConfigurationSource {
      * @param  path                  path to the file that should be used for configuration storage.
      * @throws FileNotFoundException if the specified file is not a valid file.
      */
-    public static synchronized void setConfigurationFile(String path) throws FileNotFoundException {
+    private synchronized void setConfigurationFile(String path) throws FileNotFoundException {
         AbstractFile file;
 
         if((file = FileFactory.getFile(path)) == null)
@@ -86,14 +87,14 @@ class MuPreferencesSource implements ConfigurationSource {
      * @param  file                  path to the file that should be used for configuration storage.
      * @throws FileNotFoundException if the specified file is not a valid file.
      */
-    public static synchronized void setConfigurationFile(File file) throws FileNotFoundException {setConfigurationFile(FileFactory.getFile(file.getAbsolutePath()));}
+    private synchronized void setConfigurationFile(File file) throws FileNotFoundException {setConfigurationFile(FileFactory.getFile(file.getAbsolutePath()));}
 
     /**
      * Sets the path to the configuration file.
      * @param  file                  path to the file that should be used for configuration storage.
      * @throws FileNotFoundException if the specified file is not a valid file.
      */
-    public static synchronized void setConfigurationFile(AbstractFile file) throws FileNotFoundException {
+    private synchronized void setConfigurationFile(AbstractFile file) throws FileNotFoundException {
         // Makes sure file can be used as a configuration.
         if(file.isBrowsable())
             throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
@@ -109,6 +110,7 @@ class MuPreferencesSource implements ConfigurationSource {
      * Returns an input stream on the configuration file.
      * @return an input stream on the configuration file.
      */
+    @Override
     public synchronized Reader getReader() throws IOException {
         return new InputStreamReader(new BackupInputStream(getConfigurationFile()), Charset.forName("utf-8"));
     }
@@ -117,7 +119,13 @@ class MuPreferencesSource implements ConfigurationSource {
      * Returns an output stream on the configuration file.
      * @return an output stream on the configuration file.
      */
+    @Override
     public synchronized Writer getWriter() throws IOException {
         return new OutputStreamWriter(new BackupOutputStream(getConfigurationFile()), Charset.forName("utf-8"));
     }
+    
+    @Override
+	public boolean isExists() throws IOException {
+		return getConfigurationFile().exists();
+	}
 }
