@@ -18,6 +18,7 @@
 
 package com.mucommander.conf;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.mucommander.commons.conf.Configuration;
@@ -42,6 +43,14 @@ public class MuConfigurations {
 	
 	public static void savePreferences() throws IOException, ConfigurationException {
 		preferences.write();
+	}
+	
+	public static void setPreferencesFile(String path) throws FileNotFoundException {
+		preferences.setConfigurationFile(path);
+	}
+	
+	public static boolean isPreferencesFileExists() throws IOException {
+		return preferences.isFileExists();
 	}
 	
     public static void addPreferencesListener(ConfigurationListener listener) {preferences.addConfigurationListener(listener);}

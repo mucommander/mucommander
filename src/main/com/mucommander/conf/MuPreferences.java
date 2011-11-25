@@ -25,7 +25,6 @@ import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
-import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
@@ -520,24 +519,19 @@ public class MuPreferences {
 
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    private static final Configuration CONFIGURATION;
+    private final Configuration configuration;
 
-
-
-    // - Initialization ------------------------------------------------------
-    // -----------------------------------------------------------------------
-    static {
-        CONFIGURATION = new Configuration(new MuPreferencesSource(), new VersionedXmlConfigurationReaderFactory(),
-                                          new VersionedXmlConfigurationWriterFactory());
-    }
 
     /**
-     * Prevents instantiation of this class.
+     * Prevents instantiation of this class from outside of this package.
      */
-    MuPreferences() {}
+    MuPreferences() {
+    	configuration = new Configuration(new MuPreferencesSource(), new VersionedXmlConfigurationReaderFactory(),
+                new VersionedXmlConfigurationWriterFactory());
+    }
     
-    public Configuration getConfiguration() {
-    	return CONFIGURATION;
+    Configuration getConfiguration() {
+    	return configuration;
     }
 
     // - Configuration reading / writing -------------------------------------
@@ -552,22 +546,22 @@ public class MuPreferences {
 
         VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
         try {
-            CONFIGURATION.read(reader);}
+            configuration.read(reader);}
         finally {
             configurationVersion = reader.getVersion();
             if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
-                CONFIGURATION.renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
-                CONFIGURATION.renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
-                CONFIGURATION.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
-                CONFIGURATION.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
-                CONFIGURATION.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
+                configuration.renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
+                configuration.renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
+                configuration.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
+                configuration.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
+                configuration.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
             }
 
             // Initialises mac os x specific values
             if(OsFamilies.MAC_OS_X.isCurrent()) {
-                if(CONFIGURATION.getVariable(SHELL_ENCODING) == null) {
-                	CONFIGURATION.setVariable(SHELL_ENCODING, "UTF-8");
-                    CONFIGURATION.setVariable(AUTODETECT_SHELL_ENCODING, false);
+                if(configuration.getVariable(SHELL_ENCODING) == null) {
+                	configuration.setVariable(SHELL_ENCODING, "UTF-8");
+                    configuration.setVariable(AUTODETECT_SHELL_ENCODING, false);
                 }
             }
         }
@@ -579,7 +573,7 @@ public class MuPreferences {
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
     void write() throws IOException, ConfigurationException {
-        CONFIGURATION.write();
+        configuration.write();
     }
 
     // - Configuration listening -----------------------------------------------
@@ -589,14 +583,14 @@ public class MuPreferences {
      * @param listener object to register as a CONFIGURATION listener.
      * @see            #removeConfigurationListener(ConfigurationListener)
      */
-    public void addConfigurationListener(ConfigurationListener listener) {CONFIGURATION.addConfigurationListener(listener);}
+    void addConfigurationListener(ConfigurationListener listener) {configuration.addConfigurationListener(listener);}
 
     /**
      * Removes the specified object from the list of registered CONFIGURATION listeners.
      * @param listener object to remove from the list of registered CONFIGURATION listeners.
      * @see            #addConfigurationListener(ConfigurationListener)
      */
-    public void removeConfigurationListener(ConfigurationListener listener) {CONFIGURATION.removeConfigurationListener(listener);}
+    void removeConfigurationListener(ConfigurationListener listener) {configuration.removeConfigurationListener(listener);}
 
 
     // - Configuration source --------------------------------------------------
@@ -607,14 +601,16 @@ public class MuPreferences {
      * @throws FileNotFoundException if the specified file is not a valid file.
      * @see                          #getConfigurationFile()
      */
-    public static void setConfigurationFile(String file) throws FileNotFoundException {
-        CONFIGURATION.setSource(new MuPreferencesSource(file));}
+    void setConfigurationFile(String file) throws FileNotFoundException {
+        configuration.setSource(new MuPreferencesSource(file));
+    }
 
     /**
-     * Returns the path to the CONFIGURATION file.
-     * @return             the path to the CONFIGURATION file.
+     * Check whether the preferences file exists
+     * @return             true if the preferences file exits, false otherwise.
      * @throws IOException if an error occured.
-     * @see                #setConfigurationFile(String)
      */
-    public static AbstractFile getConfigurationFile() throws IOException {return MuPreferencesSource.getConfigurationFile();}
+    boolean isFileExists() throws IOException {
+    	return MuPreferencesSource.getConfigurationFile().exists();
+    }
 }

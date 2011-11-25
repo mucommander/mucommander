@@ -320,7 +320,7 @@ public class Launcher {
                 else if(args[i].equals("-c") || args[i].equals("--configuration")) {
                     if(i >= args.length - 1)
                         printError("Missing FILE parameter to " + args[i], null, true);
-                    try {MuPreferences.setConfigurationFile(args[++i]);}
+                    try {MuConfigurations.setPreferencesFile(args[++i]);}
                     catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
                 }
 
@@ -411,7 +411,7 @@ public class Launcher {
 
             // Attempts to guess whether this is the first time muCommander is booted or not.
             boolean isFirstBoot;
-            try {isFirstBoot = !MuPreferences.getConfigurationFile().exists();}
+            try {isFirstBoot = !MuConfigurations.isPreferencesFileExists();}
             catch(IOException e) {isFirstBoot = true;}
 
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
