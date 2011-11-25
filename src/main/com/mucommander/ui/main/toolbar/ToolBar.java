@@ -92,7 +92,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         addMouseListener(this);
 
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
-        MuPreferences.addConfigurationListener(this);
+        MuConfigurations.addPreferencesListener(this);
 
         // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
         // get garbage-collected

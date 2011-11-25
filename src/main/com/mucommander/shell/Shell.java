@@ -60,7 +60,7 @@ public class Shell implements ConfigurationListener {
      * Initialises the shell.
      */
     static {
-        MuPreferences.addConfigurationListener(confListener = new Shell());
+    	MuConfigurations.addPreferencesListener(confListener = new Shell());
 
         // This could in theory also be written without the confListener reference.
         // It turns out, however, that proGuard is a bit too keen when removing fields

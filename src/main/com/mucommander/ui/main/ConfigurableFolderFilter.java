@@ -45,7 +45,7 @@ public class ConfigurableFolderFilter extends AndFileFilter implements Configura
 
     public ConfigurableFolderFilter() {
         configureFilters();
-        MuPreferences.addConfigurationListener(this);
+        MuConfigurations.addPreferencesListener(this);
     }
 
     private void configureFilters() {

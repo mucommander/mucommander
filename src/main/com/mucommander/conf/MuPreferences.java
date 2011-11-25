@@ -33,7 +33,7 @@ import com.mucommander.ui.main.table.Column;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API.
- * @author Nicolas Rinaudo, Maxence Bernard
+ * @author Nicolas Rinaudo, Maxence Bernard, Arik Hadas
  */
 public class MuPreferences {
     // - Misc. variables -----------------------------------------------------
@@ -589,14 +589,14 @@ public class MuPreferences {
      * @param listener object to register as a CONFIGURATION listener.
      * @see            #removeConfigurationListener(ConfigurationListener)
      */
-    public static void addConfigurationListener(ConfigurationListener listener) {Configuration.addConfigurationListener(listener);}
+    public void addConfigurationListener(ConfigurationListener listener) {CONFIGURATION.addConfigurationListener(listener);}
 
     /**
      * Removes the specified object from the list of registered CONFIGURATION listeners.
      * @param listener object to remove from the list of registered CONFIGURATION listeners.
      * @see            #addConfigurationListener(ConfigurationListener)
      */
-    public static void removeConfigurationListener(ConfigurationListener listener) {Configuration.removeConfigurationListener(listener);}
+    public void removeConfigurationListener(ConfigurationListener listener) {CONFIGURATION.removeConfigurationListener(listener);}
 
 
     // - Configuration source --------------------------------------------------

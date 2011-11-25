@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
+import com.mucommander.commons.conf.ConfigurationListener;
 
 /**
  * 
@@ -42,4 +43,8 @@ public class MuConfigurations {
 	public static void savePreferences() throws IOException, ConfigurationException {
 		preferences.write();
 	}
+	
+    public static void addPreferencesListener(ConfigurationListener listener) {preferences.addConfigurationListener(listener);}
+
+    public static void removePreferencesListener(ConfigurationListener listener) {preferences.removeConfigurationListener(listener);}
 }

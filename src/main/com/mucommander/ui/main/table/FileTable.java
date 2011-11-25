@@ -212,7 +212,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         addKeyListener(this);
         addFocusListener(this);
         mainFrame.addActivePanelListener(this);
-        MuPreferences.addConfigurationListener(this);
+        MuConfigurations.addPreferencesListener(this);
 
         // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
         // instead of a custom header renderer.

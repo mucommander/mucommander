@@ -141,7 +141,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     setSelectedFileSizeFormat(event.getBooleanValue());
             }
         };
-        MuPreferences.addConfigurationListener(CONFIGURATION_ADAPTER);
+        MuConfigurations.addPreferencesListener(CONFIGURATION_ADAPTER);
     }
 
 

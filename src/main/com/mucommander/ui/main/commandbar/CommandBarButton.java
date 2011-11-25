@@ -72,7 +72,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
         setMinimumSize(new Dimension(40, (int) getPreferredSize().getHeight()));
         
         // Listen to configuration changes to reload command bar buttons when icon size has changed
-        MuPreferences.addConfigurationListener(this);
+        MuConfigurations.addPreferencesListener(this);
 	}
 	
 	/**

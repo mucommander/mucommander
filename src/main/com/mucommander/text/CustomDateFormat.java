@@ -55,7 +55,7 @@ public class CustomDateFormat implements ConfigurationListener {
         // Not doing it so would cause the garbage collector to GC it as MuConfiguration holds
         // weak references of its listeners.
         singleton = new CustomDateFormat();
-        MuPreferences.addConfigurationListener(singleton);
+        MuConfigurations.addPreferencesListener(singleton);
 
         dateFormat = createDateFormat();
     }

@@ -139,7 +139,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         BookmarkManager.addBookmarkListener(this);
 
         // Listen to configuration changes to update the button if the system file icons policy has changed
-        MuPreferences.addConfigurationListener(this);
+        MuConfigurations.addPreferencesListener(this);
 
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
         if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {

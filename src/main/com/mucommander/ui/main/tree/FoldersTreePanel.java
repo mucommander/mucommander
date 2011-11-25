@@ -25,6 +25,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.util.FileComparator;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.RefreshAction;
@@ -151,7 +152,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         
         ThemeCache.addThemeListener(this);
         
-        MuPreferences.addConfigurationListener(this);
+        MuConfigurations.addPreferencesListener(this);
     }
 
     

@@ -139,7 +139,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /**
      * Creates a new instance of WindowManager.
      */
-    private WindowManager() {MuPreferences.addConfigurationListener(this);}
+    private WindowManager() {MuConfigurations.addPreferencesListener(this);}
 
     /**
      * Retrieves the user's initial path for the specified frame.
