@@ -62,5 +62,5 @@ public interface ConfigurationSource {
      * Returns whether this source exists
      * @return true if the source exists, false otherwise.
      */
-    public boolean isExists();
+    public boolean isExists() throws IOException;
 }
