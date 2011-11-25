@@ -18,12 +18,13 @@
 
 package com.mucommander.text;
 
-import com.mucommander.commons.conf.ConfigurationEvent;
-import com.mucommander.commons.conf.ConfigurationListener;
-import com.mucommander.conf.MuPreferences;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreferences;
 
 
 /**
@@ -88,9 +89,9 @@ public class CustomDateFormat implements ConfigurationListener {
      */
     public static String getDateFormatString() {
         return replaceDateSeparator(
-            MuPreferences.getVariable(MuPreferences.DATE_FORMAT, MuPreferences.DEFAULT_DATE_FORMAT),
-            MuPreferences.getVariable(MuPreferences.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR))
-        + " " + MuPreferences.getVariable(MuPreferences.TIME_FORMAT, MuPreferences.DEFAULT_TIME_FORMAT);
+        		MuConfigurations.getPreferences().getVariable(MuPreferences.DATE_FORMAT, MuPreferences.DEFAULT_DATE_FORMAT),
+        		MuConfigurations.getPreferences().getVariable(MuPreferences.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR))
+        + " " + MuConfigurations.getPreferences().getVariable(MuPreferences.TIME_FORMAT, MuPreferences.DEFAULT_TIME_FORMAT);
     }
 
 

@@ -18,20 +18,21 @@
 
 package com.mucommander.shell;
 
-import com.mucommander.AppLogger;
-import com.mucommander.PlatformManager;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.conf.MuPreferences;
-import com.mucommander.io.backup.BackupInputStream;
-import com.mucommander.io.backup.BackupOutputStream;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.WeakHashMap;
+
+import com.mucommander.AppLogger;
+import com.mucommander.PlatformManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreferences;
+import com.mucommander.io.backup.BackupInputStream;
+import com.mucommander.io.backup.BackupOutputStream;
 
 /**
  * Used to manage shell history.
@@ -75,7 +76,7 @@ public class ShellHistoryManager {
      * Initialises history.
      */
     static {
-        history   = new String[MuPreferences.getVariable(MuPreferences.SHELL_HISTORY_SIZE, MuPreferences.DEFAULT_SHELL_HISTORY_SIZE)];
+        history   = new String[MuConfigurations.getPreferences().getVariable(MuPreferences.SHELL_HISTORY_SIZE, MuPreferences.DEFAULT_SHELL_HISTORY_SIZE)];
         listeners = new WeakHashMap<ShellHistoryListener, Object>();
     }
 

@@ -18,13 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
-
-import javax.swing.*;
-import java.util.Map;
 
 /**
  * This action toggles the 'Show folders first' option, which controls whether folders are displayed first in the
@@ -43,7 +49,7 @@ public class ToggleShowFoldersFirstAction extends MuAction {
         FileTable activeTable = mainFrame.getActiveTable();
         boolean showFoldersFirst = !activeTable.getSortInfo().getFoldersFirst();
         activeTable.setFoldersFirst(showFoldersFirst);
-        MuPreferences.setVariable(MuPreferences.SHOW_FOLDERS_FIRST, showFoldersFirst);
+        MuConfigurations.getPreferences().setVariable(MuPreferences.SHOW_FOLDERS_FIRST, showFoldersFirst);
     }
     
     public static class Factory implements ActionFactory {

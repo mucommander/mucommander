@@ -18,7 +18,35 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.WindowEvent;
+import java.util.Vector;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import com.mucommander.AppLogger;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
@@ -37,13 +65,6 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Vector;
 
 /**
  * This dialog informs the user of the progress made by a FileJob and allows to control it: pause/resume it, stop it,
@@ -175,7 +196,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             advancedPanel.addSpace(5);
 
             this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, true);
-            collapseExpandButton.setExpandedState(MuPreferences.getVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED,
+            collapseExpandButton.setExpandedState(MuConfigurations.getPreferences().getVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED,
                                                                                    MuPreferences.DEFAULT_PROGRESS_DIALOG_EXPANDED));
             tempPanel.add(collapseExpandButton, BorderLayout.EAST);
 
@@ -186,7 +207,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         }
 
         closeWhenFinishedCheckBox = new JCheckBox(Translator.get("progress_dialog.close_when_finished"));
-        closeWhenFinishedCheckBox.setSelected(MuPreferences.getVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
+        closeWhenFinishedCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
                                                                                MuPreferences.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
         yPanel.add(closeWhenFinishedCheckBox);
 
@@ -463,10 +484,10 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         // Remember 'advanced panel' expanded state
         if(collapseExpandButton!=null)
-            MuPreferences.setVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
+        	MuConfigurations.getPreferences().setVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
 
         // Remember 'close window when finished' option state
-        MuPreferences.setVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
+        MuConfigurations.getPreferences().setVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
     }
 
 

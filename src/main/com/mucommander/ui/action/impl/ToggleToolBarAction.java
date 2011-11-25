@@ -18,13 +18,20 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.util.Map;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.toolbar.ToolBar} depending on its
@@ -41,7 +48,7 @@ public class ToggleToolBarAction extends MuAction {
 
     public ToggleToolBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
-        updateLabel(MuPreferences.getVariable(MuPreferences.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
+        updateLabel(MuConfigurations.getPreferences().getVariable(MuPreferences.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
     }
 
     private void updateLabel(boolean visible) {
@@ -53,7 +60,7 @@ public class ToggleToolBarAction extends MuAction {
         JPanel toolBarPanel = mainFrame.getToolBarPanel();
         boolean visible = !toolBarPanel.isVisible();
         // Save the last toolbar visible state in the configuration, this will become the default for new MainFrame windows.
-        MuPreferences.setVariable(MuPreferences.TOOLBAR_VISIBLE, visible);
+        MuConfigurations.getPreferences().setVariable(MuPreferences.TOOLBAR_VISIBLE, visible);
         // Change the label to reflect the new toolbar state
         updateLabel(visible);
         // Show/hide the toolbar

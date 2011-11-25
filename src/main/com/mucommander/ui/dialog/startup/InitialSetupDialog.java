@@ -18,18 +18,27 @@
 
 package com.mucommander.ui.dialog.startup;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Iterator;
 
 /**
  * Dialog box allowing users to select misc. setup options for muCommander.
@@ -191,10 +200,10 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
 	if(e.getSource() == themeComboBox)
 	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
 	else if(e.getSource() == lfComboBox)
-	    MuPreferences.setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+		MuConfigurations.getPreferences().setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	else if(e.getSource() == okButton) {
 	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
-	    MuPreferences.setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+	    MuConfigurations.getPreferences().setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	    dispose();
 	}
     }

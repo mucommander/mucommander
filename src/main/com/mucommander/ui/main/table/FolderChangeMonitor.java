@@ -18,21 +18,22 @@
 
 package com.mucommander.ui.main.table;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.List;
+import java.util.Vector;
+
 import com.mucommander.AppLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.filter.AbstractFileFilter;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.OrFileFilter;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
-
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -106,9 +107,9 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         instances = new Vector<FolderChangeMonitor>();
 
         // Retrieve configuration values
-        checkPeriod = MuPreferences.getVariable(MuPreferences.REFRESH_CHECK_PERIOD,
+        checkPeriod = MuConfigurations.getPreferences().getVariable(MuPreferences.REFRESH_CHECK_PERIOD,
                                                        MuPreferences.DEFAULT_REFRESH_CHECK_PERIOD);
-        waitAfterRefresh = MuPreferences.getVariable(MuPreferences.WAIT_AFTER_REFRESH,
+        waitAfterRefresh = MuConfigurations.getPreferences().getVariable(MuPreferences.WAIT_AFTER_REFRESH,
                                                             MuPreferences.DEFAULT_WAIT_AFTER_REFRESH);
 
         disableAutoRefreshFilter.addFileFilter(new AbstractFileFilter() {

@@ -18,20 +18,21 @@
 
 package com.mucommander.shell;
 
+import java.io.IOException;
+
 import com.mucommander.AppLogger;
 import com.mucommander.command.Command;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessListenerList;
 import com.mucommander.process.ProcessRunner;
-
-import java.io.IOException;
 
 /**
  * Used to execute shell commands.
@@ -159,8 +160,8 @@ public class Shell implements ConfigurationListener {
         String[] buffer;
 
         // Retrieves the configuration defined shell command.
-        if(MuPreferences.getVariable(MuPreferences.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL))
-            shellCommand = MuPreferences.getVariable(MuPreferences.CUSTOM_SHELL, DesktopManager.getDefaultShell());
+        if(MuConfigurations.getPreferences().getVariable(MuPreferences.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL))
+            shellCommand = MuConfigurations.getPreferences().getVariable(MuPreferences.CUSTOM_SHELL, DesktopManager.getDefaultShell());
         else
             shellCommand = DesktopManager.getDefaultShell();
 
@@ -170,8 +171,8 @@ public class Shell implements ConfigurationListener {
         System.arraycopy(buffer, 0, tokens, 0, buffer.length);
 
         // Retrieves encoding configuration.
-        encoding           = MuPreferences.getVariable(MuPreferences.SHELL_ENCODING);
-        autoDetectEncoding = MuPreferences.getVariable(MuPreferences.AUTODETECT_SHELL_ENCODING, MuPreferences.DEFAULT_AUTODETECT_SHELL_ENCODING);
+        encoding           = MuConfigurations.getPreferences().getVariable(MuPreferences.SHELL_ENCODING);
+        autoDetectEncoding = MuConfigurations.getPreferences().getVariable(MuPreferences.AUTODETECT_SHELL_ENCODING, MuPreferences.DEFAULT_AUTODETECT_SHELL_ENCODING);
     }
 
     /**

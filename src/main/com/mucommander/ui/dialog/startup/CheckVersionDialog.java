@@ -18,9 +18,19 @@
 
 package com.mucommander.ui.dialog.startup;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.net.URL;
+import java.util.Vector;
+
+import javax.swing.JCheckBox;
+
 import com.mucommander.AppLogger;
 import com.mucommander.VersionChecker;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.SelfUpdateJob;
@@ -32,11 +42,6 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
-import java.net.URL;
-import java.util.Vector;
 
 /**
  * This class takes care of retrieving the information about the latest muCommander version from a remote server and
@@ -183,7 +188,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
              0);
 			
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"),
-                                                       MuPreferences.getVariable(MuPreferences.CHECK_FOR_UPDATE,
+        												MuConfigurations.getPreferences().getVariable(MuPreferences.CHECK_FOR_UPDATE,
                                                                                         MuPreferences.DEFAULT_CHECK_FOR_UPDATE));
         addComponent(showNextTimeCheckBox);
 
@@ -207,6 +212,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         }
 		
         // Remember user preference
-        MuPreferences.setVariable(MuPreferences.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreferences.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
     }
 }

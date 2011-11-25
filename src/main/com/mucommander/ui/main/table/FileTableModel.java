@@ -18,17 +18,19 @@
 
 package com.mucommander.ui.main.table;
 
+import java.util.Date;
+
+import javax.swing.table.AbstractTableModel;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
-
-import javax.swing.table.AbstractTableModel;
-import java.util.Date;
 
 
 /**
@@ -80,7 +82,7 @@ public class FileTableModel extends AbstractTableModel {
 
     static {
         // Initialize the size column format based on the configuration
-        setSizeFormat(MuPreferences.getVariable(MuPreferences.DISPLAY_COMPACT_FILE_SIZE,
+        setSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreferences.DISPLAY_COMPACT_FILE_SIZE,
                                                   MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
     }
 

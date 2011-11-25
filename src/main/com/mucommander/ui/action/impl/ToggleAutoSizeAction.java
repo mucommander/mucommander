@@ -18,12 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.conf.MuPreferences;
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreferences;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action toggles the 'auto-size columns' option on the currently active FileTable, which automatically resizes
@@ -42,7 +48,7 @@ public class ToggleAutoSizeAction extends MuAction {
         boolean enabled;
 
         mainFrame.setAutoSizeColumnsEnabled(enabled = !mainFrame.isAutoSizeColumnsEnabled());
-        MuPreferences.setVariable(MuPreferences.AUTO_SIZE_COLUMNS, enabled);
+        MuConfigurations.getPreferences().setVariable(MuPreferences.AUTO_SIZE_COLUMNS, enabled);
     }
     
     public static class Factory implements ActionFactory {

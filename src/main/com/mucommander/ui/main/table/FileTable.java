@@ -58,6 +58,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.MoveJob;
@@ -202,7 +203,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         setShowGrid(false);
         setIntercellSpacing(new Dimension(0,0));
         setRowHeight();
-        setAutoSizeColumnsEnabled(MuPreferences.getVariable(MuPreferences.AUTO_SIZE_COLUMNS, MuPreferences.DEFAULT_AUTO_SIZE_COLUMNS));
+        setAutoSizeColumnsEnabled(MuConfigurations.getPreferences().getVariable(MuPreferences.AUTO_SIZE_COLUMNS, MuPreferences.DEFAULT_AUTO_SIZE_COLUMNS));
 
         // Initializes event listening.
         addMouseListener(this);

@@ -50,6 +50,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
@@ -807,7 +808,7 @@ public class FolderPanel extends JPanel implements FocusListener {
          * @return <code>true</code> if the given file should have its canonical path followed
          */
         private boolean followCanonicalPath(AbstractFile file) {
-            return (MuPreferences.getVariable(MuPreferences.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS)
+            return (MuConfigurations.getPreferences().getVariable(MuPreferences.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS)
                 || file.getURL().getScheme().equals(FileProtocols.HTTP))
             && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false));
         }

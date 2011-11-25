@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 
 /**
@@ -38,7 +39,7 @@ public class SortInfo implements Cloneable {
     private boolean ascendingOrder = true;
 
     /** Should folders be displayed first, or mixed with regular files */
-    private boolean showFoldersFirst = MuPreferences.getVariable(MuPreferences.SHOW_FOLDERS_FIRST, MuPreferences.DEFAULT_SHOW_FOLDERS_FIRST);
+    private boolean showFoldersFirst = MuConfigurations.getPreferences().getVariable(MuPreferences.SHOW_FOLDERS_FIRST, MuPreferences.DEFAULT_SHOW_FOLDERS_FIRST);
 
 
     public SortInfo() {

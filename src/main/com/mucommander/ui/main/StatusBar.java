@@ -18,6 +18,25 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
+
 import com.mucommander.AppLogger;
 import com.mucommander.cache.FastLRUCache;
 import com.mucommander.cache.LRUCache;
@@ -26,6 +45,7 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.SizeFormat;
@@ -39,16 +59,11 @@ import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
-import com.mucommander.ui.theme.*;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 
 /**
@@ -113,7 +128,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     static {
         // Initialize the size column format based on the configuration
-        setSelectedFileSizeFormat(MuPreferences.getVariable(MuPreferences.DISPLAY_COMPACT_FILE_SIZE,
+        setSelectedFileSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreferences.DISPLAY_COMPACT_FILE_SIZE,
                                                   MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
 
         // Listens to configuration changes and updates static fields accordingly.
@@ -174,7 +189,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized
-        setVisible(MuPreferences.getVariable(MuPreferences.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
+        setVisible(MuConfigurations.getPreferences().getVariable(MuPreferences.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
         
         // Catch location events to update status bar info when folder is changed
         FolderPanel leftPanel = mainFrame.getLeftPanel();

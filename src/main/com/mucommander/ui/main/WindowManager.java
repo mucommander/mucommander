@@ -18,6 +18,23 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.LookAndFeel;
+import javax.swing.MenuSelectionManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import com.mucommander.AppLogger;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.CredentialsManager;
@@ -28,18 +45,11 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.main.commandbar.CommandBar;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Window Manager is responsible for creating, disposing, switching,
@@ -91,7 +101,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         List<String> plafs;         // All available custom look and feels.
 
         // Tries to retrieve the custom look and feels list.
-        if((plafs = MuPreferences.getListVariable(MuPreferences.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
+        if((plafs = MuConfigurations.getPreferences().getListVariable(MuPreferences.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
             return;
 
         // Goes through the list and install every custom look and feel we could find.
@@ -118,7 +128,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         
 
         // Sets custom lookAndFeel if different from current lookAndFeel
-        String lnfName = MuPreferences.getVariable(MuPreferences.LOOK_AND_FEEL);
+        String lnfName = MuConfigurations.getPreferences().getVariable(MuPreferences.LOOK_AND_FEEL);
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
             setLookAndFeel(lnfName);
 
@@ -148,18 +158,18 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         AbstractFile folder;     // Initial folder.
 
         // Checks which kind of initial path we're dealing with.
-        isCustom = (frame == LEFT_FRAME ? MuPreferences.getVariable(MuPreferences.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
-                    MuPreferences.getVariable(MuPreferences.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
+        isCustom = (frame == LEFT_FRAME ? MuConfigurations.getPreferences().getVariable(MuPreferences.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
+        	MuConfigurations.getPreferences().getVariable(MuPreferences.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom)
-            folderPath = (frame == LEFT_FRAME ? MuPreferences.getVariable(MuPreferences.LEFT_CUSTOM_FOLDER) :
-                          MuPreferences.getVariable(MuPreferences.RIGHT_CUSTOM_FOLDER));
+            folderPath = (frame == LEFT_FRAME ? MuConfigurations.getPreferences().getVariable(MuPreferences.LEFT_CUSTOM_FOLDER) :
+            	MuConfigurations.getPreferences().getVariable(MuPreferences.RIGHT_CUSTOM_FOLDER));
 
         // Handles "last folder" initial paths.
         else
-            folderPath = (frame == LEFT_FRAME ? MuPreferences.getVariable(MuPreferences.LAST_LEFT_FOLDER) :
-                          MuPreferences.getVariable(MuPreferences.LAST_RIGHT_FOLDER));
+            folderPath = (frame == LEFT_FRAME ? MuConfigurations.getPreferences().getVariable(MuPreferences.LAST_LEFT_FOLDER) :
+            	MuConfigurations.getPreferences().getVariable(MuPreferences.LAST_RIGHT_FOLDER));
 
         // If the initial path is not legal or does not exist, defaults to the user's home.
         if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
@@ -344,14 +354,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            x      = MuPreferences.getIntegerVariable(MuPreferences.LAST_X);
-            y      = MuPreferences.getIntegerVariable(MuPreferences.LAST_Y);
-            width  = MuPreferences.getIntegerVariable(MuPreferences.LAST_WIDTH);
-            height = MuPreferences.getIntegerVariable(MuPreferences.LAST_HEIGHT);
+            x      = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_X);
+            y      = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_Y);
+            width  = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_WIDTH);
+            height = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_HEIGHT);
 
             // Retrieves the last known size of the screen.
-            int lastScreenWidth  = MuPreferences.getIntegerVariable(MuPreferences.SCREEN_WIDTH);
-            int lastScreenHeight = MuPreferences.getIntegerVariable(MuPreferences.SCREEN_HEIGHT);
+            int lastScreenWidth  = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.SCREEN_WIDTH);
+            int lastScreenHeight = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.SCREEN_HEIGHT);
 
             // If no previous location was saved, or if the resolution has changed,
             // reset the window's dimensions to their default values.

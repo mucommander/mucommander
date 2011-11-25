@@ -18,6 +18,9 @@
 
 package com.mucommander.ui.dialog.shutdown;
 
+import javax.swing.JCheckBox;
+
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -25,8 +28,6 @@ import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
-import javax.swing.*;
 
 /**
  * Quit confirmation dialog invoked when the user asked the application to quit, which gives the user a chance
@@ -71,7 +72,7 @@ public class QuitDialog extends QuestionDialog {
         this.quitConfirmed = getActionValue()==QUIT_ACTION;
         if(quitConfirmed) {
             // Remember user preference
-            MuPreferences.setVariable(MuPreferences.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
+        	MuConfigurations.getPreferences().setVariable(MuPreferences.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
         }
     }
     
@@ -94,7 +95,7 @@ public class QuitDialog extends QuestionDialog {
      */
     public static boolean confirmationRequired() {
         return  WindowManager.getMainFrames().size() > 0     // May happen after an uncaught exception in the startup sequence
-             && MuPreferences.getVariable(MuPreferences.CONFIRM_ON_QUIT, MuPreferences.DEFAULT_CONFIRM_ON_QUIT);
+             && MuConfigurations.getPreferences().getVariable(MuPreferences.CONFIRM_ON_QUIT, MuPreferences.DEFAULT_CONFIRM_ON_QUIT);
     }
     
     

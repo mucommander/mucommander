@@ -51,6 +51,7 @@ import com.mucommander.commons.file.filter.RegexpPathFilter;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
@@ -107,7 +108,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         }
 
         try {
-            String excludeRegexp = MuPreferences.getVariable(MuPreferences.VOLUME_EXCLUDE_REGEXP);
+            String excludeRegexp = MuConfigurations.getPreferences().getVariable(MuPreferences.VOLUME_EXCLUDE_REGEXP);
             if(excludeRegexp!=null) {
                 volumeFilter = new RegexpPathFilter(excludeRegexp, true);
                 volumeFilter.setInverted(true);

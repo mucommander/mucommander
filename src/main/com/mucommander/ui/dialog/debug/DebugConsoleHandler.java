@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.debug;
 
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 
 import java.util.LinkedList;
@@ -53,7 +54,7 @@ public class DebugConsoleHandler extends Handler {
         // TODO: re-implement this.
         //setFormatter(new SingleLineFormatter());
 
-        bufferSize = MuPreferences.getVariable(MuPreferences.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
+        bufferSize = MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
         logRecords = new LinkedList<LogRecord>();
 
         INSTANCE = this;
