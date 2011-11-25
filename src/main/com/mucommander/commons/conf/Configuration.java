@@ -97,7 +97,7 @@ public class Configuration {
     /** Holds the content of the configuration file. */
     private final ConfigurationSection                         root = new ConfigurationSection();
     /** Contains all registered configuration LISTENERS, stored as weak references. */
-    private static final WeakHashMap<ConfigurationListener, ?> LISTENERS;
+    private final WeakHashMap<ConfigurationListener, ?> LISTENERS = new WeakHashMap<ConfigurationListener, Object>();
 
 
 
@@ -114,9 +114,6 @@ public class Configuration {
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    static {
-        LISTENERS = new WeakHashMap<ConfigurationListener, Object>();
-    }
     
     /**
      * Creates a new instance of <code>Configuration</code>.
@@ -1089,7 +1086,7 @@ public class Configuration {
      * @param listener object to register as a configuration listener.
      * @see            #removeConfigurationListener(ConfigurationListener)
      */
-    public static void addConfigurationListener(ConfigurationListener listener) {
+    public void addConfigurationListener(ConfigurationListener listener) {
         LISTENERS.put(listener, null);}
 
     /**
@@ -1097,14 +1094,14 @@ public class Configuration {
      * @param listener object to remove from the list of registered configuration LISTENERS.
      * @see            #addConfigurationListener(ConfigurationListener)
      */
-    public static void removeConfigurationListener(ConfigurationListener listener) {
+    public void removeConfigurationListener(ConfigurationListener listener) {
         LISTENERS.remove(listener);}
 
     /**
      * Passes the specified event to all registered configuration LISTENERS.
      * @param event event to propagate.
      */
-    private static void triggerEvent(ConfigurationEvent event) {
+    private void triggerEvent(ConfigurationEvent event) {
         for(ConfigurationListener listener : LISTENERS.keySet())
             listener.configurationChanged(event);
     }
