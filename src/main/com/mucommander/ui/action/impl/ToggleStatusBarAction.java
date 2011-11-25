@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
@@ -42,7 +42,7 @@ public class ToggleStatusBarAction extends MuAction {
 
     public ToggleStatusBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
-        updateLabel(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
+        updateLabel(MuPreferences.getVariable(MuPreferences.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
     }
 
     private void updateLabel(boolean visible) {
@@ -54,7 +54,7 @@ public class ToggleStatusBarAction extends MuAction {
         StatusBar statusBar = mainFrame.getStatusBar();
         boolean visible = !statusBar.isVisible();
         // Save the last status bar visible state in the configuration, this will become the default for new MainFrame windows.
-        MuConfiguration.setVariable(MuConfiguration.STATUS_BAR_VISIBLE, visible);
+        MuPreferences.setVariable(MuPreferences.STATUS_BAR_VISIBLE, visible);
         // Change the label to reflect the new status bar state
         updateLabel(visible);
         // Show/hide the status bar

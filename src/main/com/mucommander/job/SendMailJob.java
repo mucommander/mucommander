@@ -23,7 +23,7 @@ import com.mucommander.commons.file.MimeTypes;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.commons.io.base64.Base64OutputStream;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -92,9 +92,9 @@ public class SendMailJob extends TransferFileJob {
         this.mailSubject = mailSubject;
         this.mailBody = mailBody+"\n\n"+"Sent by muCommander - http://www.mucommander.com\n";
 
-        this.mailServer = MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER);
-        this.fromName = MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME);
-        this.fromAddress = MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS);
+        this.mailServer = MuPreferences.getVariable(MuPreferences.SMTP_SERVER);
+        this.fromName = MuPreferences.getVariable(MuPreferences.MAIL_SENDER_NAME);
+        this.fromAddress = MuPreferences.getVariable(MuPreferences.MAIL_SENDER_ADDRESS);
     
         this.errorDialogTitle = Translator.get("email_dialog.error_title");
     }
@@ -103,9 +103,9 @@ public class SendMailJob extends TransferFileJob {
      * Returns true if mail preferences have been set.
      */
     public static boolean mailPreferencesSet() {
-        return MuConfiguration.isVariableSet(MuConfiguration.SMTP_SERVER)
-            && MuConfiguration.isVariableSet(MuConfiguration.MAIL_SENDER_NAME)
-            && MuConfiguration.isVariableSet(MuConfiguration.MAIL_SENDER_ADDRESS);
+        return MuPreferences.isVariableSet(MuPreferences.SMTP_SERVER)
+            && MuPreferences.isVariableSet(MuPreferences.MAIL_SENDER_NAME)
+            && MuPreferences.isVariableSet(MuPreferences.MAIL_SENDER_ADDRESS);
     }
 
 
@@ -123,7 +123,7 @@ public class SendMailJob extends TransferFileJob {
     /////////////////////////////////////////////
 
     private void openConnection() throws IOException {
-        this.socket = new Socket(mailServer, MuConfiguration.getVariable(MuConfiguration.SMTP_PORT, MuConfiguration.DEFAULT_SMTP_PORT));
+        this.socket = new Socket(mailServer, MuPreferences.getVariable(MuPreferences.SMTP_PORT, MuPreferences.DEFAULT_SMTP_PORT));
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         this.out = socket.getOutputStream();
         this.out64 = new Base64OutputStream(out, true);

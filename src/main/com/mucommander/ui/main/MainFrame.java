@@ -46,7 +46,7 @@ import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.CloseWindowAction;
@@ -106,7 +106,7 @@ public class MainFrame extends JFrame implements LocationListener {
     private WeakHashMap<ActivePanelListener, ?> activePanelListeners = new WeakHashMap<ActivePanelListener, Object>();
 
     /** Split pane orientation */
-    private final static String SPLIT_ORIENTATION = MuConfiguration.SPLIT_ORIENTATION;
+    private final static String SPLIT_ORIENTATION = MuPreferences.SPLIT_ORIENTATION;
 
 
     /**
@@ -177,7 +177,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // properly initialized
         this.toolbar = new ToolBar(this);
         this.toolbarPanel = ToolbarMoreButton.wrapToolBar(toolbar);
-        this.toolbarPanel.setVisible(MuConfiguration.getVariable(MuConfiguration.TOOLBAR_VISIBLE, MuConfiguration.DEFAULT_TOOLBAR_VISIBLE));
+        this.toolbarPanel.setVisible(MuPreferences.getVariable(MuPreferences.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
         contentPane.add(toolbarPanel, BorderLayout.NORTH);
 
         JPanel insetsPane = new JPanel(new BorderLayout()) {
@@ -204,7 +204,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
         splitPane = new ProportionalSplitPane(this,
-            MuConfiguration.getVariable(SPLIT_ORIENTATION, MuConfiguration.DEFAULT_SPLIT_ORIENTATION).equals(MuConfiguration.VERTICAL_SPLIT_ORIENTATION) ?
+            MuPreferences.getVariable(SPLIT_ORIENTATION, MuPreferences.DEFAULT_SPLIT_ORIENTATION).equals(MuPreferences.VERTICAL_SPLIT_ORIENTATION) ?
                                               JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
                                               false,
                 MainFrame.this.leftFolderPanel,
@@ -240,7 +240,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Show command bar only if it hasn't been disabled in the preferences
         this.commandBar = new CommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
-        this.commandBar.setVisible(MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_VISIBLE, MuConfiguration.DEFAULT_COMMAND_BAR_VISIBLE));
+        this.commandBar.setVisible(MuPreferences.getVariable(MuPreferences.COMMAND_BAR_VISIBLE, MuPreferences.DEFAULT_COMMAND_BAR_VISIBLE));
         southPanel.add(commandBar);
         insetsPane.add(southPanel, BorderLayout.SOUTH);
 
@@ -275,19 +275,19 @@ public class MainFrame extends JFrame implements LocationListener {
             if(c!=Column.NAME) {       // Skip the special name column (always visible, width automatically calculated)
                 // Sets the column's initial visibility.
                 conf.setEnabled(c,
-                    MuConfiguration.getVariable(
-                            MuConfiguration.getShowColumnVariable(c, isLeft),
+                    MuPreferences.getVariable(
+                            MuPreferences.getShowColumnVariable(c, isLeft),
                             c.showByDefault()
                     )
                 );
 
                 // Sets the column's initial width.
-                conf.setWidth(c, MuConfiguration.getIntegerVariable(MuConfiguration.getColumnWidthVariable(c, isLeft)));
+                conf.setWidth(c, MuPreferences.getIntegerVariable(MuPreferences.getColumnWidthVariable(c, isLeft)));
             }
 
             // Sets the column's initial order
-            conf.setPosition(c, MuConfiguration.getVariable(
-                                    MuConfiguration.getColumnPositionVariable(c, isLeft),
+            conf.setPosition(c, MuPreferences.getVariable(
+                                    MuPreferences.getColumnPositionVariable(c, isLeft),
                                     c.ordinal())
             );
         }
@@ -304,16 +304,16 @@ public class MainFrame extends JFrame implements LocationListener {
     public MainFrame(AbstractFile leftInitialFolder, AbstractFile rightInitialFolder) {
         init(new FolderPanel(this, leftInitialFolder, getFileTableConfiguration(true)), new FolderPanel(this, rightInitialFolder, getFileTableConfiguration(false)));
 
-        leftTable.sortBy(Column.valueOf(MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY).toUpperCase()),
-                      !MuConfiguration.getVariable(MuConfiguration.LEFT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
-        rightTable.sortBy(Column.valueOf(MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_BY, MuConfiguration.DEFAULT_SORT_BY).toUpperCase()),
-                      !MuConfiguration.getVariable(MuConfiguration.RIGHT_SORT_ORDER, MuConfiguration.DEFAULT_SORT_ORDER).equals(MuConfiguration.SORT_ORDER_DESCENDING));
-    	leftFolderPanel.setTreeWidth(MuConfiguration.getVariable(MuConfiguration.LEFT_TREE_WIDTH, 150));
-        if (MuConfiguration.getVariable(MuConfiguration.LEFT_TREE_VISIBLE, false)) {
+        leftTable.sortBy(Column.valueOf(MuPreferences.getVariable(MuPreferences.LEFT_SORT_BY, MuPreferences.DEFAULT_SORT_BY).toUpperCase()),
+                      !MuPreferences.getVariable(MuPreferences.LEFT_SORT_ORDER, MuPreferences.DEFAULT_SORT_ORDER).equals(MuPreferences.SORT_ORDER_DESCENDING));
+        rightTable.sortBy(Column.valueOf(MuPreferences.getVariable(MuPreferences.RIGHT_SORT_BY, MuPreferences.DEFAULT_SORT_BY).toUpperCase()),
+                      !MuPreferences.getVariable(MuPreferences.RIGHT_SORT_ORDER, MuPreferences.DEFAULT_SORT_ORDER).equals(MuPreferences.SORT_ORDER_DESCENDING));
+    	leftFolderPanel.setTreeWidth(MuPreferences.getVariable(MuPreferences.LEFT_TREE_WIDTH, 150));
+        if (MuPreferences.getVariable(MuPreferences.LEFT_TREE_VISIBLE, false)) {
         	leftFolderPanel.setTreeVisible(true);
         }
-    	rightFolderPanel.setTreeWidth(MuConfiguration.getVariable(MuConfiguration.RIGHT_TREE_WIDTH, 150));
-        if (MuConfiguration.getVariable(MuConfiguration.RIGHT_TREE_VISIBLE, false)) {
+    	rightFolderPanel.setTreeWidth(MuPreferences.getVariable(MuPreferences.RIGHT_TREE_WIDTH, 150));
+        if (MuPreferences.getVariable(MuPreferences.RIGHT_TREE_VISIBLE, false)) {
         	rightFolderPanel.setTreeVisible(true);
         }
 
@@ -556,7 +556,7 @@ public class MainFrame extends JFrame implements LocationListener {
     private void saveSplitPaneOrientation() {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
-        MuConfiguration.setVariable(SPLIT_ORIENTATION, splitPane.getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuConfiguration.VERTICAL_SPLIT_ORIENTATION:MuConfiguration.HORIZONTAL_SPLIT_ORIENTATION);
+        MuPreferences.setVariable(SPLIT_ORIENTATION, splitPane.getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuPreferences.VERTICAL_SPLIT_ORIENTATION:MuPreferences.HORIZONTAL_SPLIT_ORIENTATION);
     }
 
     /**
@@ -719,20 +719,20 @@ public class MainFrame extends JFrame implements LocationListener {
         // Save last MainFrame's attributes (last folders, window position) in the preferences.
 
         // Save last folders
-        MuConfiguration.setVariable(MuConfiguration.LAST_LEFT_FOLDER, 
+        MuPreferences.setVariable(MuPreferences.LAST_LEFT_FOLDER, 
                                          getLeftPanel().getFolderHistory().getLastRecallableFolder());
-        MuConfiguration.setVariable(MuConfiguration.LAST_RIGHT_FOLDER, 
+        MuPreferences.setVariable(MuPreferences.LAST_RIGHT_FOLDER, 
                                          getRightPanel().getFolderHistory().getLastRecallableFolder());
 
         // Save window position, size and screen resolution
         Rectangle bounds = getBounds();
-        MuConfiguration.setVariable(MuConfiguration.LAST_X, (int)bounds.getX());
-        MuConfiguration.setVariable(MuConfiguration.LAST_Y, (int)bounds.getY());
-        MuConfiguration.setVariable(MuConfiguration.LAST_WIDTH, (int)bounds.getWidth());
-        MuConfiguration.setVariable(MuConfiguration.LAST_HEIGHT, (int)bounds.getHeight());
+        MuPreferences.setVariable(MuPreferences.LAST_X, (int)bounds.getX());
+        MuPreferences.setVariable(MuPreferences.LAST_Y, (int)bounds.getY());
+        MuPreferences.setVariable(MuPreferences.LAST_WIDTH, (int)bounds.getWidth());
+        MuPreferences.setVariable(MuPreferences.LAST_HEIGHT, (int)bounds.getHeight());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        MuConfiguration.setVariable(MuConfiguration.SCREEN_WIDTH, screenSize.width);
-        MuConfiguration.setVariable(MuConfiguration.SCREEN_HEIGHT, screenSize.height);
+        MuPreferences.setVariable(MuPreferences.SCREEN_WIDTH, screenSize.width);
+        MuPreferences.setVariable(MuPreferences.SCREEN_HEIGHT, screenSize.height);
 
         // Saves left and right table positions.
         for(boolean isLeft=true; ; isLeft=false) {
@@ -740,19 +740,19 @@ public class MainFrame extends JFrame implements LocationListener {
             // Loop on columns
             for(Column c : Column.values()) {
                 if(c!=Column.NAME) {       // Skip the special name column (always enabled, width automatically calculated)
-                    MuConfiguration.setVariable(
-                        MuConfiguration.getShowColumnVariable(c, isLeft),
+                    MuPreferences.setVariable(
+                        MuPreferences.getShowColumnVariable(c, isLeft),
                         table.isColumnEnabled(c)
                     );
 
-                    MuConfiguration.setVariable(
-                        MuConfiguration.getColumnWidthVariable(c, isLeft),
+                    MuPreferences.setVariable(
+                        MuPreferences.getColumnWidthVariable(c, isLeft),
                         table.getColumnWidth(c)
                     );
                 }
 
-                MuConfiguration.setVariable(
-                    MuConfiguration.getColumnPositionVariable(c, isLeft),
+                MuPreferences.setVariable(
+                    MuPreferences.getColumnPositionVariable(c, isLeft),
                     table.getColumnPosition(c)
                 );
             }
@@ -762,19 +762,19 @@ public class MainFrame extends JFrame implements LocationListener {
         }
 
         // Saves left and right table sort order.
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_BY, leftTable.getSortInfo().getCriterion().toString().toLowerCase());
-        MuConfiguration.setVariable(MuConfiguration.LEFT_SORT_ORDER, leftTable.getSortInfo().getAscendingOrder() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_BY, rightTable.getSortInfo().getCriterion().toString().toLowerCase());
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_SORT_ORDER, rightTable.getSortInfo().getAscendingOrder() ? MuConfiguration.SORT_ORDER_ASCENDING : MuConfiguration.SORT_ORDER_DESCENDING);
+        MuPreferences.setVariable(MuPreferences.LEFT_SORT_BY, leftTable.getSortInfo().getCriterion().toString().toLowerCase());
+        MuPreferences.setVariable(MuPreferences.LEFT_SORT_ORDER, leftTable.getSortInfo().getAscendingOrder() ? MuPreferences.SORT_ORDER_ASCENDING : MuPreferences.SORT_ORDER_DESCENDING);
+        MuPreferences.setVariable(MuPreferences.RIGHT_SORT_BY, rightTable.getSortInfo().getCriterion().toString().toLowerCase());
+        MuPreferences.setVariable(MuPreferences.RIGHT_SORT_ORDER, rightTable.getSortInfo().getAscendingOrder() ? MuPreferences.SORT_ORDER_ASCENDING : MuPreferences.SORT_ORDER_DESCENDING);
 
         // Save split pane orientation
         saveSplitPaneOrientation();
         
         // Save tree folders preferences
-        MuConfiguration.setVariable(MuConfiguration.LEFT_TREE_VISIBLE, leftFolderPanel.isTreeVisible());
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_TREE_VISIBLE, rightFolderPanel.isTreeVisible());
-        MuConfiguration.setVariable(MuConfiguration.LEFT_TREE_WIDTH, leftFolderPanel.getTreeWidth());
-        MuConfiguration.setVariable(MuConfiguration.RIGHT_TREE_WIDTH, rightFolderPanel.getTreeWidth());
+        MuPreferences.setVariable(MuPreferences.LEFT_TREE_VISIBLE, leftFolderPanel.isTreeVisible());
+        MuPreferences.setVariable(MuPreferences.RIGHT_TREE_VISIBLE, rightFolderPanel.isTreeVisible());
+        MuPreferences.setVariable(MuPreferences.LEFT_TREE_WIDTH, leftFolderPanel.getTreeWidth());
+        MuPreferences.setVariable(MuPreferences.RIGHT_TREE_WIDTH, rightFolderPanel.getTreeWidth());
 
         // Finally, dispose the frame
         super.dispose(); 

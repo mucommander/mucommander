@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.debug;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 
 import java.util.LinkedList;
 import java.util.logging.Handler;
@@ -28,10 +28,10 @@ import java.util.logging.LogRecord;
  * This <code>java.util.logging</code> <code>Handler</code> collects the last log messages that were published by
  * the different muCommander loggers, so they can be displayed at any time in the {@link DebugConsoleDialog}.
  * Log records are kept in memory as a sliding window. The number of log records is controlled by the
- * {@link MuConfiguration#LOG_BUFFER_SIZE} configuration variable: the more records, the more memory is used.
+ * {@link MuPreferences#LOG_BUFFER_SIZE} configuration variable: the more records, the more memory is used.
  *
  * @see DebugConsoleDialog
- * @see MuConfiguration#LOG_BUFFER_SIZE
+ * @see MuPreferences#LOG_BUFFER_SIZE
  * @author Maxence Bernard
  */
 public class DebugConsoleHandler extends Handler {
@@ -53,7 +53,7 @@ public class DebugConsoleHandler extends Handler {
         // TODO: re-implement this.
         //setFormatter(new SingleLineFormatter());
 
-        bufferSize = MuConfiguration.getVariable(MuConfiguration.LOG_BUFFER_SIZE, MuConfiguration.DEFAULT_LOG_BUFFER_SIZE);
+        bufferSize = MuPreferences.getVariable(MuPreferences.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
         logRecords = new LinkedList<LogRecord>();
 
         INSTANCE = this;

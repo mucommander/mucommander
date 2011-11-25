@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -127,7 +127,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     public void commit() {
         super.commit();
         try {
-            MuConfiguration.write();
+            MuPreferences.write();
         }
         catch(Exception e) {
             InformationDialog.showErrorDialog(this);

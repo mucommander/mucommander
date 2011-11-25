@@ -21,7 +21,7 @@ package com.mucommander.text;
 import com.mucommander.AppLogger;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.bom.BOMReader;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 
 import java.io.*;
 import java.util.*;
@@ -74,7 +74,7 @@ public class Translator {
      * @param availableLanguages list of available languages
      */
     private static void setCurrentLanguage(List<String> availableLanguages) {
-        String lang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
+        String lang = MuPreferences.getVariable(MuPreferences.LANGUAGE);
 
         if(lang==null) {
             // language is not set in preferences, use system's language
@@ -111,7 +111,7 @@ public class Translator {
         }
 		
         // Set preferred language in configuration file
-        MuConfiguration.setVariable(MuConfiguration.LANGUAGE, Translator.language);
+        MuPreferences.setVariable(MuPreferences.LANGUAGE, Translator.language);
 
         AppLogger.config("Current language has been set to "+Translator.language);
     }

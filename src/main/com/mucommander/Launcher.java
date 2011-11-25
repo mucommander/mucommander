@@ -28,7 +28,7 @@ import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.commons.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.commons.file.impl.smb.SMBProtocolProvider;
 import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
@@ -244,14 +244,14 @@ public class Launcher {
     private static void migrateCommand(String useName, String commandName, String alias) {
         String command;
 
-        if(MuConfiguration.getBooleanVariable(useName) && (command = MuConfiguration.getVariable(commandName)) != null) {
+        if(MuPreferences.getBooleanVariable(useName) && (command = MuPreferences.getVariable(commandName)) != null) {
             try {
                 CommandManager.registerCommand(new Command(alias, command, Command.SYSTEM_COMMAND));}
             catch(CommandException e) {
                 // Ignore this: the command didn't work in the first place, we might as well get rid of it.
             }
-            MuConfiguration.removeVariable(useName);
-            MuConfiguration.removeVariable(commandName);
+            MuPreferences.removeVariable(useName);
+            MuPreferences.removeVariable(commandName);
         }
     }
 
@@ -319,7 +319,7 @@ public class Launcher {
                 else if(args[i].equals("-c") || args[i].equals("--configuration")) {
                     if(i >= args.length - 1)
                         printError("Missing FILE parameter to " + args[i], null, true);
-                    try {MuConfiguration.setConfigurationFile(args[++i]);}
+                    try {MuPreferences.setConfigurationFile(args[++i]);}
                     catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
                 }
 
@@ -410,12 +410,12 @@ public class Launcher {
 
             // Attempts to guess whether this is the first time muCommander is booted or not.
             boolean isFirstBoot;
-            try {isFirstBoot = !MuConfiguration.getConfigurationFile().exists();}
+            try {isFirstBoot = !MuPreferences.getConfigurationFile().exists();}
             catch(IOException e) {isFirstBoot = true;}
 
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
             // to use the metal look, we need to know about it right about now.
-            try {MuConfiguration.read();}
+            try {MuPreferences.read();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
 
 
@@ -458,12 +458,12 @@ public class Launcher {
             System.setProperty("java.net.useSystemProxies", "true");
 
             // Shows the splash screen, if enabled in the preferences
-            useSplash = MuConfiguration.getVariable(MuConfiguration.SHOW_SPLASH_SCREEN, MuConfiguration.DEFAULT_SHOW_SPLASH_SCREEN);
+            useSplash = MuPreferences.getVariable(MuPreferences.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN);
             if(useSplash) {
                 splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");}
 
             boolean showSetup;
-            showSetup = MuConfiguration.getVariable(MuConfiguration.THEME_TYPE) == null;
+            showSetup = MuPreferences.getVariable(MuPreferences.THEME_TYPE) == null;
 
             // Traps VM shutdown
             Runtime.getRuntime().addShutdownHook(new ShutdownHook());
@@ -526,9 +526,9 @@ public class Launcher {
             // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why we do this now
             SwingFileIconProvider.forceInit();
             // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-            com.mucommander.ui.icon.FileIcons.setScaleFactor(Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TABLE_ICON_SCALE,
-                                                                                              MuConfiguration.DEFAULT_TABLE_ICON_SCALE)));
-            com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuConfiguration.getVariable(MuConfiguration.USE_SYSTEM_FILE_ICONS, MuConfiguration.DEFAULT_USE_SYSTEM_FILE_ICONS));
+            com.mucommander.ui.icon.FileIcons.setScaleFactor(Math.max(1.0f, MuPreferences.getVariable(MuPreferences.TABLE_ICON_SCALE,
+                                                                                              MuPreferences.DEFAULT_TABLE_ICON_SCALE)));
+            com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuPreferences.getVariable(MuPreferences.USE_SYSTEM_FILE_ICONS, MuPreferences.DEFAULT_USE_SYSTEM_FILE_ICONS));
 
             // Register actions
             printStartupMessage("Registering actions...");
@@ -555,7 +555,7 @@ public class Launcher {
 
             // Starts Bonjour services discovery (only if enabled in prefs)
             printStartupMessage("Starting Bonjour services discovery...");
-            com.mucommander.bonjour.BonjourDirectory.setActive(MuConfiguration.getVariable(MuConfiguration.ENABLE_BONJOUR_DISCOVERY, MuConfiguration.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
+            com.mucommander.bonjour.BonjourDirectory.setActive(MuPreferences.getVariable(MuPreferences.ENABLE_BONJOUR_DISCOVERY, MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
@@ -580,7 +580,7 @@ public class Launcher {
 
             // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
             // a MainFrame instance
-            if(MuConfiguration.getVariable(MuConfiguration.ENABLE_SYSTEM_NOTIFICATIONS, MuConfiguration.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+            if(MuPreferences.getVariable(MuPreferences.ENABLE_SYSTEM_NOTIFICATIONS, MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
                 printStartupMessage("Enabling system notifications...");
                 if(com.mucommander.ui.notifier.AbstractNotifier.isAvailable())
                     com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
@@ -591,7 +591,7 @@ public class Launcher {
                 splashScreen.dispose();
 
             // Check for newer version unless it was disabled
-            if(MuConfiguration.getVariable(MuConfiguration.CHECK_FOR_UPDATE, MuConfiguration.DEFAULT_CHECK_FOR_UPDATE))
+            if(MuPreferences.getVariable(MuPreferences.CHECK_FOR_UPDATE, MuPreferences.DEFAULT_CHECK_FOR_UPDATE))
                 new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
 
             // If no theme is configured in the preferences, ask for an initial theme.
@@ -618,12 +618,12 @@ public class Launcher {
         // NTLM v2 authentication such as Samba 3.0.x, which still is widely used and comes pre-installed on
         // Mac OS X Leopard.
         // Since jCIFS 1.3.0, the default is to use NTLM v2 authentication and extended security.
-        SMBProtocolProvider.setLmCompatibility(MuConfiguration.getVariable(MuConfiguration.SMB_LM_COMPATIBILITY, MuConfiguration.DEFAULT_SMB_LM_COMPATIBILITY));
-        SMBProtocolProvider.setExtendedSecurity(MuConfiguration.getVariable(MuConfiguration.SMB_USE_EXTENDED_SECURITY, MuConfiguration.DEFAULT_SMB_USE_EXTENDED_SECURITY));
+        SMBProtocolProvider.setLmCompatibility(MuPreferences.getVariable(MuPreferences.SMB_LM_COMPATIBILITY, MuPreferences.DEFAULT_SMB_LM_COMPATIBILITY));
+        SMBProtocolProvider.setExtendedSecurity(MuPreferences.getVariable(MuPreferences.SMB_USE_EXTENDED_SECURITY, MuPreferences.DEFAULT_SMB_USE_EXTENDED_SECURITY));
 
         // Use the FTP configuration option that controls whether to force the display of hidden files, or leave it for
         // the servers to decide whether to show them.
-        FTPProtocolProvider.setForceHiddenFilesListing(MuConfiguration.getVariable(MuConfiguration.LIST_HIDDEN_FILES, MuConfiguration.DEFAULT_LIST_HIDDEN_FILES));        
+        FTPProtocolProvider.setForceHiddenFilesListing(MuPreferences.getVariable(MuPreferences.LIST_HIDDEN_FILES, MuPreferences.DEFAULT_LIST_HIDDEN_FILES));        
         
         // Use CredentialsManager for file URL authentication
         FileFactory.setDefaultAuthenticator(CredentialsManager.getAuthenticator());
@@ -679,7 +679,7 @@ public class Launcher {
      * @return the current log level used by all <code>java.util.logging</code> loggers.
      */
     public static Level getLogLevel() {
-        return Level.parse(MuConfiguration.getVariable(MuConfiguration.LOG_LEVEL, MuConfiguration.DEFAULT_LOG_LEVEL));
+        return Level.parse(MuPreferences.getVariable(MuPreferences.LOG_LEVEL, MuPreferences.DEFAULT_LOG_LEVEL));
     }
 
     /**
@@ -689,7 +689,7 @@ public class Launcher {
      * @param level the new log level to be used by all <code>java.util.logging</code> loggers.
      */
     public static void setLogLevel(Level level) {
-        MuConfiguration.setVariable(MuConfiguration.LOG_LEVEL, level.getName());
+        MuPreferences.setVariable(MuPreferences.LOG_LEVEL, level.getName());
         updateLogLevel(level);
     }
 

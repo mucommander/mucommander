@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 
 /**
  * This class holds information describes how a {@link FileTable} is currently sorted: sort criterion,
@@ -38,7 +38,7 @@ public class SortInfo implements Cloneable {
     private boolean ascendingOrder = true;
 
     /** Should folders be displayed first, or mixed with regular files */
-    private boolean showFoldersFirst = MuConfiguration.getVariable(MuConfiguration.SHOW_FOLDERS_FIRST, MuConfiguration.DEFAULT_SHOW_FOLDERS_FIRST);
+    private boolean showFoldersFirst = MuPreferences.getVariable(MuPreferences.SHOW_FOLDERS_FIRST, MuPreferences.DEFAULT_SHOW_FOLDERS_FIRST);
 
 
     public SortInfo() {

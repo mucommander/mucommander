@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -115,11 +115,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         JPanel languagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         languagePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.language")));
         this.languages = Translator.getAvailableLanguages();
-        String currentLang = MuConfiguration.getVariable(MuConfiguration.LANGUAGE);
+        String currentLang = MuPreferences.getVariable(MuPreferences.LANGUAGE);
         String lang;
         languageComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
-				return !languages[getSelectedIndex()].equals(MuConfiguration.getVariable(MuConfiguration.LANGUAGE));
+				return !languages[getSelectedIndex()].equals(MuPreferences.getVariable(MuPreferences.LANGUAGE));
 			}
         };
 
@@ -168,11 +168,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         // Date format combo
         dateFormatComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
-				return !getDateFormatString().equals(MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT));
+				return !getDateFormatString().equals(MuPreferences.getVariable(MuPreferences.DATE_FORMAT));
 			}
         };
-        String dateFormat = MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT);
-        String separator = MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR, MuConfiguration.DEFAULT_DATE_SEPARATOR);
+        String dateFormat = MuPreferences.getVariable(MuPreferences.DATE_FORMAT);
+        String separator = MuPreferences.getVariable(MuPreferences.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR);
         int dateFormatIndex = 0;
         String buffer = dateFormat.replace(separator.charAt(0), '/');
         for(int i=0; i<DATE_FORMATS.length; i++) {
@@ -193,7 +193,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         tempPanel.add(new JLabel(Translator.get("prefs_dialog.date_separator")+": "));
         dateSeparatorField = new PrefTextField(1) {
 			public boolean hasChanged() {
-				return !getText().equals(MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR));
+				return !getText().equals(MuPreferences.getVariable(MuPreferences.DATE_SEPARATOR));
 			}
         };
         // Limit the number of characters in the text field to 1 and enforces only non-alphanumerical characters
@@ -226,7 +226,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         showCenturyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_century")) {
 			public boolean hasChanged() {
-				return isSelected() != (MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT).indexOf("yyyy")!=-1);
+				return isSelected() != (MuPreferences.getVariable(MuPreferences.DATE_FORMAT).indexOf("yyyy")!=-1);
 			}
         };
         showCenturyCheckBox.setSelected(dateFormat.indexOf("yyyy")!=-1);
@@ -241,20 +241,20 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         time12RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_12_hour")) {
 			public boolean hasChanged() {
-				String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
+				String timeFormat = MuPreferences.getVariable(MuPreferences.TIME_FORMAT);
 		        return isSelected() != (timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS)); 
 			}
         };
         time12RadioButton.addActionListener(this);
         PrefRadioButton time24RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_24_hour")) {
 			public boolean hasChanged() {
-				String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
+				String timeFormat = MuPreferences.getVariable(MuPreferences.TIME_FORMAT);
 		        return isSelected() != (timeFormat.equals(HOUR_24_TIME_FORMAT) || timeFormat.equals(HOUR_24_TIME_FORMAT_WITH_SECONDS));
 			}
         };
         time24RadioButton.addActionListener(this);
         
-        String timeFormat = MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT);
+        String timeFormat = MuPreferences.getVariable(MuPreferences.TIME_FORMAT);
         if(timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS))
             time12RadioButton.setSelected(true);
         else
@@ -270,7 +270,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         showSecondsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_seconds")) {
 			public boolean hasChanged() {
-				return isSelected() != (MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT).indexOf(":ss")!=-1);
+				return isSelected() != (MuPreferences.getVariable(MuPreferences.TIME_FORMAT).indexOf(":ss")!=-1);
 			}
         };
         showSecondsCheckBox.setSelected(timeFormat.indexOf(":ss")!=-1);
@@ -334,10 +334,10 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
     ///////////////////////
     @Override
     protected void commit() {
-        MuConfiguration.setVariable(MuConfiguration.LANGUAGE, languages[languageComboBox.getSelectedIndex()]);
-        MuConfiguration.setVariable(MuConfiguration.DATE_FORMAT, getDateFormatString());
-        MuConfiguration.setVariable(MuConfiguration.DATE_SEPARATOR, dateSeparatorField.getText());
-        MuConfiguration.setVariable(MuConfiguration.TIME_FORMAT, getTimeFormatString());
+        MuPreferences.setVariable(MuPreferences.LANGUAGE, languages[languageComboBox.getSelectedIndex()]);
+        MuPreferences.setVariable(MuPreferences.DATE_FORMAT, getDateFormatString());
+        MuPreferences.setVariable(MuPreferences.DATE_SEPARATOR, dateSeparatorField.getText());
+        MuPreferences.setVariable(MuPreferences.TIME_FORMAT, getTimeFormatString());
     }
 
 

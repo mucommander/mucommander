@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.AppLogger;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
 import com.mucommander.job.TransferFileJob;
@@ -175,8 +175,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             advancedPanel.addSpace(5);
 
             this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, true);
-            collapseExpandButton.setExpandedState(MuConfiguration.getVariable(MuConfiguration.PROGRESS_DIALOG_EXPANDED,
-                                                                                   MuConfiguration.DEFAULT_PROGRESS_DIALOG_EXPANDED));
+            collapseExpandButton.setExpandedState(MuPreferences.getVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED,
+                                                                                   MuPreferences.DEFAULT_PROGRESS_DIALOG_EXPANDED));
             tempPanel.add(collapseExpandButton, BorderLayout.EAST);
 
             yPanel.add(tempPanel);
@@ -186,8 +186,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         }
 
         closeWhenFinishedCheckBox = new JCheckBox(Translator.get("progress_dialog.close_when_finished"));
-        closeWhenFinishedCheckBox.setSelected(MuConfiguration.getVariable(MuConfiguration.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
-                                                                               MuConfiguration.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
+        closeWhenFinishedCheckBox.setSelected(MuPreferences.getVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
+                                                                               MuPreferences.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
         yPanel.add(closeWhenFinishedCheckBox);
 
         yPanel.add(Box.createVerticalGlue());
@@ -463,10 +463,10 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         // Remember 'advanced panel' expanded state
         if(collapseExpandButton!=null)
-            MuConfiguration.setVariable(MuConfiguration.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
+            MuPreferences.setVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
 
         // Remember 'close window when finished' option state
-        MuConfiguration.setVariable(MuConfiguration.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
+        MuPreferences.setVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
     }
 
 

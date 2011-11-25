@@ -22,7 +22,7 @@ import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
@@ -45,8 +45,8 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	
 	/** Current icon scale factor */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-    protected static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.COMMAND_BAR_ICON_SCALE,
-                                                                        MuConfiguration.DEFAULT_COMMAND_BAR_ICON_SCALE));
+    protected static float scaleFactor = Math.max(1.0f, MuPreferences.getVariable(MuPreferences.COMMAND_BAR_ICON_SCALE,
+                                                                        MuPreferences.DEFAULT_COMMAND_BAR_ICON_SCALE));
 	
     public static CommandBarButton create(String actionId, MainFrame mainFrame) {
 		return actionId == null ? null : new CommandBarButton(actionId, mainFrame);
@@ -71,7 +71,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
         setMinimumSize(new Dimension(40, (int) getPreferredSize().getHeight()));
         
         // Listen to configuration changes to reload command bar buttons when icon size has changed
-        MuConfiguration.addConfigurationListener(this);
+        MuPreferences.addConfigurationListener(this);
 	}
 	
 	/**
@@ -114,7 +114,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
         String var = event.getVariable();
 
         // Reload butons icon if the icon scale factor has changed
-        if (var.equals(MuConfiguration.COMMAND_BAR_ICON_SCALE)) {
+        if (var.equals(MuPreferences.COMMAND_BAR_ICON_SCALE)) {
             scaleFactor = event.getFloatValue();
 
             // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size

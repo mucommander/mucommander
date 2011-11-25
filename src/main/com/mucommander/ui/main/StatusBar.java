@@ -26,7 +26,7 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.runtime.JavaVersions;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -113,8 +113,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     static {
         // Initialize the size column format based on the configuration
-        setSelectedFileSizeFormat(MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
-                                                  MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
+        setSelectedFileSizeFormat(MuPreferences.getVariable(MuPreferences.DISPLAY_COMPACT_FILE_SIZE,
+                                                  MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
 
         // Listens to configuration changes and updates static fields accordingly.
         // Note: a reference to the listener must be kept to prevent it from being garbage-collected.
@@ -122,11 +122,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             public synchronized void configurationChanged(ConfigurationEvent event) {
                 String var = event.getVariable();
 
-                if (var.equals(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE))
+                if (var.equals(MuPreferences.DISPLAY_COMPACT_FILE_SIZE))
                     setSelectedFileSizeFormat(event.getBooleanValue());
             }
         };
-        MuConfiguration.addConfigurationListener(CONFIGURATION_ADAPTER);
+        MuPreferences.addConfigurationListener(CONFIGURATION_ADAPTER);
     }
 
 
@@ -174,7 +174,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized
-        setVisible(MuConfiguration.getVariable(MuConfiguration.STATUS_BAR_VISIBLE, MuConfiguration.DEFAULT_STATUS_BAR_VISIBLE));
+        setVisible(MuPreferences.getVariable(MuPreferences.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
         
         // Catch location events to update status bar info when folder is changed
         FolderPanel leftPanel = mainFrame.getLeftPanel();

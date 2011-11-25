@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
@@ -49,8 +49,8 @@ public class ToggleHiddenFilesAction extends MuAction {
      */
     @Override
     public void performAction() {
-        MuConfiguration.setVariable(MuConfiguration.SHOW_HIDDEN_FILES,
-                                    !MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
+        MuPreferences.setVariable(MuPreferences.SHOW_HIDDEN_FILES,
+                                    !MuPreferences.getVariable(MuPreferences.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
         WindowManager.tryRefreshCurrentFolders();
     }
     

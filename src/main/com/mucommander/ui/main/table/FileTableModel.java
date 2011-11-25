@@ -23,7 +23,7 @@ import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 
@@ -80,8 +80,8 @@ public class FileTableModel extends AbstractTableModel {
 
     static {
         // Initialize the size column format based on the configuration
-        setSizeFormat(MuConfiguration.getVariable(MuConfiguration.DISPLAY_COMPACT_FILE_SIZE,
-                                                  MuConfiguration.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
+        setSizeFormat(MuPreferences.getVariable(MuPreferences.DISPLAY_COMPACT_FILE_SIZE,
+                                                  MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
     }
 
 

@@ -34,7 +34,7 @@ import java.util.List;
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API.
  * @author Nicolas Rinaudo, Maxence Bernard
  */
-public class MuConfiguration {
+public class MuPreferences {
     // - Misc. variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Whether or not to automaticaly check for updates on startup. */
@@ -526,14 +526,14 @@ public class MuConfiguration {
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
     static {
-        CONFIGURATION = new Configuration(new MuConfigurationSource(), new VersionedXmlConfigurationReaderFactory(),
+        CONFIGURATION = new Configuration(new MuPreferencesSource(), new VersionedXmlConfigurationReaderFactory(),
                                           new VersionedXmlConfigurationWriterFactory());
     }
 
     /**
      * Prevents instanciation of this class.
      */
-    private MuConfiguration() {}
+    private MuPreferences() {}
 
 
 
@@ -1038,7 +1038,7 @@ public class MuConfiguration {
      * @see                          #getConfigurationFile()
      */
     public static void setConfigurationFile(String file) throws FileNotFoundException {
-        CONFIGURATION.setSource(new MuConfigurationSource(file));}
+        CONFIGURATION.setSource(new MuPreferencesSource(file));}
 
     /**
      * Returns the path to the CONFIGURATION file.
@@ -1046,5 +1046,5 @@ public class MuConfiguration {
      * @throws IOException if an error occured.
      * @see                #setConfigurationFile(String)
      */
-    public static AbstractFile getConfigurationFile() throws IOException {return MuConfigurationSource.getConfigurationFile();}
+    public static AbstractFile getConfigurationFile() throws IOException {return MuPreferencesSource.getConfigurationFile();}
 }

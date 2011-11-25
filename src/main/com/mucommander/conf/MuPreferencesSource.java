@@ -31,7 +31,7 @@ import java.nio.charset.Charset;
 /**
  * @author Nicolas Rinaudo
  */
-class MuConfigurationSource implements ConfigurationSource {
+class MuPreferencesSource implements ConfigurationSource {
     // - Class fields ---------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /** Path to the configuration file. */
@@ -48,9 +48,9 @@ class MuConfigurationSource implements ConfigurationSource {
      * @param path path to the configuration file.
      * @throws FileNotFoundException if <code>path</code> is not accessible.
      */
-    public MuConfigurationSource(String path) throws FileNotFoundException {setConfigurationFile(path);}
+    public MuPreferencesSource(String path) throws FileNotFoundException {setConfigurationFile(path);}
 
-    public MuConfigurationSource() {}
+    public MuPreferencesSource() {}
 
 
 

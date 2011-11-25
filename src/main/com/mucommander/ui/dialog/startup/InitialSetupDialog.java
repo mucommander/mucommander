@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.startup;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -191,10 +191,10 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
 	if(e.getSource() == themeComboBox)
 	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
 	else if(e.getSource() == lfComboBox)
-	    MuConfiguration.setVariable(MuConfiguration.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+	    MuPreferences.setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	else if(e.getSource() == okButton) {
 	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
-	    MuConfiguration.setVariable(MuConfiguration.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+	    MuPreferences.setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	    dispose();
 	}
     }

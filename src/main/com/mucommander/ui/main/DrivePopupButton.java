@@ -51,7 +51,7 @@ import com.mucommander.commons.file.filter.RegexpPathFilter;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
@@ -107,14 +107,14 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         }
 
         try {
-            String excludeRegexp = MuConfiguration.getVariable(MuConfiguration.VOLUME_EXCLUDE_REGEXP);
+            String excludeRegexp = MuPreferences.getVariable(MuPreferences.VOLUME_EXCLUDE_REGEXP);
             if(excludeRegexp!=null) {
                 volumeFilter = new RegexpPathFilter(excludeRegexp, true);
                 volumeFilter.setInverted(true);
             }
         }
         catch(PatternSyntaxException e) {
-            AppLogger.info("Invalid regexp for conf variable "+MuConfiguration.VOLUME_EXCLUDE_REGEXP, e);
+            AppLogger.info("Invalid regexp for conf variable "+MuPreferences.VOLUME_EXCLUDE_REGEXP, e);
         }
 
         // Initialize the volumes list
@@ -138,7 +138,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         BookmarkManager.addBookmarkListener(this);
 
         // Listen to configuration changes to update the button if the system file icons policy has changed
-        MuConfiguration.addConfigurationListener(this);
+        MuPreferences.addConfigurationListener(this);
 
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
         if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
@@ -259,7 +259,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      * Returns the list of volumes to be displayed in the popup menu.
      *
      * <p>The raw list of volumes is fetched using {@link LocalFile#getVolumes()} and then
-     * filtered using the regexp defined in the {@link MuConfiguration#VOLUME_EXCLUDE_REGEXP} configuration variable
+     * filtered using the regexp defined in the {@link MuPreferences#VOLUME_EXCLUDE_REGEXP} configuration variable
      * (if defined).</p>
      *
      * @return the list of volumes to be displayed in the popup menu
@@ -474,7 +474,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         String var = event.getVariable();
 
         // Update the button's icon if the system file icons policy has changed
-        if (var.equals(MuConfiguration.USE_SYSTEM_FILE_ICONS))
+        if (var.equals(MuPreferences.USE_SYSTEM_FILE_ICONS))
             updateButton();
     }
 

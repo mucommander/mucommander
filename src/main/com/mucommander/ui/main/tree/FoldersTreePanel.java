@@ -25,7 +25,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.util.FileComparator;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.RefreshAction;
 import com.mucommander.ui.event.LocationEvent;
@@ -151,7 +151,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         
         ThemeCache.addThemeListener(this);
         
-        MuConfiguration.addConfigurationListener(this);
+        MuPreferences.addConfigurationListener(this);
     }
 
     
@@ -161,9 +161,9 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      */
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
-        if (var.equals(MuConfiguration.SHOW_HIDDEN_FILES) ||
-                var.equals(MuConfiguration.SHOW_DS_STORE_FILES) ||
-                var.equals(MuConfiguration.SHOW_SYSTEM_FOLDERS)) {
+        if (var.equals(MuPreferences.SHOW_HIDDEN_FILES) ||
+                var.equals(MuPreferences.SHOW_DS_STORE_FILES) ||
+                var.equals(MuPreferences.SHOW_SYSTEM_FOLDERS)) {
             Object root = model.getRoot();
             if (root != null) {
                 TreePath path = new TreePath(root);

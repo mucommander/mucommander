@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -61,33 +61,33 @@ class MailPanel extends PreferencesPanel {
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
         // Name field
-        nameField = new PrefTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME, "")) {
+        nameField = new PrefTextField(MuPreferences.getVariable(MuPreferences.MAIL_SENDER_NAME, "")) {
 			public boolean hasChanged() {
-				return !nameField.getText().equals(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME, ""));
+				return !nameField.getText().equals(MuPreferences.getVariable(MuPreferences.MAIL_SENDER_NAME, ""));
 			}
         };
         compPanel.addRow(Translator.get("prefs_dialog.mail_name"), nameField, 10);
 		
         // Email field
-        emailField = new PrefTextField(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS, "")) {
+        emailField = new PrefTextField(MuPreferences.getVariable(MuPreferences.MAIL_SENDER_ADDRESS, "")) {
 			public boolean hasChanged() {
-				return !emailField.getText().equals(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS, ""));
+				return !emailField.getText().equals(MuPreferences.getVariable(MuPreferences.MAIL_SENDER_ADDRESS, ""));
 			}
         };
         compPanel.addRow(Translator.get("prefs_dialog.mail_address"), emailField, 10);
 
         // SMTP field
-        smtpField = new PrefTextField(MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER, "")) {
+        smtpField = new PrefTextField(MuPreferences.getVariable(MuPreferences.SMTP_SERVER, "")) {
 			public boolean hasChanged() {
-				return !smtpField.getText().equals(MuConfiguration.getVariable(MuConfiguration.SMTP_SERVER, ""));
+				return !smtpField.getText().equals(MuPreferences.getVariable(MuPreferences.SMTP_SERVER, ""));
 			}
         };
         compPanel.addRow(Translator.get("prefs_dialog.mail_server"), smtpField, 10);
 
         // SMTP port field
-        portField = new PrefTextField(""+MuConfiguration.getVariable(MuConfiguration.SMTP_PORT, MuConfiguration.DEFAULT_SMTP_PORT)) {
+        portField = new PrefTextField(""+MuPreferences.getVariable(MuPreferences.SMTP_PORT, MuPreferences.DEFAULT_SMTP_PORT)) {
 			public boolean hasChanged() {
-				return !portField.getText().equals(String.valueOf(MuConfiguration.getVariable(MuConfiguration.SMTP_PORT, MuConfiguration.DEFAULT_SMTP_PORT)));
+				return !portField.getText().equals(String.valueOf(MuPreferences.getVariable(MuPreferences.SMTP_PORT, MuPreferences.DEFAULT_SMTP_PORT)));
 			}
         };
         compPanel.addRow(Translator.get("server_connect_dialog.port"), portField, 10);
@@ -107,9 +107,9 @@ class MailPanel extends PreferencesPanel {
     ///////////////////////
     @Override
     protected void commit() {
-        MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_NAME, nameField.getText());
-        MuConfiguration.setVariable(MuConfiguration.MAIL_SENDER_ADDRESS, emailField.getText());
-        MuConfiguration.setVariable(MuConfiguration.SMTP_SERVER, smtpField.getText());
-        MuConfiguration.setVariable(MuConfiguration.SMTP_PORT, portField.getText());
+        MuPreferences.setVariable(MuPreferences.MAIL_SENDER_NAME, nameField.getText());
+        MuPreferences.setVariable(MuPreferences.MAIL_SENDER_ADDRESS, emailField.getText());
+        MuPreferences.setVariable(MuPreferences.SMTP_SERVER, smtpField.getText());
+        MuPreferences.setVariable(MuPreferences.SMTP_PORT, portField.getText());
     }
 }

@@ -20,7 +20,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.SendMailJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -98,8 +98,8 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
             XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
             // From (sender) field, non editable
-            JLabel fromLabel = new JLabel(MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_NAME)
-                                          +" <"+MuConfiguration.getVariable(MuConfiguration.MAIL_SENDER_ADDRESS)+">");
+            JLabel fromLabel = new JLabel(MuPreferences.getVariable(MuPreferences.MAIL_SENDER_NAME)
+                                          +" <"+MuPreferences.getVariable(MuPreferences.MAIL_SENDER_ADDRESS)+">");
             //			fromField.setEditable(false);
             compPanel.addRow(Translator.get("email_dialog.from")+":", fromLabel, 10);
 			

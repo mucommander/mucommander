@@ -25,7 +25,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -391,7 +391,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             sortByItems[activeTable.getSortInfo().getCriterion().ordinal()].setSelected(true);
 
             toggleShowFoldersFirstItem.setSelected(activeTable.getSortInfo().getFoldersFirst());
-            toggleShowHiddenFilesItem.setSelected(MuConfiguration.getVariable(MuConfiguration.SHOW_HIDDEN_FILES, MuConfiguration.DEFAULT_SHOW_HIDDEN_FILES));
+            toggleShowHiddenFilesItem.setSelected(MuPreferences.getVariable(MuPreferences.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
             toggleTreeItem.setSelected(activeTable.getFolderPanel().isTreeVisible());
             toggleToggleAutoSizeItem.setSelected(mainFrame.isAutoSizeColumnsEnabled());
             /* TODO branch toggleBranchView.setSelected(activeTable.getFolderPanel().isBranchView()); */ 

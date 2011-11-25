@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.shutdown;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.QuitAction;
@@ -71,7 +71,7 @@ public class QuitDialog extends QuestionDialog {
         this.quitConfirmed = getActionValue()==QUIT_ACTION;
         if(quitConfirmed) {
             // Remember user preference
-            MuConfiguration.setVariable(MuConfiguration.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
+            MuPreferences.setVariable(MuPreferences.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());
         }
     }
     
@@ -94,7 +94,7 @@ public class QuitDialog extends QuestionDialog {
      */
     public static boolean confirmationRequired() {
         return  WindowManager.getMainFrames().size() > 0     // May happen after an uncaught exception in the startup sequence
-             && MuConfiguration.getVariable(MuConfiguration.CONFIRM_ON_QUIT, MuConfiguration.DEFAULT_CONFIRM_ON_QUIT);
+             && MuPreferences.getVariable(MuPreferences.CONFIRM_ON_QUIT, MuPreferences.DEFAULT_CONFIRM_ON_QUIT);
     }
     
     

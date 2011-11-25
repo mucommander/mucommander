@@ -36,7 +36,7 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
@@ -72,8 +72,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     /** Current icon scale value */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-    private static float scaleFactor = Math.max(1.0f, MuConfiguration.getVariable(MuConfiguration.TOOLBAR_ICON_SCALE,
-                                                                        MuConfiguration.DEFAULT_TOOLBAR_ICON_SCALE));
+    private static float scaleFactor = Math.max(1.0f, MuPreferences.getVariable(MuPreferences.TOOLBAR_ICON_SCALE,
+                                                                        MuPreferences.DEFAULT_TOOLBAR_ICON_SCALE));
 
 
     /**
@@ -91,7 +91,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         addMouseListener(this);
 
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
-        MuConfiguration.addConfigurationListener(this);
+        MuPreferences.addConfigurationListener(this);
 
         // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
         // get garbage-collected
@@ -213,7 +213,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         String var = event.getVariable();
 
         // Rescale buttons icon
-        if (var.equals(MuConfiguration.TOOLBAR_ICON_SCALE)) {
+        if (var.equals(MuPreferences.TOOLBAR_ICON_SCALE)) {
             scaleFactor = event.getFloatValue();
             Component components[] = getComponents();
             int nbComponents = components.length;

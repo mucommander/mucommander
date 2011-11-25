@@ -28,7 +28,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.main.commandbar.CommandBar;
@@ -91,7 +91,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         List<String> plafs;         // All available custom look and feels.
 
         // Tries to retrieve the custom look and feels list.
-        if((plafs = MuConfiguration.getListVariable(MuConfiguration.CUSTOM_LOOK_AND_FEELS, MuConfiguration.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
+        if((plafs = MuPreferences.getListVariable(MuPreferences.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
             return;
 
         // Goes through the list and install every custom look and feel we could find.
@@ -118,7 +118,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         
 
         // Sets custom lookAndFeel if different from current lookAndFeel
-        String lnfName = MuConfiguration.getVariable(MuConfiguration.LOOK_AND_FEEL);
+        String lnfName = MuPreferences.getVariable(MuPreferences.LOOK_AND_FEEL);
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
             setLookAndFeel(lnfName);
 
@@ -129,7 +129,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /**
      * Creates a new instance of WindowManager.
      */
-    private WindowManager() {MuConfiguration.addConfigurationListener(this);}
+    private WindowManager() {MuPreferences.addConfigurationListener(this);}
 
     /**
      * Retrieves the user's initial path for the specified frame.
@@ -148,18 +148,18 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         AbstractFile folder;     // Initial folder.
 
         // Checks which kind of initial path we're dealing with.
-        isCustom = (frame == LEFT_FRAME ? MuConfiguration.getVariable(MuConfiguration.LEFT_STARTUP_FOLDER, MuConfiguration.DEFAULT_STARTUP_FOLDER) :
-                    MuConfiguration.getVariable(MuConfiguration.RIGHT_STARTUP_FOLDER, MuConfiguration.DEFAULT_STARTUP_FOLDER)).equals(MuConfiguration.STARTUP_FOLDER_CUSTOM);
+        isCustom = (frame == LEFT_FRAME ? MuPreferences.getVariable(MuPreferences.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
+                    MuPreferences.getVariable(MuPreferences.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom)
-            folderPath = (frame == LEFT_FRAME ? MuConfiguration.getVariable(MuConfiguration.LEFT_CUSTOM_FOLDER) :
-                          MuConfiguration.getVariable(MuConfiguration.RIGHT_CUSTOM_FOLDER));
+            folderPath = (frame == LEFT_FRAME ? MuPreferences.getVariable(MuPreferences.LEFT_CUSTOM_FOLDER) :
+                          MuPreferences.getVariable(MuPreferences.RIGHT_CUSTOM_FOLDER));
 
         // Handles "last folder" initial paths.
         else
-            folderPath = (frame == LEFT_FRAME ? MuConfiguration.getVariable(MuConfiguration.LAST_LEFT_FOLDER) :
-                          MuConfiguration.getVariable(MuConfiguration.LAST_RIGHT_FOLDER));
+            folderPath = (frame == LEFT_FRAME ? MuPreferences.getVariable(MuPreferences.LAST_LEFT_FOLDER) :
+                          MuPreferences.getVariable(MuPreferences.LAST_RIGHT_FOLDER));
 
         // If the initial path is not legal or does not exist, defaults to the user's home.
         if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
@@ -344,14 +344,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            x      = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_X);
-            y      = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_Y);
-            width  = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_WIDTH);
-            height = MuConfiguration.getIntegerVariable(MuConfiguration.LAST_HEIGHT);
+            x      = MuPreferences.getIntegerVariable(MuPreferences.LAST_X);
+            y      = MuPreferences.getIntegerVariable(MuPreferences.LAST_Y);
+            width  = MuPreferences.getIntegerVariable(MuPreferences.LAST_WIDTH);
+            height = MuPreferences.getIntegerVariable(MuPreferences.LAST_HEIGHT);
 
             // Retrieves the last known size of the screen.
-            int lastScreenWidth  = MuConfiguration.getIntegerVariable(MuConfiguration.SCREEN_WIDTH);
-            int lastScreenHeight = MuConfiguration.getIntegerVariable(MuConfiguration.SCREEN_HEIGHT);
+            int lastScreenWidth  = MuPreferences.getIntegerVariable(MuPreferences.SCREEN_WIDTH);
+            int lastScreenHeight = MuPreferences.getIntegerVariable(MuPreferences.SCREEN_HEIGHT);
 
             // If no previous location was saved, or if the resolution has changed,
             // reset the window's dimensions to their default values.
@@ -660,7 +660,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
-    	if (var.equals(MuConfiguration.LOOK_AND_FEEL)) {
+    	if (var.equals(MuPreferences.LOOK_AND_FEEL)) {
             String lnfName = event.getValue();
 
 	    if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName))

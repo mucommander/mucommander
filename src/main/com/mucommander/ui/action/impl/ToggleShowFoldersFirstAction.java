@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -43,7 +43,7 @@ public class ToggleShowFoldersFirstAction extends MuAction {
         FileTable activeTable = mainFrame.getActiveTable();
         boolean showFoldersFirst = !activeTable.getSortInfo().getFoldersFirst();
         activeTable.setFoldersFirst(showFoldersFirst);
-        MuConfiguration.setVariable(MuConfiguration.SHOW_FOLDERS_FIRST, showFoldersFirst);
+        MuPreferences.setVariable(MuPreferences.SHOW_FOLDERS_FIRST, showFoldersFirst);
     }
     
     public static class Factory implements ActionFactory {

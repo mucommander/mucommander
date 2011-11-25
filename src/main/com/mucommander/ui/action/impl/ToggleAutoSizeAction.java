@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
@@ -42,7 +42,7 @@ public class ToggleAutoSizeAction extends MuAction {
         boolean enabled;
 
         mainFrame.setAutoSizeColumnsEnabled(enabled = !mainFrame.isAutoSizeColumnsEnabled());
-        MuConfiguration.setVariable(MuConfiguration.AUTO_SIZE_COLUMNS, enabled);
+        MuPreferences.setVariable(MuPreferences.AUTO_SIZE_COLUMNS, enabled);
     }
     
     public static class Factory implements ActionFactory {

@@ -27,7 +27,7 @@ import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.commons.util.StringUtils;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.text.Translator;
@@ -97,13 +97,13 @@ public class ThemeManager {
         boolean wasUserThemeLoaded; // Whether we have tried loading the user theme or not.
 
         // Loads the current theme type as defined in configuration.
-        try {type = getThemeTypeFromLabel(MuConfiguration.getVariable(MuConfiguration.THEME_TYPE, MuConfiguration.DEFAULT_THEME_TYPE));}
-        catch(Exception e) {type = getThemeTypeFromLabel(MuConfiguration.DEFAULT_THEME_TYPE);}
+        try {type = getThemeTypeFromLabel(MuPreferences.getVariable(MuPreferences.THEME_TYPE, MuPreferences.DEFAULT_THEME_TYPE));}
+        catch(Exception e) {type = getThemeTypeFromLabel(MuPreferences.DEFAULT_THEME_TYPE);}
 
         // Loads the current theme name as defined in configuration.
         if(type != Theme.USER_THEME) {
             wasUserThemeLoaded = false;
-            name               = MuConfiguration.getVariable(MuConfiguration.THEME_NAME, MuConfiguration.DEFAULT_THEME_NAME);
+            name               = MuPreferences.getVariable(MuPreferences.THEME_NAME, MuPreferences.DEFAULT_THEME_NAME);
         }
         else {
             name               = null;
@@ -114,8 +114,8 @@ public class ThemeManager {
         currentTheme = null;
         try {currentTheme = readTheme(type, name);}
         catch(Exception e1) {
-            type = getThemeTypeFromLabel(MuConfiguration.DEFAULT_THEME_TYPE);
-            name = MuConfiguration.DEFAULT_THEME_NAME;
+            type = getThemeTypeFromLabel(MuPreferences.DEFAULT_THEME_TYPE);
+            name = MuPreferences.DEFAULT_THEME_NAME;
 
             if(type == Theme.USER_THEME)
                 wasUserThemeLoaded = true;
@@ -818,20 +818,20 @@ public class ThemeManager {
         switch(type) {
             // User defined theme.
         case Theme.USER_THEME:
-            MuConfiguration.setVariable(MuConfiguration.THEME_TYPE, MuConfiguration.THEME_USER);
-            MuConfiguration.setVariable(MuConfiguration.THEME_NAME, null);
+            MuPreferences.setVariable(MuPreferences.THEME_TYPE, MuPreferences.THEME_USER);
+            MuPreferences.setVariable(MuPreferences.THEME_NAME, null);
             break;
 
             // Predefined themes.
         case Theme.PREDEFINED_THEME:
-            MuConfiguration.setVariable(MuConfiguration.THEME_TYPE, MuConfiguration.THEME_PREDEFINED);
-            MuConfiguration.setVariable(MuConfiguration.THEME_NAME, name);
+            MuPreferences.setVariable(MuPreferences.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
+            MuPreferences.setVariable(MuPreferences.THEME_NAME, name);
             break;
 
             // Custom themes.
         case Theme.CUSTOM_THEME:
-            MuConfiguration.setVariable(MuConfiguration.THEME_TYPE, MuConfiguration.THEME_CUSTOM);
-            MuConfiguration.setVariable(MuConfiguration.THEME_NAME, name);
+            MuPreferences.setVariable(MuPreferences.THEME_TYPE, MuPreferences.THEME_CUSTOM);
+            MuPreferences.setVariable(MuPreferences.THEME_NAME, name);
             break;
 
             // Error.
@@ -1100,15 +1100,15 @@ public class ThemeManager {
     // -----------------------------------------------------------------------------------
     /**
      * Returns a valid type identifier from the specified configuration type definition.
-     * @param  label label of the theme type as defined in {@link MuConfiguration}.
+     * @param  label label of the theme type as defined in {@link MuPreferences}.
      * @return       a valid theme type identifier.
      */
     private static int getThemeTypeFromLabel(String label) {
-        if(label.equals(MuConfiguration.THEME_USER))
+        if(label.equals(MuPreferences.THEME_USER))
             return Theme.USER_THEME;
-        else if(label.equals(MuConfiguration.THEME_PREDEFINED))
+        else if(label.equals(MuPreferences.THEME_PREDEFINED))
             return Theme.PREDEFINED_THEME;
-        else if(label.equals(MuConfiguration.THEME_CUSTOM))
+        else if(label.equals(MuPreferences.THEME_CUSTOM))
             return Theme.CUSTOM_THEME;
         throw new IllegalStateException("Unknown theme type: " + label);
     }

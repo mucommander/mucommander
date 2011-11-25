@@ -20,7 +20,7 @@ package com.mucommander.text;
 
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
-import com.mucommander.conf.MuConfiguration;
+import com.mucommander.conf.MuPreferences;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,7 +54,7 @@ public class CustomDateFormat implements ConfigurationListener {
         // Not doing it so would cause the garbage collector to GC it as MuConfiguration holds
         // weak references of its listeners.
         singleton = new CustomDateFormat();
-        MuConfiguration.addConfigurationListener(singleton);
+        MuPreferences.addConfigurationListener(singleton);
 
         dateFormat = createDateFormat();
     }
@@ -88,9 +88,9 @@ public class CustomDateFormat implements ConfigurationListener {
      */
     public static String getDateFormatString() {
         return replaceDateSeparator(
-            MuConfiguration.getVariable(MuConfiguration.DATE_FORMAT, MuConfiguration.DEFAULT_DATE_FORMAT),
-            MuConfiguration.getVariable(MuConfiguration.DATE_SEPARATOR, MuConfiguration.DEFAULT_DATE_SEPARATOR))
-        + " " + MuConfiguration.getVariable(MuConfiguration.TIME_FORMAT, MuConfiguration.DEFAULT_TIME_FORMAT);
+            MuPreferences.getVariable(MuPreferences.DATE_FORMAT, MuPreferences.DEFAULT_DATE_FORMAT),
+            MuPreferences.getVariable(MuPreferences.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR))
+        + " " + MuPreferences.getVariable(MuPreferences.TIME_FORMAT, MuPreferences.DEFAULT_TIME_FORMAT);
     }
 
 
@@ -135,7 +135,7 @@ public class CustomDateFormat implements ConfigurationListener {
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
-        if (var.equals(MuConfiguration.TIME_FORMAT) || var.equals(MuConfiguration.DATE_FORMAT) || var.equals(MuConfiguration.DATE_SEPARATOR))
+        if (var.equals(MuPreferences.TIME_FORMAT) || var.equals(MuPreferences.DATE_FORMAT) || var.equals(MuPreferences.DATE_SEPARATOR))
             updateDateFormat();
     }
 }
