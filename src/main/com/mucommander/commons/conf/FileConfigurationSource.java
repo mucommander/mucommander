@@ -35,7 +35,7 @@ public class FileConfigurationSource implements ConfigurationSource {
 
 
 
-    // - Initialisation ------------------------------------------------------------------------------------------------
+    // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a source that will open streams on the specified file.
@@ -120,21 +120,18 @@ public class FileConfigurationSource implements ConfigurationSource {
 
     // - Source methods ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * Returns an input stream on the configuration file.
-     * @return             an input stream on the configuration file.
-     * @throws IOException if an I/O error occurs.
-     */
+    @Override
     public Reader getReader() throws IOException {
         return new InputStreamReader(new FileInputStream(file), charset);
     }
 
-    /**
-     * Returns an output stream on the configuration file.
-     * @return             an output stream on the configuration file.
-     * @throws IOException if an I/O error occurs.
-     */
+    @Override
     public Writer getWriter() throws IOException {
         return new OutputStreamWriter(new FileOutputStream(file), charset);
     }
+
+	@Override
+	public boolean isExists() {
+		return file.exists();
+	}
 }

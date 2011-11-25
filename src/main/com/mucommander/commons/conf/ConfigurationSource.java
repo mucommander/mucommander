@@ -57,4 +57,10 @@ public interface ConfigurationSource {
      * @throws IOException if any I/O error occurs.
      */
     public Writer getWriter() throws IOException;
+    
+    /**
+     * Returns whether this source exists
+     * @return true if the source exists, false otherwise.
+     */
+    public boolean isExists();
 }
