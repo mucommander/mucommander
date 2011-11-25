@@ -18,17 +18,21 @@
 
 package com.mucommander.conf;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+
 import com.mucommander.RuntimeConstants;
-import com.mucommander.commons.conf.*;
+import com.mucommander.commons.conf.Configuration;
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationException;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.conf.ValueList;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.table.Column;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API.
@@ -523,7 +527,7 @@ public class MuPreferences {
 
 
 
-    // - Initialisation ------------------------------------------------------
+    // - Initialization ------------------------------------------------------
     // -----------------------------------------------------------------------
     static {
         CONFIGURATION = new Configuration(new MuPreferencesSource(), new VersionedXmlConfigurationReaderFactory(),
@@ -531,11 +535,13 @@ public class MuPreferences {
     }
 
     /**
-     * Prevents instanciation of this class.
+     * Prevents instantiation of this class.
      */
-    private MuPreferences() {}
-
-
+    MuPreferences() {}
+    
+    public Configuration getConfiguration() {
+    	return CONFIGURATION;
+    }
 
     // - Configuration reading / writing -------------------------------------
     // -----------------------------------------------------------------------
@@ -544,7 +550,7 @@ public class MuPreferences {
      * @throws IOException            if an I/O error occurs.
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
-    public static void read() throws IOException, ConfigurationException {
+    void read() throws IOException, ConfigurationException {
         String configurationVersion;
 
         VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
@@ -575,7 +581,7 @@ public class MuPreferences {
      * @throws IOException            if an I/O error occurs.
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
-    public static void write() throws IOException, ConfigurationException {
+    void write() throws IOException, ConfigurationException {
         CONFIGURATION.write();
     }
 

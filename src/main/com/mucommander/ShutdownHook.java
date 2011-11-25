@@ -21,7 +21,7 @@ package com.mucommander;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
-import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
@@ -84,7 +84,7 @@ public class ShutdownHook extends Thread {
         TreeIOThreadManager.getInstance().interrupt();
 
         // Save preferences
-        try {MuPreferences.write();}
+        try {MuConfigurations.savePreferences();}
         catch(Exception e) {AppLogger.warning("Failed to save configuration", e);}
 
         // Save shell history

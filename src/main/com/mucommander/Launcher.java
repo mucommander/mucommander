@@ -18,6 +18,11 @@
 
 package com.mucommander;
 
+import java.awt.GraphicsEnvironment;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.logging.Level;
+
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
@@ -28,6 +33,7 @@ import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.commons.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.commons.file.impl.smb.SMBProtocolProvider;
 import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.shell.ShellHistoryManager;
@@ -40,11 +46,6 @@ import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
-
-import java.awt.*;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.logging.Level;
 
 /**
  * muCommander launcher.
@@ -415,7 +416,7 @@ public class Launcher {
 
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
             // to use the metal look, we need to know about it right about now.
-            try {MuPreferences.read();}
+            try {MuConfigurations.loadPreferences();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
 
 

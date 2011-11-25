@@ -18,16 +18,16 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import com.mucommander.conf.MuPreferences;
+import java.awt.Dimension;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import com.mucommander.conf.MuConfigurations;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
-
-import java.awt.*;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * This is the main preferences dialog that contains all preferences panels organized by tabs.
@@ -127,7 +127,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     public void commit() {
         super.commit();
         try {
-            MuPreferences.write();
+            MuConfigurations.savePreferences();
         }
         catch(Exception e) {
             InformationDialog.showErrorDialog(this);
