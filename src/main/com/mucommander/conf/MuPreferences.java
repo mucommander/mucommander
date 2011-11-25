@@ -530,6 +530,9 @@ public class MuPreferences {
     			new VersionedXmlConfigurationWriterFactory());
     }
     
+    /**
+     * TODO: change this method such that it will return a more specific API
+     */
     Configuration getConfiguration() {
     	return configuration;
     }

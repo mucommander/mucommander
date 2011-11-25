@@ -29,6 +29,10 @@ import java.io.*;
 import java.nio.charset.Charset;
 
 /**
+ * This abstract package-protected class represents configuration file of muCommander as configuration source 
+ * for the mucommander.commons.conf package.
+ * It can point to a file in a given path or to the default file located in the preferences folder if no path was given.
+ * 
  * @author Nicolas Rinaudo, Arik Hadas
  */
 abstract class MuConfigurationFile implements ConfigurationSource {

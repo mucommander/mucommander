@@ -26,6 +26,8 @@ import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
 
 /**
+ * This class contains the configurations of muCommander.
+ * It provides global access to the configurations without using singletons.
  * 
  * @author Arik Hadas
  */
