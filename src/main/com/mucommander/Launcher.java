@@ -472,6 +472,10 @@ public class Launcher {
             // Configure filesystems
             configureFilesystems();
 
+            // Load snapshot data
+            try {MuConfigurations.loadSnapshot();}
+            catch(Exception e) {printFileError("Could not load snapshot", e, fatalWarnings);}
+            
             // Initializes the desktop.
             try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
             catch(Exception e) {printError("Could not initialize desktop", e, true);}

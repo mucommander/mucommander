@@ -47,6 +47,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuSnapshot;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.main.commandbar.CommandBar;
@@ -168,8 +169,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Handles "last folder" initial paths.
         else
-            folderPath = (frame == LEFT_FRAME ? MuConfigurations.getPreferences().getVariable(MuPreferences.LAST_LEFT_FOLDER) :
-            	MuConfigurations.getPreferences().getVariable(MuPreferences.LAST_RIGHT_FOLDER));
+            folderPath = (frame == LEFT_FRAME ? MuConfigurations.getSnapshot().getVariable(MuSnapshot.LAST_LEFT_FOLDER) :
+            	MuConfigurations.getSnapshot().getVariable(MuSnapshot.LAST_RIGHT_FOLDER));
 
         // If the initial path is not legal or does not exist, defaults to the user's home.
         if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
@@ -354,14 +355,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            x      = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_X);
-            y      = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_Y);
-            width  = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_WIDTH);
-            height = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.LAST_HEIGHT);
+            x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_X);
+            y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_Y);
+            width  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_WIDTH);
+            height = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_HEIGHT);
 
             // Retrieves the last known size of the screen.
-            int lastScreenWidth  = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.SCREEN_WIDTH);
-            int lastScreenHeight = MuConfigurations.getPreferences().getIntegerVariable(MuPreferences.SCREEN_HEIGHT);
+            int lastScreenWidth  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_WIDTH);
+            int lastScreenHeight = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_HEIGHT);
 
             // If no previous location was saved, or if the resolution has changed,
             // reset the window's dimensions to their default values.

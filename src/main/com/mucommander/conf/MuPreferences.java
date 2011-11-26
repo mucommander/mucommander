@@ -191,6 +191,10 @@ public class MuPreferences {
     // -----------------------------------------------------------------------
     /** Section describing the folders view CONFIGURATION. */
     public static final String  FILE_TABLE_SECTION                 = "file_table";
+    /** Identifier of the left file table. */
+    public static final String  LEFT                               = "left";
+    /** Identifier of the right file table. */
+    public static final String  RIGHT                              = "right";
     /** Whether or not to display hidden files. */
     public static final String  SHOW_HIDDEN_FILES                  = FILE_TABLE_SECTION + '.' + "show_hidden_files";
     /** Default hidden files visibility. */
@@ -223,110 +227,10 @@ public class MuPreferences {
     public static final String  CD_FOLLOWS_SYMLINKS                = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
     /** Default value for 'Follow symlinks when changing directory' option. */
     public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS        = false;
-    /** Identifier of the left file table. */
-    public static final String  LEFT                               = "left";
-    /** Identifier of the right file table. */
-    public static final String  RIGHT                              = "right";
-    /** Section describing the left table's CONFIGURATION. */
-    public static final String  LEFT_FILE_TABLE_SECTION            = FILE_TABLE_SECTION + '.' + LEFT;
-    /** Section describing the right table's CONFIGURATION. */
-    public static final String  RIGHT_FILE_TABLE_SECTION           = FILE_TABLE_SECTION + '.' + RIGHT;
-    /** Identifier of the sort section in a file table's CONFIGURATION. */
-    public static final String  SORT                               = "sort";
-    /** Identifier of the sort criteria in a file table's CONFIGURATION. */
-    public static final String  SORT_BY                            = "by";
-    /** Identifier of the sort order in a file table's CONFIGURATION. */
-    public static final String  SORT_ORDER                         = "order";
-    /** Section described the sort order of the right file table. */
-    public static final String  RIGHT_FILE_TABLE_SORT_SECTION      = LEFT_FILE_TABLE_SECTION + '.' + SORT;
-    /** Section described the sort order of the left file table. */
-    public static final String  LEFT_FILE_TABLE_SORT_SECTION       = RIGHT_FILE_TABLE_SECTION + '.' + SORT;
-    /** Controls the column on which the left file table should be sorted. */
-    public static final String  LEFT_SORT_BY                       = LEFT_FILE_TABLE_SORT_SECTION + '.' + SORT_BY;
-    /** Controls the column on which the right file table should be sorted. */
-    public static final String  RIGHT_SORT_BY                      = RIGHT_FILE_TABLE_SORT_SECTION + '.' + SORT_BY;
-    /** Controls the column on which the left file table should be sorted. */
-    public static final String  LEFT_SORT_ORDER                    = LEFT_FILE_TABLE_SORT_SECTION + '.' + SORT_ORDER;
-    /** Controls the column on which the right file table should be sorted. */
-    public static final String  RIGHT_SORT_ORDER                   = RIGHT_FILE_TABLE_SORT_SECTION + '.' + SORT_ORDER;
-    /** Describes an ascending sort order. */
-    public static final String  SORT_ORDER_ASCENDING               = "asc";
-    /** Describes a descending sort order. */
-    public static final String  SORT_ORDER_DESCENDING              = "desc";
-    /** Default 'sort order' column for the file table. */
-    public static final String  DEFAULT_SORT_ORDER                 = SORT_ORDER_ASCENDING;
-    /** Name of the 'show column' variable. */
-    public static final String  SHOW_COLUMN                        = "show";
-    /** Name of the 'column position' variable. */
-    public static final String  COLUMN_POSITION                    = "position";
-    /** Name of the 'column width' variable. */
-    public static final String  COLUMN_WIDTH                       = "width";
-
-    /** Default 'sort by' column for the file table. */
-    public static final String  DEFAULT_SORT_BY                    = "name";
 
     /** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
     static final String VERSION_ATTRIBUTE = "version";
 
-
-    /**
-     * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.table.FileTable},
-     * left or right one.
-     *
-     * @param left true for the left FileTable, false for the right one
-     * @return the CONFIGURATION section corresponding to the specified FileTable
-     */
-    private static String getFileTableSection(boolean left) {
-        return FILE_TABLE_SECTION + "." + (left?LEFT:RIGHT);
-    }
-
-    /**
-     * Returns the CONFIGURATION section corresponding to the specified column in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
-     *
-     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
-     * @param left true for the left FileTable, false for the right one
-     * @return the CONFIGURATION section corresponding to the specified FileTable
-     */
-    private static String getColumnSection(Column column, boolean left) {
-        return getFileTableSection(left) + "." + column.toString().toLowerCase();
-    }
-
-    /**
-     * Returns the variable that controls the visibility of the specified column, in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
-     *
-     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
-     * @param left true for the left FileTable, false for the right one
-     * @return the variable that controls the visibility of the specified column
-     */
-    public static String getShowColumnVariable(Column column, boolean left) {
-        return getColumnSection(column, left) + "." + SHOW_COLUMN;
-    }
-
-    /**
-     * Returns the variable that holds the width of the specified column, in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
-     *
-     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
-     * @param left true for the left FileTable, false for the right one
-     * @return the variable that holds the width of the specified column
-     */
-    public static String getColumnWidthVariable(Column column, boolean left) {
-        return getColumnSection(column, left) + "." + COLUMN_WIDTH;
-    }
-
-    /**
-     * Returns the variable that holds the position of the specified column, in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
-     *
-     * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
-     * @param left true for the left FileTable, false for the right one
-     * @return the variable that holds the position of the specified column
-     */
-    public static String getColumnPositionVariable(Column column, boolean left) {
-        return getColumnSection(column, left) + "." + COLUMN_POSITION;
-    }
 
 
     // - Mac OS X variables --------------------------------------------------
@@ -355,12 +259,6 @@ public class MuPreferences {
     public static final String  RIGHT_STARTUP_FOLDER_SECTION      = STARTUP_FOLDER_SECTION + '.' + RIGHT;
     /** Section describing the left panel's startup folder. */
     public static final String  LEFT_STARTUP_FOLDER_SECTION       = STARTUP_FOLDER_SECTION + '.' + LEFT;
-    /** Name for variables that describe the last visited folder of a panel. */
-    public static final String  LAST_FOLDER                       = "last_folder";
-    /** Last visited folder in the left panel. */
-    public static final String  LAST_LEFT_FOLDER                  = LEFT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
-    /** Last visited folder in the right panel. */
-    public static final String  LAST_RIGHT_FOLDER                 = RIGHT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
     /** Path to a custom startup folder. */
     public static final String  CUSTOM_FOLDER                     = "custom_folder";
     /** Path to the left panel custom startup folder. */
@@ -380,32 +278,6 @@ public class MuPreferences {
     /** Default startup folder type. */
     public static final String  DEFAULT_STARTUP_FOLDER            = STARTUP_FOLDER_LAST;
 
-
-
-    // - Last window variables -----------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing known information about the last muCommander window. */
-    public static final String LAST_WINDOW_SECTION                = "last_window";
-    /** Last muCommander known x position. */
-    public static final String LAST_X                             = LAST_WINDOW_SECTION + '.' + "x";
-    /** Last muCommander known y position. */
-    public static final String LAST_Y                             = LAST_WINDOW_SECTION + '.' + "y";
-    /** Last muCommander known width. */
-    public static final String LAST_WIDTH                         = LAST_WINDOW_SECTION + '.' + "width";
-    /** Last muCommander known height. */
-    public static final String LAST_HEIGHT                        = LAST_WINDOW_SECTION + '.' + "height";
-    /** Last known screen width. */
-    public static final String SCREEN_WIDTH                       = LAST_WINDOW_SECTION + '.' + "screen_width";
-    /** Last known screen height. */
-    public static final String SCREEN_HEIGHT                      = LAST_WINDOW_SECTION + '.' + "screen_height";
-    /** Last orientation used to split folder panels. */
-    public static final String SPLIT_ORIENTATION                  = LAST_WINDOW_SECTION + '.' + "split_orientation";
-    /** Vertical split pane orientation. */
-    public static final String VERTICAL_SPLIT_ORIENTATION         = "vertical";
-    /** Horizontal split pane orientation. */
-    public static final String HORIZONTAL_SPLIT_ORIENTATION       = "horizontal";
-    /** Default split pane orientation. */
-    public static final String DEFAULT_SPLIT_ORIENTATION          = VERTICAL_SPLIT_ORIENTATION;
 
     // - File presenter (viewer\editor) variables ----------------------------
     // -----------------------------------------------------------------------
@@ -507,20 +379,11 @@ public class MuPreferences {
     /** Default value for {@link #SMB_USE_EXTENDED_SECURITY}. */
     public static final boolean DEFAULT_SMB_USE_EXTENDED_SECURITY = false;
 
-    // - Tree variables ------------------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing the tree CONFIGURATION. */
-    public static final String  TREE_SECTION                      = "tree";
-    public static final String  LEFT_TREE_VISIBLE                 = TREE_SECTION + "." + LEFT + "." + "visible";
-    public static final String  RIGHT_TREE_VISIBLE                = TREE_SECTION + "." + RIGHT + "." + "visible";
-    public static final String  LEFT_TREE_WIDTH                   = TREE_SECTION + "." + LEFT + "." + "width";
-    public static final String  RIGHT_TREE_WIDTH                  = TREE_SECTION + "." + RIGHT + "." + "width";
-
 
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     private final Configuration configuration;
-
+    private String configurationVersion;
 
     /**
      * Prevents instantiation of this class from outside of this package.
@@ -545,7 +408,6 @@ public class MuPreferences {
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
     void read() throws IOException, ConfigurationException {
-        String configurationVersion;
 
         VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
         try {
@@ -553,6 +415,7 @@ public class MuPreferences {
         finally {
             configurationVersion = reader.getVersion();
             if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
+            	// Rename preferences that changed (from v0.8.5)
                 configuration.renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
                 configuration.renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
                 configuration.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
@@ -576,7 +439,43 @@ public class MuPreferences {
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
     void write() throws IOException, ConfigurationException {
-        configuration.write();
+    	if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
+    		// Remove preferences that moved to be part of the snapshot (from v0.8.6)
+    		configuration.removeVariable(MuSnapshot.LAST_LEFT_FOLDER);
+    		configuration.removeVariable(MuSnapshot.LAST_RIGHT_FOLDER);
+    		configuration.removeVariable(MuSnapshot.LAST_X);
+    		configuration.removeVariable(MuSnapshot.LAST_Y);
+    		configuration.removeVariable(MuSnapshot.LAST_WIDTH);
+    		configuration.removeVariable(MuSnapshot.LAST_HEIGHT);
+    		configuration.removeVariable(MuSnapshot.SCREEN_WIDTH);
+    		configuration.removeVariable(MuSnapshot.SCREEN_HEIGHT);
+    		configuration.removeVariable(MuSnapshot.SPLIT_ORIENTATION);
+    		configuration.removeVariable(MuSnapshot.LEFT_TREE_VISIBLE);
+    		configuration.removeVariable(MuSnapshot.RIGHT_TREE_VISIBLE);
+    		configuration.removeVariable(MuSnapshot.LEFT_TREE_WIDTH);
+    		configuration.removeVariable(MuSnapshot.RIGHT_TREE_WIDTH);
+    		configuration.removeVariable(MuSnapshot.LEFT_SORT_BY);
+    		configuration.removeVariable(MuSnapshot.LEFT_SORT_ORDER);
+    		configuration.removeVariable(MuSnapshot.RIGHT_SORT_BY);
+    		configuration.removeVariable(MuSnapshot.RIGHT_SORT_ORDER);
+    		
+    		for(boolean isLeft=true; ; isLeft=false) {
+    			// Loop on columns
+    			for(Column c : Column.values()) {
+    				if(c!=Column.NAME) {       // Skip the special name column (always enabled, width automatically calculated)
+    					configuration.removeVariable(MuSnapshot.getShowColumnVariable(c, isLeft));
+    					configuration.removeVariable(MuSnapshot.getColumnWidthVariable(c, isLeft));
+    				}
+
+    				configuration.removeVariable(MuSnapshot.getColumnPositionVariable(c, isLeft));
+    			}
+
+    			if(!isLeft)
+    				break;
+    		}
+    	}
+
+    	configuration.write();
     }
 
     // - Configuration listening -----------------------------------------------

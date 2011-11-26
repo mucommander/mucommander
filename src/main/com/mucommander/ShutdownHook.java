@@ -83,6 +83,10 @@ public class ShutdownHook extends Thread {
         
         TreeIOThreadManager.getInstance().interrupt();
 
+        // Save snapshot
+        try{MuConfigurations.saveSnapshot();}
+        catch(Exception e) {AppLogger.warning("Failed to save snapshot", e);}
+        
         // Save preferences
         try {MuConfigurations.savePreferences();}
         catch(Exception e) {AppLogger.warning("Failed to save configuration", e);}

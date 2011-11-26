@@ -35,6 +35,8 @@ public class MuConfigurations {
 
 	private static final MuPreferences preferences = new MuPreferences();
 	
+	private static final MuSnapshot snapshot = new MuSnapshot();
+	
 	public static Configuration getPreferences() {
 		return preferences.getConfiguration();
 	}
@@ -55,7 +57,25 @@ public class MuConfigurations {
 		return preferences.isFileExists();
 	}
 	
-    public static void addPreferencesListener(ConfigurationListener listener) {preferences.addConfigurationListener(listener);}
+    public static void addPreferencesListener(ConfigurationListener listener) {
+    	preferences.addConfigurationListener(listener);
+    }
 
-    public static void removePreferencesListener(ConfigurationListener listener) {preferences.removeConfigurationListener(listener);}
+    public static void removePreferencesListener(ConfigurationListener listener) {
+    	preferences.removeConfigurationListener(listener);
+    }
+    
+    /////////////////////////////////////////////////////////////////////
+    
+    public static Configuration getSnapshot() {
+    	return snapshot.getConfiguration();
+    }
+    
+    public static void loadSnapshot() throws IOException, ConfigurationException {
+    	snapshot.read();
+    }
+    
+    public static void saveSnapshot() throws IOException, ConfigurationException {
+    	snapshot.write();
+    }
 }
