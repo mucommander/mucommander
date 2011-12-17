@@ -26,16 +26,21 @@ import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
 
 /**
- * This class contains the configurations of muCommander.
+ * This class contains the configurations of muCommander and exposes their API methods.
  * It provides global access to the configurations without using singletons.
  * 
  * @author Arik Hadas
  */
 public class MuConfigurations {
 
+	/** Static configurations of muConnabder */
 	private static final MuPreferences preferences = new MuPreferences();
-	
+	/** Dynamic configurations of muCommander */
 	private static final MuSnapshot snapshot = new MuSnapshot();
+	
+	/////////////////////////
+	// API for preferences //
+	/////////////////////////
 	
 	public static Configuration getPreferences() {
 		return preferences.getConfiguration();
@@ -64,8 +69,10 @@ public class MuConfigurations {
     public static void removePreferencesListener(ConfigurationListener listener) {
     	preferences.removeConfigurationListener(listener);
     }
-    
-    /////////////////////////////////////////////////////////////////////
+
+    //////////////////////
+    // API for snapshot //
+    //////////////////////
     
     public static Configuration getSnapshot() {
     	return snapshot.getConfiguration();
