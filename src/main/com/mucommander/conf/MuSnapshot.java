@@ -290,7 +290,7 @@ public class MuSnapshot {
     					);
     		}
     		
-    		// Save tabs count 
+    		// Save tabs count
     		List<FileTableTab> tabsList = (isLeft ? currentMainFrame.getLeftPanel() : currentMainFrame.getRightPanel()).getTabs().getClonedTabs();
     		configuration.setVariable((isLeft ? LEFT_FILE_TABLE_SECTION : RIGHT_FILE_TABLE_SECTION) +"."+"tabs" + "." +"count", tabsList.size());
     		// Save tabs locations

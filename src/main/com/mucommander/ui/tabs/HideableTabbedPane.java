@@ -74,7 +74,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * 
 	 * @param tab - new tab's data
 	 */
-	public void addTab(T tab) {
+	protected void addTab(T tab) {
 		tabs.add(tab);
 	}
 	
@@ -83,7 +83,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * 
 	 * @param tab - updated tab's data for the current displayed tab
 	 */
-	public void updateTab(T tab) {
+	protected void updateTab(T tab) {
 		tabs.updateTab(display.getSelectedTabIndex(), tab);
 	}
 	
@@ -92,28 +92,28 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	/**
 	 * Remove tab with the given header
 	 */
-	public void removeTab(Component header) {
+	protected void removeTab(Component header) {
 		display.removeTab(header);
 	}
 	
 	/**
 	 * Remove current displayed tab
 	 */
-	public T removeTab() {
+	protected T removeTab() {
 		return display.removeCurrentTab();
 	}
 	
 	/**
 	 * Remove duplicate tabs
 	 */
-	public void removeDuplicateTabs() {
+	protected void removeDuplicateTabs() {
 		display.removeDuplicateTabs();
 	}
 	
 	/**
 	 * Remove all tabs except the current displayed tab
 	 */
-	public void removeOtherTabs() {
+	protected void removeOtherTabs() {
 		display.removeOtherTabs();
 	}
 	
