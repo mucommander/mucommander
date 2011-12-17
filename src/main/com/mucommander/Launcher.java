@@ -414,6 +414,11 @@ public class Launcher {
             try {isFirstBoot = !MuConfigurations.isPreferencesFileExists();}
             catch(IOException e) {isFirstBoot = true;}
 
+            // Load snapshot data before loading configuration as until version 0.8.6 the snapshot properties
+            // were stored as preferences so when loading such preferences they could overload snapshot properties
+            try {MuConfigurations.loadSnapshot();}
+            catch(Exception e) {printFileError("Could not load snapshot", e, fatalWarnings);}
+            
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
             // to use the metal look, we need to know about it right about now.
             try {MuConfigurations.loadPreferences();}
@@ -471,10 +476,6 @@ public class Launcher {
 
             // Configure filesystems
             configureFilesystems();
-
-            // Load snapshot data
-            try {MuConfigurations.loadSnapshot();}
-            catch(Exception e) {printFileError("Could not load snapshot", e, fatalWarnings);}
             
             // Initializes the desktop.
             try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}

@@ -421,6 +421,25 @@ public class MuPreferences {
                 configuration.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
                 configuration.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
                 configuration.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
+                
+                // Set snapshot properties that were saved as preferences before version 0.8.6
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_LEFT_FOLDER);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_RIGHT_FOLDER);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_X);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_Y);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_WIDTH);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_HEIGHT);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.SCREEN_WIDTH);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.SCREEN_HEIGHT);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.SPLIT_ORIENTATION);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_TREE_VISIBLE);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_TREE_VISIBLE);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_TREE_WIDTH);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_TREE_WIDTH);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_SORT_BY);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_SORT_BY);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_SORT_ORDER);
+                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_SORT_ORDER);
             }
 
             // Initialises mac os x specific values
@@ -431,6 +450,11 @@ public class MuPreferences {
                 }
             }
         }
+    }
+    
+    private void convertPreferencesVariableToSnapshotVariable(String variable) {
+    	if (configuration.isVariableSet(variable))
+        	MuConfigurations.getSnapshot().setVariable(variable, configuration.getVariable(variable));
     }
 
     /**
