@@ -60,7 +60,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
 
 
 
-    // - Initialisation ------------------------------------------------------------------
+    // - Initialization ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
      * Creates a new file table column model.
@@ -73,7 +73,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         // at least 1.
         countCache = 1;
 
-        // Initialises the columns.
+        // Initializes the columns.
         for(Column c : Column.values()) {
             columnIndex = c.ordinal();
 

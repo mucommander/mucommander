@@ -49,8 +49,9 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	}
 	
 	/**
+	 * This function returns a list of tabs which are clones of the current tabs presented in the FolderPanel
 	 * 
-	 * @return
+	 * @return List of clones of the current tabs
 	 */
 	public List<FileTableTab> getClonedTabs() {
 		List<FileTableTab> tabs = new ArrayList<FileTableTab>();

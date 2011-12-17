@@ -268,13 +268,13 @@ public class MainFrame extends JFrame implements LocationListener {
         // Loop on columns
         for(Column c  : Column.values()) {
             if(c!=Column.NAME) {       // Skip the special name column (always visible, width automatically calculated)
-                // Sets the column's initial visibility.
-                conf.setEnabled(c,
-                		MuConfigurations.getSnapshot().getVariable(
-                				MuSnapshot.getShowColumnVariable(c, isLeft),
-                            c.showByDefault()
-                    )
-                );
+            	// Sets the column's initial visibility.
+            	conf.setEnabled(c,
+            			MuConfigurations.getSnapshot().getVariable(
+            					MuSnapshot.getShowColumnVariable(c, isLeft),
+            					c.showByDefault()
+    					)
+    			);
 
                 // Sets the column's initial width.
                 conf.setWidth(c, MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getColumnWidthVariable(c, isLeft)));
