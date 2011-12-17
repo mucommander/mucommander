@@ -26,51 +26,60 @@ import com.mucommander.ui.tabs.Tab;
  *
  * @author Arik Hadas
  */
-public class FileTableTab implements Tab {
+public class FileTableTab implements Tab, Cloneable {
 
 	/** The location presented in this tab */
-     private AbstractFile location;
-     
-// 	 private boolean isLocked;
+	private AbstractFile location;
 
-     /**
-      * Factory method that validates the input before initiating FileTableTab instance
-      * 
-      * @param location - the location that would be presented in the tab
-      */
- 	 public static FileTableTab create(AbstractFile location) {
- 		 if (location == null)
- 			 throw new RuntimeException("Invalid location");
- 		 
- 		 return new FileTableTab(location);
- 	 }
- 	 
- 	 /**
- 	  * Private constructor
- 	  * 
- 	  * @param location - the location that would be presented in the tab
- 	  */
-	 private FileTableTab(AbstractFile location) {
-		 setLocation(location);
-	 }
+	// 	 private boolean isLocked;
 
-	 public void setLocation(AbstractFile location) {
-		 this.location = location;
-	 }
+	/**
+	 * Factory method that validates the input before initiating FileTableTab instance
+	 * 
+	 * @param location - the location that would be presented in the tab
+	 */
+	public static FileTableTab create(AbstractFile location) {
+		if (location == null)
+			throw new RuntimeException("Invalid location");
 
-	 public AbstractFile getLocation() {
-		 return location;
-	 }
-	 
-	 @Override
-	 public boolean equals(Object obj) {
-		 if (obj instanceof FileTableTab)
-			 return location.getAbsolutePath().equals(((FileTableTab) obj).getLocation().getAbsolutePath());
-		 return false;
-	 }
-	 
-	 @Override
-	 public int hashCode() {
-	    return location.hashCode();
+		return new FileTableTab(location);
+	}
+
+	/**
+	 * Private constructor
+	 * 
+	 * @param location - the location that would be presented in the tab
+	 */
+	private FileTableTab(AbstractFile location) {
+		setLocation(location);
+	}
+	
+	public void setLocation(AbstractFile location) {
+		this.location = location;
+	}
+
+	public AbstractFile getLocation() {
+		return location;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof FileTableTab)
+			return location.getAbsolutePath().equals(((FileTableTab) obj).getLocation().getAbsolutePath());
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return location.hashCode();
+	}
+
+	///////////////////////////
+	/// Cloneable Interface ///
+	///////////////////////////
+
+	@Override
+	public FileTableTab clone() {
+		return new FileTableTab(location);
 	}
 }

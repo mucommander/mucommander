@@ -18,6 +18,10 @@
 
 package com.mucommander.ui.main.tabs;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -42,6 +46,18 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		folderPanel.getLocationManager().addLocationListener(this);
 		
 		add(folderPanel.getCurrentFolder());
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<FileTableTab> getClonedTabs() {
+		List<FileTableTab> tabs = new ArrayList<FileTableTab>();
+		Iterator<FileTableTab> tabsIterator = getTabsIterator();
+		while(tabsIterator.hasNext())
+			tabs.add(tabsIterator.next().clone());
+		return tabs;
 	}
 	
 	/********************

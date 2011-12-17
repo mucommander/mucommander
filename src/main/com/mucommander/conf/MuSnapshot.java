@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JSplitPane;
 
@@ -31,6 +32,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.tabs.FileTableTab;
 
 /**
  * 
@@ -286,6 +288,15 @@ public class MuSnapshot {
     					MuSnapshot.getColumnPositionVariable(c, isLeft),
     					table.getColumnPosition(c)
     					);
+    		}
+    		
+    		// Save tabs count 
+    		List<FileTableTab> tabsList = (isLeft ? currentMainFrame.getLeftPanel() : currentMainFrame.getRightPanel()).getTabs().getClonedTabs();
+    		configuration.setVariable((isLeft ? LEFT_FILE_TABLE_SECTION : RIGHT_FILE_TABLE_SECTION) +"."+"tabs" + "." +"count", tabsList.size());
+    		// Save tabs locations
+    		for(int i=0; i<tabsList.size(); i++) {
+    			FileTableTab tab = tabsList.get(i);
+    			configuration.setVariable((isLeft ? LEFT_FILE_TABLE_SECTION : RIGHT_FILE_TABLE_SECTION) +"."+"tabs" + "." + "tab"+ i + "." + "location", tab.getLocation().getAbsolutePath());
     		}
 
     		if(!isLeft)

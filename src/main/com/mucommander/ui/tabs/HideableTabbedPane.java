@@ -20,6 +20,7 @@ package com.mucommander.ui.tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.Iterator;
 
 import javax.swing.JComponent;
 
@@ -155,6 +156,19 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		validate();
 		
 		display.requestFocus();
+	}
+	
+	/********************
+	 * Protected Methods
+	 ********************/
+	
+	/**
+	 * This function returns an iterator that points to the current Tabs contained in the TabbedPane
+	 * 
+	 * @return Iterator that points to current Tabs
+	 */
+	protected Iterator<T> getTabsIterator() {
+		return tabs.iterator();
 	}
 	
 	/*********************
