@@ -58,9 +58,6 @@ public class NextTabAction extends MuAction {
 	
 	public NextTabAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
-
-        // This action must be performed in a separate thread as it will otherwise lock the AWT event thread
-        setPerformActionInSeparateThread(true);
     }
 
     @Override
