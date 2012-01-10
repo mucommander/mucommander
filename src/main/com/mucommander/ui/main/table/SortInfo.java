@@ -107,9 +107,9 @@ public class SortInfo implements Cloneable {
     ////////////////////////
 
     @Override
-    public Object clone() {
+    public SortInfo clone() {
         try {
-            return super.clone();
+            return (SortInfo)super.clone();
         }
         catch(CloneNotSupportedException e) {
             // Should never happen
