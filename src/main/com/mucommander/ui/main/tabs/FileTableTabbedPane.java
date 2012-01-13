@@ -30,6 +30,7 @@ import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.FolderPanel.ChangeFolderThread;
 import com.mucommander.ui.tabs.TabbedPane;
 
 /**
@@ -150,10 +151,13 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 	
 	@Override
 	public void setSelectedIndex(int index) {
-        super.setSelectedIndex(index);
-        requestFocusInWindow();
-    }
-	
+		// Allow tabs switching only when no-events-mode is disabled
+		if (!mainFrame.getNoEventsMode()) {
+			super.setSelectedIndex(index);
+			requestFocusInWindow();
+		}
+	}
+
 	@Override
 	public void update(FileTableTab tab, int index) {
 		setTitleAt(index, tab.getLocation().getName());
@@ -164,7 +168,15 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 
 	@Override
 	public void show(FileTableTab t) {
-		folderPanel.tryChangeCurrentFolder(t.getLocation());
+		// Set no events mode before trying to change current folder in order to prevent further changes due to (fast) 
+		// tabs switching (tabs switching won't happen during no-events-mode) before current folder change is finished
+		// TODO: change the location of mainFrame.setNoEventsMode(true) call at ChangeFolderThread instead 
+		mainFrame.setNoEventsMode(true);
+		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolder(t.getLocation());
+		// If the operations wasn't started, activate all operations
+		if (changeFolderThread == null)
+			mainFrame.setNoEventsMode(false);
+		
 		validate();
 	}
 }
