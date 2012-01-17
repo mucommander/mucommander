@@ -173,26 +173,11 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
 
     @Override
     protected void saveAs(AbstractFile destFile) throws IOException {
-        OutputStream out;
-
-        out = null;
+        OutputStream out = null;
 
         try {
             out = destFile.getOutputStream();
             write(out);
-
-            setSaveNeeded(false);
-
-            // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh (see ticket #258)
-            if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
-                try {
-                    destFile.getParent().changeDate(System.currentTimeMillis());
-                }
-                catch (IOException e) {
-                    AppLogger.fine("failed to change the date of "+destFile, e);
-                    // Fail silently
-                }
-            }
         }
         finally {
             if(out != null) {
@@ -200,6 +185,21 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
                 catch(IOException e) {
                     // Ignored
                 }
+            }
+        }
+
+        // We get here only if the destination file was updated successfully
+        // so we can set that no further save is needed at this stage 
+        setSaveNeeded(false);
+
+        // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh (see ticket #258)
+        if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+            try {
+                destFile.getParent().changeDate(System.currentTimeMillis());
+            }
+            catch (IOException e) {
+                AppLogger.fine("failed to change the date of "+destFile, e);
+                // Fail silently
             }
         }
     }
