@@ -62,10 +62,10 @@ public class ThemeData {
     // This is an effort to make the ThemeData class a bit easier to maintain, but I'm the first
     // to admit it's rather dirty.
     // 
-    // For optimisation reasons, we're storing the fonts and colors in arrays, using their
+    // For optimization reasons, we're storing the fonts and colors in arrays, using their
     // identifiers as indexes in the array. This, however, means that lots of bits of code
     // must be updated whenever a font or color is added or removed. The probability of
-    // someone forgeting this is, well, 100%.
+    // someone forgetting this is, well, 100%.
     //
     // For this reason, we've declared the number of font and colors as constants.
     // People are still going to forget to update these constants, but at least it'll be
@@ -914,12 +914,12 @@ public class ThemeData {
         registerColor(QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR,    FILE_SELECTED_FOREGROUND_COLOR);
 
         // File default values.
-        registerColor(HIDDEN_FILE_FOREGROUND_COLOR,                   DEFAULT_TABLE_FOREGROUND);
+        registerColor(HIDDEN_FILE_FOREGROUND_COLOR,                   Color.GRAY);
         registerColor(FOLDER_FOREGROUND_COLOR,                        DEFAULT_TABLE_FOREGROUND);
         registerColor(ARCHIVE_FOREGROUND_COLOR,                       DEFAULT_TABLE_FOREGROUND);
         registerColor(SYMLINK_FOREGROUND_COLOR,                       DEFAULT_TABLE_FOREGROUND);
         registerColor(FILE_INACTIVE_FOREGROUND_COLOR,                 DEFAULT_TABLE_FOREGROUND);
-        registerColor(HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR,          DEFAULT_TABLE_FOREGROUND);
+        registerColor(HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR,          Color.GRAY);
         registerColor(FOLDER_INACTIVE_FOREGROUND_COLOR,               DEFAULT_TABLE_FOREGROUND);
         registerColor(ARCHIVE_INACTIVE_FOREGROUND_COLOR,              DEFAULT_TABLE_FOREGROUND);
         registerColor(SYMLINK_INACTIVE_FOREGROUND_COLOR,              DEFAULT_TABLE_FOREGROUND);
