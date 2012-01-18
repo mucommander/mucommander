@@ -128,6 +128,9 @@ public class MuSnapshot {
     /** Controls the column on which the right file table should be sorted. */
     public static final String  RIGHT_SORT_ORDER                   = RIGHT_FILE_TABLE_SORT_SECTION + '.' + SORT_ORDER;
 	
+	/** Cache the screen's size. this value isn't computed during the shutdown process since it cause a deadlock then */
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	
     /**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.table.FileTable},
      * left or right one.
@@ -246,7 +249,6 @@ public class MuSnapshot {
         configuration.setVariable(MuSnapshot.LAST_Y, (int)bounds.getY());
         configuration.setVariable(MuSnapshot.LAST_WIDTH, (int)bounds.getWidth());
         configuration.setVariable(MuSnapshot.LAST_HEIGHT, (int)bounds.getHeight());
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         configuration.setVariable(MuSnapshot.SCREEN_WIDTH, screenSize.width);
         configuration.setVariable(MuSnapshot.SCREEN_HEIGHT, screenSize.height);
         
