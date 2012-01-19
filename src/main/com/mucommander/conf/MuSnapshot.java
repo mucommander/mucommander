@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.swing.JSplitPane;
 
+import com.mucommander.AppLogger;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.ui.main.MainFrame;
@@ -201,7 +202,13 @@ public class MuSnapshot {
     MuSnapshot() {
     	configuration = new Configuration(MuSnapshotFile.getSnapshotFile(), new VersionedXmlConfigurationReaderFactory(),
     			new VersionedXmlConfigurationWriterFactory());
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		try {
+			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		}
+		catch(Exception e) {
+			AppLogger.finer(e.getMessage());
+		}
     }
     
     /**
