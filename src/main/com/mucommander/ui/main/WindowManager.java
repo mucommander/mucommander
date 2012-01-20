@@ -93,7 +93,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     private static WindowManager instance;
 
 
-    // - Initialisation ---------------------------------------------------------
+    // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
      * Installs all custom look and feels.

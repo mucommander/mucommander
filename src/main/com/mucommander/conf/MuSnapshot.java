@@ -334,17 +334,15 @@ public class MuSnapshot {
     // -----------------------------------------------------------------------
     /**
      * Loads the muCommander CONFIGURATION.
+     * Here, we don't try to convert preferences that were changed between muCommander versions,
+     * as those are 'dynamic' preferences and as such can be ignored when the user installs new version.
+     * 
      * @throws IOException            if an I/O error occurs.
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
     void read() throws IOException, ConfigurationException {
-        String configurationVersion;
-
         VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
-        try {
-            configuration.read(reader);}
-        finally {
-        }
+        configuration.read(reader);
     }
 
     /**
@@ -358,7 +356,7 @@ public class MuSnapshot {
     	//Clear the configuration before saving to drop preferences which are unused anymore
     	configuration.clear();
     	
-        // Save last folders
+    	// Save last folders
     	configuration.setVariable(MuSnapshot.LAST_LEFT_FOLDER, 
     			currentMainFrame.getLeftPanel().getFolderHistory().getLastRecallableFolder());
     	configuration.setVariable(MuSnapshot.LAST_RIGHT_FOLDER, 
