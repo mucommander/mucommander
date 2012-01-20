@@ -415,34 +415,15 @@ public class MuPreferences {
         finally {
             configurationVersion = reader.getVersion();
             if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
-            	// Rename preferences that changed (from v0.8.5)
+            	// Rename preferences that have changed (from v0.8.5)
                 configuration.renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
                 configuration.renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
                 configuration.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
                 configuration.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
                 configuration.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
-                
-                // Set snapshot properties that were saved as preferences before version 0.8.6
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_LEFT_FOLDER);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_RIGHT_FOLDER);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_X);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_Y);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_WIDTH);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LAST_HEIGHT);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.SCREEN_WIDTH);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.SCREEN_HEIGHT);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.SPLIT_ORIENTATION);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_TREE_VISIBLE);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_TREE_VISIBLE);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_TREE_WIDTH);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_TREE_WIDTH);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_SORT_BY);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_SORT_BY);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.LEFT_SORT_ORDER);
-                convertPreferencesVariableToSnapshotVariable(MuSnapshot.RIGHT_SORT_ORDER);
             }
 
-            // Initialises mac os x specific values
+            // Initializes MAC OS X specific values
             if(OsFamilies.MAC_OS_X.isCurrent()) {
                 if(configuration.getVariable(SHELL_ENCODING) == null) {
                 	configuration.setVariable(SHELL_ENCODING, "UTF-8");
@@ -464,39 +445,8 @@ public class MuPreferences {
      */
     void write() throws IOException, ConfigurationException {
     	if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
-    		// Remove preferences that moved to be part of the snapshot (from v0.8.6)
-    		configuration.removeVariable(MuSnapshot.LAST_LEFT_FOLDER);
-    		configuration.removeVariable(MuSnapshot.LAST_RIGHT_FOLDER);
-    		configuration.removeVariable(MuSnapshot.LAST_X);
-    		configuration.removeVariable(MuSnapshot.LAST_Y);
-    		configuration.removeVariable(MuSnapshot.LAST_WIDTH);
-    		configuration.removeVariable(MuSnapshot.LAST_HEIGHT);
-    		configuration.removeVariable(MuSnapshot.SCREEN_WIDTH);
-    		configuration.removeVariable(MuSnapshot.SCREEN_HEIGHT);
-    		configuration.removeVariable(MuSnapshot.SPLIT_ORIENTATION);
-    		configuration.removeVariable(MuSnapshot.LEFT_TREE_VISIBLE);
-    		configuration.removeVariable(MuSnapshot.RIGHT_TREE_VISIBLE);
-    		configuration.removeVariable(MuSnapshot.LEFT_TREE_WIDTH);
-    		configuration.removeVariable(MuSnapshot.RIGHT_TREE_WIDTH);
-    		configuration.removeVariable(MuSnapshot.LEFT_SORT_BY);
-    		configuration.removeVariable(MuSnapshot.LEFT_SORT_ORDER);
-    		configuration.removeVariable(MuSnapshot.RIGHT_SORT_BY);
-    		configuration.removeVariable(MuSnapshot.RIGHT_SORT_ORDER);
-    		
-    		for(boolean isLeft=true; ; isLeft=false) {
-    			// Loop on columns
-    			for(Column c : Column.values()) {
-    				if(c!=Column.NAME) {       // Skip the special name column (always enabled, width automatically calculated)
-    					configuration.removeVariable(MuSnapshot.getShowColumnVariable(c, isLeft));
-    					configuration.removeVariable(MuSnapshot.getColumnWidthVariable(c, isLeft));
-    				}
-
-    				configuration.removeVariable(MuSnapshot.getColumnPositionVariable(c, isLeft));
-    			}
-
-    			if(!isLeft)
-    				break;
-    		}
+    		// Clear the configuration before saving to drop preferences which are unused anymore
+    		configuration.clear();
     	}
 
     	configuration.write();

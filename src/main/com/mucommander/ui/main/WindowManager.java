@@ -341,7 +341,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         int       width;        // Width of the new MainFrame.
         int       height;       // Height of the new MainFrame.
 
-        // Initialisation.
+        // Initialization.
         if(currentMainFrame == null)
             newMainFrame = new MainFrame(folder1, folder2);
         else

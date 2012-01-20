@@ -299,19 +299,18 @@ public class MainFrame extends JFrame implements LocationListener {
     public MainFrame(AbstractFile leftInitialFolder, AbstractFile rightInitialFolder) {
         init(new FolderPanel(this, leftInitialFolder, getFileTableConfiguration(true)), new FolderPanel(this, rightInitialFolder, getFileTableConfiguration(false)));
 
-        leftTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.LEFT_SORT_BY, MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
-                      !MuConfigurations.getSnapshot().getVariable(MuSnapshot.LEFT_SORT_ORDER, MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
-        rightTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.RIGHT_SORT_BY, MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
-                      !MuConfigurations.getSnapshot().getVariable(MuSnapshot.RIGHT_SORT_ORDER, MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
-    	leftFolderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.LEFT_TREE_WIDTH, 150));
-        if (MuConfigurations.getSnapshot().getVariable(MuSnapshot.LEFT_TREE_VISIBLE, false)) {
-        	leftFolderPanel.setTreeVisible(true);
+        for (boolean isLeft = true; ; isLeft=false) {
+        	FileTable fileTable = isLeft ? leftTable : rightTable;
+        	fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortBy(isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
+                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrder(isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
+        	
+        	FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
+        	folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidth(isLeft), 150));
+        	folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblity(isLeft), false));
+        	
+        	if (!isLeft)
+        		break;
         }
-    	rightFolderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.RIGHT_TREE_WIDTH, 150));
-        if (MuConfigurations.getSnapshot().getVariable(MuSnapshot.RIGHT_TREE_VISIBLE, false)) {
-        	rightFolderPanel.setTreeVisible(true);
-        }
-
     }
 
     MainFrame cloneMainFrame() {
