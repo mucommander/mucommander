@@ -301,12 +301,12 @@ public class MainFrame extends JFrame implements LocationListener {
 
         for (boolean isLeft = true; ; isLeft=false) {
         	FileTable fileTable = isLeft ? leftTable : rightTable;
-        	fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortBy(isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
-                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrder(isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
+        	fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
+                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
         	
         	FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
-        	folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidth(isLeft), 150));
-        	folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblity(isLeft), false));
+        	folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(isLeft), 150));
+        	folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(isLeft), false));
         	
         	if (!isLeft)
         		break;

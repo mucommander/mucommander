@@ -28,10 +28,12 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
-import com.mucommander.ui.main.table.Column;
 
 /**
- * muCommander specific wrapper for the <code>com.mucommander.conf</code> API.
+ * muCommander specific wrapper for the <code>com.mucommander.conf</code> API which is used to save 'static' configurations.
+ * 'static' configurations refer to properties that can be changed from the preferences dialog only.
+ * those properties do not change often.
+ * 
  * @author Nicolas Rinaudo, Maxence Bernard, Arik Hadas
  */
 public class MuPreferences {
