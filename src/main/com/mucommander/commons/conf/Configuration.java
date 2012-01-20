@@ -904,6 +904,12 @@ public class Configuration {
         return ConfigurationSection.getBooleanValue(removeVariable(name));
     }
 
+    /**
+     * Remove all variables & sub-sections under the root section 
+     */
+    public void clear() {
+		root.clear();
+	}
 
 
     // - Advanced variable retrieval -----------------------------------------------------------------------------------

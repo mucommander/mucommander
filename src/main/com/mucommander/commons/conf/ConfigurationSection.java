@@ -37,7 +37,7 @@ class ConfigurationSection {
 
 
 
-    // - Initialisation ------------------------------------------------------------------------------------------------
+    // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
      * Creates a new configuration section.
@@ -356,4 +356,12 @@ class ConfigurationSection {
     public boolean isEmpty() {
         return !hasSections() && !hasVariables();
     }
+    
+    /**
+     * Remove all variables and sub-sections of the section
+     */
+    public void clear() {
+		variables.clear();
+        sections.clear();
+	}
 }
