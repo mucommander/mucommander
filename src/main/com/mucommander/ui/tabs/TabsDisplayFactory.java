@@ -35,16 +35,6 @@ public interface TabsDisplayFactory<T extends Tab> {
 	MultipleTabsDisplay<T> createMultipleTabsDisplay(TabsCollection<T> tabs);
 	
 	/**
-	 * Create tabs display for more than one tab
-	 * The tab at the given index will be selected
-	 * 
-	 * @param tabs - collection of the tabs
-	 * @param selectedTabIndex - index of the tab that would be selected
-	 * @return tabs display for more than one tab
-	 */
-	MultipleTabsDisplay<T> createMultipleTabsDisplay(TabsCollection<T> tabs, int selectedTabIndex);
-	
-	/**
 	 * Create tabs display for a single tab
 	 * 
 	 * @param tabs - collection of the tabs

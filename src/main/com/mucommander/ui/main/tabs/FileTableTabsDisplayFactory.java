@@ -42,14 +42,7 @@ public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTable
 
 	@Override
 	public MultipleTabsDisplay<FileTableTab> createMultipleTabsDisplay(TabsCollection<FileTableTab> tabs) {
-		return createMultipleTabsDisplay(tabs, 0);
-	}
-	
-	@Override
-	public MultipleTabsDisplay<FileTableTab> createMultipleTabsDisplay(TabsCollection<FileTableTab> tabs, int selectedTabIndex) {
-		MultipleTabsDisplay<FileTableTab> multipleTabsDisplay = new MultipleTabsDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
-		multipleTabsDisplay.setSelectedTabIndex(selectedTabIndex);
-		return multipleTabsDisplay;
+		return new MultipleTabsDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
 	}
 
 	@Override

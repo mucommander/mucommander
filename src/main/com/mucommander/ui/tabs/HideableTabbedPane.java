@@ -79,6 +79,16 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	}
 	
 	/**
+	 * Add new tab and select it
+	 * 
+	 * @param tab - new tab's data
+	 */
+	protected void addAndSelectTab(T tab) {
+		addTab(tab);
+		display.setSelectedTabIndex(tabs.count()-1);
+	}
+	
+	/**
 	 * Update the current displayed tab's data
 	 * 
 	 * @param tab - updated tab's data for the current displayed tab
@@ -140,7 +150,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 ******************/
 	
 	private void switchToMultipleTabs() {
-		setTabsDisplay(tabsDisplayFactory.createMultipleTabsDisplay(tabs, 1));
+		setTabsDisplay(tabsDisplayFactory.createMultipleTabsDisplay(tabs));
 	}
 	
 	private void switchToSingleTab() {

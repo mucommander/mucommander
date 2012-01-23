@@ -44,7 +44,7 @@ public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implement
 		
 		int index = 0;
 		for (T tab : tabs)
-			tabbedpane.set(tab, index++);
+			tabbedpane.add(tab, index++);
 		
 		tabs.addTabsListener(this);
 		pane.addChangeListener(this);

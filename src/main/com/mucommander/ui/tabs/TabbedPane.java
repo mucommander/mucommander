@@ -52,15 +52,6 @@ public abstract class TabbedPane<T extends Tab> extends JTabbedPane {
 	public abstract void update(T tab, int index);
 	
 	/**
-	 * Set the tab in the given index to the given tab
-	 * This operation does not change the selected tab
-	 * 
-	 * @param tab - implementation of Tab interface
-	 * @param index - the index of the tab to be set
-	 */
-	public abstract void set(T tab, int index);
-	
-	/**
 	 * 
 	 * 
 	 * @param tab

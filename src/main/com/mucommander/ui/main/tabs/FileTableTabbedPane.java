@@ -112,12 +112,6 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 
 	@Override
 	public void add(FileTableTab tab, int index) {
-		set(tab, index);
-		setSelectedIndex(getTabCount()-1); // ?
-	}
-	
-	@Override
-	public void set(FileTableTab tab, int index) {
 		add(getTabCount() == 0 ? fileTableComponent : new JLabel(), index);
 
 		setTitleAt(index, tab.getLocation().getName());
