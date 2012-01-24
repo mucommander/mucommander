@@ -103,10 +103,14 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	}
 
 	@Override
-	public void locationCancelled(LocationEvent locationEvent) { }
+	public void locationCancelled(LocationEvent locationEvent) {
+		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
+	}
 
 	@Override
-	public void locationFailed(LocationEvent locationEvent) { }
+	public void locationFailed(LocationEvent locationEvent) {
+		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
+	}
 	
 	@Override
 	public void locationChanging(LocationEvent locationEvent) { }
