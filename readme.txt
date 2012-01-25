@@ -81,6 +81,10 @@ Known issues:
 - Authentication issues when using several sets of credentials (login/password)
   for the same server (see ticket #76).
 - Untrusted HTTPS connections are allowed without a warning.
+- Windows Vista\7: "java.net.SocketException: Permission denied: recv failed"
+  error appears when trying to access FTP sites. It seems to be a Windows firewall
+  problem, and there's a workaround for it. For more information see: 
+  http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7077696
 
 
 License
