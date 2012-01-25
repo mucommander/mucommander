@@ -256,8 +256,7 @@ public class CredentialsManager {
         // Find the best match and move it at the first position in the vector
         int bestMatchIndex = getBestMatchIndex(location, matchesV);
         if(bestMatchIndex!=-1) {
-            matchesV.set(0, matchesV.get(bestMatchIndex));
-            matchesV.remove(bestMatchIndex+1);
+            matchesV.add(0, matchesV.remove(bestMatchIndex));
         }
 
         return matchesV;
