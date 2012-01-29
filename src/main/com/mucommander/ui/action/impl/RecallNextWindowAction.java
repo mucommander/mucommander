@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
@@ -62,6 +63,6 @@ public class RecallNextWindowAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK); }
     }
 }

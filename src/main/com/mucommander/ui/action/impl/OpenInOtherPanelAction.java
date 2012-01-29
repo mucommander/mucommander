@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
@@ -90,6 +91,6 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK); }
     }
 }
