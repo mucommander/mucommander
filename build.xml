@@ -578,7 +578,7 @@
                 <property name="file.encoding" value="UTF-8"/>
             </resources>
             <resources>
-                <j2se version="1.5"/>
+                <j2se version="1.5+"/>
                 <jar  href="mucommander.jar"/>
             </resources>
             <applicationdesc main="com.mucommander.Launcher"/>
