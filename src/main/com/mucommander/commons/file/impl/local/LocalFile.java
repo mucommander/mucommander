@@ -161,7 +161,7 @@ public class LocalFile extends ProtocolFile {
             else {
                 path = fileURL.getPath();
 
-                // Remove the leaading '/' for Windows-like paths
+                // Remove the leading '/' for Windows-like paths
                 if(USES_ROOT_DRIVES)
                     path = path.substring(1, path.length());
             }
@@ -252,7 +252,7 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Uses platform dependant functions to retrieve the total and free space on the volume where this file resides.
+     * Uses platform dependent functions to retrieve the total and free space on the volume where this file resides.
      *
      * @return a {totalSpace, freeSpace} long array, both values can be <code>null</code> if the information could not
      * be retrieved.

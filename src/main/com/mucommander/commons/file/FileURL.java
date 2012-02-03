@@ -583,7 +583,7 @@ public class FileURL implements Cloneable {
      * The returned FileURL will have the same handler, scheme, host, port, credentials and properties as this one.
      * The query part of the returned parent URL will always be <code>null</code>, even if this URL had one.
      * </p>
-     * <p>Note: this method returns a new FileURL instance everytime it is called, and all mutable fields of this FileURL
+     * <p>Note: this method returns a new FileURL instance every time it is called, and all mutable fields of this FileURL
      * are cloned. Therefore, the returned URL can be safely modified without any risk of side effects.</p>
      *
      * @return this URL's parent, <code>null</code> if it doesn't have one.

@@ -27,10 +27,10 @@ import java.util.Vector;
 public class DefaultPathCanonizer implements PathCanonizer {
 
     /** Path separator */
-    protected String separator;
+    private String separator;
 
     /** The string replacement for '~' path fragments, null for no tilde replacement */
-    protected String tildeReplacement;
+    private String tildeReplacement;
 
 
     /**
