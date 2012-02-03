@@ -986,7 +986,7 @@ public class LocalFile extends ProtocolFile {
             childURL = (FileURL)fileURL.clone();
 
             if(isUNC)   // Special case for UNC paths which include the hostname in it
-                childURL.setPath(addTrailingSeparator(fileURL.getPath())+file.getName());
+                childURL.setPath(addTrailingSeparator("\\\\"+fileURL.getHost()+fileURL.getPath().replace('/', '\\'))+file.getName());
             else
                 childURL.setPath(absPath+SEPARATOR+files[i].getName());
 
