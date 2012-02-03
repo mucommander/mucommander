@@ -78,16 +78,16 @@ public class DefaultSchemeParser implements SchemeParser {
 
 
     /**
-     * Creates a DefaultSchemeParser with a {@link DefaultPathCanonizer} that uses <code>"/"</code> as the path
-     * separator and no tilde replacement, and query parsing disabled.
+     * Creates a DefaultSchemeParser with a {@link DefaultPathCanonizer} that uses the operating system's default 
+     * path separator as the path separator and no tilde replacement, and query parsing disabled.
      */
     public DefaultSchemeParser() {
-        this(new DefaultPathCanonizer("/", null), false);
+        this(false);
     }
 
     /**
-     * Creates a DefaultSchemeParser with a {@link DefaultPathCanonizer} that uses <code>"/"</code> as the path
-     * separator and no tilde replacement.
+     * Creates a DefaultSchemeParser with a {@link DefaultPathCanonizer} that uses that uses the operating system's
+	 * default path separator as the path separator and no tilde replacement.
      * If <code>parseQuery</code> is <code>true</code>, any query part (delimited by '?') will be parsed as such,
      * or considered as part of the path otherwise.
      *
@@ -95,7 +95,7 @@ public class DefaultSchemeParser implements SchemeParser {
      * as part of the path otherwise
      */
     public DefaultSchemeParser(boolean parseQuery) {
-        this(new DefaultPathCanonizer("/", null), parseQuery);
+        this(new DefaultPathCanonizer(System.getProperty("file.separator"), null), parseQuery);
     }
 
     /**
@@ -113,7 +113,7 @@ public class DefaultSchemeParser implements SchemeParser {
     }
 
     /**
-     * Handles the parsing of the given local file url.
+     * Handles the parsing of the given local file URL.
      *
      * @param url the URL to parse
      * @param fileURL the FileURL instance in which to set the different parsed parts

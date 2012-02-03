@@ -68,7 +68,7 @@ public interface SchemeHandler {
      * credentials can be used. Any property contained by the specified FileURL will be carried over in the returned
      * FileURL. On the contrary, credentials will not be copied, the returned URL always has no credentials. 
      *
-     * <p>This method returns a new FileURL instance everytime it is called. Therefore, the returned URL can
+     * <p>This method returns a new FileURL instance every time it is called. Therefore, the returned URL can
      * safely be modified without any risk of side effects.</p>
      *
      * @param location the location for which to return the authentication realm

@@ -26,7 +26,7 @@ package com.mucommander.commons.file;
  * The multi-arg constructor allows to create a scheme handler with specific values.
  * <p>
  * The {@link #getRealm(FileURL)} implementation returns a URL with the same scheme and host (if any) as the specified
- * URL, and a path set to <code>"/"</code>. This behavior can be modified by overridding <code>getRealm</code>.
+ * URL, and a path set to <code>"/"</code>. This behavior can be modified by overriding <code>getRealm</code>.
  * </p>
  *
  * @see com.mucommander.commons.file.FileURL#getDefaultHandler()
@@ -42,17 +42,18 @@ public class DefaultSchemeHandler implements SchemeHandler {
     protected Credentials guestCredentials;
 
     /**
-     * Creates a DefaultSchemeHandler with default values that suit most schemes:
+     * Creates a DefaultSchemeHandler with default values that suit schemes in which the scheme name is not included
+	 * in the URL (local and unc locations):
      * <ul>
      *  <li>the parser is a DefaultSchemeParser instance created with the no-arg constructor</li>
      *  <li>the scheme's standard port is <code>-1</code></li>
-     *  <li>the scheme's path separator is <code>"/"</code></li>
+     *  <li>the scheme's path separator is operating system's path separator</li>
      *  <li>authentication type is {@link AuthenticationType#NO_AUTHENTICATION}</li>
      *  <li>guest credentials are <code>null</code></li>
      * </ul>
      */
     public DefaultSchemeHandler() {
-        this(new DefaultSchemeParser(), -1, "/", AuthenticationType.NO_AUTHENTICATION, null);
+        this(new DefaultSchemeParser(), -1, System.getProperty("file.separator"), AuthenticationType.NO_AUTHENTICATION, null);
     }
 
     /**
@@ -123,9 +124,10 @@ public class DefaultSchemeHandler implements SchemeHandler {
     }
 
     /**
-     * Returns a URL with the same scheme, host and port (if any) as the specified URL, and a path set to <code>"/"</code>.
+     * Returns a URL with the same scheme, host and port (if any) as the specified URL, and a path set to 
+	 * <code>"/"</code> or <code>"\"</code> depending on the URL format.
      * The login, password, query and fragment parts of the returned URL are always <code>null</code>.
-     *For example, when called with <code>http://www.mucommander.com:8080/path/to/file?query&param=value</code>,
+     * For example, when called with <code>http://www.mucommander.com:8080/path/to/file?query&param=value</code>,
      * this method returns <code>http://www.mucommander.com:8080/</code>.
      * 
      * @param location the location for which to return the authentication realm
@@ -135,7 +137,7 @@ public class DefaultSchemeHandler implements SchemeHandler {
         // Start by cloning the given URL and then modify the parts that need it
         FileURL realm = (FileURL)location.clone();
 
-        realm.setPath("/");
+        realm.setPath(location.getPathSeparator());
         realm.setCredentials(null);
         realm.setQuery(null);
         // Todo

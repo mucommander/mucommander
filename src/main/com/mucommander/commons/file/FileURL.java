@@ -628,7 +628,7 @@ public class FileURL implements Cloneable {
      * can be used. Any property contained by the specified FileURL will be carried over in the returned FileURL.
      * On the contrary, credentials will not be copied, the returned URL always has no credentials.
      *
-     * <p>Note: this method returns a new FileURL instance everytime it is called. Therefore the returned FileURL can
+     * <p>Note: this method returns a new FileURL instance every time it is called. Therefore the returned FileURL can
      * safely be modified without any risk of side effects.</p>
 
      * <p>This method is just a shorthand for <code>getHandler().getRealm(this)</code>.</p>
