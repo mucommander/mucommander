@@ -160,18 +160,18 @@ public class LocalFileTest extends AbstractFileTest {
      */
     @Test
     public void testDrivePattern() {
-        Matcher matcher = LocalFile.driveRootPattern.matcher("C:\\");
+        Matcher matcher = LocalFile.DRIVE_ROOT_PATTERN.matcher("C:\\");
         assert matcher.matches();
 
-        matcher = LocalFile.driveRootPattern.matcher("C:");
+        matcher = LocalFile.DRIVE_ROOT_PATTERN.matcher("C:");
         assert !matcher.matches();
 
-        matcher = LocalFile.driveRootPattern.matcher("C:\\blah");
+        matcher = LocalFile.DRIVE_ROOT_PATTERN.matcher("C:\\blah");
         assert !matcher.matches();
         matcher.reset();
         assert matcher.find();
 
-        matcher = LocalFile.driveRootPattern.matcher("/blah/C:\\");
+        matcher = LocalFile.DRIVE_ROOT_PATTERN.matcher("/blah/C:\\");
         assert !matcher.matches();
     }
 }
