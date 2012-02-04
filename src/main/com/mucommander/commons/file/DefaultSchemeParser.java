@@ -73,9 +73,6 @@ public class DefaultSchemeParser implements SchemeParser {
     /** <code>PathCanonizer</code> instance to be used for canonizing the path part */
     protected PathCanonizer pathCanonizer;
 
-    /** String designating the localhost. */
-    protected final static String LOCALHOST = "localhost";
-
 
     /**
      * Creates a DefaultSchemeParser with a {@link DefaultPathCanonizer} that uses the operating system's default 
@@ -124,7 +121,7 @@ public class DefaultSchemeParser implements SchemeParser {
 
         fileURL.setHandler(handler);
         fileURL.setScheme(FileProtocols.FILE);
-        fileURL.setHost(LOCALHOST);
+        fileURL.setHost(FileURL.LOCALHOST);
         fileURL.setPath((parser instanceof DefaultSchemeParser?((DefaultSchemeParser)parser).getPathCanonizer():pathCanonizer).canonize(url));
     }
 

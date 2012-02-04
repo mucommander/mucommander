@@ -98,7 +98,7 @@ public class LocalFile extends ProtocolFile {
     public final static boolean USES_ROOT_DRIVES = IS_WINDOWS || OsFamilies.OS_2.isCurrent();
 
     /** Pattern matching Windows-like drives' root, e.g. C:\ */
-    final static Pattern driveRootPattern = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}");
+    final static Pattern DRIVE_ROOT_PATTERN = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}");
 
     // Permissions can only be changed under Java 1.6 and up and are limited to 'user' access.
     // Note: 'read' and 'execute' permissions have no meaning under Windows (files are either read-only or
@@ -1010,7 +1010,7 @@ public class LocalFile extends ProtocolFile {
     @Override
     public AbstractFile getRoot() {
         if(USES_ROOT_DRIVES) {
-            Matcher matcher = driveRootPattern.matcher(absPath+SEPARATOR);
+            Matcher matcher = DRIVE_ROOT_PATTERN.matcher(absPath+SEPARATOR);
 
             // Test if this file already is the root folder
             if(matcher.matches())
@@ -1032,7 +1032,7 @@ public class LocalFile extends ProtocolFile {
     @Override
     public boolean isRoot() {
         if(USES_ROOT_DRIVES)
-            return driveRootPattern.matcher(absPath+SEPARATOR).matches();
+            return DRIVE_ROOT_PATTERN.matcher(absPath+SEPARATOR).matches();
 
         return super.isRoot();
     }
@@ -1327,7 +1327,7 @@ public class LocalFile extends ProtocolFile {
         }
 
         /**
-         * Overridden for peformance reasons.
+         * Overridden for performance reasons.
          */
         @Override
         public int getIntValue() {

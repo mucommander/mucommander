@@ -75,7 +75,7 @@ import java.util.NoSuchElementException;
  * </p>
  * <p>
  * A {@link #getDefaultHandler() default handler} is used for schemes that do not have a specific handler registered.
- * It provides default values for the above-mentionned attributes and provides a parser that parses those scheme URLs.
+ * It provides default values for the above-mentioned attributes and provides a parser that parses those scheme URLs.
  * The default handler's parser is also used for parsing locations passed to {@link #getFileURL(String)} that do not
  * contain a scheme (i.e. without the leading <code>scheme://</code>). Those locations can be system-dependent,
  * local and absolute paths, or UNC paths. These paths are turned by the parser into an equivalent, fully-qualified URL. 
@@ -97,7 +97,7 @@ import java.util.NoSuchElementException;
  *  <li>no proper percent encoding/decoding </li>
  *  <li>no support for the fragment part</li>
  * </ul>
- * Some of these limitations will be adressed in upcoming revisions of this class.
+ * Some of these limitations will be addressed in upcoming revisions of this class.
  * </p>
  *
  * @see SchemeHandler
