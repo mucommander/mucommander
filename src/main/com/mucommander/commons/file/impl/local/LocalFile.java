@@ -151,21 +151,12 @@ public class LocalFile extends ProtocolFile {
         super(fileURL);
 
         if(file==null) {
-            String path;
+            String path = fileURL.getPath();
 
-            // If the URL denotes a Windows UNC file, translate the path back into a Windows-style UNC path in the form
-            // \\hostname\share\path .
-            if(isUncFile(fileURL)) {
-                path = "\\\\"+fileURL.getHost()+fileURL.getPath().replace('/', '\\');    // Replace leading / char by \
-            }
-            else {
-                path = fileURL.getPath();
-
-                // Remove the leading '/' for Windows-like paths
-                if(USES_ROOT_DRIVES)
-                    path = path.substring(1, path.length());
-            }
-
+            // Remove the leading '/' for Windows-like paths
+            if(USES_ROOT_DRIVES)
+                path = path.substring(1, path.length());
+            
             // Create the java.io.File instance and throw an exception if the path is not absolute.
             file = new File(path);
             if(!file.isAbsolute())
@@ -194,25 +185,6 @@ public class LocalFile extends ProtocolFile {
     ////////////////////////////////
     // LocalFile-specific methods //
     ////////////////////////////////
-
-    /**
-     * Returns <code>true</code> if the specified {@link FileURL} denotes a Windows UNC file.
-     *
-     * @param fileURL the {@link FileURL} to test
-     * @return <code>true</code> if the specified {@link FileURL} denotes a Windows UNC file.
-     */
-    private static boolean isUncFile(FileURL fileURL) {
-        return IS_WINDOWS && !FileURL.LOCALHOST.equals(fileURL.getHost());
-    }
-
-    /**
-     * Returns <code>true</code> if this file's URL denotes a Windows UNC file.
-     *
-     * @return <code>true</code> if this file's URL denotes a Windows UNC file.
-     */
-    public boolean isUncFile() {
-        return isUncFile(fileURL);
-    }
 
     /**
      * Returns the user home folder. Most if not all OSes have one, but in the unlikely event that the OS doesn't have
@@ -974,21 +946,13 @@ public class LocalFile extends ProtocolFile {
         int nbFiles = files.length;
         AbstractFile children[] = new AbstractFile[nbFiles];
         FileURL childURL;
-        File file;
-
-        boolean isUNC = isUncFile();
 
         for(int i=0; i<nbFiles; i++) {
-            file = files[i];
-
             // Clone the FileURL of this file and set the child's path, this is more efficient than creating a new
             // FileURL instance from scratch.
             childURL = (FileURL)fileURL.clone();
 
-            if(isUNC)   // Special case for UNC paths which include the hostname in it
-                childURL.setPath(addTrailingSeparator("\\\\"+fileURL.getHost()+fileURL.getPath().replace('/', '\\'))+file.getName());
-            else
-                childURL.setPath(absPath+SEPARATOR+files[i].getName());
+			childURL.setPath(absPath+SEPARATOR+files[i].getName());
 
             // Retrieves an AbstractFile (LocalFile or AbstractArchiveFile) instance that's potentially already in
             // the cache, reuse this file as the file's parent, and the already-created java.io.File instance.
@@ -1038,7 +1002,7 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Overridden to return the local volum on which this file is located. The returned volume is one of the volumes
+     * Overridden to return the local volume on which this file is located. The returned volume is one of the volumes
      * returned by {@link #getVolumes()}.
      */
     @Override
@@ -1093,7 +1057,7 @@ public class LocalFile extends ProtocolFile {
         private final FileChannel channel;
         private final ByteBuffer bb;
 
-        private LocalRandomAccessInputStream(FileChannel channel) {
+        public LocalRandomAccessInputStream(FileChannel channel) {
             this.channel = channel;
             this.bb = BufferPool.getByteBuffer();
         }

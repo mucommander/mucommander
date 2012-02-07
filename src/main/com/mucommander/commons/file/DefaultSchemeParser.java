@@ -184,16 +184,14 @@ public class DefaultSchemeParser implements SchemeParser {
 
                 // Handle Windows-style UNC network paths ( \\hostname\path ):
                 // - under Windows, transform it into a URL in the file://hostname/path form,
-                //   LocalFile constructor will translate it back into an UNC network path
+                //   LocalProtocolProvider will translate it back into an UNC network path
                 // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
                 //   who've spent too much time using Windows
                 else if(url.startsWith("\\\\") && urlLen>2) {
                     if(OsFamilies.WINDOWS.isCurrent()) {
                         pos = url.indexOf('\\', 2);
-                        if(pos==-1)
-                            url =  FileProtocols.FILE+"://"+url.substring(2);
-                        else
-                            url = FileProtocols.FILE+"://"+url.substring(2, pos)+"/"+(pos==urlLen-1?"":url.substring(pos+1));
+                        url = FileProtocols.FILE+"://"+ 
+                				(pos==-1?url.substring(2):url.substring(2, pos)+"/"+(pos==urlLen-1?"":url.substring(pos+1)));
 
                         // Update scheme delimiter position
                         schemeDelimPos = FileProtocols.FILE.length();

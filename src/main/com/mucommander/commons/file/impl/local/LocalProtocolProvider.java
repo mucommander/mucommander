@@ -22,20 +22,36 @@ package com.mucommander.commons.file.impl.local;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.ProtocolProvider;
+import com.mucommander.commons.runtime.OsFamilies;
 
 import java.io.IOException;
 
 /**
- * This class is the provider for the local filesystem implemented by {@link com.mucommander.commons.file.impl.local.LocalFile}.
+ * This class is the provider for the local filesystem implemented by {@link com.mucommander.commons.file.impl.local.LocalFile}
+ * and network path given in UNC format which is implemented by {@link com.mucommander.commons.file.impl.local.UNCFile}
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  * @see com.mucommander.commons.file.impl.local.LocalFile
+ * @see com.mucommander.commons.file.impl.local.UNCFile
  */
 public class LocalProtocolProvider implements ProtocolProvider {
 
+	/** Are we running Windows ? */
+    private final static boolean IS_WINDOWS =  OsFamilies.WINDOWS.isCurrent();
+	
     public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return instantiationParams.length==0
-            ?new LocalFile(url)
-            :new LocalFile(url, (java.io.File)instantiationParams[0]);
+        return isUncFile(url)?
+        	 (instantiationParams.length==0?new UNCFile(url):new UNCFile(url ,(java.io.File)instantiationParams[0]))
+        	:(instantiationParams.length==0?new LocalFile(url):new LocalFile(url, (java.io.File)instantiationParams[0]));
+    }
+	
+	/**
+     * Returns <code>true</code> if the specified {@link FileURL} denotes a Windows UNC file.
+     *
+     * @param fileURL the {@link FileURL} to test
+     * @return <code>true</code> if the specified {@link FileURL} denotes a Windows UNC file.
+     */
+    private static boolean isUncFile(FileURL fileURL) {
+        return IS_WINDOWS && !FileURL.LOCALHOST.equals(fileURL.getHost());
     }
 }
