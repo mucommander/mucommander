@@ -18,6 +18,12 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
@@ -32,15 +38,20 @@ import com.mucommander.ui.autocomplete.TextFieldCompletion;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.progress.ProgressTextField;
-import com.mucommander.ui.theme.*;
-
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 
 /**
+ * A TextField which is located on each panel and used to display the location presented in the panel's file-table,
+ * and for letting the user change this location.
+ * 
+ * This TextField support:
+ * - auto-completion
+ * - location changing progress indicator
+ * - Theme settings
  * 
  * @author Maxence Bernard, Arik Hadas
  */
@@ -160,12 +171,18 @@ public class LocationTextField extends ProgressTextField implements LocationList
             FileURL folderURL = e.getFolderURL();
 
             String locationText;
-            // Do not display the URL's scheme for local files
             if(folderURL.getScheme().equals(FileProtocols.FILE)) {
-                locationText = folderURL.getPath();
-                // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
-                if(LocalFile.hasRootDrives())
-                    locationText = PathUtils.removeLeadingSeparator(locationText, "/");
+                // Do not display the URL's scheme & host for local files
+            	if (FileURL.LOCALHOST.equals(folderURL.getHost())) {
+            		locationText = folderURL.getPath();
+            		// Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+            		if(LocalFile.hasRootDrives())
+            			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
+            	}
+            	// For network files with FILE scheme display the URL in UNC format
+            	else {
+            		locationText = "\\\\" + folderURL.getHost() + folderURL.getPath().replace('/', '\\') + "\\";
+            	}
             }
             // Display the full URL for protocols other than 'file'
             else {
