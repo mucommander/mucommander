@@ -30,6 +30,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.impl.local.UNCFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
@@ -181,7 +182,9 @@ public class LocationTextField extends ProgressTextField implements LocationList
             	}
             	// For network files with FILE scheme display the URL in UNC format
             	else {
-            		locationText = "\\\\" + folderURL.getHost() + folderURL.getPath().replace('/', '\\') + "\\";
+            		locationText = "\\\\" + folderURL.getHost() + folderURL.getPath().replace('/', '\\');
+            		if(!locationText.endsWith(UNCFile.SEPARATOR))
+                        locationText += UNCFile.SEPARATOR;
             	}
             }
             // Display the full URL for protocols other than 'file'
