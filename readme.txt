@@ -39,7 +39,7 @@ What's new since v0.8.5 ?
 -------------------------
 
 New features:
-- Mac OS X 10.7 (Lion) is now properly detected.
+-
 
 Improvements:
 - Natural file ordering, suggested by 'andraaspar' in the forums. All symbols now come before digits (ticket #282).
