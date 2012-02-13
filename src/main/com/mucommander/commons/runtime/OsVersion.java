@@ -134,7 +134,10 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
         }
         // Mac OS X versions
         else if(osFamily==OsFamilies.MAC_OS_X) {
-            if(osVersionProp.startsWith("10.6")) {
+            if(osVersionProp.startsWith("10.7")) {
+                osVersion = MAC_OS_X_10_7;
+            }
+            else if(osVersionProp.startsWith("10.6")) {
                 osVersion = MAC_OS_X_10_6;
             }
             else if(osVersionProp.startsWith("10.5")) {
@@ -157,7 +160,7 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
             }
             else {
                 // Newer version we don't know of yet, assume latest supported OS version
-                osVersion = MAC_OS_X_10_6;
+                osVersion = MAC_OS_X_10_7;
             }
         }
         else {
