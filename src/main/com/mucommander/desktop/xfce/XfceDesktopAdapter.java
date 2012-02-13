@@ -30,7 +30,7 @@ import com.mucommander.desktop.DesktopManager;
  */
 abstract class XfceDesktopAdapter extends DefaultDesktopAdapter {
 	private static final String FILE_MANAGER_NAME = "Thunar";
-    private static final String FILE_OPENER       = "thunar $f";
+    private static final String FILE_OPENER       = "exo-open $f";
     private static final String EXE_OPENER        = "$f";
     
 	@Override

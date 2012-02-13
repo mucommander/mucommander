@@ -22,7 +22,7 @@ import com.mucommander.process.ProcessRunner;
 
 /**
  * 'Guessed' desktop adapter for Xfce. The availability of this desktop depends on the presence of the
- * <code>thunar</code> command.
+ * <code>exo-open</code> command.
  * 
  * @author Arik Hadas
  */
@@ -32,7 +32,7 @@ public class GuessedXfceDesktopAdapter extends XfceDesktopAdapter {
     @Override
     public boolean isAvailable() {
         try {
-            ProcessRunner.execute("thunar").destroy();
+            ProcessRunner.execute("exo-open");
             return true;
         }
         catch(Exception e) {return false;}
