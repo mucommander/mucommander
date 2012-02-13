@@ -16,23 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.gnome;
+package com.mucommander.desktop.xfce;
 
 import com.mucommander.process.ProcessRunner;
 
 /**
- * 'Guessed' desktop adapter for GNOME. The availability of this desktop depends on the presence of the
- * <code>gnome-open</code> command.
+ * 'Guessed' desktop adapter for Xfce. The availability of this desktop depends on the presence of the
+ * <code>thunar</code> command.
  * 
- * @author Nicolas Rinaudo
+ * @author Arik Hadas
  */
-public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
-    public String toString() {return "Gnome Desktop (guessed)";}
+public class GuessedXfceDesktopAdapter extends XfceDesktopAdapter {
+	public String toString() {return "Xfce Desktop (guessed)";}
 
     @Override
     public boolean isAvailable() {
         try {
-            ProcessRunner.execute("gnome-open");
+            ProcessRunner.execute("thunar").destroy();
             return true;
         }
         catch(Exception e) {return false;}

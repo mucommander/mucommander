@@ -335,7 +335,7 @@ public class GnomeTrash extends QueuedTrash {
     }
     
     /**
-     * It is possible to add several files with same name to the Trash. These files are distinguised
+     * It is possible to add several files with same name to the Trash. These files are distinguished
      * by _N appended to the name, where _N is rising int number. <br/>
      * This method tries to find first empty <code>filename_N.ext</code>.
      *

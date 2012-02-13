@@ -31,6 +31,7 @@ import com.mucommander.desktop.openvms.OpenVMSDesktopAdapter;
 import com.mucommander.desktop.osx.OSXDesktopAdapter;
 import com.mucommander.desktop.windows.Win9xDesktopAdapter;
 import com.mucommander.desktop.windows.WinNtDesktopAdapter;
+import com.mucommander.desktop.xfce.GuessedXfceDesktopAdapter;
 
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -147,6 +148,7 @@ public class DesktopManager {
         // Unix desktops:
         // - check for Gnome before KDE, as it seems to be more popular.
         // - check for 'configured' before 'guessed', as guesses are less reliable and more expensive.
+        registerAdapter(new GuessedXfceDesktopAdapter());
         registerAdapter(new GuessedKde3DesktopAdapter());
         registerAdapter(new GuessedKde4DesktopAdapter());
         registerAdapter(new GuessedGnomeDesktopAdapter());

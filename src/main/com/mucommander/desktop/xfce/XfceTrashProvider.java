@@ -16,25 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.gnome;
+package com.mucommander.desktop.xfce;
 
-import com.mucommander.process.ProcessRunner;
+import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.TrashProvider;
 
 /**
- * 'Guessed' desktop adapter for GNOME. The availability of this desktop depends on the presence of the
- * <code>gnome-open</code> command.
- * 
- * @author Nicolas Rinaudo
+ * This class is a trash provider for the {@link XfceTrash Xfce trash}.
+ *
+ * @see XfceTrash
+ * @author Arik Hadas
  */
-public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
-    public String toString() {return "Gnome Desktop (guessed)";}
+public class XfceTrashProvider implements TrashProvider {
 
-    @Override
-    public boolean isAvailable() {
-        try {
-            ProcessRunner.execute("gnome-open");
-            return true;
-        }
-        catch(Exception e) {return false;}
-    }
+	@Override
+	public AbstractTrash getTrash() {
+		return new XfceTrash();
+	}
 }
