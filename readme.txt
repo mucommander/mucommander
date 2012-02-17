@@ -39,7 +39,10 @@ What's new since v0.8.5 ?
 -------------------------
 
 New features:
--
+- Tabbed browsing support (ticket #185)
+- Add support for Xfce desktop environment (ticket #394)
+- Add the ability to show line numbers in text files editor & viewer
+- Quick list that display roots of partitions was added (ticket #400)
 
 Improvements:
 - Natural file ordering, suggested by 'andraaspar' in the forums. All symbols now come before digits (ticket #282).
@@ -48,6 +51,18 @@ Improvements:
 - Current folder is now automatically changed to a workable folder when it is no longer available (ticket #333).
 - Upgraded the JmDNS library (used for Bonjour support) to version 3.1.
 - Upgraded the jCIFS library (used for SMB support) to version 1.3.14.
+- Add the ability to wrap long text lines in text files editor & viewer (ticket #101)
+- The bookmarks quick list is now displayed unsorted (ticket #416)
+- Changed the quick search mechanism in quick lists to be the same as the mechanism used in folder panel (ticket #171)
+- Add an option to change the font size of the text presented at the text file editor/viewer by pressing CNTRL 
+  and rotating the mouse wheel (ticket #409)
+- Split the configuration being saved on shutdown to static configuration which is less likely to be changed between
+  invokations and is saved to the preferences.xml file, and dynamic configuration that likely to change between
+  invokations and is saved to the snapshot.xml file (see http://trac.mucommander.com/wiki/StatePersistence)
+- Changed the color of hidden files such that their color will be different from regular files (ticket #262)
+- Changed the default keyboard shortcuts of the following actions: open in both panels, open in other panel, 
+  recall next window, recall previous window
+- File editor/viewer is now getting the focus when initiated (ticket #92)
 
 Localization:
 - New: Turkish translation, contributed by Emre Aytaç
@@ -62,6 +77,15 @@ Bug fixes:
 - Fixed an issue that would occur when creating directories whose extension match that of one of the supported archive
   formats (see ticket #360).
 - Fixed a bug that could prevent the deletion of S3 files to fail.
+- NPE on shutdown (ticket #377)
+- Errors when unpacking rar archive files (ticket #152)
+- NPE when trying to update text files in EAR/WAR/JAR archives (ticket #408)
+- File renameing is now cancelled when the filename editor lost focus (#428)
+- Deadlock that cause the shutdown process not to terminate (#431)
+- Fixed a bug that prevented connections to remove locations using stored credentials (ticket #417)
+- Webstart for nightly build is now working on OS X 10.6 (ticket #390)
+- Fixed an issue that caused unpacking of 7z archive file to produce corrupted files (ticket #347)
+- Fixed several bugs related to SMB handling (tickets #351 #436)
 
 Known issues:
 - Some translations may not be up-to-date. Refer to
@@ -85,7 +109,7 @@ Known issues:
   error appears when trying to access FTP sites. It seems to be a Windows firewall
   problem, and there's a workaround for it. For more information see: 
   http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7077696
-
+- Unpacking many files from 7z archive files is being slow
 
 License
 -------
