@@ -293,11 +293,11 @@ public class MainFrame extends JFrame implements LocationListener {
     /**
      * Creates a new main frame set to the given initial folders.
      *
-     * @param leftInitialFolder the initial folder to display in the left panel
-     * @param rightInitialFolder the initial folder to display in the right panel
+     * @param leftInitialFolders the initial folders to display in the left panel's tabs
+     * @param rightInitialFolders the initial folders to display in the right panel's tabs
      */
-    public MainFrame(AbstractFile leftInitialFolder, AbstractFile rightInitialFolder) {
-        init(new FolderPanel(this, leftInitialFolder, getFileTableConfiguration(true)), new FolderPanel(this, rightInitialFolder, getFileTableConfiguration(false)));
+    public MainFrame(AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders) {
+        init(new FolderPanel(this, leftInitialFolders, getFileTableConfiguration(true)), new FolderPanel(this, rightInitialFolders, getFileTableConfiguration(false)));
 
         for (boolean isLeft = true; ; isLeft=false) {
         	FileTable fileTable = isLeft ? leftTable : rightTable;

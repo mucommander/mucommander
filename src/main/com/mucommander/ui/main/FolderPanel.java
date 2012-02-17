@@ -30,13 +30,13 @@ import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashSet;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 
 import com.mucommander.AppLogger;
 import com.mucommander.auth.CredentialsManager;
@@ -63,6 +63,8 @@ import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.dialog.file.DownloadDialog;
 import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
+import com.mucommander.ui.event.LocationAdapter;
+import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.quicklist.BookmarksQL;
 import com.mucommander.ui.main.quicklist.ParentFoldersQL;
@@ -145,10 +147,31 @@ public class FolderPanel extends JPanel implements FocusListener {
     /* TODO branch private boolean branchView; */
 
 
+    /**
+     * Constructor. For backward compatibility
+     * 
+     * @param mainFrame - the MainFrame that contains this panel
+     * @param initialFolder - the initial folder to be displayed at this panel
+     * @param conf - configuration for this panel's file table
+     */
     FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, FileTableConfiguration conf) {
+    	this(mainFrame, new AbstractFile[] {initialFolder}, conf);
+    }
+    
+    /**
+     * Constructor
+     * 
+     * @param mainFrame - the MainFrame that contains this panel
+     * @param initialFolders - the initial folders displayed at this panel's tabs
+     * @param conf - configuration for this panel's file table
+     */
+    FolderPanel(MainFrame mainFrame, AbstractFile[] initialFolders, FileTableConfiguration conf) {
         super(new BorderLayout());
 
-        AppLogger.finest(" initialFolder="+initialFolder);
+        AppLogger.finest(" initialFolder:"+initialFolders);
+        for (AbstractFile folder:initialFolders)
+        	AppLogger.finest("\t"+folder);
+        		
         this.mainFrame = mainFrame;
 
         // No decoration for this panel
@@ -189,32 +212,25 @@ public class FolderPanel extends JPanel implements FocusListener {
                 bookmarksQL,
                 rootsQL};
 
-        try {
-            // Set initial folder to current directory
-            setCurrentFolder(initialFolder, initialFolder.ls(configurableFolderFilter), null);
-        }
-        catch(Exception e) {
-            AbstractFile rootFolders[] = LocalFile.getVolumes();
-            // If that failed, try to read any other drive
-            for(int i=0; i<rootFolders.length; i++) {
-                try  {
-                    setCurrentFolder(rootFolders[i], rootFolders[i].ls(configurableFolderFilter), null);
-                    break;
-                }
-                catch(IOException e2) {
-                    if (i==rootFolders.length-1) {
-                        // Now we're screwed
-                        throw new RuntimeException("Unable to read any drive");
-                    }
-                }					
-            }
-        }
-
-        // Create the Tabs (Must be called after the fileTable was created and current folder was set)
-        tabs = new FileTableTabs(mainFrame, this);
-        
         // Create the FolderChangeMonitor that monitors changes in the current folder and automatically refreshes it
-        folderChangeMonitor = new FolderChangeMonitor(this);
+    	// after the first location is set
+        locationManager.addLocationListener(new LocationAdapter() {
+			@Override
+			public void locationChanged(LocationEvent locationEvent) {
+				final LocationAdapter thisLocationListenerInstance = this;
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						folderChangeMonitor = new FolderChangeMonitor(FolderPanel.this);
+						locationManager.removeLocationListener(thisLocationListenerInstance);						
+					}
+				});
+			}
+        });
+
+    	// Create the Tabs (Must be called after the fileTable was created and current folder was set)
+        tabs = new FileTableTabs(mainFrame, this, initialFolders);
 
         // create folders tree on a JSplitPane 
         foldersTreePanel = new FoldersTreePanel(this);

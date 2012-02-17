@@ -27,6 +27,7 @@ import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
@@ -39,6 +40,7 @@ import com.mucommander.AppLogger;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
+import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
@@ -153,31 +155,51 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *               {@link #RIGHT_FRAME}).
      * @return       the user's initial path for the specified frame.
      */ 
-    private static AbstractFile getInitialPath(int frame) {
-        boolean      isCustom;   // Whether the initial path is a custom one or the last used folder.
-        String       folderPath; // Path to the initial folder.
-        AbstractFile folder;     // Initial folder.
-
+    private static AbstractFile[] getInitialPaths(int frame) {
+        boolean       isCustom;    // Whether the initial path is a custom one or the last used folder.
+        String[]      folderPaths; // Paths to the initial folders.
+        
+        // Snapshot configuration
+        Configuration snapshot = MuConfigurations.getSnapshot();
+        // Preferences configuration
+        Configuration preferences = MuConfigurations.getPreferences();
+        
         // Checks which kind of initial path we're dealing with.
-        isCustom = (frame == LEFT_FRAME ? MuConfigurations.getPreferences().getVariable(MuPreferences.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
-        	MuConfigurations.getPreferences().getVariable(MuPreferences.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
+        isCustom = (frame == LEFT_FRAME ? preferences.getVariable(MuPreferences.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
+        	preferences.getVariable(MuPreferences.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
-        if (isCustom)
-            folderPath = (frame == LEFT_FRAME ? MuConfigurations.getPreferences().getVariable(MuPreferences.LEFT_CUSTOM_FOLDER) :
-            	MuConfigurations.getPreferences().getVariable(MuPreferences.RIGHT_CUSTOM_FOLDER));
-
+        if (isCustom) {
+        	folderPaths = new String[] {(frame == LEFT_FRAME ? preferences.getVariable(MuPreferences.LEFT_CUSTOM_FOLDER) :
+        		preferences.getVariable(MuPreferences.RIGHT_CUSTOM_FOLDER))};
+        }
         // Handles "last folder" initial paths.
-        else
-            folderPath = (frame == LEFT_FRAME ? MuConfigurations.getSnapshot().getVariable(MuSnapshot.LAST_LEFT_FOLDER) :
-            	MuConfigurations.getSnapshot().getVariable(MuSnapshot.LAST_RIGHT_FOLDER));
+        else {
+        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(frame == LEFT_FRAME), 0);
+        	folderPaths = new String[nbFolderPaths];
+        	for (int i=0; i<nbFolderPaths;++i)
+        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(frame == LEFT_FRAME, i));
+        }
 
+        List<AbstractFile> initialFolders = new LinkedList<AbstractFile>(); // Initial folders 
+        AbstractFile folder;
+        
+        for (String folderPath : folderPaths) {
+        	// TODO: consider whether to search for workable path in case the folder doesn't exist
+        	if (folderPath != null && (folder = FileFactory.getFile(folderPath)) != null && folder.exists())
+        		initialFolders.add(folder);
+        }
+        
         // If the initial path is not legal or does not exist, defaults to the user's home.
-        if(folderPath == null || (folder = FileFactory.getFile(folderPath)) == null || !folder.exists())
-            folder = FileFactory.getFile(System.getProperty("user.home"));
+        AbstractFile[] results = initialFolders.size() == 0 ?
+        		new AbstractFile[] {FileFactory.getFile(System.getProperty("user.home"))} :
+        		initialFolders.toArray(new AbstractFile[0]);
 
-        AppLogger.finer("initial folder= "+folder);
-        return folder;
+         AppLogger.finer("initial folders:");
+         for (AbstractFile result:results)
+        	 AppLogger.finer("\t"+result);
+        
+        return results;
     }
 
     /**
@@ -197,10 +219,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *               {@link #RIGHT_FRAME}).
      * @return       our best shot at what was actually requested.
      */
-    private static AbstractFile getInitialAbstractPath(String path, int frame) {
+    private static AbstractFile[] getInitialAbstractPaths(String path, int frame) {
         // This is one of those cases where a null value actually has a proper meaning.
         if(path == null)
-            return getInitialPath(frame);
+            return getInitialPaths(frame);
 
         // Tries the specified path as-is.
         AbstractFile file;
@@ -213,7 +235,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     file = null;
                 break;
             }
-            // If an AuthException occured, gets login credential from the user.
+            // If an AuthException occurred, gets login credential from the user.
             catch(Exception e) {
                 if(e instanceof AuthException) {
                     // Prompts the user for a login and password.
@@ -229,7 +251,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     }
                     // If the user cancels, we fall back to the default path.
                     else {
-                        return getInitialPath(frame);
+                        return getInitialPaths(frame);
                     }
                 }
                 else {
@@ -244,16 +266,16 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // Tries the specified path as a relative path.
             if((file = FileFactory.getFile(new File(path).getAbsolutePath())) == null || !file.exists())
                 // Defaults to home.
-                return getInitialPath(frame);
+                return getInitialPaths(frame);
 
         // If the specified path is a non-browsable, uses its parent.
         if(!file.isBrowsable())
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
             if((file = file.getParent()) == null)
-                return getInitialPath(frame);
+                return getInitialPaths(frame);
 
-        return file;
+        return new AbstractFile[] {file};
     }
     
     
@@ -310,30 +332,30 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */	
     public static synchronized MainFrame createNewMainFrame() {
         if(currentMainFrame == null)
-            return createNewMainFrame(getInitialPath(LEFT_FRAME), getInitialPath(RIGHT_FRAME));
-        return createNewMainFrame(currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder(),
-                                  currentMainFrame.getRightPanel().getFileTable().getCurrentFolder());
+            return createNewMainFrame(getInitialPaths(LEFT_FRAME), getInitialPaths(RIGHT_FRAME));
+        return createNewMainFrame(new AbstractFile[] {currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
+                                  new AbstractFile[] {currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()});
     }
 
     /**
      * Creates a new MainFrame and makes it visible on the screen, on top of any other frame.
      * @param  folder1 path on which the left frame will be opened.
      * @param  folder2 path on which the right frame will be opened.
-     * @return         a fully initialised mainframe.
+     * @return         a fully initialized mainframe.
      */
     public static synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
-        return createNewMainFrame(getInitialAbstractPath(folder1, LEFT_FRAME),
-                                  getInitialAbstractPath(folder2, RIGHT_FRAME));
+        return createNewMainFrame(getInitialAbstractPaths(folder1, LEFT_FRAME),
+                                  getInitialAbstractPaths(folder2, RIGHT_FRAME));
     }
 
     /**
      * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
      *
-     * @param folder1 initial path for the left frame.
-     * @param folder2 initial path for the right frame.
+     * @param leftFolders initial paths for the left frame.
+     * @param rightFolders initial paths for the right frame.
      * @return the newly created MainFrame.
      */
-    public static synchronized MainFrame createNewMainFrame(AbstractFile folder1, AbstractFile folder2) {
+    public static synchronized MainFrame createNewMainFrame(AbstractFile[] leftFolders, AbstractFile[] rightFolders) {
         MainFrame newMainFrame; // New MainFrame.
         Dimension screenSize;   // Used to compute the new MainFrame's proper location.
         int       x;            // Horizontal position of the new MainFrame.
@@ -343,7 +365,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Initialization.
         if(currentMainFrame == null)
-            newMainFrame = new MainFrame(folder1, folder2);
+            newMainFrame = new MainFrame(leftFolders, rightFolders);
         else
             newMainFrame = currentMainFrame.cloneMainFrame();
         screenSize   = Toolkit.getDefaultToolkit().getScreenSize();

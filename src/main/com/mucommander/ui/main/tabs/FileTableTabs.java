@@ -39,13 +39,32 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	/** FolderPanel containing those tabs */
 	private FolderPanel folderPanel;
 	
-	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel) {
+	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, AbstractFile[] initialFolders) {
 		super(new FileTableTabsDisplayFactory(mainFrame, folderPanel));
 		
 		this.folderPanel = folderPanel;
+		
+		// Register to location change events
 		folderPanel.getLocationManager().addLocationListener(this);
 		
-		add(folderPanel.getCurrentFolder());
+		// Add the initial folders
+		for (AbstractFile folder : initialFolders)
+			addTab(FileTableTab.create(folder));
+	
+		// TODO: change
+		selectTab(0);
+	}
+	
+	@Override
+	protected void selectTab(int index) {
+		super.selectTab(index);
+
+		try {
+			folderPanel.tryChangeCurrentFolder(getTab(index).getLocation(), null, true).join();
+		} catch (InterruptedException e) {
+			// We're screwed - no valid location to display
+			throw new RuntimeException("Unable to read any drive");
+		}
 	}
 	
 	/**
@@ -85,9 +104,9 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		removeOtherTabs();
 	}
 
-	/*******************
+	/****************
 	 * Other Actions
-	 *******************/
+	 ****************/
 	
 	public void close(FileTableTabHeader fileTableTabHeader) {
 		removeTab(fileTableTabHeader);

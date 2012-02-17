@@ -46,15 +46,6 @@ import com.mucommander.ui.main.tabs.FileTableTab;
  */
 public class MuSnapshot {
 
-	// - Startup folder variables --------------------------------------------
-    // -----------------------------------------------------------------------
-	/** Name for variables that describe the last visited folder of a panel. */
-    public static final String  LAST_FOLDER                       = "last_folder";
-    /** Last visited folder in the left panel. */
-    public static final String  LAST_LEFT_FOLDER                  = MuPreferences.LEFT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
-    /** Last visited folder in the right panel. */
-    public static final String  LAST_RIGHT_FOLDER                 = MuPreferences.RIGHT_STARTUP_FOLDER_SECTION + '.' + LAST_FOLDER;
-    
     // - Last window variables -----------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing known information about the last muCommander window. */
@@ -276,7 +267,7 @@ public class MuSnapshot {
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that holds the number of presented tabs in the specified FolderPanel
      */
-    private static String getTabsCountVariable(boolean left) {
+    public static String getTabsCountVariable(boolean left) {
     	return getTabsSection(left) + "." + TABS_COUNT;
     }
     
@@ -299,7 +290,7 @@ public class MuSnapshot {
      * @param index the index of tab at the FolderPanel's tabs 
      * @return the variable that holds the location presented at the tab in the given index in the specified FolderPanel
      */
-    private static String getTabLocationVariable(boolean left, int index) {
+    public static String getTabLocationVariable(boolean left, int index) {
     	return getTabSection(left, index) + "." + TAB_LOCATION;
     }
     
@@ -356,12 +347,6 @@ public class MuSnapshot {
     	//Clear the configuration before saving to drop preferences which are unused anymore
     	configuration.clear();
     	
-    	// Save last folders
-    	configuration.setVariable(MuSnapshot.LAST_LEFT_FOLDER, 
-    			currentMainFrame.getLeftPanel().getFolderHistory().getLastRecallableFolder());
-    	configuration.setVariable(MuSnapshot.LAST_RIGHT_FOLDER, 
-    			currentMainFrame.getRightPanel().getFolderHistory().getLastRecallableFolder());
-
     	// Save window position, size and screen resolution
         setWindowAttributes(currentMainFrame);
         

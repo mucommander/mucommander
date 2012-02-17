@@ -181,6 +181,27 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		return tabs.iterator();
 	}
 	
+	/**
+	 * Returns the tab at the given index
+	 * An exception will be thrown if no tab exists in the given index
+	 * 
+	 * @param index of the requested tab
+	 * @return tab in the given index
+	 */
+	protected T getTab(int index) {
+		return tabs.get(index);
+	}
+	
+	/**
+	 * Select the tab at the given index
+	 * An exception will be thrown if no tab exists in the given index
+	 * 
+	 * @param index of the tab to be selected
+	 */
+	protected void selectTab(int index) {
+		display.setSelectedTabIndex(index);
+	}
+	
 	/*********************
 	 * TabsChangeListener 
 	 *********************/
