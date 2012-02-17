@@ -18,7 +18,7 @@ Please visit the muCommander forums (http://www.mucommander.com/forums) to ask
 questions, suggest features or report a bug. Your feedback is always welcome!
 
 Official website: http://www.mucommander.com .
-Copyright (C) 2002-2010 Maxence Bernard.
+Copyright (C) 2002-2012 Maxence Bernard.
 
 
 Requirements
