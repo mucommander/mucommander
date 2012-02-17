@@ -18,13 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.QuickLists;
 
 public class ShowBookmarksQLAction extends ShowQuickListAction {
 	
@@ -34,7 +39,7 @@ public class ShowBookmarksQLAction extends ShowQuickListAction {
 	
 	@Override
     public void performAction() {
-		openQuickList(FolderPanel.BOOKMARKS_QUICK_LIST_INDEX);
+		openQuickList(QuickLists.BOOKMARKS);
 	}
 	
 	public static class Factory implements ActionFactory {

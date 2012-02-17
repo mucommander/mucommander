@@ -28,8 +28,8 @@ import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.QuickLists;
 
 /**
  * This action shows RootFoldersQL on the current active FileTable.
@@ -44,7 +44,7 @@ public class ShowRootFoldersQLAction extends ShowQuickListAction {
 	
 	@Override
     public void performAction() {
-		openQuickList(FolderPanel.ROOTS_QUICK_LIST_INDEX);
+		openQuickList(QuickLists.ROOTS);
 	}
 	
 	public static class Factory implements ActionFactory {

@@ -20,6 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.QuickLists;
 
 import java.util.Map;
 
@@ -35,7 +36,7 @@ abstract class ShowQuickListAction extends MuAction {
 		super(mainFrame, properties);		
 	}
 	
-	public void openQuickList(int index) {		
-		mainFrame.getActivePanel().showQuickList(index);
+	public void openQuickList(QuickLists quickList) {		
+		mainFrame.getActivePanel().showQuickList(quickList.ordinal());
 	}
 }

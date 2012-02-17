@@ -18,13 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.QuickLists;
 
 /**
  * This action shows RecentLocationsQL on the current active FileTable.
@@ -40,7 +45,7 @@ public class ShowRecentLocationsQLAction extends ShowQuickListAction {
 	
 	@Override
     public void performAction() {
-		openQuickList(FolderPanel.RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX);
+		openQuickList(QuickLists.RECENT_ACCESSED_LOCATIONS);
 	}
 	
 	public static class Factory implements ActionFactory {

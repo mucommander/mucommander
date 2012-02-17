@@ -138,14 +138,7 @@ public class FolderPanel extends JPanel implements FocusListener {
     protected static BookmarksQL bookmarksQL = new BookmarksQL();
     protected static RootFoldersQL rootsQL = new RootFoldersQL();
     
-    public static final int PARENT_FOLDERS_QUICK_LIST_INDEX = 0;
-    public static final int RECENT_ACCESSED_LOCATIONS_QUICK_LIST_INDEX = 1;
-    public static final int RECENT_EXECUTED_FILES_QUICK_LIST_INDEX = 2;
-    public static final int BOOKMARKS_QUICK_LIST_INDEX = 3;
-    public static final int ROOTS_QUICK_LIST_INDEX = 4;
-    
     /* TODO branch private boolean branchView; */
-
 
     /**
      * Constructor. For backward compatibility
