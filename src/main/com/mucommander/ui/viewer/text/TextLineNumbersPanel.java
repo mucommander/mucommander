@@ -1,19 +1,32 @@
 package com.mucommander.ui.viewer.text;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.*;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.HashMap;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.Utilities;
 
 /**
  * Panel in which the line numbers at a given text component are presented.
@@ -60,22 +73,24 @@ public class TextLineNumbersPanel extends JPanel implements CaretListener, Docum
 	 *                               the minimum width of the component
 	 */
 	public TextLineNumbersPanel(JTextComponent component, int minimumDisplayDigits) {
-		this(component, minimumDisplayDigits, new MatteBorder(0, 0, 0, 2, Color.GRAY), 4, ALIGNMENT.CENTER, Color.GREEN);
+		this(component, minimumDisplayDigits, new EmptyBorder(0, 0, 0, 2), 4, ALIGNMENT.CENTER);
 	}
 	
 	public TextLineNumbersPanel(JTextComponent component, int minimumDisplayDigits, Border border, int borderGap, 
-			ALIGNMENT alignment, Color currentLineForeground) {
+			ALIGNMENT alignment) {
 		this.component = component;
 
-		setCurrentLineForeground( currentLineForeground );
+		setBackground(Color.LIGHT_GRAY);
+		setForeground(Color.black);
+		setCurrentLineForeground(new Color(0,0,255));
 		setDigitAlignment(alignment);
-		setBorder( border, borderGap );
-		setMinimumDisplayDigits( minimumDisplayDigits );
-		setFont( component.getFont() );
+		setBorder(border, borderGap);
+		setMinimumDisplayDigits( minimumDisplayDigits);
+		setFont(component.getFont());
 		
 		component.getDocument().addDocumentListener(this);
 		component.addPropertyChangeListener("font", this);
-		component.addCaretListener( this );
+		component.addCaretListener(this);
 	}
 	
 	/**
