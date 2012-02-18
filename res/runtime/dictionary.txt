@@ -3762,7 +3762,7 @@ Rename.tooltip:CS:Přejmenovat vybraný soubor
 Rename.tooltip:zh_TW:重新命名已選取檔案
 Rename.tooltip:PL:Przemianuj zaznaczone pliki
 Rename.tooltip:HU:A kijelölt fájl átnevezése
-Rename.tooltip:RU:Переименоание выбранного файла
+Rename.tooltip:RU:Переименование выбранного файла
 Rename.tooltip:zh_CN:重新命名选定文件
 Rename.tooltip:SL:Preimenuj označeno datoteko
 Rename.tooltip:RO:Redenumește fișierul selectat
@@ -4478,7 +4478,7 @@ GoToParentInBothPanels.label:UA:Перейти наверх в обох пане
 GoToParentInBothPanels.label:AR:اذهب للأب في كلا اللوحتين
 GoToParentInBothPanels.label:SK:O úroveň vyššie v obidvoch paneloch
 GoToParentInBothPanels.label:zh_CN:两边面板同时返回上一级
-GoToParentInBothPanels.label:RU:Перейти наверх в обох панелях
+GoToParentInBothPanels.label:RU:Перейти наверх в обеих панелях
 GoToParentInBothPanels.label:BE:Перайсьці на ўзровень вышэй у абедзьвюх панэлях
 GoToParentInBothPanels.label:NB:Opp en mappe, begge paneler
 GoToParentInBothPanels.label:TR:Her iki panelde üst dizine git
@@ -6141,7 +6141,7 @@ CustomizeCommandBar.label:HU:Parancsszalag beállítása
 CustomizeCommandBar.label:CS:Přizpůsobit lištu příkazů
 CustomizeCommandBar.label:zh_CN:自定义命令条
 CustomizeCommandBar.label:PL:Dostosuj pasek komend
-CustomizeCommandBar.label:RU:Настройка панели комманд
+CustomizeCommandBar.label:RU:Настройка панели команд
 CustomizeCommandBar.label:BE:Наладка панэлі каманд
 CustomizeCommandBar.label:NB:Tilpass kommandolinjen
 CustomizeCommandBar.label:TR:Komut çubuğunu özelleştir
@@ -8203,7 +8203,7 @@ command_bar_dialog.help:HU:A nyomógombok húzásával módosíthatja a Parancss
 command_bar_dialog.help:CS:Přetáhněte vybraná tlačítka na náhled lišty
 command_bar_dialog.help:zh_CN:拖拽按钮来自定义命令条
 command_bar_dialog.help:PL:Przenieś przyciski aby dostosować pasek komend
-command_bar_dialog.help:RU:Перетаскивайте кнопки для настройки панели комманд
+command_bar_dialog.help:RU:Перетаскивайте кнопки для настройки панели команд
 command_bar_dialog.help:BE:Перацягвайце кнопкі для наладкі панэлі каманд
 command_bar_dialog.help:NB:Dra i knappene for å tilpasse kommandolinjen
 command_bar_dialog.help:TR:Komut çubuğunu özelleştirmek için düğmeleri sürükleyin
@@ -9745,7 +9745,7 @@ delete.deleting_file:CS:Mažu %1
 delete.deleting_file:zh_TW:正在刪除 %1
 delete.deleting_file:PL:Usuwam %1
 delete.deleting_file:HU:Törlés %1
-delete.deleting_file:RU:Удаляеся файл %1
+delete.deleting_file:RU:Удаляется файл %1
 delete.deleting_file:zh_CN:正在刪除 %1
 delete.deleting_file:SL:Brisanje %1
 delete.deleting_file:RO:În curs de ștergere %1
@@ -9804,7 +9804,7 @@ email_dialog.prefs_not_set:CS:Nejprve nastavte parametry pro odesílání elektr
 email_dialog.prefs_not_set:zh_TW:你必須要先設定郵件參數
 email_dialog.prefs_not_set:PL:Musisz ustwaić najpierw parametry poczty.
 email_dialog.prefs_not_set:HU:Önnek be kell állítania a levelező paramétereit.
-email_dialog.prefs_not_set:RU:Вам необходимо настроить параметры почты перед тем, как пытатсья что-то отправить.
+email_dialog.prefs_not_set:RU:Вам необходимо настроить параметры почты перед тем, как пытаться что-то отправить.
 email_dialog.prefs_not_set:zh_CN:你需要先设置邮件参数
 email_dialog.prefs_not_set:SL:Vnesite parametre za e-pošto.
 email_dialog.prefs_not_set:RO:Mai întâi trebuie să configurați email-ul 
@@ -10047,7 +10047,7 @@ email.connecting_to_server:CS:Připojuji se k %1
 email.connecting_to_server:zh_TW:連接至 %1
 email.connecting_to_server:PL:Podłączam się do %1
 email.connecting_to_server:HU:Kapcsolódás %1
-email.connecting_to_server:RU:Установка сооединения с %1
+email.connecting_to_server:RU:Установка соединения с %1
 email.connecting_to_server:zh_CN:连接到 %1
 email.connecting_to_server:SL:Povezovanje z %1
 email.connecting_to_server:RO:În curs de conectare la %1
@@ -12143,7 +12143,7 @@ ftp_connect.anonymous_user:CA:Usuari anònim
 
 ftp_connect.nb_connection_retries:EN:Number of connection retries
 ftp_connect.nb_connection_retries:FR:Nombre de re-tentatives de connexion
-ftp_connect.nb_connection_retries:RU:Количество попыткок установления соединения
+ftp_connect.nb_connection_retries:RU:Количество попыток установления соединения
 ftp_connect.nb_connection_retries:DA:Antal gentagende forbindelses forsøg
 ftp_connect.nb_connection_retries:NL:Hoeveelheid pogingen tot verbinden
 ftp_connect.nb_connection_retries:RO:Numărul de încercări de conectare
@@ -14341,7 +14341,7 @@ theme_editor.selected_unfocused:ES:Seleccionado (sin foco)
 theme_editor.selected_unfocused:pt_BR:Selecionado (sem o foco)
 theme_editor.selected_unfocused:SK:Vybraný (neaktívny)
 theme_editor.selected_unfocused:SL:Izbrano (without focus)
-theme_editor.selected_unfocused:RU:Выбраный (без фокуса)
+theme_editor.selected_unfocused:RU:Выбранный (без фокуса)
 theme_editor.selected_unfocused:DE:Ausgewählt (ohne Fokus)
 theme_editor.selected_unfocused:CS:Výběr (bez fokusu)
 theme_editor.selected_unfocused:IT:Selezionato (senza focus)
