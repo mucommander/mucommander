@@ -556,6 +556,7 @@ skip_all:BE:Прапусьціць усё
 skip_all:NB:Hopp over alle
 skip_all:TR:Tümünü atla
 skip_all:CA:Omet-los tots
+skip_all:UA:Пропустити все
 # Translation missing (New!)
 
 
@@ -891,6 +892,7 @@ split:BE:Разьбіць
 split:NB:Del opp
 split:TR:Böl
 split:CA:Divideix
+split:UA:Розділити
 # Translation missing (New!)
 
 
@@ -928,6 +930,7 @@ combine:BE:Злучыць
 combine:NB:Sammenflett
 combine:TR:Birleştir
 combine:CA:Combina
+combine:UA:Об'єднати
 # Translation missing (New!)
 
 
@@ -1210,6 +1213,7 @@ customize:BE:Наладзіць
 customize:NB:Tilpass
 customize:TR:Özelleştir
 customize:CA:Personalitza
+customize:UA:Налаштувати
 # Translation missing (New!)
 
 
@@ -1385,6 +1389,7 @@ preferred_encodings:BE:Абраныя кадыроўкі
 preferred_encodings:NB:Foretrukket tegnsett
 preferred_encodings:TR:Tercih edilen kodlamalar
 preferred_encodings:CA:Codificacions preferides
+preferred_encodings:UA:Доступні кодування
 # Translation missing (New!)
 
 
@@ -2053,6 +2058,7 @@ details:BE:Падрабязьней
 details:NB:Detaljer
 details:TR:Ayrıntılar
 details:CA:Detalls
+details:UA:Детальніше
 # Translation missing (New!)
 
 
@@ -2699,6 +2705,7 @@ startup_error:BE:Пры запуску muCommander'у ўзьнікла памы�
 startup_error:NB:En feil forhindret muCommander fra å starte.
 startup_error:TR:muCommander başlatılırken bir hata oluştu.
 startup_error:CA:Un error ha impedit iniciar l'muCommander
+startup_error:UA:Під час запуску muCommander'а виникла помилка.
 # Translation missing (New!)
 
 
@@ -2911,6 +2918,7 @@ action_categories.all:BE:Усе
 action_categories.all:NB:Alle
 action_categories.all:TR:Tümü
 action_categories.all:CA:Tots
+action_categories.all:UA:Всі
 # Translation missing (New!)
 
 
@@ -3528,6 +3536,7 @@ InternalView.label:BE:Прагляд (убудаваным)
 InternalView.label:NB:Vis (intern)
 InternalView.label:TR:Görüntüle (dahili)
 InternalView.label:CA:Visualitza (intern)
+InternalView.label:UA:Перегляд (вбудованим)
 # Translation missing (New!)
 
 
@@ -3596,6 +3605,7 @@ InternalEdit.label:BE:Рэдагаваць (убудаваным)
 InternalEdit.label:NB:Rediger (intern)
 InternalEdit.label:TR:Düzenle (dahili)
 InternalEdit.label:CA:Edita (intern)
+InternalEdit.label:UA:Редагувати (вбудованим)
 # Translation missing (New!)
 
 
@@ -4938,6 +4948,7 @@ MarkNextBlock.label:BE:Вылучыць блок радкоў уніз
 MarkNextBlock.label:NB:Marker en blokk nedover
 MarkNextBlock.label:TR:Aşağı doğru bir blok işaretle
 MarkNextBlock.label:CA:Selecciona un bloc
+MarkNextBlock.label:UA:Виділити блок рядків вниз
 # Translation missing (New!)
 
 
@@ -4975,6 +4986,7 @@ MarkPreviousBlock.label:BE:Вылучыць блок радкоў уверх
 MarkPreviousBlock.label:NB:Marker en blokk oppover
 MarkPreviousBlock.label:TR:Yukarı doğru bir blok işaretle
 MarkPreviousBlock.label:CA:Selecciona un bloc
+MarkPreviousBlock.label:UA:Виділити блок рядків вверх
 # Translation missing (New!)
 
 
@@ -5012,6 +5024,7 @@ MarkNextRow.label:BE:Парадковае вылучэньне ўніз
 MarkNextRow.label:NB:Marker en rad nedover
 MarkNextRow.label:TR:Aşağı doğru bir satır işaretle
 MarkNextRow.label:CA:Selecciona una fila cap avall
+MarkNextRow.label:UA:Виділити рядок вниз
 # Translation missing (New!)
 
 
@@ -5049,6 +5062,7 @@ MarkPreviousRow.label:BE:Парадковае вылучэньне ўверх
 MarkPreviousRow.label:NB:Marker en rad oppover
 MarkPreviousRow.label:TR:Yukarı doğru bir satır işaretle
 MarkPreviousRow.label:CA:Selecciona una fila cap amunt
+MarkPreviousRow.label:UA:Виділити рядок вверх
 # Translation missing (New!)
 
 
@@ -5500,6 +5514,7 @@ OpenNatively.tooltip:TR:Seçilen dosyayı sistemin dosya uzantı ayarlarıyla ç
 OpenNatively.tooltip:CA:Executa el fitxer seleccionat amb el programa associat al sistema
 
 OpenInNewTab.label:EN:Open in new tab
+OpenInNewTab.label:UA:Відкрити у новій вкладці
 # Translation missing (New!)
 
 OpenInOtherPanel.label:EN:Open in other panel
@@ -5961,6 +5976,7 @@ ToggleColumn.show:BE:Паказаць слупок %1
 ToggleColumn.show:NB:Vis %1 kolonne
 ToggleColumn.show:TR:%1 sütununu göster
 ToggleColumn.show:CA:Mostra la columna %1
+ToggleColumn.show:UA:Показати стовпець %1
 # Translation missing (New!)
 
 
@@ -5999,6 +6015,7 @@ ToggleColumn.hide:BE:Прыбраць слупок %1
 ToggleColumn.hide:NB:Skjul %1 kolonne
 ToggleColumn.hide:TR:%1 sütununu gizle
 ToggleColumn.hide:CA:Amaga la columna %1
+ToggleColumn.hide:UA:Сховати стовпець %1
 # Translation missing (New!)
 
 
@@ -6146,6 +6163,7 @@ CustomizeCommandBar.label:BE:Наладка панэлі каманд
 CustomizeCommandBar.label:NB:Tilpass kommandolinjen
 CustomizeCommandBar.label:TR:Komut çubuğunu özelleştir
 CustomizeCommandBar.label:CA:Personalitza la barra de comandes
+CustomizeCommandBar.label:UA:Налаштування панелі команд
 # Translation missing (New!)
 
 
@@ -6494,6 +6512,7 @@ SelectNextBlock.label:BE:Спусьціцца на блок радкоў уні�
 SelectNextBlock.label:NB:Hopp en blokk ned
 SelectNextBlock.label:TR:Bir blok aşağı atla
 SelectNextBlock.label:CA:Salta un bloc avall
+SelectNextBlock.label:UA:Опуститись на блок рядків вниз
 # Translation missing (New!)
 
 
@@ -6531,6 +6550,7 @@ SelectPreviousBlock.label:BE:Падняцца на блок радкоў уве�
 SelectPreviousBlock.label:NB:Hopp en blokk opp
 SelectPreviousBlock.label:TR:Bir blok yukarı atla
 SelectPreviousBlock.label:CA:Salta un bloc amunt
+SelectPreviousBlock.label:UA:Піднятись на блок рядків вверх
 # Translation missing (New!)
 
 
@@ -6568,6 +6588,7 @@ SelectNextPage.label:BE:Перайсьці ў канец старонкі
 SelectNextPage.label:NB:Hopp ned en side
 SelectNextPage.label:TR:Bir sayfa aşağı atla
 SelectNextPage.label:CA:Salta una pàgina avall
+SelectNextPage.label:UA:Перейти в кінець сторінки
 # Translation missing (New!)
 
 
@@ -6605,6 +6626,7 @@ SelectPreviousPage.label:BE:Перайсьці ў пачатак старонк�
 SelectPreviousPage.label:NB:Hopp opp en side
 SelectPreviousPage.label:TR:Bir sayfa yukarı atla
 SelectPreviousPage.label:CA:Salta una pàgina amunt
+SelectPreviousPage.label:UA:Перейти на початок сторінки
 # Translation missing (New!)
 
 
@@ -6642,6 +6664,7 @@ SelectNextRow.label:BE:Спусьціцца на адзін радок уніз
 SelectNextRow.label:NB:Hopp ned en rad
 SelectNextRow.label:TR:Bir satır aşağı atla
 SelectNextRow.label:CA:Salta una fila avall
+SelectNextRow.label:UA:Опуститись на один рядок вниз
 # Translation missing (New!)
 
 
@@ -6679,6 +6702,7 @@ SelectPreviousRow.label:BE:Падняцца на адзін радок увер�
 SelectPreviousRow.label:NB:Hopp opp en rad
 SelectPreviousRow.label:TR:Bir satır yukarı atla
 SelectPreviousRow.label:CA:Salta una fila amunt
+SelectPreviousRow.label:UA:Піднятись на один рядок вверх
 # Translation missing (New!)
 
 
@@ -7261,6 +7285,7 @@ ShowRecentExecutedFilesQL.label:CA:Fitxers executats recentment
 # Translation missing (ES, KO)
 
 ShowRootFoldersQL.label:EN:Root folders
+ShowRootFoldersQL.label:UA:Кореневі папки
 # Translation missing (New!)
 
 SplitFile.label:EN:$[split]
@@ -7285,6 +7310,7 @@ SplitFile.tooltip:BE:Падзяліць файл на некалькі част�
 SplitFile.tooltip:NB:Del en fil opp i flere deler
 SplitFile.tooltip:TR:Dosyayı birden fazla parçaya böl
 SplitFile.tooltip:CA:Divideix un fitxer en múltiples parts
+SplitFile.tooltip:UA:Розділити файл на декілька частин
 # Translation missing (New!)
 
 
@@ -7322,6 +7348,7 @@ CombineFiles.tooltip:BE:Сабраць падзелены на часткі фа
 CombineFiles.tooltip:NB:Kombiner oppdelte filer for å gjenskape orginalfilen
 CombineFiles.tooltip:TR:Bölünmüş dosya parçalarını birleştirip orjinal dosyayı tekrar oluştur
 CombineFiles.tooltip:CA:Torna a crear un fitxer dividit en múltiples parts
+CombineFiles.tooltip:UA:Об'єднати розділений на частини файл в початковий файл
 # Translation missing (New!)
 
 
@@ -7358,6 +7385,7 @@ ShowDebugConsole.label:BE:Кансоль Debug
 ShowDebugConsole.label:NB:Feilsøkingskonsoll
 ShowDebugConsole.label:TR:Hata ayıklama konsolu
 ShowDebugConsole.label:CA:Consola de depuració
+ShowDebugConsole.label:UA:Консоль Debug
 # Translation missing (New!)
 
 
@@ -7395,6 +7423,7 @@ FocusPrevious.label:BE:Перайсьці да наступнага кампан
 FocusPrevious.label:NB:Fokuser på forrige komponent
 FocusPrevious.label:TR:Önceki bileşene odaklan
 FocusPrevious.label:CA:Marca el component anterior
+FocusPrevious.label:UA:Перейти до попереднього компоненту
 # Translation missing (New!)
 
 
@@ -7433,6 +7462,7 @@ FocusNext.label:BE:Перайсьці да наступнага кампанэн
 FocusNext.label:NB:Fokuser på neste komponent
 FocusNext.label:TR:Sonraki bileşene odaklan
 FocusNext.label:CA:Marca el component següent
+FocusNext.label:UA:Перейти до наступного компоненту
 # Translation missing (New!)
 
 
@@ -7683,6 +7713,7 @@ drive_popup.network_shares:BE:Абагульнены сеткавы рэсурс
 drive_popup.network_shares:NB:Nettverksmapper
 drive_popup.network_shares:TR:Ağ paylaşımları
 drive_popup.network_shares:CA:Xarxa compartida
+drive_popup.network_shares:UA:Спільний мережевий ресурс
 # Translation missing (New!)
 
 # Title of the Quick lists menu
@@ -7908,6 +7939,7 @@ shortcuts_panel.title:BE:Камбінацыі клявіш
 shortcuts_panel.title:NB:Snarveier
 shortcuts_panel.title:TR:Kısayollar
 shortcuts_panel.title:CA:Dreceres
+shortcuts_panel.title:UA:Комбінації клавіш
 # Translation missing (New!)
 
 
@@ -7945,6 +7977,7 @@ shortcuts_panel.restore_defaults:BE:Вярнуць стандартныя
 shortcuts_panel.restore_defaults:NB:Gjenopprett innstillinger
 shortcuts_panel.restore_defaults:TR:Varsayılanları yükle
 shortcuts_panel.restore_defaults:CA:Restaura per defecte
+shortcuts_panel.restore_defaults:UA:Відновити стандартні
 # Translation missing (New!)
 
 
@@ -7982,6 +8015,7 @@ shortcuts_panel.show:BE:Адлюстраваць
 shortcuts_panel.show:NB:Vis
 shortcuts_panel.show:TR:Göster
 shortcuts_panel.show:CA:Mostra
+shortcuts_panel.show:UA:Показати
 # Translation missing (New!)
 
 
@@ -8019,6 +8053,7 @@ shortcuts_panel.default_message:BE:Націснуўшы Enter альбо зра�
 shortcuts_panel.default_message:NB:Trykk Enter eller dobbeltklikk på snarveien du vil redigere
 shortcuts_panel.default_message:TR:Düzenlemek istediğiniz kısayola çift tıklayın ya da Enter tuşuna basın
 shortcuts_panel.default_message:CA:Prem Enter o fes doble clic sobre la drecera per editar
+shortcuts_panel.default_message:UA:Натиснення Enter або подвійний клік надасть змогу редагувати комбінації клавіш
 # Translation missing (New!)
 
 
@@ -8056,6 +8091,7 @@ shortcuts_table.action_description:BE:Апісаньне дзеяньня
 shortcuts_table.action_description:NB:Handlingsbeskrivelse
 shortcuts_table.action_description:TR:Eylem açıklaması
 shortcuts_table.action_description:CA:Descripció de l'acció
+shortcuts_table.action_description:UA:Опис дії
 # Translation missing (New!)
 
 
@@ -8093,6 +8129,7 @@ shortcuts_table.shortcut:BE:Камбінацыі клявіш
 shortcuts_table.shortcut:NB:Snarvei
 shortcuts_table.shortcut:TR:Kısayol
 shortcuts_table.shortcut:CA:Drecera
+shortcuts_table.shortcut:UA:Комбінації клавіш
 # Translation missing (New!)
 
 
@@ -8130,6 +8167,7 @@ shortcuts_table.alternate_shortcut:BE:Альтэрнатыўныя камбін�
 shortcuts_table.alternate_shortcut:NB:Alternativ snarvei
 shortcuts_table.alternate_shortcut:TR:Alternatif Kısayol
 shortcuts_table.alternate_shortcut:CA:Drecera alternativa
+shortcuts_table.alternate_shortcut:UA:Альтернативні комбінації
 # Translation missing (New!)
 
 
@@ -8167,6 +8205,7 @@ shortcuts_table.type_in_a_shortcut:BE:Націсьніце камбінацыю 
 shortcuts_table.type_in_a_shortcut:NB:Skriv inn snarvei
 shortcuts_table.type_in_a_shortcut:TR:Bir kısayol yazın
 shortcuts_table.type_in_a_shortcut:CA:Escriu una drecera
+shortcuts_table.type_in_a_shortcut:UA:Натисніть комбінацію клавіш
 # Translation missing (New!)
 
 
@@ -8208,6 +8247,7 @@ command_bar_dialog.help:BE:Перацягвайце кнопкі для нала
 command_bar_dialog.help:NB:Dra i knappene for å tilpasse kommandolinjen
 command_bar_dialog.help:TR:Komut çubuğunu özelleştirmek için düğmeleri sürükleyin
 command_bar_dialog.help:CA:Arrossega els botons per personalitzar la barra de comandes
+command_bar_dialog.help:UA:Перетягуйте кнопки для налаштування панелі команд
 # Translation missing (New!)
 
 
@@ -8315,21 +8355,27 @@ table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 ########
 
 CloseDuplicateTabs.label:EN:Close duplicate tabs
+CloseDuplicateTabs.label:UA:Закрити вкладки, що повторюються
 # Translation missing (New!)
 
 CloseOtherTabs.label:EN:Close other tabs
+CloseOtherTabs.label:UA:Закрити інші вкладки
 # Translation missing (New!)
 
 CloseTab.label:EN:Close tab
+CloseTab.label:UA:Закрити вкладку
 # Translation missing (New!)
 
 MoveTabToOtherPanel.label:EN:Move tab to other panel
+MoveTabToOtherPanel.label:UA:Перемістити вкладку на іншу панель
 # Translation missing (New!)
 
 NextTab.label:EN:Next tab
+NextTab.label:UA:Наступна вкладка
 # Translation missing (New!)
 
 PreviousTab.label:EN:Previous tab
+PreviousTab.label:UA:Попередня вкладка
 # Translation missing (New!)
 
 ##################
@@ -8757,6 +8803,7 @@ destination_dialog.skip_errors:BE:Прапусьціць памылкі
 destination_dialog.skip_errors:NB:Ignorer feil
 destination_dialog.skip_errors:TR:Hataları atla
 destination_dialog.skip_errors:CA:Salta els errors
+destination_dialog.skip_errors:UA:Пропустити помилки
 # Translation missing (New!)
 
 
@@ -9666,6 +9713,7 @@ delete_dialog.move_to_trash.failed:BE:Адзін альбо некалькі ф�
 delete_dialog.move_to_trash.failed:NB:En eller flere filer kunne ikke flyttes til papirkurven.
 delete_dialog.move_to_trash.failed:TR:Bir ya da daha fazla dosya çöp kutusuna taşınamıyor.
 delete_dialog.move_to_trash.failed:CA:Algun/s fitxer/s no s'han pogut enviar a la paperera.
+delete_dialog.move_to_trash.failed:UA:Один або декілька файлів не можуть бути перенесені у смітник.
 # Translation missing (New!)
 
 
@@ -10199,6 +10247,7 @@ split_file_dialog.error_title:BE:Памылка разбіцьця файлу
 split_file_dialog.error_title:NB:Feil ved oppdeling av fil
 split_file_dialog.error_title:TR:Dosya bölme hatası
 split_file_dialog.error_title:CA:Error en partir el fitxer
+split_file_dialog.error_title:UA:Помилка під час розподілу файлу
 # Translation missing (New!)
 
 
@@ -10236,6 +10285,7 @@ split_file_dialog.file_to_split:BE:Файл для разбіцьця
 split_file_dialog.file_to_split:NB:Fil som skal deles
 split_file_dialog.file_to_split:TR:Bölünecek dosya
 split_file_dialog.file_to_split:CA:Fitxer a trossejar
+split_file_dialog.file_to_split:UA:Файл для розподілу
 # Translation missing (New!)
 
 
@@ -10273,6 +10323,7 @@ split_file_dialog.target_directory:BE:Выніковая тэчка
 split_file_dialog.target_directory:NB:Målmappe
 split_file_dialog.target_directory:TR:Hedef dizin
 split_file_dialog.target_directory:CA:Directori de destí
+split_file_dialog.target_directory:UA:Каталог призначення
 # Translation missing (New!)
 
 
@@ -10310,6 +10361,7 @@ split_file_dialog.part_size:BE:Памер кожнай часткі
 split_file_dialog.part_size:NB:Størrelse per del
 split_file_dialog.part_size:TR:Parçaların boyutu
 split_file_dialog.part_size:CA:Mida de cada tros
+split_file_dialog.part_size:UA:Розмір кожної частини
 # Translation missing (New!)
 
 
@@ -10347,6 +10399,7 @@ split_file_dialog.parts:BE:Колькасьць частак
 split_file_dialog.parts:NB:Antall deler
 split_file_dialog.parts:TR:Parça sayısı
 split_file_dialog.parts:CA:Nombre de parts
+split_file_dialog.parts:UA:Кількість частин
 # Translation missing (New!)
 
 
@@ -10384,6 +10437,7 @@ split_file_dialog.generate_CRC:BE:Сфармаваць CRC файл
 split_file_dialog.generate_CRC:NB:Generer CRC-fil
 split_file_dialog.generate_CRC:TR:CRC dosyası oluştur
 split_file_dialog.generate_CRC:CA:Generar fitxer CRC
+split_file_dialog.generate_CRC:UA:Сформувати CRC файл
 # Translation missing (New!)
 
 
@@ -10421,6 +10475,7 @@ split_file_dialog.max_parts:BE:Максымальная колькасьць ч�
 split_file_dialog.max_parts:NB:Maksimum tillatte deler er %1
 split_file_dialog.max_parts:TR:İzin verilen azami parça sayısı %1
 split_file_dialog.max_parts:CA:El màxim nombre de parts permés és %1
+split_file_dialog.max_parts:UA:Максимально допустима кількість частин %1
 # Translation missing (New!)
 
 
@@ -10458,6 +10513,7 @@ split_file_dialog.auto:BE:Аўтаматычна
 split_file_dialog.auto:NB:Automatisk
 split_file_dialog.auto:TR:Otomatik
 split_file_dialog.auto:CA:Automàtic
+split_file_dialog.auto:UA:Автоматично
 # Translation missing (New!)
 
 
@@ -10495,6 +10551,7 @@ split_file_dialog.insert_new_media:BE:Устаўце новы носьбіт
 split_file_dialog.insert_new_media:NB:Sett inn et nytt medium
 split_file_dialog.insert_new_media:TR:Yeni ortam yerleştirin
 split_file_dialog.insert_new_media:CA:Inserteu un nou suport
+split_file_dialog.insert_new_media:UA:Вставте новий носій
 # Translation missing (New!)
 
 
@@ -10537,6 +10594,7 @@ combine_files_dialog.error_title:BE:Памылка аб'яднаньня фай�
 combine_files_dialog.error_title:NB:Feil ved kombinering av fil
 combine_files_dialog.error_title:TR:Dosya birleştirme hatası
 combine_files_dialog.error_title:CA:Error combinant fitxer
+combine_files_dialog.error_title:UA:Помилка об'єднання файлу
 # Translation missing (New!)
 
 
@@ -10574,6 +10632,7 @@ combine_files_job.no_crc_file:BE:Аб'яднаньне прайшло пасьп
 combine_files_job.no_crc_file:NB:Sammenslåelse fullført. Ingen CRC-fil.
 combine_files_job.no_crc_file:TR:Birleştirme başarılı. CRC dosyası yok.
 combine_files_job.no_crc_file:CA:Combinació finalitzada. No s'ha creat fitxer CRC.
+combine_files_job.no_crc_file:UA:Об'єднано успішно. Немає CRC файлу.
 # Translation missing (New!)
 
 
@@ -10611,6 +10670,7 @@ combine_files_job.crc_read_error:BE:Памылка чытаньня CRC файл
 combine_files_job.crc_read_error:NB:Feil ved lesing av CRC-fil.
 combine_files_job.crc_read_error:TR:CRC dosyasının okunması sırasında hata.
 combine_files_job.crc_read_error:CA:Error llegint fitxer CRC.
+combine_files_job.crc_read_error:UA:Помилка читання CRC файлу.
 # Translation missing (New!)
 
 
@@ -10648,6 +10708,7 @@ combine_files_job.crc_check_failed:BE:CRC разыходжаньні: чакае
 combine_files_job.crc_check_failed:NB:CRC feil: forventet %2, fant %1
 combine_files_job.crc_check_failed:TR:CRC eşleşmiyor: beklenen %2, bulunan %1
 combine_files_job.crc_check_failed:CA:Desajust en CRC
+combine_files_job.crc_check_failed:UA:CRC розбіжність: очікується %2, отримано %1
 # Translation missing (New!)
 
 
@@ -10685,6 +10746,7 @@ combine_files_job.crc_ok:BE:Аб'яднаньне прайшло пасьпях�
 combine_files_job.crc_ok:NB:Sammenslåelse lyktes. CRC kontrollsum ok.
 combine_files_job.crc_ok:TR:Birleştirme başarılı. CRC sağlaması tamam.
 combine_files_job.crc_ok:CA:Combinació finalitzada. Suma de verificació de CRC correcta.
+combine_files_job.crc_ok:UA:Об'єднано успішно. CRC контрольна сума ok.
 # Translation missing (New!)
 
 
@@ -11793,6 +11855,7 @@ server_connect_dialog.domain:BE:Дамэн
 server_connect_dialog.domain:NB:Domene
 server_connect_dialog.domain:TR:Etki alanı
 server_connect_dialog.domain:CA:Domini
+server_connect_dialog.domain:UA:Домен
 # Translation missing (New!)
 
 
@@ -13039,18 +13102,21 @@ text_viewer.view:EN:View
 text_viewer.view:NB:Vis
 text_viewer.view:TR:Görünüm
 text_viewer.view:CA:Vista
+text_viewer.view:UA:Вигляд
 # Translation missing (New!)
 
 text_viewer.word_wrap:EN:Word wrap
 text_viewer.word_wrap:NB:Tekstbrytning
 text_viewer.word_wrap:TR:Sözcük kaydır
 text_viewer.word_wrap:CA:Ajusta el text
+text_viewer.word_wrap:UA:Перенесення слів
 # Translation missing (New!)
 
 text_viewer.line_numbers:EN:Line numbers
 text_viewer.line_numbers:NB:Linjenummere
 text_viewer.line_numbers:TR:Satır numaraları
 text_viewer.line_numbers:CA:Numera línies
+text_viewer.line_numbers:UA:Номери рядків
 # Translation missing (New!)
 
 text_viewer.binary_file_warning:EN:This appears to be a binary file
@@ -14596,6 +14662,7 @@ theme_editor.header:BE:Загаловак
 theme_editor.header:NB:Overskrift
 theme_editor.header:TR:Başlık
 theme_editor.header:CA:Capçalera
+theme_editor.header:UA:Заголовок
 # Translation missing (New!)
 
 
@@ -14634,6 +14701,7 @@ theme_editor.item:BE:Элемент
 theme_editor.item:NB:Element
 theme_editor.item:TR:Öğe
 theme_editor.item:CA:Element
+theme_editor.item:UA:Елемент
 # Translation missing (New!)
 
 
@@ -14675,6 +14743,7 @@ command_bar_customize_dialog.available_actions:BE:Даступныя дзеян�
 command_bar_customize_dialog.available_actions:NB:Tilgjengelige handlinger
 command_bar_customize_dialog.available_actions:TR:Kullanılabilir Eylemler
 command_bar_customize_dialog.available_actions:CA:Accions disponibles
+command_bar_customize_dialog.available_actions:UA:Доступні дії
 # Translation missing (New!)
 
 
@@ -14712,6 +14781,7 @@ command_bar_customize_dialog.modifier:BE:Пераключальнік
 command_bar_customize_dialog.modifier:NB:Endrer
 command_bar_customize_dialog.modifier:TR:Tamamlayıcı
 command_bar_customize_dialog.modifier:CA:Modificador
+command_bar_customize_dialog.modifier:UA:Перемикач
 # Translation missing (New!)
 
 
@@ -15165,6 +15235,7 @@ prefs_dialog.show_splash_screen:BE:Паказваць застаўку
 prefs_dialog.show_splash_screen:NB:Vis oppstartsbilde
 prefs_dialog.show_splash_screen:TR:Karşılama ekranını göster
 prefs_dialog.show_splash_screen:CA:Mostrar pantalla de presentació
+prefs_dialog.show_splash_screen:UA:Показувати заставку
 # Translation missing (ES, KO)
 
 # Folders tab
@@ -16600,6 +16671,7 @@ debug_console_dialog.level:BE:Узровень
 debug_console_dialog.level:NB:Nivå
 debug_console_dialog.level:TR:Seviye
 debug_console_dialog.level:CA:Nivell
+debug_console_dialog.level:UA:Рівень
 # Translation missing (New!)
 
 
@@ -18248,6 +18320,7 @@ batch_rename_dialog.names_conflict:BE:Канфлікт імёнаў! Некат�
 batch_rename_dialog.names_conflict:NB:Navnkonflikt! Samme verdi i gammelt og nytt navn.
 batch_rename_dialog.names_conflict:TR:İsim çakışması! Eski ve yeni adlarda aynı değerler var.
 batch_rename_dialog.names_conflict:CA:Conflicte de noms! Coïncideixen alguns noms antics i nous.
+batch_rename_dialog.names_conflict:UA:Конфлікт імен! Деякі значення співпадають в старих і нових іменах.
 # Translation missing (New!)
 
 
