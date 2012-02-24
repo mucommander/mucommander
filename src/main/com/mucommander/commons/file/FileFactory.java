@@ -73,6 +73,8 @@ import java.util.*;
  *   <li><code>ISO</code>, registered to iso and nrg files.</li>
  *   <li><code>AR</code>, registered to ar, a and deb files.</li>
  *   <li><code>LST</code>, registered to lst files.</li>
+ *   <li><code>RAR</code>, registered to rar files.</li>
+ *   <li><code>SEVENZIP</code>, registered to 7z files.</li>
  * </ul>
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
@@ -131,7 +133,6 @@ public class FileFactory {
         registerArchiveFormat(new com.mucommander.commons.file.impl.ar.ArFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.impl.lst.LstFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.impl.rar.RarFormatProvider());
-        
         registerArchiveFormat(new com.mucommander.commons.file.impl.sevenzip.SevenZipFormatProvider());
 
         // Set the default FileIconProvider instance
