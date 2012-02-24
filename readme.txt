@@ -69,7 +69,8 @@ Localization:
 - New: Catalan translation, contributed by Jordi Plantalech
 - New: Belarusian translation, contributed by vboo.
 - New: Norwegian translation, contributed by Ingrid Amundsen.
-- Russian translation updated. Update contributed by Alexey Sirotov.
+- Russian translation updated. Update contributed by Alexey Sirotov and Evgeny Morozov.
+- Ukrainian translation updated. Update contributed by Oleksandr Kovalchuk.
 
 Bug fixes:
 - Pack dialog now implements the same filename selection algorithm as other dialogs (ticket #167).
