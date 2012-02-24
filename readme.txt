@@ -5,9 +5,9 @@
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
 
 
-----------------------------
-muCommander v0.8.6 (nightly)
-----------------------------
+---------------------------
+muCommander v0.9 (nightly)
+---------------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane
 interface. It runs on any operating system with Java support (Mac OS X,
