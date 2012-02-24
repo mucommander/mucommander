@@ -72,7 +72,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleWordWrapItem;
+    private JMenuItem toggleLineWrapItem;
     private JMenuItem toggleLineNumbersItem;
     
     private String encoding;
@@ -87,7 +87,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     	setComponentToPresent(textEditorImpl.getTextArea());
     	
     	showLineNumbers(MuConfigurations.getPreferences().getVariable(MuPreferences.LINE_NUMBERS, MuPreferences.DEFAULT_LINE_NUMBERS));
-    	textEditorImpl.wrap(MuConfigurations.getPreferences().getVariable(MuPreferences.WORD_WRAP, MuPreferences.DEFAULT_WORD_WRAP));
+    	textEditorImpl.wrap(MuConfigurations.getPreferences().getVariable(MuPreferences.LINE_WRAP, MuPreferences.DEFAULT_LINE_WRAP));
 
     	initMenuBarItems();
     }
@@ -184,7 +184,7 @@ class TextViewer extends FileViewer implements EncodingListener {
     
     @Override
     public void beforeCloseHook() {
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.WORD_WRAP, textEditorImpl.isWrap());
+    	MuConfigurations.getPreferences().setVariable(MuPreferences.LINE_WRAP, textEditorImpl.isWrap());
     	MuConfigurations.getPreferences().setVariable(MuPreferences.LINE_NUMBERS, getRowHeader().getView() != null);
     }
 
@@ -213,8 +213,8 @@ class TextViewer extends FileViewer implements EncodingListener {
     	// View menu
     	viewMenu = new JMenu(Translator.get("text_viewer.view"));
     	
-    	toggleWordWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.word_wrap"), menuItemMnemonicHelper, null, this);
-    	toggleWordWrapItem.setSelected(textEditorImpl.isWrap());
+    	toggleLineWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.line_wrap"), menuItemMnemonicHelper, null, this);
+    	toggleLineWrapItem.setSelected(textEditorImpl.isWrap());
     	toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.line_numbers"), menuItemMnemonicHelper, null, this);
     	toggleLineNumbersItem.setSelected(getRowHeader().getView() != null);
     }
@@ -245,8 +245,8 @@ class TextViewer extends FileViewer implements EncodingListener {
         	textEditorImpl.findNext();
         else if(source == findPreviousItem)
         	textEditorImpl.findPrevious();
-        else if(source == toggleWordWrapItem)
-        	textEditorImpl.wrap(toggleWordWrapItem.isSelected());
+        else if(source == toggleLineWrapItem)
+        	textEditorImpl.wrap(toggleLineWrapItem.isSelected());
         else if(source == toggleLineNumbersItem)
         	setRowHeaderView(toggleLineNumbersItem.isSelected() ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
         else

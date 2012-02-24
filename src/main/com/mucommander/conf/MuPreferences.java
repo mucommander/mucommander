@@ -288,9 +288,9 @@ public class MuPreferences {
 	/** Section describing information specific to text file presenter. */
 	public static final String  TEXT_FILE_PRESENTER_SECTION       = FILE_PRESENTER_SECTION + "." + "text";
 	/** Whether or not to wrap long lines. */
-	public static final String  WORD_WRAP                         = TEXT_FILE_PRESENTER_SECTION + "." + "word_wrap";
+	public static final String  LINE_WRAP                         = TEXT_FILE_PRESENTER_SECTION + "." + "line_wrap";
 	/** Default wrap value. */
-	public static final boolean DEFAULT_WORD_WRAP                 = true;
+	public static final boolean DEFAULT_LINE_WRAP                 = true;
 	/** Whether or not to show line numbers. */
 	public static final String  LINE_NUMBERS                      = TEXT_FILE_PRESENTER_SECTION + "." + "line_numbers";
 	/** Default line numbers value. */
