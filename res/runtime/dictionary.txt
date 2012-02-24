@@ -13105,11 +13105,11 @@ text_viewer.view:CA:Vista
 text_viewer.view:UA:Вигляд
 # Translation missing (New!)
 
-text_viewer.word_wrap:EN:Word wrap
-text_viewer.word_wrap:NB:Tekstbrytning
-text_viewer.word_wrap:TR:Sözcük kaydır
-text_viewer.word_wrap:CA:Ajusta el text
-text_viewer.word_wrap:UA:Перенесення слів
+text_viewer.line_wrap:EN:Line wrap
+text_viewer.line_wrap:NB:Tekstbrytning
+text_viewer.line_wrap:TR:Sözcük kaydır
+text_viewer.line_wrap:CA:Ajusta el text
+text_viewer.line_wrap:UA:Перенесення слів
 # Translation missing (New!)
 
 text_viewer.line_numbers:EN:Line numbers
@@ -13480,7 +13480,7 @@ text_editor.find_next:EN:$[text_viewer.find_next]
 
 text_editor.find_previous:EN:$[text_viewer.find_previous]
 
-text_editor.word_wrap:EN:$[text_viewer.word_wrap]
+text_editor.line_wrap:EN:$[text_viewer.line_wrap]
 
 text_editor.line_numbers:EN:$[text_viewer.line_numbers]
 
