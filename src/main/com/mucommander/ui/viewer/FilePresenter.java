@@ -17,7 +17,7 @@ import com.mucommander.commons.file.AbstractFile;
  * 
  * @author Arik Hadas
  */
-public abstract class FilePresenter extends JScrollPane {
+abstract class FilePresenter extends JScrollPane {
 	
 	/** FileFrame instance that contains this presenter (may be null). */
     private FileFrame frame;
@@ -69,7 +69,7 @@ public abstract class FilePresenter extends JScrollPane {
      * @param frame frame that contains this <code>FilePresenter</code>.
      * @see         #getFrame()
      */
-    void setFrame(FileFrame frame) {
+    public void setFrame(FileFrame frame) {
         this.frame = frame;
     }
     

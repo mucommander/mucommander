@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.viewer.text;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -47,6 +48,7 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.viewer.FileFrame;
 import com.mucommander.ui.viewer.FileViewer;
 
 /**
@@ -56,6 +58,8 @@ import com.mucommander.ui.viewer.FileViewer;
  */
 class TextViewer extends FileViewer implements EncodingListener {
 
+	private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
+	
     private TextEditorImpl textEditorImpl;
     
     /** Menu items */
@@ -86,6 +90,14 @@ class TextViewer extends FileViewer implements EncodingListener {
     	textEditorImpl.wrap(MuConfigurations.getPreferences().getVariable(MuPreferences.WORD_WRAP, MuPreferences.DEFAULT_WORD_WRAP));
 
     	initMenuBarItems();
+    }
+    
+    @Override
+    public void setFrame(FileFrame frame) {
+        super.setFrame(frame);
+        
+        // Set the minimum size of text viewer frame to be greater than the default minimum size
+        frame.setMinimumSize(MIN_DIMENSION);
     }
     
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {

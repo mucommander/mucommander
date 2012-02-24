@@ -35,7 +35,7 @@ import java.awt.*;
  */
 public class ViewerFrame extends FileFrame {
 	
-    private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
+    private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
 	
     /**
      * Creates a new ViewerFrame to start viewing the given file.
@@ -45,17 +45,14 @@ public class ViewerFrame extends FileFrame {
      */
     ViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         super(mainFrame, file, icon);
+        
+        setMinimumSize(MIN_DIMENSION);
     }
 
     ////////////////////////
     // Overridden methods //
     ////////////////////////
 
-    @Override
-    public Dimension getMinimumSize() {
-        return MIN_DIMENSION;
-    }
-    
     @Override
     protected void showGenericErrorDialog() {
         InformationDialog.showErrorDialog(getMainFrame(), Translator.get("file_viewer.view_error_title"), Translator.get("file_viewer.view_error"));
