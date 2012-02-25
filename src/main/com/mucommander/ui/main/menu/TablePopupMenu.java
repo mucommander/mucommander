@@ -19,13 +19,13 @@
 
 package com.mucommander.ui.main.menu;
 
-import javax.swing.JSeparator;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
+
+import javax.swing.JSeparator;
 
 /**
  * Contextual popup menu invoked by FileTable when right-clicking on a file or a group of files.
@@ -66,19 +66,14 @@ public class TablePopupMenu extends MuActionsPopupMenu {
     public TablePopupMenu(MainFrame mainFrame, AbstractFile currentFolder, AbstractFile clickedFile, boolean parentFolderClicked, FileSet markedFiles) {
         super(mainFrame);
         
-        // 'Open' displayed if a single file was clicked
+        // 'Open ...' actions displayed if a single file was clicked
         if(clickedFile!=null || parentFolderClicked) {
             addAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID);
-
-            // Creates the 'Open with...' menu.
             add(new OpenWithMenu(mainFrame));
-        }
 
-        // 'Rename' displayed if a single file was clicked
-        if(clickedFile!=null)
-            addAction(com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID);
+            addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
+        }
 
         // 'Reveal in desktop' displayed only if clicked file is a local file and the OS is capable of doing this
         if(DesktopManager.canOpenInFileManager(currentFolder))
@@ -101,9 +96,15 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         addAction(com.mucommander.ui.action.impl.MarkSelectedFileAction.Descriptor.ACTION_ID);
 
         add(new JSeparator());
+
+        // 'Rename' displayed if a single file was clicked
+        if(clickedFile!=null)
+            addAction(com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID);
+
         addAction(com.mucommander.ui.action.impl.DeleteAction.Descriptor.ACTION_ID);
 
         add(new JSeparator());
+
         addAction(com.mucommander.ui.action.impl.ShowFilePropertiesAction.Descriptor.ACTION_ID);
         addAction(com.mucommander.ui.action.impl.ChangePermissionsAction.Descriptor.ACTION_ID);
         addAction(com.mucommander.ui.action.impl.ChangeDateAction.Descriptor.ACTION_ID);
