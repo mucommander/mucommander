@@ -18,52 +18,59 @@
 
 package com.mucommander.ui.main.tabs;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.FolderPanel;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicButtonUI;
-
-import com.mucommander.ui.main.FolderPanel;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
 * This panel is the header of the presented tabs under Java 1.6 and above.
 * The panel contains a button for closing the tab.
 * 
-* @author Arik Hadas
+* @author Arik Hadas, Maxence Bernard
 */
 class FileTableTabHeader extends JPanel implements ActionListener {
 	
 	private FolderPanel folderPanel;
-	
+
+    private static final String CLOSE_ICON_NAME = "close.png";
+    private static final String CLOSE_ROLLOVER_ICON_NAME = "close_rollover.png";
+    private static final int CLOSE_ICON_SIZE = 12;
+
     public FileTableTabHeader(FolderPanel folderPanel) {
-        //unset default FlowLayout' gaps
-        super(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        super(new GridBagLayout());
 
         this.folderPanel = folderPanel;
-        
         setOpaque(false);
-        
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 0;
+
+        // Label
         JLabel label = new JLabel();
         //add more space between the label and the button
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        //should be the first component in the panel
-        add(label);
-        //tab button
+        gbc.weightx = 0;
+        gbc.gridx = 0;
+        add(label, gbc);
+
+        // Close tab button
         JButton button = new CloseButton();
         button.addActionListener(this);
-        add(button);
-        //add more space to the top of the component
-        setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0)); // TODO: needed?
+        gbc.weightx = 1;
+        gbc.gridx = 1;
+        add(button, gbc);
     }
     
     public void setTitle(String title) {
@@ -88,43 +95,30 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     private class CloseButton extends JButton {
     	 
         public CloseButton() {
-            int size = 16;
-            setPreferredSize(new Dimension(size, size));
+            setPreferredSize(new Dimension(CLOSE_ICON_SIZE, CLOSE_ICON_SIZE));
             //Make the button looks the same for all Laf's
             setUI(new BasicButtonUI());
             //Make it transparent
             setContentAreaFilled(false);
             //No need to be focusable
             setFocusable(false);
-            setBorder(BorderFactory.createEtchedBorder());
             setBorderPainted(false);
+            setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, CLOSE_ICON_NAME));
             //Making nice rollover effect
-            //we use the same listener for all buttons
-//            addMouseListener(buttonMouseListener);
             setRolloverEnabled(true);
+            setRolloverIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, CLOSE_ROLLOVER_ICON_NAME));
         }
 
-        //we don't want to update UI for this button
-        public void updateUI() {}
-        
-        //paint the cross
-        protected void paintComponent(Graphics g) {
-        	super.paintComponent(g);
 
-        	Graphics2D g2 = (Graphics2D) g.create();
-        	//shift the image for pressed buttons
-        	if (getModel().isPressed()) {
-        		g2.translate(1, 1);
-        	}
+        // Remove default insets
+        @Override
+        public Insets getInsets() {
+            return new Insets(0,0,0,0);
+        }
 
-        	setBorderPainted(getModel().isRollover());
-
-        	g2.setStroke(new BasicStroke(2));
-        	g2.setColor(Color.BLACK);
-        	int delta = 6;
-        	g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
-        	g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
-        	g2.dispose();
+        // We don't want to update UI for this button
+        @Override
+        public void updateUI() {
         }
     }
 }
