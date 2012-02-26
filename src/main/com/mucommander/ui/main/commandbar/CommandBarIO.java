@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -83,7 +83,7 @@ public abstract class CommandBarIO extends DefaultHandler {
     	}
     	else {
     		CommandBarAttributes.restoreDefault();
-    		AppLogger.fine(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
+    		MuLogger.fine(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
     	}
     	
     	// initialize the writer after setting the command-bar initial attributes:
@@ -104,20 +104,20 @@ public abstract class CommandBarIO extends DefaultHandler {
     	if (CommandBarAttributes.areDefaultAttributes()) {
     		AbstractFile commandBarFile = getDescriptionFile();
         	if(commandBarFile != null && commandBarFile.exists()) {
-        		AppLogger.info("Command bar use default settings, removing descriptor file");
+        		MuLogger.info("Command bar use default settings, removing descriptor file");
         		commandBarFile.delete();
         	}
         	else
-    			AppLogger.fine("Command bar not modified, not saving");
+    			MuLogger.fine("Command bar not modified, not saving");
     	}
     	else if (commandBarWriter != null) {
     		if (wasCommandBarModified)
     			commandBarWriter.write();
     		else
-    			AppLogger.fine("Command bar not modified, not saving");
+    			MuLogger.fine("Command bar not modified, not saving");
     	}
     	else
-    		AppLogger.warning("Could not save command bar. writer is null");
+    		MuLogger.warning("Could not save command bar. writer is null");
     }
 	
 	/**

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
@@ -48,7 +48,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 		try {
 			new Writer(bos).writeKeyMap(null);
 		} catch (Exception e) {
-			AppLogger.fine("Caught exception", e);
+			MuLogger.fine("Caught exception", e);
 		} finally {
 			bos.close();
 		}
@@ -73,7 +73,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 			new Writer(bos).writeKeyMap(combinedMapping);
 			wereActionsModified = false;
 		} catch (Exception e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
 		} finally {
 			bos.close();
 		}
@@ -109,7 +109,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
     		XmlAttributes attributes = new XmlAttributes();
     		attributes.add(ID_ATTRIBUTE, actionId);
 
-    	    AppLogger.finest("     Writing mapping of "  + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
+    	    MuLogger.finest("     Writing mapping of "  + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
 
     		if (keyStrokes[0] != null)
     			attributes.add(PRIMARY_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[0]));

@@ -18,7 +18,7 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.collections.VectorChangeListener;
@@ -157,13 +157,13 @@ public class CredentialsManager {
     public static void loadCredentials() throws Exception {
         AbstractFile credentialsFile = getCredentialsFile();
         if(credentialsFile.exists()) {
-            AppLogger.fine("Found credentials file: "+credentialsFile.getAbsolutePath());
+            MuLogger.fine("Found credentials file: "+credentialsFile.getAbsolutePath());
             // Parse the credentials file
             new CredentialsParser().parse(credentialsFile);
-            AppLogger.fine("Credentials file loaded.");
+            MuLogger.fine("Credentials file loaded.");
         }
         else
-            AppLogger.fine("No credentials file found at "+credentialsFile.getAbsolutePath());
+            MuLogger.fine("No credentials file found at "+credentialsFile.getAbsolutePath());
     }
 
     /**
@@ -197,9 +197,9 @@ public class CredentialsManager {
         boolean fileSecured = !OsFamily.getCurrent().isUnixBased() || Chmod.chmod(credentialsFile, 0600);     // rw-------
 
         if(fileSecured)
-            AppLogger.fine("Credentials file saved successfully.");
+            MuLogger.fine("Credentials file saved successfully.");
         else
-            AppLogger.warning("Credentials file could not be chmod!");
+            MuLogger.warning("Credentials file could not be chmod!");
     }
 
 
@@ -283,9 +283,9 @@ public class CredentialsManager {
 
         boolean persist = credentialsMapping.isPersistent();
 
-        AppLogger.finest("called, realm="+ credentialsMapping.getRealm()+" isPersistent="+ credentialsMapping.isPersistent());
-        AppLogger.finest("before, persistentCredentials="+ persistentCredentialMappings);
-        AppLogger.finest("before, volatileCredentials="+ volatileCredentialMappings);
+        MuLogger.finest("called, realm="+ credentialsMapping.getRealm()+" isPersistent="+ credentialsMapping.isPersistent());
+        MuLogger.finest("before, persistentCredentials="+ persistentCredentialMappings);
+        MuLogger.finest("before, volatileCredentials="+ volatileCredentialMappings);
 
         if(persist) {
             replaceVectorElement(persistentCredentialMappings, credentialsMapping);
@@ -296,8 +296,8 @@ public class CredentialsManager {
             persistentCredentialMappings.removeElement(credentialsMapping);
         }
 
-        AppLogger.finest("after, persistentCredentials="+ persistentCredentialMappings);
-        AppLogger.finest("after, volatileCredentials="+ volatileCredentialMappings);
+        MuLogger.finest("after, persistentCredentials="+ persistentCredentialMappings);
+        MuLogger.finest("after, volatileCredentials="+ volatileCredentialMappings);
     }
 
 
@@ -339,7 +339,7 @@ public class CredentialsManager {
      * @param location the FileURL to authenticate
      */
     private static void authenticateImplicit(FileURL location) {
-        AppLogger.finest("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
+        MuLogger.finest("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
 
         CredentialsMapping creds[] = getMatchingCredentials(location);
         if(creds.length>0) {
@@ -374,7 +374,7 @@ public class CredentialsManager {
                 matches.add(tempCredentialsMapping);
         }
 
-        AppLogger.finest("returning matches="+matches);
+        MuLogger.finest("returning matches="+matches);
     }
 
     /**
@@ -444,7 +444,7 @@ public class CredentialsManager {
             }
         }
 
-        AppLogger.finest("returning bestMatchIndex="+bestMatchIndex);
+        MuLogger.finest("returning bestMatchIndex="+bestMatchIndex);
 
         return bestMatchIndex;
     }

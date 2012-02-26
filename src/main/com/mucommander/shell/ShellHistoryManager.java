@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.WeakHashMap;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -145,7 +145,7 @@ public class ShellHistoryManager {
                 return;
         }
 
-        AppLogger.finer("Adding  " + command + " to shell history.");
+        MuLogger.finer("Adding  " + command + " to shell history.");
 
         // Updates the history buffer.
         history[historyEnd] = command;

@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
@@ -65,7 +65,7 @@ public class ClipboardNotifier implements FlavorListener {
             // Works around "java.lang.IllegalStateException: cannot open system clipboard" thrown when the clipboard
             // is currently unavailable (ticket #164).
 
-            AppLogger.fine("Caught an exception while querying the clipboard for files", e);
+            MuLogger.fine("Caught an exception while querying the clipboard for files", e);
         }
     }
 

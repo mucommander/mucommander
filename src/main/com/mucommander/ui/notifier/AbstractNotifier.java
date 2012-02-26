@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.main.WindowManager;
@@ -112,12 +112,12 @@ public abstract class AbstractNotifier {
                 @Override
                 public void run() {
                     if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
-                        AppLogger.fine("Ignoring notification, application is in foreground");
+                        MuLogger.fine("Ignoring notification, application is in foreground");
                         return;
                     }
 
                     if(!displayNotification(notificationType, title, description))
-                        AppLogger.fine("Notification failed to be displayed");
+                        MuLogger.fine("Notification failed to be displayed");
                 }
             }
         );

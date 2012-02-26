@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.theme;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -138,7 +138,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Ignores the content of unknown elements.
         if(unknownElement != null) {
-            AppLogger.fine("Ignoring element " + qName);
+            MuLogger.fine("Ignoring element " + qName);
             return;
         }
 
@@ -777,14 +777,14 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
         // Computes the font size.
         if((buffer = attributes.getValue(ATTRIBUTE_SIZE)) == null) {
-            AppLogger.fine("Missing font size attribute in theme, ignoring.");
+            MuLogger.fine("Missing font size attribute in theme, ignoring.");
             return null;
 	    }
         size = Integer.parseInt(buffer);
 
             // Computes the font family.
             if((buffer = attributes.getValue(ATTRIBUTE_FAMILY)) == null) {
-                AppLogger.fine("Missing font family attribute in theme, ignoring.");
+                MuLogger.fine("Missing font family attribute in theme, ignoring.");
                 return null;
         }
 
@@ -799,7 +799,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         }
 
         // No font was found, instructs the ThemeManager to use the system default.
-        AppLogger.fine("Requested font families are not installed on the system, using default.");
+        MuLogger.fine("Requested font families are not installed on the system, using default.");
         return null;
     }
 
@@ -814,7 +814,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
         // Retrieves the color attribute's value.
         if((buffer = attributes.getValue(ATTRIBUTE_COLOR)) == null) {
-            AppLogger.fine("Missing color attribute in theme, ignoring.");
+            MuLogger.fine("Missing color attribute in theme, ignoring.");
             return null;
         }
         color = Integer.parseInt(buffer, 16);
@@ -830,6 +830,6 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     // -----------------------------------------------------------------------
     private void traceIllegalDeclaration(String element) {
         unknownElement = element;
-        AppLogger.fine("Unexpected start of element " + element + ", ignoring.");
+        MuLogger.fine("Unexpected start of element " + element + ", ignoring.");
     }
 }

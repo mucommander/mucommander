@@ -28,10 +28,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author Maxence Bernard
  */
-public class AppLogger {
+public class MuLogger {
 
     /** Logger singleton */
-    private final static Logger logger = LoggerFactory.getLogger(AppLogger.class);
+    private final static Logger logger = LoggerFactory.getLogger(MuLogger.class);
 
     /**
      * Returns the <code>java.util.logging.Logger</code> instance used by this class to log records.
@@ -44,8 +44,9 @@ public class AppLogger {
 
 
     /////////////////////////////////////////////////
-    // Methods deletegated to the Logger singleton //
+    // Methods delegated to the Logger singleton //
     /////////////////////////////////////////////////
+    
     public static void severe(String message) {
         logger.error(message);
     }

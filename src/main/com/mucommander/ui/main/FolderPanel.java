@@ -38,7 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.AbstractFile;
@@ -161,9 +161,9 @@ public class FolderPanel extends JPanel implements FocusListener {
     FolderPanel(MainFrame mainFrame, AbstractFile[] initialFolders, FileTableConfiguration conf) {
         super(new BorderLayout());
 
-        AppLogger.finest(" initialFolder:"+initialFolders);
+        MuLogger.finest(" initialFolder:"+initialFolders);
         for (AbstractFile folder:initialFolders)
-        	AppLogger.finest("\t"+folder);
+        	MuLogger.finest("\t"+folder);
         		
         this.mainFrame = mainFrame;
 
@@ -477,14 +477,14 @@ public class FolderPanel extends JPanel implements FocusListener {
      * @return the thread that performs the actual folder change, null if another folder change is already underway  
      */
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
-        AppLogger.finer("folder="+folder+" selectThisFileAfter="+selectThisFileAfter);
+        MuLogger.finer("folder="+folder+" selectThisFileAfter="+selectThisFileAfter);
 
         synchronized(FOLDER_CHANGE_LOCK) {
             // Make sure a folder change is not already taking place. This can happen under rare but normal
             // circumstances, if this method is called before the folder change thread has had the time to call
             // MainFrame#setNoEventsMode.
             if(changeFolderThread!=null) {
-                AppLogger.fine("A folder change is already taking place ("+changeFolderThread+"), returning null");
+                MuLogger.fine("A folder change is already taking place ("+changeFolderThread+"), returning null");
                 return null;
             }
 
@@ -557,14 +557,14 @@ public class FolderPanel extends JPanel implements FocusListener {
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
     public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
-        AppLogger.finer("folderURL="+folderURL);
+        MuLogger.finer("folderURL="+folderURL);
 
         synchronized(FOLDER_CHANGE_LOCK) {
             // Make sure a folder change is not already taking place. This can happen under rare but normal
             // circumstances, if this method is called before the folder change thread has had the time to call
             // MainFrame#setNoEventsMode.
             if(changeFolderThread!=null) {
-                AppLogger.fine("A folder change is already taking place ("+changeFolderThread+"), returning null");
+                MuLogger.fine("A folder change is already taking place ("+changeFolderThread+"), returning null");
                 return null;
             }
 
@@ -844,12 +844,12 @@ public class FolderPanel extends JPanel implements FocusListener {
         public boolean tryKill() {
             synchronized(KILL_LOCK) {
                 if(killedByStop) {
-                    AppLogger.fine("Thread already killed by #interrupt() and #stop(), there's nothing we can do, returning");
+                    MuLogger.fine("Thread already killed by #interrupt() and #stop(), there's nothing we can do, returning");
                     return false;
                 }
 
                 if(doNotKill) {
-                    AppLogger.fine("Can't kill thread now, it's too late, returning");
+                    MuLogger.fine("Can't kill thread now, it's too late, returning");
                     return false;
                 }
 
@@ -862,7 +862,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                 // InterruptedException or ClosedByInterruptException will be thrown and thus need to be catched by
                 // #run().
                 if(!killedByInterrupt) {
-                    AppLogger.fine("Killing thread using #interrupt()");
+                    MuLogger.fine("Killing thread using #interrupt()");
 
                     // This field needs to be set before actually interrupting the thread, #run() relies on it
                     killedByInterrupt = true;
@@ -870,7 +870,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                 }
                 // Call Thread#stop() the first time this method is called
                 else {
-                    AppLogger.fine("Killing thread using #stop()");
+                    MuLogger.fine("Killing thread using #stop()");
 
                     killedByStop = true;
                     super.stop();
@@ -896,7 +896,7 @@ public class FolderPanel extends JPanel implements FocusListener {
 
         @Override
         public void run() {
-            AppLogger.finer("starting folder change...");
+            MuLogger.finer("starting folder change...");
             boolean folderChangedSuccessfully = false;
 
             // Show some progress in the progress bar to give hope
@@ -955,7 +955,7 @@ public class FolderPanel extends JPanel implements FocusListener {
 
                             synchronized(KILL_LOCK) {
                                 if(killed) {
-                                    AppLogger.fine("this thread has been killed, returning");
+                                    MuLogger.fine("this thread has been killed, returning");
                                     break;
                                 }
                             }
@@ -1076,7 +1076,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                         
                         synchronized(KILL_LOCK) {
                             if(killed) {
-                                AppLogger.fine("this thread has been killed, returning");
+                                MuLogger.fine("this thread has been killed, returning");
                                 break;
                             }
                         }
@@ -1084,7 +1084,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                         // File tested -> 50% complete
                         locationTextField.setProgressValue(50);
 
-                        AppLogger.finer("calling ls()");
+                        MuLogger.finer("calling ls()");
 
                         /* TODO branch 
                         AbstractFile children[] = new AbstractFile[0];
@@ -1099,7 +1099,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                         
                         synchronized(KILL_LOCK) {
                             if(killed) {
-                                AppLogger.fine("this thread has been killed, returning");
+                                MuLogger.fine("this thread has been killed, returning");
                                 break;
                             }
                             // From now on, thread cannot be killed (would comprise table integrity)
@@ -1109,7 +1109,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                         // files listed -> 75% complete
                         locationTextField.setProgressValue(75);
 
-                        AppLogger.finer("calling setCurrentFolder");
+                        MuLogger.finer("calling setCurrentFolder");
 
                         // Change the file table's current folder and select the specified file (if any)
                         setCurrentFolder(folder, children, fileToSelect);
@@ -1129,7 +1129,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                         break;
                     }
                     catch(Exception e) {
-                        AppLogger.fine("Caught exception", e);
+                        MuLogger.fine("Caught exception", e);
 
                         if(killed) {
                             // If #tryKill() called #interrupt(), the exception we just caught was most likely
@@ -1140,7 +1140,7 @@ public class FolderPanel extends JPanel implements FocusListener {
                             // or any other exception thrown by some code that swallowed the original exception
                             // and threw a new one.
 
-                            AppLogger.fine("Thread was interrupted, ignoring exception");
+                            MuLogger.fine("Thread was interrupted, ignoring exception");
                             break;
                         }
 
@@ -1224,14 +1224,14 @@ public class FolderPanel extends JPanel implements FocusListener {
             // Ensures that this method is called only once
             synchronized(KILL_LOCK) {
                 if(disposed) {
-                    AppLogger.fine("already called, returning");
+                    MuLogger.fine("already called, returning");
                     return;
                 }
 
                 disposed = true;
             }
 
-            AppLogger.finer("cleaning up, folderChangedSuccessfully="+folderChangedSuccessfully);
+            MuLogger.finer("cleaning up, folderChangedSuccessfully="+folderChangedSuccessfully);
 
             // Clear the interrupted flag in case this thread has been killed using #interrupt().
             // Not doing this could cause some of the code called by this method to be interrupted (because this thread

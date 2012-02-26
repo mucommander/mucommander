@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.util.ResourceLoader;
 
 import javax.swing.*;
@@ -97,7 +97,7 @@ public class IconManager {
     public static ImageIcon getIcon(String iconPath, float scaleFactor) {
         URL resourceURL = ResourceLoader.getResourceAsURL(iconPath);
         if(resourceURL==null) {
-            AppLogger.fine("Warning: attempt to load non-existing icon: "+iconPath+" , icon missing ?");
+            MuLogger.fine("Warning: attempt to load non-existing icon: "+iconPath+" , icon missing ?");
             return null;
         }
 

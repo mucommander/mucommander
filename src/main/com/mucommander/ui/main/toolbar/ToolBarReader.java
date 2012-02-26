@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.io.backup.BackupInputStream;
@@ -86,7 +86,7 @@ public class ToolBarReader extends ToolBarIO {
         		if (ActionManager.isActionExist(actionIdAttribute))
         			actionIdsV.add(actionIdAttribute);
         		else
-        			AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
+        			MuLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
         	}
         	else {
         		// Resolve action class
@@ -95,7 +95,7 @@ public class ToolBarReader extends ToolBarIO {
         		if (ActionManager.isActionExist(actionId))
         			actionIdsV.add(actionId);
         		else
-        			AppLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
+        			MuLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
         	}
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {

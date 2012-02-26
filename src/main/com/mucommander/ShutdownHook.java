@@ -50,7 +50,7 @@ public class ShutdownHook extends Thread {
      * Shuts down muCommander.
      */
     public static void initiateShutdown() {
-        AppLogger.info("shutting down");
+        MuLogger.info("shutting down");
 
 //            // No need to call System.exit() under Java 1.4, application will naturally exit
 //            // when no there is no more window showing and no non-daemon thread still running.
@@ -85,45 +85,45 @@ public class ShutdownHook extends Thread {
 
         // Save snapshot
         try{MuConfigurations.saveSnapshot();}
-        catch(Exception e) {AppLogger.warning("Failed to save snapshot", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save snapshot", e);}
         
         // Save preferences
         try {MuConfigurations.savePreferences();}
-        catch(Exception e) {AppLogger.warning("Failed to save configuration", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save configuration", e);}
 
         // Save shell history
         try {ShellHistoryManager.writeHistory();}
-        catch(Exception e) {AppLogger.warning("Failed to save shell history", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save shell history", e);}
 
         // Write credentials file to disk, only if changes were made
         try {CredentialsManager.writeCredentials(false);}
-        catch(Exception e) {AppLogger.warning("Failed to save credentials", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save credentials", e);}
 
         // Write bookmarks file to disk, only if changes were made
         try {BookmarkManager.writeBookmarks(false);}
-        catch(Exception e) {AppLogger.warning("Failed to save bookmarks", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save bookmarks", e);}
 
         // Saves the current theme.
         try {ThemeManager.saveCurrentTheme();}
-        catch(Exception e) {AppLogger.warning("Failed to save user theme", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save user theme", e);}
 
         // Saves the file associations.
         try {CommandManager.writeCommands();}
-        catch(Exception e) {AppLogger.warning("Failed to save commands", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save commands", e);}
         try {CommandManager.writeAssociations();}
-        catch(Exception e) {AppLogger.warning("Failed to save associations", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save associations", e);}
         
         // Saves the action keymap.
         try { ActionKeymapIO.saveActionKeymap(); }
-        catch(Exception e) {AppLogger.warning("Failed to save action keymap", e);}
+        catch(Exception e) {MuLogger.warning("Failed to save action keymap", e);}
         
         // Saves the command bar.
         try { CommandBarIO.saveCommandBar(); }
-        catch(Exception e) {AppLogger.warning("Failed to save command bar", e); }
+        catch(Exception e) {MuLogger.warning("Failed to save command bar", e); }
         
         // Saves the tool bar.
         try { ToolBarIO.saveToolBar(); }
-        catch(Exception e) {AppLogger.warning("Failed to save toolbar", e); }
+        catch(Exception e) {MuLogger.warning("Failed to save toolbar", e); }
         
 
         // Shutdown tasks should only be performed once

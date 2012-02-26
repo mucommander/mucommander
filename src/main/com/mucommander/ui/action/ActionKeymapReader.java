@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.io.backup.BackupInputStream;
@@ -99,11 +99,11 @@ class ActionKeymapReader extends ActionKeymapIO {
     	if (keyStrokeString != null) {
     		primaryKeyStroke = KeyStroke.getKeyStroke(keyStrokeString);
     		if (primaryKeyStroke == null)
-    			AppLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
+    			MuLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
     		else {
     			String prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(primaryKeyStroke);
     			if (prevAssignedActionId != null && !prevAssignedActionId.equals(actionId))
-    				AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
+    				MuLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
     		}
     	}
 
@@ -113,18 +113,18 @@ class ActionKeymapReader extends ActionKeymapIO {
     	if (keyStrokeString != null) {
     		alternateKeyStroke = KeyStroke.getKeyStroke(keyStrokeString);
     		if (alternateKeyStroke == null)
-    			AppLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
+    			MuLogger.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
     		else {
     			String prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(alternateKeyStroke);
     			if (prevAssignedActionId != null && !prevAssignedActionId.equals(actionId))
-    				AppLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
+    				MuLogger.fine("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
     		}
     	}
 
    		// If there is no primary shortcut defined for the action but there is an alternative shortcut defined,
    		// turn the alternative shortcut to the action's primary shortcut
    		if (primaryKeyStroke == null) {
-   			AppLogger.fine("Action \"" + actionId +"\" has an alternative shortcut with no primary shortcut, so the alternative shortcut become primary");
+   			MuLogger.fine("Action \"" + actionId +"\" has an alternative shortcut with no primary shortcut, so the alternative shortcut become primary");
    			primaryActionsReadKeymap.put(actionId, alternateKeyStroke);
    			alternateActionsReadKeymap.put(actionId, null);
    			// Mark that the actions keymap file should be updated
@@ -150,7 +150,7 @@ class ActionKeymapReader extends ActionKeymapIO {
 
     @Override
     public void startDocument() {
-    	AppLogger.finest(file.getAbsolutePath()+" parsing started");
+    	MuLogger.finest(file.getAbsolutePath()+" parsing started");
     	
     	primaryActionsReadKeymap = new HashMap<String, KeyStroke>();
     	alternateActionsReadKeymap = new HashMap<String, KeyStroke>();
@@ -158,7 +158,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     
     @Override
     public void endDocument() {
-        AppLogger.finest(file.getAbsolutePath()+" parsing finished");
+        MuLogger.finest(file.getAbsolutePath()+" parsing finished");
     }
     
     @Override
@@ -171,7 +171,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     			String actionClassPath = attributes.getValue(CLASS_ATTRIBUTE);
     			
     			if(actionClassPath==null) {
-        			AppLogger.warning("Error in action keymap file: no 'class' or 'id' attribute specified in 'action' element");
+        			MuLogger.warning("Error in action keymap file: no 'class' or 'id' attribute specified in 'action' element");
         			return;
         		}
     			// extrapolate the action id from its class path
@@ -179,7 +179,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     		}
     		
     		if (!ActionManager.isActionExist(actionId)) {
-    			AppLogger.warning("Error in action keymap file: could not resolve action "+actionId);
+    			MuLogger.warning("Error in action keymap file: could not resolve action "+actionId);
     			return;
     		}
 

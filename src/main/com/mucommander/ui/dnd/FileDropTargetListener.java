@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.runtime.OsFamilies;
@@ -169,13 +169,13 @@ public class FileDropTargetListener implements DropTargetListener {
                 if(currentDropAction==DnDConstants.ACTION_MOVE
                         && (dragModifiers&MOVE_ACTION_MODIFIERS_EX)==0
                         && (event.getSourceActions()&DnDConstants.ACTION_COPY)!=0) {
-                    AppLogger.finer("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
+                    MuLogger.finer("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
                     currentDropAction = DnDConstants.ACTION_COPY;
                 }
             }
         }
 
-        AppLogger.finest("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
+        MuLogger.finest("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
 
         if(dragAccepted) {
             // Accept the drag event with our drop action
@@ -186,7 +186,7 @@ public class FileDropTargetListener implements DropTargetListener {
             event.rejectDrag();
         }
 
-        AppLogger.finest("cursor="+getDragActionCursor(currentDropAction, dragAccepted));
+        MuLogger.finest("cursor="+getDragActionCursor(currentDropAction, dragAccepted));
 
         // Change the mouse cursor on this FolderPanel and child components
         folderPanel.setCursor(getDragActionCursor(currentDropAction, dragAccepted));

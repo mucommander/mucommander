@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.TransferFileJob;
@@ -219,7 +219,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      */
     private synchronized void interruptOngoingThread() {
         if(thread!=null) {
-            AppLogger.finest("Calling interrupt() on "+thread);
+            MuLogger.finest("Calling interrupt() on "+thread);
             thread.interrupt();
             // Set the current thread to null
             thread = null;
@@ -416,10 +416,10 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
                 });
             }
             catch(InterruptedException e) {
-                AppLogger.finest("Interrupted", e);
+                MuLogger.finest("Interrupted", e);
             }
             catch(InvocationTargetException e) {
-                AppLogger.fine("Caught exception", e);
+                MuLogger.fine("Caught exception", e);
             }
 
             // Set the current thread to null

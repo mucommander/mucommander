@@ -27,7 +27,7 @@ import java.util.List;
 
 import javax.swing.JSplitPane;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.ui.main.FolderPanel;
@@ -310,7 +310,7 @@ public class MuSnapshot {
 			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		}
 		catch(HeadlessException e) {
-			AppLogger.finer("Could not fetch screen size: " + e.getMessage());
+			MuLogger.finer("Could not fetch screen size: " + e.getMessage());
 		}
     }
     

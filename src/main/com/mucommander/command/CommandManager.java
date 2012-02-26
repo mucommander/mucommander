@@ -18,7 +18,7 @@
 
 package com.mucommander.command;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -218,7 +218,7 @@ public class CommandManager implements CommandBuilder {
 
     private static void setDefaultCommand(Command command) {
         if(defaultCommand == null && command.getAlias().equals(FILE_OPENER_ALIAS)) {
-            AppLogger.fine("Registering '" + command.getCommand() + "' as default command.");
+            MuLogger.fine("Registering '" + command.getCommand() + "' as default command.");
             defaultCommand = command;
         }
     }
@@ -229,7 +229,7 @@ public class CommandManager implements CommandBuilder {
         // Registers the command and marks command as having been modified.
         setDefaultCommand(command);
 
-        AppLogger.fine("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
+        MuLogger.fine("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
 
         oldCommand = commands.put(command.getAlias(), command);
         if(mark && !command.equals(oldCommand))
@@ -269,7 +269,7 @@ public class CommandManager implements CommandBuilder {
         Command command;
 
         if((command = getCommandForAlias(cmd)) == null) {
-            AppLogger.fine("Failed to create association as '" + command + "' is not known.");
+            MuLogger.fine("Failed to create association as '" + command + "' is not known.");
             throw new CommandException(command + " not found");
         }
 
@@ -494,7 +494,7 @@ public class CommandManager implements CommandBuilder {
         InputStream  in;
 
         file = getAssociationFile();
-        AppLogger.fine("Loading associations from file: " + file.getAbsolutePath());
+        MuLogger.fine("Loading associations from file: " + file.getAbsolutePath());
 
         // Tries to load the associations file.
         // Associations are not considered to be modified by this. 
@@ -534,7 +534,7 @@ public class CommandManager implements CommandBuilder {
         if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.
 
-            AppLogger.fine("Writing associations to file: " + getAssociationFile());
+            MuLogger.fine("Writing associations to file: " + getAssociationFile());
 
             // Writes the associations.
             out = null;
@@ -552,7 +552,7 @@ public class CommandManager implements CommandBuilder {
             }
         }
         else
-            AppLogger.fine("Custom file associations not modified, skip saving.");
+            MuLogger.fine("Custom file associations not modified, skip saving.");
     }
 
 
@@ -655,7 +655,7 @@ public class CommandManager implements CommandBuilder {
         if(wereCommandsModified) {
             BackupOutputStream out;    // Where to write the associations.
 
-            AppLogger.fine("Writing custom commands to file: " + getCommandFile());
+            MuLogger.fine("Writing custom commands to file: " + getCommandFile());
 
             // Writes the commands.
             out = null;
@@ -673,7 +673,7 @@ public class CommandManager implements CommandBuilder {
             }
         }
         else
-            AppLogger.fine("Custom commands not modified, skip saving.");
+            MuLogger.fine("Custom commands not modified, skip saving.");
     }
 
     /**
@@ -692,7 +692,7 @@ public class CommandManager implements CommandBuilder {
         InputStream  in;
 
         file = getCommandFile();
-        AppLogger.fine("Loading custom commands from: " + file.getAbsolutePath());
+        MuLogger.fine("Loading custom commands from: " + file.getAbsolutePath());
 
         // Tries to load the commands file.
         // Commands are not considered to be modified by this.

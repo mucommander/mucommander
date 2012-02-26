@@ -23,7 +23,7 @@ import java.awt.event.WindowListener;
 import java.util.List;
 import java.util.Vector;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.filter.AbstractFileFilter;
@@ -264,7 +264,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
         // what we want (the folder will be changed to a 'workable' folder).
         if(date!=currentFolderDate) {
-            AppLogger.fine(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
+            MuLogger.fine(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
 			
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
@@ -321,7 +321,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     public void windowClosed(WindowEvent e) {
         // Remove the MainFrame from the list of monitored instances
         instances.remove(this);
-        AppLogger.finer("nbInstances="+instances.size());
+        MuLogger.finer("nbInstances="+instances.size());
     }	
 	
 }

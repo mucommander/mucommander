@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop.gnome;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -197,7 +197,7 @@ public class GnomeTrash extends QueuedTrash {
             // delete spec files
             filesToDelete.addAll(TRASH_INFO_SUBFOLDER.ls());
         } catch (java.io.IOException ex) {
-            AppLogger.fine("Failed to list files", ex);
+            MuLogger.fine("Failed to list files", ex);
             return false;
         }
 
@@ -226,7 +226,7 @@ public class GnomeTrash extends QueuedTrash {
             ProcessRunner.execute(REVEAL_TRASH_COMMAND).waitFor();
         }
         catch(Exception e) {    // IOException, InterruptedException
-            AppLogger.fine("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
+            MuLogger.fine("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
         }
     }
 
@@ -270,7 +270,7 @@ public class GnomeTrash extends QueuedTrash {
                 fileInfoContent = getFileInfoContent(fileToDelete);
                 trashFileName = getUniqueFilename(fileToDelete);
             } catch (IOException ex) {
-                AppLogger.fine("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
+                MuLogger.fine("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
                 
                 // continue with other file (do not move file, because info file cannot be properly created
                 continue;
@@ -285,7 +285,7 @@ public class GnomeTrash extends QueuedTrash {
                 infoWriter.write(fileInfoContent);
             } catch (IOException ex) {
                 retVal = false;
-                AppLogger.fine("Failed to create trash info file: " + trashFileName, ex);
+                MuLogger.fine("Failed to create trash info file: " + trashFileName, ex);
 
                 // continue with other file (do not move file, because info file wasn't properly created)
                 continue;
@@ -314,7 +314,7 @@ public class GnomeTrash extends QueuedTrash {
                 }
                 
                 retVal = false;
-                AppLogger.fine("Failed to move file to trash: " + trashFileName, ex);
+                MuLogger.fine("Failed to move file to trash: " + trashFileName, ex);
             }
         }
 

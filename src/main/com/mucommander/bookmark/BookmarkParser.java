@@ -18,7 +18,7 @@
 
 package com.mucommander.bookmark;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.Credentials;
@@ -123,7 +123,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equals(ELEMENT_BOOKMARK)) {
             if(bookmarkName == null || bookmarkLocation == null) {
-                AppLogger.info("Missing value, bookmark ignored: name=" + bookmarkName + " location=" + bookmarkLocation);
+                MuLogger.info("Missing value, bookmark ignored: name=" + bookmarkName + " location=" + bookmarkLocation);
                 return;
             }
 

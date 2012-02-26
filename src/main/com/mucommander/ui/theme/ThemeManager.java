@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.file.AbstractFile;
@@ -202,7 +202,7 @@ public class ThemeManager {
             name = iterator.next();
             try {themes.add(readTheme(Theme.PREDEFINED_THEME, name));}
             catch(Exception e) {
-                AppLogger.warning("Failed to load predefined theme " + name, e);
+                MuLogger.warning("Failed to load predefined theme " + name, e);
             }
         }
 
@@ -213,12 +213,12 @@ public class ThemeManager {
                 name = iterator.next();
                 try {themes.add(readTheme(Theme.CUSTOM_THEME, name));}
                 catch(Exception e) {
-                    AppLogger.warning("Failed to load custom theme " + name, e);
+                    MuLogger.warning("Failed to load custom theme " + name, e);
                 }
             }
         }
         catch(Exception e) {
-            AppLogger.warning("Failed to load custom themes", e);
+            MuLogger.warning("Failed to load custom themes", e);
         }
 
         // Sorts the themes by name.
@@ -250,7 +250,7 @@ public class ThemeManager {
                 themes.add(iterator.next());
         }
         catch(Exception e) {
-            AppLogger.fine("Failed to load custom theme names", e);
+            MuLogger.fine("Failed to load custom theme names", e);
         }
 
         // Sorts the theme names.
@@ -896,7 +896,7 @@ public class ThemeManager {
         // Saves the current theme if necessary.
         try {saveCurrentTheme();}
         catch(IOException e) {
-            AppLogger.warning("Couldn't save current theme", e);
+            MuLogger.warning("Couldn't save current theme", e);
         }
 
         // Updates muCommander's configuration.

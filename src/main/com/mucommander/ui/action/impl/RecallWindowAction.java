@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
@@ -72,7 +72,7 @@ public class RecallWindowAction extends MuAction {
 
         // Checks that the window number currently exists
         if(windowNumber<=0 || windowNumber>mainFrames.size()) {
-            AppLogger.fine("Window number "+windowNumber+" does not exist");
+            MuLogger.fine("Window number "+windowNumber+" does not exist");
             return;
         }
 

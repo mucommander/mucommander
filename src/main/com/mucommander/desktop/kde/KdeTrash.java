@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop.kde;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
@@ -69,7 +69,7 @@ class KdeTrash extends QueuedTrash {
             return true;
         }
         catch(Exception e) {    // IOException, InterruptedException
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
             return false;
         }
     }
@@ -87,7 +87,7 @@ class KdeTrash extends QueuedTrash {
             return true;
         }
         catch(Exception e) {    // IOException, InterruptedException
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
             return false;
         }
     }

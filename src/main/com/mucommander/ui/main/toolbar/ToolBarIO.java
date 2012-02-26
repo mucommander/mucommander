@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -71,7 +71,7 @@ public abstract class ToolBarIO extends DefaultHandler {
         	ToolBarAttributes.setActions(reader.getActionsRead());
         }
         else
-        	AppLogger.fine("User toolbar.xml was not found, using default toolbar");
+        	MuLogger.fine("User toolbar.xml was not found, using default toolbar");
         
         toolBarWriter = ToolBarWriter.create();
     }
@@ -85,20 +85,20 @@ public abstract class ToolBarIO extends DefaultHandler {
     	if (ToolBarAttributes.areDefaultAttributes()) {
     		AbstractFile toolBarFile = getDescriptionFile();
     		if (toolBarFile != null && toolBarFile.exists()) {
-    			AppLogger.info("Toolbar use default settings, removing descriptor file");
+    			MuLogger.info("Toolbar use default settings, removing descriptor file");
     			toolBarFile.delete();
     		}
     		else
-    			AppLogger.fine("Toolbar not modified, not saving");
+    			MuLogger.fine("Toolbar not modified, not saving");
     	}
     	else if (toolBarWriter != null) {
     		if (wasToolBarModified)
     			toolBarWriter.write();
     		else
-    			AppLogger.fine("Toolbar not modified, not saving");
+    			MuLogger.fine("Toolbar not modified, not saving");
     	}
     	else
-    		AppLogger.warning("Could not save toolbar. writer is null");
+    		MuLogger.warning("Could not save toolbar. writer is null");
     }
     
     /**

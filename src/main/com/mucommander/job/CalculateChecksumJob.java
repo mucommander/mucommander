@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
@@ -169,7 +169,7 @@ public class CalculateChecksumJob extends TransferFileJob {
                 if(getState()==INTERRUPTED || wasCurrentFileSkipped())
                     return false;
 
-                AppLogger.fine("Caught IOException", e);
+                MuLogger.fine("Caught IOException", e);
                 
                 int ret = showErrorDialog(Translator.get("error"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops

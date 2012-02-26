@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.impl.local.LocalFile;
@@ -79,7 +79,7 @@ public class CommandAction extends MuAction {
             catch(Exception e) {
                 InformationDialog.showErrorDialog(mainFrame);
 
-                AppLogger.fine("Failed to execute command: " + command.getCommand(), e);
+                MuLogger.fine("Failed to execute command: " + command.getCommand(), e);
             }
         }
         // Otherwise, copies the files locally before running the command.

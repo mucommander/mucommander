@@ -66,7 +66,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         // Makes sure the folder exists.
         if(!folder.exists())
             if(!folder.mkdir())
-                AppLogger.warning("Could not create preference folder: " + folder.getAbsolutePath());
+                MuLogger.warning("Could not create preference folder: " + folder.getAbsolutePath());
 
         return FileFactory.getFile(folder.getAbsolutePath());
     }

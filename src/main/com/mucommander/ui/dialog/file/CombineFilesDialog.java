@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -98,7 +98,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
                 }
             }
 		} catch (IOException e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
 		}
 		setFiles(files);
 	}

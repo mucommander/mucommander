@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.chooser;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.combobox.ComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
@@ -139,7 +139,7 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     }
 
     private void updateTextField() {
-        AppLogger.finest("currentKeyStroke="+currentKeyStroke+" keyCode="+ (currentKeyStroke==null?"null":""+currentKeyStroke.getKeyCode()));
+        MuLogger.finest("currentKeyStroke="+currentKeyStroke+" keyCode="+ (currentKeyStroke==null?"null":""+currentKeyStroke.getKeyCode()));
 
         updatingTextField = true;
 
@@ -155,11 +155,11 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
         updatingComboBox = true;
         int keyCode = currentKeyStroke==null?0:currentKeyStroke.getKeyCode();
 
-        AppLogger.finest("keyCode="+ keyCode);
+        MuLogger.finest("keyCode="+ keyCode);
 
         int nbChoices = keyComboBox.getItemCount();
         for(int i=1; i<nbChoices; i++) {
-            AppLogger.finest("i="+i+" value="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()+" label="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyLabel());
+            MuLogger.finest("i="+i+" value="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()+" label="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyLabel());
             if(((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()== keyCode)
             {
                 keyComboBox.setSelectedIndex(i);
@@ -246,7 +246,7 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     ////////////////////////////////
 
     public void keyPressed(KeyEvent keyEvent) {
-        AppLogger.finest("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
+        MuLogger.finest("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
 
         int keyCode = keyEvent.getKeyCode();
         if(keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META)

@@ -43,7 +43,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.runtime.OsFamilies;
@@ -769,7 +769,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
         }
         catch(Exception e) {
-            AppLogger.fine("Exception caught", e);
+            MuLogger.fine("Exception caught", e);
 
             InformationDialog.showErrorDialog(this);
         }

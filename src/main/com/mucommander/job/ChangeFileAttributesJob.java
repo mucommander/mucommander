@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
@@ -114,7 +114,7 @@ public class ChangeFileAttributesJob extends FileJob {
             return true;
         }
         catch (IOException e) {
-            AppLogger.fine("failed to change the date of "+file, e);
+            MuLogger.fine("failed to change the date of "+file, e);
             return false;
         }
     }

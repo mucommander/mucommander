@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
@@ -98,10 +98,10 @@ public class LocationHistory {
         //  - it is a directory on a local filesytem
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
-AppLogger.finest("folder="+folder+" root="+folder.getRoot());
+MuLogger.finest("folder="+folder+" root="+folder.getRoot());
         if(folderURL.getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
             this.lastRecallableFolder = folder.getAbsolutePath();
-            AppLogger.finest("lastRecallableFolder= "+lastRecallableFolder);
+            MuLogger.finest("lastRecallableFolder= "+lastRecallableFolder);
         }
     }
 

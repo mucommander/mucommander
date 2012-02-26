@@ -34,7 +34,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.bom.BOM;
@@ -198,7 +198,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
                 destFile.getParent().changeDate(System.currentTimeMillis());
             }
             catch (IOException e) {
-                AppLogger.fine("failed to change the date of "+destFile, e);
+                MuLogger.fine("failed to change the date of "+destFile, e);
                 // Fail silently
             }
         }

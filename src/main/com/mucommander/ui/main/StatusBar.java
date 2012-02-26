@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.cache.FastLRUCache;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.commons.conf.ConfigurationEvent;
@@ -302,7 +302,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         Long cachedVolumeInfo[] = volumeInfoCache.get(volumePath);
         if(cachedVolumeInfo!=null) {
-            AppLogger.finer("Cache hit!");
+            MuLogger.finer("Cache hit!");
             volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
         }
         else {
@@ -344,7 +344,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
-                    AppLogger.finer("Adding to cache");
+                    MuLogger.finer("Adding to cache");
                     volumeInfoCache.add(volumePath, new Long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
                 }
             }.start();

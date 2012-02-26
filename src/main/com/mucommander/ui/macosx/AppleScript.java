@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.macosx;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.process.AbstractProcess;
@@ -84,7 +84,7 @@ public class AppleScript {
         if(!OsFamilies.MAC_OS_X.isCurrent())
             return false;
 
-        AppLogger.fine("Executing AppleScript: "+appleScript);
+        MuLogger.fine("Executing AppleScript: "+appleScript);
 
         // Use the 'osascript' command to execute the AppleScript. The '-s o' flag tells osascript to print errors to
         // stdout rather than stderr. The AppleScript is piped to the process instead of passing it as an argument
@@ -108,10 +108,10 @@ public class AppleScript {
             // Wait for the process to die
             int returnCode = process.waitFor();
 
-            AppLogger.fine("osascript returned code="+returnCode+", output="+ outputBuffer);
+            MuLogger.fine("osascript returned code="+returnCode+", output="+ outputBuffer);
 
             if(returnCode!=0) {
-                AppLogger.fine("osascript terminated abnormally");
+                MuLogger.fine("osascript terminated abnormally");
                 return false;
             }
 
@@ -119,7 +119,7 @@ public class AppleScript {
         }
         catch(Exception e) {        // IOException, InterruptedException
             // Shouldn't normally happen
-            AppLogger.fine("Unexcepted exception while executing AppleScript", e);
+            MuLogger.fine("Unexcepted exception while executing AppleScript", e);
 
             try {
                 if(pout!=null)

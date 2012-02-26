@@ -18,7 +18,7 @@
 
 package com.mucommander.shell;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
@@ -62,7 +62,7 @@ class ShellHistoryWriter implements ShellHistoryConstants {
             out.endElement(ROOT_ELEMENT);
         }
         catch(Exception e) {
-            AppLogger.fine("Failed to write shell history", e);
+            MuLogger.fine("Failed to write shell history", e);
         }
     }
 }

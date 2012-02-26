@@ -27,7 +27,7 @@ import java.util.Vector;
 
 import javax.swing.JCheckBox;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.VersionChecker;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.conf.MuConfigurations;
@@ -99,12 +99,12 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         String         jarURL = null;
 
         try {
-            AppLogger.fine("Checking for new version...");
+            MuLogger.fine("Checking for new version...");
 
             version = VersionChecker.getInstance();
             // A newer version is available
             if(version.isNewVersionAvailable()) {
-                AppLogger.info("A new version is available!");
+                MuLogger.info("A new version is available!");
 
                 title = Translator.get("version_dialog.new_version_title");
 
@@ -125,7 +125,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             }
             // We're already running latest version
             else {
-                AppLogger.fine("No new version.");
+                MuLogger.fine("No new version.");
 
                 // If the version check was not iniated by the user (i.e. was automatic),
                 // we do not need to inform the user that he already has the latest version

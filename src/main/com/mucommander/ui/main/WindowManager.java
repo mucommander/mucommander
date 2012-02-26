@@ -36,7 +36,7 @@ import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
@@ -112,7 +112,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         for(String plaf : plafs) {
             try {installLookAndFeel(plaf);}
             catch(Throwable e) {
-                AppLogger.info("Failed to install Look&Feel "+plaf, e);
+                MuLogger.info("Failed to install Look&Feel "+plaf, e);
             }
         }
     }
@@ -136,7 +136,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             setLookAndFeel(lnfName);
 
         if(lnfName == null)
-            AppLogger.fine("Could load look'n feel from preferences");
+            MuLogger.fine("Could load look'n feel from preferences");
     }
 
     /**
@@ -195,9 +195,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         		new AbstractFile[] {FileFactory.getFile(System.getProperty("user.home"))} :
         		initialFolders.toArray(new AbstractFile[0]);
 
-         AppLogger.finer("initial folders:");
+         MuLogger.finer("initial folders:");
          for (AbstractFile result:results)
-        	 AppLogger.finer("\t"+result);
+        	 MuLogger.finer("\t"+result);
         
         return results;
     }
@@ -512,7 +512,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         for(int i=0; i<nbFrames; i++) {
             frame = frames[i];
             if(frame.isShowing()) {
-                AppLogger.finer("disposing frame#"+i);
+                MuLogger.finer("disposing frame#"+i);
                 frame.dispose();
             }
         }
@@ -577,7 +577,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 SwingUtilities.updateComponentTreeUI(mainFrames.get(i));
         }
         catch(Throwable e) {
-            AppLogger.fine("Exception caught", e);
+            MuLogger.fine("Exception caught", e);
         }
     }
 
@@ -626,7 +626,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * windowClosed is synchronized so that it doesn't get called while quit() is executing.
      */
     public synchronized void windowClosed(WindowEvent e) {
-        AppLogger.finest("called");
+        MuLogger.finest("called");
 
         Object source = e.getSource();
 
@@ -662,7 +662,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         for(int i=0; i<nbFrames; i++) {
             frame = frames[i];
             if(frame.isShowing()) {
-                AppLogger.finer("found active frame#"+i);
+                MuLogger.finer("found active frame#"+i);
                 return;
             }
         }

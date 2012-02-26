@@ -19,7 +19,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
@@ -104,7 +104,7 @@ public class MoveJob extends AbstractCopyJob {
                     return true;
                 }
                 catch(IOException e) {
-                    AppLogger.fine("IOException caught", e);
+                    MuLogger.fine("IOException caught", e);
 
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                     // Retry loops
@@ -137,7 +137,7 @@ public class MoveJob extends AbstractCopyJob {
             catch(IOException e) {
                 // Fail silently: renameTo might fail under normal conditions, for instance for local files which are
                 // not located on the same volume.
-                AppLogger.fine("Failed to rename "+file+" into "+destFile+" (not necessarily an error)", e);
+                MuLogger.fine("Failed to rename "+file+" into "+destFile+" (not necessarily an error)", e);
             }
         }
         // Rename couldn't be used or didn't succeed: move the file manually
@@ -184,7 +184,7 @@ public class MoveJob extends AbstractCopyJob {
                             destFile.changeDate(file.getDate());
                         }
                         catch (IOException e) {
-                            AppLogger.fine("failed to change the date of "+destFile, e);
+                            MuLogger.fine("failed to change the date of "+destFile, e);
                             // Fail silently
                         }
                     }
@@ -239,7 +239,7 @@ public class MoveJob extends AbstractCopyJob {
                         return true;
                     }
                     catch(IOException e) {
-                        AppLogger.fine("IOException caught", e);
+                        MuLogger.fine("IOException caught", e);
 
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                         // Retry loops

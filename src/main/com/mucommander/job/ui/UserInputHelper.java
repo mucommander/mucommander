@@ -18,7 +18,7 @@
 
 package com.mucommander.job.ui;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.job.FileJob;
 
 import javax.swing.*;
@@ -46,7 +46,7 @@ public class UserInputHelper {
                 }
             });
         } catch (Exception e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
         }
         return userInput;
     }

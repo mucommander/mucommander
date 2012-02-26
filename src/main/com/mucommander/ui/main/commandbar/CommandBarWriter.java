@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
@@ -59,7 +59,7 @@ class CommandBarWriter extends CommandBarIO {
 			new Writer(bos).write(commandBarActionIds, commandBarAlterativeActionIds, commandBarModifier);
 			wasCommandBarModified = false;
 		} catch (Exception e) {
-			AppLogger.fine("Caught exception", e);
+			MuLogger.fine("Caught exception", e);
 		} finally {
 			bos.close();
 		}
@@ -97,7 +97,7 @@ class CommandBarWriter extends CommandBarIO {
 			if (alternativeActionId != null)
 				attributes.add(ALT_ACTION_ID_ATTRIBUTE, alternativeActionId);
 			
-            AppLogger.finest("Writing button: action_id = "  + attributes.getValue(ACTION_ID_ATTRIBUTE) + ", alt_action_id = " + attributes.getValue(ALT_ACTION_ID_ATTRIBUTE));
+            MuLogger.finest("Writing button: action_id = "  + attributes.getValue(ACTION_ID_ATTRIBUTE) + ", alt_action_id = " + attributes.getValue(ALT_ACTION_ID_ATTRIBUTE));
 			
 			writer.writeStandAloneElement(BUTTON_ELEMENT, attributes);
 		}

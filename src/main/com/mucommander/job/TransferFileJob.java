@@ -20,7 +20,7 @@
 package com.mucommander.job;
 
 import com.apple.eio.FileManager;
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
@@ -158,7 +158,7 @@ public abstract class TransferFileJob extends FileJob {
                     setCurrentInputStream(in);
                 }
                 catch(Exception e) {
-                    AppLogger.fine("IOException caught, throwing FileTransferException", e);
+                    MuLogger.fine("IOException caught, throwing FileTransferException", e);
                     throw new FileTransferException(FileTransferException.OPENING_SOURCE);
                 }
 
@@ -180,7 +180,7 @@ public abstract class TransferFileJob extends FileJob {
                 destFile.changeDate(sourceFile.getDate());
             }
             catch (IOException e) {
-                AppLogger.fine("failed to change the date of "+destFile, e);
+                MuLogger.fine("failed to change the date of "+destFile, e);
                 // Fail silently
             }
         }
@@ -192,7 +192,7 @@ public abstract class TransferFileJob extends FileJob {
                 destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
             }
             catch(IOException e) {
-                AppLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
+                MuLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
                 // Fail silently
             }
         }
@@ -208,7 +208,7 @@ public abstract class TransferFileJob extends FileJob {
             }
             catch(IOException e) {
                 // Swallow the exception and do not interrupt the transfer
-                AppLogger.fine("Error while setting Mac OS X file type and creator on destination", e);
+                MuLogger.fine("Error while setting Mac OS X file type and creator on destination", e);
             }
         }
 
@@ -236,7 +236,7 @@ public abstract class TransferFileJob extends FileJob {
                 }
             }
 
-            AppLogger.finer("Source checksum= "+sourceChecksum);
+            MuLogger.finer("Source checksum= "+sourceChecksum);
 
             // Calculate the destination file's checksum
             try {
@@ -246,7 +246,7 @@ public abstract class TransferFileJob extends FileJob {
                 throw new FileTransferException(FileTransferException.READING_DESTINATION);
             }
 
-            AppLogger.finer("Destination checksum= "+destinationChecksum);
+            MuLogger.finer("Destination checksum= "+destinationChecksum);
 
             // Compare both checksums and throw an exception if they don't match
             if(!sourceChecksum.equals(destinationChecksum)) {
@@ -290,7 +290,7 @@ public abstract class TransferFileJob extends FileJob {
                     return false;
 
                 // Print the exception's stack trace
-                AppLogger.fine("Copy failed", e);
+                MuLogger.fine("Copy failed", e);
 
                 int reason = e.getReason();
                 int choice;
@@ -408,7 +408,7 @@ public abstract class TransferFileJob extends FileJob {
      */
     public synchronized void skipCurrentFile() {
         if(tlin !=null) {
-            AppLogger.finer("skipping current file, closing "+ tlin);
+            MuLogger.finer("skipping current file, closing "+ tlin);
 
             // Prevents an error from being reported when the current InputStream is closed
             currentFileSkipped = true;
@@ -540,7 +540,7 @@ public abstract class TransferFileJob extends FileJob {
 
         synchronized(this) {
             if(tlin !=null) {
-                AppLogger.finer("closing current InputStream "+ tlin);
+                MuLogger.finer("closing current InputStream "+ tlin);
 
                 closeCurrentInputStream();
             }

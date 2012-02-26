@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 
@@ -301,7 +301,7 @@ public class ActionManager {
             // Looks for the action's factory
             ActionFactory actionFactory = actionFactories.get(actionId);
             if(actionFactory == null) {
-            	AppLogger.fine("couldn't initiate action: " + actionId + ", its factory wasn't found");
+            	MuLogger.fine("couldn't initiate action: " + actionId + ", its factory wasn't found");
             	return null;
             }
 

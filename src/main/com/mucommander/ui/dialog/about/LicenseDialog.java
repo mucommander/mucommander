@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.about;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
@@ -156,7 +156,7 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
                 text.append(buffer, 0, count);
         }
         catch(Exception e) {
-            AppLogger.warning("Failed to read license file", e);
+            MuLogger.warning("Failed to read license file", e);
         }
         finally {
             if(in != null) {

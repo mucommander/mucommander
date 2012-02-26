@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.xml.XmlAttributes;
@@ -54,7 +54,7 @@ public class ToolBarWriter extends ToolBarIO {
 			new Writer(bos).write(actionIds);
 			wasToolBarModified = false;
 		} catch (Exception e) {
-			AppLogger.fine("Caught exception", e);
+			MuLogger.fine("Caught exception", e);
 		} finally {
 			bos.close();
 		}

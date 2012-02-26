@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.io.backup.BackupInputStream;
@@ -98,7 +98,7 @@ class CommandBarReader extends CommandBarIO {
 
     @Override
     public void startDocument() {
-        AppLogger.finest(file.getAbsolutePath()+" parsing started");
+        MuLogger.finest(file.getAbsolutePath()+" parsing started");
 
         actionsIdsV = new Vector<String>();
         alternateActionsIdsV = new Vector<String>();
@@ -107,7 +107,7 @@ class CommandBarReader extends CommandBarIO {
 
     @Override
     public void endDocument() {
-        AppLogger.finest(file.getAbsolutePath()+" parsing finished");
+        MuLogger.finest(file.getAbsolutePath()+" parsing finished");
     }
 
     @Override
@@ -141,13 +141,13 @@ class CommandBarReader extends CommandBarIO {
         					if (ActionManager.isActionExist(actionId))
         						alternateActionsIdsV.add(actionId);
         					else {
-        						AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
+        						MuLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
         						alternateActionsIdsV.add(null);
         					}
         				}
         			}
         			else
-        				AppLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
+        				MuLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
         		}
         	}
         }

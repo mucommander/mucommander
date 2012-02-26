@@ -57,7 +57,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.commons.util.Pair;
@@ -428,12 +428,12 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				tableData.setAlternativeAccelerator(typedKeyStroke, row);
 				break;
 			default:
-				AppLogger.fine("Unexpected column index: " + column);
+				MuLogger.fine("Unexpected column index: " + column);
 			}
 
 			fireTableCellUpdated(row, column);
 			
-			AppLogger.finest("Value: " + value + ", row: " + row + ", col: " + column);
+			MuLogger.finest("Value: " + value + ", row: " + row + ", col: " + column);
 		}
 	}
 	
@@ -476,7 +476,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		/////////////////////////////
 
 		public void keyPressed(KeyEvent keyEvent) {
-			AppLogger.finest("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
+			MuLogger.finest("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
 
 	        int keyCode = keyEvent.getKeyCode();
 	        if(keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META)

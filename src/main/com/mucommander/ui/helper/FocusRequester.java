@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.helper;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,7 +57,7 @@ public class FocusRequester implements Runnable {
      */
     public static synchronized void requestFocus(Component c) {
         if(c==null) {
-            AppLogger.fine(">>>>>>>>>>>>>>>>>> Component is null, returning!");
+            MuLogger.fine(">>>>>>>>>>>>>>>>>> Component is null, returning!");
             
             return;
         }
@@ -77,7 +77,7 @@ public class FocusRequester implements Runnable {
      */
     public static synchronized void requestFocusInWindow(Component c) {
         if(c==null) {
-            AppLogger.fine(">>>>>>>>>>>>>>>>>> Component is null, returning!");
+            MuLogger.fine(">>>>>>>>>>>>>>>>>> Component is null, returning!");
 
             return;
         }
@@ -97,7 +97,7 @@ public class FocusRequester implements Runnable {
         else
             c.requestFocus();
 
-        AppLogger.finer("focus requested on "+(c.getClass().getName()));
+        MuLogger.finer("focus requested on "+(c.getClass().getName()));
 
         this.c = null;
     }

@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.BufferPool;
@@ -124,7 +124,7 @@ public class SplitFileJob extends AbstractCopyJob {
         	origFileStream = sourceFile.getInputStream();
 		}
         catch (IOException e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", sourceFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -140,7 +140,7 @@ public class SplitFileJob extends AbstractCopyJob {
 				origFileStream = new ChecksumInputStream(origFileStream, MessageDigest.getInstance("CRC32"));
 			} catch (NoSuchAlgorithmException e) {
 				setIntegrityCheckEnabled(false);
-                AppLogger.fine("Caught exception", e);
+                MuLogger.fine("Caught exception", e);
 			}
         }
 	}
@@ -197,7 +197,7 @@ public class SplitFileJob extends AbstractCopyJob {
                     destFile.changeDate(sourceFile.getDate());
                 }
                 catch (IOException e) {
-                    AppLogger.fine("failed to change date of "+destFile, e);
+                    MuLogger.fine("failed to change date of "+destFile, e);
                     // Fail silently
                 }
             }
@@ -210,13 +210,13 @@ public class SplitFileJob extends AbstractCopyJob {
                     destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);
                 }
                 catch (IOException e) {
-                    AppLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
+                    MuLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
                     // Fail silently
                 }
             }
 		}
         catch (IOException e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
 
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
@@ -265,7 +265,7 @@ public class SplitFileJob extends AbstractCopyJob {
 					crcStream.write(line.getBytes("utf-8"));
 					crcStream.close();
 				} catch (Exception e) {
-                    AppLogger.fine("Caught exception", e);
+                    MuLogger.fine("Caught exception", e);
 					
 		            showErrorDialog(errorDialogTitle,
 		                    Translator.get("error_while_transferring", crcFileName),

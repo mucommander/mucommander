@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 
@@ -66,7 +66,7 @@ public abstract class FilesService implements CompletionService {
 					try {
 						currentDirectoryFiles = getFiles(currentDirectory);
 					} catch (IOException e) {
-                        AppLogger.fine("Caught exception", e);
+                        MuLogger.fine("Caught exception", e);
 						return new Vector<String>();
 					}
 		

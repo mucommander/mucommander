@@ -18,7 +18,7 @@
 
 package com.mucommander.cache;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 
 /**
  * An abstract LRU cache.
@@ -220,7 +220,7 @@ public abstract class LRUCache<K, V> {
                 cache.testCorruption();
             }
             catch(RuntimeException e) {
-                AppLogger.fine("Cache corrupted after "+i+" iterations, cache state="+cache);
+                MuLogger.fine("Cache corrupted after "+i+" iterations, cache state="+cache);
                 return;
             }
 
@@ -228,7 +228,7 @@ public abstract class LRUCache<K, V> {
             //			System.out.println(cache.toString());
         }
 
-        AppLogger.fine("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
+        MuLogger.fine("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
 
         // Print the cache's state
         System.out.println(cache.toString());

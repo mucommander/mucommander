@@ -19,7 +19,7 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.ProxyFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
@@ -102,7 +102,7 @@ public class CachedDirectory extends ProxyFile {
         try {
             children = file.ls(cache.getFilter());
         } catch (Exception e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
             children = new AbstractFile[0];
             setCachedIcon(NOT_ACCESSIBLE_ICON);
         }
@@ -131,7 +131,7 @@ public class CachedDirectory extends ProxyFile {
                 }
             });
         } catch (Exception e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
         }
     }
 

@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.StreamUtils;
@@ -66,7 +66,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 			setCurrentInputStream(in);
 			StreamUtils.copyStream(in, out);
 		} catch (IOException e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -97,7 +97,7 @@ public class CombineFilesJob extends AbstractCopyJob {
         try {
     		out = destFile.getOutputStream();
         } catch(IOException e) {
-        	AppLogger.fine("Caught exception", e);
+        	MuLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -117,7 +117,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 			try {
 				crcFile = f.getDirectChild(file.getNameWithoutExtension() + ".sfv");
 			} catch (IOException e) {
-				AppLogger.fine("Caught exception", e);
+				MuLogger.fine("Caught exception", e);
 			}
 		}
 	}
@@ -168,7 +168,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 	                    );
 			}
 		} catch (Exception e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("combine_files_job.crc_read_error"),
                     new String[]{CANCEL_TEXT},
@@ -179,7 +179,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 				try {
 					crcIn.close();
 				} catch (IOException e) {
-                    AppLogger.fine("Caught exception", e);
+                    MuLogger.fine("Caught exception", e);
 				}
 			}
 		}
@@ -194,7 +194,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 				out.close();
 			}
             catch (IOException e) {
-                AppLogger.fine("Caught exception", e);
+                MuLogger.fine("Caught exception", e);
 	            showErrorDialog(errorDialogTitle,
 	                    Translator.get("error_while_transferring", destFile.getName()),
 	                    new String[]{CANCEL_TEXT},

@@ -82,15 +82,15 @@ public class StressTester implements Runnable, ActionListener {
                 }
             }
             catch(Exception e) {
-                AppLogger.fine("Caught Exception", e);
+                MuLogger.fine("Caught Exception", e);
             }
 
-            AppLogger.finest("Sleeping for a bit...");
+            MuLogger.finest("Sleeping for a bit...");
             try {
                 Thread.sleep(100+random.nextInt(200));
             }
             catch(InterruptedException e) {
-                AppLogger.fine("Caught InterruptedException", e);
+                MuLogger.fine("Caught InterruptedException", e);
             }
         }
     }

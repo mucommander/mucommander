@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.autocomplete;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.ui.autocomplete.completers.Completer;
 
 import javax.swing.text.BadLocationException;
@@ -49,7 +49,7 @@ public class EditableComboboxCompletion extends CompletionType {
 	                x = autocompletedtextComp.modelToView().x;
 	            } catch(BadLocationException e){ 
 	                // this should never happen!!! 
-                    AppLogger.fine("Caught exception", e);
+                    MuLogger.fine("Caught exception", e);
 	                return;
 	            }
 	            if (autocompletedtextComp.hasFocus()) {	            	

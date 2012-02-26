@@ -129,7 +129,7 @@ public class VersionChecker extends DefaultHandler {
         VersionChecker instance;
         InputStream    in;     // Input stream on the remote XML file.
 
-        AppLogger.fine("Opening connection to " + RuntimeConstants.VERSION_URL);
+        MuLogger.fine("Opening connection to " + RuntimeConstants.VERSION_URL);
 
         // Parses the remote XML file using UTF-8 encoding.
         in = FileFactory.getFile(RuntimeConstants.VERSION_URL).getInputStream();
@@ -137,7 +137,7 @@ public class VersionChecker extends DefaultHandler {
             SAXParserFactory.newInstance().newSAXParser().parse(in, instance = new VersionChecker());
         }
         catch(Exception e) {
-            AppLogger.fine("Failed to read version XML file at "+RuntimeConstants.VERSION_URL, e);
+            MuLogger.fine("Failed to read version XML file at "+RuntimeConstants.VERSION_URL, e);
             throw e;
         }
         finally {
@@ -271,9 +271,9 @@ public class VersionChecker extends DefaultHandler {
         releaseDate   = releaseDate.trim();
 
         // Logs the data if in debug mode.
-        AppLogger.finer("download URL: "  + downloadURL);
-        AppLogger.finer("jar URL: "       + jarURL);
-        AppLogger.finer("latestVersion: " + latestVersion);
-        AppLogger.finer("releaseDate:   " + releaseDate);
+        MuLogger.finer("download URL: "  + downloadURL);
+        MuLogger.finer("jar URL: "       + jarURL);
+        MuLogger.finer("latestVersion: " + latestVersion);
+        MuLogger.finer("releaseDate:   " + releaseDate);
     }
 }

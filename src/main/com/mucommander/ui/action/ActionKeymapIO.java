@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -125,7 +125,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     	if (wereActionsModified)
     		writer.write();
     	else
-    		AppLogger.fine("Action keymap not modified, not saving");
+    		MuLogger.fine("Action keymap not modified, not saving");
     }
     
     protected static void createEmptyFile() throws IOException {
@@ -149,7 +149,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     	}
     	else {
     		createEmptyFile();
-    		AppLogger.fine(DEFAULT_ACTIONS_FILE_NAME + " was not found, created empty file");
+    		MuLogger.fine(DEFAULT_ACTIONS_FILE_NAME + " was not found, created empty file");
     	}
     }
 }

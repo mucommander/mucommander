@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
@@ -112,7 +112,7 @@ public class GrowlNotifier extends AbstractNotifier {
             // Test if Growl is currently running and abort if it is not
             StringBuffer outputBuffer = new StringBuffer();
             if(!(AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && outputBuffer.toString().equals("true"))) {
-                AppLogger.fine("Growl is not running, aborting");
+                MuLogger.fine("Growl is not running, aborting");
 
                 return false;
             }
@@ -133,7 +133,7 @@ public class GrowlNotifier extends AbstractNotifier {
                 " default notifications "+notificationTypes+
                 " icon of application \""+APP_NAME+"\"");
 
-            AppLogger.info(isRegistered?
+            MuLogger.info(isRegistered?
                 "Successfully registered "+APP_NAME+" with Growl":
                 "Error while registering "+APP_NAME+" with Growl");
 
@@ -151,10 +151,10 @@ public class GrowlNotifier extends AbstractNotifier {
 
     @Override
     public boolean displayNotification(NotificationType notificationType, String title, String description) {
-        AppLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
+        MuLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
 
         if(!isEnabled()) {
-            AppLogger.finer("Ignoring notification, this notifier is not enabled");
+            MuLogger.finer("Ignoring notification, this notifier is not enabled");
 
             return false;
         }
@@ -166,7 +166,7 @@ public class GrowlNotifier extends AbstractNotifier {
             " description \""+description+"\""+
             " application name \""+APP_NAME+"\"");
 
-        AppLogger.finer(success?
+        MuLogger.finer(success?
             "Notification sent successfully":
             "Error while sending notification");
 

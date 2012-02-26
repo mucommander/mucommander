@@ -84,11 +84,11 @@ public class Launcher {
      * This method will return immediately if the application has already been launched when it is called.
      */
     public static void waitUntilLaunched() {
-        AppLogger.finer("called, thread="+Thread.currentThread());
+        MuLogger.finer("called, thread="+Thread.currentThread());
         synchronized(LAUNCH_LOCK) {
             while(isLaunching) {
                 try {
-                    AppLogger.finer("waiting");
+                    MuLogger.finer("waiting");
                     LAUNCH_LOCK.wait();
                 }
                 catch(InterruptedException e) {
@@ -231,7 +231,7 @@ public class Launcher {
         if(useSplash)
             splashScreen.setLoadingMessage(message);
 
-        AppLogger.finest(message);
+        MuLogger.finest(message);
     }
 
 
@@ -443,7 +443,7 @@ public class Launcher {
                     constructor.newInstance();
                 }
                 catch(Exception e) {
-                    AppLogger.fine("Exception thrown while initializing Mac OS X integration", e);
+                    MuLogger.fine("Exception thrown while initializing Mac OS X integration", e);
                 }
             }
 
@@ -455,7 +455,7 @@ public class Launcher {
                 ExtensionManager.addExtensionsToClasspath();
             }
             catch(Exception e) {
-                AppLogger.fine("Failed to add extensions to the classpath", e);
+                MuLogger.fine("Failed to add extensions to the classpath", e);
             }
 
             // This the property is supposed to have the java.net package use the proxy defined in the system settings
@@ -499,7 +499,7 @@ public class Launcher {
             try {CommandManager.writeCommands();}
             catch(Exception e) {
                 System.out.println("###############################");
-                AppLogger.fine("Caught exception", e);
+                MuLogger.fine("Caught exception", e);
                 // There's really nothing we can do about this...
             }
 
@@ -609,7 +609,7 @@ public class Launcher {
             if(splashScreen!=null)
                 splashScreen.dispose();
 
-            AppLogger.severe("Startup failed", t);
+            MuLogger.severe("Startup failed", t);
             
             // Display an error dialog with a proper message and error details
             InformationDialog.showErrorDialog(null, null, Translator.get("startup_error"), null, t);

@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -148,10 +148,10 @@ public class SelfUpdateJob extends CopyJob {
             try {
                 classLoader.loadClass(classname);
 
-                AppLogger.finest("Loaded class "+classname);
+                MuLogger.finest("Loaded class "+classname);
             }
             catch(java.lang.NoClassDefFoundError e) {
-                AppLogger.fine("Caught an error while loading class "+classname, e);
+                MuLogger.fine("Caught an error while loading class "+classname, e);
             }
         }
     }
@@ -181,7 +181,7 @@ public class SelfUpdateJob extends CopyJob {
             loadingClasses = false;
         }
         catch(Exception e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
 
             // Todo: display an error message
             interrupt();
@@ -204,7 +204,7 @@ public class SelfUpdateJob extends CopyJob {
 
                     String appPath = parent.getAbsolutePath();
 
-                    AppLogger.finer("Opening "+appPath);
+                    MuLogger.finer("Opening "+appPath);
 
                     // Open -W wait for the current muCommander .app to terminate, before re-opening it
                     ProcessRunner.execute(new String[]{"/bin/sh", "-c", "open -W "+appPath+" && open "+appPath});
@@ -242,7 +242,7 @@ public class SelfUpdateJob extends CopyJob {
             ProcessRunner.execute(new String[]{"java", "-jar", destJar.getAbsolutePath()});
         }
         catch(IOException e) {
-            AppLogger.fine("Caught exception", e);
+            MuLogger.fine("Caught exception", e);
             // Todo: we might want to do something about this
         }
         finally {

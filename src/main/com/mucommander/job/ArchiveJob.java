@@ -19,7 +19,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archiver.Archiver;
 import com.mucommander.commons.file.util.FileSet;
@@ -121,7 +121,7 @@ public class ArchiveJob extends TransferFileJob {
                 if(getState()==INTERRUPTED)
                     return false;
 
-                AppLogger.fine("Caught IOException", e);
+                MuLogger.fine("Caught IOException", e);
                 
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops

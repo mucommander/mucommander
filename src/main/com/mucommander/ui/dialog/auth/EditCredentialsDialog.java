@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.auth;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.collections.AlteredVector;
@@ -242,7 +242,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     ///////////////////////////////////
 
     public void valueChanged(ListSelectionEvent e) {
-        AppLogger.finest("called, e.getValueIsAdjusting="+e.getValueIsAdjusting()+" getSelectedIndex="+ credentialsList.getSelectedIndex());
+        MuLogger.finest("called, e.getValueIsAdjusting="+e.getValueIsAdjusting()+" getSelectedIndex="+ credentialsList.getSelectedIndex());
 
         if(e.getValueIsAdjusting())
             return;

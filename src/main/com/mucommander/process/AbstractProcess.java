@@ -19,7 +19,7 @@
 package com.mucommander.process;
 
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,7 +63,7 @@ public abstract class AbstractProcess {
             @Override
             public void run() {
                 // Closes the process' streams.
-                AppLogger.finer("Destroying process...");
+                MuLogger.finer("Destroying process...");
                 stdoutMonitor.stopMonitoring();
                 if(stderrMonitor != null)
                     stderrMonitor.stopMonitoring();
@@ -73,7 +73,7 @@ public abstract class AbstractProcess {
                     destroyProcess();
                 }
                 catch(IOException e) {
-                    AppLogger.fine("IOException caught", e);
+                    MuLogger.fine("IOException caught", e);
                 }
             }
         }.start();
@@ -87,12 +87,12 @@ public abstract class AbstractProcess {
     final void startMonitoring(ProcessListener listener, String encoding) throws IOException {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
-            AppLogger.finer("Starting process merged output monitor...");
+            MuLogger.finer("Starting process merged output monitor...");
             new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process sdtout/stderr monitor").start();
         }
         // Monitors both stdout and stderr.
         else {
-            AppLogger.finer("Starting process stdout and stderr monitors...");
+            MuLogger.finer("Starting process stdout and stderr monitors...");
             new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process stdout monitor").start();
             new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), encoding, listener), "Process stderr monitor").start();
         }

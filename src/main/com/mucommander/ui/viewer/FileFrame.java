@@ -1,6 +1,6 @@
 package com.mucommander.ui.viewer;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.dialog.DialogToolkit;
@@ -53,7 +53,7 @@ public abstract class FileFrame extends JFrame {
                 	filePresenter.open(file);
                 }
                 catch(Exception e) {
-                    AppLogger.fine("Exception caught", e);
+                    MuLogger.fine("Exception caught", e);
 
                     // May be a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
                     if(!(e instanceof UserCancelledException))

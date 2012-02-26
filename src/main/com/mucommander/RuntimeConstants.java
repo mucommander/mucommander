@@ -99,11 +99,11 @@ public class RuntimeConstants {
                 attributes = manifest.getMainAttributes();
             }
             else {
-                AppLogger.warning("MANIFEST.MF not found, default values will be used");
+                MuLogger.warning("MANIFEST.MF not found, default values will be used");
             }
         }
         catch(Exception e) {
-            AppLogger.warning("Failed to read MANIFEST.MF, default values will be used", e);
+            MuLogger.warning("Failed to read MANIFEST.MF, default values will be used", e);
             // Ignore this, attributes is already set to null.
         }
         finally {

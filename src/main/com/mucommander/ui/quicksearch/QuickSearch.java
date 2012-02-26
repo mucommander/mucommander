@@ -23,7 +23,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 
 /**
  * This class contains 'quick search' common functionality - selection of rows that match
@@ -176,7 +176,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
      * @param findBestMatch if <code>true</code>, all rows will be tested in the specified order, looking for the best match. If not, it will stop to the first match (not necessarily the best).
      */
     protected void findMatch(int startRow, boolean descending, boolean findBestMatch) {
-        AppLogger.finest("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
+        MuLogger.finest("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
 
         // If search string is empty, update status bar without any icon and return
         if(searchString.length()==0) {
@@ -270,8 +270,8 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
             :containsNoCaseMatch!=-1?containsNoCaseMatch
             :-1;
         
-        AppLogger.finest("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
-        AppLogger.finest("bestMatch="+bestMatch);
+        MuLogger.finest("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
+        MuLogger.finest("bestMatch="+bestMatch);
         
         return bestMatch;
     }

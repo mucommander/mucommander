@@ -25,7 +25,7 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
@@ -167,7 +167,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         // Sanity check.
         file = tableModel.getCachedFileAtRow(rowIndex);
         if(file==null) {
-            AppLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
+            MuLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
             return null;
         }
 

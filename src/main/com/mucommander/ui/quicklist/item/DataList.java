@@ -29,7 +29,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.CellLabel;
@@ -169,7 +169,7 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 
 			// Sanity check.
 			if(item==null) {
-				AppLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
+				MuLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
 				return null;
 			}
 

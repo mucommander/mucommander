@@ -18,7 +18,7 @@
 
 package com.mucommander.process;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.runtime.JavaVersions;
 
 import java.io.File;
@@ -114,7 +114,7 @@ class LocalProcess extends AbstractProcess {
     @Override
     public InputStream getErrorStream()  throws IOException {
         if(usesMergedStreams()) {
-            AppLogger.fine("Tried to access the error stream of a merged streams process.");
+            MuLogger.fine("Tried to access the error stream of a merged streams process.");
             throw new IOException();
         }
         return process.getErrorStream();

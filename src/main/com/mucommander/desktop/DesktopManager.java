@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.desktop.gnome.ConfiguredGnomeDesktopAdapter;
@@ -208,7 +208,7 @@ public class DesktopManager {
             current = desktops.elementAt(i);
             if(current.isAvailable()) {
                 desktop = current;
-                AppLogger.fine("Using desktop: " + desktop);
+                MuLogger.fine("Using desktop: " + desktop);
                 desktop.init(install);
                 return;
             }

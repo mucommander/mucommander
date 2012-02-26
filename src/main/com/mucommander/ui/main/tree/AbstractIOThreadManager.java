@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,7 +78,7 @@ public class AbstractIOThreadManager extends Thread {
         while (!interrupted()) {
             synchronized (queue) {
                 if (ioThread.isBlocked()) {
-                    AppLogger.fine("Killing IOThread " + ioThread);
+                    MuLogger.fine("Killing IOThread " + ioThread);
                     ioThread.interrupt();
                     ioThread = new IOThread(queue, blockThreshold);
                     ioThread.start();

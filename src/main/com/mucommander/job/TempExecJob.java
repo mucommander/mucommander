@@ -18,7 +18,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccesses;
 import com.mucommander.commons.file.PermissionTypes;
@@ -90,7 +90,7 @@ public class TempExecJob extends TempCopyJob {
                         currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
                 }
                 catch(IOException e) {
-                    AppLogger.fine("Caught exeception while changing permissions of "+currentDestFile, e);
+                    MuLogger.fine("Caught exeception while changing permissions of "+currentDestFile, e);
                     return false;
                 }
             }
@@ -101,7 +101,7 @@ public class TempExecJob extends TempCopyJob {
                 RecentExecutedFilesQL.addFile(file);
             }
             catch(Exception e) {
-                AppLogger.fine("Caught exeception while opening "+currentDestFile, e);
+                MuLogger.fine("Caught exeception while opening "+currentDestFile, e);
                 return false;
             }
         }

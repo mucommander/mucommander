@@ -50,7 +50,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.collections.Enumerator;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -1902,7 +1902,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             catch(Throwable e) {
                 // While no such thing should happen, we want to make absolutely sure no exception
                 // is propagated to the AWT event dispatch thread.
-                AppLogger.warning("Caught exception while changing folder, this should not happen!", e);
+                MuLogger.warning("Caught exception while changing folder, this should not happen!", e);
             }
             finally {
                 // Notify #setCurrentFolder that we're done changing the folder.

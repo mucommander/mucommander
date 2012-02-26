@@ -45,7 +45,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJob;
@@ -289,7 +289,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     ////////////////////////////////////
 
     public void jobStateChanged(FileJob source, int oldState, int newState) {
-        AppLogger.finer("currentThread="+Thread.currentThread()+" oldState="+oldState+" newState="+newState);
+        MuLogger.finer("currentThread="+Thread.currentThread()+" oldState="+oldState+" newState="+newState);
 
         if(newState==FileJob.INTERRUPTED) {
             // Stop repaint thread and dispose dialog

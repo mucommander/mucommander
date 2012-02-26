@@ -19,7 +19,7 @@
 
 package com.mucommander.job;
 
-import com.mucommander.AppLogger;
+import com.mucommander.MuLogger;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
@@ -158,7 +158,7 @@ public class CopyJob extends AbstractCopyJob {
                             destFile.changeDate(file.getDate());
                         }
                         catch (IOException e) {
-                            AppLogger.fine("failed to change the date of "+destFile, e);
+                            MuLogger.fine("failed to change the date of "+destFile, e);
                             // Fail silently
                         }
                     }
