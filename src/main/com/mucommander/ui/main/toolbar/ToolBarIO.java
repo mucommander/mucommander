@@ -22,6 +22,10 @@ import com.mucommander.MuLogger;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.ui.notifier.SystemTrayNotifier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.File;
@@ -33,7 +37,8 @@ import java.io.IOException;
  * @author Arik Hadas
  */
 public abstract class ToolBarIO extends DefaultHandler {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarIO.class);
+	
 	/* Variables used for XML parsing */
 	/** Root element */
 	protected static final String ROOT_ELEMENT = "toolbar";
@@ -71,7 +76,7 @@ public abstract class ToolBarIO extends DefaultHandler {
         	ToolBarAttributes.setActions(reader.getActionsRead());
         }
         else
-        	MuLogger.fine("User toolbar.xml was not found, using default toolbar");
+        	LOGGER.debug("User toolbar.xml was not found, using default toolbar");
         
         toolBarWriter = ToolBarWriter.create();
     }
@@ -85,20 +90,20 @@ public abstract class ToolBarIO extends DefaultHandler {
     	if (ToolBarAttributes.areDefaultAttributes()) {
     		AbstractFile toolBarFile = getDescriptionFile();
     		if (toolBarFile != null && toolBarFile.exists()) {
-    			MuLogger.info("Toolbar use default settings, removing descriptor file");
+    			LOGGER.info("Toolbar use default settings, removing descriptor file");
     			toolBarFile.delete();
     		}
     		else
-    			MuLogger.fine("Toolbar not modified, not saving");
+    			LOGGER.debug("Toolbar not modified, not saving");
     	}
     	else if (toolBarWriter != null) {
     		if (wasToolBarModified)
     			toolBarWriter.write();
     		else
-    			MuLogger.fine("Toolbar not modified, not saving");
+    			LOGGER.debug("Toolbar not modified, not saving");
     	}
     	else
-    		MuLogger.warning("Could not save toolbar. writer is null");
+    		LOGGER.warn("Could not save toolbar. writer is null");
     }
     
     /**

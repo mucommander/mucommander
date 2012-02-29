@@ -18,24 +18,39 @@
 
 package com.mucommander.ui.dialog.about;
 
-import com.mucommander.MuLogger;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.InputStreamReader;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.InputStreamReader;
-
 /**
  * Dialog used to display muCommander's license file.
  * @author Nicolas Rinaudo
  */
 public class LicenseDialog extends FocusDialog implements ActionListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LicenseDialog.class);
+	
     // - UI components ----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Button used to close the dialog. */
@@ -156,7 +171,7 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
                 text.append(buffer, 0, count);
         }
         catch(Exception e) {
-            MuLogger.warning("Failed to read license file", e);
+            LOGGER.warn("Failed to read license file", e);
         }
         finally {
             if(in != null) {

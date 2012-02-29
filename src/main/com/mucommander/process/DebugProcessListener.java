@@ -18,7 +18,8 @@
 
 package com.mucommander.process;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Listener used while in debug mode.
@@ -29,6 +30,8 @@ import com.mucommander.MuLogger;
  * @author Nicolas Rinaudo
  */
 class DebugProcessListener implements ProcessListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DebugProcessListener.class);
+	
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Command that this listener is monitoring. */
@@ -64,20 +67,20 @@ class DebugProcessListener implements ProcessListener {
      * @param returnValue process' return value.
      */
     public void processDied(int returnValue) {
-        MuLogger.finer(command + ": died with return code " + returnValue);
+        LOGGER.debug(command + ": died with return code " + returnValue);
     }
 
     /**
      * Ignored.
      */
     public void processOutput(byte[] buffer, int offset, int length) {
-        MuLogger.finest(command + ": " + new String(buffer, offset, length));
+        LOGGER.trace(command + ": " + new String(buffer, offset, length));
     }
 
     /**
      * Prints out the process output.
      */
     public void processOutput(String output) {
-        MuLogger.finest(command + ": " + output);
+        LOGGER.trace(command + ": " + output);
     }
 }

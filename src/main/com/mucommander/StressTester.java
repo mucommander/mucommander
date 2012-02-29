@@ -19,24 +19,31 @@
 
 package com.mucommander;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Random;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.FileTable;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.Random;
-
 /**
  * Used to start muCommander in stress-test mode.
  * @author Maxence Bernard
  */
 public class StressTester implements Runnable, ActionListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(StressTester.class);
+	
     private boolean run;
 
     public StressTester() {
@@ -82,15 +89,15 @@ public class StressTester implements Runnable, ActionListener {
                 }
             }
             catch(Exception e) {
-                MuLogger.fine("Caught Exception", e);
+                LOGGER.debug("Caught Exception", e);
             }
 
-            MuLogger.finest("Sleeping for a bit...");
+            LOGGER.trace("Sleeping for a bit...");
             try {
                 Thread.sleep(100+random.nextInt(200));
             }
             catch(InterruptedException e) {
-                MuLogger.fine("Caught InterruptedException", e);
+                LOGGER.debug("Caught InterruptedException", e);
             }
         }
     }

@@ -23,7 +23,9 @@ import java.awt.event.WindowListener;
 import java.util.List;
 import java.util.Vector;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.filter.AbstractFileFilter;
@@ -50,7 +52,8 @@ import com.mucommander.ui.main.FolderPanel;
  * @see <a href="http://trac.mucommander.com/wiki/FolderAutoRefresh">FolderAutoRefresh wiki entry</a>
  */
 public class FolderChangeMonitor implements Runnable, WindowListener, LocationListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(FolderChangeMonitor.class);
+	
     /** Folder panel we are monitoring */
     private FolderPanel folderPanel;
 
@@ -264,7 +267,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
         // what we want (the folder will be changed to a 'workable' folder).
         if(date!=currentFolderDate) {
-            MuLogger.fine(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
+            LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
 			
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
@@ -321,7 +324,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     public void windowClosed(WindowEvent e) {
         // Remove the MainFrame from the list of monitored instances
         instances.remove(this);
-        MuLogger.finer("nbInstances="+instances.size());
+        LOGGER.debug("nbInstances="+instances.size());
     }	
 	
 }

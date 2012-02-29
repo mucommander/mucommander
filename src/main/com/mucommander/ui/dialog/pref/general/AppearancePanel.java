@@ -43,7 +43,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.runtime.OsFamilies;
@@ -77,6 +79,8 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 class AppearancePanel extends PreferencesPanel implements ActionListener, Runnable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppearancePanel.class);
+	
     // - Look and feel fields ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Combo box containing the list of available look&feels. */
@@ -769,7 +773,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             }
         }
         catch(Exception e) {
-            MuLogger.fine("Exception caught", e);
+        	LOGGER.debug("Exception caught", e);
 
             InformationDialog.showErrorDialog(this);
         }

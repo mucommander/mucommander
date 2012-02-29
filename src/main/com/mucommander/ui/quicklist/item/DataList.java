@@ -29,7 +29,9 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.CellLabel;
@@ -51,7 +53,8 @@ import com.mucommander.ui.theme.ThemeManager;
  */
 
 public class DataList<T> extends JList implements QuickListFocusableComponent {	
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataList.class);
+	
 	private final static int VISIBLE_ROWS_COUNT = 10;
 
 	private QuickSearch<T> quickSearch = new QuickListQuickSearch();
@@ -169,7 +172,7 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 
 			// Sanity check.
 			if(item==null) {
-				MuLogger.fine("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
+				LOGGER.debug("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
 				return null;
 			}
 

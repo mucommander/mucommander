@@ -19,7 +19,12 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archiver.Archiver;
 import com.mucommander.commons.file.util.FileSet;
@@ -29,9 +34,6 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 
 /**
  * This FileJob is responsible for compressing a set of files into an archive file.
@@ -39,7 +41,8 @@ import java.io.InputStream;
  * @author Maxence Bernard
  */
 public class ArchiveJob extends TransferFileJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArchiveJob.class);
+	
     /** Destination archive file */
     private AbstractFile destFile;
 
@@ -121,7 +124,7 @@ public class ArchiveJob extends TransferFileJob {
                 if(getState()==INTERRUPTED)
                     return false;
 
-                MuLogger.fine("Caught IOException", e);
+                LOGGER.debug("Caught IOException", e);
                 
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops

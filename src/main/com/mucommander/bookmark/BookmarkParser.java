@@ -18,18 +18,21 @@
 
 package com.mucommander.bookmark;
 
-import com.mucommander.MuLogger;
-import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParserFactory;
-import java.io.InputStream;
-import java.net.MalformedURLException;
+import com.mucommander.auth.CredentialsManager;
+import com.mucommander.auth.CredentialsMapping;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
 
 
 /**
@@ -38,6 +41,8 @@ import java.net.MalformedURLException;
  * @author Maxence Bernard
  */
 class BookmarkParser extends DefaultHandler implements BookmarkConstants {
+	private static final Logger LOGGER = LoggerFactory.getLogger(BookmarkParser.class);
+	
     /** Variable used for XML parsing */
     private String bookmarkName;
     /** Variable used for XML parsing */
@@ -123,7 +128,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equals(ELEMENT_BOOKMARK)) {
             if(bookmarkName == null || bookmarkLocation == null) {
-                MuLogger.info("Missing value, bookmark ignored: name=" + bookmarkName + " location=" + bookmarkLocation);
+                LOGGER.info("Missing value, bookmark ignored: name=" + bookmarkName + " location=" + bookmarkLocation);
                 return;
             }
 

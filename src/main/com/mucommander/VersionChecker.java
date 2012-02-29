@@ -18,13 +18,17 @@
 
 package com.mucommander;
 
-import com.mucommander.commons.file.FileFactory;
+import java.io.InputStream;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParserFactory;
-import java.io.InputStream;
+import com.mucommander.commons.file.FileFactory;
 
 /**
  * Retrieves information about the latest release of muCommander.
@@ -68,6 +72,8 @@ import java.io.InputStream;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class VersionChecker extends DefaultHandler {
+	private static final Logger LOGGER = LoggerFactory.getLogger(VersionChecker.class);
+	
     // - XML structure ----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Root XML element. */
@@ -129,7 +135,7 @@ public class VersionChecker extends DefaultHandler {
         VersionChecker instance;
         InputStream    in;     // Input stream on the remote XML file.
 
-        MuLogger.fine("Opening connection to " + RuntimeConstants.VERSION_URL);
+        LOGGER.debug("Opening connection to " + RuntimeConstants.VERSION_URL);
 
         // Parses the remote XML file using UTF-8 encoding.
         in = FileFactory.getFile(RuntimeConstants.VERSION_URL).getInputStream();
@@ -137,7 +143,7 @@ public class VersionChecker extends DefaultHandler {
             SAXParserFactory.newInstance().newSAXParser().parse(in, instance = new VersionChecker());
         }
         catch(Exception e) {
-            MuLogger.fine("Failed to read version XML file at "+RuntimeConstants.VERSION_URL, e);
+            LOGGER.debug("Failed to read version XML file at "+RuntimeConstants.VERSION_URL, e);
             throw e;
         }
         finally {
@@ -271,9 +277,9 @@ public class VersionChecker extends DefaultHandler {
         releaseDate   = releaseDate.trim();
 
         // Logs the data if in debug mode.
-        MuLogger.finer("download URL: "  + downloadURL);
-        MuLogger.finer("jar URL: "       + jarURL);
-        MuLogger.finer("latestVersion: " + latestVersion);
-        MuLogger.finer("releaseDate:   " + releaseDate);
+        LOGGER.debug("download URL: "  + downloadURL);
+        LOGGER.debug("jar URL: "       + jarURL);
+        LOGGER.debug("latestVersion: " + latestVersion);
+        LOGGER.debug("releaseDate:   " + releaseDate);
     }
 }

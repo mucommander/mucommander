@@ -18,7 +18,11 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.MuLogger;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.impl.local.LocalFile;
@@ -31,12 +35,12 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.util.Map;
-
 /**
  * @author Nicolas Rinaudo
  */
 public class CommandAction extends MuAction {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommandAction.class);
+	
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Command to run. */
@@ -79,7 +83,7 @@ public class CommandAction extends MuAction {
             catch(Exception e) {
                 InformationDialog.showErrorDialog(mainFrame);
 
-                MuLogger.fine("Failed to execute command: " + command.getCommand(), e);
+                LOGGER.debug("Failed to execute command: " + command.getCommand(), e);
             }
         }
         // Otherwise, copies the files locally before running the command.

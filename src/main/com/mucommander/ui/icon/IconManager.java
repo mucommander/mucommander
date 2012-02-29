@@ -19,15 +19,21 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.util.ResourceLoader;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.util.ResourceLoader;
 
 /**
  * IconManager takes care of loading, caching, rescaling the icons contained inside the application's JAR file.
@@ -35,6 +41,8 @@ import java.util.Map;
  * @author Maxence Bernard
  */
 public class IconManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(IconManager.class);
+	
     /** Caches for the different icon sets */
     private final static Map<String, ImageIcon> caches[];
 
@@ -97,7 +105,7 @@ public class IconManager {
     public static ImageIcon getIcon(String iconPath, float scaleFactor) {
         URL resourceURL = ResourceLoader.getResourceAsURL(iconPath);
         if(resourceURL==null) {
-            MuLogger.fine("Warning: attempt to load non-existing icon: "+iconPath+" , icon missing ?");
+            LOGGER.debug("Warning: attempt to load non-existing icon: "+iconPath+" , icon missing ?");
             return null;
         }
 

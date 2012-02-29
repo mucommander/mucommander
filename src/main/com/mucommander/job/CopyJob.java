@@ -19,14 +19,20 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.*;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractArchiveFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractRWArchiveFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.io.IOException;
 
 
 /**
@@ -35,6 +41,7 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class CopyJob extends AbstractCopyJob {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CopyJob.class);
 
     /** Destination file that is being copied, this value is updated every time #processFile() is called.
      * The value can be used by subclasses that override processFile should they need to work on the destination file. */
@@ -158,7 +165,7 @@ public class CopyJob extends AbstractCopyJob {
                             destFile.changeDate(file.getDate());
                         }
                         catch (IOException e) {
-                            MuLogger.fine("failed to change the date of "+destFile, e);
+                            LOGGER.debug("failed to change the date of "+destFile, e);
                             // Fail silently
                         }
                     }

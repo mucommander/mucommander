@@ -19,11 +19,12 @@
 package com.mucommander.process;
 
 
-import com.mucommander.MuLogger;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * muCommander specific version of a process, allowing various types of processes to be executed.
@@ -38,6 +39,8 @@ import java.io.OutputStream;
  * @author Nicolas Rinaudo
  */
 public abstract class AbstractProcess {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractProcess.class);
+	
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Stdout monitor. */
@@ -63,7 +66,7 @@ public abstract class AbstractProcess {
             @Override
             public void run() {
                 // Closes the process' streams.
-                MuLogger.finer("Destroying process...");
+            	LOGGER.debug("Destroying process...");
                 stdoutMonitor.stopMonitoring();
                 if(stderrMonitor != null)
                     stderrMonitor.stopMonitoring();
@@ -73,7 +76,7 @@ public abstract class AbstractProcess {
                     destroyProcess();
                 }
                 catch(IOException e) {
-                    MuLogger.fine("IOException caught", e);
+                	LOGGER.debug("IOException caught", e);
                 }
             }
         }.start();
@@ -87,12 +90,12 @@ public abstract class AbstractProcess {
     final void startMonitoring(ProcessListener listener, String encoding) throws IOException {
         // Only monitors stdout if the process uses merged streams.
         if(usesMergedStreams()) {
-            MuLogger.finer("Starting process merged output monitor...");
+        	LOGGER.debug("Starting process merged output monitor...");
             new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process sdtout/stderr monitor").start();
         }
         // Monitors both stdout and stderr.
         else {
-            MuLogger.finer("Starting process stdout and stderr monitors...");
+        	LOGGER.debug("Starting process stdout and stderr monitors...");
             new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process stdout monitor").start();
             new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), encoding, listener), "Process stderr monitor").start();
         }

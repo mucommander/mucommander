@@ -18,16 +18,18 @@
 
 package com.mucommander.desktop.osx;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.ui.macosx.AppleScript;
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.List;
 
 /**
  * OSXTrash provides access to the Mac OS X Finder's trash. Only local files (or locally mounted files) can be moved
@@ -52,7 +54,8 @@ import java.util.List;
  * @author Maxence Bernard
  */
 public class OSXTrash extends QueuedTrash {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(OSXTrash.class);
+	
     /** AppleScript that reveals the trash in Finder */
     private final static String REVEAL_TRASH_APPLESCRIPT =
         "tell application \"Finder\" to open trash\n" +
@@ -138,7 +141,7 @@ public class OSXTrash extends QueuedTrash {
             return Integer.parseInt(output.toString().trim());
         }
         catch(NumberFormatException e) {
-            MuLogger.fine("Caught an exception", e);
+            LOGGER.debug("Caught an exception", e);
             return -1;
         }
     }
@@ -228,7 +231,7 @@ public class OSXTrash extends QueuedTrash {
                 return success;
             }
             catch(IOException e) {
-                MuLogger.fine("Caught IOException", e);
+                LOGGER.debug("Caught IOException", e);
 
                 if(tmpOut!=null) {
                     try { tmpOut.close(); }

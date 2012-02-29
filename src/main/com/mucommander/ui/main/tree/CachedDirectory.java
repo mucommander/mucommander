@@ -19,15 +19,20 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.MuLogger;
+import java.util.Arrays;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.ProxyFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import java.util.Arrays;
 
 /**
  * A class that holds cached children of a directory.
@@ -36,7 +41,8 @@ import java.util.Arrays;
  * 
  */
 public class CachedDirectory extends ProxyFile {
-    
+	private static final Logger LOGGER = LoggerFactory.getLogger(CachedDirectory.class);
+	
     private static final ImageIcon NOT_ACCESSIBLE_ICON = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NOT_ACCESSIBLE_FILE);
 
     /** an array of cached children */
@@ -102,7 +108,7 @@ public class CachedDirectory extends ProxyFile {
         try {
             children = file.ls(cache.getFilter());
         } catch (Exception e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
             children = new AbstractFile[0];
             setCachedIcon(NOT_ACCESSIBLE_ICON);
         }
@@ -131,7 +137,7 @@ public class CachedDirectory extends ProxyFile {
                 }
             });
         } catch (Exception e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
         }
     }
 

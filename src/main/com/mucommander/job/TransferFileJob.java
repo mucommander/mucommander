@@ -19,24 +19,30 @@
 
 package com.mucommander.job;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.apple.eio.FileManager;
-import com.mucommander.MuLogger;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.io.*;
+import com.mucommander.commons.io.ByteCounter;
+import com.mucommander.commons.io.ChecksumInputStream;
+import com.mucommander.commons.io.CounterInputStream;
+import com.mucommander.commons.io.FileTransferException;
+import com.mucommander.commons.io.ThroughputLimitInputStream;
 import com.mucommander.commons.io.security.MuProvider;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 
 /**
@@ -48,7 +54,8 @@ import java.security.NoSuchAlgorithmException;
  * @author Maxence Bernard
  */
 public abstract class TransferFileJob extends FileJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransferFileJob.class);
+	
     /** Contains the number of bytes processed in the current file so far, see {@link #getCurrentFileByteCounter()} ()} */
     private ByteCounter currentFileByteCounter;
 
@@ -158,7 +165,7 @@ public abstract class TransferFileJob extends FileJob {
                     setCurrentInputStream(in);
                 }
                 catch(Exception e) {
-                    MuLogger.fine("IOException caught, throwing FileTransferException", e);
+                    LOGGER.debug("IOException caught, throwing FileTransferException", e);
                     throw new FileTransferException(FileTransferException.OPENING_SOURCE);
                 }
 
@@ -180,7 +187,7 @@ public abstract class TransferFileJob extends FileJob {
                 destFile.changeDate(sourceFile.getDate());
             }
             catch (IOException e) {
-                MuLogger.fine("failed to change the date of "+destFile, e);
+                LOGGER.debug("failed to change the date of "+destFile, e);
                 // Fail silently
             }
         }
@@ -192,7 +199,7 @@ public abstract class TransferFileJob extends FileJob {
                 destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
             }
             catch(IOException e) {
-                MuLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
+                LOGGER.debug("failed to import "+sourceFile+" permissions into "+destFile, e);
                 // Fail silently
             }
         }
@@ -208,7 +215,7 @@ public abstract class TransferFileJob extends FileJob {
             }
             catch(IOException e) {
                 // Swallow the exception and do not interrupt the transfer
-                MuLogger.fine("Error while setting Mac OS X file type and creator on destination", e);
+                LOGGER.debug("Error while setting Mac OS X file type and creator on destination", e);
             }
         }
 
@@ -236,7 +243,7 @@ public abstract class TransferFileJob extends FileJob {
                 }
             }
 
-            MuLogger.finer("Source checksum= "+sourceChecksum);
+            LOGGER.debug("Source checksum= "+sourceChecksum);
 
             // Calculate the destination file's checksum
             try {
@@ -246,7 +253,7 @@ public abstract class TransferFileJob extends FileJob {
                 throw new FileTransferException(FileTransferException.READING_DESTINATION);
             }
 
-            MuLogger.finer("Destination checksum= "+destinationChecksum);
+            LOGGER.debug("Destination checksum= "+destinationChecksum);
 
             // Compare both checksums and throw an exception if they don't match
             if(!sourceChecksum.equals(destinationChecksum)) {
@@ -290,7 +297,7 @@ public abstract class TransferFileJob extends FileJob {
                     return false;
 
                 // Print the exception's stack trace
-                MuLogger.fine("Copy failed", e);
+                LOGGER.debug("Copy failed", e);
 
                 int reason = e.getReason();
                 int choice;
@@ -408,7 +415,7 @@ public abstract class TransferFileJob extends FileJob {
      */
     public synchronized void skipCurrentFile() {
         if(tlin !=null) {
-            MuLogger.finer("skipping current file, closing "+ tlin);
+            LOGGER.debug("skipping current file, closing "+ tlin);
 
             // Prevents an error from being reported when the current InputStream is closed
             currentFileSkipped = true;
@@ -540,7 +547,7 @@ public abstract class TransferFileJob extends FileJob {
 
         synchronized(this) {
             if(tlin !=null) {
-                MuLogger.finer("closing current InputStream "+ tlin);
+                LOGGER.debug("closing current InputStream "+ tlin);
 
                 closeCurrentInputStream();
             }

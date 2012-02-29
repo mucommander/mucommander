@@ -18,16 +18,23 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.MuLogger;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 /**
  * Brings a {@link MainFrame} window to the front. This action operates on a specific window number specified in the
@@ -37,7 +44,8 @@ import java.util.Map;
  * @author Maxence Bernard
  */
 public class RecallWindowAction extends MuAction {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecallWindowAction.class);
+	
     /** Window number this action operates on */
     private int windowNumber;
 
@@ -72,7 +80,7 @@ public class RecallWindowAction extends MuAction {
 
         // Checks that the window number currently exists
         if(windowNumber<=0 || windowNumber>mainFrames.size()) {
-            MuLogger.fine("Window number "+windowNumber+" does not exist");
+            LOGGER.debug("Window number "+windowNumber+" does not exist");
             return;
         }
 

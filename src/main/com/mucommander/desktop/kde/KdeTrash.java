@@ -18,13 +18,15 @@
 
 package com.mucommander.desktop.kde;
 
-import com.mucommander.MuLogger;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.process.ProcessRunner;
-
-import java.util.List;
 
 /**
  * This class provides access to the KDE trash. Only local files (or locally mounted files) can be moved to the trash.
@@ -40,7 +42,8 @@ import java.util.List;
  * @author Maxence Bernard
  */
 class KdeTrash extends QueuedTrash {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(KdeTrash.class);
+	
     /** Command that empties the trash */
     private final static String EMPTY_TRASH_COMMAND = "ktrash --empty";
 
@@ -69,7 +72,7 @@ class KdeTrash extends QueuedTrash {
             return true;
         }
         catch(Exception e) {    // IOException, InterruptedException
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
             return false;
         }
     }
@@ -87,7 +90,7 @@ class KdeTrash extends QueuedTrash {
             return true;
         }
         catch(Exception e) {    // IOException, InterruptedException
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
             return false;
         }
     }

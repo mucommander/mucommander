@@ -18,7 +18,47 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.MuLogger;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.text.BadLocationException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
@@ -33,29 +73,14 @@ import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.text.BadLocationException;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.List;
-
 /**
  * Dialog used to set parameters for renaming multiple files.
  * 
  * @author Mariusz Jakubowski
  */
-public class BatchRenameDialog extends FocusDialog implements ActionListener,
-        DocumentListener {
+public class BatchRenameDialog extends FocusDialog implements ActionListener, DocumentListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatchRenameDialog.class);
+	
     private static final int CASE_UNCHANGED = 0;
     private static final int CASE_LOWER = 1;
     private static final int CASE_UPPER = 2;
@@ -601,7 +626,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
         	}
             edtFileNameMask.getDocument().insertString(pos, pattern, null);
         } catch (BadLocationException e) {
-            MuLogger.fine("Caught exception", e);
+        	LOGGER.debug("Caught exception", e);
         }
     }
     
@@ -932,7 +957,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener,
                         name = name.substring(currentStartIndex - 1, Math.min(
                                 currentEndIndex, targetLen));
                     } catch (Exception e) {
-                        MuLogger.info("currentStartIndex="+currentStartIndex+", currentEndIndex="+currentEndIndex, e);
+                    	LOGGER.info("currentStartIndex="+currentStartIndex+", currentEndIndex="+currentEndIndex, e);
                     }
                 } else {
                     name = "";

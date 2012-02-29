@@ -1,6 +1,20 @@
 package com.mucommander.ui.viewer;
 
-import com.mucommander.MuLogger;
+import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.dialog.DialogToolkit;
@@ -8,17 +22,13 @@ import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
 /**
  * This class is used as an abstraction for the {@link EditorFrame} and {@link ViewerFrame}.
  * 
  * @author Arik Hadas
  */
 public abstract class FileFrame extends JFrame {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileFrame.class);
 	
 	protected final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
 	
@@ -53,7 +63,7 @@ public abstract class FileFrame extends JFrame {
                 	filePresenter.open(file);
                 }
                 catch(Exception e) {
-                    MuLogger.fine("Exception caught", e);
+                    LOGGER.debug("Exception caught", e);
 
                     // May be a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
                     if(!(e instanceof UserCancelledException))

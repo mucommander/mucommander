@@ -18,15 +18,6 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.MuLogger;
-import com.mucommander.PlatformManager;
-import com.mucommander.commons.collections.AlteredVector;
-import com.mucommander.commons.collections.VectorChangeListener;
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.util.Chmod;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.io.backup.BackupOutputStream;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,6 +25,21 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.PlatformManager;
+import com.mucommander.commons.collections.AlteredVector;
+import com.mucommander.commons.collections.VectorChangeListener;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.Authenticator;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.util.Chmod;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.io.backup.BackupOutputStream;
 
 
 /**
@@ -53,7 +59,8 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class CredentialsManager {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsManager.class);
+	
     /** Contains volatile CredentialsMapping instances, lost when the application terminates */
     private static List<CredentialsMapping> volatileCredentialMappings = new Vector<CredentialsMapping>();
 
@@ -157,13 +164,13 @@ public class CredentialsManager {
     public static void loadCredentials() throws Exception {
         AbstractFile credentialsFile = getCredentialsFile();
         if(credentialsFile.exists()) {
-            MuLogger.fine("Found credentials file: "+credentialsFile.getAbsolutePath());
+        	LOGGER.debug("Found credentials file: "+credentialsFile.getAbsolutePath());
             // Parse the credentials file
             new CredentialsParser().parse(credentialsFile);
-            MuLogger.fine("Credentials file loaded.");
+            LOGGER.debug("Credentials file loaded.");
         }
         else
-            MuLogger.fine("No credentials file found at "+credentialsFile.getAbsolutePath());
+        	LOGGER.debug("No credentials file found at "+credentialsFile.getAbsolutePath());
     }
 
     /**
@@ -197,9 +204,9 @@ public class CredentialsManager {
         boolean fileSecured = !OsFamily.getCurrent().isUnixBased() || Chmod.chmod(credentialsFile, 0600);     // rw-------
 
         if(fileSecured)
-            MuLogger.fine("Credentials file saved successfully.");
+        	LOGGER.debug("Credentials file saved successfully.");
         else
-            MuLogger.warning("Credentials file could not be chmod!");
+        	LOGGER.warn("Credentials file could not be chmod!");
     }
 
 
@@ -283,9 +290,9 @@ public class CredentialsManager {
 
         boolean persist = credentialsMapping.isPersistent();
 
-        MuLogger.finest("called, realm="+ credentialsMapping.getRealm()+" isPersistent="+ credentialsMapping.isPersistent());
-        MuLogger.finest("before, persistentCredentials="+ persistentCredentialMappings);
-        MuLogger.finest("before, volatileCredentials="+ volatileCredentialMappings);
+        LOGGER.trace("called, realm="+ credentialsMapping.getRealm()+" isPersistent="+ credentialsMapping.isPersistent());
+        LOGGER.trace("before, persistentCredentials="+ persistentCredentialMappings);
+        LOGGER.trace("before, volatileCredentials="+ volatileCredentialMappings);
 
         if(persist) {
             replaceVectorElement(persistentCredentialMappings, credentialsMapping);
@@ -296,8 +303,8 @@ public class CredentialsManager {
             persistentCredentialMappings.removeElement(credentialsMapping);
         }
 
-        MuLogger.finest("after, persistentCredentials="+ persistentCredentialMappings);
-        MuLogger.finest("after, volatileCredentials="+ volatileCredentialMappings);
+        LOGGER.trace("after, persistentCredentials="+ persistentCredentialMappings);
+        LOGGER.trace("after, volatileCredentials="+ volatileCredentialMappings);
     }
 
 
@@ -339,7 +346,7 @@ public class CredentialsManager {
      * @param location the FileURL to authenticate
      */
     private static void authenticateImplicit(FileURL location) {
-        MuLogger.finest("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
+    	LOGGER.trace("called, fileURL="+ location +" containsCredentials="+ location.containsCredentials());
 
         CredentialsMapping creds[] = getMatchingCredentials(location);
         if(creds.length>0) {
@@ -374,7 +381,7 @@ public class CredentialsManager {
                 matches.add(tempCredentialsMapping);
         }
 
-        MuLogger.finest("returning matches="+matches);
+        LOGGER.trace("returning matches="+matches);
     }
 
     /**
@@ -444,7 +451,7 @@ public class CredentialsManager {
             }
         }
 
-        MuLogger.finest("returning bestMatchIndex="+bestMatchIndex);
+        LOGGER.trace("returning bestMatchIndex="+bestMatchIndex);
 
         return bestMatchIndex;
     }

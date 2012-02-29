@@ -18,14 +18,17 @@
 
 package com.mucommander;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * This class takes care of platform-specific issues, such as getting screen dimensions and issuing commands.
@@ -33,7 +36,8 @@ import java.io.IOException;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(PlatformManager.class);
+	
     // - Preferences folder -----------------------------------------------------
     // --------------------------------------------------------------------------
     /** Folder in which to store the preferences. */
@@ -66,7 +70,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         // Makes sure the folder exists.
         if(!folder.exists())
             if(!folder.mkdir())
-                MuLogger.warning("Could not create preference folder: " + folder.getAbsolutePath());
+                LOGGER.warn("Could not create preference folder: " + folder.getAbsolutePath());
 
         return FileFactory.getFile(folder.getAbsolutePath());
     }

@@ -18,9 +18,10 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.MuLogger;
-
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A thread that executes i/o operations. 
@@ -28,7 +29,8 @@ import java.util.List;
  *
  */
 public class IOThread extends Thread {
-    
+	private static final Logger LOGGER = LoggerFactory.getLogger(IOThread.class);
+	
     /** a queue with tasks to execute */
     private List<Runnable> queue;
     
@@ -62,7 +64,7 @@ public class IOThread extends Thread {
                 try {
                     task.run();
                 } catch (Exception e) {
-                    MuLogger.fine("Caught exception", e);
+                    LOGGER.debug("Caught exception", e);
                 }
                 lastActionTime = System.currentTimeMillis(); 
             }

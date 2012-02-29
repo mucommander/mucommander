@@ -18,7 +18,14 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
@@ -27,11 +34,6 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
 
 /**
  * This job calculates a checksum for a list of files and stores the results in a checksum file.
@@ -60,7 +62,8 @@ import java.security.MessageDigest;
  * @author Maxence Bernard
  */
 public class CalculateChecksumJob extends TransferFileJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(CalculateChecksumJob.class);
+	
     /** The checksum file where the checksum of each file is written */
     private AbstractFile checksumFile;
     /** The OutputStream of the checksum file */
@@ -169,7 +172,7 @@ public class CalculateChecksumJob extends TransferFileJob {
                 if(getState()==INTERRUPTED || wasCurrentFileSkipped())
                     return false;
 
-                MuLogger.fine("Caught IOException", e);
+                LOGGER.debug("Caught IOException", e);
                 
                 int ret = showErrorDialog(Translator.get("error"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops

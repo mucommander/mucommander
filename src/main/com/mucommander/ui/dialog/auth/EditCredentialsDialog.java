@@ -18,7 +18,22 @@
 
 package com.mucommander.ui.dialog.auth;
 
-import com.mucommander.MuLogger;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.collections.AlteredVector;
@@ -35,13 +50,6 @@ import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.list.SortableListPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 
 /**
  * This dialog contains a list of all persistent credentials and allows the user to edit, remove, go to and reorder them.
@@ -51,7 +59,8 @@ import java.awt.event.ActionListener;
  * @author Maxence Bernard
  */
 public class EditCredentialsDialog extends FocusDialog implements ActionListener, ListSelectionListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(EditCredentialsDialog.class);
+	
     private MainFrame mainFrame;
 
     private JButton removeButton;
@@ -242,7 +251,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     ///////////////////////////////////
 
     public void valueChanged(ListSelectionEvent e) {
-        MuLogger.finest("called, e.getValueIsAdjusting="+e.getValueIsAdjusting()+" getSelectedIndex="+ credentialsList.getSelectedIndex());
+        LOGGER.trace("called, e.getValueIsAdjusting="+e.getValueIsAdjusting()+" getSelectedIndex="+ credentialsList.getSelectedIndex());
 
         if(e.getValueIsAdjusting())
             return;

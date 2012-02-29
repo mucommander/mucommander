@@ -18,11 +18,12 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.MuLogger;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -35,7 +36,8 @@ import java.util.List;
  *
  */
 public class AbstractIOThreadManager extends Thread {
-  
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIOThreadManager.class);
+	
     /** a queue with tasks to execute */
     protected final List<Runnable> queue = Collections.synchronizedList(new ArrayList<Runnable>());
 
@@ -78,7 +80,7 @@ public class AbstractIOThreadManager extends Thread {
         while (!interrupted()) {
             synchronized (queue) {
                 if (ioThread.isBlocked()) {
-                    MuLogger.fine("Killing IOThread " + ioThread);
+                	LOGGER.debug("Killing IOThread " + ioThread);
                     ioThread.interrupt();
                     ioThread = new IOThread(queue, blockThreshold);
                     ioThread.start();

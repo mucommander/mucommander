@@ -18,7 +18,20 @@
 
 package com.mucommander.command;
 
-import com.mucommander.MuLogger;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -30,17 +43,13 @@ import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-
 /**
  * Manages custom commands and associations.
  * @author Nicolas Rinaudo
  */
 public class CommandManager implements CommandBuilder {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommandManager.class);
+	
     // - Built-in commands -----------------------------------------------------
     // -------------------------------------------------------------------------
     /** Alias for the system file opener. */
@@ -218,7 +227,7 @@ public class CommandManager implements CommandBuilder {
 
     private static void setDefaultCommand(Command command) {
         if(defaultCommand == null && command.getAlias().equals(FILE_OPENER_ALIAS)) {
-            MuLogger.fine("Registering '" + command.getCommand() + "' as default command.");
+        	LOGGER.debug("Registering '" + command.getCommand() + "' as default command.");
             defaultCommand = command;
         }
     }
@@ -229,7 +238,7 @@ public class CommandManager implements CommandBuilder {
         // Registers the command and marks command as having been modified.
         setDefaultCommand(command);
 
-        MuLogger.fine("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
+        LOGGER.debug("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
 
         oldCommand = commands.put(command.getAlias(), command);
         if(mark && !command.equals(oldCommand))
@@ -269,7 +278,7 @@ public class CommandManager implements CommandBuilder {
         Command command;
 
         if((command = getCommandForAlias(cmd)) == null) {
-            MuLogger.fine("Failed to create association as '" + command + "' is not known.");
+        	LOGGER.debug("Failed to create association as '" + command + "' is not known.");
             throw new CommandException(command + " not found");
         }
 
@@ -494,7 +503,7 @@ public class CommandManager implements CommandBuilder {
         InputStream  in;
 
         file = getAssociationFile();
-        MuLogger.fine("Loading associations from file: " + file.getAbsolutePath());
+        LOGGER.debug("Loading associations from file: " + file.getAbsolutePath());
 
         // Tries to load the associations file.
         // Associations are not considered to be modified by this. 
@@ -534,7 +543,7 @@ public class CommandManager implements CommandBuilder {
         if(wereAssociationsModified) {
             BackupOutputStream out;    // Where to write the associations.
 
-            MuLogger.fine("Writing associations to file: " + getAssociationFile());
+            LOGGER.debug("Writing associations to file: " + getAssociationFile());
 
             // Writes the associations.
             out = null;
@@ -552,7 +561,7 @@ public class CommandManager implements CommandBuilder {
             }
         }
         else
-            MuLogger.fine("Custom file associations not modified, skip saving.");
+        	LOGGER.debug("Custom file associations not modified, skip saving.");
     }
 
 
@@ -655,7 +664,7 @@ public class CommandManager implements CommandBuilder {
         if(wereCommandsModified) {
             BackupOutputStream out;    // Where to write the associations.
 
-            MuLogger.fine("Writing custom commands to file: " + getCommandFile());
+            LOGGER.debug("Writing custom commands to file: " + getCommandFile());
 
             // Writes the commands.
             out = null;
@@ -673,7 +682,7 @@ public class CommandManager implements CommandBuilder {
             }
         }
         else
-            MuLogger.fine("Custom commands not modified, skip saving.");
+        	LOGGER.debug("Custom commands not modified, skip saving.");
     }
 
     /**
@@ -692,7 +701,7 @@ public class CommandManager implements CommandBuilder {
         InputStream  in;
 
         file = getCommandFile();
-        MuLogger.fine("Loading custom commands from: " + file.getAbsolutePath());
+        LOGGER.debug("Loading custom commands from: " + file.getAbsolutePath());
 
         // Tries to load the commands file.
         // Commands are not considered to be modified by this.

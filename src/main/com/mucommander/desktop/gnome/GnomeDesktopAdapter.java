@@ -18,7 +18,9 @@
 
 package com.mucommander.desktop.gnome;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -32,6 +34,8 @@ import com.mucommander.desktop.DesktopManager;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeDesktopAdapter.class);
+	
     private static final String FILE_MANAGER_NAME = "Nautilus";
     private static final String FILE_OPENER       = "gnome-open $f";
     private static final String EXE_OPENER        = "$f";
@@ -78,7 +82,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
                 multiClickInterval = Integer.parseInt(value);
             }
             catch(Exception e) {
-                MuLogger.fine("Error while retrieving double-click interval from gconftool", e);
+            	LOGGER.debug("Error while retrieving double-click interval from gconftool", e);
                 multiClickInterval = super.getMultiClickInterval();
             }
         }

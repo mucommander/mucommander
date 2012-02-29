@@ -18,15 +18,17 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.io.IOException;
 
 /**
  * This job copies a file or a set of files to a temporary folder and makes the temporary file(s) read-only.
@@ -35,7 +37,8 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class TempCopyJob extends CopyJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(TempCopyJob.class);
+	
     /**
      * Creates a new <code>TempExecJob</code> that operates on a single file.
      *
@@ -78,7 +81,7 @@ public class TempCopyJob extends CopyJob {
         }
         catch(IOException e) {
             // Should never happen under normal circumstances.
-            MuLogger.warning("Caught exception instanciating temporary file, this should not happen!");
+            LOGGER.warn("Caught exception instanciating temporary file, this should not happen!");
             return files.getName();
         }
     }

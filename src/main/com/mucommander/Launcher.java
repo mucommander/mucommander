@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
@@ -56,7 +59,8 @@ import com.mucommander.ui.main.toolbar.ToolBarIO;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class Launcher {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
+	
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     private static SplashScreen  splashScreen;
@@ -84,11 +88,11 @@ public class Launcher {
      * This method will return immediately if the application has already been launched when it is called.
      */
     public static void waitUntilLaunched() {
-        MuLogger.finer("called, thread="+Thread.currentThread());
+        LOGGER.debug("called, thread="+Thread.currentThread());
         synchronized(LAUNCH_LOCK) {
             while(isLaunching) {
                 try {
-                    MuLogger.finer("waiting");
+                    LOGGER.debug("waiting");
                     LAUNCH_LOCK.wait();
                 }
                 catch(InterruptedException e) {
@@ -231,7 +235,7 @@ public class Launcher {
         if(useSplash)
             splashScreen.setLoadingMessage(message);
 
-        MuLogger.finest(message);
+        LOGGER.trace(message);
     }
 
 
@@ -443,7 +447,7 @@ public class Launcher {
                     constructor.newInstance();
                 }
                 catch(Exception e) {
-                    MuLogger.fine("Exception thrown while initializing Mac OS X integration", e);
+                    LOGGER.debug("Exception thrown while initializing Mac OS X integration", e);
                 }
             }
 
@@ -455,7 +459,7 @@ public class Launcher {
                 ExtensionManager.addExtensionsToClasspath();
             }
             catch(Exception e) {
-                MuLogger.fine("Failed to add extensions to the classpath", e);
+                LOGGER.debug("Failed to add extensions to the classpath", e);
             }
 
             // This the property is supposed to have the java.net package use the proxy defined in the system settings
@@ -499,7 +503,7 @@ public class Launcher {
             try {CommandManager.writeCommands();}
             catch(Exception e) {
                 System.out.println("###############################");
-                MuLogger.fine("Caught exception", e);
+                LOGGER.debug("Caught exception", e);
                 // There's really nothing we can do about this...
             }
 
@@ -609,7 +613,7 @@ public class Launcher {
             if(splashScreen!=null)
                 splashScreen.dispose();
 
-            MuLogger.severe("Startup failed", t);
+            LOGGER.error("Startup failed", t);
             
             // Display an error dialog with a proper message and error details
             InformationDialog.showErrorDialog(null, null, Translator.get("startup_error"), null, t);

@@ -18,19 +18,23 @@
 
 package com.mucommander.process;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.runtime.JavaVersions;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.runtime.JavaVersions;
 
 /**
  * Process running on the local computer.
  * @author Nicolas Rinaudo
  */
 class LocalProcess extends AbstractProcess {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocalProcess.class);
+	
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Underlying system process. */
@@ -114,7 +118,7 @@ class LocalProcess extends AbstractProcess {
     @Override
     public InputStream getErrorStream()  throws IOException {
         if(usesMergedStreams()) {
-            MuLogger.fine("Tried to access the error stream of a merged streams process.");
+            LOGGER.debug("Tried to access the error stream of a merged streams process.");
             throw new IOException();
         }
         return process.getErrorStream();

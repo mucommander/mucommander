@@ -18,7 +18,18 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.MuLogger;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.desktop.gnome.ConfiguredGnomeDesktopAdapter;
@@ -33,19 +44,12 @@ import com.mucommander.desktop.windows.Win9xDesktopAdapter;
 import com.mucommander.desktop.windows.WinNtDesktopAdapter;
 import com.mucommander.desktop.xfce.GuessedXfceDesktopAdapter;
 
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
 /**
  * @author Nicolas Rinaudo
  */
 public class DesktopManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DesktopManager.class);
+	
     // - Predefined operation types --------------------------------------
     // -------------------------------------------------------------------
     /**
@@ -208,7 +212,7 @@ public class DesktopManager {
             current = desktops.elementAt(i);
             if(current.isAvailable()) {
                 desktop = current;
-                MuLogger.fine("Using desktop: " + desktop);
+                LOGGER.debug("Using desktop: " + desktop);
                 desktop.init(install);
                 return;
             }

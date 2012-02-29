@@ -18,21 +18,27 @@
 
 package com.mucommander.ui.theme;
 
-import com.mucommander.MuLogger;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.io.InputStream;
+import java.util.StringTokenizer;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.SAXParserFactory;
-import java.awt.*;
-import java.io.InputStream;
-import java.util.StringTokenizer;
 
 /**
  * Loads theme instances from properly formatted XML files.
  * @author Nicolas Rinaudo
  */
 class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ThemeReader.class);
+	
     // - XML parser states ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Parsing hasn't started yet. */
@@ -138,7 +144,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Ignores the content of unknown elements.
         if(unknownElement != null) {
-            MuLogger.fine("Ignoring element " + qName);
+            LOGGER.debug("Ignoring element " + qName);
             return;
         }
 
@@ -777,14 +783,14 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
         // Computes the font size.
         if((buffer = attributes.getValue(ATTRIBUTE_SIZE)) == null) {
-            MuLogger.fine("Missing font size attribute in theme, ignoring.");
+            LOGGER.debug("Missing font size attribute in theme, ignoring.");
             return null;
 	    }
         size = Integer.parseInt(buffer);
 
             // Computes the font family.
             if((buffer = attributes.getValue(ATTRIBUTE_FAMILY)) == null) {
-                MuLogger.fine("Missing font family attribute in theme, ignoring.");
+                LOGGER.debug("Missing font family attribute in theme, ignoring.");
                 return null;
         }
 
@@ -799,7 +805,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         }
 
         // No font was found, instructs the ThemeManager to use the system default.
-        MuLogger.fine("Requested font families are not installed on the system, using default.");
+        LOGGER.debug("Requested font families are not installed on the system, using default.");
         return null;
     }
 
@@ -814,7 +820,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
         // Retrieves the color attribute's value.
         if((buffer = attributes.getValue(ATTRIBUTE_COLOR)) == null) {
-            MuLogger.fine("Missing color attribute in theme, ignoring.");
+            LOGGER.debug("Missing color attribute in theme, ignoring.");
             return null;
         }
         color = Integer.parseInt(buffer, 16);
@@ -830,6 +836,6 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     // -----------------------------------------------------------------------
     private void traceIllegalDeclaration(String element) {
         unknownElement = element;
-        MuLogger.fine("Unexpected start of element " + element + ", ignoring.");
+        LOGGER.debug("Unexpected start of element " + element + ", ignoring.");
     }
 }

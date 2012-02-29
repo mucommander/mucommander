@@ -18,7 +18,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -36,8 +40,6 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
-import java.io.IOException;
-
 /**
  * This job self-updates the muCommmander with a new JAR file that is fetched from a specified remote file.
  * The update process boils down to the following steps:
@@ -54,7 +56,8 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class SelfUpdateJob extends CopyJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(SelfUpdateJob.class);
+	
     /** The JAR file to be updated */
     private AbstractFile destJar;
 
@@ -148,10 +151,10 @@ public class SelfUpdateJob extends CopyJob {
             try {
                 classLoader.loadClass(classname);
 
-                MuLogger.finest("Loaded class "+classname);
+                LOGGER.trace("Loaded class "+classname);
             }
             catch(java.lang.NoClassDefFoundError e) {
-                MuLogger.fine("Caught an error while loading class "+classname, e);
+                LOGGER.debug("Caught an error while loading class "+classname, e);
             }
         }
     }
@@ -181,7 +184,7 @@ public class SelfUpdateJob extends CopyJob {
             loadingClasses = false;
         }
         catch(Exception e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
 
             // Todo: display an error message
             interrupt();
@@ -204,7 +207,7 @@ public class SelfUpdateJob extends CopyJob {
 
                     String appPath = parent.getAbsolutePath();
 
-                    MuLogger.finer("Opening "+appPath);
+                    LOGGER.debug("Opening "+appPath);
 
                     // Open -W wait for the current muCommander .app to terminate, before re-opening it
                     ProcessRunner.execute(new String[]{"/bin/sh", "-c", "open -W "+appPath+" && open "+appPath});
@@ -242,7 +245,7 @@ public class SelfUpdateJob extends CopyJob {
             ProcessRunner.execute(new String[]{"java", "-jar", destJar.getAbsolutePath()});
         }
         catch(IOException e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
             // Todo: we might want to do something about this
         }
         finally {

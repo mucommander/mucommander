@@ -18,20 +18,40 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.filter.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.filter.AndFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.ContainsFilenameFilter;
+import com.mucommander.commons.file.filter.EndsWithFilenameFilter;
+import com.mucommander.commons.file.filter.EqualsFilenameFilter;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.PassThroughFileFilter;
+import com.mucommander.commons.file.filter.RegexpFilenameFilter;
+import com.mucommander.commons.file.filter.StartsWithFilenameFilter;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.regex.PatternSyntaxException;
 
 /**
  * This dialog allows the user to add (mark) or remove (unmark) files from the current selection,
@@ -40,7 +60,8 @@ import java.util.regex.PatternSyntaxException;
  * @author Maxence Bernard
  */
 public class FileSelectionDialog extends FocusDialog implements ActionListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileSelectionDialog.class);
+	
     /* Filename comparison criteria */		
     private final static int CONTAINS    = 0;
     private final static int STARTS_WITH = 1;
@@ -202,7 +223,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
                     }
                     catch(PatternSyntaxException ex) {
                         // Todo: let the user know the regexp is invalid
-                        MuLogger.fine("Invalid regexp", ex);
+                        LOGGER.debug("Invalid regexp", ex);
 
                         // This filter does match any file
                         filter = new PassThroughFileFilter(false);

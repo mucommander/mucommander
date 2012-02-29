@@ -37,7 +37,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.cache.FastLRUCache;
 import com.mucommander.cache.LRUCache;
 import com.mucommander.commons.conf.ConfigurationEvent;
@@ -85,7 +87,8 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Maxence Bernard
  */
 public class StatusBar extends JPanel implements Runnable, MouseListener, ActivePanelListener, TableSelectionListener, LocationListener, ComponentListener, ThemeListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(StatusBar.class);
+	
     private MainFrame mainFrame;
 
     /** Label that displays info about current selected file(s) */
@@ -302,7 +305,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         Long cachedVolumeInfo[] = volumeInfoCache.get(volumePath);
         if(cachedVolumeInfo!=null) {
-            MuLogger.finer("Cache hit!");
+            LOGGER.debug("Cache hit!");
             volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
         }
         else {
@@ -344,7 +347,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                     
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
-                    MuLogger.finer("Adding to cache");
+                    LOGGER.debug("Adding to cache");
                     volumeInfoCache.add(volumePath, new Long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
                 }
             }.start();

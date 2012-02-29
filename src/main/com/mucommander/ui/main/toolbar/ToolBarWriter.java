@@ -18,14 +18,16 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
-
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * This class is responsible for writing the tool-bar attributes (buttons and separators).
@@ -33,6 +35,7 @@ import java.io.OutputStream;
  * @author Arik Hadas
  */
 public class ToolBarWriter extends ToolBarIO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarWriter.class);
 	
 	// - Singleton -------------------------------------------------------
     // -------------------------------------------------------------------
@@ -54,7 +57,7 @@ public class ToolBarWriter extends ToolBarIO {
 			new Writer(bos).write(actionIds);
 			wasToolBarModified = false;
 		} catch (Exception e) {
-			MuLogger.fine("Caught exception", e);
+			LOGGER.debug("Caught exception", e);
 		} finally {
 			bos.close();
 		}

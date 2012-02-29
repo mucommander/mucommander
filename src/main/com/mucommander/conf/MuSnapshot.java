@@ -27,7 +27,9 @@ import java.util.List;
 
 import javax.swing.JSplitPane;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.ui.main.FolderPanel;
@@ -45,7 +47,8 @@ import com.mucommander.ui.main.tabs.FileTableTab;
  * @author Arik Hadas
  */
 public class MuSnapshot {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(MuSnapshot.class);
+	
     // - Last window variables -----------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing known information about the last muCommander window. */
@@ -310,7 +313,7 @@ public class MuSnapshot {
 			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		}
 		catch(HeadlessException e) {
-			MuLogger.finer("Could not fetch screen size: " + e.getMessage());
+			LOGGER.debug("Could not fetch screen size: " + e.getMessage());
 		}
     }
     

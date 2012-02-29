@@ -18,22 +18,25 @@
 
 package com.mucommander.auth;
 
-import com.mucommander.MuLogger;
-import com.mucommander.bookmark.XORCipher;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.io.backup.BackupInputStream;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Hashtable;
 import java.util.Map;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import com.mucommander.bookmark.XORCipher;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.io.backup.BackupInputStream;
 
 /**
  * This class takes care of parsing the credentials XML file and adding parsed {@link CredentialsMapping} instances
@@ -43,7 +46,8 @@ import java.util.Map;
  * @see CredentialsWriter
  */
 class CredentialsParser extends DefaultHandler implements CredentialsConstants {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsParser.class);
+	
     // Variables used for XML parsing
     private FileURL url;
     private Map<String, String> urlProperties;
@@ -127,7 +131,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equals(ELEMENT_CREDENTIALS)) {
             if(url ==null || login ==null || password ==null) {
-                MuLogger.info("Missing value, credentials ignored: url="+ url +" login="+ login);
+                LOGGER.info("Missing value, credentials ignored: url="+ url +" login="+ login);
                 return;
             }
 
@@ -140,7 +144,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             // Decrypt password
             try {password = XORCipher.decryptXORBase64(password);}
             catch(IOException e) {
-                MuLogger.info("Password could not be decrypted: "+ password +", credentials will be ignored");
+                LOGGER.info("Password could not be decrypted: "+ password +", credentials will be ignored");
                 return;
             }
 
@@ -150,7 +154,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         else if(qName.equals(ELEMENT_URL)) {
             try {url = FileURL.getFileURL(characters.toString().trim());}
             catch(MalformedURLException e) {
-                MuLogger.info("Malformed URL: "+characters+", location will be ignored");
+                LOGGER.info("Malformed URL: "+characters+", location will be ignored");
             }
         }
         else if(qName.equals(ELEMENT_LOGIN))

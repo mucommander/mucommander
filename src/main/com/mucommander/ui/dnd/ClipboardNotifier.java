@@ -18,12 +18,14 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.MuLogger;
-
-import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.FlavorEvent;
 import java.awt.datatransfer.FlavorListener;
+
+import javax.swing.Action;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ClipboardNotifier allows an action to be dynamically enabled when the clipboard contains files, and disabled otherwise.
@@ -33,7 +35,8 @@ import java.awt.datatransfer.FlavorListener;
  * @author Maxence Bernard
  */
 public class ClipboardNotifier implements FlavorListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClipboardNotifier.class);
+	
     /** The action to dynamically enable/disable */
     private Action action;
 
@@ -65,7 +68,7 @@ public class ClipboardNotifier implements FlavorListener {
             // Works around "java.lang.IllegalStateException: cannot open system clipboard" thrown when the clipboard
             // is currently unavailable (ticket #164).
 
-            MuLogger.fine("Caught an exception while querying the clipboard for files", e);
+            LOGGER.debug("Caught an exception while querying the clipboard for files", e);
         }
     }
 

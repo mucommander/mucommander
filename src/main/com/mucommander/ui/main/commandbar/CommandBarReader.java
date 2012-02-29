@@ -18,21 +18,24 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.MuLogger;
-import com.mucommander.RuntimeConstants;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.io.backup.BackupInputStream;
-import com.mucommander.ui.action.ActionManager;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Vector;
+
+import javax.swing.KeyStroke;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.io.backup.BackupInputStream;
+import com.mucommander.ui.action.ActionManager;
 
 /**
  * This class parses the XML file describing the command bar's buttons and associated actions.
@@ -40,7 +43,8 @@ import java.util.Vector;
  * @author Maxence Bernard, Arik Hadas
  */
 class CommandBarReader extends CommandBarIO {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarReader.class);
+	
     /** Temporarily used for XML parsing */
     private List<String> actionsIdsV;
     /** Temporarily used for XML parsing */
@@ -98,7 +102,7 @@ class CommandBarReader extends CommandBarIO {
 
     @Override
     public void startDocument() {
-        MuLogger.finest(file.getAbsolutePath()+" parsing started");
+    	LOGGER.trace(file.getAbsolutePath()+" parsing started");
 
         actionsIdsV = new Vector<String>();
         alternateActionsIdsV = new Vector<String>();
@@ -107,7 +111,7 @@ class CommandBarReader extends CommandBarIO {
 
     @Override
     public void endDocument() {
-        MuLogger.finest(file.getAbsolutePath()+" parsing finished");
+    	LOGGER.trace(file.getAbsolutePath()+" parsing finished");
     }
 
     @Override
@@ -141,13 +145,13 @@ class CommandBarReader extends CommandBarIO {
         					if (ActionManager.isActionExist(actionId))
         						alternateActionsIdsV.add(actionId);
         					else {
-        						MuLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
+        						LOGGER.warn("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
         						alternateActionsIdsV.add(null);
         					}
         				}
         			}
         			else
-        				MuLogger.warning("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
+        				LOGGER.warn("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
         		}
         	}
         }

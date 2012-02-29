@@ -18,10 +18,12 @@
 
 package com.mucommander.job.ui;
 
-import com.mucommander.MuLogger;
-import com.mucommander.job.FileJob;
+import javax.swing.SwingUtilities;
 
-import javax.swing.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.job.FileJob;
 
 /**
  * This class is used to show a dialog for user and get a response from
@@ -30,6 +32,8 @@ import javax.swing.*;
  * @author Mariusz Jakubowski
  */
 public class UserInputHelper {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserInputHelper.class);
+	
     private Object userInput;
     private DialogResult dialog;
 
@@ -46,7 +50,7 @@ public class UserInputHelper {
                 }
             });
         } catch (Exception e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
         }
         return userInput;
     }

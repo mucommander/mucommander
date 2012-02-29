@@ -34,7 +34,9 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileSystemView;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
@@ -79,7 +81,8 @@ import com.mucommander.ui.icon.IconManager;
  * @author Maxence Bernard
  */
 public class DrivePopupButton extends PopupButton implements BookmarkListener, ConfigurationListener, LocationListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(DrivePopupButton.class);
+	
     /** FolderPanel instance that contains this button */
     private FolderPanel folderPanel;
 	
@@ -115,7 +118,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             }
         }
         catch(PatternSyntaxException e) {
-            MuLogger.info("Invalid regexp for conf variable "+MuPreferences.VOLUME_EXCLUDE_REGEXP, e);
+            LOGGER.info("Invalid regexp for conf variable "+MuPreferences.VOLUME_EXCLUDE_REGEXP, e);
         }
 
         // Initialize the volumes list

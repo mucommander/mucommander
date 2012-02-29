@@ -19,7 +19,12 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
@@ -31,9 +36,6 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 
 /**
  * This FileJob creates a new file or directory.
@@ -41,7 +43,8 @@ import java.io.OutputStream;
  * @author Maxence Bernard
  */
 public class MkdirJob extends FileJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(MkdirJob.class);
+	
     private AbstractFile destFolder;
 
     private boolean mkfileMode;
@@ -91,7 +94,7 @@ public class MkdirJob extends FileJob {
 
         do {
             try {
-                MuLogger.finer("Creating "+file);
+                LOGGER.debug("Creating "+file);
 
                 // Check for file collisions, i.e. if the file already exists in the destination
                 int collision = FileCollisionChecker.checkForCollision(null, file);
@@ -177,7 +180,7 @@ public class MkdirJob extends FileJob {
                 if(mkfileMode && getState()==INTERRUPTED)
                     return false;
 
-                MuLogger.fine("IOException caught", e);
+                LOGGER.debug("IOException caught", e);
 
                 int action = showErrorDialog(
                      Translator.get("error"),

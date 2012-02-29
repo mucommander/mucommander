@@ -18,11 +18,12 @@
 
 package com.mucommander.desktop.kde;
 
-import com.mucommander.MuLogger;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides access to the KDE configuration, using the <code>kreadconfig</code> command.
@@ -30,7 +31,8 @@ import java.io.InputStreamReader;
  * @author Maxence Bernard
  */
 public class KdeConfig {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(KdeConfig.class);
+	
     /** Name of the command to invoke for retrieving configuration values */
     private static String CONFIG_COMMAND = "kreadconfig";
 
@@ -50,7 +52,7 @@ public class KdeConfig {
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = br.readLine();
 
-            MuLogger.fine(CONFIG_COMMAND+" returned '"+line+"' for "+key);
+            LOGGER.debug(CONFIG_COMMAND+" returned '"+line+"' for "+key);
 
             if(line==null || (line=line.trim()).equals(""))
                 return null;
@@ -58,7 +60,7 @@ public class KdeConfig {
             return line;
         }
         catch(IOException e) {
-            MuLogger.fine("Error while retrieving value for "+key, e);
+            LOGGER.debug("Error while retrieving value for "+key, e);
 
             throw e;
         }

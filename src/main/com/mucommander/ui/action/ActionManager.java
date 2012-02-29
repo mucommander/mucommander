@@ -18,14 +18,23 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.MuLogger;
-import com.mucommander.ui.action.impl.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.ui.action.impl.*;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * ActionManager provides methods to retrieve {@link MuAction} instances and invoke them. It keeps track of all the
@@ -45,7 +54,8 @@ import java.util.regex.Pattern;
  * @author Maxence Bernard, Arik Hadas
  */
 public class ActionManager {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ActionManager.class);
+	
     /** MuAction id -> factory map */
     private static Map<String, ActionFactory> actionFactories = new Hashtable<String, ActionFactory>();
     
@@ -301,7 +311,7 @@ public class ActionManager {
             // Looks for the action's factory
             ActionFactory actionFactory = actionFactories.get(actionId);
             if(actionFactory == null) {
-            	MuLogger.fine("couldn't initiate action: " + actionId + ", its factory wasn't found");
+            	LOGGER.debug("couldn't initiate action: " + actionId + ", its factory wasn't found");
             	return null;
             }
 

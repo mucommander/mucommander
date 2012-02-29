@@ -18,19 +18,22 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.MuLogger;
-import com.mucommander.RuntimeConstants;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.io.backup.BackupInputStream;
-import com.mucommander.ui.action.ActionManager;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Vector;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.io.backup.BackupInputStream;
+import com.mucommander.ui.action.ActionManager;
 
 /**
  * This class parses the XML file describing the toolbar's buttons and associated actions.
@@ -38,6 +41,7 @@ import java.util.Vector;
  * @author Maxence Bernard, Arik Hadas
  */
 public class ToolBarReader extends ToolBarIO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarReader.class);
 
     /** Temporarily used for XML parsing */
     private List<String> actionIdsV;
@@ -86,7 +90,7 @@ public class ToolBarReader extends ToolBarIO {
         		if (ActionManager.isActionExist(actionIdAttribute))
         			actionIdsV.add(actionIdAttribute);
         		else
-        			MuLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
+        			LOGGER.warn("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
         	}
         	else {
         		// Resolve action class
@@ -95,7 +99,7 @@ public class ToolBarReader extends ToolBarIO {
         		if (ActionManager.isActionExist(actionId))
         			actionIdsV.add(actionId);
         		else
-        			MuLogger.warning("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
+        			LOGGER.warn("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
         	}
         }
         else if(qName.equals(SEPARATOR_ELEMENT)) {

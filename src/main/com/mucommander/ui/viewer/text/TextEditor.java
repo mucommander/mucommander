@@ -34,7 +34,9 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.bom.BOM;
@@ -58,7 +60,8 @@ import com.mucommander.ui.viewer.FileEditor;
  * @author Maxence Bernard, Nicolas Rinaudo, Arik Hadas
  */
 class TextEditor extends FileEditor implements DocumentListener, EncodingListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextEditor.class);
+	
     /** Menu bar */
     // Menus //
     private JMenu editMenu;
@@ -198,7 +201,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
                 destFile.getParent().changeDate(System.currentTimeMillis());
             }
             catch (IOException e) {
-                MuLogger.fine("failed to change the date of "+destFile, e);
+                LOGGER.debug("failed to change the date of "+destFile, e);
                 // Fail silently
             }
         }

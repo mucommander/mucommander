@@ -18,13 +18,16 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.MuLogger;
+import java.awt.SystemTray;
+
+import javax.swing.SwingUtilities;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.main.WindowManager;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * AbstractNotifier is a generic representation of a system notifier. It also provides factory methods to
@@ -45,6 +48,7 @@ import java.awt.*;
  * @author Maxence Bernard
  */
 public abstract class AbstractNotifier {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractNotifier.class);
 
     /** AbstractNotifier instance, null if none is available on the current platform */
     private static AbstractNotifier notifier;
@@ -112,12 +116,12 @@ public abstract class AbstractNotifier {
                 @Override
                 public void run() {
                     if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
-                        MuLogger.fine("Ignoring notification, application is in foreground");
+                    	LOGGER.debug("Ignoring notification, application is in foreground");
                         return;
                     }
 
                     if(!displayNotification(notificationType, title, description))
-                        MuLogger.fine("Notification failed to be displayed");
+                    	LOGGER.debug("Notification failed to be displayed");
                 }
             }
         );

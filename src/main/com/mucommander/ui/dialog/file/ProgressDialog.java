@@ -45,7 +45,9 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJob;
@@ -73,7 +75,8 @@ import com.mucommander.ui.main.StatusBar;
  * @author Maxence Bernard
  */
 public class ProgressDialog extends FocusDialog implements ActionListener, ItemListener, ChangeListener, FileJobListener, JobProgressListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProgressDialog.class);
+	
     private JLabel currentFileLabel;
     private JLabel totalTransferredLabel;
 
@@ -289,7 +292,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     ////////////////////////////////////
 
     public void jobStateChanged(FileJob source, int oldState, int newState) {
-        MuLogger.finer("currentThread="+Thread.currentThread()+" oldState="+oldState+" newState="+newState);
+        LOGGER.debug("currentThread="+Thread.currentThread()+" oldState="+oldState+" newState="+newState);
 
         if(newState==FileJob.INTERRUPTED) {
             // Stop repaint thread and dispose dialog

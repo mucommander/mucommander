@@ -18,7 +18,9 @@
 
 package com.mucommander.desktop.kde;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -31,7 +33,8 @@ import com.mucommander.desktop.TrashProvider;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(KdeDesktopAdapter.class);
+	
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
     private int multiClickInterval;
 
@@ -61,7 +64,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
             multiClickInterval = Integer.parseInt(value);
         }
         catch(Exception e) {
-            MuLogger.fine("Error while retrieving double-click interval from gconftool", e);
+            LOGGER.debug("Error while retrieving double-click interval from gconftool", e);
             multiClickInterval = super.getMultiClickInterval();
         }
     }

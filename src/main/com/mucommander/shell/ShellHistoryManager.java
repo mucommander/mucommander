@@ -25,7 +25,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.WeakHashMap;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -43,6 +45,8 @@ import com.mucommander.io.backup.BackupOutputStream;
  * @author Nicolas Rinaudo
  */
 public class ShellHistoryManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShellHistoryManager.class);
+	
     // - History configuration -----------------------------------------------
     // -----------------------------------------------------------------------
     /** File in which to store the shell history. */
@@ -145,7 +149,7 @@ public class ShellHistoryManager {
                 return;
         }
 
-        MuLogger.finer("Adding  " + command + " to shell history.");
+        LOGGER.debug("Adding  " + command + " to shell history.");
 
         // Updates the history buffer.
         history[historyEnd] = command;

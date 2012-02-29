@@ -23,7 +23,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class contains 'quick search' common functionality - selection of rows that match
@@ -34,7 +35,8 @@ import com.mucommander.MuLogger;
  * @author Arik Hadas
  */
 public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(QuickSearch.class);
+	
 	/** Quick search string */
     private String searchString;
 
@@ -176,7 +178,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
      * @param findBestMatch if <code>true</code>, all rows will be tested in the specified order, looking for the best match. If not, it will stop to the first match (not necessarily the best).
      */
     protected void findMatch(int startRow, boolean descending, boolean findBestMatch) {
-        MuLogger.finest("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
+        LOGGER.trace("startRow="+startRow+" descending="+descending+" findMatch="+findBestMatch);
 
         // If search string is empty, update status bar without any icon and return
         if(searchString.length()==0) {
@@ -270,8 +272,8 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
             :containsNoCaseMatch!=-1?containsNoCaseMatch
             :-1;
         
-        MuLogger.finest("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
-        MuLogger.finest("bestMatch="+bestMatch);
+        LOGGER.trace("startsWithCaseMatch="+startsWithCaseMatch+" containsCaseMatch="+containsCaseMatch+" startsWithNoCaseMatch="+startsWithNoCaseMatch+" containsNoCaseMatch="+containsNoCaseMatch);
+        LOGGER.trace("bestMatch="+bestMatch);
         
         return bestMatch;
     }

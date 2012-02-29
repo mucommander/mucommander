@@ -57,7 +57,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.commons.util.Pair;
@@ -85,6 +87,7 @@ import com.mucommander.ui.theme.ThemeListener;
  * @author Arik Hadas, Johann Schmitz (johann@j-schmitz.net)
  */
 public class ShortcutsTable extends PrefTable implements KeyListener, ListSelectionListener, FocusListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShortcutsTable.class);
 	
 	/** Base width and height of icons for a scale factor of 1 */
     private final static int BASE_ICON_DIMENSION = 16;
@@ -428,12 +431,12 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 				tableData.setAlternativeAccelerator(typedKeyStroke, row);
 				break;
 			default:
-				MuLogger.fine("Unexpected column index: " + column);
+				LOGGER.debug("Unexpected column index: " + column);
 			}
 
 			fireTableCellUpdated(row, column);
 			
-			MuLogger.finest("Value: " + value + ", row: " + row + ", col: " + column);
+			LOGGER.trace("Value: " + value + ", row: " + row + ", col: " + column);
 		}
 	}
 	
@@ -476,7 +479,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 		/////////////////////////////
 
 		public void keyPressed(KeyEvent keyEvent) {
-			MuLogger.finest("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
+			LOGGER.trace("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
 
 	        int keyCode = keyEvent.getKeyCode();
 	        if(keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META)

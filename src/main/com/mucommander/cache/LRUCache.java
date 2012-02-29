@@ -18,7 +18,8 @@
 
 package com.mucommander.cache;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An abstract LRU cache.
@@ -44,7 +45,8 @@ import com.mucommander.MuLogger;
  * @author Maxence Bernard
  */
 public abstract class LRUCache<K, V> {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(LRUCache.class);
+	
     /** Cache capacity: maximum number of items this cache can contain */
     protected int capacity;
 
@@ -220,7 +222,7 @@ public abstract class LRUCache<K, V> {
                 cache.testCorruption();
             }
             catch(RuntimeException e) {
-                MuLogger.fine("Cache corrupted after "+i+" iterations, cache state="+cache);
+                LOGGER.debug("Cache corrupted after "+i+" iterations, cache state="+cache);
                 return;
             }
 
@@ -228,7 +230,7 @@ public abstract class LRUCache<K, V> {
             //			System.out.println(cache.toString());
         }
 
-        MuLogger.fine("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
+        LOGGER.debug("Stress test took "+(System.currentTimeMillis()-timeStamp)+" ms.\n");
 
         // Print the cache's state
         System.out.println(cache.toString());

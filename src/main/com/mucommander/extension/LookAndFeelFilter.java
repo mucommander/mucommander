@@ -18,11 +18,13 @@
 
 package com.mucommander.extension;
 
-import com.mucommander.MuLogger;
-
-import javax.swing.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+
+import javax.swing.LookAndFeel;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class filter for look and feels.
@@ -39,7 +41,9 @@ import java.lang.reflect.Modifier;
  * @author Nicolas Rinaudo
  */
 public class LookAndFeelFilter implements ClassFilter {
-    /**
+	private static final Logger LOGGER = LoggerFactory.getLogger(LookAndFeelFilter.class);
+	
+	/**
      * Creates a new instance of <code>LookAndFeelFilter</code>.
      */
     public LookAndFeelFilter() {}
@@ -77,7 +81,7 @@ public class LookAndFeelFilter implements ClassFilter {
             if(buffer.equals(LookAndFeel.class)) {
                 try {return ((LookAndFeel)c.newInstance()).isSupportedLookAndFeel();}
                 catch(Throwable e) {
-                    MuLogger.fine("Caught exception", e);
+                    LOGGER.debug("Caught exception", e);
                     return false;
                 }
             }

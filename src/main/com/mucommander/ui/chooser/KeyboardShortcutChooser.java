@@ -18,25 +18,40 @@
 
 package com.mucommander.ui.chooser;
 
-import com.mucommander.MuLogger;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.IOException;
+
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.combobox.ComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.text.KeyStrokeUtils;
 
-import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.IOException;
-
 /**
  * @author Maxence Bernard
  */
 public class KeyboardShortcutChooser extends JPanel implements ItemListener, ComboBoxListener, FocusListener, KeyListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(KeyboardShortcutChooser.class);
+	
     private JTextField textField;
     private JCheckBox modifierCheckBoxes[];
     private SaneComboBox keyComboBox;
@@ -139,7 +154,7 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     }
 
     private void updateTextField() {
-        MuLogger.finest("currentKeyStroke="+currentKeyStroke+" keyCode="+ (currentKeyStroke==null?"null":""+currentKeyStroke.getKeyCode()));
+        LOGGER.trace("currentKeyStroke="+currentKeyStroke+" keyCode="+ (currentKeyStroke==null?"null":""+currentKeyStroke.getKeyCode()));
 
         updatingTextField = true;
 
@@ -155,11 +170,11 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
         updatingComboBox = true;
         int keyCode = currentKeyStroke==null?0:currentKeyStroke.getKeyCode();
 
-        MuLogger.finest("keyCode="+ keyCode);
+        LOGGER.trace("keyCode="+ keyCode);
 
         int nbChoices = keyComboBox.getItemCount();
         for(int i=1; i<nbChoices; i++) {
-            MuLogger.finest("i="+i+" value="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()+" label="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyLabel());
+            LOGGER.trace("i="+i+" value="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()+" label="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyLabel());
             if(((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()== keyCode)
             {
                 keyComboBox.setSelectedIndex(i);
@@ -246,7 +261,7 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     ////////////////////////////////
 
     public void keyPressed(KeyEvent keyEvent) {
-        MuLogger.finest("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
+        LOGGER.trace("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
 
         int keyCode = keyEvent.getKeyCode();
         if(keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META)

@@ -18,15 +18,17 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.MuLogger;
-import com.mucommander.PlatformManager;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import org.xml.sax.helpers.DefaultHandler;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.helpers.DefaultHandler;
+
+import com.mucommander.PlatformManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 
 /**
  * This class contains the common things for reading and writing the command-bar actions and modifier.
@@ -34,6 +36,7 @@ import java.io.IOException;
  * @author Arik Hadas
  */
 public abstract class CommandBarIO extends DefaultHandler {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarIO.class);
 	
 	/* Variables used for XML parsing */
 	/** Root element */
@@ -83,7 +86,7 @@ public abstract class CommandBarIO extends DefaultHandler {
     	}
     	else {
     		CommandBarAttributes.restoreDefault();
-    		MuLogger.fine(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
+    		LOGGER.debug(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
     	}
     	
     	// initialize the writer after setting the command-bar initial attributes:
@@ -104,20 +107,20 @@ public abstract class CommandBarIO extends DefaultHandler {
     	if (CommandBarAttributes.areDefaultAttributes()) {
     		AbstractFile commandBarFile = getDescriptionFile();
         	if(commandBarFile != null && commandBarFile.exists()) {
-        		MuLogger.info("Command bar use default settings, removing descriptor file");
+        		LOGGER.info("Command bar use default settings, removing descriptor file");
         		commandBarFile.delete();
         	}
         	else
-    			MuLogger.fine("Command bar not modified, not saving");
+        		LOGGER.debug("Command bar not modified, not saving");
     	}
     	else if (commandBarWriter != null) {
     		if (wasCommandBarModified)
     			commandBarWriter.write();
     		else
-    			MuLogger.fine("Command bar not modified, not saving");
+    			LOGGER.debug("Command bar not modified, not saving");
     	}
     	else
-    		MuLogger.warning("Could not save command bar. writer is null");
+    		LOGGER.warn("Could not save command bar. writer is null");
     }
 	
 	/**

@@ -18,14 +18,15 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.MuLogger;
+import java.util.Hashtable;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
-
-import java.util.Hashtable;
-import java.util.Map;
-//import com.growl.Growl;
 
 /**
  * GrowlNotifier implements a notifier that uses the Growl notification system.
@@ -42,7 +43,8 @@ import java.util.Map;
  * @author Maxence Bernard
  */
 public class GrowlNotifier extends AbstractNotifier {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(GrowlNotifier.class);
+	
     /** Is this notifier enabled ? */
     private static boolean isEnabled;
 
@@ -112,7 +114,7 @@ public class GrowlNotifier extends AbstractNotifier {
             // Test if Growl is currently running and abort if it is not
             StringBuffer outputBuffer = new StringBuffer();
             if(!(AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && outputBuffer.toString().equals("true"))) {
-                MuLogger.fine("Growl is not running, aborting");
+            	LOGGER.debug("Growl is not running, aborting");
 
                 return false;
             }
@@ -133,7 +135,7 @@ public class GrowlNotifier extends AbstractNotifier {
                 " default notifications "+notificationTypes+
                 " icon of application \""+APP_NAME+"\"");
 
-            MuLogger.info(isRegistered?
+            LOGGER.info(isRegistered?
                 "Successfully registered "+APP_NAME+" with Growl":
                 "Error while registering "+APP_NAME+" with Growl");
 
@@ -151,10 +153,10 @@ public class GrowlNotifier extends AbstractNotifier {
 
     @Override
     public boolean displayNotification(NotificationType notificationType, String title, String description) {
-        MuLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
+    	LOGGER.debug("notificationType="+notificationType+" title="+title+" description="+description);
 
         if(!isEnabled()) {
-            MuLogger.finer("Ignoring notification, this notifier is not enabled");
+        	LOGGER.debug("Ignoring notification, this notifier is not enabled");
 
             return false;
         }
@@ -166,7 +168,7 @@ public class GrowlNotifier extends AbstractNotifier {
             " description \""+description+"\""+
             " application name \""+APP_NAME+"\"");
 
-        MuLogger.finer(success?
+        LOGGER.debug(success?
             "Notification sent successfully":
             "Error while sending notification");
 

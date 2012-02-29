@@ -18,7 +18,22 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.MuLogger;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Menu;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Hashtable;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.ui.action.AWTActionProxy;
 import com.mucommander.ui.action.ActionManager;
@@ -28,13 +43,6 @@ import com.mucommander.ui.action.impl.NewWindowAction;
 import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * SystemTrayNotifier implements a notifier that uses the System Tray to display notifications. When enabled, this
@@ -46,7 +54,8 @@ import java.util.Map;
  * @author Maxence Bernard
  */
 public class SystemTrayNotifier extends AbstractNotifier implements ActionListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(SystemTrayNotifier.class);
+	
     /** TrayIcon being displayed in the system tray, null when this notifier is not enabled */
     private TrayIcon trayIcon;
 
@@ -165,10 +174,10 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
 
     @Override
     public boolean displayNotification(NotificationType notificationType, String title, String description) {
-        MuLogger.finer("notificationType="+notificationType+" title="+title+" description="+description);
+        LOGGER.debug("notificationType="+notificationType+" title="+title+" description="+description);
 
         if(!isEnabled()) {
-            MuLogger.finer("Ignoring notification, this notifier is not enabled");
+            LOGGER.debug("Ignoring notification, this notifier is not enabled");
 
             return false;
         }
@@ -188,7 +197,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent actionEvent) {
-        MuLogger.finest("caught SystemTray ActionEvent");
+        LOGGER.trace("caught SystemTray ActionEvent");
 
         WindowManager.getCurrentMainFrame().toFront();
     }

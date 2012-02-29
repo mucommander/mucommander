@@ -18,11 +18,13 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.AbstractFile;
-
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
 
 /**
  * Provides a default implementation of the {@link DesktopAdapter} interface.
@@ -38,7 +40,8 @@ import java.awt.event.MouseEvent;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class DefaultDesktopAdapter implements DesktopAdapter {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDesktopAdapter.class);
+	
     /** Default multi-click interval when the desktop property cannot be retrieved. */
     public final static int DEFAULT_MULTICLICK_INTERVAL = 500;
 
@@ -54,7 +57,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
                 multiClickInterval = value;
         }
         catch(Exception e) {
-            MuLogger.fine("Error while retrieving multi-click interval value desktop property", e);
+            LOGGER.debug("Error while retrieving multi-click interval value desktop property", e);
 
             multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
         }

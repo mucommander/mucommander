@@ -18,13 +18,15 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 
 /**
  * This <code>CompletionService</code> handles file paths completion.
@@ -33,6 +35,8 @@ import java.util.Vector;
  */
 
 public abstract class FilesService implements CompletionService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FilesService.class);
+	
 	private String cachedDirectoryName;
 	private String[] cachedDirectoryFileNames;
 	private long cachedDirectoryDate;
@@ -66,7 +70,7 @@ public abstract class FilesService implements CompletionService {
 					try {
 						currentDirectoryFiles = getFiles(currentDirectory);
 					} catch (IOException e) {
-                        MuLogger.fine("Caught exception", e);
+                        LOGGER.debug("Caught exception", e);
 						return new Vector<String>();
 					}
 		

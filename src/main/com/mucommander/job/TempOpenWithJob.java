@@ -18,7 +18,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccesses;
@@ -27,8 +31,6 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.io.IOException;
 
 /**
  * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
@@ -40,7 +42,8 @@ import java.io.IOException;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class TempOpenWithJob extends TempCopyJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(TempOpenWithJob.class);
+	
     /** The command to execute, appended with the temporary file path(s) */
     private Command command;
 
@@ -100,7 +103,7 @@ public class TempOpenWithJob extends TempCopyJob {
                         currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
                 }
                 catch(IOException e) {
-                    MuLogger.fine("Caught exeception while changing permissions of "+currentDestFile, e);
+                    LOGGER.debug("Caught exeception while changing permissions of "+currentDestFile, e);
                     return false;
                 }
             }
@@ -119,7 +122,7 @@ public class TempOpenWithJob extends TempCopyJob {
             ProcessRunner.execute(command.getTokens(tempFiles), baseDestFolder);
         }
         catch(Exception e) {
-            MuLogger.fine("Caught exception executing "+command+" "+tempFiles, e);
+            LOGGER.debug("Caught exception executing "+command+" "+tempFiles, e);
         }
     }
 }

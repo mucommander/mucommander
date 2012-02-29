@@ -18,10 +18,11 @@
 
 package com.mucommander.process;
 
-import com.mucommander.MuLogger;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used to monitor a process' stdout and stderr streams.
@@ -36,6 +37,8 @@ import java.io.InputStream;
  * @author Nicolas Rinaudo
  */
 class ProcessOutputMonitor implements Runnable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessOutputMonitor.class);
+	
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Stream to read from. */
@@ -107,10 +110,10 @@ class ProcessOutputMonitor implements Runnable {
         // Ignore this exception: either there's nothing we can do about it anyway,
         // or it's 'normal' (the process has been killed).
         catch(IOException e) {
-            MuLogger.finer("IOException thrown while monitoring process", e);
+            LOGGER.debug("IOException thrown while monitoring process", e);
         }
 
-        MuLogger.finer("Process output stream emptied, closing");
+        LOGGER.debug("Process output stream emptied, closing");
 
         // Closes the stream.
         try {
@@ -118,7 +121,7 @@ class ProcessOutputMonitor implements Runnable {
 		in.close();
 	}
         catch(IOException e) {
-            MuLogger.finer("IOException thrown while closing process stream", e);
+            LOGGER.debug("IOException thrown while closing process stream", e);
         }
 
         // If a process was set, perform 'cleanup' tasks.
@@ -126,7 +129,7 @@ class ProcessOutputMonitor implements Runnable {
             // Waits for the process to die.
             try {process.waitFor();}
             catch(Exception e) {
-                MuLogger.fine("Caught Exception while waiting for process "+process, e);
+                LOGGER.debug("Caught Exception while waiting for process "+process, e);
             }
             // If this process is still being monitored, notifies its
             // listener that it has exited.

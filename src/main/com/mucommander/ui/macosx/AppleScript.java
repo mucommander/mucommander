@@ -18,16 +18,18 @@
 
 package com.mucommander.ui.macosx;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 
 /**
  * This class allows to run AppleScript code under Mac OS X, relying on the <code>osacript</code> command available
@@ -57,7 +59,8 @@ import java.io.UnsupportedEncodingException;
  * @author Maxence Bernard
  */
 public class AppleScript {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppleScript.class);
+	
     /** The UTF-8 encoding */
     public final static String UTF8 = "UTF-8";
 
@@ -84,7 +87,7 @@ public class AppleScript {
         if(!OsFamilies.MAC_OS_X.isCurrent())
             return false;
 
-        MuLogger.fine("Executing AppleScript: "+appleScript);
+        LOGGER.debug("Executing AppleScript: "+appleScript);
 
         // Use the 'osascript' command to execute the AppleScript. The '-s o' flag tells osascript to print errors to
         // stdout rather than stderr. The AppleScript is piped to the process instead of passing it as an argument
@@ -108,10 +111,10 @@ public class AppleScript {
             // Wait for the process to die
             int returnCode = process.waitFor();
 
-            MuLogger.fine("osascript returned code="+returnCode+", output="+ outputBuffer);
+            LOGGER.debug("osascript returned code="+returnCode+", output="+ outputBuffer);
 
             if(returnCode!=0) {
-                MuLogger.fine("osascript terminated abnormally");
+            	LOGGER.debug("osascript terminated abnormally");
                 return false;
             }
 
@@ -119,7 +122,7 @@ public class AppleScript {
         }
         catch(Exception e) {        // IOException, InterruptedException
             // Shouldn't normally happen
-            MuLogger.fine("Unexcepted exception while executing AppleScript", e);
+        	LOGGER.debug("Unexcepted exception while executing AppleScript", e);
 
             try {
                 if(pout!=null)

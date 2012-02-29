@@ -18,7 +18,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
@@ -26,13 +30,12 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.IOException;
-
 /**
  * @author Maxence Bernard
  */
 public class ChangeFileAttributesJob extends FileJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFileAttributesJob.class);
+	
     private boolean recurseOnDirectories;
 
     private int permissions = -1;
@@ -114,7 +117,7 @@ public class ChangeFileAttributesJob extends FileJob {
             return true;
         }
         catch (IOException e) {
-            MuLogger.fine("failed to change the date of "+file, e);
+            LOGGER.debug("failed to change the date of "+file, e);
             return false;
         }
     }

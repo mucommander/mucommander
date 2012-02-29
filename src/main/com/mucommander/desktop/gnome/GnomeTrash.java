@@ -18,7 +18,15 @@
 
 package com.mucommander.desktop.gnome;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -29,12 +37,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 /**
  * This class handles with GNOME Trash (deleting to trash, empty the trash, go to trash etc.)
@@ -50,7 +52,8 @@ import java.util.List;
  * @author David Kovar (kowy), Maxence Bernard
  */
 public class GnomeTrash extends QueuedTrash {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeTrash.class);
+	
     /** Open trash folder in Nautilus */ 
     private final static String REVEAL_TRASH_COMMAND = "nautilus trash:///";
     
@@ -197,7 +200,7 @@ public class GnomeTrash extends QueuedTrash {
             // delete spec files
             filesToDelete.addAll(TRASH_INFO_SUBFOLDER.ls());
         } catch (java.io.IOException ex) {
-            MuLogger.fine("Failed to list files", ex);
+        	LOGGER.debug("Failed to list files", ex);
             return false;
         }
 
@@ -226,7 +229,7 @@ public class GnomeTrash extends QueuedTrash {
             ProcessRunner.execute(REVEAL_TRASH_COMMAND).waitFor();
         }
         catch(Exception e) {    // IOException, InterruptedException
-            MuLogger.fine("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
+        	LOGGER.debug("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
         }
     }
 
@@ -270,7 +273,7 @@ public class GnomeTrash extends QueuedTrash {
                 fileInfoContent = getFileInfoContent(fileToDelete);
                 trashFileName = getUniqueFilename(fileToDelete);
             } catch (IOException ex) {
-                MuLogger.fine("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
+            	LOGGER.debug("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
                 
                 // continue with other file (do not move file, because info file cannot be properly created
                 continue;
@@ -285,7 +288,7 @@ public class GnomeTrash extends QueuedTrash {
                 infoWriter.write(fileInfoContent);
             } catch (IOException ex) {
                 retVal = false;
-                MuLogger.fine("Failed to create trash info file: " + trashFileName, ex);
+                LOGGER.debug("Failed to create trash info file: " + trashFileName, ex);
 
                 // continue with other file (do not move file, because info file wasn't properly created)
                 continue;
@@ -314,7 +317,7 @@ public class GnomeTrash extends QueuedTrash {
                 }
                 
                 retVal = false;
-                MuLogger.fine("Failed to move file to trash: " + trashFileName, ex);
+                LOGGER.debug("Failed to move file to trash: " + trashFileName, ex);
             }
         }
 

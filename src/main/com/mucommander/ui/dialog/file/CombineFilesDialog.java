@@ -18,7 +18,11 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -34,15 +38,14 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CombineFilesAction;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.IOException;
-
 /**
  * Dialog used to combine file parts into the original file.
  * 
  * @author Mariusz Jakubowski
  */
 public class CombineFilesDialog extends TransferDestinationDialog {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(CombineFilesDialog.class);
+	
     private AbstractFile destFolder;
 
     /**
@@ -98,7 +101,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
                 }
             }
 		} catch (IOException e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
 		}
 		setFiles(files);
 	}

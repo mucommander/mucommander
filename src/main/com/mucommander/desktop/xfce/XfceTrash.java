@@ -24,7 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -52,7 +54,8 @@ import com.mucommander.ui.main.WindowManager;
  * @author Arik Hadas
  */
 public class XfceTrash extends QueuedTrash {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(XfceTrash.class);
+	
 	/** Open trash folder in Thunar */ 
 	private final static String REVEAL_TRASH_COMMAND = "thunar trash:///";
 
@@ -161,7 +164,7 @@ public class XfceTrash extends QueuedTrash {
                 fileInfoContent = getFileInfoContent(fileToDelete);
                 trashFileName = getUniqueFilename(fileToDelete);
             } catch (IOException ex) {
-                MuLogger.fine("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
+                LOGGER.debug("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
                 
                 // continue with other file (do not move file, because info file cannot be properly created
                 continue;
@@ -176,7 +179,7 @@ public class XfceTrash extends QueuedTrash {
                 infoWriter.write(fileInfoContent);
             } catch (IOException ex) {
                 retVal = false;
-                MuLogger.fine("Failed to create trash info file: " + trashFileName, ex);
+                LOGGER.debug("Failed to create trash info file: " + trashFileName, ex);
 
                 // continue with other file (do not move file, because info file wasn't properly created)
                 continue;
@@ -205,7 +208,7 @@ public class XfceTrash extends QueuedTrash {
                 }
                 
                 retVal = false;
-                MuLogger.fine("Failed to move file to trash: " + trashFileName, ex);
+                LOGGER.debug("Failed to move file to trash: " + trashFileName, ex);
             }
         }
 
@@ -256,7 +259,7 @@ public class XfceTrash extends QueuedTrash {
             // delete spec files
             filesToDelete.addAll(TRASH_INFO_SUBFOLDER.ls());
         } catch (java.io.IOException ex) {
-            MuLogger.fine("Failed to list files", ex);
+            LOGGER.debug("Failed to list files", ex);
             return false;
         }
 
@@ -309,7 +312,7 @@ public class XfceTrash extends QueuedTrash {
             ProcessRunner.execute(REVEAL_TRASH_COMMAND).waitFor();
         }
         catch(Exception e) {    // IOException, InterruptedException
-            MuLogger.fine("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
+            LOGGER.debug("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
         }
     }
 

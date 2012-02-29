@@ -19,14 +19,16 @@
 
 package com.mucommander.ui.main;
 
-import com.mucommander.MuLogger;
+import java.util.List;
+import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
-
-import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -41,7 +43,8 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class LocationHistory {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocationHistory.class);
+	
     /** Maximum number of elements the folder history can contain */
     private final static int HISTORY_CAPACITY = 100;
 
@@ -98,10 +101,10 @@ public class LocationHistory {
         //  - it is a directory on a local filesytem
         //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
         // Java from triggering that dreaded 'Drive not ready' popup.
-MuLogger.finest("folder="+folder+" root="+folder.getRoot());
+LOGGER.trace("folder="+folder+" root="+folder.getRoot());
         if(folderURL.getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
             this.lastRecallableFolder = folder.getAbsolutePath();
-            MuLogger.finest("lastRecallableFolder= "+lastRecallableFolder);
+            LOGGER.trace("lastRecallableFolder= "+lastRecallableFolder);
         }
     }
 

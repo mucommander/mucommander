@@ -19,7 +19,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.util.WeakHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -33,8 +37,6 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationType;
-
-import java.util.WeakHashMap;
 
 
 
@@ -60,6 +62,7 @@ import java.util.WeakHashMap;
  * @author Maxence Bernard
  */
 public abstract class FileJob implements Runnable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileJob.class);
 
     /** Thread in which the file job is performed */
     private Thread jobThread;
@@ -522,7 +525,7 @@ public abstract class FileJob implements Runnable {
      * This method implementation does nothing but it can be overriden by subclasses to perform some first-time initializations.
      */
     protected void jobStarted() {
-        MuLogger.finer("called");
+        LOGGER.debug("called");
     }
 	
 
@@ -536,7 +539,7 @@ public abstract class FileJob implements Runnable {
      * <p>Note that this method will NOT be called if a call to {@link #interrupt()} was made before all files were processed.</p>
      */
     protected void jobCompleted() {
-        MuLogger.finer("called");
+        LOGGER.debug("called");
 
         // Send a system notification if a notifier is available and enabled
         if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
@@ -553,7 +556,7 @@ public abstract class FileJob implements Runnable {
      * when the job has been paused.
      */
     protected void jobPaused() {
-        MuLogger.finer("called");
+        LOGGER.debug("called");
     }
 
 
@@ -564,7 +567,7 @@ public abstract class FileJob implements Runnable {
      * when the job has returned from pause.
      */
     protected void jobResumed() {
-        MuLogger.finer("called");
+        LOGGER.debug("called");
     }
 
 
@@ -578,7 +581,7 @@ public abstract class FileJob implements Runnable {
      * files were processed) or has been interrupted in the middle.</p>
      */
     protected void jobStopped() {
-        MuLogger.finer("called");
+        LOGGER.debug("called");
     }
 	
 	

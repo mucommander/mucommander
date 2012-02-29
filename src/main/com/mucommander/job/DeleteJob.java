@@ -19,7 +19,11 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractArchiveFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AbstractRWArchiveFile;
@@ -29,8 +33,6 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.io.IOException;
 
 /**
  * This class is responsible for deleting a set of files. This job can operate in two modes, depending on the boolean
@@ -44,7 +46,8 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class DeleteJob extends FileJob {
-    
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteJob.class);
+	
     /** Title used for error dialogs */
     private String errorDialogTitle;
 
@@ -132,7 +135,7 @@ public class DeleteJob extends FileJob {
                         break;
                     }
                     catch(IOException e) {
-                        MuLogger.fine("IOException caught", e);
+                        LOGGER.debug("IOException caught", e);
 
                         ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", filePath));
                         // Retry loops
@@ -155,7 +158,7 @@ public class DeleteJob extends FileJob {
                 return true;
             }
             catch(IOException e) {
-                MuLogger.fine("IOException caught", e);
+                LOGGER.debug("IOException caught", e);
 
                 ret = showErrorDialog(errorDialogTitle,
                                       Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())

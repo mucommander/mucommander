@@ -20,7 +20,9 @@ package com.mucommander.shell;
 
 import java.io.IOException;
 
-import com.mucommander.MuLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.command.Command;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -39,6 +41,8 @@ import com.mucommander.process.ProcessRunner;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class Shell implements ConfigurationListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Shell.class);
+	
     // - Class variables -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Encoding used by the shell. */
@@ -115,7 +119,7 @@ public class Shell implements ConfigurationListener {
     public static synchronized AbstractProcess execute(String command, AbstractFile currentFolder, ProcessListener listener) throws IOException {
         String[] commandTokens;
 
-        MuLogger.finer("Executing " + command);
+        LOGGER.debug("Executing " + command);
 
         // Adds the command to history.
         ShellHistoryManager.add(command);

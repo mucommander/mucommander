@@ -18,19 +18,24 @@
 
 package com.mucommander;
 
-import com.mucommander.commons.file.util.ResourceLoader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.util.ResourceLoader;
+
 /**
  * Defines various generic muCommander constants.
  * @author Nicolas Rinaudo
  */
 public class RuntimeConstants {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeConstants.class);
+	
     // - Constant paths ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Path to the muCommander dictionary. */
@@ -99,11 +104,11 @@ public class RuntimeConstants {
                 attributes = manifest.getMainAttributes();
             }
             else {
-                MuLogger.warning("MANIFEST.MF not found, default values will be used");
+                LOGGER.warn("MANIFEST.MF not found, default values will be used");
             }
         }
         catch(Exception e) {
-            MuLogger.warning("Failed to read MANIFEST.MF, default values will be used", e);
+            LOGGER.warn("Failed to read MANIFEST.MF, default values will be used", e);
             // Ignore this, attributes is already set to null.
         }
         finally {

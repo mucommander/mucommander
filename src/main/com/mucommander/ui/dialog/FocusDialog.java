@@ -19,17 +19,30 @@
 
 package com.mucommander.ui.dialog;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.ui.helper.FocusRequester;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.ui.helper.FocusRequester;
 
 
 /**
@@ -43,7 +56,8 @@ import java.awt.event.WindowListener;
  * @author Maxence Bernard
  */
 public class FocusDialog extends JDialog implements WindowListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(FocusDialog.class);
+	
     /** Minimum dimensions of this dialog, may be null */
     private Dimension minimumDimension;
 
@@ -212,7 +226,7 @@ public class FocusDialog extends JDialog implements WindowListener {
     public void windowActivated(WindowEvent e) {
         // (this method is called each time the dialog is activated)
         if (!firstTimeActivated && initialFocusComponent!=null) {
-            MuLogger.finest("requesting focus on initial focus component");
+            LOGGER.trace("requesting focus on initial focus component");
 
             // First try using requestFocusInWindow() which is preferred over requestFocus(). If it fails
             // (returns false), call requestFocus:
@@ -220,7 +234,7 @@ public class FocusDialog extends JDialog implements WindowListener {
             // strongly encouraged to use this method over requestFocus when possible. Code which relies on requestFocus
             // may exhibit different focus behavior on different platforms."
             if(!initialFocusComponent.requestFocusInWindow()) {
-                MuLogger.finest("requestFocusInWindow failed, calling requestFocus");
+                LOGGER.trace("requestFocusInWindow failed, calling requestFocus");
                 FocusRequester.requestFocus(initialFocusComponent);
             }
 

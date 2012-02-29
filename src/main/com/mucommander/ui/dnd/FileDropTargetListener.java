@@ -18,7 +18,19 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.MuLogger;
+import java.awt.Cursor;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.InputEvent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.runtime.OsFamilies;
@@ -29,11 +41,6 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.*;
-import java.awt.event.InputEvent;
 
 /**
  * Provides file(s) 'drop' support to components that add a <code>DropTarget</code> using this <code>DropTargetListener</code>.
@@ -64,7 +71,8 @@ import java.awt.event.InputEvent;
  * @author Maxence Bernard
  */
 public class FileDropTargetListener implements DropTargetListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileDropTargetListener.class);
+	
     /** the FolderPanel instance used to change the current folder when a file is dropped */
     private FolderPanel folderPanel;
 
@@ -169,13 +177,13 @@ public class FileDropTargetListener implements DropTargetListener {
                 if(currentDropAction==DnDConstants.ACTION_MOVE
                         && (dragModifiers&MOVE_ACTION_MODIFIERS_EX)==0
                         && (event.getSourceActions()&DnDConstants.ACTION_COPY)!=0) {
-                    MuLogger.finer("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
+                    LOGGER.debug("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
                     currentDropAction = DnDConstants.ACTION_COPY;
                 }
             }
         }
 
-        MuLogger.finest("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
+        LOGGER.trace("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
 
         if(dragAccepted) {
             // Accept the drag event with our drop action
@@ -186,7 +194,7 @@ public class FileDropTargetListener implements DropTargetListener {
             event.rejectDrag();
         }
 
-        MuLogger.finest("cursor="+getDragActionCursor(currentDropAction, dragAccepted));
+        LOGGER.trace("cursor="+getDragActionCursor(currentDropAction, dragAccepted));
 
         // Change the mouse cursor on this FolderPanel and child components
         folderPanel.setCursor(getDragActionCursor(currentDropAction, dragAccepted));

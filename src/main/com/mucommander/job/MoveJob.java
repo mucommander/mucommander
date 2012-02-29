@@ -19,14 +19,20 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.*;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractArchiveFile;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractRWArchiveFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.io.IOException;
 
 
 /**
@@ -35,7 +41,8 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class MoveJob extends AbstractCopyJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(MoveJob.class);
+	
     /** True if this job corresponds to a single file renaming */
     protected boolean renameMode = false;
 
@@ -104,7 +111,7 @@ public class MoveJob extends AbstractCopyJob {
                     return true;
                 }
                 catch(IOException e) {
-                    MuLogger.fine("IOException caught", e);
+                    LOGGER.debug("IOException caught", e);
 
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                     // Retry loops
@@ -137,7 +144,7 @@ public class MoveJob extends AbstractCopyJob {
             catch(IOException e) {
                 // Fail silently: renameTo might fail under normal conditions, for instance for local files which are
                 // not located on the same volume.
-                MuLogger.fine("Failed to rename "+file+" into "+destFile+" (not necessarily an error)", e);
+                LOGGER.debug("Failed to rename "+file+" into "+destFile+" (not necessarily an error)", e);
             }
         }
         // Rename couldn't be used or didn't succeed: move the file manually
@@ -184,7 +191,7 @@ public class MoveJob extends AbstractCopyJob {
                             destFile.changeDate(file.getDate());
                         }
                         catch (IOException e) {
-                            MuLogger.fine("failed to change the date of "+destFile, e);
+                            LOGGER.debug("failed to change the date of "+destFile, e);
                             // Fail silently
                         }
                     }
@@ -239,7 +246,7 @@ public class MoveJob extends AbstractCopyJob {
                         return true;
                     }
                     catch(IOException e) {
-                        MuLogger.fine("IOException caught", e);
+                        LOGGER.debug("IOException caught", e);
 
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                         // Retry loops

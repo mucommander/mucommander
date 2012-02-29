@@ -18,15 +18,17 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.MuLogger;
-import com.mucommander.PlatformManager;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import org.xml.sax.helpers.DefaultHandler;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.helpers.DefaultHandler;
+
+import com.mucommander.PlatformManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 
 /**
  * This class contains the common things to the actions reading and writing.
@@ -34,6 +36,7 @@ import java.io.IOException;
  * @author Maxence Bernard, Arik Hadas
  */
 public abstract class ActionKeymapIO extends DefaultHandler  {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ActionKeymapIO.class);
 	
 	/* Variables used for XML parsing */
 	protected final static String ROOT_ELEMENT = "keymap";
@@ -125,7 +128,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     	if (wereActionsModified)
     		writer.write();
     	else
-    		MuLogger.fine("Action keymap not modified, not saving");
+    		LOGGER.debug("Action keymap not modified, not saving");
     }
     
     protected static void createEmptyFile() throws IOException {
@@ -149,7 +152,7 @@ public abstract class ActionKeymapIO extends DefaultHandler  {
     	}
     	else {
     		createEmptyFile();
-    		MuLogger.fine(DEFAULT_ACTIONS_FILE_NAME + " was not found, created empty file");
+    		LOGGER.debug(DEFAULT_ACTIONS_FILE_NAME + " was not found, created empty file");
     	}
     }
 }

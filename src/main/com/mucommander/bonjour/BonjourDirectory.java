@@ -18,19 +18,22 @@
 
 package com.mucommander.bonjour;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.FileURL;
-
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceEvent;
-import javax.jmdns.ServiceInfo;
-import javax.jmdns.ServiceListener;
 import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Vector;
+
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceInfo;
+import javax.jmdns.ServiceListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
 
 /**
  * Collects and maintains a list of available Bonjour/Zeroconf services using the JmDNS library.
@@ -42,7 +45,8 @@ import java.util.Vector;
  * @see BonjourMenu
  */
 public class BonjourDirectory implements ServiceListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(BonjourDirectory.class);
+	
     /** Singleton instance held to prevent garbage collection and also used for synchronization */
     private final static BonjourDirectory instance = new BonjourDirectory();
     /** Does all the hard work */
@@ -88,7 +92,7 @@ public class BonjourDirectory implements ServiceListener {
                     jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], instance);
             }
             catch(IOException e) {
-                MuLogger.warning("Could not instantiate jmDNS, Bonjour not enabled", e);
+            	LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
             }
         }
         else if(!enabled && jmDNS!=null) {
@@ -151,7 +155,7 @@ public class BonjourDirectory implements ServiceListener {
     ////////////////////////////////////
 
     public void serviceAdded(final ServiceEvent serviceEvent) {
-        MuLogger.finest("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
+    	LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
         
         // Ignore if Bonjour has been disabled
         if(!isActive())
@@ -168,7 +172,7 @@ public class BonjourDirectory implements ServiceListener {
     }
 
     public void serviceResolved(ServiceEvent serviceEvent) {
-        MuLogger.finest("name="+serviceEvent.getName()+" type="+serviceEvent.getType()+" info="+serviceEvent.getInfo());
+    	LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType()+" info="+serviceEvent.getInfo());
 
         // Ignore if Bonjour has been disabled
         if(!isActive())
@@ -179,7 +183,7 @@ public class BonjourDirectory implements ServiceListener {
         if(serviceInfo!=null) {
             if(serviceInfo.getInetAddress() instanceof Inet6Address) {
                 // IPv6 addresses not supported at this time + they seem not to be correctly handled by ServiceInfo
-                MuLogger.fine("ignoring IPv6 service");
+            	LOGGER.debug("ignoring IPv6 service");
                 return;
             }
 
@@ -187,7 +191,7 @@ public class BonjourDirectory implements ServiceListener {
             // Synchronized to properly handle duplicate calls
             synchronized(instance) {
                 if(bs!=null && !services.contains(bs)) {
-                    MuLogger.fine("BonjourService "+bs+" added");
+                	LOGGER.debug("BonjourService "+bs+" added");
                     services.add(bs);
                 }
             }
@@ -195,7 +199,7 @@ public class BonjourDirectory implements ServiceListener {
     }
 
     public void serviceRemoved(ServiceEvent serviceEvent) {
-        MuLogger.finest("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
+    	LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
 
         // Ignore if Bonjour has been disabled
         if(!isActive())
@@ -208,7 +212,7 @@ public class BonjourDirectory implements ServiceListener {
         if(serviceInfo!=null) {
             if(serviceInfo.getInetAddress() instanceof Inet6Address) {
                 // IPv6 addresses not supported at this time + they seem not to be correctly handled by ServiceInfo
-                MuLogger.fine("ignoring IPv6 service");
+            	LOGGER.debug("ignoring IPv6 service");
                 return;
             }
 
@@ -217,7 +221,7 @@ public class BonjourDirectory implements ServiceListener {
             synchronized(instance) {
                 // Note: BonjourService#equals() uses the service's fully qualified name as the discriminator.
                 if(bs!=null && services.contains(bs)) {
-                    MuLogger.fine("BonjourService "+bs+" removed");
+                	LOGGER.debug("BonjourService "+bs+" removed");
                     services.remove(bs);
                 }
             }

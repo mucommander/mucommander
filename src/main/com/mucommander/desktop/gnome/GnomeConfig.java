@@ -18,11 +18,12 @@
 
 package com.mucommander.desktop.gnome;
 
-import com.mucommander.MuLogger;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides access to the GNOME configuration, using the <code>gconftool</code> command.
@@ -30,7 +31,8 @@ import java.io.InputStreamReader;
  * @author Maxence Bernard
  */
 public class GnomeConfig {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeConfig.class);
+	
     /** Name of the command to invoke for retrieving configuration values */
     private static String CONFIG_COMMAND = "gconftool";
 
@@ -50,7 +52,7 @@ public class GnomeConfig {
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = br.readLine();
 
-            MuLogger.fine(CONFIG_COMMAND+" returned '"+line+"' for "+key);
+            LOGGER.debug(CONFIG_COMMAND+" returned '"+line+"' for "+key);
 
             if(line==null || (line=line.trim()).equals("") || line.startsWith("No value set for"))
                 return null;
@@ -58,7 +60,7 @@ public class GnomeConfig {
             return line;
         }
         catch(IOException e) {
-            MuLogger.fine("Error while retrieving value for "+key, e);
+            LOGGER.debug("Error while retrieving value for "+key, e);
 
             throw e;
         }

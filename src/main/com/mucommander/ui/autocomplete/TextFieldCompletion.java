@@ -18,12 +18,15 @@
 
 package com.mucommander.ui.autocomplete;
 
-import com.mucommander.MuLogger;
-import com.mucommander.ui.autocomplete.completers.Completer;
-
-import javax.swing.text.BadLocationException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
+import javax.swing.text.BadLocationException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.ui.autocomplete.completers.Completer;
 
 /**
  * TextFieldCompleter is a CompleterType which suite to text-field.
@@ -32,6 +35,7 @@ import java.awt.event.KeyEvent;
  */
 
 public class TextFieldCompletion extends CompletionType {
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextFieldCompletion.class);
 	
     private class ShowingThreadImp extends ShowingThread {
     	public ShowingThreadImp(int delay) {
@@ -49,7 +53,7 @@ public class TextFieldCompletion extends CompletionType {
 	                x = autocompletedtextComp.modelToView().x;
 	            } catch(BadLocationException e){ 
 	                // this should never happen!!! 
-                    MuLogger.fine("Caught exception", e);
+                    LOGGER.debug("Caught exception", e);
 	                return;
 	            }
 	            if (autocompletedtextComp.hasFocus()) {	            	

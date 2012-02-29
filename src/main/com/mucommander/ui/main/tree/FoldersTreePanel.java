@@ -18,7 +18,32 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.MuLogger;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
@@ -38,16 +63,6 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeCache;
 import com.mucommander.ui.theme.ThemeListener;
 
-import javax.swing.*;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
-import java.awt.event.*;
-
 /**
  * A panel which contains a directory tree. This panel is attached to the left
  * side of the files table. It allows for a quick navigation in a directory
@@ -59,7 +74,8 @@ import java.awt.event.*;
 public class FoldersTreePanel extends JPanel implements TreeSelectionListener, 
 							LocationListener, FocusListener, ThemeListener, 
 							TreeModelListener, ConfigurationListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(FoldersTreePanel.class);
+	
     /** Directory tree */
     private JTree tree;
 
@@ -231,7 +247,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
                    tree.setSelectionPath(path);
                    tree.scrollPathToVisible(path);
                } catch (Exception e) {
-                   MuLogger.fine("Caught exception", e);
+                   LOGGER.debug("Caught exception", e);
                }
             }
         });

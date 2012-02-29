@@ -18,12 +18,6 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.util.FileSet;
-
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -32,6 +26,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.util.FileSet;
 
 /**
  * This class represents a Transferable file set and is used for Drag and Drop transfers initiated by muCommander
@@ -60,7 +62,8 @@ import java.util.Vector;
  * @author Maxence Bernard, Xavi Miró
  */
 public class TransferableFileSet implements Transferable {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransferableFileSet.class);
+	
     /** Transferred FileSet */
     private FileSet fileSet;
 
@@ -93,7 +96,7 @@ public class TransferableFileSet implements Transferable {
         }
         catch(ClassNotFoundException e) {
             // That should never happen
-            MuLogger.fine("FileSet DataFlavor could not be instantiated", e);
+            LOGGER.debug("FileSet DataFlavor could not be instantiated", e);
         }
     }
 
@@ -259,7 +262,7 @@ public class TransferableFileSet implements Transferable {
         }
         catch(Exception e) {
             // Catch UnsupportedFlavorException, IOException
-            MuLogger.fine("Caught exception while processing transferable", e);
+            LOGGER.debug("Caught exception while processing transferable", e);
 
             return  null;
         }

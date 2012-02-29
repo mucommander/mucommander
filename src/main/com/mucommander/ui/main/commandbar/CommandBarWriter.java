@@ -18,16 +18,19 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.MuLogger;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.swing.KeyStroke;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.RuntimeConstants;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * This class is responsible for writing the command-bar attributes (actions and modifier).
@@ -35,7 +38,8 @@ import java.io.OutputStream;
  * @author Arik Hadas
  */
 class CommandBarWriter extends CommandBarIO {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarWriter.class);
+	
 	// - Singleton -------------------------------------------------------
     // -------------------------------------------------------------------
 	private static CommandBarWriter instance;
@@ -59,7 +63,7 @@ class CommandBarWriter extends CommandBarIO {
 			new Writer(bos).write(commandBarActionIds, commandBarAlterativeActionIds, commandBarModifier);
 			wasCommandBarModified = false;
 		} catch (Exception e) {
-			MuLogger.fine("Caught exception", e);
+			LOGGER.debug("Caught exception", e);
 		} finally {
 			bos.close();
 		}
@@ -97,7 +101,7 @@ class CommandBarWriter extends CommandBarIO {
 			if (alternativeActionId != null)
 				attributes.add(ALT_ACTION_ID_ATTRIBUTE, alternativeActionId);
 			
-            MuLogger.finest("Writing button: action_id = "  + attributes.getValue(ACTION_ID_ATTRIBUTE) + ", alt_action_id = " + attributes.getValue(ALT_ACTION_ID_ATTRIBUTE));
+            LOGGER.trace("Writing button: action_id = "  + attributes.getValue(ACTION_ID_ATTRIBUTE) + ", alt_action_id = " + attributes.getValue(ALT_ACTION_ID_ATTRIBUTE));
 			
 			writer.writeStandAloneElement(BUTTON_ELEMENT, attributes);
 		}

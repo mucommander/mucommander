@@ -18,7 +18,28 @@
 
 package com.mucommander.ui.dialog.shell;
 
-import com.mucommander.MuLogger;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.PrintStream;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
@@ -36,11 +57,6 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.PrintStream;
-
 /**
  * Dialog used to execute a user-defined command.
  * <p>
@@ -54,6 +70,8 @@ import java.io.PrintStream;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class RunDialog extends FocusDialog implements ActionListener, ProcessListener, KeyListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RunDialog.class);
+	
     // - UI components -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Main frame this dialog depends on. */
@@ -216,7 +234,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      * @param retValue process' return code (not used).
      */	
     public void processDied(int retValue) {
-        MuLogger.finer("process exit, return value= "+retValue);
+        LOGGER.debug("process exit, return value= "+retValue);
         currentProcess = null;
         if(processInput!=null) {
             processInput.close();

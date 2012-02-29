@@ -18,8 +18,20 @@
 
 package com.mucommander.job;
 
-import com.mucommander.MuLogger;
-import com.mucommander.commons.file.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.DummyFile;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.ChecksumInputStream;
@@ -32,18 +44,13 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 /**
  * This job split the file into parts with given size.
  * @author Mariusz Jakubowski
  */
 public class SplitFileJob extends AbstractCopyJob {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(SplitFileJob.class);
+	
     private long partSize;
 	private AbstractFile sourceFile;
 	private InputStream origFileStream;
@@ -124,7 +131,7 @@ public class SplitFileJob extends AbstractCopyJob {
         	origFileStream = sourceFile.getInputStream();
 		}
         catch (IOException e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", sourceFile.getName()),
                     new String[]{CANCEL_TEXT},
@@ -140,7 +147,7 @@ public class SplitFileJob extends AbstractCopyJob {
 				origFileStream = new ChecksumInputStream(origFileStream, MessageDigest.getInstance("CRC32"));
 			} catch (NoSuchAlgorithmException e) {
 				setIntegrityCheckEnabled(false);
-                MuLogger.fine("Caught exception", e);
+                LOGGER.debug("Caught exception", e);
 			}
         }
 	}
@@ -197,7 +204,7 @@ public class SplitFileJob extends AbstractCopyJob {
                     destFile.changeDate(sourceFile.getDate());
                 }
                 catch (IOException e) {
-                    MuLogger.fine("failed to change date of "+destFile, e);
+                    LOGGER.debug("failed to change date of "+destFile, e);
                     // Fail silently
                 }
             }
@@ -210,13 +217,13 @@ public class SplitFileJob extends AbstractCopyJob {
                     destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);
                 }
                 catch (IOException e) {
-                    MuLogger.fine("failed to import "+sourceFile+" permissions into "+destFile, e);
+                    LOGGER.debug("failed to import "+sourceFile+" permissions into "+destFile, e);
                     // Fail silently
                 }
             }
 		}
         catch (IOException e) {
-            MuLogger.fine("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
 
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
@@ -265,7 +272,7 @@ public class SplitFileJob extends AbstractCopyJob {
 					crcStream.write(line.getBytes("utf-8"));
 					crcStream.close();
 				} catch (Exception e) {
-                    MuLogger.fine("Caught exception", e);
+                    LOGGER.debug("Caught exception", e);
 					
 		            showErrorDialog(errorDialogTitle,
 		                    Translator.get("error_while_transferring", crcFileName),

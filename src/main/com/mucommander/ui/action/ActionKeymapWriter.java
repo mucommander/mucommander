@@ -18,19 +18,22 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.MuLogger;
-import com.mucommander.RuntimeConstants;
-import com.mucommander.io.backup.BackupOutputStream;
-import com.mucommander.ui.text.KeyStrokeUtils;
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
-
-import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.RuntimeConstants;
+import com.mucommander.io.backup.BackupOutputStream;
+import com.mucommander.ui.text.KeyStrokeUtils;
+import com.mucommander.xml.XmlAttributes;
+import com.mucommander.xml.XmlWriter;
 
 /**
  * This class is responsible for writing the actions.
@@ -39,6 +42,7 @@ import java.util.Map;
  * @author Maxence Bernard, Arik Hadas
  */
 class ActionKeymapWriter extends ActionKeymapIO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ActionKeymapWriter.class);
 	
 	ActionKeymapWriter() {}
 	
@@ -48,7 +52,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 		try {
 			new Writer(bos).writeKeyMap(null);
 		} catch (Exception e) {
-			MuLogger.fine("Caught exception", e);
+			LOGGER.debug("Caught exception", e);
 		} finally {
 			bos.close();
 		}
@@ -73,7 +77,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
 			new Writer(bos).writeKeyMap(combinedMapping);
 			wereActionsModified = false;
 		} catch (Exception e) {
-            MuLogger.fine("Caught exception", e);
+			LOGGER.debug("Caught exception", e);
 		} finally {
 			bos.close();
 		}
@@ -109,7 +113,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
     		XmlAttributes attributes = new XmlAttributes();
     		attributes.add(ID_ATTRIBUTE, actionId);
 
-    	    MuLogger.finest("     Writing mapping of "  + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
+    	    LOGGER.trace("     Writing mapping of "  + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
 
     		if (keyStrokes[0] != null)
     			attributes.add(PRIMARY_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[0]));
