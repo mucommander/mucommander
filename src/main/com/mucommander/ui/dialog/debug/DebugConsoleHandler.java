@@ -18,12 +18,16 @@
 
 package com.mucommander.ui.dialog.debug;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.AppenderBase;
+import ch.qos.logback.core.OutputStreamAppender;
+
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
-
-import java.util.LinkedList;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 /**
  * This <code>java.util.logging</code> <code>Handler</code> collects the last log messages that were published by
@@ -35,29 +39,27 @@ import java.util.logging.LogRecord;
  * @see MuPreferences#LOG_BUFFER_SIZE
  * @author Maxence Bernard
  */
-public class DebugConsoleHandler extends Handler {
+public class DebugConsoleHandler extends AppenderBase<ILoggingEvent> {
 
     /** Maximum number of log records to keep in memory */
     private int bufferSize;
 
     /** Contains the last LogRecord instances. */
-    private LinkedList<LogRecord> logRecords;
+    private List<ILoggingEvent> logRecords;
 
     /** Singleton instance of DebugConsoleHandler */
-    private static DebugConsoleHandler INSTANCE;
+    private final static DebugConsoleHandler INSTANCE = new DebugConsoleHandler();
 
     /**
      * Creates a new <code>DebugConsoleHandler</code>. This constructor is automatically by
      * <code>java.util.logging</code> when it is configured and should never be called directly.
      */
-    public DebugConsoleHandler() {
+    private DebugConsoleHandler() {
         // TODO: re-implement this.
         //setFormatter(new SingleLineFormatter());
 
         bufferSize = MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
-        logRecords = new LinkedList<LogRecord>();
-
-        INSTANCE = this;
+        logRecords = new LinkedList<ILoggingEvent>();
     }
 
     /**
@@ -74,32 +76,23 @@ public class DebugConsoleHandler extends Handler {
      *
      * @return the last records that were collected by this handler.
      */
-    public synchronized LogRecord[] getLogRecords() {
-        LogRecord[] records = new LogRecord[logRecords.size()];
-        logRecords.toArray(records);
+    public synchronized ILoggingEvent[] getLogRecords() {
+    	ILoggingEvent[] records = new ILoggingEvent[0];
+    	records = logRecords.toArray(records);
 
-        return records;
+    	return records;
     }
 
 
     ////////////////////////////
-    // Handler implementation //
+    // Appender implementation //
     ////////////////////////////
 
     @Override
-    public synchronized void publish(LogRecord record) {
-        if(logRecords.size()== bufferSize)
-            logRecords.removeFirst();
+    protected void append(ILoggingEvent record) {
+		if(logRecords.size()== bufferSize)
+            logRecords.remove(0);
 
         logRecords.add(record);
-    }
-
-    @Override
-    public synchronized void flush() {
-    }
-
-    @Override
-    public synchronized void close() throws SecurityException {
-        logRecords.clear();
-    }
+	}
 }

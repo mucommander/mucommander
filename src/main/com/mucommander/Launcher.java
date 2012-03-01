@@ -21,7 +21,6 @@ package com.mucommander;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.logging.Level;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -431,7 +430,7 @@ public class Launcher {
 
             // - Logging configuration ------------------------------------
             // ------------------------------------------------------------
-            configureLogging();
+            MuLogger.configureLogging();
 
 
             // - MAC OS X specific init -----------------------------------
@@ -640,87 +639,5 @@ public class Launcher {
 
         // Register the application-specific 'bookmark' protocol.
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
-    }
-
-    private static void configureLogging() throws IOException {
-        // We're no longer using LogManager and a logging.properties file to initialize java.util.logging, because of
-        // a limitation with Webstart limiting the use of handlers and formatters residing in the system's classpath,
-        // i.e. built-in ones.
-
-//        // Read the java.util.logging configuration file bundled with the muCommander JAR, replacing the JRE's
-//        // logging.properties configuration.
-//        InputStream resIn = ResourceLoader.getRootPackageAsFile(Launcher.class).getChild("com/mucommander/logging.properties").getInputStream();
-//        LogManager.getLogManager().readConfiguration(resIn);
-//        resIn.close();
-
-        // TODO: re-enable this.
-        /*
-        // Remove default handlers
-        Logger rootLogger = LogManager.getLogManager().getLogger("");
-        Handler handlers[] = rootLogger.getHandlers();
-        for (Handler handler : handlers)
-            rootLogger.removeHandler(handler);
-
-        // and add ours
-        handlers = new Handler[] { new ConsoleHandler(), new DebugConsoleHandler()};
-        Formatter formatter = new SingleLineFormatter();
-        for (Handler handler : handlers) {
-            handler.setFormatter(formatter);
-            rootLogger.addHandler(handler);
-        }
-        */
-
-        // Set the log level to the value defined in the configuration
-        updateLogLevel(getLogLevel());
-
-//        Logger fileLogger = FileLogger.getLogger();
-//        fileLogger.finest("fileLogger finest");
-//        fileLogger.finer("fileLogger finer");
-//        fileLogger.fine("fileLogger fine");
-//        fileLogger.config("fileLogger config");
-//        fileLogger.info("fileLogger info");
-//        fileLogger.warning("fileLogger warning");
-//        fileLogger.severe("fileLogger severe");
-    }
-
-    /**
-     * Returns the current log level used by all <code>java.util.logging</code> loggers.
-     *
-     * @return the current log level used by all <code>java.util.logging</code> loggers.
-     */
-    public static Level getLogLevel() {
-        return Level.parse(MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_LEVEL, MuPreferences.DEFAULT_LOG_LEVEL));
-    }
-
-    /**
-     * Sets the new log level to be used by all <code>java.util.logging</code> loggers, and persists it in the
-     * application preferences.
-     *
-     * @param level the new log level to be used by all <code>java.util.logging</code> loggers.
-     */
-    public static void setLogLevel(Level level) {
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.LOG_LEVEL, level.getName());
-        updateLogLevel(level);
-    }
-
-    /**
-     * Sets the level of all muCommander loggers.
-     *
-     * @param level the new log level
-     */
-    public static void updateLogLevel(Level level) {
-        // TODO: re-implement that with the new logging API.
-        /*
-        // Set the level of muCommander loggers.
-        // Note: non-muCommander loggers default to the level defined in the JRE's logging.properties.
-        CommonsLogger.getLogger().setLevel(level);
-        FileLogger.getLogger().setLevel(level);
-        AppLogger.getLogger().setLevel(level);
-
-        Logger rootLogger = LogManager.getLogManager().getLogger("");
-        Handler handlers[] = rootLogger.getHandlers();
-        for (Handler handler : handlers)
-            handler.setLevel(level);
-            */
     }
 }

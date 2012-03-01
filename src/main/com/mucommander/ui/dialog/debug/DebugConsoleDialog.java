@@ -18,7 +18,33 @@
 
 package com.mucommander.ui.dialog.debug;
 
-import com.mucommander.Launcher;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+
+import ch.qos.logback.classic.spi.ILoggingEvent;
+
+import com.mucommander.MuLogger;
+import com.mucommander.MuLogger.Level;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.RefreshAction;
@@ -26,33 +52,23 @@ import com.mucommander.ui.action.impl.ShowDebugConsoleAction;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.logging.Formatter;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-
 /**
  * This dialog shows the last log messages collected by {@link DebugConsoleHandler} and allows them to be copied
  * to the clipboard. It also makes it possible to change the log level, the level combo box being preset to the
- * level returned by {@link Launcher#getLogLevel()}.
+ * level returned by {@link MuLogger#getLogLevel()}.
  *
  * @see ShowDebugConsoleAction
  * @see DebugConsoleHandler
- * @see Launcher#setLogLevel(Level)
+ * @see MuLogger#setLogLevel(Level)
  * @author Maxence Bernard
  */
 public class DebugConsoleDialog extends FocusDialog implements ActionListener, ItemListener {
 
     /** Displays log records, and allows to copy their values to the clipboard */
-    private JList recordsList;
+    private JList<LogRecordListItem> recordsList;
 
     /** Allows the log level to be changed */
-    private JComboBox levelComboBox;
+    private JComboBox<Level> levelComboBox;
 
     /** Closes the debug console when pressed */
     private JButton closeButton;
@@ -66,21 +82,6 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(700,500);
 
     /**
-     * Enumerates the log levels in the order in which they will appear in the level combo box.
-     */
-    private final static Level[] LEVELS = {
-        Level.OFF,
-        Level.SEVERE,
-        Level.WARNING,
-        Level.INFO,
-        Level.CONFIG,
-        Level.FINE,
-        Level.FINER,
-        Level.FINEST
-    };
-
-
-    /**
      * Creates a new {@link DebugConsoleDialog} using the given {@link MainFrame} as a parent.
      *
      * @param mainFrame the {@link MainFrame} to use as a parent
@@ -90,7 +91,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
         Container contentPane = getContentPane();
 
-        recordsList = new JList();
+        recordsList = new JList<LogRecordListItem>();
         // Autoscroll when dragged
         recordsList.setAutoscrolls(true);
         recordsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -131,14 +132,14 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     private JPanel createComboPanel() {
         JPanel comboPanel = new JPanel(new FlowLayout());
         comboPanel.add(new JLabel(Translator.get("debug_console_dialog.level")+":"));
-        Level logLevel = Launcher.getLogLevel();
+        Level logLevel = MuLogger.getLogLevel();
 
-        levelComboBox = new JComboBox();
-        for(int i=0; i<LEVELS.length; i++) {
-            levelComboBox.addItem(LEVELS[i].getName());
-            if(LEVELS[i].equals(logLevel))
-                levelComboBox.setSelectedIndex(i);
-        }
+        levelComboBox = new JComboBox<Level>();
+        for(Level level:Level.values())
+            levelComboBox.addItem(level);
+        		
+        levelComboBox.setSelectedItem(logLevel);
+        		
         levelComboBox.addItemListener(this);
 
         comboPanel.add(levelComboBox);
@@ -150,18 +151,19 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      * Refreshes the JList with the log records contained by {@link DebugConsoleHandler}.
      */
     private void refreshLogRecords() {
-        DefaultListModel listModel = new DefaultListModel();
+    	DefaultListModel<LogRecordListItem> listModel = new DefaultListModel<LogRecordListItem>();
         DebugConsoleHandler handler = DebugConsoleHandler.getInstance();
 
-        final LogRecord[] records = handler.getLogRecords();
-        Formatter formatter = handler.getFormatter();
-
-        for (LogRecord record : records) {
-            if (handler.isLoggable(record))
-                listModel.addElement(new LogRecordListItem(record, formatter));
+        final ILoggingEvent[] records = handler.getLogRecords();
+        final Level currentLogLevel = MuLogger.getLogLevel();
+        
+        for (ILoggingEvent record : records) {
+        	Level recordLevel = getLevel(record);
+        	if (recordLevel.isInScopeOf(currentLogLevel))
+        		listModel.addElement(new LogRecordListItem(record, recordLevel));
         }
 
-        recordsList.setModel(listModel);        
+        recordsList.setModel(listModel);
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -169,15 +171,34 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
             }
         });
     }
+    
+    public Level getLevel(ILoggingEvent lr) {
+    	switch(lr.getLevel().toInt()) {
+    	case ch.qos.logback.classic.Level.OFF_INT:
+    		return Level.OFF;
+    	case ch.qos.logback.classic.Level.ERROR_INT:
+    		return Level.SEVERE;
+    	case ch.qos.logback.classic.Level.WARN_INT:
+    		return Level.WARNING;
+    	case ch.qos.logback.classic.Level.INFO_INT:
+    		return Level.INFO;
+    	case ch.qos.logback.classic.Level.DEBUG_INT:
+    		return Level.FINE;
+    	case ch.qos.logback.classic.Level.TRACE_INT:
+    		return Level.FINEST;
+    	default:
+    		return Level.OFF;
+    	}
+    }
 
     /**
      * Changes the log level to the selected combo box value.
      */
     private void updateLogLevel() {
-        Level newLevel = LEVELS[levelComboBox.getSelectedIndex()];
+        Level newLevel = (Level) levelComboBox.getSelectedItem();
 
-        Launcher.setLogLevel(newLevel);
-        Launcher.updateLogLevel(newLevel);
+        MuLogger.setLogLevel(newLevel);
+        MuLogger.updateLogLevel(newLevel);
     }
 
 
@@ -237,7 +258,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
             // Change the label's foreground color to match the level of the log record
             if(!isSelected) {
-                Level level = ((LogRecordListItem)value).getLogRecord().getLevel();
+                Level level = ((LogRecordListItem)value).getLevel();
                 Color color;
 
                 if(level.equals(Level.SEVERE))
