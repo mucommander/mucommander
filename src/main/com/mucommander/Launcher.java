@@ -430,7 +430,7 @@ public class Launcher {
 
             // - Logging configuration ------------------------------------
             // ------------------------------------------------------------
-            MuLogger.configureLogging();
+            MuLogging.configureLogging();
 
 
             // - MAC OS X specific init -----------------------------------

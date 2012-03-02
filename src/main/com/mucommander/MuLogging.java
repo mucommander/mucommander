@@ -21,29 +21,22 @@ package com.mucommander;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-
-import javax.management.InvalidApplicationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreferences;
-import com.mucommander.ui.dialog.debug.DebugConsoleHandler;
-
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.LayoutBase;
-import ch.qos.logback.core.OutputStreamAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
-import ch.qos.logback.core.read.ListAppender;
+
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreferences;
+import com.mucommander.ui.dialog.debug.DebugConsoleAppender;
 
 /**
  * TODO: change documentation & rename class
@@ -53,9 +46,9 @@ import ch.qos.logback.core.read.ListAppender;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public class MuLogger {
+public class MuLogging {
 
-	public enum Level {
+	public enum LogLevel {
 		OFF(0),
 		SEVERE(1),
 		WARNING(2),
@@ -67,7 +60,7 @@ public class MuLogger {
 
 		private int value;
 
-		Level(int value) {
+		LogLevel(int value) {
 			this.value = value;
 		}
 
@@ -77,14 +70,14 @@ public class MuLogger {
 	}
 	
 	private static ConsoleAppender<ILoggingEvent> consoleAppender;
-	private static DebugConsoleHandler debugConsoleAppender;
+	private static DebugConsoleAppender debugConsoleAppender;
 
 	/**
 	 * Sets the level of all muCommander loggers.
 	 *
 	 * @param level the new log level
 	 */
-	public static void updateLogLevel(Level level) {
+	public static void updateLogLevel(LogLevel level) {
 		// TODO: re-implement that with the new logging API.
 		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
@@ -115,22 +108,22 @@ public class MuLogger {
 		logger.setLevel(logbackLevel);
 	}
 	
-	public static Level getLevel(ILoggingEvent lr) {
+	public static LogLevel getLevel(ILoggingEvent lr) {
     	switch(lr.getLevel().toInt()) {
     	case ch.qos.logback.classic.Level.OFF_INT:
-    		return Level.OFF;
+    		return LogLevel.OFF;
     	case ch.qos.logback.classic.Level.ERROR_INT:
-    		return Level.SEVERE;
+    		return LogLevel.SEVERE;
     	case ch.qos.logback.classic.Level.WARN_INT:
-    		return Level.WARNING;
+    		return LogLevel.WARNING;
     	case ch.qos.logback.classic.Level.INFO_INT:
-    		return Level.INFO;
+    		return LogLevel.INFO;
     	case ch.qos.logback.classic.Level.DEBUG_INT:
-    		return Level.FINE;
+    		return LogLevel.FINE;
     	case ch.qos.logback.classic.Level.TRACE_INT:
-    		return Level.FINEST;
+    		return LogLevel.FINEST;
     	default:
-    		return Level.OFF;
+    		return LogLevel.OFF;
     	}
     }
 
@@ -140,8 +133,8 @@ public class MuLogger {
 	 *
 	 * @return the current log level used by all <code>java.util.logging</code> loggers.
 	 */
-	public static Level getLogLevel() {
-		return Level.valueOf(MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_LEVEL, MuPreferences.DEFAULT_LOG_LEVEL));
+	public static LogLevel getLogLevel() {
+		return LogLevel.valueOf(MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_LEVEL, MuPreferences.DEFAULT_LOG_LEVEL));
 	}
 
 
@@ -151,12 +144,12 @@ public class MuLogger {
 	 *
 	 * @param level the new log level to be used by all <code>java.util.logging</code> loggers.
 	 */
-	public static void setLogLevel(Level level) {
+	public static void setLogLevel(LogLevel level) {
 		MuConfigurations.getPreferences().setVariable(MuPreferences.LOG_LEVEL, level.toString());
 		updateLogLevel(level);
 	}
 	
-	public static DebugConsoleHandler getDebugConsoleAppender() {
+	public static DebugConsoleAppender getDebugConsoleAppender() {
 		return debugConsoleAppender;
 	}
 	
@@ -212,8 +205,8 @@ public class MuLogger {
 	    return consoleAppender;
 	}
 	
-	private static DebugConsoleHandler createDebugConsoleAppender(LoggerContext loggerContext, Layout<ILoggingEvent> layout) {
-		DebugConsoleHandler debugConsoleAppender = new DebugConsoleHandler(layout);
+	private static DebugConsoleAppender createDebugConsoleAppender(LoggerContext loggerContext, Layout<ILoggingEvent> layout) {
+		DebugConsoleAppender debugConsoleAppender = new DebugConsoleAppender(layout);
 		
 		debugConsoleAppender.setContext(loggerContext);
 		debugConsoleAppender.start();

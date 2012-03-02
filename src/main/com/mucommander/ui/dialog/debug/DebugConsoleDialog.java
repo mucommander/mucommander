@@ -41,8 +41,8 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import com.mucommander.MuLogger;
-import com.mucommander.MuLogger.Level;
+import com.mucommander.MuLogging;
+import com.mucommander.MuLogging.LogLevel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.RefreshAction;
@@ -51,22 +51,22 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This dialog shows the last log messages collected by {@link DebugConsoleHandler} and allows them to be copied
+ * This dialog shows the last log messages collected by {@link DebugConsoleAppender} and allows them to be copied
  * to the clipboard. It also makes it possible to change the log level, the level combo box being preset to the
- * level returned by {@link MuLogger#getLogLevel()}.
+ * level returned by {@link MuLogging#getLogLevel()}.
  *
  * @see ShowDebugConsoleAction
- * @see DebugConsoleHandler
- * @see MuLogger#setLogLevel(Level)
+ * @see DebugConsoleAppender
+ * @see MuLogging#setLogLevel(LogLevel)
  * @author Maxence Bernard
  */
 public class DebugConsoleDialog extends FocusDialog implements ActionListener, ItemListener {
 
     /** Displays log records, and allows to copy their values to the clipboard */
-    private JList<LogRecordListItem> recordsList;
+    private JList<LoggingEvent> recordsList;
 
     /** Allows the log level to be changed */
-    private JComboBox<Level> levelComboBox;
+    private JComboBox<LogLevel> levelComboBox;
 
     /** Closes the debug console when pressed */
     private JButton closeButton;
@@ -89,7 +89,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
         Container contentPane = getContentPane();
 
-        recordsList = new JList<LogRecordListItem>();
+        recordsList = new JList<LoggingEvent>();
         // Autoscroll when dragged
         recordsList.setAutoscrolls(true);
         recordsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -130,10 +130,10 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     private JPanel createComboPanel() {
         JPanel comboPanel = new JPanel(new FlowLayout());
         comboPanel.add(new JLabel(Translator.get("debug_console_dialog.level")+":"));
-        Level logLevel = MuLogger.getLogLevel();
+        LogLevel logLevel = MuLogging.getLogLevel();
 
-        levelComboBox = new JComboBox<Level>();
-        for(Level level:Level.values())
+        levelComboBox = new JComboBox<LogLevel>();
+        for(LogLevel level:LogLevel.values())
             levelComboBox.addItem(level);
         		
         levelComboBox.setSelectedItem(logLevel);
@@ -146,16 +146,16 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     }
 
     /**
-     * Refreshes the JList with the log records contained by {@link DebugConsoleHandler}.
+     * Refreshes the JList with the log records contained by {@link DebugConsoleAppender}.
      */
     private void refreshLogRecords() {
-    	DefaultListModel<LogRecordListItem> listModel = new DefaultListModel<LogRecordListItem>();
-        DebugConsoleHandler handler = MuLogger.getDebugConsoleAppender();
+    	DefaultListModel<LoggingEvent> listModel = new DefaultListModel<LoggingEvent>();
+        DebugConsoleAppender handler = MuLogging.getDebugConsoleAppender();
 
-        final LogRecordListItem[] records = handler.getLogRecords();
-        final Level currentLogLevel = MuLogger.getLogLevel();
+        final LoggingEvent[] records = handler.getLogRecords();
+        final LogLevel currentLogLevel = MuLogging.getLogLevel();
         
-        for (LogRecordListItem record : records) {
+        for (LoggingEvent record : records) {
         	if (record.isRelevant(currentLogLevel))
         		listModel.addElement(record);
         }
@@ -173,10 +173,10 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      * Changes the log level to the selected combo box value.
      */
     private void updateLogLevel() {
-        Level newLevel = (Level) levelComboBox.getSelectedItem();
+        LogLevel newLevel = (LogLevel) levelComboBox.getSelectedItem();
 
-        MuLogger.setLogLevel(newLevel);
-        MuLogger.updateLogLevel(newLevel);
+        MuLogging.setLogLevel(newLevel);
+        MuLogging.updateLogLevel(newLevel);
     }
 
 
@@ -215,7 +215,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     ///////////////////
 
     /**
-     * Custom {@link ListCellRenderer} that renders {@link LogRecordListItem} instances.
+     * Custom {@link ListCellRenderer} that renders {@link LoggingEvent} instances.
      */
     private class DebugListCellRenderer extends DefaultListCellRenderer {
 
@@ -236,18 +236,18 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
             
             // Change the label's foreground color to match the level of the log record
             if(!isSelected) {
-                Level level = ((LogRecordListItem)value).getLevel();
+                LogLevel level = ((LoggingEvent)value).getLevel();
                 Color color;
 
-                if(level.equals(Level.SEVERE))
+                if(level.equals(LogLevel.SEVERE))
                     color = Color.RED;
-                else if(level.equals(Level.WARNING))
+                else if(level.equals(LogLevel.WARNING))
                     color = new Color(255, 100, 0);     // Dark orange
-                else if(level.equals(Level.CONFIG))
+                else if(level.equals(LogLevel.CONFIG))
                     color = Color.BLUE;
-                else if(level.equals(Level.INFO))
+                else if(level.equals(LogLevel.INFO))
                     color = Color.BLACK;
-                else if(level.equals(Level.FINE))
+                else if(level.equals(LogLevel.FINE))
                     color = Color.DARK_GRAY;
                 else
                     color = new Color(110, 110, 110);    // Between Color.GRAY and Color.DARK_GRAY

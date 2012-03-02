@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.MuLogger;
+import com.mucommander.MuLogging;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;

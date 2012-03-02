@@ -18,9 +18,7 @@
 
 package com.mucommander.ui.dialog.debug;
 
-import java.util.logging.LogRecord;
-
-import com.mucommander.MuLogger.Level;
+import com.mucommander.MuLogging.LogLevel;
 
 /**
  * Wraps a {@link LogRecord} and overrides {@link #toString()} to have it return a properly formatted string
@@ -29,9 +27,9 @@ import com.mucommander.MuLogger.Level;
  *
  * @author Maxence Bernard
  */
-public interface LogRecordListItem {
+public interface LoggingEvent {
 
-    public boolean isRelevant(Level level);
+    public boolean isRelevant(LogLevel level);
     
-    public Level getLevel();
+    public LogLevel getLevel();
 }

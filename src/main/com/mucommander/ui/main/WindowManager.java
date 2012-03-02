@@ -39,7 +39,7 @@ import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.MuLogger;
+import com.mucommander.MuLogging;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
