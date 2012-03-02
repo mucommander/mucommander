@@ -19,7 +19,11 @@
 package com.mucommander;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
+
+import javax.management.InvalidApplicationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +39,14 @@ import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.CoreConstants;
+import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.LayoutBase;
 import ch.qos.logback.core.OutputStreamAppender;
+import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
+import ch.qos.logback.core.read.ListAppender;
 
 /**
+ * TODO: change documentation & rename class
  * This class provides logging facilities to the muCommander application using the <code>java.util.logging</code> API.
  * Despite the name, this class is not a <code>java.util.logging.Logger</code> but provides familiar log methods
  * that delegate to the underlying <code>Logger</code> instance returned by {@link #getLogger}.
@@ -63,31 +71,13 @@ public class MuLogger {
 			this.value = value;
 		}
 
-		public boolean isInScopeOf(Level level) {
-			return value <= level.value;
+		public int value() {
+			return value;
 		}
 	}
-
-	private static void init() {
-		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-
-		//    	rootLogger.detachAndStopAllAppenders();
-
-		// we are not interested in auto-configuration
-		//        loggerContext.reset();
-		//        PatternLayoutEncoder encoder = new PatternLayoutEncoder();
-		//        encoder.setPattern("aa %caller{1} %message%n");
-		//        encoder.start();
-
-		ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<ILoggingEvent>();
-		appender.start();
-
-		AppenderBase<ILoggingEvent> debugConsoleDialogAppener = DebugConsoleHandler.getInstance();
-		debugConsoleDialogAppener.start();
-
-		rootLogger.addAppender(debugConsoleDialogAppener);
-		//        rootLogger.addAppender(appender);
-	}
+	
+	private static ConsoleAppender<ILoggingEvent> consoleAppender;
+	private static DebugConsoleHandler debugConsoleAppender;
 
 	/**
 	 * Sets the level of all muCommander loggers.
@@ -124,6 +114,25 @@ public class MuLogger {
 
 		logger.setLevel(logbackLevel);
 	}
+	
+	public static Level getLevel(ILoggingEvent lr) {
+    	switch(lr.getLevel().toInt()) {
+    	case ch.qos.logback.classic.Level.OFF_INT:
+    		return Level.OFF;
+    	case ch.qos.logback.classic.Level.ERROR_INT:
+    		return Level.SEVERE;
+    	case ch.qos.logback.classic.Level.WARN_INT:
+    		return Level.WARNING;
+    	case ch.qos.logback.classic.Level.INFO_INT:
+    		return Level.INFO;
+    	case ch.qos.logback.classic.Level.DEBUG_INT:
+    		return Level.FINE;
+    	case ch.qos.logback.classic.Level.TRACE_INT:
+    		return Level.FINEST;
+    	default:
+    		return Level.OFF;
+    	}
+    }
 
 
 	/**
@@ -146,64 +155,94 @@ public class MuLogger {
 		MuConfigurations.getPreferences().setVariable(MuPreferences.LOG_LEVEL, level.toString());
 		updateLogLevel(level);
 	}
+	
+	public static DebugConsoleHandler getDebugConsoleAppender() {
+		return debugConsoleAppender;
+	}
+	
+	public static ConsoleAppender<ILoggingEvent> getConsoleAppender() {
+		return consoleAppender;
+	}
 
 	static void configureLogging() throws IOException {
 		// We're no longer using LogManager and a logging.properties file to initialize java.util.logging, because of
 		// a limitation with Webstart limiting the use of handlers and formatters residing in the system's classpath,
 		// i.e. built-in ones.
 
-		//	        // Read the java.util.logging configuration file bundled with the muCommander JAR, replacing the JRE's
-		//	        // logging.properties configuration.
-		//	        InputStream resIn = ResourceLoader.getRootPackageAsFile(Launcher.class).getChild("com/mucommander/logging.properties").getInputStream();
-		//	        LogManager.getLogManager().readConfiguration(resIn);
-		//	        resIn.close();
-
-		// TODO: re-enable this.
-		/*
-	        // Remove default handlers
-	        Logger rootLogger = LogManager.getLogManager().getLogger("");
-	        Handler handlers[] = rootLogger.getHandlers();
-	        for (Handler handler : handlers)
-	            rootLogger.removeHandler(handler);
-
-	        // and add ours
-	        handlers = new Handler[] { new ConsoleHandler(), new DebugConsoleHandler()};
-	        Formatter formatter = new SingleLineFormatter();
-	        for (Handler handler : handlers) {
-	            handler.setFormatter(formatter);
-	            rootLogger.addHandler(handler);
-	        }
-		 */
-		MuLogger.init();
+		// Get root logger
+		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		
+		// we are not interested in auto-configuration
+		LoggerContext loggerContext = rootLogger.getLoggerContext();
+		loggerContext.reset();
+		
+		// Remove default appenders
+		rootLogger.detachAndStopAllAppenders();
+		
+		// and add ours
+		Appender<ILoggingEvent>[] appenders = createAppenders(loggerContext);
+		for (Appender<ILoggingEvent> appender : appenders)
+			rootLogger.addAppender(appender);
+		
 		// Set the log level to the value defined in the configuration
 		updateLogLevel(getLogLevel());
+	}
+	
+	private static Appender<ILoggingEvent>[] createAppenders(LoggerContext loggerContext) {
+		Layout<ILoggingEvent> layout = new CustomLoggingLayout();
 
-		//	        Logger fileLogger = FileLogger.getLogger();
-		//	        fileLogger.finest("fileLogger finest");
-		//	        fileLogger.finer("fileLogger finer");
-		//	        fileLogger.fine("fileLogger fine");
-		//	        fileLogger.config("fileLogger config");
-		//	        fileLogger.info("fileLogger info");
-		//	        fileLogger.warning("fileLogger warning");
-		//	        fileLogger.severe("fileLogger severe");
+		consoleAppender = createConsoleAppender(loggerContext, layout);
+		debugConsoleAppender = createDebugConsoleAppender(loggerContext, layout);
+		
+		return new Appender[] { consoleAppender, debugConsoleAppender };
 	}
 
+	private static ConsoleAppender<ILoggingEvent> createConsoleAppender(LoggerContext loggerContext, Layout<ILoggingEvent> layout) {
+		ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<ILoggingEvent>();
 
-	/*public static class MySampleLayout extends LayoutBase<ILoggingEvent> {
+		LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<ILoggingEvent>();
+		encoder.setContext(loggerContext);
+	    encoder.setLayout(layout);
+	    encoder.start();
 
+	    consoleAppender.setContext(loggerContext);
+	    consoleAppender.setEncoder(encoder);
+	    consoleAppender.start();
+
+	    return consoleAppender;
+	}
+	
+	private static DebugConsoleHandler createDebugConsoleAppender(LoggerContext loggerContext, Layout<ILoggingEvent> layout) {
+		DebugConsoleHandler debugConsoleAppender = new DebugConsoleHandler(layout);
+		
+		debugConsoleAppender.setContext(loggerContext);
+		debugConsoleAppender.start();
+		
+		return debugConsoleAppender;
+	}
+
+	private static class CustomLoggingLayout extends LayoutBase<ILoggingEvent> {
+
+		private final static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		
 		public String doLayout(ILoggingEvent event) {
+			StackTraceElement stackTraceElement = event.getCallerData()[0];
+			
 			StringBuffer sbuf = new StringBuffer(128);
-			sbuf.append(event.getTimeStamp());
-			sbuf.append(" ");
-			sbuf.append(event.getLevel());
-			sbuf.append(" [");
-			sbuf.append(event.getCallerData()[1].getClassName());
+			sbuf.append("[");
+			sbuf.append(SIMPLE_DATE_FORMAT.format(new Date(event.getTimeStamp())));
 			sbuf.append("] ");
-			sbuf.append(event.getCallerData()[1].getMethodName());
-			sbuf.append(" - ");
-			sbuf.append(event.getCallerData()[1].getLineNumber());
+			sbuf.append(getLevel(event));
+			sbuf.append(" ");
+			sbuf.append(stackTraceElement.getFileName());
+			sbuf.append("#");
+			sbuf.append(stackTraceElement.getMethodName());
+			sbuf.append(",");
+			sbuf.append(stackTraceElement.getLineNumber());
+			sbuf.append(" ");
+			sbuf.append(event.getFormattedMessage());
 			sbuf.append(CoreConstants.LINE_SEPARATOR);
 			return sbuf.toString();
 		}
-	}*/
+	}
 }

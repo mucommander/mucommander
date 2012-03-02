@@ -41,8 +41,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import ch.qos.logback.classic.spi.ILoggingEvent;
-
 import com.mucommander.MuLogger;
 import com.mucommander.MuLogger.Level;
 import com.mucommander.text.Translator;
@@ -152,15 +150,14 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      */
     private void refreshLogRecords() {
     	DefaultListModel<LogRecordListItem> listModel = new DefaultListModel<LogRecordListItem>();
-        DebugConsoleHandler handler = DebugConsoleHandler.getInstance();
+        DebugConsoleHandler handler = MuLogger.getDebugConsoleAppender();
 
-        final ILoggingEvent[] records = handler.getLogRecords();
+        final LogRecordListItem[] records = handler.getLogRecords();
         final Level currentLogLevel = MuLogger.getLogLevel();
         
-        for (ILoggingEvent record : records) {
-        	Level recordLevel = getLevel(record);
-        	if (recordLevel.isInScopeOf(currentLogLevel))
-        		listModel.addElement(new LogRecordListItem(record, recordLevel));
+        for (LogRecordListItem record : records) {
+        	if (record.isRelevant(currentLogLevel))
+        		listModel.addElement(record);
         }
 
         recordsList.setModel(listModel);
@@ -172,25 +169,6 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
         });
     }
     
-    public Level getLevel(ILoggingEvent lr) {
-    	switch(lr.getLevel().toInt()) {
-    	case ch.qos.logback.classic.Level.OFF_INT:
-    		return Level.OFF;
-    	case ch.qos.logback.classic.Level.ERROR_INT:
-    		return Level.SEVERE;
-    	case ch.qos.logback.classic.Level.WARN_INT:
-    		return Level.WARNING;
-    	case ch.qos.logback.classic.Level.INFO_INT:
-    		return Level.INFO;
-    	case ch.qos.logback.classic.Level.DEBUG_INT:
-    		return Level.FINE;
-    	case ch.qos.logback.classic.Level.TRACE_INT:
-    		return Level.FINEST;
-    	default:
-    		return Level.OFF;
-    	}
-    }
-
     /**
      * Changes the log level to the selected combo box value.
      */
@@ -255,7 +233,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
             // for cells
 
             JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
+            
             // Change the label's foreground color to match the level of the log record
             if(!isSelected) {
                 Level level = ((LogRecordListItem)value).getLevel();

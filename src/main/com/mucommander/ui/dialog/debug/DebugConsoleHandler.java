@@ -18,14 +18,15 @@
 
 package com.mucommander.ui.dialog.debug;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
-import ch.qos.logback.core.OutputStreamAppender;
+import ch.qos.logback.core.Layout;
 
+import com.mucommander.MuLogger;
+import com.mucommander.MuLogger.Level;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 
@@ -37,7 +38,7 @@ import com.mucommander.conf.MuPreferences;
  *
  * @see DebugConsoleDialog
  * @see MuPreferences#LOG_BUFFER_SIZE
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class DebugConsoleHandler extends AppenderBase<ILoggingEvent> {
 
@@ -45,30 +46,20 @@ public class DebugConsoleHandler extends AppenderBase<ILoggingEvent> {
     private int bufferSize;
 
     /** Contains the last LogRecord instances. */
-    private List<ILoggingEvent> logRecords;
-
-    /** Singleton instance of DebugConsoleHandler */
-    private final static DebugConsoleHandler INSTANCE = new DebugConsoleHandler();
+    private List<LogbackListItem> logRecords;
+    
+    /** The layout of the logging event representation */
+    Layout<ILoggingEvent> layout;
 
     /**
      * Creates a new <code>DebugConsoleHandler</code>. This constructor is automatically by
      * <code>java.util.logging</code> when it is configured and should never be called directly.
      */
-    private DebugConsoleHandler() {
-        // TODO: re-implement this.
-        //setFormatter(new SingleLineFormatter());
-
+    public DebugConsoleHandler(Layout<ILoggingEvent> layout) {
+    	this.layout = layout;
+    	
         bufferSize = MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
-        logRecords = new LinkedList<ILoggingEvent>();
-    }
-
-    /**
-     * Returns a singleton instance of {@link DebugConsoleHandler}.
-     *
-     * @return a singleton instance of {@link DebugConsoleHandler}.
-     */
-    public static DebugConsoleHandler getInstance() {
-        return INSTANCE;
+        logRecords = new LinkedList<LogbackListItem>();
     }
 
     /**
@@ -76,23 +67,61 @@ public class DebugConsoleHandler extends AppenderBase<ILoggingEvent> {
      *
      * @return the last records that were collected by this handler.
      */
-    public synchronized ILoggingEvent[] getLogRecords() {
-    	ILoggingEvent[] records = new ILoggingEvent[0];
+    public synchronized LogRecordListItem[] getLogRecords() {
+    	LogbackListItem[] records = new LogbackListItem[0];
     	records = logRecords.toArray(records);
 
     	return records;
     }
 
 
-    ////////////////////////////
+    /////////////////////////////
     // Appender implementation //
-    ////////////////////////////
+    /////////////////////////////
 
     @Override
     protected void append(ILoggingEvent record) {
 		if(logRecords.size()== bufferSize)
             logRecords.remove(0);
 
-        logRecords.add(record);
+        logRecords.add(new LogbackListItem(record));
 	}
+    
+    public class LogbackListItem implements LogRecordListItem {
+
+        /** The logging event */
+    	private ILoggingEvent loggingEvent;
+
+    	/** The log level of the event in mucommander's terms */
+        private Level logLevel;
+
+        LogbackListItem(ILoggingEvent lr) {
+            this.loggingEvent = lr;
+        }
+
+        /**
+         * Returns a properly formatted string representation of the {@link ILoggingEvent}.
+         * @return a properly formatted string representation of the {@link ILoggingEvent}.
+         */
+        @Override
+        public String toString() {
+        	return layout.doLayout(loggingEvent);
+        }
+        
+        ///////////////////////////////////////
+        /// LogRecordListItem Implementation //
+        ///////////////////////////////////////
+        
+        @Override
+        public boolean isRelevant(Level level) {
+        	return getLevel().value() <= level.value();
+        }
+        
+        @Override
+        public Level getLevel() {
+        	if (logLevel == null)
+        		logLevel = MuLogger.getLevel(loggingEvent);
+        	return logLevel;
+        }
+    }
 }

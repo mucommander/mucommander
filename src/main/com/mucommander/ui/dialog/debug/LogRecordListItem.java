@@ -18,11 +18,7 @@
 
 package com.mucommander.ui.dialog.debug;
 
-import java.text.SimpleDateFormat;
-import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
-
-import ch.qos.logback.classic.spi.ILoggingEvent;
 
 import com.mucommander.MuLogger.Level;
 
@@ -33,63 +29,9 @@ import com.mucommander.MuLogger.Level;
  *
  * @author Maxence Bernard
  */
-public class LogRecordListItem {
+public interface LogRecordListItem {
 
-    /** The wrapped LogRecord */
-	private ILoggingEvent lr;
-
-    private Level logLevel;
+    public boolean isRelevant(Level level);
     
-    private SimpleDateFormat simpleDateFormat;
-
-    /**
-     * Creates a new {@link LogRecordListItem} wrapping the given {@link LogRecord} and using the given {@link Formatter}
-     * to create a string representation of the <code>LogRecord</code>.
-     *
-     * @param lr the <code>LogRecord</code> to wrap
-     * @param formatter the formatter to use for creating the <code>LogRecord</code>'s string representation 
-     */
-    LogRecordListItem(ILoggingEvent lr, Level logLevel) {
-        this.lr = lr;
-        this.logLevel = logLevel;
-        
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-    }
-
-    /**
-     * Returns the wrapped {@link LogRecord}.
-     *
-     * @return the wrapped {@link LogRecord}
-     */
-    public ILoggingEvent getLogRecord() {
-        return lr;
-    }
-
-    public Level getLevel() {
-    	return logLevel;
-    }
-    
-    /**
-     * Returns a properly formatted string representation of the wrapped {@link LogRecord}.
-     * @return a properly formatted string representation of the wrapped {@link LogRecord}.
-     */
-    public String toString() {
-/*    	StringBuffer sbuf = new StringBuffer(128);
-    	sbuf.append("[");
-    	sbuf.append(simpleDateFormat.format(new Date(lr.getTimeStamp())));
-    	sbuf.append("] ");
-        sbuf.append(logLevel);
-        sbuf.append(" ");
-        sbuf.append(stackTraceElement.getClassName());
-        sbuf.append("#");
-        sbuf.append(stackTraceElement.getMethodName());
-        sbuf.append(",");
-        sbuf.append(stackTraceElement.getLineNumber());
-        sbuf.append(" ");
-        sbuf.append(lr.getFormattedMessage());
-        sbuf.append(CoreConstants.LINE_SEPARATOR);
-        return sbuf.toString();
-*/
-    	return lr.getFormattedMessage();
-    }
+    public Level getLevel();
 }
