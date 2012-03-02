@@ -25,6 +25,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
@@ -47,23 +48,63 @@ public class MuLogging {
 
 	/** Levels of log printings */
 	public enum LogLevel {
-		OFF(0),
-		SEVERE(1),
-		WARNING(2),
-		INFO(3),
-		CONFIG(4),
-		FINE(5),
-		FINER(6),
-		FINEST(7);
+		OFF,
+		SEVERE,
+		WARNING,
+		INFO,
+		CONFIG,
+		FINE,
+		FINER,
+		FINEST;
 
-		private int value;
-
-		LogLevel(int value) {
-			this.value = value;
+		/**
+		 * This method maps logback levels to mucommander log levels
+		 * 
+		 * @param logbackLevel logback log level
+		 * @return <code>LogLevel</code> corresponding to the given logback log level
+		 */
+		public static LogLevel valueOf(Level logbackLevel) {
+			switch(logbackLevel.toInt()) {
+	    	case ch.qos.logback.classic.Level.OFF_INT:
+	    		return LogLevel.OFF;
+	    	case ch.qos.logback.classic.Level.ERROR_INT:
+	    		return LogLevel.SEVERE;
+	    	case ch.qos.logback.classic.Level.WARN_INT:
+	    		return LogLevel.WARNING;
+	    	case ch.qos.logback.classic.Level.INFO_INT:
+	    		return LogLevel.INFO;
+	    	case ch.qos.logback.classic.Level.DEBUG_INT:
+	    		return LogLevel.FINE;
+	    	case ch.qos.logback.classic.Level.TRACE_INT:
+	    		return LogLevel.FINEST;
+	    	default:
+	    		return LogLevel.OFF;
+			}
 		}
-
-		public int value() {
-			return value;
+		
+		/**
+		 * This method maps mucommander log levels to logback levels
+		 * 
+		 * @return logback level corresponding to this <code>LogLevel</code>
+		 */
+		public Level toLogbackLevel() {
+			switch (this) {
+			case SEVERE:
+				return ch.qos.logback.classic.Level.ERROR;
+			case WARNING:
+				return ch.qos.logback.classic.Level.WARN;
+			case INFO:
+			case CONFIG:
+				return ch.qos.logback.classic.Level.INFO;
+			case FINE:
+			case FINER:
+				return ch.qos.logback.classic.Level.DEBUG;
+			case FINEST:
+				return ch.qos.logback.classic.Level.TRACE;
+			case OFF:
+			default:
+				return ch.qos.logback.classic.Level.OFF;
+			}	
 		}
 	}
 	
@@ -79,71 +120,34 @@ public class MuLogging {
 	 * @param level the new log level
 	 */
 	private static void updateLogLevel(LogLevel level) {
-		// TODO: re-implement that with the new logging API.
 		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-
-		ch.qos.logback.classic.Level logbackLevel = null;
-		switch (level) {
-		case OFF:
-			logbackLevel = ch.qos.logback.classic.Level.OFF;
-			break;
-		case SEVERE:
-			logbackLevel = ch.qos.logback.classic.Level.ERROR;
-			break;
-		case WARNING:
-			logbackLevel = ch.qos.logback.classic.Level.WARN;
-			break;
-		case INFO:
-		case CONFIG:
-			logbackLevel = ch.qos.logback.classic.Level.INFO;
-			break;
-		case FINE:
-		case FINER:
-			logbackLevel = ch.qos.logback.classic.Level.DEBUG;
-			break;
-		case FINEST:
-			logbackLevel = ch.qos.logback.classic.Level.TRACE;
-			break;
-		}
-
-		logger.setLevel(logbackLevel);
+		logger.setLevel(level.toLogbackLevel());
 	}
 	
-	public static LogLevel getLevel(ILoggingEvent lr) {
-    	switch(lr.getLevel().toInt()) {
-    	case ch.qos.logback.classic.Level.OFF_INT:
-    		return LogLevel.OFF;
-    	case ch.qos.logback.classic.Level.ERROR_INT:
-    		return LogLevel.SEVERE;
-    	case ch.qos.logback.classic.Level.WARN_INT:
-    		return LogLevel.WARNING;
-    	case ch.qos.logback.classic.Level.INFO_INT:
-    		return LogLevel.INFO;
-    	case ch.qos.logback.classic.Level.DEBUG_INT:
-    		return LogLevel.FINE;
-    	case ch.qos.logback.classic.Level.TRACE_INT:
-    		return LogLevel.FINEST;
-    	default:
-    		return LogLevel.OFF;
-    	}
+	/**
+	 * Returns the log level, in mucommander terms, that match the level of a given logback logging event
+	 * 
+	 * @param loggingEvent logback logging event
+	 * @return log level, in mucommander terms, that match the level of the given logback logging event
+	 */
+	public static LogLevel getLevel(ILoggingEvent loggingEvent) {
+    	return LogLevel.valueOf(loggingEvent.getLevel());
     }
 
-
 	/**
-	 * Returns the current log level used by all <code>java.util.logging</code> loggers.
+	 * Returns the current log level used by all <code>org.slf4j</code> loggers.
 	 *
-	 * @return the current log level used by all <code>java.util.logging</code> loggers.
+	 * @return the current log level used by all <code>org.slf4j</code> loggers.
 	 */
 	public static LogLevel getLogLevel() {
 		return LogLevel.valueOf(MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_LEVEL, MuPreferences.DEFAULT_LOG_LEVEL));
 	}
 
-
 	/**
-	 * Sets the new log level to be used by all <code>java.util.logging</code> loggers, and persists it in the
+	 * Sets the new log level to be used by all <code>org.slf4j</code> loggers, and persists it in the
 	 * application preferences.
 	 *
-	 * @param level the new log level to be used by all <code>java.util.logging</code> loggers.
+	 * @param level the new log level to be used by all <code>org.slf4j</code> loggers.
 	 */
 	public static void setLogLevel(LogLevel level) {
 		MuConfigurations.getPreferences().setVariable(MuPreferences.LOG_LEVEL, level.toString());

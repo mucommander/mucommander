@@ -88,9 +88,10 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 	}
 
     /**
-     * Wraps a {@link LogRecord} and overrides {@link #toString()} to have it return a properly formatted string
+     * Wraps a {@link ILoggingEvent} and overrides {@link #toString()} to have it return a properly formatted string
      * representation of it so that it can be displayed in a {@link javax.swing.JList} or {@link javax.swing.JTable} and
      * pasted to the clipboard.
+     * It also implements the LoggingEvent interface so that the logging event can be presented in the debug console.
      */
     public class LogbackLoggingEvent implements LoggingEvent {
 
@@ -106,6 +107,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 
         /**
          * Returns a properly formatted string representation of the {@link ILoggingEvent}.
+         * 
          * @return a properly formatted string representation of the {@link ILoggingEvent}.
          */
         @Override
@@ -113,13 +115,14 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
         	return loggingEventLayout.doLayout(loggingEvent);
         }
         
+        
         ///////////////////////////////////////
         /// LogRecordListItem Implementation //
         ///////////////////////////////////////
         
         @Override
         public boolean isLevelEqualOrHigherThan(LogLevel level) {
-        	return getLevel().value() <= level.value();
+        	return getLevel().compareTo(level) <= 0;
         }
         
         @Override
