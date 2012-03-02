@@ -62,8 +62,8 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class DebugConsoleDialog extends FocusDialog implements ActionListener, ItemListener {
 
-    /** Displays log records, and allows to copy their values to the clipboard */
-    private JList<LoggingEvent> recordsList;
+    /** Displays log events, and allows to copy their values to the clipboard */
+    private JList<LoggingEvent> loggingEventsList;
 
     /** Allows the log level to be changed */
     private JComboBox<LogLevel> levelComboBox;
@@ -89,14 +89,14 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
         Container contentPane = getContentPane();
 
-        recordsList = new JList<LoggingEvent>();
+        loggingEventsList = new JList<LoggingEvent>();
         // Autoscroll when dragged
-        recordsList.setAutoscrolls(true);
-        recordsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        recordsList.setCellRenderer(new DebugListCellRenderer());
+        loggingEventsList.setAutoscrolls(true);
+        loggingEventsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        loggingEventsList.setCellRenderer(new DebugListCellRenderer());
         refreshLogRecords();
 
-        JScrollPane scrollPane = new JScrollPane(recordsList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = new JScrollPane(loggingEventsList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new BorderLayout());
@@ -156,15 +156,15 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
         final LogLevel currentLogLevel = MuLogging.getLogLevel();
         
         for (LoggingEvent record : records) {
-        	if (record.isRelevant(currentLogLevel))
+        	if (record.isLevelEqualOrHigherThan(currentLogLevel))
         		listModel.addElement(record);
         }
 
-        recordsList.setModel(listModel);
+        loggingEventsList.setModel(listModel);
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                recordsList.ensureIndexIsVisible(records.length-1);
+                loggingEventsList.ensureIndexIsVisible(records.length-1);
             }
         });
     }
@@ -176,7 +176,6 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
         LogLevel newLevel = (LogLevel) levelComboBox.getSelectedItem();
 
         MuLogging.setLogLevel(newLevel);
-        MuLogging.updateLogLevel(newLevel);
     }
 
 
@@ -259,7 +258,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
             // If component's preferred width is larger than the list's width then the component is not entirely
             // visible. In that case, we set a tooltip text that will display the whole text when mouse is over the
             // component
-            if (recordsList.getVisibleRect().getWidth() < label.getPreferredSize().getWidth())
+            if (loggingEventsList.getVisibleRect().getWidth() < label.getPreferredSize().getWidth())
                 label.setToolTipText(label.getText());
             // Have to set it to null because of the rubber-stamp rendering scheme (last value is kept)
             else

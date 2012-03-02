@@ -39,15 +39,13 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.dialog.debug.DebugConsoleAppender;
 
 /**
- * TODO: change documentation & rename class
- * This class provides logging facilities to the muCommander application using the <code>java.util.logging</code> API.
- * Despite the name, this class is not a <code>java.util.logging.Logger</code> but provides familiar log methods
- * that delegate to the underlying <code>Logger</code> instance returned by {@link #getLogger}.
+ * This class manages logging issues within mucommander
  *
  * @author Maxence Bernard, Arik Hadas
  */
 public class MuLogging {
 
+	/** Levels of log printings */
 	public enum LogLevel {
 		OFF(0),
 		SEVERE(1),
@@ -69,7 +67,10 @@ public class MuLogging {
 		}
 	}
 	
+	/** Appender that writes log printings to the standard console */
 	private static ConsoleAppender<ILoggingEvent> consoleAppender;
+	
+	/** Appender that writes log printings to the debug console dialog */
 	private static DebugConsoleAppender debugConsoleAppender;
 
 	/**
@@ -77,7 +78,7 @@ public class MuLogging {
 	 *
 	 * @param level the new log level
 	 */
-	public static void updateLogLevel(LogLevel level) {
+	private static void updateLogLevel(LogLevel level) {
 		// TODO: re-implement that with the new logging API.
 		ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 

@@ -46,20 +46,20 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
     private int bufferSize;
 
     /** Contains the last LogRecord instances. */
-    private List<LogbackLoggingEvent> logRecords;
+    private List<LogbackLoggingEvent> loggingEventsList;
     
     /** The layout of the logging event representation */
-    Layout<ILoggingEvent> layout;
+    private Layout<ILoggingEvent> loggingEventLayout;
 
     /**
      * Creates a new <code>DebugConsoleHandler</code>. This constructor is automatically by
      * <code>java.util.logging</code> when it is configured and should never be called directly.
      */
-    public DebugConsoleAppender(Layout<ILoggingEvent> layout) {
-    	this.layout = layout;
+    public DebugConsoleAppender(Layout<ILoggingEvent> loggingEventsLayout) {
+    	this.loggingEventLayout = loggingEventsLayout;
     	
         bufferSize = MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
-        logRecords = new LinkedList<LogbackLoggingEvent>();
+        loggingEventsList = new LinkedList<LogbackLoggingEvent>();
     }
 
     /**
@@ -69,7 +69,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      */
     public synchronized LoggingEvent[] getLogRecords() {
     	LogbackLoggingEvent[] records = new LogbackLoggingEvent[0];
-    	records = logRecords.toArray(records);
+    	records = loggingEventsList.toArray(records);
 
     	return records;
     }
@@ -81,19 +81,24 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 
     @Override
     protected void append(ILoggingEvent record) {
-		if(logRecords.size()== bufferSize)
-            logRecords.remove(0);
+		if(loggingEventsList.size()== bufferSize)
+            loggingEventsList.remove(0);
 
-        logRecords.add(new LogbackLoggingEvent(record));
+        loggingEventsList.add(new LogbackLoggingEvent(record));
 	}
-    
+
+    /**
+     * Wraps a {@link LogRecord} and overrides {@link #toString()} to have it return a properly formatted string
+     * representation of it so that it can be displayed in a {@link javax.swing.JList} or {@link javax.swing.JTable} and
+     * pasted to the clipboard.
+     */
     public class LogbackLoggingEvent implements LoggingEvent {
 
-        /** The logging event */
+    	/** The logging event */
     	private ILoggingEvent loggingEvent;
 
     	/** The log level of the event in mucommander's terms */
-        private LogLevel logLevel;
+    	private LogLevel logLevel;
 
         LogbackLoggingEvent(ILoggingEvent lr) {
             this.loggingEvent = lr;
@@ -105,7 +110,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
          */
         @Override
         public String toString() {
-        	return layout.doLayout(loggingEvent);
+        	return loggingEventLayout.doLayout(loggingEvent);
         }
         
         ///////////////////////////////////////
@@ -113,7 +118,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
         ///////////////////////////////////////
         
         @Override
-        public boolean isRelevant(LogLevel level) {
+        public boolean isLevelEqualOrHigherThan(LogLevel level) {
         	return getLevel().value() <= level.value();
         }
         

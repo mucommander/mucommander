@@ -21,15 +21,24 @@ package com.mucommander.ui.dialog.debug;
 import com.mucommander.MuLogging.LogLevel;
 
 /**
- * Wraps a {@link LogRecord} and overrides {@link #toString()} to have it return a properly formatted string
- * representation of it so that it can be displayed in a {@link javax.swing.JList} or {@link javax.swing.JTable} and
- * pasted to the clipboard.
+ * Logging events that presented in the debug console should implement this interface
  *
- * @author Maxence Bernard
+ * @author Arik Hadas
  */
 public interface LoggingEvent {
 
-    public boolean isRelevant(LogLevel level);
+	/**
+	 * Return true if the logging event's level is equal or higher than the given level, false otherwise.
+	 * 
+	 * @param level logging event level
+	 * @return true if the logging event's level is equal or higher than the given level, false otherwise
+	 */
+    public boolean isLevelEqualOrHigherThan(LogLevel level);
     
+    /**
+     * Return the logging event's level.
+     * 
+     * @return the logging event's level
+     */
     public LogLevel getLevel();
 }
