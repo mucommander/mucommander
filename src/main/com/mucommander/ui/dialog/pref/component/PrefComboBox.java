@@ -27,7 +27,7 @@ import java.awt.event.ItemListener;
 /**
  * @author Arik Hadas
  */
-public abstract class PrefComboBox extends JComboBox implements PrefComponent {
+public abstract class PrefComboBox<T> extends JComboBox<T> implements PrefComponent {
 
 	public PrefComboBox() {
 		super();
