@@ -67,11 +67,10 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
      * Creates a new instance of XML configuration writer.
      * @param out where to write the configuration data.
      */
-    private XmlConfigurationWriter(Writer out, String rootElementName) {
+    protected XmlConfigurationWriter(Writer out, String rootElementName) {
     	this.rootElementName = rootElementName;
         this.out = createHandler(out);
     }
-
 
 
     // - Writer methods ------------------------------------------------------------------------------------------------
