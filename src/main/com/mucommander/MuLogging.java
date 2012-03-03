@@ -36,6 +36,7 @@ import ch.qos.logback.core.LayoutBase;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.dialog.debug.DebugConsoleAppender;
 
@@ -140,7 +141,7 @@ public class MuLogging {
 	 * @return the current log level used by all <code>org.slf4j</code> loggers.
 	 */
 	public static LogLevel getLogLevel() {
-		return LogLevel.valueOf(MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_LEVEL, MuPreferences.DEFAULT_LOG_LEVEL));
+		return LogLevel.valueOf(MuConfigurations.getPreferences().getVariable(MuPreference.LOG_LEVEL, MuPreferences.DEFAULT_LOG_LEVEL));
 	}
 
 	/**
@@ -150,7 +151,7 @@ public class MuLogging {
 	 * @param level the new log level to be used by all <code>org.slf4j</code> loggers.
 	 */
 	public static void setLogLevel(LogLevel level) {
-		MuConfigurations.getPreferences().setVariable(MuPreferences.LOG_LEVEL, level.toString());
+		MuConfigurations.getPreferences().setVariable(MuPreference.LOG_LEVEL, level.toString());
 		updateLogLevel(level);
 	}
 	

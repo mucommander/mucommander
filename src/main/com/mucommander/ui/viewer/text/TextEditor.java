@@ -43,7 +43,7 @@ import com.mucommander.commons.io.bom.BOM;
 import com.mucommander.commons.io.bom.BOMInputStream;
 import com.mucommander.commons.io.bom.BOMWriter;
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -166,8 +166,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     
     @Override
     public void beforeCloseHook() {
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.LINE_WRAP, textEditorImpl.isWrap());
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.LINE_NUMBERS, getRowHeader().getView() != null);
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_WRAP, textEditorImpl.isWrap());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_NUMBERS, getRowHeader().getView() != null);
     }
 
     ///////////////////////////////

@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
@@ -55,8 +56,8 @@ public class ToggleHiddenFilesAction extends MuAction {
      */
     @Override
     public void performAction() {
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.SHOW_HIDDEN_FILES,
-                                    !MuConfigurations.getPreferences().getVariable(MuPreferences.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
+    	MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES,
+                                    !MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
         WindowManager.tryRefreshCurrentFolders();
     }
     

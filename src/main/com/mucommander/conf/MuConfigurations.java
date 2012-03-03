@@ -42,8 +42,8 @@ public class MuConfigurations {
 	// API for preferences //
 	/////////////////////////
 	
-	public static Configuration getPreferences() {
-		return preferences.getConfiguration();
+	public static MuPreferencesAPI getPreferences() {
+		return preferences;
 	}
 	
 	public static void loadPreferences() throws IOException, ConfigurationException {

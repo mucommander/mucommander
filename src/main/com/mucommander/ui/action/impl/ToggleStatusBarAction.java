@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -48,7 +49,7 @@ public class ToggleStatusBarAction extends MuAction {
 
     public ToggleStatusBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
-        updateLabel(MuConfigurations.getPreferences().getVariable(MuPreferences.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
+        updateLabel(MuConfigurations.getPreferences().getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
     }
 
     private void updateLabel(boolean visible) {
@@ -60,7 +61,7 @@ public class ToggleStatusBarAction extends MuAction {
         StatusBar statusBar = mainFrame.getStatusBar();
         boolean visible = !statusBar.isVisible();
         // Save the last status bar visible state in the configuration, this will become the default for new MainFrame windows.
-        MuConfigurations.getPreferences().setVariable(MuPreferences.STATUS_BAR_VISIBLE, visible);
+        MuConfigurations.getPreferences().setVariable(MuPreference.STATUS_BAR_VISIBLE, visible);
         // Change the label to reflect the new status bar state
         updateLabel(visible);
         // Show/hide the status bar

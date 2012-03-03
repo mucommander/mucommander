@@ -44,6 +44,7 @@ import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
@@ -172,7 +173,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // properly initialized
         this.toolbar = new ToolBar(this);
         this.toolbarPanel = ToolbarMoreButton.wrapToolBar(toolbar);
-        this.toolbarPanel.setVisible(MuConfigurations.getPreferences().getVariable(MuPreferences.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
+        this.toolbarPanel.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
         contentPane.add(toolbarPanel, BorderLayout.NORTH);
 
         JPanel insetsPane = new JPanel(new BorderLayout()) {
@@ -235,7 +236,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Show command bar only if it hasn't been disabled in the preferences
         this.commandBar = new CommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
-        this.commandBar.setVisible(MuConfigurations.getPreferences().getVariable(MuPreferences.COMMAND_BAR_VISIBLE, MuPreferences.DEFAULT_COMMAND_BAR_VISIBLE));
+        this.commandBar.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.COMMAND_BAR_VISIBLE, MuPreferences.DEFAULT_COMMAND_BAR_VISIBLE));
         southPanel.add(commandBar);
         insetsPane.add(southPanel, BorderLayout.SOUTH);
 

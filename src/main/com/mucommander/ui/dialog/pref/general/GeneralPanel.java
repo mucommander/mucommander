@@ -18,7 +18,31 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.text.PlainDocument;
+
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
@@ -30,20 +54,6 @@ import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
 import com.mucommander.ui.dialog.pref.component.PrefTextField;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.YBoxPanel;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
-import javax.swing.text.PlainDocument;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -116,11 +126,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         JPanel languagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         languagePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.language")));
         this.languages = Translator.getAvailableLanguages();
-        String currentLang = MuConfigurations.getPreferences().getVariable(MuPreferences.LANGUAGE);
+        String currentLang = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
         String lang;
         languageComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
-				return !languages[getSelectedIndex()].equals(MuConfigurations.getPreferences().getVariable(MuPreferences.LANGUAGE));
+				return !languages[getSelectedIndex()].equals(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
 			}
         };
 
@@ -169,11 +179,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         // Date format combo
         dateFormatComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
-				return !getDateFormatString().equals(MuConfigurations.getPreferences().getVariable(MuPreferences.DATE_FORMAT));
+				return !getDateFormatString().equals(MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT));
 			}
         };
-        String dateFormat = MuConfigurations.getPreferences().getVariable(MuPreferences.DATE_FORMAT);
-        String separator = MuConfigurations.getPreferences().getVariable(MuPreferences.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR);
+        String dateFormat = MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT);
+        String separator = MuConfigurations.getPreferences().getVariable(MuPreference.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR);
         int dateFormatIndex = 0;
         String buffer = dateFormat.replace(separator.charAt(0), '/');
         for(int i=0; i<DATE_FORMATS.length; i++) {
@@ -194,7 +204,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         tempPanel.add(new JLabel(Translator.get("prefs_dialog.date_separator")+": "));
         dateSeparatorField = new PrefTextField(1) {
 			public boolean hasChanged() {
-				return !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreferences.DATE_SEPARATOR));
+				return !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.DATE_SEPARATOR));
 			}
         };
         // Limit the number of characters in the text field to 1 and enforces only non-alphanumerical characters
@@ -227,7 +237,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         showCenturyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_century")) {
 			public boolean hasChanged() {
-				return isSelected() != (MuConfigurations.getPreferences().getVariable(MuPreferences.DATE_FORMAT).indexOf("yyyy")!=-1);
+				return isSelected() != (MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT).indexOf("yyyy")!=-1);
 			}
         };
         showCenturyCheckBox.setSelected(dateFormat.indexOf("yyyy")!=-1);
@@ -242,20 +252,20 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         time12RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_12_hour")) {
 			public boolean hasChanged() {
-				String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreferences.TIME_FORMAT);
+				String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT);
 		        return isSelected() != (timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS)); 
 			}
         };
         time12RadioButton.addActionListener(this);
         PrefRadioButton time24RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_24_hour")) {
 			public boolean hasChanged() {
-				String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreferences.TIME_FORMAT);
+				String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT);
 		        return isSelected() != (timeFormat.equals(HOUR_24_TIME_FORMAT) || timeFormat.equals(HOUR_24_TIME_FORMAT_WITH_SECONDS));
 			}
         };
         time24RadioButton.addActionListener(this);
         
-        String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreferences.TIME_FORMAT);
+        String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT);
         if(timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS))
             time12RadioButton.setSelected(true);
         else
@@ -271,7 +281,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
         showSecondsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_seconds")) {
 			public boolean hasChanged() {
-				return isSelected() != (MuConfigurations.getPreferences().getVariable(MuPreferences.TIME_FORMAT).indexOf(":ss")!=-1);
+				return isSelected() != (MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT).indexOf(":ss")!=-1);
 			}
         };
         showSecondsCheckBox.setSelected(timeFormat.indexOf(":ss")!=-1);
@@ -335,10 +345,10 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
     ///////////////////////
     @Override
     protected void commit() {
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.LANGUAGE, languages[languageComboBox.getSelectedIndex()]);
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.DATE_FORMAT, getDateFormatString());
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.DATE_SEPARATOR, dateSeparatorField.getText());
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.TIME_FORMAT, getTimeFormatString());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, languages[languageComboBox.getSelectedIndex()]);
+    	MuConfigurations.getPreferences().setVariable(MuPreference.DATE_FORMAT, getDateFormatString());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.DATE_SEPARATOR, dateSeparatorField.getText());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.TIME_FORMAT, getTimeFormatString());
     }
 
 

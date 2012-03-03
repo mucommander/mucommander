@@ -48,6 +48,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.SizeFormat;
@@ -131,7 +132,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     static {
         // Initialize the size column format based on the configuration
-        setSelectedFileSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreferences.DISPLAY_COMPACT_FILE_SIZE,
+        setSelectedFileSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE,
                                                   MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
 
         // Listens to configuration changes and updates static fields accordingly.
@@ -192,7 +193,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized
-        setVisible(MuConfigurations.getPreferences().getVariable(MuPreferences.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
+        setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
         
         // Catch location events to update status bar info when folder is changed
         FolderPanel leftPanel = mainFrame.getLeftPanel();

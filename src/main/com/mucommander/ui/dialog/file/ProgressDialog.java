@@ -49,6 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
@@ -199,7 +200,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             advancedPanel.addSpace(5);
 
             this.collapseExpandButton = new CollapseExpandButton(Translator.get("progress_dialog.advanced"), advancedPanel, true);
-            collapseExpandButton.setExpandedState(MuConfigurations.getPreferences().getVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED,
+            collapseExpandButton.setExpandedState(MuConfigurations.getPreferences().getVariable(MuPreference.PROGRESS_DIALOG_EXPANDED,
                                                                                    MuPreferences.DEFAULT_PROGRESS_DIALOG_EXPANDED));
             tempPanel.add(collapseExpandButton, BorderLayout.EAST);
 
@@ -210,7 +211,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         }
 
         closeWhenFinishedCheckBox = new JCheckBox(Translator.get("progress_dialog.close_when_finished"));
-        closeWhenFinishedCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
+        closeWhenFinishedCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED,
                                                                                MuPreferences.DEFAULT_PROGRESS_DIALOG_CLOSE_WHEN_FINISHED));
         yPanel.add(closeWhenFinishedCheckBox);
 
@@ -487,10 +488,10 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         // Remember 'advanced panel' expanded state
         if(collapseExpandButton!=null)
-        	MuConfigurations.getPreferences().setVariable(MuPreferences.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
+        	MuConfigurations.getPreferences().setVariable(MuPreference.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
 
         // Remember 'close window when finished' option state
-        MuConfigurations.getPreferences().setVariable(MuPreferences.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
+        MuConfigurations.getPreferences().setVariable(MuPreference.PROGRESS_DIALOG_CLOSE_WHEN_FINISHED, closeWhenFinishedCheckBox.isSelected());        
     }
 
 

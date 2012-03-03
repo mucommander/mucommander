@@ -46,6 +46,7 @@ import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
@@ -114,13 +115,13 @@ public class ThemeManager {
         boolean wasUserThemeLoaded; // Whether we have tried loading the user theme or not.
 
         // Loads the current theme type as defined in configuration.
-        try {type = getThemeTypeFromLabel(MuConfigurations.getPreferences().getVariable(MuPreferences.THEME_TYPE, MuPreferences.DEFAULT_THEME_TYPE));}
+        try {type = getThemeTypeFromLabel(MuConfigurations.getPreferences().getVariable(MuPreference.THEME_TYPE, MuPreferences.DEFAULT_THEME_TYPE));}
         catch(Exception e) {type = getThemeTypeFromLabel(MuPreferences.DEFAULT_THEME_TYPE);}
 
         // Loads the current theme name as defined in configuration.
         if(type != Theme.USER_THEME) {
             wasUserThemeLoaded = false;
-            name               = MuConfigurations.getPreferences().getVariable(MuPreferences.THEME_NAME, MuPreferences.DEFAULT_THEME_NAME);
+            name               = MuConfigurations.getPreferences().getVariable(MuPreference.THEME_NAME, MuPreferences.DEFAULT_THEME_NAME);
         }
         else {
             name               = null;
@@ -835,20 +836,20 @@ public class ThemeManager {
         switch(type) {
             // User defined theme.
         case Theme.USER_THEME:
-            MuConfigurations.getPreferences().setVariable(MuPreferences.THEME_TYPE, MuPreferences.THEME_USER);
-            MuConfigurations.getPreferences().setVariable(MuPreferences.THEME_NAME, null);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_USER);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, null);
             break;
 
             // Predefined themes.
         case Theme.PREDEFINED_THEME:
-        	MuConfigurations.getPreferences().setVariable(MuPreferences.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
-        	MuConfigurations.getPreferences().setVariable(MuPreferences.THEME_NAME, name);
+        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
+        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
 
             // Custom themes.
         case Theme.CUSTOM_THEME:
-        	MuConfigurations.getPreferences().setVariable(MuPreferences.THEME_TYPE, MuPreferences.THEME_CUSTOM);
-        	MuConfigurations.getPreferences().setVariable(MuPreferences.THEME_NAME, name);
+        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_CUSTOM);
+        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
 
             // Error.

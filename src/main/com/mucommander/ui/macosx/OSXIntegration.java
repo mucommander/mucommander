@@ -21,6 +21,7 @@ package com.mucommander.ui.macosx;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.about.AboutDialog;
@@ -54,12 +55,12 @@ public class OSXIntegration {
                 //   This property should be applied only to the primary application window,
                 //   and should not affect supporting windows like dialogs or preference windows."
                 System.setProperty("apple.awt.brushMetalLook",
-                    ""+MuConfigurations.getPreferences().getVariable(MuPreferences.USE_BRUSHED_METAL, MuPreferences.DEFAULT_USE_BRUSHED_METAL));
+                    ""+MuConfigurations.getPreferences().getVariable(MuPreference.USE_BRUSHED_METAL, MuPreferences.DEFAULT_USE_BRUSHED_METAL));
             }
 
             // Enables/Disables screen menu bar (default is on) :
             //  "if you are using the Aqua look and feel, this property puts Swing menus in the Mac OS X menu bar."
-            System.setProperty("apple.laf.useScreenMenuBar", ""+MuConfigurations.getPreferences().getVariable(MuPreferences.USE_SCREEN_MENU_BAR,
+            System.setProperty("apple.laf.useScreenMenuBar", ""+MuConfigurations.getPreferences().getVariable(MuPreference.USE_SCREEN_MENU_BAR,
                                                                                                  MuPreferences.DEFAULT_USE_SCREEN_MENU_BAR));
 
             // Catch 'About', 'Preferences' and 'Quit' events

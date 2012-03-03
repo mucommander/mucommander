@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.VersionChecker;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.SelfUpdateJob;
@@ -191,7 +192,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
              0);
 			
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"),
-        												MuConfigurations.getPreferences().getVariable(MuPreferences.CHECK_FOR_UPDATE,
+        												MuConfigurations.getPreferences().getVariable(MuPreference.CHECK_FOR_UPDATE,
                                                                                         MuPreferences.DEFAULT_CHECK_FOR_UPDATE));
         addComponent(showNextTimeCheckBox);
 
@@ -215,6 +216,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         }
 		
         // Remember user preference
-        MuConfigurations.getPreferences().setVariable(MuPreferences.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreference.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
     }
 }

@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
@@ -49,7 +49,7 @@ public class ToggleShowFoldersFirstAction extends MuAction {
         FileTable activeTable = mainFrame.getActiveTable();
         boolean showFoldersFirst = !activeTable.getSortInfo().getFoldersFirst();
         activeTable.setFoldersFirst(showFoldersFirst);
-        MuConfigurations.getPreferences().setVariable(MuPreferences.SHOW_FOLDERS_FIRST, showFoldersFirst);
+        MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_FOLDERS_FIRST, showFoldersFirst);
     }
     
     public static class Factory implements ActionFactory {

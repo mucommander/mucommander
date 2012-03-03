@@ -18,19 +18,21 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import java.awt.Dimension;
+import java.awt.Insets;
+
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
-
-import java.awt.*;
 
 /**
  * Button that located in command-bar.
@@ -46,7 +48,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	
 	/** Current icon scale factor */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-    protected static float scaleFactor = Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreferences.COMMAND_BAR_ICON_SCALE,
+    protected static float scaleFactor = Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.COMMAND_BAR_ICON_SCALE,
                                                                         MuPreferences.DEFAULT_COMMAND_BAR_ICON_SCALE));
 	
     public static CommandBarButton create(String actionId, MainFrame mainFrame) {

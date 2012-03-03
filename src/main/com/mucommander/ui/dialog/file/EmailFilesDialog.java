@@ -37,7 +37,7 @@ import javax.swing.JTextField;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.job.SendMailJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -107,8 +107,8 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
             XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
             // From (sender) field, non editable
-            JLabel fromLabel = new JLabel(MuConfigurations.getPreferences().getVariable(MuPreferences.MAIL_SENDER_NAME)
-                                          +" <"+MuConfigurations.getPreferences().getVariable(MuPreferences.MAIL_SENDER_ADDRESS)+">");
+            JLabel fromLabel = new JLabel(MuConfigurations.getPreferences().getVariable(MuPreference.MAIL_SENDER_NAME)
+                                          +" <"+MuConfigurations.getPreferences().getVariable(MuPreference.MAIL_SENDER_ADDRESS)+">");
             //			fromField.setEditable(false);
             compPanel.addRow(Translator.get("email_dialog.from")+":", fromLabel, 10);
 			

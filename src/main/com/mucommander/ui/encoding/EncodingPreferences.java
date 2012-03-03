@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 
 /**
@@ -58,10 +59,10 @@ public class EncodingPreferences {
      * @return a user-defined list of preferred encodings.
      */
     public static List<String> getPreferredEncodings() {
-        List<String> vector = MuConfigurations.getPreferences().getListVariable(MuPreferences.PREFERRED_ENCODINGS, ",");
+        List<String> vector = MuConfigurations.getPreferences().getListVariable(MuPreference.PREFERRED_ENCODINGS, ",");
         if(vector==null) {
             vector = getDefaultPreferredEncodings();
-            MuConfigurations.getPreferences().setVariable(MuPreferences.PREFERRED_ENCODINGS, vector, ",");
+            MuConfigurations.getPreferences().setVariable(MuPreference.PREFERRED_ENCODINGS, vector, ",");
         }
 
         return vector;
@@ -89,6 +90,6 @@ public class EncodingPreferences {
      * @param encodings the user-defined list of preferred encodings
      */
     public static void setPreferredEncodings(List<String> encodings) {
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.PREFERRED_ENCODINGS, encodings, ",");
+    	MuConfigurations.getPreferences().setVariable(MuPreference.PREFERRED_ENCODINGS, encodings, ",");
     }
 }

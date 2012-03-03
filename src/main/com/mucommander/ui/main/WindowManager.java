@@ -39,7 +39,6 @@ import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.MuLogging;
 import com.mucommander.ShutdownHook;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
@@ -51,7 +50,9 @@ import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuPreferencesAPI;
 import com.mucommander.conf.MuSnapshot;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.ui.dialog.auth.AuthDialog;
@@ -109,7 +110,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         List<String> plafs;         // All available custom look and feels.
 
         // Tries to retrieve the custom look and feels list.
-        if((plafs = MuConfigurations.getPreferences().getListVariable(MuPreferences.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
+        if((plafs = MuConfigurations.getPreferences().getListVariable(MuPreference.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
             return;
 
         // Goes through the list and install every custom look and feel we could find.
@@ -136,7 +137,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         
 
         // Sets custom lookAndFeel if different from current lookAndFeel
-        String lnfName = MuConfigurations.getPreferences().getVariable(MuPreferences.LOOK_AND_FEEL);
+        String lnfName = MuConfigurations.getPreferences().getVariable(MuPreference.LOOK_AND_FEEL);
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
             setLookAndFeel(lnfName);
 
@@ -167,16 +168,16 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // Snapshot configuration
         Configuration snapshot = MuConfigurations.getSnapshot();
         // Preferences configuration
-        Configuration preferences = MuConfigurations.getPreferences();
+        MuPreferencesAPI preferences = MuConfigurations.getPreferences();
         
         // Checks which kind of initial path we're dealing with.
-        isCustom = (frame == LEFT_FRAME ? preferences.getVariable(MuPreferences.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
-        	preferences.getVariable(MuPreferences.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
+        isCustom = (frame == LEFT_FRAME ? preferences.getVariable(MuPreference.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
+        	preferences.getVariable(MuPreference.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom) {
-        	folderPaths = new String[] {(frame == LEFT_FRAME ? preferences.getVariable(MuPreferences.LEFT_CUSTOM_FOLDER) :
-        		preferences.getVariable(MuPreferences.RIGHT_CUSTOM_FOLDER))};
+        	folderPaths = new String[] {(frame == LEFT_FRAME ? preferences.getVariable(MuPreference.LEFT_CUSTOM_FOLDER) :
+        		preferences.getVariable(MuPreference.RIGHT_CUSTOM_FOLDER))};
         }
         // Handles "last folder" initial paths.
         else {

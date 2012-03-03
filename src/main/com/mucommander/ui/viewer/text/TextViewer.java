@@ -40,6 +40,7 @@ import com.mucommander.commons.io.EncodingDetector;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.bom.BOMInputStream;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
@@ -86,8 +87,8 @@ class TextViewer extends FileViewer implements EncodingListener {
 
     	setComponentToPresent(textEditorImpl.getTextArea());
     	
-    	showLineNumbers(MuConfigurations.getPreferences().getVariable(MuPreferences.LINE_NUMBERS, MuPreferences.DEFAULT_LINE_NUMBERS));
-    	textEditorImpl.wrap(MuConfigurations.getPreferences().getVariable(MuPreferences.LINE_WRAP, MuPreferences.DEFAULT_LINE_WRAP));
+    	showLineNumbers(MuConfigurations.getPreferences().getVariable(MuPreference.LINE_NUMBERS, MuPreferences.DEFAULT_LINE_NUMBERS));
+    	textEditorImpl.wrap(MuConfigurations.getPreferences().getVariable(MuPreference.LINE_WRAP, MuPreferences.DEFAULT_LINE_WRAP));
 
     	initMenuBarItems();
     }
@@ -184,8 +185,8 @@ class TextViewer extends FileViewer implements EncodingListener {
     
     @Override
     public void beforeCloseHook() {
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.LINE_WRAP, textEditorImpl.isWrap());
-    	MuConfigurations.getPreferences().setVariable(MuPreferences.LINE_NUMBERS, getRowHeader().getView() != null);
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_WRAP, textEditorImpl.isWrap());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_NUMBERS, getRowHeader().getView() != null);
     }
 
     String getEncoding() {

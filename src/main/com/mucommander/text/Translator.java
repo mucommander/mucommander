@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.bom.BOMReader;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 
 
@@ -89,7 +90,7 @@ public class Translator {
      * @param availableLanguages list of available languages
      */
     private static void setCurrentLanguage(List<String> availableLanguages) {
-        String lang = MuConfigurations.getPreferences().getVariable(MuPreferences.LANGUAGE);
+        String lang = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
 
         if(lang==null) {
             // language is not set in preferences, use system's language
@@ -126,7 +127,7 @@ public class Translator {
         }
 		
         // Set preferred language in configuration file
-        MuConfigurations.getPreferences().setVariable(MuPreferences.LANGUAGE, Translator.language);
+        MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, Translator.language);
 
         LOGGER.debug("Current language has been set to "+Translator.language);
     }

@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
@@ -48,7 +48,7 @@ public class ToggleAutoSizeAction extends MuAction {
         boolean enabled;
 
         mainFrame.setAutoSizeColumnsEnabled(enabled = !mainFrame.isAutoSizeColumnsEnabled());
-        MuConfigurations.getPreferences().setVariable(MuPreferences.AUTO_SIZE_COLUMNS, enabled);
+        MuConfigurations.getPreferences().setVariable(MuPreference.AUTO_SIZE_COLUMNS, enabled);
     }
     
     public static class Factory implements ActionFactory {

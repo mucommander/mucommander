@@ -37,6 +37,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
@@ -73,7 +74,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     /** Current icon scale value */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-    private static float scaleFactor = Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreferences.TOOLBAR_ICON_SCALE,
+    private static float scaleFactor = Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.TOOLBAR_ICON_SCALE,
                                                                         MuPreferences.DEFAULT_TOOLBAR_ICON_SCALE));
 
 

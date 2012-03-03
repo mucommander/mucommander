@@ -28,6 +28,7 @@ import ch.qos.logback.core.Layout;
 import com.mucommander.MuLogging;
 import com.mucommander.MuLogging.LogLevel;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 
 /**
@@ -58,7 +59,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
     public DebugConsoleAppender(Layout<ILoggingEvent> loggingEventsLayout) {
     	this.loggingEventLayout = loggingEventsLayout;
     	
-        bufferSize = MuConfigurations.getPreferences().getVariable(MuPreferences.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
+        bufferSize = MuConfigurations.getPreferences().getVariable(MuPreference.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
         loggingEventsList = new LinkedList<LogbackLoggingEvent>();
     }
 

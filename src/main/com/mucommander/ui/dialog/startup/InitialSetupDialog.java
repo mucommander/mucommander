@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
@@ -200,10 +200,10 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
 	if(e.getSource() == themeComboBox)
 	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
 	else if(e.getSource() == lfComboBox)
-		MuConfigurations.getPreferences().setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+		MuConfigurations.getPreferences().setVariable(MuPreference.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	else if(e.getSource() == okButton) {
 	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
-	    MuConfigurations.getPreferences().setVariable(MuPreferences.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+	    MuConfigurations.getPreferences().setVariable(MuPreference.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
 	    dispose();
 	}
     }

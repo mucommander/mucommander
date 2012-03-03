@@ -20,11 +20,13 @@ package com.mucommander.conf;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.conf.ValueList;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.icon.FileIcons;
@@ -36,10 +38,11 @@ import com.mucommander.ui.icon.FileIcons;
  * 
  * @author Nicolas Rinaudo, Maxence Bernard, Arik Hadas
  */
-public class MuPreferences {
+public class MuPreferences implements MuPreferencesAPI {
+
 	// - Misc. variables -----------------------------------------------------
 	// -----------------------------------------------------------------------
-	/** Whether or not to automaticaly check for updates on startup. */
+	/** Whether or not to automatically check for updates on startup. */
 	public static final String  CHECK_FOR_UPDATE                  = "check_for_updates_on_startup";
 	/** Default automated update behavior. */
 	public static final boolean DEFAULT_CHECK_FOR_UPDATE          = true;
@@ -113,14 +116,14 @@ public class MuPreferences {
 	public static final boolean DEFAULT_USE_CUSTOM_SHELL          = false;
 	/** Maximum number of items that should be present in the shell history. */
 	public static final String  SHELL_HISTORY_SIZE                = SHELL_SECTION + '.' + "history_size";
+	/** Default maximum shell history size. */
+	public static final int     DEFAULT_SHELL_HISTORY_SIZE        = 100;
 	/** Encoding used to read the shell output. */
 	public static final String  SHELL_ENCODING                    = SHELL_SECTION + '.' + "encoding";
 	/** Whether or not shell encoding should be auto-detected. */
 	public static final String  AUTODETECT_SHELL_ENCODING         = SHELL_SECTION + '.' + "autodect_encoding";
 	/** Default shell encoding auto-detection behaviour. */
 	public static final boolean DEFAULT_AUTODETECT_SHELL_ENCODING = true;
-	/** Default maximum shell history size. */
-	public static final int     DEFAULT_SHELL_HISTORY_SIZE        = 100;
 
 
 
@@ -384,7 +387,8 @@ public class MuPreferences {
 
 	// - Instance fields -----------------------------------------------------
 	// -----------------------------------------------------------------------
-	private final Configuration configuration;
+	private Configuration configuration;
+	
 	private String configurationVersion;
 
 	/**
@@ -393,13 +397,6 @@ public class MuPreferences {
 	MuPreferences() {
 		configuration = new Configuration(MuPreferencesFile.getPreferencesFile(), new VersionedXmlConfigurationReaderFactory(),
 				new VersionedXmlConfigurationWriterFactory());
-	}
-
-	/**
-	 * TODO: change this method such that it will return a more specific API
-	 */
-	Configuration getConfiguration() {
-		return configuration;
 	}
 
 	// - Configuration reading / writing -------------------------------------
@@ -412,7 +409,7 @@ public class MuPreferences {
 	void read() throws IOException, ConfigurationException {
 		VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
 		configuration.read(reader);
-		
+
 		// Ensure backward compatibility
 		configurationVersion = reader.getVersion();
 		if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
@@ -433,55 +430,170 @@ public class MuPreferences {
 		}
 	}
 
-/**
- * Saves the muCommander CONFIGURATION.
- * @throws IOException            if an I/O error occurs.
- * @throws ConfigurationException if a CONFIGURATION related error occurs.
- */
-void write() throws IOException, ConfigurationException {
-	if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
-		// Clear the configuration before saving to drop preferences which are unused anymore
-		configuration.clear();
+	/**
+	 * Saves the muCommander CONFIGURATION.
+	 * @throws IOException            if an I/O error occurs.
+	 * @throws ConfigurationException if a CONFIGURATION related error occurs.
+	 */
+	void write() throws IOException, ConfigurationException {
+		if(configurationVersion != null && !configurationVersion.equals(RuntimeConstants.VERSION)) {
+			// Clear the configuration before saving to drop preferences which are unused anymore
+			Configuration conf = new Configuration(MuPreferencesFile.getPreferencesFile(), new VersionedXmlConfigurationReaderFactory(),
+					new VersionedXmlConfigurationWriterFactory());
+
+			for (MuPreference preference : MuPreference.values())
+				conf.setVariable(preference.toString(), configuration.getVariable(preference.toString()));
+			
+			// Remove preferences which are not relevant if we're not using MAC
+			if (!OsFamilies.MAC_OS_X.isCurrent()) {
+				conf.removeVariable(USE_BRUSHED_METAL);
+				conf.removeVariable(USE_SCREEN_MENU_BAR);
+			}
+
+			configuration = conf;
+		}
+
+		configuration.write();
 	}
 
-	configuration.write();
-}
+	// - Configuration listening -----------------------------------------------
+	// -------------------------------------------------------------------------
+	/**
+	 * Adds the specified object to the list of registered CONFIGURATION listeners.
+	 * @param listener object to register as a CONFIGURATION listener.
+	 * @see            #removeConfigurationListener(ConfigurationListener)
+	 */
+	void addConfigurationListener(ConfigurationListener listener) {configuration.addConfigurationListener(listener);}
 
-// - Configuration listening -----------------------------------------------
-// -------------------------------------------------------------------------
-/**
- * Adds the specified object to the list of registered CONFIGURATION listeners.
- * @param listener object to register as a CONFIGURATION listener.
- * @see            #removeConfigurationListener(ConfigurationListener)
- */
-void addConfigurationListener(ConfigurationListener listener) {configuration.addConfigurationListener(listener);}
-
-/**
- * Removes the specified object from the list of registered CONFIGURATION listeners.
- * @param listener object to remove from the list of registered CONFIGURATION listeners.
- * @see            #addConfigurationListener(ConfigurationListener)
- */
-void removeConfigurationListener(ConfigurationListener listener) {configuration.removeConfigurationListener(listener);}
+	/**
+	 * Removes the specified object from the list of registered CONFIGURATION listeners.
+	 * @param listener object to remove from the list of registered CONFIGURATION listeners.
+	 * @see            #addConfigurationListener(ConfigurationListener)
+	 */
+	void removeConfigurationListener(ConfigurationListener listener) {configuration.removeConfigurationListener(listener);}
 
 
-// - Configuration source --------------------------------------------------
-// -------------------------------------------------------------------------
-/**
- * Sets the path to the CONFIGURATION file.
- * @param  file                  path to the file that should be used for CONFIGURATION storage.
- * @throws FileNotFoundException if the specified file is not a valid file.
- * @see                          #getConfigurationFile()
- */
-void setConfigurationFile(String file) throws FileNotFoundException {
-	configuration.setSource(MuPreferencesFile.getPreferencesFile(file));
-}
+	// - Configuration source --------------------------------------------------
+	// -------------------------------------------------------------------------
+	/**
+	 * Sets the path to the CONFIGURATION file.
+	 * @param  file                  path to the file that should be used for CONFIGURATION storage.
+	 * @throws FileNotFoundException if the specified file is not a valid file.
+	 * @see                          #getConfigurationFile()
+	 */
+	void setConfigurationFile(String file) throws FileNotFoundException {
+		configuration.setSource(MuPreferencesFile.getPreferencesFile(file));
+	}
 
-/**
- * Check whether the preferences file exists
- * @return             true if the preferences file exits, false otherwise.
- * @throws IOException if an error occured.
- */
-boolean isFileExists() throws IOException {
-	return configuration.getSource().isExists();
-}
+	/**
+	 * Check whether the preferences file exists
+	 * @return             true if the preferences file exits, false otherwise.
+	 * @throws IOException if an error occured.
+	 */
+	boolean isFileExists() throws IOException {
+		return configuration.getSource().isExists();
+	}
+	
+	/////////////////////////////////////
+	// MuPreferencesAPI implementation //
+	/////////////////////////////////////
+
+	@Override
+	public boolean setVariable(MuPreference preference, String value) {
+		return configuration.setVariable(preference.toString(), value);
+	}
+
+	@Override
+	public boolean setVariable(MuPreference preference, int value) {
+		return configuration.setVariable(preference.toString(), value);
+	}
+
+	@Override
+	public boolean setVariable(MuPreference preference, List<String> value,
+			String separator) {
+		return configuration.setVariable(preference.toString(), value, separator);
+	}
+
+	@Override
+	public boolean setVariable(MuPreference preference, float value) {
+		return configuration.setVariable(preference.toString(), value);
+	}
+
+	@Override
+	public boolean setVariable(MuPreference preference, boolean value) {
+		return configuration.setVariable(preference.toString(), value);
+	}
+
+	@Override
+	public boolean setVariable(MuPreference preference, long value) {
+		return configuration.setVariable(preference.toString(), value);
+	}
+
+	@Override
+	public boolean setVariable(MuPreference preference, double value) {
+		return configuration.setVariable(preference.toString(), value);
+	}
+
+	@Override
+	public String getVariable(MuPreference preference) {
+		return configuration.getVariable(preference.toString());
+	}
+	
+	@Override
+	public String getVariable(MuPreference preference, String value) {
+		return configuration.getVariable(preference.toString(), value);
+	}
+
+	@Override
+	public int getVariable(MuPreference preference, int value) {
+		return configuration.getVariable(preference.toString(), value);
+	}
+
+	@Override
+	public List<String> getVariable(MuPreference preference, List<String> value, String separator) {
+		return configuration.getVariable(preference.toString(), value, separator);
+	}
+
+	@Override
+	public float getVariable(MuPreference preference, float value) {
+		return configuration.getVariable(preference.toString(), value);
+	}
+
+	@Override
+	public boolean getVariable(MuPreference preference, boolean value) { 
+		return configuration.getVariable(preference.toString(), value);
+	}
+
+	@Override
+	public long getVariable(MuPreference preference, long value) {
+		return configuration.getVariable(preference.toString(), value);
+	}
+
+	@Override
+	public double getVariable(MuPreference preference, double value) {
+		return configuration.getVariable(preference.toString(), value);
+	}
+	
+	@Override
+	public ValueList getListVariable(MuPreference preference, String separator) {
+		return configuration.getListVariable(preference.toString(), separator);
+	}
+	
+	public boolean getBooleanVariable(String name) {
+		return configuration.getBooleanVariable(name);
+	}
+	
+	public String  getVariable(String name) {
+		return configuration.getVariable(name);
+	}
+	
+	@Override
+	public boolean isVariableSet(MuPreference preference) {
+		return configuration.isVariableSet(preference.toString());
+	}
+	
+	@Override
+	public String removeVariable(String name) {
+		return configuration.removeVariable(name);
+	}
 }
