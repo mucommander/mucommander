@@ -50,7 +50,7 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     /** Empty XML attributes (avoids creating a new instance on each <code>startElement</code> call). */
     private   final Attributes     emptyAttributes = new AttributesImpl();
     /** Root element name. */
-    private   final String rootElementName;
+    protected   final String rootElementName;
 
 
     // - Initialization ------------------------------------------------------------------------------------------------
