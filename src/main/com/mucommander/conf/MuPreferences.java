@@ -384,6 +384,8 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Default value for {@link #SMB_USE_EXTENDED_SECURITY}. */
 	public static final boolean DEFAULT_SMB_USE_EXTENDED_SECURITY = false;
 
+	
+	private static final String ROOT_ELEMENT = "preferences";
 
 	// - Instance fields -----------------------------------------------------
 	// -----------------------------------------------------------------------
@@ -396,7 +398,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	 */
 	MuPreferences() {
 		configuration = new Configuration(MuPreferencesFile.getPreferencesFile(), new VersionedXmlConfigurationReaderFactory(),
-				new VersionedXmlConfigurationWriterFactory());
+				new VersionedXmlConfigurationWriterFactory(ROOT_ELEMENT));
 	}
 
 	// - Configuration reading / writing -------------------------------------
@@ -439,7 +441,7 @@ public class MuPreferences implements MuPreferencesAPI {
 		if(configurationVersion != null && !configurationVersion.equals(RuntimeConstants.VERSION)) {
 			// Clear the configuration before saving to drop preferences which are unused anymore
 			Configuration conf = new Configuration(MuPreferencesFile.getPreferencesFile(), new VersionedXmlConfigurationReaderFactory(),
-					new VersionedXmlConfigurationWriterFactory());
+					new VersionedXmlConfigurationWriterFactory(ROOT_ELEMENT));
 
 			for (MuPreference preference : MuPreference.values())
 				conf.setVariable(preference.toString(), configuration.getVariable(preference.toString()));

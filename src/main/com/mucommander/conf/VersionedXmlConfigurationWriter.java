@@ -35,8 +35,8 @@ class VersionedXmlConfigurationWriter extends XmlConfigurationWriter {
     // Overridden methods //
     ////////////////////////
 
-    public VersionedXmlConfigurationWriter(Writer out) {
-        super(out);
+    public VersionedXmlConfigurationWriter(Writer out, String rootElementName) {
+        super(out, rootElementName);
     }
 
     @Override
@@ -49,7 +49,7 @@ class VersionedXmlConfigurationWriter extends XmlConfigurationWriter {
 
         attributes.addAttribute("", MuPreferences.VERSION_ATTRIBUTE, MuPreferences.VERSION_ATTRIBUTE, "string", RuntimeConstants.VERSION);
 
-        try {out.startElement("", ROOT_ELEMENT, ROOT_ELEMENT, attributes);}
+        try {out.startElement("", rootElementName, rootElementName, attributes);}
         catch(SAXException e) {throw new ConfigurationException(e);}
     }
 }

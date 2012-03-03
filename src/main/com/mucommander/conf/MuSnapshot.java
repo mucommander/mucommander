@@ -350,6 +350,9 @@ public class MuSnapshot {
     	return getTabSection(window, left, index) + "." + TAB_LOCATION;
     }
     
+    
+    private static final String ROOT_ELEMENT = "snapshot";
+    
 	// - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     private final Configuration configuration;
@@ -360,7 +363,7 @@ public class MuSnapshot {
      */
     MuSnapshot() {
     	configuration = new Configuration(MuSnapshotFile.getSnapshotFile(), new VersionedXmlConfigurationReaderFactory(),
-    			new VersionedXmlConfigurationWriterFactory());
+    			new VersionedXmlConfigurationWriterFactory(ROOT_ELEMENT));
 		
 		try {
 			screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -27,8 +27,19 @@ import java.io.Writer;
 /**
 * @author Maxence Bernard
 */
-class VersionedXmlConfigurationWriterFactory implements ConfigurationWriterFactory {
-    public ConfigurationBuilder getWriterInstance(Writer out) throws WriterConfigurationException {
-        return new VersionedXmlConfigurationWriter(out);
+class VersionedXmlConfigurationWriterFactory extends ConfigurationWriterFactory<ConfigurationBuilder> {
+    
+	/**
+	 * Constructor
+	 * 
+	 * @param rootElementName the name of the root element in the XML file
+	 */
+	public VersionedXmlConfigurationWriterFactory(String rootElementName) {
+		super(rootElementName);
+	}
+	
+	@Override
+	public ConfigurationBuilder getWriterInstance(Writer out) throws WriterConfigurationException {
+        return new VersionedXmlConfigurationWriter(out, getRootElementName());
     }
 }
