@@ -42,10 +42,6 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     /** Factory used to create instances of {@link XmlConfigurationWriter}. */
     public static final ConfigurationWriterFactory<XmlConfigurationWriter> FACTORY;
-    /** Root element name. */
-    public static final String ROOT_ELEMENT = "prefs";
-
-
 
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -53,15 +49,16 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     protected final ContentHandler out;
     /** Empty XML attributes (avoids creating a new instance on each <code>startElement</code> call). */
     private   final Attributes     emptyAttributes = new AttributesImpl();
+    /** Root element name. */
+    private   final String rootElementName;
 
 
-
-    // - Initialisation ------------------------------------------------------------------------------------------------
+    // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
         FACTORY = new ConfigurationWriterFactory<XmlConfigurationWriter>() {
             public XmlConfigurationWriter getWriterInstance(Writer out) {
-                return new XmlConfigurationWriter(out);
+                return new XmlConfigurationWriter(out, getRootElementName());
             }
         };
     }
@@ -70,7 +67,8 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
      * Creates a new instance of XML configuration writer.
      * @param out where to write the configuration data.
      */
-    public XmlConfigurationWriter(Writer out) {
+    private XmlConfigurationWriter(Writer out, String rootElementName) {
+    	this.rootElementName = rootElementName;
         this.out = createHandler(out);
     }
 
@@ -82,7 +80,7 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
         SAXTransformerFactory factory;
         TransformerHandler    transformer;
 
-        // Initialises the transformer factory.
+        // Initializes the transformer factory.
         factory = (SAXTransformerFactory)SAXTransformerFactory.newInstance();
         factory.setAttribute("indent-number", 4);
 
@@ -159,7 +157,7 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     public void startConfiguration() throws ConfigurationException {
         try {
             out.startDocument();
-            startElement(ROOT_ELEMENT);
+            startElement(rootElementName);
         }
         catch(SAXException e) {throw new ConfigurationException(e);}
     }
@@ -170,7 +168,7 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
      */
     public void endConfiguration() throws ConfigurationException {
         try {
-            endElement(ROOT_ELEMENT);
+            endElement(rootElementName);
             out.endDocument();
         }
         catch(SAXException e) {throw new ConfigurationException(e);}
