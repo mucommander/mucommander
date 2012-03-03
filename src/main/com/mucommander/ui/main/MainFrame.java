@@ -200,17 +200,17 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
         splitPane = new ProportionalSplitPane(this,
-        		MuConfigurations.getSnapshot().getVariable(MuSnapshot.SPLIT_ORIENTATION, MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
-                                              JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
+        		MuConfigurations.getSnapshot().getVariable(MuSnapshot.getSplitOrientation(0), MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
+                                              	JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
                                               false,
-                MainFrame.this.leftFolderPanel,
-                MainFrame.this.rightFolderPanel) {
-                // We don't want any extra space around split pane
-                @Override
-                public Insets getInsets() {
-                    return new Insets(0, 0, 0, 0);
-                }
-            };
+                                              MainFrame.this.leftFolderPanel,
+                                              MainFrame.this.rightFolderPanel) {
+        	// We don't want any extra space around split pane
+        	@Override
+        	public Insets getInsets() {
+        		return new Insets(0, 0, 0, 0);
+        	}
+        };
 
         // Remove any default border the split pane has
         splitPane.setBorder(null);
@@ -272,18 +272,18 @@ public class MainFrame extends JFrame implements LocationListener {
             	// Sets the column's initial visibility.
             	conf.setEnabled(c,
             			MuConfigurations.getSnapshot().getVariable(
-            					MuSnapshot.getShowColumnVariable(c, isLeft),
+            					MuSnapshot.getShowColumnVariable(0, c, isLeft),
             					c.showByDefault()
     					)
     			);
 
                 // Sets the column's initial width.
-                conf.setWidth(c, MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getColumnWidthVariable(c, isLeft)));
+                conf.setWidth(c, MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getColumnWidthVariable(0, c, isLeft)));
             }
 
             // Sets the column's initial order
             conf.setPosition(c, MuConfigurations.getSnapshot().getVariable(
-                                    MuSnapshot.getColumnPositionVariable(c, isLeft),
+                                    MuSnapshot.getColumnPositionVariable(0, c, isLeft),
                                     c.ordinal())
             );
         }
@@ -302,12 +302,12 @@ public class MainFrame extends JFrame implements LocationListener {
 
         for (boolean isLeft = true; ; isLeft=false) {
         	FileTable fileTable = isLeft ? leftTable : rightTable;
-        	fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
-                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
+        	fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
+                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
         	
         	FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
-        	folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(isLeft), 150));
-        	folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(isLeft), false));
+        	folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
+        	folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(0, isLeft), false));
         	
         	if (!isLeft)
         		break;

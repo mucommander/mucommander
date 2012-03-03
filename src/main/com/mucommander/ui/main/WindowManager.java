@@ -181,10 +181,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         }
         // Handles "last folder" initial paths.
         else {
-        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(frame == LEFT_FRAME), 0);
+        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(0, frame == LEFT_FRAME), 0);
         	folderPaths = new String[nbFolderPaths];
         	for (int i=0; i<nbFolderPaths;++i)
-        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(frame == LEFT_FRAME, i));
+        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(0, frame == LEFT_FRAME, i));
         }
 
         List<AbstractFile> initialFolders = new LinkedList<AbstractFile>(); // Initial folders 
@@ -383,10 +383,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(mainFrames.isEmpty()) {
             currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
-            x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_X);
-            y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_Y);
-            width  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_WIDTH);
-            height = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.LAST_HEIGHT);
+            x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getX(0));
+            y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getY(0));
+            width  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getWidth(0));
+            height = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getHeight(0));
 
             // Retrieves the last known size of the screen.
             int lastScreenWidth  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_WIDTH);

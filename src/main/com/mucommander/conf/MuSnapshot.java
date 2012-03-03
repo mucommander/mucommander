@@ -49,47 +49,67 @@ import com.mucommander.ui.main.tabs.FileTableTab;
 public class MuSnapshot {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MuSnapshot.class);
 	
-    // - Last window variables -----------------------------------------------
+	// - Last screen variables -----------------------------------------------
     // -----------------------------------------------------------------------
-    /** Section describing known information about the last muCommander window. */
-    private static final String  LAST_WINDOW_SECTION              = "last_window";
-    /** Last muCommander known x position. */
-    public static final String  LAST_X                            = LAST_WINDOW_SECTION + '.' + "x";
-    /** Last muCommander known y position. */
-    public static final String  LAST_Y                            = LAST_WINDOW_SECTION + '.' + "y";
-    /** Last muCommander known width. */
-    public static final String  LAST_WIDTH                        = LAST_WINDOW_SECTION + '.' + "width";
-    /** Last muCommander known height. */
-    public static final String  LAST_HEIGHT                       = LAST_WINDOW_SECTION + '.' + "height";
+    /** Section describing last known screen properties. */
+    private static final String SCREEN_SECTION                     = "screen";
     /** Last known screen width. */
-    public static final String  SCREEN_WIDTH                      = LAST_WINDOW_SECTION + '.' + "screen_width";
+    public static final String  SCREEN_WIDTH                       = SCREEN_SECTION + "." + "width";
     /** Last known screen height. */
-    public static final String  SCREEN_HEIGHT                     = LAST_WINDOW_SECTION + '.' + "screen_height";
-    /** Last orientation used to split folder panels. */
-    public static final String  SPLIT_ORIENTATION                 = LAST_WINDOW_SECTION + '.' + "split_orientation";
-    /** Vertical split pane orientation. */
-    public static final String VERTICAL_SPLIT_ORIENTATION         = "vertical";
-    /** Horizontal split pane orientation. */
-    public static final String HORIZONTAL_SPLIT_ORIENTATION       = "horizontal";
-    /** Default split pane orientation. */
-    public static final String DEFAULT_SPLIT_ORIENTATION          = VERTICAL_SPLIT_ORIENTATION;
+    public static final String  SCREEN_HEIGHT                      = SCREEN_SECTION + "." + "height";
     
-    // - Last panels variables -----------------------------------------------
+	// - Last windows variables ----------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing known information about last muCommander windows. */
+    private static final String WINDOWS_SECTION                    = "windows";
+    /** Describes the number of windows that were open. */
+    public static final String  WINDOWS_COUNT                      = WINDOWS_SECTION + '.' + "count";
+    /** Subsection describing information which is specific to a particular window. */
+    private static final String WINDOW                             = "window";
+    
+    // - Window variables ----------------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing known general information of muCommander window. */
+    private static final String WINDOW_PROPERTIES_SECTION          = "window_properties";
+    /** Describes the window's horizontal position. */
+    private static final String X                                  = "x";
+    /** Describes the window's vertical position. */
+    private static final String Y                                  = "y";
+    /** Describes the window's width. */
+    private static final String WIDTH                              = "width";
+    /** Describes the window's height. */
+    private static final String HEIGHT                             = "height";
+    /** Describes the orientation used to split folder panels. */
+    private static final String SPLIT_ORIENTATION                  = "split_orientation";
+    /** Vertical split pane orientation. */
+    public static final String  VERTICAL_SPLIT_ORIENTATION         = "vertical";
+    /** Horizontal split pane orientation. */
+    public static final String  HORIZONTAL_SPLIT_ORIENTATION       = "horizontal";
+    /** Default split pane orientation. */
+    public static final String  DEFAULT_SPLIT_ORIENTATION          = VERTICAL_SPLIT_ORIENTATION;
+    
+    // - Panels variables ----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the dynamic information contained in the folder panels */
-    private static final String  PANELS                            = "panels";
+    private static final String  PANELS_SECTION                    = "panels";
     /** Identifier of the left panel. */
     private static final String  LEFT                              = "left";
     /** Identifier of the right panel. */
     private static final String  RIGHT                             = "right";
+    
+    // - Tree variables ------------------------------------------------------
+    // -----------------------------------------------------------------------
     /** Subsection describing the tree view CONFIGURATION. */
-    private static final String  TREE                              = "tree";
+    private static final String  TREE_SECTION                      = "tree";
     /** Describes whether the tree is visible */
-    public static final String   TREE_VISIBLE                      = "visible";
-    /** Describes the tree is width */
-    public static final String   TREE_WIDTH                        = "width";
+    private static final String  TREE_VISIBLE                      = "visible";
+    /** Describes the tree's width */
+    private static final String  TREE_WIDTH                        = "width";
+    
+    // - File Table variables ------------------------------------------------
+    // -----------------------------------------------------------------------
     /** Subsection describing the folders view CONFIGURATION. */
-    private static final String  FILE_TABLE                        = "file_table";
+    private static final String  FILE_TABLE_SECTION                = "file_table";
     /** Describes an ascending sort order. */
     public static final String  SORT_ORDER_ASCENDING               = "asc";
     /** Describes a descending sort order. */
@@ -97,51 +117,84 @@ public class MuSnapshot {
     /** Default 'sort order' column for the file table. */
     public static final String  DEFAULT_SORT_ORDER                 = SORT_ORDER_ASCENDING;
     /** Name of the 'show column' variable. */
-    public static final String  SHOW_COLUMN                        = "show";
+    private static final String SHOW_COLUMN                        = "show";
     /** Name of the 'column position' variable. */
-    public static final String  COLUMN_POSITION                    = "position";
+    private static final String COLUMN_POSITION                    = "position";
     /** Name of the 'column width' variable. */
-    public static final String  COLUMN_WIDTH                       = "width";
+    private static final String COLUMN_WIDTH                       = "width";
     /** Default 'sort by' column for the file table. */
     public static final String  DEFAULT_SORT_BY                    = "name";
     /** Identifier of the sort section in a file table's CONFIGURATION. */
-    public static final String  SORT                               = "sort";
+    private static final String SORT                               = "sort";
     /** Identifier of the sort criteria in a file table's CONFIGURATION. */
-    public static final String  SORT_BY                            = "by";
+    private static final String SORT_BY                            = "by";
     /** Identifier of the sort order in a file table's CONFIGURATION. */
-    public static final String  SORT_ORDER                         = "order";
+    private static final String SORT_ORDER                         = "order";
+    
+    // - Tabs variables ------------------------------------------------------
+    // -----------------------------------------------------------------------
     /** Subsection describing the tabs CONFIGURATION. */
-    private static final String  TABS                              = "tabs";
+    private static final String TABS_SECTION                       = "tabs";
     /** Describes the number of tabs presented in the panel */
-    private static final String  TABS_COUNT                        = "count";
+    private static final String TABS_COUNT                         = "count";
     /** Subsection describing information which is specific to a particular tab */
-    private static final String  TAB                               = "tab";
+    private static final String TAB                                = "tab";
     /** Describes the location presented in a tab */
-    private static final String  TAB_LOCATION                      = "location";
+    private static final String TAB_LOCATION                       = "location";
+    
     
 	/** Cache the screen's size. this value isn't computed during the shutdown process since it cause a deadlock then */
 	private Dimension screenSize;
 	
+	
+	private static String getWindowSection(int index) {
+        return WINDOWS_SECTION + "." + WINDOW + "-" + index; 
+    }
+	
+	private static String getWindowPropertiesSection(int window) {
+		return getWindowSection(window) + "." + WINDOW_PROPERTIES_SECTION;
+	}
+
+	public static String getX(int window) {
+    	return getWindowPropertiesSection(window) + "." + X;
+    }
+    
+    public static String getY(int window) {
+    	return getWindowPropertiesSection(window) + "." + Y;
+    }
+    
+    public static String getWidth(int window) {
+    	return getWindowPropertiesSection(window) + "." + WIDTH;
+    }
+    
+    public static String getHeight(int window) {
+    	return getWindowPropertiesSection(window) + "." + HEIGHT;
+    }
+    
+    public static String getSplitOrientation(int window) {
+    	return getWindowPropertiesSection(window) + "." + SPLIT_ORIENTATION;
+    }
+
 	/**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.FolderPanel},
-     * left or right one.
+     * left or right one in the window at the given index.
      *
      * @param left true for the left FolderPanel, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FolderPanel
      */
-	private static String getFolderPanelSection(boolean left) {
-        return PANELS + "." + (left?LEFT:RIGHT);
+	private static String getFolderPanelSection(int window, boolean left) {
+        return getWindowSection(window) + "." + PANELS_SECTION + "." + (left?LEFT:RIGHT);
     }
 	
 	/**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.FoldersTreePanel},
-     * left or right one.
+     * left or right one in the window at the given index.
      *
      * @param left true for the left FoldersTreePanel, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FoldersTreePanel
      */
-	private static String getTreeSection(boolean left) {
-    	return getFolderPanelSection(left) + "." + TREE;
+	private static String getTreeSection(int window, boolean left) {
+    	return getFolderPanelSection(window, left) + "." + TREE_SECTION;
     }
     
 	/**
@@ -151,8 +204,8 @@ public class MuSnapshot {
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that controls the visibility of the tree view in the specified FolderPanel
      */
-    public static String getTreeVisiblityVariable(boolean left) {
-    	return getTreeSection(left) + "." + TREE_VISIBLE;
+    public static String getTreeVisiblityVariable(int window, boolean left) {
+    	return getTreeSection(window, left) + "." + TREE_VISIBLE;
     }
     
     /**
@@ -162,8 +215,8 @@ public class MuSnapshot {
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that holds the width of the tree view in the specified FolderPanel
      */
-    public static String getTreeWidthVariable(boolean left) {
-    	return getTreeSection(left) + "." + TREE_WIDTH;
+    public static String getTreeWidthVariable(int window, boolean left) {
+    	return getTreeSection(window, left) + "." + TREE_WIDTH;
     }
 	
     /**
@@ -173,12 +226,12 @@ public class MuSnapshot {
      * @param left true for the left FileTable, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTable
      */
-    private static String getFileTableSection(boolean left) {
-        return getFolderPanelSection(left) + "." + FILE_TABLE;
+    private static String getFileTableSection(int window, boolean left) {
+        return getFolderPanelSection(window, left) + "." + FILE_TABLE_SECTION;
     }
     
-    private static String getFileTableSortSection(boolean left) {
-    	return getFileTableSection(left) + "." + SORT;
+    private static String getFileTableSortSection(int window, boolean left) {
+    	return getFileTableSection(window, left) + "." + SORT;
     }
     
     /**
@@ -188,8 +241,8 @@ public class MuSnapshot {
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that controls the sort criteria of the file table in the specified FolderPanel
      */
-    public static String getFileTableSortByVariable(boolean left) {
-    	return getFileTableSortSection(left) + "." + SORT_BY;
+    public static String getFileTableSortByVariable(int window, boolean left) {
+    	return getFileTableSortSection(window, left) + "." + SORT_BY;
     }
     
     /**
@@ -199,8 +252,8 @@ public class MuSnapshot {
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that controls the sort order of the file table in the specified FolderPanel
      */
-    public static String getFileTableSortOrderVariable(boolean left) {
-    	return getFileTableSortSection(left) + "." + SORT_ORDER;
+    public static String getFileTableSortOrderVariable(int window, boolean left) {
+    	return getFileTableSortSection(window, left) + "." + SORT_ORDER;
     }
 
     /**
@@ -211,8 +264,8 @@ public class MuSnapshot {
      * @param left true for the left FileTable, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTable
      */
-    private static String getColumnSection(Column column, boolean left) {
-        return getFileTableSection(left) + "." + column.toString().toLowerCase();
+    private static String getColumnSection(int window, Column column, boolean left) {
+        return getFileTableSection(window, left) + "." + column.toString().toLowerCase();
     }
 
     /**
@@ -223,8 +276,8 @@ public class MuSnapshot {
      * @param left true for the left FileTable, false for the right one
      * @return the variable that controls the visibility of the specified column
      */
-    public static String getShowColumnVariable(Column column, boolean left) {
-        return getColumnSection(column, left) + "." + SHOW_COLUMN;
+    public static String getShowColumnVariable(int window, Column column, boolean left) {
+        return getColumnSection(window, column, left) + "." + SHOW_COLUMN;
     }
 
     /**
@@ -235,8 +288,8 @@ public class MuSnapshot {
      * @param left true for the left FileTable, false for the right one
      * @return the variable that holds the width of the specified column
      */
-    public static String getColumnWidthVariable(Column column, boolean left) {
-        return getColumnSection(column, left) + "." + COLUMN_WIDTH;
+    public static String getColumnWidthVariable(int window, Column column, boolean left) {
+        return getColumnSection(window, column, left) + "." + COLUMN_WIDTH;
     }
     
     /**
@@ -247,8 +300,8 @@ public class MuSnapshot {
      * @param left true for the left FileTable, false for the right one
      * @return the variable that holds the position of the specified column
      */
-    public static String getColumnPositionVariable(Column column, boolean left) {
-        return getColumnSection(column, left) + "." + COLUMN_POSITION;
+    public static String getColumnPositionVariable(int window, Column column, boolean left) {
+        return getColumnSection(window, column, left) + "." + COLUMN_POSITION;
     }
     
 
@@ -259,8 +312,8 @@ public class MuSnapshot {
      * @param left true for the left FileTableTabs, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTableTabs
      */    
-    private static String getTabsSection(boolean left) {
-    	return getFolderPanelSection(left) + "." + TABS;
+    private static String getTabsSection(int window, boolean left) {
+    	return getFolderPanelSection(window, left) + "." + TABS_SECTION;
     }
     
     /**
@@ -270,8 +323,8 @@ public class MuSnapshot {
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that holds the number of presented tabs in the specified FolderPanel
      */
-    public static String getTabsCountVariable(boolean left) {
-    	return getTabsSection(left) + "." + TABS_COUNT;
+    public static String getTabsCountVariable(int window, boolean left) {
+    	return getTabsSection(window, left) + "." + TABS_COUNT;
     }
     
     /**
@@ -281,8 +334,8 @@ public class MuSnapshot {
      * @param left true for the left FileTableTab, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTableTab
      */    
-    private static String getTabSection(boolean left, int index) {
-    	return getTabsSection(left) + "." + TAB + "-" + index; 
+    private static String getTabSection(int window, boolean left, int index) {
+    	return getTabsSection(window, left) + "." + TAB + "-" + index; 
     }
     
     /**
@@ -293,8 +346,8 @@ public class MuSnapshot {
      * @param index the index of tab at the FolderPanel's tabs 
      * @return the variable that holds the location presented at the tab in the given index in the specified FolderPanel
      */
-    public static String getTabLocationVariable(boolean left, int index) {
-    	return getTabSection(left, index) + "." + TAB_LOCATION;
+    public static String getTabLocationVariable(int window, boolean left, int index) {
+    	return getTabSection(window, left, index) + "." + TAB_LOCATION;
     }
     
 	// - Instance fields -----------------------------------------------------
@@ -345,79 +398,90 @@ public class MuSnapshot {
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
     void write() throws IOException, ConfigurationException {
-    	MainFrame currentMainFrame = WindowManager.getCurrentMainFrame();
-    	
     	//Clear the configuration before saving to drop preferences which are unused anymore
     	configuration.clear();
     	
-    	// Save window position, size and screen resolution
-        setWindowAttributes(currentMainFrame);
-        
-        // Save left panel dynamic properties
-        setPanelAttributes(true, currentMainFrame.getLeftPanel());
-
-        // Save right panel dynamic properties
-        setPanelAttributes(false, currentMainFrame.getRightPanel());
-
+    	List<MainFrame> mainFrames = WindowManager.getMainFrames();    	
+    	int nbMainFrames = mainFrames.size();
+    	
+    	// Save windows count
+    	configuration.setVariable(WINDOWS_COUNT, nbMainFrames);
+    	
+    	// Save attributes for each window
+    	for (int i=0; i<nbMainFrames; ++i)
+    		setFrameAttributes(mainFrames.get(i), i);
+    	
         configuration.write();
     }
     
-    private void setPanelAttributes(boolean isLeft, FolderPanel panel) {
-    	// Save tree folders preferences
-        setTreeAttributes(isLeft, panel);
-    	
-        setTableAttributes(isLeft, panel.getFileTable());
+    private void setFrameAttributes(MainFrame mainFrame, int index) {
+    	// Save window position, size and screen resolution
+        setWindowAttributes(index, mainFrame);
         
-        setTabsAttributes(isLeft, panel.getTabs().getClonedTabs());
+        // Save left panel dynamic properties
+        setPanelAttributes(index, true, mainFrame.getLeftPanel());
+
+        // Save right panel dynamic properties
+        setPanelAttributes(index, false, mainFrame.getRightPanel());
+
+    }
+    
+    private void setPanelAttributes(int index, boolean isLeft, FolderPanel panel) {
+    	// Save tree folders preferences
+        setTreeAttributes(index, isLeft, panel);
+    	
+        setTableAttributes(index, isLeft, panel.getFileTable());
+        
+        setTabsAttributes(index, isLeft, panel.getTabs().getClonedTabs());
     }
 
-    private void setTabsAttributes(boolean isLeft, List<FileTableTab> tabs) {
+    private void setTabsAttributes(int index, boolean isLeft, List<FileTableTab> tabs) {
     	// Save tabs count
-    	configuration.setVariable(getTabsCountVariable(isLeft), tabs.size());
+    	configuration.setVariable(getTabsCountVariable(index, isLeft), tabs.size());
     	// Save tabs locations
     	for(int i=0; i<tabs.size(); i++) {
     		FileTableTab tab = tabs.get(i);
-    		configuration.setVariable(getTabLocationVariable(isLeft, i), tab.getLocation().getAbsolutePath());
+    		configuration.setVariable(getTabLocationVariable(index, isLeft, i), tab.getLocation().getAbsolutePath());
     	}
     }
     
-    private void setTableAttributes(boolean isLeft, FileTable table) {
+    private void setTableAttributes(int index, boolean isLeft, FileTable table) {
     	// Saves table sort order.
-    	configuration.setVariable(MuSnapshot.getFileTableSortByVariable(isLeft), table.getSortInfo().getCriterion().toString().toLowerCase());
-    	configuration.setVariable(MuSnapshot.getFileTableSortOrderVariable(isLeft), table.getSortInfo().getAscendingOrder() ? MuSnapshot.SORT_ORDER_ASCENDING : MuSnapshot.SORT_ORDER_DESCENDING);
+    	configuration.setVariable(MuSnapshot.getFileTableSortByVariable(index, isLeft), table.getSortInfo().getCriterion().toString().toLowerCase());
+    	configuration.setVariable(MuSnapshot.getFileTableSortOrderVariable(index, isLeft), table.getSortInfo().getAscendingOrder() ? MuSnapshot.SORT_ORDER_ASCENDING : MuSnapshot.SORT_ORDER_DESCENDING);
     	
     	// Loop on columns
 		for(Column c : Column.values()) {
 			if(c!=Column.NAME) {       // Skip the special name column (always enabled, width automatically calculated)
 				MuConfigurations.getSnapshot().setVariable(
-						MuSnapshot.getShowColumnVariable(c, isLeft),
+						MuSnapshot.getShowColumnVariable(index, c, isLeft),
 						table.isColumnEnabled(c)
 						);
 
 				MuConfigurations.getSnapshot().setVariable(
-						MuSnapshot.getColumnWidthVariable(c, isLeft),
+						MuSnapshot.getColumnWidthVariable(index, c, isLeft),
 						table.getColumnWidth(c)
 						);
 			}
 
 			MuConfigurations.getSnapshot().setVariable(
-					MuSnapshot.getColumnPositionVariable(c, isLeft),
+					MuSnapshot.getColumnPositionVariable(index, c, isLeft),
 					table.getColumnPosition(c)
 					);
 		}
     }
     
-    private void setTreeAttributes(boolean isLeft, FolderPanel panel) {
-    	configuration.setVariable(MuSnapshot.getTreeVisiblityVariable(isLeft), panel.isTreeVisible());
-        configuration.setVariable(MuSnapshot.getTreeWidthVariable(isLeft), panel.getTreeWidth());
+    private void setTreeAttributes(int index, boolean isLeft, FolderPanel panel) {
+    	configuration.setVariable(MuSnapshot.getTreeVisiblityVariable(index, isLeft), panel.isTreeVisible());
+        configuration.setVariable(MuSnapshot.getTreeWidthVariable(index, isLeft), panel.getTreeWidth());
     }
     
-    private void setWindowAttributes(MainFrame currentMainFrame) {
+    private void setWindowAttributes(int index, MainFrame currentMainFrame) {
         Rectangle bounds = currentMainFrame.getBounds();
-        configuration.setVariable(MuSnapshot.LAST_X, (int)bounds.getX());
-        configuration.setVariable(MuSnapshot.LAST_Y, (int)bounds.getY());
-        configuration.setVariable(MuSnapshot.LAST_WIDTH, (int)bounds.getWidth());
-        configuration.setVariable(MuSnapshot.LAST_HEIGHT, (int)bounds.getHeight());
+        configuration.setVariable(getX(index), (int)bounds.getX());
+        configuration.setVariable(getY(index), (int)bounds.getY());
+        configuration.setVariable(getWidth(index), (int)bounds.getWidth());
+        configuration.setVariable(getHeight(index), (int)bounds.getHeight());
         
         if (screenSize != null) {
         	configuration.setVariable(MuSnapshot.SCREEN_WIDTH, screenSize.width);
@@ -427,6 +491,6 @@ public class MuSnapshot {
         // Save split pane orientation
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
-    	configuration.setVariable(MuSnapshot.SPLIT_ORIENTATION, currentMainFrame.getSplitPane().getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuSnapshot.VERTICAL_SPLIT_ORIENTATION:MuSnapshot.HORIZONTAL_SPLIT_ORIENTATION);
+    	configuration.setVariable(getSplitOrientation(index), currentMainFrame.getSplitPane().getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuSnapshot.VERTICAL_SPLIT_ORIENTATION:MuSnapshot.HORIZONTAL_SPLIT_ORIENTATION);
     }
 }
