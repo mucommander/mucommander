@@ -63,10 +63,10 @@ import com.mucommander.ui.main.MainFrame;
 public class DebugConsoleDialog extends FocusDialog implements ActionListener, ItemListener {
 
     /** Displays log events, and allows to copy their values to the clipboard */
-    private JList<LoggingEvent> loggingEventsList;
+    private JList loggingEventsList;
 
     /** Allows the log level to be changed */
-    private JComboBox<LogLevel> levelComboBox;
+    private JComboBox levelComboBox;
 
     /** Closes the debug console when pressed */
     private JButton closeButton;
@@ -89,7 +89,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
         Container contentPane = getContentPane();
 
-        loggingEventsList = new JList<LoggingEvent>();
+        loggingEventsList = new JList();
         // Autoscroll when dragged
         loggingEventsList.setAutoscrolls(true);
         loggingEventsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -132,7 +132,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
         comboPanel.add(new JLabel(Translator.get("debug_console_dialog.level")+":"));
         LogLevel logLevel = MuLogging.getLogLevel();
 
-        levelComboBox = new JComboBox<LogLevel>();
+        levelComboBox = new JComboBox();
         for(LogLevel level:LogLevel.values())
             levelComboBox.addItem(level);
         		
@@ -149,7 +149,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      * Refreshes the JList with the log records contained by {@link DebugConsoleAppender}.
      */
     private void refreshLogRecords() {
-    	DefaultListModel<LoggingEvent> listModel = new DefaultListModel<LoggingEvent>();
+    	DefaultListModel listModel = new DefaultListModel();
         DebugConsoleAppender handler = MuLogging.getDebugConsoleAppender();
 
         final LoggingEvent[] records = handler.getLogRecords();
