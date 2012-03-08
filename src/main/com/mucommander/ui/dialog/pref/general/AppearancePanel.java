@@ -85,7 +85,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Look and feel fields ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Combo box containing the list of available look&feels. */
-    private PrefComboBox<String>              lookAndFeelComboBox;
+    private PrefComboBox              lookAndFeelComboBox;
     /** All available look&feels. */
     private UIManager.LookAndFeelInfo lookAndFeels[];
     /** 'Use brushed metal look' checkbox */
@@ -104,11 +104,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Icon size fields ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Displays the list of available sizes for toolbar icons. */
-    private PrefComboBox<String>        toolbarIconsSizeComboBox;
+    private PrefComboBox        toolbarIconsSizeComboBox;
     /** Displays the list of available sizes for command bar icons. */
-    private PrefComboBox<String>        commandBarIconsSizeComboBox;
+    private PrefComboBox        commandBarIconsSizeComboBox;
     /** Displays the list of available sizes for file icons. */
-    private PrefComboBox<String>        fileIconsSizeComboBox;
+    private PrefComboBox        fileIconsSizeComboBox;
     /** All icon sizes label. */
     private final static String ICON_SIZES[]                = {"100%", "125%", "150%", "175%", "200%", "300%"};
     /** All icon sizes scale factors. */
@@ -128,7 +128,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Theme fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Lists all available themes. */
-    private PrefComboBox<Theme> themeComboBox;
+    private PrefComboBox themeComboBox;
     /** Triggers the theme editor. */
     private JButton      editThemeButton;
     /** Triggers the theme duplication dialog. */
@@ -153,7 +153,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Misc. fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** System icon combobox. */
-    private PrefComboBox<String>   useSystemFileIconsComboBox;
+    private PrefComboBox 	       useSystemFileIconsComboBox;
     /** Identifier of 'yes' actions in question dialogs. */
     private final static int       YES_ACTION = 0;
     /** Identifier of 'no' actions in question dialogs. */
@@ -165,7 +165,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
 
 
-    // - Initialization ---------------------------------------------------------
+    // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
      * Creates a new appearance panel with the specified parent.
@@ -175,13 +175,13 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         super(parent, Translator.get("prefs_dialog.appearance_tab"));
         initUI();
 
-        // Initializes the known custom look and feels
+        // Initialises the known custom look and feels
         initializeCustomLookAndFeels();
     }
 
 
 
-    // - UI initialization ------------------------------------------------------
+    // - UI initialisation ------------------------------------------------------
     // --------------------------------------------------------------------------
     private void initUI() {
         YBoxPanel mainPanel;
@@ -257,7 +257,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         lnfPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.look_and_feel")));
 
         // Creates the look and feel combo box.
-        lookAndFeelComboBox = new PrefComboBox<String>() {
+        lookAndFeelComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
 				int selectedIndex = getSelectedIndex();
                 if(selectedIndex<0)
@@ -289,7 +289,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         // Populates the look and feel combo box.
         populateLookAndFeels();
 
-        // Initializes buttons and event listening.
+        // Initialises buttons and event listening.
         importLookAndFeelButton = new JButton(Translator.get("prefs_dialog.import") + "...");
         deleteLookAndFeelButton = new JButton(Translator.get("delete"));
         importLookAndFeelButton.addActionListener(this);
@@ -374,7 +374,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         typeLabel = new JLabel("");
 
         // Creates the theme combo box.
-        themeComboBox   = new PrefComboBox<Theme>() {
+        themeComboBox   = new PrefComboBox() {
 			public boolean hasChanged() {
 				return !ThemeManager.isCurrentTheme((Theme)getSelectedItem());
 			}        	
@@ -407,7 +407,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 }
             });
 
-        // Initializes the content of the combo box.
+        // Initialises the content of the combo box.
         populateThemes(ThemeManager.getCurrentTheme());
 
         gridPanel.add(themeComboBox);
@@ -448,7 +448,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private JPanel createSystemIconsPanel() {
         /* 'Use system file icons' combo box */
-        this.useSystemFileIconsComboBox = new PrefComboBox<String>() {
+        this.useSystemFileIconsComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
 				String systemIconsPolicy;
 				switch(useSystemFileIconsComboBox.getSelectedIndex()) {
@@ -485,8 +485,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * @param defaultValue the default value for the icon scale factor if the configuration variable has no value
      * @return a combo box that allows to choose a size for a certain type of icon
      */
-    private PrefComboBox<String> createIconSizeCombo(final MuPreference preference, float defaultValue) {
-    	PrefComboBox<String> iconSizeCombo = new PrefComboBox<String>() {
+    private PrefComboBox createIconSizeCombo(final MuPreference preference, float defaultValue) {
+    	PrefComboBox iconSizeCombo = new PrefComboBox() {
 			public boolean hasChanged() {
 				return !String.valueOf(ICON_SCALE_FACTORS[getSelectedIndex()]).equals(
 						MuConfigurations.getPreferences().getVariable(preference));
@@ -557,14 +557,14 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Look and feel actions --------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Initializes the list of custom look&feels.
+     * Initialises the list of custom look&feels.
      */
     private void initializeCustomLookAndFeels() {
         customLookAndFeels = MuConfigurations.getPreferences().getListVariable(MuPreference.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR);
     }
 
     /**
-     * Initializes the list of available look&feels.
+     * Initialises the list of available look&feels.
      */
     private void initializeAvailableLookAndFeels() {
         // Loads all available look and feels.
@@ -785,7 +785,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         JFileChooser chooser; // Used to select the theme to import.
         AbstractFile file;    // Path to the theme to import.
 
-        // Initializes the file chooser.
+        // Initialises the file chooser.
         chooser = createFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.addChoosableFileFilter(new ExtensionFileFilter("jar", Translator.get("prefs_dialog.jar_file")));
@@ -898,7 +898,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     }
 
     /**
-     * Creates a file chooser initialized on the last selected folder.
+     * Creates a file chooser initialised on the last selected folder.
      */
     private JFileChooser createFileChooser() {
         if(lastSelectedFolder == null)
@@ -929,7 +929,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         JFileChooser chooser; // Used to select the theme to import.
         AbstractFile         file;    // Path to the theme to import.
 
-        // Initializes the file chooser.
+        // Initialises the file chooser.
         chooser = createFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.addChoosableFileFilter(new ExtensionFileFilter("xml", Translator.get("prefs_dialog.xml_file")));
