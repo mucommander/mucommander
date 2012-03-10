@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
@@ -61,6 +62,6 @@ public class CloseOtherTabsAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK); }
     }
 }
