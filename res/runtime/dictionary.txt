@@ -18522,6 +18522,8 @@ recent_executed_files_quick_list.empty_message:CA:No hi ha fitxers executats rec
 recent_executed_files_quick_list.empty_message:ES:No hay ficheros ejecutados recientmente
 # Translation missing (KO)
 
+roots_quick_list.empty_message:EN:No root folders
+# Translation missing (New!)
 
 ######################
 # Deprecated entries #
