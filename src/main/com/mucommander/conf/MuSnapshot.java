@@ -64,6 +64,8 @@ public class MuSnapshot {
     private static final String WINDOWS_SECTION                    = "windows";
     /** Describes the number of windows that were open. */
     public static final String  WINDOWS_COUNT                      = WINDOWS_SECTION + '.' + "count";
+    /** Describes the index of the selected window. */
+    public static final String  WINDOWS_SELECTION                  = WINDOWS_SECTION + '.' + "selection";
     /** Subsection describing information which is specific to a particular window. */
     private static final String WINDOW                             = "window";
     
@@ -146,6 +148,9 @@ public class MuSnapshot {
 	/** Cache the screen's size. this value isn't computed during the shutdown process since it cause a deadlock then */
 	private Dimension screenSize;
 	
+	public static String getSelectedWindow() {
+		return WINDOWS_SELECTION;
+	}
 	
 	private static String getWindowSection(int index) {
         return WINDOWS_SECTION + "." + WINDOW + "-" + index; 
@@ -404,11 +409,16 @@ public class MuSnapshot {
     	//Clear the configuration before saving to drop preferences which are unused anymore
     	configuration.clear();
     	
+    	// Get opened main frames list
     	List<MainFrame> mainFrames = WindowManager.getMainFrames();    	
-    	int nbMainFrames = mainFrames.size();
     	
     	// Save windows count
+    	int nbMainFrames = mainFrames.size();
     	configuration.setVariable(WINDOWS_COUNT, nbMainFrames);
+    	
+    	// Save the index of the selected window
+    	int indexOfSelectedWindow = WindowManager.getCurrentWindowIndex();
+    	configuration.setVariable(WINDOWS_SELECTION, indexOfSelectedWindow);
     	
     	// Save attributes for each window
     	for (int i=0; i<nbMainFrames; ++i)

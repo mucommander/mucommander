@@ -181,10 +181,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         }
         // Handles "last folder" initial paths.
         else {
-        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(0, frame == LEFT_FRAME), 0);
+        	// Get the index of the window that was selected in the previous run
+        	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
+        	// Set initial path to each tab
+        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME), 0);
         	folderPaths = new String[nbFolderPaths];
         	for (int i=0; i<nbFolderPaths;++i)
-        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(0, frame == LEFT_FRAME, i));
+        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME, i));
         }
 
         List<AbstractFile> initialFolders = new LinkedList<AbstractFile>(); // Initial folders 
@@ -498,7 +501,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         int nbFrames = mainFrames.size();
         if(nbFrames>0) {            // If an uncaught exception occurred in the startup sequence, there is no MainFrame to dispose
             // Retrieve current MainFrame's index
-            int currentMainFrameIndex = mainFrames.indexOf(currentMainFrame);
+            int currentMainFrameIndex = getCurrentWindowIndex();
             
             // Dispose all MainFrames but the current one
             for(int i=0; i<nbFrames; i++) {
@@ -530,12 +533,19 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         ShutdownHook.initiateShutdown();
     }
 	
+    /**
+     * Returns the index of the currently selected window
+     * @return index of currently selected window
+     */
+    public static int getCurrentWindowIndex() {
+    	return mainFrames.indexOf(currentMainFrame);
+    }
 	
     /**
      * Switches to the next MainFrame, in the order of which they were created.
      */
     public static void switchToNextWindow() {
-        int frameIndex = mainFrames.indexOf(currentMainFrame);
+        int frameIndex = getCurrentWindowIndex();
         MainFrame mainFrame = mainFrames.get(frameIndex==mainFrames.size()-1?0:frameIndex+1);
         mainFrame.toFront();
     }
@@ -544,7 +554,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * Switches to previous MainFrame, in the order of which they were created.
      */
     public static void switchToPreviousWindow() {
-        int frameIndex = mainFrames.indexOf(currentMainFrame);
+        int frameIndex = getCurrentWindowIndex();
         MainFrame mainFrame = mainFrames.get(frameIndex==0?mainFrames.size()-1:frameIndex-1);
         mainFrame.toFront();
     }
