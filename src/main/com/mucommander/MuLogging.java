@@ -18,27 +18,21 @@
 
 package com.mucommander;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.ConsoleAppender;
-import ch.qos.logback.core.CoreConstants;
-import ch.qos.logback.core.Layout;
-import ch.qos.logback.core.LayoutBase;
+import ch.qos.logback.core.*;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
-
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.dialog.debug.DebugConsoleAppender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This class manages logging issues within mucommander
@@ -227,7 +221,7 @@ public class MuLogging {
 		public String doLayout(ILoggingEvent event) {
 			StackTraceElement stackTraceElement = event.getCallerData()[0];
 			
-			StringBuffer sbuf = new StringBuffer(128);
+			StringBuilder sbuf = new StringBuilder(128);
 			sbuf.append("[");
 			sbuf.append(SIMPLE_DATE_FORMAT.format(new Date(event.getTimeStamp())));
 			sbuf.append("] ");

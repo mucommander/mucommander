@@ -18,6 +18,13 @@
 
 package com.mucommander.ui.dnd;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.util.FileSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -26,14 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.util.FileSet;
 
 /**
  * This class represents a Transferable file set and is used for Drag and Drop transfers initiated by muCommander
@@ -333,7 +332,7 @@ public class TransferableFileSet implements Transferable {
 //            String mimeType = dataFlavor.getMimeType();
 //            String charset = mimeType.substring(mimeType.indexOf("charset=")+8, mimeType.length());
 //
-//            StringBuffer sb = new StringBuffer();
+//            StringBuilder sb = new StringBuilder();
 //            for(int i=0; i<nbFiles; i++) {
 //                sb.append(fileSet.fileAt(i).getAbsolutePath());
 //                if(i!=nbFiles-1)
@@ -344,7 +343,7 @@ public class TransferableFileSet implements Transferable {
 //        }
         // Return a String with file paths or names
         else if(dataFlavor.equals(DataFlavor.stringFlavor) && stringFlavorSupported) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
                 file = fileSet.elementAt(i);
@@ -357,7 +356,7 @@ public class TransferableFileSet implements Transferable {
         }
         // Return a String with file URLs, as specified by RFC 2483
         else if(dataFlavor.equals(TEXT_URI_FLAVOR) && textUriFlavorSupported) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
                 file = fileSet.elementAt(i);

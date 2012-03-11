@@ -18,31 +18,19 @@
 
 package com.mucommander.ui.dialog.about;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.InputStreamReader;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.RuntimeConstants;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.InputStreamReader;
 
 /**
  * Dialog used to display muCommander's license file.
@@ -156,13 +144,13 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
      * @return the license text.
      */
     private String getLicenseText() {
-        StringBuffer      text;   // Stores the license text.
+        StringBuilder     text;   // Stores the license text.
         char[]            buffer; // Buffer for each chunk of data read from the license file.
         int               count;  // Number of characters read from the last read operation.
         InputStreamReader in;     // Stream on the license file.
 
         in   = null;
-        text = new StringBuffer();
+        text = new StringBuilder();
         try {
             in     = new InputStreamReader(LicenseDialog.class.getResourceAsStream(RuntimeConstants.LICENSE));
             buffer = new char[2048];

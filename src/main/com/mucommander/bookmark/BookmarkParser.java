@@ -18,21 +18,19 @@
 
 package com.mucommander.bookmark;
 
-import java.io.InputStream;
-import java.net.MalformedURLException;
-
-import javax.xml.parsers.SAXParserFactory;
-
+import com.mucommander.auth.CredentialsManager;
+import com.mucommander.auth.CredentialsMapping;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 
 
 /**
@@ -48,7 +46,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     /** Variable used for XML parsing */
     private String bookmarkLocation;
     /** Variable used for XML parsing */
-    private StringBuffer characters;
+    private StringBuilder characters;
     /** Receives bookmarks events. */
     private BookmarkBuilder builder;
     /** muCommander version that was used to write the bookmarks file */
@@ -65,7 +63,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
      */
     void parse(InputStream in, BookmarkBuilder builder) throws Exception {
         this.builder = builder;
-        characters   = new StringBuffer();
+        characters   = new StringBuilder();
         SAXParserFactory.newInstance().newSAXParser().parse(in, this);
     }
 

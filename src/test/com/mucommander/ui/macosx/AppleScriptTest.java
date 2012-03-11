@@ -36,7 +36,7 @@ public class AppleScriptTest {
      */
     @Test
     public void testScriptOutput() {
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
         boolean success = AppleScript.execute("count {\"How\", \"many\", \"items\", \"in\", \"this\", \"list\"}", output);
 
         if(OsFamilies.MAC_OS_X.isCurrent()) {
@@ -57,7 +57,7 @@ public class AppleScriptTest {
      */
     @Test
     public void testScriptEncoding() {
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
 
         String nonAsciiString;
         Locale stringLocale;        // for locale-aware String comparison
@@ -92,6 +92,6 @@ public class AppleScriptTest {
     @Test
     public void testScriptError() {
         // Should fail under all platforms
-        assert !AppleScript.execute("blah", new StringBuffer());
+        assert !AppleScript.execute("blah", new StringBuilder());
     }
 }

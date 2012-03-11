@@ -18,16 +18,6 @@
 
 package com.mucommander.job;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.MimeTypes;
 import com.mucommander.commons.file.util.FileSet;
@@ -39,6 +29,12 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import java.io.*;
+import java.net.Socket;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 /**
@@ -173,7 +169,7 @@ public class SendMailJob extends TransferFileJob {
     private String splitRecipientString(String recipientsStr, List<String> recipients) {
 
         // /!\ this piece of code is far from being bullet proof but I'm too lazy now to rewrite it
-        StringBuffer newRecipientsSb = new StringBuffer();
+        StringBuilder newRecipientsSb = new StringBuilder();
         StringTokenizer st = new StringTokenizer(recipientsStr, ",;");
         String rec;
         int pos1, pos2;

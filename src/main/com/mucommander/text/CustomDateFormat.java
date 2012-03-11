@@ -18,14 +18,14 @@
 
 package com.mucommander.text;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -71,7 +71,7 @@ public class CustomDateFormat implements ConfigurationListener {
         if(separator==null || separator.equals("/"))
             return dateFormatString;
 
-        StringBuffer dateFormatStringSB = new StringBuffer();
+        StringBuilder dateFormatStringSB = new StringBuilder();
         int pos1 = 0;
         int pos2;
         while((pos2=dateFormatString.indexOf('/', pos1))>-1) {

@@ -253,8 +253,8 @@ public class CommandTest {
      */
     @Test
     public void testParsingWithSubstitution() {
-        String[]     tokens;
-        StringBuffer buffer;
+        String[]      tokens;
+        StringBuilder buffer;
 
         // Makes sure keywords are tokenised when not escaped.
         tokens = Command.getTokens("ls $f", files);
@@ -265,7 +265,7 @@ public class CommandTest {
 
         // Makes sure keywords are not tokenised when escaped.
         tokens = Command.getTokens("ls \"$f\"", files);
-        buffer = new StringBuffer("\"");
+        buffer = new StringBuilder("\"");
         buffer.append(files[0].getAbsolutePath());
         for(int i = 1; i < files.length; i++) {
             buffer.append(' ');

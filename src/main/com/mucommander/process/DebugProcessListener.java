@@ -46,10 +46,10 @@ class DebugProcessListener implements ProcessListener {
      * @param tokens tokens that compose the command that is being ran.
      */
     public DebugProcessListener(String[] tokens) {
-        StringBuffer buffer;
+        StringBuilder buffer;
 
         // Rebuilds the command.
-        buffer = new StringBuffer();
+        buffer = new StringBuilder();
         for (String token : tokens) {
             buffer.append(token);
             buffer.append(' ');

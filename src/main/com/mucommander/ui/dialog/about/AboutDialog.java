@@ -471,9 +471,9 @@ public class AboutDialog extends FocusDialog implements ActionListener {
      * @return a formatted version of muCommander's build date.
      */
     private String getFormatedDate() {
-        StringBuffer buffer;
+        StringBuilder buffer;
 
-        buffer = new StringBuffer(RuntimeConstants.BUILD_DATE.substring(0, 4));
+        buffer = new StringBuilder(RuntimeConstants.BUILD_DATE.substring(0, 4));
         buffer.append('/');
         buffer.append(RuntimeConstants.BUILD_DATE.substring(4, 6));
         buffer.append('/');

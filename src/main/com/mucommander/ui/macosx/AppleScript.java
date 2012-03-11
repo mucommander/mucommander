@@ -18,24 +18,23 @@
 
 package com.mucommander.ui.macosx;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class allows to run AppleScript code under Mac OS X, relying on the <code>osacript</code> command available
  * that comes with any install of Mac OS X. This command is used instead of the Cocoa-Java library which has been
  * deprecated by Apple.<br/>
- * Calls to {@link #execute(String, StringBuffer)} on any OS other than Mac OS X will always fail.
+ * Calls to {@link #execute(String, StringBuilder)} on any OS other than Mac OS X will always fail.
  *
  * <p>
  * <b>Important notes about character encoding</b>:
@@ -71,7 +70,7 @@ public class AppleScript {
     /**
      * Executes the given AppleScript and returns <code>true</code> if it completed its execution normally, i.e. without
      * any error.
-     * The script's output is accumulated in the given <code>StringBuffer</code>. If the script completed its execution
+     * The script's output is accumulated in the given <code>StringBuilder</code>. If the script completed its execution
      * normally, the buffer will contain the script's standard output. If the script failed because of an error in it,
      * the buffer will contain details about the error.
      *
@@ -79,11 +78,11 @@ public class AppleScript {
      * speed the execution up a little.</p>
      *
      * @param appleScript the AppleScript to execute
-     * @param outputBuffer the StringBuffer that will hold the script's output, <code>null</code> for no output
-     * @return true if the script was succesfully executed, false if the
+     * @param outputBuffer the StringBuilder that will hold the script's output, <code>null</code> for no output
+     * @return true if the script was successfully executed, false if the
      */
-    public static boolean execute(String appleScript, StringBuffer outputBuffer) {
-        // No point in going any futher if the current OS is not Mac OS X
+    public static boolean execute(String appleScript, StringBuilder outputBuffer) {
+        // No point in going any further if the current OS is not Mac OS X
         if(!OsFamilies.MAC_OS_X.isCurrent())
             return false;
 
@@ -143,7 +142,7 @@ public class AppleScript {
      *   <li>{@link #MACROMAN} for AppleScript 1.10- (Mac OS X 10.4 or lower)</li>
      * </ul>
      *
-     * If {@link #MACROMAN} is used, the scripts passed to {@link #execute(String, StringBuffer)} should not contain
+     * If {@link #MACROMAN} is used, the scripts passed to {@link #execute(String, StringBuilder)} should not contain
      * characters that are not part of the <i>MacRoman</i> charset or they will not be properly interpreted.
      *
      * @return the encoding that AppleScript uses on the current runtime environment
@@ -167,10 +166,10 @@ public class AppleScript {
      */
     private static class ScriptOutputListener implements ProcessListener {
 
-        private StringBuffer outputBuffer;
+        private StringBuilder outputBuffer;
         private String outputEncoding;
 
-        private ScriptOutputListener(StringBuffer outputBuffer, String outputEncoding) {
+        private ScriptOutputListener(StringBuilder outputBuffer, String outputEncoding) {
             this.outputBuffer = outputBuffer;
             this.outputEncoding = outputEncoding;
         }

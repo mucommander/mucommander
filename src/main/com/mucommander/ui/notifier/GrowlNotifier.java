@@ -18,15 +18,14 @@
 
 package com.mucommander.ui.notifier;
 
-import java.util.Hashtable;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.macosx.AppleScript;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * GrowlNotifier implements a notifier that uses the Growl notification system.
@@ -112,7 +111,7 @@ public class GrowlNotifier extends AbstractNotifier {
                 return (isEnabled = true);
 
             // Test if Growl is currently running and abort if it is not
-            StringBuffer outputBuffer = new StringBuffer();
+            StringBuilder outputBuffer = new StringBuilder();
             if(!(AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && outputBuffer.toString().equals("true"))) {
             	LOGGER.debug("Growl is not running, aborting");
 

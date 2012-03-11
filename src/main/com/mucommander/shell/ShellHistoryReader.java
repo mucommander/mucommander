@@ -46,7 +46,7 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
     /** Reader's current status. */
     private int          status;
     /** Buffer for the current command. */
-    private StringBuffer command;
+    private StringBuilder command;
     /** muCommander version that was used to write the shell history file */
     private String version;
 
@@ -57,7 +57,7 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
      * Creates a new shell history reader.
      */
     private ShellHistoryReader() {
-        command = new StringBuffer();
+        command = new StringBuilder();
         status = STATUS_UNKNOWN;
     }
 

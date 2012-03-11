@@ -18,25 +18,23 @@
 
 package com.mucommander.auth;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.xml.parsers.SAXParserFactory;
-
+import com.mucommander.bookmark.XORCipher;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.io.backup.BackupInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.mucommander.bookmark.XORCipher;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.io.backup.BackupInputStream;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This class takes care of parsing the credentials XML file and adding parsed {@link CredentialsMapping} instances
@@ -53,7 +51,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     private Map<String, String> urlProperties;
     private String login;
     private String password;
-    private StringBuffer characters;
+    private StringBuilder characters;
 
     /** muCommander version that was used to write the credentials file */
     private String version;
@@ -76,7 +74,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
         InputStream in;
 
         in = null;
-        characters = new StringBuffer();
+        characters = new StringBuilder();
         try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
         finally {
             if(in != null) {

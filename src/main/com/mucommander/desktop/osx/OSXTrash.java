@@ -18,18 +18,17 @@
 
 package com.mucommander.desktop.osx;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.ui.macosx.AppleScript;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.List;
 
 /**
  * OSXTrash provides access to the Mac OS X Finder's trash. Only local files (or locally mounted files) can be moved
@@ -133,7 +132,7 @@ public class OSXTrash extends QueuedTrash {
      */
     @Override
     public int getItemCount() {
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
         if(!AppleScript.execute(COUNT_TRASH_ITEMS_APPLESCRIPT, output))
             return -1;
 

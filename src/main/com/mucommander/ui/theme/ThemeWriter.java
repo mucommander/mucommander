@@ -21,7 +21,8 @@ package com.mucommander.ui.theme;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -450,9 +451,9 @@ class ThemeWriter implements ThemeXmlConstants {
      */
     private static XmlAttributes getColorAttributes(Color color) {
         XmlAttributes attributes; // Stores the color's description.
-        StringBuffer  buffer;     // Used to build the color's string representation.
+        StringBuilder buffer;     // Used to build the color's string representation.
 
-        buffer = new StringBuffer();
+        buffer = new StringBuilder();
 
         // Red component.
         if(color.getRed() < 16)

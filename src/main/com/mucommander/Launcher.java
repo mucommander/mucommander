@@ -18,13 +18,6 @@
 
 package com.mucommander;
 
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
@@ -49,6 +42,12 @@ import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.GraphicsEnvironment;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
 
 /**
  * muCommander launcher.
@@ -189,10 +188,10 @@ public class Launcher {
     /**
      * Creates an error message.
      */
-    private static StringBuffer createErrorMessage(String msg, Exception exception, boolean quit) {
-        StringBuffer error;
+    private static StringBuilder createErrorMessage(String msg, Exception exception, boolean quit) {
+        StringBuilder error;
 
-        error = new StringBuffer();
+        error = new StringBuilder();
         if(quit)
             error.append("Warning: ");
         error.append(msg);
@@ -219,7 +218,7 @@ public class Launcher {
      * Prints a configuration file specific error message.
      */
     private static void printFileError(String msg, Exception exception, boolean quit) {
-        StringBuffer error;
+        StringBuilder error;
 
         error = createErrorMessage(msg, exception, quit);
         if(!quit)
