@@ -18,37 +18,9 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.AWTKeyStroke;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.KeyboardFocusManager;
-import java.awt.dnd.DropTarget;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.net.MalformedURLException;
-import java.util.HashSet;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.AuthException;
-import com.mucommander.commons.file.AuthenticationType;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -69,17 +41,27 @@ import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationManager;
-import com.mucommander.ui.main.quicklist.BookmarksQL;
-import com.mucommander.ui.main.quicklist.ParentFoldersQL;
-import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
-import com.mucommander.ui.main.quicklist.RecentLocationsQL;
-import com.mucommander.ui.main.quicklist.RootFoldersQL;
+import com.mucommander.ui.main.quicklist.*;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
+import java.awt.*;
+import java.awt.dnd.DropTarget;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.net.MalformedURLException;
+import java.util.HashSet;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -216,11 +198,11 @@ public class FolderPanel extends JPanel implements FocusListener {
 			public void locationChanged(LocationEvent locationEvent) {
 				final LocationAdapter thisLocationListenerInstance = this;
 				SwingUtilities.invokeLater(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						folderChangeMonitor = new FolderChangeMonitor(FolderPanel.this);
-						locationManager.removeLocationListener(thisLocationListenerInstance);						
+						locationManager.removeLocationListener(thisLocationListenerInstance);
 					}
 				});
 			}
@@ -492,12 +474,19 @@ public class FolderPanel extends JPanel implements FocusListener {
                 return null;
             }
 
-            this.changeFolderThread = new ChangeFolderThread(folder, findWorkableFolder);
-            if(selectThisFileAfter!=null)
-                this.changeFolderThread.selectThisFileAfter(selectThisFileAfter);
-            changeFolderThread.start();
+            // Important: the ChangeFolderThread instance must be kept in a local variable (as opposed to the
+            // changeFolderThread field only) before being returned. The reason for this is that ChangeFolderThread
+            // changes the changeFolderThread field to null when finished, and it may do so before this method has
+            // returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
+            // a null value to be returned, which is particularly problematic during startup (would cause an NPE).
+            ChangeFolderThread thread = new ChangeFolderThread(folder, findWorkableFolder);
 
-            return changeFolderThread;
+            if(selectThisFileAfter!=null)
+                thread.selectThisFileAfter(selectThisFileAfter);
+            thread.start();
+
+            changeFolderThread = thread;
+            return thread;
         }
     }
 
@@ -572,11 +561,17 @@ public class FolderPanel extends JPanel implements FocusListener {
                 return null;
             }
 
-            this.changeFolderThread = new ChangeFolderThread(folderURL);
-            changeFolderThread.setCredentialsMapping(credentialsMapping);
-            changeFolderThread.start();
+            // Important: the ChangeFolderThread instance must be kept in a local variable (as opposed to the
+            // changeFolderThread field only) before being returned. The reason for this is that ChangeFolderThread
+            // changes the changeFolderThread field to null when finished, and it may do so before this method has
+            // returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
+            // a null value to be returned, which is particularly problematic during startup (would cause an NPE).
+            ChangeFolderThread thread = new ChangeFolderThread(folderURL);
+            thread.setCredentialsMapping(credentialsMapping);
+            thread.start();
 
-            return changeFolderThread;
+            changeFolderThread = thread;
+            return thread;
         }
     }
 
