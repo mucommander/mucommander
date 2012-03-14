@@ -1243,7 +1243,9 @@ public class FolderPanel extends JPanel implements FocusListener {
             // Restore normal mouse cursor
             mainFrame.setCursor(Cursor.getDefaultCursor());
 
-            changeFolderThread = null;
+            synchronized(FOLDER_CHANGE_LOCK) {
+                changeFolderThread = null;
+            }
 
             // Make all actions active again
             mainFrame.setNoEventsMode(false);
