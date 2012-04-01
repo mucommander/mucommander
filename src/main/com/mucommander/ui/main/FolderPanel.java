@@ -40,6 +40,7 @@ import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.quicklist.*;
 import com.mucommander.ui.main.table.FileTable;
@@ -81,6 +82,8 @@ public class FolderPanel extends JPanel implements FocusListener {
     private FolderChangeMonitor folderChangeMonitor;
 
     private LocationManager locationManager = new LocationManager(this);
+    /** Holds a reference to the LocationListener. Used transiently while the first location is being set. */
+    private LocationListener locationListener;
 
     /*  We're NOT using JComboBox anymore because of its strange behavior:
         it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
@@ -191,9 +194,11 @@ public class FolderPanel extends JPanel implements FocusListener {
                 bookmarksQL,
                 rootsQL};
 
-        // Create the FolderChangeMonitor that monitors changes in the current folder and automatically refreshes it
-    	// after the first location is set
-        locationManager.addLocationListener(new LocationAdapter() {
+        // Waits for the first location to be set before creating the FolderChangeMonitor that will monitor the
+        // current folder for changes.
+        // Note: We need to hold a hard reference to the LocationListener, otherwise it might get GCed before being
+        // invoked (ticket #452).
+        locationListener = new LocationAdapter() {
 			@Override
 			public void locationChanged(LocationEvent locationEvent) {
 				final LocationAdapter thisLocationListenerInstance = this;
@@ -202,11 +207,14 @@ public class FolderPanel extends JPanel implements FocusListener {
 					@Override
 					public void run() {
 						folderChangeMonitor = new FolderChangeMonitor(FolderPanel.this);
+                        // We're now done with the LocationListener, remove it
 						locationManager.removeLocationListener(thisLocationListenerInstance);
+                        locationListener = null;
 					}
 				});
 			}
-        });
+        };
+        locationManager.addLocationListener(locationListener);
 
     	// Create the Tabs (Must be called after the fileTable was created and current folder was set)
         tabs = new FileTableTabs(mainFrame, this, initialFolders);
