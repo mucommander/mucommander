@@ -8759,7 +8759,7 @@ quit_dialog.show_next_time:DE:Nächstes Mal anzeigen
 quit_dialog.show_next_time:ES:Mostrar la próxima vez
 quit_dialog.show_next_time:CS:Zobrazit příště
 quit_dialog.show_next_time:zh_TW:下次再顯示
-quit_dialog.show_next_time:PL:Do zobaczenia następnym razem
+quit_dialog.show_next_time:PL:Pokaż następnym razem
 quit_dialog.show_next_time:HU:Üzenet megjelenítése
 quit_dialog.show_next_time:RU:Показывать следующий раз
 quit_dialog.show_next_time:zh_CN:下次还显示
@@ -17386,7 +17386,7 @@ setup.intro:RO:Vă rugăm să alegeți modul în care muCommander se va comporta
 setup.intro:zh_CN:请选择你所希望的 muCommander 行为模式
 setup.intro:RU:Выберите основные настройки muCommander.
 setup.intro:ES:Por favor, seleccione la forma en la que desea que muCommander se comporte.
-setup.intro:PL:Proszę wybrać sposób otrzymania muCommander.
+setup.intro:PL:Proszę wybrać jak ma się zachowywać muCommander.
 setup.intro:KO:muCommander가 작동하는 방식을 선택하세요
 setup.intro:pt_BR:Por favor, selecione como o muCommander deve se comportar.
 setup.intro:NL:Kiest u a.u.b. de manier waarop muCommander zich moet gedragen.
