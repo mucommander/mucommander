@@ -37,7 +37,7 @@ public class ZipFormatProvider implements ArchiveFormatProvider {
 
     /** Static instance of the filename filter that matches archive filenames */
     private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(new String[]
-        {".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf", ".egg", ".epub"}
+        {".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf", ".egg", ".epub", ".cbz"}
     );
 
 

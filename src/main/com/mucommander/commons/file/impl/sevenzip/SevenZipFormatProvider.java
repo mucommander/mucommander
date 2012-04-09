@@ -36,7 +36,7 @@ import java.io.IOException;
 public class SevenZipFormatProvider implements ArchiveFormatProvider {
 	/** Static instance of the filename filter that matches archive filenames */
     private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(new String[]
-        {".7z"}
+        {".7z", ".cb7"}
     );
 
 
