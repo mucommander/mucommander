@@ -152,6 +152,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertHeader(doc,         "Translators");
             insertDetailedString(doc, "4X_Pro",              "Russian");
             insertDetailedString(doc, "Roberto Angeletti",   "Italian");
+            insertDetailedString(doc, "Emre Aytaç",          "Turkish");
             insertDetailedString(doc, "Tamás Balogh-Walder", "Hungarian");
             insertDetailedString(doc, "Mykola Bilovus",      "Ukrainian");
             insertDetailedString(doc, "ChArLoK_16",          "Arabic");
@@ -166,21 +167,20 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertDetailedString(doc, "Jioh L. Jung",        "Korean");
             insertDetailedString(doc, "Andrzej Kosiński",    "Polish");
             insertDetailedString(doc, "Joze Kovacic",        "Slovenian");
+            insertDetailedString(doc, "Oleksandr Kovalchuk", "Ukrainian");
             insertDetailedString(doc, "Pieter Kristensen",   "Dutch");
             insertDetailedString(doc, "Ján Ľudvík",          "Slovak");
             insertDetailedString(doc, "Jaromír Mára",        "Czech");
+            insertDetailedString(doc, "Xavi Miró",           "Spanish");
+            insertDetailedString(doc, "Evgeny Morozov",      "Russian");
             insertDetailedString(doc, "Jonathan Murphy",     "British English");
             insertDetailedString(doc, "Nardog",              "Japanese");
+            insertDetailedString(doc, "Jordi Plantalech",    "Catalan");
             insertDetailedString(doc, "Alexey Sirotov",      "Russian");
             insertDetailedString(doc, "Jeppe Toustrup",      "Danish");
             insertDetailedString(doc, "Peter Vasko",         "Czech");
             insertDetailedString(doc, "vboo",                "Belarusian");
             insertDetailedString(doc, "whiteriver",          "Simplified Chinese");
-            insertDetailedString(doc, "Emre Aytaç",          "Turkish");
-            insertDetailedString(doc, "Jordi Plantalech",    "Catalan");
-			insertDetailedString(doc, "Oleksandr Kovalchuk", "Ukrainian");
-			insertDetailedString(doc, "Evgeny Morozov",      "Russian");
-			insertDetailedString(doc, "Xavi Miró",           "Spanish");
             insertLineBreak(doc);
 
             // Special thanks.
