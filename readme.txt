@@ -81,7 +81,7 @@ Bug fixes:
 - Fixed an exception on shutdown (ticket #377).
 - Fixed an exception when trying to update text files in archives using the internal editor (ticket #408).
 - File renaming is now cancelled when the filename editor loses focus (#428).
-- Fixed a deadlock that would cause the shutdown process not to terminate (#431).
+- Fixed a deadlock that could prevent the application from shutting down (#431).
 - Fixed a bug that prevented connections to remove locations using stored credentials (ticket #417).
 - Webstart for nightly build is now working on OS X 10.6 (ticket #390).
 - Fixed an issue that caused unpacking of 7z archive file to produce corrupted files (ticket #347).
