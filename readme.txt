@@ -82,11 +82,8 @@ Bug fixes:
 - Fixed an exception when trying to update text files in archives using the internal editor (ticket #408).
 - File renaming is now cancelled when the filename editor loses focus (#428).
 - Fixed a deadlock that could prevent the application from shutting down (#431).
-- Fixed a bug that prevented connections to remove locations using stored credentials (ticket #417).
-- Webstart for nightly build is now working on OS X 10.6 (ticket #390).
 - Fixed an issue that caused unpacking of 7z archive file to produce corrupted files (ticket #347).
 - Fixed several bugs related to SMB handling (tickets #351 and #436).
-- Fixed an issue which could cause the app to crash after completing a file job (ticket #452).
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
