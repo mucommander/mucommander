@@ -417,7 +417,7 @@ public class Launcher {
             try {isFirstBoot = !MuConfigurations.isPreferencesFileExists();}
             catch(IOException e) {isFirstBoot = true;}
 
-            // Load snapshot data before loading configuration as until version 0.8.6 the snapshot properties
+            // Load snapshot data before loading configuration as until version 0.9 the snapshot properties
             // were stored as preferences so when loading such preferences they could overload snapshot properties
             try {MuConfigurations.loadSnapshot();}
             catch(Exception e) {printFileError("Could not load snapshot", e, fatalWarnings);}
