@@ -540,7 +540,7 @@
         <echo message="Using archive prefix: ${archive.prefix}"/>
     </target>
 
-    <target name="release" depends="release-prefixes,compile,javadoc,jnlp,version,nsis,app.tgz,portable,tgz,deb"
+    <target name="release" depends="reports,release-prefixes,compile,javadoc,jnlp,version,nsis,app.tgz,portable,tgz,deb"
             description="Generates the library's release artifacts.">
         <echo>Packaging sources...</echo>
         <tar destfile="${dist}/${package.prefix}-src.tar.gz" compression="gzip">
