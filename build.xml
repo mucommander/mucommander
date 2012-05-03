@@ -177,7 +177,7 @@
 
     <!-- = Packaging targets ======================================================================================= -->
     <!-- =========================================================================================================== -->
-    <target name="release" depends="reports,compile,javadoc,jar" description="Generates the library's release artifacts.">
+    <target name="release" depends="compile,javadoc,jar" description="Generates the library's release artifacts.">
         <echo>Packaging sources...</echo>
         <jar jarfile="${dist.source}" basedir="${src.main}"/>
     </target>
