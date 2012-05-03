@@ -32,9 +32,9 @@ import java.io.Reader;
  */
 public class BoundedReader extends FilterReader {
 
-    protected long totalRead;
-    protected long allowedCharacters;
-    protected IOException outOfBoundException;
+    private long totalRead;
+    private long allowedCharacters;
+    private IOException outOfBoundException;
 
     /**
      * Equivalent to {@link #BoundedReader(java.io.Reader, long, java.io.IOException)} called with a
@@ -89,7 +89,7 @@ public class BoundedReader extends FilterReader {
      *
      * @return the total number of characters that have been read or skipped thus far
      */
-    public long getReadCounter() {
+    public synchronized long getReadCounter() {
         return totalRead;
     }
 
@@ -100,7 +100,7 @@ public class BoundedReader extends FilterReader {
      * @return the remaining number of characters that this reader allows to be read, {@link Long#MAX_VALUE} if this
      * reader is not bounded.
      */
-    public long getRemainingCharacters() {
+    public synchronized long getRemainingCharacters() {
         return allowedCharacters<=-1 ? Long.MAX_VALUE : allowedCharacters-totalRead;
     }
 

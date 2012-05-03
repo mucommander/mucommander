@@ -35,10 +35,10 @@ import java.io.OutputStream;
 public class CounterOutputStream extends OutputStream {
 
     /** Underlying OutputStream */
-    private OutputStream out;
+    private final OutputStream out;
 
     /** Byte counter */
-    private ByteCounter counter;
+    private final ByteCounter counter;
 
     
     /**

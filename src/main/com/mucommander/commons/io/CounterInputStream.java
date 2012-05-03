@@ -36,10 +36,10 @@ import java.io.InputStream;
 public class CounterInputStream extends InputStream {
 
     /** Underlying InputStream */
-    private InputStream in;
+    private final InputStream in;
 
     /** Byte counter */
-    private ByteCounter counter;
+    private final ByteCounter counter;
 
     /** Should skipped bytes be accounted for ? (enabled by default) */
     private boolean countSkippedBytes = true;

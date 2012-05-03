@@ -174,10 +174,16 @@ public class BOM {
      * @return returns a String representation of this <code>BOM</code>.
      */
     public String toString() {
-        String sigRep = "{";
-        for(int i=0; i<sig.length; i++)
-            sigRep += (0xFF&sig[i])+(i==sig.length-1?"}":", ");
+        StringBuilder out;
 
-        return super.toString()+", signature="+sigRep+", encoding="+encoding;
+        out = new StringBuilder(super.toString());
+        out.append(", signature=");
+        for(int i=0; i < sig.length; i++) {
+            out.append(0xFF&sig[i]);
+            out.append((i==sig.length-1?"}":", "));
+        }
+        out.append(", encoding=");
+        out.append(encoding);
+        return out.toString();
     }
 }
