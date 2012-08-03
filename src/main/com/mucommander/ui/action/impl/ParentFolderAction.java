@@ -71,21 +71,17 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
         toggleEnabledState();
     }
     
-    /*******************
-	 * LocationListener
-	 *******************/
+    /**********************************
+	 * LocationListener Implementation
+	 **********************************/
 
-    @Override
     public void locationChanged(LocationEvent e) {
         toggleEnabledState();
     }
     
-	@Override
 	public void locationChanging(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationCancelled(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationFailed(LocationEvent locationEvent) { }
 }

@@ -218,7 +218,6 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 		// ThemeListener implementation //
 		//////////////////////////////////
 
-		@Override
 		public void colorChanged(ColorChangedEvent event) {		
 			if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR)
 				itemBackgound = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR);
@@ -233,7 +232,6 @@ public class DataList<T> extends JList implements QuickListFocusableComponent {
 				selectedItemForeground = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR);
 		}
 
-		@Override
 		public void fontChanged(FontChangedEvent event) {
 			itemFont = ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT);		
 		}

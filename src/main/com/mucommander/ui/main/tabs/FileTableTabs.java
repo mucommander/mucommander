@@ -112,25 +112,21 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		removeTab(fileTableTabHeader);
 	}
 	
-	/*******************
-	 * LocationListener
-	 *******************/
+	/**********************************
+	 * LocationListener Implementation
+	 **********************************/
 	
-	@Override
 	public void locationChanged(LocationEvent locationEvent) {
 		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
 	}
 
-	@Override
 	public void locationCancelled(LocationEvent locationEvent) {
 		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
 	}
 
-	@Override
 	public void locationFailed(LocationEvent locationEvent) {
 		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
 	}
 	
-	@Override
 	public void locationChanging(LocationEvent locationEvent) { }
 }

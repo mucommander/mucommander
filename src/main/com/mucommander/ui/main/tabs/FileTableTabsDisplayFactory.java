@@ -40,12 +40,14 @@ public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTable
 		this.mainFrame = mainFrame;
 	}
 
-	@Override
+	/************************************
+	 * TabsDisplayFactory Implementation
+	 ************************************/
+	
 	public MultipleTabsDisplay<FileTableTab> createMultipleTabsDisplay(TabsCollection<FileTableTab> tabs) {
 		return new MultipleTabsDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
 	}
 
-	@Override
 	public SingleTabDisplay<FileTableTab> createSingleTabsDisplay(TabsCollection<FileTableTab> tabs) {
 		return new SingleTabDisplay<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
 	}

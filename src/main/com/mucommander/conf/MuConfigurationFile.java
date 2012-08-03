@@ -114,7 +114,6 @@ abstract class MuConfigurationFile implements ConfigurationSource {
      * Returns an input stream on the configuration file.
      * @return an input stream on the configuration file.
      */
-    @Override
     public synchronized Reader getReader() throws IOException {
         return new InputStreamReader(new BackupInputStream(getConfigurationFile()), Charset.forName("utf-8"));
     }
@@ -123,12 +122,10 @@ abstract class MuConfigurationFile implements ConfigurationSource {
      * Returns an output stream on the configuration file.
      * @return an output stream on the configuration file.
      */
-    @Override
     public synchronized Writer getWriter() throws IOException {
         return new OutputStreamWriter(new BackupOutputStream(getConfigurationFile()), Charset.forName("utf-8"));
     }
     
-    @Override
 	public boolean isExists() throws IOException {
 		return getConfigurationFile().exists();
 	}

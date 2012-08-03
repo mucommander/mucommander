@@ -766,22 +766,18 @@ public class MainFrame extends JFrame implements LocationListener {
         rightTable.setAutoSizeColumnsEnabled(b);
     }
     
-    /*******************
-	 * LocationListener
-	 *******************/
+    /**********************************
+	 * LocationListener Implementation
+	 **********************************/
 
-    @Override
     public void locationChanged(LocationEvent e) {
         // Update window title to reflect the new current folder
         updateWindowTitle();
     }
     
-	@Override
 	public void locationChanging(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationCancelled(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationFailed(LocationEvent locationEvent) { }
 }

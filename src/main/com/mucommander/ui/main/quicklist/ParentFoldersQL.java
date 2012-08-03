@@ -73,21 +73,17 @@ public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> implements
 		return getIconOfFile(item);
 	}
 
-	/*******************
-	 * LocationListener
-	 *******************/
+	/**********************************
+	 * LocationListener Implementation
+	 **********************************/
 
-	@Override
 	public void locationChanged(LocationEvent locationEvent) {
 		updated = false;
 	}
 	
-	@Override
 	public void locationChanging(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationCancelled(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationFailed(LocationEvent locationEvent) { }
 }

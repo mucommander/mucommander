@@ -550,22 +550,18 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         }
     }
 
-	/*******************
-	 * LocationListener
-	 *******************/
+	/**********************************
+	 * LocationListener Implementation
+	 **********************************/
 	
-    @Override
 	public void locationChanged(LocationEvent e) {
         // Update the button's label to reflect the new current folder
         updateButton();
     }
     
-    @Override
 	public void locationChanging(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationCancelled(LocationEvent locationEvent) { }
 
-	@Override
 	public void locationFailed(LocationEvent locationEvent) {}
 }

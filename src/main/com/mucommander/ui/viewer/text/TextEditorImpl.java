@@ -93,7 +93,6 @@ class TextEditorImpl implements ThemeListener {
 			 * That's why in case we get an event that needs to initiate its default behavior,
 			 * we just bubble it up to the parent component of the JTextArea.  
 			 */
-			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				boolean isCtrlPressed = (e.getModifiers() & KeyEvent.CTRL_MASK)!=0;
 				if (isCtrlPressed) {

@@ -167,7 +167,6 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
     // FocusListener methods //
     ///////////////////////////
     
-    @Override
     public void focusGained(FocusEvent e) {
     	setBorderColor(borderColor);
     	getViewport().setBackground(backgroundColor);
@@ -175,7 +174,6 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
     	getViewport().repaint();
     }
 
-    @Override
     public void focusLost(FocusEvent e) {
     	setBorderColor(unfocusedBorderColor);
     	getViewport().setBackground(unfocusedBackgroundColor);

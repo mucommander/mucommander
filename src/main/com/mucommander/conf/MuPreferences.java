@@ -500,83 +500,67 @@ public class MuPreferences implements MuPreferencesAPI {
 	// MuPreferencesAPI implementation //
 	/////////////////////////////////////
 
-	@Override
 	public boolean setVariable(MuPreference preference, String value) {
 		return configuration.setVariable(preference.toString(), value);
 	}
 
-	@Override
 	public boolean setVariable(MuPreference preference, int value) {
 		return configuration.setVariable(preference.toString(), value);
 	}
 
-	@Override
 	public boolean setVariable(MuPreference preference, List<String> value,
 			String separator) {
 		return configuration.setVariable(preference.toString(), value, separator);
 	}
 
-	@Override
 	public boolean setVariable(MuPreference preference, float value) {
 		return configuration.setVariable(preference.toString(), value);
 	}
 
-	@Override
 	public boolean setVariable(MuPreference preference, boolean value) {
 		return configuration.setVariable(preference.toString(), value);
 	}
 
-	@Override
 	public boolean setVariable(MuPreference preference, long value) {
 		return configuration.setVariable(preference.toString(), value);
 	}
 
-	@Override
 	public boolean setVariable(MuPreference preference, double value) {
 		return configuration.setVariable(preference.toString(), value);
 	}
 
-	@Override
 	public String getVariable(MuPreference preference) {
 		return configuration.getVariable(preference.toString());
 	}
 	
-	@Override
 	public String getVariable(MuPreference preference, String value) {
 		return configuration.getVariable(preference.toString(), value);
 	}
 
-	@Override
 	public int getVariable(MuPreference preference, int value) {
 		return configuration.getVariable(preference.toString(), value);
 	}
 
-	@Override
 	public List<String> getVariable(MuPreference preference, List<String> value, String separator) {
 		return configuration.getVariable(preference.toString(), value, separator);
 	}
 
-	@Override
 	public float getVariable(MuPreference preference, float value) {
 		return configuration.getVariable(preference.toString(), value);
 	}
 
-	@Override
 	public boolean getVariable(MuPreference preference, boolean value) { 
 		return configuration.getVariable(preference.toString(), value);
 	}
 
-	@Override
 	public long getVariable(MuPreference preference, long value) {
 		return configuration.getVariable(preference.toString(), value);
 	}
 
-	@Override
 	public double getVariable(MuPreference preference, double value) {
 		return configuration.getVariable(preference.toString(), value);
 	}
 	
-	@Override
 	public ValueList getListVariable(MuPreference preference, String separator) {
 		return configuration.getListVariable(preference.toString(), separator);
 	}
@@ -589,12 +573,10 @@ public class MuPreferences implements MuPreferencesAPI {
 		return configuration.getVariable(name);
 	}
 	
-	@Override
 	public boolean isVariableSet(MuPreference preference) {
 		return configuration.isVariableSet(preference.toString());
 	}
 	
-	@Override
 	public String removeVariable(String name) {
 		return configuration.removeVariable(name);
 	}

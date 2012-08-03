@@ -29,7 +29,9 @@ import com.mucommander.desktop.TrashProvider;
  */
 public class XfceTrashProvider implements TrashProvider {
 
-	@Override
+	/*******************************
+	 * TrashProvider Implementation
+	 *******************************/
 	public AbstractTrash getTrash() {
 		return new XfceTrash();
 	}

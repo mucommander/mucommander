@@ -202,11 +202,10 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		display.setSelectedTabIndex(index);
 	}
 	
-	/*********************
-	 * TabsChangeListener 
-	 *********************/
+	/************************************
+	 * TabsChangeListener Implementation
+	 ************************************/
 
-	@Override
 	public void tabAdded(int index) {
 		switch (tabs.count()) {
 		case 2:
@@ -219,12 +218,10 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		}
 	}
 
-	@Override
 	public void tabRemoved(int index) {
 		if (tabs.count() == 1)
 			switchToSingleTab();
 	}
 	
-	@Override
 	public void tabUpdated(int index) { }
 }

@@ -121,12 +121,10 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
         /// LogRecordListItem Implementation //
         ///////////////////////////////////////
         
-        @Override
         public boolean isLevelEqualOrHigherThan(LogLevel level) {
         	return getLevel().compareTo(level) <= 0;
         }
         
-        @Override
         public LogLevel getLevel() {
         	if (logLevel == null)
         		logLevel = MuLogging.getLevel(loggingEvent);

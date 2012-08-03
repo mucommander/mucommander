@@ -282,12 +282,10 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     // LocationListener implementation //
     /////////////////////////////////////
 
-    @Override
     public void locationChanging(LocationEvent locationEvent) {
         folderChanging = true;
     }
 
-    @Override
     public void locationChanged(LocationEvent locationEvent) {
         // Update new current folder info
         updateFolderInfo(locationEvent.getFolderPanel().getCurrentFolder());
@@ -295,12 +293,10 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         folderChanging = false;
     }
 
-    @Override
     public void locationCancelled(LocationEvent locationEvent) {
         folderChanging = false;
     }
 
-    @Override
     public void locationFailed(LocationEvent locationEvent) {
         folderChanging = false;
     }

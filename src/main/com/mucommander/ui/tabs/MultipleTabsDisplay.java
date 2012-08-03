@@ -59,30 +59,26 @@ public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implement
 		pane.remove(index);
 	}
 	
-	/*********************
-	 * TabsChangeListener 
-	 *********************/
+	/************************************
+	 * TabsChangeListener Implementation
+	 ************************************/
 
-	@Override
 	public void tabUpdated(int index) {
 		update(tabs.get(index), index);
 	}
 
-	@Override
 	public void tabAdded(int index) {
 		add(tabs.get(index), index);
 	}
 
-	@Override
 	public void tabRemoved(int index) {
 		removeTab(index);
 	}
 	
-	/*****************
-	 * ChangeListener
-	 *****************/
+	/********************************
+	 * ChangeListener Implementation
+	 ********************************/
 	
-	@Override
 	public void stateChanged(ChangeEvent e) {
 		int selectedIndex = getSelectedTabIndex();
 		if (selectedIndex != -1)

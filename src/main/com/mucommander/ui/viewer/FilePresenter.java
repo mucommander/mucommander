@@ -29,10 +29,9 @@ abstract class FilePresenter extends JScrollPane {
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		addFocusListener(new FocusListener() {
-			@Override
+
 			public void focusLost(FocusEvent e) {}
 			
-			@Override
 			public void focusGained(FocusEvent e) {
 				// Delegate the focus to the JComponent that actually present the file
 				Component component = FilePresenter.this.getViewport().getComponent(0);

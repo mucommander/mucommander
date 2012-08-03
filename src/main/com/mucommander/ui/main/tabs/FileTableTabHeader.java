@@ -91,7 +91,10 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     	return label.getText();
     }
     
-    @Override
+    /********************************
+	 * ActionListener Implementation
+	 ********************************/
+    
 	public void actionPerformed(ActionEvent e) {
     	folderPanel.getTabs().close(this);
 	}

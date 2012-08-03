@@ -65,11 +65,10 @@ public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> implemen
 		return getIconOfFile(item);
 	}
 	
-	/*******************
-	 * LocationListener
-	 *******************/
+	/**********************************
+	 * LocationListener Implementation
+	 **********************************/
 	
-	@Override
 	public void locationChanged(LocationEvent locationEvent) {
 		AbstractFile currentFolder = locationEvent.getFolderPanel().getCurrentFolder();
 			
@@ -78,12 +77,9 @@ public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> implemen
 		linkedList.addFirst(currentFolder);
 	}
 
-	@Override
 	public void locationCancelled(LocationEvent locationEvent) {}
 	
-	@Override
 	public void locationChanging(LocationEvent locationEvent) {}
 
-	@Override
 	public void locationFailed(LocationEvent locationEvent) {}
 }

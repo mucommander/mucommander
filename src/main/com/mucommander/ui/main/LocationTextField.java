@@ -164,7 +164,6 @@ public class LocationTextField extends ProgressTextField implements LocationList
     // LocationListener methods //
     //////////////////////////////
 
-    @Override
     public void locationChanging(LocationEvent e) {
         // Change the location field's text to the folder being changed, only if the folder change was not initiated
         // by the location field (to preserve the path entered by the user while the folder is being changed) 
@@ -200,20 +199,17 @@ public class LocationTextField extends ProgressTextField implements LocationList
         setEnabled(false);
     }
 
-    @Override
     public void locationChanged(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path
         folderChangeCompleted(true);
     }
 
-    @Override
     public void locationCancelled(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path.
         // If the path was entered in the location field, keep the path to give the user a chance to correct it.
         folderChangeCompleted(false);
     }
 
-    @Override
     public void locationFailed(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path.
         // If the path was entered in the location field, keep the path to give the user a chance to correct it.

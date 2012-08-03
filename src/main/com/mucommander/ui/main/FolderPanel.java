@@ -204,7 +204,6 @@ public class FolderPanel extends JPanel implements FocusListener {
 				final LocationAdapter thisLocationListenerInstance = this;
 				SwingUtilities.invokeLater(new Runnable() {
 
-					@Override
 					public void run() {
 						folderChangeMonitor = new FolderChangeMonitor(FolderPanel.this);
                         // We're now done with the LocationListener, remove it

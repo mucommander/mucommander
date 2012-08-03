@@ -1562,19 +1562,19 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 }
             );
             textField.addActionListener(new ActionListener() {
-            	@Override
+            	
                 public void actionPerformed(ActionEvent e) {
                     rename();
                 }
             });
             textField.addFocusListener(new FocusListener() {
-				@Override
+				
 				public void focusLost(FocusEvent e) {
 					cancelCellEditing();
 					FileTable.this.repaint();
 				}
 				
-				@Override
+				
 				public void focusGained(FocusEvent e) {}
 			});
         }

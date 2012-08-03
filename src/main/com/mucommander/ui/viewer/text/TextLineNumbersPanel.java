@@ -291,17 +291,14 @@ public class TextLineNumbersPanel extends JPanel implements CaretListener, Docum
     // DocumentListener implementation //
     /////////////////////////////////////
 	
-	@Override
 	public void changedUpdate(DocumentEvent e) {
 		documentChanged();
 	}
 
-	@Override
 	public void insertUpdate(DocumentEvent e) {
 		documentChanged();
 	}
 
-	@Override
 	public void removeUpdate(DocumentEvent e) {
 		documentChanged();
 	}
@@ -333,7 +330,6 @@ public class TextLineNumbersPanel extends JPanel implements CaretListener, Docum
     // CaretListener implementation //
     //////////////////////////////////
 	
-	@Override
 	public void caretUpdate(CaretEvent e)
 	{
 		if (currentLineForeground == null)
@@ -357,7 +353,6 @@ public class TextLineNumbersPanel extends JPanel implements CaretListener, Docum
     // PropertyChangeListener implementation //
     ///////////////////////////////////////////
 	
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getNewValue() instanceof Font) {
 			setFont((Font) evt.getNewValue());
