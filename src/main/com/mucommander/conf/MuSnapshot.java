@@ -152,38 +152,81 @@ public class MuSnapshot {
 		return WINDOWS_SELECTION;
 	}
 	
+	/**
+	 * Returns the section of the {@link com.mucommander.ui.main.MainFrame} at a given index
+	 * 
+	 * @param index index of MainFrame
+	 * @return the section of the MainFrame at the given index
+	 */
 	private static String getWindowSection(int index) {
         return WINDOWS_SECTION + "." + WINDOW + "-" + index; 
     }
 	
+	/**
+	 * Returns the section of the properties for the {@link com.mucommander.ui.main.MainFrame} at a given index
+	 * 
+	 * @param window index of MainFrame
+	 * @return the section of the properties for the MainFrame at the given index
+	 */
 	private static String getWindowPropertiesSection(int window) {
 		return getWindowSection(window) + "." + WINDOW_PROPERTIES_SECTION;
 	}
 
+	/**
+	 * Returns the horizontal position on the screen of the {@link com.mucommander.ui.main.MainFrame} at a given index
+	 * 
+	 * @param window index of MainFrame
+	 * @return the horizontal position of the MainFrame at the given index
+	 */
 	public static String getX(int window) {
     	return getWindowPropertiesSection(window) + "." + X;
     }
     
+	/**
+	 * Return the vertical position on the screen of the {@link com.mucommander.ui.main.MainFrame} at a given index
+	 * 
+	 * @param window index of MainFrame
+	 * @return the vertical position of the MainFrame at the given index
+	 */
     public static String getY(int window) {
     	return getWindowPropertiesSection(window) + "." + Y;
     }
     
+    /**
+     * Returns the width of the {@link com.mucommander.ui.main.MainFrame} at a given index
+     * 
+     * @param window index of MainFrame
+     * @return the width of the MainFrame at the given index
+     */
     public static String getWidth(int window) {
     	return getWindowPropertiesSection(window) + "." + WIDTH;
     }
     
+    /**
+     * Return the height of the {@link com.mucommander.ui.main.MainFrame} in a given index
+     * 
+     * @param window index of MainFrame
+     * @return the height of the MainFrame at the given index
+     */
     public static String getHeight(int window) {
     	return getWindowPropertiesSection(window) + "." + HEIGHT;
     }
     
+    /**
+     * Returns the orientation used to split folder panels in the {@link com.mucommander.ui.main.MainFrame} at a given index
+     * 
+     * @param window index of MainFrame
+     * @return the orientation used to split folder panel in the MainFrame at the given index
+     */
     public static String getSplitOrientation(int window) {
     	return getWindowPropertiesSection(window) + "." + SPLIT_ORIENTATION;
     }
 
 	/**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.FolderPanel},
-     * left or right one in the window at the given index.
+     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FolderPanel, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FolderPanel
      */
@@ -193,8 +236,9 @@ public class MuSnapshot {
 	
 	/**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.FoldersTreePanel},
-     * left or right one in the window at the given index.
+     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FoldersTreePanel, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FoldersTreePanel
      */
@@ -204,8 +248,9 @@ public class MuSnapshot {
     
 	/**
      * Returns the variable that controls the visibility of the tree view, in the left or right
-     * {@link com.mucommander.ui.main.FolderPanel}.
+     * {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that controls the visibility of the tree view in the specified FolderPanel
      */
@@ -215,8 +260,9 @@ public class MuSnapshot {
     
     /**
      * Returns the variable that holds the width of the tree view, in the left or right
-     * {@link com.mucommander.ui.main.FolderPanel}.
+     * {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that holds the width of the tree view in the specified FolderPanel
      */
@@ -226,8 +272,9 @@ public class MuSnapshot {
 	
     /**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.table.FileTable},
-     * left or right one.
+     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FileTable, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTable
      */
@@ -235,14 +282,23 @@ public class MuSnapshot {
         return getFolderPanelSection(window, left) + "." + FILE_TABLE_SECTION;
     }
     
+    /**
+     * Returns the CONFIGURATION section that describes the sorting of the specified {@link com.mucommander.ui.main.FileTable},
+     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
+     * 
+     * @param window index of MainFrame
+     * @param left true for the left FileTable, false for the right one
+     * @return the CONFIGURATION section that describes the sorting of the specified FileTable
+     */
     private static String getFileTableSortSection(int window, boolean left) {
     	return getFileTableSection(window, left) + "." + SORT;
     }
     
     /**
      * Returns the variable that controls the sort criteria of the file table, in the left or right
-     * {@link com.mucommander.ui.main.FolderPanel}.
+     * {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that controls the sort criteria of the file table in the specified FolderPanel
      */
@@ -252,8 +308,9 @@ public class MuSnapshot {
     
     /**
      * Returns the variable that controls the sort order (ascending\descending) of the file table, 
-     * in the left or right {@link com.mucommander.ui.main.FolderPanel}.
+     * in the left or right {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that controls the sort order of the file table in the specified FolderPanel
      */
@@ -263,8 +320,9 @@ public class MuSnapshot {
 
     /**
      * Returns the CONFIGURATION section corresponding to the specified column in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
+     * {@link com.mucommander.ui.main.table.FileTable} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTable
@@ -275,8 +333,9 @@ public class MuSnapshot {
 
     /**
      * Returns the variable that controls the visibility of the specified column, in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
+     * {@link com.mucommander.ui.main.table.FileTable} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the variable that controls the visibility of the specified column
@@ -287,8 +346,9 @@ public class MuSnapshot {
 
     /**
      * Returns the variable that holds the width of the specified column, in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
+     * {@link com.mucommander.ui.main.table.FileTable} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the variable that holds the width of the specified column
@@ -299,8 +359,9 @@ public class MuSnapshot {
     
     /**
      * Returns the variable that holds the position of the specified column, in the left or right
-     * {@link com.mucommander.ui.main.table.FileTable}.
+     * {@link com.mucommander.ui.main.table.FileTable} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param column column, see {@link com.mucommander.ui.main.table.Column} for possible values
      * @param left true for the left FileTable, false for the right one
      * @return the variable that holds the position of the specified column
@@ -312,8 +373,9 @@ public class MuSnapshot {
 
     /**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.tabs.FileTableTabs},
-     * left or right one.
+     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FileTableTabs, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTableTabs
      */    
@@ -323,8 +385,9 @@ public class MuSnapshot {
     
     /**
      * Returns the variable that holds the number of presented tabs, in the left or right
-     * {@link com.mucommander.ui.main.FolderPanel}.
+     * {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FolderPanel, false for the right one
      * @return the variable that holds the number of presented tabs in the specified FolderPanel
      */
@@ -334,8 +397,9 @@ public class MuSnapshot {
     
     /**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.tabs.FileTableTab},
-     * left or right one.
+     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FileTableTab, false for the right one
      * @return the CONFIGURATION section corresponding to the specified FileTableTab
      */    
@@ -345,8 +409,9 @@ public class MuSnapshot {
     
     /**
      * Returns the variable that holds the location presented at the tab in the given index,
-     * in the left or right {@link com.mucommander.ui.main.FolderPanel}.
+     * in the left or right {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
      *
+     * @param window index of MainFrame
      * @param left true for the left FolderPanel, false for the right one
      * @param index the index of tab at the FolderPanel's tabs 
      * @return the variable that holds the location presented at the tab in the given index in the specified FolderPanel
