@@ -456,6 +456,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 			setBackground(ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED]);
 			setForeground(ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED][ThemeCache.PLAIN_FILE]);
 			addKeyListener(this);
+			// It is required to disable the traversal keys in order to support keys combination that include the TAB key
+			setFocusTraversalKeysEnabled(false);
 		}
 
 		/**
