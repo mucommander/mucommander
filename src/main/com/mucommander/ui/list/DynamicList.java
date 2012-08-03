@@ -41,7 +41,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Maxence Bernard
  */
-public class DynamicList<E> extends JList<E> {
+public class DynamicList<E> extends JList {
 
     /** Items displayed in the JList */
     private AlteredVector<E> items;

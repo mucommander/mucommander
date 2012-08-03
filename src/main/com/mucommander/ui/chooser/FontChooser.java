@@ -44,9 +44,9 @@ public class FontChooser extends YBoxPanel implements ActionListener {
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Lists all the available font families. */
-    private JComboBox<String>   families;
+    private JComboBox   families;
     /** Lists all the legal font sizes. */
-    private JComboBox<String>   sizes;
+    private JComboBox   sizes;
     /** Whether or not the font should be italic. */
     private JCheckBox   italic;
     /** Whether or not the font should be bold. */
@@ -59,7 +59,7 @@ public class FontChooser extends YBoxPanel implements ActionListener {
     private WeakHashMap<ChangeListener, ?> listeners = new WeakHashMap<ChangeListener, Object>();
 
 
-    // - Initialization ---------------------------------------------------------
+    // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
      * Creates a new FontChooser with the specified selection.
@@ -83,7 +83,7 @@ public class FontChooser extends YBoxPanel implements ActionListener {
         setAlignmentX(LEFT_ALIGNMENT);
 
         // Font families.
-        families      = new JComboBox<String>();
+        families      = new JComboBox();
         familyNames   = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         selectedIndex = 0;
         for(int i = 0; i < familyNames.length; i++) {
@@ -100,7 +100,7 @@ public class FontChooser extends YBoxPanel implements ActionListener {
         add(panel);
 
         // Font sizes.
-        sizes = new JComboBox<String>();
+        sizes = new JComboBox();
         for (int fontSize : FONT_SIZES)
             sizes.addItem(Integer.toString(fontSize));
         sizes.setSelectedItem(Integer.toString(selection.getSize()));

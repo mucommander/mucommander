@@ -45,7 +45,7 @@ import java.util.WeakHashMap;
  * @see EditableComboBoxListener
  * @author Maxence Bernard
  */
-public class EditableComboBox<T> extends SaneComboBox<T> {
+public class EditableComboBox extends SaneComboBox {
     /** Used to render the content of the combo box. */
     private ComboBoxCellRenderer renderer;
     /** The text field used as the combo box's editor */
@@ -83,7 +83,7 @@ public class EditableComboBox<T> extends SaneComboBox<T> {
      * will be created and used.
      * @param comboBoxModel the ComboBoxModel to use for this combo box
      */
-    public EditableComboBox(JTextField textField, ComboBoxModel<T> comboBoxModel) {
+    public EditableComboBox(JTextField textField, ComboBoxModel comboBoxModel) {
         super(comboBoxModel);
         init(textField);
     }
@@ -95,7 +95,7 @@ public class EditableComboBox<T> extends SaneComboBox<T> {
      * will be created and used.
      * @param items items used to populate the initial items list.
      */
-    public EditableComboBox(JTextField textField, T[] items) {
+    public EditableComboBox(JTextField textField, Object[] items) {
         super(items);
         init(textField);
     }
@@ -107,7 +107,7 @@ public class EditableComboBox<T> extends SaneComboBox<T> {
      * will be created and used.
      * @param items items used to populate the initial items list.
      */
-    public EditableComboBox(JTextField textField, Vector<T> items) {
+    public EditableComboBox(JTextField textField, Vector<Object> items) {
         super(items);
         init(textField);
     }
