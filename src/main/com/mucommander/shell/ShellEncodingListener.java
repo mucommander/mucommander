@@ -24,7 +24,6 @@ import java.nio.charset.Charset;
 import com.mucommander.commons.io.EncodingDetector;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
-import com.mucommander.conf.MuPreferences;
 import com.mucommander.process.ProcessListener;
 
 /**

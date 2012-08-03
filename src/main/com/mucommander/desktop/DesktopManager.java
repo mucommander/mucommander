@@ -168,7 +168,7 @@ public class DesktopManager {
 
 
 
-        // - Operations initialisation -----------------------------------
+        // - Operations initialization -----------------------------------
         // ---------------------------------------------------------------
         operations = new Hashtable[3];
 

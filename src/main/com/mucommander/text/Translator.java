@@ -39,7 +39,6 @@ import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.bom.BOMReader;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
-import com.mucommander.conf.MuPreferences;
 
 
 /**

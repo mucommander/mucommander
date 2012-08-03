@@ -59,10 +59,10 @@ public class Shell implements ConfigurationListener {
 
 
 
-    // - Initialisation ------------------------------------------------------
+    // - Initialization ------------------------------------------------------
     // -----------------------------------------------------------------------
     /**
-     * Initialises the shell.
+     * Initializes the shell.
      */
     static {
     	MuConfigurations.addPreferencesListener(confListener = new Shell());
