@@ -5537,6 +5537,7 @@ OpenNatively.tooltip:CA:Executa el fitxer seleccionat amb el programa associat a
 OpenInNewTab.label:EN:Open in new tab
 OpenInNewTab.label:UA:Відкрити у новій вкладці
 OpenInNewTab.label:ES:Abrir en pestaña nueva
+OpenInNewTab.label:DE:In neuem Panel öffnen
 # Translation missing (New!)
 
 OpenInOtherPanel.label:EN:Open in other panel
