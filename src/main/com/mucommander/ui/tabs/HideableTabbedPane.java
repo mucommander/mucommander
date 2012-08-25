@@ -92,6 +92,15 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 			LOGGER.error("Was requested to change to non-existing tab, ignoring");
 	}
 	
+	/**
+	 * Return the index of the selected tab
+	 * 
+	 * @return index of the selected tab
+	 */
+	public int getSelectedIndex() {
+		return display.getSelectedTabIndex();
+	}
+	
 	/***********************
 	 * Tabs Actions Support
 	 ***********************/
@@ -123,7 +132,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * @param tab - updated tab's data for the current displayed tab
 	 */
 	protected void updateTab(T tab) {
-		tabs.updateTab(display.getSelectedTabIndex(), tab);
+		tabs.updateTab(getSelectedIndex(), tab);
 	}
 	
 	/* Actions that depended on the display type (single/multiple tabs) */
