@@ -16,29 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.main.tabs;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.tabs.Tab;
+package com.mucommander.ui.tabs;
 
 /**
- * Interface of tab in the {@link com.mucommander.ui.main.FolderPanel} that contains a {@link com.mucommander.ui.main.table.FileTable}
- *
+ * interface for factory of {@link com.mucommander.ui.tabs.Tab} 
+ * 
  * @author Arik Hadas
+ *
+ * @param <T> kind-of Tab
+ * @param <K> parameter for initiating the new tab
  */
-public interface FileTableTab extends Tab {
+public interface TabFactory<T extends Tab, K> {
 
 	/**
-	 * Setter for the location presented in the tab
+	 * This method returns new {@link com.mucommander.ui.tabs.Tab} based on the given parameter
 	 * 
-	 * @param location the file that is going to be presented in the tab
+	 * @param k a parameter that the new tab is based on
+	 * @return instance of subclass of {@link com.mucommander.ui.tabs.Tab}
 	 */
-	public void setLocation(AbstractFile location);
+	public T createTab(K k);
 
-	/**
-	 * Getter for the location presented in the tab
-	 * 
-	 * @return the file that is being presented in the tab
-	 */
-	public AbstractFile getLocation();
 }

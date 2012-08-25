@@ -18,16 +18,13 @@
 
 package com.mucommander.ui.main.tabs;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.HideableTabbedPane;
+import com.mucommander.ui.tabs.TabFactory;
 
 /**
 * HideableTabbedPane of FileTableTabs.
@@ -39,6 +36,9 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	/** FolderPanel containing those tabs */
 	private FolderPanel folderPanel;
 	
+	/** Factory of instances of FileTableTab */
+	private TabFactory<FileTableTab, AbstractFile> tabsFactory = new FileTableTabFactory();
+	
 	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, AbstractFile[] initialFolders) {
 		super(new FileTableTabsDisplayFactory(mainFrame, folderPanel));
 		
@@ -49,7 +49,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		
 		// Add the initial folders
 		for (AbstractFile folder : initialFolders)
-			addTab(FileTableTab.create(folder));
+			addTab(tabsFactory.createTab(folder));
 	
 		// TODO: change
 		selectTab(0);
@@ -72,7 +72,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 ********************/
 	
 	public void add(AbstractFile file) {
-		addAndSelectTab(FileTableTab.create(file));
+		addAndSelectTab(tabsFactory.createTab(file));
 	}
 	
 	public void add(FileTableTab tab) {
@@ -104,15 +104,15 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 **********************************/
 	
 	public void locationChanged(LocationEvent locationEvent) {
-		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
+		updateTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
 	}
 
 	public void locationCancelled(LocationEvent locationEvent) {
-		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
+		updateTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
 	}
 
 	public void locationFailed(LocationEvent locationEvent) {
-		updateTab(FileTableTab.create(folderPanel.getCurrentFolder()));
+		updateTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
 	}
 	
 	public void locationChanging(LocationEvent locationEvent) { }
