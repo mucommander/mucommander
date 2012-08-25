@@ -177,7 +177,8 @@ public class ActionManager {
     	registerAction(new ShowAboutAction.Descriptor(),          		    new ShowAboutAction.Factory());
     	registerAction(new ShowBookmarksQLAction.Descriptor(),              new ShowBookmarksQLAction.Factory());
     	registerAction(new CustomizeCommandBarAction.Descriptor(),          new CustomizeCommandBarAction.Factory());
-    	registerAction(new ShowFilePropertiesAction.Descriptor(),           new ShowFilePropertiesAction.Factory());
+        registerAction(new ShowDebugConsoleAction.Descriptor(),             new ShowDebugConsoleAction.Factory());
+        registerAction(new ShowFilePropertiesAction.Descriptor(),           new ShowFilePropertiesAction.Factory());
     	registerAction(new ShowKeyboardShortcutsAction.Descriptor(),        new ShowKeyboardShortcutsAction.Factory());
     	registerAction(new ShowParentFoldersQLAction.Descriptor(),          new ShowParentFoldersQLAction.Factory());
     	registerAction(new ShowPreferencesAction.Descriptor(),              new ShowPreferencesAction.Factory());
@@ -185,7 +186,7 @@ public class ActionManager {
     	registerAction(new ShowRecentLocationsQLAction.Descriptor(),        new ShowRecentLocationsQLAction.Factory());
     	registerAction(new ShowRootFoldersQLAction.Descriptor(), 			new ShowRootFoldersQLAction.Factory());
     	registerAction(new ShowServerConnectionsAction.Descriptor(),        new ShowServerConnectionsAction.Factory());
-        registerAction(new ShowDebugConsoleAction.Descriptor(),             new ShowDebugConsoleAction.Factory());
+    	registerAction(new ShowTabsQLAction.Descriptor(),					new ShowTabsQLAction.Factory());
     	registerAction(new SortByDateAction.Descriptor(),             		new SortByDateAction.Factory());
     	registerAction(new SortByExtensionAction.Descriptor(),              new SortByExtensionAction.Factory());
     	registerAction(new SortByGroupAction.Descriptor(),            		new SortByGroupAction.Factory());

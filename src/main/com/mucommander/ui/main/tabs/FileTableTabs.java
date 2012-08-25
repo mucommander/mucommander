@@ -22,12 +22,13 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.FolderPanel.ChangeFolderThread;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.HideableTabbedPane;
 import com.mucommander.ui.tabs.TabFactory;
 
 /**
-* HideableTabbedPane of FileTableTabs.
+* HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
 * 
 * @author Arik Hadas
 */
@@ -59,8 +60,10 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	protected void selectTab(int index) {
 		super.selectTab(index);
 
+		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolder(getTab(index).getLocation(), null, true);
 		try {
-			folderPanel.tryChangeCurrentFolder(getTab(index).getLocation(), null, true).join();
+			if (changeFolderThread != null)
+				changeFolderThread.join();
 		} catch (InterruptedException e) {
 			// We're screwed - no valid location to display
 			throw new RuntimeException("Unable to read any drive");

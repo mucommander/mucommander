@@ -28,5 +28,6 @@ public enum QuickLists {
     RECENT_ACCESSED_LOCATIONS,
     RECENT_EXECUTED_FILES,
     BOOKMARKS,
-    ROOTS
+    ROOTS,
+    TABS
 }

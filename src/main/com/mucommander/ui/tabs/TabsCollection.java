@@ -125,6 +125,19 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	}
 	
 	/**
+	 * Return the index of the given tab in the collection
+	 * 
+	 * @return the index of the given tab or -1 if the tab is not exist in the collection
+	 */
+	public int indexOf(T tab) {
+		return collection.indexOf(tab);
+	}
+	
+	/********************
+	 * Listeners support
+	 ********************/
+	
+	/**
 	 * Add a given listener to the listeners to be notified about tabs-changes
 	 * 
 	 * @param listener - object that implements TabsChangeListener interface

@@ -192,7 +192,8 @@ public class FolderPanel extends JPanel implements FocusListener {
     			recentLocationsQL,
                 recentExecutedFilesQL,
                 bookmarksQL,
-                rootsQL};
+                rootsQL,
+                new TabsQL(this)};
 
         // Waits for the first location to be set before creating the FolderChangeMonitor that will monitor the
         // current folder for changes.

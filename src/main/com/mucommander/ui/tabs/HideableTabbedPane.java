@@ -24,6 +24,11 @@ import java.util.Iterator;
 
 import javax.swing.JComponent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.ui.main.FolderPanel;
+
 /**
  * This component acts like a tabbedpane in which multiple tabs are presented in a JTabbedPane layout 
  * and single tab is presented without the JTabbedPane layout, only the tab's data.
@@ -38,7 +43,8 @@ import javax.swing.JComponent;
  * @author Arik Hadas
  */
 public class HideableTabbedPane<T extends Tab> extends JComponent implements TabsChangeListener {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(HideableTabbedPane.class);
+	
 	/* The tabs which are being displayed */
 	private TabsCollection<T> tabs;
 	/* The tabs display type - single-tab or multiple-tab */
@@ -70,6 +76,20 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 */
 	public Iterator<T> iterator() {
 		return tabs.iterator();
+	}
+
+	/**
+	 * Select the given tab
+	 * 
+	 * @param tab the tab to be selected
+	 */
+	public void selectTab(T tab) {
+		int index = tabs.indexOf(tab);
+		
+		if (index != -1)
+			selectTab(index);
+		else
+			LOGGER.error("Was requested to change to non-existing tab, ignoring");
 	}
 	
 	/***********************
