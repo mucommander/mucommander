@@ -62,6 +62,15 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		// Register for tabs changes
 		tabs.addTabsListener(this);
 	}
+
+	/**
+	 * This function returns an iterator that points to the current Tabs contained in the TabbedPane
+	 * 
+	 * @return Iterator that points to current Tabs
+	 */
+	public Iterator<T> iterator() {
+		return tabs.iterator();
+	}
 	
 	/***********************
 	 * Tabs Actions Support
@@ -171,15 +180,6 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	/********************
 	 * Protected Methods
 	 ********************/
-	
-	/**
-	 * This function returns an iterator that points to the current Tabs contained in the TabbedPane
-	 * 
-	 * @return Iterator that points to current Tabs
-	 */
-	protected Iterator<T> getTabsIterator() {
-		return tabs.iterator();
-	}
 	
 	/**
 	 * Returns the tab at the given index

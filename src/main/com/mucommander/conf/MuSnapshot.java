@@ -23,6 +23,7 @@ import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JSplitPane;
@@ -38,6 +39,7 @@ import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.tabs.FileTableTab;
+import com.mucommander.ui.main.tabs.FileTableTabs;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API which is used to save 'dynamic' configurations.
@@ -510,17 +512,22 @@ public class MuSnapshot {
     	
         setTableAttributes(index, isLeft, panel.getFileTable());
         
-        setTabsAttributes(index, isLeft, panel.getTabs().getClonedTabs());
+        setTabsAttributes(index, isLeft, panel.getTabs());
     }
 
-    private void setTabsAttributes(int index, boolean isLeft, List<FileTableTab> tabs) {
-    	// Save tabs count
-    	configuration.setVariable(getTabsCountVariable(index, isLeft), tabs.size());
+    private void setTabsAttributes(int index, boolean isLeft, FileTableTabs tabs) {
+    	int tabsCounter = 0;
+    	Iterator<FileTableTab> tabsIterator = tabs.iterator();
+    	
     	// Save tabs locations
-    	for(int i=0; i<tabs.size(); i++) {
-    		FileTableTab tab = tabs.get(i);
-    		configuration.setVariable(getTabLocationVariable(index, isLeft, i), tab.getLocation().getAbsolutePath());
+    	while (tabsIterator.hasNext()) {
+    		FileTableTab tab = tabsIterator.next();
+    		++tabsCounter;
+    		configuration.setVariable(getTabLocationVariable(index, isLeft, tabsCounter), tab.getLocation().getAbsolutePath());
     	}
+    	
+    	// Save tabs count
+    	configuration.setVariable(getTabsCountVariable(index, isLeft), tabsCounter + 1);
     }
     
     private void setTableAttributes(int index, boolean isLeft, FileTable table) {

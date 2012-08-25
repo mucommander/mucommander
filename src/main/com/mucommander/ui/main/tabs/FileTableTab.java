@@ -26,7 +26,7 @@ import com.mucommander.ui.tabs.Tab;
  *
  * @author Arik Hadas
  */
-public class FileTableTab implements Tab, Cloneable {
+public class FileTableTab implements Tab {
 
 	/** The location presented in this tab */
 	private AbstractFile location;
@@ -72,14 +72,5 @@ public class FileTableTab implements Tab, Cloneable {
 	@Override
 	public int hashCode() {
 		return location.hashCode();
-	}
-
-	///////////////////////////
-	/// Cloneable Interface ///
-	///////////////////////////
-
-	@Override
-	public FileTableTab clone() {
-		return new FileTableTab(location);
 	}
 }
