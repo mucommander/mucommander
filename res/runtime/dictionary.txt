@@ -7327,6 +7327,9 @@ ShowRootFoldersQL.label:UA:Кореневі папки
 ShowRootFoldersQL.label:ES:Directorios raíz
 # Translation missing (New!)
 
+ShowTabsQL.label:EN:Open tabs
+# Translation missing (New!)
+
 SplitFile.label:EN:$[split]
 
 SplitFile.tooltip:EN:Split a file into multiple parts
@@ -18523,7 +18526,10 @@ recent_executed_files_quick_list.empty_message:CA:No hi ha fitxers executats rec
 recent_executed_files_quick_list.empty_message:ES:No hay ficheros ejecutados recientmente
 # Translation missing (KO)
 
-roots_quick_list.empty_message:EN:No root folders
+roots_quick_list.empty_message:EN:No root folders available
+# Translation missing (New!)
+
+tabs_quick_list.empty_message:EN:Only one tab is presented
 # Translation missing (New!)
 
 ######################
