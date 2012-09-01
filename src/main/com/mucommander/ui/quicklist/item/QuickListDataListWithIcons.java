@@ -33,13 +33,13 @@ import com.mucommander.ui.main.table.CellLabel;
  * 
  * @author Arik Hadas
  */
-public abstract class DataListWithIcons<T> extends DataList<T> {
+public abstract class QuickListDataListWithIcons<T> extends QuickListDataList<T> {
 	
-	public DataListWithIcons() {
-		super();
+	public QuickListDataListWithIcons(Component nextFocusableComponent) {
+		super(nextFocusableComponent);
 	}
 	
-	public DataListWithIcons(T[] data) {
+	public QuickListDataListWithIcons(T[] data) {
 		super(data);
 	}
 	

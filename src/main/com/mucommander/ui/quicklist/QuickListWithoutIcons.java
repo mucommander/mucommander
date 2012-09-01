@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.quicklist;
 
-import com.mucommander.ui.quicklist.item.DataList;
+import com.mucommander.ui.quicklist.item.QuickListDataList;
 
 /**
  * FileTablePopupWithoutIcons is a FileTablePopupWithDataList in which the data list 
@@ -29,10 +29,10 @@ import com.mucommander.ui.quicklist.item.DataList;
 
 public abstract class QuickListWithoutIcons<T> extends QuickListWithDataList<T> {
 
-	public QuickListWithoutIcons(String header, String emptyPopupHeader) {
-		super(header, emptyPopupHeader);
+	public QuickListWithoutIcons(QuickListContainer container, String header, String emptyPopupHeader) {
+		super(container, header, emptyPopupHeader);
 	}
 	
 	@Override
-    protected DataList<T> getList() { return new DataList<T>(); }
+    protected QuickListDataList<T> getList() { return new QuickListDataList<T>(nextFocusableComponent()); }
 }

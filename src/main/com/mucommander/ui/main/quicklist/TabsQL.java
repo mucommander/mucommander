@@ -46,7 +46,7 @@ public class TabsQL extends QuickListWithIcons<FileTableTab> {
 	private TabFactory<FileTableTab, FileTableTab> tabsFactory = new PrintableFileTableTabFactory();
 	
 	public TabsQL(FolderPanel folderPanel) {
-		super(ActionProperties.getActionLabel(ShowTabsQLAction.Descriptor.ACTION_ID), Translator.get("tabs_quick_list.empty_message"));
+		super(folderPanel, ActionProperties.getActionLabel(ShowTabsQLAction.Descriptor.ACTION_ID), Translator.get("tabs_quick_list.empty_message"));
 		
 		this.folderPanel = folderPanel;
 	}

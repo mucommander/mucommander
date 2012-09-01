@@ -18,15 +18,20 @@
 
 package com.mucommander.ui.quicklist;
 
-import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.quicklist.item.QuickListHeaderItem;
-
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Vector;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.border.LineBorder;
+
+import com.mucommander.ui.quicklist.item.QuickListHeaderItem;
 
 /**
  * This abstract class contains some common features to all file table's popups:
@@ -41,34 +46,38 @@ import java.util.Vector;
 public abstract class QuickList extends JPopupMenu implements FocusListener {
 	private static final int PADDING = 2;
 	protected QuickListHeaderItem headerMenuItem;
-	protected FolderPanel folderPanel;
 	private java.util.List<Component> items = new Vector<Component>();
+	private QuickListContainer container;
 	
-	protected QuickList(String header) {
+	protected QuickList(QuickListContainer container, String header) {
 		super();
-				
+		
+		this.container = container;
+		
 		setBorder(new PopupsBorder());
 		add(headerMenuItem = new QuickListHeaderItem(header));		
 		setFocusTraversalKeysEnabled(false);
+	}
+	
+	protected Component nextFocusableComponent() {
+		return container.nextFocusableComponent();
 	}
 	
 	/**
 	 * This function is called before showing quick-list.
 	 * If the return value is true, the quick list will be shown. Otherwise, it won't be shown.
 	 */
-	protected abstract boolean prepareForShowing();
+	protected abstract boolean prepareForShowing(QuickListContainer container);
 	
-	public void show(FolderPanel folderPanel) {
-		this.folderPanel = folderPanel;
+	public void show() {
         
-		if (prepareForShowing()) {
-	     // Note: the actual popup menu's size is not known at this stage so we use the component's preferred size
+		if (prepareForShowing(container)) {
+			// Note: the actual popup menu's size is not known at this stage so we use the component's preferred size
 	        Dimension dim = getPreferredSize();
-	
-	        int x = Math.max((folderPanel.getWidth() - (int)dim.getWidth()) / 2, 0);
-	        int y = folderPanel.getLocationTextField().getHeight() + Math.max((folderPanel.getHeight() - (int)dim.getHeight()) / 3, 0);
+
+	        Point location = container.calcQuickListPosition(dim);
 	        
-	        show(folderPanel, x, y);
+	        show(container.containerComponent(), location.x, location.y);
 		}
 	}
 	
@@ -94,13 +103,9 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 		}
 		
 		return new Dimension((int) Math.ceil(
-				Math.max(folderPanel == null ? 0 : folderPanel.getWidth() / 2, width * 1.05))
+				Math.max(container == null ? 0 : container.getWidth() / 2, width * 1.05))
 				, (int) Math.ceil(height));
 	}
-	
-	public FolderPanel getPanel() {
-		return folderPanel;
-	}	
 	
 	public void focusGained(FocusEvent arg0) {}
 

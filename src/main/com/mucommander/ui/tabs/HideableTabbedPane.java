@@ -27,8 +27,6 @@ import javax.swing.JComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.ui.main.FolderPanel;
-
 /**
  * This component acts like a tabbedpane in which multiple tabs are presented in a JTabbedPane layout 
  * and single tab is presented without the JTabbedPane layout, only the tab's data.

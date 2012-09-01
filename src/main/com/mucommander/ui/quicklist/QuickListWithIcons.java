@@ -23,12 +23,14 @@ import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
-import com.mucommander.ui.quicklist.item.DataList;
-import com.mucommander.ui.quicklist.item.DataListWithIcons;
+import com.mucommander.ui.quicklist.item.QuickListDataList;
+import com.mucommander.ui.quicklist.item.QuickListDataListWithIcons;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+
+import java.awt.Component;
 import java.util.HashMap;
 
 /**
@@ -48,8 +50,8 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	// Saves the number of waiting-icons (SpinningDials) appearing in the list.
 	private int numOfWaitingIconInList;
 	
-	public QuickListWithIcons(String header, String emptyPopupHeader) {
-		super(header, emptyPopupHeader);
+	public QuickListWithIcons(QuickListContainer container, String header, String emptyPopupHeader) {
+		super(container, header, emptyPopupHeader);
 		numOfWaitingIconInList = 0;
 		addPopupMenuListener(new PopupMenuListener() {
 
@@ -83,8 +85,8 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	}
 	
 	@Override
-    protected DataList<T> getList() {
-		return new DataListWithIcons<T>() {
+    protected QuickListDataList<T> getList() {
+		return new QuickListDataListWithIcons<T>(nextFocusableComponent()) {
 			@Override
             public Icon getImageIconOfItem(T item) {
 				return getImageIconOfItemImp(item);

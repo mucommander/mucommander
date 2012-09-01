@@ -28,6 +28,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowBookmarksQLAction;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
 /**
@@ -36,10 +37,13 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  * @author Arik Hadas
  */
 public class BookmarksQL extends QuickListWithIcons<Bookmark> implements BookmarkListener {
-	protected Bookmark[] cachedBookmarks;
+	private Bookmark[] cachedBookmarks;
+	private FolderPanel folderPanel;
 
-	public BookmarksQL() {
-		super(ActionProperties.getActionLabel(ShowBookmarksQLAction.Descriptor.ACTION_ID), Translator.get("bookmarks_menu.no_bookmark"));
+	public BookmarksQL(FolderPanel folderPanel) {
+		super(folderPanel, ActionProperties.getActionLabel(ShowBookmarksQLAction.Descriptor.ACTION_ID), Translator.get("bookmarks_menu.no_bookmark"));
+		
+		this.folderPanel = folderPanel;
 		
 		bookmarksChanged();
 		BookmarkManager.addBookmarkListener(this);

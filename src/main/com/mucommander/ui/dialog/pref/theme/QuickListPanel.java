@@ -19,6 +19,7 @@
 package com.mucommander.ui.dialog.pref.theme;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -43,8 +44,8 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.quicklist.QuickList;
-import com.mucommander.ui.quicklist.item.DataList;
-import com.mucommander.ui.quicklist.item.DataListWithIcons;
+import com.mucommander.ui.quicklist.item.QuickListDataList;
+import com.mucommander.ui.quicklist.item.QuickListDataListWithIcons;
 import com.mucommander.ui.quicklist.item.QuickListHeaderItem;
 import com.mucommander.ui.theme.ThemeData;
 
@@ -74,7 +75,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
     }
 
     /** The list of items of the sample quick list */
-    private DataList<String> list = new DataListWithIcons<String>(sampleData) {
+    private QuickListDataList<String> list = new QuickListDataListWithIcons<String>(sampleData) {
     	
     	{
     		for (KeyListener listener : getKeyListeners())

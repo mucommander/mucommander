@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.quicklist;
 
-import com.mucommander.ui.quicklist.item.DataList;
+import com.mucommander.ui.quicklist.item.QuickListDataList;
 
 import javax.swing.*;
 
@@ -29,11 +29,11 @@ import javax.swing.*;
  */
 
 public abstract class QuickListWithDataList<T> extends QuickList {	
-	protected DataList dataList;	
+	protected QuickListDataList dataList;	
 	private QuickListWithEmptyMsg emptyPopup;
 	
-	public QuickListWithDataList(String header, String emptyPopupHeader) {
-		super(header);
+	public QuickListWithDataList(QuickListContainer container, String header, String emptyPopupHeader) {
+		super(container, header);
 
 		// get the TablePopupDataList.
 		dataList = getList();
@@ -51,7 +51,7 @@ public abstract class QuickListWithDataList<T> extends QuickList {
         
         // create TablePopupWithEmptyMsg that will be shown instead of this popup, if this
         // popup's data list won't have any elements.
-        emptyPopup = new QuickListWithEmptyMsg(header, emptyPopupHeader);
+        emptyPopup = new QuickListWithEmptyMsg(container, header, emptyPopupHeader);
 	}
 	
 	protected abstract T[] getData();
@@ -67,7 +67,7 @@ public abstract class QuickListWithDataList<T> extends QuickList {
 	}		
 	
 	@Override
-    protected boolean prepareForShowing() {
+    protected boolean prepareForShowing(QuickListContainer container) {
 		boolean toShow = false;
 		// if data list contains at least 1 element, show this popup.
 		T[] data;
@@ -79,7 +79,7 @@ public abstract class QuickListWithDataList<T> extends QuickList {
 		}
 		// else, show popup with a "no elements" message.
 		else
-			emptyPopup.show(folderPanel);
+			emptyPopup.show();
 		
 		return toShow;
 	}
@@ -91,5 +91,5 @@ public abstract class QuickListWithDataList<T> extends QuickList {
 	 */
 	protected abstract void acceptListItem(T item);
 	
-	protected abstract DataList getList();
+	protected abstract QuickListDataList getList();
 }

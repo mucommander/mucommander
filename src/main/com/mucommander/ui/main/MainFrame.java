@@ -64,7 +64,6 @@ import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.toolbar.ToolBar;
-import com.mucommander.ui.quicklist.QuickListFocusableComponent;
 
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
@@ -719,9 +718,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         @Override
         public Component getComponentAfter(Container container, Component component) {
-        	if (component instanceof QuickListFocusableComponent) {
-        		return ((QuickListFocusableComponent) component).getInvokerFileTable();
-        	} else if (component==leftFolderPanel.getFoldersTreePanel().getTree()) {
+        	if (component==leftFolderPanel.getFoldersTreePanel().getTree()) {
 		        return leftTable;
 		    } else if (component==rightFolderPanel.getFoldersTreePanel().getTree()) {
 		        return rightTable;

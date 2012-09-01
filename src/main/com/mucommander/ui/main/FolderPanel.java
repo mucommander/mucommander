@@ -49,6 +49,8 @@ import com.mucommander.ui.main.table.FolderChangeMonitor;
 import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
+import com.mucommander.ui.quicklist.QuickListContainer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +72,7 @@ import java.util.HashSet;
  *
  * @author Maxence Bernard
  */
-public class FolderPanel extends JPanel implements FocusListener {
+public class FolderPanel extends JPanel implements FocusListener, QuickListContainer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FolderPanel.class);
 	
     private MainFrame  mainFrame;
@@ -122,11 +124,7 @@ public class FolderPanel extends JPanel implements FocusListener {
 
     /** Array of all the existing pop ups for this panel's FileTable **/
     private QuickList[] fileTablePopups;
-    protected static RecentLocationsQL recentLocationsQL = new RecentLocationsQL();
-    protected static RecentExecutedFilesQL recentExecutedFilesQL = new RecentExecutedFilesQL();
-    protected static BookmarksQL bookmarksQL = new BookmarksQL();
-    protected static RootFoldersQL rootsQL = new RootFoldersQL();
-    
+  
     /* TODO branch private boolean branchView; */
 
     /**
@@ -186,13 +184,12 @@ public class FolderPanel extends JPanel implements FocusListener {
         fileTable = new FileTable(mainFrame, this, conf);
         
         // Initialize quick lists
-    	locationManager.addLocationListener(recentLocationsQL);
     	fileTablePopups = new QuickList[]{
     			new ParentFoldersQL(this),
-    			recentLocationsQL,
-                recentExecutedFilesQL,
-                bookmarksQL,
-                rootsQL,
+    			new RecentLocationsQL(this),
+    			new RecentExecutedFilesQL(this),
+    			new BookmarksQL(this),
+    			new RootFoldersQL(this),
                 new TabsQL(this)};
 
         // Waits for the first location to be set before creating the FolderChangeMonitor that will monitor the
@@ -1281,7 +1278,7 @@ public class FolderPanel extends JPanel implements FocusListener {
      * @param index - index of the FileTablePopup in fileTablePopups.
      */
     public void showQuickList(int index) {
-    	fileTablePopups[index].show(this);
+    	fileTablePopups[index].show();
     }
     
     /**
@@ -1342,6 +1339,25 @@ public class FolderPanel extends JPanel implements FocusListener {
 	        foldersTreePanel.requestFocus();
     	}
     }
+
+    ////////////////////////////////
+    // QuickListContainer methods //
+    ////////////////////////////////
+    
+    public Point calcQuickListPosition(Dimension dim) {
+    	return new Point(
+    			Math.max((getWidth() - (int)dim.getWidth()) / 2, 0),
+    			getLocationTextField().getHeight() + Math.max((getHeight() - (int)dim.getHeight()) / 3, 0)
+    			);
+	}
+
+	public Component containerComponent() {
+		return this;
+	}
+
+	public Component nextFocusableComponent() {
+		return fileTable;
+	}
 
     /* TODO branch 
     /**

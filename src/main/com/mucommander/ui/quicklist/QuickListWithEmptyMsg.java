@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.quicklist;
 
-import com.mucommander.ui.main.table.FileTable;
-import com.mucommander.ui.quicklist.item.QuickListEmptyMessageItem;
-
-import javax.swing.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
+import javax.swing.SwingUtilities;
+
+import com.mucommander.ui.quicklist.item.QuickListEmptyMessageItem;
 
 /**
  * FileTablePopupWithEmptyMsg is a FileTablePopup which contains EmptyMessageItem.
@@ -31,11 +31,11 @@ import java.awt.event.KeyListener;
  * @author Arik Hadas
  */
 
-class QuickListWithEmptyMsg extends QuickList implements QuickListFocusableComponent {
+class QuickListWithEmptyMsg extends QuickList {
 	protected QuickListEmptyMessageItem emptyMenuItem;
 	
-	public QuickListWithEmptyMsg(String header, String emptyPopupHeader) {
-		super(header);
+	public QuickListWithEmptyMsg(QuickListContainer container, String header, String emptyPopupHeader) {
+		super(container, header);
 		
 		add(emptyMenuItem = new QuickListEmptyMessageItem(emptyPopupHeader));
 		
@@ -44,7 +44,7 @@ class QuickListWithEmptyMsg extends QuickList implements QuickListFocusableCompo
 	}
 	
 	@Override
-    protected boolean prepareForShowing() {
+    protected boolean prepareForShowing(QuickListContainer container) {
 		getFocus();
 		return true;
 	}
@@ -58,25 +58,16 @@ class QuickListWithEmptyMsg extends QuickList implements QuickListFocusableCompo
 	}
 	
 	private void addKeyListenerToList() {		
-		addKeyListener(new KeyListener() {
+		addKeyListener(new KeyAdapter() {
 
 			public void keyPressed(KeyEvent e) {
 				switch(e.getKeyCode()) {				
 				default:
-					getInvokerFileTable().requestFocus();
+					nextFocusableComponent().requestFocus();
 					break;
 				}				
-			}
-
-			public void keyReleased(KeyEvent e) {
-			}
-
-			public void keyTyped(KeyEvent e) {
 			}
 		});
 	}
 
-	public FileTable getInvokerFileTable() {
-		return getPanel().getFileTable();
-	}
 }

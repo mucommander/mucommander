@@ -18,6 +18,11 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.io.IOException;
+import java.util.LinkedList;
+
+import javax.swing.Icon;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.impl.local.LocalFile;
@@ -27,13 +32,10 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentExecutedFilesQLAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  * This quick list shows recently executed files.
@@ -42,11 +44,14 @@ import java.util.LinkedList;
  */
 
 public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
-	public static LinkedList<AbstractFile> list = new LinkedList<AbstractFile>();
+	private static LinkedList<AbstractFile> list = new LinkedList<AbstractFile>();
 	private static final int MAX_NUM_OF_ELEMENTS = 10;
-
-	public RecentExecutedFilesQL() {
-		super(ActionProperties.getActionLabel(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID), Translator.get("recent_executed_files_quick_list.empty_message"));
+	private FolderPanel folderPanel;
+	
+	public RecentExecutedFilesQL(FolderPanel folderPanel) {
+		super(folderPanel, ActionProperties.getActionLabel(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID), Translator.get("recent_executed_files_quick_list.empty_message"));
+		
+		this.folderPanel = folderPanel;
 	}
 	
 	@Override
