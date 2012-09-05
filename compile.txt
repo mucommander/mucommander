@@ -35,74 +35,20 @@ libraries and tools are installed.
   
   Once these tools have been installed, you might want / need to configure
 the muCommander build process.
-This is done by copying ./build/local_template.xml to ./local.xml and
+This is done by copying ./build_template.properties to ./build.properties and
 editing it.
 
   The values that need to be set are:
-- java.lib (defaults to a system-dependant best guess)
-  Path to the Java 1.6's classes JAR.
-  This is usually found in /path/to/jre/lib/rt.jar
-  Apple, however, decided to use non-standard paths for reasons of their own.
-  Under Mac OS X, you'll find the classes JAR file in:
-  /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/classes.jar
-
-- jsse.lib (defaults to a system-dependant best guess)
-  Path to the JSSE JAR file.
-  This is usually found in /path/to/jre/lib/jsse.jar
-  Apple, however, decided to use non-standard paths for reasons of their own.
-  Under Mac OS X, you'll find the classes JAR file in:
-  /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/jsse.jar
-
-- ant.lib (defaults to /path/to/ant/lib/ant.jar)
-  Path to the Ant JAR file.
-  This is necessary in order to compile the various Ant tasks used by
-  muCommander.
-  This value only needs to be set if the Ant JAR file is not in its standard
-  location.
-
-- proguard.lib (defaults to ./tools/proguard.jar)
-  Path to the ProGuard JAR file.
-  The one used by muCommander can be found in ./tools/proguard.jar, but you can
-  modify that if you wish to try out other versions.
-
-- antcontrib.lib (defaults to ./tools/ant-contrib.jar)
-  Path to the Ant Contrib JAR file.
-  The one used by muCommander can be found in ./tools/ant-contrib.jar, but you can
-  modify that if you wish to try out other versions.
-
-- doccheck.lib (defaults to ./tools/doccheck.jar)
-  Path to the Doccheck JAR file.
-  The one used by muCommander can be found in ./tools/doccheck.jar, but you can
-  modify that if you wish to try out other versions.
-
 - 7za.executable (non-required)
   Path to the 7za executable.
   This is used to compress muCommander's JAR file better than Java's ZIP
   implementation.
   If this property is not set, standard ZIP compression will be used.
 
-- antdoclet.lib (defaults to ./tools/antdoclet.jar)
-  Path to the AntDoclet JAR file.
-  This is used to generate the Ant tools documentation.
-  The one used by muCommander can be found in ./tools/antdoclet.jar, but you can
-  modify that if you wish to try out other versions.
-
-- velocity.lib (defaults to ./tools/velocity.jar)
-  Path to the Velocity JAR file.
-  This is used to generate the Ant tools documentation.
-  The one used by muCommander can be found in ./tools/velocity.jar, but you can
-  modify that if you wish to try out other versions.
-
 - store.path (non-required)
   Password of the keystore file used to generate a signed muCommander JAR file.
   If this property is not set, you won't be able to generate signed JAR files.
   If you're not Maxence, you can safely ignore this property.
-
-- jdeb.lib (defaults to ./tools/jdeb.jar)
-  Path to the JDeb JAR file.
-  This is used to generate the muCommander Debian package.
-  The one used by muCommander can be found in ./tools/jdeb.jar, but you can
-  modify that if you wish to try out other versions.
 
 - nsis.dir (non-required)
   Path to the NSIS installation directory.
@@ -114,39 +60,6 @@ editing it.
   This is used to generate a muCommander Win32 executable.
   If this property is not set, you won't be able to generate Win32 or portable
   releases.
-
-- case-sensitive-fs (defaults to false)
-  Whether the file system is case sensitive.
-  Case sensitive systems allow ProGuard to perform slightly more agressive
-  obfuscation of the bytecode. If unsure, leave this value to false.
-
-- findbugs.home (non-required).
-  Path to the FindBugs installation directory.
-  Thi sis used to generate bytecode analysis reports.
-  If this property is not set, bytecode analysis reports won't be generated.
-
-- simian.lib (Defaults to ./tools/simian.jar)
-  Path to the Simian JAR file.
-  The one used by muCommander can be found in ./tools/simian.jar, but you can
-  modify that if you wish to try out other versions.
-
-- javancss.lib (Defaults to ./tools/javancss.jar)
-  Path to the JavaNCSS JAR file.
-  The one used by muCommander can be found in ./tools/javancss.jar, but you can
-  modify that if you wish to try out other versions.
-
-  Some external tools need additional configuration to work properly:
-
-- JUnit
-  To ensure that unit testing can be performed, the
-  ./lib/noinclude/junit.jar file must be copied to $ANT_HOME/lib.
-  If this isn't done, unit testing will most likely be skipped.
-
-- JDepend
-  To ensure that dependency analysis can be performed, the
-  ./tools/jdepend.jar file must be copied to $ANT_HOME/lib.
-  If this isn't done, dependency analysis will most likely
-  be skipped.
 
 
 
