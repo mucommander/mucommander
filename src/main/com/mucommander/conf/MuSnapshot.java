@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
-import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.LocationHistory;

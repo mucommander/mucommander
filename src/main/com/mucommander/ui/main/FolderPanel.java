@@ -98,7 +98,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     private FoldersTreePanel foldersTreePanel;
     private JSplitPane treeSplitPane;
 	
-    private LocationHistory folderHistory = new LocationHistory(this);
+    private LocationHistory folderHistory;
     
     private FileDragSourceListener fileDragSourceListener;
 
@@ -134,8 +134,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param initialFolder - the initial folder to be displayed at this panel
      * @param conf - configuration for this panel's file table
      */
-    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, FileTableConfiguration conf) {
-    	this(mainFrame, new AbstractFile[] {initialFolder}, conf);
+    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, FileTableConfiguration conf, FileURL[] locationHistory) {
+    	this(mainFrame, new AbstractFile[] {initialFolder}, conf, locationHistory);
     }
     
     /**
@@ -145,7 +145,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param initialFolders - the initial folders displayed at this panel's tabs
      * @param conf - configuration for this panel's file table
      */
-    FolderPanel(MainFrame mainFrame, AbstractFile[] initialFolders, FileTableConfiguration conf) {
+    FolderPanel(MainFrame mainFrame, AbstractFile[] initialFolders, FileTableConfiguration conf, FileURL[] locationHistory) {
         super(new BorderLayout());
 
         LOGGER.trace(" initialFolder:"+initialFolders);
@@ -154,6 +154,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         		
         this.mainFrame = mainFrame;
 
+        folderHistory = new LocationHistory(this, locationHistory);
+        
         // No decoration for this panel
         setBorder(null);
 

@@ -64,10 +64,12 @@ public class LocationHistory {
     /**
      * Creates a new FolderHistory instance which will keep track of visited folders in the given FolderPanel.
      */
-    public LocationHistory(FolderPanel folderPanel) {
+    public LocationHistory(FolderPanel folderPanel, FileURL[] lastHistory) {
         this.folderPanel = folderPanel;
+        
+        for (FileURL url:lastHistory)
+        	addToHistory(url);
     }
-
 
     /**
      * Adds the specified folder to history. The folder won't be added if the previous folder is the same.
@@ -75,8 +77,21 @@ public class LocationHistory {
      * <p>This method is called by FolderPanel each time a folder is changed.
      */
     void addToHistory(AbstractFile folder) {
+    	this.addToHistory(folder.getURL());
+    	
+    	// Save last recallable folder on startup, only if :
+        //  - it is a directory on a local filesytem
+        //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
+        // Java from triggering that dreaded 'Drive not ready' popup.
+LOGGER.trace("folder="+folder+" root="+folder.getRoot());
+        if(folder.getURL().getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
+            this.lastRecallableFolder = folder.getAbsolutePath();
+            LOGGER.trace("lastRecallableFolder= "+lastRecallableFolder);
+        }
+    }
+
+    private void addToHistory(FileURL folderURL) {
         int historySize = history.size();
-        FileURL folderURL = folder.getURL();
 
         // Do not add folder to history if new current folder is the same as previous folder
         if (historyIndex<0 || !folderURL.equals(history.get(historyIndex), false, false)) {
@@ -95,16 +110,6 @@ public class LocationHistory {
 
             // Add previous folder to history
             history.add(folderURL);
-        }
-
-        // Save last recallable folder on startup, only if :
-        //  - it is a directory on a local filesytem
-        //  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
-        // Java from triggering that dreaded 'Drive not ready' popup.
-LOGGER.trace("folder="+folder+" root="+folder.getRoot());
-        if(folderURL.getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
-            this.lastRecallableFolder = folder.getAbsolutePath();
-            LOGGER.trace("lastRecallableFolder= "+lastRecallableFolder);
         }
     }
 

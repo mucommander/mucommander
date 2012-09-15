@@ -27,6 +27,7 @@ import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -210,6 +211,38 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         
         return results;
     }
+    
+    /**
+     * Retrieves the initial history, based on previous runs, for the specified frame.
+     * @param frame frame for which the initial path should be returned (either {@link #LEFT_FRAME} or
+     *               {@link #RIGHT_FRAME}).
+     * @return the locations that were presented in previous runs, which will be the initial history for the current run
+     */
+    private static FileURL[] getInitialHistory(int frame) {
+    	// Snapshot configuration
+        Configuration snapshot = MuConfigurations.getSnapshot();
+        
+    	// Get the index of the window that was selected in the previous run
+    	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
+    	
+    	int nbLocations = snapshot.getVariable(MuSnapshot.getRecentLocationsCountVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME), 0);
+    	List<FileURL> locations = new LinkedList<FileURL>();
+    	
+    	for (int i=0; i<nbLocations; ++i) {
+			try {
+				FileURL location = FileURL.getFileURL(snapshot.getVariable(MuSnapshot.getRecentLocationVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME, i)));
+				locations.add(location);
+			} catch (MalformedURLException e) {
+				LOGGER.debug("Got invalid URL from the snapshot file", e);
+			}
+    	}
+    	
+    	LOGGER.debug("initial history:");
+        for (FileURL location:locations)
+       	 LOGGER.debug("\t"+location);
+    	
+    	return locations.toArray(new FileURL[0]);
+    }
 
     /**
      * Returns a valid initial abstract path for the specified frame.
@@ -341,9 +374,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */	
     public static synchronized MainFrame createNewMainFrame() {
         if(currentMainFrame == null)
-            return createNewMainFrame(getInitialPaths(LEFT_FRAME), getInitialPaths(RIGHT_FRAME));
+            return createNewMainFrame(getInitialPaths(LEFT_FRAME), getInitialPaths(RIGHT_FRAME),
+            						  getInitialHistory(LEFT_FRAME), getInitialHistory(RIGHT_FRAME));
         return createNewMainFrame(new AbstractFile[] {currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
-                                  new AbstractFile[] {currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()});
+                                  new AbstractFile[] {currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()},
+                                  new FileURL[0],
+                                  new FileURL[0]);
     }
 
     /**
@@ -354,7 +390,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
         return createNewMainFrame(getInitialAbstractPaths(folder1, LEFT_FRAME),
-                                  getInitialAbstractPaths(folder2, RIGHT_FRAME));
+                                  getInitialAbstractPaths(folder2, RIGHT_FRAME),
+                                  new FileURL[0],
+                                  new FileURL[0]);
     }
 
     /**
@@ -364,7 +402,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @param rightFolders initial paths for the right frame.
      * @return the newly created MainFrame.
      */
-    public static synchronized MainFrame createNewMainFrame(AbstractFile[] leftFolders, AbstractFile[] rightFolders) {
+    public static synchronized MainFrame createNewMainFrame(AbstractFile[] leftFolders, AbstractFile[] rightFolders,
+    														FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) {
         MainFrame newMainFrame; // New MainFrame.
         Dimension screenSize;   // Used to compute the new MainFrame's proper location.
         int       x;            // Horizontal position of the new MainFrame.
@@ -374,7 +413,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Initialization.
         if(currentMainFrame == null)
-            newMainFrame = new MainFrame(leftFolders, rightFolders);
+            newMainFrame = new MainFrame(leftFolders, rightFolders, leftLocationHistory, rightLocationHistory);
         else
             newMainFrame = currentMainFrame.cloneMainFrame();
         screenSize   = Toolkit.getDefaultToolkit().getScreenSize();

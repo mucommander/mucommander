@@ -40,6 +40,7 @@ import javax.swing.table.TableColumnModel;
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
@@ -296,8 +297,10 @@ public class MainFrame extends JFrame implements LocationListener {
      * @param leftInitialFolders the initial folders to display in the left panel's tabs
      * @param rightInitialFolders the initial folders to display in the right panel's tabs
      */
-    public MainFrame(AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders) {
-        init(new FolderPanel(this, leftInitialFolders, getFileTableConfiguration(true)), new FolderPanel(this, rightInitialFolders, getFileTableConfiguration(false)));
+    public MainFrame(AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders,
+    			     FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) {
+        init(new FolderPanel(this, leftInitialFolders, getFileTableConfiguration(true), leftLocationHistory), 
+        	 new FolderPanel(this, rightInitialFolders, getFileTableConfiguration(false), rightLocationHistory));
 
         for (boolean isLeft = true; ; isLeft=false) {
         	FileTable fileTable = isLeft ? leftTable : rightTable;
@@ -317,8 +320,8 @@ public class MainFrame extends JFrame implements LocationListener {
         MainFrame mainFrame;
 
         mainFrame = new MainFrame();
-        mainFrame.init(new FolderPanel(mainFrame, leftFolderPanel.getCurrentFolder(), leftTable.getConfiguration()),
-                       new FolderPanel(mainFrame, rightFolderPanel.getCurrentFolder(), rightTable.getConfiguration()));
+        mainFrame.init(new FolderPanel(mainFrame, leftFolderPanel.getCurrentFolder(), leftTable.getConfiguration(), new FileURL[0]),
+                       new FolderPanel(mainFrame, rightFolderPanel.getCurrentFolder(), rightTable.getConfiguration(), new FileURL[0]));
         mainFrame.leftTable.sortBy(leftTable.getSortInfo());
         mainFrame.rightTable.sortBy(rightTable.getSortInfo());
         return mainFrame;
