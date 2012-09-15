@@ -91,5 +91,5 @@ public abstract class QuickListWithDataList<T> extends QuickList {
 	 */
 	protected abstract void acceptListItem(T item);
 	
-	protected abstract QuickListDataList getList();
+	protected abstract QuickListDataList<T> getList();
 }

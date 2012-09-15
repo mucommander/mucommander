@@ -33,7 +33,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.LocationHistory;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.Column;
@@ -59,6 +62,15 @@ public class MuSnapshot {
     public static final String  SCREEN_WIDTH                       = SCREEN_SECTION + "." + "width";
     /** Last known screen height. */
     public static final String  SCREEN_HEIGHT                      = SCREEN_SECTION + "." + "height";
+    
+    // - Location history ---- -----------------------------------------------
+    // -----------------------------------------------------------------------
+    /** Section containing the visited location in each folder panel. */
+    private static final String RECENT_LOCATIONS_SECTION           = "recent_locations";
+    /** A location that was visited within the folder panel. */
+    public static final String  LOCATION                           = "location";
+    /** Describes the number of visited locations saved for the folder panel */
+    private static final String LOCATIONS_COUNT                    = "count";
     
 	// - Last windows variables ----------------------------------------------
     // -----------------------------------------------------------------------
@@ -422,6 +434,42 @@ public class MuSnapshot {
     	return getTabSection(window, left, index) + "." + TAB_LOCATION;
     }
     
+    /**
+     * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.LocationHistory},
+     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
+     *
+     * @param window index of MainFrame
+     * @param left true for the left LocationHistory, false for the right one
+     * @return the CONFIGURATION section corresponding to the specified FileTableTabs
+     */    
+    private static String getRecentLocationsSection(int window, boolean left) {
+    	return getFolderPanelSection(window, left) + "." + RECENT_LOCATIONS_SECTION;
+    }
+    
+    /**
+     * Returns the variable that holds number of visited locations saved for the left or right {@link com.mucommander.ui.main.FolderPanel},
+     * at the {@link com.mucommander.ui.main.MainFrame} in the given index.
+     *
+     * @param window index of MainFrame
+     * @param left true for the left FolderPanel, false for the right one
+     * @return the variable that holds the number of visited locations saved for the specified FolderPanel
+     */
+    public static String getRecentLocationsCountVariable(int window, boolean left) {
+    	return getRecentLocationsSection(window, left)  + "." + LOCATIONS_COUNT; 
+    }
+    
+    /**
+     * Returns the variable that holds a location contained in the locations history of the folder panel,
+     * in the left or right {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
+     *
+     * @param window index of MainFrame
+     * @param left true for the left FolderPanel, false for the right one
+     * @param index the index of location in the visited location history 
+     * @return the variable that holds the location presented at the tab in the given index in the specified FolderPanel
+     */
+    public static String getRecentLocationVariable(int window, boolean left, int index) {
+    	return getRecentLocationsSection(window, left)  + "." + LOCATION + "-" + index; 
+    }
     
     private static final String ROOT_ELEMENT = "snapshot";
     
@@ -491,6 +539,11 @@ public class MuSnapshot {
     	for (int i=0; i<nbMainFrames; ++i)
     		setFrameAttributes(mainFrames.get(i), i);
     	
+    	if (screenSize != null) {
+        	configuration.setVariable(MuSnapshot.SCREEN_WIDTH, screenSize.width);
+        	configuration.setVariable(MuSnapshot.SCREEN_HEIGHT, screenSize.height);
+        }
+    	
         configuration.write();
     }
     
@@ -513,6 +566,17 @@ public class MuSnapshot {
         setTableAttributes(index, isLeft, panel.getFileTable());
         
         setTabsAttributes(index, isLeft, panel.getTabs());
+        
+        setPanelHistory(index, isLeft, panel.getFolderHistory());
+    }
+    
+    private void setPanelHistory(int index, boolean isLeft, LocationHistory locationHistory) {
+    	FileURL[] locations = locationHistory.getAllFolders();
+
+    	configuration.setVariable(getRecentLocationsCountVariable(index, isLeft), locations.length);
+    	
+    	for (int i=0; i<locations.length; ++i)
+    		configuration.setVariable(getRecentLocationVariable(index, isLeft, i), locations[i].toString());
     }
 
     private void setTabsAttributes(int index, boolean isLeft, FileTableTabs tabs) {
@@ -568,11 +632,6 @@ public class MuSnapshot {
         configuration.setVariable(getWidth(index), (int)bounds.getWidth());
         configuration.setVariable(getHeight(index), (int)bounds.getHeight());
         
-        if (screenSize != null) {
-        	configuration.setVariable(MuSnapshot.SCREEN_WIDTH, screenSize.width);
-        	configuration.setVariable(MuSnapshot.SCREEN_HEIGHT, screenSize.height);
-        }
-
         // Save split pane orientation
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing

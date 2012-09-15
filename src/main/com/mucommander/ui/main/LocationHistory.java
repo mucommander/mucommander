@@ -184,6 +184,21 @@ LOGGER.trace("folder="+folder+" root="+folder.getRoot());
         return urls;
     }
 
+    public FileURL[] getAllFolders() {
+    	if (historyIndex < 0)
+    		return new FileURL[0];
+    	else {
+    		int historySize = history.size();
+    		FileURL urls[] = new FileURL[historySize-1];
+    		
+    		int cur = 0;
+            for(int i=0; i<historySize; i++)
+            	if (i != historyIndex)
+            		urls[cur++] = history.get(i);
+            
+            return urls;
+    	}
+    }
 
     /**
      * Returns true if the folder history contains the given FileURL, either as a back or forward folder, or as the
