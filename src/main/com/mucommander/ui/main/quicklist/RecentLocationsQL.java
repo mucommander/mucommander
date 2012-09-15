@@ -18,17 +18,20 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.LinkedList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.swing.Icon;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.LocationHistory;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
 /**
@@ -36,20 +39,16 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  * 
  * @author Arik Hadas
  */
-public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> implements LocationListener {
+public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> {
 	
 	private static int MAX_ELEMENTS = 15;
-	private LinkedList<AbstractFile> linkedList;
+
 	private FolderPanel folderPanel;
 	
 	public RecentLocationsQL(FolderPanel folderPanel) {
 		super(folderPanel, ActionProperties.getActionLabel(ShowRecentLocationsQLAction.Descriptor.ACTION_ID), Translator.get("recent_locations_quick_list.empty_message"));
 		
 		this.folderPanel = folderPanel;
-		
-		folderPanel.getLocationManager().addLocationListener(this);
-		
-		linkedList = new LinkedList<AbstractFile>();
 	}
 
 	@Override
@@ -59,34 +58,37 @@ public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> implemen
 
 	@Override
     public AbstractFile[] getData() {
-		LinkedList<AbstractFile> list = (LinkedList<AbstractFile>)linkedList.clone();
+		Set<AbstractFile> list = new LinkedHashSet<AbstractFile>();
 
-		if (!list.remove(folderPanel.getCurrentFolder()))
-			list.removeLast();
+		LocationHistory folderHistory = folderPanel.getFolderHistory();
+		FileURL[] forwardFolders = folderHistory.getForwardFolders();
+		for (FileURL url:forwardFolders)
+			list.add(FileFactory.getFile(url));
 		
-		return list.toArray(new AbstractFile[0]);
+		FileURL[] backFolders = folderHistory.getBackFolders();
+		for (FileURL url:backFolders)
+			list.add(FileFactory.getFile(url));
+		
+		// Remove current presented location from the list
+		list.remove(folderPanel.getCurrentFolder());
+
+		AbstractFile[] results;
+		
+		if (list.size() <= MAX_ELEMENTS)
+			results = list.toArray(new AbstractFile[0]);
+		else {
+			results = new AbstractFile[MAX_ELEMENTS];
+			Iterator<AbstractFile> iterator = list.iterator();
+			
+			for (int i=0; i<results.length; ++i)
+				results[i] = iterator.next();
+		}
+		
+		return results;
 	}
 
 	@Override
     protected Icon itemToIcon(AbstractFile item) {
 		return getIconOfFile(item);
 	}
-	
-	/**********************************
-	 * LocationListener Implementation
-	 **********************************/
-	
-	public void locationChanged(LocationEvent locationEvent) {
-		AbstractFile currentFolder = locationEvent.getFolderPanel().getCurrentFolder();
-			
-		if (!linkedList.remove(currentFolder) && linkedList.size() > MAX_ELEMENTS)
-			linkedList.removeLast();
-		linkedList.addFirst(currentFolder);
-	}
-
-	public void locationCancelled(LocationEvent locationEvent) {}
-	
-	public void locationChanging(LocationEvent locationEvent) {}
-
-	public void locationFailed(LocationEvent locationEvent) {}
 }
