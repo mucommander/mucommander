@@ -598,12 +598,12 @@ public class MuSnapshot {
     	// Save tabs locations
     	while (tabsIterator.hasNext()) {
     		FileTableTab tab = tabsIterator.next();
-    		++tabsCounter;
     		configuration.setVariable(getTabLocationVariable(index, isLeft, tabsCounter), tab.getLocation().getAbsolutePath());
+    		++tabsCounter;
     	}
     	
     	// Save tabs count
-    	configuration.setVariable(getTabsCountVariable(index, isLeft), tabsCounter + 1);
+    	configuration.setVariable(getTabsCountVariable(index, isLeft), tabsCounter);
     	
     	// Save the index of the selected tab
     	configuration.setVariable(getTabsSelectionVariable(index, isLeft), tabs.getSelectedIndex());

@@ -174,7 +174,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         	// Get the index of the window that was selected in the previous run
         	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
         	// Set initial path to each tab
-        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT), 0);
+        	int nbFolderPaths = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT));
         	folderPaths = new String[nbFolderPaths];
         	for (int i=0; i<nbFolderPaths;++i)
         		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT, i));
