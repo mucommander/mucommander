@@ -156,7 +156,8 @@ public class MuSnapshot {
     private static final String TAB                                = "tab";
     /** Describes the location presented in a tab */
     private static final String TAB_LOCATION                       = "location";
-    
+    /** The index of the selected tab within the folder panel */
+    private static final String SELECTED_TAB					   = "selection";
     
 	/** Cache the screen's size. this value isn't computed during the shutdown process since it cause a deadlock then */
 	private Dimension screenSize;
@@ -409,6 +410,18 @@ public class MuSnapshot {
     }
     
     /**
+     * Returns the variable that holds the index of the selected tab, in the left or right
+     * {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
+     * 
+     * @param window index of MainFrame
+     * @param left true for the left FileTableTab, false for the right one
+     * @return the variable that holds the index of the selected tab in the specified FolderPanel
+     */
+    public static String getTabsSelectionVariable(int window, boolean left) {
+    	return getTabsSection(window, left) + "." + SELECTED_TAB;
+    }
+    
+    /**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.tabs.FileTableTab},
      * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
@@ -591,6 +604,9 @@ public class MuSnapshot {
     	
     	// Save tabs count
     	configuration.setVariable(getTabsCountVariable(index, isLeft), tabsCounter + 1);
+    	
+    	// Save the index of the selected tab
+    	configuration.setVariable(getTabsSelectionVariable(index, isLeft), tabs.getSelectedIndex());
     }
     
     private void setTableAttributes(int index, boolean isLeft, FileTable table) {

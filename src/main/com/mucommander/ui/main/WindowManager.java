@@ -364,9 +364,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public static synchronized MainFrame createNewMainFrame() {
         if(currentMainFrame == null)
             return createNewMainFrame(getInitialPaths(FolderPanelType.LEFT), getInitialPaths(FolderPanelType.RIGHT),
+            						  MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(0, true)),
+            						  MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(0, false)),
             						  getInitialHistory(FolderPanelType.LEFT), getInitialHistory(FolderPanelType.RIGHT));
         return createNewMainFrame(new AbstractFile[] {currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
                                   new AbstractFile[] {currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()},
+                                  0,
+                                  0,
                                   new FileURL[0],
                                   new FileURL[0]);
     }
@@ -380,6 +384,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public static synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
         return createNewMainFrame(getInitialAbstractPaths(folder1, FolderPanelType.LEFT),
                                   getInitialAbstractPaths(folder2, FolderPanelType.RIGHT),
+                                  0,
+                                  0,
                                   new FileURL[0],
                                   new FileURL[0]);
     }
@@ -392,6 +398,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return the newly created MainFrame.
      */
     public static synchronized MainFrame createNewMainFrame(AbstractFile[] leftFolders, AbstractFile[] rightFolders,
+    														int indexOfLeftSelectedTab, int indexOfRightSelectedTab,
     														FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) {
         MainFrame newMainFrame; // New MainFrame.
         Dimension screenSize;   // Used to compute the new MainFrame's proper location.
@@ -402,7 +409,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Initialization.
         if(currentMainFrame == null)
-            newMainFrame = new MainFrame(leftFolders, rightFolders, leftLocationHistory, rightLocationHistory);
+            newMainFrame = new MainFrame(leftFolders, rightFolders, indexOfLeftSelectedTab, indexOfRightSelectedTab, leftLocationHistory, rightLocationHistory);
         else
             newMainFrame = currentMainFrame.cloneMainFrame();
         screenSize   = Toolkit.getDefaultToolkit().getScreenSize();

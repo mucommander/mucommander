@@ -137,8 +137,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param initialFolder - the initial folder to be displayed at this panel
      * @param conf - configuration for this panel's file table
      */
-    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, FileTableConfiguration conf, FileURL[] locationHistory) {
-    	this(mainFrame, new AbstractFile[] {initialFolder}, conf, locationHistory);
+    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, int indexOfSelectedTab, FileTableConfiguration conf, FileURL[] locationHistory) {
+    	this(mainFrame, new AbstractFile[] {initialFolder}, indexOfSelectedTab, conf, locationHistory);
     }
     
     /**
@@ -148,7 +148,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param initialFolders - the initial folders displayed at this panel's tabs
      * @param conf - configuration for this panel's file table
      */
-    FolderPanel(MainFrame mainFrame, AbstractFile[] initialFolders, FileTableConfiguration conf, FileURL[] locationHistory) {
+    FolderPanel(MainFrame mainFrame, AbstractFile[] initialFolders, int indexOfSelectedTab, FileTableConfiguration conf, FileURL[] locationHistory) {
         super(new BorderLayout());
 
         LOGGER.trace(" initialFolder:"+initialFolders);
@@ -219,7 +219,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         locationManager.addLocationListener(locationListener);
 
     	// Create the Tabs (Must be called after the fileTable was created and current folder was set)
-        tabs = new FileTableTabs(mainFrame, this, initialFolders);
+        tabs = new FileTableTabs(mainFrame, this, initialFolders, indexOfSelectedTab);
 
         // create folders tree on a JSplitPane 
         foldersTreePanel = new FoldersTreePanel(this);

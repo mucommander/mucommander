@@ -298,9 +298,10 @@ public class MainFrame extends JFrame implements LocationListener {
      * @param rightInitialFolders the initial folders to display in the right panel's tabs
      */
     public MainFrame(AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders,
+    				 int indexOfLeftSelectedTab, int indexOfRightSelectedTab,
     			     FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) {
-        init(new FolderPanel(this, leftInitialFolders, getFileTableConfiguration(true), leftLocationHistory), 
-        	 new FolderPanel(this, rightInitialFolders, getFileTableConfiguration(false), rightLocationHistory));
+        init(new FolderPanel(this, leftInitialFolders, indexOfLeftSelectedTab, getFileTableConfiguration(true), leftLocationHistory), 
+        	 new FolderPanel(this, rightInitialFolders, indexOfRightSelectedTab, getFileTableConfiguration(false), rightLocationHistory));
 
         for (boolean isLeft = true; ; isLeft=false) {
         	FileTable fileTable = isLeft ? leftTable : rightTable;
@@ -320,8 +321,8 @@ public class MainFrame extends JFrame implements LocationListener {
         MainFrame mainFrame;
 
         mainFrame = new MainFrame();
-        mainFrame.init(new FolderPanel(mainFrame, leftFolderPanel.getCurrentFolder(), leftTable.getConfiguration(), new FileURL[0]),
-                       new FolderPanel(mainFrame, rightFolderPanel.getCurrentFolder(), rightTable.getConfiguration(), new FileURL[0]));
+        mainFrame.init(new FolderPanel(mainFrame, leftFolderPanel.getCurrentFolder(), 0, leftTable.getConfiguration(), new FileURL[0]),
+                       new FolderPanel(mainFrame, rightFolderPanel.getCurrentFolder(), 0, rightTable.getConfiguration(), new FileURL[0]));
         mainFrame.leftTable.sortBy(leftTable.getSortInfo());
         mainFrame.rightTable.sortBy(rightTable.getSortInfo());
         return mainFrame;
