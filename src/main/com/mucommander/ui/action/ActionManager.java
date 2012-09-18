@@ -74,6 +74,7 @@ public class ActionManager {
     	registerAction(new ChangeLocationAction.Descriptor(),               new ChangeLocationAction.Factory());
     	registerAction(new ChangePermissionsAction.Descriptor(),            new ChangePermissionsAction.Factory());
     	registerAction(new CheckForUpdatesAction.Descriptor(),              new CheckForUpdatesAction.Factory());
+    	registerAction(new CloneTabToOtherPanelAction.Descriptor(), 		new CloneTabToOtherPanelAction.Factory());
     	registerAction(new CloseDuplicateTabsAction.Descriptor(),			new CloseDuplicateTabsAction.Factory());
     	registerAction(new CloseOtherTabsAction.Descriptor(),				new CloseOtherTabsAction.Factory());
     	registerAction(new CloseWindowAction.Descriptor(),                  new CloseWindowAction.Factory());

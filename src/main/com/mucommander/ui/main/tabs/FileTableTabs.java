@@ -75,7 +75,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 ********************/
 	
 	public void add(AbstractFile file) {
-		addAndSelectTab(tabsFactory.createTab(file));
+		add(tabsFactory.createTab(file));
 	}
 	
 	public void add(FileTableTab tab) {
@@ -95,7 +95,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	}
 	
 	public void duplicate() {
-		addAndSelectTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
+		add(tabsFactory.createTab(folderPanel.getCurrentFolder()));
 	}
 
 	/****************
