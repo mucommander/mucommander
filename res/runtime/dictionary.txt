@@ -8412,6 +8412,9 @@ table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 # Tabs #
 ########
 
+DuplicateTab.label:EN:Duplicate tab
+# Translation missing (New!)
+
 CloseDuplicateTabs.label:EN:Close duplicate tabs
 CloseDuplicateTabs.label:UA:Закрити вкладки, що повторюються
 CloseDuplicateTabs.label:ES:Cerrar pestañas duplicadas
@@ -8430,6 +8433,9 @@ CloseTab.label:ES:Cerrar pestaña
 MoveTabToOtherPanel.label:EN:Move tab to other panel
 MoveTabToOtherPanel.label:UA:Перемістити вкладку на іншу панель
 MoveTabToOtherPanel.label:ES:Mover pestaña al otro panel
+# Translation missing (New!)
+
+CloneTabToOtherPanel.label:EN:Clone tab to other panel
 # Translation missing (New!)
 
 NextTab.label:EN:Next tab
