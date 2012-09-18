@@ -89,6 +89,7 @@ public class ActionManager {
     	registerAction(new FocusNextAction.Descriptor(),                    new FocusNextAction.Factory());
     	registerAction(new DeleteAction.Descriptor(),         			    new DeleteAction.Factory());
     	registerAction(new DonateAction.Descriptor(),    			        new DonateAction.Factory());
+    	registerAction(new DuplicateTab.Descriptor(),						new DuplicateTab.Factory());
     	registerAction(new EditAction.Descriptor(),     			        new EditAction.Factory());
     	registerAction(new EditBookmarksAction.Descriptor(),                new EditBookmarksAction.Factory());
     	registerAction(new EditCredentialsAction.Descriptor(),              new EditCredentialsAction.Factory());

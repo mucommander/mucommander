@@ -93,6 +93,10 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	public void closeOtherTabs() {
 		removeOtherTabs();
 	}
+	
+	public void duplicate() {
+		addAndSelectTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
+	}
 
 	/****************
 	 * Other Actions
