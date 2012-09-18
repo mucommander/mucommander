@@ -74,6 +74,9 @@ import java.util.HashSet;
  */
 public class FolderPanel extends JPanel implements FocusListener, QuickListContainer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FolderPanel.class);
+
+	/** The following constants are used to identify the left and right folder panels */
+	public enum FolderPanelType { LEFT, RIGHT }
 	
     private MainFrame  mainFrame;
 

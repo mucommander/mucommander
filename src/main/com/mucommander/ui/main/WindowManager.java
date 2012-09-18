@@ -57,6 +57,7 @@ import com.mucommander.conf.MuPreferencesAPI;
 import com.mucommander.conf.MuSnapshot;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.ui.dialog.auth.AuthDialog;
+import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.commandbar.CommandBar;
 
 /**
@@ -69,18 +70,6 @@ import com.mucommander.ui.main.commandbar.CommandBar;
 public class WindowManager implements WindowListener, ConfigurationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WindowManager.class);
 	
-    // - Folder frame identifiers -----------------------------------------------
-    // --------------------------------------------------------------------------
-    // The following constants are used to identify the left and right folder frames
-    // in the configuration file.
-
-    /** Configuration identifier for the left folder frame. */
-    static final int LEFT_FRAME  = 0;
-    /** Configuration identifier for the right folder frame. */
-    static final int RIGHT_FRAME = 1;
-
-
-
     // - MainFrame positioning --------------------------------------------------
     // --------------------------------------------------------------------------
     // The following constants are used to compute the proper position of a new MainFrame.
@@ -158,11 +147,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * return the user's home directory - we assume this will always exist, which might be a bit
      * of a leap of faith.
      * </p>
-     * @param  frame frame for which the initial path should be returned (either {@link #LEFT_FRAME} or
-     *               {@link #RIGHT_FRAME}).
+     * @param  folderPanelType panel for which the initial path should be returned (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
+     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
      * @return       the user's initial path for the specified frame.
      */ 
-    private static AbstractFile[] getInitialPaths(int frame) {
+    private static AbstractFile[] getInitialPaths(FolderPanelType folderPanelType) {
         boolean       isCustom;    // Whether the initial path is a custom one or the last used folder.
         String[]      folderPaths; // Paths to the initial folders.
         
@@ -172,12 +161,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         MuPreferencesAPI preferences = MuConfigurations.getPreferences();
         
         // Checks which kind of initial path we're dealing with.
-        isCustom = (frame == LEFT_FRAME ? preferences.getVariable(MuPreference.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
+        isCustom = (folderPanelType == FolderPanelType.LEFT ? preferences.getVariable(MuPreference.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
         	preferences.getVariable(MuPreference.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom) {
-        	folderPaths = new String[] {(frame == LEFT_FRAME ? preferences.getVariable(MuPreference.LEFT_CUSTOM_FOLDER) :
+        	folderPaths = new String[] {(folderPanelType == FolderPanelType.LEFT ? preferences.getVariable(MuPreference.LEFT_CUSTOM_FOLDER) :
         		preferences.getVariable(MuPreference.RIGHT_CUSTOM_FOLDER))};
         }
         // Handles "last folder" initial paths.
@@ -185,10 +174,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         	// Get the index of the window that was selected in the previous run
         	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
         	// Set initial path to each tab
-        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME), 0);
+        	int nbFolderPaths = snapshot.getVariable(MuSnapshot.getTabsCountVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT), 0);
         	folderPaths = new String[nbFolderPaths];
         	for (int i=0; i<nbFolderPaths;++i)
-        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME, i));
+        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT, i));
         }
 
         List<AbstractFile> initialFolders = new LinkedList<AbstractFile>(); // Initial folders 
@@ -214,23 +203,23 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     
     /**
      * Retrieves the initial history, based on previous runs, for the specified frame.
-     * @param frame frame for which the initial path should be returned (either {@link #LEFT_FRAME} or
-     *               {@link #RIGHT_FRAME}).
+     * @param folderPanelType panel for which the initial path should be returned (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
+     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
      * @return the locations that were presented in previous runs, which will be the initial history for the current run
      */
-    private static FileURL[] getInitialHistory(int frame) {
+    private static FileURL[] getInitialHistory(FolderPanelType folderPanelType) {
     	// Snapshot configuration
         Configuration snapshot = MuConfigurations.getSnapshot();
         
     	// Get the index of the window that was selected in the previous run
     	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
     	
-    	int nbLocations = snapshot.getVariable(MuSnapshot.getRecentLocationsCountVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME), 0);
+    	int nbLocations = snapshot.getVariable(MuSnapshot.getRecentLocationsCountVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT), 0);
     	List<FileURL> locations = new LinkedList<FileURL>();
     	
     	for (int i=0; i<nbLocations; ++i) {
 			try {
-				FileURL location = FileURL.getFileURL(snapshot.getVariable(MuSnapshot.getRecentLocationVariable(indexOfPreviouslySelectedWindow, frame == LEFT_FRAME, i)));
+				FileURL location = FileURL.getFileURL(snapshot.getVariable(MuSnapshot.getRecentLocationVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT, i)));
 				locations.add(location);
 			} catch (MalformedURLException e) {
 				LOGGER.debug("Got invalid URL from the snapshot file", e);
@@ -257,14 +246,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * - if it does not have a parent, use the default initial path for the frame.<br/>
      * </p>
      * @param  path  path to the folder we want to open in <code>frame</code>.
-     * @param  frame identifer of the frame we want to compute the path for (either {@link #LEFT_FRAME} or
-     *               {@link #RIGHT_FRAME}).
+     * @param  folderPanelType identifer of the panel we want to compute the path for (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
+     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
      * @return       our best shot at what was actually requested.
      */
-    private static AbstractFile[] getInitialAbstractPaths(String path, int frame) {
+    private static AbstractFile[] getInitialAbstractPaths(String path, FolderPanelType folderPanelType) {
         // This is one of those cases where a null value actually has a proper meaning.
         if(path == null)
-            return getInitialPaths(frame);
+            return getInitialPaths(folderPanelType);
 
         // Tries the specified path as-is.
         AbstractFile file;
@@ -293,7 +282,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     }
                     // If the user cancels, we fall back to the default path.
                     else {
-                        return getInitialPaths(frame);
+                        return getInitialPaths(folderPanelType);
                     }
                 }
                 else {
@@ -308,14 +297,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // Tries the specified path as a relative path.
             if((file = FileFactory.getFile(new File(path).getAbsolutePath())) == null || !file.exists())
                 // Defaults to home.
-                return getInitialPaths(frame);
+                return getInitialPaths(folderPanelType);
 
         // If the specified path is a non-browsable, uses its parent.
         if(!file.isBrowsable())
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
             if((file = file.getParent()) == null)
-                return getInitialPaths(frame);
+                return getInitialPaths(folderPanelType);
 
         return new AbstractFile[] {file};
     }
@@ -374,8 +363,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */	
     public static synchronized MainFrame createNewMainFrame() {
         if(currentMainFrame == null)
-            return createNewMainFrame(getInitialPaths(LEFT_FRAME), getInitialPaths(RIGHT_FRAME),
-            						  getInitialHistory(LEFT_FRAME), getInitialHistory(RIGHT_FRAME));
+            return createNewMainFrame(getInitialPaths(FolderPanelType.LEFT), getInitialPaths(FolderPanelType.RIGHT),
+            						  getInitialHistory(FolderPanelType.LEFT), getInitialHistory(FolderPanelType.RIGHT));
         return createNewMainFrame(new AbstractFile[] {currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
                                   new AbstractFile[] {currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()},
                                   new FileURL[0],
@@ -389,8 +378,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return         a fully initialized mainframe.
      */
     public static synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
-        return createNewMainFrame(getInitialAbstractPaths(folder1, LEFT_FRAME),
-                                  getInitialAbstractPaths(folder2, RIGHT_FRAME),
+        return createNewMainFrame(getInitialAbstractPaths(folder1, FolderPanelType.LEFT),
+                                  getInitialAbstractPaths(folder2, FolderPanelType.RIGHT),
                                   new FileURL[0],
                                   new FileURL[0]);
     }
