@@ -53,9 +53,9 @@ import com.mucommander.ui.main.MainFrame;
  * 
  * @author Arik Hadas
  */
-public class DuplicateTab extends MuAction {
+public class DuplicateTabAction extends MuAction {
 	
-	public DuplicateTab(MainFrame mainFrame, Map<String,Object> properties) {
+	public DuplicateTabAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -67,7 +67,7 @@ public class DuplicateTab extends MuAction {
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new DuplicateTab(mainFrame, properties);
+			return new DuplicateTabAction(mainFrame, properties);
 		}
     }
     
