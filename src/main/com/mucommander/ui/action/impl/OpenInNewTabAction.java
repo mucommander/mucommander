@@ -64,7 +64,7 @@ public class OpenInNewTabAction extends SelectedFileAction {
         if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
             return;
 
-        // Opens the currently selected file in the inactive panel.
+        // Opens the currently selected file in a new tab
         mainFrame.getActivePanel().getTabs().add(file);
 	}
 	

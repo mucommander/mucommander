@@ -47,6 +47,11 @@ import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
+/**
+ * Lock the currently selected tab
+ * 
+ * @author Arik Hadas
+ */
 public class LockTabAction extends MuAction {
 	
 	public LockTabAction(MainFrame mainFrame, Map<String,Object> properties) {
