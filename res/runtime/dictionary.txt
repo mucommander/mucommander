@@ -8412,6 +8412,12 @@ table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 # Tabs #
 ########
 
+LockTab.label:EN:Lock
+# Translation missing (New!)
+
+UnlockTab.label:EN:Unlock
+# Translation missing (New!)
+
 DuplicateTab.label:EN:Duplicate tab
 # Translation missing (New!)
 
