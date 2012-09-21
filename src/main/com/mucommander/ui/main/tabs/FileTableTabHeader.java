@@ -60,23 +60,23 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.gridy = 0;
 
+        // Locked tab icon
+        lockedButton = new LockedButton();
+        gbc.weightx = 0;    // required otherwise extra width may be redistributed around the button
+        gbc.gridx = 0;
+        lockedButton.setVisible(false);
+        add(lockedButton, gbc);
+        
         // Label
         JLabel label = new JLabel();
         Font font = new JLabel().getFont();
         label.setFont(font.deriveFont(font.getStyle(), font.getSize()-2));
         // Add extra space between the label and the button
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        gbc.weightx = 0;
-        gbc.gridx = 0;
+        gbc.weightx = 1;
+        gbc.gridx = 1;
         add(label, gbc);
 
-        // Locked tab icon
-        lockedButton = new LockedButton();
-        gbc.weightx = 1;    // required otherwise extra width may be redistributed around the button
-        gbc.gridx = 1;
-        lockedButton.setVisible(false);
-        add(lockedButton, gbc);
-        
         // Close tab button
         JButton closeButton = new CloseButton();
         closeButton.addActionListener(this);
@@ -86,7 +86,7 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     }
 
     public void setTitle(String title) {
-    	JLabel label = (JLabel)getComponent(0); 
+    	JLabel label = (JLabel)getComponent(1); 
 
         // Truncate the title if it is too long.
         // Note: 31 is the maximum title length displayed in tabs by Firefox and Safari at the time of this writing
@@ -99,7 +99,7 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     }
     
     public String getTitle() {
-    	JLabel label = (JLabel)getComponent(0); 
+    	JLabel label = (JLabel)getComponent(1); 
     	return label.getText();
     }
 
