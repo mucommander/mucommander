@@ -85,13 +85,13 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	}
 	
 	/**
-	 * Update the tab in the given index to the given tab
+	 * Update the tab in the given index with the given {@link TabUpdater}
 	 * 
 	 * @param index - the index of the tab to be updated
-	 * @param tab - the updated tab
+	 * @param updater - the object that will be used to update the tab
 	 */
-	public void updateTab(int index, T tab) {
-		collection.set(index, tab);
+	public void updateTab(int index, TabUpdater<T> updater) {
+		updater.update(get(index));
 		fireTabUpdated(index);
 	}
 	

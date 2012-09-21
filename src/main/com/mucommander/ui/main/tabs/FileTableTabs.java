@@ -26,6 +26,7 @@ import com.mucommander.ui.main.FolderPanel.ChangeFolderThread;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.HideableTabbedPane;
 import com.mucommander.ui.tabs.TabFactory;
+import com.mucommander.ui.tabs.TabUpdater;
 
 /**
 * HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
@@ -70,6 +71,15 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		}
 	}
 	
+	private void updateTabLocation(final AbstractFile location) {
+		updateCurrentTab(new TabUpdater<FileTableTab>() {
+			
+			public void update(FileTableTab tab) {
+				tab.setLocation(location);
+			}
+		});
+	}
+	
 	/********************
 	 * MuActions support
 	 ********************/
@@ -111,15 +121,15 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 **********************************/
 	
 	public void locationChanged(LocationEvent locationEvent) {
-		updateTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
+		updateTabLocation(folderPanel.getCurrentFolder());
 	}
 
 	public void locationCancelled(LocationEvent locationEvent) {
-		updateTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
+		updateTabLocation(folderPanel.getCurrentFolder());
 	}
 
 	public void locationFailed(LocationEvent locationEvent) {
-		updateTab(tabsFactory.createTab(folderPanel.getCurrentFolder()));
+		updateTabLocation(folderPanel.getCurrentFolder());
 	}
 	
 	public void locationChanging(LocationEvent locationEvent) { }
