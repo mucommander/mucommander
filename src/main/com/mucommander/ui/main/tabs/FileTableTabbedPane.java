@@ -118,6 +118,21 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 		setToolTipTextAt(index, tab.getLocation().getAbsolutePath());
 	}
 	
+	public void setLockedAt(int index, boolean lock) {
+		if (JavaVersions.JAVA_1_5.isCurrentOrLower()) {
+//			super.setTitleAt(index, title);
+		}
+		else {
+			FileTableTabHeader header = getTabHeader(index);
+			if (header == null) {
+				header = new FileTableTabHeader(folderPanel);
+				setTabHeader(index, header);
+			}
+				
+			header.setLocked(lock);
+		}
+	}
+	
 	@Override
 	public void setTitleAt(int index, String title) {
 		if (JavaVersions.JAVA_1_5.isCurrentOrLower())
@@ -154,6 +169,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 
 	@Override
 	public void update(FileTableTab tab, int index) {
+		setLockedAt(index, tab.isLocked());
 		setTitleAt(index, tab.getLocation().getName());
 		setToolTipTextAt(index, tab.getLocation().getAbsolutePath());
 		

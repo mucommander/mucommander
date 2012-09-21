@@ -39,10 +39,15 @@ import java.awt.event.ActionListener;
 class FileTableTabHeader extends JPanel implements ActionListener {
 	
 	private FolderPanel folderPanel;
+	
+	private JButton lockedButton;
 
-    private static final String CLOSE_ICON_NAME = "close.png";
+	private static final String CLOSE_ICON_NAME = "close.png";
     private static final String CLOSE_ROLLOVER_ICON_NAME = "close_rollover.png";
     private static final int CLOSE_ICON_SIZE = 12;
+    
+    private static final String LOCKED_ICON_NAME = "lock.png";
+    private static final int LOCKED_ICON_SIZE = 12;
 
     public FileTableTabHeader(FolderPanel folderPanel) {
         super(new GridBagLayout());
@@ -65,12 +70,19 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         gbc.gridx = 0;
         add(label, gbc);
 
-        // Close tab button
-        JButton button = new CloseButton();
-        button.addActionListener(this);
+        // Locked tab icon
+        lockedButton = new LockedButton();
         gbc.weightx = 1;    // required otherwise extra width may be redistributed around the button
         gbc.gridx = 1;
-        add(button, gbc);
+        lockedButton.setVisible(false);
+        add(lockedButton, gbc);
+        
+        // Close tab button
+        JButton closeButton = new CloseButton();
+        closeButton.addActionListener(this);
+        gbc.weightx = 1;    // required otherwise extra width may be redistributed around the button
+        gbc.gridx = 2;
+        add(closeButton, gbc);
     }
 
     public void setTitle(String title) {
@@ -90,6 +102,12 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     	JLabel label = (JLabel)getComponent(0); 
     	return label.getText();
     }
+
+	public void setLocked(boolean lock) {
+		lockedButton.setVisible(lock);
+		
+		validate();
+	}
     
     /********************************
 	 * ActionListener Implementation
@@ -99,9 +117,9 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     	folderPanel.getTabs().close(this);
 	}
     
-    /**********************
-	 * 
-	 **********************/
+    /**************************************************
+	 * Buttons which are presented in the tab's header
+	 **************************************************/
     private class CloseButton extends JButton {
     	 
         public CloseButton() {
@@ -117,6 +135,34 @@ class FileTableTabHeader extends JPanel implements ActionListener {
             //Making nice rollover effect
             setRolloverEnabled(true);
             setRolloverIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, CLOSE_ROLLOVER_ICON_NAME));
+        }
+
+
+        // Remove default insets
+        @Override
+        public Insets getInsets() {
+            return new Insets(0,0,0,0);
+        }
+
+        // We don't want to update UI for this button
+        @Override
+        public void updateUI() {
+        }
+    }
+    
+    private class LockedButton extends JButton {
+   	 
+        public LockedButton() {
+            setPreferredSize(new Dimension(LOCKED_ICON_SIZE, LOCKED_ICON_SIZE));
+            //Make the button looks the same for all Laf's
+            setUI(new BasicButtonUI());
+            //Make it transparent
+            setContentAreaFilled(false);
+            //No need to be focusable
+            setFocusable(false);
+            setBorderPainted(false);
+            setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, LOCKED_ICON_NAME));
+            setRolloverEnabled(false);
         }
 
 

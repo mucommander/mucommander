@@ -53,6 +53,14 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 			return tab.getLocation();
 		}
 
+		public void setLocked(boolean locked) {
+			tab.setLocked(locked);
+		}
+
+		public boolean isLocked() {
+			return tab.isLocked();
+		}
+		
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof FileTableTabFactory.DefaultFileTableTab)

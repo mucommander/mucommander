@@ -41,4 +41,18 @@ public interface FileTableTab extends Tab {
 	 * @return the file that is being presented in the tab
 	 */
 	public AbstractFile getLocation();
+	
+	/**
+	 * Set the tab to be locked or unlocked according to the given flag
+	 * 
+	 * @param locked flag that indicates whether the tab should be locked or not
+	 */
+	public void setLocked(boolean locked);
+	
+	/**
+	 * Returns whether the tab is locked
+	 * 
+	 * @return indication whether the tab is locked
+	 */
+	public boolean isLocked();
 }

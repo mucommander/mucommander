@@ -23,7 +23,9 @@ import com.mucommander.ui.action.impl.CloseDuplicateTabsAction;
 import com.mucommander.ui.action.impl.CloseOtherTabsAction;
 import com.mucommander.ui.action.impl.CloseTabAction;
 import com.mucommander.ui.action.impl.DuplicateTabAction;
+import com.mucommander.ui.action.impl.LockTabAction;
 import com.mucommander.ui.action.impl.MoveTabToOtherPanelAction;
+import com.mucommander.ui.action.impl.UnlockTabAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
 
@@ -37,14 +39,20 @@ class FileTableTabPopupMenu extends MuActionsPopupMenu {
 	public FileTableTabPopupMenu(MainFrame mainFrame) {
 		super(mainFrame);
 		
+		FileTableTab currentTab = mainFrame.getActivePanel().getTabs().getCurrentTab();
+		
 		addAction(DuplicateTabAction.Descriptor.ACTION_ID);
 		addAction(CloseTabAction.Descriptor.ACTION_ID);
 		addAction(CloseOtherTabsAction.Descriptor.ACTION_ID);
 		addAction(CloseDuplicateTabsAction.Descriptor.ACTION_ID);
+		
 		add(new Separator());
+		
+		addAction(currentTab.isLocked() ? UnlockTabAction.Descriptor.ACTION_ID : LockTabAction.Descriptor.ACTION_ID);
+			
+		add(new Separator());
+		
 		addAction(MoveTabToOtherPanelAction.Descriptor.ACTION_ID);
 		addAction(CloneTabToOtherPanelAction.Descriptor.ACTION_ID);
-//		addAction("lock");
-//		addAction("Move To Other Panel");
 	}
 }

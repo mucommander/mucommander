@@ -112,6 +112,7 @@ public class ActionManager {
     	registerAction(new InternalViewAction.Descriptor(),                 new InternalViewAction.Factory());
     	registerAction(new InvertSelectionAction.Descriptor(),              new InvertSelectionAction.Factory());
     	registerAction(new LocalCopyAction.Descriptor(),                    new LocalCopyAction.Factory());
+    	registerAction(new LockTabAction.Descriptor(),						new LockTabAction.Factory());
     	registerAction(new MarkAllAction.Descriptor(),           		    new MarkAllAction.Factory());
     	registerAction(new MarkExtensionAction.Descriptor(),            	new MarkExtensionAction.Factory());
     	registerAction(new MarkGroupAction.Descriptor(),            		new MarkGroupAction.Factory());
@@ -217,6 +218,7 @@ public class ActionManager {
     	registerAction(new ToggleStatusBarAction.Descriptor(),              new ToggleStatusBarAction.Factory());
     	registerAction(new ToggleToolBarAction.Descriptor(),                new ToggleToolBarAction.Factory());
     	registerAction(new ToggleTreeAction.Descriptor(),             	    new ToggleTreeAction.Factory());
+    	registerAction(new UnlockTabAction.Descriptor(),					new UnlockTabAction.Factory());
     	registerAction(new UnmarkAllAction.Descriptor(),            		new UnmarkAllAction.Factory());
     	registerAction(new UnmarkGroupAction.Descriptor(),            		new UnmarkGroupAction.Factory());
     	registerAction(new UnpackAction.Descriptor(),             			new UnpackAction.Factory());

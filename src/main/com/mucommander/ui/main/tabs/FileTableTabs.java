@@ -71,11 +71,29 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		}
 	}
 	
+	/**
+	 * Return the currently selected tab
+	 * 
+	 * @return currently selected tab
+	 */
+	FileTableTab getCurrentTab() {
+		return getTab(getSelectedIndex());
+	}
+	
 	private void updateTabLocation(final AbstractFile location) {
 		updateCurrentTab(new TabUpdater<FileTableTab>() {
 			
 			public void update(FileTableTab tab) {
 				tab.setLocation(location);
+			}
+		});
+	}
+	
+	private void updateTabLocking(final boolean lock) {
+		updateCurrentTab(new TabUpdater<FileTableTab>() {
+			
+			public void update(FileTableTab tab) {
+				tab.setLocked(lock);
 			}
 		});
 	}
@@ -106,6 +124,14 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	
 	public void duplicate() {
 		add(tabsFactory.createTab(folderPanel.getCurrentFolder()));
+	}
+	
+	public void lock() {
+		updateTabLocking(true);
+	}
+	
+	public void unlock() {
+		updateTabLocking(false);
 	}
 
 	/****************

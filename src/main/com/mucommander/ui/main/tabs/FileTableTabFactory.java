@@ -40,7 +40,8 @@ public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFil
 		/** The location presented in this tab */
 		private AbstractFile location;
 
-		// 	 private boolean isLocked;
+		/** Flag that indicates whether the tab is locked or not */
+		private boolean locked;
 
 		/**
 		 * Private constructor
@@ -57,6 +58,14 @@ public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFil
 
 		public AbstractFile getLocation() {
 			return location;
+		}
+		
+		public void setLocked(boolean locked) {
+			this.locked = locked;
+		}
+
+		public boolean isLocked() {
+			 return locked;
 		}
 
 		@Override
