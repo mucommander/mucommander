@@ -208,7 +208,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return the locations that were presented in previous runs, which will be the initial history for the current run
      */
     private static FileURL[] getInitialHistory(FolderPanelType folderPanelType) {
-    	// Snapshot configuration
+    	/*// Snapshot configuration
         Configuration snapshot = MuConfigurations.getSnapshot();
         
     	// Get the index of the window that was selected in the previous run
@@ -230,7 +230,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         for (FileURL location:locations)
        	 LOGGER.debug("\t"+location);
     	
-    	return locations.toArray(new FileURL[0]);
+    	return locations.toArray(new FileURL[0]);*/
+    	return new FileURL[0];
     }
 
     /**

@@ -27,6 +27,7 @@ import javax.swing.Icon;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
@@ -58,18 +59,9 @@ public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> {
 
 	@Override
     public AbstractFile[] getData() {
-		Set<AbstractFile> list = new LinkedHashSet<AbstractFile>();
-
-		LocationHistory folderHistory = folderPanel.getFolderHistory();
-		FileURL[] forwardFolders = folderHistory.getForwardFolders();
-		for (FileURL url:forwardFolders)
-			list.add(FileFactory.getFile(url));
+		Set<AbstractFile> list = GlobalLocationHistory.Instance().getHistory();
 		
-		FileURL[] backFolders = folderHistory.getBackFolders();
-		for (FileURL url:backFolders)
-			list.add(FileFactory.getFile(url));
-		
-		// Remove current presented location from the list
+		// Remove currently presented location from the list
 		list.remove(folderPanel.getCurrentFolder());
 
 		AbstractFile[] results;

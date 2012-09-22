@@ -19,6 +19,7 @@
 package com.mucommander.ui.event;
 
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
 
 import java.util.WeakHashMap;
@@ -42,6 +43,8 @@ public class LocationManager {
      */
     public LocationManager(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
+        
+        addLocationListener(GlobalLocationHistory.Instance());
     }
 
 

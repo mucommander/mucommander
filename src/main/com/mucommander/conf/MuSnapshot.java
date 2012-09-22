@@ -25,6 +25,7 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JSplitPane;
 
@@ -33,9 +34,9 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
-import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.LocationHistory;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.Column;
@@ -447,40 +448,31 @@ public class MuSnapshot {
     }
     
     /**
-     * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.LocationHistory},
-     * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
-     *
-     * @param window index of MainFrame
-     * @param left true for the left LocationHistory, false for the right one
-     * @return the CONFIGURATION section corresponding to the specified FileTableTabs
+     * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.core.GlobalLocationHistory}
+
+     * @return the CONFIGURATION section corresponding to the specified {@link com.mucommander.core.GlobalLocationHistory}
      */    
-    private static String getRecentLocationsSection(int window, boolean left) {
-    	return getFolderPanelSection(window, left) + "." + RECENT_LOCATIONS_SECTION;
+    private static String getRecentLocationsSection() {
+    	return RECENT_LOCATIONS_SECTION;
     }
     
     /**
-     * Returns the variable that holds number of visited locations saved for the left or right {@link com.mucommander.ui.main.FolderPanel},
-     * at the {@link com.mucommander.ui.main.MainFrame} in the given index.
+     * Returns the variable that holds number of the saved visited locations
      *
-     * @param window index of MainFrame
-     * @param left true for the left FolderPanel, false for the right one
-     * @return the variable that holds the number of visited locations saved for the specified FolderPanel
+     * @return the variable that holds the number of saved visited locations
      */
-    public static String getRecentLocationsCountVariable(int window, boolean left) {
-    	return getRecentLocationsSection(window, left)  + "." + LOCATIONS_COUNT; 
+    public static String getRecentLocationsCountVariable() {
+    	return getRecentLocationsSection()  + "." + LOCATIONS_COUNT; 
     }
     
     /**
-     * Returns the variable that holds a location contained in the locations history of the folder panel,
-     * in the left or right {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
+     * Returns the variable that holds a location contained in the global locations history at the given index
      *
-     * @param window index of MainFrame
-     * @param left true for the left FolderPanel, false for the right one
      * @param index the index of location in the visited location history 
-     * @return the variable that holds the location presented at the tab in the given index in the specified FolderPanel
+     * @return the variable that holds a location contained in the global locations history at the given index
      */
-    public static String getRecentLocationVariable(int window, boolean left, int index) {
-    	return getRecentLocationsSection(window, left)  + "." + LOCATION + "-" + index; 
+    public static String getRecentLocationVariable(int index) {
+    	return getRecentLocationsSection()  + "." + LOCATION + "-" + index; 
     }
     
     private static final String ROOT_ELEMENT = "snapshot";
@@ -556,6 +548,8 @@ public class MuSnapshot {
         	configuration.setVariable(MuSnapshot.SCREEN_HEIGHT, screenSize.height);
         }
     	
+    	setGlobalHistory();
+    	
         configuration.write();
     }
     
@@ -578,17 +572,16 @@ public class MuSnapshot {
         setTableAttributes(index, isLeft, panel.getFileTable());
         
         setTabsAttributes(index, isLeft, panel.getTabs());
-        
-        setPanelHistory(index, isLeft, panel.getFolderHistory());
     }
     
-    private void setPanelHistory(int index, boolean isLeft, LocationHistory locationHistory) {
-    	FileURL[] locations = locationHistory.getAllFolders();
+    private void setGlobalHistory() {
+    	Set<AbstractFile> locations = GlobalLocationHistory.Instance().getHistory();
 
-    	configuration.setVariable(getRecentLocationsCountVariable(index, isLeft), locations.length);
+    	configuration.setVariable(getRecentLocationsCountVariable(), locations.size());
     	
-    	for (int i=0; i<locations.length; ++i)
-    		configuration.setVariable(getRecentLocationVariable(index, isLeft, i), locations[i].toString());
+    	Iterator<AbstractFile> iterator = locations.iterator();
+    	for (int i=0; iterator.hasNext(); ++i)
+    		configuration.setVariable(getRecentLocationVariable(i), iterator.next().toString());
     }
 
     private void setTabsAttributes(int index, boolean isLeft, FileTableTabs tabs) {
