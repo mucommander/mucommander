@@ -19,6 +19,8 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.core.LocalLocationHistory;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.tabs.TabFactory;
 
 /**
@@ -28,11 +30,17 @@ import com.mucommander.ui.tabs.TabFactory;
  */
 public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFile> {
 
+	private FolderPanel folderPanel;
+	
+	public FileTableTabFactory(FolderPanel folderPanel) {
+		this.folderPanel = folderPanel;
+	}
+	
 	public FileTableTab createTab(AbstractFile location) {
 		if (location == null)
 			throw new RuntimeException("Invalid location");
 
-		return new DefaultFileTableTab(location);
+		return new DefaultFileTableTab(location, folderPanel);
 	}
 
 	class DefaultFileTableTab implements FileTableTab {
@@ -42,14 +50,19 @@ public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFil
 
 		/** Flag that indicates whether the tab is locked or not */
 		private boolean locked;
+		
+		/** History of accessed location within the tab */
+		private LocalLocationHistory locationHistory;
 
 		/**
 		 * Private constructor
 		 * 
 		 * @param location - the location that would be presented in the tab
 		 */
-		private DefaultFileTableTab(AbstractFile location) {
+		private DefaultFileTableTab(AbstractFile location, FolderPanel folderPanel) {
 			setLocation(location);
+			
+			locationHistory = new LocalLocationHistory(folderPanel);
 		}
 		
 		public void setLocation(AbstractFile location) {
@@ -68,6 +81,10 @@ public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFil
 			 return locked;
 		}
 
+		public LocalLocationHistory getLocationHistory() {
+			return locationHistory;
+		}
+		
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof FileTableTab)

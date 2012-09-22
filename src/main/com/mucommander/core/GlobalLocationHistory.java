@@ -41,6 +41,9 @@ import com.mucommander.ui.main.MainFrame;
  * This class tracks location changing events, in every {@link FolderPanel} or {@link MainFrame},
  * and saves those locations, thus creating a global location history tracking.
  * 
+ * <p>FolderHistory also keeps track of the last visited location so that it can be saved and recalled the next time the
+ * application is started.</p>
+ * 
  * @author Arik Hadas
  */
 public class GlobalLocationHistory extends LocationAdapter {
@@ -52,7 +55,7 @@ public class GlobalLocationHistory extends LocationAdapter {
 	/** Locations that were accessed */
 	private Set<FileURL> history = new LinkedHashSet<FileURL>();
 	
-	/** Maximal number of location that would be saved */
+	/** Maximum number of location that would be saved */
 	private static final int MAX_CAPACITY = 100;
 	
 	/**
@@ -64,11 +67,11 @@ public class GlobalLocationHistory extends LocationAdapter {
 		// Restore the global history from last run
 		int nbLocations = snapshot.getIntegerVariable(MuSnapshot.getRecentLocationsCountVariable());
     	for (int i=0; i<nbLocations; ++i) {
+    		String filePath = snapshot.getVariable(MuSnapshot.getRecentLocationVariable(i));
 			try {
-				FileURL location = FileURL.getFileURL(snapshot.getVariable(MuSnapshot.getRecentLocationVariable(i)));
-				history.add(location);
+				history.add(FileURL.getFileURL(filePath));
 			} catch (MalformedURLException e) {
-				LOGGER.debug("Got invalid URL from the snapshot file", e);
+				LOGGER.debug("Got invalid URL from the snapshot file: " + filePath, e);
 			}
     	}
 	}
@@ -96,6 +99,13 @@ public class GlobalLocationHistory extends LocationAdapter {
 		return result;
 	}
 	
+	/**
+	 * Returns true if the global history contains the given FileURL
+	 */
+	public boolean historyContains(FileURL folderURL) {
+		return history.contains(folderURL);
+	}
+	
 	///////////////////////
 	/// LocationAdapter ///
 	///////////////////////
@@ -107,7 +117,7 @@ public class GlobalLocationHistory extends LocationAdapter {
 		// at the end of the list to preserve the insertion order of the history
 		boolean alreadyExists = history.remove(file);
 		
-		// ensure that we won't cross the maximal number of saved locations
+		// ensure that we won't cross the maximum number of saved locations
 		if (!alreadyExists && MAX_CAPACITY == history.size())
 			history.remove(history.iterator().next());
 		

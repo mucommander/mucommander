@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.tabs.TabFactory;
 
 /**
@@ -59,6 +60,10 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 
 		public boolean isLocked() {
 			return tab.isLocked();
+		}
+
+		public LocalLocationHistory getLocationHistory() {
+			return tab.getLocationHistory();
 		}
 		
 		@Override

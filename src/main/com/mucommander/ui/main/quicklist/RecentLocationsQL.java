@@ -19,20 +19,16 @@
 package com.mucommander.ui.main.quicklist;
 
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.swing.Icon;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
 import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.LocationHistory;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
 /**

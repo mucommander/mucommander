@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.tabs.Tab;
 
 /**
@@ -55,4 +56,11 @@ public interface FileTableTab extends Tab {
 	 * @return indication whether the tab is locked
 	 */
 	public boolean isLocked();
+	
+	/**
+	 * Returns the tracker of the last accessed locations within the tab
+	 * 
+	 * @return tracker of the last accessed locations within the tab
+	 */
+	public LocalLocationHistory getLocationHistory();
 }

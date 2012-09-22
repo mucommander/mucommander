@@ -18,15 +18,47 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.AWTKeyStroke;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
+import java.awt.Point;
+import java.awt.dnd.DropTarget;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.net.MalformedURLException;
+import java.util.HashSet;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.AuthenticationType;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.core.GlobalLocationHistory;
+import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
@@ -42,7 +74,12 @@ import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.event.LocationManager;
-import com.mucommander.ui.main.quicklist.*;
+import com.mucommander.ui.main.quicklist.BookmarksQL;
+import com.mucommander.ui.main.quicklist.ParentFoldersQL;
+import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
+import com.mucommander.ui.main.quicklist.RecentLocationsQL;
+import com.mucommander.ui.main.quicklist.RootFoldersQL;
+import com.mucommander.ui.main.quicklist.TabsQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
@@ -50,21 +87,6 @@ import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.quicklist.QuickListContainer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
-import java.awt.*;
-import java.awt.dnd.DropTarget;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.net.MalformedURLException;
-import java.util.HashSet;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -101,8 +123,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     private FoldersTreePanel foldersTreePanel;
     private JSplitPane treeSplitPane;
 	
-    private LocationHistory folderHistory;
-    
+    private GlobalLocationHistory globalHistory = GlobalLocationHistory.Instance();
+    	
     private FileDragSourceListener fileDragSourceListener;
 
     /** Filters out unwanted files when listing folder contents */
@@ -157,8 +179,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         		
         this.mainFrame = mainFrame;
 
-        folderHistory = new LocationHistory(this, locationHistory);
-        
         // No decoration for this panel
         setBorder(null);
 
@@ -350,8 +370,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      *
      * @return the visited folders history, wrapped in a FolderHistory object
      */
-    public LocationHistory getFolderHistory() {
-        return this.folderHistory;
+    public LocalLocationHistory getFolderHistory() {
+        return getTabs().getCurrentTab().getLocationHistory();
     }
 
     /**
@@ -639,9 +659,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
         // Update the current folder's value now that it is set
         this.currentFolder = folder;
-
-        // Add the folder to history
-        folderHistory.addToHistory(folder);
 
         // Notify listeners that the location has changed
         locationManager.fireLocationChanged(folder.getURL());
@@ -994,7 +1011,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
                                 // The dialog is also not displayed if the file corresponds to the currently selected file,
                                 // which is a weak (and not so accurate) way to know if the folder change is the result
                                 // of the OpenAction (enter pressed on the file). This works well enough in practice.
-                                if(!folderHistory.historyContains(folderURL) && !file.equals(fileTable.getSelectedFile())) {
+                                if(!globalHistory.historyContains(folderURL) && !file.equals(fileTable.getSelectedFile())) {
                                     // Restore default cursor
                                     mainFrame.setCursor(Cursor.getDefaultCursor());
 

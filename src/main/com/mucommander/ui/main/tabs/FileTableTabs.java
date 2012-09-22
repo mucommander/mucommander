@@ -39,12 +39,14 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	private FolderPanel folderPanel;
 	
 	/** Factory of instances of FileTableTab */
-	private TabFactory<FileTableTab, AbstractFile> tabsFactory = new FileTableTabFactory();
+	private TabFactory<FileTableTab, AbstractFile> tabsFactory;
 	
 	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, AbstractFile[] initialFolders, int indexOfSelectedTab) {
 		super(new FileTableTabsDisplayFactory(mainFrame, folderPanel));
 		
 		this.folderPanel = folderPanel;
+		
+		tabsFactory = new FileTableTabFactory(folderPanel);
 		
 		// Register to location change events
 		folderPanel.getLocationManager().addLocationListener(this);
@@ -76,7 +78,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 * 
 	 * @return currently selected tab
 	 */
-	FileTableTab getCurrentTab() {
+	public FileTableTab getCurrentTab() {
 		return getTab(getSelectedIndex());
 	}
 	
