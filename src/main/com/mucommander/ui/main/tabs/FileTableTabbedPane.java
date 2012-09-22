@@ -180,12 +180,6 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 
 	@Override
 	public void show(FileTableTab t) {
-		if (previousTab != null)
-			folderPanel.getLocationManager().removeLocationListener(previousTab.getLocationHistory());
-		
-		previousTab = t;
-		folderPanel.getLocationManager().addLocationListener(previousTab.getLocationHistory());
-		
 		// Set no events mode before trying to change current folder in order to prevent further changes due to (fast) 
 		// tabs switching (tabs switching won't happen during no-events-mode) before current folder change is finished
 		// TODO: change the location of mainFrame.setNoEventsMode(true) call at ChangeFolderThread instead 

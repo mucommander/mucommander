@@ -28,8 +28,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 
 /**
@@ -40,7 +38,7 @@ import com.mucommander.ui.main.FolderPanel;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public class LocalLocationHistory implements LocationListener {
+public class LocalLocationHistory {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocalLocationHistory.class);
 
 	/** Maximum number of elements the folder history can contain */
@@ -71,7 +69,7 @@ public class LocalLocationHistory implements LocationListener {
 	 *
 	 * <p>This method is called by FolderPanel each time a folder is changed.
 	 */
-	private void addToHistory(AbstractFile folder) {
+	public void addToHistory(AbstractFile folder) {
 		this.addToHistory(folder.getURL());
 
 		// Save last recallable folder on startup, only if :
@@ -204,25 +202,5 @@ public class LocalLocationHistory implements LocationListener {
 	 */
 	public String getLastRecallableFolder() {
 		return this.lastRecallableFolder;
-	}
-
-	////////////////////////
-	/// LocationListener ///
-	////////////////////////
-	
-	public void locationChanging(LocationEvent locationEvent) {
-		
-	}
-
-	public void locationChanged(LocationEvent locationEvent) {
-		addToHistory(locationEvent.getFolderURL());
-	}
-
-	public void locationCancelled(LocationEvent locationEvent) {
-		
-	}
-
-	public void locationFailed(LocationEvent locationEvent) {
-		
 	}
 }

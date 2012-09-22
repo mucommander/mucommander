@@ -284,10 +284,10 @@ public class LocationChanger {
         // while FileTable#setCurrentFolder is being called. 
         lastFolderChangeTime = System.currentTimeMillis();
 
-        folderPanel.tmp(folder, children, fileToSelect);
-
         // Update the current folder's value now that it is set
         this.currentFolder = folder;
+        
+        folderPanel.tmp(folder, children, fileToSelect);
 
         // Notify listeners that the location has changed
         locationManager.fireLocationChanged(folder.getURL());

@@ -41,7 +41,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	/** Factory of instances of FileTableTab */
 	private TabFactory<FileTableTab, AbstractFile> tabsFactory;
 	
-	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, AbstractFile[] initialFolders, int indexOfSelectedTab) {
+	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, AbstractFile[] initialFolders) {
 		super(new FileTableTabsDisplayFactory(mainFrame, folderPanel));
 		
 		this.folderPanel = folderPanel;
@@ -54,13 +54,10 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		// Add the initial folders
 		for (AbstractFile folder : initialFolders)
 			addTab(tabsFactory.createTab(folder));
-
-		// Select the tab that was previously selected on last run
-		selectTab(indexOfSelectedTab);
 	}
 	
 	@Override
-	protected void selectTab(int index) {
+	public void selectTab(int index) {
 		super.selectTab(index);
 
 		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolder(getTab(index).getLocation(), null, true);

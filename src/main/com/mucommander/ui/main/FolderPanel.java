@@ -143,8 +143,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         	LOGGER.trace("\t"+folder);
         		
         this.mainFrame = mainFrame;
-
-        locationChanger = new LocationChanger(mainFrame, this, locationManager);
         
         // No decoration for this panel
         setBorder(null);
@@ -174,6 +172,14 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
         // Create the FileTable
         fileTable = new FileTable(mainFrame, this, conf);
+
+        locationChanger = new LocationChanger(mainFrame, this, locationManager);
+        
+        // Create the Tabs (Must be called after the fileTable was created and current folder was set)
+        tabs = new FileTableTabs(mainFrame, this, initialFolders);
+        
+		// Select the tab that was previously selected on last run
+		tabs.selectTab(indexOfSelectedTab);
         
         // Initialize quick lists
     	fileTablePopups = new QuickList[]{
@@ -204,9 +210,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 			}
         };
         locationManager.addLocationListener(locationListener);
-
-    	// Create the Tabs (Must be called after the fileTable was created and current folder was set)
-        tabs = new FileTableTabs(mainFrame, this, initialFolders, indexOfSelectedTab);
 
         // create folders tree on a JSplitPane 
         foldersTreePanel = new FoldersTreePanel(this);
@@ -429,6 +432,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
             fileTable.setCurrentFolder(folder, children);
         else
             fileTable.setCurrentFolder(folder, children, fileToSelect);
+        
+        tabs.getCurrentTab().getLocationHistory().addToHistory(folder);
     }
 
     ////////////////////////
