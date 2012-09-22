@@ -18,15 +18,21 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.core.LocationChanger.ChangeFolderThread;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.util.Map;
 
 /**
  * This action is invoked to stop a running location change.
@@ -52,7 +58,7 @@ public class StopAction extends MuAction implements LocationListener {
     @Override
     public void performAction() {
         FolderPanel folderPanel = mainFrame.getActivePanel();
-        FolderPanel.ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
+        ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
 
         if(changeFolderThread!=null)
             changeFolderThread.tryKill();

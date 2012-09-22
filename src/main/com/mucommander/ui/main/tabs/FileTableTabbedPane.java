@@ -27,10 +27,10 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.core.LocationChanger.ChangeFolderThread;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.FolderPanel.ChangeFolderThread;
 import com.mucommander.ui.tabs.TabbedPane;
 
 /**
