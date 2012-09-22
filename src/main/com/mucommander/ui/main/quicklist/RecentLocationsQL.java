@@ -19,7 +19,7 @@
 package com.mucommander.ui.main.quicklist;
 
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -55,7 +55,7 @@ public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> {
 
 	@Override
     public AbstractFile[] getData() {
-		Set<AbstractFile> list = GlobalLocationHistory.Instance().getHistory();
+		List<AbstractFile> list = GlobalLocationHistory.Instance().getHistory();
 		
 		// Remove currently presented location from the list
 		list.remove(folderPanel.getCurrentFolder());

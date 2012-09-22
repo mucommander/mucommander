@@ -25,7 +25,6 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JSplitPane;
 
@@ -575,7 +574,7 @@ public class MuSnapshot {
     }
     
     private void setGlobalHistory() {
-    	Set<AbstractFile> locations = GlobalLocationHistory.Instance().getHistory();
+    	List<AbstractFile> locations = GlobalLocationHistory.Instance().getHistory();
 
     	configuration.setVariable(getRecentLocationsCountVariable(), locations.size());
     	

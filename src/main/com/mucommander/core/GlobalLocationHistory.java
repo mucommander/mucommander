@@ -21,6 +21,8 @@ package com.mucommander.core;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -86,15 +88,16 @@ public class GlobalLocationHistory extends LocationAdapter {
 	}
 
 	/**
-	 * Returns all the tracked locations as a {@link Set} of {@link AbstractFile} 
+	 * Returns all the tracked locations as a {@link Set} of {@link AbstractFile}
+	 * The locations are turned in a reverse insertion-order, that means that the last accessed location would be the first  
 	 * 
 	 * @return all the tracked locations
 	 */
-	public Set<AbstractFile> getHistory() {
-		Set<AbstractFile> result = new LinkedHashSet<AbstractFile>();
+	public List<AbstractFile> getHistory() {
+		List<AbstractFile> result = new LinkedList<AbstractFile>();
 		
 		for (Iterator<FileURL> iterator = history.iterator(); iterator.hasNext(); )
-			result.add(FileFactory.getFile(iterator.next()));
+			result.add(0, FileFactory.getFile(iterator.next()));
 		
 		return result;
 	}
