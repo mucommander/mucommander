@@ -23,6 +23,7 @@ package com.mucommander.commons.file;
 import com.mucommander.commons.file.compat.CompatURLStreamHandler;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -908,8 +909,10 @@ public class FileURL implements Cloneable {
      * @return <code>true</code> if the path of this URL and the given URL are equal
      */
     public boolean pathEquals(FileURL url) {
-        String path1 = this.getPath();
-        String path2 = url.getPath();
+    	boolean isCaseSensitiveOS = !(OsFamily.getCurrent().equals(OsFamily.WINDOWS) || OsFamily.getCurrent().equals(OsFamily.OS_2));
+    	
+        String path1 = isCaseSensitiveOS ? this.getPath() : this.getPath().toLowerCase();
+        String path2 = isCaseSensitiveOS ? url.getPath() : url.getPath().toLowerCase();
 
         if(path1.equals(path2))
             return true;
