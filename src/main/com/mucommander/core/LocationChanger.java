@@ -287,8 +287,10 @@ public class LocationChanger {
         // Update the current folder's value now that it is set
         this.currentFolder = folder;
         
-        folderPanel.tmp(folder, children, fileToSelect);
+        folderPanel.setCurrentFolderInTheUI(folder, children, fileToSelect);
 
+        folderPanel.getTabs().getCurrentTab().getLocationHistory().addToHistory(folder);
+        
         // Notify listeners that the location has changed
         locationManager.fireLocationChanged(folder.getURL());
     }

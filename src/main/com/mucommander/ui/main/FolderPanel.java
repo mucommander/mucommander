@@ -426,14 +426,12 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     /**
      * TODO: change
      */
-    public void tmp(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+    public void setCurrentFolderInTheUI(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
     	// Change the current folder in the table and select the given file if not null
         if(fileToSelect == null)
             fileTable.setCurrentFolder(folder, children);
         else
             fileTable.setCurrentFolder(folder, children, fileToSelect);
-        
-        tabs.getCurrentTab().getLocationHistory().addToHistory(folder);
     }
 
     ////////////////////////
