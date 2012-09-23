@@ -156,6 +156,8 @@ public class MuSnapshot {
     private static final String TAB                                = "tab";
     /** Describes the location presented in a tab */
     private static final String TAB_LOCATION                       = "location";
+    /** Describes whether a tab is locked */
+    private static final String TAB_LOCKED                         = "locked";
     /** The index of the selected tab within the folder panel */
     private static final String SELECTED_TAB					   = "selection";
     
@@ -447,6 +449,20 @@ public class MuSnapshot {
     }
     
     /**
+     * Returns the variable that indicates whether the tab in the given index,
+     * in the left or right {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index,
+     * is locked
+     *
+     * @param window index of MainFrame
+     * @param left true for the left FolderPanel, false for the right one
+     * @param index the index of tab at the FolderPanel's tabs 
+     * @return the variable that indicates whether the tab in the given index in the specified FolderPanel is locked
+     */
+    public static String getTabLockedVariable(int window, boolean left, int index) {
+    	return getTabSection(window, left, index) + "." + TAB_LOCKED;
+    }
+    
+    /**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.core.GlobalLocationHistory}
 
      * @return the CONFIGURATION section corresponding to the specified {@link com.mucommander.core.GlobalLocationHistory}
@@ -591,6 +607,7 @@ public class MuSnapshot {
     	while (tabsIterator.hasNext()) {
     		FileTableTab tab = tabsIterator.next();
     		configuration.setVariable(getTabLocationVariable(index, isLeft, tabsCounter), tab.getLocation().getAbsolutePath());
+    		configuration.setVariable(getTabLockedVariable(index, isLeft, tabsCounter), tab.isLocked());
     		++tabsCounter;
     	}
     	
