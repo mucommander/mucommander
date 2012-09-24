@@ -98,11 +98,12 @@ public class LocationChanger {
 	 * </p>
 	 *
 	 * @param folder the folder to be made current folder
+	 * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
 	 * @return the thread that performs the actual folder change, null if another folder change is already underway
 	 */
-	public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
+	public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, boolean changeLockedTab) {
 		/* TODO branch setBranchView(false); */
-		return tryChangeCurrentFolder(folder, null, false);
+		return tryChangeCurrentFolder(folder, null, false, changeLockedTab);
 	}
 
 	/**
@@ -123,9 +124,10 @@ public class LocationChanger {
 	 *
 	 * @param folder the folder to be made current folder
 	 * @param selectThisFileAfter the file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
+	 * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
 	 * @return the thread that performs the actual folder change, null if another folder change is already underway  
 	 */
-	public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
+	public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder, boolean changeLockedTab) {
 		LOGGER.debug("folder="+folder+" selectThisFileAfter="+selectThisFileAfter);
 
 		synchronized(FOLDER_CHANGE_LOCK) {
@@ -142,7 +144,7 @@ public class LocationChanger {
 			// changes the changeFolderThread field to null when finished, and it may do so before this method has
 			// returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
-			ChangeFolderThread thread = new ChangeFolderThread(folder, findWorkableFolder);
+			ChangeFolderThread thread = new ChangeFolderThread(folder, findWorkableFolder, changeLockedTab);
 
 			if(selectThisFileAfter!=null)
 				thread.selectThisFileAfter(selectThisFileAfter);
@@ -264,7 +266,7 @@ public class LocationChanger {
 	 */
 	public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
 		folderPanel.getFoldersTreePanel().refreshFolder(currentFolder);
-		return tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true);
+		return tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true, true);
 	}
 	
 	 /**
@@ -278,8 +280,9 @@ public class LocationChanger {
      * @param folder folder to be made current folder
      * @param children current folder's files (value of folder.ls())
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
+     * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
      */
-    private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+    private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
         // Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
         // while FileTable#setCurrentFolder is being called. 
         lastFolderChangeTime = System.currentTimeMillis();
@@ -287,7 +290,7 @@ public class LocationChanger {
         // Update the current folder's value now that it is set
         this.currentFolder = folder;
         
-        folderPanel.setCurrentFolderInTheUI(folder, children, fileToSelect);
+        folderPanel.setCurrentFolderInTheUI(folder, children, fileToSelect, changeLockedTab);
 
         folderPanel.getTabs().getCurrentTab().getLocationHistory().addToHistory(folder);
         
@@ -392,6 +395,7 @@ public class LocationChanger {
 
 		private AbstractFile folder;
 		private boolean findWorkableFolder;
+		private boolean changeLockedTab;
 		private FileURL folderURL;
 		private AbstractFile fileToSelect;
 		private CredentialsMapping credentialsMapping;
@@ -413,11 +417,12 @@ public class LocationChanger {
 		/* TODO branch private ArrayList childrenList; */
 
 
-		public ChangeFolderThread(AbstractFile folder, boolean findWorkableFolder) {
+		public ChangeFolderThread(AbstractFile folder, boolean findWorkableFolder, boolean changeLockedTab) {
 			// Ensure that we work on a raw file instance and not a cached one
 			this.folder = (folder instanceof CachedFile)?((CachedFile)folder).getProxiedFile():folder;
 			this.folderURL = folder.getURL();
 			this.findWorkableFolder = findWorkableFolder;
+			this.changeLockedTab = changeLockedTab;
 
 			setPriority(Thread.MAX_PRIORITY);
 		}
@@ -781,7 +786,7 @@ children = folder.ls(chainedFileFilter);
 						LOGGER.trace("calling setCurrentFolder");
 
 						// Change the file table's current folder and select the specified file (if any)
-						setCurrentFolder(folder, children, fileToSelect);
+						setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
 
 						// folder set -> 95% complete
 						folderPanel.setProgressValue(95);

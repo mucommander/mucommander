@@ -184,7 +184,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 		// tabs switching (tabs switching won't happen during no-events-mode) before current folder change is finished
 		// TODO: change the location of mainFrame.setNoEventsMode(true) call at ChangeFolderThread instead 
 		mainFrame.setNoEventsMode(true);
-		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolder(t.getLocation());
+		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolderEvenOnLockedTab(t.getLocation());
 		// If the operations wasn't started, activate all operations
 		if (changeFolderThread == null)
 			mainFrame.setNoEventsMode(false);

@@ -66,6 +66,7 @@ import com.mucommander.ui.main.quicklist.TabsQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
+import com.mucommander.ui.main.tabs.FileTableTab;
 import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
@@ -387,12 +388,16 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     	locationTextField.setProgressValue(value);
     }
 
+    public ChangeFolderThread tryChangeCurrentFolderEvenOnLockedTab(AbstractFile folder) {
+    	return locationChanger.tryChangeCurrentFolder(folder, true);
+    }
+    
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
-    	return locationChanger.tryChangeCurrentFolder(folder);
+    	return locationChanger.tryChangeCurrentFolder(folder, false);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
-    	return locationChanger.tryChangeCurrentFolder(folder, selectThisFileAfter, findWorkableFolder);
+    	return locationChanger.tryChangeCurrentFolder(folder, selectThisFileAfter, findWorkableFolder, false);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
@@ -412,26 +417,42 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
 
     public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
-        return locationChanger.tryChangeCurrentFolder(selectThisFileAfter);
+        return locationChanger.tryRefreshCurrentFolder(selectThisFileAfter);
     }
 
     public long getLastFolderChangeTime() {
         return locationChanger.getLastFolderChangeTime();
     }
-    
+
     public ChangeFolderThread getChangeFolderThread() {
         return locationChanger.getChangeFolderThread();
     }
-    
+
     /**
-     * TODO: change
+     * This method updates the UI with the given folder 
+     * If the currently selected tab is locked and the given flag "changeLockedTab" is off, 
+     * then a new tab is opened with the given folder,
+     * otherwise, the currently presented folder is replaces with the given folder
+     * 
+     * @param folder - the folder to be set
+     * @param children - the children of the given folder
+     * @param fileToSelect - the file that would be selected after changing the folder
+     * @param changeLockedTab - flag that indicates whether to change the presented folder in 
+     * the currently selected tab although it's locked (used when switching tabs)
      */
-    public void setCurrentFolderInTheUI(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
-    	// Change the current folder in the table and select the given file if not null
-        if(fileToSelect == null)
-            fileTable.setCurrentFolder(folder, children);
-        else
-            fileTable.setCurrentFolder(folder, children, fileToSelect);
+    public void setCurrentFolderInTheUI(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
+    	FileTableTab currentTab = tabs.getCurrentTab();
+
+    	if (!changeLockedTab && currentTab.isLocked()) {
+    		tabs.add(folder);
+    	}
+    	else {
+    		// Change the current folder in the table and select the given file if not null
+    		if(fileToSelect == null)
+    			fileTable.setCurrentFolder(folder, children);
+    		else
+    			fileTable.setCurrentFolder(folder, children, fileToSelect);
+    	}
     }
 
     ////////////////////////
