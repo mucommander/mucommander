@@ -171,17 +171,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
         add(locationPanel, BorderLayout.NORTH);
 
-        // Create the FileTable
-        fileTable = new FileTable(mainFrame, this, conf);
-
-        locationChanger = new LocationChanger(mainFrame, this, locationManager);
-        
-        // Create the Tabs (Must be called after the fileTable was created and current folder was set)
-        tabs = new FileTableTabs(mainFrame, this, initialFolders);
-        
-		// Select the tab that was previously selected on last run
-		tabs.selectTab(indexOfSelectedTab);
-        
         // Initialize quick lists
     	fileTablePopups = new QuickList[]{
     			new ParentFoldersQL(this),
@@ -211,6 +200,17 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 			}
         };
         locationManager.addLocationListener(locationListener);
+        
+        // Create the FileTable
+        fileTable = new FileTable(mainFrame, this, conf);
+
+        locationChanger = new LocationChanger(mainFrame, this, locationManager);
+        
+        // Create the Tabs (Must be called after the fileTable was created and current folder was set)
+        tabs = new FileTableTabs(mainFrame, this, initialFolders);
+        
+		// Select the tab that was previously selected on last run
+		tabs.selectTab(indexOfSelectedTab);
 
         // create folders tree on a JSplitPane 
         foldersTreePanel = new FoldersTreePanel(this);
