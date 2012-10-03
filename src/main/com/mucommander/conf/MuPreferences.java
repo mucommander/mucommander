@@ -258,30 +258,23 @@ public class MuPreferences implements MuPreferencesAPI {
 
 	// - Startup folder variables --------------------------------------------
 	// -----------------------------------------------------------------------
-	/** Section describing muCommander's Mac OS X integration. */
+	/** Section describing muCommander's startup folders. */
 	public static final String  STARTUP_FOLDER_SECTION            = "startup_folder";
-	/** Section describing the right panel's startup folder. */
-	public static final String  RIGHT_STARTUP_FOLDER_SECTION      = STARTUP_FOLDER_SECTION + '.' + RIGHT;
-	/** Section describing the left panel's startup folder. */
-	public static final String  LEFT_STARTUP_FOLDER_SECTION       = STARTUP_FOLDER_SECTION + '.' + LEFT;
-	/** Path to a custom startup folder. */
-	public static final String  CUSTOM_FOLDER                     = "custom_folder";
-	/** Path to the left panel custom startup folder. */
-	public static final String  LEFT_CUSTOM_FOLDER                = LEFT_STARTUP_FOLDER_SECTION + '.' + CUSTOM_FOLDER;
-	/** Path to the right panel custom startup folder. */
-	public static final String  RIGHT_CUSTOM_FOLDER               = RIGHT_STARTUP_FOLDER_SECTION + '.' + CUSTOM_FOLDER;
-	/** Startup folder type. */
-	public static final String  STARTUP_FOLDER                    = "on_startup";
+	/** Startup folder type (for the two panels) */
+	public static final String  STARTUP_FOLDERS                   = STARTUP_FOLDER_SECTION + '.' + "on_startup";
 	/** The custom folder should be used on startup. */
-	public static final String  STARTUP_FOLDER_CUSTOM             = "customFolder";
+	public static final String  STARTUP_FOLDERS_CUSTOM            = "customFolders";
 	/** The last visited folder should be used on startup. */
-	public static final String  STARTUP_FOLDER_LAST               = "lastFolder";
-	/** Type of startup folder that should be used in the left panel. */
-	public static final String  LEFT_STARTUP_FOLDER               = LEFT_STARTUP_FOLDER_SECTION + '.' + STARTUP_FOLDER;
-	/** Type of startup folder that should be used in the right panel. */
-	public static final String  RIGHT_STARTUP_FOLDER              = RIGHT_STARTUP_FOLDER_SECTION + '.' + STARTUP_FOLDER;
+	public static final String  STARTUP_FOLDERS_LAST              = "lastFolders";
 	/** Default startup folder type. */
-	public static final String  DEFAULT_STARTUP_FOLDER            = STARTUP_FOLDER_LAST;
+	public static final String  DEFAULT_STARTUP_FOLDERS           = STARTUP_FOLDERS_LAST;
+	/** Section describing custom folders that were set for the two panel. */
+	public static final String  CUSTOM_FOLDERS_SECTION            = STARTUP_FOLDER_SECTION + '.' + "custom_folders";
+	/** Path to a custom startup folders Section describing the right panel's startup folder. */
+	public static final String  RIGHT_CUSTOM_FOLDER      		  = CUSTOM_FOLDERS_SECTION + '.' + RIGHT;
+	/** Section describing the left panel's startup folder. */
+	public static final String  LEFT_CUSTOM_FOLDER			      = CUSTOM_FOLDERS_SECTION + '.' + LEFT;
+	
 
 
 	// - File presenter (viewer\editor) variables ----------------------------

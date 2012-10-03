@@ -161,8 +161,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         MuPreferencesAPI preferences = MuConfigurations.getPreferences();
         
         // Checks which kind of initial path we're dealing with.
-        isCustom = (folderPanelType == FolderPanelType.LEFT ? preferences.getVariable(MuPreference.LEFT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER) :
-        	preferences.getVariable(MuPreference.RIGHT_STARTUP_FOLDER, MuPreferences.DEFAULT_STARTUP_FOLDER)).equals(MuPreferences.STARTUP_FOLDER_CUSTOM);
+        isCustom = preferences.getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
 
         // Handles custom initial paths.
         if (isCustom) {
@@ -201,6 +200,15 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         return results;
     }
     
+    private static int getInitialSelectedTab(FolderPanelType folderPanelType) {
+    	// Checks which kind of initial path we're dealing with.
+    	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
+    	
+    	return isCustom ? 
+    		0 :
+    		MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(0, folderPanelType == FolderPanelType.LEFT));
+    }
+    
     /**
      * Retrieves the initial history, based on previous runs, for the specified frame.
      * @param folderPanelType panel for which the initial path should be returned (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
@@ -208,6 +216,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return the locations that were presented in previous runs, which will be the initial history for the current run
      */
     private static FileURL[] getInitialHistory(FolderPanelType folderPanelType) {
+    	// Checks which kind of initial path we're dealing with.
+    	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
+
     	/*// Snapshot configuration
         Configuration snapshot = MuConfigurations.getSnapshot();
         
@@ -365,8 +376,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public static synchronized MainFrame createNewMainFrame() {
         if(currentMainFrame == null)
             return createNewMainFrame(getInitialPaths(FolderPanelType.LEFT), getInitialPaths(FolderPanelType.RIGHT),
-            						  MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(0, true)),
-            						  MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(0, false)),
+            						  getInitialSelectedTab(FolderPanelType.LEFT), getInitialSelectedTab(FolderPanelType.RIGHT),
             						  getInitialHistory(FolderPanelType.LEFT), getInitialHistory(FolderPanelType.RIGHT));
         return createNewMainFrame(new AbstractFile[] {currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
                                   new AbstractFile[] {currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()},

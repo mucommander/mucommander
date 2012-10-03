@@ -19,8 +19,12 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -32,6 +36,10 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SpringLayout;
+import javax.swing.plaf.basic.BasicTextFieldUI;
+import javax.swing.text.JTextComponent;
 
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.conf.MuConfigurations;
@@ -43,7 +51,7 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
 import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
-import com.mucommander.ui.dialog.pref.component.PrefTextField;
+import com.mucommander.ui.layout.SpringUtilities;
 import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.WindowManager;
@@ -57,14 +65,13 @@ import com.mucommander.ui.main.WindowManager;
 class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener, ActionListener {
 
     // Startup folders
-    private PrefRadioButton leftLastFolderRadioButton;
-    private PrefRadioButton leftCustomFolderRadioButton;
-    private PrefTextField leftCustomFolderTextField;
+    private PrefRadioButton lastFoldersRadioButton;
+    private PrefRadioButton customFoldersRadioButton;
+    
+    private PrefFilePathFieldWithDefaultValue leftCustomFolderTextField;
     private JButton leftCustomFolderButton;
 	
-    private PrefRadioButton rightLastFolderRadioButton;
-    private PrefRadioButton rightCustomFolderRadioButton;
-    private PrefTextField rightCustomFolderTextField;
+    private PrefFilePathFieldWithDefaultValue rightCustomFolderTextField;
 	private JButton rightCustomFolderButton;
 
     // Show hidden files?
@@ -87,125 +94,91 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 
         setLayout(new BorderLayout());
 
-        XBoxPanel tempPanel;
 
         // Startup folders panel
         YBoxPanel startupFolderPanel = new YBoxPanel();
         startupFolderPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.startup_folders")));
-				
-        // Left folder
-        JLabel leftFolderLabel = new JLabel(Translator.get("prefs_dialog.left_folder"));
-        leftFolderLabel.setAlignmentX(LEFT_ALIGNMENT);
-        startupFolderPanel.add(leftFolderLabel);
-        startupFolderPanel.addSpace(5);
 		
-        tempPanel = new XBoxPanel(5);
-        tempPanel.setAlignmentX(LEFT_ALIGNMENT);
-        leftLastFolderRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.last_folder")) {
+        // Last folders or custom folders selections
+        lastFoldersRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.last_folder")) {
 			public boolean hasChanged() {
 				return !(isSelected() ? 
-						MuPreferences.STARTUP_FOLDER_LAST	: MuPreferences.STARTUP_FOLDER_CUSTOM).equals(
-								MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_STARTUP_FOLDER));
+						MuPreferences.STARTUP_FOLDERS_LAST	: MuPreferences.STARTUP_FOLDERS_CUSTOM).equals(
+								MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS));
 			}
 		};
-        tempPanel.add(leftLastFolderRadioButton);
-        startupFolderPanel.add(tempPanel);
-		
-        leftCustomFolderRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.custom_folder")) {
+		customFoldersRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.custom_folder")) {
 			public boolean hasChanged() {
 				return !(isSelected() ? 
-						MuPreferences.STARTUP_FOLDER_CUSTOM : MuPreferences.STARTUP_FOLDER_LAST).equals(
-								MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_STARTUP_FOLDER));
+						MuPreferences.STARTUP_FOLDERS_CUSTOM : MuPreferences.STARTUP_FOLDERS_LAST).equals(
+								MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS));
 			}
         };
-        tempPanel = new XBoxPanel(5);
-        tempPanel.setAlignmentX(LEFT_ALIGNMENT);
-        tempPanel.add(leftCustomFolderRadioButton);
-        tempPanel.addSpace(5);
+        startupFolderPanel.add(lastFoldersRadioButton);
+        startupFolderPanel.addSpace(5);
+        startupFolderPanel.add(customFoldersRadioButton);
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(lastFoldersRadioButton);
+        buttonGroup.add(customFoldersRadioButton);
+
+        customFoldersRadioButton.addItemListener(this);
+        
+        // Custom folders specification
+        JLabel leftFolderLabel = new JLabel(Translator.get("prefs_dialog.left_folder"));
+        leftFolderLabel.setAlignmentX(LEFT_ALIGNMENT);
+
+        JLabel rightFolderLabel = new JLabel(Translator.get("prefs_dialog.right_folder"));
+        rightFolderLabel.setAlignmentX(LEFT_ALIGNMENT);
+
+        // Panel that contains the text field and button for specifying custom left folder
+        XBoxPanel leftCustomFolderSpecifyingPanel = new XBoxPanel(5);
+        leftCustomFolderSpecifyingPanel.setAlignmentX(LEFT_ALIGNMENT);
+        
         // Create a path field with auto-completion capabilities
-        leftCustomFolderTextField = new PrefFilePathField(MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER, "")) {
-			public boolean hasChanged() {
-				return !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER));
-			}
-        };
+        leftCustomFolderTextField = new PrefFilePathFieldWithDefaultValue(true);
         leftCustomFolderTextField.addKeyListener(this);
-        tempPanel.add(leftCustomFolderTextField);
+        leftCustomFolderSpecifyingPanel.add(leftCustomFolderTextField);
 
         leftCustomFolderButton = new JButton("...");
         leftCustomFolderButton.addActionListener(this);
-        tempPanel.add(leftCustomFolderButton);
-        startupFolderPanel.add(tempPanel);
+        leftCustomFolderSpecifyingPanel.add(leftCustomFolderButton);
 
-        if(MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_STARTUP_FOLDER, "").equals(MuPreferences.STARTUP_FOLDER_LAST)) {
-            leftLastFolderRadioButton.setSelected(true);
-            setCustomFolderComponentsEnabled(true, false);
-        }
-        else
-            leftCustomFolderRadioButton.setSelected(true);
+        // Panel that contains the text field and button for specifying custom right folder
+        XBoxPanel rightCustomFolderSpecifyingPanel = new XBoxPanel(5);
+        rightCustomFolderSpecifyingPanel.setAlignmentX(LEFT_ALIGNMENT);
 
-        leftCustomFolderRadioButton.addItemListener(this);
-
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(leftLastFolderRadioButton);
-        buttonGroup.add(leftCustomFolderRadioButton);
-
-        startupFolderPanel.addSpace(15);
-
-        // Right folder
-        JLabel rightFolderLabel = new JLabel(Translator.get("prefs_dialog.right_folder"));
-        rightFolderLabel.setAlignmentX(LEFT_ALIGNMENT);
-        startupFolderPanel.add(rightFolderLabel);
-        startupFolderPanel.addSpace(5);
-
-        tempPanel = new XBoxPanel(5);
-        tempPanel.setAlignmentX(LEFT_ALIGNMENT);
-        rightLastFolderRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.last_folder")) {
-			public boolean hasChanged() {
-				return !(isSelected() ? 
-						MuPreferences.STARTUP_FOLDER_LAST : MuPreferences.STARTUP_FOLDER_CUSTOM).equals(
-								MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_STARTUP_FOLDER));
-			}
-        };
-        tempPanel.add(rightLastFolderRadioButton);
-        startupFolderPanel.add(tempPanel);
-		
-        rightCustomFolderRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.custom_folder")) {
-			public boolean hasChanged() {
-				return !(isSelected() ? 
-						MuPreferences.STARTUP_FOLDER_CUSTOM : MuPreferences.STARTUP_FOLDER_LAST).equals(
-								MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_STARTUP_FOLDER));
-			}
-        };
-        tempPanel = new XBoxPanel(5);
-        tempPanel.setAlignmentX(LEFT_ALIGNMENT);
-        tempPanel.add(rightCustomFolderRadioButton);
-        tempPanel.addSpace(5);
         // Create a path field with auto-completion capabilities
-        rightCustomFolderTextField = new PrefFilePathField(MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER, "")) {
-			public boolean hasChanged() {
-				return !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER));
-			}
-        };
+        rightCustomFolderTextField = new PrefFilePathFieldWithDefaultValue(false);
         rightCustomFolderTextField.addKeyListener(this);
-        tempPanel.add(rightCustomFolderTextField);
+        rightCustomFolderSpecifyingPanel.add(rightCustomFolderTextField);
 
         rightCustomFolderButton = new JButton("...");
         rightCustomFolderButton.addActionListener(this);
-        tempPanel.add(rightCustomFolderButton);
-        startupFolderPanel.add(tempPanel);
-
-        if(MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_STARTUP_FOLDER, "").equals(MuPreferences.STARTUP_FOLDER_LAST)) {
-            rightLastFolderRadioButton.setSelected(true);
-            setCustomFolderComponentsEnabled(false, false);
+        rightCustomFolderSpecifyingPanel.add(rightCustomFolderButton);
+        
+        JPanel container = new JPanel(new SpringLayout());
+        container.add(leftFolderLabel);
+        container.add(leftCustomFolderSpecifyingPanel);
+        container.add(rightFolderLabel);
+        container.add(rightCustomFolderSpecifyingPanel);
+        
+        //Lay out the panel.
+        SpringUtilities.makeCompactGrid(container,
+                                        2, 2, //rows, cols
+                                        20, 6,        //initX, initY
+                                        6, 6);       //xPad, yPad
+        
+        startupFolderPanel.add(container);
+        
+        if(MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, "").equals(MuPreferences.STARTUP_FOLDERS_LAST)) {
+            lastFoldersRadioButton.setSelected(true);
+            setCustomFolderComponentsEnabled(false);
         }
         else
-            rightCustomFolderRadioButton.setSelected(true);
-
-        rightCustomFolderRadioButton.addItemListener(this);
-
-        buttonGroup = new ButtonGroup();
-        buttonGroup.add(rightLastFolderRadioButton);
-        buttonGroup.add(rightCustomFolderRadioButton);
+            customFoldersRadioButton.setSelected(true);
+        
+        // --------------------------------------------------------------------------------------------------------------
 
         YBoxPanel northPanel = new YBoxPanel();
         northPanel.add(startupFolderPanel);
@@ -266,10 +239,8 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 
         add(northPanel, BorderLayout.NORTH);
         
-        leftLastFolderRadioButton.addDialogListener(parent);
-        leftCustomFolderRadioButton.addDialogListener(parent);
-        rightLastFolderRadioButton.addDialogListener(parent);
-        rightCustomFolderRadioButton.addDialogListener(parent);
+        lastFoldersRadioButton.addDialogListener(parent);
+        customFoldersRadioButton.addDialogListener(parent);
         rightCustomFolderTextField.addDialogListener(parent);
         leftCustomFolderTextField.addDialogListener(parent);
         showHiddenFilesCheckBox.addDialogListener(parent);
@@ -281,15 +252,11 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         }
     }
 
-    /**
-     * Enables/disables the custom folder components.
-     *
-     * @param isLeft true if the components pertain to the left folder
-     * @param enabled true to enable the components
-     */
-    private void setCustomFolderComponentsEnabled(boolean isLeft, boolean enabled) {
-        (isLeft?leftCustomFolderTextField:rightCustomFolderTextField).setEnabled(enabled);
-        (isLeft?leftCustomFolderButton:rightCustomFolderButton).setEnabled(enabled);
+    private void setCustomFolderComponentsEnabled(boolean enabled) {
+        leftCustomFolderTextField.setEnabled(enabled);
+        leftCustomFolderButton.setEnabled(enabled);
+        rightCustomFolderTextField.setEnabled(enabled);
+        rightCustomFolderButton.setEnabled(enabled);
     }
 
 
@@ -299,13 +266,11 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 
     @Override
     protected void commit() {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.LEFT_STARTUP_FOLDER, leftLastFolderRadioButton.isSelected() ? MuPreferences.STARTUP_FOLDER_LAST :
-                MuPreferences.STARTUP_FOLDER_CUSTOM);
-    	MuConfigurations.getPreferences().setVariable(MuPreference.LEFT_CUSTOM_FOLDER, leftCustomFolderTextField.getText());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.STARTUP_FOLDERS, lastFoldersRadioButton.isSelected() ? MuPreferences.STARTUP_FOLDERS_LAST : MuPreferences.STARTUP_FOLDERS_CUSTOM);
+    	
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LEFT_CUSTOM_FOLDER, leftCustomFolderTextField.getFilePath());
 		
-    	MuConfigurations.getPreferences().setVariable(MuPreference.RIGHT_STARTUP_FOLDER, rightLastFolderRadioButton.isSelected() ? MuPreferences.STARTUP_FOLDER_LAST :
-                MuPreferences.STARTUP_FOLDER_CUSTOM);
-    	MuConfigurations.getPreferences().setVariable(MuPreference.RIGHT_CUSTOM_FOLDER, rightCustomFolderTextField.getText());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.RIGHT_CUSTOM_FOLDER, rightCustomFolderTextField.getFilePath());
 
     	MuConfigurations.getPreferences().setVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE, compactSizeCheckBox.isSelected());
 
@@ -335,11 +300,8 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         if(source==showHiddenFilesCheckBox) {
             showDSStoreFilesCheckBox.setEnabled(showHiddenFilesCheckBox.isSelected());
         }
-        else if(source==leftCustomFolderRadioButton) {
-            setCustomFolderComponentsEnabled(true, leftCustomFolderRadioButton.isSelected());
-        }
-        else if(source==rightCustomFolderRadioButton) {
-            setCustomFolderComponentsEnabled(false, rightCustomFolderRadioButton.isSelected());
+        else if(source==customFoldersRadioButton) {
+            setCustomFolderComponentsEnabled(customFoldersRadioButton.isSelected());
         }
     }
 
@@ -354,14 +316,10 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     public void keyTyped(KeyEvent e) {
         Object source = e.getSource();
 		
-        if(source==leftCustomFolderTextField) {
-            if(!leftCustomFolderRadioButton.isSelected())
-                leftCustomFolderRadioButton.setSelected(true);
+        if(source==leftCustomFolderTextField || source==rightCustomFolderTextField) {
+            if(!customFoldersRadioButton.isSelected())
+                customFoldersRadioButton.setSelected(true);
         }
-        else if(source==rightCustomFolderTextField) {
-            if(!rightCustomFolderRadioButton.isSelected())
-                rightCustomFolderRadioButton.setSelected(true);
-        }			
     }
 	
     public void keyPressed(KeyEvent e) {
@@ -389,14 +347,127 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
             File file = chooser.getSelectedFile();
             if (source==leftCustomFolderButton) {
                 leftCustomFolderTextField.setText(file.getPath());
-                if(!leftCustomFolderRadioButton.isSelected())
-                    leftCustomFolderRadioButton.setSelected(true);
+                if(!customFoldersRadioButton.isSelected())
+                    customFoldersRadioButton.setSelected(true);
             }
             else if (source==rightCustomFolderButton) {
                 rightCustomFolderTextField.setText(file.getPath());
-                if(!rightCustomFolderRadioButton.isSelected())
-                	rightCustomFolderRadioButton.setSelected(true);
+                if(!customFoldersRadioButton.isSelected())
+                    customFoldersRadioButton.setSelected(true);
             }
         }
 	}
+    
+    public class PrefFilePathFieldWithDefaultValue extends PrefFilePathField {
+    	
+    	private boolean isLeft;
+    	private final String HOME_FOLDER_PATH = System.getProperty("user.home");
+    	
+    	public PrefFilePathFieldWithDefaultValue(boolean isLeft) {
+    		super(isLeft ? MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER, "") : MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER, ""));
+    		this.isLeft = isLeft;
+    		
+//    		setUI(new HintTextFieldUI(HOME_FOLDER_PATH, true));
+    	}
+    	
+		public boolean hasChanged() {
+			return isLeft ? 
+					!getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER)) :
+					!getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER));
+		}
+		
+		public String getFilePath() {
+			String text = super.getText();
+			
+			return text.trim().isEmpty() ? HOME_FOLDER_PATH : text;
+		}
+
+    	private class HintTextFieldUI extends BasicTextFieldUI implements FocusListener {
+
+    	    private String hint;
+    	    private boolean hideOnFocus;
+    	    private Color color;
+
+    	    public Color getColor() {
+    	        return color;
+    	    }
+
+    	    public void setColor(Color color) {
+    	        this.color = color;
+    	        repaint();
+    	    }
+
+    	    private void repaint() {
+    	        if(getComponent() != null) {
+    	            getComponent().repaint();           
+    	        }
+    	    }
+
+    	    public boolean isHideOnFocus() {
+    	        return hideOnFocus;
+    	    }
+
+    	    public void setHideOnFocus(boolean hideOnFocus) {
+    	        this.hideOnFocus = hideOnFocus;
+    	        repaint();
+    	    }
+
+    	    public String getHint() {
+    	        return hint;
+    	    }
+
+    	    public void setHint(String hint) {
+    	        this.hint = hint;
+    	        repaint();
+    	    }
+    	    public HintTextFieldUI(String hint) {
+    	        this(hint,false);
+    	    }
+
+    	    public HintTextFieldUI(String hint, boolean hideOnFocus) {
+    	        this(hint,hideOnFocus, Color.gray);
+    	    }
+
+    	    public HintTextFieldUI(String hint, boolean hideOnFocus, Color color) {
+    	        this.hint = hint;
+    	        this.hideOnFocus = hideOnFocus;
+    	        this.color = color;
+    	    }
+
+    	    @Override
+    	    protected void paintSafely(Graphics g) {
+    	        super.paintSafely(g);
+    	        JTextComponent comp = getComponent();
+    	        if(hint!=null && comp.getText().length() == 0 && (!(hideOnFocus && comp.hasFocus()))){
+    	            if(color != null) {
+    	                g.setColor(color);
+    	            } else {
+    	                g.setColor(comp.getForeground().brighter().brighter().brighter());              
+    	            }
+    	            int padding = (comp.getHeight() - comp.getFont().getSize())/2;
+    	            g.drawString(hint, 3, comp.getHeight()-padding-1);          
+    	        }
+    	    }
+
+    	    public void focusGained(FocusEvent e) {
+    	        if(hideOnFocus) repaint();
+
+    	    }
+
+    	    public void focusLost(FocusEvent e) {
+    	        if(hideOnFocus) repaint();
+    	    }
+    	    
+    	    @Override
+    	    protected void installListeners() {
+    	        super.installListeners();
+    	        getComponent().addFocusListener(this);
+    	    }
+    	    @Override
+    	    protected void uninstallListeners() {
+    	        super.uninstallListeners();
+    	        getComponent().removeFocusListener(this);
+    	    }
+    	}
+    }
 }
