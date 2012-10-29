@@ -27,6 +27,9 @@ import javax.swing.JComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.tabs.TabsDisplay.DisplayKind;
 
 /**
@@ -249,10 +252,16 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		case 2:
 			if (display.getDisplayKind() == DisplayKind.WithoutTabHeaders)
 				switchToMultipleTabs();
+			
 			break;
 		case 1:
-			// TODO: get default single tab display
-			switchToSingleTab();
+			boolean alwaysShowSingleTabHeader = MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER); 
+			
+			if (alwaysShowSingleTabHeader)
+				switchToMultipleTabs();
+			else
+				switchToSingleTab();
+			
 			break;
 		default:
 		}
@@ -264,9 +273,12 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		
 		// TODO: decide what to do in case nbTabs == 0
 		
-		// TODO: get default single tab display
-		if (nbTabs == 1)
-			switchToSingleTab();
+		if (nbTabs == 1) {
+			boolean alwaysShowSingleTabHeader = MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER);
+			
+			if (!alwaysShowSingleTabHeader)
+				switchToSingleTab();
+		}
 	}
 	
 	public void tabUpdated(int index) { }

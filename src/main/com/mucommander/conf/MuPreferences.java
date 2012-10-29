@@ -232,6 +232,10 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final String  CD_FOLLOWS_SYMLINKS                = FILE_TABLE_SECTION + '.' + "cd_follows_symlinks";
 	/** Default value for 'Follow symlinks when changing directory' option. */
 	public static final boolean DEFAULT_CD_FOLLOWS_SYMLINKS        = false;
+	/** Whether to always show the header of a single tab or not */
+	public static final String SHOW_SINGLE_TAB_HEADER			   = FILE_TABLE_SECTION + '.' + "show_single_tab_header";
+	/** Default value for 'Always show single tab header" */
+	public static final boolean DEFAULT_SHOW_SINGLE_TAB_HEADER	   = false;
 
 	/** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
 	static final String VERSION_ATTRIBUTE = "version";
