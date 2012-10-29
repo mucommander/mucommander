@@ -27,16 +27,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
-* Component that present multiple tabs
+* Component that presents tabs with headers
 * 
 * @author Arik Hadas
 */
-public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implements TabsChangeListener, ChangeListener {
+public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> implements TabsChangeListener, ChangeListener {
 	
 	private TabsCollection<T> tabs;
 	private TabbedPane<T> pane;
 	
-	public MultipleTabsDisplay(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
+	public TabsWithHeaderDisplay(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
 		super(tabbedpane, tabs, DisplayKind.WithTabHeaders);
 		
 		this.tabs = tabs;

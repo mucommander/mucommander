@@ -20,10 +20,10 @@ package com.mucommander.ui.main.tabs;
 
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.tabs.MultipleTabsDisplay;
-import com.mucommander.ui.tabs.SingleTabDisplay;
+import com.mucommander.ui.tabs.TabWithoutHeaderDisplay;
 import com.mucommander.ui.tabs.TabsCollection;
 import com.mucommander.ui.tabs.TabsDisplayFactory;
+import com.mucommander.ui.tabs.TabsWithHeaderDisplay;
 
 /**
 * Factory that creates displays for file table tabs
@@ -44,11 +44,11 @@ public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTable
 	 * TabsDisplayFactory Implementation
 	 ************************************/
 	
-	public MultipleTabsDisplay<FileTableTab> createMultipleTabsDisplay(TabsCollection<FileTableTab> tabs) {
-		return new MultipleTabsDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
+	public TabsWithHeaderDisplay<FileTableTab> createMultipleTabsDisplay(TabsCollection<FileTableTab> tabs) {
+		return new TabsWithHeaderDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
 	}
 
-	public SingleTabDisplay<FileTableTab> createSingleTabsDisplay(TabsCollection<FileTableTab> tabs) {
-		return new SingleTabDisplay<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
+	public TabWithoutHeaderDisplay<FileTableTab> createSingleTabsDisplay(TabsCollection<FileTableTab> tabs) {
+		return new TabWithoutHeaderDisplay<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
 	}
 }

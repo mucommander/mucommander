@@ -23,16 +23,16 @@ import java.awt.Component;
 import javax.swing.JComponent;
 
 /**
-* Component that present single tab
+* Component that presents tab with no header
 * 
 * @author Arik Hadas
 */
-public class SingleTabDisplay<T extends Tab> extends TabsDisplay<T> {
+public class TabWithoutHeaderDisplay<T extends Tab> extends TabsDisplay<T> {
 
 	/** The component to be displayed in the tab */
 	private JComponent component;
 	
-	public SingleTabDisplay(TabsCollection<T> tabs, JComponent component) {
+	public TabWithoutHeaderDisplay(TabsCollection<T> tabs, JComponent component) {
 		super(component, tabs, DisplayKind.WithoutTabHeaders);
 		
 		this.component = component;
