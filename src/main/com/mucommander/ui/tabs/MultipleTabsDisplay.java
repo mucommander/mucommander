@@ -37,7 +37,7 @@ public class MultipleTabsDisplay<T extends Tab> extends TabsDisplay<T> implement
 	private TabbedPane<T> pane;
 	
 	public MultipleTabsDisplay(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
-		super(tabbedpane, tabs);
+		super(tabbedpane, tabs, DisplayKind.WithTabHeaders);
 		
 		this.tabs = tabs;
 		this.pane = tabbedpane;

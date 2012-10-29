@@ -97,6 +97,24 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		});
 	}
 	
+	@Override
+	public void tabRemoved(int index) {
+		int nbTabs = getTabs().count();
+		
+		boolean actNormally = true;
+		
+		if (nbTabs == 1) {
+			FileTableTab tab = getTab(0);
+			
+			// If there's just single tab that is locked don't remove his header
+			if (tab.isLocked())
+				actNormally = false;
+		}
+		
+		if (actNormally)
+			super.tabRemoved(index);
+	}
+	
 	/********************
 	 * MuActions support
 	 ********************/

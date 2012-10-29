@@ -33,7 +33,7 @@ public class SingleTabDisplay<T extends Tab> extends TabsDisplay<T> {
 	private JComponent component;
 	
 	public SingleTabDisplay(TabsCollection<T> tabs, JComponent component) {
-		super(component, tabs);
+		super(component, tabs, DisplayKind.WithoutTabHeaders);
 		
 		this.component = component;
 	}

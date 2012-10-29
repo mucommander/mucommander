@@ -27,6 +27,8 @@ import javax.swing.JComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.ui.tabs.TabsDisplay.DisplayKind;
+
 /**
  * This component acts like a tabbedpane in which multiple tabs are presented in a JTabbedPane layout 
  * and single tab is presented without the JTabbedPane layout, only the tab's data.
@@ -45,9 +47,10 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	
 	/* The tabs which are being displayed */
 	private TabsCollection<T> tabs;
-	/* The tabs display type - single-tab or multiple-tab */
+	/* The tabs display type (with/without tabs headers)
+	 * It is initialize as nullable so that it can be destroyed when it's replaced for the first time (see @{link tabAdded()})*/
 	private TabsDisplay<T> display = new NullableTabsDisplay<T>();
-	/* The factory that will be used to create the display type */
+	/* The factory that will be used to create the display type */	
 	private TabsDisplayFactory<T> tabsDisplayFactory;
 	
 	/**
@@ -107,6 +110,10 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 */
 	public int getSelectedIndex() {
 		return display.getSelectedTabIndex();
+	}
+	
+	protected TabsCollection<T> getTabs() {
+		return tabs;
 	}
 	
 	/***********************
@@ -235,11 +242,16 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 ************************************/
 
 	public void tabAdded(int index) {
-		switch (tabs.count()) {
+		// The number of tabs including the one that was just been added
+		int nbTabs = tabs.count();
+		
+		switch (nbTabs) {
 		case 2:
-			switchToMultipleTabs();
+			if (display.getDisplayKind() == DisplayKind.WithoutTabHeaders)
+				switchToMultipleTabs();
 			break;
 		case 1:
+			// TODO: get default single tab display
 			switchToSingleTab();
 			break;
 		default:
@@ -247,7 +259,13 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	}
 
 	public void tabRemoved(int index) {
-		if (tabs.count() == 1)
+		// The number of tabs without the one that was just been removed
+		int nbTabs = tabs.count();
+		
+		// TODO: decide what to do in case nbTabs == 0
+		
+		// TODO: get default single tab display
+		if (nbTabs == 1)
 			switchToSingleTab();
 	}
 	
