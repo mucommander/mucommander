@@ -5,9 +5,9 @@
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
 
 
-----------------
-muCommander v0.9
-----------------
+------------------
+muCommander v0.9.1
+------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
 It runs on any operating system with Java support (Mac OS X, Windows, Linux, *BSD, Solaris...).
@@ -33,57 +33,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.8.5 ?
--------------------------
+What's new since v0.9 ?
+-----------------------
 
 New features:
-- Tabbed browsing support (ticket #185).
-- Added support for Xfce desktop environment (ticket #394).
-- Text viewer and editor can now display line numbers.
-- New quick list for root folders, mapped onto Alt+5 by default (ticket #400).
+-
 
 Improvements:
-- Natural file ordering, suggested by 'andraaspar' in the forums. All symbols now come before digits (ticket #282).
-- Improved the display of filenames when they are not entirely visible, by removing characters in the middle so that
-  both ends of the filename are visible.
-- Current folder is now automatically changed to a workable folder when it is no longer available (ticket #333).
-- Upgraded the JmDNS library (used for Bonjour support) to version 3.1.
-- Upgraded the jCIFS library (used for SMB support) to version 1.3.14.
-- Better RAR archive support (ticket #152).
-- Text viewer and editor can now wrap long lines (ticket #101).
-- The bookmarks quick list is now displayed unsorted (ticket #416).
-- Changed the quick search mechanism in quick lists to match the one used in the folder pane (ticket #171).
-- Added an option to change the font size in the text file editor/viewer by pressing Ctrl while rotating the mouse wheel
-  (ticket #409).
-- Application state is now persisted on shutdown in a dedicated snapshot.xml file, instead of being stored along with
-  preferences in preferences.xml (see http://trac.mucommander.com/wiki/StatePersistence).
-- Changed the color of hidden files to be different from regular files (ticket #262).
-- Changed the default keyboard shortcuts of the 'open in both panels', 'open in other panel', 'recall next window' and
-  'recall previous window' actions, to make room for the new tab-related shortcuts.
-- File editor/viewer is now getting the focus when initiated (ticket #92).
-- Comic Book Archive files (cbr, cbz, cb7, cbt) are now recognized as archives (#454).
+- Add support for copying files base names (ticket #462), contributed by Chen Rozenes
 
 Localization:
-- New: Turkish translation, contributed by Emre Aytaç
-- New: Catalan translation, contributed by Jordi Plantalech
-- New: Belarusian translation, contributed by vboo.
-- New: Norwegian translation, contributed by Ingrid Amundsen.
-- Russian translation updated. Update contributed by Alexey Sirotov and Evgeny Morozov.
-- Ukrainian translation updated. Update contributed by Oleksandr Kovalchuk.
-- Spanish translation updated. Update contributed by Xavi Miró.
+- 
 
 Bug fixes:
-- Pack dialog now implements the same filename selection algorithm as other dialogs (ticket #167).
-- When an invalid destination was entered in a transfer dialog, the spinning dial icon would keep spinning.
-- Fixed an issue that would occur when creating directories whose extension match that of one of the supported archive
-  formats (see ticket #360).
-- Fixed a bug that could cause the deletion of S3 files to fail.
-- Fixed an exception on shutdown (ticket #377).
-- Fixed an exception when trying to update text files in archives using the internal editor (ticket #408).
-- File renaming is now cancelled when the filename editor loses focus (#428).
-- Fixed a deadlock that could prevent the application from shutting down (#431).
-- Fixed an issue that caused unpacking of 7z archive file to produce corrupted files (ticket #347).
-- Fixed several bugs related to SMB handling (tickets #351 and #436).
+- 
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
