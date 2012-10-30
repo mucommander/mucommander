@@ -261,6 +261,11 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
+    public String getBaseName() {
+    	return file.getBaseName();
+    }
+    
+    @Override
     public String getAbsolutePath() {
         return file.getAbsolutePath();
     }
