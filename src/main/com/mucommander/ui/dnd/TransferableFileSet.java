@@ -81,7 +81,10 @@ public class TransferableFileSet implements Transferable {
     /** Does DataFlavor.stringFlavor transfer the files' full paths or filenames only ? */
     private boolean stringFlavourTransfersFilename = false;
 
-    /** DataFlavor used for GNOME/KDE transfers */
+    /** Does DataFlavor.stringFlavor transfer the files' filenames with extension or without ? */
+    private boolean stringFlavourTransfersFileBaseName = false;
+    
+	/** DataFlavor used for GNOME/KDE transfers */
     private static DataFlavor TEXT_URI_FLAVOR;
 
     /** Custom FileSet DataFlavor used for local transfers */
@@ -173,6 +176,28 @@ public class TransferableFileSet implements Transferable {
         return this.stringFlavourTransfersFilename;
     }
 
+    /**
+     * Sets whether the files' base name (without file extension) should be returned when
+     * {@link #getTransferData(java.awt.datatransfer.DataFlavor)} is called with <code>DataFlavor.stringFlavor</code>.
+     * (*not* enabled by default)
+     *
+     * @param b if <code>true</code>, DataFlavor.stringFlavor returns filenames without extension, full file name otherwise.
+     */
+	public void setStringDataFlavourTransfersFileBaseName(boolean b) {
+		this.stringFlavourTransfersFileBaseName = b;
+	}
+
+    /**
+     * Returns whether the files' base name (without file extension) should be returned when
+     * {@link #getTransferData(java.awt.datatransfer.DataFlavor)} is called with <code>DataFlavor.stringFlavor</code>.
+     * Returns <code>false</code> unless {@link #setStringDataFlavourTransfersFileBaseName(boolean)} has been called.
+     *
+     * @return whether the files'  base name (without file extension) should be returned when
+     * {@link #getTransferData(java.awt.datatransfer.DataFlavor)} is called with <code>DataFlavor.stringFlavor</code>
+     */
+    public boolean getStringDataFlavourTransfersFileBaseName() {
+		return stringFlavourTransfersFileBaseName;
+	}
 
     /**
      * Returns an instance of the custom FileSet DataFlavor used to transfer files locally.
@@ -347,7 +372,14 @@ public class TransferableFileSet implements Transferable {
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
                 file = fileSet.elementAt(i);
-                sb.append(stringFlavourTransfersFilename?file.getName():file.getAbsolutePath());
+                // Check if to return string with filenames
+                if (stringFlavourTransfersFilename) {
+                	// Append just base name or file name with extension
+                	sb.append(stringFlavourTransfersFileBaseName ? file.getBaseName() : file.getName());
+                } else {
+                	sb.append(file.getAbsolutePath());
+                }
+                                	
                 if(i!=nbFiles-1)
                     sb.append('\n');
             }

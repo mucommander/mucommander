@@ -85,6 +85,7 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         if(clickedFile!=null || markedFiles.size()>0) {
             addAction(com.mucommander.ui.action.impl.CopyFilesToClipboardAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFileNamesAction.Descriptor.ACTION_ID);
+            addAction(com.mucommander.ui.action.impl.CopyFileBaseNamesAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID);
             
             add(new JSeparator());

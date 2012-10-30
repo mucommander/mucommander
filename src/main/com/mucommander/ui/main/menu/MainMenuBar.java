@@ -62,6 +62,7 @@ import com.mucommander.ui.action.impl.CloseWindowAction;
 import com.mucommander.ui.action.impl.CombineFilesAction;
 import com.mucommander.ui.action.impl.CompareFoldersAction;
 import com.mucommander.ui.action.impl.ConnectToServerAction;
+import com.mucommander.ui.action.impl.CopyFileBaseNamesAction;
 import com.mucommander.ui.action.impl.CopyFileNamesAction;
 import com.mucommander.ui.action.impl.CopyFilePathsAction;
 import com.mucommander.ui.action.impl.CopyFilesToClipboardAction;
@@ -275,6 +276,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         markMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFilesToClipboardAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFileNamesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFileBaseNamesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFilePathsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(PasteClipboardFilesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
 

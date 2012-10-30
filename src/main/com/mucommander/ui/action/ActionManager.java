@@ -83,6 +83,7 @@ public class ActionManager {
     	registerAction(new CompareFoldersAction.Descriptor(),               new CompareFoldersAction.Factory());
     	registerAction(new ConnectToServerAction.Descriptor(),              new ConnectToServerAction.Factory());
     	registerAction(new CopyAction.Descriptor(),                         new CopyAction.Factory());
+    	registerAction(new CopyFileBaseNamesAction.Descriptor(),            new CopyFileBaseNamesAction.Factory());
     	registerAction(new CopyFileNamesAction.Descriptor(),                new CopyFileNamesAction.Factory());
     	registerAction(new CopyFilePathsAction.Descriptor(),                new CopyFilePathsAction.Factory());
     	registerAction(new CopyFilesToClipboardAction.Descriptor(),         new CopyFilesToClipboardAction.Factory());
