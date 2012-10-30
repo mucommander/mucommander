@@ -1367,6 +1367,26 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
 
     /**
+     * Returns the given filename without its extension (base name). if the filename doesn't have an extension, returns the filename as received
+     *
+     * <p>A filename has an extension if and only if:<br/>
+     * - it contains at least one <code>.</code> character<br/>
+     * - the last <code>.</code> is not the last character of the filename<br/>
+     * - the last <code>.</code> is not the first character of the filename</p>
+     *
+     * @return the file's base name - without its extension, if the filename doesn't have an extension returns the filename as received
+     */
+    public String getBaseName() { 
+    	String fileName = getName(); 
+    	int lastDotPos = fileName.lastIndexOf('.');
+    	 
+         if(lastDotPos<=0 || lastDotPos==fileName.length()-1)
+             return fileName;
+         
+         return fileName.substring(0, lastDotPos);
+    }
+    
+    /**
      * Returns the checksum (also referred to as <i>hash</i> or <i>digest</i>) of the given <code>InputStream</code>
      * calculated by reading the stream and feeding the bytes to the given <code>MessageDigest</code> until EOF is
      * reached.
