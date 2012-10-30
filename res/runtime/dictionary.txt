@@ -4134,6 +4134,9 @@ CopyFileNames.label:NB:Kopier navn(ene)
 CopyFileNames.label:TR:İsim(ler)i kopyala
 CopyFileNames.label:CA:Copia el(s) nom(s)
 
+CopyFileBaseNames.label:EN:Copy basename(s)
+# Translation missing (New!)
+
 CopyFilePaths.label:EN:Copy path(s)
 CopyFilePaths.label:FR:Copier chemin(s)
 CopyFilePaths.label:RO:Copiază cale/căi
@@ -15646,6 +15649,9 @@ prefs_dialog.follow_symlinks_when_cd:NB:Følg symbolske lenker ved endring av gj
 prefs_dialog.follow_symlinks_when_cd:TR:Geçerli dizini değiştirirken sembolik bağlantıları takip et
 prefs_dialog.follow_symlinks_when_cd:CA:Seguir els enllaços simbòlics en canviar el directori actual
 # Translation missing (KO)
+
+prefs_dialog.show_single_tab_header:EN:Always show single tab header
+# Translation missing (New!)
 
 # Appearance tab
 
