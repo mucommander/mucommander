@@ -40,7 +40,7 @@ class FileTableTabHeader extends JPanel implements ActionListener {
 	
 	private FolderPanel folderPanel;
 	
-	private JButton lockedButton;
+	private JLabel lockedIcon;
 
 	private static final String CLOSE_ICON_NAME = "close.png";
     private static final String CLOSE_ROLLOVER_ICON_NAME = "close_rollover.png";
@@ -61,11 +61,11 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         gbc.gridy = 0;
 
         // Locked tab icon
-        lockedButton = new LockedButton();
+        lockedIcon = new LockedIcon();
         gbc.weightx = 0;    // required otherwise extra width may be redistributed around the button
         gbc.gridx = 0;
-        lockedButton.setVisible(false);
-        add(lockedButton, gbc);
+        lockedIcon.setVisible(false);
+        add(lockedIcon, gbc);
         
         // Label
         JLabel label = new JLabel();
@@ -104,7 +104,7 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     }
 
 	public void setLocked(boolean lock) {
-		lockedButton.setVisible(lock);
+		lockedIcon.setVisible(lock);
 		
 		validate();
 	}
@@ -150,19 +150,13 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         }
     }
     
-    private class LockedButton extends JButton {
+    private class LockedIcon extends JLabel {
    	 
-        public LockedButton() {
+        public LockedIcon() {
+        	super(IconManager.getIcon(IconManager.COMMON_ICON_SET, LOCKED_ICON_NAME));
             setPreferredSize(new Dimension(LOCKED_ICON_SIZE, LOCKED_ICON_SIZE));
-            //Make the button looks the same for all Laf's
-            setUI(new BasicButtonUI());
-            //Make it transparent
-            setContentAreaFilled(false);
             //No need to be focusable
             setFocusable(false);
-            setBorderPainted(false);
-            setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, LOCKED_ICON_NAME));
-            setRolloverEnabled(false);
         }
 
 
@@ -170,11 +164,6 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         @Override
         public Insets getInsets() {
             return new Insets(0,0,0,0);
-        }
-
-        // We don't want to update UI for this button
-        @Override
-        public void updateUI() {
         }
     }
 }
