@@ -19,6 +19,8 @@
 package com.mucommander.ui.main.tabs;
 
 import java.awt.Point;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -42,7 +44,7 @@ import com.mucommander.ui.tabs.TabbedPane;
  * 
  * @author Arik Hadas
  */
-public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
+public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements FocusListener {
 
 	/** The FileTable instance presented in each tab */
 	private JComponent fileTableComponent;
@@ -50,7 +52,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 	private MainFrame mainFrame;
 	private FolderPanel folderPanel;
 	
-	
+
 	public FileTableTabbedPane(MainFrame mainFrame, FolderPanel folderPanel, JComponent fileTableComponent) {
 		this.fileTableComponent = fileTableComponent;
 		this.mainFrame = mainFrame;
@@ -71,6 +73,8 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 				}
 			}
 		});
+		
+		addFocusListener(this);
 	}
 	
 	@Override
@@ -190,4 +194,16 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 		
 		validate();
 	}
+
+	//////////////////////////////////
+	// FocusListener implementation //
+	//////////////////////////////////
+	
+	@Override
+	public void focusGained(FocusEvent e) {
+		folderPanel.getTabs().requestFocus();
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) { }
 }
