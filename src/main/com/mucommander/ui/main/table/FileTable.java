@@ -97,7 +97,7 @@ import com.mucommander.ui.theme.ThemeManager;
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class FileTable extends JTable implements MouseListener, MouseMotionListener, KeyListener, FocusListener,
+public class FileTable extends JTable implements MouseListener, MouseMotionListener, KeyListener,
                                                  ActivePanelListener, ConfigurationListener, ThemeListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileTable.class);
 	
@@ -215,7 +215,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         folderPanel.addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
-        addFocusListener(this);
         mainFrame.addActivePanelListener(this);
         MuConfigurations.addPreferencesListener(this);
 
@@ -273,6 +272,31 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // header back to normal. This looks like a bug in Apple's implementation.
 
         }
+    }
+    
+    /**
+     * Restores selection when focus is gained.
+     * Note: this is not FocusListener implementation method
+     */
+    private void focusGained() {
+        focusGainedTime = System.currentTimeMillis();
+
+        if(isEditing()) {
+            filenameEditor.filenameField.requestFocus();
+        }
+        else {
+            // Repaints the table to reflect the new focused state
+            repaint();
+        }
+    }
+
+    /**
+     * Hides selection when focus is lost.
+     * Note: this is not FocusListener implementation method
+     */
+    private void focusLost() {
+        // Repaints the table to reflect the new focused state
+        repaint();
     }
 
     /**
@@ -1441,35 +1465,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         }
     }
 
-
-    ///////////////////////////
-    // FocusListener methods //
-    ///////////////////////////
-
-    /**
-     * Restores selection when focus is gained.
-     */
-    public void focusGained(FocusEvent e) {
-        focusGainedTime = System.currentTimeMillis();
-
-        if(isEditing()) {
-            filenameEditor.filenameField.requestFocus();
-        }
-        else {
-            // Repaints the table to reflect the new focused state
-            repaint();
-        }
-    }
-
-    /**
-     * Hides selection when focus is lost.
-     */
-    public void focusLost(FocusEvent e) {
-        // Repaints the table to reflect the new focused state
-        repaint();
-    }
-
-
     /////////////////////////////////
     // ActivePanelListener methods //
     /////////////////////////////////
@@ -1481,6 +1476,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // instead of a custom header renderer. These indicators change when the active table has changed. 
         if(usesTableHeaderRenderingProperties())
             setTableHeaderRenderingProperties();
+        
+        if(isActiveTable)
+        	focusGained();
+        else
+        	focusLost();
     }
 
 
