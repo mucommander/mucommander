@@ -50,7 +50,6 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> {
 	private MainFrame mainFrame;
 	private FolderPanel folderPanel;
 	
-	private FileTableTab previousTab;
 	
 	public FileTableTabbedPane(MainFrame mainFrame, FolderPanel folderPanel, JComponent fileTableComponent) {
 		this.fileTableComponent = fileTableComponent;
