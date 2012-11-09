@@ -32,7 +32,7 @@ public interface TabsDisplayFactory<T extends Tab> {
 	 * @param tabs - collection of the tabs
 	 * @return tabs display for more than one tab
 	 */
-	TabsWithHeaderDisplay<T> createMultipleTabsDisplay(TabsCollection<T> tabs);
+	TabsWithHeaderDisplay<T> createTabsWithHeadersDisplay(TabsCollection<T> tabs);
 	
 	/**
 	 * Create tabs display for a single tab
@@ -40,5 +40,5 @@ public interface TabsDisplayFactory<T extends Tab> {
 	 * @param tabs - collection of the tabs
 	 * @return tabs display for a single tab
 	 */
-	TabWithoutHeaderDisplay<T> createSingleTabsDisplay(TabsCollection<T> tabs);
+	TabWithoutHeaderDisplay<T> createTabWithoutHeaderDisplay(TabsCollection<T> tabs);
 }

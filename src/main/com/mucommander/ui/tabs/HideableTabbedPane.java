@@ -205,12 +205,12 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * Private Methods
 	 ******************/
 	
-	private void switchToMultipleTabs() {
-		setTabsDisplay(tabsDisplayFactory.createMultipleTabsDisplay(tabs));
+	private void switchToTabsWithHeaders() {
+		setTabsDisplay(tabsDisplayFactory.createTabsWithHeadersDisplay(tabs));
 	}
 	
-	private void switchToSingleTab() {
-		setTabsDisplay(tabsDisplayFactory.createSingleTabsDisplay(tabs));
+	private void switchToTabWithoutHeader() {
+		setTabsDisplay(tabsDisplayFactory.createTabWithoutHeaderDisplay(tabs));
 	}
 	
 	private void setTabsDisplay(TabsDisplay<T> display) {
@@ -251,16 +251,16 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		switch (nbTabs) {
 		case 2:
 			if (display.getDisplayKind() == DisplayKind.WithoutTabHeaders)
-				switchToMultipleTabs();
+				switchToTabsWithHeaders();
 			
 			break;
 		case 1:
 			boolean alwaysShowSingleTabHeader = MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER); 
 			
 			if (alwaysShowSingleTabHeader)
-				switchToMultipleTabs();
+				switchToTabsWithHeaders();
 			else
-				switchToSingleTab();
+				switchToTabWithoutHeader();
 			
 			break;
 		default:
@@ -277,7 +277,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 			boolean alwaysShowSingleTabHeader = MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER);
 			
 			if (!alwaysShowSingleTabHeader)
-				switchToSingleTab();
+				switchToTabWithoutHeader();
 		}
 	}
 	

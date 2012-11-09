@@ -34,29 +34,29 @@ import javax.swing.event.ChangeListener;
 public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> implements TabsChangeListener, ChangeListener {
 	
 	private TabsCollection<T> tabs;
-	private TabbedPane<T> pane;
+	private TabbedPane<T> tabbedpane;
 	
 	public TabsWithHeaderDisplay(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
 		super(tabbedpane, tabs, DisplayKind.WithTabHeaders);
 		
 		this.tabs = tabs;
-		this.pane = tabbedpane;
+		this.tabbedpane = tabbedpane;
 		
 		int index = 0;
 		for (T tab : tabs)
 			tabbedpane.add(tab, index++);
 		
 		tabs.addTabsListener(this);
-		pane.addChangeListener(this);
+		tabbedpane.addChangeListener(this);
 	}
 
 	@Override
 	public int getSelectedTabIndex() {
-		return pane.getSelectedIndex();
+		return tabbedpane.getSelectedIndex();
 	}
 	
 	public void removeTab(int index) {
-		pane.remove(index);
+		tabbedpane.remove(index);
 	}
 	
 	/************************************
@@ -96,33 +96,33 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 
 	@Override
 	public void add(T tab, int index) {
-		pane.add(tab, index);
+		tabbedpane.add(tab, index);
 	}
 
 	@Override
 	public void update(T tab, int index) {
-		pane.update(tab, index);
+		tabbedpane.update(tab, index);
 	}
 
 	@Override
 	public void show(T t) {
-		pane.show(t);		
+		tabbedpane.show(t);		
 	}
 
 	@Override
 	public void destroy() {
 		tabs.removeTabsListener(this);
-		pane.removeChangeListener(this);
+		tabbedpane.removeChangeListener(this);
 	}
 	
 	@Override
 	public void setSelectedTabIndex(int index) {
-		pane.setSelectedIndex(index);
+		tabbedpane.setSelectedIndex(index);
 	}
 
 	@Override
 	public void requestFocus() {
-		pane.requestFocusInWindow();
+		tabbedpane.requestFocusInWindow();
 	}
 
 	@Override
@@ -187,6 +187,6 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 
 	@Override
 	public void removeTab(Component header) {
-		tabs.remove(pane.indexOfTabComponent(header));
+		tabs.remove(tabbedpane.indexOfTabComponent(header));
 	}
 }

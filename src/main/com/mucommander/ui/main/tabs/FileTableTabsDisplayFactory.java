@@ -44,11 +44,11 @@ public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTable
 	 * TabsDisplayFactory Implementation
 	 ************************************/
 	
-	public TabsWithHeaderDisplay<FileTableTab> createMultipleTabsDisplay(TabsCollection<FileTableTab> tabs) {
+	public TabsWithHeaderDisplay<FileTableTab> createTabsWithHeadersDisplay(TabsCollection<FileTableTab> tabs) {
 		return new TabsWithHeaderDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
 	}
 
-	public TabWithoutHeaderDisplay<FileTableTab> createSingleTabsDisplay(TabsCollection<FileTableTab> tabs) {
+	public TabWithoutHeaderDisplay<FileTableTab> createTabWithoutHeaderDisplay(TabsCollection<FileTableTab> tabs) {
 		return new TabWithoutHeaderDisplay<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
 	}
 }
