@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.core.LocationChanger.ChangeFolderThread;
@@ -68,7 +69,15 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 				if (selectedTabIndex != -1) {
 					if (DesktopManager.isRightMouseButton(e)) {
 						setSelectedIndex(selectedTabIndex);
-						new FileTableTabPopupMenu(FileTableTabbedPane.this.mainFrame).show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y);
+						
+						// Open the popup menu only after all swing events are finished, to ensure that when the popup menu is shown
+						// and asks for the currently selected tab in the active panel, it'll get the right one
+						SwingUtilities.invokeLater(new Runnable() {
+							
+							public void run() {
+								new FileTableTabPopupMenu(FileTableTabbedPane.this.mainFrame).show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y);	
+							}
+						});
 					}
 				}
 			}
@@ -199,11 +208,9 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	// FocusListener implementation //
 	//////////////////////////////////
 	
-	@Override
 	public void focusGained(FocusEvent e) {
 		folderPanel.getTabs().requestFocus();
 	}
 
-	@Override
 	public void focusLost(FocusEvent e) { }
 }
