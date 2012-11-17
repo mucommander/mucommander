@@ -37,7 +37,7 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 	private TabbedPane<T> tabbedpane;
 	
 	public TabsWithHeaderDisplay(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
-		super(tabbedpane, tabs, DisplayKind.WithTabHeaders);
+		super(tabbedpane, tabs);
 		
 		this.tabs = tabs;
 		this.tabbedpane = tabbedpane;

@@ -30,29 +30,16 @@ import javax.swing.JComponent;
 */
 abstract class TabsDisplay<T extends Tab> extends JComponent {
 	
-	enum DisplayKind {
-		WithTabHeaders,
-		WithoutTabHeaders
-	}
-	
 	/** Collection of the displayed tabs */
 	private TabsCollection<T> tabs;
 	
-	/** Indicates whether to display tabs headers or not */
-	private DisplayKind displayKind;
-	
-	public TabsDisplay(JComponent component, TabsCollection<T> tabs, DisplayKind displayKind) {
+	public TabsDisplay(JComponent component, TabsCollection<T> tabs) {
 		this.tabs = tabs;
-		this.displayKind = displayKind;
 		
 		setLayout(new BorderLayout());
 		add(component, BorderLayout.CENTER);
 	}
 	
-	DisplayKind getDisplayKind() {
-		return displayKind;
-	}
-
 	/*************** 
 	 * Tabs Actions
 	 ***************/

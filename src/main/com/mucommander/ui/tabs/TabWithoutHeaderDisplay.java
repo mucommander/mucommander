@@ -33,7 +33,7 @@ public class TabWithoutHeaderDisplay<T extends Tab> extends TabsDisplay<T> {
 	private JComponent component;
 	
 	public TabWithoutHeaderDisplay(TabsCollection<T> tabs, JComponent component) {
-		super(component, tabs, DisplayKind.WithoutTabHeaders);
+		super(component, tabs);
 		
 		this.component = component;
 	}

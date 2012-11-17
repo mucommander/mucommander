@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.ui.tabs.TabsDisplay.DisplayKind;
 
 /**
  * This component acts like a tabbedpane in which multiple tabs are presented in a JTabbedPane layout 
@@ -250,8 +249,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		
 		switch (nbTabs) {
 		case 2:
-			if (display.getDisplayKind() == DisplayKind.WithoutTabHeaders)
-				switchToTabsWithHeaders();
+			switchToTabsWithHeaders();
 			
 			break;
 		case 1:

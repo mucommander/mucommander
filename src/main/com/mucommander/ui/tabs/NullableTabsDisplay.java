@@ -30,7 +30,7 @@ import javax.swing.JLabel;
 class NullableTabsDisplay<T extends Tab> extends TabsDisplay<T> {
 
 	public NullableTabsDisplay() {
-		super(new JLabel(), null, null);
+		super(new JLabel(), null);
 	}
 
 	@Override
