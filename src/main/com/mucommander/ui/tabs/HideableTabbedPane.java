@@ -21,12 +21,15 @@ package com.mucommander.ui.tabs;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.Iterator;
+import java.util.prefs.PreferenceChangeEvent;
 
 import javax.swing.JComponent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -102,6 +105,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * @param index of the tab to be selected
 	 */
 	public void selectTab(int index) {
+		System.out.println("selecting " + index);
 		tabsViewer.setSelectedTabIndex(index);
 	}
 	
@@ -165,7 +169,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * Remove current displayed tab
 	 */
 	protected T removeTab() {
-		return tabsViewer.removeCurrentTab();
+		return tabsCollection.remove(getSelectedIndex());
 	}
 	
 	/**
@@ -205,15 +209,18 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 ******************/
 	
 	private void switchToTabsWithHeaders() {
-		setTabsViewer(tabsDisplayFactory.createTabsWithHeadersDisplay(tabsCollection));
+		int p = tabsViewer.getSelectedTabIndex();
+		this.tabsViewer.destroy();
+		TabsWithHeaderViewer<T> viewer = tabsDisplayFactory.createTabsWithHeadersDisplay(tabsCollection);
+		setTabsViewer(viewer);
 	}
 	
 	private void switchToTabWithoutHeader() {
+		this.tabsViewer.destroy();
 		setTabsViewer(tabsDisplayFactory.createTabWithoutHeaderDisplay(tabsCollection));
 	}
 	
 	private void setTabsViewer(TabsViewer<T> tabsViewer) {
-		this.tabsViewer.destroy();
 		this.tabsViewer = tabsViewer;
 		
 		removeAll();
@@ -238,48 +245,46 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		return tabsCollection.get(index);
 	}
 	
-	
-	/************************************
-	 * TabsChangeListener Implementation
-	 ************************************/
-
-	public void tabAdded(int index) {
-		// The number of tabs including the one that was just been added
+	protected boolean refreshViewer() {
 		int nbTabs = tabsCollection.count();
 		
 		switch (nbTabs) {
 		case 2:
 			switchToTabsWithHeaders();
 			
-			break;
+			return true;
 		case 1:
-			boolean alwaysShowSingleTabHeader = MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER); 
-			
-			if (alwaysShowSingleTabHeader)
+			if (showSingleTabHeader())
 				switchToTabsWithHeaders();
 			else
 				switchToTabWithoutHeader();
 			
-			break;
+			return true;
 		default:
-			tabsViewer.add(tabsCollection.get(index), index);
+			return false;
 		}
 	}
 
+	protected boolean showSingleTabHeader() {
+		return MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER);
+	}
+	
+	/************************************
+	 * TabsChangeListener Implementation
+	 ************************************/
+
+	public void tabAdded(int index) {
+		if (!refreshViewer())
+			tabsViewer.add(tabsCollection.get(index), index);
+	}
+
 	public void tabRemoved(int index) {
-		// The number of tabs without the one that was just been removed
-		int nbTabs = tabsCollection.count();
-		
-		// TODO: decide what to do in case nbTabs == 0
-		
-		if (nbTabs == 1) {
-			boolean alwaysShowSingleTabHeader = MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER);
-			
-			if (!alwaysShowSingleTabHeader)
-				switchToTabWithoutHeader();
-		}
-		else
+		int previouslySelectedIndex = tabsViewer.getSelectedTabIndex();
+
+		if (!refreshViewer())
 			tabsViewer.removeTab(index);
+		else
+			tabsViewer.setSelectedTabIndex(previouslySelectedIndex > 0 ? previouslySelectedIndex-1 : 0);
 	}
 	
 	public void tabUpdated(int index) {

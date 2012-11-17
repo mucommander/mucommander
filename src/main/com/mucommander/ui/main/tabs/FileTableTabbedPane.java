@@ -52,12 +52,14 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	
 	private MainFrame mainFrame;
 	private FolderPanel folderPanel;
+	private FileTableTabHeaderFactory headersFactory;
 	
 
-	public FileTableTabbedPane(MainFrame mainFrame, FolderPanel folderPanel, JComponent fileTableComponent) {
+	public FileTableTabbedPane(MainFrame mainFrame, FolderPanel folderPanel, JComponent fileTableComponent, FileTableTabHeaderFactory headersFactory) {
 		this.fileTableComponent = fileTableComponent;
 		this.mainFrame = mainFrame;
 		this.folderPanel = folderPanel;
+		this.headersFactory = headersFactory;
 
 		setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
@@ -128,48 +130,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	public void add(FileTableTab tab, int index) {
 		add(getTabCount() == 0 ? fileTableComponent : new JLabel(), index);
 
-		setTitleAt(index, tab.getLocation().getName());
-		setToolTipTextAt(index, tab.getLocation().getAbsolutePath());
-	}
-	
-	public void setLockedAt(int index, boolean lock) {
-		if (JavaVersions.JAVA_1_5.isCurrentOrLower()) {
-//			super.setTitleAt(index, title);
-		}
-		else {
-			FileTableTabHeader header = getTabHeader(index);
-			if (header == null) {
-				header = new FileTableTabHeader(folderPanel);
-				setTabHeader(index, header);
-			}
-				
-			header.setLocked(lock);
-		}
-	}
-	
-	@Override
-	public void setTitleAt(int index, String title) {
-		if (JavaVersions.JAVA_1_5.isCurrentOrLower())
-			super.setTitleAt(index, title);
-		else {
-			FileTableTabHeader header = getTabHeader(index);
-			if (header == null) {
-				header = new FileTableTabHeader(folderPanel);
-				setTabHeader(index, header);
-			}
-				
-			header.setTitle(title);
-		}
-	}
-	
-	@Override
-	public String getTitleAt(int index) {
-		if (JavaVersions.JAVA_1_5.isCurrentOrLower())
-			return super.getTitleAt(index);
-		else {
-			FileTableTabHeader header = getTabHeader(index);
-			return header!=null ? header.getTitle() : "";
-		}
+		update(tab, index);
 	}
 	
 	@Override
@@ -183,8 +144,14 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 
 	@Override
 	public void update(FileTableTab tab, int index) {
-		setLockedAt(index, tab.isLocked());
-		setTitleAt(index, tab.getLocation().getName());
+		if (JavaVersions.JAVA_1_5.isCurrentOrLower()) {
+			/*setLockedAt(index, tab.isLocked());
+			setTitleAt(index, tab.getLocation().getName());	*/
+		}
+		else {
+			setTabHeader(index, headersFactory.create(tab));
+		}
+		
 		setToolTipTextAt(index, tab.getLocation().getAbsolutePath());
 		
 		doLayout();

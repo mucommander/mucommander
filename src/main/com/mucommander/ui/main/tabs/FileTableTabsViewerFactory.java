@@ -45,7 +45,8 @@ public class FileTableTabsViewerFactory implements TabsViewerFactory<FileTableTa
 	 ************************************/
 	
 	public TabsWithHeaderViewer<FileTableTab> createTabsWithHeadersDisplay(TabsCollection<FileTableTab> tabs) {
-		return new TabsWithHeaderViewer<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
+		FileTableTabHeaderFactory headersFactory = tabs.count() == 1 ? new NotClosableFileTableTabHeaderFactory(folderPanel) : new DefaultFileTableTabHeaderFactory(folderPanel);
+		return new TabsWithHeaderViewer<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent(), headersFactory));
 	}
 
 	public TabWithoutHeaderViewer<FileTableTab> createTabWithoutHeaderDisplay(TabsCollection<FileTableTab> tabs) {

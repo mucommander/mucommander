@@ -100,9 +100,10 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	 * 
 	 * @param index - the index of the tab to be removed
 	 */
-	public void remove(int index) {
-		collection.remove(index);
+	public T remove(int index) {
+		T tab = collection.remove(index);
 		fireTabRemoved(index);
+		return tab;
 	}
 	
 	/**

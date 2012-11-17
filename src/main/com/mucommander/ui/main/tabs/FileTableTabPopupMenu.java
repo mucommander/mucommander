@@ -52,7 +52,9 @@ class FileTableTabPopupMenu extends MuActionsPopupMenu {
 			
 		add(new Separator());
 		
-		addAction(MoveTabToOtherPanelAction.Descriptor.ACTION_ID);
+		if (!currentTab.isLocked())
+			addAction(MoveTabToOtherPanelAction.Descriptor.ACTION_ID);
+		
 		addAction(CloneTabToOtherPanelAction.Descriptor.ACTION_ID);
 	}
 }

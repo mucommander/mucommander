@@ -49,7 +49,7 @@ class FileTableTabHeader extends JPanel implements ActionListener {
     private static final String LOCKED_ICON_NAME = "lock.png";
     private static final int LOCKED_ICON_SIZE = 12;
 
-    public FileTableTabHeader(FolderPanel folderPanel) {
+    public FileTableTabHeader(FolderPanel folderPanel, boolean closable, FileTableTab tab) {
         super(new GridBagLayout());
 
         this.folderPanel = folderPanel;
@@ -77,37 +77,32 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         gbc.gridx = 1;
         add(label, gbc);
 
-        // Close tab button
-        JButton closeButton = new CloseButton();
-        closeButton.addActionListener(this);
-        gbc.weightx = 1;    // required otherwise extra width may be redistributed around the button
-        gbc.gridx = 2;
-        add(closeButton, gbc);
+        if (closable && !tab.isLocked()) {
+        	// Close tab button
+        	JButton closeButton = new CloseButton();
+        	closeButton.addActionListener(this);
+        	gbc.weightx = 1;    // required otherwise extra width may be redistributed around the button
+        	gbc.gridx = 2;
+        	add(closeButton, gbc);
+        }
+        
+        setText(tab.getLocation().getName());
+        
+        lockedIcon.setVisible(tab.isLocked());
     }
 
-    public void setTitle(String title) {
+    private void setText(String text) {
     	JLabel label = (JLabel)getComponent(1); 
 
         // Truncate the title if it is too long.
         // Note: 31 is the maximum title length displayed in tabs by Firefox and Safari at the time of this writing
-        if(title.length()>31)
-            title = title.substring(0, 32) + "…";
+        if(text.length()>31)
+            text = text.substring(0, 32) + "…";
 
-    	label.setText(title);
+    	label.setText(text);
 
     	validate();
     }
-    
-    public String getTitle() {
-    	JLabel label = (JLabel)getComponent(1); 
-    	return label.getText();
-    }
-
-	public void setLocked(boolean lock) {
-		lockedIcon.setVisible(lock);
-		
-		validate();
-	}
     
     /********************************
 	 * ActionListener Implementation

@@ -19,6 +19,9 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.LocationChanger.ChangeFolderThread;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -62,7 +65,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 
 		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolder(getTab(index).getLocation(), null, true);
 		try {
-			if (changeFolderThread != null)
+			if (changeFolderThread != null && changeFolderThread.isAlive())
 				changeFolderThread.join();
 		} catch (InterruptedException e) {
 			// We're screwed - no valid location to display
@@ -98,21 +101,23 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	}
 	
 	@Override
-	public void tabRemoved(int index) {
+	protected boolean showSingleTabHeader() {
 		int nbTabs = getTabs().count();
-		
-		boolean actNormally = true;
 		
 		if (nbTabs == 1) {
 			FileTableTab tab = getTab(0);
 			
 			// If there's just single tab that is locked don't remove his header
 			if (tab.isLocked())
-				actNormally = false;
+				return true;
 		}
 		
-		if (actNormally)
-			super.tabRemoved(index);
+		return super.showSingleTabHeader();
+	}
+	
+	@Override
+	protected FileTableTab removeTab() {
+		return !getCurrentTab().isLocked() ? super.removeTab() : null;
 	}
 	
 	/********************

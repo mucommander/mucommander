@@ -58,22 +58,6 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> implement
 		tabbedpane.remove(index);
 	}
 	
-	/************************************
-	 * TabsChangeListener Implementation
-	 ************************************/
-
-	public void tabUpdated(int index) {
-		update(tabsCollection.get(index), index);
-	}
-
-	public void tabAdded(int index) {
-		add(tabsCollection.get(index), index);
-	}
-
-	public void tabRemoved(int index) {
-		removeTab(index);
-	}
-	
 	/********************************
 	 * ChangeListener Implementation
 	 ********************************/
