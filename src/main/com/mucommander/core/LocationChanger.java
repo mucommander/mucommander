@@ -292,7 +292,7 @@ public class LocationChanger {
         
         folderPanel.setCurrentFolderInTheUI(folder, children, fileToSelect, changeLockedTab);
 
-        folderPanel.getTabs().getCurrentTab().getLocationHistory().addToHistory(folder);
+//        folderPanel.getTabs().getCurrentTab().getLocationHistory().addToHistory(folder);
         
         // Notify listeners that the location has changed
         locationManager.fireLocationChanged(folder.getURL());

@@ -393,7 +393,14 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
     
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
-    	return locationChanger.tryChangeCurrentFolder(folder, false);
+    	FileTableTab currentTab = tabs.getCurrentTab();
+    	
+    	if (currentTab.isLocked()) {
+    		tabs.add(folder);
+    		return null;
+    	}
+    	else
+    		return locationChanger.tryChangeCurrentFolder(folder, false);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
@@ -441,18 +448,13 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * the currently selected tab although it's locked (used when switching tabs)
      */
     public void setCurrentFolderInTheUI(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
-    	FileTableTab currentTab = tabs.getCurrentTab();
+    	
 
-    	if (!changeLockedTab && currentTab.isLocked()) {
-    		tabs.add(folder);
-    	}
-    	else {
     		// Change the current folder in the table and select the given file if not null
     		if(fileToSelect == null)
     			fileTable.setCurrentFolder(folder, children);
     		else
     			fileTable.setCurrentFolder(folder, children, fileToSelect);
-    	}
     }
 
     ////////////////////////

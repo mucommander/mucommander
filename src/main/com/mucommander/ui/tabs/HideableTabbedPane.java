@@ -278,6 +278,8 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	public void tabAdded(int index) {
 		if (!refreshViewer())
 			tabsViewer.add(tabsCollection.get(index), index);
+		
+		tabsViewer.setSelectedTabIndex(index);
 	}
 
 	public void tabRemoved(int index) {
