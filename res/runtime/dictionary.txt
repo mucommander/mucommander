@@ -15650,7 +15650,7 @@ prefs_dialog.follow_symlinks_when_cd:TR:Geçerli dizini değiştirirken sembolik
 prefs_dialog.follow_symlinks_when_cd:CA:Seguir els enllaços simbòlics en canviar el directori actual
 # Translation missing (KO)
 
-prefs_dialog.show_single_tab_header:EN:Always show single tab header
+prefs_dialog.show_tab_header:EN:Always show tab header
 # Translation missing (New!)
 
 # Appearance tab
