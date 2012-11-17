@@ -90,7 +90,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     private PrefCheckBox followSymlinksCheckBox;
     
     // Always show single tab's header ?
-    private PrefCheckBox showSingleTabHeaderCheckBox;
+    private PrefCheckBox showTabHeaderCheckBox;
 
     public FoldersPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.folders_tab"));
@@ -240,14 +240,14 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
                                                                             MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS));
         northPanel.add(followSymlinksCheckBox);
 
-        showSingleTabHeaderCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_single_tab_header")) {
+        showTabHeaderCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_tab_header")) {
 			public boolean hasChanged() {
-				return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER); 
+				return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_TAB_HEADER, MuPreferences.DEFAULT_SHOW_TAB_HEADER); 
 			}
         };
-        showSingleTabHeaderCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER,
-                                                                            MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER));
-        northPanel.add(showSingleTabHeaderCheckBox);
+        showTabHeaderCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_TAB_HEADER,
+                                                                            MuPreferences.DEFAULT_SHOW_TAB_HEADER));
+        northPanel.add(showTabHeaderCheckBox);
         
         add(northPanel, BorderLayout.NORTH);
         
@@ -258,7 +258,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         showHiddenFilesCheckBox.addDialogListener(parent);
         compactSizeCheckBox.addDialogListener(parent);
         followSymlinksCheckBox.addDialogListener(parent);
-        showSingleTabHeaderCheckBox.addDialogListener(parent);
+        showTabHeaderCheckBox.addDialogListener(parent);
         if(OsFamilies.MAC_OS_X.isCurrent()) {
         	showDSStoreFilesCheckBox.addDialogListener(parent);
         	showSystemFoldersCheckBox.addDialogListener(parent);
@@ -289,7 +289,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 
     	MuConfigurations.getPreferences().setVariable(MuPreference.CD_FOLLOWS_SYMLINKS, followSymlinksCheckBox.isSelected());
     	
-    	MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, showSingleTabHeaderCheckBox.isSelected());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_TAB_HEADER, showTabHeaderCheckBox.isSelected());
 
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
         boolean refreshFolders = MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());

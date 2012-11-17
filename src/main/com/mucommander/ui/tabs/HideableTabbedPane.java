@@ -268,7 +268,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	}
 
 	protected boolean showSingleTabHeader() {
-		return MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SINGLE_TAB_HEADER, MuPreferences.DEFAULT_SHOW_SINGLE_TAB_HEADER);
+		return MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_TAB_HEADER, MuPreferences.DEFAULT_SHOW_TAB_HEADER);
 	}
 	
 	/************************************
