@@ -67,4 +67,7 @@ class NullableTabsDisplay<T extends Tab> extends TabsDisplay<T> {
 
 	@Override
 	public void removeDuplicateTabs() { }
+
+	@Override
+	public void removeTab(int index) { }
 }

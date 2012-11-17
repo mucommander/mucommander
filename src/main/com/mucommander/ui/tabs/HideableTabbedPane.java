@@ -262,6 +262,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 			
 			break;
 		default:
+			display.add(tabs.get(index), index);
 		}
 	}
 
@@ -277,7 +278,11 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 			if (!alwaysShowSingleTabHeader)
 				switchToTabWithoutHeader();
 		}
+		else
+			display.removeTab(index);
 	}
 	
-	public void tabUpdated(int index) { }
+	public void tabUpdated(int index) {
+		display.update(tabs.get(index), index);
+	}
 }

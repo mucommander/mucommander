@@ -31,7 +31,7 @@ import javax.swing.event.ChangeListener;
 * 
 * @author Arik Hadas
 */
-public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> implements TabsChangeListener, ChangeListener {
+public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> implements ChangeListener {
 	
 	private TabsCollection<T> tabs;
 	private TabbedPane<T> tabbedpane;
@@ -46,7 +46,6 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 		for (T tab : tabs)
 			tabbedpane.add(tab, index++);
 		
-		tabs.addTabsListener(this);
 		tabbedpane.addChangeListener(this);
 	}
 
@@ -111,7 +110,6 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 
 	@Override
 	public void destroy() {
-		tabs.removeTabsListener(this);
 		tabbedpane.removeChangeListener(this);
 	}
 	

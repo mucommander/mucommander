@@ -66,6 +66,8 @@ abstract class TabsDisplay<T extends Tab> extends JComponent {
 
 	public abstract void removeTab(Component header);
 	
+	public abstract void removeTab(int index);
+	
 	public void nextTab() {
 		setSelectedTabIndex((getSelectedTabIndex()+1) % tabs.count());
 	}
