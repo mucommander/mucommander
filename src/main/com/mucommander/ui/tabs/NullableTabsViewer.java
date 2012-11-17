@@ -27,9 +27,9 @@ import javax.swing.JLabel;
  * 
  * @author Arik Hadas
  */
-class NullableTabsDisplay<T extends Tab> extends TabsDisplay<T> {
+class NullableTabsViewer<T extends Tab> extends TabsViewer<T> {
 
-	public NullableTabsDisplay() {
+	public NullableTabsViewer() {
 		super(new JLabel(), null);
 	}
 

@@ -28,12 +28,12 @@ import javax.swing.JComponent;
 * 
 * @author Arik Hadas
 */
-abstract class TabsDisplay<T extends Tab> extends JComponent {
+abstract class TabsViewer<T extends Tab> extends JComponent {
 	
 	/** Collection of the displayed tabs */
 	private TabsCollection<T> tabs;
 	
-	public TabsDisplay(JComponent component, TabsCollection<T> tabs) {
+	public TabsViewer(JComponent component, TabsCollection<T> tabs) {
 		this.tabs = tabs;
 		
 		setLayout(new BorderLayout());

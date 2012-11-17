@@ -37,7 +37,7 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	private List<T> collection = new ArrayList<T>();
 	
 	/** Listeners that were registered to be notified when tabs are added/removed/updated */
-	private WeakHashMap<TabsChangeListener, ?> tabsListeners = new WeakHashMap<TabsChangeListener, Object>();
+	private WeakHashMap<TabsEventsListener, ?> tabsListeners = new WeakHashMap<TabsEventsListener, Object>();
 	
 	/**
 	 * Empty constructor
@@ -142,7 +142,7 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	 * 
 	 * @param listener - object that implements TabsChangeListener interface
 	 */
-	public synchronized void addTabsListener(TabsChangeListener listener) {
+	public synchronized void addTabsListener(TabsEventsListener listener) {
         tabsListeners.put(listener, null);
     }
 
@@ -151,7 +151,7 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	 * 
 	 * @param listener - object that implements TabsChangeListener interface
 	 */
-    public synchronized void removeTabsListener(TabsChangeListener listener) {
+    public synchronized void removeTabsListener(TabsEventsListener listener) {
     	tabsListeners.remove(listener);
     }
     
@@ -161,8 +161,8 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
      * @param index - the index of the added tab
      */
     public synchronized void fireTabAdded(int index) {
-    	Set<TabsChangeListener> listeners = new HashSet<TabsChangeListener>(tabsListeners.keySet());
-    	for(TabsChangeListener listener : listeners)
+    	Set<TabsEventsListener> listeners = new HashSet<TabsEventsListener>(tabsListeners.keySet());
+    	for(TabsEventsListener listener : listeners)
             listener.tabAdded(index);
     }
     
@@ -172,8 +172,8 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
      * @param index - the index in which the removed tab was located
      */
     public synchronized void fireTabRemoved(int index) {
-    	Set<TabsChangeListener> listeners = tabsListeners.keySet();
-        for(TabsChangeListener listener : listeners)
+    	Set<TabsEventsListener> listeners = tabsListeners.keySet();
+        for(TabsEventsListener listener : listeners)
             listener.tabRemoved(index);
     }
     
@@ -183,8 +183,8 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
      * @param index - the index of the updated tab
      */
     public synchronized void fireTabUpdated(int index) {
-    	Set<TabsChangeListener> listeners = tabsListeners.keySet();
-        for(TabsChangeListener listener : listeners)
+    	Set<TabsEventsListener> listeners = tabsListeners.keySet();
+        for(TabsEventsListener listener : listeners)
             listener.tabUpdated(index);
     }
     

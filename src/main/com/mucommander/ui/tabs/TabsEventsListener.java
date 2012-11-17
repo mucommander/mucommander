@@ -21,12 +21,12 @@ package com.mucommander.ui.tabs;
 /**
 * Interface to be implemented by classes that wish to be notified of tabs changes on a particular
 * HideableTabbedPane. Those classes need to be registered to receive those events, this can be done by calling
-* {@link TabsCollection#addTabsListener(TabsChangeListener)}.
+* {@link TabsCollection#addTabsListener(TabsEventsListener)}.
 *
 * @see com.mucommander.ui.tabs.TabsCollection
 * @author Arik Hadas
 */
-public interface TabsChangeListener {
+public interface TabsEventsListener {
 	
 	/**
 	 * This method is invoked when a tab was added.

@@ -31,15 +31,15 @@ import javax.swing.event.ChangeListener;
 * 
 * @author Arik Hadas
 */
-public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> implements ChangeListener {
+public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> implements ChangeListener {
 	
-	private TabsCollection<T> tabs;
+	private TabsCollection<T> tabsCollection;
 	private TabbedPane<T> tabbedpane;
 	
-	public TabsWithHeaderDisplay(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
+	public TabsWithHeaderViewer(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
 		super(tabbedpane, tabs);
 		
-		this.tabs = tabs;
+		this.tabsCollection = tabs;
 		this.tabbedpane = tabbedpane;
 		
 		int index = 0;
@@ -63,11 +63,11 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 	 ************************************/
 
 	public void tabUpdated(int index) {
-		update(tabs.get(index), index);
+		update(tabsCollection.get(index), index);
 	}
 
 	public void tabAdded(int index) {
-		add(tabs.get(index), index);
+		add(tabsCollection.get(index), index);
 	}
 
 	public void tabRemoved(int index) {
@@ -81,7 +81,7 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 	public void stateChanged(ChangeEvent e) {
 		int selectedIndex = getSelectedTabIndex();
 		if (selectedIndex != -1)
-			show(tabs.get(selectedIndex));
+			show(tabsCollection.get(selectedIndex));
 	}
 	
 	/**************
@@ -90,7 +90,7 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 	
 	@Override
 	public void add(T tab) {
-		add(tab, tabs.count());
+		add(tab, tabsCollection.count());
 	}
 
 	@Override
@@ -125,8 +125,8 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 
 	@Override
 	public T removeCurrentTab() {
-		T tab = tabs.get(getSelectedTabIndex());
-		tabs.remove(getSelectedTabIndex());
+		T tab = tabsCollection.get(getSelectedTabIndex());
+		tabsCollection.remove(getSelectedTabIndex());
 		return tab;
 	}
 
@@ -140,7 +140,7 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 		int selectedTabIndex = getSelectedTabIndex();
 		
 		// add all duplicated tabs to the duplicatedTab Set
-		Iterator<T> existingTabsIterator = tabs.iterator();
+		Iterator<T> existingTabsIterator = tabsCollection.iterator();
 		while (existingTabsIterator.hasNext()) {
 			T tab = existingTabsIterator.next();
 			if (!visitedTabs.add(tab))
@@ -149,25 +149,25 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 		
 		// remove all duplicated tabs which are identical to the selected tab without
 		// changing the tab selection
-		T selectedTab = tabs.get(selectedTabIndex);
+		T selectedTab = tabsCollection.get(selectedTabIndex);
 		if (duplicatedTabs.remove(selectedTab)) {
 			int removedTabsCount = 0;
-			int tabsCount = tabs.count();
+			int tabsCount = tabsCollection.count();
 			for (int i=0; i<tabsCount; ++i) {
 				if (i == selectedTabIndex) // do not remove the selected tab
 					continue;
-				if (selectedTab.equals(tabs.get(i-removedTabsCount)))
-					tabs.remove(i-removedTabsCount++);
+				if (selectedTab.equals(tabsCollection.get(i-removedTabsCount)))
+					tabsCollection.remove(i-removedTabsCount++);
 			}
 		}
 		
 		// remove all other duplicated tabs
-		for (int i = 0; i < tabs.count(); ++i) {
-			T currentTab = tabs.get(i);
+		for (int i = 0; i < tabsCollection.count(); ++i) {
+			T currentTab = tabsCollection.get(i);
 			if (duplicatedTabs.remove(currentTab)) {
-				for (int j = i + 1; j < tabs.count(); ++j)
-					if (currentTab.equals(tabs.get(j)))
-						tabs.remove(j--);
+				for (int j = i + 1; j < tabsCollection.count(); ++j)
+					if (currentTab.equals(tabsCollection.get(j)))
+						tabsCollection.remove(j--);
 			}
 		}
 	}
@@ -177,14 +177,14 @@ public class TabsWithHeaderDisplay<T extends Tab> extends TabsDisplay<T> impleme
 		int selectedTabIndex = getSelectedTabIndex();
 
 		for (int i=0; i<selectedTabIndex; ++i)
-			tabs.remove(0);
+			tabsCollection.remove(0);
 
-		for(int i=tabs.count()-1; i>0; --i)
-			tabs.remove(1);		
+		for(int i=tabsCollection.count()-1; i>0; --i)
+			tabsCollection.remove(1);		
 	}
 
 	@Override
 	public void removeTab(Component header) {
-		tabs.remove(tabbedpane.indexOfTabComponent(header));
+		tabsCollection.remove(tabbedpane.indexOfTabComponent(header));
 	}
 }

@@ -23,7 +23,7 @@ package com.mucommander.ui.tabs;
 * 
 * @author Arik Hadas
 */
-public interface TabsDisplayFactory<T extends Tab> {
+public interface TabsViewerFactory<T extends Tab> {
 
 	/**
 	 * Create tabs display for more than one tab
@@ -32,7 +32,7 @@ public interface TabsDisplayFactory<T extends Tab> {
 	 * @param tabs - collection of the tabs
 	 * @return tabs display for more than one tab
 	 */
-	TabsWithHeaderDisplay<T> createTabsWithHeadersDisplay(TabsCollection<T> tabs);
+	TabsWithHeaderViewer<T> createTabsWithHeadersDisplay(TabsCollection<T> tabs);
 	
 	/**
 	 * Create tabs display for a single tab
@@ -40,5 +40,5 @@ public interface TabsDisplayFactory<T extends Tab> {
 	 * @param tabs - collection of the tabs
 	 * @return tabs display for a single tab
 	 */
-	TabWithoutHeaderDisplay<T> createTabWithoutHeaderDisplay(TabsCollection<T> tabs);
+	TabWithoutHeaderViewer<T> createTabWithoutHeaderDisplay(TabsCollection<T> tabs);
 }

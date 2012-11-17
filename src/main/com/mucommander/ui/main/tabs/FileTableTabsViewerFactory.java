@@ -20,22 +20,22 @@ package com.mucommander.ui.main.tabs;
 
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.tabs.TabWithoutHeaderDisplay;
+import com.mucommander.ui.tabs.TabWithoutHeaderViewer;
 import com.mucommander.ui.tabs.TabsCollection;
-import com.mucommander.ui.tabs.TabsDisplayFactory;
-import com.mucommander.ui.tabs.TabsWithHeaderDisplay;
+import com.mucommander.ui.tabs.TabsViewerFactory;
+import com.mucommander.ui.tabs.TabsWithHeaderViewer;
 
 /**
 * Factory that creates displays for file table tabs
 * 
 * @author Arik Hadas
 */
-public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTableTab> {
+public class FileTableTabsViewerFactory implements TabsViewerFactory<FileTableTab> {
 
 	private FolderPanel folderPanel;
 	private MainFrame mainFrame;
 	
-	public FileTableTabsDisplayFactory(MainFrame mainFrame, FolderPanel folderPanel) {
+	public FileTableTabsViewerFactory(MainFrame mainFrame, FolderPanel folderPanel) {
 		this.folderPanel = folderPanel;
 		this.mainFrame = mainFrame;
 	}
@@ -44,11 +44,11 @@ public class FileTableTabsDisplayFactory implements TabsDisplayFactory<FileTable
 	 * TabsDisplayFactory Implementation
 	 ************************************/
 	
-	public TabsWithHeaderDisplay<FileTableTab> createTabsWithHeadersDisplay(TabsCollection<FileTableTab> tabs) {
-		return new TabsWithHeaderDisplay<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
+	public TabsWithHeaderViewer<FileTableTab> createTabsWithHeadersDisplay(TabsCollection<FileTableTab> tabs) {
+		return new TabsWithHeaderViewer<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent()));
 	}
 
-	public TabWithoutHeaderDisplay<FileTableTab> createTabWithoutHeaderDisplay(TabsCollection<FileTableTab> tabs) {
-		return new TabWithoutHeaderDisplay<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
+	public TabWithoutHeaderViewer<FileTableTab> createTabWithoutHeaderDisplay(TabsCollection<FileTableTab> tabs) {
+		return new TabWithoutHeaderViewer<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
 	}
 }

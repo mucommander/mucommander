@@ -27,12 +27,12 @@ import javax.swing.JComponent;
 * 
 * @author Arik Hadas
 */
-public class TabWithoutHeaderDisplay<T extends Tab> extends TabsDisplay<T> {
+public class TabWithoutHeaderViewer<T extends Tab> extends TabsViewer<T> {
 
 	/** The component to be displayed in the tab */
 	private JComponent component;
 	
-	public TabWithoutHeaderDisplay(TabsCollection<T> tabs, JComponent component) {
+	public TabWithoutHeaderViewer(TabsCollection<T> tabs, JComponent component) {
 		super(component, tabs);
 		
 		this.component = component;
