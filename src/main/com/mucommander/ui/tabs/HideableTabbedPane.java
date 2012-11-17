@@ -47,7 +47,7 @@ import com.mucommander.conf.MuPreferences;
  *  
  * @author Arik Hadas
  */
-public class HideableTabbedPane<T extends Tab> extends JComponent implements TabsEventListener {
+public class HideableTabbedPane<T extends Tab> extends JComponent implements TabsEventListener, ConfigurationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HideableTabbedPane.class);
 	
 	/* The tabs which are being displayed */
@@ -73,6 +73,8 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		tabsCollection = new TabsCollection<T>();
 		// Register for tabs changes
 		tabsCollection.addTabsListener(this);
+		
+		MuConfigurations.addPreferencesListener(this);
 	}
 
 	/**
@@ -289,5 +291,18 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	
 	public void tabUpdated(int index) {
 		tabsViewer.update(tabsCollection.get(index), index);
+	}
+
+	/***************************************
+	 * ConfigurationListener Implementation
+	 ***************************************/
+	
+	@Override
+	public void configurationChanged(ConfigurationEvent event) {
+		String var = event.getVariable();
+
+        // Update the button's icon if the system file icons policy has changed
+        if (var.equals(MuPreferences.SHOW_SINGLE_TAB_HEADER))
+            refreshViewer();
 	}
 }
