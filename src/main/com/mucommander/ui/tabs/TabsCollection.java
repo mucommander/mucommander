@@ -97,13 +97,19 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	
 	/**
 	 * Remove the tab in the given index
+	 * If there are less than two tabs in the collection, the tab
+	 * won't be removed in order to prevent a situation in which
+	 * we remain with no tabs at all
 	 * 
 	 * @param index - the index of the tab to be removed
 	 */
 	public T remove(int index) {
-		T tab = collection.remove(index);
-		fireTabRemoved(index);
-		return tab;
+		if (collection.size() > 1) {
+			T tab = collection.remove(index);
+			fireTabRemoved(index);
+			return tab;
+		}
+		return null;
 	}
 	
 	/**
