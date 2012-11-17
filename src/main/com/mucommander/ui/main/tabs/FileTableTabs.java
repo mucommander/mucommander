@@ -42,7 +42,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	private TabFactory<FileTableTab, AbstractFile> tabsFactory;
 	
 	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, AbstractFile[] initialFolders) {
-		super(new FileTableTabsDisplayFactory(mainFrame, folderPanel));
+		super(new FileTableTabsViewerFactory(mainFrame, folderPanel));
 		
 		this.folderPanel = folderPanel;
 		
