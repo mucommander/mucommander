@@ -44,7 +44,7 @@ import com.mucommander.conf.MuPreferences;
  *  
  * @author Arik Hadas
  */
-public class HideableTabbedPane<T extends Tab> extends JComponent implements TabsEventsListener {
+public class HideableTabbedPane<T extends Tab> extends JComponent implements TabsEventListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HideableTabbedPane.class);
 	
 	/* The tabs which are being displayed */
