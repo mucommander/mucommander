@@ -137,7 +137,8 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	public void setSelectedIndex(int index) {
 		// Allow tabs switching only when no-events-mode is disabled
 		if (!mainFrame.getNoEventsMode()) {
-			super.setSelectedIndex(index);
+
+		    super.setSelectedIndex(index);
 			requestFocusInWindow();
 		}
 	}
@@ -154,7 +155,12 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 		
 		setToolTipTextAt(index, tab.getLocation().getAbsolutePath());
 		
-		doLayout();
+		SwingUtilities.invokeLater(new Runnable() {
+
+			public void run() {
+			    doLayout();
+			}
+		});
 	}
 
 	@Override

@@ -46,7 +46,7 @@ Localization:
 - 
 
 Bug fixes:
-- 
+- Fix a deadlock which caused the application to freeze while switching tabs on MAC OS
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
