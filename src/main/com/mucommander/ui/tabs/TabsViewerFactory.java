@@ -19,26 +19,11 @@
 package com.mucommander.ui.tabs;
 
 /**
-* Factory that creates tabs displays.
+* Factory that creates tabs viewer.
 * 
 * @author Arik Hadas
 */
 public interface TabsViewerFactory<T extends Tab> {
 
-	/**
-	 * Create tabs display for more than one tab
-	 * The first tab will be selected
-	 * 
-	 * @param tabs - collection of the tabs
-	 * @return tabs display for more than one tab
-	 */
-	TabsWithHeaderViewer<T> createTabsWithHeadersDisplay(TabsCollection<T> tabs);
-	
-	/**
-	 * Create tabs display for a single tab
-	 * 
-	 * @param tabs - collection of the tabs
-	 * @return tabs display for a single tab
-	 */
-	TabWithoutHeaderViewer<T> createTabWithoutHeaderDisplay(TabsCollection<T> tabs);
+	TabsViewer<T> create(TabsCollection<T> tabs);
 }

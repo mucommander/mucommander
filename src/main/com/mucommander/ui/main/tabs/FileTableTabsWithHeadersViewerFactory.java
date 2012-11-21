@@ -20,36 +20,32 @@ package com.mucommander.ui.main.tabs;
 
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.tabs.TabWithoutHeaderViewer;
 import com.mucommander.ui.tabs.TabsCollection;
+import com.mucommander.ui.tabs.TabsViewer;
 import com.mucommander.ui.tabs.TabsViewerFactory;
 import com.mucommander.ui.tabs.TabsWithHeaderViewer;
 
 /**
-* Factory that creates displays for file table tabs
+* Factory that creates viewers presenting tabs with headers
 * 
 * @author Arik Hadas
 */
-public class FileTableTabsViewerFactory implements TabsViewerFactory<FileTableTab> {
+public class FileTableTabsWithHeadersViewerFactory implements TabsViewerFactory<FileTableTab> {
 
 	private FolderPanel folderPanel;
 	private MainFrame mainFrame;
 	
-	public FileTableTabsViewerFactory(MainFrame mainFrame, FolderPanel folderPanel) {
+	public FileTableTabsWithHeadersViewerFactory(MainFrame mainFrame, FolderPanel folderPanel) {
 		this.folderPanel = folderPanel;
 		this.mainFrame = mainFrame;
 	}
 
-	/************************************
-	 * TabsDisplayFactory Implementation
-	 ************************************/
+	/***********************************
+	 * TabsViewerFactory Implementation
+	 ***********************************/
 	
-	public TabsWithHeaderViewer<FileTableTab> createTabsWithHeadersDisplay(TabsCollection<FileTableTab> tabs) {
+	public TabsViewer<FileTableTab> create(TabsCollection<FileTableTab> tabs) {
 		FileTableTabHeaderFactory headersFactory = tabs.count() == 1 ? new NotClosableFileTableTabHeaderFactory(folderPanel) : new DefaultFileTableTabHeaderFactory(folderPanel);
 		return new TabsWithHeaderViewer<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent(), headersFactory));
-	}
-
-	public TabWithoutHeaderViewer<FileTableTab> createTabWithoutHeaderDisplay(TabsCollection<FileTableTab> tabs) {
-		return new TabWithoutHeaderViewer<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
 	}
 }

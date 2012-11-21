@@ -54,19 +54,21 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	/* The tabs display type (with/without tabs headers)
 	 * It is initialize as nullable so that it can be destroyed when it's replaced for the first time (see @{link tabAdded()})*/
 	private TabsViewer<T> tabsViewer = new NullableTabsViewer<T>();
-	/* The factory that will be used to create the display type */	
-	private TabsViewerFactory<T> tabsDisplayFactory;
+	/* The factory that will be used to create the viewers for tabs with no headers */	
+	private TabsViewerFactory<T> tabsWithoutHeadersViewerFactory;
+	/* The factory that will be used to create the viewers for tabs with headers */	
+	private TabsViewerFactory<T> tabsWithHeadersViewerFactory;
 	
 	/**
 	 * Constructor
 	 *  
 	 * @param tabsDisplayFactory - factory of tabs-display
 	 */
-	public HideableTabbedPane(TabsViewerFactory<T> tabsDisplayFactory) {
+	public HideableTabbedPane(TabsViewerFactory<T> tabsWithoutHeadersViewerFactory, TabsViewerFactory<T> tabsWithHeadersViewerFactory) {
 		setLayout(new BorderLayout());
 
-		// Set the tabs display factory
-		this.tabsDisplayFactory = tabsDisplayFactory;
+		this.tabsWithoutHeadersViewerFactory = tabsWithoutHeadersViewerFactory;
+		this.tabsWithHeadersViewerFactory = tabsWithHeadersViewerFactory;
 		
 		// Initialize the tabs collection
 		tabsCollection = new TabsCollection<T>();
@@ -210,18 +212,16 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 ******************/
 	
 	private void switchToTabsWithHeaders() {
-		this.tabsViewer.destroy();
-		TabsWithHeaderViewer<T> viewer = tabsDisplayFactory.createTabsWithHeadersDisplay(tabsCollection);
-		setTabsViewer(viewer);
+		setTabsViewer(tabsWithHeadersViewerFactory);
 	}
 	
 	private void switchToTabWithoutHeader() {
-		this.tabsViewer.destroy();
-		setTabsViewer(tabsDisplayFactory.createTabWithoutHeaderDisplay(tabsCollection));
+		setTabsViewer(tabsWithoutHeadersViewerFactory);
 	}
 	
-	private void setTabsViewer(TabsViewer<T> tabsViewer) {
-		this.tabsViewer = tabsViewer;
+	private void setTabsViewer(TabsViewerFactory<T> tabsViewerFactory) {
+		this.tabsViewer.destroy();
+		this.tabsViewer = tabsViewerFactory.create(tabsCollection);
 		
 		removeAll();
 		add(tabsViewer);

@@ -28,7 +28,7 @@ import javax.swing.JComponent;
 * 
 * @author Arik Hadas
 */
-abstract class TabsViewer<T extends Tab> extends JComponent {
+public abstract class TabsViewer<T extends Tab> extends JComponent {
 	
 	/** Collection of the displayed tabs */
 	private TabsCollection<T> tabs;
