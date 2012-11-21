@@ -37,10 +37,12 @@ What's new since v0.9 ?
 -----------------------
 
 New features:
--
+- Quick list of the current open tabs in the panel (default keystroke: ALT+6)
+- Locking tabs capability
 
 Improvements:
 - Add support for copying files base names (ticket #462), contributed by Chen Rozenes
+- User can set whether to always display tabs headers (even in case the panel contains single tab)
 
 Localization:
 - 
