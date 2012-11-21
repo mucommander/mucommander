@@ -662,6 +662,11 @@ public class MainFrame extends JFrame implements LocationListener {
     public void updateWindowTitle() {
         // Update window title
         String title = activeTable.getCurrentFolder().getAbsolutePath();
+
+	// Add the application name to window title on all OSs except MAC
+        if (!OsFamilies.MAC_OS_X.isCurrent())
+        	title += " - muCommander";
+
         java.util.List<MainFrame> mainFrames = WindowManager.getMainFrames();
         if(mainFrames.size()>1)
             title += " ["+(mainFrames.indexOf(this)+1)+"]";

@@ -37,18 +37,19 @@ What's new since v0.9 ?
 -----------------------
 
 New features:
-- Quick list of the current open tabs in the panel (default keystroke: ALT+6)
-- Locking tabs capability
+- Quick list of the current open tabs in the panel (default keystroke: ALT+6).
+- Locking tabs capability.
 
 Improvements:
-- Add support for copying files base names (ticket #462), contributed by Chen Rozenes
-- User can set whether to always display tabs headers (even in case the panel contains single tab)
+- Add support for copying files base names (ticket #462), contributed by Chen Rozenes.
+- User can set whether to always display tabs headers (even in case the panel contains single tab).
+- Add the application name to window title on all OSs except Mac OS X (ticket #501).
 
 Localization:
 - 
 
 Bug fixes:
-- Fix a deadlock which caused the application to freeze while switching tabs on MAC OS
+- Fix a deadlock which caused the application to freeze while switching tabs on MAC OS.
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
