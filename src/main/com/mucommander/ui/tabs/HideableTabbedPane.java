@@ -107,7 +107,6 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * @param index of the tab to be selected
 	 */
 	public void selectTab(int index) {
-		System.out.println("selecting " + index);
 		tabsViewer.setSelectedTabIndex(index);
 	}
 	
@@ -299,7 +298,6 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * ConfigurationListener Implementation
 	 ***************************************/
 	
-	@Override
 	public void configurationChanged(ConfigurationEvent event) {
 		String var = event.getVariable();
 
