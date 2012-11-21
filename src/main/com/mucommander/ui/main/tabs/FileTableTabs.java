@@ -57,17 +57,10 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	}
 	
 	@Override
-	public void selectTab(int index) {
+	public ChangeFolderThread selectTab(int index) {
 		super.selectTab(index);
 
-		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolder(getTab(index).getLocation(), null, true);
-		try {
-			if (changeFolderThread != null && changeFolderThread.isAlive())
-				changeFolderThread.join();
-		} catch (InterruptedException e) {
-			// We're screwed - no valid location to display
-			throw new RuntimeException("Unable to read any drive");
-		}
+		return folderPanel.tryChangeCurrentFolder(getTab(index).getLocation(), null, true);
 	}
 	
 	/**

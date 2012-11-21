@@ -21,7 +21,6 @@ package com.mucommander.ui.tabs;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.Iterator;
-import java.util.prefs.PreferenceChangeEvent;
 
 import javax.swing.JComponent;
 
@@ -106,8 +105,9 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * 
 	 * @param index of the tab to be selected
 	 */
-	public void selectTab(int index) {
+	public <T> T selectTab(int index) {
 		tabsViewer.setSelectedTabIndex(index);
+		return null;
 	}
 	
 	/**
@@ -210,7 +210,6 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 ******************/
 	
 	private void switchToTabsWithHeaders() {
-		int p = tabsViewer.getSelectedTabIndex();
 		this.tabsViewer.destroy();
 		TabsWithHeaderViewer<T> viewer = tabsDisplayFactory.createTabsWithHeadersDisplay(tabsCollection);
 		setTabsViewer(viewer);
@@ -287,7 +286,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		if (!refreshViewer())
 			tabsViewer.removeTab(index);
 		else
-			tabsViewer.setSelectedTabIndex(previouslySelectedIndex > 0 ? previouslySelectedIndex-1 : 0);
+			selectTab(previouslySelectedIndex > 0 ? previouslySelectedIndex-1 : 0);
 	}
 	
 	public void tabUpdated(int index) {
