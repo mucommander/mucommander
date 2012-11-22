@@ -121,6 +121,15 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		return tabsViewer.getSelectedTabIndex();
 	}
 	
+	/**
+	 * Return how many tabs the panel contains
+	 * 
+	 * @return number of tabs contained in the panel
+	 */
+	public int getTabsCount() {
+		return tabsCollection.count();
+	}
+	
 	protected TabsCollection<T> getTabs() {
 		return tabsCollection;
 	}

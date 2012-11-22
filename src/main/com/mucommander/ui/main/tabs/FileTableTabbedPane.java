@@ -111,16 +111,6 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 		super.setTabComponentAt(index, component);
 	}
 	
-	/**
-	 * Not in use yet
-	 * 
-	 * @param index
-	 * @return
-	 */
-	private FileTableTabHeader getTabHeader(int index) {
-		return (FileTableTabHeader) getTabComponentAt(index);
-	}
-	
 	@Override
 	public void add(FileTableTab tab) {
 		add(tab, getTabCount());

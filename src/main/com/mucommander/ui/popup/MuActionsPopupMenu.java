@@ -52,7 +52,7 @@ public abstract class MuActionsPopupMenu extends JPopupMenu {
      * </p>
      * @param actionId action ID
      */
-    protected void addAction(String actionId) {
+    protected JMenuItem addAction(String actionId) {
         JMenuItem item;
         KeyStroke stroke;
 
@@ -64,5 +64,7 @@ public abstract class MuActionsPopupMenu extends JPopupMenu {
             if(stroke.getModifiers() == 0 &&
                (stroke.getKeyCode() == KeyEvent.VK_ENTER || stroke.getKeyCode() == KeyEvent.VK_SPACE || stroke.getKeyCode() == KeyEvent.VK_ESCAPE))
                 item.setAccelerator(null);
+        
+        return item;
     }
 }
