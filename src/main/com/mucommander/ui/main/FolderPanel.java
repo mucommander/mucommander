@@ -76,7 +76,7 @@ import com.mucommander.ui.quicklist.QuickListContainer;
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
  * drive button, and the location field.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class FolderPanel extends JPanel implements FocusListener, QuickListContainer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FolderPanel.class);
@@ -553,7 +553,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 	            oldTreeWidth = treeSplitPane.getDividerLocation();
 	        }
 	        foldersTreePanel.setVisible(treeVisible);
-	        // hide completly divider if a tree isn't visible
+	        // hide completely divider if a tree isn't visible
 	        treeSplitPane.setDividerLocation(treeVisible ? oldTreeWidth : 0);
 	        treeSplitPane.setDividerSize(treeVisible ? 5 : 0);
 	        foldersTreePanel.requestFocus();
@@ -578,24 +578,4 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 	public Component nextFocusableComponent() {
 		return fileTable;
 	}
-
-    /* TODO branch 
-    /**
-     * Returns true if branch view is enabled for this folder panel.
-     * @return
-     * /
-    public boolean isBranchView() {
-        return branchView;
-    }
-    
-    /**
-     * Enables/disables branch view.
-     * @see ToggleBranchViewAction
-     * @param branchView
-     * /
-    public void setBranchView(boolean branchView) {
-        this.branchView = branchView;
-    }
-    */
-
 }
