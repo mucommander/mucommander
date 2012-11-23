@@ -148,7 +148,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 		SwingUtilities.invokeLater(new Runnable() {
 
 			public void run() {
-			    doLayout();
+				validate();
 			}
 		});
 	}
