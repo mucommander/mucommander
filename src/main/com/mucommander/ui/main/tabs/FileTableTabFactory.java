@@ -90,7 +90,8 @@ public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFil
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof FileTableTab)
-				return location.getAbsolutePath().equals(((FileTableTab) obj).getLocation().getAbsolutePath());
+				return location.getAbsolutePath().equals(((FileTableTab) obj).getLocation().getAbsolutePath()) &&
+					   locked == ((FileTableTab) obj).isLocked();
 			return false;
 		}
 
