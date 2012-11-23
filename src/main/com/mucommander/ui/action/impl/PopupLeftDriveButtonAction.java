@@ -20,6 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.tabs.ActiveTabListener;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -31,11 +32,23 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class PopupLeftDriveButtonAction extends MuAction {
+public class PopupLeftDriveButtonAction extends MuAction implements ActiveTabListener {
 
     public PopupLeftDriveButtonAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
+        
+        mainFrame.getLeftPanel().getTabs().addActiveTabListener(this);
+        
+        activeTabChanged();
     }
+
+    /**
+     * Enables or disables this action based on the current tab is not locked, 
+     * this action will be enabled, if not it will be disabled.
+     */
+	public void activeTabChanged() {
+		setEnabled(!mainFrame.getLeftPanel().getTabs().getCurrentTab().isLocked());
+	}
 
     @Override
     public void performAction() {

@@ -129,9 +129,8 @@ public class OpenLocationAction extends ActiveTabAction {
     }
 
     /**
-     * Enables or disables this action based on the currently active folder's
-     * current tab is not locked, this action will be enabled,
-     * if not it will be disabled.
+     * Enables or disables this action based on the current tab is not locked,
+     * this action will be enabled, if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {
