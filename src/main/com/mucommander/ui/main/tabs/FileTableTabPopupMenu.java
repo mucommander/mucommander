@@ -43,7 +43,8 @@ class FileTableTabPopupMenu extends MuActionsPopupMenu {
 		FileTableTabs tabs = mainFrame.getActivePanel().getTabs();
 		
 		FileTableTab tab = mainFrame.getActivePanel().getTabs().getCurrentTab();
-		boolean isTabCloseable = tabs.getTabsCount() > 1;
+		// tab is closeable if it's not the only tab in the panel and it's not locked
+		boolean isTabCloseable = tabs.getTabsCount() > 1  && !tab.isLocked();
 		
 		addAction(DuplicateTabAction.Descriptor.ACTION_ID);
 		addAction(CloseTabAction.Descriptor.ACTION_ID).setEnabled(isTabCloseable);
@@ -52,7 +53,7 @@ class FileTableTabPopupMenu extends MuActionsPopupMenu {
 		add(new Separator());
 		addAction(tab.isLocked() ? UnlockTabAction.Descriptor.ACTION_ID : LockTabAction.Descriptor.ACTION_ID);
 		add(new Separator());
-		addAction(MoveTabToOtherPanelAction.Descriptor.ACTION_ID).setEnabled(isTabCloseable && !tab.isLocked());
+		addAction(MoveTabToOtherPanelAction.Descriptor.ACTION_ID).setEnabled(isTabCloseable);
 		addAction(CloneTabToOtherPanelAction.Descriptor.ACTION_ID);
 	}
 }
