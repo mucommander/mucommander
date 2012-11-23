@@ -211,12 +211,14 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         
 		// Select the tab that was previously selected on last run
 		ChangeFolderThread changeFolderThread = tabs.selectTab(indexOfSelectedTab);
-		try {
-			if (changeFolderThread != null && changeFolderThread.isAlive())
-				changeFolderThread.join();
-		} catch (InterruptedException e) {
-			// We're screwed - no valid location to display
-			throw new RuntimeException("Unable to read any drive");
+		if(changeFolderThread != null) {
+			while(changeFolderThread.isAlive()) {
+				try {changeFolderThread.join();}
+				catch(InterruptedException e) {
+					// We're screwed - no valid location to display
+					throw new RuntimeException("Unable to read any drive");
+				}
+			}
 		}
 
         // create folders tree on a JSplitPane 
