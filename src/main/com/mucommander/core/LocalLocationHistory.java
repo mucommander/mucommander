@@ -69,8 +69,8 @@ public class LocalLocationHistory {
 	 *
 	 * <p>This method is called by FolderPanel each time a folder is changed.
 	 */
-	public void addToHistory(AbstractFile folder) {
-		this.addToHistory(folder.getURL());
+	public void tryToAddToHistory(AbstractFile folder) {
+		this.tryToAddToHistory(folder.getURL());
 
 		// Save last recallable folder on startup, only if :
 		//  - it is a directory on a local filesytem
@@ -83,29 +83,31 @@ public class LocalLocationHistory {
 		}
 	}
 
+	private void tryToAddToHistory(FileURL folderURL) {
+		// Do not add folder to history if new current folder is the same as previous folder
+		if (historyIndex<0 || !folderURL.equals(history.get(historyIndex), false, false))
+			addToHistory(folderURL);
+	}
+
 	private void addToHistory(FileURL folderURL) {
 		int historySize = history.size();
 
-		// Do not add folder to history if new current folder is the same as previous folder
-		if (historyIndex<0 || !folderURL.equals(history.get(historyIndex), false, false)) {
-			historyIndex++;
+		historyIndex++;
 
-			// Delete 'forward' history items if any
-			for(int i=historyIndex; i<historySize; i++) {
-				history.remove(historyIndex);
-			}
-
-			// If capacity is reached, remove first folder
-			if(history.size()>=HISTORY_CAPACITY) {
-				history.remove(0);
-				historyIndex--;
-			}
-
-			// Add previous folder to history
-			history.add(folderURL);
+		// Delete 'forward' history items if any
+		for(int i=historyIndex; i<historySize; i++) {
+			history.remove(historyIndex);
 		}
-	}
 
+		// If capacity is reached, remove first folder
+		if(history.size()>=HISTORY_CAPACITY) {
+			history.remove(0);
+			historyIndex--;
+		}
+
+		// Add previous folder to history
+		history.add(folderURL);
+	}
 
 	/**
 	 * Changes current folder to be the previous one in folder history.

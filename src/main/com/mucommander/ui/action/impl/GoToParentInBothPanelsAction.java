@@ -33,7 +33,7 @@ import java.util.Map;
  * if the inactive panel's current folder has a parent, it will open that one as well.
  * </p>
  * <p>
- * Note that this action's behaviour is strictly equivalent to that of {@link GoToParentAction} in the
+ * Note that this action's behavior is strictly equivalent to that of {@link GoToParentAction} in the
  * active panel. Differences will only occur in the inactive panel, and then again only when possible.
  * </p>
  * <p>
