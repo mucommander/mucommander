@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
@@ -31,7 +30,7 @@ import javax.swing.event.ChangeListener;
 * 
 * @author Arik Hadas
 */
-public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> implements ChangeListener {
+public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 	
 	private TabsCollection<T> tabsCollection;
 	private TabbedPane<T> tabbedpane;
@@ -45,32 +44,37 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> implement
 		int index = 0;
 		for (T tab : tabs)
 			tabbedpane.add(tab, index++);
-		
-		tabbedpane.addChangeListener(this);
 	}
+	
+	
+	/**************
+	 * TabsViewer
+	 **************/
 
 	@Override
 	public int getSelectedTabIndex() {
 		return tabbedpane.getSelectedIndex();
 	}
 	
+	@Override
 	public void removeTab(int index) {
 		tabbedpane.remove(index);
 	}
 	
-	/********************************
-	 * ChangeListener Implementation
-	 ********************************/
-	
-	public void stateChanged(ChangeEvent e) {
-		int selectedIndex = getSelectedTabIndex();
-		if (selectedIndex != -1)
-			show(tabsCollection.get(selectedIndex));
+	@Override
+	public void show(T t) {
+		tabbedpane.show(t);		
 	}
 	
-	/**************
-	 * TabsDisplay
-	 **************/
+	@Override
+	public void addChangeListener(ChangeListener listener) { 
+		tabbedpane.addChangeListener(listener);
+	}
+	
+	@Override
+	public void removeChangeListener(ChangeListener listener) { 
+		tabbedpane.removeChangeListener(listener);
+	}
 	
 	@Override
 	public void add(T tab) {
@@ -87,16 +91,6 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> implement
 		tabbedpane.update(tab, index);
 	}
 
-	@Override
-	public void show(T t) {
-		tabbedpane.show(t);		
-	}
-
-	@Override
-	public void destroy() {
-		tabbedpane.removeChangeListener(this);
-	}
-	
 	@Override
 	public void setSelectedTabIndex(int index) {
 		tabbedpane.setSelectedIndex(index);

@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JComponent;
+import javax.swing.event.ChangeListener;
 
 /**
 * Abstract class for components that display tabs.
@@ -40,11 +41,15 @@ public abstract class TabsViewer<T extends Tab> extends JComponent {
 		add(component, BorderLayout.CENTER);
 	}
 	
+	public void addChangeListener(ChangeListener listener) { }
+	
+	public void removeChangeListener(ChangeListener listener) { }
+	
+	public abstract void show(T tab);
+	
 	/*************** 
 	 * Tabs Actions
 	 ***************/
-	
-	public void destroy() { }
 	
 	public abstract void add(T tab);
 	
@@ -56,8 +61,6 @@ public abstract class TabsViewer<T extends Tab> extends JComponent {
 	
 	public abstract void setSelectedTabIndex(int index);
 
-	public abstract void show(T t);
-	
 	public abstract T removeCurrentTab();
 	
 	public abstract void removeDuplicateTabs();
