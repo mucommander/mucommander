@@ -402,14 +402,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
     
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
-    	FileTableTab currentTab = tabs.getCurrentTab();
-    	
-    	if (currentTab.isLocked()) {
-    		tabs.add(folder);
-    		return null;
-    	}
-    	else
-    		return locationChanger.tryChangeCurrentFolder(folder, false);
+    	return locationChanger.tryChangeCurrentFolder(folder, false);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {

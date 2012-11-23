@@ -30,6 +30,7 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
+import com.mucommander.ui.main.tabs.FileTableTabs;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -80,8 +81,13 @@ public class OpenAction extends MuAction {
      */
     protected void open(AbstractFile file, FolderPanel destination) {
         // Opens browsable files in the destination FolderPanel.
-        if(file.isBrowsable())
-            destination.tryChangeCurrentFolder(file);
+        if(file.isBrowsable()) {
+        	FileTableTabs tabs = destination.getTabs();
+        	if (tabs.getCurrentTab().isLocked())
+        		tabs.add(file);
+        	else
+        		destination.tryChangeCurrentFolder(file);
+        }
 
         // Opens local files using their native associations.
         else if(file.getURL().getScheme().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
