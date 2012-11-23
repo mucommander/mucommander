@@ -60,13 +60,15 @@ public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFil
 		 * @param location - the location that would be presented in the tab
 		 */
 		private DefaultFileTableTab(AbstractFile location, FolderPanel folderPanel) {
-			setLocation(location);
-			
+			this.location = location;
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
 		
 		public void setLocation(AbstractFile location) {
 			this.location = location;
+			
+			// add location to the history (See LocalLocationHistory to see how it handles the first location it gets)
+			locationHistory.tryToAddToHistory(location);
 		}
 
 		public AbstractFile getLocation() {
