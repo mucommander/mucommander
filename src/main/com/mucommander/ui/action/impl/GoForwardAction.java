@@ -30,7 +30,7 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class GoForwardAction extends ParentFolderAction {
+public class GoForwardAction extends ActiveTabAction {
 
     public GoForwardAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
@@ -49,7 +49,8 @@ public class GoForwardAction extends ParentFolderAction {
      */
     @Override
     protected void toggleEnabledState() {
-        setEnabled(mainFrame.getActivePanel().getFolderHistory().hasForwardFolder());
+        setEnabled(mainFrame.getActivePanel().getFolderHistory().hasForwardFolder() &&
+        		  !mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
     }
 
     public static class Factory implements ActionFactory {

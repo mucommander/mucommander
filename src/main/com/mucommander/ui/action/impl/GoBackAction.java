@@ -18,19 +18,24 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action recalls the previous folder in the current FolderPanel's history.
  *
  * @author Maxence Bernard
  */
-public class GoBackAction extends ParentFolderAction {
+public class GoBackAction extends ActiveTabAction {
 
     public GoBackAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
@@ -49,7 +54,8 @@ public class GoBackAction extends ParentFolderAction {
      */
     @Override
     protected void toggleEnabledState() {
-        setEnabled(mainFrame.getActivePanel().getFolderHistory().hasBackFolder());
+        setEnabled(mainFrame.getActivePanel().getFolderHistory().hasBackFolder() &&
+        		  !mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
     }
     
     public static class Factory implements ActionFactory {
