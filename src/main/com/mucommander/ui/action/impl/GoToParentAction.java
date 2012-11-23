@@ -29,11 +29,11 @@ import java.util.Map;
 
 /**
  * This action changes the current folder of the currently active FolderPanel to the current folder's parent.
- * This action only gets enabled when the current folder has a parent.
+ * This action only gets enabled when the current folder has a parent and current tab is not locked.
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class GoToParentAction extends ParentFolderAction {
+public class GoToParentAction extends ActiveTabAction {
     /**
      * Creates a new <code>GoToParentAction</code> with the specified parameters.
      * @param mainFrame  frame to which the action is attached.
@@ -46,11 +46,13 @@ public class GoToParentAction extends ParentFolderAction {
 
     /**
      * Enables or disables this action based on the currently active folder's
-     * has a parent, this action will be enabled, if not it will be disabled.
+     * has a parent and current tab is not locked, this action will be enabled,
+     * if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {
-        setEnabled(mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+        setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
+        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
     }
 
 
@@ -60,35 +62,19 @@ public class GoToParentAction extends ParentFolderAction {
     ///////////////////////
 
     /**
-     * Goes to <code>sourcePanel</code>'s parent in <code>destPanel</code>.
-     * <p>
-     * If <code>sourcePanel</code> doesn't have a parent, nothing will happen.
-     * </p>
-     * @param  sourcePanel panel whose parent should be used.
-     * @param  destPanel   panel in which to change the location.
-     * @return             <code>true</code> if <code>sourcePanel</code> has a parent, <code>false</code> otherwise.
+     * Updates <code>panel</code>'s location to its parent.
+     *
+     * @param  panel in which to change the location.
+     * @return <code>true</code> if <code>panel</code> has a parent, <code>false</code> otherwise.
      */
-    protected boolean goToParent(FolderPanel sourcePanel, FolderPanel destPanel) {
-        AbstractFile parent;
+    protected boolean goToParent(FolderPanel panel) {
+    	AbstractFile parent;
 
-        if((parent = sourcePanel.getCurrentFolder().getParent()) != null) {
-            destPanel.tryChangeCurrentFolder(parent, null, true);
+        if((parent = panel.getCurrentFolder().getParent()) != null) {
+        	panel.tryChangeCurrentFolder(parent, null, true);
             return true;
         }
         return false;
-    }
-
-    /**
-     * Updates <code>panel</code>'s location to its parent.
-     * <p>
-     * This is a convenience method and is strictly equivalent to calling
-     * <code>{@link #goToParent(FolderPanel,FolderPanel) goToParent(}panel, panel)</code>
-     * </p>
-     * @param  panel in which to change the location.
-     * @return       <code>true</code> if <code>panel</code> has a parent, <code>false</code> otherwise.
-     */
-    protected boolean goToParent(FolderPanel panel) {
-        return goToParent(panel, panel);
     }
 
 

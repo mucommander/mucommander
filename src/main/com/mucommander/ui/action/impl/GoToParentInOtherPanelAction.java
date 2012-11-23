@@ -18,7 +18,9 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -28,11 +30,12 @@ import java.util.Map;
 /**
  * Opens the active panel's parent in the inactive panel.
  * <p>
- * This action is only enabled when the active panel has a parent.
+ * This action is only enabled when the active panel has a parent,
+ * and the selected tab in the other panel is not locked.
  * </p>
  * @author Nicolas Rinaudo
  */
-public class GoToParentInOtherPanelAction extends GoToParentAction {
+public class GoToParentInOtherPanelAction extends ParentFolderAction {
     /**
      * Creates a new <code>GoToParentInOtherPanelAction</code> with the specified parameters.
      * @param mainFrame  frame to which the action is attached.
@@ -43,10 +46,42 @@ public class GoToParentInOtherPanelAction extends GoToParentAction {
     }
 
     /**
+     * Goes to <code>sourcePanel</code>'s parent in <code>destPanel</code>.
+     * <p>
+     * If <code>sourcePanel</code> doesn't have a parent, nothing will happen.
+     * </p>
+     * @param  sourcePanel panel whose parent should be used.
+     * @param  destPanel   panel in which to change the location.
+     * @return             <code>true</code> if <code>sourcePanel</code> has a parent, <code>false</code> otherwise.
+     */
+    private boolean goToParent(FolderPanel sourcePanel, FolderPanel destPanel) {
+        AbstractFile parent;
+
+        if((parent = sourcePanel.getCurrentFolder().getParent()) != null) {
+            destPanel.tryChangeCurrentFolder(parent, null, true);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Enables or disables this action based on the currently active folder's
+     * has a parent and selected tab in the other panel is not locked,
+     * this action will be enabled, if not it will be disabled.
+     */
+    @Override
+    protected void toggleEnabledState() {
+        setEnabled(!mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked() &&
+        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+    }
+    
+    /**
      * Opens the active panel's parent in the inactive panel.
      */
     @Override
-    public void performAction() {goToParent(mainFrame.getActivePanel(), mainFrame.getInactivePanel());}
+    public void performAction() {
+    	goToParent(mainFrame.getActivePanel(), mainFrame.getInactivePanel());
+    }
     
     public static class Factory implements ActionFactory {
 

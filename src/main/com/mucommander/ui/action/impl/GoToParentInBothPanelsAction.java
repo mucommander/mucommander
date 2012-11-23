@@ -42,7 +42,7 @@ import java.util.Map;
  * </p>
  * @author Nicolas Rinaudo
  */
-public class GoToParentInBothPanelsAction extends GoToParentAction {
+public class GoToParentInBothPanelsAction extends ActiveTabAction {
     // - Initialization ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -57,7 +57,17 @@ public class GoToParentInBothPanelsAction extends GoToParentAction {
         setPerformActionInSeparateThread(true);
     }
 
-
+    /**
+     * Enables or disables this action based on the currently active folder's
+     * has a parent and both tabs in the two panel are not locked,
+     * this action will be enabled, if not it will be disabled.
+     */
+    @Override
+    protected void toggleEnabledState() {
+        setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
+        		   !mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked() &&
+        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+    }
 
     // - Action code ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------

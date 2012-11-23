@@ -33,12 +33,23 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class GoToRootAction extends GoToParentAction {
+public class GoToRootAction extends ActiveTabAction {
 
     public GoToRootAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
+    /**
+     * Enables or disables this action based on the currently active folder's
+     * has a parent and current tab is not locked, this action will be enabled,
+     * if not it will be disabled.
+     */
+    @Override
+    protected void toggleEnabledState() {
+        setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
+        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+    }
+    
     @Override
     public void performAction() {
         // Changes the current folder to make it the current folder's root folder.
