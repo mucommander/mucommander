@@ -19,6 +19,8 @@
 package com.mucommander.ui.action.impl;
 
 import com.mucommander.ui.action.*;
+import com.mucommander.ui.event.ActivePanelListener;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -31,11 +33,27 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class SetSameFolderAction extends MuAction {
+public class SetSameFolderAction extends MuAction implements ActivePanelListener {
 
     public SetSameFolderAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
+
+        mainFrame.addActivePanelListener(this);
+        
+        toggleEnabledState();
     }
+    
+    /**
+     * Enables or disables this action based on the tab in the other panel being not lock,
+     * this action will be enabled, if not it will be disabled.
+     */
+    private void toggleEnabledState() {
+        setEnabled(!mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked());
+    }
+    
+    public void activePanelChanged(FolderPanel folderPanel) {
+    	toggleEnabledState();
+	}
 
     @Override
     public void performAction() {

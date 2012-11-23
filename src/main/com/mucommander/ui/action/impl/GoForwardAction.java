@@ -45,7 +45,7 @@ public class GoForwardAction extends ActiveTabAction {
 
     /**
      * Enables or disables this action based on the history of the currently active FolderPanel: if there is a next
-     * folder in the history, this action will be enabled, if not it will be disabled.
+     * folder in the history and the current tab is not locked, this action will be enabled, if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {

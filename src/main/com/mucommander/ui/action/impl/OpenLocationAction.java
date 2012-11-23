@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class OpenLocationAction extends MuAction {
+public class OpenLocationAction extends ActiveTabAction {
 
     private FileURL url;
     private AbstractFile file;
@@ -128,6 +128,15 @@ public class OpenLocationAction extends MuAction {
         return mainFrame.getActivePanel();
     }
 
+    /**
+     * Enables or disables this action based on the currently active folder's
+     * current tab is not locked, this action will be enabled,
+     * if not it will be disabled.
+     */
+    @Override
+    protected void toggleEnabledState() {
+        setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
+    }
 
     /////////////////////////////
     // MuAction implementation //

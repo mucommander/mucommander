@@ -20,6 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
@@ -71,6 +72,13 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
         setPerformActionInSeparateThread(true);
     }
 
+    @Override
+    public void activePanelChanged(FolderPanel folderPanel) {
+        super.activePanelChanged(folderPanel);
+        
+        if (mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked())
+        	setEnabled(false);
+    }
 
     /**
      * This method is overridden to enable this action when the parent folder is selected. 

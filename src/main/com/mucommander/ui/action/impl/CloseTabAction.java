@@ -35,10 +35,21 @@ import com.mucommander.ui.main.MainFrame;
  * 
  * @author Arik Hadas
  */
-public class CloseTabAction extends MuAction {
+public class CloseTabAction extends ActiveTabAction {
 
     public CloseTabAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
+    }
+    
+    /**
+     * Enables or disables this action based on the currently active folder's
+     * current tab is not locked and is not the only tab in the panel,
+     * this action will be enabled, if not it will be disabled.
+     */
+    @Override
+    protected void toggleEnabledState() {
+        setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
+        		    mainFrame.getActivePanel().getTabs().getTabsCount() > 1);
     }
 
     @Override

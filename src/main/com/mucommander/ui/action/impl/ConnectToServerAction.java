@@ -31,10 +31,19 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class ConnectToServerAction extends MuAction implements InvokesDialog {
+public class ConnectToServerAction extends ActiveTabAction implements InvokesDialog {
 
     public ConnectToServerAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
+    }
+    
+    /**
+     * Enables or disables this action based on the currently active folder's
+     * current tab is not locked, this action will be enabled, if not it will be disabled.
+     */
+    @Override
+    protected void toggleEnabledState() {
+        setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
     }
 
     @Override

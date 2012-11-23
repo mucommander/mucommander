@@ -29,6 +29,8 @@ import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.event.ActivePanelListener;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
@@ -50,6 +52,14 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
         super(mainFrame, properties);
     }
 
+    @Override
+    public void activePanelChanged(FolderPanel folderPanel) {
+        super.activePanelChanged(folderPanel);
+        
+        if (mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked())
+        	setEnabled(false);
+    }
+    
     /**
      * This method is overridden to enable this action when the parent folder is selected.
      */
