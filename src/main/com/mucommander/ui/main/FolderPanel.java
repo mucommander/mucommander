@@ -66,11 +66,11 @@ import com.mucommander.ui.main.quicklist.TabsQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
-import com.mucommander.ui.main.tabs.FileTableTab;
 import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.quicklist.QuickListContainer;
+import com.mucommander.ui.tabs.ActiveTabListener;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -78,7 +78,7 @@ import com.mucommander.ui.quicklist.QuickListContainer;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public class FolderPanel extends JPanel implements FocusListener, QuickListContainer {
+public class FolderPanel extends JPanel implements FocusListener, QuickListContainer, ActiveTabListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FolderPanel.class);
 
 	/** The following constants are used to identify the left and right folder panels */
@@ -220,6 +220,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 				}
 			}
 		}
+		
+		tabs.addActiveTabListener(this);
 
         // create folders tree on a JSplitPane 
         foldersTreePanel = new FoldersTreePanel(this);
@@ -572,5 +574,16 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
 	public Component nextFocusableComponent() {
 		return fileTable;
+	}
+
+	///////////////////////////////
+	// ActiveTabListener methods //
+	///////////////////////////////
+
+	public void activeTabChanged() {
+		boolean isCurrentTabLocked = tabs.getCurrentTab().isLocked();
+		
+		locationTextField.setEnabled(!isCurrentTabLocked);
+		driveButton.setEnabled(!isCurrentTabLocked);
 	}
 }
