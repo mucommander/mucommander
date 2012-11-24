@@ -1,5 +1,5 @@
-
-           _____                           _
+﻿
+		   _____                           _
  _____ _ _|     |___ _____ _____ ___ ___ _| |___ ___
 |     | | |   --| . |     |     | .'|   | . | -_|  _|
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
@@ -37,19 +37,24 @@ What's new since v0.9 ?
 -----------------------
 
 New features:
-- Quick list of the current open tabs in the panel (default keystroke: ALT+6).
+- Quick list of the open tabs in the panel (ticket #450).
 - Locking tabs capability.
+- Add 'Duplicate tab' and 'Clone tab to other panel' actions.
 
 Improvements:
 - Add support for copying files base names (ticket #462), contributed by Chen Rozenes.
 - User can set whether to always display tabs headers (even in case the panel contains single tab).
 - Add the application name to window title on all OSs except Mac OS X (ticket #501).
+- The locations that can be navigated by Back/Forward actions are now saved per-tab.
+- The recently visited locations list is changed to include all the accessed locations from all tabs and windows.
+- The recently visited locations list is restored from previous run on startup (ticket #471).
 
 Localization:
 - 
 
 Bug fixes:
 - Fix a deadlock which caused the application to freeze while switching tabs on MAC OS.
+- Key combinations that contain the TAB key can be set as shortcuts (ticket #465).
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
