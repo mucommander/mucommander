@@ -592,7 +592,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static void switchToNextWindow() {
         int frameIndex = getCurrentWindowIndex();
-        MainFrame mainFrame = mainFrames.get(frameIndex==mainFrames.size()-1?0:frameIndex+1);
+        MainFrame mainFrame = mainFrames.get((frameIndex+1) % mainFrames.size());
         mainFrame.toFront();
     }
 
@@ -601,7 +601,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static void switchToPreviousWindow() {
         int frameIndex = getCurrentWindowIndex();
-        MainFrame mainFrame = mainFrames.get(frameIndex==0?mainFrames.size()-1:frameIndex-1);
+        int nbFrames = mainFrames.size();
+        MainFrame mainFrame = mainFrames.get((frameIndex-1+nbFrames) % nbFrames);
         mainFrame.toFront();
     }
 
@@ -752,15 +753,15 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public void configurationChanged(ConfigurationEvent event) {
     	String var = event.getVariable();
-    
+
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
     	if (var.equals(MuPreferences.LOOK_AND_FEEL)) {
-            String lnfName = event.getValue();
+    		String lnfName = event.getValue();
 
-	    if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName))
-		setLookAndFeel(lnfName);
-        }
+    		if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName))
+    			setLookAndFeel(lnfName);
+    	}
     }
 
 
