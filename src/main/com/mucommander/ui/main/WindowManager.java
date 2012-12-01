@@ -422,7 +422,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         if(currentMainFrame == null)
             newMainFrame = new MainFrame(leftFolders, rightFolders, indexOfLeftSelectedTab, indexOfRightSelectedTab, leftLocationHistory, rightLocationHistory);
         else
-            newMainFrame = currentMainFrame.cloneMainFrame();
+            newMainFrame = new MainFrame(currentMainFrame);
         screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
 
 

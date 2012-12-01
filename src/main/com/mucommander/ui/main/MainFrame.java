@@ -258,9 +258,6 @@ public class MainFrame extends JFrame implements LocationListener {
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
     }
 
-    private MainFrame() {
-    }
-
     private FileTableConfiguration getFileTableConfiguration(boolean isLeft) {
         FileTableConfiguration conf;
 
@@ -317,16 +314,23 @@ public class MainFrame extends JFrame implements LocationListener {
         }
     }
 
-    MainFrame cloneMainFrame() {
-        MainFrame mainFrame;
+    /**
+     * Copy constructor
+     */
+    MainFrame(MainFrame mainFrame) {
+    	FolderPanel leftFolderPanel = mainFrame.getLeftPanel(); 
+    	FolderPanel rightFolderPanel = mainFrame.getRightPanel();
+    	FileTable leftFileTable = leftFolderPanel.getFileTable();
+    	FileTable rightFileTable = rightFolderPanel.getFileTable();
+        
+    	init(new FolderPanel(this, leftFolderPanel.getCurrentFolder(), 0, leftFileTable.getConfiguration(), new FileURL[0]),
+             new FolderPanel(this, rightFolderPanel.getCurrentFolder(), 0, rightFileTable.getConfiguration(), new FileURL[0]));
 
-        mainFrame = new MainFrame();
-        mainFrame.init(new FolderPanel(mainFrame, leftFolderPanel.getCurrentFolder(), 0, leftTable.getConfiguration(), new FileURL[0]),
-                       new FolderPanel(mainFrame, rightFolderPanel.getCurrentFolder(), 0, rightTable.getConfiguration(), new FileURL[0]));
-        mainFrame.leftTable.sortBy(leftTable.getSortInfo());
-        mainFrame.rightTable.sortBy(rightTable.getSortInfo());
-        return mainFrame;
+    	// TODO: Sorting should be part of the FileTable configuration
+        this.leftTable.sortBy(leftFileTable.getSortInfo());
+        this.rightTable.sortBy(rightFileTable.getSortInfo());
     }
+
 
     /**
      * Registers the given ActivePanelListener to receive events when the active table changes.
