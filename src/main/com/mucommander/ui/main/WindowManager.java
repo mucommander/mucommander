@@ -64,7 +64,7 @@ import com.mucommander.ui.main.commandbar.CommandBar;
  * Window Manager is responsible for creating, disposing, switching,
  * in other words managing :) muCommander windows.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 //public class WindowManager implements ActionListener, WindowListener, ActivePanelListener, LocationListener, ConfigurationListener {
 public class WindowManager implements WindowListener, ConfigurationListener {
@@ -79,16 +79,14 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /** Number of pixels a new MainFrame will be moved down from its parent. */
     private static final int Y_OFFSET = 22;
 
-
-
     /** MainFrame (main muCommander window) instances */
-    private static List<MainFrame> mainFrames;
+    private List<MainFrame> mainFrames;
     
     /** MainFrame currently being used (that has focus),
      * or last frame to have been used if muCommander doesn't have focus */	
-    private static MainFrame currentMainFrame;
+    private MainFrame currentMainFrame;
 
-    private static WindowManager instance;
+    private static WindowManager instance = new WindowManager();
 
 
     // - Initialization ---------------------------------------------------------
@@ -113,9 +111,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         }
     }
 
-    static {
-        mainFrames = new Vector<MainFrame>();
-        instance   = new WindowManager();
+    /**
+     * Creates a new instance of WindowManager.
+     */
+    private WindowManager() {
+    	mainFrames = new Vector<MainFrame>();
 
         // Notifies Swing that look&feels must be loaded as extensions.
         // This is necessary to ensure that look and feels placed in the extensions folder
@@ -133,12 +133,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         if(lnfName == null)
             LOGGER.debug("Could load look'n feel from preferences");
+        
+        MuConfigurations.addPreferencesListener(this);
     }
-
-    /**
-     * Creates a new instance of WindowManager.
-     */
-    private WindowManager() {MuConfigurations.addPreferencesListener(this);}
 
     /**
      * Retrieves the user's initial path for the specified frame.
@@ -284,7 +281,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                     // Prompts the user for a login and password.
                     AuthException authException = (AuthException)e;
                     FileURL url = authException.getURL();
-                    AuthDialog authDialog = new AuthDialog(currentMainFrame, url, true, authException.getMessage());
+                    AuthDialog authDialog = new AuthDialog(instance.currentMainFrame, url, true, authException.getMessage());
                     authDialog.showDialog();
                     newCredentialsMapping = authDialog.getCredentialsMapping();
                     if(newCredentialsMapping !=null) {
@@ -339,7 +336,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return the <code>MainFrame</code> instance that was last active
      */
     public static MainFrame getCurrentMainFrame() {
-        return currentMainFrame;
+        return instance.currentMainFrame;
     }
 	
     /**
@@ -348,7 +345,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return a <code>Vector</code> of all <code>MainFrame</code> instances currently displaying
      */
     public static List<MainFrame> getMainFrames() {
-        return mainFrames;
+        return instance.mainFrames;
     }
 
     /**
@@ -357,9 +354,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public static void tryRefreshCurrentFolders() {
         // Starts with the main frame to make sure that results are immediately
         // visible to the user.
-        currentMainFrame.tryRefreshCurrentFolders();
-        for(MainFrame mainFrame : mainFrames)
-            if(mainFrame != currentMainFrame)
+    	instance.currentMainFrame.tryRefreshCurrentFolders();
+        for(MainFrame mainFrame : instance.mainFrames)
+            if(mainFrame != instance.currentMainFrame)
                 mainFrame.tryRefreshCurrentFolders();
     }
 
@@ -371,15 +368,15 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * If it is, we'll use the user's default paths. If it's not, the current mainframe's paths will
      * be used.
      * </p>
-     * @return a fully initialised mainframe.
+     * @return a fully initialized mainframe.
      */	
     public static synchronized MainFrame createNewMainFrame() {
-        if(currentMainFrame == null)
+        if(instance.currentMainFrame == null)
             return createNewMainFrame(getInitialPaths(FolderPanelType.LEFT), getInitialPaths(FolderPanelType.RIGHT),
             						  getInitialSelectedTab(FolderPanelType.LEFT), getInitialSelectedTab(FolderPanelType.RIGHT),
             						  getInitialHistory(FolderPanelType.LEFT), getInitialHistory(FolderPanelType.RIGHT));
-        return createNewMainFrame(new AbstractFile[] {currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
-                                  new AbstractFile[] {currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()},
+        return createNewMainFrame(new AbstractFile[] {instance.currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
+                                  new AbstractFile[] {instance.currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()},
                                   0,
                                   0,
                                   new FileURL[0],
@@ -419,18 +416,18 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         int       height;       // Height of the new MainFrame.
 
         // Initialization.
-        if(currentMainFrame == null)
+        if(instance.currentMainFrame == null)
             newMainFrame = new MainFrame(leftFolders, rightFolders, indexOfLeftSelectedTab, indexOfRightSelectedTab, leftLocationHistory, rightLocationHistory);
         else
-            newMainFrame = new MainFrame(currentMainFrame);
+            newMainFrame = new MainFrame(instance.currentMainFrame);
         screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
 
 
         // - Initial window dimensions --------------------------
         // ------------------------------------------------------
         // If this is the first window, retrieve initial dimensions from preferences.
-        if(mainFrames.isEmpty()) {
-            currentMainFrame = newMainFrame;
+        if(instance.mainFrames.isEmpty()) {
+        	instance.currentMainFrame = newMainFrame;
             // Retrieve last saved window bounds
             x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getX(0));
             y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getY(0));
@@ -460,17 +457,17 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // If this is *not* the first window, use the same dimensions as the previous MainFrame, with
         // a slight horizontal and vertical offset to make sure we keep both of them visible.
         else {
-            x             = currentMainFrame.getX() + X_OFFSET;
-            y             = currentMainFrame.getY() + Y_OFFSET;
-            width         = currentMainFrame.getWidth();
-            height        = currentMainFrame.getHeight();
+            x             = instance.currentMainFrame.getX() + X_OFFSET;
+            y             = instance.currentMainFrame.getY() + Y_OFFSET;
+            width         = instance.currentMainFrame.getWidth();
+            height        = instance.currentMainFrame.getHeight();
 
             // Make sure we're still within the screen.
             // Note that while the width and height tests look redundant, they are required. Some
             // window managers, such as Gnome, return rather peculiar results.
-            if(!isInsideUsableScreen(currentMainFrame, x + width, -1))
+            if(!isInsideUsableScreen(instance.currentMainFrame, x + width, -1))
                 x = 0;
-            if(!isInsideUsableScreen(currentMainFrame, -1, y + height))
+            if(!isInsideUsableScreen(instance.currentMainFrame, -1, y + height))
                 y = 0;
             if(width + x > screenSize.width)
                 width = screenSize.width - x;
@@ -483,13 +480,13 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         newMainFrame.addWindowListener(instance);
 
         // Adds the new MainFrame to the vector
-        mainFrames.add(newMainFrame);
+        instance.mainFrames.add(newMainFrame);
 
         // Set new window's title. Window titles show window number only if there is more than one window.
         // So if a second window was just created, we update first window's title so that it shows window number (#1).
         newMainFrame.updateWindowTitle();
-        if(mainFrames.size()==2)
-            mainFrames.get(0).updateWindowTitle();
+        if(instance.mainFrames.size()==2)
+        	instance.mainFrames.get(0).updateWindowTitle();
 
         // Make this new frame visible
         newMainFrame.setVisible(true);
@@ -544,7 +541,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static synchronized void quit() {
         // Dispose all MainFrames, ending with the currently active one.
-        int nbFrames = mainFrames.size();
+        int nbFrames = instance.mainFrames.size();
         if(nbFrames>0) {            // If an uncaught exception occurred in the startup sequence, there is no MainFrame to dispose
             // Retrieve current MainFrame's index
             int currentMainFrameIndex = getCurrentWindowIndex();
@@ -552,12 +549,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // Dispose all MainFrames but the current one
             for(int i=0; i<nbFrames; i++) {
                 if(i!=currentMainFrameIndex)
-                    mainFrames.get(i).dispose();
+                	instance.mainFrames.get(i).dispose();
             }
 
             // Dispose current MainFrame last so that its attributes (last folders, window position...) are saved last
             // in the preferences
-            mainFrames.get(currentMainFrameIndex).dispose();
+            instance.mainFrames.get(currentMainFrameIndex).dispose();
         }
 
         // Dispose all other frames (viewers, editors...)
@@ -584,7 +581,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return index of currently selected window
      */
     public static int getCurrentWindowIndex() {
-    	return mainFrames.indexOf(currentMainFrame);
+    	return instance.mainFrames.indexOf(instance.currentMainFrame);
     }
 	
     /**
@@ -592,7 +589,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static void switchToNextWindow() {
         int frameIndex = getCurrentWindowIndex();
-        MainFrame mainFrame = mainFrames.get((frameIndex+1) % mainFrames.size());
+        MainFrame mainFrame = instance.mainFrames.get((frameIndex+1) % instance.mainFrames.size());
         mainFrame.toFront();
     }
 
@@ -601,8 +598,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     public static void switchToPreviousWindow() {
         int frameIndex = getCurrentWindowIndex();
-        int nbFrames = mainFrames.size();
-        MainFrame mainFrame = mainFrames.get((frameIndex-1+nbFrames) % nbFrames);
+        int nbFrames = instance.mainFrames.size();
+        MainFrame mainFrame = instance.mainFrames.get((frameIndex-1+nbFrames) % nbFrames);
         mainFrame.toFront();
     }
 
@@ -624,7 +621,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             ClassLoader oldLoader;
             Thread      currentThread;
 
-            // Initialises class loading.
+            // Initializes class loading.
             // This is necessary due to Swing's UIDefaults.LazyProxyValue behaviour that just
             // won't use the right ClassLoader instance to load resources.
             currentThread = Thread.currentThread();
@@ -636,8 +633,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // Restores the contextual ClassLoader.
             currentThread.setContextClassLoader(oldLoader);
 
-            for(int i=0; i<mainFrames.size(); i++)
-                SwingUtilities.updateComponentTreeUI(mainFrames.get(i));
+            for(int i=0; i<instance.mainFrames.size(); i++)
+                SwingUtilities.updateComponentTreeUI(instance.mainFrames.get(i));
         }
         catch(Throwable e) {
             LOGGER.debug("Exception caught", e);
