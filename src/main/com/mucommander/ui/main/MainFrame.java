@@ -37,6 +37,7 @@ import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 import javax.swing.table.TableColumnModel;
 
+import com.apple.eawt.FullScreenUtilities;
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
@@ -152,6 +153,11 @@ public class MainFrame extends JFrame implements LocationListener {
     private void init(FolderPanel leftFolderPanel, FolderPanel rightFolderPanel) {
         // Set the window icon
         setWindowIcon();
+
+        if (OsFamilies.MAC_OS_X.isCurrent()) {
+        	// Lion Fullscreen support
+        	FullScreenUtilities.setWindowCanFullScreen(this, true);
+        }
 
         // Enable window resize
         setResizable(true);
