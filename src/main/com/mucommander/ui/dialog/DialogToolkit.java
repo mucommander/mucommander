@@ -19,13 +19,24 @@
 
 package com.mucommander.ui.dialog;
 
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.HeadlessException;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.helper.MnemonicHelper;
-import com.mucommander.ui.main.WindowManager;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
+import com.mucommander.ui.helper.ScreenServices;
 
 
 /**
@@ -44,7 +55,7 @@ public class DialogToolkit {
     }
 
     public static boolean fitToScreen(Window window) {
-        Rectangle screenBounds = WindowManager.getFullScreenBounds(window);
+        Rectangle screenBounds = ScreenServices.getFullScreenBounds(window);
         return fitToMaxDimension(window, new Dimension((int)screenBounds.getWidth(), (int)screenBounds.getHeight()));
     }
 	
