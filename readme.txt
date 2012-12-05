@@ -48,6 +48,7 @@ Improvements:
 - The locations that can be navigated by Back/Forward actions are now saved per-tab.
 - The recently visited locations list is changed to include all the accessed locations from all tabs and windows.
 - The recently visited locations list is restored from previous run on startup (ticket #471).
+- Add fullscreen support for Mac OS X Lion (ticket #468).
 
 Localization:
 - 
@@ -55,6 +56,7 @@ Localization:
 Bug fixes:
 - Fix a deadlock which caused the application to freeze while switching tabs on MAC OS.
 - Key combinations that contain the TAB key can be set as shortcuts (ticket #465).
+- Fix installation via software center on Ubuntu
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
