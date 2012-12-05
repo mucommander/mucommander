@@ -463,7 +463,7 @@
         <mkdir dir="${tmp.deb}/data"/>
         <mkdir dir="${tmp.deb}/data/usr/share/mucommander"/>
 
-        <taskdef name="jdeb" classname="org.vafer.jdeb.DebAntTask" classpathref="lib.tools"/>
+        <taskdef name="jdeb" classname="org.vafer.jdeb.ant.DebAntTask" classpathref="lib.tools"/>
 
         <!-- Copies the debian data files.                         -->
         <copy todir="${tmp.deb}/data/usr/share/mucommander" overwrite="true">
@@ -505,7 +505,7 @@
         </copy>
 
         <jdeb destfile="${dist}/${deb.name}" control="${tmp.deb}/control">
-            <data src="${tmp.deb}/data.tar.gz"/>
+            <data src="${tmp.deb}/data.tar.gz" type="archive"/>
         </jdeb>
     </target>
 
