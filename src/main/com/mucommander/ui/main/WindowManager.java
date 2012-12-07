@@ -20,12 +20,9 @@ package com.mucommander.ui.main;
 
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -38,25 +35,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.ShutdownHook;
-import com.mucommander.auth.CredentialsManager;
-import com.mucommander.auth.CredentialsMapping;
-import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.AuthException;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.conf.MuPreferencesAPI;
-import com.mucommander.conf.MuSnapshot;
 import com.mucommander.extension.ExtensionManager;
-import com.mucommander.ui.dialog.auth.AuthDialog;
-import com.mucommander.ui.helper.ScreenServices;
-import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.commandbar.CommandBar;
+import com.mucommander.ui.main.frame.MainFrameBuilder;
 
 /**
  * Window Manager is responsible for creating, disposing, switching,
@@ -84,7 +70,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * or last frame to have been used if muCommander doesn't have focus */	
     private MainFrame currentMainFrame;
 
-    private static WindowManager instance = new WindowManager();
+    private static final WindowManager instance = new WindowManager();
 
 
     // - Initialization ---------------------------------------------------------
@@ -136,188 +122,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
     /**
-     * Retrieves the user's initial path for the specified frame.
-     * <p>
-     * If the path found in preferences is either illegal or does not exist, this method will
-     * return the user's home directory - we assume this will always exist, which might be a bit
-     * of a leap of faith.
-     * </p>
-     * @param  folderPanelType panel for which the initial path should be returned (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
-     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
-     * @return       the user's initial path for the specified frame.
-     */ 
-    private static AbstractFile[] getInitialPaths(FolderPanelType folderPanelType) {
-        boolean       isCustom;    // Whether the initial path is a custom one or the last used folder.
-        String[]      folderPaths; // Paths to the initial folders.
-        
-        // Snapshot configuration
-        Configuration snapshot = MuConfigurations.getSnapshot();
-        // Preferences configuration
-        MuPreferencesAPI preferences = MuConfigurations.getPreferences();
-        
-        // Checks which kind of initial path we're dealing with.
-        isCustom = preferences.getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
-
-        // Handles custom initial paths.
-        if (isCustom) {
-        	folderPaths = new String[] {(folderPanelType == FolderPanelType.LEFT ? preferences.getVariable(MuPreference.LEFT_CUSTOM_FOLDER) :
-        		preferences.getVariable(MuPreference.RIGHT_CUSTOM_FOLDER))};
-        }
-        // Handles "last folder" initial paths.
-        else {
-        	// Get the index of the window that was selected in the previous run
-        	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
-        	// Set initial path to each tab
-        	int nbFolderPaths = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT));
-        	folderPaths = new String[nbFolderPaths];
-        	for (int i=0; i<nbFolderPaths;++i)
-        		folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT, i));
-        }
-
-        List<AbstractFile> initialFolders = new LinkedList<AbstractFile>(); // Initial folders 
-        AbstractFile folder;
-        
-        for (String folderPath : folderPaths) {
-        	// TODO: consider whether to search for workable path in case the folder doesn't exist
-        	if (folderPath != null && (folder = FileFactory.getFile(folderPath)) != null && folder.exists())
-        		initialFolders.add(folder);
-        }
-        
-        // If the initial path is not legal or does not exist, defaults to the user's home.
-        AbstractFile[] results = initialFolders.size() == 0 ?
-        		new AbstractFile[] {FileFactory.getFile(System.getProperty("user.home"))} :
-        		initialFolders.toArray(new AbstractFile[0]);
-
-         LOGGER.debug("initial folders:");
-         for (AbstractFile result:results)
-        	 LOGGER.debug("\t"+result);
-        
-        return results;
-    }
-    
-    private static int getInitialSelectedTab(FolderPanelType folderPanelType) {
-    	// Checks which kind of initial path we're dealing with.
-    	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
-    	
-    	return isCustom ? 
-    		0 :
-    		MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(0, folderPanelType == FolderPanelType.LEFT));
-    }
-    
-    /**
-     * Retrieves the initial history, based on previous runs, for the specified frame.
-     * @param folderPanelType panel for which the initial path should be returned (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
-     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
-     * @return the locations that were presented in previous runs, which will be the initial history for the current run
-     */
-    private static FileURL[] getInitialHistory(FolderPanelType folderPanelType) {
-    	// Checks which kind of initial path we're dealing with.
-    	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
-
-    	/*// Snapshot configuration
-        Configuration snapshot = MuConfigurations.getSnapshot();
-        
-    	// Get the index of the window that was selected in the previous run
-    	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
-    	
-    	int nbLocations = snapshot.getVariable(MuSnapshot.getRecentLocationsCountVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT), 0);
-    	List<FileURL> locations = new LinkedList<FileURL>();
-    	
-    	for (int i=0; i<nbLocations; ++i) {
-			try {
-				FileURL location = FileURL.getFileURL(snapshot.getVariable(MuSnapshot.getRecentLocationVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT, i)));
-				locations.add(location);
-			} catch (MalformedURLException e) {
-				LOGGER.debug("Got invalid URL from the snapshot file", e);
-			}
-    	}
-    	
-    	LOGGER.debug("initial history:");
-        for (FileURL location:locations)
-       	 LOGGER.debug("\t"+location);
-    	
-    	return locations.toArray(new FileURL[0]);*/
-    	return new FileURL[0];
-    }
-
-    /**
-     * Returns a valid initial abstract path for the specified frame.
-     * <p>
-     * This method does its best to interpret <code>path</code> properly, or to fail
-     * politely if it can't. This means that:<br/>
-     * - we first try to see whether <code>path</code> is a legal, existing URI.<br/>
-     * - if it's not, we check whether it might be a legal local, existing file path.<br/>
-     * - if it's not, we'll just use the default initial path for the frame.<br/>
-     * - if <code>path</code> is browsable (eg directory, archive, ...), use it as is.<br/>
-     * - if it's not, use its parent.<br/>
-     * - if it does not have a parent, use the default initial path for the frame.<br/>
-     * </p>
-     * @param  path  path to the folder we want to open in <code>frame</code>.
-     * @param  folderPanelType identifer of the panel we want to compute the path for (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
-     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
-     * @return       our best shot at what was actually requested.
-     */
-    private static AbstractFile[] getInitialAbstractPaths(String path, FolderPanelType folderPanelType) {
-        // This is one of those cases where a null value actually has a proper meaning.
-        if(path == null)
-            return getInitialPaths(folderPanelType);
-
-        // Tries the specified path as-is.
-        AbstractFile file;
-        CredentialsMapping newCredentialsMapping;
-
-        while(true) {
-            try {
-                file = FileFactory.getFile(path, true);
-                if(!file.exists())
-                    file = null;
-                break;
-            }
-            // If an AuthException occurred, gets login credential from the user.
-            catch(Exception e) {
-                if(e instanceof AuthException) {
-                    // Prompts the user for a login and password.
-                    AuthException authException = (AuthException)e;
-                    FileURL url = authException.getURL();
-                    AuthDialog authDialog = new AuthDialog(instance.currentMainFrame, url, true, authException.getMessage());
-                    authDialog.showDialog();
-                    newCredentialsMapping = authDialog.getCredentialsMapping();
-                    if(newCredentialsMapping !=null) {
-                        // Use the provided credentials
-                        CredentialsManager.authenticate(url, newCredentialsMapping);
-                        path = url.toString(true);
-                    }
-                    // If the user cancels, we fall back to the default path.
-                    else {
-                        return getInitialPaths(folderPanelType);
-                    }
-                }
-                else {
-                    file = null;
-                    break;
-                }
-            }
-        }
-
-        // If the specified path does not work out,
-        if(file == null)
-            // Tries the specified path as a relative path.
-            if((file = FileFactory.getFile(new File(path).getAbsolutePath())) == null || !file.exists())
-                // Defaults to home.
-                return getInitialPaths(folderPanelType);
-
-        // If the specified path is a non-browsable, uses its parent.
-        if(!file.isBrowsable())
-            // This is just playing things safe, as I doubt there might ever be a case of
-            // a file without a parent directory.
-            if((file = file.getParent()) == null)
-                return getInitialPaths(folderPanelType);
-
-        return new AbstractFile[] {file};
-    }
-    
-    
-    /**
      * Returns the sole instance of WindowManager.
      *
      * @return the sole instance of WindowManager
@@ -360,136 +164,31 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
     /**
      * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
-     * <p>
-     * The initial path of each frame will differ depending on whether this is the first mainframe
-     * we create or not.<br/>
-     * If it is, we'll use the user's default paths. If it's not, the current mainframe's paths will
-     * be used.
-     * </p>
-     * @return a fully initialized mainframe.
-     */	
-    public static synchronized MainFrame createNewMainFrame() {
-        if(instance.currentMainFrame == null)
-            return createNewMainFrame(getInitialPaths(FolderPanelType.LEFT), getInitialPaths(FolderPanelType.RIGHT),
-            						  getInitialSelectedTab(FolderPanelType.LEFT), getInitialSelectedTab(FolderPanelType.RIGHT),
-            						  getInitialHistory(FolderPanelType.LEFT), getInitialHistory(FolderPanelType.RIGHT));
-        return createNewMainFrame(new AbstractFile[] {instance.currentMainFrame.getLeftPanel().getFileTable().getCurrentFolder()},
-                                  new AbstractFile[] {instance.currentMainFrame.getRightPanel().getFileTable().getCurrentFolder()},
-                                  0,
-                                  0,
-                                  new FileURL[0],
-                                  new FileURL[0]);
-    }
-
-    /**
-     * Creates a new MainFrame and makes it visible on the screen, on top of any other frame.
-     * @param  folder1 path on which the left frame will be opened.
-     * @param  folder2 path on which the right frame will be opened.
-     * @return         a fully initialized mainframe.
-     */
-    public static synchronized MainFrame createNewMainFrame(String folder1, String folder2) {
-        return createNewMainFrame(getInitialAbstractPaths(folder1, FolderPanelType.LEFT),
-                                  getInitialAbstractPaths(folder2, FolderPanelType.RIGHT),
-                                  0,
-                                  0,
-                                  new FileURL[0],
-                                  new FileURL[0]);
-    }
-
-    /**
-     * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
      *
      * @param leftFolders initial paths for the left frame.
      * @param rightFolders initial paths for the right frame.
      * @return the newly created MainFrame.
      */
-    public static synchronized MainFrame createNewMainFrame(AbstractFile[] leftFolders, AbstractFile[] rightFolders,
-    														int indexOfLeftSelectedTab, int indexOfRightSelectedTab,
-    														FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) {
-        MainFrame newMainFrame; // New MainFrame.
-        Dimension screenSize;   // Used to compute the new MainFrame's proper location.
-        int       x;            // Horizontal position of the new MainFrame.
-        int       y;            // Vertical position of the new MainFrame.
-        int       width;        // Width of the new MainFrame.
-        int       height;       // Height of the new MainFrame.
+    public static synchronized void createNewMainFrame(MainFrameBuilder mainFrameBuilder) {
+        MainFrame[] newMainFrames = mainFrameBuilder.build();
 
-        // Initialization.
-        if(instance.currentMainFrame == null)
-            newMainFrame = new MainFrame(leftFolders, rightFolders, indexOfLeftSelectedTab, indexOfRightSelectedTab, leftLocationHistory, rightLocationHistory);
-        else
-            newMainFrame = new MainFrame(instance.currentMainFrame);
-        screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-
-
-        // - Initial window dimensions --------------------------
-        // ------------------------------------------------------
-        // If this is the first window, retrieve initial dimensions from preferences.
-        if(instance.mainFrames.isEmpty()) {
-        	instance.currentMainFrame = newMainFrame;
-            // Retrieve last saved window bounds
-            x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getX(0));
-            y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getY(0));
-            width  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getWidth(0));
-            height = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getHeight(0));
-
-            // Retrieves the last known size of the screen.
-            int lastScreenWidth  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_WIDTH);
-            int lastScreenHeight = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_HEIGHT);
-
-            // If no previous location was saved, or if the resolution has changed,
-            // reset the window's dimensions to their default values.
-            if(x == -1 || y == -1 || width == -1 || height == -1 ||
-               screenSize.width != lastScreenWidth ||  screenSize.height != lastScreenHeight
-               || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
-
-                // Full screen bounds are not reliable enough, in particular under Linux+Gnome
-                // so we simply make the initial window 4/5 of screen's size, and center it.
-                // This should fit under any window manager / platform
-                x      = screenSize.width / 10;
-                y      = screenSize.height / 10;
-                width  = (int)(screenSize.width * 0.8);
-                height = (int)(screenSize.height * 0.8);
-            }
-        }
-
-        // If this is *not* the first window, use the same dimensions as the previous MainFrame, with
-        // a slight horizontal and vertical offset to make sure we keep both of them visible.
-        else {
-            x             = instance.currentMainFrame.getX() + X_OFFSET;
-            y             = instance.currentMainFrame.getY() + Y_OFFSET;
-            width         = instance.currentMainFrame.getWidth();
-            height        = instance.currentMainFrame.getHeight();
-
-            // Make sure we're still within the screen.
-            // Note that while the width and height tests look redundant, they are required. Some
-            // window managers, such as Gnome, return rather peculiar results.
-            if(!ScreenServices.isInsideUsableScreen(instance.currentMainFrame, x + width, -1))
-                x = 0;
-            if(!ScreenServices.isInsideUsableScreen(instance.currentMainFrame, -1, y + height))
-                y = 0;
-            if(width + x > screenSize.width)
-                width = screenSize.width - x;
-            if(height + y > screenSize.height)
-                height = screenSize.height - y;
-        }
-        newMainFrame.setBounds(new Rectangle(x, y, width, height));
-
-        // To catch user window closing actions
-        newMainFrame.addWindowListener(instance);
+     // To catch user window closing actions
+        for (MainFrame frame : newMainFrames)
+        	frame.addWindowListener(instance);
 
         // Adds the new MainFrame to the vector
-        instance.mainFrames.add(newMainFrame);
+        instance.mainFrames.addAll(Arrays.asList(newMainFrames));
 
         // Set new window's title. Window titles show window number only if there is more than one window.
         // So if a second window was just created, we update first window's title so that it shows window number (#1).
-        newMainFrame.updateWindowTitle();
+        for (MainFrame frame : newMainFrames)
+        	frame.updateWindowTitle();
         if(instance.mainFrames.size()==2)
-        	instance.mainFrames.get(0).updateWindowTitle();
+            instance.mainFrames.get(0).updateWindowTitle();
 
         // Make this new frame visible
-        newMainFrame.setVisible(true);
-
-        return newMainFrame;
+        for (MainFrame frame : newMainFrames)
+        	frame.setVisible(true);
     }
 
     /**

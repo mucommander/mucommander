@@ -18,13 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.main.frame.ClonedMainFrameBuilder;
 
 /**
  * This action creates a new muCommander window.
@@ -42,7 +48,7 @@ public class NewWindowAction extends MuAction {
 
     @Override
     public void performAction() {
-        WindowManager.createNewMainFrame();
+        WindowManager.createNewMainFrame(new ClonedMainFrameBuilder());
     }
     
     public static class Factory implements ActionFactory {

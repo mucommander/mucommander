@@ -18,6 +18,13 @@
 
 package com.mucommander;
 
+import java.awt.GraphicsEnvironment;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
@@ -41,13 +48,9 @@ import com.mucommander.ui.dialog.startup.InitialSetupDialog;
 import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
+import com.mucommander.ui.main.frame.CommandLineMainFrameBuilder;
+import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
 
 /**
  * muCommander launcher.
@@ -568,16 +571,13 @@ public class Launcher {
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
-            for(; i < args.length; i += 2) {
-                if(i < args.length - 1)
-                    WindowManager.createNewMainFrame(args[i], args[i + 1]);
-                else
-                    WindowManager.createNewMainFrame(args[i], null);
-            }
+            String[] folders = new String[args.length - i];
+            System.arraycopy(args, i, folders, 0, folders.length);
+            WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
 
             // If no initial path was specified, start a default main window.
             if(WindowManager.getCurrentMainFrame() == null)
-                WindowManager.createNewMainFrame();
+                WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
 
             // Done launching, wake up threads waiting for the application being launched.
             // Important: this must be done before disposing the splash screen, as this would otherwise create a deadlock
