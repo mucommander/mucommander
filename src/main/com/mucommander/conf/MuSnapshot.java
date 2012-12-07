@@ -167,7 +167,11 @@ public class MuSnapshot {
 	public static String getSelectedWindow() {
 		return WINDOWS_SELECTION;
 	}
-	
+
+	public static String getWindowsCount() {
+		return WINDOWS_COUNT;
+	}
+
 	/**
 	 * Returns the section of the {@link com.mucommander.ui.main.MainFrame} at a given index
 	 * 
