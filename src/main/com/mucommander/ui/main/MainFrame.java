@@ -323,7 +323,7 @@ public class MainFrame extends JFrame implements LocationListener {
     /**
      * Copy constructor
      */
-    MainFrame(MainFrame mainFrame) {
+    public MainFrame(MainFrame mainFrame) {
     	FolderPanel leftFolderPanel = mainFrame.getLeftPanel(); 
     	FolderPanel rightFolderPanel = mainFrame.getRightPanel();
     	FileTable leftFileTable = leftFolderPanel.getFileTable();
