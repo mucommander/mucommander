@@ -38,7 +38,11 @@ public class ClonedMainFrameBuilder extends MainFrameBuilder {
     private static final int X_OFFSET = 22;
     /** Number of pixels a new MainFrame will be moved down from its parent. */
     private static final int Y_OFFSET = 22;
-    
+
+    public int getSelectedFrame() {
+    	return WindowManager.getMainFrames().size()-1;
+    }
+
 	@Override
 	public MainFrame[] build() {
 		MainFrame currentMainFrame = WindowManager.getCurrentMainFrame();

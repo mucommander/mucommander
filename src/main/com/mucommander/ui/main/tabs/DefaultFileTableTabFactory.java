@@ -28,14 +28,14 @@ import com.mucommander.ui.tabs.TabFactory;
  * 
  * @author Arik Hadas
  */
-public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFile> {
+public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, AbstractFile> {
 
 	private FolderPanel folderPanel;
 	
-	public FileTableTabFactory(FolderPanel folderPanel) {
+	public DefaultFileTableTabFactory(FolderPanel folderPanel) {
 		this.folderPanel = folderPanel;
 	}
-	
+
 	public FileTableTab createTab(AbstractFile location) {
 		if (location == null)
 			throw new RuntimeException("Invalid location");
@@ -61,6 +61,7 @@ public class FileTableTabFactory implements TabFactory<FileTableTab, AbstractFil
 		 */
 		private DefaultFileTableTab(AbstractFile location, FolderPanel folderPanel) {
 			this.location = location;
+			this.locked = false;
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
 		

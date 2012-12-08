@@ -26,13 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
-import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.MuSnapshot;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.tabs.ConfFileTableTab;
 
 /**
  * 
@@ -43,8 +44,11 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 	
 	private Configuration snapshot = MuConfigurations.getSnapshot();
 	
-	public DefaultMainFramesBuilder() {
-		
+	public DefaultMainFramesBuilder() { }
+
+	@Override
+	public int getSelectedFrame() {
+		return snapshot.getIntegerVariable(MuSnapshot.getSelectedWindow());
 	}
 
 	@Override
@@ -53,9 +57,11 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
 		// if there're no windows saved in the snapshot file, open one window with default settings
 		if (nbFrames == 0) {
-			MainFrame mainFrame = new MainFrame(getInitialPaths(FolderPanelType.LEFT, 0), getInitialPaths(FolderPanelType.RIGHT, 0),
-					getInitialSelectedTab(FolderPanelType.LEFT, 0), getInitialSelectedTab(FolderPanelType.RIGHT, 0),
-					  getInitialHistory(FolderPanelType.LEFT, 0), getInitialHistory(FolderPanelType.RIGHT, 0));
+			MainFrame mainFrame = new MainFrame(
+					new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
+					getFileTableConfiguration(FolderPanelType.LEFT, -1),
+					new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
+					getFileTableConfiguration(FolderPanelType.RIGHT, -1));
 			
 			Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
 	        // Full screen bounds are not reliable enough, in particular under Linux+Gnome
@@ -80,9 +86,27 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 	}
 
 	private MainFrame createMainFrame(int index) {
-		MainFrame mainFrame = new MainFrame(getInitialPaths(FolderPanelType.LEFT, index), getInitialPaths(FolderPanelType.RIGHT, index),
-				getInitialSelectedTab(FolderPanelType.LEFT, index), getInitialSelectedTab(FolderPanelType.RIGHT, index),
-				  getInitialHistory(FolderPanelType.LEFT, index), getInitialHistory(FolderPanelType.RIGHT, index));
+		int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
+		ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
+		for (int i=0; i<nbTabsInLeftPanel; ++i)
+			leftTabs[i] = new ConfFileTableTab(
+									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
+									FileFactory.getFile(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))));
+		
+		int nbTabsInRightPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, false));
+		ConfFileTableTab[] rightTabs = new ConfFileTableTab[nbTabsInRightPanel];
+		for (int i=0; i<nbTabsInRightPanel; ++i)
+			rightTabs[i] = new ConfFileTableTab(
+									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
+									FileFactory.getFile(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))));
+		
+		MainFrame mainFrame = new MainFrame(
+				leftTabs,
+				getInitialSelectedTab(FolderPanelType.LEFT, index),
+				getFileTableConfiguration(FolderPanelType.LEFT, index),
+				rightTabs,
+				getInitialSelectedTab(FolderPanelType.RIGHT, index),
+				getFileTableConfiguration(FolderPanelType.RIGHT, index));
 		
 		// Retrieve last saved window bounds
 		Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
@@ -115,42 +139,6 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         return mainFrame;
 	}
 	
-    /**
-     * Retrieves the initial history, based on previous runs, for the specified frame.
-     * @param folderPanelType panel for which the initial path should be returned (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
-     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
-     * @return the locations that were presented in previous runs, which will be the initial history for the current run
-     */
-    private FileURL[] getInitialHistory(FolderPanelType folderPanelType, int window) {
-    	// Checks which kind of initial path we're dealing with.
-    	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
-
-    	/*// Snapshot configuration
-        Configuration snapshot = MuConfigurations.getSnapshot();
-        
-    	// Get the index of the window that was selected in the previous run
-    	int indexOfPreviouslySelectedWindow = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getSelectedWindow());
-    	
-    	int nbLocations = snapshot.getVariable(MuSnapshot.getRecentLocationsCountVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT), 0);
-    	List<FileURL> locations = new LinkedList<FileURL>();
-    	
-    	for (int i=0; i<nbLocations; ++i) {
-			try {
-				FileURL location = FileURL.getFileURL(snapshot.getVariable(MuSnapshot.getRecentLocationVariable(indexOfPreviouslySelectedWindow, folderPanelType == FolderPanelType.LEFT, i)));
-				locations.add(location);
-			} catch (MalformedURLException e) {
-				LOGGER.debug("Got invalid URL from the snapshot file", e);
-			}
-    	}
-    	
-    	LOGGER.debug("initial history:");
-        for (FileURL location:locations)
-       	 LOGGER.debug("\t"+location);
-    	
-    	return locations.toArray(new FileURL[0]);*/
-    	return new FileURL[0];
-    }
-    
     private int getInitialSelectedTab(FolderPanelType folderPanelType, int window) {
     	// Checks which kind of initial path we're dealing with.
     	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);

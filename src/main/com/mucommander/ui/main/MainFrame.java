@@ -41,7 +41,6 @@ import com.apple.eawt.FullScreenUtilities;
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.commons.runtime.OsVersions;
@@ -65,6 +64,7 @@ import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.SortInfo;
+import com.mucommander.ui.main.tabs.ConfFileTableTab;
 import com.mucommander.ui.main.toolbar.ToolBar;
 
 /**
@@ -264,47 +264,24 @@ public class MainFrame extends JFrame implements LocationListener {
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
     }
 
-    private FileTableConfiguration getFileTableConfiguration(boolean isLeft) {
-        FileTableConfiguration conf;
-
-        conf = new FileTableConfiguration();
-
-        // Loop on columns
-        for(Column c  : Column.values()) {
-            if(c!=Column.NAME) {       // Skip the special name column (always visible, width automatically calculated)
-            	// Sets the column's initial visibility.
-            	conf.setEnabled(c,
-            			MuConfigurations.getSnapshot().getVariable(
-            					MuSnapshot.getShowColumnVariable(0, c, isLeft),
-            					c.showByDefault()
-    					)
-    			);
-
-                // Sets the column's initial width.
-                conf.setWidth(c, MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getColumnWidthVariable(0, c, isLeft)));
-            }
-
-            // Sets the column's initial order
-            conf.setPosition(c, MuConfigurations.getSnapshot().getVariable(
-                                    MuSnapshot.getColumnPositionVariable(0, c, isLeft),
-                                    c.ordinal())
-            );
-        }
-
-        return conf;
+    public MainFrame(ConfFileTableTab leftTab, FileTableConfiguration leftTableConf,
+    	             ConfFileTableTab rightTab, FileTableConfiguration rightTableConf) {
+    	this(new ConfFileTableTab[] {leftTab}, 0, leftTableConf, new ConfFileTableTab[] {rightTab}, 0, rightTableConf);
     }
-
+    
     /**
      * Creates a new main frame set to the given initial folders.
      *
      * @param leftInitialFolders the initial folders to display in the left panel's tabs
      * @param rightInitialFolders the initial folders to display in the right panel's tabs
      */
-    public MainFrame(AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders,
+    public MainFrame(ConfFileTableTab[] leftTabs, int indexOfLeftSelectedTab, FileTableConfiguration leftTableConf,
+    		         ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
+    		/*AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders,
     				 int indexOfLeftSelectedTab, int indexOfRightSelectedTab,
-    			     FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) {
-        init(new FolderPanel(this, leftInitialFolders, indexOfLeftSelectedTab, getFileTableConfiguration(true), leftLocationHistory), 
-        	 new FolderPanel(this, rightInitialFolders, indexOfRightSelectedTab, getFileTableConfiguration(false), rightLocationHistory));
+    			     FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) { */
+        init(new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf), 
+        	 new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf));
 
         for (boolean isLeft = true; ; isLeft=false) {
         	FileTable fileTable = isLeft ? leftTable : rightTable;
@@ -328,15 +305,14 @@ public class MainFrame extends JFrame implements LocationListener {
     	FolderPanel rightFolderPanel = mainFrame.getRightPanel();
     	FileTable leftFileTable = leftFolderPanel.getFileTable();
     	FileTable rightFileTable = rightFolderPanel.getFileTable();
-        
-    	init(new FolderPanel(this, leftFolderPanel.getCurrentFolder(), 0, leftFileTable.getConfiguration(), new FileURL[0]),
-             new FolderPanel(this, rightFolderPanel.getCurrentFolder(), 0, rightFileTable.getConfiguration(), new FileURL[0]));
+
+    	init(new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(leftFolderPanel.getCurrentFolder())}, 0, leftFileTable.getConfiguration()),
+             new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(rightFolderPanel.getCurrentFolder())}, 0, rightFileTable.getConfiguration()));
 
     	// TODO: Sorting should be part of the FileTable configuration
         this.leftTable.sortBy(leftFileTable.getSortInfo());
         this.rightTable.sortBy(rightFileTable.getSortInfo());
     }
-
 
     /**
      * Registers the given ActivePanelListener to receive events when the active table changes.

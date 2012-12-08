@@ -614,12 +614,14 @@ public class MuSnapshot {
     		configuration.setVariable(getTabLockedVariable(index, isLeft, tabsCounter), tab.isLocked());
     		++tabsCounter;
     	}
-    	
-    	// Save tabs count
-    	configuration.setVariable(getTabsCountVariable(index, isLeft), tabsCounter);
-    	
-    	// Save the index of the selected tab
-    	configuration.setVariable(getTabsSelectionVariable(index, isLeft), tabs.getSelectedIndex());
+
+    	if (tabsCounter > 0) {
+    		// Save tabs count
+    		configuration.setVariable(getTabsCountVariable(index, isLeft), tabsCounter);
+
+    		// Save the index of the selected tab
+    		configuration.setVariable(getTabsSelectionVariable(index, isLeft), tabs.getSelectedIndex());
+    	}
     }
     
     private void setTableAttributes(int index, boolean isLeft, FileTable table) {

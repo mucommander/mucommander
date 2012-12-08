@@ -32,6 +32,7 @@ import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.ui.main.tabs.ConfFileTableTab;
 
 /**
  * 
@@ -43,9 +44,11 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
 	
 	public CommandLineMainFrameBuilder(String[] folders) {
 		for(int i=0; i < folders.length; i += 2) {
-			mainFrames.add(new MainFrame(getInitialAbstractPaths(folders[i], FolderPanelType.LEFT),
-					getInitialAbstractPaths(i < folders.length - 1 ? folders[i + 1] : null, FolderPanelType.RIGHT),
-					0,0,new FileURL[0],new FileURL[0]));
+			mainFrames.add(new MainFrame(
+					new ConfFileTableTab(getInitialAbstractPaths(folders[i], FolderPanelType.LEFT)),
+					getFileTableConfiguration(FolderPanelType.LEFT, mainFrames.size()),
+					new ConfFileTableTab(getInitialAbstractPaths(i < folders.length - 1 ? folders[i + 1] : null, FolderPanelType.RIGHT)),
+					getFileTableConfiguration(FolderPanelType.RIGHT, mainFrames.size())));
         }
 	}
 
@@ -67,14 +70,14 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
      * - if it does not have a parent, use the default initial path for the frame.<br/>
      * </p>
      * @param  path  path to the folder we want to open in <code>frame</code>.
-     * @param  folderPanelType identifer of the panel we want to compute the path for (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
+     * @param  folderPanelType identifier of the panel we want to compute the path for (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
      *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
      * @return       our best shot at what was actually requested.
      */
-    private AbstractFile[] getInitialAbstractPaths(String path, FolderPanelType folderPanelType) {
+    private AbstractFile getInitialAbstractPaths(String path, FolderPanelType folderPanelType) {
         // This is one of those cases where a null value actually has a proper meaning.
         if(path == null)
-            return getInitialPaths(folderPanelType, 0);
+            return getHomeFolder();
 
         // Tries the specified path as-is.
         AbstractFile file;
@@ -103,7 +106,7 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
                     }
                     // If the user cancels, we fall back to the default path.
                     else {
-                        return getInitialPaths(folderPanelType, 0);
+                        return getHomeFolder();
                     }
                 }
                 else {
@@ -118,15 +121,15 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
             // Tries the specified path as a relative path.
             if((file = FileFactory.getFile(new File(path).getAbsolutePath())) == null || !file.exists())
                 // Defaults to home.
-                return getInitialPaths(folderPanelType, 0);
+                return getHomeFolder();
 
         // If the specified path is a non-browsable, uses its parent.
         if(!file.isBrowsable())
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
             if((file = file.getParent()) == null)
-                return getInitialPaths(folderPanelType, 0);
+                return getHomeFolder();
 
-        return new AbstractFile[] {file};
+        return file;
     }
 }

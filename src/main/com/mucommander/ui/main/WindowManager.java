@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -57,11 +56,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     // - MainFrame positioning --------------------------------------------------
     // --------------------------------------------------------------------------
     // The following constants are used to compute the proper position of a new MainFrame.
-
-    /** Number of pixels a new MainFrame will be moved to the left from its parent. */
-    private static final int X_OFFSET = 22;
-    /** Number of pixels a new MainFrame will be moved down from its parent. */
-    private static final int Y_OFFSET = 22;
 
     /** MainFrame (main muCommander window) instances */
     private List<MainFrame> mainFrames;
@@ -109,7 +103,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // Installs all custom look and feels.
         installCustomLookAndFeels();
         
-
         // Sets custom lookAndFeel if different from current lookAndFeel
         String lnfName = MuConfigurations.getPreferences().getVariable(MuPreference.LOOK_AND_FEEL);
         if(lnfName!=null && !lnfName.equals(UIManager.getLookAndFeel().getName()))
@@ -172,7 +165,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public static synchronized void createNewMainFrame(MainFrameBuilder mainFrameBuilder) {
         MainFrame[] newMainFrames = mainFrameBuilder.build();
 
-     // To catch user window closing actions
+        // To catch user window closing actions
         for (MainFrame frame : newMainFrames)
         	frame.addWindowListener(instance);
 
@@ -181,60 +174,22 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Set new window's title. Window titles show window number only if there is more than one window.
         // So if a second window was just created, we update first window's title so that it shows window number (#1).
-        for (MainFrame frame : newMainFrames)
+        for (MainFrame frame : instance.mainFrames)
         	frame.updateWindowTitle();
-        if(instance.mainFrames.size()==2)
-            instance.mainFrames.get(0).updateWindowTitle();
 
-        // Make this new frame visible
+        // Make frames visible
         for (MainFrame frame : newMainFrames)
         	frame.setVisible(true);
-    }
 
-    /**
-     * Properly disposes the given MainFrame.
-     */
-/*
-    public static synchronized void disposeMainFrame(MainFrame mainFrameToDispose) {
-        // Saves last folders
-        MuConfiguration.setVariable("prefs.startup_folder.left.last_folder", 
-                                         mainFrameToDispose.getLeftPanel().getFolderHistory().getLastRecallableFolder());
-        MuConfiguration.setVariable("prefs.startup_folder.right.last_folder", 
-                                         mainFrameToDispose.getRightPanel().getFolderHistory().getLastRecallableFolder());
-
-        // Saves window position, size and screen resolution
-        Rectangle bounds = mainFrameToDispose.getBounds();
-        MuConfiguration.setVariableInt("prefs.last_window.x", (int)bounds.getX());
-        MuConfiguration.setVariableInt("prefs.last_window.y", (int)bounds.getY());
-        MuConfiguration.setVariableInt("prefs.last_window.width", (int)bounds.getWidth());
-        MuConfiguration.setVariableInt("prefs.last_window.height", (int)bounds.getHeight());
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        MuConfiguration.setVariableInt("prefs.last_window.screen_width", screenSize.width);
-        MuConfiguration.setVariableInt("prefs.last_window.screen_height", screenSize.height);
-
-        // Disposes the MainFrame
-        int frameIndex = mainFrames.indexOf(mainFrameToDispose);
-
-        mainFrameToDispose.dispose();
-        mainFrames.remove(mainFrameToDispose);
-
-        // Update following window titles to reflect the MainFrame's disposal.
-        // Window titles show window number only if there is more than one window.
-        // So if there is only one window left, we update first window's title so that it removes window number (#1).
-        int nbFrames = mainFrames.size();
-        if(nbFrames==1) {
-            ((MainFrame)mainFrames.elementAt(0)).updateWindowTitle();
-        }
-        else {
-            for(int i=frameIndex; i<nbFrames; i++)
-                ((MainFrame)mainFrames.elementAt(i)).updateWindowTitle();
+        if (instance.mainFrames.size() > 0) {
+        	int previouslySelectedMainFrame = mainFrameBuilder.getSelectedFrame();
+        	instance.mainFrames.get(previouslySelectedMainFrame).toFront();
         }
     }
-*/
 
     /**
      * Disposes all opened windows, ending with the one that is currently active if there is one, 
-     * or the last one which was activated.
+     * or the last one which was activated.	
      */
     public static synchronized void quit() {
         // Dispose all MainFrames, ending with the currently active one.

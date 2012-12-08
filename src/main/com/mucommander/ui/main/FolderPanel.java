@@ -66,6 +66,8 @@ import com.mucommander.ui.main.quicklist.TabsQL;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.FolderChangeMonitor;
+import com.mucommander.ui.main.tabs.ConfFileTableTab;
+import com.mucommander.ui.main.tabs.FileTableTab;
 import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
@@ -125,9 +127,9 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param initialFolder - the initial folder to be displayed at this panel
      * @param conf - configuration for this panel's file table
      */
-    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, int indexOfSelectedTab, FileTableConfiguration conf, FileURL[] locationHistory) {
-    	this(mainFrame, new AbstractFile[] {initialFolder}, indexOfSelectedTab, conf, locationHistory);
-    }
+//    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, int indexOfSelectedTab, FileTableConfiguration conf) {
+//    	this(mainFrame, new AbstractFile[] {initialFolder}, indexOfSelectedTab, conf);
+//    }
     
     /**
      * Constructor
@@ -136,12 +138,12 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param initialFolders - the initial folders displayed at this panel's tabs
      * @param conf - configuration for this panel's file table
      */
-    FolderPanel(MainFrame mainFrame, AbstractFile[] initialFolders, int indexOfSelectedTab, FileTableConfiguration conf, FileURL[] locationHistory) {
+    FolderPanel(MainFrame mainFrame, ConfFileTableTab[] initialTabs, int indexOfSelectedTab, FileTableConfiguration conf) {
         super(new BorderLayout());
 
-        LOGGER.trace(" initialFolder:"+initialFolders);
-        for (AbstractFile folder:initialFolders)
-        	LOGGER.trace("\t"+folder);
+        LOGGER.trace(" initialTabs:");
+        for (FileTableTab tab:initialTabs)
+        	LOGGER.trace("\t"+(tab.getLocation() != null ?  tab.getLocation().getAbsolutePath() : null));
         		
         this.mainFrame = mainFrame;
         
@@ -207,9 +209,10 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         locationChanger = new LocationChanger(mainFrame, this, locationManager);
         
         // Create the Tabs (Must be called after the fileTable was created and current folder was set)
-        tabs = new FileTableTabs(mainFrame, this, initialFolders);
+        tabs = new FileTableTabs(mainFrame, this, initialTabs);
         
 		// Select the tab that was previously selected on last run
+        System.out.println("selecting: " + indexOfSelectedTab);
 		ChangeFolderThread changeFolderThread = tabs.selectTab(indexOfSelectedTab);
 		if(changeFolderThread != null) {
 			while(changeFolderThread.isAlive()) {

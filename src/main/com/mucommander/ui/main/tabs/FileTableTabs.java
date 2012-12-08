@@ -37,23 +37,27 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 
 	/** FolderPanel containing those tabs */
 	private FolderPanel folderPanel;
-	
+
 	/** Factory of instances of FileTableTab */
-	private TabFactory<FileTableTab, AbstractFile> tabsFactory;
-	
-	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, AbstractFile[] initialFolders) {
+	private TabFactory<FileTableTab, AbstractFile> defaultTabsFactory;
+
+	/** Factory of instances of FileTableTab */
+	private TabFactory<FileTableTab, FileTableTab> clonedTabsFactory;
+
+	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, ConfFileTableTab[] initialTabs) {
 		super(new FileTableTabsWithoutHeadersViewerFactory(folderPanel), new FileTableTabsWithHeadersViewerFactory(mainFrame, folderPanel));
 		
 		this.folderPanel = folderPanel;
 		
-		tabsFactory = new FileTableTabFactory(folderPanel);
+		defaultTabsFactory = new DefaultFileTableTabFactory(folderPanel);
+		clonedTabsFactory = new ClonedFileTableTabFactory(folderPanel);
 		
 		// Register to location change events
 		folderPanel.getLocationManager().addLocationListener(this);
 		
 		// Add the initial folders
-		for (AbstractFile folder : initialFolders)
-			addTab(tabsFactory.createTab(folder));
+		for (FileTableTab tab : initialTabs)
+			addTab(clonedTabsFactory.createTab(tab));
 	}
 	
 	@Override
@@ -115,7 +119,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 ********************/
 	
 	public void add(AbstractFile file) {
-		addTab(tabsFactory.createTab(file));
+		addTab(defaultTabsFactory.createTab(file));
 	}
 	
 	public void add(FileTableTab tab) {
@@ -135,7 +139,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	}
 	
 	public void duplicate() {
-		add(tabsFactory.createTab(folderPanel.getCurrentFolder()));
+		add(clonedTabsFactory.createTab(getCurrentTab()));
 	}
 	
 	public void lock() {

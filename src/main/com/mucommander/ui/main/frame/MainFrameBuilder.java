@@ -33,6 +33,8 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.MuPreferencesAPI;
 import com.mucommander.conf.MuSnapshot;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
+import com.mucommander.ui.main.table.Column;
+import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -102,5 +104,74 @@ public abstract class MainFrameBuilder {
         	 LOGGER.debug("\t"+result);
         
         return results;
+    }
+
+    /**
+     * Retrieves the user's initial path for the specified frame.
+     * <p>
+     * If the path found in preferences is either illegal or does not exist, this method will
+     * return the user's home directory - we assume this will always exist, which might be a bit
+     * of a leap of faith.
+     * </p>
+     * @param  folderPanelType panel for which the initial path should be returned (either {@link com.mucommander.ui.main.FolderPanel.FolderPanelType.LEFT} or
+     *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
+     * @return       the user's initial path for the specified frame.
+     */ 
+    protected AbstractFile getInitialPath(FolderPanelType folderPanelType) {
+        // Preferences configuration
+        MuPreferencesAPI preferences = MuConfigurations.getPreferences();
+        
+        // Checks which kind of initial path we're dealing with.
+        boolean isCustom = preferences.getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
+
+        String customPath = null;
+        // Handles custom initial paths.
+        if (isCustom) {
+        	customPath = (folderPanelType == FolderPanelType.LEFT ? 
+        			preferences.getVariable(MuPreference.LEFT_CUSTOM_FOLDER)
+        			: preferences.getVariable(MuPreference.RIGHT_CUSTOM_FOLDER));
+        }
+
+        AbstractFile result = null;
+        if (customPath == null || (result = FileFactory.getFile(customPath)) == null || !result.exists())
+        	result = getHomeFolder();
+        
+        LOGGER.debug("initial folder: " + result);
+        
+        return result;
+    }
+
+    protected FileTableConfiguration getFileTableConfiguration(FolderPanelType folderPanelType, int window) {
+        FileTableConfiguration conf;
+
+        conf = new FileTableConfiguration();
+
+        // Loop on columns
+        for(Column c  : Column.values()) {
+            if(c!=Column.NAME) {       // Skip the special name column (always visible, width automatically calculated)
+            	// Sets the column's initial visibility.
+            	conf.setEnabled(c,
+            			MuConfigurations.getSnapshot().getVariable(
+            					MuSnapshot.getShowColumnVariable(window, c, folderPanelType == FolderPanelType.LEFT),
+            					c.showByDefault()
+    					)
+    			);
+
+                // Sets the column's initial width.
+                conf.setWidth(c, MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getColumnWidthVariable(window, c, folderPanelType == FolderPanelType.LEFT)));
+            }
+
+            // Sets the column's initial order
+            conf.setPosition(c, MuConfigurations.getSnapshot().getVariable(
+                                    MuSnapshot.getColumnPositionVariable(window, c, folderPanelType == FolderPanelType.LEFT),
+                                    c.ordinal())
+            );
+        }
+
+        return conf;
+    }
+    
+    protected AbstractFile getHomeFolder() {
+    	return FileFactory.getFile(System.getProperty("user.home"));
     }
 }
