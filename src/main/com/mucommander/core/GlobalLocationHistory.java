@@ -109,6 +109,14 @@ public class GlobalLocationHistory extends LocationAdapter {
 		return history.contains(folderURL);
 	}
 	
+	public void snapshot(Configuration configuration) {
+		configuration.setVariable(MuSnapshot.getRecentLocationsCountVariable(), history.size());
+    	
+    	Iterator<FileURL> iterator = history.iterator();
+    	for (int i=0; iterator.hasNext(); ++i)
+    		configuration.setVariable(MuSnapshot.getRecentLocationVariable(i), iterator.next().toString());
+	}
+	
 	///////////////////////
 	/// LocationAdapter ///
 	///////////////////////
