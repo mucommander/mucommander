@@ -37,7 +37,7 @@ What's new since v0.9 ?
 -----------------------
 
 New features:
-- Quick list of the open tabs in the panel (ticket #450).
+- Quick list of the open tabs in panel (ticket #450).
 - Locking tabs capability.
 - Add 'Duplicate tab' and 'Clone tab to other panel' actions.
 
@@ -49,6 +49,7 @@ Improvements:
 - The recently visited locations list is changed to include all the accessed locations from all tabs and windows.
 - The recently visited locations list is restored from previous run on startup (ticket #471).
 - Add fullscreen support for Mac OS X Lion (ticket #468).
+- Add the ability to open sftp symlinks (ticket #467).
 
 Localization:
 - 
