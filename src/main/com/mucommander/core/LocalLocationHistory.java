@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
@@ -69,24 +70,23 @@ public class LocalLocationHistory {
 	 *
 	 * <p>This method is called by FolderPanel each time a folder is changed.
 	 */
-	public void tryToAddToHistory(AbstractFile folder) {
-		this.tryToAddToHistory(folder.getURL());
+	public void tryToAddToHistory(FileURL folderURL) {
+		// Do not add folder to history if new current folder is the same as previous folder
+		if (historyIndex<0 || !folderURL.equals(history.get(historyIndex), false, false))
+			addToHistory(folderURL);
 
 		// Save last recallable folder on startup, only if :
 		//  - it is a directory on a local filesytem
 		//  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
 		// Java from triggering that dreaded 'Drive not ready' popup.
-		LOGGER.trace("folder="+folder+" root="+folder.getRoot());
-		if(folder.getURL().getScheme().equals(FileProtocols.FILE) && folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
-			this.lastRecallableFolder = folder.getAbsolutePath();
-			LOGGER.trace("lastRecallableFolder= "+lastRecallableFolder);
+		LOGGER.trace("folder="+folderURL);
+		if(folderURL.getScheme().equals(FileProtocols.FILE)) {
+			AbstractFile folder = FileFactory.getFile(folderURL);
+			if (folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
+				this.lastRecallableFolder = folder.getAbsolutePath();
+				LOGGER.trace("lastRecallableFolder= "+lastRecallableFolder);
+			}
 		}
-	}
-
-	private void tryToAddToHistory(FileURL folderURL) {
-		// Do not add folder to history if new current folder is the same as previous folder
-		if (historyIndex<0 || !folderURL.equals(history.get(historyIndex), false, false))
-			addToHistory(folderURL);
 	}
 
 	private void addToHistory(FileURL folderURL) {

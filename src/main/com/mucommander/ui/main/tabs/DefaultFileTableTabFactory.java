@@ -69,7 +69,7 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, Abst
 			this.location = location;
 			
 			// add location to the history (See LocalLocationHistory to see how it handles the first location it gets)
-			locationHistory.tryToAddToHistory(location);
+			locationHistory.tryToAddToHistory(location.getURL());
 		}
 
 		public AbstractFile getLocation() {
