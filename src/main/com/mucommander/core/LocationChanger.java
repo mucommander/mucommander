@@ -171,7 +171,7 @@ public class LocationChanger {
 	 */
 	public ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
 		try {
-			return tryChangeCurrentFolder(FileURL.getFileURL(folderPath), null);
+			return tryChangeCurrentFolder(FileURL.getFileURL(folderPath), null, false);
 		}
 		catch(MalformedURLException e) {
 			// FileURL could not be resolved, notify the user that the folder doesn't exist
@@ -195,7 +195,11 @@ public class LocationChanger {
 	 * @return the thread that performs the actual folder change, null if another folder change is already underway
 	 */
 	public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL) {
-		return tryChangeCurrentFolder(folderURL, null);
+		return tryChangeCurrentFolder(folderURL, null, false);
+	}
+
+	public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, boolean changeLockedTab) {
+		return tryChangeCurrentFolder(folderURL, null, changeLockedTab);
 	}
 
 	/**
@@ -214,7 +218,7 @@ public class LocationChanger {
 	 * @param credentialsMapping the CredentialsMapping to use for authentication, can be null
 	 * @return the thread that performs the actual folder change, null if another folder change is already underway
 	 */
-	public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
+	public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping, boolean changeLockedTab) {
 		LOGGER.debug("folderURL="+folderURL);
 
 		synchronized(FOLDER_CHANGE_LOCK) {
@@ -231,7 +235,7 @@ public class LocationChanger {
 			// changes the changeFolderThread field to null when finished, and it may do so before this method has
 			// returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
-			ChangeFolderThread thread = new ChangeFolderThread(folderURL);
+			ChangeFolderThread thread = new ChangeFolderThread(folderURL, changeLockedTab);
 			thread.setCredentialsMapping(credentialsMapping);
 			thread.start();
 
@@ -427,8 +431,9 @@ public class LocationChanger {
 			setPriority(Thread.MAX_PRIORITY);
 		}
 
-		public ChangeFolderThread(FileURL folderURL) {
+		public ChangeFolderThread(FileURL folderURL, boolean changeLockedTab) {
 			this.folderURL = folderURL;
+			this.changeLockedTab = changeLockedTab;
 
 			setPriority(Thread.MAX_PRIORITY);
 		}

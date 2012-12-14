@@ -74,10 +74,10 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
      *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
      * @return       our best shot at what was actually requested.
      */
-    private AbstractFile getInitialAbstractPaths(String path, FolderPanelType folderPanelType) {
+    private FileURL getInitialAbstractPaths(String path, FolderPanelType folderPanelType) {
         // This is one of those cases where a null value actually has a proper meaning.
         if(path == null)
-            return getHomeFolder();
+            return getHomeFolder().getURL();
 
         // Tries the specified path as-is.
         AbstractFile file;
@@ -106,7 +106,7 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
                     }
                     // If the user cancels, we fall back to the default path.
                     else {
-                        return getHomeFolder();
+                        return getHomeFolder().getURL();
                     }
                 }
                 else {
@@ -121,15 +121,15 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
             // Tries the specified path as a relative path.
             if((file = FileFactory.getFile(new File(path).getAbsolutePath())) == null || !file.exists())
                 // Defaults to home.
-                return getHomeFolder();
+                return getHomeFolder().getURL();
 
         // If the specified path is a non-browsable, uses its parent.
         if(!file.isBrowsable())
             // This is just playing things safe, as I doubt there might ever be a case of
             // a file without a parent directory.
             if((file = file.getParent()) == null)
-                return getHomeFolder();
+                return getHomeFolder().getURL();
 
-        return file;
+        return file.getURL();
     }
 }

@@ -29,6 +29,8 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.core.LocationChanger.ChangeFolderThread;
 import com.mucommander.desktop.DesktopManager;
@@ -143,7 +145,11 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 			setTabHeader(index, headersFactory.create(tab));
 		}
 		
-		setToolTipTextAt(index, tab.getLocation().getAbsolutePath());
+		String locationText = tab.getLocation().getPath();
+		// Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+		if(LocalFile.hasRootDrives())
+			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
+		setToolTipTextAt(index, locationText);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 

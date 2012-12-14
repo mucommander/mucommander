@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.tabs;
 
-import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.tabs.TabFactory;
 
@@ -46,11 +46,11 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 			this.tab = tab;
 		}
 		
-		public void setLocation(AbstractFile location) {
+		public void setLocation(FileURL location) {
 			tab.setLocation(location);
 		}
 
-		public AbstractFile getLocation() {
+		public FileURL getLocation() {
 			return tab.getLocation();
 		}
 

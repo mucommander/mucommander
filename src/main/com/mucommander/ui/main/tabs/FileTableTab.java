@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.tabs;
 
-import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.tabs.Tab;
 
@@ -34,14 +34,14 @@ public interface FileTableTab extends Tab {
 	 * 
 	 * @param location the file that is going to be presented in the tab
 	 */
-	public void setLocation(AbstractFile location);
+	public void setLocation(FileURL location);
 
 	/**
 	 * Getter for the location presented in the tab
 	 * 
 	 * @return the file that is being presented in the tab
 	 */
-	public AbstractFile getLocation();
+	public FileURL getLocation();
 	
 	/**
 	 * Set the tab to be locked or unlocked according to the given flag

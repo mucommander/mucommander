@@ -21,12 +21,13 @@ package com.mucommander.ui.main.frame;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.net.MalformedURLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
-import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -91,14 +92,14 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 		for (int i=0; i<nbTabsInLeftPanel; ++i)
 			leftTabs[i] = new ConfFileTableTab(
 									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
-									FileFactory.getFile(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))));
+									restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))));
 		
 		int nbTabsInRightPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, false));
 		ConfFileTableTab[] rightTabs = new ConfFileTableTab[nbTabsInRightPanel];
 		for (int i=0; i<nbTabsInRightPanel; ++i)
 			rightTabs[i] = new ConfFileTableTab(
 									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
-									FileFactory.getFile(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))));
+									restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))));
 		
 		MainFrame mainFrame = new MainFrame(
 				leftTabs,
@@ -146,5 +147,13 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
     	return isCustom ? 
     		0 :
     		MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
+    }
+    
+    private FileURL restoreFileURL(String url) {
+    	try {
+			return FileURL.getFileURL(url);
+		} catch (MalformedURLException e) {
+			return getHomeFolder().getURL();
+		}
     }
 }

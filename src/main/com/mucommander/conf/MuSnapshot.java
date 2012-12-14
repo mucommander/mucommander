@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
-import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
@@ -611,7 +610,7 @@ public class MuSnapshot {
     	// Save tabs locations
     	while (tabsIterator.hasNext()) {
     		FileTableTab tab = tabsIterator.next();
-    		configuration.setVariable(getTabLocationVariable(index, isLeft, tabsCounter), tab.getLocation().getAbsolutePath());
+    		configuration.setVariable(getTabLocationVariable(index, isLeft, tabsCounter), tab.getLocation().toString());
     		configuration.setVariable(getTabLockedVariable(index, isLeft, tabsCounter), tab.isLocked());
     		++tabsCounter;
     	}

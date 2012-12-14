@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowTabsQLAction;
@@ -53,7 +54,7 @@ public class TabsQL extends QuickListWithIcons<FileTableTab> {
 	
 	@Override
 	protected Icon itemToIcon(FileTableTab item) {
-		return getIconOfFile(item.getLocation());
+		return getIconOfFile(FileFactory.getFile(item.getLocation()));
 	}
 
 	@Override

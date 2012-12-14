@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.tabs;
 
-import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.tabs.TabFactory;
@@ -28,7 +28,7 @@ import com.mucommander.ui.tabs.TabFactory;
  * 
  * @author Arik Hadas
  */
-public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, AbstractFile> {
+public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, FileURL> {
 
 	private FolderPanel folderPanel;
 	
@@ -36,7 +36,7 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, Abst
 		this.folderPanel = folderPanel;
 	}
 
-	public FileTableTab createTab(AbstractFile location) {
+	public FileTableTab createTab(FileURL location) {
 		if (location == null)
 			throw new RuntimeException("Invalid location");
 
@@ -46,7 +46,7 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, Abst
 	class DefaultFileTableTab implements FileTableTab {
 		
 		/** The location presented in this tab */
-		private AbstractFile location;
+		private FileURL location;
 
 		/** Flag that indicates whether the tab is locked or not */
 		private boolean locked;
@@ -59,20 +59,20 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, Abst
 		 * 
 		 * @param location - the location that would be presented in the tab
 		 */
-		private DefaultFileTableTab(AbstractFile location, FolderPanel folderPanel) {
+		private DefaultFileTableTab(FileURL location, FolderPanel folderPanel) {
 			this.location = location;
 			this.locked = false;
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
 		
-		public void setLocation(AbstractFile location) {
+		public void setLocation(FileURL location) {
 			this.location = location;
 			
 			// add location to the history (See LocalLocationHistory to see how it handles the first location it gets)
-			locationHistory.tryToAddToHistory(location.getURL());
+			locationHistory.tryToAddToHistory(location);
 		}
 
-		public AbstractFile getLocation() {
+		public FileURL getLocation() {
 			return location;
 		}
 		
@@ -91,7 +91,7 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, Abst
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof FileTableTab)
-				return location.getAbsolutePath().equals(((FileTableTab) obj).getLocation().getAbsolutePath()) &&
+				return location.equals(((FileTableTab) obj).getLocation()) &&
 					   locked == ((FileTableTab) obj).isLocked();
 			return false;
 		}

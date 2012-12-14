@@ -1,18 +1,18 @@
 package com.mucommander.ui.main.tabs;
 
-import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocalLocationHistory;
 
 public class ConfFileTableTab implements FileTableTab {
 
 	private boolean lock;
-	private AbstractFile location;
+	private FileURL location;
 	
-	public ConfFileTableTab(AbstractFile location) {
+	public ConfFileTableTab(FileURL location) {
 		this(false, location);
 	}
 	
-	public ConfFileTableTab(boolean lock, AbstractFile location) {
+	public ConfFileTableTab(boolean lock, FileURL location) {
 		this.lock = lock;
 		this.location = location;
 	}
@@ -21,11 +21,11 @@ public class ConfFileTableTab implements FileTableTab {
 		return lock;
 	}
 
-	public AbstractFile getLocation() {
+	public FileURL getLocation() {
 		return location;
 	}
 	
-	public void setLocation(AbstractFile location) {
+	public void setLocation(FileURL location) {
 		throw new UnsupportedOperationException("cannot change location of configuration tab");
 	}
 

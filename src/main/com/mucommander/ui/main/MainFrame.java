@@ -306,8 +306,8 @@ public class MainFrame extends JFrame implements LocationListener {
     	FileTable leftFileTable = leftFolderPanel.getFileTable();
     	FileTable rightFileTable = rightFolderPanel.getFileTable();
 
-    	init(new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(leftFolderPanel.getCurrentFolder())}, 0, leftFileTable.getConfiguration()),
-             new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(rightFolderPanel.getCurrentFolder())}, 0, rightFileTable.getConfiguration()));
+    	init(new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())}, 0, leftFileTable.getConfiguration()),
+             new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(rightFolderPanel.getCurrentFolder().getURL())}, 0, rightFileTable.getConfiguration()));
 
     	// TODO: Sorting should be part of the FileTable configuration
         this.leftTable.sortBy(leftFileTable.getSortInfo());

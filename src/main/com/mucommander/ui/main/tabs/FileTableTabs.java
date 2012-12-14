@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocationChanger.ChangeFolderThread;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -39,7 +40,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	private FolderPanel folderPanel;
 
 	/** Factory of instances of FileTableTab */
-	private TabFactory<FileTableTab, AbstractFile> defaultTabsFactory;
+	private TabFactory<FileTableTab, FileURL> defaultTabsFactory;
 
 	/** Factory of instances of FileTableTab */
 	private TabFactory<FileTableTab, FileTableTab> clonedTabsFactory;
@@ -76,7 +77,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		return getTab(getSelectedIndex());
 	}
 	
-	private void updateTabLocation(final AbstractFile location) {
+	private void updateTabLocation(final FileURL location) {
 		updateCurrentTab(new TabUpdater<FileTableTab>() {
 			
 			public void update(FileTableTab tab) {
@@ -119,7 +120,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 ********************/
 	
 	public void add(AbstractFile file) {
-		addTab(defaultTabsFactory.createTab(file));
+		addTab(defaultTabsFactory.createTab(file.getURL()));
 	}
 	
 	public void add(FileTableTab tab) {
@@ -163,15 +164,15 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 **********************************/
 	
 	public void locationChanged(LocationEvent locationEvent) {
-		updateTabLocation(folderPanel.getCurrentFolder());
+		updateTabLocation(folderPanel.getCurrentFolder().getURL());
 	}
 
 	public void locationCancelled(LocationEvent locationEvent) {
-		updateTabLocation(folderPanel.getCurrentFolder());
+		updateTabLocation(folderPanel.getCurrentFolder().getURL());
 	}
 
 	public void locationFailed(LocationEvent locationEvent) {
-		updateTabLocation(folderPanel.getCurrentFolder());
+		updateTabLocation(folderPanel.getCurrentFolder().getURL());
 	}
 	
 	public void locationChanging(LocationEvent locationEvent) { }

@@ -18,6 +18,9 @@
 
 package com.mucommander.ui.main.tabs;
 
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 
@@ -86,7 +89,11 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         	add(closeButton, gbc);
         }
         
-        setText(tab.getLocation().getName());
+        String locationText = tab.getLocation().getPath();
+        // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+		if(tab.getLocation().getHost().equals(FileURL.LOCALHOST) && LocalFile.hasRootDrives())
+			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
+        setText(locationText);
         
         lockedIcon.setVisible(tab.isLocked());
     }

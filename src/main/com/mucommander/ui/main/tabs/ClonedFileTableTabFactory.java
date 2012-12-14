@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.main.tabs;
 
-import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.tabs.TabFactory;
@@ -46,7 +46,7 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 	class ClonedFileTableTab implements FileTableTab {
 		
 		/** The location presented in this tab */
-		private AbstractFile location;
+		private FileURL location;
 
 		/** Flag that indicates whether the tab is locked or not */
 		private boolean locked;
@@ -65,14 +65,14 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
 		
-		public void setLocation(AbstractFile location) {
+		public void setLocation(FileURL location) {
 			this.location = location;
 			
 			// add location to the history (See LocalLocationHistory to see how it handles the first location it gets)
-			locationHistory.tryToAddToHistory(location.getURL());
+			locationHistory.tryToAddToHistory(location);
 		}
 
-		public AbstractFile getLocation() {
+		public FileURL getLocation() {
 			return location;
 		}
 		
@@ -91,7 +91,7 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof FileTableTab)
-				return location.getAbsolutePath().equals(((FileTableTab) obj).getLocation().getAbsolutePath()) &&
+				return location.equals(((FileTableTab) obj).getLocation()) &&
 					   locked == ((FileTableTab) obj).isLocked();
 			return false;
 		}

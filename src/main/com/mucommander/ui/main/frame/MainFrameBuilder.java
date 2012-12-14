@@ -27,15 +27,16 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.MuPreferencesAPI;
 import com.mucommander.conf.MuSnapshot;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTableConfiguration;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * 
@@ -117,7 +118,7 @@ public abstract class MainFrameBuilder {
      *               {@link #@link com.mucommander.ui.main.FolderPanel.FolderPanelType.RIGHT}).
      * @return       the user's initial path for the specified frame.
      */ 
-    protected AbstractFile getInitialPath(FolderPanelType folderPanelType) {
+    protected FileURL getInitialPath(FolderPanelType folderPanelType) {
         // Preferences configuration
         MuPreferencesAPI preferences = MuConfigurations.getPreferences();
         
@@ -138,7 +139,7 @@ public abstract class MainFrameBuilder {
         
         LOGGER.debug("initial folder: " + result);
         
-        return result;
+        return result.getURL();
     }
 
     protected FileTableConfiguration getFileTableConfiguration(FolderPanelType folderPanelType, int window) {

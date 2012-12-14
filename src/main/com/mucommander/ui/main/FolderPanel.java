@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.core.LocationChanger;
@@ -143,7 +144,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
         LOGGER.trace(" initialTabs:");
         for (FileTableTab tab:initialTabs)
-        	LOGGER.trace("\t"+(tab.getLocation() != null ?  tab.getLocation().getAbsolutePath() : null));
+        	LOGGER.trace("\t"+(tab.getLocation() != null ?  tab.getLocation().toString() : null));
         		
         this.mainFrame = mainFrame;
         
@@ -401,12 +402,20 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     	locationTextField.setProgressValue(value);
     }
 
+    public ChangeFolderThread tryChangeCurrentFolderEvenOnLockedTab(FileURL folderURL) {
+    	return locationChanger.tryChangeCurrentFolder(folderURL, true);
+    }
+
     public ChangeFolderThread tryChangeCurrentFolderEvenOnLockedTab(AbstractFile folder) {
     	return locationChanger.tryChangeCurrentFolder(folder, true);
     }
     
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
     	return locationChanger.tryChangeCurrentFolder(folder, false);
+    }
+
+    public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
+    	return locationChanger.tryChangeCurrentFolder(FileFactory.getFile(folderURL), selectThisFileAfter, findWorkableFolder, false);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
@@ -422,7 +431,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
-    	return locationChanger.tryChangeCurrentFolder(folderURL, credentialsMapping);
+    	return locationChanger.tryChangeCurrentFolder(folderURL, credentialsMapping, false);
     }
 
     public ChangeFolderThread tryRefreshCurrentFolder() {
