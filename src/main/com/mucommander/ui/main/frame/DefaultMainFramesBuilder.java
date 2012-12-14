@@ -48,7 +48,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
 	@Override
 	public int getSelectedFrame() {
-		return snapshot.getIntegerVariable(MuSnapshot.getSelectedWindow());
+		return Math.max(snapshot.getIntegerVariable(MuSnapshot.getSelectedWindow()), 0);
 	}
 
 	@Override
