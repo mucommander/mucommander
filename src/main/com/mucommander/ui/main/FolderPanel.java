@@ -212,7 +212,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         tabs = new FileTableTabs(mainFrame, this, initialTabs);
         
 		// Select the tab that was previously selected on last run
-        System.out.println("selecting: " + indexOfSelectedTab);
 		ChangeFolderThread changeFolderThread = tabs.selectTab(indexOfSelectedTab);
 		if(changeFolderThread != null) {
 			while(changeFolderThread.isAlive()) {
