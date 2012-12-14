@@ -19,6 +19,7 @@
 package com.mucommander.core;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -93,13 +94,8 @@ public class GlobalLocationHistory extends LocationAdapter {
 	 * 
 	 * @return all the tracked locations
 	 */
-	public List<AbstractFile> getHistory() {
-		List<AbstractFile> result = new LinkedList<AbstractFile>();
-		
-		for (Iterator<FileURL> iterator = history.iterator(); iterator.hasNext(); )
-			result.add(0, FileFactory.getFile(iterator.next()));
-		
-		return result;
+	public List<FileURL> getHistory() {
+		return new ArrayList<FileURL>(history);
 	}
 	
 	/**
@@ -107,14 +103,6 @@ public class GlobalLocationHistory extends LocationAdapter {
 	 */
 	public boolean historyContains(FileURL folderURL) {
 		return history.contains(folderURL);
-	}
-	
-	public void snapshot(Configuration configuration) {
-		configuration.setVariable(MuSnapshot.getRecentLocationsCountVariable(), history.size());
-    	
-    	Iterator<FileURL> iterator = history.iterator();
-    	for (int i=0; iterator.hasNext(); ++i)
-    		configuration.setVariable(MuSnapshot.getRecentLocationVariable(i), iterator.next().toString());
 	}
 	
 	///////////////////////

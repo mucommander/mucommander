@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -567,7 +568,7 @@ public class MuSnapshot {
         	configuration.setVariable(MuSnapshot.SCREEN_HEIGHT, screenSize.height);
         }
     	
-    	GlobalLocationHistory.Instance().snapshot(configuration);
+    	setGlobalHistory();
     	
         configuration.write();
     }
@@ -593,6 +594,16 @@ public class MuSnapshot {
         setTabsAttributes(index, isLeft, panel.getTabs());
     }
     
+    private void setGlobalHistory() {
+    	List<FileURL> locations = GlobalLocationHistory.Instance().getHistory();
+
+    	configuration.setVariable(getRecentLocationsCountVariable(), locations.size());
+    	
+    	Iterator<FileURL> iterator = locations.iterator();
+    	for (int i=0; iterator.hasNext(); ++i)
+    		configuration.setVariable(getRecentLocationVariable(i), iterator.next().toString());
+    }
+
     private void setTabsAttributes(int index, boolean isLeft, FileTableTabs tabs) {
     	int tabsCounter = 0;
     	Iterator<FileTableTab> tabsIterator = tabs.iterator();

@@ -18,12 +18,13 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.Icon;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -36,7 +37,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  * 
  * @author Arik Hadas
  */
-public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> {
+public class RecentLocationsQL extends QuickListWithIcons<FileURL> {
 	
 	private static int MAX_ELEMENTS = 15;
 
@@ -49,34 +50,22 @@ public class RecentLocationsQL extends QuickListWithIcons<AbstractFile> {
 	}
 
 	@Override
-    protected void acceptListItem(AbstractFile item) {
+    protected void acceptListItem(FileURL item) {
 		folderPanel.tryChangeCurrentFolder(item);
 	}
 
 	@Override
-    public AbstractFile[] getData() {
-		List<AbstractFile> list = GlobalLocationHistory.Instance().getHistory();
+    public FileURL[] getData() {
+		List<FileURL> list = GlobalLocationHistory.Instance().getHistory();
 		
 		// Remove currently presented location from the list
-		list.remove(folderPanel.getCurrentFolder());
+		list.remove(folderPanel.getCurrentFolder().getURL());
 
-		AbstractFile[] results;
-		
-		if (list.size() <= MAX_ELEMENTS)
-			results = list.toArray(new AbstractFile[0]);
-		else {
-			results = new AbstractFile[MAX_ELEMENTS];
-			Iterator<AbstractFile> iterator = list.iterator();
-			
-			for (int i=0; i<results.length; ++i)
-				results[i] = iterator.next();
-		}
-		
-		return results;
+		return list.toArray(new FileURL[0]);
 	}
 
 	@Override
-    protected Icon itemToIcon(AbstractFile item) {
-		return getIconOfFile(item);
+    protected Icon itemToIcon(FileURL item) {
+		return getIconOfFile(FileFactory.getFile(item));
 	}
 }
