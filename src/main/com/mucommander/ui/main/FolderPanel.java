@@ -406,10 +406,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     	return locationChanger.tryChangeCurrentFolder(folderURL, true);
     }
 
-    public ChangeFolderThread tryChangeCurrentFolderEvenOnLockedTab(AbstractFile folder) {
-    	return locationChanger.tryChangeCurrentFolder(folder, true);
-    }
-    
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
     	return locationChanger.tryChangeCurrentFolder(folder, false);
     }
