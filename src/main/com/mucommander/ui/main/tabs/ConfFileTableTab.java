@@ -17,29 +17,23 @@ public class ConfFileTableTab implements FileTableTab {
 		this.location = location;
 	}
 
-	@Override
 	public boolean isLocked() {
 		return lock;
 	}
 
-	@Override
 	public AbstractFile getLocation() {
 		return location;
 	}
 	
-	@Override
 	public void setLocation(AbstractFile location) {
 		throw new UnsupportedOperationException("cannot change location of configuration tab");
 	}
 
-	@Override
 	public void setLocked(boolean locked) {
 		throw new UnsupportedOperationException("cannot lock configuration tab");
 	}
 
-	@Override
 	public LocalLocationHistory getLocationHistory() {
 		return null;
 	}
-
 }
