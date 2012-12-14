@@ -311,7 +311,8 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		if (!refreshViewer())
 			tabsViewer.add(tabsCollection.get(index), index);
 		
-		tabsViewer.setSelectedTabIndex(index);
+		if(isDisplayable())
+			tabsViewer.setSelectedTabIndex(index);
 	}
 
 	public void tabRemoved(int index) {
@@ -320,7 +321,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		if (!refreshViewer())
 			tabsViewer.removeTab(index);
 		else
-			selectTab(previouslySelectedIndex > 0 ? previouslySelectedIndex-1 : 0);
+			selectTab(Math.max(previouslySelectedIndex-1, 0));
 	}
 	
 	public void tabUpdated(int index) {
