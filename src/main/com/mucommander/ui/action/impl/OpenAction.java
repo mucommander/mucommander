@@ -85,9 +85,6 @@ public class OpenAction extends MuAction {
      * @param destination if <code>file</code> is browsable, folder panel in which to open the file.
      */
     protected void open(AbstractFile file, FolderPanel destination) {
-    	if (file.isSymlink())
-    		file = file.getCanonicalFile();
-    	
         // Opens browsable files in the destination FolderPanel.
         if(file.isBrowsable()) {
         	FileTableTabs tabs = destination.getTabs();
