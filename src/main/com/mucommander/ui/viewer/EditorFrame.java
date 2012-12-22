@@ -69,7 +69,7 @@ public class EditorFrame extends FileFrame {
     }
     
     @Override
-	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException, Exception {
+	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
 		return editor = EditorRegistrar.createFileEditor(file, EditorFrame.this);
 	}
 }

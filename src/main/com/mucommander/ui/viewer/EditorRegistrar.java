@@ -86,11 +86,10 @@ public class EditorRegistrar {
      *
      * @param file the file that will be displayed by the returned FileEditor
      * @param frame the frame in which the FileEditor is shown
-     * @return the created FileEditor
+     * @return the created FileEditor, or null if no suitable editor was found
      * @throws UserCancelledException if the user has been asked to confirm the operation and canceled
-     * 		   Exception if no suitable editor was found
      */
-    public static FileEditor createFileEditor(AbstractFile file, EditorFrame frame) throws UserCancelledException, Exception {
+    public static FileEditor createFileEditor(AbstractFile file, EditorFrame frame) throws UserCancelledException {
         FileEditor editor = null;
     	for(EditorFactory factory : editorFactories) {
             try {
@@ -114,10 +113,8 @@ public class EditorRegistrar {
             }
         }
 
-    	if (editor == null)
-    		throw new Exception("No suitable editor found");
-    	
-    	editor.setFrame(frame);
+    	if (editor != null)
+    		editor.setFrame(frame);
     	
     	return editor;
     }

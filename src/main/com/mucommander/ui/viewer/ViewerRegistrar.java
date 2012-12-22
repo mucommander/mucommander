@@ -89,11 +89,10 @@ public class ViewerRegistrar {
      *
      * @param file the file that will be displayed by the returned FileViewer
      * @param frame the frame in which the FileViewer is shown
-     * @return the created FileViewer
+     * @return the created FileViewer, or null if no suitable viewer was found
      * @throws UserCancelledException if the user has been asked to confirm the operation and canceled
-     * 		   Exception if no suitable viewer was found
      */
-    public static FileViewer createFileViewer(AbstractFile file, ViewerFrame frame) throws UserCancelledException, Exception {
+    public static FileViewer createFileViewer(AbstractFile file, ViewerFrame frame) throws UserCancelledException {
     	FileViewer viewer = null;
         for(ViewerFactory factory : viewerFactories) {
             try {
@@ -120,10 +119,8 @@ public class ViewerRegistrar {
             }
         }
 
-        if (viewer == null)
-        	throw new Exception("No suitable viewer found");
-        
-        viewer.setFrame(frame);
+        if (viewer != null)
+        	viewer.setFrame(frame);
         
         return viewer;
     }

@@ -59,7 +59,7 @@ public class ViewerFrame extends FileFrame {
     }
 
 	@Override
-	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException, Exception {
+	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
 		return ViewerRegistrar.createFileViewer(file, ViewerFrame.this);
 	}
 }

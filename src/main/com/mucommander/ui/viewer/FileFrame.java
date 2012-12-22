@@ -52,22 +52,31 @@ public abstract class FileFrame extends JFrame {
 	}
 	
 	protected void initContentPane(final AbstractFile file) {
-        AsyncPanel asyncPanel = new AsyncPanel() {
+		try {
+			filePresenter = createFilePresenter(file);
+		} catch (UserCancelledException e) {
+			// May get a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
+			return;
+		}
+
+		// if not suitable presenter was found for the given file
+		if (filePresenter == null) {
+			showGenericErrorDialog();
+			return;
+		}
+
+		AsyncPanel asyncPanel = new AsyncPanel() {
         	
             @Override
             public JComponent getTargetComponent() {
                 try {
-                	filePresenter = createFilePresenter(file);
-
                     // Ask the presenter to present the file
                 	filePresenter.open(file);
                 }
                 catch(Exception e) {
                     LOGGER.debug("Exception caught", e);
 
-                    // May be a UserCancelledException if the user canceled (refused to confirm the operation after a warning)
-                    if(!(e instanceof UserCancelledException))
-                        showGenericErrorDialog();
+                    showGenericErrorDialog();
 
                     dispose();
                     return filePresenter==null?new JPanel():filePresenter;
@@ -127,8 +136,7 @@ public abstract class FileFrame extends JFrame {
     
     @Override
     public void dispose() {
-    	if (filePresenter != null)
-    		filePresenter.beforeCloseHook();
+    	filePresenter.beforeCloseHook();
     	super.dispose();
     }
     
@@ -138,5 +146,5 @@ public abstract class FileFrame extends JFrame {
     
     protected abstract void showGenericErrorDialog();
     
-    protected abstract FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException, Exception;
+    protected abstract FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException;
 }
