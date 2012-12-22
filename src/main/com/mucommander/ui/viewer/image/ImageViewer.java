@@ -19,22 +19,37 @@
 
 package com.mucommander.ui.viewer.image;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
-import com.mucommander.ui.theme.*;
-import com.mucommander.ui.viewer.FileFrame;
-import com.mucommander.ui.viewer.FileViewer;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.helper.MenuToolkit;
+import com.mucommander.ui.helper.MnemonicHelper;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.viewer.FileFrame;
+import com.mucommander.ui.viewer.FileViewer;
 
 
 /**
@@ -166,27 +181,6 @@ class ImageViewer extends FileViewer implements ActionListener {
                                                   && zoomFactor/2*image.getHeight(null)>120));
     }
 
-    /*
-      private synchronized void goToImage(boolean next) {
-      AbstractFile newFile;
-      if(next)
-      newFile = getNextFileInFolder(file, true);
-      else
-      newFile = getPreviousFileInFolder(file, true);
-
-      if(newFile!=null) {
-      try {
-      loadImage(newFile);
-      frame.setCurrentFile(newFile);
-      updateFrame();
-      }
-      catch(IOException ex) {
-      }
-      }
-      }
-    */
-
-
     ///////////////////////////////
     // FileViewer implementation //
     ///////////////////////////////
@@ -195,7 +189,7 @@ class ImageViewer extends FileViewer implements ActionListener {
     public void show(AbstractFile file) throws IOException {
         loadImage(file);
     }
-    
+
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////

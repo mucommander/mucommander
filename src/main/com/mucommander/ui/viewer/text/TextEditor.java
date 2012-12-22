@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -215,6 +216,13 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     	super.setFrame(frame);
     	
     	frame.setFullScreen(isTextPresenterDisplayedInFullScreen());
+
+    	getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
+    	getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
+    		public void actionPerformed(ActionEvent e){
+    			getFrame().setFullScreen(!getFrame().isFullScreen());
+    		}
+    	});
     }
 
     @Override

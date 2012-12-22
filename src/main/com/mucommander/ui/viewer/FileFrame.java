@@ -4,21 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
@@ -31,8 +26,6 @@ import com.mucommander.ui.main.MainFrame;
  */
 public abstract class FileFrame extends JFrame {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileFrame.class);
-	
-	protected final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
 
 	private final static Dimension WAIT_DIALOG_SIZE = new Dimension(400, 350);
 
@@ -88,16 +81,6 @@ public abstract class FileFrame extends JFrame {
 
                 setJMenuBar(filePresenter.getMenuBar());
                 
-                // Catch Apple+W keystrokes under Mac OS X to close the window
-                if(OsFamilies.MAC_OS_X.isCurrent()) {
-                	filePresenter.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
-                	filePresenter.getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
-                		public void actionPerformed(ActionEvent e){
-                			dispose();
-                		}
-                	});
-                }
-
                 return filePresenter;
             }
 

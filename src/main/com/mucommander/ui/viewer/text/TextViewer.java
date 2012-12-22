@@ -27,6 +27,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -58,7 +60,9 @@ import com.mucommander.ui.viewer.FileViewer;
  */
 class TextViewer extends FileViewer implements EncodingListener {
 
-    private TextEditorImpl textEditorImpl;
+	public final static String CUSTOM_FULL_SCREEN_EVENT = "CUSTOM_FULL_SCREEN_EVENT";
+
+	private TextEditorImpl textEditorImpl;
     
     /** Menu items */
     // Menus //
@@ -95,6 +99,13 @@ class TextViewer extends FileViewer implements EncodingListener {
         super.setFrame(frame);
 
         frame.setFullScreen(isTextPresenterDisplayedInFullScreen());
+
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
+    	getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
+    		public void actionPerformed(ActionEvent e){
+    			getFrame().setFullScreen(!getFrame().isFullScreen());
+    		}
+    	});
     }
     
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
