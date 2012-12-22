@@ -52,6 +52,7 @@ import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.viewer.FileEditor;
+import com.mucommander.ui.viewer.FileFrame;
 
 
 /**
@@ -61,7 +62,7 @@ import com.mucommander.ui.viewer.FileEditor;
  */
 class TextEditor extends FileEditor implements DocumentListener, EncodingListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TextEditor.class);
-	
+
     /** Menu bar */
     // Menus //
     private JMenu editMenu;
@@ -168,6 +169,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     public void beforeCloseHook() {
     	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_WRAP, textEditorImpl.isWrap());
     	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_NUMBERS, getRowHeader().getView() != null);
+
+    	setTextPresenterDisplayedInFullScreen(getFrame().isFullScreen());
     }
 
     ///////////////////////////////
@@ -205,6 +208,13 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
                 // Fail silently
             }
         }
+    }
+
+    @Override
+    public void setFrame(FileFrame frame) {
+    	super.setFrame(frame);
+    	
+    	frame.setFullScreen(isTextPresenterDisplayedInFullScreen());
     }
 
     @Override

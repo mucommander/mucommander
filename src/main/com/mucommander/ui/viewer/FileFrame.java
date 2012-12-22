@@ -1,6 +1,8 @@
 package com.mucommander.ui.viewer;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -31,7 +33,9 @@ public abstract class FileFrame extends JFrame {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileFrame.class);
 	
 	protected final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
-	
+
+	private final static Dimension WAIT_DIALOG_SIZE = new Dimension(400, 350);
+
 	// The file presenter within this frame
 	private FilePresenter filePresenter;
 	
@@ -59,7 +63,7 @@ public abstract class FileFrame extends JFrame {
 			return;
 		}
 
-		// if not suitable presenter was found for the given file
+		// If not suitable presenter was found for the given file
 		if (filePresenter == null) {
 			showGenericErrorDialog();
 			return;
@@ -101,6 +105,9 @@ public abstract class FileFrame extends JFrame {
             protected void updateLayout() {
                 super.updateLayout();
 
+                // Sets panel to preferred size, without exceeding a maximum size and with a minimum size
+                pack();
+
                 // Request focus on the viewer when it is visible
                 FocusRequester.requestFocus(filePresenter);
             }
@@ -111,15 +118,33 @@ public abstract class FileFrame extends JFrame {
         contentPane.add(asyncPanel, BorderLayout.CENTER);
         setContentPane(contentPane);
 
-        // Sets panel to preferred size, without exceeding a maximum size and with a minimum size
-        pack();
+        setSize(WAIT_DIALOG_SIZE);
+        DialogToolkit.centerOnWindow(this, getMainFrame());
+
         setVisible(true);
     }
-	
+
 	protected MainFrame getMainFrame() {
 		return mainFrame;
 	}
-	
+
+	/**
+	 * Sets this file presenter to full screen
+	 */
+	public void setFullScreen(boolean on) {
+		int currentExtendedState = getExtendedState();
+		setExtendedState(on ? currentExtendedState | Frame.MAXIMIZED_BOTH : currentExtendedState & ~Frame.MAXIMIZED_BOTH);
+	}
+
+	/**
+	 * Returns whether this frame is set to be displayed in full screen mode
+	 * 
+	 * @return true if the frame is set to full screen, false otherwise
+	 */
+	public boolean isFullScreen() {
+		return (getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH;
+	}
+
 	////////////////////////
     // Overridden methods //
     ////////////////////////

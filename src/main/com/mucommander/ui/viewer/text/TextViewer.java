@@ -18,7 +18,6 @@
 
 package com.mucommander.ui.viewer.text;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -59,8 +58,6 @@ import com.mucommander.ui.viewer.FileViewer;
  */
 class TextViewer extends FileViewer implements EncodingListener {
 
-	private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
-	
     private TextEditorImpl textEditorImpl;
     
     /** Menu items */
@@ -96,9 +93,8 @@ class TextViewer extends FileViewer implements EncodingListener {
     @Override
     public void setFrame(FileFrame frame) {
         super.setFrame(frame);
-        
-        // Set the minimum size of text viewer frame to be greater than the default minimum size
-        frame.setMinimumSize(MIN_DIMENSION);
+
+        frame.setFullScreen(isTextPresenterDisplayedInFullScreen());
     }
     
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
@@ -187,6 +183,8 @@ class TextViewer extends FileViewer implements EncodingListener {
     public void beforeCloseHook() {
     	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_WRAP, textEditorImpl.isWrap());
     	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_NUMBERS, getRowHeader().getView() != null);
+
+    	setTextPresenterDisplayedInFullScreen(getFrame().isFullScreen());
     }
 
     String getEncoding() {

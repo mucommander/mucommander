@@ -11,19 +11,23 @@ import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuSnapshot;
 
 /**
  * Abstract class that serves as a common base for the file presenter objects (FileViewer, FileEditor).
  * 
  * @author Arik Hadas
  */
-abstract class FilePresenter extends JScrollPane {
+public abstract class FilePresenter extends JScrollPane {
 	
 	/** FileFrame instance that contains this presenter (may be null). */
     private FileFrame frame;
     
     /** File currently being presented. */
     private AbstractFile file;
+
+    private static boolean textPresenterFullScreen = MuConfigurations.getSnapshot().getBooleanVariable(MuSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN);
 	
 	public FilePresenter() {
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -40,7 +44,15 @@ abstract class FilePresenter extends JScrollPane {
 			}
 		});
 	}
-	
+
+	public static void setTextPresenterDisplayedInFullScreen(boolean on) {
+		textPresenterFullScreen = on;
+	}
+
+	public static boolean isTextPresenterDisplayedInFullScreen() {
+		return textPresenterFullScreen;
+	}
+
 	/**
 	 * Set component to be presented in the ScrollPane viewport
 	 * 

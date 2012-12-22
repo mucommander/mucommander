@@ -42,6 +42,7 @@ import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.tabs.FileTableTab;
 import com.mucommander.ui.main.tabs.FileTableTabs;
+import com.mucommander.ui.viewer.FilePresenter;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API which is used to save 'dynamic' configurations.
@@ -61,7 +62,14 @@ public class MuSnapshot {
     public static final String  SCREEN_WIDTH                       = SCREEN_SECTION + "." + "width";
     /** Last known screen height. */
     public static final String  SCREEN_HEIGHT                      = SCREEN_SECTION + "." + "height";
-    
+
+    // - Text file presenter (viewer/editor) variables ----------------------------
+    // -----------------------------------------------------------------------
+    /** Section describing known information about last text file presenter. */
+    private static final String TEXT_FILE_PRESENTER_SECTION        = "text_file_presenter";
+    /** Last known file presenter full screen mode. */
+    public static final String  TEXT_FILE_PRESENTER_FULL_SCREEN    = TEXT_FILE_PRESENTER_SECTION + "." + "full_screen";
+
     // - Location history ---- -----------------------------------------------
     // -----------------------------------------------------------------------
     /** Section containing the visited location in each folder panel. */
@@ -568,10 +576,16 @@ public class MuSnapshot {
         }
     	
     	setGlobalHistory();
-    	
+
+    	setTextPresenterProperties();
+
         configuration.write();
     }
-    
+
+    private void setTextPresenterProperties() {
+    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN, FilePresenter.isTextPresenterDisplayedInFullScreen());
+    }
+
     private void setFrameAttributes(MainFrame mainFrame, int index) {
     	// Save window position, size and screen resolution
         setWindowAttributes(index, mainFrame);
