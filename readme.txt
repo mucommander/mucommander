@@ -37,13 +37,13 @@ What's new since v0.9 ?
 -----------------------
 
 New features:
-- Lock tab capability, .
+- Lock tab capability, which prevents closing/moving the tab or changing its location.
 - New quick list that presents open tabs in the current panel, mapped onto Alt+6 by default (ticket #450).
 
 Improvements:
 - Restore the state of all windows from previous run.
 - Add copying base names of files capability (ticket #462), contributed by Chen Rozenes.
-- User can set whether to always display tabs headers (even in case the panel contains single tab).
+- User can choose to always display tabs headers from preferences dialog (even when the panel contains single tab).
 - Add the application name to window title on all OSs except Mac OS X (ticket #501).
 - The locations that can be navigated by Back/Forward actions are now saved per-tab.
 - The recently visited locations list now includes the accessed locations on all tabs and windows.
@@ -55,6 +55,9 @@ Improvements:
   preferences) to prevent firewall dialog which keeps popping up on startup (workaround for ticket #339).
 - Add 'Duplicate tab' and 'Clone tab to other panel' actions.
 - Add 'CNTRL+M' keystroke to toggle text file editor/viewer full screen mode.
+- Tab can be closed by clicking on its header with middle mouse button.
+- Assign 'CNTRL+PAGE_DOWN' keystroke for switching to next tab, and 'CNTRL+PAGE_UP' for switching to 
+  previous tab (the keystrokes that were previously assigned to those action remain as alternative keystrokes) 
 
 Localization:
 - 
