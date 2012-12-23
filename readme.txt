@@ -37,19 +37,24 @@ What's new since v0.9 ?
 -----------------------
 
 New features:
-- Quick list of the open tabs in panel (ticket #450).
-- Locking tabs capability.
-- Add 'Duplicate tab' and 'Clone tab to other panel' actions.
+- Lock tab capability, .
+- New quick list that presents open tabs in the current panel, mapped onto Alt+6 by default (ticket #450).
 
 Improvements:
-- Add support for copying files base names (ticket #462), contributed by Chen Rozenes.
+- Restore the state of all windows from previous run.
+- Add copying base names of files capability (ticket #462), contributed by Chen Rozenes.
 - User can set whether to always display tabs headers (even in case the panel contains single tab).
 - Add the application name to window title on all OSs except Mac OS X (ticket #501).
 - The locations that can be navigated by Back/Forward actions are now saved per-tab.
-- The recently visited locations list is changed to include all the accessed locations from all tabs and windows.
-- The recently visited locations list is restored from previous run on startup (ticket #471).
+- The recently visited locations list now includes the accessed locations on all tabs and windows.
+- The recently visited locations list is now restored from previous run on startup (ticket #471).
 - Add fullscreen support for Mac OS X Lion (ticket #468).
 - Add the ability to open sftp symlinks (ticket #467).
+- Text file editor/viewer restore the full screen mode of last used (closed) editor/viewer on startup.
+- 'Bonjour' support is now disabled by default on Mac OS (on fresh installation, i.e, with no previous 
+  preferences) to prevent firewall dialog which keeps popping up on startup (workaround for ticket #339).
+- Add 'Duplicate tab' and 'Clone tab to other panel' actions.
+- Add 'CNTRL+M' keystroke to toggle text file editor/viewer full screen mode.
 
 Localization:
 - 
@@ -57,15 +62,15 @@ Localization:
 Bug fixes:
 - Fix a deadlock which caused the application to freeze while switching tabs on MAC OS.
 - Key combinations that contain the TAB key can be set as shortcuts (ticket #465).
-- Fix installation via software center on Ubuntu
+- Fix installation via software center on Ubuntu.
+- 
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
 - Windows: Recycle Bin not working on Windows 64-bit with a 64-bit Java runtime (ticket #234). One way to work around
   this issue is to use a 32-bit Java runtime.
 - Mac OS X: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
-  up on startup even if the dialog has been previously accepted (ticket #339). This dialog can be suppressed by
-  disabling 'Bonjour' support in the muCommander preferences.
+  up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
 - Executable permissions on local files are not properly preserved when running a unix-based OS with Java 1.5.
 - SMB support may not work properly on non multi-language JRE.
 - 'Copy files to clipboard' not working with some applications (files are not pasted).
