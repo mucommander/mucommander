@@ -34,6 +34,7 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.JavaVersions;
 import com.mucommander.core.LocationChanger.ChangeFolderThread;
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.TabbedPane;
@@ -71,9 +72,9 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 				final Point clickedPoint = e.getPoint();
 				int selectedTabIndex = indexAtLocation(clickedPoint.x, clickedPoint.y);
 				if (selectedTabIndex != -1) {
+					setSelectedIndex(selectedTabIndex);
+					
 					if (DesktopManager.isRightMouseButton(e)) {
-						setSelectedIndex(selectedTabIndex);
-						
 						// Open the popup menu only after all swing events are finished, to ensure that when the popup menu is shown
 						// and asks for the currently selected tab in the active panel, it'll get the right one
 						SwingUtilities.invokeLater(new Runnable() {
@@ -82,6 +83,10 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 								new FileTableTabPopupMenu(FileTableTabbedPane.this.mainFrame).show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y);	
 							}
 						});
+					}
+
+					if (DesktopManager.isMiddleMouseButton(e)) {
+						ActionManager.performAction(com.mucommander.ui.action.impl.CloseTabAction.Descriptor.ACTION_ID, FileTableTabbedPane.this.mainFrame);
 					}
 				}
 			}
