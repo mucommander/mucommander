@@ -30,6 +30,7 @@ public class ActionCategories {
 	public static final ActionCategory VIEW       = new ActionCategory("action_categories" + ".view");
 	public static final ActionCategory FILES      = new ActionCategory("action_categories" + ".file_operations");
 	public static final ActionCategory WINDOW     = new ActionCategory("action_categories" + ".windows");
+	public static final ActionCategory TAB        = new ActionCategory("action_categories" + ".tabs");
 	public static final ActionCategory MISC       = new ActionCategory("action_categories" + ".misc");
 	
 	/**

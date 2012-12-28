@@ -60,7 +60,7 @@ public class SetTabTitleAction extends MuAction implements InvokesDialog {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.MISC; }
+		public ActionCategory getCategory() { return ActionCategories.TAB; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

@@ -57,7 +57,7 @@ public class CloseDuplicateTabsAction extends MuAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.NAVIGATION; }
+		public ActionCategory getCategory() { return ActionCategories.TAB; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
