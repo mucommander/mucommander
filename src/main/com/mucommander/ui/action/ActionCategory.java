@@ -31,7 +31,7 @@ public class ActionCategory implements Comparable<ActionCategory> {
 	private String descriptionKey;
 	 
 	protected ActionCategory(String descriptionKey) {
-		this.descriptionKey = descriptionKey;
+		this.descriptionKey = "action_categories." + descriptionKey;
 	}
 
 	public String getDescriptionKey() { return descriptionKey; } 
