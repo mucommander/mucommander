@@ -98,7 +98,7 @@ public class TabTitleDialog extends FocusDialog implements ActionListener {
 
     private JPanel createInnerPanel() {
     	XBoxPanel panel = new XBoxPanel();
-    	panel.add(new JLabel(Translator.get("title" + ":")));
+    	panel.add(new JLabel(Translator.get("title") + ":"));
     	panel.addSpace(10);
     	panel.add(titleTextField);//, BorderLayout.CENTER);
     	panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
