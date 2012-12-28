@@ -2920,21 +2920,6 @@ action_categories.all:UA:Всі
 action_categories.all:ES:Todos
 # Translation missing (New!)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 action_categories.navigation:EN:Navigation
 action_categories.navigation:FR:Navigation
 action_categories.navigation:DE:Navigation
@@ -3069,6 +3054,9 @@ action_categories.windows:BE:Вакенцы
 action_categories.windows:NB:Vinduer
 action_categories.windows:TR:Pencereler
 action_categories.windows:CA:Finestres
+
+action_categories.tabs:EN:Tabs
+# Translation missing (New!)
 
 action_categories.misc:EN:$[prefs_dialog.misc_tab]
 
