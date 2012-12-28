@@ -8404,16 +8404,16 @@ table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 # Tabs #
 ########
 
-LockTab.label:EN:Lock
+ToggleLockTab.lock:EN:Lock
 # Translation missing (New!)
 
-LockTab.tooltip:EN:Lock tab
+ToggleLockTab.unlock:EN:Unlock
 # Translation missing (New!)
 
-UnlockTab.label:EN:Unlock
+ToggleLockTab.label:EN:Lock/Unlock
 # Translation missing (New!)
 
-UnlockTab.tooltip:EN:Unlock tab
+ToggleLockTab.tooltip:EN:Change tab's locking state
 # Translation missing (New!)
 
 DuplicateTab.label:EN:Duplicate
