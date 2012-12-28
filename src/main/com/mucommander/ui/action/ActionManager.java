@@ -178,6 +178,7 @@ public class ActionManager {
     	registerAction(new SelectFirstRowAction.Descriptor(),               new SelectFirstRowAction.Factory());
     	registerAction(new SelectLastRowAction.Descriptor(),                new SelectLastRowAction.Factory());
     	registerAction(new SetSameFolderAction.Descriptor(),                new SetSameFolderAction.Factory());
+    	registerAction(new SetTabTitleAction.Descriptor(),                  new SetTabTitleAction.Factory());
     	registerAction(new ShowAboutAction.Descriptor(),          		    new ShowAboutAction.Factory());
     	registerAction(new ShowBookmarksQLAction.Descriptor(),              new ShowBookmarksQLAction.Factory());
     	registerAction(new CustomizeCommandBarAction.Descriptor(),          new CustomizeCommandBarAction.Factory());

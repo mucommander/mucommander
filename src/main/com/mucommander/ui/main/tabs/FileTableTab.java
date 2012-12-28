@@ -56,7 +56,21 @@ public interface FileTableTab extends Tab {
 	 * @return indication whether the tab is locked
 	 */
 	public boolean isLocked();
-	
+
+	/**
+	 * Set the title of the tab to the given string
+	 * 
+	 * @param title - predefined title to be assigned to the tab, null for no predefined title
+	 */
+	public void setTitle(String title);
+
+	/**
+	 * Returns the title that was assigned for the tab
+	 * 
+	 * @return the title that was assigned for the tab, null is returned if no title was assigned
+	 */
+	public String getTitle();
+
 	/**
 	 * Returns the tracker of the last accessed locations within the tab
 	 * 

@@ -94,7 +94,16 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 			}
 		});
 	}
-	
+
+	private void updateTabTitle(final String title) {
+		updateCurrentTab(new TabUpdater<FileTableTab>() {
+
+			public void update(FileTableTab tab) {
+				tab.setTitle(title);
+			}
+		});
+	}
+
 	@Override
 	protected boolean showSingleTabHeader() {
 		int nbTabs = getTabs().count();
@@ -149,6 +158,10 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	
 	public void unlock() {
 		updateTabLocking(false);
+	}
+
+	public void setTitle(String title) {
+		updateTabTitle(title);
 	}
 
 	/****************

@@ -50,6 +50,9 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 
 		/** Flag that indicates whether the tab is locked or not */
 		private boolean locked;
+
+		/** Title that is assigned for the tab */
+		private String title;
 		
 		/** History of accessed location within the tab */
 		private LocalLocationHistory locationHistory;
@@ -84,15 +87,25 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 			 return locked;
 		}
 
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+
 		public LocalLocationHistory getLocationHistory() {
 			return locationHistory;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof FileTableTab)
-				return location.equals(((FileTableTab) obj).getLocation()) &&
-					   locked == ((FileTableTab) obj).isLocked();
+			if (obj instanceof FileTableTab) {
+				FileTableTab other = (FileTableTab) obj;
+				return location.equals(other.getLocation()) &&
+					   locked == other.isLocked();
+			}
 			return false;
 		}
 

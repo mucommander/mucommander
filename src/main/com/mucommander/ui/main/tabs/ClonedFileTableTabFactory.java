@@ -50,7 +50,10 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 
 		/** Flag that indicates whether the tab is locked or not */
 		private boolean locked;
-		
+
+		/** Title that is assigned for the tab */
+		private String title;
+
 		/** History of accessed location within the tab */
 		private LocalLocationHistory locationHistory;
 
@@ -62,6 +65,7 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 		private ClonedFileTableTab(FileTableTab tab, FolderPanel folderPanel) {
 			this.location = tab.getLocation();
 			this.locked = tab.isLocked();
+			this.title = tab.getTitle();
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
 		
@@ -80,6 +84,14 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 			this.locked = locked;
 		}
 
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+
 		public boolean isLocked() {
 			 return locked;
 		}
@@ -90,9 +102,11 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof FileTableTab)
-				return location.equals(((FileTableTab) obj).getLocation()) &&
+			if (obj instanceof FileTableTab) {
+				FileTableTab other = ((FileTableTab) obj);
+				return location.equals(other.getLocation()) &&
 					   locked == ((FileTableTab) obj).isLocked();
+			}
 			return false;
 		}
 

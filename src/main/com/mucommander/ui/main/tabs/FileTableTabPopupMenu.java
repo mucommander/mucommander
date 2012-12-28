@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.tabs;
 
+import com.mucommander.ui.action.impl.SetTabTitleAction;
 import com.mucommander.ui.action.impl.CloneTabToOtherPanelAction;
 import com.mucommander.ui.action.impl.CloseDuplicateTabsAction;
 import com.mucommander.ui.action.impl.CloseOtherTabsAction;
@@ -47,6 +48,7 @@ class FileTableTabPopupMenu extends MuActionsPopupMenu {
 		addAction(CloseDuplicateTabsAction.Descriptor.ACTION_ID);
 		add(new Separator());
 		addAction(tab.isLocked() ? UnlockTabAction.Descriptor.ACTION_ID : LockTabAction.Descriptor.ACTION_ID);
+		addAction(SetTabTitleAction.Descriptor.ACTION_ID);
 		add(new Separator());
 		addAction(MoveTabToOtherPanelAction.Descriptor.ACTION_ID);
 		addAction(CloneTabToOtherPanelAction.Descriptor.ACTION_ID);

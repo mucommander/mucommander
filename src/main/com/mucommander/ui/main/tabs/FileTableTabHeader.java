@@ -18,20 +18,22 @@
 
 package com.mucommander.ui.main.tabs;
 
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.FolderPanel;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicButtonUI;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.FolderPanel;
 
 /**
 * This panel is the header of the presented tabs under Java 1.6 and above.
@@ -88,14 +90,23 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         	gbc.gridx = 2;
         	add(closeButton, gbc);
         }
-        
-        String locationText = tab.getLocation().getPath();
-        // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
-		if(tab.getLocation().getHost().equals(FileURL.LOCALHOST) && LocalFile.hasRootDrives())
-			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
-        setText(locationText);
+
+        setText(getDisplayableTitleForTab(tab));
         
         lockedIcon.setVisible(tab.isLocked());
+    }
+
+    private String getDisplayableTitleForTab(FileTableTab tab) {
+    	String title = tab.getTitle();
+    	if (title != null)
+    		return title;
+    	else {
+//    		String locationText = tab.getLocation().getPath();
+//            // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+//    		if(tab.getLocation().getHost().equals(FileURL.LOCALHOST) && LocalFile.hasRootDrives())
+//    			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
+    		return tab.getLocation().getFilename();
+    	}
     }
 
     private void setText(String text) {

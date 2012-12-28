@@ -7,14 +7,16 @@ public class ConfFileTableTab implements FileTableTab {
 
 	private boolean lock;
 	private FileURL location;
+	private String title;
 	
 	public ConfFileTableTab(FileURL location) {
-		this(false, location);
+		this(false, location, null);
 	}
-	
-	public ConfFileTableTab(boolean lock, FileURL location) {
+
+	public ConfFileTableTab(boolean lock, FileURL location, String title) {
 		this.lock = lock;
 		this.location = location;
+		this.title = title;
 	}
 
 	public boolean isLocked() {
@@ -24,6 +26,10 @@ public class ConfFileTableTab implements FileTableTab {
 	public FileURL getLocation() {
 		return location;
 	}
+
+	public String getTitle() {
+		return title;
+	}
 	
 	public void setLocation(FileURL location) {
 		throw new UnsupportedOperationException("cannot change location of configuration tab");
@@ -31,6 +37,10 @@ public class ConfFileTableTab implements FileTableTab {
 
 	public void setLocked(boolean locked) {
 		throw new UnsupportedOperationException("cannot lock configuration tab");
+	}
+
+	public void setTitle(String title) {
+		throw new UnsupportedOperationException("cannot change title of configuration tab");
 	}
 
 	public LocalLocationHistory getLocationHistory() {

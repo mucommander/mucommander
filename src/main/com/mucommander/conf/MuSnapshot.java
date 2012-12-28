@@ -167,7 +167,9 @@ public class MuSnapshot {
     /** Describes whether a tab is locked */
     private static final String TAB_LOCKED                         = "locked";
     /** The index of the selected tab within the folder panel */
-    private static final String SELECTED_TAB					   = "selection";
+    private static final String SELECTED_TAB                       = "selection";
+    /** Describes the title that was set for the tab */
+    private static final String TAB_TITLE                          = "title";
     
 	/** Cache the screen's size. this value isn't computed during the shutdown process since it cause a deadlock then */
 	private Dimension screenSize;
@@ -459,7 +461,20 @@ public class MuSnapshot {
     public static String getTabLocationVariable(int window, boolean left, int index) {
     	return getTabSection(window, left, index) + "." + TAB_LOCATION;
     }
-    
+
+    /**
+     * Returns the variable that holds the title of the tab in the given index,
+     * in the left or right {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index.
+     *
+     * @param window index of MainFrame
+     * @param left true for the left FolderPanel, false for the right one
+     * @param index the index of tab at the FolderPanel's tabs 
+     * @return the variable that holds the title of the tab in the given index in the specified FolderPanel
+     */
+    public static String getTabTitleVariable(int window, boolean left, int index) {
+    	return getTabSection(window, left, index) + "." + TAB_TITLE;
+    }
+
     /**
      * Returns the variable that indicates whether the tab in the given index,
      * in the left or right {@link com.mucommander.ui.main.FolderPanel} at the {@link com.mucommander.ui.main.MainFrame} in the given index,
@@ -626,6 +641,7 @@ public class MuSnapshot {
     		FileTableTab tab = tabsIterator.next();
     		configuration.setVariable(getTabLocationVariable(index, isLeft, tabsCounter), tab.getLocation().toString());
     		configuration.setVariable(getTabLockedVariable(index, isLeft, tabsCounter), tab.isLocked());
+    		configuration.setVariable(getTabTitleVariable(index, isLeft, tabsCounter), tab.getTitle());
     		++tabsCounter;
     	}
 

@@ -62,6 +62,14 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 			return tab.isLocked();
 		}
 
+		public void setTitle(String title) {
+			tab.setTitle(title);
+		}
+
+		public String getTitle() {
+			return tab.getTitle();
+		}
+
 		public LocalLocationHistory getLocationHistory() {
 			return tab.getLocationHistory();
 		}
