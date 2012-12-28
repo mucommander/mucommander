@@ -2069,19 +2069,8 @@ details:UA:Детальніше
 details:ES:Detalles
 # Translation missing (New!)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+title:EN:Title
+# Translation missing (New!)
 
 
 ##########################
@@ -8455,6 +8444,12 @@ NextTab.label:ES:Siguiente pestaña
 PreviousTab.label:EN:Previous tab
 PreviousTab.label:UA:Попередня вкладка
 PreviousTab.label:ES:Pestaña anterior
+# Translation missing (New!)
+
+SetTabTitle.label:EN:Set title
+# Translation missing (New!)
+
+SetTabTitle.tooltip:EN:Set tab title
 # Translation missing (New!)
 
 ##################
