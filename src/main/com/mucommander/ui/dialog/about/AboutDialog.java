@@ -18,6 +18,32 @@
 
 package com.mucommander.ui.dialog.about;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
+
 import com.mucommander.RuntimeConstants;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
@@ -26,18 +52,10 @@ import com.mucommander.ui.action.impl.GoToWebsiteAction;
 import com.mucommander.ui.action.impl.ShowAboutAction;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.layout.FluentPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
-
-import javax.swing.*;
-import javax.swing.text.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
 
 /**
  * Dialog displaying information about muCommander.
@@ -265,48 +283,60 @@ public class AboutDialog extends FocusDialog implements ActionListener {
     /**
      * Creates the about box's left panel.
      */
-    private JPanel createIconPanel() {
-        JPanel mainPanel;
-        JPanel tempPanel;
-        JPanel flowPanel;
+	private JPanel createIconPanel() {
 
-        // Makes sure the panel's a bit roomier than the default configuration.
-        mainPanel = new JPanel(new BorderLayout()) {
-                @Override
-                public Insets getInsets() {return new Insets(10, 10, 0, 10);}
-            };
+		// Makes sure the panel's a bit roomier than the default configuration.
+		return new FluentPanel(new BorderLayout()) {
+			@Override
+			public Insets getInsets() {
+				return new Insets(10, 10, 0, 10);
+			}
+		}.add(new FluentPanel(new BorderLayout())
+                  .add(new JLabel(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png")),
+                	   BorderLayout.NORTH)
+                  .add(new FluentPanel(new FlowLayout(FlowLayout.CENTER)).add(createAppString()),
+  				       BorderLayout.CENTER)
+  				  .add(new FluentPanel(new FlowLayout(FlowLayout.CENTER)).add(createCopyright()),
+  				       BorderLayout.SOUTH),
+              BorderLayout.NORTH)
+		 .add(new FluentPanel(new BorderLayout())
+                  .add(createHomeComponent(), BorderLayout.NORTH)
+                  .add(createLicenseButton(), BorderLayout.CENTER)
+                  .add(createOkButton(), BorderLayout.SOUTH),
+		      BorderLayout.SOUTH);
+	}
 
-        tempPanel = new JPanel(new BorderLayout());
+	private JLabel createCopyright() {
+		return new JLabel("©" + RuntimeConstants.COPYRIGHT+ " Maxence Bernard");
+	}
 
-        tempPanel.add(new JLabel(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png")), BorderLayout.NORTH);
+	private JLabel createAppString() {
+		return createBoldLabel(RuntimeConstants.APP_STRING);
+	}
 
-        flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        flowPanel.add(createBoldLabel(RuntimeConstants.APP_STRING));
-        tempPanel.add(flowPanel, BorderLayout.CENTER);
+	private Component createHomeComponent() {
+		return DesktopManager.canBrowse() ?
+      		  createHomeButton()
+      		  : new FluentPanel(new FlowLayout(FlowLayout.CENTER)).add(new JLabel(RuntimeConstants.HOMEPAGE_URL));
+	}
 
-        flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        flowPanel.add(new JLabel("©" + RuntimeConstants.COPYRIGHT + " Maxence Bernard"));
-        tempPanel.add(flowPanel, BorderLayout.SOUTH);
-        mainPanel.add(tempPanel, BorderLayout.NORTH);
+	private JButton createHomeButton() {
+		homeButton = new JButton(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID));
+		homeButton.addActionListener(this);
+		return homeButton;
+	}
 
-        tempPanel = new JPanel(new BorderLayout());
-        if(DesktopManager.canBrowse()) {
-            tempPanel.add(homeButton = new JButton(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID)), BorderLayout.NORTH);
-            homeButton.addActionListener(this);
-        }
-        else {
-            flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            flowPanel.add(new JLabel(com.mucommander.RuntimeConstants.HOMEPAGE_URL));
-            tempPanel.add(flowPanel, BorderLayout.NORTH);
-        }
-        tempPanel.add(licenseButton = new JButton(Translator.get("license")), BorderLayout.CENTER);
-        licenseButton.addActionListener(this);
-        tempPanel.add(okButton = new JButton(Translator.get("ok")), BorderLayout.SOUTH);
-        okButton.addActionListener(this);
-        mainPanel.add(tempPanel, BorderLayout.SOUTH);
+	private JButton createLicenseButton() {
+		licenseButton = new JButton(Translator.get("license"));
+		licenseButton.addActionListener(this);
+		return licenseButton;
+	}
 
-        return mainPanel;
-    }
+	private JButton createOkButton() {
+		okButton = new JButton(Translator.get("ok"));
+		okButton.addActionListener(this);
+		return okButton;
+	}
 
 
 

@@ -27,6 +27,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ChangeDateAction;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.layout.FluentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -69,21 +70,15 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
         AbstractFile destFile = files.size()==1?files.elementAt(0):files.getBaseFolder();
         boolean canChangeDate = destFile.isFileOperationSupported(FileOperation.CHANGE_DATE);
 
-        JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         nowRadioButton = new JRadioButton(Translator.get("change_date_dialog.now"));
         nowRadioButton.setSelected(true);
         nowRadioButton.addItemListener(this);
 
-        tempPanel.add(nowRadioButton);
-
-        mainPanel.add(tempPanel);
+        mainPanel.add(new FluentPanel(new FlowLayout(FlowLayout.LEFT)).add(nowRadioButton));
 
         buttonGroup.add(nowRadioButton);
         JRadioButton specificDateRadioButton = new JRadioButton(Translator.get("change_date_dialog.specific_date"));
         buttonGroup.add(specificDateRadioButton);
-
-        tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        tempPanel.add(specificDateRadioButton);
 
         this.dateSpinner = new JSpinner(new SpinnerDateModel());
         dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, CustomDateFormat.getDateFormatString()));
@@ -91,9 +86,10 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
         dateSpinner.setValue(new Date(destFile.getDate()));
         // Spinner is disabled until the 'Specific date' radio button is selected 
         dateSpinner.setEnabled(false);
-        tempPanel.add(dateSpinner);
 
-        mainPanel.add(tempPanel);
+        mainPanel.add(new FluentPanel(new FlowLayout(FlowLayout.LEFT))
+                          .add(specificDateRadioButton)
+                          .add(dateSpinner));
 
         mainPanel.addSpace(10);
         recurseDirCheckBox = new JCheckBox(Translator.get("recurse_directories"));
