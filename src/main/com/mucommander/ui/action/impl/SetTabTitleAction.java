@@ -26,6 +26,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.tab.TabTitleDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -36,7 +37,7 @@ import com.mucommander.ui.main.MainFrame;
  * 
  * @author Arik Hadas
  */
-public class SetTabTitleAction extends MuAction {
+public class SetTabTitleAction extends MuAction implements InvokesDialog {
 
 	public SetTabTitleAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
