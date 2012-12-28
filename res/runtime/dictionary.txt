@@ -8407,33 +8407,56 @@ table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 LockTab.label:EN:Lock
 # Translation missing (New!)
 
+LockTab.tooltip:EN:Lock tab
+# Translation missing (New!)
+
 UnlockTab.label:EN:Unlock
 # Translation missing (New!)
 
-DuplicateTab.label:EN:Duplicate tab
+UnlockTab.tooltip:EN:Unlock tab
 # Translation missing (New!)
 
-CloseDuplicateTabs.label:EN:Close duplicate tabs
-CloseDuplicateTabs.label:UA:Закрити вкладки, що повторюються
-CloseDuplicateTabs.label:ES:Cerrar pestañas duplicadas
+DuplicateTab.label:EN:Duplicate
 # Translation missing (New!)
 
-CloseOtherTabs.label:EN:Close other tabs
-CloseOtherTabs.label:UA:Закрити інші вкладки
-CloseOtherTabs.label:ES:Cerrar las demás pestañas
+DuplicateTab.tooltip:EN:Create similar tab in the same panel
 # Translation missing (New!)
 
-CloseTab.label:EN:Close tab
-CloseTab.label:UA:Закрити вкладку
-CloseTab.label:ES:Cerrar pestaña
+CloseDuplicateTabs.label:EN:Close duplicates
 # Translation missing (New!)
 
-MoveTabToOtherPanel.label:EN:Move tab to other panel
-MoveTabToOtherPanel.label:UA:Перемістити вкладку на іншу панель
-MoveTabToOtherPanel.label:ES:Mover pestaña al otro panel
+CloseDuplicateTabs.tooltip:EN:Close duplicate tabs
+CloseDuplicateTabs.tooltip:UA:Закрити вкладки, що повторюються
+CloseDuplicateTabs.tooltip:ES:Cerrar pestañas duplicadas
 # Translation missing (New!)
 
-CloneTabToOtherPanel.label:EN:Clone tab to other panel
+CloseOtherTabs.label:EN:Close others
+# Translation missing (New!)
+
+CloseOtherTabs.tooltip:EN:Close other tabs
+CloseOtherTabs.tooltip:UA:Закрити інші вкладки
+CloseOtherTabs.tooltip:ES:Cerrar las demás pestañas
+# Translation missing (New!)
+
+CloseTab.label:EN:$[close]
+
+CloseTab.tooltip:EN:Close tab
+CloseTab.tooltip:UA:Закрити вкладку
+CloseTab.tooltip:ES:Cerrar pestaña
+# Translation missing (New!)
+
+MoveTabToOtherPanel.label:EN:Move to other panel
+# Translation missing (New!)
+
+MoveTabToOtherPanel.tooltip:EN:Move tab to other panel
+MoveTabToOtherPanel.tooltip:UA:Перемістити вкладку на іншу панель
+MoveTabToOtherPanel.tooltip:ES:Mover pestaña al otro panel
+# Translation missing (New!)
+
+CloneTabToOtherPanel.label:EN:Clone to other panel
+# Translation missing (New!)
+
+CloneTabToOtherPanel.tooltip:EN:Add similar tab in the other panel
 # Translation missing (New!)
 
 NextTab.label:EN:Next tab
@@ -8441,15 +8464,21 @@ NextTab.label:UA:Наступна вкладка
 NextTab.label:ES:Siguiente pestaña
 # Translation missing (New!)
 
+NextTab.tooltip:EN:Switch to the tab on the right
+# Translation missing (New!)
+
 PreviousTab.label:EN:Previous tab
 PreviousTab.label:UA:Попередня вкладка
 PreviousTab.label:ES:Pestaña anterior
 # Translation missing (New!)
 
+PreviousTab.tooltip:EN:Switch to the tab on the left
+# Translation missing (New!)
+
 SetTabTitle.label:EN:Set title
 # Translation missing (New!)
 
-SetTabTitle.tooltip:EN:Set tab title
+SetTabTitle.tooltip:EN:Set fixed title for the tab
 # Translation missing (New!)
 
 ##################
