@@ -21,10 +21,8 @@ package com.mucommander.ui.quicklist.item;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Image;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import com.mucommander.ui.main.table.CellLabel;
