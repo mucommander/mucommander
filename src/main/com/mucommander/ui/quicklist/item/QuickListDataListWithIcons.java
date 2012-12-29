@@ -52,7 +52,7 @@ public abstract class QuickListDataListWithIcons<T> extends QuickListDataList<T>
 	// Abstract methods //
 	//////////////////////
 
-	public abstract Icon getImageIconOfItem(final T item);
+	public abstract Icon getImageIconOfItem(final T item, final Dimension preferredSize);
 
 	protected class DataListItemWithIconRenderer extends DataListItemRenderer {
 		
@@ -63,23 +63,10 @@ public abstract class QuickListDataListWithIcons<T> extends QuickListDataList<T>
 
 			// Add its icon
 			T item = getListItem(index);
-			Icon icon = getImageIconOfItem(item);
-			label.setIcon(resizeIcon(icon));
+			Icon icon = getImageIconOfItem(item, this.getPreferredSize());
+			label.setIcon(icon);
 
 			return label;
-		}
-		
-		private Icon resizeIcon(Icon icon) {
-			if (icon instanceof ImageIcon) {
-				Image image = ((ImageIcon) icon).getImage();
-				final Dimension dimension = this.getPreferredSize();
-				final double height = dimension.getHeight();
-				final double width = (height / icon.getIconHeight()) * icon.getIconWidth();
-				image = image.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
-				return new ImageIcon(image);
-			}
-
-			return icon;
 		}
 	}
 }

@@ -18,9 +18,12 @@
 
 package com.mucommander.ui.quicklist;
 
+import java.awt.Dimension;
+import java.awt.Image;
 import java.util.HashMap;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -87,8 +90,8 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
     protected QuickListDataList<T> getList() {
 		return new QuickListDataListWithIcons<T>(nextFocusableComponent()) {
 			@Override
-            public Icon getImageIconOfItem(T item) {
-				return getImageIconOfItemImp(item);
+            public Icon getImageIconOfItem(T item,  final Dimension preferredSize) {
+				return getImageIconOfItemImp(item, preferredSize);
 			}
 		};
 	}
@@ -112,7 +115,7 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 			IconManager.getImageIcon(FileIcons.getFileIcon(file)) : null; 
 	}
 	
-	private Icon getImageIconOfItemImp(final T item) {
+	protected Icon getImageIconOfItemImp(final T item,  final Dimension preferredSize) {
 		boolean found;
 		synchronized(itemToIconCacheMap) {
 			if (!(found = itemToIconCacheMap.containsKey(item))) {
@@ -120,25 +123,34 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 				waitingIconAddedToList();
 			}
 		}
-		
+
+		Icon result = itemToIconCacheMap.get(item);
+
 		if (!found)
 			new Thread() {
 				@Override
                 public void run() {
 					Icon icon = itemToIcon(item);
-					synchronized(itemToIconCacheMap) {
-						// If the item does not exist or is not accessible, show notAvailableIcon for it.
-						itemToIconCacheMap.put(item, icon != null ? icon : notAvailableIcon);
-					}
+					// If the item does not exist or is not accessible, show notAvailableIcon for it.
+					itemToIconCacheMap.put(item, icon != null ? icon : notAvailableIcon);
 					waitingIconRemovedFromList();
 					repaint();
 				}
 			}.start();
 		
-		Icon result;
-		synchronized(itemToIconCacheMap) {
-			result = itemToIconCacheMap.get(item);
+		return resizeIcon(result, preferredSize);
+	}
+
+	protected Icon resizeIcon(Icon icon,  final Dimension preferredSize) {
+		if (icon instanceof ImageIcon) {
+			Image image = ((ImageIcon) icon).getImage();
+			final Dimension dimension = preferredSize;
+			final double height = dimension.getHeight();
+			final double width = (height / icon.getIconHeight()) * icon.getIconWidth();
+			image = image.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
+			return new ImageIcon(image);
 		}
-		return result;
+
+		return icon;
 	}
 }

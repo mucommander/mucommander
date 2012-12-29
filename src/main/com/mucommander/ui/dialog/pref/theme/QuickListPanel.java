@@ -20,6 +20,7 @@ package com.mucommander.ui.dialog.pref.theme;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -83,7 +84,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
     	}
     	
 		@Override
-        public Icon getImageIconOfItem(String item) {
+        public Icon getImageIconOfItem(String item,  final Dimension preferredSize) {
 			return sampleIcon;
 		}
 		

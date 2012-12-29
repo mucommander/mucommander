@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,8 +29,10 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowTabsQLAction;
+import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.tabs.FileTableTab;
+import com.mucommander.ui.main.tabs.FileTableTabHeader;
 import com.mucommander.ui.main.tabs.PrintableFileTableTabFactory;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 import com.mucommander.ui.tabs.TabFactory;
@@ -46,15 +49,22 @@ public class TabsQL extends QuickListWithIcons<FileTableTab> {
 	
 	private TabFactory<FileTableTab, FileTableTab> tabsFactory = new PrintableFileTableTabFactory();
 	
+	Icon lockedTabIcon = IconManager.getIcon(IconManager.COMMON_ICON_SET, FileTableTabHeader.LOCKED_ICON_NAME);
+	
 	public TabsQL(FolderPanel folderPanel) {
 		super(folderPanel, ActionProperties.getActionLabel(ShowTabsQLAction.Descriptor.ACTION_ID), Translator.get("tabs_quick_list.empty_message"));
 		
 		this.folderPanel = folderPanel;
 	}
-	
+
+	@Override
+	protected Icon getImageIconOfItemImp(final FileTableTab item,  final Dimension preferredSize) {
+		return itemToIcon(item);
+	}
+
 	@Override
 	protected Icon itemToIcon(FileTableTab item) {
-		return getIconOfFile(FileFactory.getFile(item.getLocation()));
+		return item.isLocked() ? lockedTabIcon : null;
 	}
 
 	@Override
