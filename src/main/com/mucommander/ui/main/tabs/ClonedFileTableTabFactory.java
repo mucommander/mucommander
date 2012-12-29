@@ -43,7 +43,7 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 		return new ClonedFileTableTab(tab, folderPanel);
 	}
 
-	class ClonedFileTableTab implements FileTableTab {
+	class ClonedFileTableTab extends FileTableTab {
 		
 		/** The location presented in this tab */
 		private FileURL location;
@@ -69,6 +69,7 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
 		
+		@Override
 		public void setLocation(FileURL location) {
 			this.location = location;
 			
@@ -76,30 +77,36 @@ public class ClonedFileTableTabFactory implements TabFactory<FileTableTab, FileT
 			locationHistory.tryToAddToHistory(location);
 		}
 
+		@Override
 		public FileURL getLocation() {
 			return location;
 		}
-		
+
+		@Override
 		public void setLocked(boolean locked) {
 			this.locked = locked;
 		}
 
+		@Override
 		public void setTitle(String title) {
 			this.title = title;
 		}
 
+		@Override
 		public String getTitle() {
 			return title;
 		}
 
+		@Override
 		public boolean isLocked() {
 			 return locked;
 		}
 
+		@Override
 		public LocalLocationHistory getLocationHistory() {
 			return locationHistory;
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof FileTableTab) {

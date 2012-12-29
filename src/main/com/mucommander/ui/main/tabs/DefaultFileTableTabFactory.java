@@ -43,7 +43,7 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 		return new DefaultFileTableTab(location, folderPanel);
 	}
 
-	class DefaultFileTableTab implements FileTableTab {
+	class DefaultFileTableTab extends FileTableTab {
 		
 		/** The location presented in this tab */
 		private FileURL location;
@@ -67,7 +67,8 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 			this.locked = false;
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
-		
+
+		@Override
 		public void setLocation(FileURL location) {
 			this.location = location;
 			
@@ -75,26 +76,32 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 			locationHistory.tryToAddToHistory(location);
 		}
 
+		@Override
 		public FileURL getLocation() {
 			return location;
 		}
-		
+
+		@Override
 		public void setLocked(boolean locked) {
 			this.locked = locked;
 		}
 
+		@Override
 		public boolean isLocked() {
 			 return locked;
 		}
 
+		@Override
 		public void setTitle(String title) {
 			this.title = title;
 		}
 
+		@Override
 		public String getTitle() {
 			return title;
 		}
 
+		@Override
 		public LocalLocationHistory getLocationHistory() {
 			return locationHistory;
 		}

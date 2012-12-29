@@ -91,22 +91,9 @@ class FileTableTabHeader extends JPanel implements ActionListener {
         	add(closeButton, gbc);
         }
 
-        setText(getDisplayableTitleForTab(tab));
+        setText(tab.getDisplayableTitle());
         
         lockedIcon.setVisible(tab.isLocked());
-    }
-
-    private String getDisplayableTitleForTab(FileTableTab tab) {
-    	String title = tab.getTitle();
-    	if (title != null)
-    		return title;
-    	else {
-//    		String locationText = tab.getLocation().getPath();
-//            // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
-//    		if(tab.getLocation().getHost().equals(FileURL.LOCALHOST) && LocalFile.hasRootDrives())
-//    			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
-    		return tab.getLocation().getFilename();
-    	}
     }
 
     private void setText(String text) {

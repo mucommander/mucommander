@@ -38,38 +38,45 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 	 * is presented (by overriding its toString method) and the way it's compared to 
 	 * FileTableTabFactory.DefaultFileTableTab instances (by overriding its equals method)
 	 */
-	private class PrintableFileTableTab implements FileTableTab {
+	private class PrintableFileTableTab extends FileTableTab {
 
 		private FileTableTab tab;
 		
 		private PrintableFileTableTab(FileTableTab tab) {
 			this.tab = tab;
 		}
-		
+
+		@Override
 		public void setLocation(FileURL location) {
 			tab.setLocation(location);
 		}
 
+		@Override
 		public FileURL getLocation() {
 			return tab.getLocation();
 		}
 
+		@Override
 		public void setLocked(boolean locked) {
 			tab.setLocked(locked);
 		}
 
+		@Override
 		public boolean isLocked() {
 			return tab.isLocked();
 		}
 
+		@Override
 		public void setTitle(String title) {
 			tab.setTitle(title);
 		}
 
+		@Override
 		public String getTitle() {
 			return tab.getTitle();
 		}
 
+		@Override
 		public LocalLocationHistory getLocationHistory() {
 			return tab.getLocationHistory();
 		}
@@ -84,7 +91,7 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 		
 		@Override
 		public String toString() {
-			return getLocation().toString();
+			return getDisplayableTitle();
 		}
 	}
 }
