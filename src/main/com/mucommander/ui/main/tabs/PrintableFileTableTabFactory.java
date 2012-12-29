@@ -83,10 +83,7 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof ClonedFileTableTabFactory.ClonedFileTableTab)
-				return tab == obj;
-			
-			return super.equals(obj);
+			return tab == obj;
 		}
 		
 		@Override
