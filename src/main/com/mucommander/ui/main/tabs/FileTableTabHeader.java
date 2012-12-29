@@ -52,7 +52,7 @@ public class FileTableTabHeader extends JPanel implements ActionListener {
     private static final int CLOSE_ICON_SIZE = 12;
     
     public static final String LOCKED_ICON_NAME = "lock.png";
-    private static final int LOCKED_ICON_SIZE = 12;
+    public static final int LOCKED_ICON_SIZE = 12;
 
     FileTableTabHeader(FolderPanel folderPanel, boolean closable, FileTableTab tab) {
         super(new GridBagLayout());
@@ -158,7 +158,6 @@ public class FileTableTabHeader extends JPanel implements ActionListener {
             //No need to be focusable
             setFocusable(false);
         }
-
 
         // Remove default insets
         @Override

@@ -29,6 +29,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowTabsQLAction;
+import com.mucommander.ui.icon.EmptyIcon;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.tabs.FileTableTab;
@@ -50,6 +51,7 @@ public class TabsQL extends QuickListWithIcons<FileTableTab> {
 	private TabFactory<FileTableTab, FileTableTab> tabsFactory = new PrintableFileTableTabFactory();
 	
 	Icon lockedTabIcon = IconManager.getIcon(IconManager.COMMON_ICON_SET, FileTableTabHeader.LOCKED_ICON_NAME);
+	Icon unlockedTabIcon = new EmptyIcon(8, 9);
 	
 	public TabsQL(FolderPanel folderPanel) {
 		super(folderPanel, ActionProperties.getActionLabel(ShowTabsQLAction.Descriptor.ACTION_ID), Translator.get("tabs_quick_list.empty_message"));
@@ -64,7 +66,7 @@ public class TabsQL extends QuickListWithIcons<FileTableTab> {
 
 	@Override
 	protected Icon itemToIcon(FileTableTab item) {
-		return item.isLocked() ? lockedTabIcon : null;
+		return item.isLocked() ? lockedTabIcon : unlockedTabIcon;
 	}
 
 	@Override
