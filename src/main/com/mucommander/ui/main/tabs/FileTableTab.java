@@ -101,7 +101,7 @@ public abstract class FileTableTab implements Tab {
 
 	private String getFilenameRepresentation(String filename, boolean local) {
 		// Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
-		if(local && LocalFile.hasRootDrives())
+		if(local && LocalFile.hasRootDrives() && filename != null)
 			return PathUtils.removeLeadingSeparator(filename, "/");
 		// Under other OSes, if the filename is empty return "/"
 		else
