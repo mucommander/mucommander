@@ -43,17 +43,14 @@ public class EmptyIcon implements Icon {
 		this.height = height;
 	}
 
-	@Override
 	public int getIconHeight() {
 		return height;
 	}
 
-	@Override
 	public int getIconWidth() {
 		return width;
 	}
 
-	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 	}
 }
