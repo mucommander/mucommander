@@ -18,11 +18,14 @@
 
 package com.mucommander.ui.event;
 
+import java.io.IOException;
 import java.util.WeakHashMap;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.core.GlobalLocationHistory;
+import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
 
 /**
@@ -39,6 +42,9 @@ public class LocationManager {
     /** Current location presented in the FolderPanel */
     private AbstractFile currentFolder;
 
+    /** Filters out unwanted files when listing folder contents */
+	private ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
+
     /**
      * Creates a new LocationManager that manages location events listeners and broadcasts for the specified FolderPanel.
      *
@@ -50,14 +56,29 @@ public class LocationManager {
         addLocationListener(GlobalLocationHistory.Instance());
     }
 
-    public void setCurrentFolder(AbstractFile currentFolder) {
-        
-    	this.currentFolder = currentFolder;
+    /**
+     * Set the given {@link AbstractFile} as the folder presented in the {@link FolderPanel}.
+     * This method saves the given {@link AbstractFile}, and notify the {@link LocationListener}s that
+     * the location was changed to it.
+     * 
+     * @param currentFolder the {@link AbstractFile} that is going to be presented in the {@link FolderPanel}
+     * @throws IOException 
+     * @throws UnsupportedFileOperationException 
+     */
+    public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) throws UnsupportedFileOperationException, IOException {
+    	folderPanel.setCurrentFolder(folder, folder.ls(configurableFolderFilter), fileToSelect, changeLockedTab);
+    	
+    	this.currentFolder = folder;
 
     	// Notify listeners that the location has changed
-    	fireLocationChanged(currentFolder.getURL());
+    	fireLocationChanged(folder.getURL());
     }
 
+    /**
+     * Return the folder presented in the {@link FolderPanel}
+     * 
+     * @return the {@link AbstractFile} presented in the {@link FolderPanel}
+     */
     public AbstractFile getCurrentFolder() {
     	return currentFolder;
     }
@@ -115,7 +136,6 @@ public class LocationManager {
         for(LocationListener listener : locationListeners.keySet())
             listener.locationCancelled(new LocationEvent(folderPanel, folderURL));
     }
-
 
     /**
      * Notifies all registered listeners that the folder change as notified by {@link #fireLocationChanging(FileURL)}

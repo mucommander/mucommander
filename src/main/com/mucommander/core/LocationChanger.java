@@ -19,6 +19,7 @@
 package com.mucommander.core;
 
 import java.awt.Cursor;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ import com.mucommander.commons.file.AuthenticationType;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -44,7 +46,6 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.auth.AuthDialog;
 import com.mucommander.ui.dialog.file.DownloadDialog;
 import com.mucommander.ui.event.LocationManager;
-import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -61,9 +62,6 @@ public class LocationChanger {
 	private ChangeFolderThread changeFolderThread;
 
 	private GlobalLocationHistory globalHistory = GlobalLocationHistory.Instance();
-
-	/** Filters out unwanted files when listing folder contents */
-	private ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
 
 	/** The lock object used to prevent simultaneous folder change operations */
 	private final Object FOLDER_CHANGE_LOCK = new Object();
@@ -283,14 +281,15 @@ public class LocationChanger {
      * @param children current folder's files (value of folder.ls())
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
+	 * @throws IOException 
+	 * @throws UnsupportedFileOperationException 
      */
-    private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
+    private void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) throws UnsupportedFileOperationException, IOException {
     	// Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
         // while FileTable#setCurrentFolder is being called. 
         lastFolderChangeTime = System.currentTimeMillis();
         
-    	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
-    	locationManager.setCurrentFolder(folder);
+    	locationManager.setCurrentFolder(folder, fileToSelect, changeLockedTab);
     }
 
     /**
@@ -755,15 +754,14 @@ public class LocationChanger {
 						LOGGER.trace("calling ls()");
 
 						/* TODO branch 
-AbstractFile children[] = new AbstractFile[0];
-if (branchView) {
-childrenList = new ArrayList();
-readBranch(folder);
-children = (AbstractFile[]) childrenList.toArray(children);
-} else {
-children = folder.ls(chainedFileFilter);                            
-} */
-						AbstractFile children[] = folder.ls(configurableFolderFilter);
+						AbstractFile children[] = new AbstractFile[0];
+						if (branchView) {
+							childrenList = new ArrayList();
+							readBranch(folder);
+							children = (AbstractFile[]) childrenList.toArray(children);
+						} else {
+							children = folder.ls(chainedFileFilter);                            
+						}*/ 
 
 						synchronized(KILL_LOCK) {
 							if(killed) {
@@ -780,7 +778,7 @@ children = folder.ls(chainedFileFilter);
 						LOGGER.trace("calling setCurrentFolder");
 
 						// Change the file table's current folder and select the specified file (if any)
-						setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
+						setCurrentFolder(folder, fileToSelect, changeLockedTab);
 
 						// folder set -> 95% complete
 						folderPanel.setProgressValue(95);
@@ -865,29 +863,6 @@ children = folder.ls(chainedFileFilter);
 			}
 		}
 
-
-		/* TODO branch         
-/**
-		 * Reads all files in the current directory and all its subdirectories.
-		 * @param parent
-		 * /
-private void readBranch(AbstractFile parent) {
-AbstractFile[] children;
-try {
-children = parent.ls(chainedFileFilter);
-for (int i=0; i<children.length; i++) {
-if (children[i].isDirectory()) {
-readBranch(children[i]);
-} else {
-childrenList.add(children[i]);
-}
-}
-} catch (IOException e) {
-AppLogger.fine("Caught exception", e);
-}
-}
-		 */
-
 		public void cleanup(boolean folderChangedSuccessfully) {
 			// Ensures that this method is called only once
 			synchronized(KILL_LOCK) {
@@ -929,10 +904,30 @@ AppLogger.fine("Caught exception", e);
 			}
 		}
 
-
 		// For debugging purposes
 		public String toString() {
 			return super.toString()+" folderURL="+folderURL+" folder="+folder;
 		}
 	}
+	
+	/* TODO branch         
+	*//**
+	 * Reads all files in the current directory and all its subdirectories.
+	 * @param parent
+	 *//*
+	private void readBranch(AbstractFile parent) {
+		AbstractFile[] children;
+		try {
+			children = parent.ls(chainedFileFilter);
+			for (int i=0; i<children.length; i++) {
+				if (children[i].isDirectory()) {
+					readBranch(children[i]);
+				} else {
+					childrenList.add(children[i]);
+				}
+			}
+		} catch (IOException e) {
+			AppLogger.fine("Caught exception", e);
+		}
+	}*/
 }
