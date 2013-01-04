@@ -82,9 +82,9 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
 	/** The following constants are used to identify the left and right folder panels */
 	public enum FolderPanelType { LEFT, RIGHT }
-	
+
     private MainFrame  mainFrame;
-    
+
     private LocationManager locationManager = new LocationManager(this);
 
     /*  We're NOT using JComboBox anymore because of its strange behavior:
@@ -97,11 +97,11 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     private FileTableTabs tabs;
     private FoldersTreePanel foldersTreePanel;
     private JSplitPane treeSplitPane;
-	
+
     private FileDragSourceListener fileDragSourceListener;
 
     private LocationChanger locationChanger;
-    
+
     /** Is directory tree visible */
     private boolean treeVisible = false;
 
@@ -110,7 +110,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
     /** Array of all the existing pop ups for this panel's FileTable **/
     private QuickList[] fileTablePopups;
-  
+
     /* TODO branch private boolean branchView; */
 
     /**
@@ -425,34 +425,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     			fileTable.setCurrentFolder(folder, children, fileToSelect);
     }
 
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
-
-    /**
-     * Overridden for debugging purposes.
-     */
-    public String toString() {
-        return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+hasFocus();
-    }
-
-
-    ///////////////////////////
-    // FocusListener methods //
-    ///////////////////////////
-    
-    public void focusGained(FocusEvent e) {
-        // Notify MainFrame that we are in control now! (our table/location field is active)
-        mainFrame.setActiveTable(fileTable);
-    }
-
-    public void focusLost(FocusEvent e) {
-        fileTable.getQuickSearch().stop();
-    }
-
-
-    
-
     /**
      * Shows the pop up which is located the given index in fileTablePopups.
      * 
@@ -502,7 +474,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         return foldersTreePanel;
     }
 
-
     /**
      * Enables/disables a directory tree visibility. Invoked by {@link com.mucommander.ui.action.impl.ToggleTreeAction}.
      */
@@ -519,6 +490,33 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 	        treeSplitPane.setDividerSize(treeVisible ? 5 : 0);
 	        foldersTreePanel.requestFocus();
     	}
+    }
+
+    
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    /**
+     * Overridden for debugging purposes.
+     */
+    @Override
+    public String toString() {
+        return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+hasFocus();
+    }
+
+    ///////////////////////////
+    // FocusListener methods //
+    ///////////////////////////
+    
+    public void focusGained(FocusEvent e) {
+        // Notify MainFrame that we are in control now! (our table/location field is active)
+        mainFrame.setActiveTable(fileTable);
+    }
+
+    public void focusLost(FocusEvent e) {
+        fileTable.getQuickSearch().stop();
     }
 
     ////////////////////////////////

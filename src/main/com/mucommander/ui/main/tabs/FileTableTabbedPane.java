@@ -151,13 +151,12 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 		}
 		
 		String locationText = tab.getLocation().getPath();
-		// Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+		// For OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
 		if(LocalFile.hasRootDrives())
 			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
 		setToolTipTextAt(index, locationText);
 		
 		SwingUtilities.invokeLater(new Runnable() {
-
 			public void run() {
 				validate();
 			}
@@ -181,7 +180,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	//////////////////////////////////
 	// FocusListener implementation //
 	//////////////////////////////////
-	
+
 	public void focusGained(FocusEvent e) {
 		folderPanel.getTabs().requestFocus();
 	}

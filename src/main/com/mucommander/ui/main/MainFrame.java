@@ -584,14 +584,12 @@ public class MainFrame extends JFrame implements LocationListener {
         activeTable.requestFocus();
     }
 
-
     /**
      * Makes both folders the same, choosing the one which is currently active. 
      */
     public void setSameFolder() {
         (activeTable == leftTable ? rightTable : leftTable).getFolderPanel().tryChangeCurrentFolder(activeTable.getFolderPanel().getCurrentFolder());
     }
-
 
     /**
      * Returns <code>true</code> if this MainFrame is currently active in the foreground.
@@ -639,7 +637,6 @@ public class MainFrame extends JFrame implements LocationListener {
 
         return false;
     }
-
 
     /**
      * Updates this window's title to show currently active folder and window number.
