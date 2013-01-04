@@ -24,10 +24,10 @@ import java.util.WeakHashMap;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.core.FolderChangeMonitor;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.table.FolderChangeMonitor;
 
 /**
  * @author Maxence Bernard

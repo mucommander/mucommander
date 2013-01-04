@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.main.table;
+package com.mucommander.core;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
