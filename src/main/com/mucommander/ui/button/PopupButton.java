@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.button;
 
+import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.impl.MuteProxyAction;
 
 import javax.swing.*;
@@ -202,11 +203,16 @@ public abstract class PopupButton extends NonFocusableButton {
             if(!isEnabled() || shouldIgnoreMouseEvent())    // Ignore event if button is disabled
                 return;
 
-            pressedTime = System.currentTimeMillis();
+            if (DesktopManager.isRightMouseButton(mouseEvent)) {
+            	popupMenu();
+            }
+            else {
+            	pressedTime = System.currentTimeMillis();
 
-            // Spawn a thread to check if mouse is still pressed in POPUP_DELAY ms. If that is the case, popup menu
-            // will be displayed.
-            new Thread(this).start();
+            	// Spawn a thread to check if mouse is still pressed in POPUP_DELAY ms. If that is the case, popup menu
+            	// will be displayed.
+            	new Thread(this).start();
+            }
         }
 
         public synchronized void mouseClicked(MouseEvent mouseEvent) {
