@@ -39,9 +39,11 @@ What's new since v0.9 ?
 New features:
 - Lock tab capability, which prevents closing/moving the tab or changing its location.
 - New quick list that presents open tabs in the current panel, mapped onto Alt+6 by default (ticket #450).
+- Add the option to set fixed title for tab.
+- Add actions for duplicate a tab and clone tab to other panel.
 
 Improvements:
-- Restore the state of all windows from previous run.
+- Restore the state of all windows from last run on startup.
 - Add copying base names of files capability (ticket #462), contributed by Chen Rozenes.
 - User can choose to always display tabs headers from preferences dialog (even when the panel contains single tab).
 - Add the application name to window title on all OSs except Mac OS X (ticket #501).
@@ -53,11 +55,15 @@ Improvements:
 - Text file editor/viewer restore the full screen mode of last used (closed) editor/viewer on startup.
 - 'Bonjour' support is now disabled by default on Mac OS (on fresh installation, i.e, with no previous 
   preferences) to prevent firewall dialog which keeps popping up on startup (workaround for ticket #339).
-- Add 'Duplicate tab' and 'Clone tab to other panel' actions.
-- Add 'CNTRL+M' keystroke to toggle text file editor/viewer full screen mode.
+- Add 'cntrl+m' keystroke to toggle text file editor/viewer full screen mode.
 - Tab can be closed by clicking on its header with middle mouse button.
-- Assign 'CNTRL+PAGE_DOWN' keystroke for switching to next tab, and 'CNTRL+PAGE_UP' for switching to 
-  previous tab (the keystrokes that were previously assigned to those action remain as alternative keystrokes) 
+- Assign 'cntrl+page_down' keystroke for switching to next tab, and 'cntrl+page_up' for switching to 
+  previous tab (the keystrokes that were previously assigned to those action remain as alternative keystrokes) .
+- Improve names and descriptions presented for tab related actions.
+- Add new category of actions in the 'shortcuts dialog' for tabs related actions.
+- Changed tab's not-fixed-title to be in the pattern '<host>:<filename>'
+- Show backward/forward locations list when pressing with right click on the back/forward buttons in the toolbar 
+  instead of trigger back/forward actions
 
 Localization:
 - 
@@ -66,7 +72,6 @@ Bug fixes:
 - Fix a deadlock which caused the application to freeze while switching tabs on MAC OS.
 - Key combinations that contain the TAB key can be set as shortcuts (ticket #465).
 - Fix installation via software center on Ubuntu.
-- 
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
