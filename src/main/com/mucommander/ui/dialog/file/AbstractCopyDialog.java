@@ -81,7 +81,7 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
 
         // Fill text field with absolute path, and if there is only one file,
         // append file's name
-        fieldText = mainFrame.getInactiveTable().getCurrentFolder().getAbsolutePath(true);
+        fieldText = mainFrame.getInactivePanel().getCurrentFolder().getAbsolutePath(true);
         // Append filename to destination path if there is only one file to copy
         // and if the file is not a directory that already exists in destination
         // (otherwise folder would be copied into the destination folder)

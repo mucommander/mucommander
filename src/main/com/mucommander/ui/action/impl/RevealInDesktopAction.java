@@ -49,7 +49,7 @@ public class RevealInDesktopAction extends ParentFolderAction {
 
     @Override
     protected void toggleEnabledState() {
-        AbstractFile currentFolder = mainFrame.getActiveTable().getCurrentFolder();
+        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         setEnabled(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)
                && !currentFolder.isArchive()
                && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class)

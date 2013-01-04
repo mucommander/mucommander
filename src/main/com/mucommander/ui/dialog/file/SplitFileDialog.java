@@ -198,7 +198,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 
 		String destPath = edtTargetDirectory.getText();
         PathUtils.ResolvedDestination resolvedDest = 
-        	PathUtils.resolveDestination(destPath, mainFrame.getActiveTable().getCurrentFolder());
+        	PathUtils.resolveDestination(destPath, mainFrame.getActivePanel().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null || (files.size()>1 && 
         		resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER)) {

@@ -19,6 +19,20 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
@@ -35,13 +49,6 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 
 /**
@@ -141,7 +148,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         String enteredPath = pathField.getText();
 
         // Resolves destination folder
-        PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActiveTable().getCurrentFolder());
+        PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActivePanel().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null) {
             InformationDialog.showErrorDialog(mainFrame, Translator.get("invalid_path", enteredPath));

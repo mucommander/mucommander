@@ -34,6 +34,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.dnd.FileDropTargetListener;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.theme.ColorChangedEvent;
@@ -65,11 +66,14 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
     
     /** Frame containing this file table. */
     private MainFrame mainFrame;
+    /** Panel containing this file table */
+    private FolderPanel folderPanel;
     
-	public FileTableWrapperForDisplay(final FileTable fileTable, final MainFrame mainFrame) {
+	public FileTableWrapperForDisplay(final FileTable fileTable, final FolderPanel folderPanel, final MainFrame mainFrame) {
 		super(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		this.mainFrame = mainFrame;
+		this.folderPanel = folderPanel;
 		this.fileTable = fileTable;
 		
 		backgroundColor          = ThemeManager.getCurrentColor(Theme.FILE_TABLE_BACKGROUND_COLOR);
@@ -112,7 +116,7 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
                 else if (DesktopManager.isRightMouseButton(e)) {
                     if(!fileTable.hasFocus())
                         fileTable.requestFocus();
-                    AbstractFile currentFolder = fileTable.getCurrentFolder();
+                    AbstractFile currentFolder = folderPanel.getCurrentFolder();
                     new TablePopupMenu(mainFrame, currentFolder, null, false, fileTable.getFileTableModel().getMarkedFiles()).show(FileTableWrapperForDisplay.this, e.getX(), e.getY());
                 }
             }

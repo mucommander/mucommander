@@ -224,7 +224,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             setTableHeaderRenderingProperties();
         
         // Initialize a wrapper of presentation adjustments for the file-table
-        scrollpaneWrapper = new FileTableWrapperForDisplay(this, mainFrame);
+        scrollpaneWrapper = new FileTableWrapperForDisplay(this, folderPanel, mainFrame);
     }
     
     public String getFileNameAtRow(int index) {
@@ -441,15 +441,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Returns the folder currently displayed by this FileTable.
-     *
-     * @return the folder currently displayed by this FileTable
-     */
-    public AbstractFile getCurrentFolder() {
-        return tableModel.getCurrentFolder();
-    }
-
-    /**
      * Shorthand for {@link #setCurrentFolder(AbstractFile, AbstractFile[], AbstractFile)} called with no specific file
      * to select (default selection).
      *
@@ -488,17 +479,14 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @param fileToSelect the file to select, <code>null</code> for the default selection.
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
-        AbstractFile currentFolder;     // Current folder.
-        FileSet      markedFiles;       // Buffer for all previously marked file.
-
         // Stop quick search in case it was being used before folder change
         quickSearch.stop();
 
-        currentFolder = getCurrentFolder();
+        AbstractFile currentFolder = folderPanel.getCurrentFolder();
 
         // If we're refreshing the current folder, save the current selection and marked files
         // in order to restore them properly.
-        markedFiles  = null;
+        FileSet markedFiles  = null;
         if(currentFolder != null && folder.equalsCanonical(currentFolder)) {
             markedFiles = tableModel.getMarkedFiles();
             if(fileToSelect==null)
@@ -890,7 +878,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // protocols that have a special file implementation for the root folder (s3 is one).
         AbstractFile file = getFileTableModel().getFileAt(0);
         if(file==null)
-            file = getCurrentFolder();
+            file = folderPanel.getCurrentFolder();
 
         // The Owner and Group columns are displayable only if current folder has this information
         if(column==Column.OWNER) {
@@ -1256,7 +1244,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      */
     @Override
     public String toString() {
-        return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+hasFocus()+" currentRow="+currentRow;
+        return getClass().getName()+"@"+hashCode() +" currentFolder="+folderPanel.getCurrentFolder()+" hasFocus="+hasFocus()+" currentRow="+currentRow;
     }
 
     ///////////////////////////
@@ -1386,7 +1374,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 requestFocus();
 
             // Popup menu where the user right-clicked
-            new TablePopupMenu(mainFrame, getCurrentFolder(), parentFolderClicked?null:tableModel.getFileAtRow(clickedRow), parentFolderClicked, tableModel.getMarkedFiles()).show(this, x, y);
+            new TablePopupMenu(mainFrame, folderPanel.getCurrentFolder(), parentFolderClicked?null:tableModel.getFileAtRow(clickedRow), parentFolderClicked, tableModel.getMarkedFiles()).show(this, x, y);
         }
         // Middle-click on a row marks or unmarks it
         // Control left-click also works
@@ -1590,7 +1578,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             if(!newName.equals(fileToRename.getName())) {
                 AbstractFile current;
 
-                current = getCurrentFolder();
+                current = folderPanel.getCurrentFolder();
                 // Starts moving files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
                 FileSet files = new FileSet(current);

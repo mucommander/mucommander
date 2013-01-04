@@ -579,7 +579,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 checkBoxMenuItem.setAction(recallWindowAction);
 
                 // Replace the action's label and use the MainFrame's current folder path instead
-                checkBoxMenuItem.setText((i+1)+" "+mainFrame.getActiveTable().getCurrentFolder().getAbsolutePath());
+                checkBoxMenuItem.setText((i+1)+" "+mainFrame.getActiveTable().getFolderPanel().getCurrentFolder().getAbsolutePath());
 
                 // Use the action's label as a tooltip 
                 checkBoxMenuItem.setToolTipText(recallWindowAction.getLabel());

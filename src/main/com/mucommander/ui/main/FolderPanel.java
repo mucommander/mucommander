@@ -368,16 +368,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     	locationTextField.requestFocus();
     }
 	
-
-    /**
-     * Returns the folder that is currently being displayed by this panel.
-     *
-     * @return the folder that is currently being displayed by this panel
-     */
-    public AbstractFile getCurrentFolder() {
-        return fileTable.getCurrentFolder();
-    }
-    
     /**
      * Returns the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it.
      *
@@ -427,12 +417,21 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         return locationChanger.tryRefreshCurrentFolder(selectThisFileAfter);
     }
 
+    public ChangeFolderThread getChangeFolderThread() {
+        return locationChanger.getChangeFolderThread();
+    }
+
     public long getLastFolderChangeTime() {
         return locationChanger.getLastFolderChangeTime();
     }
 
-    public ChangeFolderThread getChangeFolderThread() {
-        return locationChanger.getChangeFolderThread();
+    /**
+     * Returns the folder that is currently being displayed by this panel.
+     *
+     * @return the folder that is currently being displayed by this panel
+     */
+    public AbstractFile getCurrentFolder() {
+        return locationManager.getCurrentFolder();
     }
 
     /**
@@ -447,9 +446,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param changeLockedTab - flag that indicates whether to change the presented folder in 
      * the currently selected tab although it's locked (used when switching tabs)
      */
-    public void setCurrentFolderInTheUI(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
-    	
-
+    public void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
     		// Change the current folder in the table and select the given file if not null
     		if(fileToSelect == null)
     			fileTable.setCurrentFolder(folder, children);
@@ -465,7 +462,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * Overridden for debugging purposes.
      */
     public String toString() {
-        return getClass().getName()+"@"+hashCode() +" currentFolder="+fileTable.getCurrentFolder()+" hasFocus="+hasFocus();
+        return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+hasFocus();
     }
 
 

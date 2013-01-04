@@ -63,7 +63,7 @@ public class PasteClipboardFilesAction extends MuAction {
 
         // Start copying files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-        AbstractFile destFolder = mainFrame.getActiveTable().getCurrentFolder();
+        AbstractFile destFolder = mainFrame.getActivePanel().getCurrentFolder();
         CopyJob job = new CopyJob(progressDialog, mainFrame, clipboardFiles, destFolder, null, CopyJob.COPY_MODE, FileCollisionDialog.ASK_ACTION);
         progressDialog.start(job);
     }

@@ -19,6 +19,15 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.FlowLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archiver.Archiver;
 import com.mucommander.commons.file.util.FileSet;
@@ -31,13 +40,7 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.PackAction;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.text.FilePathField;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 
 /**
@@ -112,8 +115,7 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
 
     @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
-        FileTable activeTable = mainFrame.getInactiveTable();
-        String initialPath = activeTable.getCurrentFolder().getAbsolutePath(true);
+        String initialPath = mainFrame.getInactivePanel().getCurrentFolder().getAbsolutePath(true);
         AbstractFile file;
         String fileName;
         // Computes the archive's default name:

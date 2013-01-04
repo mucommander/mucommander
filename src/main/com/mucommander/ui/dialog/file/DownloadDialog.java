@@ -54,7 +54,7 @@ public class DownloadDialog extends TransferDestinationDialog {
         AbstractFile file = files.elementAt(0);
 
         //		AbstractFile activeFolder = mainFrame.getActiveTable().getCurrentFolder();
-        AbstractFile unactiveFolder = mainFrame.getInactiveTable().getCurrentFolder();
+        AbstractFile unactiveFolder = mainFrame.getInactivePanel().getCurrentFolder();
         // Fill text field with current folder's absolute path and file name
         return new PathFieldContent(unactiveFolder.getAbsolutePath(true)+file.getName());
     }

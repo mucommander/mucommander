@@ -33,6 +33,7 @@ import com.mucommander.job.ui.UserInputHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.AbstractNotifier;
@@ -674,18 +675,18 @@ public abstract class FileJob implements Runnable {
      * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
      */
     protected void refreshTables() {
-        FileTable activeTable = getMainFrame().getActiveTable();
-        FileTable inactiveTable = getMainFrame().getInactiveTable();
+    	FolderPanel activePanel = getMainFrame().getActivePanel();
+    	FolderPanel inactivePanel = getMainFrame().getInactivePanel();
 
-        if(hasFolderChanged(inactiveTable.getCurrentFolder()))
-            inactiveTable.getFolderPanel().tryRefreshCurrentFolder();
+        if(hasFolderChanged(inactivePanel.getCurrentFolder()))
+        	inactivePanel.tryRefreshCurrentFolder();
 
-        if(hasFolderChanged(activeTable.getCurrentFolder())) {
+        if(hasFolderChanged(activePanel.getCurrentFolder())) {
             // Select file specified by selectFileWhenFinished (if any) only if the file exists in the active table's folder
-            if(fileToSelect!=null && activeTable.getCurrentFolder().equalsCanonical(fileToSelect.getParent()) && fileToSelect.exists())
-                activeTable.getFolderPanel().tryRefreshCurrentFolder(fileToSelect);
+            if(fileToSelect!=null && activePanel.getCurrentFolder().equalsCanonical(fileToSelect.getParent()) && fileToSelect.exists())
+            	activePanel.tryRefreshCurrentFolder(fileToSelect);
             else
-                activeTable.getFolderPanel().tryRefreshCurrentFolder();
+            	activePanel.tryRefreshCurrentFolder();
         }
 
         // Repaint the status bar as marked files have changed

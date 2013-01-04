@@ -18,11 +18,12 @@
 
 package com.mucommander.ui.event;
 
+import java.util.WeakHashMap;
+
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
-
-import java.util.WeakHashMap;
 
 /**
  * @author Maxence Bernard
@@ -35,6 +36,8 @@ public class LocationManager {
     /** The FolderPanel instance this LocationManager manages location events for */
     private FolderPanel folderPanel;
 
+    /** Current location presented in the FolderPanel */
+    private AbstractFile currentFolder;
 
     /**
      * Creates a new LocationManager that manages location events listeners and broadcasts for the specified FolderPanel.
@@ -47,6 +50,17 @@ public class LocationManager {
         addLocationListener(GlobalLocationHistory.Instance());
     }
 
+    public void setCurrentFolder(AbstractFile currentFolder) {
+        
+    	this.currentFolder = currentFolder;
+
+    	// Notify listeners that the location has changed
+    	fireLocationChanged(currentFolder.getURL());
+    }
+
+    public AbstractFile getCurrentFolder() {
+    	return currentFolder;
+    }
 
     /**
      * Registers a LocationListener to receive notifications whenever the current folder of the associated FolderPanel
@@ -72,6 +86,16 @@ public class LocationManager {
     }
 
     /**
+     * Notifies all registered listeners that the current folder has changed on associated FolderPanel.
+     *
+     * @param folderURL url of the new current folder in the associated FolderPanel
+     */
+    private synchronized void fireLocationChanged(FileURL folderURL) {
+        for(LocationListener listener : locationListeners.keySet())
+            listener.locationChanged(new LocationEvent(folderPanel, folderURL));
+    }
+
+    /**
      * Notifies all registered listeners that the current folder is being changed on the associated FolderPanel.
      *
      * @param folderURL url of the folder that will become the new location if the folder change is successful
@@ -79,16 +103,6 @@ public class LocationManager {
     public synchronized void fireLocationChanging(FileURL folderURL) {
         for(LocationListener listener : locationListeners.keySet())
             listener.locationChanging(new LocationEvent(folderPanel, folderURL));
-    }
-
-    /**
-     * Notifies all registered listeners that the current folder has changed on associated FolderPanel.
-     *
-     * @param folderURL url of the new current folder in the associated FolderPanel
-     */
-    public synchronized void fireLocationChanged(FileURL folderURL) {
-        for(LocationListener listener : locationListeners.keySet())
-            listener.locationChanged(new LocationEvent(folderPanel, folderURL));
     }
 
     /**

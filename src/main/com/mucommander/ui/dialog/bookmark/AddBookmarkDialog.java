@@ -66,7 +66,7 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
         Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel(5);
 
-        AbstractFile currentFolder = mainFrame.getActiveTable().getCurrentFolder();
+        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
 
         // Text fields panel
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel();

@@ -55,12 +55,11 @@ import com.mucommander.ui.main.MainFrame;
 public class LocationChanger {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationChanger.class);
 
+    /** Last time folder has changed */
+    private long lastFolderChangeTime;
+
 	private ChangeFolderThread changeFolderThread;
 
-	private long lastFolderChangeTime;
-	
-	private AbstractFile currentFolder;
-	
 	private GlobalLocationHistory globalHistory = GlobalLocationHistory.Instance();
 
 	/** Filters out unwanted files when listing folder contents */
@@ -268,8 +267,8 @@ public class LocationChanger {
 	 * @see #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)
 	 */
 	public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
-		folderPanel.getFoldersTreePanel().refreshFolder(currentFolder);
-		return tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true, true);
+		folderPanel.getFoldersTreePanel().refreshFolder(locationManager.getCurrentFolder());
+		return tryChangeCurrentFolder(locationManager.getCurrentFolder(), selectThisFileAfter, true, true);
 	}
 	
 	 /**
@@ -286,21 +285,14 @@ public class LocationChanger {
      * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
      */
     private void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
-        // Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
+    	// Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
         // while FileTable#setCurrentFolder is being called. 
         lastFolderChangeTime = System.currentTimeMillis();
-
-        // Update the current folder's value now that it is set
-        this.currentFolder = folder;
         
-        folderPanel.setCurrentFolderInTheUI(folder, children, fileToSelect, changeLockedTab);
-
-//        folderPanel.getTabs().getCurrentTab().getLocationHistory().addToHistory(folder);
-        
-        // Notify listeners that the location has changed
-        locationManager.fireLocationChanged(folder.getURL());
+    	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
+    	locationManager.setCurrentFolder(folder);
     }
-    
+
     /**
      * Returns the time at which the last folder change completed successfully.
      *
@@ -373,7 +365,7 @@ public class LocationChanger {
      * @param file the file to download
      */
     private void showDownloadDialog(AbstractFile file) {
-        FileSet fileSet = new FileSet(currentFolder);
+        FileSet fileSet = new FileSet(locationManager.getCurrentFolder());
         fileSet.add(file);
 		
         // Show confirmation/path modification dialog

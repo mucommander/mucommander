@@ -589,7 +589,7 @@ public class MainFrame extends JFrame implements LocationListener {
      * Makes both folders the same, choosing the one which is currently active. 
      */
     public void setSameFolder() {
-        (activeTable == leftTable ? rightTable : leftTable).getFolderPanel().tryChangeCurrentFolder(activeTable.getCurrentFolder());
+        (activeTable == leftTable ? rightTable : leftTable).getFolderPanel().tryChangeCurrentFolder(activeTable.getFolderPanel().getCurrentFolder());
     }
 
 
@@ -647,7 +647,7 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public void updateWindowTitle() {
         // Update window title
-        String title = activeTable.getCurrentFolder().getAbsolutePath();
+        String title = activeTable.getFolderPanel().getCurrentFolder().getAbsolutePath();
 
 	// Add the application name to window title on all OSs except MAC
         if (!OsFamilies.MAC_OS_X.isCurrent())
@@ -661,7 +661,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
         if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
             // Displays the document icon in the window title bar, works only for local files
-            AbstractFile currentFolder = activeTable.getCurrentFolder();
+            AbstractFile currentFolder = activeTable.getFolderPanel().getCurrentFolder();
             Object javaIoFile;
             if(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)) {
                 // If the current folder is an archive entry, display the archive file, this is the closest we can get

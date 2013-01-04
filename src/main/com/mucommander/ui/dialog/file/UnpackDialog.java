@@ -58,7 +58,7 @@ public class UnpackDialog extends TransferDestinationDialog {
 
     @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
-        return new PathFieldContent(mainFrame.getInactiveTable().getCurrentFolder().getAbsolutePath(true));
+        return new PathFieldContent(mainFrame.getInactivePanel().getCurrentFolder().getAbsolutePath(true));
     }
 
     @Override

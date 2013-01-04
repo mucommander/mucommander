@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.table.FileTable;
@@ -65,8 +66,9 @@ public class StressTester implements Runnable, ActionListener {
             if(random.nextInt(2)==0)
                 ActionManager.performAction(com.mucommander.ui.action.impl.SwitchActiveTableAction.Descriptor.ACTION_ID, mainFrame);    
 
+            FolderPanel folderPanel = mainFrame.getActivePanel();
             FileTable fileTable = mainFrame.getActiveTable();
-            AbstractFile currentFolder = fileTable.getCurrentFolder();
+            AbstractFile currentFolder = folderPanel.getCurrentFolder();
 
             try {
                 AbstractFile parentFolder = currentFolder.getParent();

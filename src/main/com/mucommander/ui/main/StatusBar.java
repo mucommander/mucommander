@@ -300,7 +300,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         if(!isVisible())
             return;
 
-        final AbstractFile currentFolder = mainFrame.getActiveTable().getCurrentFolder();
+        final AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         // Resolve the current folder's volume and use its path as a key for the volume info cache
         final String volumePath = currentFolder.getVolume().getAbsolutePath(true);
 

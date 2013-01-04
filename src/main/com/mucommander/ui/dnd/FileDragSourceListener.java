@@ -132,7 +132,7 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
             draggedFiles = markedFiles;
         }
         else {
-            draggedFiles = new FileSet(fileTable.getCurrentFolder(), selectedFile);
+            draggedFiles = new FileSet(folderPanel.getCurrentFolder(), selectedFile);
         }
 
         // Set initial DnDContext information
