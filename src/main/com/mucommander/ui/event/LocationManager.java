@@ -27,6 +27,7 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.table.FolderChangeMonitor;
 
 /**
  * @author Maxence Bernard
@@ -44,6 +45,8 @@ public class LocationManager {
 
     /** Filters out unwanted files when listing folder contents */
 	private ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
+
+	private FolderChangeMonitor folderChangeMonitor;
 
     /**
      * Creates a new LocationManager that manages location events listeners and broadcasts for the specified FolderPanel.
@@ -72,6 +75,10 @@ public class LocationManager {
 
     	// Notify listeners that the location has changed
     	fireLocationChanged(folder.getURL());
+
+    	// After the initial folder is set, initialize the monitoring thread
+    	if (folderChangeMonitor == null)
+    		folderChangeMonitor = new FolderChangeMonitor(folderPanel);
     }
 
     /**
@@ -81,6 +88,10 @@ public class LocationManager {
      */
     public AbstractFile getCurrentFolder() {
     	return currentFolder;
+    }
+
+    public FolderChangeMonitor getFolderChangeMonitor() {
+        return folderChangeMonitor;
     }
 
     /**

@@ -36,7 +36,6 @@ import java.util.HashSet;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,9 +53,6 @@ import com.mucommander.ui.action.impl.FocusNextAction;
 import com.mucommander.ui.action.impl.FocusPreviousAction;
 import com.mucommander.ui.dnd.FileDragSourceListener;
 import com.mucommander.ui.dnd.FileDropTargetListener;
-import com.mucommander.ui.event.LocationAdapter;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.quicklist.BookmarksQL;
 import com.mucommander.ui.main.quicklist.ParentFoldersQL;
@@ -89,11 +85,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 	
     private MainFrame  mainFrame;
     
-    private FolderChangeMonitor folderChangeMonitor;
-
     private LocationManager locationManager = new LocationManager(this);
-    /** Holds a reference to the LocationListener. Used transiently while the first location is being set. */
-    private LocationListener locationListener;
 
     /*  We're NOT using JComboBox anymore because of its strange behavior:
         it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
@@ -172,27 +164,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     			new RootFoldersQL(this),
                 new TabsQL(this)};
 
-        // Waits for the first location to be set before creating the FolderChangeMonitor that will monitor the
-        // current folder for changes.
-        // Note: We need to hold a hard reference to the LocationListener, otherwise it might get GCed before being
-        // invoked (ticket #452).
-        locationListener = new LocationAdapter() {
-			@Override
-			public void locationChanged(LocationEvent locationEvent) {
-				final LocationAdapter thisLocationListenerInstance = this;
-				SwingUtilities.invokeLater(new Runnable() {
-
-					public void run() {
-						folderChangeMonitor = new FolderChangeMonitor(FolderPanel.this);
-                        // We're now done with the LocationListener, remove it
-						locationManager.removeLocationListener(thisLocationListenerInstance);
-                        locationListener = null;
-					}
-				});
-			}
-        };
-        locationManager.addLocationListener(locationListener);
-        
         // Create the FileTable
         fileTable = new FileTable(mainFrame, this, conf);
 
@@ -374,7 +345,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @return the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it
      */
     public FolderChangeMonitor getFolderChangeMonitor() {
-        return folderChangeMonitor;
+        return locationManager.getFolderChangeMonitor();
     }
     
     public void setProgressValue(int value) {
