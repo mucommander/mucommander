@@ -235,8 +235,7 @@ public class LocationChanger {
 			// changes the changeFolderThread field to null when finished, and it may do so before this method has
 			// returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
-			ChangeFolderThread thread = new ChangeFolderThread(folderURL, changeLockedTab);
-			thread.setCredentialsMapping(credentialsMapping);
+			ChangeFolderThread thread = new ChangeFolderThread(folderURL, credentialsMapping, changeLockedTab);
 			thread.start();
 
 			changeFolderThread = thread;
@@ -431,9 +430,16 @@ public class LocationChanger {
 			setPriority(Thread.MAX_PRIORITY);
 		}
 
-		public ChangeFolderThread(FileURL folderURL, boolean changeLockedTab) {
+		/**
+		 * 
+		 * @param folderURL
+		 * @param credentialsMapping the CredentialsMapping to use for accessing the folder, <code>null</code> for none
+		 * @param changeLockedTab
+		 */
+		public ChangeFolderThread(FileURL folderURL, CredentialsMapping credentialsMapping, boolean changeLockedTab) {
 			this.folderURL = folderURL;
 			this.changeLockedTab = changeLockedTab;
+			this.credentialsMapping = credentialsMapping;
 
 			setPriority(Thread.MAX_PRIORITY);
 		}
@@ -445,15 +451,6 @@ public class LocationChanger {
 		 */
 		public void selectThisFileAfter(AbstractFile fileToSelect) {
 			this.fileToSelect = fileToSelect;
-		}
-
-		/**
-		 * Sets the {@link CredentialsMapping} to use for accessing the folder, <code>null</code> for none.
-		 * 
-		 * @param credentialsMapping the CredentialsMapping to use
-		 */
-		public void setCredentialsMapping(CredentialsMapping credentialsMapping) {
-			this.credentialsMapping = credentialsMapping;
 		}
 
 		/**
