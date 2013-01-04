@@ -76,8 +76,7 @@ public class TabTitleDialog extends FocusDialog implements ActionListener {
     	titleTextField = new JTextField();
         titleTextField.setDocument(new SizeConstrainedDocument(31));
         titleTextField.setText(folderPanel.getTabs().getCurrentTab().getTitle());
-        titleTextField.setSelectionStart(0);
-        titleTextField.setSelectionEnd(titleTextField.getText().length());
+        titleTextField.selectAll();
 
         okButton = new JButton(Translator.get("ok"));
         cancelButton = new JButton(Translator.get("cancel"));

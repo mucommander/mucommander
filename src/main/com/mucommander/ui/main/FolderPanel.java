@@ -122,17 +122,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     /* TODO branch private boolean branchView; */
 
     /**
-     * Constructor. For backward compatibility
-     * 
-     * @param mainFrame - the MainFrame that contains this panel
-     * @param initialFolder - the initial folder to be displayed at this panel
-     * @param conf - configuration for this panel's file table
-     */
-//    FolderPanel(MainFrame mainFrame, AbstractFile initialFolder, int indexOfSelectedTab, FileTableConfiguration conf) {
-//    	this(mainFrame, new AbstractFile[] {initialFolder}, indexOfSelectedTab, conf);
-//    }
-    
-    /**
      * Constructor
      * 
      * @param mainFrame - the MainFrame that contains this panel
