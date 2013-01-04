@@ -21,11 +21,15 @@ package com.mucommander.ui.event;
 import java.io.IOException;
 import java.util.WeakHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.core.FolderChangeMonitor;
 import com.mucommander.core.GlobalLocationHistory;
+import com.mucommander.core.LocationChanger;
 import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
 
@@ -33,6 +37,7 @@ import com.mucommander.ui.main.FolderPanel;
  * @author Maxence Bernard
  */
 public class LocationManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocationManager.class);
 
     /** Contains all registered location listeners, stored as weak references */
     private WeakHashMap<LocationListener, ?> locationListeners = new WeakHashMap<LocationListener, Object>();
@@ -69,8 +74,11 @@ public class LocationManager {
      * @throws UnsupportedFileOperationException 
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) throws UnsupportedFileOperationException, IOException {
-    	folderPanel.setCurrentFolder(folder, folder.ls(configurableFolderFilter), fileToSelect, changeLockedTab);
-    	
+    	LOGGER.trace("calling ls()");
+    	AbstractFile[] children = folder.ls(configurableFolderFilter);
+
+    	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
+
     	this.currentFolder = folder;
 
     	// Notify listeners that the location has changed

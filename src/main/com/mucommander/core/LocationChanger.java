@@ -751,8 +751,6 @@ public class LocationChanger {
 						// File tested -> 50% complete
 						folderPanel.setProgressValue(50);
 
-						LOGGER.trace("calling ls()");
-
 						/* TODO branch 
 						AbstractFile children[] = new AbstractFile[0];
 						if (branchView) {

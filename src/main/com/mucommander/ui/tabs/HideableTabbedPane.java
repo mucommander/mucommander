@@ -131,7 +131,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * 
 	 * @param index of the tab to be selected
 	 */
-	public <T> T selectTab(int index) {
+	public <K> K selectTab(int index) {
 		tabsViewer.setSelectedTabIndex(index);
 		return null;
 	}
