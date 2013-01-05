@@ -106,10 +106,10 @@ public class CommandManager implements CommandBuilder {
 
 
 
-    // - Initialisation --------------------------------------------------------
+    // - Initialization --------------------------------------------------------
     // -------------------------------------------------------------------------
     /**
-     * Initialises the command manager.
+     * Initializes the command manager.
      */
     static {
         systemAssociations = new Vector<CommandAssociation>();
@@ -130,7 +130,7 @@ public class CommandManager implements CommandBuilder {
     /**
      * Returns the tokens that compose the command that must be executed to open the specified file.
      * <p>
-     * This is a convenience method and is stricly equivalent to calling
+     * This is a convenience method and is strictly equivalent to calling
      * <code>{@link #getTokensForFile(AbstractFile,boolean) getTokensForFile(}file, true)</code>.
      * </p>
      * @param file file for which the opening command's tokens must be returned.

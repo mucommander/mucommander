@@ -19,7 +19,7 @@
 package com.mucommander.command;
 
 /**
- * Used to explore a list of commands in a format independant fashion.
+ * Used to explore a list of commands in a format independent fashion.
  * <p>
  * Different classes, such as {@link CommandManager} or {@link CommandReader}, know how to
  * generate a list of commands - from instances loaded in memory or from a file, for example.
@@ -32,10 +32,10 @@ package com.mucommander.command;
  * interact with such instances must make sure this contract is respected.
  * </p>
  * <p>
- * A (fairly useless) implemention might look like:
+ * A (fairly useless) implementation might look like:
  * <pre>
  * public class CommandPrinter implements CommandBuilder {
- *    public void startBuilding() {System.out.println("Begining command list building...");}
+ *    public void startBuilding() {System.out.println("Beginning command list building...");}
  *
  *    public void endBuilding() {System.out.println("Done.");}
  *
@@ -47,7 +47,7 @@ package com.mucommander.command;
  * Passing an instance of <code>CommandPrinter</code> to {@link CommandManager#buildCommands(CommandBuilder)}
  * will result in something like:
  * <pre>
- * Begining command list building...
+ * Beginning command list building...
  * - creating command 'open $f' with alias 'open'
  * - creating command 'open -a Safari $f' with alias 'openURL'
  * Done.
