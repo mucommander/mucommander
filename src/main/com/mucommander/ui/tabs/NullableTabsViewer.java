@@ -54,9 +54,6 @@ class NullableTabsViewer<T extends Tab> extends TabsViewer<T> {
 	public void setSelectedTabIndex(int index) { }
 
 	@Override
-	public void show(T t) { }
-
-	@Override
 	public T removeCurrentTab() { return null; }
 
 	@Override

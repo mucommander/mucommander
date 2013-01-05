@@ -31,13 +31,13 @@ public class TabWithoutHeaderViewer<T extends Tab> extends TabsViewer<T> {
 
 	/** The component to be displayed in the tab */
 	private JComponent component;
-	
+
 	public TabWithoutHeaderViewer(TabsCollection<T> tabs, JComponent component) {
 		super(component, tabs);
-		
+
 		this.component = component;
 	}
-	
+
 	@Override
 	public void requestFocus() {
 		component.requestFocusInWindow();
@@ -54,13 +54,10 @@ public class TabWithoutHeaderViewer<T extends Tab> extends TabsViewer<T> {
 			throw new IllegalArgumentException("Unable to add tab at index > 0 to single tab display");
 		add(tab);
 	}
-	
+
 	@Override
 	public void update(T tab, int index) { }
-	
-	@Override
-	public void show(T t) { }
-	
+
 	@Override
 	public void setSelectedTabIndex(int index) { }
 

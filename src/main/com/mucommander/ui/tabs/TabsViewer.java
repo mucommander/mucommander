@@ -44,9 +44,7 @@ public abstract class TabsViewer<T extends Tab> extends JComponent {
 	public void addChangeListener(ChangeListener listener) { }
 	
 	public void removeChangeListener(ChangeListener listener) { }
-	
-	public abstract void show(T tab);
-	
+
 	/*************** 
 	 * Tabs Actions
 	 ***************/

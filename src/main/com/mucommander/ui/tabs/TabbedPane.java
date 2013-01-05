@@ -50,11 +50,4 @@ public abstract class TabbedPane<T extends Tab> extends JTabbedPane {
 	 * @param index - the index of the tab to be updated
 	 */
 	public abstract void update(T tab, int index);
-	
-	/**
-	 * 
-	 * 
-	 * @param tab
-	 */
-	public abstract void show(T tab);
 }

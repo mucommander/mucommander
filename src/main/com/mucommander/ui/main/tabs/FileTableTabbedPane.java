@@ -32,7 +32,6 @@ import javax.swing.SwingUtilities;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.JavaVersions;
-import com.mucommander.core.LocationChanger.ChangeFolderThread;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.FolderPanel;
@@ -67,18 +66,18 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 		setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
 		addMouseListener(new MouseAdapter() {
-			
+
 			public void mouseClicked(MouseEvent e) {
 				final Point clickedPoint = e.getPoint();
 				int selectedTabIndex = indexAtLocation(clickedPoint.x, clickedPoint.y);
 				if (selectedTabIndex != -1) {
 					setSelectedIndex(selectedTabIndex);
-					
+
 					if (DesktopManager.isRightMouseButton(e)) {
 						// Open the popup menu only after all swing events are finished, to ensure that when the popup menu is shown
 						// and asks for the currently selected tab in the active panel, it'll get the right one
 						SwingUtilities.invokeLater(new Runnable() {
-							
+
 							public void run() {
 								new FileTableTabPopupMenu(FileTableTabbedPane.this.mainFrame).show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y);	
 							}
@@ -91,10 +90,10 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 				}
 			}
 		});
-		
+
 		addFocusListener(this);
 	}
-	
+
 	@Override
 	public boolean requestFocusInWindow() {
 		return fileTableComponent.requestFocusInWindow();
@@ -103,11 +102,11 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	@Override
 	public void removeTabAt(int index) {
 		super.removeTabAt(index);
-		
+
 		if (index == 0 && getTabCount() > 0)
 			setComponentAt(0, fileTableComponent); 
 	}
-	
+
 	/**
 	 * Not in use yet
 	 * 
@@ -117,7 +116,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	public void setTabHeader(int index, FileTableTabHeader component) {
 		super.setTabComponentAt(index, component);
 	}
-	
+
 	@Override
 	public void add(FileTableTab tab) {
 		add(tab, getTabCount());
@@ -129,7 +128,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 
 		update(tab, index);
 	}
-	
+
 	@Override
 	public void setSelectedIndex(int index) {
 		// Allow tabs switching only when no-events-mode is disabled
@@ -149,32 +148,18 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 		else {
 			setTabHeader(index, headersFactory.create(tab));
 		}
-		
+
 		String locationText = tab.getLocation().getPath();
 		// For OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
 		if(LocalFile.hasRootDrives())
 			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
 		setToolTipTextAt(index, locationText);
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				validate();
 			}
 		});
-	}
-
-	@Override
-	public void show(FileTableTab t) {
-		// Set no events mode before trying to change current folder in order to prevent further changes due to (fast) 
-		// tabs switching (tabs switching won't happen during no-events-mode) before current folder change is finished
-		// TODO: change the location of mainFrame.setNoEventsMode(true) call at ChangeFolderThread instead 
-		mainFrame.setNoEventsMode(true);
-		ChangeFolderThread changeFolderThread = folderPanel.tryChangeCurrentFolderEvenOnLockedTab(t.getLocation());
-		// If the operations wasn't started, activate all operations
-		if (changeFolderThread == null)
-			mainFrame.setNoEventsMode(false);
-		
-		validate();
 	}
 
 	//////////////////////////////////

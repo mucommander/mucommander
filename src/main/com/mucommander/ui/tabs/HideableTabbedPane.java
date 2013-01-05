@@ -51,7 +51,7 @@ import com.mucommander.conf.MuPreferences;
  */
 public class HideableTabbedPane<T extends Tab> extends JComponent implements TabsEventListener, ConfigurationListener, ChangeListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HideableTabbedPane.class);
-	
+
 	/* The tabs which are being displayed */
 	private TabsCollection<T> tabsCollection;
 	/* The tabs display type (with/without tabs headers)
@@ -63,7 +63,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	private TabsViewerFactory<T> tabsWithHeadersViewerFactory;
 	/* Contains all registered active tab change listeners, stored as weak references */
     private WeakHashMap<ActiveTabListener, ?> activeTabChangedListener = new WeakHashMap<ActiveTabListener, Object>();
-	
+
 	/**
 	 * Constructor
 	 *  
@@ -74,12 +74,12 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 
 		this.tabsWithoutHeadersViewerFactory = tabsWithoutHeadersViewerFactory;
 		this.tabsWithHeadersViewerFactory = tabsWithHeadersViewerFactory;
-		
+
 		// Initialize the tabs collection
 		tabsCollection = new TabsCollection<T>();
 		// Register for tabs changes
 		tabsCollection.addTabsListener(this);
-		
+
 		MuConfigurations.addPreferencesListener(this);
 	}
 
@@ -94,14 +94,14 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
     public synchronized void removeActiveTabChangedListener(ActiveTabListener listener) {
     	activeTabChangedListener.remove(listener);
     }
-    
+
     /**
      */
-    private synchronized void fireActiveTabChanged() {
+    protected synchronized void fireActiveTabChanged() {
         for(ActiveTabListener listener : activeTabChangedListener.keySet())
             listener.activeTabChanged();
     }
-	
+
 	/**
 	 * This function returns an iterator that points to the current Tabs contained in the TabbedPane
 	 * 
@@ -118,24 +118,23 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 */
 	public void selectTab(T tab) {
 		int index = tabsCollection.indexOf(tab);
-		
+
 		if (index != -1)
 			selectTab(index);
 		else
 			LOGGER.error("Was requested to change to non-existing tab, ignoring");
 	}
-	
+
 	/**
 	 * Select the tab at the given index
 	 * An exception will be thrown if no tab exists in the given index
 	 * 
 	 * @param index of the tab to be selected
 	 */
-	public <K> K selectTab(int index) {
+	public void selectTab(int index) {
 		tabsViewer.setSelectedTabIndex(index);
-		return null;
 	}
-	
+
 	/**
 	 * Return the index of the selected tab
 	 * 
@@ -144,7 +143,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	public int getSelectedIndex() {
 		return tabsViewer.getSelectedTabIndex();
 	}
-	
+
 	/**
 	 * Return how many tabs the panel contains
 	 * 
@@ -153,17 +152,17 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	public int getTabsCount() {
 		return tabsCollection.count();
 	}
-	
+
 	protected TabsCollection<T> getTabs() {
 		return tabsCollection;
 	}
-	
+
 	/***********************
 	 * Tabs Actions Support
 	 ***********************/
-	
+
 	/* Actions which are not depended on the display type (single/multiple tabs) */
-	
+
 	/**
 	 * Add new tab
 	 * 
@@ -172,7 +171,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	protected void addTab(T tab) {
 		tabsCollection.add(tab);
 	}
-	
+
 	/**
 	 * Add new tab and select it
 	 * 
@@ -182,7 +181,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		addTab(tab);
 		tabsViewer.setSelectedTabIndex(tabsCollection.count()-1);
 	}
-	
+
 	/**
 	 * Update the current displayed tab's data with the given {@link TabUpdater}
 	 * 
@@ -191,7 +190,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	protected void updateCurrentTab(TabUpdater<T> updater) {
 		tabsCollection.updateTab(getSelectedIndex(), updater);
 	}
-	
+
 	/* Actions that depended on the display type (single/multiple tabs) */
 
 	/**
@@ -200,28 +199,28 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	protected void removeTab(Component header) {
 		tabsViewer.removeTab(header);
 	}
-	
+
 	/**
 	 * Remove current displayed tab
 	 */
 	protected T removeTab() {
 		return tabsCollection.remove(getSelectedIndex());
 	}
-	
+
 	/**
 	 * Remove duplicate tabs
 	 */
 	protected void removeDuplicateTabs() {
 		tabsViewer.removeDuplicateTabs();
 	}
-	
+
 	/**
 	 * Remove all tabs except the current displayed tab
 	 */
 	protected void removeOtherTabs() {
 		tabsViewer.removeOtherTabs();
 	}
-	
+
 	/**
 	 * Change the current displayed tab to the tab which is located to the right of the
 	 * current displayed tab.
@@ -230,7 +229,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	public void nextTab() {
 		tabsViewer.nextTab();
 	}
-	
+
 	/**
 	 * Change the current displayed tab to the tab which is located to the left of the
 	 * current displayed tab.
@@ -239,35 +238,35 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	public void previousTab() {
 		tabsViewer.previousTab();
 	}
-	
+
 	/******************
 	 * Private Methods
 	 ******************/
-	
+
 	private void switchToTabsWithHeaders() {
 		setTabsViewer(tabsWithHeadersViewerFactory);
 	}
-	
+
 	private void switchToTabWithoutHeader() {
 		setTabsViewer(tabsWithoutHeadersViewerFactory);
 	}
-	
+
 	private void setTabsViewer(TabsViewerFactory<T> tabsViewerFactory) {
 		tabsViewer.removeChangeListener(this);
 		tabsViewer = tabsViewerFactory.create(tabsCollection);
 		tabsViewer.addChangeListener(this);
-		
+
 		removeAll();
 		add(tabsViewer);
 		validate();
-		
+
 		tabsViewer.requestFocus();
 	}
-	
+
 	/********************
 	 * Protected Methods
 	 ********************/
-	
+
 	/**
 	 * Returns the tab at the given index
 	 * An exception will be thrown if no tab exists in the given index
@@ -278,10 +277,10 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	protected T getTab(int index) {
 		return tabsCollection.get(index);
 	}
-	
+
 	protected boolean refreshViewer() {
 		int nbTabs = tabsCollection.count();
-		
+
 		switch (nbTabs) {
 		case 2:
 			switchToTabsWithHeaders();
@@ -302,7 +301,10 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	protected boolean showSingleTabHeader() {
 		return MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_TAB_HEADER, MuPreferences.DEFAULT_SHOW_TAB_HEADER);
 	}
-	
+
+	protected void show(int tabIndex) {
+	}
+
 	/************************************
 	 * TabsChangeListener Implementation
 	 ************************************/
@@ -333,7 +335,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	/***************************************
 	 * ConfigurationListener Implementation
 	 ***************************************/
-	
+
 	public void configurationChanged(ConfigurationEvent event) {
 		String var = event.getVariable();
 
@@ -343,11 +345,9 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	}
 
 	public void stateChanged(ChangeEvent e) {
-		int selectedIndex = tabsViewer.getSelectedTabIndex();
-		if (selectedIndex != -1) {
-			tabsViewer.show(tabsCollection.get(selectedIndex));
-			
-			fireActiveTabChanged();
-		}
+		final int selectedIndex = tabsViewer.getSelectedTabIndex();
+
+		if (selectedIndex != -1)
+			show(selectedIndex);
 	}
 }

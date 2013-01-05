@@ -31,22 +31,21 @@ import javax.swing.event.ChangeListener;
 * @author Arik Hadas
 */
 public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
-	
+
 	private TabsCollection<T> tabsCollection;
 	private TabbedPane<T> tabbedpane;
-	
+
 	public TabsWithHeaderViewer(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
 		super(tabbedpane, tabs);
-		
+
 		this.tabsCollection = tabs;
 		this.tabbedpane = tabbedpane;
-		
+
 		int index = 0;
 		for (T tab : tabs)
 			tabbedpane.add(tab, index++);
 	}
-	
-	
+
 	/**************
 	 * TabsViewer
 	 **************/
@@ -55,27 +54,22 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 	public int getSelectedTabIndex() {
 		return tabbedpane.getSelectedIndex();
 	}
-	
+
 	@Override
 	public void removeTab(int index) {
 		tabbedpane.remove(index);
 	}
-	
-	@Override
-	public void show(T t) {
-		tabbedpane.show(t);		
-	}
-	
+
 	@Override
 	public void addChangeListener(ChangeListener listener) { 
 		tabbedpane.addChangeListener(listener);
 	}
-	
+
 	@Override
 	public void removeChangeListener(ChangeListener listener) { 
 		tabbedpane.removeChangeListener(listener);
 	}
-	
+
 	@Override
 	public void add(T tab) {
 		add(tab, tabsCollection.count());
@@ -116,7 +110,7 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 		Set<T> duplicatedTabs = new HashSet<T>(); 
 		// The index of the selected tab
 		int selectedTabIndex = getSelectedTabIndex();
-		
+
 		// add all duplicated tabs to the duplicatedTab Set
 		Iterator<T> existingTabsIterator = tabsCollection.iterator();
 		while (existingTabsIterator.hasNext()) {
@@ -124,7 +118,7 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 			if (!visitedTabs.add(tab))
 				duplicatedTabs.add(tab);
 		}
-		
+
 		// remove all duplicated tabs which are identical to the selected tab without
 		// changing the tab selection
 		T selectedTab = tabsCollection.get(selectedTabIndex);
@@ -138,7 +132,7 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 					tabsCollection.remove(i-removedTabsCount++);
 			}
 		}
-		
+
 		// remove all other duplicated tabs
 		for (int i = 0; i < tabsCollection.count(); ++i) {
 			T currentTab = tabsCollection.get(i);

@@ -70,6 +70,7 @@ import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.quicklist.QuickListContainer;
 import com.mucommander.ui.tabs.ActiveTabListener;
+import com.mucommander.utils.Callback;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -173,16 +174,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         tabs = new FileTableTabs(mainFrame, this, initialTabs);
         
 		// Select the tab that was previously selected on last run
-		ChangeFolderThread changeFolderThread = tabs.selectTab(indexOfSelectedTab);
-		if(changeFolderThread != null) {
-			while(changeFolderThread.isAlive()) {
-				try {changeFolderThread.join();}
-				catch(InterruptedException e) {
-					// We're screwed - no valid location to display
-					throw new RuntimeException("Unable to read any drive");
-				}
-			}
-		}
+		tabs.selectTab(indexOfSelectedTab);
 		
 		tabs.addActiveTabListener(this);
 
@@ -352,8 +344,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     	locationTextField.setProgressValue(value);
     }
 
-    public ChangeFolderThread tryChangeCurrentFolderEvenOnLockedTab(FileURL folderURL) {
-    	return locationChanger.tryChangeCurrentFolder(folderURL, true);
+    public void tryChangeCurrentFolderInternal(FileURL folderURL, Callback callback) {
+    	locationChanger.tryChangeCurrentFolderInternal(folderURL, callback);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {

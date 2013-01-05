@@ -19,6 +19,7 @@
 package com.mucommander.core;
 
 import java.awt.Cursor;
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -48,6 +49,7 @@ import com.mucommander.ui.dialog.file.DownloadDialog;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.utils.Callback;
 
 /**
  * 
@@ -82,6 +84,46 @@ public class LocationChanger {
 		this.mainFrame = mainFrame;
 		this.folderPanel = folderPanel;
 		this.locationManager = locationManager;
+	}
+
+	/**
+	 * This method is triggered internally (i.e not by user request) to change the current
+	 * folder to the given folder
+	 *
+	 * @param folderURL the URL of the folder to switch to
+	 * @param callback the {@link Callback#call()} method will be called when folder has changed
+	 */
+	public void tryChangeCurrentFolderInternal(final FileURL folderURL, final Callback callback) {
+		mainFrame.setNoEventsMode(true);
+		// Set cursor to hourglass/wait
+		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		
+    	Thread setLocationThread = new Thread() {
+    		@Override
+    		public void run() {
+    			try {
+    				AbstractFile folder = FileFactory.getFile(folderURL);
+    				if (folder == null)
+    					throw new IOException();
+    				locationManager.setCurrentFolder(folder, null, true);
+    			} catch (UnsupportedFileOperationException e) {
+    				e.printStackTrace();
+    			} catch (IOException e) {
+    				e.printStackTrace();
+    			} finally {
+    				mainFrame.setNoEventsMode(false);
+    				// Restore default cursor
+					mainFrame.setCursor(Cursor.getDefaultCursor());
+					// Notify callback that the folder has been set 
+    				callback.call();
+    	    	}
+    		}
+    	};
+
+    	if (EventQueue.isDispatchThread())
+    		setLocationThread.start();
+    	else
+    		setLocationThread.run();
 	}
 
 	/**
