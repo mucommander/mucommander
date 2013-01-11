@@ -37,7 +37,6 @@ public class LocationEvent {
     /** URL of the folder that has or is being changed */
     private FileURL folderURL;
 
-
     /**
      * Creates a new LocationEvent.
      *
@@ -49,14 +48,12 @@ public class LocationEvent {
         this.folderURL = folderURL;
     }
 
-
     /**
      * Returns the FolderPanel instance where location has or is being changed.
      */
     public FolderPanel getFolderPanel() {
         return folderPanel;
     }
-
 
     /**
      * Returns the URL to the folder that has or is being changed.

@@ -147,13 +147,8 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
      * {@link com.mucommander.ui.main.table.FileTable.QuickSearch} when a quick search is over.
      */
     public void undimBackground() {
-        Color newColor;
-
         // Identifies the new background color.
-        if(fileTable.hasFocus())
-            newColor = backgroundColor;
-        else
-            newColor = unfocusedBackgroundColor;
+    	Color newColor = fileTable.hasFocus() ?  backgroundColor : unfocusedBackgroundColor;
 
         // If the old and new background color differ, set the new background
         // color.
