@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.WeakHashMap;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -349,5 +350,11 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 
 		if (selectedIndex != -1)
 			show(selectedIndex);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				tabsViewer.requestFocus();
+			}
+		});
 	}
 }
