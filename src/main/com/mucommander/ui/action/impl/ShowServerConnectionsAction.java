@@ -31,7 +31,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class ShowServerConnectionsAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class ShowServerConnectionsAction extends MuAction {
 
     public ShowServerConnectionsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

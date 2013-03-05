@@ -34,7 +34,8 @@ import java.util.Map;
  *
  * @author Mariusz Jakubowski
  */
-public class SplitFileAction extends SelectedFileAction implements InvokesDialog {
+@InvokesDialog
+public class SplitFileAction extends SelectedFileAction {
 
     public SplitFileAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

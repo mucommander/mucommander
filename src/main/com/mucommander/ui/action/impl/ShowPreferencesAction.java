@@ -30,7 +30,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class ShowPreferencesAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class ShowPreferencesAction extends MuAction {
 
     public ShowPreferencesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

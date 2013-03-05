@@ -31,7 +31,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class EditBookmarksAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class EditBookmarksAction extends MuAction {
 
     public EditBookmarksAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

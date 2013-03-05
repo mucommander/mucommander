@@ -34,7 +34,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class ChangeDateAction extends SelectedFilesAction implements InvokesDialog {
+@InvokesDialog
+public class ChangeDateAction extends SelectedFilesAction {
 
     public ChangeDateAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

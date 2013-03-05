@@ -18,11 +18,18 @@
 
 package com.mucommander.ui.action;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * This interface should be implemented by {@link MuAction} classes that invoke a dialog when the action is performed,
  * in order to automatically append '...' to the action's label.
  *
  * @author Maxence Bernard
  */
-public interface InvokesDialog {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface InvokesDialog {
 }

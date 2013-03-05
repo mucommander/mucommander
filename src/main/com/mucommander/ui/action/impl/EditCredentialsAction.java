@@ -31,7 +31,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class EditCredentialsAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class EditCredentialsAction extends MuAction {
 
     public EditCredentialsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

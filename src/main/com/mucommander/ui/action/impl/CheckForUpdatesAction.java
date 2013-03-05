@@ -30,7 +30,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class CheckForUpdatesAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class CheckForUpdatesAction extends MuAction {
 
     public CheckForUpdatesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

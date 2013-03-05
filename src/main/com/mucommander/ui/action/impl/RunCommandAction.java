@@ -31,7 +31,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class RunCommandAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class RunCommandAction extends MuAction {
 
     public RunCommandAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

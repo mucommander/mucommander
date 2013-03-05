@@ -31,7 +31,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class ConnectToServerAction extends ActiveTabAction implements InvokesDialog {
+@InvokesDialog
+public class ConnectToServerAction extends ActiveTabAction {
 
     public ConnectToServerAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

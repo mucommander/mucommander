@@ -36,7 +36,8 @@ import java.util.Map;
  *
  * @author Mariusz Jakubowski
  */
-public class CombineFilesAction extends SelectedFilesAction implements InvokesDialog {
+@InvokesDialog
+public class CombineFilesAction extends SelectedFilesAction {
 	
     public CombineFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

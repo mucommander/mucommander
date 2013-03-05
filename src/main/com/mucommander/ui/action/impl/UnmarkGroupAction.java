@@ -31,7 +31,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class UnmarkGroupAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class UnmarkGroupAction extends MuAction {
 
     public UnmarkGroupAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

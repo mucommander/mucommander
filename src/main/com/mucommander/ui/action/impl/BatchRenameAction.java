@@ -37,7 +37,8 @@ import java.util.Map;
  *
  * @author Mariusz Jakubowski
  */
-public class BatchRenameAction extends SelectedFilesAction implements InvokesDialog {
+@InvokesDialog
+public class BatchRenameAction extends SelectedFilesAction {
 
     public BatchRenameAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

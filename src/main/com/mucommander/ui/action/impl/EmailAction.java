@@ -34,7 +34,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class EmailAction extends SelectedFilesAction implements InvokesDialog {
+@InvokesDialog
+public class EmailAction extends SelectedFilesAction {
 
     public EmailAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

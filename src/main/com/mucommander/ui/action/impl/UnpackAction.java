@@ -34,7 +34,8 @@ import java.util.Map;
  *
  * @author Maxence Bernard
  */
-public class UnpackAction extends SelectedFilesAction implements InvokesDialog {
+@InvokesDialog
+public class UnpackAction extends SelectedFilesAction {
 
     public UnpackAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

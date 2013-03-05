@@ -34,7 +34,8 @@ import java.util.Map;
  * 
  * @author Maxence Bernard
  */
-public class ChangePermissionsAction extends SelectedFilesAction implements InvokesDialog {
+@InvokesDialog
+public class ChangePermissionsAction extends SelectedFilesAction {
 
     public ChangePermissionsAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

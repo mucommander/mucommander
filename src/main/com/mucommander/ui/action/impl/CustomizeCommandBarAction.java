@@ -30,7 +30,8 @@ import java.util.Map;
  * 
  * @author Arik Hadas
  */
-public class CustomizeCommandBarAction extends MuAction implements InvokesDialog {
+@InvokesDialog
+public class CustomizeCommandBarAction extends MuAction {
 	
 	public CustomizeCommandBarAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);

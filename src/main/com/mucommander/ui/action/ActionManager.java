@@ -346,7 +346,7 @@ public class ActionManager {
                 String label = ActionProperties.getActionLabel(actionId);
                 
                 // Append '...' to the label if this action invokes a dialog when performed
-                if(action instanceof InvokesDialog)
+                if(action.getClass().isAnnotationPresent(InvokesDialog.class))
                     label += "...";
 
                 action.setLabel(label);
