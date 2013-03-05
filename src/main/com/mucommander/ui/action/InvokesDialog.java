@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This interface should be implemented by {@link MuAction} classes that invoke a dialog when the action is performed,
+ * This Annotation should mark {@link MuAction} classes that invoke a dialog when the action is performed,
  * in order to automatically append '...' to the action's label.
  *
  * @author Maxence Bernard
