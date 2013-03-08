@@ -92,27 +92,16 @@ public class Command implements Comparable<Command> {
 
 
 
-    // - Type definitions ----------------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
-    /** Describes <i>normal</i> commands. */
-    public static final int NORMAL_COMMAND    = 0;
-    /** Describes <i>system</i> commands. */
-    public static final int SYSTEM_COMMAND    = 1;
-    /** Describres <i>invisible</i> commands. */
-    public static final int INVISIBLE_COMMAND = 2;
-
-
-
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Command's alias. */
-    private final String    alias;
+    private final String      alias;
     /** Original command. */
-    private final String    command;
+    private final String      command;
     /** Name used to display the command to users. */
-    private final String    displayName;
+    private final String      displayName;
     /** Command type. */
-    private final int       type;
+    private final CommandType type;
 
 
 
@@ -125,7 +114,7 @@ public class Command implements Comparable<Command> {
      * @param type        type of the command.
      * @param displayName name of the command as seen by users (if <code>null</code>, defaults to <code>alias</code>).
      */
-    public Command(String alias, String command, int type, String displayName) {
+    public Command(String alias, String command, CommandType type, String displayName) {
         this.alias       = alias;
         this.type        = type;
         this.displayName = displayName;
@@ -141,7 +130,9 @@ public class Command implements Comparable<Command> {
      * @param alias   alias of the command.
      * @param command command that will be executed.
      */
-    public Command(String alias, String command) {this(alias, command, NORMAL_COMMAND, null);}
+    public Command(String alias, String command) {
+    	this(alias, command, CommandType.NORMAL_COMMAND, null);
+    }
 
     /**
      * Creates a new command.
@@ -153,7 +144,9 @@ public class Command implements Comparable<Command> {
      * @param command command that will be executed.
      * @param type    type of the command.
      */
-    public Command(String alias, String command, int type) {this(alias, command, type, null);}
+    public Command(String alias, String command, CommandType type) {
+    	this(alias, command, type, null);
+    }
 
 
 
@@ -163,35 +156,45 @@ public class Command implements Comparable<Command> {
      * Returns this command's tokens without performing keyword substitution.
      * @return this command's tokens without performing keyword substitution.
      */
-    public synchronized String[] getTokens() {return getTokens(command, (AbstractFile[])null);}
+    public synchronized String[] getTokens() {
+    	return getTokens(command, (AbstractFile[])null);
+    }
 
     /**
      * Returns this command's tokens, replacing keywords by the corresponding values from the specified file.
      * @param  file file from which to retrieve keyword substitution values.
      * @return      this command's tokens, replacing keywords by the corresponding values from the specified file.
      */
-    public synchronized String[] getTokens(AbstractFile file) {return getTokens(command, file);}
+    public synchronized String[] getTokens(AbstractFile file) {
+    	return getTokens(command, file);
+    }
 
     /**
      * Returns this command's tokens, replacing keywords by the corresponding values from the specified fileset.
      * @param  files files from which to retrieve keyword substitution values.
      * @return       this command's tokens, replacing keywords by the corresponding values from the specified fileset.
      */
-    public synchronized String[] getTokens(FileSet files) {return getTokens(command, files);}
+    public synchronized String[] getTokens(FileSet files) {
+    	return getTokens(command, files);
+    }
 
     /**
      * Returns this command's tokens, replacing keywords by the corresponding values from the specified files.
      * @param  files files from which to retrieve keyword substitution values.
      * @return       this command's tokens, replacing keywords by the corresponding values from the specified files.
      */
-    public synchronized String[] getTokens(AbstractFile[] files) {return getTokens(command, files);}
+    public synchronized String[] getTokens(AbstractFile[] files) {
+    	return getTokens(command, files);
+    }
 
     /**
      * Returns the specified command's tokens without performing keyword substitution.
      * @param  command command to tokenize.
      * @return         the specified command's tokens without performing keyword substitution.
      */
-    public static String[] getTokens(String command) {return getTokens(command, (AbstractFile[])null);}
+    public static String[] getTokens(String command) {
+    	return getTokens(command, (AbstractFile[])null);
+    }
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified file.
@@ -199,7 +202,9 @@ public class Command implements Comparable<Command> {
      * @param  file    file from which to retrieve keyword substitution values.
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified file.
      */
-    public static String[] getTokens(String command, AbstractFile file) {return getTokens(command, new AbstractFile[] {file});}
+    public static String[] getTokens(String command, AbstractFile file) {
+    	return getTokens(command, new AbstractFile[] {file});
+    }
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
@@ -207,7 +212,9 @@ public class Command implements Comparable<Command> {
      * @param  files   file from which to retrieve keyword substitution values.
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
      */
-    public static String[] getTokens(String command, FileSet files) {return getTokens(command, files.toArray(new AbstractFile[files.size()]));}
+    public static String[] getTokens(String command, FileSet files) {
+    	return getTokens(command, files.toArray(new AbstractFile[files.size()]));
+    }
 
     /**
      * Returns the specified command's tokens after replacing keywords by the corresponding values from the specified files.
@@ -374,7 +381,7 @@ public class Command implements Comparable<Command> {
         hashCode = alias.hashCode();
         hashCode = hashCode * 31 + command.hashCode();
         hashCode = hashCode * 31 + getDisplayName().hashCode();
-        hashCode = hashCode * 31 + type;
+        hashCode = hashCode * 31 + type.hashCode();
 
         return hashCode;
     }
@@ -403,19 +410,25 @@ public class Command implements Comparable<Command> {
      * Returns the original, un-tokenised command.
      * @return the original, un-tokenised command.
      */
-    public synchronized String getCommand() {return command;}
+    public synchronized String getCommand() {
+    	return command;
+    }
 
     /**
      * Returns this command's alias.
      * @return this command's alias.
      */
-    public synchronized String getAlias() {return alias;}
+    public synchronized String getAlias() {
+    	return alias;
+    }
 
     /**
      * Returns the command's type.
      * @return the command's type.
      */
-    public synchronized int getType() {return type;}
+    public synchronized CommandType getType() {
+    	return type;
+    }
 
     /**
      * Returns the command's display name.
@@ -425,16 +438,19 @@ public class Command implements Comparable<Command> {
      * @return the command's display name.
      */
     public synchronized String getDisplayName() {
-        if(displayName == null)
-            return alias;
-        return displayName;
+    	return displayName != null ? displayName : alias;
     }
 
     /**
      * Returns <code>true</code> if the command's display name has been set.
      * @return <code>true</code> if the command's display name has been set, <code>false</code> otherwise.
      */
-    synchronized boolean isDisplayNameSet() {return displayName != null;}
+    synchronized boolean isDisplayNameSet() {
+    	return displayName != null;
+    }
 
-    public String toString() {return alias + (displayName == null ? "" : ":" + displayName) + ":" + command;}
+    @Override
+    public String toString() {
+    	return alias + (displayName == null ? "" : ":" + displayName) + ":" + command;
+    }
 }

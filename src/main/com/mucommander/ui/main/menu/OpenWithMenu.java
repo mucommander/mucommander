@@ -18,16 +18,16 @@
 
 package com.mucommander.ui.main.menu;
 
+import java.util.Collections;
+import java.util.Iterator;
+
+import javax.swing.JMenu;
+
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
+import com.mucommander.command.CommandType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.Iterator;
 
 
 /**
@@ -58,7 +58,7 @@ public class OpenWithMenu extends JMenu {
 
         while(iterator.hasNext()) {
             command = iterator.next();
-            if(command.getType() == Command.NORMAL_COMMAND)
+            if(command.getType() == CommandType.NORMAL_COMMAND)
                 add(new com.mucommander.ui.action.impl.CommandAction(mainFrame, Collections.<String, Object> emptyMap(), command));
         }
         if(getItemCount() == 0)

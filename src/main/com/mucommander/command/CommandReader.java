@@ -99,48 +99,18 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // New custom command declaration.
         if(qName.equals(ELEMENT_COMMAND)) {
-            String  alias;
-            String  command;
-            int     type;
-            String  display;
+            String alias = attributes.getValue(ATTRIBUTE_ALIAS);
+            String command = attributes.getValue(ATTRIBUTE_VALUE);
 
             // Makes sure the required attributes are there.
-            if(((alias = attributes.getValue(ATTRIBUTE_ALIAS)) == null) || ((command = attributes.getValue(ATTRIBUTE_VALUE)) == null))
-                return;
-            type    = parseCommandType(attributes.getValue(ATTRIBUTE_TYPE));
-            display = attributes.getValue(ATTRIBUTE_DISPLAY);
+            if(alias != null && command != null) {
+            	CommandType type = CommandType.parseCommandType(attributes.getValue(ATTRIBUTE_TYPE));
+            	String display = attributes.getValue(ATTRIBUTE_DISPLAY);
 
-
-            // Creates the command and passes it to the builder.
-            try {builder.addCommand(new Command(alias, command, type, display));}
-            catch(CommandException e) {throw new SAXException(e);}
+            	// Creates the command and passes it to the builder.
+            	try {builder.addCommand(new Command(alias, command, type, display));}
+            	catch(CommandException e) {throw new SAXException(e);}
+            }
         }
-    }
-
-
-
-    // - Misc. ---------------------------------------------------------------
-    // -----------------------------------------------------------------------
-    /**
-     * Returns the integer value of the specified command type.
-     * <p>
-     * Note that this method is not strict in the arguments it receives:
-     * <ul>
-     *   <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_SYSTEM}, {@link Command#SYSTEM_COMMAND} will be returned.</li>
-     *   <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_INVISIBLE}, {@link Command#INVISIBLE_COMMAND} will be returned.</li>
-     *   <li>In any other case, {@link Command#NORMAL_COMMAND} will be returned.</li>
-     * </ul>
-     * </p>
-     * @param  type type to analyse.
-     * @return      <code>type</code>'s integer equivalent.
-     */
-    private static int parseCommandType(String type) {
-        if(type == null)
-            return Command.NORMAL_COMMAND;
-        if(type.equals(VALUE_SYSTEM))
-            return Command.SYSTEM_COMMAND;
-        if(type.equals(VALUE_INVISIBLE))
-            return Command.INVISIBLE_COMMAND;
-        return Command.NORMAL_COMMAND;
     }
 }

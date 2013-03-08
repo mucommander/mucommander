@@ -30,6 +30,7 @@ import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
+import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.commons.file.impl.ftp.FTPProtocolProvider;
@@ -253,7 +254,7 @@ public class Launcher {
 
         if(MuConfigurations.getPreferences().getBooleanVariable(useName) && (command = MuConfigurations.getPreferences().getVariable(commandName)) != null) {
             try {
-                CommandManager.registerCommand(new Command(alias, command, Command.SYSTEM_COMMAND));}
+                CommandManager.registerCommand(new Command(alias, command, CommandType.SYSTEM_COMMAND));}
             catch(CommandException e) {
                 // Ignore this: the command didn't work in the first place, we might as well get rid of it.
             }
