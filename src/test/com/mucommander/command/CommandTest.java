@@ -362,7 +362,7 @@ public class CommandTest {
     /**
      * Makes sure the specified command matches the specified arguments.
      */
-    private void checkCommand(Command command, int type, boolean isDisplayNameSet) {
+    private void checkCommand(Command command, CommandType type, boolean isDisplayNameSet) {
         // Tests common values.
         assert ALIAS.equals(command.getAlias());
         assert COMMAND.equals(command.getCommand());
