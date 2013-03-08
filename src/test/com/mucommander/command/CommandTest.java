@@ -385,16 +385,16 @@ public class CommandTest {
     @Test
     public void testConstructors() {
         // Tests the 2 arguments constructor.
-        checkCommand(new Command(ALIAS, COMMAND), Command.NORMAL_COMMAND, false);
+        checkCommand(new Command(ALIAS, COMMAND), CommandType.NORMAL_COMMAND, false);
 
         // Tests the 3 arguments constructor.
-        checkCommand(new Command(ALIAS, COMMAND, Command.NORMAL_COMMAND), Command.NORMAL_COMMAND, false);
-        checkCommand(new Command(ALIAS, COMMAND, Command.SYSTEM_COMMAND), Command.SYSTEM_COMMAND, false);
-        checkCommand(new Command(ALIAS, COMMAND, Command.INVISIBLE_COMMAND), Command.INVISIBLE_COMMAND, false);
+        checkCommand(new Command(ALIAS, COMMAND, CommandType.NORMAL_COMMAND), CommandType.NORMAL_COMMAND, false);
+        checkCommand(new Command(ALIAS, COMMAND, Command.SYSTEM_COMMAND), CommandType.SYSTEM_COMMAND, false);
+        checkCommand(new Command(ALIAS, COMMAND, Command.INVISIBLE_COMMAND), CommandType.INVISIBLE_COMMAND, false);
 
         // Tests the 4 arguments constructor.
-        checkCommand(new Command(ALIAS, COMMAND, Command.NORMAL_COMMAND, DISPLAY_NAME), Command.NORMAL_COMMAND, true);
-        checkCommand(new Command(ALIAS, COMMAND, Command.SYSTEM_COMMAND, DISPLAY_NAME), Command.SYSTEM_COMMAND, true);
-        checkCommand(new Command(ALIAS, COMMAND, Command.INVISIBLE_COMMAND, DISPLAY_NAME), Command.INVISIBLE_COMMAND, true);
+        checkCommand(new Command(ALIAS, COMMAND, CommandType.NORMAL_COMMAND, DISPLAY_NAME), CommandType.NORMAL_COMMAND, true);
+        checkCommand(new Command(ALIAS, COMMAND, CommandType.SYSTEM_COMMAND, DISPLAY_NAME), CommandType.SYSTEM_COMMAND, true);
+        checkCommand(new Command(ALIAS, COMMAND, CommandType.INVISIBLE_COMMAND, DISPLAY_NAME), CommandType.INVISIBLE_COMMAND, true);
     }
 }
