@@ -27,9 +27,9 @@ import javax.swing.*;
 /**
  * AbstractActionDescriptor is an abstract class which implements ActionDescriptor interface.
  * this class implements the following methods which are common to all action descriptors:
- * ActionDescriptor#getLabel()
- * ActionDescriptor#getIcon()
- * ActionDescriptor#getTooltip()
+ * {@link ActionDescriptor#getLabel()}
+ * {@link ActionDescriptor#getIcon()}
+ * {@link ActionDescriptor#getTooltip()}
  * 
  * @author Arik Hadas
  */
