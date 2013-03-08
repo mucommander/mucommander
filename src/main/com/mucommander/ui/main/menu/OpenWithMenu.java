@@ -24,6 +24,8 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
+
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -57,7 +59,7 @@ public class OpenWithMenu extends JMenu {
         while(iterator.hasNext()) {
             command = iterator.next();
             if(command.getType() == Command.NORMAL_COMMAND)
-                add(new com.mucommander.ui.action.impl.CommandAction(mainFrame, new Hashtable<String, Object>(), command));
+                add(new com.mucommander.ui.action.impl.CommandAction(mainFrame, Collections.<String, Object> emptyMap(), command));
         }
         if(getItemCount() == 0)
             setEnabled(false);
