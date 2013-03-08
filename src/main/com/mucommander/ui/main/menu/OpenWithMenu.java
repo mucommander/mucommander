@@ -44,7 +44,7 @@ public class OpenWithMenu extends JMenu {
      * Creates a new Open With menu.
      */
     public OpenWithMenu(MainFrame frame) {
-        super(Translator.get("file_menu.open_with"));
+        super(Translator.get("file_menu.open_with") + "...");
         this.mainFrame = frame;
         populate();
     }
