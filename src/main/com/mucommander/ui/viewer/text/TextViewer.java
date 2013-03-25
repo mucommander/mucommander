@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.charset.Charset;
 
 import javax.swing.AbstractAction;
@@ -126,9 +125,6 @@ class TextViewer extends FileViewer implements EncodingListener {
                 in = file.getInputStream();
 
             String encoding = EncodingDetector.detectEncoding(in);
-            // If the encoding could not be detected or the detected encoding is not supported, default to UTF-8
-            if(encoding==null || !Charset.isSupported(encoding))
-                encoding = "UTF-8";
 
             if(in instanceof RandomAccessInputStream) {
                 // Seek to the beginning of the file and reuse the stream
@@ -157,18 +153,17 @@ class TextViewer extends FileViewer implements EncodingListener {
         }
     }
 
-    void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
-        this.encoding = encoding;
-
+    void loadDocument(InputStream in, final String encoding, DocumentListener documentListener) throws IOException {
         // If the encoding is UTF-something, wrap the stream in a BOMInputStream to filter out the byte-order mark
         // (see ticket #245)
-        if(encoding.toLowerCase().startsWith("utf")) {
+        if(encoding != null && encoding.toLowerCase().startsWith("utf")) {
             in = new BOMInputStream(in);
         }
 
-        Reader isr = new BufferedReader(new InputStreamReader(in, encoding));
+        // If the given encoding is invalid (null or not supported), default to "UTF-8" 
+        this.encoding = encoding==null || !Charset.isSupported(encoding) ? "UTF-8" : encoding;
 
-        textEditorImpl.read(isr);
+        textEditorImpl.read(new BufferedReader(new InputStreamReader(in, this.encoding)));
         
         // Listen to document changes
         if(documentListener!=null)

@@ -23,8 +23,6 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -40,8 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
-import com.mucommander.commons.io.bom.BOM;
-import com.mucommander.commons.io.bom.BOMInputStream;
 import com.mucommander.commons.io.bom.BOMWriter;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -79,8 +75,6 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     private JMenuItem toggleLineWrapItem;
     private JMenuItem toggleLineNumbersItem;
 
-    private BOM bom;
-    
     private TextEditorImpl textEditorImpl;
     private TextViewer textViewerDelegate;
     
@@ -133,22 +127,10 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     
     void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
     	textViewerDelegate.loadDocument(in, encoding, documentListener);
-    	
-    	if(encoding.toLowerCase().startsWith("utf")) {
-    		bom = ((BOMInputStream)in).getBOM();
-    	}
     }
     
     private void write(OutputStream out) throws IOException {
-        Writer writer;
-
-        // If there was a BOM originally, preserve it when writing the file.
-        if(bom==null)
-            writer = new OutputStreamWriter(out, textViewerDelegate.getEncoding());
-        else
-            writer = new BOMWriter(out, bom);
-
-        textEditorImpl.write(writer);
+    	textEditorImpl.write(new BOMWriter(out, textViewerDelegate.getEncoding())); 
     }
 
     @Override
