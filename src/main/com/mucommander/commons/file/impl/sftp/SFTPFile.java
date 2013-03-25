@@ -665,6 +665,7 @@ public class SFTPFile extends ProtocolFile {
                 // Cache the value and return it until it expires
                 canonicalPath = canonicalURL.toString(false);
                 canonicalPathFetchedTime = System.currentTimeMillis();
+                return canonicalPath;
             }
             catch(IOException e) {
                 // Simply continue and return the absolute path
