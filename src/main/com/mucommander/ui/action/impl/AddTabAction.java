@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
@@ -45,8 +45,7 @@ public class AddTabAction extends MuAction {
 
 	@Override
 	public void performAction() {
-		AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-		mainFrame.getActivePanel().getTabs().add(currentFolder);
+		mainFrame.getActivePanel().getTabs().add(LocalFile.getUserHome());
 	}
 
 	public static class Factory implements ActionFactory {
