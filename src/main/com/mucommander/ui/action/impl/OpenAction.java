@@ -20,13 +20,18 @@ package com.mucommander.ui.action.impl;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.TempExecJob;
 import com.mucommander.text.Translator;
@@ -84,21 +89,35 @@ public class OpenAction extends MuAction {
      * @param file        file to open.
      * @param destination if <code>file</code> is browsable, folder panel in which to open the file.
      */
-    protected void open(AbstractFile file, FolderPanel destination) {
+    protected void open(final AbstractFile file, FolderPanel destination) {
+    	AbstractFile resolvedFile;
+    	if (file.isSymlink()) {
+    		resolvedFile = resolveSymlink(file);
+
+    		if (resolvedFile == null) {
+    			InformationDialog.showErrorDialog(mainFrame, Translator.get("cannot_open_cyclic_symlink"));
+    			return;
+    		}
+    	}
+    	else
+    		resolvedFile = file;
+
         // Opens browsable files in the destination FolderPanel.
-        if(file.isBrowsable()) {
+        if(resolvedFile.isBrowsable()) {
+        	resolvedFile = MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS) ? resolvedFile : file;
+
         	FileTableTabs tabs = destination.getTabs();
         	if (tabs.getCurrentTab().isLocked())
-        		tabs.add(file);
+        		tabs.add(resolvedFile);
         	else
-        		destination.tryChangeCurrentFolder(file);
+        		destination.tryChangeCurrentFolder(resolvedFile);
         }
 
         // Opens local files using their native associations.
-        else if(file.getURL().getScheme().equals(FileProtocols.FILE) && (file.hasAncestor(LocalFile.class))) {
+        else if(resolvedFile.getURL().getScheme().equals(FileProtocols.FILE) && (resolvedFile.hasAncestor(LocalFile.class))) {
             try {
-            	DesktopManager.open(file);
-            	RecentExecutedFilesQL.addFile(file);
+            	DesktopManager.open(resolvedFile);
+            	RecentExecutedFilesQL.addFile(resolvedFile);
     		}
             catch(IOException e) {
                 InformationDialog.showErrorDialog(mainFrame);
@@ -108,9 +127,22 @@ public class OpenAction extends MuAction {
         // Copies non-local file in a temporary local file and opens them using their native association.
         else {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-            TempExecJob job = new TempExecJob(progressDialog, mainFrame, file);
+            TempExecJob job = new TempExecJob(progressDialog, mainFrame, resolvedFile);
             progressDialog.start(job);
         }
+    }
+
+    private AbstractFile resolveSymlink(AbstractFile symlink) {
+    	return resolveSymlink(symlink, new HashSet<AbstractFile>());
+    }
+
+    private AbstractFile resolveSymlink(AbstractFile file, Set<AbstractFile> visitedFiles) {
+    	if (visitedFiles.contains(file))
+    		return null;
+    	else {
+    		visitedFiles.add(file);
+    		return file.isSymlink() ? resolveSymlink(file.getCanonicalFile(), visitedFiles) : file;
+    	}
     }
 
     /**
