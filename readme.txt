@@ -40,7 +40,7 @@ New features:
 - Lock tab capability, which prevents closing/moving the tab or changing its location.
 - New quick list that presents open tabs in the current panel, mapped onto Alt+6 by default (ticket #450).
 - Add the option to set fixed title for tab.
-- Add actions for duplicate a tab and clone tab to other panel.
+- Add actions: add tab, duplicate tab, clone tab to other panel.
 
 Improvements:
 - Restore the state of all windows from last run on startup.

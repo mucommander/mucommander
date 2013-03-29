@@ -8392,6 +8392,12 @@ table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 # Tabs #
 ########
 
+AddTab.label:EN:Add tab
+# Translation missing (New!)
+
+AddTab.tooltip:EN:Add new tab in the active panel
+# Translation missing (New!)
+
 ToggleLockTab.lock:EN:Lock
 # Translation missing (New!)
 
