@@ -17375,6 +17375,9 @@ theme_could_not_be_loaded:NB:En feil oppstod ved lastingen av dette temaet.
 theme_could_not_be_loaded:TR:Tema yüklenirken bir hata oluştu.
 theme_could_not_be_loaded:CA:S'ha produït un error en carregar aquest tema.
 
+# Error message displayed trying to open cyclic symlink
+cannot_open_cyclic_symlink:EN:Cannot open the selected link because it is cyclic
+# Translation missing (New!)
 
 #################
 # Setup entries #
