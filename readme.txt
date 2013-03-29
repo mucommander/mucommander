@@ -69,9 +69,11 @@ Localization:
 - 
 
 Bug fixes:
-- Fix a deadlock which caused the application to freeze while switching tabs on MAC OS.
+- Prevent deadlock which caused the application to freeze while switching tabs on MAC OS.
 - Key combinations that contain the TAB key can be set as shortcuts (ticket #465).
 - Fix installation via software center on Ubuntu.
+- Symbolic links cannot be opened (ticket #467).
+- Encoding of text file is changed after being modified by the viewer/editor (ticket #438).
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
