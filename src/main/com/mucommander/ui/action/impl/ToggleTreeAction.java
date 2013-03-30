@@ -18,14 +18,20 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.util.Map;
 
 /**
  * This action toggles the visibility of a directory tree.
@@ -44,6 +50,11 @@ public class ToggleTreeAction extends MuAction {
         FolderPanel folderPanel = mainFrame.getActiveTable().getFolderPanel();
         folderPanel.setTreeVisible(!folderPanel.isTreeVisible());
     }
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
     public static class Factory implements ActionFactory {
 

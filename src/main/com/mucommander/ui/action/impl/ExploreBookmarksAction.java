@@ -18,12 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action changes the current folder of the currently active {@link com.mucommander.ui.main.FolderPanel} to
@@ -41,7 +47,12 @@ public class ExploreBookmarksAction extends ActiveTabAction {
     public void performAction() {
         mainFrame.getActivePanel().tryChangeCurrentFolder("bookmark://");
     }
-    
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
+
     /**
      * Enables or disables this action based on the currently active folder's
      * current tab is not locked, this action will be enabled,

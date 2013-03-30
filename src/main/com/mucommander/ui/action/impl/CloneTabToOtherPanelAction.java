@@ -26,6 +26,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
@@ -46,7 +47,12 @@ public class CloneTabToOtherPanelAction extends MuAction {
     	AbstractFile currentLocation = mainFrame.getActivePanel().getCurrentFolder();
     	mainFrame.getInactivePanel().getTabs().add(currentLocation);
     }
-    
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {

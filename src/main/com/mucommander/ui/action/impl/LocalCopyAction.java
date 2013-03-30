@@ -30,6 +30,7 @@ import com.mucommander.commons.file.filter.FileOperationFilter;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.LocalCopyDialog;
@@ -65,7 +66,12 @@ public class LocalCopyAction extends SelectedFileAction {
             new LocalCopyDialog(mainFrame, new FileSet(activePanel.getCurrentFolder(), selectedFile)).showDialog();
         }
     }
-    
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {

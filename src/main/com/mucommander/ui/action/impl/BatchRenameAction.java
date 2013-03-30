@@ -18,18 +18,25 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.FileOperationFilter;
 import com.mucommander.commons.file.filter.OrFileFilter;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.InvokesDialog;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.BatchRenameDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.util.Map;
 
 /**
  * This action invokes the 'Batch-Rename' dialog which allows to
@@ -56,6 +63,11 @@ public class BatchRenameAction extends SelectedFilesAction {
     public void performAction(FileSet files) {
         new BatchRenameDialog(mainFrame, files).showDialog();
     }
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
     public static class Factory implements ActionFactory {
 

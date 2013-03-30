@@ -27,6 +27,7 @@ import com.mucommander.core.LocationChanger.ChangeFolderThread;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.LocationEvent;
@@ -63,6 +64,11 @@ public class StopAction extends MuAction implements LocationListener {
         if(changeFolderThread!=null)
             changeFolderThread.tryKill();
     }
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
 
     //////////////////////////////

@@ -18,14 +18,20 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.util.Map;
 
 /**
  * This action equalizes both FileTable's current folders: the 'inactive' FileTable's current folder becomes
@@ -59,7 +65,12 @@ public class SetSameFolderAction extends MuAction implements ActivePanelListener
     public void performAction() {
         mainFrame.setSameFolder();
     }
-    
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {

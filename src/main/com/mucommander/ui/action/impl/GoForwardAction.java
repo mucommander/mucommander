@@ -18,12 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action recalls the next folder in the current FolderPanel's history.
@@ -42,6 +48,10 @@ public class GoForwardAction extends ActiveTabAction {
         mainFrame.getActivePanel().getFolderHistory().goForward();
     }
 
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
     /**
      * Enables or disables this action based on the history of the currently active FolderPanel: if there is a next

@@ -31,6 +31,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
@@ -87,6 +88,11 @@ public class RecallWindowAction extends MuAction {
         // Brings the MainFrame to front
         mainFrames.get(windowNumber-1).toFront();
     }
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
     public static class Factory implements ActionFactory {
 

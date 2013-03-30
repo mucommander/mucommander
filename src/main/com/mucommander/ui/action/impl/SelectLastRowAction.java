@@ -18,13 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTable;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.table.FileTable;
 
 /**
  * This action selects the last row/file in the current FileTable.
@@ -42,7 +48,12 @@ public class SelectLastRowAction extends MuAction {
         FileTable fileTable = mainFrame.getActiveTable();
         fileTable.selectRow(fileTable.getFileTableModel().getRowCount()-1);
     }
-    
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {

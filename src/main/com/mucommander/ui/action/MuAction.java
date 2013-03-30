@@ -391,4 +391,10 @@ public abstract class MuAction extends AbstractAction {
      * Called when this action has been triggered. This method provides a response to the action trigger.
      */
     public abstract void performAction();
+
+    /**
+     * Returns the <code>ActionDescriptor</code> of the action.
+     * @return the <code>ActionDescriptor</code> of the action.
+     */
+    public abstract ActionDescriptor getDescriptor();
 }

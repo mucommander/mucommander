@@ -18,17 +18,19 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.net.URL;
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.net.URL;
-import java.util.Map;
 
 /**
  * This action opens a URL in the system's default browser. This action is enabled only if the OS/Window manager
@@ -61,7 +63,12 @@ public class OpenURLInBrowserAction extends MuAction {
             }
         }
     }
-    
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {

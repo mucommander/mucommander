@@ -18,12 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * Marks/unmarks files in the active FileTable, from the currently selected row to the first row (inclusive).
@@ -44,6 +50,11 @@ public class MarkToFirstRowAction extends MarkBackwardAction {
     protected int getRowDecrement() {
         return mainFrame.getActiveTable().getSelectedRow();
     }
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
     public static class Factory implements ActionFactory {
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {

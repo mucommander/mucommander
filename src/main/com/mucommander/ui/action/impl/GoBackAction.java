@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
@@ -47,6 +48,10 @@ public class GoBackAction extends ActiveTabAction {
         mainFrame.getActivePanel().getFolderHistory().goBack();
     }
 
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
     /**
      * Enables or disables this action based on the history of the currently active FolderPanel: if there is a previous

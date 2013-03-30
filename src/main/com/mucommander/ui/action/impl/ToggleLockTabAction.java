@@ -26,6 +26,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
@@ -60,6 +61,11 @@ public class ToggleLockTabAction extends ActiveTabAction {
         // Change the label to reflect the new tab's locking state
         updateLabel(lock);
     }
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 
 	@Override
 	protected void toggleEnabledState() {

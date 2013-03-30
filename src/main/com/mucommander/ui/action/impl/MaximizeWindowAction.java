@@ -18,13 +18,21 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
+import javax.swing.JFrame;
+import javax.swing.KeyStroke;
+
 import com.mucommander.commons.runtime.OsFamilies;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.util.Map;
 
 /**
  * Maximizes the {@link MainFrame} this action is associated with.
@@ -42,7 +50,12 @@ public class MaximizeWindowAction extends MuAction {
     public void performAction() {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-    
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {

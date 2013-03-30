@@ -18,16 +18,17 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.impl.BatchRenameAction.Descriptor;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.Map;
 
 /**
  * This action opens a specified location in the current active FileTable. The location can be designated by either a
@@ -154,4 +155,9 @@ public class OpenLocationAction extends ActiveTabAction {
             folderPanel.tryChangeCurrentFolder(path);
         }
     }
+
+	@Override
+	public ActionDescriptor getDescriptor() {
+		return new Descriptor();
+	}
 }
