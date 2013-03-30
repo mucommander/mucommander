@@ -95,20 +95,6 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         // Create a path field with auto-completion capabilities
         pathField = new FilePathField();
         pathField.addActionListener(this);
-
-        // Sets the initial selection.
-        AbstractFile currentFile;
-        if((currentFile = mainFrame.getActiveTable().getSelectedFile()) != null) {
-            String initialValue;
-            if(mkfileMode) {
-                if((initialValue = currentFile.getName()) != null)
-                    pathField.setText(initialValue);
-            }
-            else if((initialValue = currentFile.getNameWithoutExtension()) != null)
-                pathField.setText(initialValue);
-        }
-        pathField.setSelectionStart(0);
-        pathField.setSelectionEnd(pathField.getText().length());
         mainPanel.add(pathField);
 
         if(mkfileMode) {
