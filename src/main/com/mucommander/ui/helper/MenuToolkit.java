@@ -19,11 +19,16 @@
 
 package com.mucommander.ui.helper;
 
-import com.mucommander.ui.action.MuAction;
-
-import javax.swing.*;
-import javax.swing.event.MenuListener;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.event.MenuListener;
+
+import com.mucommander.ui.action.MuAction;
 
 
 /**
@@ -118,7 +123,27 @@ public class MenuToolkit {
 
         return menuItem;
     }
-	
+
+    /**
+     * Does things that should be done to all menu items created from
+     * <code>MuAction</code>s.
+     * <ol>
+     * <li>If the provided action has an icon, it would by default get displayed in the menu item.
+     *     Since icons have nothing to do in menus, let's make sure the menu item has no icon.</li>
+     * <li>If the action has a keyboard shortcut that conflicts with
+     *     the menu's internal ones (enter, space and escape), they will
+     *     not be used.</li>
+     * </ol>
+     * @param item menu item to take care of.
+     */
+    public static void configureActionMenuItem(JMenuItem item) {
+    	item.setIcon(null);
+
+    	KeyStroke stroke = item.getAccelerator();
+    	if (stroke != null && stroke.getModifiers() == 0 &&
+    			(stroke.getKeyCode() == KeyEvent.VK_ENTER || stroke.getKeyCode() == KeyEvent.VK_SPACE || stroke.getKeyCode() == KeyEvent.VK_ESCAPE))
+    		item.setAccelerator(null);
+    }
 
     public static JMenuItem addMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper) {
         return addMenuItem(menu, action, mnemonicHelper, false);

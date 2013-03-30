@@ -18,15 +18,16 @@
 
 package com.mucommander.ui.main.menu;
 
-import java.util.Collections;
-import java.util.Iterator;
-
+import javax.swing.Action;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.main.MainFrame;
 
 
@@ -55,9 +56,16 @@ public class OpenWithMenu extends JMenu {
     private synchronized void populate() {
         for (Command command : CommandManager.commands()) {
             if(command.getType() == CommandType.NORMAL_COMMAND)
-                add(new com.mucommander.ui.action.impl.CommandAction(mainFrame, Collections.<String, Object> emptyMap(), command));
+            	add(ActionManager.getActionInstance(command, mainFrame));
         }
         if(getItemCount() == 0)
             setEnabled(false);
+    }
+
+    @Override
+    public final JMenuItem add(Action a) {
+    	JMenuItem item = super.add(a);
+    	MenuToolkit.configureActionMenuItem(item);
+    	return item;
     }
 }

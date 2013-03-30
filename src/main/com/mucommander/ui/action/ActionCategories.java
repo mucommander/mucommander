@@ -32,6 +32,7 @@ public class ActionCategories {
 	public static final ActionCategory WINDOW     = new ActionCategory("windows");
 	public static final ActionCategory TAB        = new ActionCategory("tabs");
 	public static final ActionCategory MISC       = new ActionCategory("misc");
+	public static final ActionCategory COMMANDS   = new ActionCategory("commands");
 	
 	/**
 	 * Category that contains all actions.

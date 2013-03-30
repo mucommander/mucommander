@@ -18,13 +18,12 @@
 
 package com.mucommander.ui.popup;
 
-import java.awt.event.KeyEvent;
-
+import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
 
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -43,28 +42,16 @@ public abstract class MuActionsPopupMenu extends JPopupMenu {
     
     /**
      * Adds the MuAction denoted by the given ID to this popup menu, as a <code>JMenuItem</code>.
-     * <p>
-     * No icon will be displayed, regardless of whether the action has one or not.
-     * </p>
-     * <p>
-     * If the action has a keyboard shortcut that conflicts with the menu's internal ones (enter, space and escape),
-     * they will not be used.
-     * </p>
      * @param actionId action ID
      */
     protected JMenuItem addAction(String actionId) {
-        JMenuItem item;
-        KeyStroke stroke;
+        return add(ActionManager.getActionInstance(actionId, mainFrame));
+    }
 
-        item = add(ActionManager.getActionInstance(actionId, mainFrame));
-        item.setIcon(null);
-
-        stroke = item.getAccelerator();
-        if(stroke != null)
-            if(stroke.getModifiers() == 0 &&
-               (stroke.getKeyCode() == KeyEvent.VK_ENTER || stroke.getKeyCode() == KeyEvent.VK_SPACE || stroke.getKeyCode() == KeyEvent.VK_ESCAPE))
-                item.setAccelerator(null);
-        
-        return item;
+    @Override
+    public final JMenuItem add(Action a) {
+    	JMenuItem item = super.add(a);
+    	MenuToolkit.configureActionMenuItem(item);
+    	return item;
     }
 }

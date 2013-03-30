@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.action;
 
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,9 @@ import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandManager;
+import com.mucommander.command.CommandType;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 
@@ -225,6 +229,14 @@ public class ActionManager {
     	registerAction(new UnmarkGroupAction.Descriptor(),            		new UnmarkGroupAction.Factory());
     	registerAction(new UnpackAction.Descriptor(),             			new UnpackAction.Factory());
     	registerAction(new ViewAction.Descriptor(),              			new ViewAction.Factory());
+
+    	// register "open with" commands as actions, to allow for keyboard shortcuts for them
+    	for (Command command : CommandManager.commands()) {
+    		if (command.getType() == CommandType.NORMAL_COMMAND) {
+    			ActionManager.registerAction(new CommandAction.Descriptor(command),
+    					                     new CommandAction.Factory(command));
+    		}
+    	}
     }
 
     /**
@@ -272,7 +284,22 @@ public class ActionManager {
     public static boolean isActionExist(String actionId) {    	
     	return actionId != null && actionFactories.containsKey(actionId);
     }
-    
+
+    /**
+     * Convenience method that returns an instance of the action corresponding to the given <code>Command</code>,
+     * and associated with the specified <code>MainFrame</code>. This method gets the ID of the relevant action,
+     * passes it to {@link #getActionInstance(String, MainFrame)} and returns the {@link MuAction} instance.
+     *
+     * @param command the command that is invoked by the returned action
+     * @param mainFrame the MainFrame instance the action belongs to
+     * @return a MuAction instance matching the given action ID and MainFrame, <code>null</code> if the
+     * @see {@link #getActionInstance(String, MainFrame)}
+     * action could not be found or could not be instantiated.
+     */
+    public static MuAction getActionInstance(Command command, MainFrame mainFrame) {
+        return getActionInstance(new CommandAction.Descriptor(command).getId(), mainFrame);
+    }
+
     /**
      * Convenience method that returns an instance of the action denoted by the given ID, and associated with the
      * specified <code>MainFrame</code>. This method creates an ActionParameters with no initial property, passes it to
@@ -281,6 +308,7 @@ public class ActionManager {
      * @param actionId ID of the action to instantiate
      * @param mainFrame the MainFrame instance the action belongs to
      * @return a MuAction instance matching the given action ID and MainFrame, <code>null</code> if the
+     * @see {@link #getActionInstance(ActionParameters, MainFrame)}
      * action could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(String actionId, MainFrame mainFrame) {
@@ -325,15 +353,12 @@ public class ActionManager {
             Map<String,Object> properties = actionParameters.getInitProperties();
             // If no properties hashtable is specified in the action descriptor
             if(properties==null) {
-            	properties = new Hashtable<String,Object>();
+            	properties = Collections.emptyMap();
             }
             // else clone the hashtable to ensure that it doesn't get modified by action instances.
             // Since cloning is an expensive operation, this is done only if the hashtable is not empty.
             else if(!properties.isEmpty()) {
-                Map<String,Object> buffer;
-
-                buffer = new Hashtable<String,Object>();
-                buffer.putAll(properties);
+                Map<String,Object> buffer = new Hashtable<String,Object>(properties);
                 properties = buffer;
             }
 
