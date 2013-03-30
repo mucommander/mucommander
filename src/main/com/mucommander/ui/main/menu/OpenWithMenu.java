@@ -53,11 +53,7 @@ public class OpenWithMenu extends JMenu {
      * Refreshes the content of the menu.
      */
     private synchronized void populate() {
-        Iterator<Command> iterator = CommandManager.commands();
-        Command  command;
-
-        while(iterator.hasNext()) {
-            command = iterator.next();
+        for (Command command : CommandManager.commands()) {
             if(command.getType() == CommandType.NORMAL_COMMAND)
                 add(new com.mucommander.ui.action.impl.CommandAction(mainFrame, Collections.<String, Object> emptyMap(), command));
         }

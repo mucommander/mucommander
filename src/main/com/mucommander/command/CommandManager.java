@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -202,18 +203,16 @@ public class CommandManager implements CommandBuilder {
     }
 
     /**
-     * Returns an iterator on all registered commands.
-     * @return an iterator on all registered commands.
+     * Returns a sorted collection of all registered commands.
+     * @return a sorted collection of all registered commands.
      */
-    public static Iterator<Command> commands() {
-        List<Command> list;
-
-        // Sorts the list.
-        list = new Vector<Command>(commands.size());
-        list.addAll(commands.values());
+    public static Collection<Command> commands() {
+        // Copy the registered commands to a new list
+    	List<Command> list = new Vector<Command>(commands.values());
+    	// Sorts the list.
         Collections.sort(list);
         
-        return list.iterator();
+        return list;
     }
 
     /**
@@ -310,15 +309,12 @@ public class CommandManager implements CommandBuilder {
      * @throws CommandException if anything goes wrong.
      */
     public static void buildCommands(CommandBuilder builder) throws CommandException {
-        Iterator<Command> iterator; // Used to iterate through commands and associations.
-
         builder.startBuilding();
 
-        // Goes through all the registered commands.
-        iterator = commands();
         try {
-            while(iterator.hasNext())
-                builder.addCommand(iterator.next());
+        	// Goes through all the registered commands.
+        	for (Command command : commands())
+                builder.addCommand(command);
         }
         finally {builder.endBuilding();}
     }
