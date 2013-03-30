@@ -3058,6 +3058,9 @@ action_categories.windows:CA:Finestres
 action_categories.tabs:EN:Tabs
 # Translation missing (New!)
 
+action_categories.commands:EN:Custom commands
+# Translation missing (New!)
+
 action_categories.misc:EN:$[prefs_dialog.misc_tab]
 
 
@@ -8416,7 +8419,7 @@ ToggleLockTab.tooltip:EN:Change tab's locking state
 DuplicateTab.label:EN:Duplicate
 # Translation missing (New!)
 
-DuplicateTab.tooltip:EN:Create similar tab in the same panel
+DuplicateTab.tooltip:EN:Duplicate active tab in the same panel
 # Translation missing (New!)
 
 CloseDuplicateTabs.label:EN:Close duplicates
