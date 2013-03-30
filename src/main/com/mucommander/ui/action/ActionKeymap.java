@@ -247,9 +247,9 @@ public class ActionKeymap {
     	if(accelerator != null) {
     		InputMap inputMap = comp.getInputMap(condition);
     		ActionMap actionMap = comp.getActionMap();
-    		Class<?> muActionClass = action.getClass();
-    		inputMap.put(accelerator, muActionClass);
-    		actionMap.put(muActionClass, action);
+    		String actionId = action.getDescriptor().getId();
+    		inputMap.put(accelerator, actionId);
+    		actionMap.put(actionId, action);
     	}
     }
 
@@ -276,9 +276,8 @@ public class ActionKeymap {
     	if(accelerator != null) {
     		InputMap inputMap = comp.getInputMap(condition);
     		ActionMap actionMap = comp.getActionMap();
-    		Class<?> muActionClass = action.getClass();
     		inputMap.remove(accelerator);
-    		actionMap.remove(muActionClass);
+    		actionMap.remove(action.getDescriptor().getId());
     	}
     }
     
