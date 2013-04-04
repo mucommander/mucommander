@@ -806,9 +806,11 @@
         <mkdir dir="${dist}"/>
 
         <!-- Retrieves the implementation version.                                                                   -->
-        <exec executable="svnversion" failifexecutionfails="no" outputproperty="svn.version">
-            <arg value="."/>
+        <exec executable="git" failifexecutionfails="no" outputproperty="build.version">
+            <arg value="log"/>
             <arg value="-n"/>
+            <arg value="1"/>
+            <arg value="--pretty=format:%h"/>
         </exec>
 
         <echo>Creating JAR file...</echo>
@@ -823,7 +825,7 @@
                 <attribute name="Specification-Version"  value="${app.version}"/>
                 <attribute name="Implementation-Title"   value="${app.name}"/>
                 <attribute name="Implementation-Vendor"  value="${app.vendor}"/>
-                <attribute name="Implementation-Version" value="${svn.version}"/>
+                <attribute name="Implementation-Version" value="${build.version}"/>
                 <attribute name="Build-Date"             value="${DSTAMP}"/>
                 <attribute name="Build-URL"              value="${version.url}"/>
             </manifest>
