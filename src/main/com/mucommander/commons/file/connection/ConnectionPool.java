@@ -61,24 +61,24 @@ public class ConnectionPool implements Runnable {
 
                 // Try and find an appropriate existing ConnectionHandler
                 for(ConnectionHandler connHandler : connectionHandlers) {
-                        // ConnectionHandler must match the realm and credentials and must not be locked
-                        if(connHandler.equals(realm, urlCredentials)) {
-                            synchronized(connHandler) {     // Ensures that lock remains unchanged while we access/update it
-                                if(!connHandler.isLocked()) {
-                                    // Try to acquire lock if a lock was requested
-                                    if(!acquireLock || connHandler.acquireLock()) {
-                                        LOGGER.info("returning ConnectionHandler {}, realm = {}", connHandler, realm);
+                	// ConnectionHandler must match the realm and credentials and must not be locked
+                	if(connHandler.equals(realm, urlCredentials)) {
+                		matchingConnHandlers++;
+                		synchronized(connHandler) {     // Ensures that lock remains unchanged while we access/update it
+                			if(!connHandler.isLocked()) {
+                				// Try to acquire lock if a lock was requested
+                				if(!acquireLock || connHandler.acquireLock()) {
+                					LOGGER.info("returning ConnectionHandler {}, realm = {}", connHandler, realm);
 
-                                        // Update last activity timestamp to now
-                                        connHandler.updateLastActivityTimestamp();
+                					// Update last activity timestamp to now
+                					connHandler.updateLastActivityTimestamp();
 
-                                        return connHandler;
-                                    }
-                                }
-                            }
-                        }
-
-                    matchingConnHandlers++;
+                					return connHandler;
+                				}
+                			}
+                		}
+                	}
+                    
                     if(matchingConnHandlers==MAX_CONNECTIONS_PER_REALM) {
                         LOGGER.info("Maximum number of connection per realm reached, waiting for one to be removed or released...");
                         try {
