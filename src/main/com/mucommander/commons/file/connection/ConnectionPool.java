@@ -18,13 +18,14 @@
 
 package com.mucommander.commons.file.connection;
 
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
+import java.io.InterruptedIOException;
+import java.util.Vector;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InterruptedIOException;
-import java.util.Vector;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
 
 
 /**
@@ -55,14 +56,11 @@ public class ConnectionPool implements Runnable {
 
         while(true) {
             synchronized(connectionHandlers) {      // Ensures that monitor thread is not currently changing the list while we access it
-                int nbConn = connectionHandlers.size();
-                ConnectionHandler connHandler;
                 Credentials urlCredentials = url.getCredentials();
                 int matchingConnHandlers = 0;
 
                 // Try and find an appropriate existing ConnectionHandler
-                for(int i=0; i<nbConn; i++) {
-                    connHandler = getConnectionHandlerAt(i);
+                for(ConnectionHandler connHandler : connectionHandlers) {
                         // ConnectionHandler must match the realm and credentials and must not be locked
                         if(connHandler.equals(realm, urlCredentials)) {
                             synchronized(connHandler) {     // Ensures that lock remains unchanged while we access/update it
@@ -99,7 +97,7 @@ public class ConnectionPool implements Runnable {
                     continue;
 
                 // No suitable ConnectionHandler found, create a new one
-                connHandler = connectionHandlerFactory.createConnectionHandler(url);
+                ConnectionHandler connHandler = connectionHandlerFactory.createConnectionHandler(url);
 
                 // Acquire lock if a lock was requested
                 if(acquireLock)
@@ -168,8 +166,7 @@ public class ConnectionPool implements Runnable {
             long now = System.currentTimeMillis();
 
             synchronized(connectionHandlers) {      // Ensures that getConnectionHandler is not currently changing the list while we access it
-                for(int i=0; i<connectionHandlers.size(); i++) {
-                    ConnectionHandler connHandler = getConnectionHandlerAt(i);
+                for(ConnectionHandler connHandler : connectionHandlers) {
 
                     synchronized(connHandler) {     // Ensures that no one is trying to acquire a lock on the connection while we access it 
                         if(!connHandler.isLocked()) {   // Do not touch ConnectionHandler if it is currently locked
@@ -179,7 +176,7 @@ public class ConnectionPool implements Runnable {
                             if(!connHandler.isConnected()) {
                                 LOGGER.info("Removing unconnected ConnectionHandler {}", connHandler);
 
-                                connectionHandlers.removeElementAt(i);
+                                connectionHandlers.remove(connHandler);
                                 // Notify any thread waiting for a ConnectionHandler to be released
                                 connectionHandlers.notify();
 
@@ -194,7 +191,7 @@ public class ConnectionPool implements Runnable {
                             if(closePeriod!=-1 && now-lastUsed>closePeriod*1000) {
                                 LOGGER.info("Removing timed-out ConnectionHandler {}",connHandler);
 
-                                connectionHandlers.removeElementAt(i);
+                                connectionHandlers.remove(connHandler);
                                 // Notify any thread waiting for a ConnectionHandler to be released
                                 connectionHandlers.notify();
 
