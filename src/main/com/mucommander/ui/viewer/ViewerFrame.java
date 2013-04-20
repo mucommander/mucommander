@@ -53,13 +53,18 @@ public class ViewerFrame extends FileFrame {
     // Overridden methods //
     ////////////////////////
 
-    @Override
-    protected void showGenericErrorDialog() {
-        InformationDialog.showErrorDialog(getMainFrame(), Translator.get("file_viewer.view_error_title"), Translator.get("file_viewer.view_error"));
-    }
-
 	@Override
 	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
 		return ViewerRegistrar.createFileViewer(file, ViewerFrame.this);
+	}
+
+	@Override
+	protected String getGenericErrorDialogTitle() {
+		return Translator.get("file_viewer.view_error_title");
+	}
+
+	@Override
+    protected String getGenericErrorDialogMessage() {
+		return Translator.get("file_viewer.view_error");
 	}
 }

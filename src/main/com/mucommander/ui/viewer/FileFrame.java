@@ -15,9 +15,14 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.viewer.EditorFrame;
+import com.mucommander.ui.viewer.FilePresenter;
+import com.mucommander.ui.viewer.UserCancelledException;
+import com.mucommander.ui.viewer.ViewerFrame;
 
 /**
  * This class is used as an abstraction for the {@link EditorFrame} and {@link ViewerFrame}.
@@ -102,13 +107,13 @@ public abstract class FileFrame extends JFrame {
         setContentPane(contentPane);
 
         setSize(WAIT_DIALOG_SIZE);
-        DialogToolkit.centerOnWindow(this, getMainFrame());
+        DialogToolkit.centerOnWindow(this, mainFrame);
 
         setVisible(true);
     }
 
-	protected MainFrame getMainFrame() {
-		return mainFrame;
+	private void showGenericErrorDialog() {
+		InformationDialog.showErrorDialog(mainFrame, getGenericErrorDialogTitle(), getGenericErrorDialogMessage());
 	}
 
 	/**
@@ -139,7 +144,7 @@ public abstract class FileFrame extends JFrame {
         DialogToolkit.fitToScreen(this);
         DialogToolkit.fitToMinDimension(this, getMinimumSize());
 
-        DialogToolkit.centerOnWindow(this, getMainFrame());
+        DialogToolkit.centerOnWindow(this, mainFrame);
     }
     
     @Override
@@ -152,7 +157,9 @@ public abstract class FileFrame extends JFrame {
     // Abstract methods //
     //////////////////////
     
-    protected abstract void showGenericErrorDialog();
+    protected abstract String getGenericErrorDialogTitle();
+
+    protected abstract String getGenericErrorDialogMessage();
     
     protected abstract FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException;
 }
