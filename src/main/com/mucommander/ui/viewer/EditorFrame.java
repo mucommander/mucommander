@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.Dimension;
+import java.awt.Image;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.awt.*;
 
 
 /**

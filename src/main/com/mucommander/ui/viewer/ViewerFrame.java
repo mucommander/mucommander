@@ -19,12 +19,12 @@
  
 package com.mucommander.ui.viewer;
 
+import java.awt.Dimension;
+import java.awt.Image;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.awt.*;
 
 
 /**
@@ -35,7 +35,7 @@ import java.awt.*;
  */
 public class ViewerFrame extends FileFrame {
 	
-    private final static Dimension MIN_DIMENSION = new Dimension(200, 150);
+    private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
 	
     /**
      * Creates a new ViewerFrame to start viewing the given file.
@@ -45,13 +45,16 @@ public class ViewerFrame extends FileFrame {
      */
     ViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         super(mainFrame, file, icon);
-        
-        setMinimumSize(MIN_DIMENSION);
     }
 
     ////////////////////////
     // Overridden methods //
     ////////////////////////
+
+    @Override
+    public Dimension getMinimumSize() {
+    	return MIN_DIMENSION;
+    }
 
 	@Override
 	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
