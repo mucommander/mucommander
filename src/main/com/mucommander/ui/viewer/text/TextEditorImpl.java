@@ -227,6 +227,8 @@ class TextEditorImpl implements ThemeListener {
 	void write(Writer writer) throws IOException {
 		Document document = textArea.getDocument();
 
+		// According to the documentation in DefaultEditorKit, the line separator is set to be as the system property
+		// if no other line separator exists in the file, but in practice it is not, so this is a workaround for it
 		if (!lineSeparatorExists)
 			document.putProperty(DefaultEditorKit.EndOfLineStringProperty, System.getProperty("line.separator"));
 
