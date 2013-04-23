@@ -26,6 +26,9 @@ import java.util.Locale;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public final class StringUtils {
+
+	public static final String EMPTY = "";
+
     /**
      * Prevents instantiation of this class.
      */
@@ -250,8 +253,8 @@ public final class StringUtils {
      * @return the capitalized string
      */
     public static String capitalize(String s) {
-        if(s == null || s.isEmpty())
-            return "";
+        if(isNullOrEmpty(s))
+            return EMPTY;
 
         StringBuilder out;
 
@@ -295,7 +298,7 @@ public final class StringUtils {
 
         for(int i=0; i<sLen; i++) {
             el = s[i];
-            if(el==null || el.equals(""))
+            if (isNullOrEmpty(el))
                 continue;
 
             if(first)
@@ -307,5 +310,15 @@ public final class StringUtils {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Returns true if the given string is null or empty (i.e. it's length is 0)
+     *
+     * @param string - the given String to check
+     * @return true if the given string is null or empty, false otherwise
+     */
+    public static boolean isNullOrEmpty(String string) {
+    	return string == null || string.isEmpty();
     }
 }
