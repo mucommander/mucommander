@@ -19,10 +19,6 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.viewer.EditorFrame;
-import com.mucommander.ui.viewer.FilePresenter;
-import com.mucommander.ui.viewer.UserCancelledException;
-import com.mucommander.ui.viewer.ViewerFrame;
 
 /**
  * This class is used as an abstraction for the {@link EditorFrame} and {@link ViewerFrame}.
@@ -139,18 +135,14 @@ public abstract class FileFrame extends JFrame {
 
     @Override
     public void pack() {
-        super.pack();
+    	if (!isFullScreen()) {
+    		super.pack();
 
-        DialogToolkit.fitToScreen(this);
-        DialogToolkit.fitToMinDimension(this, getMinimumSize());
+    		DialogToolkit.fitToScreen(this);
+    		DialogToolkit.fitToMinDimension(this, getMinimumSize());
 
-        DialogToolkit.centerOnWindow(this, mainFrame);
-    }
-    
-    @Override
-    public void dispose() {
-    	filePresenter.beforeCloseHook();
-    	super.dispose();
+    		DialogToolkit.centerOnWindow(this, mainFrame);
+    	}
     }
     
     //////////////////////

@@ -281,21 +281,6 @@ public class MuPreferences implements MuPreferencesAPI {
 	
 
 
-	// - File presenter (viewer\editor) variables ----------------------------
-	// -----------------------------------------------------------------------
-	/** Section describing information about features used by the last file presenter instance. */
-	public static final String  FILE_PRESENTER_SECTION            = "file_presenter";
-	/** Section describing information specific to text file presenter. */
-	public static final String  TEXT_FILE_PRESENTER_SECTION       = FILE_PRESENTER_SECTION + "." + "text";
-	/** Whether or not to wrap long lines. */
-	public static final String  LINE_WRAP                         = TEXT_FILE_PRESENTER_SECTION + "." + "line_wrap";
-	/** Default wrap value. */
-	public static final boolean DEFAULT_LINE_WRAP                 = true;
-	/** Whether or not to show line numbers. */
-	public static final String  LINE_NUMBERS                      = TEXT_FILE_PRESENTER_SECTION + "." + "line_numbers";
-	/** Default line numbers value. */
-	public static final boolean DEFAULT_LINE_NUMBERS              = true;
-
 	// - Folder monitoring variables -----------------------------------------
 	// -----------------------------------------------------------------------
 	/** Section describing the automatic folder refresh behavior. */

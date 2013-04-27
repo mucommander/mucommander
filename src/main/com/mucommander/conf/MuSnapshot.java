@@ -42,7 +42,7 @@ import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.tabs.FileTableTab;
 import com.mucommander.ui.main.tabs.FileTableTabs;
-import com.mucommander.ui.viewer.FilePresenter;
+import com.mucommander.ui.viewer.text.TextViewer;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API which is used to save 'dynamic' configurations.
@@ -63,10 +63,20 @@ public class MuSnapshot {
     /** Last known screen height. */
     public static final String  SCREEN_HEIGHT                      = SCREEN_SECTION + "." + "height";
 
-    // - Text file presenter (viewer/editor) variables ----------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing known information about last text file presenter. */
-    private static final String TEXT_FILE_PRESENTER_SECTION        = "text_file_presenter";
+    // - Text file presenter (viewer/editor) variables -----------------------
+ 	// -----------------------------------------------------------------------
+ 	/** Section describing information about features used by the last file presenter instance. */
+ 	private static final String  FILE_PRESENTER_SECTION            = "file_presenter";
+ 	/** Section describing information specific to text file presenter. */
+ 	private static final String TEXT_FILE_PRESENTER_SECTION        = FILE_PRESENTER_SECTION + "." + "text";
+ 	/** Whether or not to wrap long lines. */
+ 	public static final String  TEXT_FILE_PRESENTER_LINE_WRAP      = TEXT_FILE_PRESENTER_SECTION + "." + "line_wrap";
+ 	/** Default wrap value. */
+ 	public static final boolean DEFAULT_LINE_WRAP                  = false;
+ 	/** Whether or not to show line numbers. */
+ 	public static final String  TEXT_FILE_PRESENTER_LINE_NUMBERS   = TEXT_FILE_PRESENTER_SECTION + "." + "line_numbers";
+ 	/** Default line numbers value. */
+ 	public static final boolean DEFAULT_LINE_NUMBERS               = true;
     /** Last known file presenter full screen mode. */
     public static final String  TEXT_FILE_PRESENTER_FULL_SCREEN    = TEXT_FILE_PRESENTER_SECTION + "." + "full_screen";
 
@@ -598,7 +608,9 @@ public class MuSnapshot {
     }
 
     private void setTextPresenterProperties() {
-    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN, FilePresenter.isTextPresenterDisplayedInFullScreen());
+    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN, TextViewer.isFullScreen());
+    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_LINE_WRAP, TextViewer.isLineWrap());
+    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewer.isLineNumbers());
     }
 
     private void setFrameAttributes(MainFrame mainFrame, int index) {

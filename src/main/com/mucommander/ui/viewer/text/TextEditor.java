@@ -148,13 +148,6 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     	return menuBar;
     }
     
-    @Override
-    public void beforeCloseHook() {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_WRAP, textEditorImpl.isWrap());
-    	MuConfigurations.getPreferences().setVariable(MuPreference.LINE_NUMBERS, getRowHeader().getView() != null);
-
-    	setTextPresenterDisplayedInFullScreen(getFrame().isFullScreen());
-    }
 
     ///////////////////////////////
     // FileEditor implementation //
@@ -194,15 +187,16 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     }
 
     @Override
-    public void setFrame(FileFrame frame) {
+    public void setFrame(final FileFrame frame) {
     	super.setFrame(frame);
     	
-    	frame.setFullScreen(isTextPresenterDisplayedInFullScreen());
+    	frame.setFullScreen(TextViewer.isFullScreen());
 
     	getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
     	getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
     		public void actionPerformed(ActionEvent e){
-    			getFrame().setFullScreen(!getFrame().isFullScreen());
+    			TextViewer.setFullScreen(!frame.isFullScreen());
+    			frame.setFullScreen(TextViewer.isFullScreen());
     		}
     	});
     }
@@ -250,9 +244,9 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         else if(source == findPreviousItem)
         	textEditorImpl.findPrevious();
         else if(source == toggleLineWrapItem)
-        	textEditorImpl.wrap(toggleLineWrapItem.isSelected());
+        	textViewerDelegate.wrapLines(toggleLineWrapItem.isSelected());
         else if(source == toggleLineNumbersItem)
-        	setRowHeaderView(toggleLineNumbersItem.isSelected() ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
+        	textViewerDelegate.showLineNumbers(toggleLineNumbersItem.isSelected());
         else
         	super.actionPerformed(e);
     }

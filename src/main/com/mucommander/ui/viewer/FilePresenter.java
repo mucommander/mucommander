@@ -16,8 +16,6 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuSnapshot;
 
 /**
  * Abstract class that serves as a common base for the file presenter objects (FileViewer, FileEditor).
@@ -34,8 +32,6 @@ public abstract class FilePresenter extends JScrollPane {
 
     protected final static String CUSTOM_FULL_SCREEN_EVENT = "CUSTOM_FULL_SCREEN_EVENT";
     private final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
-
-    private static boolean textPresenterFullScreen = MuConfigurations.getSnapshot().getBooleanVariable(MuSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN);
 	
 	public FilePresenter() {
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -61,14 +57,6 @@ public abstract class FilePresenter extends JScrollPane {
         		}
         	});
         }
-	}
-
-	public static void setTextPresenterDisplayedInFullScreen(boolean on) {
-		textPresenterFullScreen = on;
-	}
-
-	public static boolean isTextPresenterDisplayedInFullScreen() {
-		return textPresenterFullScreen;
 	}
 
 	/**
@@ -143,11 +131,6 @@ public abstract class FilePresenter extends JScrollPane {
     	setCurrentFile(file);
     }
     
-    /**
-     * Hook operation that can be override to make operations just before the presenter is disposed
-     */
-    public void beforeCloseHook() { }
-	
 	//////////////////////
     // Abstract methods //
     //////////////////////
