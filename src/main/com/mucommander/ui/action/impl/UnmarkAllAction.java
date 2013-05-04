@@ -35,7 +35,12 @@ public class UnmarkAllAction extends MarkAllAction {
     public UnmarkAllAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties, false);
     }
-    
+
+    @Override
+    public ActionDescriptor getDescriptor() {
+    	return new Descriptor();
+    }
+
     public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
