@@ -295,6 +295,7 @@
                     <string name="file.encoding"                value="UTF-8"/>
                 </dict>
             </dict>
+            <boolean name="NSHighResolutionCapable" value="true"/> 
         </mkapp>
     </target>
 
