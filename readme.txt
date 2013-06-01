@@ -66,12 +66,14 @@ Improvements:
 - Keyboard shortcuts can now be set for commands defined at commands.xml (ticket #456), contributed by Jarek Czekalski.
 - Show empty name in the make file/directory dialog when it is opened (ticket #512), contributed by hclsiva.
 - Mac OS X: enabled high-resolution rendering on Retina displays (ticket #518), contributed Alexey Lysiuk.
+- Added Windows 8 and Mac OS X 10.8 to the OS versions.
 
 Localization:
 - Turkish translation has been updated.
 
 Bug fixes:
 - Prevent deadlock which caused the application to freeze while switching tabs on MAC OS.
+- Recycle Bin is now working on Windows 64-bit (ticket #234)
 - Key combinations that contain the TAB key can be set as shortcuts (ticket #465).
 - Fix installation via software center on Ubuntu.
 - Symbolic links cannot be opened (ticket #467).
