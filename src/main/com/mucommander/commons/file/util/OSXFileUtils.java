@@ -19,18 +19,19 @@
 
 package com.mucommander.commons.file.util;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
 
 /**
  * This class contains methods for file operations that are specific to Mac OS X.
@@ -61,7 +62,7 @@ public class OSXFileUtils {
      * @return the Spotlight/Finder comment of the specified file
      */
     public static String getSpotlightComment(AbstractFile file) {
-        if(!(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_4.isCurrentOrHigher()))
+        if(!(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()))
             return null;
 
         InputStream pin = null;

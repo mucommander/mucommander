@@ -28,7 +28,7 @@ import com.mucommander.commons.file.icon.LocalFileIconProvider;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.SilenceableOutputStream;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         if(initialized)
             return;
 
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS_X.isCurrent())
             fileChooser = new JFileChooser();
         else
             fileSystemView = FileSystemView.getFileSystemView();
@@ -193,7 +193,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
 
     public Icon lookupCache(AbstractFile file, Dimension preferredResolution) {
         // Under Mac OS X, return the icon of /Network for the root of remote (non-local) locations. 
-        if(OsFamilies.MAC_OS_X.isCurrent() && !FileProtocols.FILE.equals(file.getURL().getScheme()) && file.isRoot())
+        if(OsFamily.MAC_OS_X.isCurrent() && !FileProtocols.FILE.equals(file.getURL().getScheme()) && file.isRoot())
             return getSwingIcon(new java.io.File("/Network"));
 
         // Look for an existing icon instance for the file's extension
@@ -225,7 +225,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         //
         // Note that the symlink test is performed last because it is the most expensive.
         //
-        if((!(originalFile.getTopAncestor() instanceof LocalFile) || (OsFamilies.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrent()))
+        if((!(originalFile.getTopAncestor() instanceof LocalFile) || (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrent()))
                 && originalFile.isSymlink()) {
             icon = getSymlinkIcon(icon);
         }

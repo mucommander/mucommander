@@ -22,7 +22,7 @@ package com.mucommander.commons.file.impl.local;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.ProtocolProvider;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 
 import java.io.IOException;
 
@@ -37,7 +37,7 @@ import java.io.IOException;
 public class LocalProtocolProvider implements ProtocolProvider {
 
 	/** Are we running Windows ? */
-    private final static boolean IS_WINDOWS =  OsFamilies.WINDOWS.isCurrent();
+    private final static boolean IS_WINDOWS =  OsFamily.WINDOWS.isCurrent();
 	
     public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
         return isUncFile(url)?

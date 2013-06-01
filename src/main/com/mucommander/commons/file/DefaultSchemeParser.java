@@ -20,7 +20,7 @@
 package com.mucommander.commons.file;
 
 import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -188,7 +188,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 // - under other OS, conveniently transform it into smb://hostname/path to be nice with folks
                 //   who've spent too much time using Windows
                 else if(url.startsWith("\\\\") && urlLen>2) {
-                    if(OsFamilies.WINDOWS.isCurrent()) {
+                    if(OsFamily.WINDOWS.isCurrent()) {
                         pos = url.indexOf('\\', 2);
                         url = FileProtocols.FILE+"://"+ 
                 				(pos==-1?url.substring(2):url.substring(2, pos)+"/"+(pos==urlLen-1?"":url.substring(pos+1)));

@@ -19,7 +19,38 @@
 
 package com.mucommander.commons.file.impl.local;
 
-import com.mucommander.commons.file.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.GroupedPermissionBits;
+import com.mucommander.commons.file.IndividualPermissionBits;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.ProtocolFile;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.file.util.Kernel32;
 import com.mucommander.commons.file.util.Kernel32API;
@@ -28,18 +59,10 @@ import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.runtime.*;
+import com.mucommander.commons.runtime.JavaVersion;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
 import com.sun.jna.ptr.LongByReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.StringTokenizer;
-import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -91,11 +114,11 @@ public class LocalFile extends ProtocolFile {
     public final static String SEPARATOR = File.separator;
 
     /** Are we running Windows ? */
-    private final static boolean IS_WINDOWS =  OsFamilies.WINDOWS.isCurrent();
+    private final static boolean IS_WINDOWS =  OsFamily.WINDOWS.isCurrent();
 
     /** True if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
      * of having single a root folder '/' */
-    public final static boolean USES_ROOT_DRIVES = IS_WINDOWS || OsFamilies.OS_2.isCurrent();
+    public final static boolean USES_ROOT_DRIVES = IS_WINDOWS || OsFamily.OS_2.isCurrent();
 
     /** Pattern matching Windows-like drives' root, e.g. C:\ */
     final static Pattern DRIVE_ROOT_PATTERN = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}");
@@ -114,7 +137,7 @@ public class LocalFile extends ProtocolFile {
     private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_1_5 = PermissionBits.EMPTY_PERMISSION_BITS;   // --------- (0)
 
     /** Bit mask that indicates which permissions can be changed */
-    private final static PermissionBits CHANGEABLE_PERMISSIONS = JavaVersions.JAVA_1_6.isCurrentOrHigher()
+    private final static PermissionBits CHANGEABLE_PERMISSIONS = JavaVersion.JAVA_1_6.isCurrentOrHigher()
             ?(IS_WINDOWS?CHANGEABLE_PERMISSIONS_JAVA_1_6_WINDOWS:CHANGEABLE_PERMISSIONS_JAVA_1_6_NON_WINDOWS)
             : CHANGEABLE_PERMISSIONS_JAVA_1_5;
 
@@ -212,7 +235,7 @@ public class LocalFile extends ProtocolFile {
      */
     public long[] getVolumeInfo() throws IOException {
         // Under Java 1.6 and up, use the (new) java.io.File methods
-        if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
+        if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
             return new long[] {
                 getTotalSpace(),
                 getFreeSpace()
@@ -257,7 +280,7 @@ public class LocalFile extends ProtocolFile {
                 // running Window NT or higher.
                 // Note: no command invocation under Windows 95/98/Me, because it causes a shell window to
                 // appear briefly every time this method is called (See ticket #63).
-                else if(OsVersions.WINDOWS_NT.isCurrentOrHigher()) {
+                else if(OsVersion.WINDOWS_NT.isCurrentOrHigher()) {
                     // 'dir' command returns free space on the last line
                     Process process = Runtime.getRuntime().exec(
                             (OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT)>=0 ? "cmd /c" : "command.com /c")
@@ -408,7 +431,7 @@ public class LocalFile extends ProtocolFile {
      */
     public static boolean hasRootDrives() {
         return IS_WINDOWS
-            || OsFamilies.OS_2.isCurrent()
+            || OsFamily.OS_2.isCurrent()
             || "\\".equals(SEPARATOR);
     }
 
@@ -433,7 +456,7 @@ public class LocalFile extends ProtocolFile {
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
             addMacOSXVolumes(volumesV);
         }
         else {
@@ -658,7 +681,7 @@ public class LocalFile extends ProtocolFile {
     @Override
     public void changePermission(int access, int permission, boolean enabled) throws IOException {
         // Only the 'user' permissions under Java 1.6 are supported
-        if(access!=USER_ACCESS || JavaVersions.JAVA_1_6.isCurrentLower())
+        if(access!=USER_ACCESS || JavaVersion.JAVA_1_6.isCurrentLower())
             throw new IOException();
 
         boolean success = false;
@@ -819,7 +842,7 @@ public class LocalFile extends ProtocolFile {
                 throw new IOException();
 
             // Windows 9x or Windows Me: Kernel32's MoveFileEx function is NOT available
-            if(OsVersions.WINDOWS_ME.isCurrentOrLower()) {
+            if(OsVersion.WINDOWS_ME.isCurrentOrLower()) {
                 // The destination file is deleted before calling java.io.File#renameTo().
                 // Note that in this case, the atomicity of this method is not guaranteed anymore -- if
                 // java.io.File#renameTo() fails (for whatever reason), the destination file is deleted anyway.
@@ -850,7 +873,7 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public long getFreeSpace() throws IOException {
-        if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
+        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
             return file.getUsableSpace();
 
         return getVolumeInfo()[1];
@@ -858,7 +881,7 @@ public class LocalFile extends ProtocolFile {
 	
     @Override
     public long getTotalSpace() throws IOException {
-        if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
+        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
             return file.getTotalSpace();
 
         return getVolumeInfo()[0];
@@ -1266,7 +1289,7 @@ public class LocalFile extends ProtocolFile {
         /** Mask for supported permissions under Java 1.5 */
         private static PermissionBits JAVA_1_5_PERMISSIONS = new GroupedPermissionBits(384);   // rw------- (300 octal)
 
-        private final static PermissionBits MASK = JavaVersions.JAVA_1_6.isCurrentOrHigher()
+        private final static PermissionBits MASK = JavaVersion.JAVA_1_6.isCurrentOrHigher()
                 ?JAVA_1_6_PERMISSIONS
                 :JAVA_1_5_PERMISSIONS;
 
@@ -1284,7 +1307,7 @@ public class LocalFile extends ProtocolFile {
             else if(type==WRITE_PERMISSION)
                 return file.canWrite();
             // Execute permission can only be retrieved under Java 1.6 and up
-            else if(type==EXECUTE_PERMISSION && JavaVersions.JAVA_1_6.isCurrentOrHigher())
+            else if(type==EXECUTE_PERMISSION && JavaVersion.JAVA_1_6.isCurrentOrHigher())
                 return file.canExecute();
 
             return false;

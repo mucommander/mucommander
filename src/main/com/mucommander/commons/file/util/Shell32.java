@@ -19,7 +19,7 @@
 
 package com.mucommander.commons.file.util;
 
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.sun.jna.Native;
 
 /**
@@ -38,7 +38,7 @@ public class Shell32 {
     private static Shell32API INSTANCE;
 
     static {
-        if(OsFamilies.WINDOWS.isCurrent()) {        // Don't even bother if we're not running Windows
+        if(OsFamily.WINDOWS.isCurrent()) {        // Don't even bother if we're not running Windows
             try {
                 INSTANCE = (Shell32API)Native.loadLibrary("shell32", Shell32API.class, Shell32API.DEFAULT_OPTIONS);
             }

@@ -21,7 +21,7 @@ package com.mucommander.commons.file.impl.s3;
 
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersion;
 import org.jets3t.service.Constants;
 import org.jets3t.service.S3ObjectsChunk;
 import org.jets3t.service.S3Service;
@@ -60,7 +60,7 @@ public abstract class S3File extends ProtocolFile {
         if(cause instanceof IOException)
             return (IOException)cause;
 
-        if(JavaVersions.JAVA_1_6.isCurrentOrHigher())
+        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
             return new IOException(e);
 
         return new IOException(e.getMessage());
