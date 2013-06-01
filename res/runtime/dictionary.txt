@@ -12506,6 +12506,16 @@ server_connections_dialog.connection_idle:NB:Inaktiv
 server_connections_dialog.connection_idle:TR:Boşta
 server_connections_dialog.connection_idle:CA:Inactiu
 
+###################
+# VSphere Connect #
+###################
+
+# %1 will be replaced by the string "IP\UUID\Instance UUID"
+vsphere_connections_dialog.guest_server:EN:Guest Server %1
+
+vsphere_connections_dialog.guest_user:EN:Guest Username
+
+vsphere_connections_dialog.guest_password:EN:Guest Password
 
 ############################
 # Bonjour/Zeroconf support #

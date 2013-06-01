@@ -41,6 +41,7 @@ New features:
 - New quick list that presents open tabs in the current panel, mapped onto Alt+6 by default (ticket #450).
 - Added the option to set fixed title for tab.
 - Added the following actions: add tab, duplicate tab, clone tab to other panel.
+- Added support for VMware vSphere virtual machines file system, contributed by Yuval Kohavi <yuval.kohavi@intigua.com>
 
 Improvements:
 - The state of all windows from last run is now restored on startup.
