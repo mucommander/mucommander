@@ -63,6 +63,8 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	WINDOWS_VISTA("Windows Vista"),
 	/** Windows 7 */
 	WINDOWS_7("Windows 7"),
+	/** Windows 8 */
+	WINDOWS_8("Windows 8"),
 
 
 	///////////////////////
@@ -84,7 +86,9 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	/** Mac OS X 10.6 */
 	MAC_OS_X_10_6("10.6"),
 	/** Mac OS X 10.7 */
-	MAC_OS_X_10_7("10.7");
+	MAC_OS_X_10_7("10.7"),
+	/** Mac OS X 10.8 */
+	MAC_OS_X_10_8("10.8");
 	
 
     /** Logger used by this class. */
@@ -174,11 +178,17 @@ public enum OsVersion implements ComparableRuntimeProperty {
             if (osNameProp.equals("Windows 7"))
                 return WINDOWS_7;
 
+            if (osNameProp.equals("Windows 8"))
+                return WINDOWS_8;
+
             // Newer version we don't know of yet, assume latest supported OS version
-            return WINDOWS_7;
+            return WINDOWS_8;
         }
         // Mac OS X versions
         if (osFamily==OsFamily.MAC_OS_X) {
+            if(osVersionProp.startsWith("10.8"))
+                return MAC_OS_X_10_8;
+
             if(osVersionProp.startsWith("10.7"))
                 return MAC_OS_X_10_7;
 
@@ -204,7 +214,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
                 return MAC_OS_X_10_0;
 
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_X_10_7;
+            return MAC_OS_X_10_8;
         }
 
         return OsVersion.UNKNOWN_VERSION;
