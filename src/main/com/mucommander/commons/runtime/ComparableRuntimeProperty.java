@@ -19,31 +19,11 @@
 package com.mucommander.commons.runtime;
 
 /**
- * ComparableRuntimeProperty is a runtime property for which the values have a natural order. This class provides
- * methods to compare instances, using an int value specified at creation time as the discriminator.
+ * Utility methods for comparing the current runtime's value of this property to this instance
  *
- * <p>Subclasses must ensure that no two instances have the same discriminator value. Based on this assumption,
- * if {@link #compareTo(Object)} returns <code>0</code>, then instances are equal according to the shallow equals
- * operator '=='.</p>
- *
- * @author Maxence Bernard
+ * @author Arik Hadas, Maxence Bernard
 */
-public abstract class ComparableRuntimeProperty extends RuntimeProperty implements Comparable<ComparableRuntimeProperty> {
-
-    /** The descriminator set at creation time */
-    protected final Integer discriminator;
-
-    /**
-     * Creates a new RuntimeProperty using the specified String representation and order discriminator.
-     *
-     * @param stringRepresentation a String representation of this property
-     * @param discriminator the descriminator that serves to compare an instance with another against
-     */
-    protected ComparableRuntimeProperty(String stringRepresentation, Integer discriminator) {
-        super(stringRepresentation);
-
-        this.discriminator = discriminator;
-    }
+public interface ComparableRuntimeProperty {
 
     /**
      * Returns <code>true</code> if the current runtime's value of this property is equal or lower to this instance,
@@ -51,9 +31,7 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
      *
      * @return <code>true</code> if the current runtime's value of this property is equal or lower to this instance
      */
-    public boolean isCurrentOrLower() {
-        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)<=0;
-    }
+    boolean isCurrentOrLower();
 
     /**
      * Returns <code>true</code> if the current runtime's value of this property is lower than this instance,
@@ -61,9 +39,7 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
      *
      * @return <code>true</code> if the current runtime's value of this property is lower than this instance
      */
-    public boolean isCurrentLower() {
-        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)<0;
-    }
+    boolean isCurrentLower();
 
     /**
      * Returns <code>true</code> if the current runtime's value of this property is equal or higher to this instance,
@@ -71,9 +47,7 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
      *
      * @return <code>true</code> if the current runtime's value of this property is equal or higher to this instance
      */
-    public boolean isCurrentOrHigher() {
-        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)>=0;
-    }
+    boolean isCurrentOrHigher();
 
     /**
      * Returns <code>true</code> if the current runtime's value of this property is higher than this instance,
@@ -81,16 +55,5 @@ public abstract class ComparableRuntimeProperty extends RuntimeProperty implemen
      *
      * @return <code>true</code> if the current runtime's value of this property is higher than this instance
      */
-    public boolean isCurrentHigher() {
-        return ((ComparableRuntimeProperty)getCurrentValue()).compareTo(this)>0;
-    }
-
-
-    ///////////////////////////////
-    // Comparable implementation //
-    ///////////////////////////////
-
-    public int compareTo(ComparableRuntimeProperty crp) {
-        return discriminator.compareTo(crp.discriminator);
-    }
+    boolean isCurrentHigher();
 }

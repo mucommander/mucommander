@@ -30,18 +30,85 @@ import org.slf4j.LoggerFactory;
  *
  * @see OsVersions
  * @see OsFamily
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
-public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
+public enum OsVersion implements ComparableRuntimeProperty {
+	/** Unknown OS version */
+	UNKNOWN_VERSION("Unknown"),
+
+	//////////////////////
+	// Windows versions //
+	//////////////////////
+
+	// Windows 9X subfamily
+
+	/** Windows 95 */
+	WINDOWS_95("Windows 95"),
+	/** Windows 98 */
+	WINDOWS_98("Windows 98"),
+	/** Windows Me */
+	WINDOWS_ME("Windows Me"),
+
+	// Windows NT subfamily
+
+	/** Windows NT */
+	WINDOWS_NT("Windows NT"),
+	/** Windows 2000 */
+	WINDOWS_2000("Windows 2000"),
+	/** Windows XP */
+	WINDOWS_XP("Windows XP"),
+	/** Windows 2003 */
+	WINDOWS_2003("Windows 2003"),
+	/** Windows Vista */
+	WINDOWS_VISTA("Windows Vista"),
+	/** Windows 7 */
+	WINDOWS_7("Windows 7"),
+
+
+	///////////////////////
+	// Mac OS X versions //
+	///////////////////////
+
+	/** Mac OS X 10.0 */
+	MAC_OS_X_10_0("10.0"),
+	/** Mac OS X 10.1 */
+	MAC_OS_X_10_1("10.1"),
+	/** Mac OS X 10.2 */
+	MAC_OS_X_10_2("10.2"),
+	/** Mac OS X 10.3 */
+	MAC_OS_X_10_3("10.3"),
+	/** Mac OS X 10.4 */
+	MAC_OS_X_10_4("10.4"),
+	/** Mac OS X 10.5 */
+	MAC_OS_X_10_5("10.5"),
+	/** Mac OS X 10.6 */
+	MAC_OS_X_10_6("10.6"),
+	/** Mac OS X 10.7 */
+	MAC_OS_X_10_7("10.7");
+	
+
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsVersion.class);
+
+    /** The String representation of this RuntimeProperty, set at creation time */
+    protected final String stringRepresentation;
 
     /** Holds the OsVersion of the current runtime environment  */
     private static OsVersion currentValue;
 
+    /**
+     * Determines the current value by parsing the corresponding system property. This method is called automatically
+     * by this class the first time the current value is accessed. However, this method has been made public to allow
+     * to force the initialization if it needs to happen at a predictable time.
+     */
+    static {
+    	currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getRawSystemProperty(), OsFamily.getCurrent());
+    	LOGGER.info("Current OS version: {}", currentValue);
+    }
 
-    protected OsVersion(String stringRepresentation, int intValue) {
-        super(stringRepresentation, intValue);
+
+    OsVersion(String stringRepresentation) {
+    	this.stringRepresentation = stringRepresentation;
     }
 
     
@@ -50,29 +117,11 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
     ////////////////////
 
     /**
-     * Determines the current value by parsing the corresponding system property. This method is called automatically
-     * by this class the first time the current value is accessed. However, this method has been made public to allow
-     * to force the initialization if it needs to happen at a predictable time.
-     */
-    public static void init() {
-        // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
-        if(currentValue==null) {
-            currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getRawSystemProperty(), OsFamily.getCurrent());
-            LOGGER.info("Current OS version: {}", currentValue);
-        }
-    }
-
-    /**
      * Returns the OS version of the current runtime environment.
      *
      * @return the OS version of the current runtime environment
      */
     public static OsVersion getCurrent() {
-        if(currentValue==null) {
-            // init() is called only once
-            init();
-        }
-
         return currentValue;
     }
 
@@ -94,89 +143,108 @@ public class OsVersion extends ComparableRuntimeProperty implements OsVersions {
      * @return an OsVersion instance corresponding to the specified system property's value
      */
     static OsVersion parseSystemProperty(String osVersionProp, String osNameProp, OsFamily osFamily) {
-        OsVersion osVersion;
-
         // This website holds a collection of system property values under many OSes:
         // http://lopica.sourceforge.net/os.html
 
-        if(osFamily==OsFamilies.WINDOWS) {
-            if(osNameProp.equals("Windows 95")) {
-                osVersion = WINDOWS_95;
-            }
-            else if(osNameProp.equals("Windows 98")) {
-                osVersion = WINDOWS_98;
-            }
-            else if(osNameProp.equals("Windows Me")) {
-                osVersion = WINDOWS_ME;
-            }
-            else if(osNameProp.equals("Windows NT")) {
-                osVersion = WINDOWS_NT;
-            }
-            else if(osNameProp.equals("Windows 2000")) {
-                osVersion = WINDOWS_2000;
-            }
-            else if(osNameProp.equals("Windows XP")) {
-                osVersion = WINDOWS_XP;
-            }
-            else if(osNameProp.equals("Windows 2003")) {
-                osVersion = WINDOWS_2003;
-            }
-            else if(osNameProp.equals("Windows Vista")) {
-                osVersion = WINDOWS_VISTA;
-            }
-            else if(osNameProp.equals("Windows 7")) {
-                osVersion = WINDOWS_7;
-            }
-            else {
-                // Newer version we don't know of yet, assume latest supported OS version
-                osVersion = WINDOWS_7;
-            }
+        if(osFamily==OsFamily.WINDOWS) {
+            if (osNameProp.equals("Windows 95"))
+                return WINDOWS_95;
+
+            if (osNameProp.equals("Windows 98"))
+                return WINDOWS_98;
+
+            if (osNameProp.equals("Windows Me"))
+                return WINDOWS_ME;
+
+            if (osNameProp.equals("Windows NT"))
+                return WINDOWS_NT;
+
+            if (osNameProp.equals("Windows 2000"))
+                return WINDOWS_2000;
+
+            if (osNameProp.equals("Windows XP"))
+                return WINDOWS_XP;
+
+            if (osNameProp.equals("Windows 2003"))
+                return WINDOWS_2003;
+
+            if (osNameProp.equals("Windows Vista"))
+                return WINDOWS_VISTA;
+
+            if (osNameProp.equals("Windows 7"))
+                return WINDOWS_7;
+
+            // Newer version we don't know of yet, assume latest supported OS version
+            return WINDOWS_7;
         }
         // Mac OS X versions
-        else if(osFamily==OsFamilies.MAC_OS_X) {
-            if(osVersionProp.startsWith("10.7")) {
-                osVersion = MAC_OS_X_10_7;
-            }
-            else if(osVersionProp.startsWith("10.6")) {
-                osVersion = MAC_OS_X_10_6;
-            }
-            else if(osVersionProp.startsWith("10.5")) {
-                osVersion = MAC_OS_X_10_5;
-            }
-            else if(osVersionProp.startsWith("10.4")) {
-                osVersion = MAC_OS_X_10_4;
-            }
-            else if(osVersionProp.startsWith("10.3")) {
-                osVersion = MAC_OS_X_10_3;
-            }
-            else if(osVersionProp.startsWith("10.2")) {
-                osVersion = MAC_OS_X_10_2;
-            }
-            else if(osVersionProp.startsWith("10.1")) {
-                osVersion = MAC_OS_X_10_1;
-            }
-            else if(osVersionProp.startsWith("10.0")) {
-                osVersion = MAC_OS_X_10_0;
-            }
-            else {
-                // Newer version we don't know of yet, assume latest supported OS version
-                osVersion = MAC_OS_X_10_7;
-            }
-        }
-        else {
-            osVersion = OsVersions.UNKNOWN_VERSION;
+        if (osFamily==OsFamily.MAC_OS_X) {
+            if(osVersionProp.startsWith("10.7"))
+                return MAC_OS_X_10_7;
+
+            if (osVersionProp.startsWith("10.6"))
+                return MAC_OS_X_10_6;
+
+            if (osVersionProp.startsWith("10.5"))
+                return MAC_OS_X_10_5;
+
+            if (osVersionProp.startsWith("10.4"))
+                return MAC_OS_X_10_4;
+
+            if (osVersionProp.startsWith("10.3"))
+                return MAC_OS_X_10_3;
+
+            if (osVersionProp.startsWith("10.2"))
+                return MAC_OS_X_10_2;
+
+            if (osVersionProp.startsWith("10.1"))
+                return MAC_OS_X_10_1;
+
+            if (osVersionProp.startsWith("10.0"))
+                return MAC_OS_X_10_0;
+
+            // Newer version we don't know of yet, assume latest supported OS version
+            return MAC_OS_X_10_7;
         }
 
-        return osVersion;
+        return OsVersion.UNKNOWN_VERSION;
     }
 
-    
+    /**
+     * Returns <code>true</code> if this instance is the same instance as the one returned by {@link #getCurrent()}.
+     *
+     * @return true if this instance is the same as the current runtime's value
+     */
+    public boolean isCurrent() {
+        return this==currentValue;
+    }
+
     //////////////////////////////////////////////
     // ComparableRuntimeProperty implementation //
     //////////////////////////////////////////////
 
+    public boolean isCurrentOrLower() {
+		return currentValue.compareTo(this)<=0;
+	}
+
+	public boolean isCurrentLower() {
+		return currentValue.compareTo(this)<0;
+	}
+
+	public boolean isCurrentOrHigher() {
+		return currentValue.compareTo(this)>=0;
+	}
+
+	public boolean isCurrentHigher() {
+		return currentValue.compareTo(this)>0;
+	}
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
     @Override
-    protected RuntimeProperty getCurrentValue() {
-        return getCurrent();
+    public String toString() {
+        return stringRepresentation;
     }
 }

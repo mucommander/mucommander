@@ -27,18 +27,52 @@ import org.slf4j.LoggerFactory;
  *
  * @see OsFamilies
  * @see OsVersion
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
-public class OsFamily extends RuntimeProperty implements OsFamilies {
+public enum OsFamily {
+	/** Windows */
+    WINDOWS("Windows"),
+    /** Mac OS X */
+    MAC_OS_X("Mac OS X"),
+    /** Linux */
+    LINUX("Linux"),
+    /** Solaris */
+    SOLARIS("Solaris"),
+    /** OS/2 */
+    OS_2("OS/2"),
+    /** FreeBSD */
+    FREEBSD("FreeBSD"),
+    /** AIX */
+    AIX("AIX"),
+    /** HP-UX */
+    HP_UX("HP-UX"),
+    /** OpenVMS */
+    OPENVMS("OpenVMS"),
+    /** Other OS */
+    UNKNOWN_OS_FAMILY("Unknown");
+
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsFamily.class);
+
+    /** The String representation of this RuntimeProperty, set at creation time */
+    protected final String stringRepresentation;
 
     /** Holds the OsFamily of the current runtime environment  */
     private static OsFamily currentValue;
 
+    /**
+     * Determines the current value by parsing the corresponding system property. This method is called automatically
+     * by this class the first time the current value is accessed. However, this method has been made public to allow
+     * to force the initialization if it needs to happen at a predictable time.
+     */
+    static {
+    	currentValue = parseSystemProperty(getRawSystemProperty());
+    	LOGGER.info("Current OS family: {}", currentValue);
+    }
 
-    protected OsFamily(String stringRepresentation) {
-        super(stringRepresentation);
+    
+    OsFamily(String stringRepresentation) {
+    	this.stringRepresentation = stringRepresentation;
     }
 
 
@@ -47,29 +81,11 @@ public class OsFamily extends RuntimeProperty implements OsFamilies {
     ////////////////////
 
     /**
-     * Determines the current value by parsing the corresponding system property. This method is called automatically
-     * by this class the first time the current value is accessed. However, this method has been made public to allow
-     * to force the initialization if it needs to happen at a predictable time.
-     */
-    public static void init() {
-        // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
-        if(currentValue==null) {
-            currentValue = parseSystemProperty(getRawSystemProperty());
-            LOGGER.info("Current OS family: {}", currentValue);
-        }
-    }
-
-    /**
      * Returns the OS family of the current runtime environment.
      *
      * @return the OS family of the current runtime environment
      */
     public static OsFamily getCurrent() {
-        if(currentValue==null) {
-            // init() is called only once
-            init();
-        }
-
         return currentValue;
     }
 
@@ -115,58 +131,61 @@ public class OsFamily extends RuntimeProperty implements OsFamilies {
      * @return an OsFamily instance corresponding to the specified system property's value
      */
     static OsFamily parseSystemProperty(String osNameProp) {
-        OsFamily osFamily;
-
         // This website holds a collection of system property values under many OSes:
         // http://lopica.sourceforge.net/os.html
 
         // Windows family
-        if(osNameProp.startsWith("Windows")) {
-            osFamily = WINDOWS;
+        if (osNameProp.startsWith("Windows")) {
+            return WINDOWS;
         }
         // Mac OS X family
-        else if(osNameProp.startsWith("Mac OS X")) {
-            osFamily = MAC_OS_X;
+        if (osNameProp.startsWith("Mac OS X")) {
+            return MAC_OS_X;
         }
         // OS/2 family
-        else if(osNameProp.startsWith("OS/2")) {
-            osFamily = OS_2;
+        if (osNameProp.startsWith("OS/2")) {
+            return OS_2;
         }
         // Linux family
-        else if(osNameProp.startsWith("Linux")) {
-            osFamily = LINUX;
+        if (osNameProp.startsWith("Linux")) {
+            return LINUX;
         }
         // Solaris family
-        else if(osNameProp.startsWith("Solaris") || osNameProp.startsWith("SunOS")) {
-            osFamily = SOLARIS;
+        if (osNameProp.startsWith("Solaris") || osNameProp.startsWith("SunOS")) {
+            return SOLARIS;
         }
-        else if(osNameProp.startsWith("FreeBSD")) {
-            osFamily = FREEBSD;
+        if (osNameProp.startsWith("FreeBSD")) {
+            return FREEBSD;
         }
-        else if(osNameProp.startsWith("AIX")) {
-            osFamily = AIX;
+        if (osNameProp.startsWith("AIX")) {
+            return AIX;
         }
-        else if(osNameProp.startsWith("HP-UX")) {
-            osFamily = HP_UX;
+        if (osNameProp.startsWith("HP-UX")) {
+            return HP_UX;
         }
-        else if(osNameProp.startsWith("OpenVMS")) {
-            osFamily = OPENVMS;
-        }
-        // Any other OS
-        else {
-            osFamily = UNKNOWN_OS_FAMILY;
+        if (osNameProp.startsWith("OpenVMS")) {
+            return OPENVMS;
         }
 
-        return osFamily;
+        // Any other OS
+        return UNKNOWN_OS_FAMILY;
     }
 
+    /**
+     * Returns <code>true</code> if this instance is the same instance as the one returned by {@link #getCurrent()}.
+     *
+     * @return true if this instance is the same as the current runtime's value
+     */
+    public boolean isCurrent() {
+        return this==currentValue;
+    }
 
-    ////////////////////////////////////
-    // RuntimeProperty implementation //
-    ////////////////////////////////////
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
 
     @Override
-    protected RuntimeProperty getCurrentValue() {
-        return getCurrent();
+    public String toString() {
+        return stringRepresentation;
     }
 }

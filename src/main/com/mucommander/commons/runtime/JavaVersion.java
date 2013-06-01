@@ -28,36 +28,53 @@ import org.slf4j.LoggerFactory;
  * against each other.
  *
  * @see JavaVersions
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
 */
-public class JavaVersion extends ComparableRuntimeProperty implements JavaVersions {
+public enum JavaVersion implements ComparableRuntimeProperty {
+	/** Java 1.0.x */
+    JAVA_1_0("1.0"),
+    /** Java 1.1.x */
+    JAVA_1_1("1.1"),
+    /** Java 1.2.x */
+    JAVA_1_2("1.2"),
+    /** Java 1.3.x */
+    JAVA_1_3("1.3"),
+    /** Java 1.4.x */
+    JAVA_1_4("1.4"),
+    /** Java 1.5.x */
+    JAVA_1_5("1.5"),
+    /** Java 1.6.x */
+    JAVA_1_6("1.6"),
+    /** Java 1.7.x */
+    JAVA_1_7("1.7");
+
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JavaVersion.class);
 
     /** Holds the JavaVersion of the current runtime environment  */
     private static JavaVersion currentValue;
 
-    protected JavaVersion(String stringRepresentation, int intValue) {
-        super(stringRepresentation, intValue);
-    }
-
-
-    ////////////////////
-    // Static methods //
-    ////////////////////
+    /** The String representation of this RuntimeProperty, set at creation time */
+    protected final String stringRepresentation;
 
     /**
      * Determines the current value by parsing the corresponding system property. This method is called automatically
      * by this class the first time the current value is accessed. However, this method has been made public to allow
      * to force the initialization if it needs to happen at a predictable time.
      */
-    public static void init() {
-        // Note: performing the initialization outside of the class static block avoids cyclic dependency problems.
-        if(currentValue==null) {
-            currentValue = parseSystemProperty(getRawSystemProperty());
-            LOGGER.info("Current Java version: {}", currentValue);
-        }
+    static {
+    	currentValue = parseSystemProperty(getRawSystemProperty());
+    	LOGGER.info("Current Java version: {}", currentValue);
     }
+
+
+    JavaVersion(String stringRepresentation) {
+    	this.stringRepresentation = stringRepresentation;
+    }
+
+    ////////////////////
+    // Static methods //
+    ////////////////////
 
     /**
      * Returns the Java version of the current runtime environment.
@@ -65,11 +82,6 @@ public class JavaVersion extends ComparableRuntimeProperty implements JavaVersio
      * @return the Java version of the current runtime environment
      */
     public static JavaVersion getCurrent() {
-        if(currentValue==null) {
-            // init() is called only once
-            init();
-        }
-
         return currentValue;
     }
 
@@ -89,50 +101,74 @@ public class JavaVersion extends ComparableRuntimeProperty implements JavaVersio
      * @return a JavaVersion instance corresponding to the specified system property's value
      */
     static JavaVersion parseSystemProperty(String javaVersionProp) {
-        JavaVersion javaVersion;
-
         // Java version property should never be null or empty, but better be safe than sorry ...
-        if(javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals(""))
+        if (javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals(""))
             // Assume java 1.5 (first supported Java version)
-            javaVersion = JavaVersions.JAVA_1_5;
+            return JavaVersion.JAVA_1_5;
         // Java 1.7
-        else if(javaVersionProp.startsWith("1.7"))
-            javaVersion = JavaVersions.JAVA_1_7;
+        if (javaVersionProp.startsWith("1.7"))
+            return JavaVersion.JAVA_1_7;
         // Java 1.6
-        else if(javaVersionProp.startsWith("1.6"))
-            javaVersion = JavaVersions.JAVA_1_6;
+        if (javaVersionProp.startsWith("1.6"))
+            return JavaVersion.JAVA_1_6;
         // Java 1.5
-        else if(javaVersionProp.startsWith("1.5"))
-            javaVersion = JavaVersions.JAVA_1_5;
+        if (javaVersionProp.startsWith("1.5"))
+            return JavaVersion.JAVA_1_5;
         // Java 1.4
-        else if(javaVersionProp.startsWith("1.4"))
-            javaVersion = JavaVersions.JAVA_1_4;
+        if (javaVersionProp.startsWith("1.4"))
+            return JavaVersion.JAVA_1_4;
         // Java 1.3
-        else if(javaVersionProp.startsWith("1.3"))
-            javaVersion = JavaVersions.JAVA_1_3;
+        if (javaVersionProp.startsWith("1.3"))
+            return JavaVersion.JAVA_1_3;
         // Java 1.2
-        else if(javaVersionProp.startsWith("1.2"))
-            javaVersion = JavaVersions.JAVA_1_2;
+        if (javaVersionProp.startsWith("1.2"))
+            return JavaVersion.JAVA_1_2;
         // Java 1.1
-        else if(javaVersionProp.startsWith("1.1"))
-            javaVersion = JavaVersions.JAVA_1_1;
+        if (javaVersionProp.startsWith("1.1"))
+            return JavaVersion.JAVA_1_1;
         // Java 1.0
-        else if(javaVersionProp.startsWith("1.0"))
-            javaVersion = JavaVersions.JAVA_1_0;
-        // Newer version we don't know of yet, assume latest supported Java version
-        else
-            javaVersion = JavaVersions.JAVA_1_6;
+        if (javaVersionProp.startsWith("1.0"))
+            return JavaVersion.JAVA_1_0;
 
-        return javaVersion;
+        // Newer version we don't know of yet, assume latest supported Java version
+        return JavaVersion.JAVA_1_6;
     }
 
+    /**
+     * Returns <code>true</code> if this instance is the same instance as the one returned by {@link #getCurrent()}.
+     *
+     * @return true if this instance is the same as the current runtime's value
+     */
+    public boolean isCurrent() {
+        return this==currentValue;
+    }
 
     //////////////////////////////////////////////
     // ComparableRuntimeProperty implementation //
     //////////////////////////////////////////////
 
+	public boolean isCurrentOrLower() {
+		return currentValue.compareTo(this)<=0;
+	}
+
+	public boolean isCurrentLower() {
+		return currentValue.compareTo(this)<0;
+	}
+
+	public boolean isCurrentOrHigher() {
+		return currentValue.compareTo(this)>=0;
+	}
+
+	public boolean isCurrentHigher() {
+		return currentValue.compareTo(this)>0;
+	}
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
     @Override
-    protected RuntimeProperty getCurrentValue() {
-        return getCurrent();
+    public String toString() {
+        return stringRepresentation;
     }
 }
