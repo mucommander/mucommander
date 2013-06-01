@@ -57,6 +57,7 @@
         <dependency org="testng"        name="testng"                      rev="latest.integration" conf="test"/>
         <dependency org="sourceforge"   name="cobertura"                   rev="latest.integration" conf="test"/>
 		<dependency org="edmund-wagner" name="junrar"                      rev="latest.integration" conf="runtime->default"/>
+		<dependency org="wmware"        name="vi"                          rev="latest.integration" conf="runtime->default"/>
 
         <!-- External tools.                                                                                         -->
         <dependency org="mucommander" name="code-metrics" rev="latest.integration" conf="tools"/>
