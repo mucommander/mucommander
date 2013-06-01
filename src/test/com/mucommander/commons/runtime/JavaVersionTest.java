@@ -18,7 +18,7 @@
 
 package com.mucommander.commons.runtime;
 
-import com.mucommander.commons.runtime.JavaVersion;
+import org.testng.annotations.Test;
 
 /**
  * A JUnit test case for {@link JavaVersion}.
