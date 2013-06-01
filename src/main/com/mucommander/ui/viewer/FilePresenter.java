@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * Abstract class that serves as a common base for the file presenter objects (FileViewer, FileEditor).
@@ -49,7 +49,7 @@ public abstract class FilePresenter extends JScrollPane {
 		});
 
 		// Catch Apple+W keystrokes under Mac OS X to close the window
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
         	getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
         	getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
         		public void actionPerformed(ActionEvent e){

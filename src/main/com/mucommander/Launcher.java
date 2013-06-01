@@ -35,7 +35,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.commons.file.impl.ftp.FTPProtocolProvider;
 import com.mucommander.commons.file.impl.smb.SMBProtocolProvider;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -441,7 +441,7 @@ public class Launcher {
             // ------------------------------------------------------------
             // If muCommander is running under Mac OS X (how lucky!), add some glue for the main menu bar and other OS X
             // specifics.
-            if(OsFamilies.MAC_OS_X.isCurrent()) {
+            if(OsFamily.MAC_OS_X.isCurrent()) {
                 // Use reflection to create an OSXIntegration instance so that ClassLoader
                 // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
                 try {

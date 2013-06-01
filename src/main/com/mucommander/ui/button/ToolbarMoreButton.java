@@ -18,15 +18,29 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
-import com.mucommander.ui.icon.IconManager;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import java.awt.*;
-import java.awt.event.*;
+
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.ui.icon.IconManager;
 
 /*
  * MySwing: Advanced Swing Utilites
@@ -78,7 +92,7 @@ public class ToolbarMoreButton extends JToggleButton implements ActionListener {
     setContentAreaFilled(false);
     setBorderPainted(false);
     // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-    if (OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
+    if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
       putClientProperty("JComponent.sizeVariant", "small");
       putClientProperty("JButton.buttonType", "textured");
     }

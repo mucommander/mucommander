@@ -25,8 +25,8 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.runtime.JavaVersions;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.JavaVersion;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.main.WindowManager;
 
 /**
@@ -55,9 +55,9 @@ public abstract class AbstractNotifier {
 
     static {
         // Finds and creates a suitable AbstractNotifier instance for the platform, if there is one
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS_X.isCurrent())
             notifier = new GrowlNotifier();
-        else if(JavaVersions.JAVA_1_6.isCurrentOrHigher() && SystemTray.isSupported())
+        else if(JavaVersion.JAVA_1_6.isCurrentOrHigher() && SystemTray.isSupported())
             notifier = new SystemTrayNotifier();
     }
 

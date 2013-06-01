@@ -41,9 +41,9 @@ import com.apple.eawt.FullScreenUtilities;
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.runtime.JavaVersions;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.commons.runtime.JavaVersion;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -114,11 +114,11 @@ public class MainFrame extends JFrame implements LocationListener {
         // TODO: this code should probably be moved to the desktop API
 
         // - Mac OS X completely ignores calls to #setIconImage/setIconImages, no need to waste time
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS_X.isCurrent())
             return;
 
         // Use Java 1.6 's new Window#setIconImages(List<Image>) when available
-        if(JavaVersions.JAVA_1_6.isCurrentOrHigher()) {
+        if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
             java.util.List<Image> icons = new Vector<Image>();
 
             // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.
@@ -127,7 +127,7 @@ public class MainFrame extends JFrame implements LocationListener {
             // - Windows XP messes up 8-bit PNG transparency.
             // We would be better off with the .ico of the launch4j exe (which has 8-bit alpha transparency) but there
             // seems to be no way to keep it when in 'dontWrapJar' mode (separate exe and jar files).
-            if(OsFamilies.WINDOWS.isCurrent() && OsVersions.WINDOWS_XP.isCurrentOrLower()) {
+            if(OsFamily.WINDOWS.isCurrent() && OsVersion.WINDOWS_XP.isCurrentOrLower()) {
                 icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon48_8.png").getImage());
             }
             // - Windows Vista supports 8-bit transparency and icon resolutions up to 256x256.
@@ -154,7 +154,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Set the window icon
         setWindowIcon();
 
-        if (OsFamilies.MAC_OS_X.isCurrent()) {
+        if (OsFamily.MAC_OS_X.isCurrent()) {
         	// Lion Fullscreen support
         	FullScreenUtilities.setWindowCanFullScreen(this, true);
         }
@@ -647,7 +647,7 @@ public class MainFrame extends JFrame implements LocationListener {
         String title = activeTable.getFolderPanel().getCurrentFolder().getAbsolutePath();
 
 	// Add the application name to window title on all OSs except MAC
-        if (!OsFamilies.MAC_OS_X.isCurrent())
+        if (!OsFamily.MAC_OS_X.isCurrent())
         	title += " - muCommander";
 
         java.util.List<MainFrame> mainFrames = WindowManager.getMainFrames();
@@ -656,7 +656,7 @@ public class MainFrame extends JFrame implements LocationListener {
         setTitle(title);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getFolderPanel().getCurrentFolder();
             Object javaIoFile;

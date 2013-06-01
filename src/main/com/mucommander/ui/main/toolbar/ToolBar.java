@@ -34,8 +34,8 @@ import javax.swing.JToolBar;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -69,8 +69,8 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
     /** Whether to use the new JButton decorations introduced in Mac OS X 10.5 (Leopard) */
     private final static boolean USE_MAC_OS_X_CLIENT_PROPERTIES =
-            OsFamilies.MAC_OS_X.isCurrent() &&
-            OsVersions.MAC_OS_X_10_5.isCurrentOrHigher();
+    		OsFamily.MAC_OS_X.isCurrent() &&
+            OsVersion.MAC_OS_X_10_5.isCurrentOrHigher();
 
     /** Current icon scale value */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.

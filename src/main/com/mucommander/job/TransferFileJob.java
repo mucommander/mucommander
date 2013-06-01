@@ -39,7 +39,7 @@ import com.mucommander.commons.io.CounterInputStream;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.ThroughputLimitInputStream;
 import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -205,7 +205,7 @@ public abstract class TransferFileJob extends FileJob {
         }
 
         // Under Mac OS X only, preserving the file type and creator
-        if(OsFamilies.MAC_OS_X.isCurrent()
+        if(OsFamily.MAC_OS_X.isCurrent()
             && sourceFile.hasAncestor(LocalFile.class)
             && destFile.hasAncestor(LocalFile.class)) {
 

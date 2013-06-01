@@ -21,6 +21,8 @@ package com.mucommander.core;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 
 import org.slf4j.Logger;
@@ -32,12 +34,17 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.AuthenticationType;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -104,7 +111,7 @@ public class LocationChanger {
     			try {
     				AbstractFile folder = FileFactory.getFile(folderURL);
     				if (folder == null)
-    					throw new IOException();
+    					folder = new NullableFile(folderURL);
     				locationManager.setCurrentFolder(folder, null, true);
     			} catch (UnsupportedFileOperationException e) {
     				e.printStackTrace();
@@ -970,4 +977,200 @@ public class LocationChanger {
 			AppLogger.fine("Caught exception", e);
 		}
 	}*/
+
+	private class NullableFile extends AbstractFile {
+
+		private NullableFile(FileURL url) {
+			super(url);
+		}
+
+		@Override
+		public boolean canGetGroup() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean canGetOwner() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void changeDate(long arg0) throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void changePermission(int arg0, int arg1, boolean arg2)
+				throws IOException, UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void copyRemotelyTo(AbstractFile arg0) throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void delete() throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public boolean exists() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public OutputStream getAppendOutputStream() throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public PermissionBits getChangeablePermissions() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public long getDate() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public long getFreeSpace() throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public String getGroup() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public InputStream getInputStream() throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public OutputStream getOutputStream() throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getOwner() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public AbstractFile getParent() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public FilePermissions getPermissions() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public RandomAccessInputStream getRandomAccessInputStream()
+				throws IOException, UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public RandomAccessOutputStream getRandomAccessOutputStream()
+				throws IOException, UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public long getSize() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public long getTotalSpace() throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public Object getUnderlyingFileObject() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean isArchive() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean isDirectory() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean isSymlink() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public AbstractFile[] ls() throws IOException,
+				UnsupportedFileOperationException {
+//			throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);
+			return new AbstractFile[0];
+		}
+
+		@Override
+		public void mkdir() throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void renameTo(AbstractFile arg0) throws IOException,
+				UnsupportedFileOperationException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void setParent(AbstractFile arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }

@@ -41,7 +41,7 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -215,7 +215,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Disable menu bar (NOT menu item) mnemonics under Mac OS X because of a bug: when screen menu bar is enabled
         // and a menu is triggered by a mnemonic, the menu pops up where it would appear with a regular menu bar
         // (i.e. with screen menu bar disabled).
-        MnemonicHelper menuMnemonicHelper = OsFamilies.MAC_OS_X.isCurrent()?null:new MnemonicHelper();
+        MnemonicHelper menuMnemonicHelper = OsFamily.MAC_OS_X.isCurrent()?null:new MnemonicHelper();
 
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
         MnemonicHelper menuItemMnemonicHelper2 = new MnemonicHelper();
@@ -249,7 +249,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ChangeDateAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
-        if(!OsFamilies.MAC_OS_X.isCurrent()) {
+        if(!OsFamily.MAC_OS_X.isCurrent()) {
             fileMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowPreferencesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         }
@@ -257,7 +257,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CloseWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         // Under Mac OS X, 'Quit' already appears in the application (muCommander) menu, do not display it again
-        if(!OsFamilies.MAC_OS_X.isCurrent())
+        if(!OsFamily.MAC_OS_X.isCurrent())
             MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(QuitAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
 
         add(fileMenu);
@@ -399,7 +399,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         windowMenu = MenuToolkit.addMenu(Translator.get("window_menu"), menuMnemonicHelper, this);
 
         // If running Mac OS X, add 'Minimize' and 'Zoom' items
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
             MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(MinimizeWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
             MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(MaximizeWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
             windowMenu.add(new JSeparator());
@@ -448,7 +448,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 		
         // Under Mac OS X, 'About' already appears in the application (muCommander) menu, do not display it again
-        if(!OsFamilies.MAC_OS_X.isCurrent()) {
+        if(!OsFamily.MAC_OS_X.isCurrent()) {
             helpMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowAboutAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         }

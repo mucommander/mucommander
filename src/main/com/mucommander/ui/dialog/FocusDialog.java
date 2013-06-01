@@ -41,7 +41,7 @@ import javax.swing.border.EmptyBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.helper.FocusRequester;
 
 
@@ -113,7 +113,7 @@ public class FocusDialog extends JDialog implements WindowListener {
         actionMap.put(CUSTOM_DISPOSE_EVENT, disposeAction);
 		
         // Maps the dispose action to the 'Apple+W' keystroke under Mac OS X
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS_X.isCurrent())
             inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
 
         // Under Windows, Alt+F4 automagically disposes the dialog, nothing to do

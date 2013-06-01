@@ -18,15 +18,20 @@
 
 package com.mucommander.ui.encoding;
 
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.ui.combobox.SaneComboBox;
-import com.mucommander.ui.dialog.DialogOwner;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.WeakHashMap;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.ui.combobox.SaneComboBox;
+import com.mucommander.ui.dialog.DialogOwner;
 
 /**
  * This compound component lets the user choose a character encoding among a list of {@link EncodingPreferences#getPreferredEncodings()
@@ -91,7 +96,7 @@ public class EncodingSelectBox extends JPanel {
         // Customize button
         customizeButton = new JButton("...");
         // Mac OS X: small component size
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS_X.isCurrent())
             customizeButton.putClientProperty("JComponent.sizeVariant", "small");
 
         customizeButton.addActionListener(new ActionListener() {

@@ -27,8 +27,8 @@ import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.conf.ValueList;
-import com.mucommander.commons.runtime.JavaVersions;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.JavaVersion;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.icon.FileIcons;
 
 /**
@@ -83,8 +83,8 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** System notifications are enabled by default on platforms where a notifier is available and works well enough.
 	 * In particular, the system tray notifier is available under Linux+Java 1.6, but it doesn't work well so it is not
 	 * enabled by default. */
-	public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamilies.MAC_OS_X.isCurrent() ||
-			(OsFamilies.WINDOWS.isCurrent() && JavaVersions.JAVA_1_6.isCurrentOrHigher());
+	public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamily.MAC_OS_X.isCurrent() ||
+			(OsFamily.WINDOWS.isCurrent() && JavaVersion.JAVA_1_6.isCurrentOrHigher());
 	/** List of encodings that are displayed in encoding selection components. */
 	public static final String  PREFERRED_ENCODINGS               = "preferred_encodings";
 
@@ -339,7 +339,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Used do determine whether discovery of Bonjour services should be activated or not. */
 	public static final String  ENABLE_BONJOUR_DISCOVERY          = BONJOUR_SECTION + '.' + "discovery_enabled";
 	/** Default Bonjour discovery activation used on startup. */
-	public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = OsFamilies.MAC_OS_X.isCurrent() ? false : true;
+	public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = OsFamily.MAC_OS_X.isCurrent() ? false : true;
 
 
 
@@ -406,7 +406,7 @@ public class MuPreferences implements MuPreferencesAPI {
 		}
 
 		// Initializes MAC OS X specific values
-		if(OsFamilies.MAC_OS_X.isCurrent()) {
+		if(OsFamily.MAC_OS_X.isCurrent()) {
 			if(configuration.getVariable(SHELL_ENCODING) == null) {
 				configuration.setVariable(SHELL_ENCODING, "UTF-8");
 				configuration.setVariable(AUTODETECT_SHELL_ENCODING, false);
@@ -429,7 +429,7 @@ public class MuPreferences implements MuPreferencesAPI {
 				conf.setVariable(preference.toString(), configuration.getVariable(preference.toString()));
 			
 			// Remove preferences which are not relevant if we're not using MAC
-			if (!OsFamilies.MAC_OS_X.isCurrent()) {
+			if (!OsFamily.MAC_OS_X.isCurrent()) {
 				conf.removeVariable(USE_BRUSHED_METAL);
 				conf.removeVariable(USE_SCREEN_MENU_BAR);
 			}

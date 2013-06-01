@@ -32,7 +32,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.impl.local.UNCFile;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;
 import com.mucommander.ui.autocomplete.TextFieldCompletion;
@@ -71,7 +71,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
     private static Pattern windowsTrailingSpacePattern;
 
     static {
-        if(OsFamilies.WINDOWS.isCurrent())
+        if(OsFamily.WINDOWS.isCurrent())
             windowsTrailingSpacePattern = Pattern.compile("[ ]+[\\\\]*$");
     }
 
@@ -232,7 +232,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // Note that Win32 doesn't allow creating files with trailing spaces (in Explorer, command prompt...), but
         // those files can still be manually crafted and thus exist on one's hard drive.
         // Mucommander should in theory be able to access such files without any problem but this hasn't been tested.
-        if(OsFamilies.WINDOWS.isCurrent() && location.indexOf(":\\")==1) {
+        if(OsFamily.WINDOWS.isCurrent() && location.indexOf(":\\")==1) {
             // Looks for trailing spaces and if some 
             Matcher matcher = windowsTrailingSpacePattern.matcher(location);
             if(matcher.find())

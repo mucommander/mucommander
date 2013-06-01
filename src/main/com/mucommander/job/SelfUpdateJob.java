@@ -31,7 +31,7 @@ import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.filter.OrFileFilter;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.ResourceLoader;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
@@ -196,7 +196,7 @@ public class SelfUpdateJob extends CopyJob {
         try {
             AbstractFile parent;
             // Mac OS X
-            if(OsFamilies.MAC_OS_X.isCurrent()) {
+            if(OsFamily.MAC_OS_X.isCurrent()) {
                 parent = destJar.getParent();
 
                 // Look for an .app container that encloses the JAR file
@@ -220,7 +220,7 @@ public class SelfUpdateJob extends CopyJob {
                 EqualsFilenameFilter launcherFilter;
 
                 // Windows
-                if(OsFamilies.WINDOWS.isCurrent()) {
+                if(OsFamily.WINDOWS.isCurrent()) {
                     // Look for a muCommander.exe launcher located in the same folder as the JAR file
                     launcherFilter = new EqualsFilenameFilter("muCommander.exe", false);
 

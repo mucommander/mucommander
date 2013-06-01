@@ -18,14 +18,15 @@
 
 package com.mucommander.ui.notifier;
 
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.macosx.AppleScript;
+import java.util.Hashtable;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Hashtable;
-import java.util.Map;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.macosx.AppleScript;
 
 /**
  * GrowlNotifier implements a notifier that uses the Growl notification system.
@@ -103,7 +104,7 @@ public class GrowlNotifier extends AbstractNotifier {
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
             // No need to bother if the OS is not Mac OS X
-            if(!OsFamilies.MAC_OS_X.isCurrent())
+            if(!OsFamily.MAC_OS_X.isCurrent())
                 return false;
 
             // Nothing else to do if the application has already been registered

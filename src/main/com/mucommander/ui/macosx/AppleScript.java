@@ -18,17 +18,18 @@
 
 package com.mucommander.ui.macosx;
 
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
-import com.mucommander.process.AbstractProcess;
-import com.mucommander.process.ProcessListener;
-import com.mucommander.process.ProcessRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.process.AbstractProcess;
+import com.mucommander.process.ProcessListener;
+import com.mucommander.process.ProcessRunner;
 
 /**
  * This class allows to run AppleScript code under Mac OS X, relying on the <code>osacript</code> command available
@@ -83,7 +84,7 @@ public class AppleScript {
      */
     public static boolean execute(String appleScript, StringBuilder outputBuffer) {
         // No point in going any further if the current OS is not Mac OS X
-        if(!OsFamilies.MAC_OS_X.isCurrent())
+        if(!OsFamily.MAC_OS_X.isCurrent())
             return false;
 
         LOGGER.debug("Executing AppleScript: "+appleScript);
@@ -151,7 +152,7 @@ public class AppleScript {
         // - AppleScript 2.0+ (Mac OS X 10.5 and up) is fully Unicode-aware and expects a script in UTF-8 encoding.
         // - AppleScript 1.3- (Mac OS X 10.4 or lower) expects MacRoman encoding, not UTF-8.
         String encoding;
-        if(OsVersions.MAC_OS_X_10_5.isCurrentOrHigher())
+        if(OsVersion.MAC_OS_X_10_5.isCurrentOrHigher())
             encoding = UTF8;
         else
             encoding = MACROMAN;

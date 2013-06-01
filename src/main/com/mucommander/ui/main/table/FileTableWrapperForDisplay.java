@@ -19,12 +19,18 @@
 package com.mucommander.ui.main.table;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -122,7 +128,34 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
             }
         });
 	}
-	
+
+	static BufferedImage image;
+	@Override
+	public void paintComponent(Graphics g) {
+		if (!fileTable.getFolderPanel().getCurrentFolder().exists()) {
+			setOpaque(false);
+	        getViewport().setOpaque(false);
+			if (image == null) {
+				try {
+					image = ImageIO.read(new URL(
+							"http://upload.wikimedia.org/wikipedia/en/2/24/Lenna.png"));
+				}
+				catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		}
+		else {
+			setOpaque(true);
+	        getViewport().setOpaque(true);
+		}
+		super.paintComponent(g);
+	}
+
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible)

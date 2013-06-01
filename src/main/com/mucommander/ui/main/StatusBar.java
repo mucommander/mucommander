@@ -46,7 +46,7 @@ import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -323,7 +323,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
                     // Folder is a local file and Java version is 1.5: call getVolumeInfo() instead of
                     // separate calls to getFreeSpace() and getTotalSpace() as it is twice as fast.
-                    if(currentFolder instanceof LocalFile && JavaVersions.JAVA_1_5.isCurrentOrLower()) {
+                    if(currentFolder instanceof LocalFile && JavaVersion.JAVA_1_5.isCurrentOrLower()) {
                         try {
                             long volumeInfo[] = ((LocalFile)currentFolder).getVolumeInfo();
                             volumeTotal = volumeInfo[0];
@@ -458,6 +458,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     ////////////////////////////////////////
 	
     public void activePanelChanged(FolderPanel folderPanel) {
+    	setVisible(folderPanel.getCurrentFolder().exists());
         updateStatusInfo();
     }
 

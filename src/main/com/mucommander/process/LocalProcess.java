@@ -26,7 +26,7 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * Process running on the local computer.
@@ -75,7 +75,7 @@ class LocalProcess extends AbstractProcess {
      * @return <code>true</code> if the current JRE version supports merged <code>java.lang.Process</code> streams, <code>false</code> otherwise.
      */
     @Override
-    public boolean usesMergedStreams() {return JavaVersions.JAVA_1_5.isCurrentOrHigher();}
+    public boolean usesMergedStreams() {return JavaVersion.JAVA_1_5.isCurrentOrHigher();}
 
     /**
      * Waits for the process to die.

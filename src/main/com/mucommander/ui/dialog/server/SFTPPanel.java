@@ -19,20 +19,26 @@
 
 package com.mucommander.ui.dialog.server;
 
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.impl.sftp.SFTPFile;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.text.ParseException;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.impl.sftp.SFTPFile;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.main.MainFrame;
 
 
 /**
@@ -90,7 +96,7 @@ public class SFTPPanel extends ServerPanel {
 
         JButton chooseFileButton = new JButton("...");
         // Mac OS X: small component size
-        if(OsFamilies.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS_X.isCurrent())
             chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
 
         chooseFileButton.addActionListener(new ActionListener() {

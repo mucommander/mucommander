@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.macosx;
 
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 import org.testng.annotations.Test;
 
@@ -39,7 +39,7 @@ public class AppleScriptTest {
         StringBuilder output = new StringBuilder();
         boolean success = AppleScript.execute("count {\"How\", \"many\", \"items\", \"in\", \"this\", \"list\"}", output);
 
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
             // Assert that the script was executed successfully and that the output matches what is expected
             assert success;
             assert "6".equals(output.toString());
@@ -75,7 +75,7 @@ public class AppleScriptTest {
 
         boolean success = AppleScript.execute("do shell script \"echo "+nonAsciiString+"\"", output);
 
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
             // Assert that the script was executed successfully and that we got the same text as the one we passed
             assert success;
             assert StringUtils.equals(nonAsciiString, output.toString(), stringLocale);

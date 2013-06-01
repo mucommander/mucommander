@@ -22,7 +22,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccesses;
 import com.mucommander.commons.file.PermissionTypes;
 import com.mucommander.commons.file.filter.AbstractFileFilter;
-import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * Filter on a file's permissions.
@@ -43,7 +43,7 @@ public class PermissionsFileFilter extends AbstractFileFilter implements Permiss
     }
 
     public boolean accept(AbstractFile file) {
-        if(permission== EXECUTE_PERMISSION && JavaVersions.JAVA_1_5.isCurrentOrLower())
+        if(permission== EXECUTE_PERMISSION && JavaVersion.JAVA_1_5.isCurrentOrLower())
             return true;
 
         return filter ? file.getPermissions().getBitValue(USER_ACCESS, permission) : !file.getPermissions().getBitValue(USER_ACCESS, permission);

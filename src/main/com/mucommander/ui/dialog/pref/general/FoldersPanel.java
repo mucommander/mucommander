@@ -41,7 +41,7 @@ import javax.swing.SpringLayout;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -196,7 +196,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         northPanel.add(showHiddenFilesCheckBox);
 
         // Mac OS X-only options
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
             // Monitor showHiddenFilesCheckBox state to disable 'show .DS_Store files' option
             // when 'Show hidden files' is disabled, as .DS_Store files are hidden files
             showHiddenFilesCheckBox.addItemListener(this);
@@ -259,7 +259,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         compactSizeCheckBox.addDialogListener(parent);
         followSymlinksCheckBox.addDialogListener(parent);
         showTabHeaderCheckBox.addDialogListener(parent);
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
         	showDSStoreFilesCheckBox.addDialogListener(parent);
         	showSystemFoldersCheckBox.addDialogListener(parent);
         }
@@ -294,7 +294,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
         boolean refreshFolders = MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());
         
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
             refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_DS_STORE_FILES, showDSStoreFilesCheckBox.isSelected());
             refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());
         }

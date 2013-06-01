@@ -18,17 +18,18 @@
 
 package com.mucommander.ui.viewer;
 
+import java.awt.Frame;
+import java.awt.Image;
+import java.util.Vector;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
-
-import java.awt.*;
-import java.util.Vector;
 
 /**
  * ViewerRegistrar maintains a list of registered file viewers and provides methods to dynamically register file viewers
@@ -70,7 +71,7 @@ public class ViewerRegistrar {
         ViewerFrame frame = new ViewerFrame(mainFrame, file, icon);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
             // Displays the document icon in the window title bar, works only for local files
             if(file.getURL().getScheme().equals(FileProtocols.FILE))
                 frame.getRootPane().putClientProperty("Window.documentFile", file.getUnderlyingFileObject()); 

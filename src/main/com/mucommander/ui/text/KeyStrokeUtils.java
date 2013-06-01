@@ -18,10 +18,11 @@
 
 package com.mucommander.ui.text;
 
-import com.mucommander.commons.runtime.OsFamilies;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * This class offers utility methods for converting KeyStrokes to texts.
@@ -96,7 +97,7 @@ public class KeyStrokeUtils {
         if((modifiers&KeyEvent.CTRL_MASK)!=0)
             modifiersString += (modifiersString.equals("")?"":"+")+CTRL_MODIFIER_STRING;
 
-        if(OsFamilies.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS_X.isCurrent()) {
             if((modifiers&KeyEvent.ALT_MASK)!=0)
                 modifiersString += (modifiersString.equals("")?"":"+")+ALT_MODIFIER_STRING;
 

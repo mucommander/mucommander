@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.job.CopyJob;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
@@ -90,7 +90,7 @@ public class FileDropTargetListener implements DropTargetListener {
      * <code>InputEvent.META_DOWN_MASK</code> under Mac OS X, <code>InputEvent.ALT_DOWN_MASK</code> under any other
      * platform.
      */
-    private final static int MOVE_ACTION_MODIFIERS_EX = OsFamilies.MAC_OS_X.isCurrent()?
+    private final static int MOVE_ACTION_MODIFIERS_EX = OsFamily.MAC_OS_X.isCurrent()?
             InputEvent.META_DOWN_MASK
             :InputEvent.ALT_DOWN_MASK;
 

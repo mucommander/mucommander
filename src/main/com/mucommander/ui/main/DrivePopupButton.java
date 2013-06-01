@@ -51,8 +51,8 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.filter.PathFilter;
 import com.mucommander.commons.file.filter.RegexpPathFilter;
 import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -106,7 +106,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
 
     static {
-        if(OsFamilies.WINDOWS.isCurrent()) {
+        if(OsFamily.WINDOWS.isCurrent()) {
             fileSystemView = FileSystemView.getFileSystemView();
             extendedNameCache = new Hashtable<AbstractFile, String>();
         }
@@ -146,7 +146,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         MuConfigurations.addPreferencesListener(this);
 
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
             setMargin(new Insets(6,8,6,8));
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
@@ -194,7 +194,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             else {
                 // Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
                 // display 'SMB' which is the underlying protocol
-                if(OsFamilies.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
+                if(OsFamily.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
                     newLabel = "SMB";
                 }
                 else {
@@ -204,7 +204,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
                     // c) when network drives are present but not mounted (e.g. X:\ mapped onto an SMB share),
                     // getCanonicalPath which is I/O bound will take a looooong time to execute
 
-                    if(OsFamilies.WINDOWS.isCurrent())
+                    if(OsFamily.WINDOWS.isCurrent())
                         currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
                     else
                         currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
@@ -214,7 +214,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
                     String temp;
                     int len;
                     for(int i=0; i< volumes.length; i++) {
-                        if(OsFamilies.WINDOWS.isCurrent())
+                        if(OsFamily.WINDOWS.isCurrent())
                             temp = volumes[i].getAbsolutePath(false).toLowerCase();
                         else
                             temp = volumes[i].getCanonicalPath(false).toLowerCase();

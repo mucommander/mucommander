@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategories;
@@ -79,7 +79,7 @@ public class MinimizeWindowAction extends MuAction {
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
             String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID)+".mac_os_x";
-            if(OsFamilies.MAC_OS_X.isCurrent() && Translator.hasValue(macLabelKey, false))
+            if(OsFamily.MAC_OS_X.isCurrent() && Translator.hasValue(macLabelKey, false))
                 return Translator.get(macLabelKey);
 
             return super.getLabel();

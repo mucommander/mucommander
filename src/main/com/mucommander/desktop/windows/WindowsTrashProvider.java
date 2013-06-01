@@ -19,7 +19,7 @@
 package com.mucommander.desktop.windows;
 
 import com.mucommander.commons.file.util.Shell32;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.TrashProvider;
 
@@ -41,6 +41,6 @@ public class WindowsTrashProvider implements TrashProvider {
      * @return <code>true</code> if the Windows Trash can be used on the current runtime environment.
      */
     public static boolean isAvailable() {
-        return OsFamilies.WINDOWS.isCurrent() && Shell32.isAvailable();
+        return OsFamily.WINDOWS.isCurrent() && Shell32.isAvailable();
     }
 }

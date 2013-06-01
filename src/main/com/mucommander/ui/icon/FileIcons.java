@@ -18,13 +18,16 @@
 
 package com.mucommander.ui.icon;
 
+import java.awt.Dimension;
+import java.awt.Image;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.FileIconProvider;
-import com.mucommander.commons.runtime.OsFamilies;
-
-import javax.swing.*;
-import java.awt.*;
+import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * <code>FileIcons</code> provides several methods to retrieve file icons for a given file:
@@ -314,6 +317,6 @@ public class FileIcons {
      * default file manager
      */
     public static boolean hasProperSystemIcons() {
-        return OsFamilies.MAC_OS_X.isCurrent() || OsFamilies.WINDOWS.isCurrent();
+        return OsFamily.MAC_OS_X.isCurrent() || OsFamily.WINDOWS.isCurrent();
     }
 }

@@ -18,7 +18,7 @@
 
 package com.mucommander.desktop.openvms;
 
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 
 /**
@@ -33,6 +33,6 @@ public class OpenVMSDesktopAdapter extends DefaultDesktopAdapter {
 
     @Override
     public boolean isAvailable() {
-        return OsFamilies.OPENVMS.isCurrent();
+        return OsFamily.OPENVMS.isCurrent();
     }
 }

@@ -18,15 +18,16 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
-import com.mucommander.ui.action.impl.GoToDocumentationAction;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.util.Hashtable;
 import java.util.Map;
+
+import javax.swing.JButton;
+import javax.swing.border.EmptyBorder;
+
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.ui.action.impl.GoToDocumentationAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This is a contextual 'Help' button to be used wherever help is available or needed. When clicked, it opens
@@ -73,7 +74,7 @@ public class HelpButton extends JButton {
         // Use the action's label as a tooltip
         setToolTipText(action.getLabel());
 
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
             // If running Mac OS X 10.5 (and up), use the special client property to have a standard help button.
             putClientProperty("JButton.buttonType", "help");
 

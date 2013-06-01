@@ -31,7 +31,7 @@ import javax.swing.SwingUtilities;
 
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.runtime.JavaVersions;
+import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.FolderPanel;
@@ -141,7 +141,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 
 	@Override
 	public void update(FileTableTab tab, int index) {
-		if (JavaVersions.JAVA_1_5.isCurrentOrLower()) {
+		if (JavaVersion.JAVA_1_5.isCurrentOrLower()) {
 			/*setLockedAt(index, tab.isLocked());
 			setTitleAt(index, tab.getLocation().getName());	*/
 		}

@@ -18,12 +18,28 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.OSXFileUtils;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.PropertiesJob;
 import com.mucommander.text.SizeFormat;
@@ -40,13 +56,6 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FileLabel;
 import com.mucommander.ui.text.MultiLineLabel;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 /**
  * This dialog shows properties of a file or a group of files : number of files, file kind,
@@ -119,7 +128,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         sizePanel.add(new JLabel(dial = new SpinningDial()));
         labelPanel.addRow(Translator.get("size")+":", sizePanel, 6);
 
-        if(OsFamilies.MAC_OS_X.isCurrent() && OsVersions.MAC_OS_X_10_4.isCurrentOrHigher()
+        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()
         && isSingleFile && singleFile.hasAncestor(LocalFile.class)) {
             String comment = OSXFileUtils.getSpotlightComment(singleFile);
             JLabel commentLabel = new JLabel(Translator.get("comment")+":");

@@ -26,16 +26,14 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.runtime.JavaVersions;
-import com.mucommander.commons.runtime.OsFamilies;
-import com.mucommander.commons.runtime.OsVersions;
+import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * This class takes care of platform-specific issues, such as getting screen dimensions and issuing commands.
  *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
+public class PlatformManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PlatformManager.class);
 	
     // - Preferences folder -----------------------------------------------------
@@ -61,7 +59,7 @@ public class PlatformManager implements JavaVersions, OsFamilies, OsVersions {
         File folder;
 
         // Mac OS X specific folder (~/Library/Preferences/muCommander)
-        if(MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS_X.isCurrent())
             folder = new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");
         // For all other platforms, use generic folder (~/.mucommander)
         else
