@@ -58,5 +58,8 @@ public interface FileProtocols {
 
     /** Protocol for files served by a web server using Webdav/HTTPS. */
     public final static String WEBDAVS   = "webdavs";
+    
+    /** Protocol for files served by a web server using vSphere. */
+    public final static String VSPHERE   = "vsphere";
 
 }
