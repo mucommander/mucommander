@@ -132,7 +132,7 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
 	static BufferedImage image;
 	@Override
 	public void paintComponent(Graphics g) {
-		if (!fileTable.getFolderPanel().getCurrentFolder().exists()) {
+		/*if (!fileTable.getFolderPanel().getCurrentFolder().exists()) {
 			setOpaque(false);
 	        getViewport().setOpaque(false);
 			if (image == null) {
@@ -152,7 +152,7 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
 		else {
 			setOpaque(true);
 	        getViewport().setOpaque(true);
-		}
+		}*/
 		super.paintComponent(g);
 	}
 
