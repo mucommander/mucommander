@@ -22,7 +22,7 @@ import com.mucommander.commons.file.AuthenticationType;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.FileURLTestCase;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
@@ -136,7 +136,7 @@ public class LocalFileURLTest extends FileURLTestCase {
         FileURL url = FileURL.getFileURL("\\\\host\\share");
 
         // UNC path will be transformed into either a 'file' or a 'smb' URL, depending on the current OS
-        assert (OsFamilies.WINDOWS.isCurrent()?"file":"smb").equals(url.getScheme());
+        assert (OsFamily.WINDOWS.isCurrent()?"file":"smb").equals(url.getScheme());
         assert "host".equals(url.getHost());
         assert "/share".equals(url.getPath());
     }
