@@ -19,6 +19,7 @@
 
 package com.mucommander.commons.file.util;
 
+import com.mucommander.commons.runtime.JavaVersion;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.examples.win32.W32API;
@@ -37,7 +38,7 @@ public interface Shell32API extends W32API {
     //
 
     /** Custom alignment of structures. */
-    int STRUCTURE_ALIGNMENT = Structure.ALIGN_NONE;
+    int STRUCTURE_ALIGNMENT = JavaVersion.isAmd64Architecture() ? Structure.ALIGN_DEFAULT : Structure.ALIGN_NONE;
 
 
     //////////////////////////////
