@@ -21,7 +21,7 @@ package com.mucommander.commons.file;
 import com.mucommander.commons.file.util.PathUtilsTest;
 import com.mucommander.commons.io.*;
 import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.commons.runtime.OsFamilies;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -2191,7 +2191,7 @@ public abstract class AbstractFileTest {
 
         // Skips the test if under OS X (this would create a new instance of JFileChooser, which fails 
         isHeadless = GraphicsEnvironment.isHeadless();
-        if(isHeadless && OsFamilies.MAC_OS_X.isCurrent())
+        if(isHeadless && OsFamily.MAC_OS_X.isCurrent())
             return;
 
         // Some icon providers will fail (return a null icon) if the file doesn't exist
