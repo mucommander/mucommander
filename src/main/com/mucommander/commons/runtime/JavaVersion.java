@@ -54,6 +54,9 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     /** Holds the JavaVersion of the current runtime environment  */
     private static JavaVersion currentValue;
 
+    /** Holds the String representation of the current JVM architecture  */
+    private static String currentArchitecture;
+
     /** The String representation of this RuntimeProperty, set at creation time */
     protected final String stringRepresentation;
 
@@ -64,7 +67,9 @@ public enum JavaVersion implements ComparableRuntimeProperty {
      */
     static {
     	currentValue = parseSystemProperty(getRawSystemProperty());
+    	currentArchitecture = System.getProperty("os.arch");
     	LOGGER.info("Current Java version: {}", currentValue);
+    	LOGGER.info("Current JVM architecture: {}", currentArchitecture);
     }
 
 
@@ -75,6 +80,15 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     ////////////////////
     // Static methods //
     ////////////////////
+
+    /**
+     * Returns <code>true</code> if the JVM architecture is amd64
+     *
+     * @return <code>true</code> if the JVM architecture is amd64, and <code>false</code> otherwise.
+     */
+    public static boolean isAmd64Architecture() {
+    	return "amd64".equals(currentArchitecture);
+    }
 
     /**
      * Returns the Java version of the current runtime environment.
