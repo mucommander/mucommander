@@ -79,6 +79,7 @@ Bug fixes:
 - Fix installation via software center on Ubuntu.
 - Symbolic links cannot be opened (ticket #467).
 - Encoding of text file is changed after being modified by the viewer/editor (ticket #438).
+- Cannot connect to some FTP/SFTP bookmarks if there are more than 4 of them (ticket #525), contributed by Ondrej Dusek.
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
