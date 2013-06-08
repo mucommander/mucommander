@@ -739,6 +739,12 @@
                 <method name="*"/>
                 <constructor name="*"/>
             </keep>
+			<!-- Don't obfuscate the VMWare Infrastructure library.                                                  -->
+			<keep name="com.vmware.vim25.**">
+                <field name="*"/>
+                <method name="*"/>
+                <constructor name="*"/>
+            </keep>
             <!-- Hadoop HDFS.                                                                                        -->
             <keep name="org.apache.hadoop.hdfs.DistributedFileSystem"/>
             <keep name="org.apache.hadoop.net.StandardSocketFactory"/>
