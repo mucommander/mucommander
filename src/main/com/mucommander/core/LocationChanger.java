@@ -108,10 +108,8 @@ public class LocationChanger {
     	Thread setLocationThread = new Thread() {
     		@Override
     		public void run() {
+    			AbstractFile folder = getWorkableLocation(folderURL);
     			try {
-    				AbstractFile folder = FileFactory.getFile(folderURL);
-    				if (folder == null)
-    					folder = new NullableFile(folderURL);
     				locationManager.setCurrentFolder(folder, null, true);
     			} catch (UnsupportedFileOperationException e) {
     				e.printStackTrace();
@@ -131,6 +129,21 @@ public class LocationChanger {
     		setLocationThread.start();
     	else
     		setLocationThread.run();
+	}
+
+	/**
+	 * Temporary fix for handling not-accessible locations to
+	 * prevent the nightly build from crashing. it should be
+	 * replaced with a better solution for handling not-accessible
+	 * location, in all the different flows.
+	 */
+	private AbstractFile getWorkableLocation(FileURL folderURL) {
+		AbstractFile folder = FileFactory.getFile(folderURL);
+
+		if (folder == null)
+			folder = new NullableFile(folderURL);
+
+		return folder.exists() ? folder : getWorkableFolder(folder);
 	}
 
 	/**
@@ -420,6 +433,35 @@ public class LocationChanger {
         new DownloadDialog(mainFrame, fileSet).showDialog();
     }
 
+	/**
+	 * Returns a 'workable' folder as a substitute for the given non-existing folder. This method will return the
+	 * first existing parent if there is one, to the first existing local volume otherwise. In the unlikely event
+	 * that no local volume exists, <code>null</code> will be returned.
+	 *
+	 * @param folder folder for which to find a workable folder
+	 * @return a 'workable' folder for the given non-existing folder, <code>null</code> if there is none.
+	 */
+	private AbstractFile getWorkableFolder(AbstractFile folder) {
+		// Look for an existing parent
+		AbstractFile newFolder = folder;
+		do {
+			newFolder = newFolder.getParent();
+			if(newFolder!=null && newFolder.exists())
+				return newFolder;
+		}
+		while(newFolder!=null);
+
+		// Fall back to the first existing volume
+		AbstractFile[] localVolumes = LocalFile.getVolumes();
+		for(AbstractFile volume : localVolumes) {
+			if(volume.exists())
+				return volume;
+		}
+
+		// No volume could be found, return null
+		return null;
+	}
+
 	////////////////////////////////////
 	// ChangeFolderThread inner class //
 	////////////////////////////////////
@@ -491,35 +533,6 @@ public class LocationChanger {
 		 */
 		public void selectThisFileAfter(AbstractFile fileToSelect) {
 			this.fileToSelect = fileToSelect;
-		}
-
-		/**
-		 * Returns a 'workable' folder as a substitute for the given non-existing folder. This method will return the
-		 * first existing parent if there is one, to the first existing local volume otherwise. In the unlikely event
-		 * that no local volume exists, <code>null</code> will be returned.
-		 *
-		 * @param folder folder for which to find a workable folder
-		 * @return a 'workable' folder for the given non-existing folder, <code>null</code> if there is none.
-		 */
-		private AbstractFile getWorkableFolder(AbstractFile folder) {
-			// Look for an existing parent
-			AbstractFile newFolder = folder;
-			do {
-				newFolder = newFolder.getParent();
-				if(newFolder!=null && newFolder.exists())
-					return newFolder;
-			}
-			while(newFolder!=null);
-
-			// Fall back to the first existing volume
-			AbstractFile[] localVolumes = LocalFile.getVolumes();
-			for(AbstractFile volume : localVolumes) {
-				if(volume.exists())
-					return volume;
-			}
-
-			// No volume could be found, return null
-			return null;
 		}
 
 		/**
