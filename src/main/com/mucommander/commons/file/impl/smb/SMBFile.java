@@ -260,7 +260,7 @@ import java.net.MalformedURLException;
             return file.exists();
         }
         catch(IOException e) {
-            LOGGER.info("Exception caught while calling SmbFile#exists()", e);
+            LOGGER.info("Exception caught while calling SmbFile#exists(): " +   e.getMessage());
 
             return e instanceof SmbAuthException;
         }
