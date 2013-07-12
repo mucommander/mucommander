@@ -133,6 +133,11 @@ public class UNCFile extends ProtocolFile {
     }
 
     @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    @Override
     public long getDate() {
     	return file.lastModified();
     }

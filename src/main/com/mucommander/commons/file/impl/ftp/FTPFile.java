@@ -285,6 +285,11 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    @Override
     public long getDate() {
         if(isSymlink())
             return ((org.apache.commons.net.ftp.FTPFile)getCanonicalFile().getUnderlyingFileObject()).getTimestamp().getTimeInMillis();

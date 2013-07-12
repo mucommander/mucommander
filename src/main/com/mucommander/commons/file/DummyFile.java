@@ -179,6 +179,14 @@ public class DummyFile extends AbstractFile {
     }
 
     /**
+     * Implementation notes: always returns <code>false</code>.
+     */
+    @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    /**
      * Implementation notes: always throws an {@link UnsupportedFileOperationException}.
      *
      * @throws UnsupportedFileOperationException always

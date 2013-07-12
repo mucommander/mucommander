@@ -47,6 +47,7 @@ import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.GroupedPermissionBits;
 import com.mucommander.commons.file.IndividualPermissionBits;
+import com.mucommander.commons.file.MacOsSystemFolder;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.ProtocolFile;
 import com.mucommander.commons.file.UnsupportedFileOperation;
@@ -619,6 +620,14 @@ public class LocalFile extends ProtocolFile {
             String parentCanonPath = parent.getCanonicalPath(true);
             return !canonPath.equalsIgnoreCase(parentCanonPath+getName());
         }
+    }
+
+    @Override
+    public boolean isSystem() {
+        if (OsFamily.MAC_OS_X.isCurrent()) {
+        	return MacOsSystemFolder.isSystemFile(this);
+        }
+        return false;
     }
 
     @Override

@@ -221,6 +221,14 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     }
 
     /**
+     * Always returns <code>false</code>.
+     */
+    @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    /**
      * Delegates to the archive file's {@link AbstractArchiveFile#getFreeSpace()} method.
      *
      * @throws IOException if an I/O error occurred

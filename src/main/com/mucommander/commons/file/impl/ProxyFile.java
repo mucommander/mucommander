@@ -152,6 +152,11 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
+    public boolean isSystem() {
+        return file.isSystem();
+    }
+
+    @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
         return file.ls();
     }

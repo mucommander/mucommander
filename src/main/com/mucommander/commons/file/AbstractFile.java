@@ -19,14 +19,7 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.commons.file.compat.CompatURLStreamHandler;
-import com.mucommander.commons.file.filter.FileFilter;
-import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.impl.ProxyFile;
-import com.mucommander.commons.io.*;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +28,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import javax.swing.Icon;
+
+import com.mucommander.commons.file.compat.CompatURLStreamHandler;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.FilenameFilter;
+import com.mucommander.commons.file.impl.ProxyFile;
+import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.ChecksumInputStream;
+import com.mucommander.commons.io.FileTransferException;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.commons.io.StreamUtils;
 
 /**
  * <code>AbstractFile</code> is the superclass of all files.
@@ -1649,6 +1655,16 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * @return <code>true</code> if this file is a symbolic link
      */
     public abstract boolean isSymlink();
+
+    /**
+     * Returns <code>true</code> if this file is a system file.
+     * Note that system file attribute depends on the OS, so we can know it only for local files:
+     * - For MAC OS, {@link MacOsSystemFolder} defines the group of system files
+     * - On Windows, files has special attribute that mark them as system files
+     *
+     * @return <code>true</code> if this file is a system file
+     */
+    public abstract boolean isSystem();
 	
     /**
      * Returns the children files that this file contains. For this operation to be successful, this file must be

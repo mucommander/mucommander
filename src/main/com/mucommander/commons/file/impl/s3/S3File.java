@@ -210,6 +210,11 @@ public abstract class S3File extends ProtocolFile {
     }
 
     @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    @Override
     public PermissionBits getChangeablePermissions() {
         return PermissionBits.EMPTY_PERMISSION_BITS;
     }

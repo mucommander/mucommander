@@ -397,6 +397,11 @@ public class HTTPFile extends ProtocolFile {
     }
 
     @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    @Override
     public InputStream getInputStream() throws IOException {
         HttpURLConnection conn = getHttpURLConnection(this.url);
 

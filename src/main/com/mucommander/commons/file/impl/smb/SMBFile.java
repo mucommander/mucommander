@@ -336,6 +336,11 @@ import java.net.MalformedURLException;
     }
 
     @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    @Override
     public InputStream getInputStream() throws IOException {
         return new SmbFileInputStream(file);
     }

@@ -218,6 +218,11 @@ public class SFTPFile extends ProtocolFile {
         return fileAttributes.isSymlink();
     }
 
+    @Override
+    public boolean isSystem() {
+        return false;
+    }
+
     /**
      * Implementation note: for symlinks, returns the date of the link's target.
      */

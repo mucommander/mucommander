@@ -266,6 +266,11 @@ public class NFSFile extends ProtocolFile {
     }
 
     @Override
+    public boolean isSystem() {
+        return false;
+    }
+
+    @Override
     public AbstractFile[] ls() throws IOException {
         return ls(null);
     }

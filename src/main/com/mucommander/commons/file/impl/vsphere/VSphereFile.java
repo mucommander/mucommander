@@ -581,6 +581,11 @@ public class VSphereFile extends ProtocolFile implements
 	}
 
 	@Override
+    public boolean isSystem() {
+        return false;
+    }
+
+	@Override
 	public AbstractFile[] ls() throws IOException,
 			UnsupportedFileOperationException {
 		List<GuestFileInfo> fileInfos = new ArrayList<GuestFileInfo>();
