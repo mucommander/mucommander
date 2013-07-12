@@ -213,11 +213,11 @@ public class FileFactory {
     }
 
     /**
-     * Returns the protocol provider associated with the specified protocol identifer, or <code>null</code> if there
+     * Returns the protocol provider associated with the specified protocol identifier, or <code>null</code> if there
      * is none.
      *
      * @param  protocol identifier of the protocol whose provider should be retrieved.
-     * @return          the protocol provider registered to the specified protocol identifer, or <code>null</code> if none.
+     * @return the protocol provider registered to the specified protocol identifier, or <code>null</code> if none.
      */
     public static ProtocolProvider getProtocolProvider(String protocol) {
         return protocolProviders.get(protocol.toLowerCase());
@@ -340,7 +340,7 @@ public class FileFactory {
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation
      * @return <code>null</code> if the given path is not absolute or incorrect (doesn't correspond to any file)
      * @throws java.io.IOException  and throwException param was set to <code>true</code>.
-     * @throws AuthException if additionnal authentication information is required to create the file
+     * @throws AuthException if additional authentication information is required to create the file
      */
     public static AbstractFile getFile(String absPath, boolean throwException) throws AuthException, IOException {
         try {return getFile(absPath, null);}
@@ -423,7 +423,7 @@ public class FileFactory {
      *
      * @param fileURL the file URL representing the file to be created
      * @param authenticator used to authenticate the specified location if its protocol
-     * {@link FileURL#getAuthenticationType() is authenticated} and the loction contains no credentials already.
+     * {@link FileURL#getAuthenticationType() is authenticated} and the location contains no credentials already.
      * If the value is <code>null</code>, no {@link Authenticator} will be used, not even the default one.
      * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
      * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
@@ -596,7 +596,7 @@ public class FileFactory {
      * @param deleteOnExit if <code>true</code>, the temporary file will be deleted upon normal termination of the JVM
      * @return the temporary file, may be a LocalFile or an AbstractArchiveFile if the filename's extension corresponds
      * to a registered archive format.
-     * @throws IOException if an error occurred while instanciating the temporary file. This should not happen under
+     * @throws IOException if an error occurred while instantiating the temporary file. This should not happen under
      * normal circumstances.
      */
     public static AbstractFile getTemporaryFile(String desiredFilename, boolean deleteOnExit) throws IOException {
