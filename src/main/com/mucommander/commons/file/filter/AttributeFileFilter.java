@@ -54,7 +54,9 @@ public class AttributeFileFilter extends AbstractFileFilter {
 		/** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isHidden() hidden}. */
 		HIDDEN,
 		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isRoot() root folder}. */
-		ROOT;
+		ROOT,
+		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSystem() system file}. */
+		SYSTEM;
 	}
 
     /** The attribute to test files against */
@@ -123,8 +125,11 @@ public class AttributeFileFilter extends AbstractFileFilter {
                 return file.isHidden();
             case ROOT:
                 return file.isRoot();
+		    case SYSTEM:
+			    return file.isSystem();
+		    default:
+		    	return true;
         }
-        return true;
     }
 }
 
