@@ -365,6 +365,8 @@ public class BookmarkFile extends ProtocolFile {
     @Override
     public boolean isSymlink() {return false;}
     @Override
+    public boolean isSystem() {return false;}
+    @Override
     public String getOwner() {return null;}
     @Override
     public boolean canGetOwner() {return false;}

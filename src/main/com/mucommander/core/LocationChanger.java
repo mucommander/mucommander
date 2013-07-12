@@ -1159,6 +1159,12 @@ public class LocationChanger {
 		}
 
 		@Override
+		public boolean isSystem() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
 		public AbstractFile[] ls() throws IOException,
 				UnsupportedFileOperationException {
 //			throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);

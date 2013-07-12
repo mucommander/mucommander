@@ -128,6 +128,8 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     @Override
     public boolean isSymlink() {return false;}
     @Override
+    public boolean isSystem() {return false;}
+    @Override
     @UnsupportedFileOperation
     public void mkdir() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);}
     @Override
