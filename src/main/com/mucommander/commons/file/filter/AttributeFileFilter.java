@@ -40,30 +40,25 @@ import com.mucommander.commons.file.AbstractFile;
  */
 public class AttributeFileFilter extends AbstractFileFilter {
 
-    /** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isDirectory() directory}. */
-    public static final int DIRECTORY = 0;
-
-    /** Tests if the file is a regular file, i.e. not a directory. This is equivalent to negating {@link #DIRECTORY}. */
-    public static final int FILE      = 1;
-
-    /** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isBrowsable() browsable}. */
-    public static final int BROWSABLE = 2;
-
-    /** Tests if the file is an {@link com.mucommander.commons.file.AbstractFile#isArchive() archive}. */
-    public static final int ARCHIVE   = 3;
-
-    /** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSymlink() symlink}. */
-    public static final int SYMLINK   = 4;
-
-    /** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isHidden() hidden}. */
-    public static final int HIDDEN    = 5;
-
-    /** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isRoot() root folder}. */
-    public static final int ROOT      = 6;
-
+	public enum FileAttribute {
+		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isDirectory() directory}. */
+		DIRECTORY,
+		/** Tests if the file is a regular file, i.e. not a directory. This is equivalent to negating {@link #DIRECTORY}. */
+		FILE,
+		/** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isBrowsable() browsable}. */
+		BROWSABLE,
+		/** Tests if the file is an {@link com.mucommander.commons.file.AbstractFile#isArchive() archive}. */
+		ARCHIVE,
+		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSymlink() symlink}. */
+		SYMLINK,
+		/** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isHidden() hidden}. */
+		HIDDEN,
+		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isRoot() root folder}. */
+		ROOT;
+	}
 
     /** The attribute to test files against */
-    private int attribute;
+    private FileAttribute attribute;
 
 
     /**
@@ -72,7 +67,7 @@ public class AttributeFileFilter extends AbstractFileFilter {
      *
      * @param attribute the attribute to test files against
      */
-    public AttributeFileFilter(int attribute) {
+    public AttributeFileFilter(FileAttribute attribute) {
         this(attribute, false);
     }
 
@@ -83,7 +78,7 @@ public class AttributeFileFilter extends AbstractFileFilter {
      * @param attribute the attribute to test files against
      * @param inverted if true, this filter will operate in inverted mode.
      */
-    public AttributeFileFilter(int attribute, boolean inverted) {
+    public AttributeFileFilter(FileAttribute attribute, boolean inverted) {
         super(inverted);
         this.attribute = attribute;
     }
@@ -94,7 +89,7 @@ public class AttributeFileFilter extends AbstractFileFilter {
      *
      * @return the attribute which files are tested against.
      */
-    public int getAttribute() {
+    public FileAttribute getAttribute() {
         return attribute;
     }
 
@@ -103,7 +98,7 @@ public class AttributeFileFilter extends AbstractFileFilter {
      *
      * @param attribute the attribute which files are tested against.
      */
-    public void setAttribute(int attribute) {
+    public void setAttribute(FileAttribute attribute) {
         this.attribute = attribute;
     }
 
