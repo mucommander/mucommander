@@ -42,7 +42,8 @@ public class ConfigurableFolderFilter extends AndFileFilter implements Configura
     
     private FileFilter hiddenFileFilter = new AttributeFileFilter(FileAttribute.HIDDEN, true);
     private FileFilter dsFileFilter = new DSStoreFileFilter();
-    private FileFilter systemFileFilter = new SystemFileFilter();
+    /** Filter used to filter out system files and folders that should not be displayed to inexperienced users. */
+    private FileFilter systemFileFilter = new AttributeFileFilter(FileAttribute.SYSTEM, true);
     
 
     public ConfigurableFolderFilter() {
