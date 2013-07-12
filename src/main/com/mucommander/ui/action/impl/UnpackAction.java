@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.OrFileFilter;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -49,8 +50,8 @@ public class UnpackAction extends SelectedFilesAction {
 
         // Unpack job operates on archives and directories
         setSelectedFileFilter(new OrFileFilter(
-            new AttributeFileFilter(AttributeFileFilter.ARCHIVE),
-            new AttributeFileFilter(AttributeFileFilter.DIRECTORY)
+            new AttributeFileFilter(FileAttribute.ARCHIVE),
+            new AttributeFileFilter(FileAttribute.DIRECTORY)
         ));
     }
 

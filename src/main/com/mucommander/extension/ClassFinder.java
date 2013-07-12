@@ -18,15 +18,16 @@
 
 package com.mucommander.extension;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.AbstractFileClassLoader;
-import com.mucommander.commons.file.filter.AttributeFileFilter;
-import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
-import com.mucommander.commons.file.filter.OrFileFilter;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AbstractFileClassLoader;
+import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
+import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
+import com.mucommander.commons.file.filter.OrFileFilter;
 
 /**
  * Finds specific classes within a browsable file.
@@ -63,7 +64,7 @@ public class ClassFinder {
     public ClassFinder() {
         filter = new OrFileFilter(
             new ExtensionFilenameFilter(".class"),
-            new AttributeFileFilter(AttributeFileFilter.DIRECTORY)
+            new AttributeFileFilter(FileAttribute.DIRECTORY)
         );
     }
 

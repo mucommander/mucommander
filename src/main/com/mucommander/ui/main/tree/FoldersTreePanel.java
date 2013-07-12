@@ -49,6 +49,7 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
@@ -105,7 +106,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
 
         // Filters out the files that should not be displayed in the tree view
         AndFileFilter treeFileFilter = new AndFileFilter(
-            new AttributeFileFilter(AttributeFileFilter.DIRECTORY),
+            new AttributeFileFilter(FileAttribute.DIRECTORY),
             new ConfigurableFolderFilter()
         );
 

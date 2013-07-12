@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.ContainsFilenameFilter;
 import com.mucommander.commons.file.filter.EndsWithFilenameFilter;
 import com.mucommander.commons.file.filter.EqualsFilenameFilter;
@@ -234,7 +235,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
             // If folders are excluded, add a regular file filter and chain it with an AndFileFilter
             if(!includeFolders) {
                 filter = new AndFileFilter(
-                    new AttributeFileFilter(AttributeFileFilter.FILE),
+                    new AttributeFileFilter(FileAttribute.FILE),
                     filter
                 );
             }

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.EqualsFilenameFilter;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.filter.OrFileFilter;
@@ -90,7 +91,7 @@ public class SelfUpdateJob extends CopyJob {
         this.classLoader = getClass().getClassLoader();
 
         directoryOrClassFileFilter = new OrFileFilter(
-            new AttributeFileFilter(AttributeFileFilter.DIRECTORY),
+            new AttributeFileFilter(FileAttribute.DIRECTORY),
             new ExtensionFilenameFilter(".class")
         );
     }

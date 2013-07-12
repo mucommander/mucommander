@@ -38,6 +38,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.PermissionTypes;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.ChainedFileFilter;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.RegexpFilenameFilter;
@@ -330,11 +331,11 @@ public class CommandManager implements CommandBuilder {
 
             attributeFilter = (AttributeFileFilter)filter;
             switch(attributeFilter.getAttribute()) {
-            case AttributeFileFilter.HIDDEN:
+            case HIDDEN:
                 builder.setIsHidden(!attributeFilter.isInverted());
                 break;
 
-            case AttributeFileFilter.SYMLINK:
+            case SYMLINK:
                 builder.setIsSymlink(!attributeFilter.isInverted());
                 break;
             }

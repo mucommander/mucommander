@@ -25,6 +25,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FileOperationFilter;
 import com.mucommander.commons.file.util.FileSet;
@@ -55,7 +56,7 @@ public class CombineFilesAction extends SelectedFilesAction {
     @Override
     public void performAction(FileSet files) {
         // Filter out files that are not regular files
-        FileFilter filter = new AttributeFileFilter(AttributeFileFilter.FILE);
+        FileFilter filter = new AttributeFileFilter(FileAttribute.FILE);
         filter.filter(files);
 
     	if (files.size()==0)

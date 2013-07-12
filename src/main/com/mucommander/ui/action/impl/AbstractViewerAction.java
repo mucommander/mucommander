@@ -18,11 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.FileOperationFilter;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.job.TempOpenWithJob;
@@ -31,8 +34,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.Map;
 
 /**
  * Provides a common base for viewer and editor actions.
@@ -53,7 +54,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
         // Enable this action only if the currently selected file is not a directory and can be read.
         setSelectedFileFilter(new AndFileFilter(
             new FileOperationFilter(FileOperation.READ_FILE),
-            new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true)
+            new AttributeFileFilter(FileAttribute.DIRECTORY, true)
         ));
     }
 

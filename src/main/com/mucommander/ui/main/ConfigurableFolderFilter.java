@@ -22,6 +22,7 @@ import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -39,7 +40,7 @@ import com.mucommander.ui.main.tree.FoldersTreePanel;
  */
 public class ConfigurableFolderFilter extends AndFileFilter implements ConfigurationListener {
     
-    private FileFilter hiddenFileFilter = new AttributeFileFilter(AttributeFileFilter.HIDDEN, true);
+    private FileFilter hiddenFileFilter = new AttributeFileFilter(FileAttribute.HIDDEN, true);
     private FileFilter dsFileFilter = new DSStoreFileFilter();
     private FileFilter systemFileFilter = new SystemFileFilter();
     

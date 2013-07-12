@@ -25,6 +25,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.FileOperationFilter;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -47,7 +48,7 @@ public class SplitFileAction extends SelectedFileAction {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new AndFileFilter(
-            new AttributeFileFilter(AttributeFileFilter.DIRECTORY, true),
+            new AttributeFileFilter(FileAttribute.DIRECTORY, true),
             new FileOperationFilter(FileOperation.READ_FILE)
         ));
     }

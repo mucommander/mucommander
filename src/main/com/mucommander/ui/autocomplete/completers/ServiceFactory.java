@@ -19,7 +19,13 @@
 package com.mucommander.ui.autocomplete.completers;
 
 import com.mucommander.commons.file.filter.AttributeFileFilter;
-import com.mucommander.ui.autocomplete.completers.services.*;
+import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
+import com.mucommander.ui.autocomplete.completers.services.AllFilesService;
+import com.mucommander.ui.autocomplete.completers.services.BookmarksService;
+import com.mucommander.ui.autocomplete.completers.services.CompletionService;
+import com.mucommander.ui.autocomplete.completers.services.FilteredFilesService;
+import com.mucommander.ui.autocomplete.completers.services.SystemVariablesService;
+import com.mucommander.ui.autocomplete.completers.services.VolumesService;
 
 /**
  * A factory class to produce completion-services.
@@ -34,7 +40,7 @@ public class ServiceFactory {
 	}
 	
 	public static CompletionService getBrowsableFilesService() {
-		return new FilteredFilesService(new AttributeFileFilter(AttributeFileFilter.BROWSABLE));
+		return new FilteredFilesService(new AttributeFileFilter(FileAttribute.BROWSABLE));
 	}
 	
 	public static CompletionService getVolumesService() {
