@@ -126,14 +126,6 @@ public class QuickListDataList<T> extends JList {
 		});
 	}
 
-	public void getFocus(){
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				requestFocus();
-			}
-		});
-	}
-
 	public void setForegroundColors(Color foreground, Color selectedForeground) {
 		DataListItemRenderer cellRenderer = (DataListItemRenderer) getCellRenderer();
 		cellRenderer.setItemForeground(foreground);

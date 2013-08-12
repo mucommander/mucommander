@@ -49,6 +49,7 @@ class QuickListWithEmptyMsg extends QuickList {
 		return true;
 	}
 	
+	@Override
 	public void getFocus(){
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

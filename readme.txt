@@ -80,6 +80,7 @@ Bug fixes:
 - Symbolic links cannot be opened (ticket #467).
 - Encoding of text file is changed after being modified by the viewer/editor (ticket #438).
 - Cannot connect to some FTP/SFTP bookmarks if there are more than 4 of them (ticket #525), contributed by Ondrej Dusek.
+- Quick lists on the right panel sometimes not being focused (ticket #552), contributed by Jarek Czekalski.
 
 Known issues:
 - Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.

@@ -78,6 +78,7 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 	        Point location = container.calcQuickListPosition(dim);
 	        
 	        show(container.containerComponent(), location.x, location.y);
+	        getFocus();
 		}
 	}
 	
@@ -112,6 +113,12 @@ public abstract class QuickList extends JPopupMenu implements FocusListener {
 	public void focusLost(FocusEvent arg0) {
 		setVisible(false);		
 	}
+	
+	/**
+	 * Get focus for the desired subcomponent. Only subclasses know which
+	 * component to focus, so they must implement it.
+	 */
+	protected abstract void getFocus();
 	
 	public static class PopupsBorder extends LineBorder {
 		public PopupsBorder() {

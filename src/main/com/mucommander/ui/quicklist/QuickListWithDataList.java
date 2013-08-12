@@ -73,8 +73,6 @@ public abstract class QuickListWithDataList<T> extends QuickList {
 		T[] data;
 		if ((data = getData()).length > 0) {
 			dataList.setListData(data);
-			// transfer the focus to the data list.
-			dataList.getFocus();
 			toShow = true;
 		}
 		// else, show popup with a "no elements" message.
@@ -84,6 +82,17 @@ public abstract class QuickListWithDataList<T> extends QuickList {
 		return toShow;
 	}
 
+	@Override
+	protected void getFocus() {
+		// to overcome #552 (right recentQL not focused) both must be used:
+		// invokeLater and requestFocus (requestFocusInWindow is not sufficient)
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				dataList.requestFocus();
+			}
+		});
+	}
+	
 	/**
 	 * This function defines what should be done with a selected item from the data list.
 	 * 
