@@ -63,6 +63,9 @@ public class CustomFileIconProvider implements FileIconProvider {
     /** Icon for the root of remote (non-local) locations */
     public final static String NETWORK_ICON_NAME = "network.png";
 
+    /** Icon for the not accessible remote locations */
+    public final static String DISCONNECTED_ICON_NAME = "disconnect.png";
+
     /** Icon for not accessible files (used for quick-lists) **/
     public final static String NOT_ACCESSIBLE_FILE = "not_accessible.png";
 
@@ -161,12 +164,14 @@ public class CustomFileIconProvider implements FileIconProvider {
         // Retrieve the file's extension, null if the file has no extension
         String fileExtension = file.getExtension();
 
-        // If file is a directory, use folder icon. One exception is made for
-
+        if (!file.exists()) {
+        	icon = IconManager.getIcon(IconManager.FILE_ICON_SET, DISCONNECTED_ICON_NAME);
+        }
         // Special icon for the root of remote (non-local) locations
-        if(!FileProtocols.FILE.equals(file.getURL().getScheme()) && file.isRoot()) {
+        else if(!FileProtocols.FILE.equals(file.getURL().getScheme()) && file.isRoot()) {
             icon = IconManager.getIcon(IconManager.FILE_ICON_SET, NETWORK_ICON_NAME);
         }
+        // If file is a directory, use folder icon. One exception is made for 'app' extension under MAC OS
         else if(file.isDirectory()) {
             // Mac OS X application are directories with the .app extension and have a dedicated icon
             if(fileExtension!=null && fileExtension.equals("app"))
