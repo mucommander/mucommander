@@ -34,7 +34,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.AuthenticationType;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
@@ -111,10 +110,6 @@ public class LocationChanger {
     			AbstractFile folder = getWorkableLocation(folderURL);
     			try {
     				locationManager.setCurrentFolder(folder, null, true);
-    			} catch (UnsupportedFileOperationException e) {
-    				e.printStackTrace();
-    			} catch (IOException e) {
-    				e.printStackTrace();
     			} finally {
     				mainFrame.setNoEventsMode(false);
     				// Restore default cursor
@@ -132,18 +127,22 @@ public class LocationChanger {
 	}
 
 	/**
-	 * Temporary fix for handling not-accessible locations to
-	 * prevent the nightly build from crashing. it should be
-	 * replaced with a better solution for handling not-accessible
-	 * location, in all the different flows.
+	 * Return a workable location according the following logic:
+	 * - If the given folder exists, return it
+	 * - if the given folder is local file, find workable location
+	 *   according to the logic used for inaccessible local files
+	 * - Otherwise, return the non-exist remote location
 	 */
 	private AbstractFile getWorkableLocation(FileURL folderURL) {
 		AbstractFile folder = FileFactory.getFile(folderURL);
-
+		if (folder != null && folder.exists())
+			return folder;
+		
 		if (folder == null)
 			folder = new NullableFile(folderURL);
-
-		return folder.exists() ? folder : getWorkableFolder(folder);
+		
+		return FileProtocols.FILE.equals(folderURL.getScheme()) ?
+				getWorkableFolder(folder) : folder;
 	}
 
 	/**
@@ -990,206 +989,4 @@ public class LocationChanger {
 			AppLogger.fine("Caught exception", e);
 		}
 	}*/
-
-	private class NullableFile extends AbstractFile {
-
-		private NullableFile(FileURL url) {
-			super(url);
-		}
-
-		@Override
-		public boolean canGetGroup() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean canGetOwner() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void changeDate(long arg0) throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void changePermission(int arg0, int arg1, boolean arg2)
-				throws IOException, UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void copyRemotelyTo(AbstractFile arg0) throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void delete() throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public boolean exists() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public OutputStream getAppendOutputStream() throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public PermissionBits getChangeablePermissions() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public long getDate() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public long getFreeSpace() throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public String getGroup() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public InputStream getInputStream() throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public OutputStream getOutputStream() throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public String getOwner() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public AbstractFile getParent() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public FilePermissions getPermissions() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public RandomAccessInputStream getRandomAccessInputStream()
-				throws IOException, UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public RandomAccessOutputStream getRandomAccessOutputStream()
-				throws IOException, UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public long getSize() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public long getTotalSpace() throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public Object getUnderlyingFileObject() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean isArchive() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean isDirectory() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean isSymlink() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean isSystem() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public AbstractFile[] ls() throws IOException,
-				UnsupportedFileOperationException {
-//			throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);
-			return new AbstractFile[0];
-		}
-
-		@Override
-		public void mkdir() throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void renameTo(AbstractFile arg0) throws IOException,
-				UnsupportedFileOperationException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void setParent(AbstractFile arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	}
 }

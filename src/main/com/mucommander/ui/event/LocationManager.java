@@ -72,9 +72,15 @@ public class LocationManager {
      * @throws IOException 
      * @throws UnsupportedFileOperationException 
      */
-    public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) throws UnsupportedFileOperationException, IOException {
+    public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) {
     	LOGGER.trace("calling ls()");
-    	AbstractFile[] children = folder.ls(configurableFolderFilter);
+    	AbstractFile[] children;
+		try {
+			children = folder.ls(configurableFolderFilter);
+		} catch (Exception e) {
+			LOGGER.debug("Couldn't ls children of " + folder.getAbsolutePath() + ", error: " + e.getMessage());
+			children = new AbstractFile[0];
+		}
 
     	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
 

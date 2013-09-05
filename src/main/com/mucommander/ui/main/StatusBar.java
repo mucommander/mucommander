@@ -302,7 +302,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         final AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         // Resolve the current folder's volume and use its path as a key for the volume info cache
-        final String volumePath = currentFolder.getVolume().getAbsolutePath(true);
+        final String volumePath = currentFolder.exists() ?
+        		currentFolder.getVolume().getAbsolutePath(true) : "";
 
         Long cachedVolumeInfo[] = volumeInfoCache.get(volumePath);
         if(cachedVolumeInfo!=null) {
@@ -458,7 +459,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     ////////////////////////////////////////
 	
     public void activePanelChanged(FolderPanel folderPanel) {
-    	setVisible(folderPanel.getCurrentFolder().exists());
         updateStatusInfo();
     }
 
