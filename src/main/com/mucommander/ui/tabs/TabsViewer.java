@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.tabs;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridLayout;
 
 import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
@@ -37,8 +37,8 @@ public abstract class TabsViewer<T extends Tab> extends JComponent {
 	public TabsViewer(JComponent component, TabsCollection<T> tabs) {
 		this.tabs = tabs;
 		
-		setLayout(new BorderLayout());
-		add(component, BorderLayout.CENTER);
+		setLayout(new GridLayout(1, 1));
+		add(component);
 	}
 	
 	public void addChangeListener(ChangeListener listener) { }
