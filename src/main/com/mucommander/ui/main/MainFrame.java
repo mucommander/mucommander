@@ -710,18 +710,18 @@ public class MainFrame extends JFrame implements LocationListener {
 
         @Override
         public Component getComponentAfter(Container container, Component component) {
-        	if (component==leftFolderPanel.getFoldersTreePanel().getTree()) {
+        	if (component==leftFolderPanel.getFoldersTreePanel().getTree())
 		        return leftTable;
-		    } else if (component==rightFolderPanel.getFoldersTreePanel().getTree()) {
+		    if (component==rightFolderPanel.getFoldersTreePanel().getTree())
 		        return rightTable;
-		    } else if(component== leftFolderPanel.getLocationTextField())
+		    if(component== leftFolderPanel.getLocationTextField())
                 return leftTable;
-            else if(component== leftTable)
+            if(component== leftTable)
                 return rightTable;
             if(component== rightFolderPanel.getLocationTextField())
                 return rightTable;
-            else    // component==table2
-                return leftTable;
+            // otherwise (component==table2)
+            return leftTable;
         }
 
         @Override
