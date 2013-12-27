@@ -471,6 +471,8 @@
         <mkdir dir="${tmp.deb}/control"/>
         <mkdir dir="${tmp.deb}/data"/>
         <mkdir dir="${tmp.deb}/data/usr/share/mucommander"/>
+        <mkdir dir="${tmp.deb}/data/usr/share/applications"/>
+        <mkdir dir="${tmp.deb}/data/usr/share/pixmaps"/>
 
         <taskdef name="jdeb" classname="org.vafer.jdeb.ant.DebAntTask" classpathref="lib.tools"/>
 
@@ -488,6 +490,12 @@
             <fileset file="readme.txt"/>
             <fileset file="${dist.jar}"/>
         </copy>
+        <copy todir="${tmp.deb}/data/usr/share/applications" overwrite="true">
+            <fileset file="${res.package}/unix/mucommander.desktop"/>
+        </copy>
+        <copy tofile="${tmp.deb}/data/usr/share/pixmaps/mucommander.png" overwrite="true">
+            <fileset file="${res.runtime}/images/mucommander/icon128_24.png"/>
+        </copy> 
 
         <!-- Generates the data.tar.gz file.                       -->
         <tar destfile="${tmp.deb}/data.tar.gz" compression="gzip">

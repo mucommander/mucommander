@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=muCommander
+Comment=A lightweight, cross-platform file manager
+Exec=mucommander
+Icon=mucommander
+Terminal=false
+Type=Application
+Categories=Application;FileManager;Utility;
+StartupNotify=true
+
