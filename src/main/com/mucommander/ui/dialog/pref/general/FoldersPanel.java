@@ -80,7 +80,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     // Show Mac OS X .DS_Store?
     private PrefCheckBox showDSStoreFilesCheckBox;
 
-    // Show Mac OS X system folders ?
+    // Show system folders ?
     private PrefCheckBox showSystemFoldersCheckBox;
 
     // Display compact file size ?
@@ -211,15 +211,17 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
             showDSStoreFilesCheckBox.setEnabled(showHiddenFilesCheckBox.isSelected());
             // Shift the check box to the right to indicate that it is a sub-option
             northPanel.add(showDSStoreFilesCheckBox, 20);
+        }
 
-            showSystemFoldersCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_system_folders")) {
-				public boolean hasChanged() {
-					return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SYSTEM_FOLDERS, MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS);
-				}
-            };
-            showSystemFoldersCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SYSTEM_FOLDERS,
-                                                                                   MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS));
-            northPanel.add(showSystemFoldersCheckBox);
+        if (OsFamily.MAC_OS_X.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
+        	showSystemFoldersCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_system_folders")) {
+        		public boolean hasChanged() {
+        			return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SYSTEM_FOLDERS, MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS);
+        		}
+        	};
+        	showSystemFoldersCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SYSTEM_FOLDERS,
+        			MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS));
+        	northPanel.add(showSystemFoldersCheckBox);        	
         }
 
         compactSizeCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.compact_file_size")) {
@@ -261,7 +263,9 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         showTabHeaderCheckBox.addDialogListener(parent);
         if(OsFamily.MAC_OS_X.isCurrent()) {
         	showDSStoreFilesCheckBox.addDialogListener(parent);
-        	showSystemFoldersCheckBox.addDialogListener(parent);
+        }
+        if(OsFamily.MAC_OS_X.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
+        	showSystemFoldersCheckBox.addDialogListener(parent);    		
         }
     }
 
@@ -296,7 +300,10 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         
         if(OsFamily.MAC_OS_X.isCurrent()) {
             refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_DS_STORE_FILES, showDSStoreFilesCheckBox.isSelected());
-            refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());
+        }
+
+        if(OsFamily.MAC_OS_X.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
+        	refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());	
         }
 
         if(refreshFolders)
