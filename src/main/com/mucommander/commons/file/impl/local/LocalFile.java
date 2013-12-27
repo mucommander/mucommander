@@ -627,6 +627,35 @@ public class LocalFile extends ProtocolFile {
         if (OsFamily.MAC_OS_X.isCurrent()) {
         	return MacOsSystemFolder.isSystemFile(this);
         }
+        if (OsFamily.WINDOWS.isCurrent()) {
+    		if (!Kernel32.isAvailable()) 
+    			return false; 
+
+    		String filePath = file.getAbsolutePath();
+    		int attributes = Kernel32.getInstance().GetFileAttributes(filePath); 
+
+    		// if GetFileAttributes() fails we try FindFirstFile() as fallback
+    		// such a case would be pagefile.sys
+    		if(attributes == Kernel32API.INVALID_FILE_ATTRIBUTES) {
+    			Kernel32API.FindFileHandle findFileHandle = null;
+    			Kernel32API.WIN32_FIND_DATA findFileData = new Kernel32API.WIN32_FIND_DATA();        		
+
+    			try {
+    				findFileHandle = Kernel32.getInstance().FindFirstFile(filePath, findFileData);
+
+    				if (findFileHandle.isValid()) {
+    					attributes = findFileData.dwFileAttributes;
+    				}
+    			} 
+    			finally {
+    				if (findFileHandle != null && findFileHandle.isValid()) {
+    					Kernel32.getInstance().FindClose(findFileHandle);	
+    				}
+    			}
+    		}
+
+    		return (attributes & Kernel32API.FILE_ATTRIBUTE_SYSTEM) != 0;
+    	}
         return false;
     }
 

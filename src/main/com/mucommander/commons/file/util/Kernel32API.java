@@ -300,5 +300,85 @@ public interface Kernel32API extends W32API {
             LongByReference lpFileSystemFlags,
             CharBuffer lpFileSystemNameBuffer,
             int nFileSystemNameSize
-    );
+    		);
+
+    ////////////////////////////////
+    // GetFileAttributes function //
+    ////////////////////////////////
+
+    /** Failed to retrieve file attributes  */
+    public final static int INVALID_FILE_ATTRIBUTES = -1;
+
+    /** A file or directory that the operating system uses a part of, or uses exclusively. */
+    public final static int FILE_ATTRIBUTE_SYSTEM =  0x00000004;
+
+    /**
+     * Retrieves file system attributes for a specified file or directory.
+     * 
+     * @param fileName The name of the file or directory.
+     * @return If the function succeeds, the return value contains the attributes of the specified file or directory.
+     * If the function fails, the return value is INVALID_FILE_ATTRIBUTES. To get extended error information, call GetLastError.
+     */
+    int GetFileAttributes(String fileName);
+
+    ////////////////////////////
+    // FindFirstFile function //
+    ////////////////////////////
+    /** Alias class for W32API.HANDLE. */
+    public final class FindFileHandle extends W32API.HANDLE {
+    	public boolean isValid() {
+    		return this != W32API.INVALID_HANDLE_VALUE;
+    	}
+    }
+
+    /** Contains information about the file that is found by the FindFirstFile, FindFirstFileEx, or FindNextFile function. */
+    public class WIN32_FIND_DATA extends Structure {
+    	/** The file attributes of a file. */
+    	public int dwFileAttributes;
+    	/** A FILETIME structure that specifies when a file or directory was created. */
+    	public long ftCreationTime;
+    	/** For a file, the structure specifies when the file was last read from, written to, or for executable files, run.
+    	 *  For a directory, the structure specifies when the directory is created. If the underlying file system does not support last access time, this member is zero. */
+    	public long ftLastAccessTime;
+    	/** For a file, the structure specifies when the file was last written to, truncated, or overwritten, for example, when WriteFile or SetEndOfFile are used. The date and time are not updated when file attributes or security descriptors are changed.
+    	 *  For a directory, the structure specifies when the directory is created. If the underlying file system does not support last write time, this member is zero. */
+    	public long ftLastWriteTime;
+    	/** The high-order DWORD value of the file size, in bytes.
+    	 *  This value is zero unless the file size is greater than MAXDWORD.
+    	 *  The size of the file is equal to (nFileSizeHigh * (MAXDWORD+1)) + nFileSizeLow. */
+    	public int nFileSizeHigh;
+    	/** The low-order DWORD value of the file size, in bytes. */
+    	public int nFileSizeLow;
+    	/** If the dwFileAttributes member includes the FILE_ATTRIBUTE_REPARSE_POINT attribute, this member specifies the reparse point tag.
+    	 *  Otherwise, this value is undefined and should not be used. */
+    	public int dwReserved0;
+    	/** Reserved for future use. */
+    	public int dwReserved1;
+    	/** The name of the file. */
+    	public char[] cFileName = new char[250];
+    	/** An alternative name for the file.
+    	 * This name is in the classic 8.3 file name format. */
+    	public char[] cAlternateFileName = new char[14];
+    }
+
+    /**
+     * Searches a directory for a file or subdirectory with a name that matches a specific name (or partial name if wildcards are used).
+     * 
+     * @param fileName The directory or path, and the file name, which can include wildcard characters, for example, an asterisk (*) or a question mark (?).
+     * @param findFileData A pointer to the WIN32_FIND_DATA structure that receives information about a found file or directory.
+     * @return If the function succeeds, the return value is a search handle used in a subsequent call to FindNextFile or FindClose, and the lpFindFileData parameter contains information about the first file or directory found.
+     */
+    FindFileHandle FindFirstFile(String fileName, WIN32_FIND_DATA findFileData);
+
+    /////////////////////////
+    // FindClose function //
+    ////////////////////////
+    /**
+     * Closes a file search handle opened by the FindFirstFile, FindFirstFileEx, FindFirstFileNameW, FindFirstFileNameTransactedW, FindFirstFileTransacted, FindFirstStreamTransactedW, or FindFirstStreamW functions.
+     * 
+     * @param hFindFile The file search handle.
+     * @return If the function succeeds, the return value is nonzero.
+     * If the function fails, the return value is zero. To get extended error information, call GetLastError.
+     */
+    boolean FindClose(FindFileHandle hFindFile);
 }
