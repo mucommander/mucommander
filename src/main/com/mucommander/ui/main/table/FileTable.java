@@ -25,6 +25,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -39,6 +40,7 @@ import java.util.WeakHashMap;
 import javax.swing.DefaultCellEditor;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -53,6 +55,8 @@ import javax.swing.table.TableColumnModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jidesoft.swing.DefaultOverlayable;
+import com.jidesoft.swing.StyledLabelBuilder;
 import com.mucommander.commons.collections.Enumerator;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -69,9 +73,11 @@ import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.MarkNextRowAction;
 import com.mucommander.ui.action.impl.MarkPreviousRowAction;
 import com.mucommander.ui.action.impl.MarkSelectedFileAction;
+import com.mucommander.ui.action.impl.RefreshAction;
 import com.mucommander.ui.dialog.file.AbstractCopyDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -181,6 +187,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /** Wrapper of presentation adjustments for the file-table */
     private FileTableWrapperForDisplay scrollpaneWrapper;
 
+    /** Table that shows the user to refresh if the location doesn't exist */
+    private DefaultOverlayable overlayTable;
+
     public FileTable(MainFrame mainFrame, FolderPanel folderPanel, FileTableConfiguration conf) {
         super(new FileTableModel(), new FileTableColumnModel(conf));
 
@@ -225,8 +234,46 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         
         // Initialize a wrapper of presentation adjustments for the file-table
         scrollpaneWrapper = new FileTableWrapperForDisplay(this, folderPanel, mainFrame);
+        
+        overlayTable = createOverlayableTable();
+        addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				overlayTable.repaint();
+			}
+		});
     }
-    
+
+    private DefaultOverlayable createOverlayableTable() {
+    	return new DefaultOverlayable(scrollpaneWrapper) {
+			private static final long serialVersionUID = 1L;
+
+			{
+                addOverlayComponent(createRefreshNonExistingLocationLabel());
+        	}
+
+			private JLabel createRefreshNonExistingLocationLabel() {
+				JLabel label = StyledLabelBuilder.createStyledLabel("{Refresh to reconnect:f:darkGray}");
+                label.setIcon(MuAction.getStandardIcon(RefreshAction.class));
+                return label;
+			}
+
+        	@Override
+        	public boolean requestFocusInWindow() {
+        		return scrollpaneWrapper.requestFocusInWindow();
+        	}
+
+        	/**
+             * Overridden to ensure that the table is always visible.
+             */
+            @Override
+            public void setVisible(boolean visible) {
+            	if (visible)
+            		super.setVisible(true);
+            }
+        };
+    }
+
     public String getFileNameAtRow(int index) {
     	return (index==0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(index).getName();
     }
@@ -239,7 +286,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @return the FileTable as a UI component for display purpose
      */
     public JComponent getAsUIComponent() {
-        return scrollpaneWrapper;
+        return overlayTable;
     }
 
     /**
@@ -285,8 +332,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             filenameEditor.filenameField.requestFocus();
         }
         else {
-            // Repaints the table to reflect the new focused state
-            repaint();
+        	overlayTable.getOverlayComponents()[0].setEnabled(true);
+        	// Repaints the table to reflect the new focused state
+        	overlayTable.repaint();
         }
     }
 
@@ -295,8 +343,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Note: this is not FocusListener implementation method
      */
     private void focusLost() {
+    	overlayTable.getOverlayComponents()[0].setEnabled(false);
         // Repaints the table to reflect the new focused state
-        repaint();
+        overlayTable.repaint();
     }
 
     /**
@@ -479,6 +528,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @param fileToSelect the file to select, <code>null</code> for the default selection.
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+    	overlayTable.setOverlayVisible(!folder.exists());
         // Stop quick search in case it was being used before folder change
         quickSearch.stop();
 
@@ -1230,15 +1280,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         return getPreferredSize();
     }
 
-    /**
-     * Overridden to ensure that the table is always visible.
-     */
-    @Override
-    public void setVisible(boolean visible) {
-    	if (visible)
-    		super.setVisible(true);
-    }
-    
     /**
      * Overridden for debugging purposes.
      */

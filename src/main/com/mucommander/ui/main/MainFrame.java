@@ -726,7 +726,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         @Override
         public Component getComponentBefore(Container container, Component component) {
-            // Completly symetrical with getComponentAfter
+            // Completely symmetrical with getComponentAfter
             return getComponentAfter(container, component);
        }
 
