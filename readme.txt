@@ -68,6 +68,7 @@ Improvements:
 - Show empty name in the make file/directory dialog when it is opened (ticket #512), contributed by hclsiva.
 - Mac OS X: enabled high-resolution rendering on Retina displays (ticket #518), contributed Alexey Lysiuk.
 - Added Windows 8 and Mac OS X 10.8 to the OS versions.
+- System files can now be filtered also on windows, contributed by Markus Bullmann.
 
 Localization:
 - Turkish translation has been updated.
