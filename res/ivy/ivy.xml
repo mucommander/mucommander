@@ -76,5 +76,6 @@
         <dependency org="jmdns"               name="jmdns"                           rev="3.1"                conf="runtime->*"/>
         <dependency org="jets3t"              name="jets3t"                          rev="0.7.2"              conf="runtime->*"/>
         <dependency org="jidesoft"            name="jide-oss"                        rev="3.5.12"             conf="runtime->*"/>
+        <dependency org="oracle"              name="openjdk"                         rev="6"                  conf="runtime->*"/>
     </dependencies>
 </ivy-module>
