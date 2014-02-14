@@ -18,7 +18,7 @@ Please visit the muCommander forums (http://www.mucommander.com/forums) to ask q
 report a bug. Your feedback is always welcome!
 
 Official website: http://www.mucommander.com
-Copyright (C) 2002-2013 Maxence Bernard.
+Copyright (C) 2002-2014 Maxence Bernard.
 
 
 Requirements
