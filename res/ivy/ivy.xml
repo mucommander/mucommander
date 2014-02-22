@@ -38,7 +38,7 @@
         <dependency org="mucommander"   name="code-metrics"                    rev="latest.integration" conf="tools"/>
 
         <dependency org="antlr"               name="antlr"                           rev="2.7.7"              conf="runtime->*"/>
-        <dependency org="ant-contrib"         name="ant-contrib"                     rev="1.0b2"              conf="runtime->*"/> 
+        <dependency org="ant-contrib"         name="ant-contrib"                     rev="1.0b2"              conf="runtime->*"/>
         <dependency org="hadoop"              name="hadoop-core"                     rev="0.20.2"             conf="runtime->*"/>
         <dependency org="oro"                 name="oro"                             rev="2.0.8"              conf="runtime->*"/>
         <dependency org="log4j"               name="log4j"                           rev="1.2.16"             conf="runtime->*"/>
@@ -59,7 +59,7 @@
         <dependency org="mucommander"         name="mucommander-commons-io"          rev="latest"             conf="runtime->*"/>
         <dependency org="mucommander"         name="mucommander-commons-runtime"     rev="latest"             conf="runtime->*"/>
         <dependency org="mucommander"         name="mucommander-commons-util"        rev="latest"             conf="runtime->*"/>
-        <dependency org="apple"               name="java-extension"                  rev="1.6"                conf="runtime->*"/>
+        <dependency org="apple"               name="java-extension"                  rev="1.6"                conf="compile->default"/>
         <dependency org="ibm"                 name="icu4j-charsets"                  rev="4.4.1"              conf="runtime->*"/>
         <dependency org="ibm"                 name="icu4j-charset-detect"            rev="4.4.1"              conf="runtime->*"/>
         <dependency org="ibm"                 name="icu4j"                           rev="4.4.1"              conf="runtime->*"/>
