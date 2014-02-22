@@ -89,6 +89,10 @@
     <property name="ivy.retrieve.pattern" value="${lib}/[conf]/[organisation]/[artifact].[ext]"/>
     <!-- Path to the Ivy settings file.                                                                              -->
     <property name="ivy.settings.file"    value="${res.ivy}/ivysettings.xml"/>
+    <!-- Ivy jar file.                                                                                               -->
+    <property name="ivy.jar.file"         value="${res.ivy}/ivy.jar"/>
+    <!-- Ivy version.                                                                                                -->
+    <property name="ivy.install.version"  value="2.2.0"/>
 
     <!-- Runtime classpath.                                                                                          -->
     <path id="lib.runtime">
@@ -103,6 +107,11 @@
     <!-- Tools classpath.                                                                                            -->
     <path id="lib.tools">
         <fileset dir="${lib.tools}" includes="**/*.jar"/>
+    </path>
+
+    <!-- Ivy library classpath.                                                                                      -->
+    <path id="ivy.lib.path">
+        <fileset dir="${res.ivy}" includes="*.jar"/>
     </path>
 
 
@@ -367,7 +376,19 @@
     <target name="synchronize" description="Forces synchronisation of all dependencies."
             depends="retrieve-runtime,retrieve-test,retrieve-tools"/>
 
-    <target name="ivy-config" unless="ivy.offline">
+    <target name="check-ivy">
+        <condition property="ivy.available">
+            <available file="${ivy.jar.file}" type="file"/>
+        </condition>
+    </target>
+
+    <target name="get-ivy" depends="check-ivy" unless="ivy.available">
+        <echo>Downloading ivy</echo>
+        <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true"/>
+    </target>
+
+    <target name="ivy-config" depends="get-ivy" unless="ivy.offline">
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
         <echo>Resolving dependencies repository...</echo>
         <ivy:configure/>
         <ivy:resolve file="${res.ivy}/ivy.xml" haltonfailure="false"/>
