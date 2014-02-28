@@ -25,11 +25,11 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.Layout;
 
-import com.mucommander.MuLogging;
-import com.mucommander.MuLogging.LogLevel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.utils.MuLogging;
+import com.mucommander.utils.MuLogging.LogLevel;
 
 /**
  * This <code>java.util.logging</code> <code>Handler</code> collects the last log messages that were published by

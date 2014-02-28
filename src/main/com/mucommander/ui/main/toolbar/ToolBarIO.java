@@ -18,19 +18,17 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import com.mucommander.MuLogging;
-import com.mucommander.PlatformManager;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.ui.notifier.SystemTrayNotifier;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import com.mucommander.PlatformManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 
 /**
  * 

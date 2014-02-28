@@ -41,14 +41,14 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import com.mucommander.MuLogging;
-import com.mucommander.MuLogging.LogLevel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.RefreshAction;
 import com.mucommander.ui.action.impl.ShowDebugConsoleAction;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.utils.MuLogging;
+import com.mucommander.utils.MuLogging.LogLevel;
 
 /**
  * This dialog shows the last log messages collected by {@link DebugConsoleAppender} and allows them to be copied
