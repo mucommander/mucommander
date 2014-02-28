@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.main.quicklist;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.Icon;
 
@@ -27,8 +27,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
-import com.mucommander.ui.event.LocationEvent;
-import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
@@ -37,56 +35,39 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  * 
  * @author Arik Hadas
  */
-public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> implements LocationListener {
-	
-	private List<AbstractFile> parents = new Vector<AbstractFile>();
-	private boolean updated = true;
-	private FolderPanel folderPanel;
-	
-	public ParentFoldersQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowParentFoldersQLAction.Descriptor.ACTION_ID), Translator.get("parent_folders_quick_list.empty_message"));
-		
-		this.folderPanel = folderPanel;
-		
-		folderPanel.getLocationManager().addLocationListener(this);
-	}
-	
-	@Override
-    protected void acceptListItem(AbstractFile item) {
-		folderPanel.tryChangeCurrentFolder(item);
-	}
-	
-	protected void populateParentFolders(AbstractFile folder) {
-		parents = new Vector<AbstractFile>();
-				
-		while((folder=folder.getParent())!=null)
-            parents.add(folder);
+public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> {
+
+    private FolderPanel folderPanel;
+
+    public ParentFoldersQL(FolderPanel folderPanel) {
+        super(folderPanel,
+                ActionProperties.getActionLabel(ShowParentFoldersQLAction.Descriptor.ACTION_ID),
+                Translator.get("parent_folders_quick_list.empty_message"));
+
+        this.folderPanel = folderPanel;
     }
-	
-	@Override
+
+    @Override
+    protected void acceptListItem(AbstractFile item) {
+        folderPanel.tryChangeCurrentFolder(item);
+    }
+
+    @Override
     public AbstractFile[] getData() {
-		if (!updated && (updated = true))
-			populateParentFolders(folderPanel.getCurrentFolder());
-		
-		return parents.toArray(new AbstractFile[0]);
-	}
+        return populateParentFolders(folderPanel.getCurrentFolder()).toArray(new AbstractFile[0]);
+    }
 
-	@Override
+    @Override
     protected Icon itemToIcon(AbstractFile item) {
-		return getIconOfFile(item);
-	}
+        return getIconOfFile(item);
+    }
 
-	/**********************************
-	 * LocationListener Implementation
-	 **********************************/
+    protected List<AbstractFile> populateParentFolders(AbstractFile folder) {
+        List<AbstractFile> parents = new LinkedList<AbstractFile>();
 
-	public void locationChanged(LocationEvent locationEvent) {
-		updated = false;
-	}
-	
-	public void locationChanging(LocationEvent locationEvent) { }
+        while ((folder = folder.getParent()) != null)
+            parents.add(folder);
 
-	public void locationCancelled(LocationEvent locationEvent) { }
-
-	public void locationFailed(LocationEvent locationEvent) { }
+        return parents;
+    }
 }
