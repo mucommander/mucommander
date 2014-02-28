@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.debug;
 
-import com.mucommander.MuLogging.LogLevel;
+import com.mucommander.utils.MuLogging.LogLevel;
 
 /**
  * Logging events that presented in the debug console should implement this interface
