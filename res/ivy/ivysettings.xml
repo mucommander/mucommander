@@ -8,16 +8,12 @@
     <!-- = Configuration =========================================================================================== -->
     <!-- =========================================================================================================== -->
     <property name="repo.uri"  value="http://ivy.mucommander.com/"/>
-    <property name="nexus.uri" value="http://nexus-mucommander.rhcloud.com/nexus/content/groups/mucommander"/>
-
 
     <!-- = muCommander Repository ================================================================================== -->
     <!-- =========================================================================================================== -->
     <resolvers>
       <chain name="mucommander-repos" returnFirst="true">
-        <url name="mucommander-nexus">
-          <artifact pattern="${nexus.uri}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-        </url>
+        <ibiblio name="central" m2compatible="true"/>
         <url name="mucommander-ivy">
           <ivy      pattern="${repo.uri}/[organisation]/[module]/[revision]/ivy.xml" />
           <artifact pattern="${repo.uri}/[organisation]/[module]/[revision]/[artifact].[ext]" />
