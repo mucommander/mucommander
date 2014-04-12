@@ -1,0 +1,11 @@
+# Generated Directories
+tmp
+lib
+reports
+dist
+
+# Generated Files
+*class
+*log
+ivy*jar
+
