@@ -1,9 +1,4 @@
-
-	   _____                           _
- _____ _ _|     |___ _____ _____ ___ ___ _| |___ ___
-|     | | |   --| . |     |     | .'|   | . | -_|  _|
-|_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
-
+# muCommander
 
 [![Version](http://img.shields.io/badge/version-0.9.1-blue.svg?style=flat)](https://mucommander.atlassian.net/browse/MUC/?selectedTab=com.atlassian.jira.jira-projects-plugin:versions-panel)
 [![License](http://img.shields.io/badge/License-GPL-blue.svg)](http://www.gnu.org/copyleft/gpl.html)
