@@ -1,11 +1,13 @@
+<<<<<<< HEAD
 # Generated Directories
 tmp
 lib
 reports
 dist
+build
 
 # Generated Files
 *class
 *log
 ivy*jar
-
+.gradle

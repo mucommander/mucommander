@@ -1,0 +1,32 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    ivy {
+        url = 'http://ivy.mucommander.com'
+        layout "pattern", {
+                ivy '[organisation]/[module]/[revision]/ivy.xml'
+                artifact '[organisation]/[module]/[revision]/[artifact].[ext]'
+        }
+    }
+}
+
+dependencies {
+    compile group: 'mucommander', name: 'mucommander-commons-io', version: 'latest.integration', configuration: 'runtime'
+    compile group: 'mucommander', name: 'mucommander-commons-util', version: 'latest.integration', configuration: 'runtime'
+    compile group: 'mucommander', name: 'mucommander-commons-runtime', version: 'latest.integration', configuration: 'runtime'
+    compile group: 'jna', name: 'jna', version: '3.2.2'
+    compile group: 'vmware', name: 'vi', version: '2.5'
+    compile group: 'edmund-wagner', name: 'junrar', version: '0.5'
+    compile group: 'apache', name: 'commons-net', version: '2.0'
+    compile group: 'sshtools', name: 'j2ssh', version: '0.2.9'
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile 'jcifs:jcifs:1.3.17'
+    compile 'com.sun.jna:jna:3.0.9'
+    compile 'org.apache.hadoop:hadoop-core:0.20.2'
+    compile 'com.github.junrar:junrar:0.7'
+    compile 'commons-collections:commons-collections:3.2.1'
+
+    testCompile 'org.testng:testng:6.8.1'
+    testCompile 'junit:junit:4.11'
+}

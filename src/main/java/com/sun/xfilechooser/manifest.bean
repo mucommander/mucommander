@@ -1,0 +1,39 @@
+Name: com/sun/xfilechooser/XFileChooser.class
+Java-Bean: True
+
+Name: com/sun/xfilechooser/BeanXFile.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/XFileSystemView.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/UnixXFileSystemView.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/WindowsXFileSystemView.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/WindowsXFileSystemView$XWindowsFloppy.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/GenericXFileSystemView.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/XFileChooserBeanInfo.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/FileModeEditor.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/DialogEditor.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/XFileChooserEditor.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/EditorResource.class
+Java-Bean: False
+
+Name: com/sun/xfilechooser/images/422LOGO5_16x16.gif
+Name: com/sun/xfilechooser/images/422LOGO5_32x32.gif
+
