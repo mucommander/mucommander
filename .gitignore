@@ -3,6 +3,8 @@ tmp
 lib
 reports
 dist
+build
+.gradle
 
 # Generated Files
 *class

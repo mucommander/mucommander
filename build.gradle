@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    ivy {
+        url = 'http://ivy.mucommander.com'
+	layout "pattern", {
+		ivy '[organisation]/[module]/[revision]/ivy.xml'
+		artifact '[organisation]/[module]/[revision]/[artifact].[ext]'
+	}
+    }
+}
+
+dependencies {
+    compile group: 'mucommander', name: 'mucommander-commons-file', version: 'latest.integration', configuration: 'runtime'
+    compile group: 'mucommander', name: 'mucommander-commons-conf', version: 'latest.integration', configuration: 'runtime'
+    compile group: 'mucommander', name: 'mucommander-commons-collections', version: 'latest.integration', configuration: 'runtime'
+    compile group: 'org.openjdk', name: 'java-extension', version: '6.0', configuration: 'runtime'
+
+    compile 'jmdns:jmdns:3.1'
+    compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'ch.qos.logback:logback-core:1.1.2'
+    compile 'ch.qos.logback:logback-classic:1.1.2'
+    compile 'com.jidesoft:jide-oss:3.5.14'
+
+    testCompile 'org.testng:testng:6.8.1'
+    testCompile 'junit:junit:4.11'
+}
