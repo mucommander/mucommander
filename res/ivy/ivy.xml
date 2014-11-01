@@ -49,7 +49,6 @@
         <dependency org="apache"        name="commons-net"                 rev="latest.integration" conf="runtime->*"/>
         <dependency org="jcifs"         name="jcifs"                       rev="latest.integration" conf="runtime->*"/>
         <dependency org="sshtools"      name="j2ssh"                       rev="latest.integration" conf="runtime->*"/>
-        <dependency org="sun"           name="yanfs"                       rev="latest.integration" conf="runtime->*"/>
         <dependency org="apache"        name="bzip2"                       rev="latest.integration" conf="runtime->*"/>
         <dependency org="apache"        name="commons-collections"         rev="latest.integration" conf="runtime->*"/>
         <dependency org="slf4j"         name="slf4j"                       rev="latest.integration" conf="runtime->default"/>
