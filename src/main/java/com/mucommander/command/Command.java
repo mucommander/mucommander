@@ -328,23 +328,26 @@ public class Command implements Comparable<Command> {
     }
     
     /**
-     * Returns whether this command contains keyword.
+     * Returns whether this command contains keywords referencing selected file.
      * <p>
-     * Returns true as long as KEYWORD_HEADER is found as leading char in any token.
-     * Illegal tokens like $xyz still return true.
+     * Returns true if command contains keywords referencing selected file, e.g. $f,$n,$p,$e,$b.
+     * Returns false otherwise, e.g. $j, $xyz, etc.
      * </p>
-     * @return whether this command contains keyword.
+     * @return whether this command contains keywords referencing selected file.
      */
-    public synchronized boolean hasKeywordToken() {
+    public synchronized boolean hasSelectedFileKeyword() {
     	String[] tokens = getTokens();
         for (String token : tokens) {
-            if (token.length() > 0) {
-                if (token.charAt(0) == KEYWORD_HEADER) {
-                    return true;
-                }
+            // Not using regexp because it depends on the definition of KEYWORD_*
+            if (token.startsWith("" + KEYWORD_HEADER + KEYWORD_PATH)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_NAME)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_EXTENSION)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_NAME_WITHOUT_EXTENSION)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_PARENT)) {
+                return true;
             }
         }
-        // No token with KEYWORD_HEADER found
+        // No token with file referencing keyword found
         return false;
     }
 
