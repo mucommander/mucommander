@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a6b29fe_4f48912d",
+        "filename": "src/main/java/com/mucommander/command/Command.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2014-11-04T13:33:03Z",
+      "side": 1,
+      "message": "how about using String.startsWith instead?",
+      "revId": "dbf116e9dd67c9b8b238e150d0c3bf51a2a62d16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a6b29fe_af55e5c7",
+        "filename": "src/main/java/com/mucommander/ui/action/impl/CommandAction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2014-11-04T13:33:03Z",
+      "side": 1,
+      "message": "this is true for the keywords $f, $n, $p, $e, $b but not for $j (The path of the directory from which muCommander was started), we should perform the action when no file is selected and if only $j keyword present",
+      "revId": "dbf116e9dd67c9b8b238e150d0c3bf51a2a62d16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
