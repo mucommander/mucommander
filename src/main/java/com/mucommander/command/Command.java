@@ -326,6 +326,30 @@ public class Command implements Comparable<Command> {
 
         return tokens.toArray(new String[tokens.size()]);
     }
+    
+    /**
+     * Returns whether this command contains keywords referencing selected file.
+     * <p>
+     * Returns true if command contains keywords referencing selected file, e.g. $f,$n,$p,$e,$b.
+     * Returns false otherwise, e.g. $j, $xyz, etc.
+     * </p>
+     * @return whether this command contains keywords referencing selected file.
+     */
+    public synchronized boolean hasSelectedFileKeyword() {
+    	String[] tokens = getTokens();
+        for (String token : tokens) {
+            // Not using regexp because it depends on the definition of KEYWORD_*
+            if (token.startsWith("" + KEYWORD_HEADER + KEYWORD_PATH)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_NAME)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_EXTENSION)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_NAME_WITHOUT_EXTENSION)
+                    || token.startsWith("" + KEYWORD_HEADER + KEYWORD_PARENT)) {
+                return true;
+            }
+        }
+        // No token with file referencing keyword found
+        return false;
+    }
 
     /**
      * Returns <code>true</code> if the specified character is a legal keyword.
