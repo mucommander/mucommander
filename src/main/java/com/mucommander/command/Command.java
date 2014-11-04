@@ -326,6 +326,27 @@ public class Command implements Comparable<Command> {
 
         return tokens.toArray(new String[tokens.size()]);
     }
+    
+    /**
+     * Returns whether this command contains keyword.
+     * <p>
+     * Returns true as long as KEYWORD_HEADER is found as leading char in any token.
+     * Illegal tokens like $xyz still return true.
+     * </p>
+     * @return whether this command contains keyword.
+     */
+    public synchronized boolean hasKeywordToken() {
+    	String[] tokens = getTokens();
+        for (String token : tokens) {
+            if (token.length() > 0) {
+                if (token.charAt(0) == KEYWORD_HEADER) {
+                    return true;
+                }
+            }
+        }
+        // No token with KEYWORD_HEADER found
+        return false;
+    }
 
     /**
      * Returns <code>true</code> if the specified character is a legal keyword.
