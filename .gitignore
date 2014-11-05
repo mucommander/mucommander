@@ -5,6 +5,7 @@ reports
 dist
 build
 .gradle
+bin
 
 # Generated Files
 *class
