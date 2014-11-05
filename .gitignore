@@ -6,9 +6,12 @@ dist
 build
 .gradle
 bin
+.settings
 
 # Generated Files
 *class
 *log
 ivy*jar
+.classpath
+.project
 
