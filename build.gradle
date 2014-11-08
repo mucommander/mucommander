@@ -12,9 +12,10 @@ repositories {
 }
 
 dependencies {
-    compile group: 'mucommander', name: 'mucommander-commons-io', version: 'latest.integration', configuration: 'runtime'
-    compile group: 'mucommander', name: 'mucommander-commons-util', version: 'latest.integration', configuration: 'runtime'
-    compile group: 'mucommander', name: 'mucommander-commons-runtime', version: 'latest.integration', configuration: 'runtime'
+    compile project(':mucommander-commons-io')
+    compile project(':mucommander-commons-runtime')
+    compile project(':mucommander-commons-util')
+
     compile group: 'jna', name: 'jna', version: '3.2.2'
     compile group: 'vmware', name: 'vi', version: '2.5'
     compile group: 'edmund-wagner', name: 'junrar', version: '0.5'
