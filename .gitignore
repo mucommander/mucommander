@@ -1,2 +1,5 @@
 .gradle
 build
+.classpath
+.project
+bin
