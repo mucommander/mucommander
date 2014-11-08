@@ -1,4 +1,8 @@
-apply plugin: 'java'
+allprojects {
+    apply plugin: 'java'
+    group = 'org.mucommander'
+    version = '0.9.0'
+}
 
 repositories {
     jcenter()
