@@ -1,0 +1,5 @@
+include 'mucommander-commons-file'
+include 'mucommander-commons-conf'
+include 'mucommander-commons-collections'
+
+rootProject.name = 'mucommander'

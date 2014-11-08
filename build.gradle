@@ -12,9 +12,9 @@ repositories {
 }
 
 dependencies {
-    compile group: 'mucommander', name: 'mucommander-commons-file', version: 'latest.integration', configuration: 'runtime'
-    compile group: 'mucommander', name: 'mucommander-commons-conf', version: 'latest.integration', configuration: 'runtime'
-    compile group: 'mucommander', name: 'mucommander-commons-collections', version: 'latest.integration', configuration: 'runtime'
+    compile project('mucommander-commons-file')
+    compile project('mucommander-commons-conf')
+    compile project('mucommander-commons-collections')
     compile group: 'org.openjdk', name: 'java-extension', version: '6.0', configuration: 'runtime'
 
     compile 'jmdns:jmdns:3.1'

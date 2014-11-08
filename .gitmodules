@@ -1,0 +1,9 @@
+[submodule "mucommander-commons-conf"]
+	path = mucommander-commons-conf
+	url = https://review.gerrithub.io/mucommander/mucommander-commons-conf
+[submodule "mucommander-commons-file"]
+	path = mucommander-commons-file
+	url = https://review.gerrithub.io/mucommander/mucommander-commons-file
+[submodule "mucommander-commons-collections"]
+	path = mucommander-commons-collections
+	url = https://review.gerrithub.io/mucommander/mucommander-commons-collections
