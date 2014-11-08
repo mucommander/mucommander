@@ -1,5 +1,8 @@
 include 'mucommander-commons-file'
 include 'mucommander-commons-conf'
 include 'mucommander-commons-collections'
+include 'mucommander-commons-io'
+include 'mucommander-commons-runtime'
+include 'mucommander-commons-util'
 
 rootProject.name = 'mucommander'

@@ -7,3 +7,12 @@
 [submodule "mucommander-commons-collections"]
 	path = mucommander-commons-collections
 	url = https://review.gerrithub.io/mucommander/mucommander-commons-collections
+[submodule "mucommander-commons-io"]
+	path = mucommander-commons-io
+	url = https://review.gerrithub.io/mucommander/mucommander-commons-io
+[submodule "mucommander-commons-runtime"]
+	path = mucommander-commons-runtime
+	url = https://review.gerrithub.io/mucommander/mucommander-commons-runtime
+[submodule "mucommander-commons-util"]
+	path = mucommander-commons-util
+	url = https://review.gerrithub.io/mucommander/mucommander-commons-util
