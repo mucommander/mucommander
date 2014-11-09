@@ -2,6 +2,7 @@
 
 [![Version](http://img.shields.io/badge/version-0.9.1-blue.svg?style=flat)](https://mucommander.atlassian.net/browse/MUC/?selectedTab=com.atlassian.jira.jira-projects-plugin:versions-panel)
 [![License](http://img.shields.io/badge/License-GPL-blue.svg)](http://www.gnu.org/copyleft/gpl.html)
+[![Build Status](https://travis-ci.org/mucommander/mucommander.svg)](https://travis-ci.org/mucommander/mucommander)
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
 It runs on any operating system with Java support (Mac OS X, Windows, Linux, *BSD, Solaris...).
