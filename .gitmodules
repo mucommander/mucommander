@@ -1,18 +1,18 @@
 [submodule "mucommander-commons-conf"]
 	path = mucommander-commons-conf
-	url = https://review.gerrithub.io/mucommander/mucommander-commons-conf
+	url = https://github.com/mucommander/mucommander-commons-conf
 [submodule "mucommander-commons-file"]
 	path = mucommander-commons-file
-	url = https://review.gerrithub.io/mucommander/mucommander-commons-file
+	url = https://github.com/mucommander/mucommander-commons-file
 [submodule "mucommander-commons-collections"]
 	path = mucommander-commons-collections
-	url = https://review.gerrithub.io/mucommander/mucommander-commons-collections
+	url = https://github.com/mucommander/mucommander-commons-collections
 [submodule "mucommander-commons-io"]
 	path = mucommander-commons-io
-	url = https://review.gerrithub.io/mucommander/mucommander-commons-io
+	url = https://github.com/mucommander/mucommander-commons-io
 [submodule "mucommander-commons-runtime"]
 	path = mucommander-commons-runtime
-	url = https://review.gerrithub.io/mucommander/mucommander-commons-runtime
+	url = https://github.com/mucommander/mucommander-commons-runtime
 [submodule "mucommander-commons-util"]
 	path = mucommander-commons-util
-	url = https://review.gerrithub.io/mucommander/mucommander-commons-util
+	url = https://github.com/mucommander/mucommander-commons-util
