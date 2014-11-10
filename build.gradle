@@ -30,3 +30,9 @@ dependencies {
     testCompile 'org.testng:testng:6.8.1'
     testCompile 'junit:junit:4.11'
 }
+
+task standaloneJar(type: Jar) {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
