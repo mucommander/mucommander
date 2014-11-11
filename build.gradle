@@ -1,3 +1,6 @@
+apply plugin: 'application'
+mainClassName = 'com.mucommander.Launcher'
+
 allprojects {
     apply plugin: 'java'
     group = 'org.mucommander'
