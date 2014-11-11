@@ -8,7 +8,7 @@
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
 It runs on any operating system with Java support (Mac OS X, Windows, Linux, *BSD, Solaris...).
 
-Documentation can be found at http://trac.mucommander.com/ .
+Documentation can be found at https://mucommander.atlassian.net/wiki/ .
 
 Please visit the muCommander forums (http://www.mucommander.com/forums) to ask questions, suggest features or
 report a bug. Your feedback is always welcome!
@@ -20,8 +20,8 @@ Copyright (C) 2002-2014 Maxence Bernard.
 Requirements
 ------------
 
-A Java Runtime Environment (JRE) 1.5 or later is required to run muCommander.
-Java 1.6 is recommended, you can download it at http://java.com.
+A Java Runtime Environment (JRE) 1.6 or later is required to run muCommander.
+Java 1.7 is recommended, you can download it at http://java.com.
 
 Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
 
@@ -102,8 +102,8 @@ Please refer to the 'license.txt' file bundled with muCommander.
 
 muCommander uses the following great third party works :
 
-- the Ant library released under the Apache License.
- Ant can be found at http://ant.apache.org .
+- the Gradle library released under the Apache License.
+ Gradle can be found at http:/gradle.org .
 
 - Apache Commons libraries released under the Apache License.
  Apache Commons can be found at http://commons.apache.org .
@@ -243,4 +243,4 @@ Documentation
 -------------
 
 Documentation on how to use, customize and extend muCommander is available at:
-http://trac.mucommander.com
+https://mucommander.atlassian.net/wiki/
