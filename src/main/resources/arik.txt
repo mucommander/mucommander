@@ -284,7 +284,6 @@ reset:BE:Скінуц�?
 reset:NB:Nullstill
 reset:TR:Sıfırla
 reset:CA:Reinicia
-# Translation missing (KO)
 
 rename:EN:Rename
 rename:FR:Renommer
@@ -366,7 +365,6 @@ change:NB:Endre
 change:TR:De�?i�?tir
 change:CA:Canvia
 change:ES:Cambiar
-# Translation missing (KO)
 
 save:EN:Save
 save:FR:Enregistrer
@@ -552,7 +550,6 @@ skip_all:TR:Tümünü atla
 skip_all:CA:Omet-los tots
 skip_all:UA:�?ропу�?тити в�?е
 skip_all:ES:Saltar todos
-# Translation missing (New!)
 
 
 
@@ -889,7 +886,6 @@ split:TR:Böl
 split:CA:Divideix
 split:UA:Розділити
 split:ES:Dividir
-# Translation missing (New!)
 
 
 
@@ -928,7 +924,6 @@ combine:TR:Birle�?tir
 combine:CA:Combina
 combine:UA:�?б'єднати
 combine:ES:Unir
-# Translation missing (New!)
 
 
 
@@ -1078,7 +1073,6 @@ quick_search:BE:Хуткі пошук
 quick_search:NB:Hurtigsøk
 quick_search:TR:Hızlı Arama
 quick_search:CA:Cerca ràpida
-# Translation missing (KO)
 
 file_manager:EN:File manager
 file_manager:FR:Gestionnaire de fichiers
@@ -1105,7 +1099,6 @@ file_manager:NB:Filhåndterer
 file_manager:TR:Dosya yöneticisi
 file_manager:CA:Gestor de fitxers
 file_manager:ES:Gestor de ficheros
-# Translation missing (KO)
 
 # Used as a button label, in the 'Mkdir' dialog for instance
 create:EN:Create
@@ -1160,7 +1153,6 @@ creating_file:zh_CN:正�?�创建 %1
 creating_file:BE:Ствараецца %1
 creating_file:TR:Olu�?turuluyor %1
 creating_file:CA:Creant %1
-# Translation missing (KO, NB)
 
 # Used as a button label in the file chooser of the 'Folders' preferences
 choose:EN:Choose
@@ -1188,7 +1180,6 @@ choose:BE:�?б�?рыце
 choose:NB:Velg
 choose:TR:Seç
 choose:CA:Selecciona
-# Translation missing (KO)
 
 # Used for instance in the 'misc' preference panel
 customize:EN:Customize
@@ -1213,7 +1204,6 @@ customize:TR:Özelle�?tir
 customize:CA:Personalitza
 customize:UA:�?алаштувати
 customize:ES:Personalizar
-# Translation missing (New!)
 
 
 
@@ -1256,7 +1246,6 @@ choose_folder:BE:�?б�?рыце т�?чку
 choose_folder:NB:Velg mappe
 choose_folder:TR:Bir dizin seç
 choose_folder:CA:Selecciona un directori
-# Translation missing (KO)
 
 login:EN:Login
 login:FR:Identifiant
@@ -1365,7 +1354,6 @@ encoding:BE:�?адыро�?ка
 encoding:NB:Tegnsett
 encoding:TR:Karakter Kodlaması
 encoding:CA:Codificació
-# Translation missing (KO)
 
 # Used in the dialog that allows to customize the list of preferred encodings
 preferred_encodings:EN:Preferred encodings
@@ -1390,7 +1378,6 @@ preferred_encodings:TR:Tercih edilen kodlamalar
 preferred_encodings:CA:Codificacions preferides
 preferred_encodings:UA:До�?тупні кодуванн�?
 preferred_encodings:ES:Codificaciones preferidas
-# Translation missing (New!)
 
 
 
@@ -1433,7 +1420,6 @@ license:BE:Ліц�?нзі�?
 license:NB:Lisens
 license:TR:Lisans
 license:CA:Llicència
-# Translation missing (KO)
 
 name:EN:Name
 name:FR:Nom
@@ -1595,7 +1581,6 @@ owner:BE:Уладал�?нік
 owner:NB:Eier
 owner:TR:Sahibi
 owner:CA:Propietari
-# Translation missing (KO)
 
 group:EN:Group
 group:FR:Groupe
@@ -1622,7 +1607,6 @@ group:BE:Група
 group:NB:Gruppe
 group:TR:Grup
 group:CA:Grup
-# Translation missing (KO)
 
 location:EN:Location
 location:FR:Emplacement
@@ -1788,7 +1772,6 @@ go_to:BE:�?ерай�?�?ці да
 go_to:NB:Gå til
 go_to:TR:Git
 go_to:CA:Ves a
-# Translation missing (KO)
 
 example:EN:Example
 example:FR:Exemple
@@ -1842,7 +1825,6 @@ preview:BE:�?ап�?р�?дні прагл�?д
 preview:NB:Forhåndsvisning
 preview:TR:Önizleme
 preview:CA:Previsualitza
-# Translation missing (KO)
 
 # Used for archive (e.g. Zip) and file comments (e.g. Mac OS X Finder comments)
 comment:EN:Comment
@@ -1897,7 +1879,6 @@ sample_text:BE:�?рыклад т�?к�?ту
 sample_text:NB:Eksempel på tekst
 sample_text:TR:Örnek metin
 sample_text:CA:Text d'exemple
-# Translation missing (KO)
 
 # %1 is replaced by a number of files, e.g. '5 files(s)'
 nb_files:EN:%1 file(s)
@@ -1981,7 +1962,6 @@ loading:BE:Загрузка...
 loading:NB:Laster...
 loading:TR:Yükleniyor...
 loading:CA:Carregant...
-# Translation missing (KO)
 
 this_operation_cannot_be_undone:EN:This operation cannot be undone.
 this_operation_cannot_be_undone:FR:Cette opération ne peut pas être annulée.
@@ -2008,7 +1988,6 @@ this_operation_cannot_be_undone:BE:�?емагчыма �?ка�?авац�? дад�
 this_operation_cannot_be_undone:NB:Denne handlingen kan ikke angres.
 this_operation_cannot_be_undone:TR:Bu i�?lem geri alınamaz.
 this_operation_cannot_be_undone:CA:Aquesta operació no es pot desfer
-# Translation missing (KO)
 
 remove:EN:Remove
 remove:FR:Retirer
@@ -2035,7 +2014,6 @@ remove:BE:Выдаліц�?
 remove:NB:Fjern
 remove:TR:Kaldır
 remove:CA:Esborrar
-# Translation missing (KO)
 
 # Used as a button in error dialogs to show more information about the error.
 details:EN:Details
@@ -2060,10 +2038,8 @@ details:TR:Ayrıntılar
 details:CA:Detalls
 details:UA:Детал�?ніше
 details:ES:Detalles
-# Translation missing (New!)
 
 title:EN:Title
-# Translation missing (New!)
 
 
 ##########################
@@ -2151,7 +2127,6 @@ generic_error:BE:�?ры выканан�?ні ап�?рацыі �?з�?нікла �
 generic_error:NB:En feil oppstod under utførelsen av valgte handling.
 generic_error:TR:İ�?lem sırasında bir hata olu�?tu.
 generic_error:CA:S'ha produit un error mentre es realitzava l'operació sol·licitada
-# Translation missing (KO)
 
 folder_does_not_exist:EN:This folder doesn't exist or is not available.
 folder_does_not_exist:FR:Ce dossier n'existe pas ou n'est pas disponible.
@@ -2232,7 +2207,6 @@ this_file_does_not_exist:BE:Файл %1 не і�?нуе ал�?бо неда�?�?�
 this_file_does_not_exist:NB:Filen finnes ikke eller er utilgjengelig: %1
 this_file_does_not_exist:TR:Dosya mevcut de�?il ya da kullanılamıyor: %1
 this_file_does_not_exist:CA:Aquest fitxer no existeix o no està disponible
-# Translation missing (KO)
 
 invalid_path:EN:Invalid path: %1
 invalid_path:FR:Chemin invalide: %1
@@ -2641,7 +2615,6 @@ read_error:BE:�?амылка чытан�?н�?
 read_error:NB:Feil ved lesing
 read_error:TR:Okuma hatası
 read_error:CA:Error de lectura
-# Translation missing (KO)
 
 # This error is displayed during a transfer when the 'Verify data integrity' 
 # option has been enabled and the checksum of the source and destination files
@@ -2672,7 +2645,6 @@ integrity_check_error:BE:�?�? пройдзена праверка ц�?ла�?на
 integrity_check_error:NB:Integritetssjekk feilet: kilde og målet stemmer ikke med hverandre
 integrity_check_error:TR:Bütünlük do�?rulama ba�?arısız: kaynak ve hedef uyu�?muyor
 integrity_check_error:CA:Comprovació d'integritat fallada
-# Translation missing (KO)
 
 # Used when an unexpected error occurs on startup.
 startup_error:EN:An error prevented muCommander from starting.
@@ -2697,7 +2669,6 @@ startup_error:TR:muCommander ba�?latılırken bir hata olu�?tu.
 startup_error:CA:Un error ha impedit iniciar l'muCommander
 startup_error:UA:�?ід ча�? запу�?ку muCommander'а виникла помилка.
 startup_error:ES:Un error ha impedido iniciar muCommander
-# Translation missing (New!)
 
 
 
@@ -2911,7 +2882,6 @@ action_categories.all:TR:Tümü
 action_categories.all:CA:Tots
 action_categories.all:UA:В�?і
 action_categories.all:ES:Todos
-# Translation missing (New!)
 
 action_categories.navigation:EN:Navigation
 action_categories.navigation:FR:Navigation
@@ -3049,10 +3019,8 @@ action_categories.windows:TR:Pencereler
 action_categories.windows:CA:Finestres
 
 action_categories.tabs:EN:Tabs
-# Translation missing (New!)
 
 action_categories.commands:EN:Custom commands
-# Translation missing (New!)
 
 action_categories.misc:EN:$[prefs_dialog.misc_tab]
 
@@ -3143,7 +3111,6 @@ BatchRename.label:NB:Gi nytt navn til filer
 BatchRename.label:TR:Toplu ad de�?i�?tirme
 BatchRename.label:CA:Reanomena en bloc
 BatchRename.label:ES:Renombrado masivo
-# Translation missing (KO)
 
 EditBookmarks.label:EN:Edit bookmarks
 EditBookmarks.label:FR:Éditer les favoris
@@ -3199,7 +3166,6 @@ ExploreBookmarks.label:BE:�?рагл�?дзец�? закладкі
 ExploreBookmarks.label:NB:Vis bokmerker
 ExploreBookmarks.label:TR:Yer imlerini görüntüle
 ExploreBookmarks.label:CA:Explora els preferits
-# Translation missing (KO)
 
 EditCredentials.label:EN:Edit credentials
 EditCredentials.label:FR:Éditer les indentifiants
@@ -3522,7 +3488,6 @@ InternalView.label:TR:Görüntüle (dahili)
 InternalView.label:CA:Visualitza (intern)
 InternalView.label:UA:�?ерегл�?д (вбудованим)
 InternalView.label:ES:Visualizar (interno)
-# Translation missing (New!)
 
 
 
@@ -3592,7 +3557,6 @@ InternalEdit.label:TR:Düzenle (dahili)
 InternalEdit.label:CA:Edita (intern)
 InternalEdit.label:UA:Редагувати (вбудованим)
 InternalEdit.label:ES:Editar (interno)
-# Translation missing (New!)
 
 
 
@@ -3915,7 +3879,6 @@ Delete.tooltip:CA:Esborra els fitxers seleccionats
 Delete.tooltip:ES:Eliminar los ficheros marcados
 # The following entries need to be updated to indicate that the system trash is used when it is available
 Delete.tooltip:KO:선�?�?? �??�?� 삭�?
-# Translation missing (KO)
 
 # Deletes without using the system trash
 PermanentDelete.label:EN:Delete permanently
@@ -3943,7 +3906,6 @@ PermanentDelete.label:NB:Slett permanent
 PermanentDelete.label:TR:Kalıcı olarak sil
 PermanentDelete.label:CA:Esborra permanentment
 PermanentDelete.label:ES:Borrar permanentemente
-# Translation missing (KO)
 
 PermanentDelete.tooltip:EN:Delete marked files without using the system trash
 PermanentDelete.tooltip:FR:Supprimer les fichiers marqués sans utiliser la corbeille système
@@ -3970,7 +3932,6 @@ PermanentDelete.tooltip:NB:Slett markerte filer uten å bruke papirkurven
 PermanentDelete.tooltip:TR:Seçilen dosyaları çöpe ta�?ımadan sil
 PermanentDelete.tooltip:CA:Esborra els fitxers seleccionats sense utilitzar la paperera de reciclatge
 PermanentDelete.tooltip:ES:Borrar ficheros marcados sin usar la papelera de reciclaje
-# Translation missing (KO)
 
 Refresh.label:EN:Refresh
 Refresh.label:FR:Actualiser
@@ -4108,7 +4069,6 @@ CopyFileNames.label:TR:İsim(ler)i kopyala
 CopyFileNames.label:CA:Copia el(s) nom(s)
 
 CopyFileBaseNames.label:EN:Copy basename(s)
-# Translation missing (New!)
 
 CopyFilePaths.label:EN:Copy path(s)
 CopyFilePaths.label:FR:Copier chemin(s)
@@ -4459,7 +4419,6 @@ GoToParentInOtherPanel.label:NB:Opp en mappe, andre panel
 GoToParentInOtherPanel.label:TR:Di�?er panelde üst dizine git
 GoToParentInOtherPanel.label:CA:Ves al directori pare en un altre tauler
 GoToParentInOtherPanel.label:ES:Ir al directorio padre en el otro panel
-# Translation missing (KO)
 
 GoToParentInBothPanels.label:EN:Go to parent in both panels
 GoToParentInBothPanels.label:FR:Remonter dans les deux panneaux
@@ -4486,7 +4445,6 @@ GoToParentInBothPanels.label:NB:Opp en mappe, begge paneler
 GoToParentInBothPanels.label:TR:Her iki panelde üst dizine git
 GoToParentInBothPanels.label:CA:Ves al directori pare a ambdós taulers
 GoToParentInBothPanels.label:ES:Ir al directorio padre en ambos paneles
-# Translation missing (KO)
 
 GoToRoot.label:EN:Go to root
 GoToRoot.label:FR:Aller à la racine
@@ -4675,7 +4633,6 @@ SortByOwner.label:BE:Сартавац�? па �?ладал�?ніку
 SortByOwner.label:NB:Sorter etter eier
 SortByOwner.label:TR:Sahibe göre sırala
 SortByOwner.label:CA:Ordena per propietari
-# Translation missing (KO)
 
 SortByGroup.label:EN:Sort by Group
 SortByGroup.label:FR:Trier par Groupe
@@ -4702,7 +4659,6 @@ SortByGroup.label:BE:Сартавац�? па групе
 SortByGroup.label:NB:Sorter etter gruppe
 SortByGroup.label:TR:Gruba göre sırala
 SortByGroup.label:CA:Ordena per grup
-# Translation missing (KO)
 
 MarkGroup.label:EN:Mark files
 MarkGroup.label:FR:Marquer fichiers
@@ -4943,7 +4899,6 @@ MarkNextBlock.label:TR:A�?a�?ı do�?ru bir blok i�?aretle
 MarkNextBlock.label:CA:Selecciona un bloc
 MarkNextBlock.label:UA:Виділити блок р�?дків вниз
 MarkNextBlock.label:ES:Seleccionar el siguiente bloque
-# Translation missing (New!)
 
 
 
@@ -4982,7 +4937,6 @@ MarkPreviousBlock.label:TR:Yukarı do�?ru bir blok i�?aretle
 MarkPreviousBlock.label:CA:Selecciona un bloc
 MarkPreviousBlock.label:UA:Виділити блок р�?дків вверх
 MarkPreviousBlock.label:ES:Seleccionar el bloque anterior
-# Translation missing (New!)
 
 
 
@@ -5021,7 +4975,6 @@ MarkNextRow.label:TR:A�?a�?ı do�?ru bir satır i�?aretle
 MarkNextRow.label:CA:Selecciona una fila cap avall
 MarkNextRow.label:UA:Виділити р�?док вниз
 MarkNextRow.label:ES:Seleccionar una fila hacia abajo
-# Translation missing (New!)
 
 
 
@@ -5060,7 +5013,6 @@ MarkPreviousRow.label:TR:Yukarı do�?ru bir satır i�?aretle
 MarkPreviousRow.label:CA:Selecciona una fila cap amunt
 MarkPreviousRow.label:UA:Виділити р�?док вверх
 MarkPreviousRow.label:ES:Seleccionar una fila hacia arriba
-# Translation missing (New!)
 
 
 
@@ -5210,7 +5162,6 @@ MarkExtension.label:BE:Ска�?авац�? вылуч�?н�?не
 MarkExtension.label:NB:Marker filendelse
 MarkExtension.label:TR:Uzantıyı i�?aretle
 MarkExtension.label:CA:Selecciona les extensions
-# Translation missing (KO)
 
 InvertSelection.label:EN:Invert selection
 InvertSelection.label:FR:Inverser sélection
@@ -5515,7 +5466,6 @@ OpenInNewTab.label:UA:Відкрити у новій вкладці
 OpenInNewTab.label:ES:Abrir en pestaña nueva
 OpenInNewTab.label:DE:In neuem Panel öffnen
 OpenInNewTab.label:TR:Yeni sekmede aç
-# Translation missing (New!)
 
 OpenInOtherPanel.label:EN:Open in other panel
 OpenInOtherPanel.label:FR:Ouvrir dans l'autre panneau
@@ -5542,7 +5492,6 @@ OpenInOtherPanel.label:BE:�?дчыніц�? у іншай пан�?лі
 OpenInOtherPanel.label:NB:Åpne i det andre panelet
 OpenInOtherPanel.label:TR:Di�?er panelde aç
 OpenInOtherPanel.label:CA:Obre en a l'altre tauler
-# Translation missing (KO)
 
 OpenInBothPanels.label:EN:Open in both panels
 OpenInBothPanels.label:FR:Ouvrir dans les deux panneaux
@@ -5569,7 +5518,6 @@ OpenInBothPanels.label:BE:�?дчыніц�? у абедз�?в�?х пан�?л�?х
 OpenInBothPanels.label:NB:Åpne i begge panelene
 OpenInBothPanels.label:TR:Her iki panelde aç
 OpenInBothPanels.label:CA:Obre a ambdós taulers
-# Translation missing (KO)
 
 # This action is used to show a selected file in the system's default file manager, %1 is the name of the system's 
 # file manager (Finder, Explorer...)
@@ -5978,7 +5926,6 @@ ToggleColumn.show:TR:%1 sütununu göster
 ToggleColumn.show:CA:Mostra la columna %1
 ToggleColumn.show:UA:�?оказати �?товпец�? %1
 ToggleColumn.show:ES:Mostrar la columna %1
-# Translation missing (New!)
 
 
 
@@ -6018,7 +5965,6 @@ ToggleColumn.hide:TR:%1 sütununu gizle
 ToggleColumn.hide:CA:Amaga la columna %1
 ToggleColumn.hide:UA:Сховати �?товпец�? %1
 ToggleColumn.hide:ES:Ocultar la columna %1
-# Translation missing (New!)
 
 
 
@@ -6167,7 +6113,6 @@ CustomizeCommandBar.label:TR:Komut çubu�?unu özelle�?tir
 CustomizeCommandBar.label:CA:Personalitza la barra de comandes
 CustomizeCommandBar.label:UA:�?алаштуванн�? панелі команд
 CustomizeCommandBar.label:ES:Personalizar la barra de comandos
-# Translation missing (New!)
 
 
 
@@ -6290,7 +6235,6 @@ ToggleTree.label:NB:Trevisning
 ToggleTree.label:TR:Dizin a�?acını göster
 ToggleTree.label:CA:Mostra l'arbre
 ToggleTree.label:ES:Mostrar vista en árbol
-# Translation missing (KO)
 
 PopupLeftDriveButton.label:EN:Change left folder
 PopupLeftDriveButton.label:FR:Changer le dossier de gauche
@@ -6466,7 +6410,6 @@ BringAllToFront.label:BE:�?аказац�? у�?е вакенцы
 BringAllToFront.label:NB:Legg alle øverst
 BringAllToFront.label:TR:Tüm pencereleri öne getir
 BringAllToFront.label:CA:Mostra-ho tot
-# Translation missing (KO)
 
 SwitchActiveTable.label:EN:Switch between left and right panels
 SwitchActiveTable.label:FR:Basculer entre les dossiers de droite et de gauche
@@ -6518,7 +6461,6 @@ SelectNextBlock.label:TR:Bir blok a�?a�?ı atla
 SelectNextBlock.label:CA:Salta un bloc avall
 SelectNextBlock.label:UA:�?пу�?тити�?�? на блок р�?дків вниз
 SelectNextBlock.label:ES:Saltar un bloque hacia abajo
-# Translation missing (New!)
 
 
 
@@ -6557,7 +6499,6 @@ SelectPreviousBlock.label:TR:Bir blok yukarı atla
 SelectPreviousBlock.label:CA:Salta un bloc amunt
 SelectPreviousBlock.label:UA:�?ідн�?ти�?�? на блок р�?дків вверх
 SelectPreviousBlock.label:ES:Saltar un bloque hacia arriba
-# Translation missing (New!)
 
 
 
@@ -6596,7 +6537,6 @@ SelectNextPage.label:TR:Bir sayfa a�?a�?ı atla
 SelectNextPage.label:CA:Salta una pàgina avall
 SelectNextPage.label:UA:�?ерейти в кінец�? �?торінки
 SelectNextPage.label:ES:Saltar una página hacia abajo
-# Translation missing (New!)
 
 
 
@@ -6635,7 +6575,6 @@ SelectPreviousPage.label:TR:Bir sayfa yukarı atla
 SelectPreviousPage.label:CA:Salta una pàgina amunt
 SelectPreviousPage.label:UA:�?ерейти на початок �?торінки
 SelectPreviousPage.label:ES:Saltar una página hacia arriba
-# Translation missing (New!)
 
 
 
@@ -6674,7 +6613,6 @@ SelectNextRow.label:TR:Bir satır a�?a�?ı atla
 SelectNextRow.label:CA:Salta una fila avall
 SelectNextRow.label:UA:�?пу�?тити�?�? на один р�?док вниз
 SelectNextRow.label:ES:Saltar una fila hacia abajo
-# Translation missing (New!)
 
 
 
@@ -6713,7 +6651,6 @@ SelectPreviousRow.label:TR:Bir satır yukarı atla
 SelectPreviousRow.label:CA:Salta una fila amunt
 SelectPreviousRow.label:UA:�?ідн�?ти�?�? на один р�?док вверх
 SelectPreviousRow.label:ES:Saltar una fila hacia arriba
-# Translation missing (New!)
 
 
 
@@ -7052,7 +6989,6 @@ OpenTrash.label:BE:�?дчыніц�? С�?метніцу
 OpenTrash.label:NB:Åpne papirkurv
 OpenTrash.label:TR:Çöp kutusunu aç
 OpenTrash.label:CA:Obre la paperera
-# Translation missing (KO)
 
 EmptyTrash.label:EN:Empty Trash
 EmptyTrash.label:FR:Vider la Corbeille
@@ -7079,7 +7015,6 @@ EmptyTrash.label:BE:�?чы�?�?ціц�? С�?метніцу
 EmptyTrash.label:NB:Tøm papirkurv
 EmptyTrash.label:TR:Çöp kutusunu bo�?alt
 EmptyTrash.label:CA:Buida la paperera
-# Translation missing (KO)
 
 CalculateChecksum.label:EN:Calculate checksum
 CalculateChecksum.label:FR:Calculer la checksum
@@ -7106,7 +7041,6 @@ CalculateChecksum.label:BE:Раз�?лік кантрол�?най �?умы
 CalculateChecksum.label:NB:Regn ut kontrollsum
 CalculateChecksum.label:TR:Sa�?lama toplamını hesapla
 CalculateChecksum.label:CA:Calcula el checksum
-# Translation missing (KO)
 
 MaximizeWindow.label:EN:Maximize
 MaximizeWindow.label:en_GB:Maximise
@@ -7134,7 +7068,6 @@ MaximizeWindow.label:NB:Maksimer
 MaximizeWindow.label:TR:Büyüt
 MaximizeWindow.label:CA:Maximitza
 MaximizeWindow.label:ES:Maximizar
-# Translation missing (KO)
 
 # This entry overrides the standard 'Maximize' label under Mac OS X.
 # Mac OS X uses a special terminology: 'Zoom' instead of 'Maximize'.
@@ -7216,7 +7149,6 @@ GoToDocumentation.label:NB:Online dokumentasjon
 GoToDocumentation.label:TR:Çevrimiçi belgelendirme
 GoToDocumentation.label:CA:Documentació en línia
 GoToDocumentation.label:ES:Documentación en línea
-# Translation missing (KO)
 
 ShowParentFoldersQL.label:EN:Parent folders
 ShowParentFoldersQL.label:FR:Dossiers parents
@@ -7243,7 +7175,6 @@ ShowParentFoldersQL.label:NB:Overordnede mapper
 ShowParentFoldersQL.label:TR:�?st dizinler
 ShowParentFoldersQL.label:CA:Directoris pare
 ShowParentFoldersQL.label:ES:Directorios padre
-# Translation missing (KO)
 
 ShowRecentLocationsQL.label:EN:Recent locations
 ShowRecentLocationsQL.label:FR:Dossiers récents
@@ -7270,7 +7201,6 @@ ShowRecentLocationsQL.label:NB:Nylig brukte plasser
 ShowRecentLocationsQL.label:TR:Son kullanılan konumlar
 ShowRecentLocationsQL.label:CA:Localitzacions recents
 ShowRecentLocationsQL.label:ES:Ubicaciones recientes
-# Translation missing (KO)
 
 ShowRecentExecutedFilesQL.label:EN:Recently executed files
 ShowRecentExecutedFilesQL.label:FR:Fichiers récemment exécutés
@@ -7297,17 +7227,14 @@ ShowRecentExecutedFilesQL.label:NB:Nylig åpnede filer
 ShowRecentExecutedFilesQL.label:TR:Son çalı�?tırılan dosyalar
 ShowRecentExecutedFilesQL.label:CA:Fitxers executats recentment
 ShowRecentExecutedFilesQL.label:ES:Ficheros ejecutados recientemente
-# Translation missing (KO)
 
 ShowRootFoldersQL.label:EN:Root folders
 ShowRootFoldersQL.label:UA:�?ореневі папки
 ShowRootFoldersQL.label:ES:Directorios raíz
 ShowRootFoldersQL.label:TR:Kök dizinler
-# Translation missing (New!)
 
 ShowTabsQL.label:EN:Open tabs
 ShowTabsQL.label:TR:Sekmeleri aç
-# Translation missing (New!)
 
 SplitFile.label:EN:$[split]
 
@@ -7333,7 +7260,6 @@ SplitFile.tooltip:TR:Dosyayı birden fazla parçaya böl
 SplitFile.tooltip:CA:Divideix un fitxer en múltiples parts
 SplitFile.tooltip:UA:Розділити файл на декіл�?ка ча�?тин
 SplitFile.tooltip:ES:Dividir un fichero en múltiples partes
-# Translation missing (New!)
 
 
 
@@ -7372,7 +7298,6 @@ CombineFiles.tooltip:TR:Bölünmü�? dosya parçalarını birle�?tirip orjinal d
 CombineFiles.tooltip:CA:Torna a crear un fitxer dividit en múltiples parts
 CombineFiles.tooltip:UA:�?б'єднати розділений на ча�?тини файл в початковий файл
 CombineFiles.tooltip:ES:Reconstruir un fichero a partir de sus partes
-# Translation missing (New!)
 
 
 
@@ -7410,7 +7335,6 @@ ShowDebugConsole.label:TR:Hata ayıklama konsolu
 ShowDebugConsole.label:CA:Consola de depuració
 ShowDebugConsole.label:UA:�?он�?ол�? Debug
 ShowDebugConsole.label:ES:Consola de depuración
-# Translation missing (New!)
 
 
 
@@ -7449,7 +7373,6 @@ FocusPrevious.label:TR:Önceki bile�?ene odaklan
 FocusPrevious.label:CA:Marca el component anterior
 FocusPrevious.label:UA:�?ерейти до попередн�?ого компоненту
 FocusPrevious.label:ES:Posiciona el foco en el componente anterior
-# Translation missing (New!)
 
 
 
@@ -7489,7 +7412,6 @@ FocusNext.label:TR:Sonraki bile�?ene odaklan
 FocusNext.label:CA:Marca el component següent
 FocusNext.label:UA:�?ерейти до на�?тупного компоненту
 FocusNext.label:ES:Posiciona el foco en el siguiente componente
-# Translation missing (New!)
 
 
 
@@ -7741,7 +7663,6 @@ drive_popup.network_shares:TR:A�? payla�?ımları
 drive_popup.network_shares:CA:Xarxa compartida
 drive_popup.network_shares:UA:Спіл�?ний мережевий ре�?ур�?
 drive_popup.network_shares:ES:Ubicaciones de red compartidas
-# Translation missing (New!)
 
 # Title of the Quick lists menu
 quick_lists_menu:EN:Quick lists
@@ -7769,7 +7690,6 @@ quick_lists_menu:NB:Hurtiglister
 quick_lists_menu:TR:Hızlı Listeler
 quick_lists_menu:CA:Llistes ràpides
 quick_lists_menu:ES:Listas rápidas
-# Translation missing (KO)
 
 window_menu:EN:Window
 window_menu:FR:Fenêtre
@@ -7969,7 +7889,6 @@ shortcuts_panel.title:TR:Kısayollar
 shortcuts_panel.title:CA:Dreceres
 shortcuts_panel.title:UA:�?омбінації клавіш
 shortcuts_panel.title:ES:Atajos de teclado
-# Translation missing (New!)
 
 
 
@@ -8008,7 +7927,6 @@ shortcuts_panel.restore_defaults:TR:Varsayılanları yükle
 shortcuts_panel.restore_defaults:CA:Restaura per defecte
 shortcuts_panel.restore_defaults:UA:Відновити �?тандартні
 shortcuts_panel.restore_defaults:ES:Restaurar valores por defecto
-# Translation missing (New!)
 
 
 
@@ -8047,7 +7965,6 @@ shortcuts_panel.show:TR:Göster
 shortcuts_panel.show:CA:Mostra
 shortcuts_panel.show:UA:�?оказати
 shortcuts_panel.show:ES:Mostrar
-# Translation missing (New!)
 
 
 
@@ -8086,7 +8003,6 @@ shortcuts_panel.default_message:TR:Düzenlemek istedi�?iniz kısayola çift tık
 shortcuts_panel.default_message:CA:Prem Enter o fes doble clic sobre la drecera per editar
 shortcuts_panel.default_message:UA:�?ати�?ненн�? Enter або подвійний клік нада�?т�? змогу редагувати комбінації клавіш
 shortcuts_panel.default_message:ES:Pulsar Intro o hacer doble click sobre el atajo de teclado a editar
-# Translation missing (New!)
 
 
 
@@ -8125,7 +8041,6 @@ shortcuts_table.action_description:TR:Eylem açıklaması
 shortcuts_table.action_description:CA:Descripció de l'acció
 shortcuts_table.action_description:UA:�?пи�? дії
 shortcuts_table.action_description:ES:Descripción de la acción
-# Translation missing (New!)
 
 
 
@@ -8164,7 +8079,6 @@ shortcuts_table.shortcut:TR:Kısayol
 shortcuts_table.shortcut:CA:Drecera
 shortcuts_table.shortcut:UA:�?омбінації клавіш
 shortcuts_table.shortcut:ES:Atajo de teclado
-# Translation missing (New!)
 
 
 
@@ -8203,7 +8117,6 @@ shortcuts_table.alternate_shortcut:TR:Alternatif Kısayol
 shortcuts_table.alternate_shortcut:CA:Drecera alternativa
 shortcuts_table.alternate_shortcut:UA:�?л�?тернативні комбінації
 shortcuts_table.alternate_shortcut:ES:Atajo de teclado alternativo
-# Translation missing (New!)
 
 
 
@@ -8242,7 +8155,6 @@ shortcuts_table.type_in_a_shortcut:TR:Bir kısayol yazın
 shortcuts_table.type_in_a_shortcut:CA:Escriu una drecera
 shortcuts_table.type_in_a_shortcut:UA:�?ати�?ніт�? комбінаці�? клавіш
 shortcuts_table.type_in_a_shortcut:ES:Escribir un atajo de teclado
-# Translation missing (New!)
 
 
 
@@ -8285,7 +8197,6 @@ command_bar_dialog.help:TR:Komut çubu�?unu özelle�?tirmek için dü�?meleri s�
 command_bar_dialog.help:CA:Arrossega els botons per personalitzar la barra de comandes
 command_bar_dialog.help:UA:�?ерет�?гуйте кнопки дл�? налаштуванн�? панелі команд
 command_bar_dialog.help:ES:Arrastrar botones para personalizar la barra de comandos
-# Translation missing (New!)
 
 
 
@@ -8392,92 +8303,69 @@ table.download_or_browse:CA:Vol explorar o descarregar aquest fitxer?
 ########
 
 AddTab.label:EN:Add tab
-# Translation missing (New!)
 
 AddTab.tooltip:EN:Add new tab in the active panel
-# Translation missing (New!)
 
 ToggleLockTab.lock:EN:Lock
-# Translation missing (New!)
 
 ToggleLockTab.unlock:EN:Unlock
-# Translation missing (New!)
 
 ToggleLockTab.label:EN:Lock/Unlock
-# Translation missing (New!)
 
 ToggleLockTab.tooltip:EN:Change tab's locking state
-# Translation missing (New!)
 
 DuplicateTab.label:EN:Duplicate
-# Translation missing (New!)
 
 DuplicateTab.tooltip:EN:Duplicate active tab in the same panel
-# Translation missing (New!)
 
 CloseDuplicateTabs.label:EN:Close duplicates
 CloseDuplicateTabs.label:TR:Benzer sekmeleri kapat
-# Translation missing (New!)
 
 CloseDuplicateTabs.tooltip:EN:Close duplicate tabs
 CloseDuplicateTabs.tooltip:UA:Закрити вкладки, що повтор�?�?т�?�?�?
 CloseDuplicateTabs.tooltip:ES:Cerrar pestañas duplicadas
-# Translation missing (New!)
 
 CloseOtherTabs.label:EN:Close others
 CloseOtherTabs.label:TR:Di�?er sekmeleri kapat
-# Translation missing (New!)
 
 CloseOtherTabs.tooltip:EN:Close other tabs
 CloseOtherTabs.tooltip:UA:Закрити інші вкладки
 CloseOtherTabs.tooltip:ES:Cerrar las demás pestañas
-# Translation missing (New!)
 
 CloseTab.label:EN:$[close]
 
 CloseTab.tooltip:EN:Close tab
 CloseTab.tooltip:UA:Закрити вкладку
 CloseTab.tooltip:ES:Cerrar pestaña
-# Translation missing (New!)
 
 MoveTabToOtherPanel.label:EN:Move to other panel
 MoveTabToOtherPanel.label:TR:Sekmeyi di�?er panele ta�?ı
-# Translation missing (New!)
 
 MoveTabToOtherPanel.tooltip:EN:Move tab to other panel
 MoveTabToOtherPanel.tooltip:UA:�?еремі�?тити вкладку на іншу панел�?
 MoveTabToOtherPanel.tooltip:ES:Mover pestaña al otro panel
-# Translation missing (New!)
 
 CloneTabToOtherPanel.label:EN:Clone to other panel
-# Translation missing (New!)
 
 CloneTabToOtherPanel.tooltip:EN:Add similar tab in the other panel
-# Translation missing (New!)
 
 NextTab.label:EN:Next tab
 NextTab.label:UA:�?а�?тупна вкладка
 NextTab.label:ES:Siguiente pestaña
 NextTab.label:TR:Sonraki sekme
-# Translation missing (New!)
 
 NextTab.tooltip:EN:Switch to the tab on the right
-# Translation missing (New!)
 
 PreviousTab.label:EN:Previous tab
 PreviousTab.label:UA:�?опередн�? вкладка
 PreviousTab.label:ES:Pestaña anterior
 PreviousTab.label:TR:Önceki sekme
-# Translation missing (New!)
 
 PreviousTab.tooltip:EN:Switch to the tab on the left
-# Translation missing (New!)
 
 SetTabTitle.label:EN:Set title
-# Translation missing (New!)
 
 SetTabTitle.tooltip:EN:Set fixed title for the tab
-# Translation missing (New!)
 
 ##################
 # Version dialog #
@@ -8700,7 +8588,6 @@ version_dialog.install_and_restart:BE:У�?тал�?вац�? і перазапу�?
 version_dialog.install_and_restart:NB:Installer og restart
 version_dialog.install_and_restart:TR:Yükle ve yeniden ba�?lat
 version_dialog.install_and_restart:CA:Instal·la i reinicia
-# Translation missing (KO)
 
 # Displayed in the progress dialog before actually installing the a new version
 version_dialog.preparing_for_update:EN:Preparing for update...
@@ -8728,7 +8615,6 @@ version_dialog.preparing_for_update:BE:Ідзе падрыхто�?ка да аб
 version_dialog.preparing_for_update:NB:Forbereder oppdatering...
 version_dialog.preparing_for_update:TR:Güncellemeye hazırlanıyor...
 version_dialog.preparing_for_update:CA:Preparant l'actualització...
-# Translation missing (KO)
 
 
 ###############
@@ -8792,7 +8678,6 @@ quit_dialog.desc:BE:Зачыніц�? %1 вакенца�? і вый�?�?ці з mu
 quit_dialog.desc:NB:Du har %1 vindu(er) åpne. Er du sikker på at du vil avslutte? 
 quit_dialog.desc:TR:%1 pencere açık. Çıkmak istedi�?inizden emin misiniz ?
 quit_dialog.desc:CA:Té %1 finestra(es) oberta(es). N'està segur?
-# Translation missing (KO) : this entry needs to be updated to take into account the number of windows
 
 quit_dialog.show_next_time:EN:Show next time
 quit_dialog.show_next_time:FR:Afficher la prochaine fois
@@ -8881,7 +8766,6 @@ destination_dialog.verify_integrity:BE:Зрабіц�? праверку ц�?ла�
 destination_dialog.verify_integrity:NB:Bekreft dataintegritet
 destination_dialog.verify_integrity:TR:Veri bütünlü�?ünü do�?rula
 destination_dialog.verify_integrity:CA:Comprova la integritat de les dades
-# Translation missing (KO)
 
 # Used in copy/move/unpack dialogs
 destination_dialog.skip_errors:EN:Skip errors
@@ -8906,7 +8790,6 @@ destination_dialog.skip_errors:TR:Hataları atla
 destination_dialog.skip_errors:CA:Salta els errors
 destination_dialog.skip_errors:UA:�?ропу�?тити помилки
 destination_dialog.skip_errors:ES:Ignorar los errores
-# Translation missing (New!)
 
 
 
@@ -8990,7 +8873,6 @@ rename_dialog.new_name:BE:�?овае ім�?
 rename_dialog.new_name:NB:Nytt navn
 rename_dialog.new_name:TR:Yeni ad
 rename_dialog.new_name:CA:Nou nom
-# Translation missing (KO)
 
 
 ########
@@ -9391,7 +9273,6 @@ optimizing_archive:BE:�?птымізацы�? архіву %1
 optimizing_archive:NB:Optimaliserer arkiv %1
 optimizing_archive:TR:Ar�?iv düzenleniyor %1
 optimizing_archive:CA:Optimitzant el fitxer %1
-# Translation missing (KO)
 
 # This gets displayed in the file progress diaog when files are copied into
 # a writable archive (Zip only at the moment).
@@ -9421,7 +9302,6 @@ error_while_optimizing_archive:BE:�?амылка пры аптымізацыі �
 error_while_optimizing_archive:NB:Feil ved optimalisering av arkiv %1
 error_while_optimizing_archive:TR:Ar�?iv düzenlenmesi sırasında hata %1
 error_while_optimizing_archive:CA:Error en comprimir el fitxer %1
-# Translation missing (KO)
 
 
 ########
@@ -9682,7 +9562,6 @@ mkfile_dialog.allocate_space:BE:Вылучыц�? пра�?тору
 mkfile_dialog.allocate_space:NB:Tildel plass
 mkfile_dialog.allocate_space:TR:Disk alanını ayır
 mkfile_dialog.allocate_space:CA:Mida
-# Translation missing (KO, SL)
 
 
 ##########
@@ -9766,7 +9645,6 @@ delete_dialog.move_to_trash.confirmation_details:BE:Файлы будуц�? пе
 delete_dialog.move_to_trash.confirmation_details:NB:Filene vil bli flyttet til papirkurven.
 delete_dialog.move_to_trash.confirmation_details:TR:Dosyalar çöp kutusuna ta�?ınacak.
 delete_dialog.move_to_trash.confirmation_details:CA:Els fitxers s'enviaran a la paperera.
-# Translation missing (KO)
 
 delete_dialog.move_to_trash.option:EN:Move to trash
 delete_dialog.move_to_trash.option:FR:Déplacer dans la corbeille
@@ -9793,7 +9671,6 @@ delete_dialog.move_to_trash.option:BE:�?еране�?�?ці �? С�?метніцу
 delete_dialog.move_to_trash.option:NB:Flytt til papirkurven
 delete_dialog.move_to_trash.option:TR:Çöp kutusuna ta�?ı
 delete_dialog.move_to_trash.option:CA:Enviar a la paperera
-# Translation missing (KO)
 
 delete_dialog.move_to_trash.failed:EN:One or more files could not be moved to the trash.
 delete_dialog.move_to_trash.failed:FR:Un ou plusieurs fichiers n'ont pu être déplacés dans la corbeille.
@@ -9817,7 +9694,6 @@ delete_dialog.move_to_trash.failed:TR:Bir ya da daha fazla dosya çöp kutusuna 
 delete_dialog.move_to_trash.failed:CA:Algun/s fitxer/s no s'han pogut enviar a la paperera.
 delete_dialog.move_to_trash.failed:UA:�?дин або декіл�?ка файлів не можут�? бути перене�?ені у �?мітник.
 delete_dialog.move_to_trash.failed:ES:Uno o más ficheros no pudieron moverse a la papelera de reciclaje
-# Translation missing (New!)
 
 
 
@@ -10161,7 +10037,6 @@ email_dialog.sending:BE:Да�?ылан�?не файла�?
 email_dialog.sending:NB:Sender filer
 email_dialog.sending:TR:Dosyalar gönderiliyor
 email_dialog.sending:CA:Enviant fitxers
-# Translation missing (KO)
 
 email.sending_file:EN:Sending %1
 email.sending_file:FR:Envoi de %1
@@ -10352,7 +10227,6 @@ split_file_dialog.error_title:TR:Dosya bölme hatası
 split_file_dialog.error_title:CA:Error en partir el fitxer
 split_file_dialog.error_title:UA:�?омилка під ча�? розподілу файлу
 split_file_dialog.error_title:ES:Error dividiendo fichero
-# Translation missing (New!)
 
 
 
@@ -10391,7 +10265,6 @@ split_file_dialog.file_to_split:TR:Bölünecek dosya
 split_file_dialog.file_to_split:CA:Fitxer a trossejar
 split_file_dialog.file_to_split:UA:Файл дл�? розподілу
 split_file_dialog.file_to_split:ES:Fichero a dividir 
-# Translation missing (New!)
 
 
 
@@ -10430,7 +10303,6 @@ split_file_dialog.target_directory:TR:Hedef dizin
 split_file_dialog.target_directory:CA:Directori de destí
 split_file_dialog.target_directory:UA:�?аталог призначенн�?
 split_file_dialog.target_directory:ES:Directorio destino
-# Translation missing (New!)
 
 
 
@@ -10469,7 +10341,6 @@ split_file_dialog.part_size:TR:Parçaların boyutu
 split_file_dialog.part_size:CA:Mida de cada tros
 split_file_dialog.part_size:UA:Розмір кожної ча�?тини
 split_file_dialog.part_size:ES:Tamaño de cada parte
-# Translation missing (New!)
 
 
 
@@ -10508,7 +10379,6 @@ split_file_dialog.parts:TR:Parça sayısı
 split_file_dialog.parts:CA:Nombre de parts
 split_file_dialog.parts:UA:�?іл�?кі�?т�? ча�?тин
 split_file_dialog.parts:ES:Número de partes
-# Translation missing (New!)
 
 
 
@@ -10547,7 +10417,6 @@ split_file_dialog.generate_CRC:TR:CRC dosyası olu�?tur
 split_file_dialog.generate_CRC:CA:Generar fitxer CRC
 split_file_dialog.generate_CRC:UA:Сформувати CRC файл
 split_file_dialog.generate_CRC:ES:Generar fichero CRC
-# Translation missing (New!)
 
 
 
@@ -10586,7 +10455,6 @@ split_file_dialog.max_parts:TR:İzin verilen azami parça sayısı %1
 split_file_dialog.max_parts:CA:El màxim nombre de parts permés és %1
 split_file_dialog.max_parts:UA:�?ак�?имал�?но допу�?тима кіл�?кі�?т�? ча�?тин %1
 split_file_dialog.max_parts:ES:El máximo número de partes permitido es %1
-# Translation missing (New!)
 
 
 
@@ -10625,7 +10493,6 @@ split_file_dialog.auto:TR:Otomatik
 split_file_dialog.auto:CA:Automàtic
 split_file_dialog.auto:UA:�?втоматично
 split_file_dialog.auto:ES:Automático
-# Translation missing (New!)
 
 
 
@@ -10664,7 +10531,6 @@ split_file_dialog.insert_new_media:TR:Yeni ortam yerle�?tirin
 split_file_dialog.insert_new_media:CA:Inserteu un nou suport
 split_file_dialog.insert_new_media:UA:В�?тавте новий но�?ій
 split_file_dialog.insert_new_media:ES:Insertar un nuevo disco
-# Translation missing (New!)
 
 
 
@@ -10708,7 +10574,6 @@ combine_files_dialog.error_title:TR:Dosya birle�?tirme hatası
 combine_files_dialog.error_title:CA:Error combinant fitxer
 combine_files_dialog.error_title:UA:�?омилка об'єднанн�? файлу
 combine_files_dialog.error_title:ES:Error uniendo ficheros
-# Translation missing (New!)
 
 
 
@@ -10747,7 +10612,6 @@ combine_files_job.no_crc_file:TR:Birle�?tirme ba�?arılı. CRC dosyası yok.
 combine_files_job.no_crc_file:CA:Combinació finalitzada. No s'ha creat fitxer CRC.
 combine_files_job.no_crc_file:UA:�?б'єднано у�?пішно. �?емає CRC файлу.
 combine_files_job.no_crc_file:ES:Unión finalizada. Sin fichero CRC a verificar.
-# Translation missing (New!)
 
 
 
@@ -10786,7 +10650,6 @@ combine_files_job.crc_read_error:TR:CRC dosyasının okunması sırasında hata.
 combine_files_job.crc_read_error:CA:Error llegint fitxer CRC.
 combine_files_job.crc_read_error:UA:�?омилка читанн�? CRC файлу.
 combine_files_job.crc_read_error:ES:Error leyendo fichero CRC.
-# Translation missing (New!)
 
 
 
@@ -10825,7 +10688,6 @@ combine_files_job.crc_check_failed:TR:CRC e�?le�?miyor: beklenen %2, bulunan %1
 combine_files_job.crc_check_failed:CA:Desajust en CRC
 combine_files_job.crc_check_failed:UA:CRC розбіжні�?т�?: очікуєт�?�?�? %2, отримано %1
 combine_files_job.crc_check_failed:ES:Error de verificación de CRC: esperado %2, encontrado %1
-# Translation missing (New!)
 
 
 
@@ -10864,7 +10726,6 @@ combine_files_job.crc_ok:TR:Birle�?tirme ba�?arılı. CRC sa�?laması tamam.
 combine_files_job.crc_ok:CA:Combinació finalitzada. Suma de verificació de CRC correcta.
 combine_files_job.crc_ok:UA:�?б'єднано у�?пішно. CRC контрол�?на �?ума ok.
 combine_files_job.crc_ok:ES:Unión finalizada. Verificación de CRC correcta.
-# Translation missing (New!)
 
 
 
@@ -11073,7 +10934,6 @@ file_selection_dialog.ends_with:BE:Сканча�?цца на
 file_selection_dialog.ends_with:NB:Slutter med
 file_selection_dialog.ends_with:TR:İle bitiyorsa
 file_selection_dialog.ends_with:CA:Acaba amb
-# Translation missing (KO)
 
 file_selection_dialog.is:EN:Is
 file_selection_dialog.is:FR:Est
@@ -11181,7 +11041,6 @@ file_selection_dialog.matches_regexp:BE:�?дпав�?дае р�?гул�?рнам�
 file_selection_dialog.matches_regexp:NB:Regulært uttrykk
 file_selection_dialog.matches_regexp:TR:Regexp e�?le�?iyorsa
 file_selection_dialog.matches_regexp:CA:Coïncideix amb l'expressió regular
-# Translation missing (KO)
 
 
 ###################
@@ -11460,7 +11319,6 @@ progress_dialog.verifying_file:BE:Ідзе праверка %1
 progress_dialog.verifying_file:NB:Verifiserer %1
 progress_dialog.verifying_file:TR:Do�?rulanıyor %1
 progress_dialog.verifying_file:CA:Verificant %1
-# Translation missing (KO)
 
 progress_dialog.job_finished:EN:Job finished
 progress_dialog.job_finished:FR:Tâche terminée
@@ -11514,7 +11372,6 @@ progress_dialog.job_error:BE:�?амылка апрацо�?кі
 progress_dialog.job_error:NB:Feil ved utførelse
 progress_dialog.job_error:TR:İ�?lem hatası
 progress_dialog.job_error:CA:Error en tasca
-# Translation missing (KO)
 
 
 #####################
@@ -11634,7 +11491,6 @@ calculate_checksum_dialog.checksum_algorithm:BE:�?л�?гарытм падлік�
 calculate_checksum_dialog.checksum_algorithm:NB:Algoritme for kontrollsum
 calculate_checksum_dialog.checksum_algorithm:TR:Do�?rulama algoritması
 calculate_checksum_dialog.checksum_algorithm:CA:Algorisme de suma de verificació
-# Translation missing (KO)
 
 # Used as the label of a radio button for the destination checksum file
 calculate_checksum_dialog.temporary_file:EN:Temporary file
@@ -11662,7 +11518,6 @@ calculate_checksum_dialog.temporary_file:BE:Ча�?овы файл
 calculate_checksum_dialog.temporary_file:NB:Midlertidig fil
 calculate_checksum_dialog.temporary_file:TR:Geçici dosya
 calculate_checksum_dialog.temporary_file:CA:Fitxer temporal
-# Translation missing (KO)
 
 
 ######################
@@ -11949,7 +11804,6 @@ server_connect_dialog.share:BE:�?гул�?ны р�?�?ур�?
 server_connect_dialog.share:NB:Del
 server_connect_dialog.share:TR:Payla�?ım
 server_connect_dialog.share:CA:Compartir
-# Translation missing (KO)
 
 # Used for SMB connection properties
 server_connect_dialog.domain:EN:Domain
@@ -11974,7 +11828,6 @@ server_connect_dialog.domain:TR:Etki alanı
 server_connect_dialog.domain:CA:Domini
 server_connect_dialog.domain:UA:Домен
 server_connect_dialog.domain:ES:Dominio
-# Translation missing (New!)
 
 
 
@@ -12178,7 +12031,6 @@ server_connect_dialog.protocol:BE:�?ратакол
 server_connect_dialog.protocol:NB:Protokoll
 server_connect_dialog.protocol:TR:İleti�?im kuralı
 server_connect_dialog.protocol:CA:Protocol
-# Translation missing (KO)
 
 server_connect_dialog.nfs_version:EN:NFS version
 server_connect_dialog.nfs_version:FR:Version de NFS
@@ -12205,7 +12057,6 @@ server_connect_dialog.nfs_version:BE:В�?р�?і�? NFS
 server_connect_dialog.nfs_version:NB:NFS-versjon
 server_connect_dialog.nfs_version:TR:NFS sürümü
 server_connect_dialog.nfs_version:CA:Versió de NFS
-# Translation missing (KO)
 
 # Used in the SFTP panel for (optional) public key authentication.
 server_connect_dialog.private_key:EN:Private key
@@ -12233,7 +12084,6 @@ server_connect_dialog.private_key:NB:Privat nøkkel
 server_connect_dialog.private_key:TR:Özel anahtar
 server_connect_dialog.private_key:CA:Clau privada
 server_connect_dialog.private_key:ES:Clave privada
-# Translation missing (KO)
 
 # Used in the SFTP panel for (optional) public key authentication. The 
 # passphrase is used to decypher the private key ; the meaning of 'passphrase'
@@ -12263,7 +12113,6 @@ server_connect_dialog.passphrase:NB:Passord
 server_connect_dialog.passphrase:TR:�?ifre cümleleri
 server_connect_dialog.passphrase:CA:Contrasenya
 server_connect_dialog.passphrase:ES:Contraseña
-# Translation missing (KO)
 
 
 ###############
@@ -12349,7 +12198,6 @@ ftp_connect.nb_connection_retries:NB:Antall forsøk på å tilkoble
 ftp_connect.nb_connection_retries:TR:Yeniden ba�?lanma deneme sayısı
 ftp_connect.nb_connection_retries:CA:Nombre de intents de connexió
 ftp_connect.nb_connection_retries:ES:Número de reintentos de conexión
-# Translation missing (KO)
 
 ftp_connect.retry_delay:EN:Delay between retries (in seconds)
 ftp_connect.retry_delay:FR:Délai entre tentatives de connexion (en secondes)
@@ -12376,7 +12224,6 @@ ftp_connect.retry_delay:NB:Mellomrom mellom tilkoblinger (i sekunder)
 ftp_connect.retry_delay:TR:Denemeler arası bekleme süresi (saniye)
 ftp_connect.retry_delay:CA:Retard entre intents (en segons)
 ftp_connect.retry_delay:ES:Tiempo de espera entre reintentos (en segundos)
-# Translation missing (KO)
 
 
 ################
@@ -12735,7 +12582,6 @@ auth_dialog.connect_as:NB:Koble til som
 auth_dialog.connect_as:TR:...ile ba�?lan
 auth_dialog.connect_as:CA:Connecta com
 auth_dialog.connect_as:ES:Conectar como
-# Translation missing (KO)
 
 auth_dialog.authentication_failed:EN:Authentication failed
 auth_dialog.authentication_failed:FR:L'authentification a échoué
@@ -12762,7 +12608,6 @@ auth_dialog.authentication_failed:NB:Godkjenning feilet
 auth_dialog.authentication_failed:TR:Kimlik denetimi ba�?arısız
 auth_dialog.authentication_failed:CA:Error autenticant
 auth_dialog.authentication_failed:ES:Error de autenticación
-# Translation missing (KO)
 
 
 #################
@@ -13174,7 +13019,6 @@ text_viewer.find:BE:�?ошук
 text_viewer.find:NB:Finn
 text_viewer.find:TR:Bul
 text_viewer.find:CA:Busca
-# Translation missing (KO)
 
 # Displayed in the 'Edit' menu of the internal text editor
 text_viewer.find_next:EN:Find next
@@ -13202,7 +13046,6 @@ text_viewer.find_next:BE:Шукац�? далей
 text_viewer.find_next:NB:Finn neste
 text_viewer.find_next:TR:Sonrakini bul
 text_viewer.find_next:CA:Busca el següent
-# Translation missing (KO)
 
 # Displayed in the 'Edit' menu of the internal text editor
 text_viewer.find_previous:EN:Find previous
@@ -13230,7 +13073,6 @@ text_viewer.find_previous:BE:Шукац�? пап�?р�?дні
 text_viewer.find_previous:NB:Finn forrige
 text_viewer.find_previous:TR:Öncekini bul
 text_viewer.find_previous:CA:Busca l'anterior
-# Translation missing (KO)
 
 text_viewer.view:EN:View
 text_viewer.view:NB:Vis
@@ -13238,7 +13080,6 @@ text_viewer.view:TR:Görünüm
 text_viewer.view:CA:Vista
 text_viewer.view:UA:Вигл�?д
 text_viewer.view:ES:Vista
-# Translation missing (New!)
 
 text_viewer.line_wrap:EN:Line wrap
 text_viewer.line_wrap:NB:Tekstbrytning
@@ -13246,7 +13087,6 @@ text_viewer.line_wrap:TR:Sözcük kaydır
 text_viewer.line_wrap:CA:Ajusta el text
 text_viewer.line_wrap:UA:�?ерене�?енн�? �?лів
 text_viewer.line_wrap:ES:Ajuste de línea
-# Translation missing (New!)
 
 text_viewer.line_numbers:EN:Line numbers
 text_viewer.line_numbers:NB:Linjenummere
@@ -13254,7 +13094,6 @@ text_viewer.line_numbers:TR:Satır numaraları
 text_viewer.line_numbers:CA:Numera línies
 text_viewer.line_numbers:UA:�?омери р�?дків
 text_viewer.line_numbers:ES:Números de línea
-# Translation missing (New!)
 
 text_viewer.binary_file_warning:EN:This appears to be a binary file
 text_viewer.binary_file_warning:FR:Ce fichier a l'air d'être un fichier binaire
@@ -13281,7 +13120,6 @@ text_viewer.binary_file_warning:BE:Г�?ты файл хутч�?й за �?�?ё д
 text_viewer.binary_file_warning:NB:Dette ser ut til å være en binærfil
 text_viewer.binary_file_warning:TR:Bu ikili dosya gibi görünüyor, metin de�?il
 text_viewer.binary_file_warning:CA:El fitxer sembla binari
-# Translation missing (KO)
 
 
 ################
@@ -13819,7 +13657,6 @@ theme_editor.title:BE:Р�?дактар т�?мы
 theme_editor.title:NB:Temabehandler
 theme_editor.title:TR:Tema düzenleyici
 theme_editor.title:CA:Editor de temes
-# Translation missing (KO)
 
 theme_editor.folder_tab:EN:Folder pane
 theme_editor.folder_tab:FR:Panneau de dossier
@@ -13846,7 +13683,6 @@ theme_editor.folder_tab:BE:�?ан�?л�? т�?чкі
 theme_editor.folder_tab:NB:Mappepanel
 theme_editor.folder_tab:TR:Dizin bölmesi
 theme_editor.folder_tab:CA:Subfinestra de directori
-# Translation missing (KO)
 
 theme_editor.shell_tab:EN:Shell
 theme_editor.shell_tab:FR:Shell
@@ -13873,7 +13709,6 @@ theme_editor.shell_tab:BE:�?балонка
 theme_editor.shell_tab:NB:Skall
 theme_editor.shell_tab:TR:Kabuk
 theme_editor.shell_tab:CA:intèrpret d'ordres
-# Translation missing (KO)
 
 # Shell history refers to the text field's popup menu of the 'Run command' dialog
 theme_editor.shell_history_tab:EN:Shell history
@@ -13901,7 +13736,6 @@ theme_editor.shell_history_tab:BE:Гі�?торы�? каманд
 theme_editor.shell_history_tab:NB:Skall-historikk
 theme_editor.shell_history_tab:TR:Kabuk geçmi�?i
 theme_editor.shell_history_tab:CA:Historial del intèrpret d'ordres
-# Translation missing (KO)
 
 theme_editor.statusbar_tab:EN:Status bar
 theme_editor.statusbar_tab:FR:Barre de status
@@ -13928,7 +13762,6 @@ theme_editor.statusbar_tab:BE:Радок �?тану
 theme_editor.statusbar_tab:NB:Statuslinje
 theme_editor.statusbar_tab:TR:Durum çubu�?u
 theme_editor.statusbar_tab:CA:Barra d'estat
-# Translation missing (KO)
 
 # 'Free space' refers to the free space indicator displayed in the status bar.
 theme_editor.free_space:EN:Free space
@@ -13956,7 +13789,6 @@ theme_editor.free_space:BE:Вол�?на�? пра�?тора
 theme_editor.free_space:NB:Ledig plass
 theme_editor.free_space:TR:Bo�? alan
 theme_editor.free_space:CA:Espai lliure
-# Translation missing (KO)
 
 theme_editor.free_space.ok:EN:OK
 theme_editor.free_space.ok:FR:OK
@@ -13983,7 +13815,6 @@ theme_editor.free_space.ok:BE:OK
 theme_editor.free_space.ok:NB:OK
 theme_editor.free_space.ok:TR:Uygun
 theme_editor.free_space.ok:CA:D'acord
-# Translation missing (KO)
 
 theme_editor.free_space.warning:EN:Warning
 theme_editor.free_space.warning:FR:Avertissement
@@ -14010,7 +13841,6 @@ theme_editor.free_space.warning:BE:Увага
 theme_editor.free_space.warning:NB:Advarsel
 theme_editor.free_space.warning:TR:Uyarı
 theme_editor.free_space.warning:CA:Avís
-# Translation missing (KO)
 
 theme_editor.free_space.critical:EN:Critical
 theme_editor.free_space.critical:FR:Critique
@@ -14037,7 +13867,6 @@ theme_editor.free_space.critical:BE:Вел�?мі мала
 theme_editor.free_space.critical:NB:Kritisk
 theme_editor.free_space.critical:TR:Kritik
 theme_editor.free_space.critical:CA:Crític
-# Translation missing (KO)
 
 theme_editor.locationbar_tab:EN:Location bar
 theme_editor.locationbar_tab:FR:Barre d'emplacement
@@ -14064,7 +13893,6 @@ theme_editor.locationbar_tab:BE:Указал�?нік ме�?цазнаходжа�
 theme_editor.locationbar_tab:NB:Adresselinje
 theme_editor.locationbar_tab:TR:Konum çubu�?u
 theme_editor.locationbar_tab:CA:Barra de localització
-# Translation missing (KO)
 
 theme_editor.editor_tab:EN:File editor
 theme_editor.editor_tab:FR:Editeur de fichiers
@@ -14091,7 +13919,6 @@ theme_editor.editor_tab:BE:Р�?дактар файла�?
 theme_editor.editor_tab:NB:Filbehandler
 theme_editor.editor_tab:TR:Dosya düzenleyici
 theme_editor.editor_tab:CA:Editor de fitxers
-# Translation missing (KO)
 
 theme_editor.font:EN:Font
 theme_editor.font:FR:Fonte
@@ -14146,7 +13973,6 @@ theme_editor.active_panel:BE:�?кты�?на�?
 theme_editor.active_panel:NB:Aktivt
 theme_editor.active_panel:TR:Etkin
 theme_editor.active_panel:CA:Actiu
-# Translation missing (KO)
 
 # 'Inactive' refers to a file pane that doesn't have keyboard focus.
 theme_editor.inactive_panel:EN:Inactive
@@ -14174,7 +14000,6 @@ theme_editor.inactive_panel:BE:�?еакты�?на�?
 theme_editor.inactive_panel:NB:Inaktivt
 theme_editor.inactive_panel:TR:Etkin olmayan
 theme_editor.inactive_panel:CA:Inactiu
-# Translation missing (KO)
 
 theme_editor.general:EN:General
 theme_editor.general:FR:General
@@ -14201,7 +14026,6 @@ theme_editor.general:BE:�?гул�?ны
 theme_editor.general:NB:Generelt
 theme_editor.general:TR:Genel
 theme_editor.general:CA:General
-# Translation missing (KO)
 
 theme_editor.theme_warning:EN:This will overwrite the custom theme. Do you wish to proceed?
 theme_editor.theme_warning:FR:Cette opération va modifier le thème personnalisé. Voulez-vous continuer?
@@ -14257,7 +14081,6 @@ theme_editor.could_not_save_theme:BE:�?е атрымліваецца захав�
 theme_editor.could_not_save_theme:NB:Kunne ikke lagre temaet %1
 theme_editor.could_not_save_theme:TR:%1 temasının üzerine yazılamıyor
 theme_editor.could_not_save_theme:CA:No es pot escriure el tema %1
-# Translation missing (KO)
 
 theme_editor.border:EN:Border
 theme_editor.border:FR:Bordure
@@ -14284,7 +14107,6 @@ theme_editor.border:BE:Рамка
 theme_editor.border:NB:Kanter
 theme_editor.border:TR:Çerçeve
 theme_editor.border:CA:Vora
-# Translation missing (KO)
 
 theme_editor.background:EN:Background
 theme_editor.background:FR:Fond
@@ -14339,7 +14161,6 @@ theme_editor.alternate_background:BE:Іншы фон
 theme_editor.alternate_background:NB:Sekundær bakgrunn
 theme_editor.alternate_background:TR:Alternatif arkaplan
 theme_editor.alternate_background:CA:Alternar fons
-# Translation missing (KO)
 
 theme_editor.unfocused_background:EN:Background (without focus)
 theme_editor.unfocused_background:FR:Fond (sans focus)
@@ -14366,7 +14187,6 @@ theme_editor.unfocused_background:BE:Фон (без фоку�?у)
 theme_editor.unfocused_background:NB:Bakgrunn (ute av fokus)
 theme_editor.unfocused_background:TR:Arkaplan (odaklanmadan)
 theme_editor.unfocused_background:CA:Fons (sense focus)
-# Translation missing (KO)
 
 theme_editor.quick_search:EN:$[quick_search]
 
@@ -14396,7 +14216,6 @@ theme_editor.quick_search.unmatched_file:BE:Файлы, што не �?упада
 theme_editor.quick_search.unmatched_file:NB:Filer som ikke matcher
 theme_editor.quick_search.unmatched_file:TR:E�?le�?meyen dosya
 theme_editor.quick_search.unmatched_file:CA:Fitxer sense coincidència
-# Translation missing (KO)
 
 theme_editor.text:EN:Text
 theme_editor.text:FR:Texte
@@ -14423,7 +14242,6 @@ theme_editor.text:BE:Т�?к�?т
 theme_editor.text:NB:Tekst
 theme_editor.text:TR:Metin
 theme_editor.text:CA:Text
-# Translation missing (KO)
 
 theme_editor.progress:EN:Progress
 theme_editor.progress:FR:Progression
@@ -14450,7 +14268,6 @@ theme_editor.progress:BE:Індыкатар выканан�?н�?
 theme_editor.progress:NB:Fremdrift
 theme_editor.progress:TR:İlerleme
 theme_editor.progress:CA:Realitzat
-# Translation missing (KO)
 
 theme_editor.normal:EN:Normal
 theme_editor.normal:FR:Normal
@@ -14477,7 +14294,6 @@ theme_editor.normal:BE:Звычайны
 theme_editor.normal:NB:Normal
 theme_editor.normal:TR:Normal
 theme_editor.normal:CA:Normal
-# Translation missing (KO)
 
 theme_editor.normal_unfocused:EN:Normal (without focus)
 theme_editor.normal_unfocused:FR:Normal (sans focus)
@@ -14504,7 +14320,6 @@ theme_editor.normal_unfocused:BE:Звычайны (без фоку�?у)
 theme_editor.normal_unfocused:NB:Normal (ute av fokus)
 theme_editor.normal_unfocused:TR:Normal (odaklanmadan)
 theme_editor.normal_unfocused:CA:Normal (sense focus)
-# Translation missing (KO)
 
 theme_editor.selected:EN:Selected
 theme_editor.selected:FR:Sélectionné
@@ -14531,7 +14346,6 @@ theme_editor.selected:BE:�?браны
 theme_editor.selected:NB:Markert
 theme_editor.selected:TR:Seçilen
 theme_editor.selected:CA:Seleccionat
-# Translation missing (KO)
 
 theme_editor.selected_unfocused:EN:Selected (without focus)
 theme_editor.selected_unfocused:FR:Sélectionné (without focus)
@@ -14558,7 +14372,6 @@ theme_editor.selected_unfocused:BE:�?браны (без фоку�?у)
 theme_editor.selected_unfocused:NB:Markert (ute av fokus)
 theme_editor.selected_unfocused:TR:Seçilen (odaklanmadan)
 theme_editor.selected_unfocused:CA:Seleccionat (sense focus)
-# Translation missing (KO)
 
 theme_editor.color:EN:Color
 theme_editor.color:en_GB:Colour
@@ -14586,7 +14399,6 @@ theme_editor.color:BE:�?олер
 theme_editor.color:NB:Farge
 theme_editor.color:TR:Renk
 theme_editor.color:CA:Color
-# Translation missing (KO)
 
 theme_editor.colors:EN:Colors
 theme_editor.colors:en_GB:Colours
@@ -14614,7 +14426,6 @@ theme_editor.colors:BE:�?олеры
 theme_editor.colors:NB:Farger
 theme_editor.colors:TR:Renkler
 theme_editor.colors:CA:Colors
-# Translation missing (KO)
 
 theme_editor.plain_file:EN:Plain file
 theme_editor.plain_file:FR:Fichier normal
@@ -14801,7 +14612,6 @@ theme_editor.header:TR:Ba�?lık
 theme_editor.header:CA:Capçalera
 theme_editor.header:UA:Заголовок
 theme_editor.header:ES:Cabecera
-# Translation missing (New!)
 
 
 
@@ -14841,7 +14651,6 @@ theme_editor.item:TR:Ö�?e
 theme_editor.item:CA:Element
 theme_editor.item:UA:Елемент
 theme_editor.item:ES:Elemento
-# Translation missing (New!)
 
 
 
@@ -14884,7 +14693,6 @@ command_bar_customize_dialog.available_actions:TR:Kullanılabilir Eylemler
 command_bar_customize_dialog.available_actions:CA:Accions disponibles
 command_bar_customize_dialog.available_actions:UA:До�?тупні дії
 command_bar_customize_dialog.available_actions:ES:Acciones disponibles
-# Translation missing (New!)
 
 
 
@@ -14923,7 +14731,6 @@ command_bar_customize_dialog.modifier:TR:Tamamlayıcı
 command_bar_customize_dialog.modifier:CA:Modificador
 command_bar_customize_dialog.modifier:UA:�?еремикач
 command_bar_customize_dialog.modifier:ES:Modificador
-# Translation missing (New!)
 
 
 
@@ -15378,7 +15185,6 @@ prefs_dialog.show_splash_screen:TR:Kar�?ılama ekranını göster
 prefs_dialog.show_splash_screen:CA:Mostrar pantalla de presentació
 prefs_dialog.show_splash_screen:UA:�?оказувати за�?тавку
 prefs_dialog.show_splash_screen:ES:Mostrar pantalla de bienvenida
-# Translation missing (KO)
 
 # Folders tab
 
@@ -15680,10 +15486,8 @@ prefs_dialog.follow_symlinks_when_cd:BE:�?ераходзіц�? па �?па�?ыл
 prefs_dialog.follow_symlinks_when_cd:NB:Følg symbolske lenker ved endring av gjeldende mappe
 prefs_dialog.follow_symlinks_when_cd:TR:Geçerli dizini de�?i�?tirirken sembolik ba�?lantıları takip et
 prefs_dialog.follow_symlinks_when_cd:CA:Seguir els enllaços simbòlics en canviar el directori actual
-# Translation missing (KO)
 
 prefs_dialog.show_tab_header:EN:Always show tab header
-# Translation missing (New!)
 
 # Appearance tab
 
@@ -15982,7 +15786,6 @@ prefs_dialog.edit_current_theme:BE:Р�?дагавац�? т�?му аздабле�
 prefs_dialog.edit_current_theme:NB:Rediger gjeldende tema...
 prefs_dialog.edit_current_theme:TR:Geçerli temayı düzenle...
 prefs_dialog.edit_current_theme:CA:Edita el tema actual...
-# Translation missing (KO)
 
 prefs_dialog.themes:EN:Themes
 prefs_dialog.themes:FR:Thèmes
@@ -16036,7 +15839,6 @@ prefs_dialog.import_theme:BE:Імпартавац�? т�?му
 prefs_dialog.import_theme:NB:Importer tema
 prefs_dialog.import_theme:TR:Temayı içe aktar
 prefs_dialog.import_theme:CA:Importa tema
-# Translation missing (KO)
 
 prefs_dialog.import_look_and_feel:EN:Import look & feel
 prefs_dialog.import_look_and_feel:FR:Importer un look & feel
@@ -16063,7 +15865,6 @@ prefs_dialog.import_look_and_feel:BE:Імпарт наладак з�?нешн�?�
 prefs_dialog.import_look_and_feel:NB:Importer stil
 prefs_dialog.import_look_and_feel:TR:Pencere & dü�?me stilini içe aktar
 prefs_dialog.import_look_and_feel:CA:Importa Look & Feel
-# Translation missing (KO)
 
 prefs_dialog.no_look_and_feel:EN:No look & feel was found.
 prefs_dialog.no_look_and_feel:FR:Aucun look & feel n'a été trouvé.
@@ -16090,7 +15891,6 @@ prefs_dialog.no_look_and_feel:BE:�?аладак з�?нешн�?га выгл�?д�
 prefs_dialog.no_look_and_feel:NB:Fant ingen stil
 prefs_dialog.no_look_and_feel:TR:Hiç pencere & dü�?me stili bulunmadı.
 prefs_dialog.no_look_and_feel:CA:No s'ha trobat cap Look & Feel.
-# Translation missing (KO)
 
 # Error message displayed when a theme import fails because it couldn't be written.
 # %1 will be replaced by the theme's name.
@@ -16119,7 +15919,6 @@ prefs_dialog.error_in_import:BE:�?амылка імпарту т�?мы %1.
 prefs_dialog.error_in_import:NB:Feil ved importering av temaet %1.
 prefs_dialog.error_in_import:TR:%1 temasının içeri aktarılmasında hata olu�?tu.
 prefs_dialog.error_in_import:CA:Error important el tema %1
-# Translation missing (KO)
 
 # Error message displayed when a theme import fails because it couldn't be loaded.
 # %1 will be replaced by the path to the theme's file.
@@ -16148,7 +15947,6 @@ prefs_dialog.cannot_read_theme:BE:�?е атрымліваецца загрузі
 prefs_dialog.cannot_read_theme:NB:Kan ikke laste inn temaet fre filen %1
 prefs_dialog.cannot_read_theme:TR:%1 dosyasından tema yüklenemiyor
 prefs_dialog.cannot_read_theme:CA:No s'ha pogut llegir el tema del fitxer %1
-# Translation missing (KO)
 
 # Title of the theme export dialog box. %1 will be replaced by the name of the theme
 # being exported.
@@ -16177,7 +15975,6 @@ prefs_dialog.export_theme:BE:Эк�?парт %1
 prefs_dialog.export_theme:NB:Eksporter %1
 prefs_dialog.export_theme:TR:%1 temasını dı�?a aktar
 prefs_dialog.export_theme:CA:Exporta %1
-# Translation missing (KO)
 
 prefs_dialog.import:EN:Import
 prefs_dialog.import:FR:Importer
@@ -16204,7 +16001,6 @@ prefs_dialog.import:BE:Імпарт
 prefs_dialog.import:NB:Importer
 prefs_dialog.import:TR:İçe aktar
 prefs_dialog.import:CA:Importa
-# Translation missing (KO)
 
 prefs_dialog.export:EN:Export
 prefs_dialog.export:FR:Exporter
@@ -16231,7 +16027,6 @@ prefs_dialog.export:BE:Эк�?парт
 prefs_dialog.export:NB:Eksporterer
 prefs_dialog.export:TR:Dı�?a aktar
 prefs_dialog.export:CA:Exporta
-# Translation missing (KO)
 
 # %1 will be replaced by the type of theme being described.
 prefs_dialog.theme_type:EN:Type: %1
@@ -16259,7 +16054,6 @@ prefs_dialog.theme_type:BE:Тып: %1
 prefs_dialog.theme_type:NB:Type: %1
 prefs_dialog.theme_type:TR:Tür: %1
 prefs_dialog.theme_type:CA:Tipus
-# Translation missing (KO)
 
 # %1 will be replaced by the theme name.
 prefs_dialog.delete_theme:EN:Permanently delete theme %1 ?
@@ -16287,7 +16081,6 @@ prefs_dialog.delete_theme:BE:Выдаліц�? т�?му %1 цалкам?
 prefs_dialog.delete_theme:NB:Permanent sletting av temaet %1 ?
 prefs_dialog.delete_theme:TR:%1 teması kalıcı olarak silinsin mi ?
 prefs_dialog.delete_theme:CA:Eliminar el tema %1 permanentment?
-# Translation missing (KO)
 
 # %1 will be replaced by the look and feel name.
 prefs_dialog.delete_look_and_feel:EN:Permanently delete look & feel %1 ?
@@ -16315,7 +16108,6 @@ prefs_dialog.delete_look_and_feel:BE:Выдаліц�? наладкі %1 наза
 prefs_dialog.delete_look_and_feel:NB:Permanent sletting av stilen %1 ?
 prefs_dialog.delete_look_and_feel:TR:%1 pencere & dü�?me stili kalıcı olarak silinsin mi ?
 prefs_dialog.delete_look_and_feel:CA:Eliminar el Look & Feel %1 permanentment?
-# Translation missing (KO)
 
 prefs_dialog.rename_failed:EN:Failed to rename theme %1
 prefs_dialog.rename_failed:FR:Impossible de renommer le thème %1
@@ -16342,7 +16134,6 @@ prefs_dialog.rename_failed:BE:�?е атрымала�?�? з�?м�?ніц�? наз�
 prefs_dialog.rename_failed:NB:Kunne ikke gi nytt navn til temaet %1
 prefs_dialog.rename_failed:TR:%1 teması yeniden adlandırılamıyor
 prefs_dialog.rename_failed:CA:Error renombrant el tema %1
-# Translation missing (KO)
 
 # Label of the 'XML file' filter used by the theme import / export dialog boxes.
 prefs_dialog.xml_file:EN:XML file
@@ -16370,7 +16161,6 @@ prefs_dialog.xml_file:BE:XML-файл
 prefs_dialog.xml_file:NB:XML-fil
 prefs_dialog.xml_file:TR:XML dosyası
 prefs_dialog.xml_file:CA:Fitxer XML
-# Translation missing (KO)
 
 # Label of the JAR file' filter used by the look&feel import / export dialog boxes.
 prefs_dialog.jar_file:EN:JAR file
@@ -16398,7 +16188,6 @@ prefs_dialog.jar_file:BE:JAR-файл
 prefs_dialog.jar_file:NB:JAR-fil
 prefs_dialog.jar_file:TR:JAR dosyası
 prefs_dialog.jar_file:CA:Fitxer JAR
-# Translation missing (KO)
 
 # Mail tab
 
@@ -16705,7 +16494,6 @@ prefs_dialog.shell_encoding:BE:�?адыро�?ка каманднага радк�
 prefs_dialog.shell_encoding:NB:Skallets tegnsett
 prefs_dialog.shell_encoding:TR:Kabuk karakter kodlaması
 prefs_dialog.shell_encoding:CA:Codificació del interpret d'ordres
-# Translation missing (KO)
 
 # Refers to automatic detecting of the character encoding
 prefs_dialog.auto_detect_shell_encoding:EN:Auto-detect
@@ -16733,7 +16521,6 @@ prefs_dialog.auto_detect_shell_encoding:BE:�?�?тавызнач�?н�?не
 prefs_dialog.auto_detect_shell_encoding:NB:Velg automatisk
 prefs_dialog.auto_detect_shell_encoding:TR:Otomatik algıla
 prefs_dialog.auto_detect_shell_encoding:CA:Detecció automàtica
-# Translation missing (KO)
 
 # Bonjour is a service discovery protocol : http://en.wikipedia.org/wiki/Bonjour_%28software%29
 prefs_dialog.enable_bonjour_discovery:EN:Enable Bonjour services discovery
@@ -16789,7 +16576,6 @@ prefs_dialog.enable_system_notifications:BE:Дазволіц�? �?ы�?т�?мны�
 prefs_dialog.enable_system_notifications:NB:Aktiver systemmeldinger
 prefs_dialog.enable_system_notifications:TR:Sistem bildirimlerini etkinle�?tir
 prefs_dialog.enable_system_notifications:CA:Activar les notificacions del sistema
-# Translation missing (KO)
 
 
 #################
@@ -16818,7 +16604,6 @@ debug_console_dialog.level:TR:Seviye
 debug_console_dialog.level:CA:Nivell
 debug_console_dialog.level:UA:Рівен�?
 debug_console_dialog.level:ES:Nivel
-# Translation missing (New!)
 
 
 
@@ -17284,7 +17069,6 @@ theme.custom:BE:Т�?ма кары�?тал�?ніка
 theme.custom:NB:Tilpasset
 theme.custom:TR:Özelle�?tirilmi�?
 theme.custom:CA:Personalitzat
-# Translation missing (KO)
 
 theme.built_in:EN:Built-in
 theme.built_in:FR:Pré-installé
@@ -17311,7 +17095,6 @@ theme.built_in:BE:Убудавана�?
 theme.built_in:NB:Innebygd
 theme.built_in:TR:Yerle�?ik
 theme.built_in:CA:Integrat
-# Translation missing (KO)
 
 theme.add_on:EN:Add-on
 theme.add_on:FR:Ajouté
@@ -17338,7 +17121,6 @@ theme.add_on:BE:Дадатак
 theme.add_on:NB:Tillegg
 theme.add_on:TR:Eklenti
 theme.add_on:CA:Complement
-# Translation missing (KO)
 
 theme.current:EN:current
 theme.current:FR:courant
@@ -17365,7 +17147,6 @@ theme.current:BE:б�?гуча�?
 theme.current:NB:aktivt
 theme.current:TR:aktif
 theme.current:CA:actual
-# Translation missing (KO)
 
 # Error message displayed when a theme cannot be loaded
 theme_could_not_be_loaded:EN:An error occurred while loading this theme.
@@ -17397,7 +17178,6 @@ theme_could_not_be_loaded:CA:S'ha produït un error en carregar aquest tema.
 
 # Error message displayed trying to open cyclic symlink
 cannot_open_cyclic_symlink:EN:Cannot open the selected link because it is cyclic
-# Translation missing (New!)
 
 #################
 # Setup entries #
@@ -17629,7 +17409,6 @@ color_chooser.red:BE:Чырвоны
 color_chooser.red:NB:Rød
 color_chooser.red:TR:Kırmızı
 color_chooser.red:CA:Vermell
-# Translation missing (KO)
 
 color_chooser.green:EN:Green
 color_chooser.green:FR:Vert
@@ -17656,7 +17435,6 @@ color_chooser.green:BE:З�?лёны
 color_chooser.green:NB:Grønn
 color_chooser.green:TR:Ye�?il
 color_chooser.green:CA:Verd
-# Translation missing (KO)
 
 color_chooser.blue:EN:Blue
 color_chooser.blue:FR:Bleu
@@ -17683,7 +17461,6 @@ color_chooser.blue:BE:Сіні
 color_chooser.blue:NB:Blå
 color_chooser.blue:TR:Mavi
 color_chooser.blue:CA:Blau
-# Translation missing (KO)
 
 color_chooser.hue:EN:Hue
 color_chooser.hue:FR:Tonalité
@@ -17710,7 +17487,6 @@ color_chooser.hue:BE:�?дцен�?не
 color_chooser.hue:NB:Fargetone
 color_chooser.hue:TR:Renk tonu
 color_chooser.hue:CA:To
-# Translation missing (KO)
 
 color_chooser.brightness:EN:Brightness
 color_chooser.brightness:FR:Luminosité
@@ -17737,7 +17513,6 @@ color_chooser.brightness:BE:Ярка�?�?ц�?
 color_chooser.brightness:NB:Lysstyrke
 color_chooser.brightness:TR:Parlaklık
 color_chooser.brightness:CA:Brillantor
-# Translation missing (KO)
 
 # 'Swatches' refer to color samples arranged in a grid
 color_chooser.swatches:EN:Swatches
@@ -17765,7 +17540,6 @@ color_chooser.swatches:BE:Узоры
 color_chooser.swatches:NB:Fargekart
 color_chooser.swatches:TR:Örnekler
 color_chooser.swatches:CA:Mostres
-# Translation missing (KO)
 
 color_chooser.saturation:EN:Saturation
 color_chooser.saturation:FR:Saturation
@@ -17792,7 +17566,6 @@ color_chooser.saturation:BE:�?а�?ычана�?�?ц�?
 color_chooser.saturation:NB:Metning
 color_chooser.saturation:TR:Doygunluk
 color_chooser.saturation:CA:Saturació
-# Translation missing (KO)
 
 # RGB stands for Red Green Blue
 color_chooser.rgb:EN:RGB
@@ -17820,7 +17593,6 @@ color_chooser.rgb:BE:RGB
 color_chooser.rgb:NB:RGB
 color_chooser.rgb:TR:RGB
 color_chooser.rgb:CA:RGB
-# Translation missing (KO)
 
 color_chooser.hsb:EN:HSB
 color_chooser.hsb:FR:TSL
@@ -17847,7 +17619,6 @@ color_chooser.hsb:BE:HSB
 color_chooser.hsb:NB:HSB
 color_chooser.hsb:TR:HSB
 color_chooser.hsb:CA:HSB
-# Translation missing (KO)
 
 color_chooser.recent:EN:Recent
 color_chooser.recent:FR:Récentes
@@ -17874,7 +17645,6 @@ color_chooser.recent:BE:�?ап�?р�?дні
 color_chooser.recent:NB:Nylig
 color_chooser.recent:TR:Son kullanılanlar
 color_chooser.recent:CA:Recent
-# Translation missing (KO)
 
 color_chooser.alpha:EN:Alpha transparency
 color_chooser.alpha:FR:Transparence alpha
@@ -17901,7 +17671,6 @@ color_chooser.alpha:BE:�?разры�?та�?�?ц�?
 color_chooser.alpha:NB:Gjennomsiktighet/Alfa-verdi
 color_chooser.alpha:TR:�?effaflık
 color_chooser.alpha:CA:Transparència alpha
-# Translation missing (KO)
 
 color_chooser.title:EN:Pick a color
 color_chooser.title:en_GB:Pick a colour
@@ -17961,7 +17730,6 @@ batch_rename_dialog.mask:NB:Navngi mønster
 batch_rename_dialog.mask:TR:Ad de�?i�?tirme modeli
 batch_rename_dialog.mask:CA:Renombra patró
 batch_rename_dialog.mask:ES:Patrón de renombrado
-# Translation missing (KO)
 
 batch_rename_dialog.search_replace:EN:Search & Replace
 batch_rename_dialog.search_replace:FR:Chercher & Remplacer
@@ -17988,7 +17756,6 @@ batch_rename_dialog.search_replace:NB:Søk og erstatt
 batch_rename_dialog.search_replace:TR:Bul & De�?i�?tir
 batch_rename_dialog.search_replace:CA:Cerca i reemplaça
 batch_rename_dialog.search_replace:ES:Buscar y reemplazar 
-# Translation missing (KO)
 
 batch_rename_dialog.search_for:EN:Search for
 batch_rename_dialog.search_for:FR:Chercher
@@ -18015,7 +17782,6 @@ batch_rename_dialog.search_for:NB:Søk etter
 batch_rename_dialog.search_for:TR:Aranan
 batch_rename_dialog.search_for:CA:Cerca
 batch_rename_dialog.search_for:ES:Buscar
-# Translation missing (KO)
 
 batch_rename_dialog.replace_with:EN:Replace with
 batch_rename_dialog.replace_with:FR:Remplacer par
@@ -18042,7 +17808,6 @@ batch_rename_dialog.replace_with:NB:Erstatt med
 batch_rename_dialog.replace_with:TR:Yeni de�?er
 batch_rename_dialog.replace_with:CA:Reemplaça amb
 batch_rename_dialog.replace_with:ES:Reemplazar con
-# Translation missing (KO)
 
 batch_rename_dialog.counter:EN:Counter
 batch_rename_dialog.counter:FR:Compteur
@@ -18069,7 +17834,6 @@ batch_rename_dialog.counter:NB:Teller
 batch_rename_dialog.counter:TR:Sayaç
 batch_rename_dialog.counter:CA:Comptador
 batch_rename_dialog.counter:ES:Contador
-# Translation missing (KO)
 
 batch_rename_dialog.start_at:EN:Start at
 batch_rename_dialog.start_at:FR:Commencer à
@@ -18096,7 +17860,6 @@ batch_rename_dialog.start_at:NB:Begynn ved
 batch_rename_dialog.start_at:TR:Ba�?langıç
 batch_rename_dialog.start_at:CA:Comença a
 batch_rename_dialog.start_at:ES:Comenzar en
-# Translation missing (KO)
 
 batch_rename_dialog.step_by:EN:Step by
 batch_rename_dialog.step_by:FR:Incrément
@@ -18123,7 +17886,6 @@ batch_rename_dialog.step_by:NB:Øk med
 batch_rename_dialog.step_by:TR:Artma miktarı
 batch_rename_dialog.step_by:CA:Salta'n
 batch_rename_dialog.step_by:ES:Incrementar en
-# Translation missing (KO)
 
 batch_rename_dialog.format:EN:Format
 batch_rename_dialog.format:FR:Format
@@ -18150,7 +17912,6 @@ batch_rename_dialog.format:NB:Format
 batch_rename_dialog.format:TR:Biçim
 batch_rename_dialog.format:CA:Format
 batch_rename_dialog.format:ES:Formato
-# Translation missing (KO)
 
 batch_rename_dialog.upper_lower_case:EN:Upper/Lowercase
 batch_rename_dialog.upper_lower_case:FR:Casse
@@ -18177,7 +17938,6 @@ batch_rename_dialog.upper_lower_case:NB:Store/små bokstaver
 batch_rename_dialog.upper_lower_case:TR:Büyük/Küçük harf
 batch_rename_dialog.upper_lower_case:CA:Majúscules/Minúscules
 batch_rename_dialog.upper_lower_case:ES:Mayúsculas/Minúsculas
-# Translation missing (KO)
 
 batch_rename_dialog.no_change:EN:Unchanged
 batch_rename_dialog.no_change:FR:Inchangée
@@ -18204,7 +17964,6 @@ batch_rename_dialog.no_change:NB:Uendret
 batch_rename_dialog.no_change:TR:De�?i�?tirme
 batch_rename_dialog.no_change:CA:Sense canvis
 batch_rename_dialog.no_change:ES:Sin cambios
-# Translation missing (KO)
 
 batch_rename_dialog.lower_case:EN:lowercase
 batch_rename_dialog.lower_case:FR:minuscule
@@ -18231,7 +17990,6 @@ batch_rename_dialog.lower_case:NB:små bokstaver
 batch_rename_dialog.lower_case:TR:küçük harf
 batch_rename_dialog.lower_case:CA:minúscules
 batch_rename_dialog.lower_case:ES:minúsculas
-# Translation missing (KO)
 
 batch_rename_dialog.upper_case:EN:UPPERCASE
 batch_rename_dialog.upper_case:FR:MAJUSCULE
@@ -18258,7 +18016,6 @@ batch_rename_dialog.upper_case:NB:STORE BOKSTAVER
 batch_rename_dialog.upper_case:TR:B�?Y�?K HARF
 batch_rename_dialog.upper_case:CA:MAJ�?SCULES
 batch_rename_dialog.upper_case:ES:MAY�?SCULAS
-# Translation missing (KO)
 
 batch_rename_dialog.first_upper:EN:First letter uppercase
 batch_rename_dialog.first_upper:FR:Première lettre majuscule
@@ -18285,7 +18042,6 @@ batch_rename_dialog.first_upper:NB:Stor bokstav først
 batch_rename_dialog.first_upper:TR:İlk harf büyük
 batch_rename_dialog.first_upper:CA:Primera lletra en majúscula
 batch_rename_dialog.first_upper:ES:Primera letra en mayúscula
-# Translation missing (KO)
 
 batch_rename_dialog.word:EN:First Of Each Word
 batch_rename_dialog.word:FR:Première De Chaque Mot
@@ -18312,7 +18068,6 @@ batch_rename_dialog.word:NB:På Begynnelsen Av Hvert Ord
 batch_rename_dialog.word:TR:Her Kelimenin İlk Harfi Büyük
 batch_rename_dialog.word:CA:Primera Lletra De Cada Paraula
 batch_rename_dialog.word:ES:Primera Letra De Cada Palabra
-# Translation missing (KO)
 
 batch_rename_dialog.old_name:EN:Old name
 batch_rename_dialog.old_name:FR:Ancien nom
@@ -18339,7 +18094,6 @@ batch_rename_dialog.old_name:NB:Gammelt navn
 batch_rename_dialog.old_name:TR:Eski adı
 batch_rename_dialog.old_name:CA:Nom antic
 batch_rename_dialog.old_name:ES:Nombre antiguo
-# Translation missing (KO)
 
 batch_rename_dialog.new_name:EN:New name
 batch_rename_dialog.new_name:FR:Nouveau nom
@@ -18366,7 +18120,6 @@ batch_rename_dialog.new_name:NB:Nytt navn
 batch_rename_dialog.new_name:TR:Yeni adı
 batch_rename_dialog.new_name:CA:Nom nou
 batch_rename_dialog.new_name:ES:Nombre nuevo
-# Translation missing (KO)
 
 # This label corresponds to a feature that is currently not used. 
 # The 'block name' feature allows selected file names to be preserved, i.e. not
@@ -18396,7 +18149,6 @@ batch_rename_dialog.block_name:NB:Bevar
 batch_rename_dialog.block_name:TR:Koru
 batch_rename_dialog.block_name:CA:Protegeix
 batch_rename_dialog.block_name:ES:Preservar
-# Translation missing (KO)
 
 batch_rename_dialog.range:EN:Range
 batch_rename_dialog.range:FR:Intervalle
@@ -18423,7 +18175,6 @@ batch_rename_dialog.range:NB:Område
 batch_rename_dialog.range:TR:Aralık
 batch_rename_dialog.range:CA:Abast
 batch_rename_dialog.range:ES:Intervalo
-# Translation missing (KO)
 
 batch_rename_dialog.proceed_renaming:EN:%1 files out of %2 will be renamed. Do you wish to proceed?
 batch_rename_dialog.proceed_renaming:FR:%1 fichiers sur %2 vont être renommés. Etes-vous sûr?
@@ -18450,7 +18201,6 @@ batch_rename_dialog.proceed_renaming:NB:%1 filer av %2 vil få nytt navn. Ønske
 batch_rename_dialog.proceed_renaming:TR:%2 dosyadan %1 tanesinin adı de�?i�?tirilecek. Devam etmek istiyor musunuz?
 batch_rename_dialog.proceed_renaming:CA:Es canviarà el nom de %1 fitxers de %2. Vols continuar?
 batch_rename_dialog.proceed_renaming:ES:Se renombrarán %1 ficheros de %2. ¿ Desea continuar ?
-# Translation missing (KO)
 
 # some files in batch rename dialog have duplicate names
 batch_rename_dialog.duplicate_names:EN:Duplicate names!
@@ -18478,7 +18228,6 @@ batch_rename_dialog.duplicate_names:NB:Dupliser navn!
 batch_rename_dialog.duplicate_names:TR:Aynı isimli dosyalar mevcut!
 batch_rename_dialog.duplicate_names:CA:Noms duplicats!
 batch_rename_dialog.duplicate_names:ES:¡Nombres duplicados!
-# Translation missing (KO)
 
 # some files in new name column have the same values as in old names column
 # e.g. 1->2, 2->3
@@ -18491,7 +18240,6 @@ batch_rename_dialog.names_conflict:TR:İsim çakı�?ması! Eski ve yeni adlarda 
 batch_rename_dialog.names_conflict:CA:Conflicte de noms! Coïncideixen alguns noms antics i nous.
 batch_rename_dialog.names_conflict:UA:�?онфлікт імен! Де�?кі значенн�? �?півпада�?т�? в �?тарих і нових іменах.
 batch_rename_dialog.names_conflict:ES:¡Conflicto de nombres! Coinciden nombres antiguos y nuevos.
-# Translation missing (New!)
 
 
 ###############
@@ -18523,7 +18271,6 @@ parent_folders_quick_list.empty_message:NB:Gjeldende mappe har ingen overmappe
 parent_folders_quick_list.empty_message:TR:Geçerli konumun üst dizini bulunmuyor
 parent_folders_quick_list.empty_message:CA:L'emplaçament actual no te pare
 parent_folders_quick_list.empty_message:ES:La ubicación actual no tiene padre
-# Translation missing (KO)
 
 recent_locations_quick_list.empty_message:EN:No recent location
 recent_locations_quick_list.empty_message:FR:Pas de dossier récent
@@ -18550,7 +18297,6 @@ recent_locations_quick_list.empty_message:NB:Ingen nylig besøkte steder
 recent_locations_quick_list.empty_message:TR:Son kullanılan konum bulunmuyor
 recent_locations_quick_list.empty_message:CA:No hi ha emplaçaments recents
 recent_locations_quick_list.empty_message:ES:No hay ubicaciones recientes
-# Translation missing (KO)
 
 recent_executed_files_quick_list.empty_message:EN:No recently executed file
 recent_executed_files_quick_list.empty_message:FR:Pas de fichier récemment exécuté
@@ -18577,15 +18323,12 @@ recent_executed_files_quick_list.empty_message:NB:Ingen nylig åpnede filer
 recent_executed_files_quick_list.empty_message:TR:Son çalı�?tırılan dosya bulunmuyor
 recent_executed_files_quick_list.empty_message:CA:No hi ha fitxers executats recentment
 recent_executed_files_quick_list.empty_message:ES:No hay ficheros ejecutados recientmente
-# Translation missing (KO)
 
 roots_quick_list.empty_message:EN:No root folders available
 roots_quick_list.empty_message:TR:Kök dizin yok ya da ula�?ılamıyor
-# Translation missing (New!)
 
 tabs_quick_list.empty_message:EN:Only one tab is presented
 tabs_quick_list.empty_message:TR:Sadece bir sekme görüntüleniyor
-# Translation missing (New!)
 
 ######################
 # Deprecated entries #
