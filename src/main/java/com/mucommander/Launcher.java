@@ -491,7 +491,7 @@ public class Launcher {
 
             // Loads dictionary
             printStartupMessage("Loading dictionary...");
-            try {com.mucommander.text.Translator.loadDictionaryFile();}
+            try {com.mucommander.text.Translator.init();}
             catch(Exception e) {printError("Could not load dictionary", e, true);}
 
             // Loads custom commands
