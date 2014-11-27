@@ -15,3 +15,4 @@ ivy*jar
 .classpath
 .project
 
+/bin
