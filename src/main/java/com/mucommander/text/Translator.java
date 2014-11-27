@@ -18,24 +18,15 @@
 
 package com.mucommander.text;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.file.util.ResourceLoader;
-import com.mucommander.commons.io.bom.BOMReader;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 
@@ -53,22 +44,19 @@ import com.mucommander.conf.MuPreference;
 public class Translator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Translator.class);
 
-    /** Contains key/value pairs for the current language */
-    private static Map<String, String> dictionary;
-
-    /** Contains key/value pairs for the default language, for entries that are not defined in the current language */
-    private static Map<String, String> defaultDictionary;
-
     /** List of all available languages in the dictionary file */
     private static List<Locale> availableLanguages = new ArrayList<Locale>();
 
     /** Current language */
     private static Locale language;
 
+    private static ResourceBundle bundle;
+    
     /**
      * Prevents instance creation.
      */
-    private Translator() {}
+    private Translator() {
+    }
 
     static {
     	registerLocale(Locale.forLanguageTag("ar-SA"));
@@ -120,17 +108,17 @@ public class Translator {
         // Determines if language is one of the languages declared as available
         if(availableLanguages.contains(locale)) {
             // Language is available
-            Translator.language = locale;
-            LOGGER.debug("Language "+Translator.language+" is available.");
+        	bundle= ResourceBundle.getBundle("dictionary", locale);
+            LOGGER.debug("Language "+locale+" is available.");
         }
         else {
             // Language is not available, fall back to default language
-        	Translator.language = Locale.forLanguageTag("en-US");
+        	bundle= ResourceBundle.getBundle("dictionary");
             LOGGER.debug("Language "+locale+" is not available, falling back to English");
         }
 
         // Set preferred language in configuration file
-        MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, Translator.language.toLanguageTag());
+        MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, locale.toLanguageTag());
 
         LOGGER.debug("Current language has been set to "+Translator.language);
     }
@@ -180,73 +168,15 @@ public class Translator {
     	}
     }
 
-    public static void loadDictionaryFile() throws IOException {
-        loadDictionaryFile(com.mucommander.RuntimeConstants.DICTIONARY_FILE);
-    }
-
     /**
      * Loads the specified dictionary file, which contains localized text entries.
      *
      * @param filePath path to the dictionary file
      * @throws IOException thrown if an IO error occurs.
      */
-    public static void loadDictionaryFile(String filePath) throws IOException {
-        dictionary         = new Hashtable<String, String>();
-        defaultDictionary  = new Hashtable<String, String>();
-
+    public static void init() throws IOException {
         // Determines current language based on available languages and preferred language (if set) or system's language
         setCurrentLanguage();
-
-        BufferedReader br = new BufferedReader(new BOMReader(ResourceLoader.getResourceAsStream(filePath)));
-        String line;
-        String keyLC;
-        String lang;
-        String text;
-        StringTokenizer st;
-
-        while((line = br.readLine())!=null) {
-            if (!line.trim().startsWith("#") && !line.trim().equals("")) {
-                st = new StringTokenizer(line);
-
-                try {
-                    // Sets delimiter to ':'
-                    keyLC = st.nextToken(":").trim().toLowerCase();
-
-                    lang = st.nextToken().trim();
-
-                    // Delimiter is now line break
-                    text = st.nextToken("\n");
-                    text = text.substring(1, text.length());
-
-                    // Replace "\n" strings in the text by \n characters
-                    int pos = 0;
-
-                    while ((pos = text.indexOf("\\n", pos))!=-1)
-                        text = text.substring(0, pos)+"\n"+text.substring(pos+2, text.length());
-
-                    // Replace "\\uxxxx" unicode strings by the designated character
-                    pos = 0;
-
-                    while ((pos = text.indexOf("\\u", pos))!=-1)
-                        text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
-
-                    // Add entry for current language, or for default language if a value for current language wasn't already set
-                    if(lang.equalsIgnoreCase(language.getLanguage())) {
-                        dictionary.put(keyLC, text);
-                        // Remove the default dictionary entry as it will not be used (saves some memory).
-                        defaultDictionary.remove(keyLC);
-                    }
-                    else if(lang.equalsIgnoreCase("en") && dictionary.get(keyLC)==null) {
-                    	defaultDictionary.put(keyLC, text);
-                    }
-                }
-                catch(Exception e) {
-                    LOGGER.info("error in line " + line + " (" + e + ")");
-                    throw new IOException("Syntax error in line " + line);
-                }
-            }
-        }
-        br.close();
     }
 
     /**
@@ -280,8 +210,7 @@ public class Translator {
      * @return <code>true</code> if the given key has a corresponding value in the current language.
      */
     public static boolean hasValue(String key, boolean useDefaultLanguage) {
-        return dictionary.get(key.toLowerCase())!=null
-                || (useDefaultLanguage && defaultDictionary.get(key.toLowerCase())!=null);
+    	return bundle.containsKey(key);
     }
 
     /**
@@ -294,292 +223,6 @@ public class Translator {
      * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String... paramValues) {
-        // Returns the localized text
-        String text = dictionary.get(key.toLowerCase());
-
-        if (text==null) {
-            text = defaultDictionary.get(key.toLowerCase());
-
-            if(text==null) {
-            	LOGGER.debug("No value for "+key+", returning key");
-                return key;
-            }
-            else {
-            	LOGGER.debug("No value for "+key+" in language "+language+", using English value");
-                // Don't return yet, parameters need to be replaced
-            }
-        }
-
-        // Replace %1, %2 ... parameters by their value
-        if (paramValues!=null) {
-            int pos = -1;
-            for(int i=0; i<paramValues.length; i++) {
-                while(++pos<text.length()-1 && (pos = text.indexOf("%"+(i+1), pos))!=-1)
-                    text = text.substring(0, pos)+paramValues[i]+text.substring(pos+2, text.length());
-            }
-        }
-
-        // Replace $[key] occurrences by their value
-        int pos = 0;
-        int pos2;
-        String variable;
-
-        while ((pos = text.indexOf("$[", pos))!=-1) {
-            pos2 = text.indexOf("]", pos+1);
-            variable = text.substring(pos+2, pos2);
-            text = text.substring(0, pos)+get(variable, paramValues)+text.substring(pos2+1, text.length());
-        }
-
-        return text;
-    }
-
-
-    /**
-     * Based on the number of supplied command line parameters, this method either :
-     * <ul>
-     * <li>Looks for and reports any missing or unused dictionary entry,
-     * using the supplied source folder path to look inside source files
-     * for references to dictionary entries.
-     * <li>Merges a new language's entries from a dictionary file into a new one.
-     * </ul>
-     */
-    public static void main(String args[]) throws IOException {
-        /*	
-        // Looks for missing and unused entries
-        if(args.length<4) {
-        Enumeration languages = dictionaries.keys();
-        Vector langsV = new Vector();
-        while(languages.hasMoreElements())
-        langsV.add(languages.nextElement());
-				
-        String langs[] = new String[langsV.size()];
-        langsV.toArray(langs);
-			
-        com.mucommander.commons.file.AbstractFile sourceFolder = com.mucommander.commons.file.AbstractFile.getFile(args[0]);
-		
-        System.out.println("\n##### Looking for missing entries #####");
-        checkMissingEntries(sourceFolder, langs);
-
-        System.out.println("\n##### Looking for unused entries #####");
-        checkUnusedEntries(sourceFolder, langs);
-        }
-        // Integrates a new language into the dictionary
-        else {
-        */
-        // Parameters order: originalFile newLanguageFile resultingFile newLanguage
-        if(args.length<4) {
-            System.out.println("usage: Translator originalFile newLanguageFile mergedFile newLanguage");
-            return;
-        }
-
-        addLanguageToDictionary(args[0], args[1], args[2], args[3]);
-        /*
-          }
-        */
-    }
-
-
-    /**
-     * Checks for missing dictionary entries in the given file or folder and reports them on the standard output.
-     * If the given file is a folder, recurse on each file that it contains, if it's a 'regular' file and the
-     * extension is '.java', looks for any calls to {@link #Translator.get(String), Translator.get()} and checks
-     * that the request entry has a value in each language's dictionary.
-     */ 
-    /*
-      private static void checkMissingEntries(com.mucommander.commons.file.AbstractFile file, String languages[]) throws IOException {
-      if(file.isDirectory()) {
-      com.mucommander.commons.file.AbstractFile children[] = file.ls();
-      for(int i=0; i<children.length; i++)
-      checkMissingEntries(children[i], languages);
-      }
-      else if(file.getName().endsWith(".java")) {
-      BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
-      String line;
-      int pos;
-      String entry;
-      String value;
-      String language;
-      while((line=br.readLine())!=null) {
-      if(!line.trim().startsWith("//") && (pos=line.indexOf("Translator.get(\""))!=-1) {
-      try {
-      entry = line.substring(pos+16, line.indexOf("\"", pos+16));
-      for(int i=0; i<languages.length; i++) {
-      language = languages[i];
-      if((String)((Hashtable)dictionaries.get(language)).get(entry)!=null || (!language.equalsIgnoreCase("en") && (value=(String)((Hashtable)dictionaries.get("en")).get(entry))!=null && value.startsWith("$")))
-      continue;
-      System.out.println("Missing "+language.toUpperCase()+" entry '"+entry+"' in "+file.getAbsolutePath());
-      }
-      }
-      catch(Exception e) {
-      }
-      }
-      }
-      br.close();
-      } 
-      }
-    */
-
-
-    /**
-     * Checks all enties in all dictionaries, checks that they are used in at least one source file
-     * in or under the supplied folder, and reports unused entries on the standard output.
-     */ 
-    /*
-      private static void checkUnusedEntries(com.mucommander.commons.file.AbstractFile sourceFolder, String languages[]) throws IOException {
-      Enumeration entries;
-      String entry;
-      for(int i=0; i<languages.length; i++) {
-      entries = ((Hashtable)dictionaries.get(languages[i])).keys();
-      while(entries.hasMoreElements()) {
-      entry = (String)entries.nextElement();
-
-      if(!isEntryUsed(entry, sourceFolder))
-      System.out.println("Unused "+languages[i].toUpperCase()+" entry "+entry);
-      }
-      }
-      }
-    */
-
-    /**
-     * Checks if the given entry is used in the supplied file or folder.
-     */
-    /*
-      private static boolean isEntryUsed(String entry, com.mucommander.commons.file.AbstractFile file) throws IOException {
-      if(file.isDirectory()) {
-      com.mucommander.commons.file.AbstractFile children[] = file.ls();
-      for(int i=0; i<children.length; i++)
-      if(isEntryUsed(entry, children[i]))
-      return true;
-      return false;
-      }
-      else if(file.getName().endsWith(".java")) {
-      BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
-      String line;
-      int pos;
-      while((line=br.readLine())!=null) {
-      if(!line.trim().startsWith("//") && (pos=line.indexOf("\""+entry+"\""))!=-1) {
-      br.close();
-      return true;
-      }
-      }
-      br.close();
-      return false;
-      }
-		
-      return false;
-      }
-    */
-
-    /**
-     * Merges a dictionary file with another one, adding entries of the specified new language.
-     * <p>This method is used to merge dictionary files sent by contributors.
-     *
-     * @param originalFile current version of the dictionary file
-     * @param newLanguageFile dictionary file containing new language entries
-     * @param resultingFile merged dictionary file
-     * @param newLanguage new language
-     * @throws IOException if an I/O error occurred
-     */
-    private static void addLanguageToDictionary(String originalFile, String newLanguageFile, String resultingFile, String newLanguage) throws IOException {
-        // Initialize streams
-        BufferedReader originalFileReader = new BufferedReader(new BOMReader(new FileInputStream(originalFile)));
-        BufferedReader newLanguageFileReader = new BufferedReader(new BOMReader(new FileInputStream(newLanguageFile)));
-        PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(resultingFile), "UTF-8"));
-
-        // Parse new language's entries
-        String line;
-        int lineNum = 0;
-        String key;
-        String lang;
-        String text;
-        StringTokenizer st;
-        Map<String, String> newLanguageEntries = new Hashtable<String, String>();
-        while ((line = newLanguageFileReader.readLine())!=null) {
-            try {
-                if (!line.trim().startsWith("#") && !line.trim().equals("")) {
-                    st = new StringTokenizer(line);
-
-                    // Sets delimiter to ':'
-                    key = st.nextToken(":");
-                    lang = st.nextToken();
-
-                    if(lang.equalsIgnoreCase(newLanguage)) {
-                        // Delimiter is now line break
-                        text = st.nextToken("\n");
-                        text = text.substring(1, text.length());
-
-                        newLanguageEntries.put(key, text);
-                    }
-                }
-                lineNum++;
-            }
-            catch(Exception e) {
-            	LOGGER.warn("caught "+e+" at line "+lineNum);
-                return;
-            }
-        }
-
-        // Insert new language entries in resulting file
-        boolean keyProcessedForNewLanguage = false;
-        String currentKey = null;
-        while ((line = originalFileReader.readLine())!=null) {
-            boolean emptyLine = line.trim().startsWith("#") || line.trim().equals("");
-            if (!keyProcessedForNewLanguage && (emptyLine || (currentKey!=null && !line.startsWith(currentKey+":")))) {
-                if(currentKey!=null) {
-                    String newLanguageValue = newLanguageEntries.get(currentKey);
-                    if(newLanguageValue!=null) {
-                        // Insert new language's entry in resulting file
-                    	LOGGER.info("New language entry for key="+currentKey+" value="+newLanguageValue);
-                        pw.println(currentKey+":"+newLanguage+":"+newLanguageValue);
-                    }
-
-                    keyProcessedForNewLanguage = true;
-                }
-            }
-
-            if(!emptyLine) {
-                // Parse entry
-                st = new StringTokenizer(line);
-
-                // Set delimiter to ':'
-                key = st.nextToken(":");
-                lang = st.nextToken();
-
-                if(!key.equals(currentKey)) {
-                    currentKey = key;
-                    keyProcessedForNewLanguage = false;
-                }
-
-                if(lang.equalsIgnoreCase(newLanguage)) {
-                    // Delimiter is now line break
-                    String existingNewLanguageValue = st.nextToken("\n");
-                    existingNewLanguageValue = existingNewLanguageValue.substring(1, existingNewLanguageValue.length());
-                    String newLanguageValue = newLanguageEntries.get(currentKey);
-
-                    if(newLanguageValue!=null) {
-                        if(!existingNewLanguageValue.equals(newLanguageValue))
-                        	LOGGER.warn("Warning: found an updated value for key="+currentKey+", using new value="+newLanguageValue+" existing value="+existingNewLanguageValue);
-
-                        pw.println(currentKey+":"+newLanguage+":"+newLanguageValue);
-                    }
-                    else {
-                    	LOGGER.warn("Existing dictionary has a value for key="+currentKey+" that is missing in the new dictionary file, using existing value= "+existingNewLanguageValue);
-                        pw.println(currentKey+":"+newLanguage+":"+existingNewLanguageValue);
-                    }
-
-                    keyProcessedForNewLanguage = true;
-                }
-                else {
-                    pw.println(line);
-                }
-            }
-            else {
-                pw.println(line);
-            }
-        }
-
-        newLanguageFileReader.close();
-        originalFileReader.close();
-        pw.close();
+    	return bundle.containsKey(key) ? bundle.getString(key) : key;
     }
 }
