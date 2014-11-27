@@ -29,6 +29,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -71,11 +72,19 @@ public class Translator {
 
     /** Key for available languages */
     private final static String AVAILABLE_LANGUAGES_KEY = "available_languages";
-
+    private final static Locale locale;
+    private final static ResourceBundle bundle;
+    
+    static {
+    	locale = Locale.getDefault();
+    	bundle= ResourceBundle.getBundle("dictionary", locale);
+//    	LOGGER.info("locale: " + locale + " " + bundle);
+    }
     /**
      * Prevents instance creation.
      */
-    private Translator() {}
+    private Translator() {
+    }
 
 
     /**
@@ -137,7 +146,7 @@ public class Translator {
      * @throws IOException thrown if an IO error occurs.
      */
     public static void loadDictionaryFile() throws IOException {
-        loadDictionaryFile(com.mucommander.RuntimeConstants.DICTIONARY_FILE);
+//        loadDictionaryFile(com.mucommander.RuntimeConstants.DICTIONARY_FILE);
     }
 
     /**
@@ -255,8 +264,9 @@ public class Translator {
      * @return <code>true</code> if the given key has a corresponding value in the current language.
      */
     public static boolean hasValue(String key, boolean useDefaultLanguage) {
-        return dictionary.get(key.toLowerCase())!=null
-                || (useDefaultLanguage && defaultDictionary.get(key.toLowerCase())!=null);
+    	return true;
+//        return dictionary.get(key.toLowerCase())!=null
+//                || (useDefaultLanguage && defaultDictionary.get(key.toLowerCase())!=null);
     }
 
     /**
@@ -269,6 +279,11 @@ public class Translator {
      * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String... paramValues) {
+    	if (bundle.containsKey(key))
+    		return  bundle.getString(key);
+    	return key;
+//    	return "aaa";
+    	/*
         // Returns the localized text
         String text = dictionary.get(key.toLowerCase());
 
@@ -306,7 +321,7 @@ public class Translator {
         }
 
         return text;
-    }
+*/    }
 
 
     /**
