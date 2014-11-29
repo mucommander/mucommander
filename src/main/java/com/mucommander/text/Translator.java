@@ -24,13 +24,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,34 +48,61 @@ import com.mucommander.conf.MuPreference;
  *
  * <p>See dictionary file for more information about th dictionary file format.</p>
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class Translator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Translator.class);
-	
+
     /** Contains key/value pairs for the current language */
     private static Map<String, String> dictionary;
 
     /** Contains key/value pairs for the default language, for entries that are not defined in the current language */
     private static Map<String, String> defaultDictionary;
-    
+
     /** List of all available languages in the dictionary file */
-    private static List<String> availableLanguages;
+    private static List<Locale> availableLanguages = new ArrayList<Locale>();
 
     /** Current language */
-    private static String language;
-
-    /** Default language */
-    private final static String DEFAULT_LANGUAGE = "EN";
-
-    /** Key for available languages */
-    private final static String AVAILABLE_LANGUAGES_KEY = "available_languages";
+    private static Locale language;
 
     /**
      * Prevents instance creation.
      */
     private Translator() {}
 
+    static {
+    	registerLocale(Locale.forLanguageTag("ar-SA"));
+    	registerLocale(Locale.forLanguageTag("be-BY"));
+    	registerLocale(Locale.forLanguageTag("ca-ES"));
+    	registerLocale(Locale.forLanguageTag("cs-CZ"));
+    	registerLocale(Locale.forLanguageTag("da-DA"));
+    	registerLocale(Locale.forLanguageTag("de-DE"));
+    	registerLocale(Locale.forLanguageTag("en-GB"));
+    	registerLocale(Locale.forLanguageTag("en-US"));
+    	registerLocale(Locale.forLanguageTag("es-ES"));
+    	registerLocale(Locale.forLanguageTag("fr-FR"));
+    	registerLocale(Locale.forLanguageTag("hu-HU"));
+    	registerLocale(Locale.forLanguageTag("it-IT"));
+    	registerLocale(Locale.forLanguageTag("ja-JP"));
+    	registerLocale(Locale.forLanguageTag("ko-KR"));
+    	registerLocale(Locale.forLanguageTag("no-NO"));
+    	registerLocale(Locale.forLanguageTag("nl-NL"));
+    	registerLocale(Locale.forLanguageTag("pl-PL"));
+    	registerLocale(Locale.forLanguageTag("pt-BR"));
+    	registerLocale(Locale.forLanguageTag("ro-RO"));
+    	registerLocale(Locale.forLanguageTag("ru-RU"));
+    	registerLocale(Locale.forLanguageTag("sk-SK"));
+    	registerLocale(Locale.forLanguageTag("sl-SL"));
+    	registerLocale(Locale.forLanguageTag("sv-SV"));
+    	registerLocale(Locale.forLanguageTag("tr-TR"));
+    	registerLocale(Locale.forLanguageTag("uk-UA"));
+    	registerLocale(Locale.forLanguageTag("zh-CN"));
+    	registerLocale(Locale.forLanguageTag("zh-TW"));
+    }
+
+    public static void registerLocale(Locale locale) {
+    	availableLanguages.add(locale);
+    }
 
     /**
      * Determines and sets the current language based on the given list of available languages
@@ -88,54 +114,72 @@ public class Translator {
      *
      * @param availableLanguages list of available languages
      */
-    private static void setCurrentLanguage(List<String> availableLanguages) {
-        String lang = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
-
-        if(lang==null) {
-            // language is not set in preferences, use system's language
-            // Try to match language with the system's language, only if the system's language
-            // has values in dictionary, otherwise use default language (English).
-            lang = Locale.getDefault().getLanguage();
-            LOGGER.info("Language not set in preferences, trying to match system's language ("+lang+")");
-        }
-        else {
-        	LOGGER.info("Using language set in preferences: "+lang);
-        }
-
-        // Determines if the list of available languages contains the language (case-insensitive)
-        boolean containsLanguage = false;
-        int nbAvailableLanguages = availableLanguages.size();
-        for(int i=0; i<nbAvailableLanguages; i++) {
-            if(availableLanguages.get(i).equalsIgnoreCase(lang)) {
-                containsLanguage = true;
-                lang = availableLanguages.get(i);   // Use the proper case variation
-                break;
-            }
-        }
+    private static void setCurrentLanguage() {
+        Locale locale = getLocale();
 
         // Determines if language is one of the languages declared as available
-        if(containsLanguage) {
+        if(availableLanguages.contains(locale)) {
             // Language is available
-            Translator.language = lang;
-            LOGGER.debug("Language "+lang+" is available.");
+            Translator.language = locale;
+            LOGGER.debug("Language "+Translator.language+" is available.");
         }
         else {
-            // Language is not available, fall back to default language (English)
-            Translator.language = DEFAULT_LANGUAGE;
-            LOGGER.debug("Language "+lang+" is not available, falling back to default language "+DEFAULT_LANGUAGE);
+            // Language is not available, fall back to default language
+        	Translator.language = Locale.forLanguageTag("en-US");
+            LOGGER.debug("Language "+locale+" is not available, falling back to English");
         }
-		
+
         // Set preferred language in configuration file
-        MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, Translator.language);
+        MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, Translator.language.toLanguageTag());
 
         LOGGER.debug("Current language has been set to "+Translator.language);
     }
 
-    /**
-     * Loads the default dictionary file.
-     *
-     * @throws IOException thrown if an IO error occurs.
-     */
+    private static Locale getLocale() {
+    	String localeNameFromConf = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
+    	if (localeNameFromConf == null) {
+    		// language is not set in preferences, use system's language
+            // Try to match language with the system's language, only if the system's language
+            // has values in dictionary, otherwise use default language (English).
+            Locale defaultLocale = Locale.getDefault();
+            LOGGER.info("Language not set in preferences, trying to match system's language ("+defaultLocale+")");
+            return defaultLocale;
+    	}
+
+    	LOGGER.info("Using language set in preferences: "+localeNameFromConf);
+    	switch (localeNameFromConf) {
+    	// for backward compatibility
+    	case "EN": return Locale.forLanguageTag("en-US");
+    	case "en_GB": return Locale.forLanguageTag("en_GB");
+    	case "FR": return Locale.forLanguageTag("fr-FR");
+    	case "DE": return Locale.forLanguageTag("de-DE");
+    	case "ES": return Locale.forLanguageTag("es-ES");
+    	case "CS": return Locale.forLanguageTag("cs-CZ");
+    	case "zh_CN": return Locale.forLanguageTag("zh-CN");
+    	case "zh_TW": return Locale.forLanguageTag("zh-TW");
+    	case "PL": return Locale.forLanguageTag("pl-PL");
+    	case "HU": return Locale.forLanguageTag("hu-HU");
+    	case "RU": return Locale.forLanguageTag("ru-RU");
+    	case "SL": return Locale.forLanguageTag("sl-SL");
+    	case "RO": return Locale.forLanguageTag("ro-RO");
+    	case "IT": return Locale.forLanguageTag("it-IT");
+    	case "KO": return Locale.forLanguageTag("ko-KR");
+    	case "pt_BR": return Locale.forLanguageTag("pt-BR");
+    	case "NL": return Locale.forLanguageTag("nl-NL");
+    	case "SK": return Locale.forLanguageTag("sk-SK");
+    	case "JA": return Locale.forLanguageTag("ja-JP");
+    	case "SV": return Locale.forLanguageTag("sv-SV");
+    	case "DA": return Locale.forLanguageTag("da-DA");
+    	case "UA": return Locale.forLanguageTag("uk-UA");
+    	case "AR": return Locale.forLanguageTag("ar-SA");
+    	case "BE": return Locale.forLanguageTag("be-BY");
+    	case "NB": return Locale.forLanguageTag("no-NO");
+    	case "TR": return Locale.forLanguageTag("tr-TR");
+    	case "CA": return Locale.forLanguageTag("ca-ES");
+    	default: return Locale.forLanguageTag(localeNameFromConf);
+    	}
+    }
+
     public static void loadDictionaryFile() throws IOException {
         loadDictionaryFile(com.mucommander.RuntimeConstants.DICTIONARY_FILE);
     }
@@ -147,9 +191,11 @@ public class Translator {
      * @throws IOException thrown if an IO error occurs.
      */
     public static void loadDictionaryFile(String filePath) throws IOException {
-        availableLanguages = new Vector<String>();
         dictionary         = new Hashtable<String, String>();
         defaultDictionary  = new Hashtable<String, String>();
+
+        // Determines current language based on available languages and preferred language (if set) or system's language
+        setCurrentLanguage();
 
         BufferedReader br = new BufferedReader(new BOMReader(ResourceLoader.getResourceAsStream(filePath)));
         String line;
@@ -165,22 +211,6 @@ public class Translator {
                 try {
                     // Sets delimiter to ':'
                     keyLC = st.nextToken(":").trim().toLowerCase();
-
-                    // Special key that lists available languages, must
-                    // be defined before any other entry
-                    if(Translator.language==null && keyLC.equals(AVAILABLE_LANGUAGES_KEY)) {
-                        // Parse comma separated languages
-                        st = new StringTokenizer(st.nextToken(), ",\n");
-                        while(st.hasMoreTokens())
-                            availableLanguages.add(st.nextToken().trim());
-
-                        LOGGER.debug("Available languages= "+availableLanguages);
-
-                        // Determines current language based on available languages and preferred language (if set) or system's language
-                        setCurrentLanguage(availableLanguages);
-
-                        continue;
-                    }
 
                     lang = st.nextToken().trim();
 
@@ -201,13 +231,13 @@ public class Translator {
                         text = text.substring(0, pos)+(char)(Integer.parseInt(text.substring(pos+2, pos+6), 16))+text.substring(pos+6, text.length());
 
                     // Add entry for current language, or for default language if a value for current language wasn't already set
-                    if(lang.equalsIgnoreCase(language)) {
+                    if(lang.equalsIgnoreCase(language.getLanguage())) {
                         dictionary.put(keyLC, text);
                         // Remove the default dictionary entry as it will not be used (saves some memory).
                         defaultDictionary.remove(keyLC);
                     }
-                    else if(lang.equalsIgnoreCase(DEFAULT_LANGUAGE) && dictionary.get(keyLC)==null) {
-                        defaultDictionary.put(keyLC, text);
+                    else if(lang.equalsIgnoreCase("en") && dictionary.get(keyLC)==null) {
+                    	defaultDictionary.put(keyLC, text);
                     }
                 }
                 catch(Exception e) {
@@ -225,27 +255,22 @@ public class Translator {
      * @return lang a language code
      */
     public static String getLanguage() {
-        return language;
+        return language.getLanguage();
     }
-	
-	
+
     /**
      * Returns an array of available languages, expressed as language codes ("EN", "FR", "pt_BR"...).
      * The returned array is sorted by language codes in case insensitive order.
      *
      * @return an array of language codes.
      */
-    public static String[] getAvailableLanguages() {
-        String[] languages = availableLanguages.toArray(new String[availableLanguages.size()]);
-        Arrays.sort(languages, String.CASE_INSENSITIVE_ORDER);
-
-        return languages;
+    public static List<Locale> getAvailableLanguages() {
+    	return availableLanguages;
     }
-
 
     /**
      * Returns <code>true</code> if the given entry's key has a value in the current language.
-     * If the <code>useDefaultLanguage</code> parameter is <code>true</code>, entries that have no value in the 
+     * If the <code>useDefaultLanguage</code> parameter is <code>true</code>, entries that have no value in the
      * {@link #getLanguage() current language} but one in the {@link #DEFAULT_LANGUAGE} will be considered as having
      * a value (<code>true</code> will be returned).
      *
@@ -280,7 +305,7 @@ public class Translator {
                 return key;
             }
             else {
-            	LOGGER.debug("No value for "+key+" in language "+language+", using "+DEFAULT_LANGUAGE+" value");
+            	LOGGER.debug("No value for "+key+" in language "+language+", using English value");
                 // Don't return yet, parameters need to be replaced
             }
         }
