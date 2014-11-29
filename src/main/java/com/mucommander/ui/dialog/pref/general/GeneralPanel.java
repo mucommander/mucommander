@@ -29,6 +29,8 @@ import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -64,7 +66,7 @@ import com.mucommander.ui.layout.YBoxPanel;
 class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListener, DocumentListener {
 
     // Language
-    private String languages[];
+    private List<Locale> languages;
     private PrefComboBox languageComboBox;
 	
     // Date/time format
@@ -126,11 +128,11 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         JPanel languagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         languagePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.language")));
         this.languages = Translator.getAvailableLanguages();
-        String currentLang = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
-        String lang;
+        Locale currentLang = Locale.forLanguageTag(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
+        Locale lang;
         languageComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
-				return !languages[getSelectedIndex()].equals(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
+				return !languages.get(getSelectedIndex()).equals(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
 			}
         };
 
@@ -141,9 +143,9 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-                String language = (String)value;
-                label.setText(Translator.get("language."+language));
-                label.setIcon(IconManager.getIcon(IconManager.LANGUAGE_ICON_SET, language+".png"));
+                Locale language = (Locale)value;
+                label.setText(Translator.get(language.toLanguageTag()));
+                label.setIcon(IconManager.getIcon(IconManager.LANGUAGE_ICON_SET, language.toLanguageTag()+".png"));
 
                 return label;
             }
@@ -151,17 +153,10 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         languageComboBox.setRenderer(new LanguageComboBoxRenderer());
 		
         // Add combo items and select current language (defaults to EN if current language can't be found)
-        int languageIndex = -1;
-        for(int i=0; i<languages.length; i++) {
-            lang = languages[i];
-            languageComboBox.addItem(lang);
-
-            if(lang.equalsIgnoreCase(currentLang))
-                languageIndex = i;
-            else if(languageIndex==-1 && lang.equalsIgnoreCase("en"))
-                languageIndex = i;
+        for(Locale language : languages) {
+            languageComboBox.addItem(language);
         }
-        languageComboBox.setSelectedIndex(languageIndex);
+        languageComboBox.setSelectedItem(currentLang);
 
         languagePanel.add(languageComboBox);
         mainPanel.add(languagePanel);
@@ -345,7 +340,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
     ///////////////////////
     @Override
     protected void commit() {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, languages[languageComboBox.getSelectedIndex()]);
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, languages.get(languageComboBox.getSelectedIndex()).toLanguageTag());
     	MuConfigurations.getPreferences().setVariable(MuPreference.DATE_FORMAT, getDateFormatString());
     	MuConfigurations.getPreferences().setVariable(MuPreference.DATE_SEPARATOR, dateSeparatorField.getText());
     	MuConfigurations.getPreferences().setVariable(MuPreference.TIME_FORMAT, getTimeFormatString());
