@@ -65,8 +65,8 @@ public class Translator {
     	registerLocale(Locale.forLanguageTag("cs"));
     	registerLocale(Locale.forLanguageTag("da"));
     	registerLocale(Locale.forLanguageTag("de"));
-    	registerLocale(Locale.forLanguageTag("en-GB"));
     	registerLocale(Locale.forLanguageTag("en"));
+    	registerLocale(Locale.forLanguageTag("en-GB"));
     	registerLocale(Locale.forLanguageTag("es"));
     	registerLocale(Locale.forLanguageTag("fr"));
     	registerLocale(Locale.forLanguageTag("hu"));
@@ -104,37 +104,7 @@ public class Translator {
     	}
 
     	LOGGER.info("Using language set in preferences: "+localeNameFromConf);
-    	switch (localeNameFromConf) {
-    	// for backward compatibility
-    	case "EN": return Locale.forLanguageTag("en-US");
-    	case "en_GB": return Locale.forLanguageTag("en_GB");
-    	case "FR": return Locale.forLanguageTag("fr-FR");
-    	case "DE": return Locale.forLanguageTag("de-DE");
-    	case "ES": return Locale.forLanguageTag("es-ES");
-    	case "CS": return Locale.forLanguageTag("cs-CZ");
-    	case "zh_CN": return Locale.forLanguageTag("zh-CN");
-    	case "zh_TW": return Locale.forLanguageTag("zh-TW");
-    	case "PL": return Locale.forLanguageTag("pl-PL");
-    	case "HU": return Locale.forLanguageTag("hu-HU");
-    	case "RU": return Locale.forLanguageTag("ru-RU");
-    	case "SL": return Locale.forLanguageTag("sl-SL");
-    	case "RO": return Locale.forLanguageTag("ro-RO");
-    	case "IT": return Locale.forLanguageTag("it-IT");
-    	case "KO": return Locale.forLanguageTag("ko-KR");
-    	case "pt_BR": return Locale.forLanguageTag("pt-BR");
-    	case "NL": return Locale.forLanguageTag("nl-NL");
-    	case "SK": return Locale.forLanguageTag("sk-SK");
-    	case "JA": return Locale.forLanguageTag("ja-JP");
-    	case "SV": return Locale.forLanguageTag("sv-SV");
-    	case "DA": return Locale.forLanguageTag("da-DA");
-    	case "UA": return Locale.forLanguageTag("uk-UA");
-    	case "AR": return Locale.forLanguageTag("ar-SA");
-    	case "BE": return Locale.forLanguageTag("be-BY");
-    	case "NB": return Locale.forLanguageTag("no-NO");
-    	case "TR": return Locale.forLanguageTag("tr-TR");
-    	case "CA": return Locale.forLanguageTag("ca-ES");
-    	default: return Locale.forLanguageTag(localeNameFromConf);
-    	}
+    	return Locale.forLanguageTag(localeNameFromConf.replace('_', '-'));
     }
 
     public static void init() throws IOException {
