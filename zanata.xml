@@ -30,7 +30,6 @@
     <locale>en-GB</locale>
     <locale>zh-CN</locale>
     <locale>zh-TW</locale>
-    <locale>ja</locale>
   </locales>
 
 </config>
