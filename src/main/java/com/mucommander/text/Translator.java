@@ -51,7 +51,7 @@ public class Translator {
     /** Current language */
     private static Locale language;
 
-    private static ResourceBundle bundle;
+    private static ResourceBundle dictionaryBundle;
     private static ResourceBundle languagesBundle;
     
     /**
@@ -115,12 +115,12 @@ public class Translator {
         // Determines if language is one of the languages declared as available
         if(availableLanguages.contains(locale)) {
             // Language is available
-        	bundle= ResourceBundle.getBundle("dictionary", locale);
+        	dictionaryBundle= ResourceBundle.getBundle("dictionary", locale);
             LOGGER.debug("Language "+locale+" is available.");
         }
         else {
             // Language is not available, fall back to default language
-        	bundle= ResourceBundle.getBundle("dictionary");
+        	dictionaryBundle= ResourceBundle.getBundle("dictionary");
             LOGGER.debug("Language "+locale+" is not available, falling back to English");
         }
 
@@ -163,7 +163,7 @@ public class Translator {
      * @return <code>true</code> if the given key has a corresponding value in the current language.
      */
     public static boolean hasValue(String key, boolean useDefaultLanguage) {
-    	return bundle.containsKey(key);
+    	return dictionaryBundle.containsKey(key);
     }
 
     /**
@@ -176,8 +176,8 @@ public class Translator {
      * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String... paramValues) {
-    	if (bundle.containsKey(key))
-    		return MessageFormat.format(bundle.getString(key), paramValues);
+    	if (dictionaryBundle.containsKey(key))
+    		return MessageFormat.format(dictionaryBundle.getString(key), paramValues);
 
     	if (languagesBundle.containsKey(key))
     		return languagesBundle.getString(key);
