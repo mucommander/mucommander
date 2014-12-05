@@ -19,6 +19,7 @@
 package com.mucommander.text;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -176,7 +177,7 @@ public class Translator {
      */
     public static String get(String key, String... paramValues) {
     	if (bundle.containsKey(key))
-    		return bundle.getString(key);
+    		return MessageFormat.format(bundle.getString(key), paramValues);
 
     	if (languagesBundle.containsKey(key))
     		return languagesBundle.getString(key);
