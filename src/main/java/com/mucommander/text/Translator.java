@@ -51,6 +51,7 @@ public class Translator {
     private static Locale language;
 
     private static ResourceBundle bundle;
+    private static ResourceBundle languagesBundle;
     
     /**
      * Prevents instance creation.
@@ -126,6 +127,8 @@ public class Translator {
         MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, locale.toLanguageTag());
 
         LOGGER.debug("Current language has been set to "+Translator.language);
+
+        languagesBundle = ResourceBundle.getBundle("languages");
     }
 
     /**
@@ -172,6 +175,12 @@ public class Translator {
      * @return the localized text String for the given key expressd in the current language
      */
     public static String get(String key, String... paramValues) {
-    	return bundle.containsKey(key) ? bundle.getString(key) : key;
+    	if (bundle.containsKey(key))
+    		return bundle.getString(key);
+
+    	if (languagesBundle.containsKey(key))
+    		return languagesBundle.getString(key);
+
+    	return key;
     }
 }
