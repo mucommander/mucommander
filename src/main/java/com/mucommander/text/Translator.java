@@ -59,31 +59,31 @@ public class Translator {
     }
 
     static {
-    	registerLocale(Locale.forLanguageTag("ar-SA"));
-    	registerLocale(Locale.forLanguageTag("be-BY"));
-    	registerLocale(Locale.forLanguageTag("ca-ES"));
-    	registerLocale(Locale.forLanguageTag("cs-CZ"));
-    	registerLocale(Locale.forLanguageTag("da-DA"));
-    	registerLocale(Locale.forLanguageTag("de-DE"));
+    	registerLocale(Locale.forLanguageTag("ar"));
+    	registerLocale(Locale.forLanguageTag("be"));
+    	registerLocale(Locale.forLanguageTag("ca"));
+    	registerLocale(Locale.forLanguageTag("cs"));
+    	registerLocale(Locale.forLanguageTag("da"));
+    	registerLocale(Locale.forLanguageTag("de"));
     	registerLocale(Locale.forLanguageTag("en-GB"));
-    	registerLocale(Locale.forLanguageTag("en-US"));
-    	registerLocale(Locale.forLanguageTag("es-ES"));
-    	registerLocale(Locale.forLanguageTag("fr-FR"));
-    	registerLocale(Locale.forLanguageTag("hu-HU"));
-    	registerLocale(Locale.forLanguageTag("it-IT"));
-    	registerLocale(Locale.forLanguageTag("ja-JP"));
-    	registerLocale(Locale.forLanguageTag("ko-KR"));
-    	registerLocale(Locale.forLanguageTag("no-NO"));
-    	registerLocale(Locale.forLanguageTag("nl-NL"));
-    	registerLocale(Locale.forLanguageTag("pl-PL"));
+    	registerLocale(Locale.forLanguageTag("en"));
+    	registerLocale(Locale.forLanguageTag("es"));
+    	registerLocale(Locale.forLanguageTag("fr"));
+    	registerLocale(Locale.forLanguageTag("hu"));
+    	registerLocale(Locale.forLanguageTag("it"));
+    	registerLocale(Locale.forLanguageTag("ja"));
+    	registerLocale(Locale.forLanguageTag("ko"));
+    	registerLocale(Locale.forLanguageTag("nb"));
+    	registerLocale(Locale.forLanguageTag("nl"));
+    	registerLocale(Locale.forLanguageTag("pl"));
     	registerLocale(Locale.forLanguageTag("pt-BR"));
-    	registerLocale(Locale.forLanguageTag("ro-RO"));
-    	registerLocale(Locale.forLanguageTag("ru-RU"));
-    	registerLocale(Locale.forLanguageTag("sk-SK"));
-    	registerLocale(Locale.forLanguageTag("sl-SL"));
-    	registerLocale(Locale.forLanguageTag("sv-SV"));
-    	registerLocale(Locale.forLanguageTag("tr-TR"));
-    	registerLocale(Locale.forLanguageTag("uk-UA"));
+    	registerLocale(Locale.forLanguageTag("ro"));
+    	registerLocale(Locale.forLanguageTag("ru"));
+    	registerLocale(Locale.forLanguageTag("sk"));
+    	registerLocale(Locale.forLanguageTag("sl"));
+    	registerLocale(Locale.forLanguageTag("sv"));
+    	registerLocale(Locale.forLanguageTag("tr"));
+    	registerLocale(Locale.forLanguageTag("uk"));
     	registerLocale(Locale.forLanguageTag("zh-CN"));
     	registerLocale(Locale.forLanguageTag("zh-TW"));
     }
