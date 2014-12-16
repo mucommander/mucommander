@@ -1,4 +1,6 @@
 apply plugin: 'application'
+apply plugin: 'launch4j'
+
 mainClassName = 'com.mucommander.Launcher'
 
 allprojects {
@@ -30,6 +32,29 @@ dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.2'
     compile 'com.jidesoft:jide-oss:3.6.4'
 
+    compile 'net.sf.launch4j:launch4j:3.4.0'
+
     testCompile 'org.testng:testng:6.8.8'
     testCompile 'junit:junit:4.11'
 }
+
+buildscript {
+repositories {
+mavenCentral()
+}
+dependencies {
+classpath 'edu.sc.seis.gradle:launch4j:1.0.6'
+}
+}
+    
+launch4j {
+    mainClassName = 'com.mucommander.Launcher'
+    icon = 'package/windows/mucommander.ico'
+    dontWrapJar = true
+    jar = 'mucommander-0.9.0.jar'
+    outfile = 'mucommander.exe'
+}
+
+
+
+
