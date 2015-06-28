@@ -18,7 +18,6 @@ dependencies {
 
     compile group: 'jna', name: 'jna', version: '3.2.2'
     compile group: 'vmware', name: 'vi', version: '2.5'
-    compile group: 'edmund-wagner', name: 'junrar', version: '0.5'
     compile group: 'apache', name: 'commons-net', version: '2.0'
     compile group: 'sshtools', name: 'j2ssh', version: '0.2.9'
     compile 'org.slf4j:slf4j-api:1.7.5'

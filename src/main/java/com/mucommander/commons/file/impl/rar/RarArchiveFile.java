@@ -30,8 +30,8 @@ import com.mucommander.commons.file.ArchiveEntryIterator;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.WrapperArchiveEntryIterator;
 
-import de.innosystec.unrar.exception.RarException;
-import de.innosystec.unrar.rarfile.FileHeader;
+import com.github.junrar.exception.RarException;
+import com.github.junrar.rarfile.FileHeader;
 
 /**
  * RarArchiveFile provides read-only access to archives in the Rar format.
@@ -80,7 +80,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     }
     
     /**
-     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.mucommander.commons.file.impl.rar.provider.de.innosystec.unrar.rarfile.FileHeader}
+     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.github.junrar.rarfile.FileHeader}
      *
      * @param header the object that serves to initialize the attributes of the returned ArchiveEntry
      * @return an ArchiveEntry whose attributes are fetched from the given FileHeader
