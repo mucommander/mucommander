@@ -20,10 +20,11 @@
 package com.mucommander.commons.file.util;
 
 import com.sun.jna.Structure;
-import com.sun.jna.examples.win32.W32API;
 import com.sun.jna.ptr.LongByReference;
 
 import java.nio.CharBuffer;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Exposes parts of the Windows Kernel32 API using the JNA (Java Native Access) library.
@@ -359,6 +360,14 @@ public interface Kernel32API extends W32API {
     	/** An alternative name for the file.
     	 * This name is in the classic 8.3 file name format. */
     	public char[] cAlternateFileName = new char[14];
+
+        @Override
+        protected List getFieldOrder() {
+            return Arrays.asList(
+                    "dwFileAttributes", "ftCreationTime", "ftLastAccessTime", "ftLastWriteTime",
+                    "nFileSizeHigh", "nFileSizeLow", "nFileSizeLow", "dwReserved0", "dwReserved1",
+                    "cFileName", "cAlternateFileName");
+        }
     }
 
     /**
