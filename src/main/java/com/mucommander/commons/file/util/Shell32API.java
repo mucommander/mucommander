@@ -22,7 +22,9 @@ package com.mucommander.commons.file.util;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
-import com.sun.jna.examples.win32.W32API;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Exposes parts of the Windows Shell32 API using the JNA (Java Native Access) library.
@@ -132,6 +134,13 @@ public interface Shell32API extends W32API {
 
             return encodedPaths.toString();
         }
+
+        @Override
+        protected List getFieldOrder() {
+            return Arrays.asList(
+                    "hwnd", "wFunc", "pFrom", "pTo", "fFlags", "fAnyOperationsAborted",
+                    "pNameMappings", "lpszProgressTitle");
+        }
     }
 
     /**
@@ -191,6 +200,11 @@ public interface Shell32API extends W32API {
         public long i64Size;
         /** The total number of items in the specified Recycle Bin. */
         public long i64NumItems;
+
+        @Override
+        protected List getFieldOrder() {
+            return Arrays.asList("cbSize", "i64Size", "i64NumItems");
+        }
     }
 
     /**

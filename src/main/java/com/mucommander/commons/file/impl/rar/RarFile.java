@@ -26,10 +26,10 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.util.CircularByteBuffer;
 
-import de.innosystec.unrar.Archive;
-import de.innosystec.unrar.exception.RarException;
-import de.innosystec.unrar.exception.RarException.RarExceptionType;
-import de.innosystec.unrar.rarfile.FileHeader;
+import com.github.junrar.Archive;
+import com.github.junrar.exception.RarException;
+import com.github.junrar.exception.RarException.RarExceptionType;
+import com.github.junrar.rarfile.FileHeader;
 
 /**
  * 

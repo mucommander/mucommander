@@ -22,6 +22,10 @@ package com.mucommander.commons.file.util;
 import com.sun.jna.Library;
 import com.sun.jna.Structure;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Exposes parts of the C standard library using JNA (Java Native Access).
  *
@@ -59,6 +63,13 @@ public interface CLibrary extends Library {
         public int f_flag;
         /* maximum filename length */
         public int f_namemax;
+
+        @Override
+        protected List getFieldOrder() {
+            return Arrays.asList(
+                    "f_bsize", "f_frsize", "f_blocks", "f_bfree", "f_bavail", "f_files",
+                    "f_ffree", "f_favail", "f_fsid", "f_flag", "f_namemax");
+        }
     }
 
     /**
