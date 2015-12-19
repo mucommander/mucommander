@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<!-- TODO: enable multi-threaded tests. -->
+<!--<suite thread-count="4" data-provider-thread-count="4" verbose="1" name="all" parallel="methods">-->
+<suite verbose="1" name="all">
+    <test name="conf">
+        <packages>
+            <package name="com.mucommander.commons.conf.*"/>
+        </packages>
+    </test>
+</suite>
