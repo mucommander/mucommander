@@ -1,6 +1,3 @@
-[submodule "mucommander-commons-runtime"]
-	path = mucommander-commons-runtime
-	url = https://github.com/mucommander/mucommander-commons-runtime
 [submodule "mucommander-commons-util"]
 	path = mucommander-commons-util
 	url = https://github.com/mucommander/mucommander-commons-util
