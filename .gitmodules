@@ -1,9 +1,6 @@
 [submodule "mucommander-commons-conf"]
 	path = mucommander-commons-conf
 	url = https://github.com/mucommander/mucommander-commons-conf
-[submodule "mucommander-commons-file"]
-	path = mucommander-commons-file
-	url = https://github.com/mucommander/mucommander-commons-file
 [submodule "mucommander-commons-collections"]
 	path = mucommander-commons-collections
 	url = https://github.com/mucommander/mucommander-commons-collections
