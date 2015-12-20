@@ -177,7 +177,7 @@ public class Translator {
      */
     public static String get(String key, String... paramValues) {
     	if (dictionaryBundle.containsKey(key))
-    		return MessageFormat.format(dictionaryBundle.getString(key), paramValues);
+    		return MessageFormat.format(dictionaryBundle.getString(key), (Object[]) paramValues);
 
     	if (languagesBundle.containsKey(key))
     		return languagesBundle.getString(key);
