@@ -54,7 +54,7 @@ jar {
                    "Specification-Version": version,
                    "Implementation-Title": "muCommander",
                    "Implementation-Vendor": "Arik Hadas",
-                   "Implementation-Version": revision,
+                   "Implementation-Version": revision.substring(0, 7),
                    "Build-Date": new Date().format('yyyyMMdd'),
                    "Build-URL": "http://www.mucommander.com/version/nightly.xml")
     }
