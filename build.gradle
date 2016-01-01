@@ -1,5 +1,6 @@
 plugins {
     id 'org.ajoberstar.grgit' version '1.3.2'
+    id "edu.sc.seis.macAppBundle" version "2.1.5"
 }
 
 apply plugin: 'application'
@@ -59,3 +60,20 @@ jar {
                    "Build-URL": "http://www.mucommander.com/version/nightly.xml")
     }
 }
+
+macAppBundle {
+    appName = "muCommander"
+    mainClassName = "com.mucommander.Launcher"
+    appStyle = "Oracle"
+    bundleIdentifier = "com.mucommander.muCommander"
+    jvmVersion = "1.6+"
+    icon = "package/osx/icon.icns"
+    bundleAllowMixedLocalizations = "true"
+
+    javaProperties.put("java.system.class.loader", "com.mucommander.commons.file.AbstractFileClassLoader")
+    javaProperties.put("com.apple.smallTabs", "true")
+    javaProperties.put("com.apple.hwaccel", "true")
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    javaProperties.put("file.encoding", "UTF-8")
+}
+
