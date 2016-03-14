@@ -117,7 +117,7 @@ public class Translator {
 
     public static void init() {
     	final Locale locale = getLocale();
-		final ResourceBundle resourceBundle;
+    	final ResourceBundle resourceBundle;
 
         // Determines if language is one of the languages declared as available
         if(availableLanguages.contains(locale)) {
