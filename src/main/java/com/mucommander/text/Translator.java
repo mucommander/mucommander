@@ -210,7 +210,8 @@ public class Translator {
         private final ResourceBundle resourceBundle;
 
         /**
-         * The cache containing the
+         * The cache containing the already computed values in case the original value contains at least
+		 * one variable.
          */
         private final ConcurrentMap<String, String> cache = new ConcurrentHashMap<>();
 
