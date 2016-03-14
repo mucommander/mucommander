@@ -122,16 +122,16 @@ public class Translator {
         // Determines if language is one of the languages declared as available
         if(availableLanguages.contains(locale)) {
             // Language is available
-			resourceBundle= ResourceBundle.getBundle("dictionary", locale);
+            resourceBundle= ResourceBundle.getBundle("dictionary", locale);
             LOGGER.debug("Language "+locale+" is available.");
         }
         else {
             // Language is not available, fall back to default language
-			resourceBundle= ResourceBundle.getBundle("dictionary");
+            resourceBundle= ResourceBundle.getBundle("dictionary");
             LOGGER.debug("Language "+locale+" is not available, falling back to English");
         }
 
-		dictionaryBundle = new Translator.ResolveVariableResourceBundle(resourceBundle);
+        dictionaryBundle = new Translator.ResolveVariableResourceBundle(resourceBundle);
 
         // Set preferred language in configuration file
         MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, locale.toLanguageTag());
@@ -194,70 +194,70 @@ public class Translator {
     	return key;
     }
 
-	/**
-	 * Decorator allowing to resolve the values composed of variables on the fly.
-	 */
-	private static class ResolveVariableResourceBundle extends ResourceBundle {
+    /**
+     * Decorator allowing to resolve the values composed of variables on the fly.
+     */
+    private static class ResolveVariableResourceBundle extends ResourceBundle {
 
-		/**
-		 * Pattern corresponding to a variable.
-		 */
-		private static final Pattern VARIABLE = Pattern.compile("\\$\\[([^]]+)\\]");
-
-		/**
-		 * The underlying resource bundle.
-		 */
-		private final ResourceBundle resourceBundle;
-
-		/**
-		 * The cache containing the
-		 */
-		private final ConcurrentMap<String, String> cache = new ConcurrentHashMap<>();
-
-		/**
-		 * Constructs a {@code ResolveVariableResourceBundle} with the specified underlying
-		 * {@link ResourceBundle}.
-		 * @param resourceBundle The underlying {@link ResourceBundle}.
+        /**
+         * Pattern corresponding to a variable.
          */
-		ResolveVariableResourceBundle(final ResourceBundle resourceBundle) {
-			this.resourceBundle = resourceBundle;
-		}
+        private static final Pattern VARIABLE = Pattern.compile("\\$\\[([^]]+)\\]");
 
-		@Override
-		protected Object handleGetObject(final String key) {
-			Object result = cache.get(key);
-			if (result == null) {
-				result = resourceBundle.getObject(key);
-				if (result instanceof String) {
-					final String value = (String) result;
-					final Matcher matcher = VARIABLE.matcher(value);
-					if (matcher.find()) {
-						int startIndex = 0;
-						final StringBuilder buffer = new StringBuilder(64);
-						while (matcher.find(startIndex)) {
-							buffer.append(value, startIndex, matcher.start());
-							try {
-								buffer.append(handleGetObject(matcher.group(1)));
-							} catch (MissingResourceException e) {
-								if (LOGGER.isDebugEnabled()) {
-									LOGGER.debug("The key '%s' is missing", key);
-								}
-								buffer.append(value, matcher.start(), matcher.end());
-							}
-							startIndex = matcher.end();
-						}
-						buffer.append(value.substring(startIndex));
-						result = buffer.toString();
-						cache.putIfAbsent(key, (String) result);
-					}
-				}
-			}
-			return result;
-		}
+        /**
+         * The underlying resource bundle.
+         */
+        private final ResourceBundle resourceBundle;
 
-		@Override
-		public Enumeration<String> getKeys() {
-			return resourceBundle.getKeys();
-		}
-	}
+        /**
+         * The cache containing the
+         */
+        private final ConcurrentMap<String, String> cache = new ConcurrentHashMap<>();
+
+        /**
+         * Constructs a {@code ResolveVariableResourceBundle} with the specified underlying
+         * {@link ResourceBundle}.
+         * @param resourceBundle The underlying {@link ResourceBundle}.
+         */
+        ResolveVariableResourceBundle(final ResourceBundle resourceBundle) {
+            this.resourceBundle = resourceBundle;
+        }
+
+        @Override
+        protected Object handleGetObject(final String key) {
+            Object result = cache.get(key);
+            if (result == null) {
+                result = resourceBundle.getObject(key);
+                if (result instanceof String) {
+                    final String value = (String) result;
+                    final Matcher matcher = VARIABLE.matcher(value);
+                    if (matcher.find()) {
+                        int startIndex = 0;
+                        final StringBuilder buffer = new StringBuilder(64);
+                        while (matcher.find(startIndex)) {
+                            buffer.append(value, startIndex, matcher.start());
+                            try {
+                                buffer.append(handleGetObject(matcher.group(1)));
+                            } catch (MissingResourceException e) {
+                                if (LOGGER.isDebugEnabled()) {
+                                    LOGGER.debug("The key '%s' is missing", key);
+                                }
+                                buffer.append(value, matcher.start(), matcher.end());
+                            }
+                            startIndex = matcher.end();
+                        }
+                        buffer.append(value.substring(startIndex));
+                        result = buffer.toString();
+                        cache.putIfAbsent(key, (String) result);
+                    }
+                }
+            }
+            return result;
+        }
+
+        @Override
+        public Enumeration<String> getKeys() {
+            return resourceBundle.getKeys();
+        }
+    }
 }
