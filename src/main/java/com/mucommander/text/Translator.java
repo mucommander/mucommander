@@ -271,7 +271,7 @@ public class Translator {
                         buffer.append(ResolveVariableResourceBundle.resolve(matcher.group(1), resource, map));
                     } catch (MissingResourceException e) {
                         if (LOGGER.isTraceEnabled()) {
-                            LOGGER.trace(   "The key '{}' is missing", key);
+                            LOGGER.trace("The key '{}' is missing", key);
                         }
                         buffer.append(value, matcher.start(), matcher.end());
                     }
