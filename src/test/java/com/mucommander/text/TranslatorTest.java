@@ -44,6 +44,7 @@ public class TranslatorTest {
         assert Translator.get("key2").equals("World");
         assert Translator.get("key3").equals("Hello");
         assert Translator.get("key4").equals("\"Hello the World!\"");
-        assert Translator.get("key5").equals("\"Hello the $[key6]!\"");
+        assert Translator.get("key5").equals("\"Hello the $[key0]!\"");
+        assert Translator.get("key6").equals("-\"Hello the World!\"-\"Hello the $[key0]!\"-$[key7]-");
     }
 }

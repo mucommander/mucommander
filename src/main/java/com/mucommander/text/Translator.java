@@ -18,24 +18,22 @@
 
 package com.mucommander.text;
 
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
 
 
 /**
@@ -195,7 +193,7 @@ public class Translator {
     }
 
     /**
-     * Decorator allowing to resolve the values composed of variables on the fly.
+     * Decorator allowing to resolve the values composed of variables.
      */
     private static class ResolveVariableResourceBundle extends ResourceBundle {
 
@@ -210,10 +208,10 @@ public class Translator {
         private final ResourceBundle resourceBundle;
 
         /**
-         * The cache containing the already computed values in case the original value contains at least
-    	 * one variable.
+         * The cache containing the resolved values in case the original value contains at least
+         * one variable.
          */
-        private final ConcurrentMap<String, String> cache = new ConcurrentHashMap<>();
+        private final Map<String, String> cache;
 
         /**
          * Constructs a {@code ResolveVariableResourceBundle} with the specified underlying
@@ -222,36 +220,14 @@ public class Translator {
          */
         ResolveVariableResourceBundle(final ResourceBundle resourceBundle) {
             this.resourceBundle = resourceBundle;
+            this.cache = ResolveVariableResourceBundle.resolve(resourceBundle);
         }
 
         @Override
         protected Object handleGetObject(final String key) {
-            Object result = cache.get(key);
+            final Object result = cache.get(key);
             if (result == null) {
-                result = resourceBundle.getObject(key);
-                if (result instanceof String) {
-                    final String value = (String) result;
-                    final Matcher matcher = VARIABLE.matcher(value);
-                    if (matcher.find()) {
-                        int startIndex = 0;
-                        final StringBuilder buffer = new StringBuilder(64);
-                        while (matcher.find(startIndex)) {
-                            buffer.append(value, startIndex, matcher.start());
-                            try {
-                                buffer.append(handleGetObject(matcher.group(1)));
-                            } catch (MissingResourceException e) {
-                                if (LOGGER.isDebugEnabled()) {
-                                    LOGGER.debug("The key '%s' is missing", key);
-                                }
-                                buffer.append(value, matcher.start(), matcher.end());
-                            }
-                            startIndex = matcher.end();
-                        }
-                        buffer.append(value.substring(startIndex));
-                        result = buffer.toString();
-                        cache.putIfAbsent(key, (String) result);
-                    }
-                }
+                return resourceBundle.getObject(key);
             }
             return result;
         }
@@ -259,6 +235,55 @@ public class Translator {
         @Override
         public Enumeration<String> getKeys() {
             return resourceBundle.getKeys();
+        }
+
+        /**
+         * Resolves all the values composed of variables.
+         * @param resourceBundle The {@code ResourceBundle} from which we extract the values to resolve.
+         * @return A {@code Map} containing all the values that have been resolved
+         */
+        private static Map<String, String> resolve(final ResourceBundle resourceBundle) {
+            final Map<String, String> result = new HashMap<>();
+            for (final Enumeration<String> enumeration = resourceBundle.getKeys(); enumeration.hasMoreElements(); ) {
+                final String key = enumeration.nextElement();
+                ResolveVariableResourceBundle.resolve(key, resourceBundle, result);
+            }
+            return Collections.unmodifiableMap(result);
+        }
+
+        /**
+         * Resolves the value of the specified key if needed and stores the result in the specified map.
+         * @param key The key to resolve.
+         * @param resource The resource bundle from which we extract the value to resolve.
+         * @param map The map in which we store the result.
+         * @return The resolved value of the specified key.
+         */
+        private static Object resolve(final String key, final ResourceBundle resource, final Map<String, String> map) {
+            Object result = resource.getObject(key);
+            if (result instanceof String) {
+                final String value = (String) result;
+                final Matcher matcher = VARIABLE.matcher(value);
+                int startIndex = 0;
+                final StringBuilder buffer = new StringBuilder(64);
+                while (matcher.find(startIndex)) {
+                    buffer.append(value, startIndex, matcher.start());
+                    try {
+                        buffer.append(ResolveVariableResourceBundle.resolve(matcher.group(1), resource, map));
+                    } catch (MissingResourceException e) {
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("The key '%s' is missing", key);
+                        }
+                        buffer.append(value, matcher.start(), matcher.end());
+                    }
+                    startIndex = matcher.end();
+                }
+                if (buffer.length() > 0) {
+                    buffer.append(value.substring(startIndex));
+                    result = buffer.toString();
+                    map.put(key, (String) result);
+                }
+            }
+            return result;
         }
     }
 }
