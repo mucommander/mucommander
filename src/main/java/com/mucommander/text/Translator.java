@@ -18,18 +18,22 @@
 
 package com.mucommander.text;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -53,7 +57,7 @@ public class Translator {
 
     private static ResourceBundle dictionaryBundle;
     private static ResourceBundle languagesBundle;
-    
+
     /**
      * Prevents instance creation.
      */
@@ -109,20 +113,23 @@ public class Translator {
     	return Locale.forLanguageTag(localeNameFromConf.replace('_', '-'));
     }
 
-    public static void init() throws IOException {
-    	Locale locale = getLocale();
+    public static void init() {
+    	final Locale locale = getLocale();
+    	final ResourceBundle resourceBundle;
 
         // Determines if language is one of the languages declared as available
         if(availableLanguages.contains(locale)) {
             // Language is available
-        	dictionaryBundle= ResourceBundle.getBundle("dictionary", locale);
+            resourceBundle= ResourceBundle.getBundle("dictionary", locale);
             LOGGER.debug("Language "+locale+" is available.");
         }
         else {
             // Language is not available, fall back to default language
-        	dictionaryBundle= ResourceBundle.getBundle("dictionary");
+            resourceBundle= ResourceBundle.getBundle("dictionary");
             LOGGER.debug("Language "+locale+" is not available, falling back to English");
         }
+
+        dictionaryBundle = new Translator.ResolveVariableResourceBundle(resourceBundle);
 
         // Set preferred language in configuration file
         MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, locale.toLanguageTag());
@@ -183,5 +190,100 @@ public class Translator {
     		return languagesBundle.getString(key);
 
     	return key;
+    }
+
+    /**
+     * Decorator allowing to resolve the values composed of variables.
+     */
+    private static class ResolveVariableResourceBundle extends ResourceBundle {
+
+        /**
+         * Pattern corresponding to a variable.
+         */
+        private static final Pattern VARIABLE = Pattern.compile("\\$\\[([^]]+)\\]");
+
+        /**
+         * The underlying resource bundle.
+         */
+        private final ResourceBundle resourceBundle;
+
+        /**
+         * The cache containing the resolved values in case the original value contains at least
+         * one variable.
+         */
+        private final Map<String, String> cache;
+
+        /**
+         * Constructs a {@code ResolveVariableResourceBundle} with the specified underlying
+         * {@link ResourceBundle}.
+         * @param resourceBundle The underlying {@link ResourceBundle}.
+         */
+        ResolveVariableResourceBundle(final ResourceBundle resourceBundle) {
+            this.resourceBundle = resourceBundle;
+            this.cache = ResolveVariableResourceBundle.resolve(resourceBundle);
+        }
+
+        @Override
+        protected Object handleGetObject(final String key) {
+            final Object result = cache.get(key);
+            if (result == null) {
+                return resourceBundle.getObject(key);
+            }
+            return result;
+        }
+
+        @Override
+        public Enumeration<String> getKeys() {
+            return resourceBundle.getKeys();
+        }
+
+        /**
+         * Resolves all the values composed of variables.
+         * @param resourceBundle The {@code ResourceBundle} from which we extract the values to resolve.
+         * @return A {@code Map} containing all the values that have been resolved
+         */
+        private static Map<String, String> resolve(final ResourceBundle resourceBundle) {
+            final Map<String, String> result = new HashMap<>();
+            for (final Enumeration<String> enumeration = resourceBundle.getKeys(); enumeration.hasMoreElements(); ) {
+                final String key = enumeration.nextElement();
+                ResolveVariableResourceBundle.resolve(key, resourceBundle, result);
+            }
+            return Collections.unmodifiableMap(result);
+        }
+
+        /**
+         * Resolves the value of the specified key if needed and stores the result in the specified map.
+         * @param key The key to resolve.
+         * @param resource The resource bundle from which we extract the value to resolve.
+         * @param map The map in which we store the result.
+         * @return The resolved value of the specified key.
+         */
+        private static Object resolve(final String key, final ResourceBundle resource, final Map<String, String> map) {
+            Object result = resource.getObject(key);
+            if (result instanceof String) {
+                final String value = (String) result;
+                final Matcher matcher = VARIABLE.matcher(value);
+                int startIndex = 0;
+                final StringBuilder buffer = new StringBuilder(64);
+                while (matcher.find(startIndex)) {
+                    buffer.append(value, startIndex, matcher.start());
+                    try {
+                        buffer.append(ResolveVariableResourceBundle.resolve(matcher.group(1), resource, map));
+                    } catch (MissingResourceException e) {
+                        if (LOGGER.isTraceEnabled()) {
+                            LOGGER.trace("The key '{}' is missing", key);
+                        }
+                        buffer.append(value, matcher.start(), matcher.end());
+                    }
+                    startIndex = matcher.end();
+                }
+                if (buffer.length() > 0) {
+                    buffer.append(value.substring(startIndex));
+                    result = buffer.toString();
+                    map.put(key, (String) result);
+                }
+            }
+            return result;
+        }
     }
 }
