@@ -243,7 +243,7 @@ public class Translator {
          * @return A {@code Map} containing all the values that have been resolved
          */
         private static Map<String, String> resolve(final ResourceBundle resourceBundle) {
-            final Map<String, String> result = new HashMap<>();
+            final Map<String, String> result = new HashMap<String, String>();
             for (final Enumeration<String> enumeration = resourceBundle.getKeys(); enumeration.hasMoreElements(); ) {
                 final String key = enumeration.nextElement();
                 ResolveVariableResourceBundle.resolve(key, resourceBundle, result);
