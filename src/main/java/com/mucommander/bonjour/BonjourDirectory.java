@@ -97,7 +97,11 @@ public class BonjourDirectory implements ServiceListener {
         }
         else if(!enabled && jmDNS!=null) {
             // Shutdown JmDNS
-            jmDNS.close();
+            try {
+                jmDNS.close();
+            } catch (IOException e) {
+                LOGGER.trace("Could not close jmDNS", e);
+            }
             services.clear();
             jmDNS = null;
         }
