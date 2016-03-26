@@ -1,8 +1,6 @@
 apply plugin: 'java'
 
-repositories {
-    jcenter()
-}
+repositories.jcenter()
 
 dependencies {
     compile project(':mucommander-commons-io')
