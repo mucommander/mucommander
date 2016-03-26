@@ -20,9 +20,7 @@ ext {
     revision = git.head().id
 }
 
-repositories {
-    jcenter()
-}
+repositories.jcenter()
 
 dependencies {
     compile project('mucommander-commons-file')
