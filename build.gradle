@@ -4,7 +4,7 @@ plugins {
 }
 
 apply plugin: 'application'
-mainClassName = 'com.mucommander.Launcher'
+mainClassName = 'com.mucommander.muCommander'
 
 allprojects {
     apply plugin: 'java'

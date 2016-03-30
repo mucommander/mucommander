@@ -62,8 +62,8 @@ import com.mucommander.utils.MuLogging;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class Launcher {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
+public class muCommander {
+	private static final Logger LOGGER = LoggerFactory.getLogger(muCommander.class);
 	
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
@@ -83,7 +83,7 @@ public class Launcher {
     /**
      * Prevents initialisation of the <code>Launcher</code>.
      */
-    private Launcher() {}
+    private muCommander() {}
 
 
     /**

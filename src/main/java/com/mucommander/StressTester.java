@@ -114,7 +114,7 @@ public class StressTester implements Runnable, ActionListener {
      * @throws IOException if an unrecoverable error occurred during startup
      */
     public static void main(String args[]) throws IOException {
-        Launcher.main(args);
+        muCommander.main(args);
 
         StressTester instance = new StressTester();
         JDialog stopDialog = new JDialog();

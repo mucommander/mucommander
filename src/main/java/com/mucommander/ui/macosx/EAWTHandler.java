@@ -22,7 +22,7 @@ package com.mucommander.ui.macosx;
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
-import com.mucommander.Launcher;
+import com.mucommander.muCommander;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.ui.main.FolderPanel;
@@ -75,7 +75,7 @@ class EAWTHandler implements ApplicationListener {
         // application is launched with a file to open, for instance when drag-n-dropping a file to the Dock icon
         // when muCommander is not started yet. In this case, this method is called while Launcher is still busy
         // launching the application (no mainframe exists yet).
-        Launcher.waitUntilLaunched();
+        muCommander.waitUntilLaunched();
 
         AbstractFile file = FileFactory.getFile(event.getFilename());
         FolderPanel activePanel = WindowManager.getCurrentMainFrame().getActivePanel();
