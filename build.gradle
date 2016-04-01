@@ -68,3 +68,15 @@ macAppBundle {
     javaProperties.put("file.encoding", "UTF-8")
 }
 
+// Unix packaging
+task tgz(dependsOn: jar, type: Tar) {
+    println 'Packaging Unix release file...'
+
+    from ('build/libs') { include '*.jar' }
+    from ('package') { include 'license.txt', 'readme.txt' }
+    from 'package/unix/mucommander.sh'
+    baseName = 'mucommander'
+    extension = 'tar.gz'
+    compression = Compression.GZIP
+}
+
