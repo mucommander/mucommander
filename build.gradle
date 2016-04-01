@@ -54,7 +54,7 @@ jar {
 
 macAppBundle {
     appName = "muCommander"
-    mainClassName = "com.mucommander.Launcher"
+    mainClassName = "com.mucommander.muCommander"
     appStyle = "Oracle"
     bundleIdentifier = "com.mucommander.muCommander"
     jvmVersion = "1.6+"
