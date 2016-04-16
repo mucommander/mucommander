@@ -143,7 +143,7 @@ public class Translator {
 
     public static void init() {
     	final Locale locale = getLocale();
-    	ResourceBundle resourceBundle;
+    	final ResourceBundle resourceBundle;
 
     	final Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
 
