@@ -11,6 +11,37 @@ allprojects {
     group = 'org.mucommander'
     version = '0.9.1'
 }
+task(afterEclipseImport)  << {
+    File f = file('.settings/org.eclipse.core.resources.prefs')
+    f.write('eclipse.preferences.version=1\n') 
+    f.append('encoding//src/main/resources/languages.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_ar.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_be.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_ca.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_cs.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_da.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_de.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_en_GB.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_es.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_fr.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_hu.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_it.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_ja.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_ko.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_nb.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_nl.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_pl.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_pt_BR.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_ro.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_ru.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_sk.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_sl.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_sv.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_tr.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_ua.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_zh_CN.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
+}
 
 ext {
     // Open the Git repository in the current directory.
