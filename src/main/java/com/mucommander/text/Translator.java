@@ -166,7 +166,7 @@ public class Translator {
 
         LOGGER.debug("Current language has been set to "+Translator.language);
 
-        languagesBundle = ResourceBundle.getBundle("languages");
+        languagesBundle = ResourceBundle.getBundle("languages", new Utf8ResourceBundleControl());
     }
 
     /**
