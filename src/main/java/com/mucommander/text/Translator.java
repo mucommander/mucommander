@@ -18,8 +18,10 @@
 
 package com.mucommander.text;
 
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,11 +31,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 
 
 /**
@@ -113,19 +120,42 @@ public class Translator {
     	return Locale.forLanguageTag(localeNameFromConf.replace('_', '-'));
     }
 
+	private static final class Utf8ResourceBundleControl extends ResourceBundle.Control {
+		@Override
+		public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) 
+				throws IllegalAccessException, InstantiationException, IOException {
+			
+			String bundleName = toBundleName(baseName, locale);
+			String resourceName = toResourceName(bundleName, "properties");
+			
+			URL resourceURL = loader.getResource(resourceName);
+			if (resourceURL != null) {
+				try {
+					return new PropertyResourceBundle(new InputStreamReader(resourceURL.openStream(), StandardCharsets.UTF_8));
+				} catch (Exception e) {
+		            LOGGER.debug("Language "+locale+" failed to load, non english characters might be broken",e);
+				}
+			}
+
+			return super.newBundle(baseName, locale, format, loader, reload);
+		}
+	}
+
     public static void init() {
     	final Locale locale = getLocale();
-    	final ResourceBundle resourceBundle;
+    	ResourceBundle resourceBundle;
 
-        // Determines if language is one of the languages declared as available
+    	final Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
+
+    	// Determines if language is one of the languages declared as available
         if(availableLanguages.contains(locale)) {
-            // Language is available
-            resourceBundle= ResourceBundle.getBundle("dictionary", locale);
+			// Language is available
+			resourceBundle= ResourceBundle.getBundle("dictionary", locale, utf8ResourceBundleControl);
             LOGGER.debug("Language "+locale+" is available.");
         }
         else {
             // Language is not available, fall back to default language
-            resourceBundle= ResourceBundle.getBundle("dictionary");
+            resourceBundle= ResourceBundle.getBundle("dictionary", utf8ResourceBundleControl);
             LOGGER.debug("Language "+locale+" is not available, falling back to English");
         }
 
