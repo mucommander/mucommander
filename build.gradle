@@ -60,6 +60,7 @@ macAppBundle {
     jvmVersion = "1.6+"
     icon = "package/osx/icon.icns"
     bundleAllowMixedLocalizations = "true"
+    bundleExtras.put("NSHighResolutionCapable", "true")
 
     javaProperties.put("java.system.class.loader", "com.mucommander.commons.file.AbstractFileClassLoader")
     javaProperties.put("com.apple.smallTabs", "true")
