@@ -16,7 +16,10 @@ mainClassName = 'com.mucommander.muCommander'
 allprojects {
     group = 'org.mucommander'
     version = '0.9.1'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 }
+
 task(afterEclipseImport)  << {
     File f = file('.settings/org.eclipse.core.resources.prefs')
     f.write('eclipse.preferences.version=1\n') 
