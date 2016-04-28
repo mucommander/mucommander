@@ -1,8 +1,14 @@
+buildscript {
+    dependencies {
+        classpath files('libs/mucommander-gradle-macappbundle-2.1.6.jar')
+    }
+}
+
 plugins {
     id 'application'
     id 'org.ajoberstar.grgit' version '1.3.2'
-    id 'edu.sc.seis.macAppBundle' version '2.1.5'
     id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'edu.sc.seis.macAppBundle' version '2.1.6'
 }
 
 mainClassName = 'com.mucommander.muCommander'
