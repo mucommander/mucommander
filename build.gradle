@@ -60,6 +60,32 @@ jar {
     }
 }
 
+shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    exclude 'com/ibm/icu/impl/**'
+    exclude 'com/ibm/icu/lang/**'
+    exclude 'com/ibm/icu/math/**'
+    exclude 'com/ibm/icu/util/**'
+    exclude 'javax/el/**'
+    exclude 'javax/servlet/**'
+    exclude 'com/sun/jna/darwin/**'
+    exclude 'com/sun/jna/freebsd-x86/**'
+    exclude 'com/sun/jna/freebsd-x86-64/**'
+    exclude 'com/sun/jna/linux-arm/**'
+    exclude 'com/sun/jna/linux-x86/**'
+    exclude 'com/sun/jna/linux-x86-64/**'
+    exclude 'com/sun/jna/openbsd-x86/**'
+    exclude 'com/sun/jna/openbsd-x86-64/**'
+    exclude 'com/sun/jna/platform/**'
+    exclude 'com/sun/jna/sunos-sparc/**'
+    exclude 'com/sun/jna/sunos-sparcv9/**'
+    exclude 'com/sun/jna/sunos-x86/**'
+    exclude 'com/sun/jna/sunos-x86-64/**'
+    exclude 'com/sun/jna/w32ce-arm/**'
+    exclude 'org/eclipse/**'
+}
+
 macAppBundle {
     appName = "muCommander"
     mainClassName = "com.mucommander.muCommander"
