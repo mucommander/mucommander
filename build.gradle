@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath files('libs/mucommander-gradle-macappbundle-2.1.6.jar')
+        classpath files('libs/mucommander-gradle-macappbundle-2.1.6.jar', 'libs/proguard.jar')
     }
 }
 
@@ -85,6 +85,15 @@ shadowJar {
     exclude 'com/sun/jna/w32ce-arm/**'
     exclude 'org/eclipse/**'
 }
+
+task proguard(type: proguard.gradle.ProGuardTask) {
+    configuration 'package/proguard.txt'
+
+    injars shadowJar.archivePath
+    outjars jar.archivePath
+}
+
+shadowJar.doLast { proguard.execute() }
 
 macAppBundle {
     appName = "muCommander"
