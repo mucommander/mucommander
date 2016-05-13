@@ -9,6 +9,7 @@ plugins {
     id 'org.ajoberstar.grgit' version '1.3.2'
     id 'com.github.johnrengelman.shadow' version '1.2.3'
     id 'edu.sc.seis.macAppBundle' version '2.1.6'
+    id 'edu.sc.seis.launch4j' version '1.6.1'
 }
 
 mainClassName = 'com.mucommander.muCommander'
@@ -114,6 +115,13 @@ macAppBundle {
     javaProperties.put("com.apple.hwaccel", "true")
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     javaProperties.put("file.encoding", "UTF-8")
+}
+
+launch4j {
+    icon = "$projectDir/package/windows/mucommander.ico"
+    copyConfigurable = project.tasks.shadowJar.outputs.files
+    jar = shadowJar.archivePath
+    outfile = project.tasks.jar.archiveName.replace('jar', 'exe')
 }
 
 // Unix packaging
