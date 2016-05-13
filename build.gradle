@@ -89,11 +89,15 @@ shadowJar {
 task proguard(type: proguard.gradle.ProGuardTask) {
     configuration 'package/proguard.txt'
 
-    injars shadowJar.archivePath
-    outjars jar.archivePath
+    injars file('tmp.jar')
+    outjars shadowJar.archivePath
 }
 
-shadowJar.doLast { proguard.execute() }
+shadowJar.doLast {
+    file(shadowJar.archivePath).renameTo('tmp.jar')
+    proguard.execute()
+    file('tmp.jar').delete()
+}
 
 macAppBundle {
     appName = "muCommander"
