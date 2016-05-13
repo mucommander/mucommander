@@ -117,9 +117,7 @@ macAppBundle {
 }
 
 // Unix packaging
-task tgz(dependsOn: jar, type: Tar) {
-    println 'Packaging Unix release file...'
-
+task tgz(dependsOn: shadowJar, type: Tar) {
     from ('build/libs') { include '*.jar' }
     from ('package') { include 'license.txt', 'readme.txt' }
     from 'package/unix/mucommander.sh'
