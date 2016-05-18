@@ -9,7 +9,6 @@ import com.mucommander.commons.file.impl.sevenzip.provider.Common.CRC;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.IntVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.LongVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.ObjectVector;
-import com.mucommander.commons.file.impl.sevenzip.provider.Common.RecordVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.HRESULT;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.IInStream;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.Common.BindPair;

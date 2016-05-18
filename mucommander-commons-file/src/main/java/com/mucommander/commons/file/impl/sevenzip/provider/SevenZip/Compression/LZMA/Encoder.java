@@ -3,7 +3,6 @@ package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Compression
 import java.io.IOException;
 
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.ICodeProgress;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Compression.LZ.BinTree;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Compression.LZMA.Base;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Compression.RangeCoder.BitTreeEncoder;
 

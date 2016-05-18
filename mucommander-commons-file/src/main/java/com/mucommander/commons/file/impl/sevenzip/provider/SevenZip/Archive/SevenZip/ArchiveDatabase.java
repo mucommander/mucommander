@@ -4,7 +4,6 @@ import com.mucommander.commons.file.impl.sevenzip.provider.Common.BoolVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.IntVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.LongVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.ObjectVector;
-import com.mucommander.commons.file.impl.sevenzip.provider.Common.RecordVector;
 
 class ArchiveDatabase {
     public LongVector PackSizes = new LongVector();

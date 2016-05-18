@@ -39,9 +39,8 @@ package com.sun.xfilechooser;
 
 import java.beans.*;
 import javax.swing.*;
-import javax.swing.filechooser.*;
+
 import java.util.*;
-import com.sun.xfilechooser.*;
 
 /**
  * An editor to set the Dialog Type of XFileChooser. Used during

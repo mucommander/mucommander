@@ -2,8 +2,6 @@ package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Common;
 
 import java.io.IOException;
 
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.HRESULT;
-
 public class StreamUtils
 {    
     static public int  ReadStream(java.io.InputStream stream, byte [] data,int off, int size) throws IOException

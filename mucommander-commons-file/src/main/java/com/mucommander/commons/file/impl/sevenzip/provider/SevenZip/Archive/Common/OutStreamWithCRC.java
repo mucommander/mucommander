@@ -1,7 +1,6 @@
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.Common;
 
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.CRC;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.HRESULT;
 
 
 public class OutStreamWithCRC extends java.io.OutputStream {

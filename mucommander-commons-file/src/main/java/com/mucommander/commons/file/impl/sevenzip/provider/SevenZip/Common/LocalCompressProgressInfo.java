@@ -1,10 +1,6 @@
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Common;
 
-import java.io.IOException;
-
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.HRESULT;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.ICompressProgressInfo;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.IProgress;
 
 
 public class LocalCompressProgressInfo implements ICompressProgressInfo {

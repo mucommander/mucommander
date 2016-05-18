@@ -21,7 +21,6 @@ package com.mucommander.ui.main.tabs;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.util.StringUtils;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.tabs.Tab;
 
