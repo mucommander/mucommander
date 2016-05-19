@@ -32,7 +32,7 @@
 package com.mucommander.ui.layout;
 
 import javax.swing.*;
-import javax.swing.SpringLayout;
+
 import java.awt.*;
 
 /**

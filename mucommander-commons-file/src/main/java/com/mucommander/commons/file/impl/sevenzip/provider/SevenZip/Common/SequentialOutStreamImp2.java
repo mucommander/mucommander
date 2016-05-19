@@ -1,9 +1,5 @@
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Common;
 
-import java.io.IOException;
-
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.HRESULT;
-
 public class SequentialOutStreamImp2 extends java.io.OutputStream {
     byte []_buffer;
     int _size;

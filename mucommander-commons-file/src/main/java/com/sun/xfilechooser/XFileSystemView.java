@@ -37,14 +37,10 @@
 
 package com.sun.xfilechooser;
 
-import javax.swing.*;
 import javax.swing.filechooser.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
-import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 
 /**

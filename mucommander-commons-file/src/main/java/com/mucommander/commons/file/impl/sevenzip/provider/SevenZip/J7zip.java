@@ -3,7 +3,6 @@ package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip;
 
 import java.text.DateFormat;
 
-import java.util.HashMap;
 import java.util.Vector;
 
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.IArchiveExtractCallback;

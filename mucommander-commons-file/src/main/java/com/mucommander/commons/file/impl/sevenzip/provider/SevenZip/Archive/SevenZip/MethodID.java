@@ -1,5 +1,4 @@
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip;
-import com.mucommander.commons.file.impl.sevenzip.provider.Common.RecordVector;
 
 class MethodID {
     

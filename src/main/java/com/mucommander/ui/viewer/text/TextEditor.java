@@ -39,8 +39,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.bom.BOMWriter;
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.InformationDialog;

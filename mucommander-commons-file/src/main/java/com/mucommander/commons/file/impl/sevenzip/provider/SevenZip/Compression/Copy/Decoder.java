@@ -1,9 +1,6 @@
 
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Compression.Copy;
 
-import java.io.IOException;
-
-import com.mucommander.commons.file.impl.sevenzip.provider.Common.RecordVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.HRESULT;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.ICompressCoder;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.ICompressProgressInfo;

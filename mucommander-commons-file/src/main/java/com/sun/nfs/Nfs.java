@@ -40,7 +40,6 @@ package com.sun.nfs;
 import java.io.*;
 import com.sun.rpc.*;
 import java.util.Hashtable;
-import java.util.Vector;
 
 /**
  *

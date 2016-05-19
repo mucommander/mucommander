@@ -2,7 +2,6 @@ package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.Sev
 
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.IntVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.LongVector;
-import com.mucommander.commons.file.impl.sevenzip.provider.Common.RecordVector;
 
 public class ArchiveDatabaseEx extends ArchiveDatabase {
     InArchiveInfo ArchiveInfo = new InArchiveInfo();

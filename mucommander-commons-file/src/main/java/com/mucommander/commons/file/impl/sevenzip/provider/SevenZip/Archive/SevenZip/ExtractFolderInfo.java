@@ -1,9 +1,6 @@
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip;
 
-import java.io.IOException;
-
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.BoolVector;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.Common.BindPair;
 
 
 class ExtractFolderInfo {

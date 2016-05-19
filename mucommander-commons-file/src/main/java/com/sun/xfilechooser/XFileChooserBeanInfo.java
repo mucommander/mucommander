@@ -39,8 +39,7 @@ package com.sun.xfilechooser;
 
 import java.beans.*;
 import com.sun.xfilechooser.*;
-import javax.swing.*;
-import javax.swing.filechooser.*;
+
 import java.util.*;
 
 /**

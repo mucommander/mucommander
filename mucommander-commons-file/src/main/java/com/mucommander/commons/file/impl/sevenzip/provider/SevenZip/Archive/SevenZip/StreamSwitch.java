@@ -2,7 +2,6 @@ package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.Sev
 
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.ByteBuffer;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.ObjectVector;
-import com.mucommander.commons.file.impl.sevenzip.provider.Common.RecordVector;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.HRESULT;
 
 

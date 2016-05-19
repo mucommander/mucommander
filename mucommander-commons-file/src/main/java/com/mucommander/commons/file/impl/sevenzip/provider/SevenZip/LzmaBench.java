@@ -1,7 +1,6 @@
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip;
 
 import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class LzmaBench

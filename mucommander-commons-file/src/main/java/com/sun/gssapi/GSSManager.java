@@ -37,8 +37,6 @@
  
 package com.sun.gssapi;
 
-import java.io.*;
-import java.security.NoSuchProviderException;
 import java.security.Provider;
 import java.security.Security;
 import java.util.Hashtable;

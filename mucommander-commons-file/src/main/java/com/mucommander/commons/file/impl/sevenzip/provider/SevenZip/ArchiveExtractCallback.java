@@ -8,7 +8,6 @@ import java.io.File;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.IArchiveExtractCallback;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.IInArchive;
 import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
-import com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip.Handler;
 
 public class ArchiveExtractCallback implements IArchiveExtractCallback // , ICryptoGetTextPassword,
 {

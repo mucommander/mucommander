@@ -1,6 +1,5 @@
 package com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZip;
 import java.io.IOException;
-import java.io.InputStream;
 
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.ByteBuffer;
 import com.mucommander.commons.file.impl.sevenzip.provider.Common.LimitedSequentialInStream;

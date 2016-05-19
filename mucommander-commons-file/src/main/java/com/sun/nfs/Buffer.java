@@ -38,7 +38,6 @@
 package com.sun.nfs;
 
 import java.io.*;
-import com.sun.rpc.*;
 
 /**
  * Here we do all the NFS read and write buffering.

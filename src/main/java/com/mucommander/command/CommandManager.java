@@ -38,7 +38,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.PermissionTypes;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
-import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.ChainedFileFilter;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.RegexpFilenameFilter;

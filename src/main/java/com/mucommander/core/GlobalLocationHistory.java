@@ -20,9 +20,7 @@ package com.mucommander.core;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuSnapshot;
