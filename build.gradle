@@ -122,6 +122,8 @@ launch4j {
     copyConfigurable = project.tasks.shadowJar.outputs.files
     jar = shadowJar.archivePath
     outfile = project.tasks.jar.archiveName.replace('jar', 'exe')
+    cmdLine = '-p %HOMEPATH%/.mucommander'
+    opt = '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader'
 }
 
 // Unix packaging
