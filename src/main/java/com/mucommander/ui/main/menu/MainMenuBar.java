@@ -127,6 +127,7 @@ import com.mucommander.ui.action.impl.ToggleAutoSizeAction;
 import com.mucommander.ui.action.impl.ToggleCommandBarAction;
 import com.mucommander.ui.action.impl.ToggleHiddenFilesAction;
 import com.mucommander.ui.action.impl.ToggleShowFoldersFirstAction;
+import com.mucommander.ui.action.impl.ToggleSinglePanelAction;
 import com.mucommander.ui.action.impl.ToggleStatusBarAction;
 import com.mucommander.ui.action.impl.ToggleToolBarAction;
 import com.mucommander.ui.action.impl.ToggleTreeAction;
@@ -171,6 +172,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem toggleShowFoldersFirstItem;
     private JCheckBoxMenuItem toggleShowHiddenFilesItem;
     private JCheckBoxMenuItem toggleTreeItem;
+    private JCheckBoxMenuItem toggleSinglePanel;
+
     /* TODO branch private JCheckBoxMenuItem toggleBranchView; */
 
 
@@ -295,6 +298,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleShowFoldersFirstAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         toggleShowHiddenFilesItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleHiddenFilesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         toggleTreeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleTreeAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        toggleSinglePanel = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleSinglePanelAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         /* TODO branch toggleBranchView = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleBranchViewAction.class, mainFrame), menuItemMnemonicHelper); */
 
         viewMenu.add(new JSeparator());
@@ -488,7 +492,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             toggleShowHiddenFilesItem.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
             toggleTreeItem.setSelected(activeTable.getFolderPanel().isTreeVisible());
             toggleToggleAutoSizeItem.setSelected(mainFrame.isAutoSizeColumnsEnabled());
-            /* TODO branch toggleBranchView.setSelected(activeTable.getFolderPanel().isBranchView()); */ 
+            toggleSinglePanel.setSelected(mainFrame.isSinglePanel());
+
+            /* TODO branch toggleBranchView.setSelected(activeTable.getFolderPanel().isBranchView()); */
         }
         else if(source==columnsMenu) {
             // Update the selected and enabled state of each column menu item.

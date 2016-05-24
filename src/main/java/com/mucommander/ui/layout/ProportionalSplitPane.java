@@ -122,6 +122,14 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
 
 
     /**
+     * returns current pane split ratio.
+     */
+    public float getSplitRatio() {
+        return this.splitRatio;
+    }
+
+
+    /**
      * Returns the split pane divider component.
      */
     public BasicSplitPaneDivider getDividerComponent() {
