@@ -126,11 +126,20 @@ launch4j {
     opt = '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader'
 }
 
+import org.apache.tools.ant.filters.ReplaceTokens
+
 // Unix packaging
 task tgz(dependsOn: shadowJar, type: Tar) {
-    from ('build/libs') { include '*.jar' }
+    from ('build/libs') {
+        include '*.jar'
+        rename '(.*?)-.*.jar','$1.jar'
+    }
     from ('package') { include 'license.txt', 'readme.txt' }
-    from 'package/unix/mucommander.sh'
+    from ('package/unix/mucommander.sh') {
+        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
+                                       ARGS: ''])
+    }
+    into "muCommander-$version"
     extension = 'tar.gz'
     compression = Compression.GZIP
 }
