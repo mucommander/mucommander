@@ -10,13 +10,14 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.3'
     id 'edu.sc.seis.macAppBundle' version '2.1.6'
     id 'edu.sc.seis.launch4j' version '1.6.1'
+    id 'nebula.ospackage' version '3.5.0'
 }
 
 mainClassName = 'com.mucommander.muCommander'
 
 allprojects {
     group = 'org.mucommander'
-    version = '0.9.1'.replaceAll('\\.', '_')
+    version = '0.9.1'
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
 }
@@ -142,6 +143,39 @@ task tgz(dependsOn: shadowJar, type: Tar) {
     into "muCommander-$version"
     extension = 'tar.gz'
     compression = Compression.GZIP
+}
+
+// Debian packaging
+buildDeb {
+    postInstall file('package/unix/deb/postinst')
+    postUninstall file('package/unix/deb/postrm')
+
+    maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
+    summary = 'a lightweight, cross-platform file manager'
+    suggests('sun-java6-jre')
+    recommends('java-virtual-machine')
+    recommends('java2-runtime')
+
+    from ('build/libs') {
+        include '*.jar'
+        rename '(.*?)-.*.jar','$1.jar'
+    }
+    from ('package') { include 'license.txt', 'readme.txt' }
+    from ('package/unix/mucommander.sh') {
+        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
+                                       ARGS: ''])
+    }
+    into '/usr/share/mucommander'
+
+    from ('src/main/resources/images/mucommander') {
+        include 'icon128_24.png'
+        into '/usr/share/pixmaps/'
+        rename '.*', 'mucommander.png'
+    }
+    from ('package/unix') {
+        include 'mucommander.desktop'
+        into '/usr/share/applications'
+    }
 }
 
 task(afterEclipseImport)  << {
