@@ -7,8 +7,8 @@ bin
 .settings
 
 # Generated Files
-*class
-*log
+*.class
+*.log
 .classpath
 .project
 
