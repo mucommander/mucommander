@@ -178,6 +178,40 @@ buildDeb {
     }
 }
 
+buildRpm {
+    postInstall file('package/unix/deb/postinst')
+    postUninstall file('package/unix/deb/postrm')
+
+    maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
+    summary = 'a lightweight, cross-platform file manager'
+    suggests('sun-java6-jre')
+    recommends('java-virtual-machine')
+    recommends('java2-runtime')
+    os = LINUX
+
+    from ('build/libs') {
+        include '*.jar'
+        rename '(.*?)-.*.jar','$1.jar'
+    }
+    from ('package') { include 'license.txt', 'readme.txt' }
+    from ('package/unix/mucommander.sh') {
+        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
+                                       ARGS: ''])
+    }
+    into '/usr/share/mucommander'
+
+    from ('src/main/resources/images/mucommander/icon128_24.png') {
+        rename '.*', 'mucommander.png'
+        addParentDirs = false
+        into '/usr/share/pixmaps'
+    }
+    from ('package/unix') {
+        include 'mucommander.desktop'
+        addParentDirs = false
+        into '/usr/share/applications'
+    }
+}
+
 task(afterEclipseImport)  << {
     File f = file('.settings/org.eclipse.core.resources.prefs')
     f.write('eclipse.preferences.version=1\n')
