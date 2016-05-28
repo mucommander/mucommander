@@ -54,7 +54,7 @@
 -keep class org.apache.hadoop.hdfs.protocol.DatanodeInfo$AdminStates
 # Apache Commons logging (Hadoop + JetS3t dependency).
 -keep class org.apache.commons.logging.impl.LogFactoryImpl
--keep class org.apache.commons.logging.impl.Jdk14Logger
+-keep class org.apache.commons.logging.impl.Jdk14Logger { <init>(...); }
 -keep class org.apache.commons.logging.Log
 # Keep Enum methods so that they are still considered as Enum at runtime (Hadoop dependency).
 -keepclassmembers class * extends java.lang.Enum {
