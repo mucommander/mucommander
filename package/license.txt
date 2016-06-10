@@ -15,7 +15,7 @@ Additionally, muCommander uses the following third party works:
 - Apache Hadoop under the terms of the Apache License
 - the Furbelow library under the terms of the GNU Lesser General Public License
 - the ICU4J library under the terms of the ICU License
-- the J2SSH library under the terms of the GNU Lesser General Public License
+- the JSCH library under the terms of the Berkeley Software Distribution License 
 - the J7Zip library under the terms of the GNU Lesser General Public License
 - the jCIFS library under the terms of the GNU Lesser General Public License
 - the JetS3t library under the terms of the Apache License

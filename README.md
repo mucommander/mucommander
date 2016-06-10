@@ -118,8 +118,8 @@ muCommander uses the following great third party works :
 - the ICU4J library released under the ICU License.
  the ICU project can be found at http://icu-project.org .
 
-- the J2SSH library released under the GNU LGPL.
- J2SSH can be found at http://www.sshtools.com .
+- the JSCH library released under the BSD license.
+ JSCH can be found at http://www.jcraft.com/jsch/ .
 
 - the J7Zip library released under the GNU LGPL.
  J7Zip can be found at http://sourceforge.net/projects/p7zip/ .

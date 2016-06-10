@@ -477,7 +477,7 @@ public abstract class HadoopFile extends ProtocolFile {
         }
 
         /**
-         * Sets the file attributes using the values contained in the specified J2SSH FileAttributes instance.
+         * Sets the file attributes using the values contained in the specified hadoop FileAttributes instance.
          *
          * @param fileStatus FileStatus instance that contains the file attributes values to use
          */

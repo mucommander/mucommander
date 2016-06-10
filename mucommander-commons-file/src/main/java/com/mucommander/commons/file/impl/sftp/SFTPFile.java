@@ -73,7 +73,7 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
  * reused by SFTPFile instances located on the same server, dealing with concurrency issues. Connections are
  * thus managed transparently and need not be manually managed.</p>
  *
- * <p>Low-level SFTP implementation is provided by the <code>J2SSH</code> library distributed under the LGPL license.</p>
+ * <p>Low-level SFTP implementation is provided by the <code>JSCH</code> library distributed under the BSD license.</p>
  *
  * @see ConnectionPool
  * @author Maxence Bernard, Arik Hadas
@@ -480,13 +480,7 @@ public class SFTPFile extends ProtocolFile {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            // Note: this J2SSH method has been patched to set the permissions of the new directory to 0755 (rwxr-xr-x)
-            // instead of 0. This patches allows to avoid a 'change permissions' request (cf comment code hereunder).
             connHandler.channelSftp.mkdir(absPath);
-
-            // Set new directory permissions to 755 octal (493 dec): "rwxr-xr-x"
-            // Note: by default, permissions for files freshly created is 0 (not readable/writable/executable by anyone)!
-            connHandler.channelSftp.chmod(493, absPath);
 
             // Update local attributes
             fileAttributes.setExists(true);
@@ -585,7 +579,6 @@ public class SFTPFile extends ProtocolFile {
     @Override
     @UnsupportedFileOperation
     public long getFreeSpace() throws UnsupportedFileOperationException {
-        // No way to retrieve this information with J2SSH
         throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
     }
 
@@ -597,7 +590,6 @@ public class SFTPFile extends ProtocolFile {
     @Override
     @UnsupportedFileOperation
     public long getTotalSpace() throws UnsupportedFileOperationException {
-        // No way to retrieve this information with J2SSH
         throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
     }
 
@@ -773,7 +765,6 @@ public class SFTPFile extends ProtocolFile {
                 // date, isDirectory, isLink values are those of the linked file. This is not a problem, except for
                 // isLink because it makes impossible to detect changes in the isLink state. Changes should not happen
                 // very often, but still.
-                // Todo: try and fix for this in J2SSH
                 setAttributes(connHandler.channelSftp.lstat(url.getPath()));
                 setExists(true);
             }
@@ -796,9 +787,9 @@ public class SFTPFile extends ProtocolFile {
         }
 
         /**
-         * Sets the file attributes using the values contained in the specified J2SSH FileAttributes instance.
+         * Sets the file attributes using the values contained in the specified JSCH SftpATTRS instance.
          *
-         * @param attrs J2SSH FileAttributes instance that contains the values to use
+         * @param attrs  JSCH SftpATTRS instance that contains the values to use
          */
         private void setAttributes(SftpATTRS attrs) {
             setDirectory(attrs.isDir());
