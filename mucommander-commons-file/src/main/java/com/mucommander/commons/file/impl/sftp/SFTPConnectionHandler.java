@@ -19,42 +19,30 @@
 
 package com.mucommander.commons.file.impl.sftp;
 
-import com.mucommander.commons.file.AuthException;
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.connection.ConnectionHandler;
-import com.sshtools.j2ssh.SftpClient;
-import com.sshtools.j2ssh.SshClient;
-import com.sshtools.j2ssh.authentication.*;
-import com.sshtools.j2ssh.sftp.SftpSubsystemClient;
-import com.sshtools.j2ssh.transport.IgnoreHostKeyVerification;
-import com.sshtools.j2ssh.transport.publickey.InvalidSshKeyException;
-import com.sshtools.j2ssh.transport.publickey.SshPrivateKey;
-import com.sshtools.j2ssh.transport.publickey.SshPrivateKeyFile;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.UserInfo;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.connection.ConnectionHandler;
 
 /**
  * Handles connections to SFTP servers.
  *
- * @author Maxence Bernard, Vassil Dichev
+ * @author Arik Hadas, Maxence Bernard, Vassil Dichev
  */
 class SFTPConnectionHandler extends ConnectionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(SFTPConnectionHandler.class);
 
-    SshClient sshClient;
-    SftpClient sftpClient;
-    SftpSubsystemClient sftpSubsystem;
-
-    /** 'Password' SSH authentication method */
-    private final static String PASSWORD_AUTH_METHOD = "password";
-
-    /** 'Keyboard interactive' SSH authentication method */
-    private final static String KEYBOARD_INTERACTIVE_AUTH_METHOD = "keyboard-interactive";
+    Session session;
+    ChannelSftp channelSftp;
 
     /** 'Public key' SSH authentication method, not supported at the moment */
     private final static String PUBLIC_KEY_AUTH_METHOD = "publickey";
@@ -84,151 +72,62 @@ class SFTPConnectionHandler extends ConnectionHandler {
 
             LOGGER.trace("creating SshClient");
 
-            // Init SSH client
-            sshClient = new SshClient();
+            JSch jsch = new JSch();
 
             // Override default port (22) if a custom port was specified in the URL
             int port = realm.getPort();
             if(port==-1)
                 port = 22;
 
-            // Connect to server, no host key verification
-            sshClient.connect(realm.getHost(), port, new IgnoreHostKeyVerification());
-
-            // Retrieve a list of available authentication methods on the server.
-            // Some SSH servers support the 'password' auth method (e.g. OpenSSH on Debian unstable), some don't
-            // and only support the 'keyboard-interactive' method.
-            List<String> authMethods = sshClient.getAvailableAuthMethods(credentials.getLogin());
-            if(authMethods==null)   // this can happen
-                throw new IOException();
-
-            LOGGER.info("getAvailableAuthMethods()={}", sshClient.getAvailableAuthMethods(credentials.getLogin()));
-
-            SshAuthenticationClient authClient = null;
             String privateKeyPath = realm.getProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME);
-
-            // Try public key first. Don't try other methods if there's a key file defined
-            if (authMethods.contains(PUBLIC_KEY_AUTH_METHOD) && privateKeyPath != null) {
+            if (privateKeyPath != null) {
                 LOGGER.info("Using {} authentication method", PUBLIC_KEY_AUTH_METHOD);
-
-                PublicKeyAuthenticationClient pk = new PublicKeyAuthenticationClient();
-                pk.setUsername(credentials.getLogin());
-
-                SshPrivateKey key = null;
-                // Throw an AuthException if problems with private key file
-                try {
-                    SshPrivateKeyFile file = SshPrivateKeyFile.parse(new File(privateKeyPath));
-                    key = file.toPrivateKey(credentials.getPassword());
-                } catch (InvalidSshKeyException iske) {
-                    throwAuthException("Invalid private key file or passphrase");  // Todo: localize this entry
-                } catch (IOException ioe) {
-                    throwAuthException("Error reading private key file");  // Todo: localize this entry
-                }
-
-                pk.setKey(key);
-
-                authClient = pk;
-            }
-            // Use 'keyboard-interactive' method only if 'password' auth method is not available and
-            // 'keyboard-interactive' is supported by the server
-            else if(!authMethods.contains(PASSWORD_AUTH_METHOD) && authMethods.contains(KEYBOARD_INTERACTIVE_AUTH_METHOD) && 
-                    privateKeyPath == null) {
-                LOGGER.info("Using {} authentication method", KEYBOARD_INTERACTIVE_AUTH_METHOD);
-
-                KBIAuthenticationClient kbi = new KBIAuthenticationClient();
-                kbi.setUsername(credentials.getLogin());
-
-                // Fake keyboard password input
-                kbi.setKBIRequestHandler(new KBIRequestHandler() {
-                    public void showPrompts(String name, String instruction, KBIPrompt[] prompts) {
-                        // Workaround for what seems to be a bug in J2SSH: this method is called twice, first time
-                        // with a valid KBIPrompt array, second time with null
-                        if(prompts==null) {
-                            LOGGER.trace("prompts is null!");
-                            return;
-                        }
-
-                        for(int i=0; i<prompts.length; i++) {
-                            LOGGER.trace("prompts[{}]={}", i, prompts[i].getPrompt());
-                            prompts[i].setResponse(credentials.getPassword());
-                        }
-                    }
-                });
-
-                authClient = kbi;
-            }
-            // Default to 'password' method, even if server didn't report as being supported
-            else if (privateKeyPath == null) {
-                LOGGER.info("Using {} authentication method", PASSWORD_AUTH_METHOD);
-
-                PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
-                pwd.setUsername(credentials.getLogin());
-                pwd.setPassword(credentials.getPassword());
-
-                authClient = pwd;
+                jsch.addIdentity(privateKeyPath);
             }
 
-            try {
-                int authResult = sshClient.authenticate(authClient);
+            session = jsch.getSession(credentials.getLogin(), realm.getHost(), port);
+            session.setUserInfo(new PasswordAuthentication());
 
-                // Throw an AuthException if authentication failed
-                if(authResult!=AuthenticationProtocolState.COMPLETE)
-                    throwAuthException("Login or password rejected");   // Todo: localize this entry
-
-                LOGGER.info("authentication complete, authResult={}", authResult);
-            }
-            catch(IOException e) {
-                if(e instanceof AuthException)
-                    throw e;
-
-                LOGGER.info("Caught exception while authenticating", e);
-                throwAuthException(e.getMessage());
-            }
-
-
+            session.connect(5*1000);
             // Init SFTP connections
-            sftpClient = sshClient.openSftpClient();
-            sftpSubsystem = sshClient.openSftpChannel();
+            channelSftp = (ChannelSftp) session.openChannel("sftp");
+            channelSftp.connect(5*1000);
+            LOGGER.info("authentication complete");
         }
         catch(IOException e) {
             LOGGER.info("IOException thrown while starting connection", e);
 
             // Disconnect if something went wrong
-            if(sshClient!=null && sshClient.isConnected())
-                sshClient.disconnect();
+            if(session!=null && session.isConnected())
+            	session.disconnect();;
 
-            sshClient = null;
-            sftpClient = null;
-            sftpSubsystem = null;
+            session = null;
+            channelSftp = null;
 
             // Re-throw exception
             throw e;
-        }
+		} catch (JSchException e) {
+			LOGGER.info("Caught exception while authenticating", e);
+            throwAuthException(e.getMessage());
+		}
     }
 
 
     @Override
     public synchronized boolean isConnected() {
-        return sshClient!=null && sshClient.isConnected()
-            && sftpClient!=null && !sftpClient.isClosed()
-            && sftpSubsystem !=null && !sftpSubsystem.isClosed();
+        return session!=null && session.isConnected()
+            && channelSftp!=null && !channelSftp.isClosed();
     }
 
 
     @Override
     public synchronized void closeConnection() {
-        if(sftpClient!=null) {
-            try { sftpClient.quit(); }
-            catch(IOException e) { LOGGER.info("IOException caught while calling sftpClient.quit()", e); }
+        if(channelSftp!=null) {
+            channelSftp.quit();
         }
 
-        if(sftpSubsystem !=null) {
-            try { sftpSubsystem.close(); }
-            catch(IOException e) { LOGGER.info("IOException caught while calling sftpChannel.close ()"); }
-        }
-
-        if(sshClient!=null)
-            sshClient.disconnect();
+        if(session!=null)
+        	session.disconnect();
     }
 
 
@@ -237,4 +136,37 @@ class SFTPConnectionHandler extends ConnectionHandler {
         // No-op, keep alive is not available and shouldn't really be necessary, SSH servers such as OpenSSH usually
         // maintain connections open without limit.
     }
+
+    private class PasswordAuthentication implements UserInfo {
+
+    	@Override
+		public void showMessage(String message) {
+		}
+		
+		@Override
+		public boolean promptYesNo(String message) {
+			return true;
+		}
+		
+		@Override
+		public boolean promptPassword(String message) {
+			return true;
+		}
+		
+		@Override
+		public boolean promptPassphrase(String message) {
+			return true;
+		}
+		
+		@Override
+		public String getPassword() {
+			return credentials.getPassword();
+		}
+		
+		@Override
+		public String getPassphrase() {
+			return credentials.getPassword();
+		}
+    }
+
 }

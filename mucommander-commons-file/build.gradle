@@ -17,10 +17,11 @@ dependencies {
     compile 'org.apache.hadoop:hadoop-core:0.20.2'
     compile 'com.github.junrar:junrar:0.7'
     compile 'commons-collections:commons-collections:3.2.1'
+	compile 'com.jcraft:jsch:0.1.53'
 
     testCompile 'org.testng:testng:6.8.1'
     testCompile 'junit:junit:4.11'
 
     // -- Dependencies awaiting cleanup --
-    compile files('libs/vim25.jar', 'libs/j2ssh.jar')
+    compile files('libs/vim25.jar')
 }

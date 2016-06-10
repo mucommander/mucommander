@@ -64,4 +64,10 @@
 
 -keep class com.jidesoft.plaf.aqua.** { *; }
 -keep class com.jidesoft.**
+
+-keep class com.jcraft.jsch.jce.*
+-keep class * extends com.jcraft.jsch.KeyExchange
+-keep class com.jcraft.jsch.**
+-keep class com.jcraft.jzlib.ZStream
+-keep class com.jcraft.jsch.Compression
  
