@@ -19,7 +19,8 @@
 package com.mucommander.commons.file.connection;
 
 import java.io.InterruptedIOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class ConnectionPool implements Runnable {
     private static ConnectionPool instance = new ConnectionPool();
 
     /** List of registered ConnectionHandler */
-    private final static Vector<ConnectionHandler> connectionHandlers = new Vector<ConnectionHandler>();
+    private final static List<ConnectionHandler> connectionHandlers = new ArrayList<ConnectionHandler>();
 
     /** The thread that monitors connections, null if there currently is no registered ConnectionHandler */
     private static Thread monitorThread;
@@ -106,7 +107,7 @@ public class ConnectionPool implements Runnable {
                 LOGGER.info("adding new ConnectionHandler {}, realm = {}", connHandler, connHandler.getRealm());
 
                 // Insert new ConnectionHandler at first position as if it has more chances to be accessed again soon
-                connectionHandlers.insertElementAt(connHandler, 0);
+                connectionHandlers.add(0, connHandler);
 
                 // Start monitor thread if it is not currently running (if there previously was no registered ConnectionHandler)
                 if(monitorThread==null) {
@@ -131,17 +132,10 @@ public class ConnectionPool implements Runnable {
      *
      * @return a list of registered ConnectionHandler instances
      */
-    public static Vector<ConnectionHandler> getConnectionHandlersSnapshot() {
-        return (Vector<ConnectionHandler>)connectionHandlers.clone();
+    public static List<ConnectionHandler> getConnectionHandlersSnapshot() {
+        return new ArrayList<ConnectionHandler>(connectionHandlers);
     }
     
-    /**
-     * Returns the ConnectionHandler instance located at the given position in the list.
-     */
-    private static ConnectionHandler getConnectionHandlerAt(int i) {
-        return connectionHandlers.elementAt(i);
-    }
-
     /**
      * Called by {@link ConnectionHandler#releaseLock()} to notify the <code>ConnectionHandler</code> that a
      * <code>ConnectionHandler</code> has been released.
