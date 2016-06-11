@@ -110,6 +110,13 @@ macAppBundle {
     icon = "package/osx/icon.icns"
     bundleAllowMixedLocalizations = "true"
     bundleExtras.put("NSHighResolutionCapable", "true")
+    backgroundImage = "package/osx/bg.gif"
+    backgroundImageWidth = 450
+    backgroundImageHeight = 475
+    appIconX = 225
+    appIconY = 75
+    appFolderX = 225
+    appFolderY = 350
 
     javaProperties.put("java.system.class.loader", "com.mucommander.commons.file.AbstractFileClassLoader")
     javaProperties.put("com.apple.smallTabs", "true")
