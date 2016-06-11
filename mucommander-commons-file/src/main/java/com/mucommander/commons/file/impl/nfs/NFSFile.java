@@ -49,7 +49,7 @@ import java.io.OutputStream;
  * license. The {@link #getUnderlyingFileObject()} method allows to retrieve a <code>com.sun.xfile.XFile</code> instance
  * corresponding to this NFSFile.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class NFSFile extends ProtocolFile {
 
@@ -277,7 +277,7 @@ public class NFSFile extends ProtocolFile {
 
     @Override
     public void mkdir() throws IOException {
-        if(!new XFile(absPath).mkdir())
+        if (!file.mkdir())
             throw new IOException();
     }
 
