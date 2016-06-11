@@ -288,12 +288,12 @@ public class NFSFile extends ProtocolFile {
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return new XFileOutputStream(absPath, false);
+        return new XFileOutputStream(file, false);
     }
 
     @Override
     public OutputStream getAppendOutputStream() throws IOException {
-        return new XFileOutputStream(absPath, true);
+        return new XFileOutputStream(file, true);
     }
 
     @Override
