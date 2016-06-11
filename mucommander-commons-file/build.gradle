@@ -23,5 +23,5 @@ dependencies {
     testCompile 'junit:junit:4.11'
 
     // -- Dependencies awaiting cleanup --
-    compile files('libs/vim25.jar')
+    compile files('libs/vim25.jar', 'libs/yanfs.jar')
 }
