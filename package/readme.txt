@@ -12,10 +12,8 @@ muCommander v0.9.1
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
 It runs on any operating system with Java support (Mac OS X, Windows, Linux, *BSD, Solaris...).
 
-Documentation can be found at http://trac.mucommander.com/ .
-
-Please visit the muCommander forums (http://www.mucommander.com/forums) to ask questions, suggest features or
-report a bug. Your feedback is always welcome!
+Please visit the muCommander project page on GitHub (https://github.com/mucommander) to ask questions,
+suggest features, report a bug or browse documentation. Your feedback is always welcome!
 
 Official website: http://www.mucommander.com
 Copyright (C) 2002-2014 Maxence Bernard.
@@ -24,8 +22,8 @@ Copyright (C) 2002-2014 Maxence Bernard.
 Requirements
 ------------
 
-A Java Runtime Environment (JRE) 1.5 or later is required to run muCommander.
-Java 1.6 is recommended, you can download it at http://java.com.
+A Java Runtime Environment (JRE) 1.6 or later is required to run muCommander.
+Java 1.7 is recommended, you can download it at http://java.com.
 
 Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
 
@@ -84,7 +82,7 @@ Bug fixes:
 - Quick lists on the right panel sometimes not being focused (ticket #552), contributed by Jarek Czekalski.
 
 Known issues:
-- Some translations may not be up-to-date. Refer to http://trac.mucommander.com/wiki/Translations for more information.
+- Some translations may not be up-to-date.
 - Mac OS X: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
   up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
 - Executable permissions on local files are not properly preserved when running a unix-based OS with Java 1.5.
@@ -106,8 +104,8 @@ Please refer to the 'license.txt' file bundled with muCommander.
 
 muCommander uses the following great third party works :
 
-- the Ant library released under the Apache License.
- Ant can be found at http://ant.apache.org .
+- the Gradle library released under the Apache License.
+ Gradle can be found at http:/gradle.org .
 
 - Apache Commons libraries released under the Apache License.
  Apache Commons can be found at http://commons.apache.org .
@@ -121,7 +119,7 @@ muCommander uses the following great third party works :
 - the ICU4J library released under the ICU License.
  the ICU project can be found at http://icu-project.org .
 
-- the JSCH library released under the BDS license.
+- the JSCH library released under the BSD license.
  JSCH can be found at http://www.jcraft.com/jsch/ .
 
 - the J7Zip library released under the GNU LGPL.
@@ -247,4 +245,5 @@ Documentation
 -------------
 
 Documentation on how to use, customize and extend muCommander is available at:
-http://trac.mucommander.com
+https://github.com/mucommander
+
