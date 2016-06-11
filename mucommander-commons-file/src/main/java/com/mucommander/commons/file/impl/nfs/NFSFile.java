@@ -77,7 +77,7 @@ public class NFSFile extends ProtocolFile {
     public final static String NFS_VERSION_3 = "v3";
 
     /** Default NFS version */
-    public final static String DEFAULT_NFS_VERSION = NFS_VERSION_2;
+    public final static String DEFAULT_NFS_VERSION = NFS_VERSION_3;
 
     /** Name of the NFS transport protocol property */
     public final static String NFS_PROTOCOL_PROPERTY_NAME = "protocol";
