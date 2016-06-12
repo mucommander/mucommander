@@ -27,12 +27,12 @@ import com.mucommander.text.Translator;
  */
 class FileJobAction {
 
-	protected final static int SKIP_ACTION = 0;
-	protected final static int SKIP_ALL_ACTION = 1;
-	protected final static int RETRY_ACTION = 2;
-	protected final static int CANCEL_ACTION = 3;
-	protected final static int APPEND_ACTION = 4;
-	protected final static int OK_ACTION = 5;
+	protected final static int SKIP = 0;
+	protected final static int SKIP_ALL = 1;
+	protected final static int RETRY = 2;
+	protected final static int CANCEL = 3;
+	protected final static int APPEND = 4;
+	protected final static int OK = 5;
 
 	protected final static String SKIP_TEXT = Translator.get("skip");
 	protected final static String SKIP_ALL_TEXT = Translator.get("skip_all");

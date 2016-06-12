@@ -133,7 +133,7 @@ public class CopyJob extends AbstractCopyJob {
                         // Unable to create folder
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
                         // Retry loops
-                        if(ret==FileJobAction.RETRY_ACTION)
+                        if(ret==FileJobAction.RETRY)
                             continue;
                         // Cancel or close dialog return false
                         return false;
@@ -176,7 +176,7 @@ public class CopyJob extends AbstractCopyJob {
                     // file.ls() failed
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog returns false
                     return false;

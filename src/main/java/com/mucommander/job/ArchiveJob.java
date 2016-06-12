@@ -128,7 +128,7 @@ public class ArchiveJob extends TransferFileJob {
                 
                 int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
-                if(ret==FileJobAction.RETRY_ACTION) {
+                if(ret==FileJobAction.RETRY) {
                     // Reset processed bytes currentFileByteCounter
                     getCurrentFileByteCounter().reset();
 
@@ -189,11 +189,11 @@ public class ArchiveJob extends TransferFileJob {
                 int choice = showErrorDialog(Translator.get("pack_dialog.error_title"),
                                              Translator.get("cannot_write_file", destFile.getName()),
                                              new String[] {FileJobAction.CANCEL_TEXT, FileJobAction.RETRY_TEXT},
-                                             new int[]  {FileJobAction.CANCEL_ACTION, FileJobAction.RETRY_ACTION}
+                                             new int[]  {FileJobAction.CANCEL, FileJobAction.RETRY}
                                              );
 
                 // Retry loops
-                if(choice == FileJobAction.RETRY_ACTION)
+                if(choice == FileJobAction.RETRY)
                     continue;
 
                 // 'Cancel' or close dialog interrupts the job

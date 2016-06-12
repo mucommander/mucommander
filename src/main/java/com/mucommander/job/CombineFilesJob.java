@@ -78,7 +78,7 @@ public class CombineFilesJob extends AbstractCopyJob {
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL_ACTION}
+                    new int[]{FileJobAction.CANCEL}
                     );
             interrupt();
 			return false;
@@ -109,7 +109,7 @@ public class CombineFilesJob extends AbstractCopyJob {
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL_ACTION}
+                    new int[]{FileJobAction.CANCEL}
                     );
             interrupt();
         }
@@ -151,7 +151,7 @@ public class CombineFilesJob extends AbstractCopyJob {
             showErrorDialog(errorDialogTitle,
                     Translator.get("combine_files_job.no_crc_file"),
                     new String[]{FileJobAction.OK_TEXT},
-                    new int[]{FileJobAction.OK_ACTION}
+                    new int[]{FileJobAction.OK}
                     );
 			return;
 		}
@@ -166,13 +166,13 @@ public class CombineFilesJob extends AbstractCopyJob {
 	            showErrorDialog(errorDialogTitle,
 	                    Translator.get("combine_files_job.crc_check_failed", crcDest, crcLine),
 	                    new String[]{FileJobAction.OK_TEXT},
-	                    new int[]{FileJobAction.OK_ACTION}
+	                    new int[]{FileJobAction.OK}
 	                    );
 			} else {
 	            showErrorDialog(Translator.get("combine_files_dialog.error_title"),
 	                    Translator.get("combine_files_job.crc_ok"),
 	                    new String[]{FileJobAction.OK_TEXT},
-	                    new int[]{FileJobAction.OK_ACTION}
+	                    new int[]{FileJobAction.OK}
 	                    );
 			}
 		} catch (Exception e) {
@@ -180,7 +180,7 @@ public class CombineFilesJob extends AbstractCopyJob {
             showErrorDialog(errorDialogTitle,
                     Translator.get("combine_files_job.crc_read_error"),
                     new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL_ACTION}
+                    new int[]{FileJobAction.CANCEL}
                     );
 		} finally {
 			if (crcIn!=null) {
@@ -206,7 +206,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 	            showErrorDialog(errorDialogTitle,
 	                    Translator.get("error_while_transferring", destFile.getName()),
 	                    new String[]{FileJobAction.CANCEL_TEXT},
-	                    new int[]{FileJobAction.CANCEL_ACTION}
+	                    new int[]{FileJobAction.CANCEL}
 	                    );
 			}
 		}

@@ -114,7 +114,7 @@ public class CalculateChecksumJob extends TransferFileJob {
                     // file.ls() failed
                     int ret = showErrorDialog(Translator.get("error"), Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog returns false
                     return false;
@@ -176,7 +176,7 @@ public class CalculateChecksumJob extends TransferFileJob {
                 
                 int ret = showErrorDialog(Translator.get("error"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
-                if(ret==FileJobAction.RETRY_ACTION) {
+                if(ret==FileJobAction.RETRY) {
                     // Reset processed bytes currentFileByteCounter
                     getCurrentFileByteCounter().reset();
 
@@ -235,11 +235,11 @@ public class CalculateChecksumJob extends TransferFileJob {
                 int choice = showErrorDialog(Translator.get("error"),
                                              Translator.get("cannot_write_file", checksumFile.getName()),
                                              new String[] {FileJobAction.CANCEL_TEXT, FileJobAction.RETRY_TEXT},
-                                             new int[]  {FileJobAction.CANCEL_ACTION, FileJobAction.RETRY_ACTION}
+                                             new int[]  {FileJobAction.CANCEL, FileJobAction.RETRY}
                                              );
 
                 // Retry loops
-                if(choice == FileJobAction.RETRY_ACTION)
+                if(choice == FileJobAction.RETRY)
                     continue;
 
                 // 'Cancel' or close dialog interrupts the job

@@ -115,7 +115,7 @@ public class MoveJob extends AbstractCopyJob {
 
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog returns false
                     return false;
@@ -160,7 +160,7 @@ public class MoveJob extends AbstractCopyJob {
                     catch(IOException e) {
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFile.getAbsolutePath()));
                         // Retry loops
-                        if(ret==FileJobAction.RETRY_ACTION)
+                        if(ret==FileJobAction.RETRY)
                             continue;
                         // Cancel, skip or close dialog returns false
                         return false;
@@ -204,7 +204,7 @@ public class MoveJob extends AbstractCopyJob {
                     // file.ls() failed
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog returns false
                     return false;
@@ -225,7 +225,7 @@ public class MoveJob extends AbstractCopyJob {
                 catch(IOException e) {
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_folder", file.getAbsolutePath()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog returns false
                     return false;
@@ -250,7 +250,7 @@ public class MoveJob extends AbstractCopyJob {
 
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                         // Retry loops
-                        if(ret==FileJobAction.RETRY_ACTION)
+                        if(ret==FileJobAction.RETRY)
                             continue;
                         // Cancel, skip or close dialog returns false
                         return false;

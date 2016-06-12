@@ -109,7 +109,7 @@ public class UnpackJob extends AbstractCopyJob {
                     // Unable to create folder
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", baseDestFolder.getName()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY)
                         continue;
                     // Cancel or close dialog interrupts the job
                     interrupt();
@@ -158,7 +158,7 @@ public class UnpackJob extends AbstractCopyJob {
                     // File could not be uncompressed properly
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", getCurrentFilename()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY)
                         continue;
                     // cancel, skip or close dialog will simply return false
                     return false;
@@ -267,7 +267,7 @@ public class UnpackJob extends AbstractCopyJob {
                                 // Unable to create folder
                                 int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", entryFile.getName()));
                                 // Retry loops
-                                if(ret==FileJobAction.RETRY_ACTION)
+                                if(ret==FileJobAction.RETRY)
                                     continue;
                                 // Cancel or close dialog return false
                                 return false;

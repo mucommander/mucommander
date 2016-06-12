@@ -540,7 +540,7 @@ public abstract class FileJob implements Runnable {
      */
     protected int showErrorDialog(String title, String message) {
         String actionTexts[] = new String[]{FileJobAction.SKIP_TEXT, FileJobAction.SKIP_ALL_TEXT, FileJobAction.RETRY_TEXT, FileJobAction.CANCEL_TEXT};
-        int actionValues[] = new int[]{FileJobAction.SKIP_ACTION, FileJobAction.SKIP_ALL_ACTION, FileJobAction.RETRY_ACTION, FileJobAction.CANCEL_ACTION};
+        int actionValues[] = new int[]{FileJobAction.SKIP, FileJobAction.SKIP_ALL, FileJobAction.RETRY, FileJobAction.CANCEL};
 
         return showErrorDialog(title, message, actionTexts, actionValues);
     }
@@ -554,8 +554,8 @@ public abstract class FileJob implements Runnable {
         // Return SKIP_ACTION if 'skip all' has previously been selected and 'skip' is in the list of actions.
         if(autoSkipErrors) {
             for (int actionValue : actionValues)
-                if (actionValue == FileJobAction.SKIP_ACTION)
-                    return FileJobAction.SKIP_ACTION;
+                if (actionValue == FileJobAction.SKIP)
+                    return FileJobAction.SKIP;
         }
 
         // Send a system notification if a notifier is available and enabled
@@ -582,12 +582,12 @@ public abstract class FileJob implements Runnable {
 
         // Cancel or close dialog stops this job
         int userChoice = waitForUserResponse(dialog);
-        if(userChoice==-1 || userChoice==FileJobAction.CANCEL_ACTION)
+        if(userChoice==-1 || userChoice==FileJobAction.CANCEL)
             interrupt();
         // Keep 'skip all' choice for further error and return SKIP_ACTION
-        else if(userChoice==FileJobAction.SKIP_ALL_ACTION) {
+        else if(userChoice==FileJobAction.SKIP_ALL) {
             autoSkipErrors = true;
-            return FileJobAction.SKIP_ACTION;
+            return FileJobAction.SKIP;
         }
 
         return userChoice;
