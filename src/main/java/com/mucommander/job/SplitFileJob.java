@@ -135,7 +135,7 @@ public class SplitFileJob extends AbstractCopyJob {
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", sourceFile.getName()),
                     new String[]{CANCEL_TEXT},
-                    new int[]{CANCEL_ACTION}
+                    new int[]{FileJobAction.CANCEL_ACTION}
                     );
             setState(FileJobState.INTERRUPTED);
             return;
@@ -184,7 +184,7 @@ public class SplitFileJob extends AbstractCopyJob {
 					showErrorDialog(ActionProperties.getActionLabel(SplitFileAction.Descriptor.ACTION_ID),
 							Translator.get("split_file_dialog.insert_new_media"), 
 							new String[]{OK_TEXT, CANCEL_TEXT}, 
-							new int[]{OK_ACTION, CANCEL_ACTION});
+							new int[]{FileJobAction.OK_ACTION, FileJobAction.CANCEL_ACTION});
 					if (getState() == FileJobState.INTERRUPTED) {
 						return false;
 					}
@@ -228,7 +228,7 @@ public class SplitFileJob extends AbstractCopyJob {
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
                     new String[]{CANCEL_TEXT},
-                    new int[]{CANCEL_ACTION}
+                    new int[]{FileJobAction.CANCEL_ACTION}
                     );
 			return false;
 			
@@ -277,7 +277,7 @@ public class SplitFileJob extends AbstractCopyJob {
 		            showErrorDialog(errorDialogTitle,
 		                    Translator.get("error_while_transferring", crcFileName),
 		                    new String[]{CANCEL_TEXT},
-		                    new int[]{CANCEL_ACTION}
+		                    new int[]{FileJobAction.CANCEL_ACTION}
 		                    );
 				}
             }

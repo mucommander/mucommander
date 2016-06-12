@@ -97,7 +97,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
 
                 int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFileName));
                 // Retry loops
-                if(ret==RETRY_ACTION)
+                if(ret==FileJobAction.RETRY_ACTION)
                     continue;
                 // Cancel or close dialog return false
                 return null;
@@ -215,7 +215,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                 break;
             }
             catch(IOException e) {
-                if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", rwArchiveFile.getName()))==RETRY_ACTION)
+                if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", rwArchiveFile.getName()))==FileJobAction.RETRY_ACTION)
                     continue;
 
                 break;

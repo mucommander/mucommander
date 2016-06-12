@@ -322,18 +322,18 @@ public abstract class TransferFileJob extends FileJob {
                         choice = showErrorDialog(errorDialogTitle,
                                                  Translator.get("error_while_transferring", sourceFile.getName()),
                                                  new String[]{SKIP_TEXT, SKIP_ALL_TEXT, APPEND_TEXT, RETRY_TEXT, CANCEL_TEXT},
-                                                 new int[]{SKIP_ACTION, SKIP_ALL_ACTION, APPEND_ACTION, RETRY_ACTION, CANCEL_ACTION}
+                                                 new int[]{FileJobAction.SKIP_ACTION, FileJobAction.SKIP_ALL_ACTION, FileJobAction.APPEND_ACTION, FileJobAction.RETRY_ACTION, FileJobAction.CANCEL_ACTION}
                                                  );
                     break;
                 }
 
                 // Retry action (append or retry)
-                if(choice==RETRY_ACTION || choice==APPEND_ACTION) {
+                if(choice==FileJobAction.RETRY_ACTION || choice==FileJobAction.APPEND_ACTION) {
                     // Reset current file byte counters
                     currentFileByteCounter.reset();
                     currentFileSkippedByteCounter.reset();
                     // Append resumes transfer
-                    append = choice==APPEND_ACTION;
+                    append = choice==FileJobAction.APPEND_ACTION;
                     continue;
                 }
 

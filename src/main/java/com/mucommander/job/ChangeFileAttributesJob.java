@@ -86,7 +86,7 @@ public class ChangeFileAttributesJob extends FileJob {
                     // Unable to open source file
                     int ret = showErrorDialog("", Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
-                    if(ret==RETRY_ACTION)
+                    if(ret==FileJobAction.RETRY_ACTION)
                         continue;
                     // Cancel, skip or close dialog return false
                     return false;

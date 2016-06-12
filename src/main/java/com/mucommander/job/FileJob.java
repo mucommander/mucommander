@@ -129,13 +129,6 @@ public abstract class FileJob implements Runnable {
 //    private int nbFilesProcessed;
 //    private int nbFilesDiscovered;
 
-    protected final static int SKIP_ACTION = 0;
-    protected final static int SKIP_ALL_ACTION = 1;
-    protected final static int RETRY_ACTION = 2;
-    protected final static int CANCEL_ACTION = 3;
-    protected final static int APPEND_ACTION = 4;
-    protected final static int OK_ACTION = 5;
-
     protected final static String SKIP_TEXT = Translator.get("skip");
     protected final static String SKIP_ALL_TEXT = Translator.get("skip_all");
     protected final static String RETRY_TEXT = Translator.get("retry");
@@ -577,7 +570,7 @@ public abstract class FileJob implements Runnable {
      */
     protected int showErrorDialog(String title, String message) {
         String actionTexts[] = new String[]{SKIP_TEXT, SKIP_ALL_TEXT, RETRY_TEXT, CANCEL_TEXT};
-        int actionValues[] = new int[]{SKIP_ACTION, SKIP_ALL_ACTION, RETRY_ACTION, CANCEL_ACTION};
+        int actionValues[] = new int[]{FileJobAction.SKIP_ACTION, FileJobAction.SKIP_ALL_ACTION, FileJobAction.RETRY_ACTION, FileJobAction.CANCEL_ACTION};
 
         return showErrorDialog(title, message, actionTexts, actionValues);
     }
@@ -591,8 +584,8 @@ public abstract class FileJob implements Runnable {
         // Return SKIP_ACTION if 'skip all' has previously been selected and 'skip' is in the list of actions.
         if(autoSkipErrors) {
             for (int actionValue : actionValues)
-                if (actionValue == SKIP_ACTION)
-                    return SKIP_ACTION;
+                if (actionValue == FileJobAction.SKIP_ACTION)
+                    return FileJobAction.SKIP_ACTION;
         }
 
         // Send a system notification if a notifier is available and enabled
@@ -619,12 +612,12 @@ public abstract class FileJob implements Runnable {
 
         // Cancel or close dialog stops this job
         int userChoice = waitForUserResponse(dialog);
-        if(userChoice==-1 || userChoice==CANCEL_ACTION)
+        if(userChoice==-1 || userChoice==FileJobAction.CANCEL_ACTION)
             interrupt();
         // Keep 'skip all' choice for further error and return SKIP_ACTION
-        else if(userChoice==SKIP_ALL_ACTION) {
+        else if(userChoice==FileJobAction.SKIP_ALL_ACTION) {
             autoSkipErrors = true;
-            return SKIP_ACTION;
+            return FileJobAction.SKIP_ACTION;
         }
 
         return userChoice;

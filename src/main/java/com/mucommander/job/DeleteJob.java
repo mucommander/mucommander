@@ -139,7 +139,7 @@ public class DeleteJob extends FileJob {
 
                         ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", filePath));
                         // Retry loops
-                        if(ret==RETRY_ACTION)
+                        if(ret==FileJobAction.RETRY_ACTION)
                             continue;
                         // Cancel, skip or close dialog returns false
                         return false;
@@ -164,7 +164,7 @@ public class DeleteJob extends FileJob {
                                       Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())
                                       );
                 // Retry loops
-                if(ret==RETRY_ACTION)
+                if(ret==FileJobAction.RETRY_ACTION)
                     continue;
                 // Cancel, skip or close dialog returns false
                 return false;
@@ -209,7 +209,7 @@ public class DeleteJob extends FileJob {
                     break;
                 }
                 catch(IOException e) {
-                    if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName()))==RETRY_ACTION)
+                    if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName()))==FileJobAction.RETRY_ACTION)
                         continue;
 
                     break;
