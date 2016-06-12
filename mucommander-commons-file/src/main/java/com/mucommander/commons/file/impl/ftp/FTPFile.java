@@ -947,6 +947,9 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             if(isClosed)
                 return;
 
+            // we need to refresh the file after an update
+            // otherwise the displayed size of archive files is incorrect
+            file = getFTPFile(getURL());
             isClosed = true;
 
             try {
