@@ -126,9 +126,6 @@ public abstract class FileJob implements Runnable {
     /** True if the user asked to automatically skip errors */
     private boolean autoSkipErrors;
 
-//    private int nbFilesProcessed;
-//    private int nbFilesDiscovered;
-
     /**
      * Creates a new FileJob without starting it.
      *
@@ -455,27 +452,8 @@ public abstract class FileJob implements Runnable {
                 }
             }
         }
-//        if(this.currentFile!=null)
-//            this.nbFilesProcessed++;
     }
 
-
-//    protected void fileDiscovered(AbstractFile file) {
-//        this.nbFilesDiscovered++;
-//    }
-//
-//    protected void filesDiscovered(AbstractFile files[]) {
-//        this.nbFilesDiscovered += files.length;
-//    }
-//
-//    protected int getNbFilesDiscovered() {
-//        return this.nbFilesDiscovered;
-//    }
-//
-//    protected int getNbFilesProcessed() {
-//        return this.nbFilesProcessed;
-//    }
-//
 
     /**
      * Returns the name of the file currently being processed surrounded by simple quotes (e.g. 'test.zip'), or an empty
@@ -762,8 +740,6 @@ public abstract class FileJob implements Runnable {
 
         // Notify that this job has started
         jobStarted();
-
-//this.nbFilesDiscovered += nbFiles;
 
         // Loop on all source files, checking that job has not been interrupted
         for(int i=0; i<nbFiles; i++) {
