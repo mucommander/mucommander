@@ -18,14 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.command.Command;
-import com.mucommander.command.CommandManager;
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandManager;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * User configurable variant of {@link InternalEditAction}.
@@ -67,7 +71,7 @@ public class EditAction extends InternalEditAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.FILES; }
+		public ActionCategory getCategory() { return ActionCategory.FILES; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

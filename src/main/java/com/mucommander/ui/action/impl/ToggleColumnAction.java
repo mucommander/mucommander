@@ -20,7 +20,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
@@ -69,7 +69,7 @@ public abstract class ToggleColumnAction extends MuAction {
 
         public String getId() { return column.getToggleColumnActionId(); }
 
-        public ActionCategory getCategory() { return ActionCategories.VIEW; }
+        public ActionCategory getCategory() { return ActionCategory.VIEW; }
 
         public KeyStroke getDefaultAltKeyStroke() { return null; }
 

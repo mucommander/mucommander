@@ -108,7 +108,6 @@ public class ChangeFileAttributesJob extends FileJob {
             }
         }
 
-//        if(date!=-1)
         if(!file.isFileOperationSupported(FileOperation.CHANGE_DATE))
             return false;
 

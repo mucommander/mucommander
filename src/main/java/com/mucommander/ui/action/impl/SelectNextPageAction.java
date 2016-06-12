@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
@@ -68,7 +68,7 @@ public class SelectNextPageAction extends SelectForwardAction {
         }
 
         public ActionCategory getCategory() {
-            return ActionCategories.SELECTION;
+            return ActionCategory.SELECTION;
         }
 
         public KeyStroke getDefaultKeyStroke() {

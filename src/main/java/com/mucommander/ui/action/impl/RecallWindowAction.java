@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
@@ -116,7 +116,7 @@ public class RecallWindowAction extends MuAction {
 
 		public String getId() { return ACTION_ID+(windowNumber==-1?"":""+windowNumber); }
 
-		public ActionCategory getCategory() { return ActionCategories.WINDOW; }
+		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

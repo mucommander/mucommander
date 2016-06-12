@@ -25,12 +25,26 @@ import com.mucommander.text.Translator;
  * 
  * @author Arik Hadas
  */
-public class ActionCategory implements Comparable<ActionCategory> {
-	
+public enum ActionCategory {
+	ALL("all") {
+		@Override
+        public boolean contains(String actionId) {
+            return true;
+		}
+	},
+	NAVIGATION("navigation"),
+	SELECTION("selection"),
+	VIEW("view"),
+	FILES("file_operations"),
+	WINDOW("windows"),
+	TAB("tabs"),
+	MISC("misc"),
+	COMMANDS("commands");
+
 	/** The category's label key in the dictionary file */
 	private String descriptionKey;
 	 
-	protected ActionCategory(String descriptionKey) {
+	ActionCategory(String descriptionKey) {
 		this.descriptionKey = "action_categories." + descriptionKey;
 	}
 
@@ -40,25 +54,12 @@ public class ActionCategory implements Comparable<ActionCategory> {
 	
 	public boolean contains(String actionId) {
 		ActionCategory actionCategory = ActionProperties.getActionCategory(actionId);
-		if (actionCategory != null)
-			return descriptionKey.equals(actionCategory.getDescriptionKey());
-		return false;
-	}
-	
-	public String toString() { 
-		String description = getDescription();
-		if (description != null)
-			return description;
-		return getDescriptionKey();
-	}
-	
-	public boolean equals(Object obj) {
-		if (obj instanceof ActionCategory)
-			return descriptionKey.equals(((ActionCategory) obj).descriptionKey);
-		return false;
+		return actionCategory != null && descriptionKey.equals(actionCategory.getDescriptionKey());
 	}
 
-	public int compareTo(ActionCategory actionCategory) {
-        return getDescription().compareTo(actionCategory.getDescription());
+	@Override
+	public String toString() { 
+		String description = getDescription();
+		return description != null ? description : getDescriptionKey();
 	}
 }

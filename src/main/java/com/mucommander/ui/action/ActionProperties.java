@@ -37,7 +37,7 @@ public class ActionProperties {
 	private static ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
 	
 	/* Contains all used action categories (i.e for each category at least one action is registered) */
-	private static TreeSet<ActionCategory> actionCategories = new TreeSet<ActionCategory>();
+	private static TreeSet<ActionCategory> ActionCategory = new TreeSet<ActionCategory>();
 
 	/* Maps action id -> primary shortcut */
 	private static HashMap<String, KeyStroke> defaultPrimaryActionKeymap = new HashMap<String, KeyStroke>();
@@ -60,7 +60,7 @@ public class ActionProperties {
 		// Add the category in the descriptor to the categories pool
 		ActionCategory category = actionDescriptor.getCategory();
 		if (category != null)
-			actionCategories.add(category);
+			ActionCategory.add(category);
 		
 		// Add the shortcuts in the descriptor to the default keymap
 		KeyStroke defaultActionKeyStroke = actionDescriptor.getDefaultKeyStroke();
@@ -200,8 +200,8 @@ public class ActionProperties {
 	 * 
 	 * @return Set of existed action categories.
 	 */
-	public static Set<ActionCategory> getActionCategories() {
-		return actionCategories;
+	public static Set<ActionCategory> getActionCategory() {
+		return ActionCategory;
 	}
 	
 	private static ActionDescriptor getNullSafeActionDescriptor(String actionId) {

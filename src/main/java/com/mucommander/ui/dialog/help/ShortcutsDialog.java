@@ -118,7 +118,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         Hashtable<ActionCategory, LinkedList<String>> categoryToItsActionsWithShortcutsIdsMap = new Hashtable<ActionCategory, LinkedList<String>>();
 
         // Initialize empty LinkedList for each category
-        for(ActionCategory category : ActionProperties.getActionCategories())
+        for(ActionCategory category : ActionProperties.getActionCategory())
             categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<String>());
 
         // Go over all action ids

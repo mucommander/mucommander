@@ -19,7 +19,7 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
@@ -135,8 +135,8 @@ public class ShortcutsPanel extends PreferencesPanel {
 		panel.add(new JLabel(Translator.get("shortcuts_panel" + ".show") + ":"));
 		
 		final JComboBox combo = new JComboBox();
-		combo.addItem(ActionCategories.ALL);
-	    for(ActionCategory category : ActionProperties.getActionCategories())
+		combo.addItem(ActionCategory.ALL);
+	    for(ActionCategory category : ActionProperties.getActionCategory())
 	      combo.addItem(category);
 	    
 	    combo.addActionListener(new ActionListener() {

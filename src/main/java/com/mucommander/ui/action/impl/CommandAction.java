@@ -33,7 +33,7 @@ import com.mucommander.job.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
@@ -133,7 +133,7 @@ public class CommandAction extends MuAction {
 
     	public String getLabel() { return label; }
 
-    	public ActionCategory getCategory() { return ActionCategories.COMMANDS; }
+    	public ActionCategory getCategory() { return ActionCategory.COMMANDS; }
 
     	public KeyStroke getDefaultAltKeyStroke() { return null; }
 

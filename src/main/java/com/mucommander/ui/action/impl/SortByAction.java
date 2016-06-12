@@ -18,8 +18,15 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.ActivePanelListener;
@@ -27,13 +34,6 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableColumnModelEvent;
-import javax.swing.event.TableColumnModelListener;
-import java.util.Map;
 
 /**
  * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by a specified criterion.
@@ -134,7 +134,7 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
 
         public String getId() { return column.getSortByColumnActionId(); }
 
-		public ActionCategory getCategory() { return ActionCategories.VIEW; }
+		public ActionCategory getCategory() { return ActionCategory.VIEW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 

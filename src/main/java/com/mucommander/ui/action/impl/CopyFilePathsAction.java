@@ -25,7 +25,6 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategories;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
@@ -76,7 +75,7 @@ public class CopyFilePathsAction extends SelectedFilesAction {
     	
 		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategories.SELECTION; }
+		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
