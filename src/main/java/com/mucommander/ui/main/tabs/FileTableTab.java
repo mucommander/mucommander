@@ -89,7 +89,7 @@ public abstract class FileTableTab implements Tab {
 	}
 
 	private String createDisplayableTitleFromLocation(FileURL location) {
-		boolean local = location.getHost().equals(FileURL.LOCALHOST);
+		boolean local = FileURL.LOCALHOST.equals(location.getHost());
 
 		return getHostRepresentation(location.getHost(), local) + getFilenameRepresentation(location.getFilename(), local);
 	}
