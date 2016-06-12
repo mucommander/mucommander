@@ -30,7 +30,6 @@ import com.mucommander.commons.file.AbstractRWArchiveFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -91,7 +90,7 @@ public class CopyJob extends AbstractCopyJob {
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
-        if (getState() == State.INTERRUPTED)
+        if (getState() == FileJobState.INTERRUPTED)
             return false;
 		
         // Destination folder
@@ -150,7 +149,7 @@ public class CopyJob extends AbstractCopyJob {
                     // for each file in folder...
                     AbstractFile subFiles[] = file.ls();
 //filesDiscovered(subFiles);
-                    for(int i=0; i<subFiles.length && getState() != State.INTERRUPTED; i++) {
+                    for(int i=0; i<subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(subFiles[i]);
                         processFile(subFiles[i], destFile);

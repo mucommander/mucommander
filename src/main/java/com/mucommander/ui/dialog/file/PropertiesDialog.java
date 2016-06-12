@@ -42,7 +42,7 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.PropertiesJob;
-import com.mucommander.job.FileJob.State;
+import com.mucommander.job.FileJobState;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -190,7 +190,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
     public void run() {
         dial.setAnimated(true);
-        while(repaintThread!=null && job.getState() != State.FINISHED) {
+        while(repaintThread!=null && job.getState() != FileJobState.FINISHED) {
             updateLabels();
 			
             try { Thread.sleep(REFRESH_RATE); }

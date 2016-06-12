@@ -30,7 +30,6 @@ import com.mucommander.commons.file.AbstractRWArchiveFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -82,7 +81,7 @@ public class MoveJob extends AbstractCopyJob {
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
-        if (getState() == State.INTERRUPTED)
+        if (getState() == FileJobState.INTERRUPTED)
             return false;
 		
         // Destination folder
@@ -177,7 +176,7 @@ public class MoveJob extends AbstractCopyJob {
                     boolean isFolderEmpty = true;
                     for (AbstractFile subFile : subFiles) {
                         // Return now if the job was interrupted, so that we do not attempt to delete this folder
-                        if (getState() == State.INTERRUPTED)
+                        if (getState() == FileJobState.INTERRUPTED)
                             return false;
 
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
@@ -214,7 +213,7 @@ public class MoveJob extends AbstractCopyJob {
             } while(true);
 
             // Return now if the job was interrupted, so that we do not attempt to delete this folder
-            if (getState() == State.INTERRUPTED)
+            if (getState() == FileJobState.INTERRUPTED)
                 return false;
 
             // finally, delete the empty folder
@@ -238,7 +237,7 @@ public class MoveJob extends AbstractCopyJob {
 
             // if renameTo() was not supported or failed, or if it wasn't possible because of 'append',
             // try the hard way by copying the file first, and then deleting the source file.
-            if(tryCopyFile(file, destFile, append, errorDialogTitle) && getState() != State.INTERRUPTED) {
+            if(tryCopyFile(file, destFile, append, errorDialogTitle) && getState() != FileJobState.INTERRUPTED) {
                 // Delete the source file
                 do {		// Loop for retry
                     try  {

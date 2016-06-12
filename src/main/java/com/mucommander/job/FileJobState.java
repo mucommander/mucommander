@@ -19,21 +19,19 @@
 package com.mucommander.job;
 
 /**
- * Interface to be implemented by classes that wish to be notified of state changes on a particular
- * {@link FileJob}. Those classes need to be registered to receive those events, this can be done by calling
- * {@link FileJob#addFileJobListener(FileJobListener)}.
+ * Internal states of a {@code FileJob}
  *
- * @author Maxence Bernard
+ * @author Arik Hadas
  */
-public interface FileJobListener {
-
-    /**
-     * Called when the state of the specified FileJob has changed.
-     *
-     * @param source the FileJob which state has changed
-     * @param oldState the FileJob's state prior to the change, see FileJob's constant fields for possible values
-     * @param newState the new FileJob's state, see FileJob's constant fields for possible values
-     */
-    public abstract void jobStateChanged(FileJob source, FileJobState oldState, FileJobState newState);
-
+public enum FileJobState {
+	/** Indicates that this job has not started yet, this is a temporary state */
+	NOT_STARTED, 
+	/** Indicates that this job is currently processing files, this is a temporary state */
+	RUNNING,
+	/** Indicates that this job is currently paused, waiting for user response, this is a temporary state */
+	PAUSED,
+	/** Indicates that this job has been interrupted by the end user, this is a permanent state */
+	INTERRUPTED,
+	/** Indicates that this job has naturally finished (i.e. without being interrupted), this is a permanent state */
+	FINISHED
 }

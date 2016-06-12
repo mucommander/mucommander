@@ -26,7 +26,6 @@ import com.mucommander.commons.io.base64.Base64OutputStream;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -254,7 +253,7 @@ public class SendMailJob extends TransferFileJob {
 
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if (getState() == State.INTERRUPTED)
+        if (getState() == FileJobState.INTERRUPTED)
             return false;
 
         // Send file attachment
@@ -308,7 +307,7 @@ public class SendMailJob extends TransferFileJob {
             showErrorDialog(Translator.get("email.server_unavailable", mailServer));
         }
 
-        if (getState() == State.INTERRUPTED)
+        if (getState() == FileJobState.INTERRUPTED)
             return;
 
         // Send mail body
