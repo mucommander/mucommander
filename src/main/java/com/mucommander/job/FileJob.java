@@ -129,14 +129,6 @@ public abstract class FileJob implements Runnable {
 //    private int nbFilesProcessed;
 //    private int nbFilesDiscovered;
 
-    protected final static String SKIP_TEXT = Translator.get("skip");
-    protected final static String SKIP_ALL_TEXT = Translator.get("skip_all");
-    protected final static String RETRY_TEXT = Translator.get("retry");
-    protected final static String CANCEL_TEXT = Translator.get("cancel");
-    protected final static String APPEND_TEXT = Translator.get("resume");
-    protected final static String OK_TEXT = Translator.get("ok");
-
-
     /**
      * Creates a new FileJob without starting it.
      *
@@ -569,7 +561,7 @@ public abstract class FileJob implements Runnable {
      * is returned.
      */
     protected int showErrorDialog(String title, String message) {
-        String actionTexts[] = new String[]{SKIP_TEXT, SKIP_ALL_TEXT, RETRY_TEXT, CANCEL_TEXT};
+        String actionTexts[] = new String[]{FileJobAction.SKIP_TEXT, FileJobAction.SKIP_ALL_TEXT, FileJobAction.RETRY_TEXT, FileJobAction.CANCEL_TEXT};
         int actionValues[] = new int[]{FileJobAction.SKIP_ACTION, FileJobAction.SKIP_ALL_ACTION, FileJobAction.RETRY_ACTION, FileJobAction.CANCEL_ACTION};
 
         return showErrorDialog(title, message, actionTexts, actionValues);

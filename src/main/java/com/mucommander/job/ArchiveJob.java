@@ -188,7 +188,7 @@ public class ArchiveJob extends TransferFileJob {
             catch(Exception e) {
                 int choice = showErrorDialog(Translator.get("pack_dialog.error_title"),
                                              Translator.get("cannot_write_file", destFile.getName()),
-                                             new String[] {CANCEL_TEXT, RETRY_TEXT},
+                                             new String[] {FileJobAction.CANCEL_TEXT, FileJobAction.RETRY_TEXT},
                                              new int[]  {FileJobAction.CANCEL_ACTION, FileJobAction.RETRY_ACTION}
                                              );
 

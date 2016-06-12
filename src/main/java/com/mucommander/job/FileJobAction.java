@@ -34,4 +34,11 @@ class FileJobAction {
 	protected final static int APPEND_ACTION = 4;
 	protected final static int OK_ACTION = 5;
 
+	protected final static String SKIP_TEXT = Translator.get("skip");
+	protected final static String SKIP_ALL_TEXT = Translator.get("skip_all");
+	protected final static String RETRY_TEXT = Translator.get("retry");
+	protected final static String CANCEL_TEXT = Translator.get("cancel");
+	protected final static String APPEND_TEXT = Translator.get("resume");
+	protected final static String OK_TEXT = Translator.get("ok");
+
 }
