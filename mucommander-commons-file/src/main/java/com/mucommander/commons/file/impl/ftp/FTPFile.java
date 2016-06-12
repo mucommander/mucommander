@@ -526,6 +526,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             else
                 connHandler.ftpClient.deleteFile(absPath);
 
+            fileExists = false; // need to set to false since the file is cached
             // Throw an IOException if server replied with an error
             connHandler.checkServerReply();
         }
