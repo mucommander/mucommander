@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -66,7 +67,7 @@ public class CombineFilesJob extends AbstractCopyJob {
             findCRCFile(file);
         }
         
-        if(getState()==INTERRUPTED)
+        if (getState() == State.INTERRUPTED)
             return false;
         
         try {

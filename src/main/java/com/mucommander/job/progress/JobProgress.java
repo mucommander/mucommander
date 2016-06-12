@@ -20,6 +20,7 @@ package com.mucommander.job.progress;
 
 import com.mucommander.job.FileJob;
 import com.mucommander.job.TransferFileJob;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.Translator;
 
@@ -70,9 +71,9 @@ public class JobProgress {
 	 *         <code>false</code> if only label has been updated.
 	 */
 	public boolean calcJobProgress(boolean fullUpdate) {
-		int jobState = job.getState();
+		State jobState = job.getState();
 		jobPauseStartDate = job.getPauseStartDate();
-		if (jobState == FileJob.FINISHED || jobState == FileJob.INTERRUPTED) {
+		if (jobState == State.FINISHED || jobState == State.INTERRUPTED) {
 			jobStatusString = Translator.get("progress_dialog.job_finished");
 			// Job just finished, let's loop one more time to ensure that
 			// components (progress bar in particular)
@@ -85,7 +86,7 @@ public class JobProgress {
 			return false;
 		}
 		// Do not refresh progress information is job is paused, simply sleep
-		if (jobState == FileJob.PAUSED) {
+		if (jobState == State.PAUSED) {
 			return false;
 		}
 		// Now is updated with current time, or job end date if job has finished

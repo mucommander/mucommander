@@ -30,6 +30,7 @@ import com.mucommander.commons.file.AbstractRWArchiveFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -112,7 +113,7 @@ public class DeleteJob extends FileJob {
      */
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(getState()==INTERRUPTED)
+        if (getState() == State.INTERRUPTED)
             return false;
 
         // Delete files recursively, only if trash is not used.
@@ -127,7 +128,7 @@ public class DeleteJob extends FileJob {
                     // Delete each file in this folder
                     try {
                         AbstractFile subFiles[] = file.ls();
-                        for(int i=0; i<subFiles.length && getState()!=INTERRUPTED; i++) {
+                        for(int i=0; i<subFiles.length && getState() != State.INTERRUPTED; i++) {
                             // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                             nextFile(subFiles[i]);
                             processFile(subFiles[i], null);
@@ -148,7 +149,7 @@ public class DeleteJob extends FileJob {
             }
         }
         // Return now if the job was interrupted, so that we do not attempt to delete this folder
-        if(getState()==INTERRUPTED)
+        if (getState() == State.INTERRUPTED)
             return false;
 
         do {		// Loop for retry

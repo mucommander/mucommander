@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -102,7 +103,7 @@ public class CalculateChecksumJob extends TransferFileJob {
                 try {
                     // for each file in folder...
                     AbstractFile children[] = file.ls();
-                    for(int i=0; i<children.length && getState()!=INTERRUPTED; i++) {
+                    for(int i=0; i<children.length && getState() != State.INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(children[i]);
                         processFile(children[i], null);
@@ -169,7 +170,7 @@ public class CalculateChecksumJob extends TransferFileJob {
                 // the IOException was caused by the stream being closed as a result of the user interruption.
                 // If that is the case, the exception should not be interpreted as an error.
                 // Same goes if the current file was skipped.
-                if(getState()==INTERRUPTED || wasCurrentFileSkipped())
+                if (getState() == State.INTERRUPTED || wasCurrentFileSkipped())
                     return false;
 
                 LOGGER.debug("Caught IOException", e);

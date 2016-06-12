@@ -20,6 +20,7 @@ package com.mucommander.job.progress;
 
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
+import com.mucommander.job.FileJob.State;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -226,8 +227,8 @@ public class JobProgressMonitor implements FileJobListener {
 	 * A {@link FileJobListener} implementation.
 	 * Removes a finished job after a small delay.
 	 */
-	public void jobStateChanged(final FileJob source, int oldState, int newState) {
-		if (newState==FileJob.FINISHED || newState==FileJob.INTERRUPTED) {
+	public void jobStateChanged(final FileJob source, State oldState, State newState) {
+		if (newState == State.FINISHED || newState == State.INTERRUPTED) {
 			ActionListener jobToRemove = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					removeJob(source);					

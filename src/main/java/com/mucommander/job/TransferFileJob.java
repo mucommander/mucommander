@@ -40,6 +40,7 @@ import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.ThroughputLimitInputStream;
 import com.mucommander.commons.io.security.MuProvider;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -293,7 +294,7 @@ public abstract class TransferFileJob extends FileJob {
                 // the IOException was caused by the stream being closed as a result of the user interruption.
                 // If that is the case, the exception should not be interpreted as an error.
                 // Same goes if the current file was skipped.
-                if(getState()==INTERRUPTED || wasCurrentFileSkipped())
+                if (getState() == State.INTERRUPTED || wasCurrentFileSkipped())
                     return false;
 
                 // Print the exception's stack trace
@@ -425,7 +426,7 @@ public abstract class TransferFileJob extends FileJob {
         }
 
         // Resume job if currently paused 
-        if(getState()==PAUSED)
+        if (getState() == State.PAUSED)
             setPaused(false);
     }
 
@@ -518,7 +519,7 @@ public abstract class TransferFileJob extends FileJob {
         this.throughputLimit = bytesPerSecond<=0?-1:bytesPerSecond;
 
         synchronized(this) {
-            if(getState()!=PAUSED && tlin !=null)
+            if(getState() != State.PAUSED && tlin !=null)
                 tlin.setThroughputLimit(throughputLimit);
         }
     }

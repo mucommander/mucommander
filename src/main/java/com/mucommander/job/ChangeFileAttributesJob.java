@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -65,7 +66,7 @@ public class ChangeFileAttributesJob extends FileJob {
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted
-        if(getState()==INTERRUPTED)
+        if (getState() == State.INTERRUPTED)
             return false;
 
         if(recurseOnDirectories && file.isDirectory()) {
@@ -74,7 +75,7 @@ public class ChangeFileAttributesJob extends FileJob {
                     AbstractFile children[] = file.ls();
                     int nbChildren = children.length;
 
-                    for(int i=0; i<nbChildren && getState()!=INTERRUPTED; i++) {
+                    for(int i=0; i<nbChildren && getState() != State.INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(children[i]);
                         processFile(children[i], null);

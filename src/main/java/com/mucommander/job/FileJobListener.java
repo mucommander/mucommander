@@ -18,6 +18,8 @@
 
 package com.mucommander.job;
 
+import com.mucommander.job.FileJob.State;
+
 /**
  * Interface to be implemented by classes that wish to be notified of state changes on a particular
  * {@link FileJob}. Those classes need to be registered to receive those events, this can be done by calling
@@ -34,6 +36,6 @@ public interface FileJobListener {
      * @param oldState the FileJob's state prior to the change, see FileJob's constant fields for possible values
      * @param newState the new FileJob's state, see FileJob's constant fields for possible values
      */
-    public abstract void jobStateChanged(FileJob source, int oldState, int newState);
+    public abstract void jobStateChanged(FileJob source, State oldState, State newState);
 
 }

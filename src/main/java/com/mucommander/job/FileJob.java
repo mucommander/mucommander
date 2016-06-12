@@ -114,25 +114,21 @@ public abstract class FileJob implements Runnable {
     /** File to be selected after job has finished (can be null if not set) */
     private AbstractFile fileToSelect;
 
-    
-    /** Indicates that this job has not started yet, this is a temporary state */
-    public final static int NOT_STARTED = 0;
-
-    /** Indicates that this job is currently processing files, this is a temporary state */
-    public final static int RUNNING = 1;
-
-    /** Indicates that this job is currently paused, waiting for user response, this is a temporary state */
-    public final static int PAUSED = 2;
-
-    /** Indicates that this job has been interrupted by the end user, this is a permanent state */
-    public final static int INTERRUPTED = 3;
-
-    /** Indicates that this job has naturally finished (i.e. without being interrupted), this is a permanent state */
-    public final static int FINISHED = 4;
-
+    public enum State {
+    	/** Indicates that this job has not started yet, this is a temporary state */
+    	NOT_STARTED, 
+    	/** Indicates that this job is currently processing files, this is a temporary state */
+    	RUNNING,
+    	/** Indicates that this job is currently paused, waiting for user response, this is a temporary state */
+    	PAUSED,
+    	/** Indicates that this job has been interrupted by the end user, this is a permanent state */
+    	INTERRUPTED,
+    	/** Indicates that this job has naturally finished (i.e. without being interrupted), this is a permanent state */
+    	FINISHED
+    }
 
     /** Current state of this job */
-    private int jobState = NOT_STARTED;
+    private State jobState = State.NOT_STARTED;
 
     /** List of registered FileJobListener stored as weak references */
     private WeakHashMap<FileJobListener, ?> listeners = new WeakHashMap<FileJobListener, Object>();
@@ -241,7 +237,7 @@ public abstract class FileJob implements Runnable {
      */
     public void start() {
         // Return if job has already been started
-        if(getState()!=NOT_STARTED)
+        if(getState() != State.NOT_STARTED)
             return;
 
         // Pause auto-refresh during file job as it potentially modifies the current folders contents
@@ -249,7 +245,7 @@ public abstract class FileJob implements Runnable {
         getMainFrame().getLeftPanel().getFolderChangeMonitor().setPaused(true);
         getMainFrame().getRightPanel().getFolderChangeMonitor().setPaused(true);
 
-        setState(RUNNING);
+        setState(State.RUNNING);
         startDate = System.currentTimeMillis();
 
         jobThread = new Thread(this, getClass().getName());
@@ -280,7 +276,7 @@ public abstract class FileJob implements Runnable {
      *
      * @return the current state of this FileJob. See constant fields for possible return values.
      */
-    public int getState() {
+    public State getState() {
         return jobState;
     }
 
@@ -289,8 +285,8 @@ public abstract class FileJob implements Runnable {
      *
      * @param jobState the new state
      */
-    protected void setState(int jobState) {
-        int oldState = this.jobState;
+    protected void setState(State jobState) {
+    	State oldState = this.jobState;
         this.jobState = jobState;
 
         for(FileJobListener listener : listeners.keySet())
@@ -394,16 +390,16 @@ public abstract class FileJob implements Runnable {
      * Interrupts this job, changes the job state to {@link #INTERRUPTED} and notifies listeners.
      */	
     public void interrupt() {
-        int state = getState();
-        if(state==INTERRUPTED || state==FINISHED)
+    	State state = getState();
+        if (state == State.INTERRUPTED || state == State.FINISHED)
             return;
 
-        if(state==PAUSED)
+        if (state == State.PAUSED)
             setPaused(false);
 
         // Set state before calling stop() so that state is INTERRUPTED when jobStopped() is called
         // (some FileJob rely on that)
-        setState(INTERRUPTED);
+        setState(State.INTERRUPTED);
 
         stop();
     }
@@ -436,7 +432,7 @@ public abstract class FileJob implements Runnable {
         // Lock the pause lock while updating paused status
         synchronized(pauseLock) {
             // Resume job if it was paused
-            if(!paused && getState()==PAUSED) {
+            if(!paused && getState() == State.PAUSED) {
                 // Calculate pause time
                 calcPausedTime();                
                 // Call the jobResumed method to notify of the new job's state
@@ -446,17 +442,17 @@ public abstract class FileJob implements Runnable {
                 pauseLock.notify();
 
                 // Switch to RUNNING state and notify listeners
-                setState(RUNNING);
+                setState(State.RUNNING);
             }
             // Pause job if it not paused already
-            else if(paused && getState()!=PAUSED && getState()!=INTERRUPTED && getState()!=FINISHED) {
+            else if(paused && getState() != State.PAUSED && getState() != State.INTERRUPTED && getState() != State.FINISHED) {
                 // Memorize pause time in order to calculate pause time when the job is resumed
                 setPauseStartDate();
                 // Call the jobPaused method to notify of the new job's state
                 jobPaused();
 
                 // Switch to PAUSED state and notify listeners
-                setState(PAUSED);
+                setState(State.PAUSED);
             }
         }
     }
@@ -478,7 +474,7 @@ public abstract class FileJob implements Runnable {
         // Lock the pause lock
         synchronized(pauseLock) {
             // Loop while job is paused, there shouldn't normally be more than one loop
-            while(getState()==PAUSED) {
+            while (getState() == State.PAUSED) {
                 try {
                     // Wait for a call to notify()
                     pauseLock.wait();
@@ -809,7 +805,7 @@ public abstract class FileJob implements Runnable {
             boolean success = processFile(currentFile, null);
 
             // Stop if job was interrupted
-            if(getState()==INTERRUPTED)
+            if (getState() == State.INTERRUPTED)
                 break;
 
             // Unmark file in active table if 'auto unmark' is enabled
@@ -825,7 +821,7 @@ public abstract class FileJob implements Runnable {
                 currentFileIndex++;
                 stop();
                 jobCompleted();
-                setState(FINISHED);
+                setState(State.FINISHED);
             }
         }
 

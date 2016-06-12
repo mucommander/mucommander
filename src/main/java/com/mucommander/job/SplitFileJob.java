@@ -37,6 +37,7 @@ import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.ChecksumInputStream;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.SplitFileAction;
@@ -137,7 +138,7 @@ public class SplitFileJob extends AbstractCopyJob {
                     new String[]{CANCEL_TEXT},
                     new int[]{CANCEL_ACTION}
                     );
-            setState(INTERRUPTED);
+            setState(State.INTERRUPTED);
             return;
 		}
         origFileStream = setCurrentInputStream(origFileStream);
@@ -155,7 +156,7 @@ public class SplitFileJob extends AbstractCopyJob {
 
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(getState()==INTERRUPTED)
+        if (getState() == State.INTERRUPTED)
             return false;
         
         // Create destination AbstractFile instance
@@ -185,7 +186,7 @@ public class SplitFileJob extends AbstractCopyJob {
 							Translator.get("split_file_dialog.insert_new_media"), 
 							new String[]{OK_TEXT, CANCEL_TEXT}, 
 							new int[]{OK_ACTION, CANCEL_ACTION});
-					if (getState()==INTERRUPTED) {
+					if (getState() == State.INTERRUPTED) {
 						return false;
 					}
 					// create new output file if necessary

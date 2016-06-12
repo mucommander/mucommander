@@ -31,6 +31,7 @@ import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.job.FileJob.State;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -89,7 +90,7 @@ public class MkdirJob extends FileJob {
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         // Stop if interrupted (although there is no way to stop the job at this time)
-        if(getState()==INTERRUPTED)
+        if (getState() == State.INTERRUPTED)
             return false;
 
         do {
@@ -142,7 +143,7 @@ public class MkdirJob extends FileJob {
                                 try {
                                     long remaining = allocateSpace;
                                     int nbWrite;
-                                    while(remaining>0 && getState()!=INTERRUPTED) {
+                                    while (remaining>0 && getState() != State.INTERRUPTED) {
                                         nbWrite = (int)(remaining>bufferSize?bufferSize:remaining);
                                         mkfileOut.write(buffer, 0, nbWrite);
                                         remaining -= nbWrite;
@@ -177,7 +178,7 @@ public class MkdirJob extends FileJob {
             catch(IOException e) {
                 // In mkfile mode, interrupting the job will close the OutputStream and cause an IOException to be
                 // thrown, this is normal behavior
-                if(mkfileMode && getState()==INTERRUPTED)
+                if (mkfileMode && getState() == State.INTERRUPTED)
                     return false;
 
                 LOGGER.debug("IOException caught", e);
