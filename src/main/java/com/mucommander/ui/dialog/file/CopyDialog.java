@@ -19,6 +19,9 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractArchiveFile;
 import com.mucommander.commons.file.AbstractFile;
@@ -26,15 +29,13 @@ import com.mucommander.commons.file.ArchiveEntry;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.CopyJob;
+import com.mucommander.job.CopyJob.TransferMode;
 import com.mucommander.job.TransferFileJob;
 import com.mucommander.job.UnpackJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CopyAction;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -100,7 +101,7 @@ public class CopyDialog extends AbstractCopyDialog {
                 files,
                 resolvedDest.getDestinationFolder(),
                 newName,
-                CopyJob.COPY_MODE,
+                TransferMode.COPY,
                 defaultFileExistsAction);
         }
 

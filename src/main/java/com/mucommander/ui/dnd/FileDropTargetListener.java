@@ -35,6 +35,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.job.CopyJob;
+import com.mucommander.job.CopyJob.TransferMode;
 import com.mucommander.job.MoveJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
@@ -287,7 +288,7 @@ public class FileDropTargetListener implements DropTargetListener {
             else {
                 // Start copying files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
-                CopyJob job = new CopyJob(progressDialog, mainFrame, droppedFiles, destFolder, null, CopyJob.COPY_MODE, FileCollisionDialog.ASK_ACTION);
+                CopyJob job = new CopyJob(progressDialog, mainFrame, droppedFiles, destFolder, null, TransferMode.COPY, FileCollisionDialog.ASK_ACTION);
                 progressDialog.start(job);
             }
         }

@@ -48,11 +48,12 @@ public class CopyJob extends AbstractCopyJob {
     protected AbstractFile currentDestFile;
 
     /** Operating mode : COPY_MODE or DOWNLOAD_MODE */
-    private int mode;
+    private TransferMode mode;
 
-    public final static int COPY_MODE = 0;
-    public final static int DOWNLOAD_MODE = 1;
-
+    public enum TransferMode {
+        COPY,
+        DOWNLOAD
+    }
 	
 	
     /**
@@ -66,11 +67,11 @@ public class CopyJob extends AbstractCopyJob {
      * @param mode mode in which CopyJob is to operate: {@link #COPY_MODE} or {@link #DOWNLOAD_MODE}.
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
-    public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int mode, int fileExistsAction) {
+    public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, TransferMode mode, int fileExistsAction) {
         super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
         this.mode = mode;
-        this.errorDialogTitle = Translator.get(mode==DOWNLOAD_MODE?"download_dialog.error_title":"copy_dialog.error_title");
+        this.errorDialogTitle = Translator.get(mode==TransferMode.DOWNLOAD?"download_dialog.error_title":"copy_dialog.error_title");
     }
 
 
@@ -229,6 +230,6 @@ public class CopyJob extends AbstractCopyJob {
         if(isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());
 
-        return Translator.get(mode==DOWNLOAD_MODE?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFilename());
+        return Translator.get(mode==TransferMode.DOWNLOAD?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFilename());
     }
 }

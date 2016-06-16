@@ -27,6 +27,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.job.CopyJob;
+import com.mucommander.job.CopyJob.TransferMode;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -70,7 +71,7 @@ public class PasteClipboardFilesAction extends MuAction {
         // Start copying files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
         AbstractFile destFolder = mainFrame.getActivePanel().getCurrentFolder();
-        CopyJob job = new CopyJob(progressDialog, mainFrame, clipboardFiles, destFolder, null, CopyJob.COPY_MODE, FileCollisionDialog.ASK_ACTION);
+        CopyJob job = new CopyJob(progressDialog, mainFrame, clipboardFiles, destFolder, null, TransferMode.COPY, FileCollisionDialog.ASK_ACTION);
         progressDialog.start(job);
     }
 
