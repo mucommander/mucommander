@@ -56,7 +56,7 @@ public class SplitFileJob extends AbstractCopyJob {
 	private InputStream origFileStream;
 	private AbstractFile destFolder;
 	private long sizeLeft;
-	private boolean recalculateCRC = false;
+	private boolean recalculateCRC;
 
 
 	/**

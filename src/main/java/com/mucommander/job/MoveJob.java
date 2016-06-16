@@ -44,7 +44,7 @@ public class MoveJob extends AbstractCopyJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MoveJob.class);
 	
     /** True if this job corresponds to a single file renaming */
-    protected boolean renameMode = false;
+    protected boolean renameMode;
 
     
     /**
