@@ -32,5 +32,5 @@ public interface ConfigurationListener {
      * Invoked when the configuration changes.
      * @param event describes the configuration modification.
      */
-    public void configurationChanged(ConfigurationEvent event);
+    void configurationChanged(ConfigurationEvent event);
 }

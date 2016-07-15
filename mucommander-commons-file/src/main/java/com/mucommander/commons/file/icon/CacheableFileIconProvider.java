@@ -49,7 +49,7 @@ public interface CacheableFileIconProvider extends FileIconProvider {
      * @param preferredResolution the preferred resolution for the icon
      * @return true if the icon cache can be used with the specified file
      */
-    public abstract boolean isCacheable(AbstractFile file, Dimension preferredResolution);
+    boolean isCacheable(AbstractFile file, Dimension preferredResolution);
 
     /**
      * This method is called by {@link CachedFileIconProvider#getFileIcon(com.mucommander.commons.file.AbstractFile, java.awt.Dimension)}
@@ -67,7 +67,7 @@ public interface CacheableFileIconProvider extends FileIconProvider {
      * @param preferredResolution the preferred resolution for the icon
      * @return a cached icon to re-use, null if there is none
      */
-    public abstract Icon lookupCache(AbstractFile file, Dimension preferredResolution);
+    Icon lookupCache(AbstractFile file, Dimension preferredResolution);
 
     /**
      * This method is called by {@link CachedFileIconProvider#getFileIcon(com.mucommander.commons.file.AbstractFile, java.awt.Dimension)}
@@ -84,6 +84,6 @@ public interface CacheableFileIconProvider extends FileIconProvider {
      * @param icon the icon to add to the cache
      * @param preferredResolution the preferred icon resolution that was originally requested
      */
-    public abstract void addToCache(AbstractFile file, Icon icon, Dimension preferredResolution);
+    void addToCache(AbstractFile file, Icon icon, Dimension preferredResolution);
 
 }

@@ -35,5 +35,5 @@ public interface PathCanonizer {
      * @param path path to canonize
      * @return a canonical representation of the given path.
      */
-    public String canonize(String path);
+    String canonize(String path);
 }

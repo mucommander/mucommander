@@ -33,19 +33,19 @@ public interface TabsEventListener {
 	 * 
 	 * @param index - the index in which the tab was added
 	 */
-	public void tabAdded(int index);
+	void tabAdded(int index);
 	
 	/**
 	 * This method is invoked when a tab was removed.
 	 * 
 	 * @param index - the index in which the tab was added
 	 */
-	public void tabRemoved(int index);
+	void tabRemoved(int index);
 	
 	/**
 	 * This method is invoked when a tab data was updated.
 	 * 
 	 * @param index - the index of the updated tab
 	 */
-	public void tabUpdated(int index);
+	void tabUpdated(int index);
 }

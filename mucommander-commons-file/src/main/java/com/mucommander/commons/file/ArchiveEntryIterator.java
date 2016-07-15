@@ -45,7 +45,7 @@ public interface ArchiveEntryIterator {
      * @throws IOException if an error occurred while reading the archive, either because the archive is corrupt or
      * because of an I/O error
      */
-    public ArchiveEntry nextEntry() throws IOException;
+    ArchiveEntry nextEntry() throws IOException;
 
     /**
      * Closes this iterator and releases all the resources it holds. This method must be called when this iterator
@@ -53,5 +53,5 @@ public interface ArchiveEntryIterator {
      *
      * @throws IOException if an error occurred while closing the resources
      */
-    public void close() throws IOException;
+    void close() throws IOException;
 }

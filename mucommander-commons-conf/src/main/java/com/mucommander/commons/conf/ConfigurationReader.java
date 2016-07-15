@@ -57,5 +57,5 @@ public interface ConfigurationReader {
      * @throws IOException            if an I/O error occurs.
      * @throws ConfigurationException if another type of error occurs, in which case that error must be returned by <code>ConfigurationException.getCause()</code>.
      */
-    public void read(Reader in, ConfigurationBuilder builder) throws ConfigurationException, IOException;
+    void read(Reader in, ConfigurationBuilder builder) throws ConfigurationException, IOException;
 }

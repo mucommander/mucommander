@@ -30,5 +30,5 @@ import com.mucommander.commons.file.AbstractFile;
  */
 public interface CriterionValueGenerator<C> {
 
-    public C getCriterionValue(AbstractFile file);
+    C getCriterionValue(AbstractFile file);
 }

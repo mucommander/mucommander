@@ -38,15 +38,15 @@ public abstract interface FilePermissions extends PermissionBits {
 
     /** Empty file permissions: read/write/execute permissions cleared for user/group/other (0), none of the permission
      * bits are supported (mask is 0) */
-    public final static FilePermissions EMPTY_FILE_PERMISSIONS = new SimpleFilePermissions(0, 0);
+    final static FilePermissions EMPTY_FILE_PERMISSIONS = new SimpleFilePermissions(0, 0);
 
     /** Default file permissions used by {@link AbstractFile#importPermissions(AbstractFile)} for permission bits that
      * are not available in the source: rw-r--r-- (644 octal). All of the permission bits are marked as supported. */
-    public final static FilePermissions DEFAULT_FILE_PERMISSIONS = new SimpleFilePermissions(420, FULL_PERMISSION_BITS);
+    final static FilePermissions DEFAULT_FILE_PERMISSIONS = new SimpleFilePermissions(420, FULL_PERMISSION_BITS);
 
     /** Default directory permissions used by {@link AbstractFile#importPermissions(AbstractFile)} for permission bits that
      * are not available in the source: rwxr-xr-x (755 octal). All of the permission bits are marked as supported. */
-    public final static FilePermissions DEFAULT_DIRECTORY_PERMISSIONS = new SimpleFilePermissions(493, FULL_PERMISSION_BITS);
+    final static FilePermissions DEFAULT_DIRECTORY_PERMISSIONS = new SimpleFilePermissions(493, FULL_PERMISSION_BITS);
 
 
     /**
@@ -55,5 +55,5 @@ public abstract interface FilePermissions extends PermissionBits {
      *
      * @return the mask that indicates which permission bits are significant and should be taken into account.
      */
-    public PermissionBits getMask();
+    PermissionBits getMask();
 }

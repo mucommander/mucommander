@@ -43,7 +43,7 @@ public interface ConfigurationBuilder {
      * </p>
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
-    public void startConfiguration() throws ConfigurationException;
+    void startConfiguration() throws ConfigurationException;
 
     /**
      * Receives notification at the end of the configuration.
@@ -53,7 +53,7 @@ public interface ConfigurationBuilder {
      * </p>
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
-    public void endConfiguration() throws ConfigurationException;
+    void endConfiguration() throws ConfigurationException;
 
     /**
      * Receives notification at the beginning of a section.
@@ -66,7 +66,7 @@ public interface ConfigurationBuilder {
      * @param  name                   name of the new section.
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
-    public void startSection(String name) throws ConfigurationException;
+    void startSection(String name) throws ConfigurationException;
 
     /**
      * Receives notification at the end of a section.
@@ -78,7 +78,7 @@ public interface ConfigurationBuilder {
      * @param  name                   name of the finished section.
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
-    public void endSection(String name) throws ConfigurationException;
+    void endSection(String name) throws ConfigurationException;
 
     /**
      * Receives notification of variable definition.
@@ -92,5 +92,5 @@ public interface ConfigurationBuilder {
      * @param  value                  value of the new variable.
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
-    public void addVariable(String name, String value) throws ConfigurationException;
+    void addVariable(String name, String value) throws ConfigurationException;
 }

@@ -29,28 +29,28 @@ import javax.swing.*;
  */
 public interface ActionDescriptor {
 	
-	public String getId();
+	String getId();
 	
-	public String getDescription();
+	String getDescription();
 	
-	public ActionCategory getCategory();
+	ActionCategory getCategory();
 	
-	public String getLabel();
+	String getLabel();
 	
-	public String getLabelKey();
+	String getLabelKey();
 	
-	public KeyStroke getDefaultKeyStroke();
+	KeyStroke getDefaultKeyStroke();
 	
-	public KeyStroke getDefaultAltKeyStroke();
+	KeyStroke getDefaultAltKeyStroke();
 	
-	public ImageIcon getIcon();
+	ImageIcon getIcon();
 	
-	public String getTooltip();
+	String getTooltip();
 
     /**
      * Returns <code>true</code> if the action requires parameters at creation time.
      *
      * @return <code>true</code> if the action requires parameters at creation time.
      */
-    public boolean isParameterized();
+    boolean isParameterized();
 }

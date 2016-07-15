@@ -33,7 +33,7 @@ public interface RandomAccess {
      *
      * @throws IOException if an I/O error occurs
      */
-    public abstract void close() throws IOException;
+    void close() throws IOException;
 
     /**
      * Returns the offset (in bytes) from the beginning of the file at which the next read or write occurs.
@@ -41,7 +41,7 @@ public interface RandomAccess {
      * @return the offset (in bytes) from the beginning of the file at which the next read or write occurs
      * @throws IOException if an I/O error occurs.
      */
-    public abstract long getOffset() throws IOException;
+    long getOffset() throws IOException;
 
     /**
      * Returns the length of the file, in bytes.
@@ -49,7 +49,7 @@ public interface RandomAccess {
      * @return the length of the file, in bytes
      * @throws IOException if an I/O error occurs
      */
-    public abstract long getLength() throws IOException;
+    long getLength() throws IOException;
 
     /**
      * Sets the offset, measured from the beginning of the file, at which the next read or write occurs.
@@ -60,6 +60,6 @@ public interface RandomAccess {
      * @param offset the new offset position, measured in bytes from the beginning of the file
      * @throws IOException if an I/O error occurs
      */
-    public abstract void seek(long offset) throws IOException;
+    void seek(long offset) throws IOException;
 
 }

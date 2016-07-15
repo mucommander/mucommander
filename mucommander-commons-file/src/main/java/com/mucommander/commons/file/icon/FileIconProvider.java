@@ -54,5 +54,5 @@ public interface FileIconProvider {
      * @param preferredResolution the preferred icon resolution
      * @return an icon for the requested file
      */
-    public abstract Icon getFileIcon(AbstractFile file, Dimension preferredResolution);
+    Icon getFileIcon(AbstractFile file, Dimension preferredResolution);
 }

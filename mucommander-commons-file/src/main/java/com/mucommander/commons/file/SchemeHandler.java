@@ -61,7 +61,7 @@ public interface SchemeHandler {
      *
      * @return the <code>SchemeParser</code> that turns URL strings of a particular scheme into {@link FileURL} objects
      */
-    public SchemeParser getParser();
+    SchemeParser getParser();
 
     /**
      * Returns the authentication realm of the given location, i.e. the base location throughout which a set of
@@ -74,7 +74,7 @@ public interface SchemeHandler {
      * @param location the location for which to return the authentication realm
      * @return the authentication realm of the specified url
      */
-    public FileURL getRealm(FileURL location);
+    FileURL getRealm(FileURL location);
 
     /**
      * Returns the scheme's guest credentials, <code>null</code> if the scheme doesn't have any.
@@ -87,7 +87,7 @@ public interface SchemeHandler {
      *
      * @return the scheme's guest credentials, <code>null</code> if the scheme doesn't have any
      */
-    public Credentials getGuestCredentials();
+    Credentials getGuestCredentials();
 
     /**
      * Returns the type of authentication used by the scheme's file protocol. The returned value is one of the constants
@@ -95,7 +95,7 @@ public interface SchemeHandler {
      *
      * @return the type of authentication used by the scheme's file protocol
      */
-    public AuthenticationType getAuthenticationType();
+    AuthenticationType getAuthenticationType();
 
     /**
      * Returns the scheme's path separator, which serves as a delimiter for path fragments. For most schemes, this is
@@ -103,7 +103,7 @@ public interface SchemeHandler {
      *
      * @return this scheme's path separator
      */
-    public String getPathSeparator();
+    String getPathSeparator();
 
     /**
      * Returns the scheme's standard port, <code>-1</code> if the scheme doesn't have any. Some file protocols may not
@@ -112,5 +112,5 @@ public interface SchemeHandler {
      *
      * @return the scheme's standard port
      */
-    public int getStandardPort();
+    int getStandardPort();
 }

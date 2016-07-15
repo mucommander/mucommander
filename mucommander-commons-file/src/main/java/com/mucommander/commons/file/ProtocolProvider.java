@@ -42,5 +42,5 @@ public interface ProtocolProvider {
      * @return a new instance of <code>AbstractFile</code> that matches the specified URL.
      * @throws IOException if an error occurs.
      */
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException;
+    AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException;
 }

@@ -38,11 +38,11 @@ public interface EditorFactory {
      * exception is displayed to the end user.
      * @return      <code>true</code> if this factory can create a file editor for the specified file.
      */
-    public boolean canEditFile(AbstractFile file) throws WarnUserException;
+    boolean canEditFile(AbstractFile file) throws WarnUserException;
 
     /**
      * Returns a new instance of {@link FileEditor}.
      * @return a new instance of {@link FileEditor}.
      */
-    public FileEditor createFileEditor();
+    FileEditor createFileEditor();
 }

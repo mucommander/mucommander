@@ -38,5 +38,5 @@ public interface ConfigurationReaderFactory<T extends ConfigurationReader> {
      * @return                              an instance of {@link ConfigurationReader}.
      * @throws ReaderConfigurationException if the factory wasn't properly configured.
      */
-    public T getReaderInstance() throws ReaderConfigurationException;
+    T getReaderInstance() throws ReaderConfigurationException;
 }

@@ -34,5 +34,5 @@ public interface ConnectionHandlerFactory {
     /**
      * Creates and returns a {@link ConnectionHandler} instance for the given location.
      */
-    public ConnectionHandler createConnectionHandler(FileURL location);
+    ConnectionHandler createConnectionHandler(FileURL location);
 }

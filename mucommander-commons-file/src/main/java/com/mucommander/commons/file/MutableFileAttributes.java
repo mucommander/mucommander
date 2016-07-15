@@ -37,54 +37,54 @@ public interface MutableFileAttributes extends FileAttributes {
      *
      * @param path the file's path
      */
-    public void setPath(String path);
+    void setPath(String path);
 
     /**
      * Sets whether the file exists physically on the underlying filesystem.
      *
      * @param exists <code>true</code> if the file exists physically on the underlying filesystem
      */
-    public void setExists(boolean exists);
+    void setExists(boolean exists);
 
     /**
      * Sets the file's date in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
      *
      * @param date the file's date in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      */
-    public void setDate(long date);
+    void setDate(long date);
 
     /**
      * Sets the file's size in bytes.
      *
      * @param size the file's size in bytes
      */
-    public void setSize(long size);
+    void setSize(long size);
 
     /**
      * Specifies whether the file is a directory or a regular file.
      *
      * @param directory <code>true</code> for directory, <code>false</code> for regular file
      */
-    public void setDirectory(boolean directory);
+    void setDirectory(boolean directory);
 
     /**
      * Sets the file's permissions.
      *
      * @param permissions the file's permissions
      */
-    public void setPermissions(FilePermissions permissions);
+    void setPermissions(FilePermissions permissions);
 
     /**
      * Sets the file's owner.
      *
      * @param owner the file's owner
      */
-    public void setOwner(String owner);
+    void setOwner(String owner);
 
     /**
      * Sets the file's group.
      *
      * @param group the file's owner
      */
-    public void setGroup(String group);
+    void setGroup(String group);
 }

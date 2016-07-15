@@ -65,7 +65,7 @@ public interface FileAttributes {
      *
      * @return the file's path, <code>null</code> by default
      */
-    public String getPath();
+    String getPath();
 
     /**
      * Returns <code>true</code> if the file exists physically on the underlying filesystem, <code>false</code>
@@ -73,21 +73,21 @@ public interface FileAttributes {
      *
      * @return <code>true</code> if the file exists physically on the underlying filesystem, <code>false</code> by default
      */
-    public boolean exists();
+    boolean exists();
 
     /**
      * Returns the file's date in milliseconds since the epoch (00:00:00 GMT, January 1, 1970), <code>0</code> by default
      *
      * @return the file's date in milliseconds since the epoch (00:00:00 GMT, January 1, 1970), <code>0</code> by default
      */
-    public long getDate();
+    long getDate();
 
     /**
      * Returns the file's size in bytes.
      *
      * @return the file's size in bytes
      */
-    public long getSize();
+    long getSize();
 
     /**
      * Returns <code>true</code> if the file is a directory, <code>false</code> if it is a regular file
@@ -95,26 +95,26 @@ public interface FileAttributes {
      *
      * @return <code>true</code> if the file is a directory, <code>false</code> if it is a regular file or undefined
      */
-    public boolean isDirectory();
+    boolean isDirectory();
 
     /**
      * Returns the file's permissions, <code>null</code> by default.
      *
      * @return the file's permissions, <code>null</code> by default
      */
-    public FilePermissions getPermissions();
+    FilePermissions getPermissions();
 
     /**
      * Returns the file's owner, <code>null</code> by default.
      *
      * @return the file's owner, <code>null</code> by default
      */
-    public String getOwner();
+    String getOwner();
 
     /**
      * Returns the file's group, <code>null</code> by default.
      *
      * @return the file's group, <code>null</code> by default
      */
-    public String getGroup();
+    String getGroup();
 }

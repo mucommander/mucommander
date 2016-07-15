@@ -34,7 +34,7 @@ public interface VectorChangeListener {
      * @param startIndex index at which the first element has been added
      * @param nbAdded number of elements added
      */
-    public void elementsAdded(int startIndex, int nbAdded);
+    void elementsAdded(int startIndex, int nbAdded);
 
     /**
      * This method is called when one or more elements has been removed from the AlteredVector.
@@ -42,12 +42,12 @@ public interface VectorChangeListener {
      * @param startIndex index at which the first element has been removed
      * @param nbRemoved number of elements removed
      */
-    public void elementsRemoved(int startIndex, int nbRemoved);
+    void elementsRemoved(int startIndex, int nbRemoved);
 
     /**
      * This method is called when an element has been changed in the AlteredVector.
      *
      * @param index index of the element that has been changed
      */
-    public void elementChanged(int index);
+    void elementChanged(int index);
 }

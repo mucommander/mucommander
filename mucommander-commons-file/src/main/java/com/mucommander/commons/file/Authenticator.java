@@ -50,5 +50,5 @@ public interface Authenticator {
      *
      * @param fileURL the file URL to authenticate
      */
-    public void authenticate(FileURL fileURL);
+    void authenticate(FileURL fileURL);
 }

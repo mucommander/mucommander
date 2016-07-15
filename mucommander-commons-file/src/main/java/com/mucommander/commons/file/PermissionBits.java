@@ -67,7 +67,7 @@ public interface PermissionBits {
      *
      * @return the value of all the permission bits (9 in total) in a UNIX-style permission int
      */
-    public abstract int getIntValue();
+    int getIntValue();
 
     /**
      * Returns the value of a specific permission bit: <code>true</code> if the permission is set, <code>false</code>
@@ -77,5 +77,5 @@ public interface PermissionBits {
      * @param type one of the values defined in {@link com.mucommander.commons.file.PermissionTypes}
      * @return <code>true</code> if the permission is set, <code>false</code> if it isn't
      */
-    public abstract boolean getBitValue(int access, int type);
+    boolean getBitValue(int access, int type);
 }

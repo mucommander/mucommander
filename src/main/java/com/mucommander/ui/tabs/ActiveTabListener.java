@@ -26,5 +26,5 @@ package com.mucommander.ui.tabs;
  */
 public interface ActiveTabListener {
 
-	public void activeTabChanged();
+	void activeTabChanged();
 }

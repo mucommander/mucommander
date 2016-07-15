@@ -25,5 +25,5 @@ package com.mucommander.utils;
  */
 public interface Callback {
 
-	public void call();
+	void call();
 }

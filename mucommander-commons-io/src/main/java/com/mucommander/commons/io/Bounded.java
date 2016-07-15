@@ -34,14 +34,14 @@ public interface Bounded {
      * @return the total number of bytes that are allowed to be processed (read or written) by the stream,
      * <code>-1</code> if the stream is not bounded.
      */
-    public abstract long getAllowedBytes();
+    long getAllowedBytes();
 
     /**
      * Returns the total number of bytes that have been processed (read or written) by the stream thus far.
      *
      * @return the total number of bytes that have been processed (read or written) by the stream thus far.
      */
-    public abstract long getProcessedBytes();
+    long getProcessedBytes();
 
     /**
      * Returns the remaining number of bytes that are allowed to be processed (read or written) by the stream,
@@ -50,5 +50,5 @@ public interface Bounded {
      * @return the remaining number of bytes that are allowed to be processed (read or written) by the stream,
      * {@link Long#MAX_VALUE} if this stream is not bounded.
      */
-    public long getRemainingBytes();
+    long getRemainingBytes();
 }

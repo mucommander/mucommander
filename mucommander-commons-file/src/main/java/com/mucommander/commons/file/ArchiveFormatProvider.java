@@ -44,7 +44,7 @@ public interface ArchiveFormatProvider {
      * @return             a new instance of <code>AbstractArchiveFile</code> that matches the specified URL.
      * @throws IOException if an error occurs.
      */
-    public AbstractArchiveFile getFile(AbstractFile file) throws IOException;
+    AbstractArchiveFile getFile(AbstractFile file) throws IOException;
 
 
     /**
@@ -52,5 +52,5 @@ public interface ArchiveFormatProvider {
      *
      * @return the <code>FilenameFilter</code> that matches filenames to be associated with this archive format
      */
-    public FilenameFilter getFilenameFilter();
+    FilenameFilter getFilenameFilter();
 }

@@ -47,7 +47,7 @@ public interface FileFilter {
      *
      * @return true if this filter operates in normal mode, false if in inverted mode
      */
-    public boolean isInverted();
+    boolean isInverted();
 
     /**
      * Sets the mode in which {@link #match(com.mucommander.commons.file.AbstractFile)} operates. If <code>true</code>, this
@@ -58,7 +58,7 @@ public interface FileFilter {
      *
      * @param inverted if true, this filter will operate in inverted mode.
      */
-    public void setInverted(boolean inverted);
+    void setInverted(boolean inverted);
 
     /**
      * Returns <code>true</code> if this filter matched the given file, according to the current {@link #isInverted()}
@@ -71,7 +71,7 @@ public interface FileFilter {
      * @param file the file to test
      * @return true if this filter matched the given file, according to the current inverted mode
      */
-    public boolean match(AbstractFile file);
+    boolean match(AbstractFile file);
 
     /**
      * Returns <code>true</code> if the given file was rejected by this filter, <code>false</code> if it was accepted.
@@ -81,7 +81,7 @@ public interface FileFilter {
      * @param file the file to test
      * @return true if the given file was rejected by this FileFilter
      */
-    public boolean reject(AbstractFile file);
+    boolean reject(AbstractFile file);
 
     /**
      * Convenience method that filters out files that do not {@link #match(AbstractFile) match} this filter and
@@ -90,7 +90,7 @@ public interface FileFilter {
      * @param files files to be tested against {@link #match(com.mucommander.commons.file.AbstractFile)}
      * @return a file array of files that were matched by this filter
      */
-    public AbstractFile[] filter(AbstractFile files[]);
+    AbstractFile[] filter(AbstractFile files[]);
 
     /**
      * Convenience method that filters out files that do not {@link #match(AbstractFile) match} this filter
@@ -98,7 +98,7 @@ public interface FileFilter {
      *
      * @param files files to be tested against {@link #match(com.mucommander.commons.file.AbstractFile)}
      */
-    public void filter(FileSet files);
+    void filter(FileSet files);
 
     /**
      * Convenience method that returns <code>true</code> if all the files contained in the specified file array
@@ -107,7 +107,7 @@ public interface FileFilter {
      * @param files the files to test against this FileFilter
      * @return true if all the files contained in the specified file array were matched by this filter
      */
-    public boolean match(AbstractFile files[]);
+    boolean match(AbstractFile files[]);
 
     /**
      * Convenience method that returns <code>true</code> if all the files contained in the specified {@link FileSet}
@@ -116,7 +116,7 @@ public interface FileFilter {
      * @param files the files to test against this FileFilter
      * @return true if all the files contained in the specified {@link FileSet} were matched by this filter
      */
-    public boolean match(FileSet files);
+    boolean match(FileSet files);
 
     /**
      * Convenience method that returns <code>true</code> if all the files contained in the specified file array
@@ -125,7 +125,7 @@ public interface FileFilter {
      * @param files the files to test against this FileFilter
      * @return true if all the files contained in the specified file array were accepted by this filter
      */
-    public boolean accept(AbstractFile files[]);
+    boolean accept(AbstractFile files[]);
 
     /**
      * Convenience method that returns <code>true</code> if all the files contained in the specified {@link FileSet}
@@ -134,7 +134,7 @@ public interface FileFilter {
      * @param files the files to test against this FileFilter
      * @return true if all the files contained in the specified {@link FileSet} were accepted by this filter
      */
-    public boolean accept(FileSet files);
+    boolean accept(FileSet files);
 
     /**
      * Convenience method that returns <code>true</code> if all the files contained in the specified file array
@@ -143,7 +143,7 @@ public interface FileFilter {
      * @param files the files to test against this FileFilter
      * @return true if all the files contained in the specified file array were rejected by this filter
      */
-    public boolean reject(AbstractFile files[]);
+    boolean reject(AbstractFile files[]);
 
     /**
      * Convenience method that returns <code>true</code> if all the files contained in the specified {@link FileSet}
@@ -152,7 +152,7 @@ public interface FileFilter {
      * @param files the files to test against this FileFilter
      * @return true if all the files contained in the specified {@link FileSet} were rejected by this filter
      */
-    public boolean reject(FileSet files);
+    boolean reject(FileSet files);
 
     /**
      * Returns <code>true</code> if the given file was accepted by this filter, <code>false</code> if it was rejected.
@@ -162,5 +162,5 @@ public interface FileFilter {
      * @param file the file to test
      * @return true if the given file was accepted by this FileFilter
      */
-    public boolean accept(AbstractFile file);
+    boolean accept(AbstractFile file);
 }

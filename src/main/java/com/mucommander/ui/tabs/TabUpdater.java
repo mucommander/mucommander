@@ -25,5 +25,5 @@ package com.mucommander.ui.tabs;
  */
 public interface TabUpdater<T> {
 
-	public void update(T tab);
+	void update(T tab);
 }

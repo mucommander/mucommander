@@ -34,6 +34,6 @@ public interface TabFactory<T extends Tab, K> {
 	 * @param k a parameter that the new tab is based on
 	 * @return instance of subclass of {@link com.mucommander.ui.tabs.Tab}
 	 */
-	public T createTab(K k);
+	T createTab(K k);
 
 }

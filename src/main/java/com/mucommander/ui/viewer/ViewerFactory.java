@@ -38,12 +38,12 @@ public interface ViewerFactory {
      * exception is displayed to the end user.
      * @return      <code>true</code> if this factory can create a file viewer for the specified file.
      */
-    public boolean canViewFile(AbstractFile file) throws WarnUserException;
+    boolean canViewFile(AbstractFile file) throws WarnUserException;
 
     /**
      * Returns a new instance of {@link FileViewer}.
      * 
      * @return a new instance of {@link FileViewer}.
      */
-    public FileViewer createFileViewer();
+    FileViewer createFileViewer();
 }

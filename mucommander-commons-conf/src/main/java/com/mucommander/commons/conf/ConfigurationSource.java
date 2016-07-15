@@ -49,18 +49,18 @@ public interface ConfigurationSource {
      * @return             an input stream on the configuration source.
      * @throws IOException if any I/O error occurs.
      */
-    public Reader getReader() throws IOException;
+    Reader getReader() throws IOException;
 
     /**
      * Returns an output stream on the configuration source.
      * @return             an output stream on the configuration source.
      * @throws IOException if any I/O error occurs.
      */
-    public Writer getWriter() throws IOException;
+    Writer getWriter() throws IOException;
     
     /**
      * Returns whether this source exists
      * @return true if the source exists, false otherwise.
      */
-    public boolean isExists() throws IOException;
+    boolean isExists() throws IOException;
 }
