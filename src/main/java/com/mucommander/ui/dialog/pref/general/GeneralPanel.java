@@ -67,7 +67,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
     // Language
     private List<Locale> languages;
-    private PrefComboBox<Locale> languageComboBox;
+    private PrefComboBox languageComboBox;
 
     // Date/time format
     private PrefRadioButton time12RadioButton;
@@ -128,8 +128,9 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         JPanel languagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         languagePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.language")));
         this.languages = Translator.getAvailableLanguages();
-        Locale currentLang = Locale.forLanguageTag(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
-        languageComboBox = new PrefComboBox<Locale>() {
+        String localeNameFromConf = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
+        Locale currentLang = localeNameFromConf.contains("_") ? new Locale(localeNameFromConf.split("_")[0], localeNameFromConf.split("_")[1]) : new Locale(localeNameFromConf);
+        languageComboBox = new PrefComboBox() {
 			public boolean hasChanged() {
 				return !languages.get(getSelectedIndex()).equals(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
 			}
@@ -143,8 +144,8 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
                 JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
                 Locale language = (Locale)value;
-                label.setText(Translator.get(language.toLanguageTag()));
-                label.setIcon(IconManager.getIcon(IconManager.LANGUAGE_ICON_SET, language.toLanguageTag()+".png"));
+                label.setText(Translator.get(language.toString()));
+                label.setIcon(IconManager.getIcon(IconManager.LANGUAGE_ICON_SET, language.toString()+".png"));
 
                 return label;
             }
@@ -339,7 +340,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
     ///////////////////////
     @Override
     protected void commit() {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, languageComboBox.getSelectedItem().toLanguageTag());
+    	MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, languageComboBox.getSelectedItem().toString());
     	MuConfigurations.getPreferences().setVariable(MuPreference.DATE_FORMAT, getDateFormatString());
     	MuConfigurations.getPreferences().setVariable(MuPreference.DATE_SEPARATOR, dateSeparatorField.getText());
     	MuConfigurations.getPreferences().setVariable(MuPreference.TIME_FORMAT, getTimeFormatString());

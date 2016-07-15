@@ -28,7 +28,7 @@ import java.awt.event.ItemListener;
 /**
  * @author Arik Hadas
  */
-public abstract class PrefComboBox<T> extends JComboBox<T> implements PrefComponent {
+public abstract class PrefComboBox extends JComboBox implements PrefComponent {
 
 	public PrefComboBox() {
 		super();
@@ -44,7 +44,7 @@ public abstract class PrefComboBox<T> extends JComboBox<T> implements PrefCompon
 	}
 
 	@Override
-	public T getSelectedItem() {
-		return (T) super.getSelectedItem();
+	public Object getSelectedItem() {
+		return super.getSelectedItem();
 	}
 }
