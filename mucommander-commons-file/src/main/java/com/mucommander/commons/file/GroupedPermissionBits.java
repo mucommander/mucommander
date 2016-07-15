@@ -35,7 +35,7 @@ public class GroupedPermissionBits implements PermissionBits {
     /**
      * Creates a new GroupedPermissionBits using the specified UNIX-style permission int. The int can be created
      * by combining (binary OR and shift) values defined in {@link com.mucommander.commons.file.PermissionTypes} and
-     * {@link com.mucommander.commons.file.PermissionAccesses}.
+     * {@link com.mucommander.commons.file.PermissionAccess}.
      *
      * @param permissions a UNIX-style permission int.
      */
@@ -52,7 +52,7 @@ public class GroupedPermissionBits implements PermissionBits {
         return permissions;
     }
 
-    public boolean getBitValue(int access, PermissionType type) {
-        return (permissions & (type.toInt() << (access*3))) != 0;
+    public boolean getBitValue(PermissionAccess access, PermissionType type) {
+        return (permissions & (type.toInt() << (access.toInt()*3))) != 0;
     }
 }

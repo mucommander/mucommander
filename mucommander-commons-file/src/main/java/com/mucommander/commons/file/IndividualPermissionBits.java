@@ -41,7 +41,7 @@ public abstract class IndividualPermissionBits implements PermissionBits {
         int bitShift = 0;
         int perms = 0;
 
-        for(int a=PermissionAccesses.OTHER_ACCESS; a<=PermissionAccesses.USER_ACCESS; a++) {
+        for(PermissionAccess a : PermissionAccess.values()) {
             for(PermissionType p : PermissionType.values()) {
                 if(getBitValue(a, p))
                     perms |= (1<<bitShift);

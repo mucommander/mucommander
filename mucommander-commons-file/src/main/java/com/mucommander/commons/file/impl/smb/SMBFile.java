@@ -277,8 +277,8 @@ import java.net.MalformedURLException;
     }
 
     @Override
-    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException {
-        if(access!=USER_ACCESS || permission!=PermissionType.WRITE)
+    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
+        if(access!=PermissionAccess.USER || permission!=PermissionType.WRITE)
             throw new IOException();
 
         if(enabled)
@@ -649,8 +649,8 @@ import java.net.MalformedURLException;
             this.file = file;
         }
 
-        public boolean getBitValue(int access, PermissionType type) {
-            if(access!=USER_ACCESS)
+        public boolean getBitValue(PermissionAccess access, PermissionType type) {
+            if(access!=PermissionAccess.USER)
                 return false;
 
             try {

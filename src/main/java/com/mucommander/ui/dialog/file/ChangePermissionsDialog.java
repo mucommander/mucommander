@@ -38,7 +38,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.PermissionAccesses;
+import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
@@ -58,7 +58,7 @@ import com.mucommander.ui.text.SizeConstrainedDocument;
  * @author Maxence Bernard
  */
 public class ChangePermissionsDialog extends JobDialog
-        implements ActionListener, ItemListener, DocumentListener, PermissionAccesses {
+        implements ActionListener, ItemListener, DocumentListener {
 
     private JCheckBox permCheckBoxes[][];
 
@@ -97,21 +97,21 @@ public class ChangePermissionsDialog extends JobDialog
         gridPanel.add(new JLabel(Translator.get("permissions.write")));
         gridPanel.add(new JLabel(Translator.get("permissions.executable")));
 
-        for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
-            gridPanel.add(new JLabel(Translator.get(a==USER_ACCESS ?"permissions.user":a==GROUP_ACCESS?"permissions.group":"permissions.other")));
+        for(PermissionAccess a : PermissionAccess.reverseValues()) {
+            gridPanel.add(new JLabel(Translator.get(a==PermissionAccess.USER ?"permissions.user":a==PermissionAccess.GROUP?"permissions.group":"permissions.other")));
 
             for(PermissionType p : PermissionType.values()) {
                 permCheckBox = new JCheckBox();
-                permCheckBox.setSelected((defaultPerms & (p.toInt()<<a*3))!=0);
+                permCheckBox.setSelected((defaultPerms & (p.toInt()<<a.toInt()*3))!=0);
 
                 // Enable the checkbox only if the permission can be set in the destination
-                if((permSetMask & (p.toInt()<<a*3))==0)
+                if((permSetMask & (p.toInt()<<a.toInt()*3))==0)
                     permCheckBox.setEnabled(false);
                 else
                     permCheckBox.addItemListener(this);
 
                 gridPanel.add(permCheckBox);
-                permCheckBoxes[a][p.toInt()] = permCheckBox;
+                permCheckBoxes[a.toInt()][p.toInt()] = permCheckBox;
             }
         }
 
@@ -187,12 +187,12 @@ public class ChangePermissionsDialog extends JobDialog
         JCheckBox permCheckBox;
         int perms = 0;
 
-        for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
+        for(PermissionAccess a : PermissionAccess.reverseValues()) {
             for(PermissionType p : PermissionType.values()) {
-                permCheckBox = permCheckBoxes[a][p.toInt()];
+                permCheckBox = permCheckBoxes[a.toInt()][p.toInt()];
 
                 if(permCheckBox.isSelected())
-                    perms |= (p.toInt()<<a*3);
+                    perms |= (p.toInt()<<a.toInt()*3);
             }
         }
 
@@ -222,12 +222,12 @@ public class ChangePermissionsDialog extends JobDialog
 
         int perms = octalStr.equals("")?0:Integer.parseInt(octalStr, 8);
 
-        for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
+        for(PermissionAccess a : PermissionAccess.reverseValues()) {
             for(PermissionType p : PermissionType.values()) {
-                permCheckBox = permCheckBoxes[a][p.toInt()];
+                permCheckBox = permCheckBoxes[a.toInt()][p.toInt()];
 
 //                if(permCheckBox.isEnabled())
-                permCheckBox.setSelected((perms & (p.toInt()<<a*3))!=0);
+                permCheckBox.setSelected((perms & (p.toInt()<<a.toInt()*3))!=0);
             }
         }
 

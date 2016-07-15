@@ -214,7 +214,7 @@ public class NFSFile extends ProtocolFile {
 
     @Override
     @UnsupportedFileOperation
-    public void changePermission(int access, PermissionType permission, boolean enabled) throws UnsupportedFileOperationException {
+    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws UnsupportedFileOperationException {
         // XFile has no method for that unfortunately
         throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
     }
@@ -544,8 +544,8 @@ public class NFSFile extends ProtocolFile {
             this.file = file;
         }
 
-        public boolean getBitValue(int access, PermissionType type) {
-            if(access!= USER_ACCESS)
+        public boolean getBitValue(PermissionAccess access, PermissionType type) {
+            if(access!= PermissionAccess.USER)
                 return false;
 
             switch(type) {

@@ -221,7 +221,7 @@ public abstract class S3File extends ProtocolFile {
 
     @Override
     @UnsupportedFileOperation
-    public void changePermission(int access, PermissionType permission, boolean enabled) throws UnsupportedFileOperationException {
+    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws UnsupportedFileOperationException {
         throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
     }
 

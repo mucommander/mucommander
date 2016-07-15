@@ -19,6 +19,10 @@
 
 package com.mucommander.commons.file;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * This interface defines constants fields used for designating the three different permission accesses:
  * {@link #USER_ACCESS}, {@link #GROUP_ACCESS} and {@link #OTHER_ACCESS}. Their actual int values represent the number
@@ -30,14 +34,28 @@ package com.mucommander.commons.file;
  * @see com.mucommander.commons.file.PermissionType
  * @author Maxence Bernard
  */
-public interface PermissionAccesses {
+public enum PermissionAccess {
 
     /** Designates the 'other' permission access. */
-    public int OTHER_ACCESS = 0;
-
+    OTHER(0),
     /** Designates the 'group' permission access. */
-    public int GROUP_ACCESS = 1;
-
+    GROUP(1),
     /** Designates the 'user' permission access. */
-    public int USER_ACCESS = 2;
+    USER(2);
+
+    private int intVal;
+
+    private PermissionAccess(int intVal) {
+    	this.intVal = intVal;
+	}
+
+    public int toInt() {
+    	return intVal;
+    }
+
+    public static List<PermissionAccess> reverseValues() {
+    	List<PermissionAccess> values = Arrays.asList(PermissionAccess.values());
+        Collections.reverse(values);
+        return values;
+    }
 }

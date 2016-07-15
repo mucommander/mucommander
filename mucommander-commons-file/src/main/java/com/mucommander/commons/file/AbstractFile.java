@@ -52,7 +52,7 @@ import com.mucommander.commons.io.StreamUtils;
  * @see com.mucommander.commons.file.impl.ProxyFile
  * @author Maxence Bernard
  */
-public abstract class AbstractFile implements FileAttributes, PermissionAccesses {
+public abstract class AbstractFile implements FileAttributes {
 
     /** URL representing this file */
     protected FileURL fileURL;
@@ -546,7 +546,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionAccesses
     /**
      * Changes this file's permissions to the specified permissions int.
      * The permissions int should be constructed using the permission types and accesses defined in
-     * {@link com.mucommander.commons.file.PermissionType} and {@link com.mucommander.commons.file.PermissionAccesses}.
+     * {@link com.mucommander.commons.file.PermissionType} and {@link com.mucommander.commons.file.PermissionAccess}.
      *
      * <p>Implementation note: the default implementation of this method calls sequentially {@link #changePermission(int, int, boolean)},
      * for each permission and access (that's a total 9 calls). This may affect performance on filesystems which need
@@ -563,7 +563,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionAccesses
         int bitShift = 0;
 
         PermissionBits mask = getChangeablePermissions();
-        for(int a=OTHER_ACCESS; a<=USER_ACCESS; a++) {
+        for(PermissionAccess a : PermissionAccess.values()) {
             for(PermissionType p : PermissionType.values()) {
                 if(mask.getBitValue(a, p))
                     changePermission(a, p, (permissions & (1<<bitShift))!=0);
@@ -610,14 +610,14 @@ public abstract class AbstractFile implements FileAttributes, PermissionAccesses
 
         int perms = permissions.getIntValue();
 
-        int bitShift = USER_ACCESS *3;
+        int bitShift = PermissionAccess.USER.toInt() *3;
 
         // Permissions go by triplets (rwx), there are 3 of them for respectively 'owner', 'group' and 'other' accesses.
         // The first one ('owner') will always be displayed, regardless of the permission bit mask. 'Group' and 'other'
         // will be displayed only if the permission mask contains information about them (at least one permission bit).
-        for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
+        for(PermissionAccess a : PermissionAccess.reverseValues()) {
 
-            if(a==USER_ACCESS || (supportedPerms & (7<<bitShift))!=0) {
+            if(a==PermissionAccess.USER || (supportedPerms & (7<<bitShift))!=0) {
                 for(PermissionType p : PermissionType.values()) {
                     if((perms & (p.toInt()<<bitShift))==0)
                         s += '-';
@@ -1573,7 +1573,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionAccesses
      * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
      * @param access see {@link PermissionType} for allowed values
-     * @param permission see {@link PermissionAccesses} for allowed values
+     * @param permission see {@link PermissionAccess} for allowed values
      * @param enabled true to enable the flag, false to disable it
      * @throws IOException if the permission couldn't be changed, either because of insufficient permissions or because
      * of an I/O error.
@@ -1581,7 +1581,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionAccesses
      * or is not implemented.
      * @see #getChangeablePermissions()
      */
-    public abstract void changePermission(int access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException;
+    public abstract void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException;
 
     /**
      * Returns information about the owner of this file. The kind of information that is returned is implementation-dependant.

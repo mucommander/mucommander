@@ -48,6 +48,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.GroupedPermissionBits;
 import com.mucommander.commons.file.IndividualPermissionBits;
 import com.mucommander.commons.file.MacOsSystemFolder;
+import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.ProtocolFile;
@@ -718,9 +719,9 @@ public class LocalFile extends ProtocolFile {
     }
 
     @Override
-    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException {
+    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
         // Only the 'user' permissions under Java 1.6 are supported
-        if(access!=USER_ACCESS || JavaVersion.JAVA_1_6.isCurrentLower())
+        if(access!=PermissionAccess.USER || JavaVersion.JAVA_1_6.isCurrentLower())
             throw new IOException();
 
         boolean success = false;
@@ -1340,9 +1341,9 @@ public class LocalFile extends ProtocolFile {
             this.file = file;
         }
 
-        public boolean getBitValue(int access, PermissionType type) {
+        public boolean getBitValue(PermissionAccess access, PermissionType type) {
             // Only the 'user' permissions are supported
-            if(access!=USER_ACCESS)
+            if(access!=PermissionAccess.USER)
                 return false;
 
             switch(type) {
@@ -1366,13 +1367,13 @@ public class LocalFile extends ProtocolFile {
         public int getIntValue() {
             int userPerms = 0;
 
-            if(getBitValue(USER_ACCESS, PermissionType.READ))
+            if(getBitValue(PermissionAccess.USER, PermissionType.READ))
                 userPerms |= PermissionType.READ.toInt();
 
-            if(getBitValue(USER_ACCESS, PermissionType.WRITE))
+            if(getBitValue(PermissionAccess.USER, PermissionType.WRITE))
                 userPerms |= PermissionType.WRITE.toInt();
 
-            if(getBitValue(USER_ACCESS, PermissionType.EXECUTE))
+            if(getBitValue(PermissionAccess.USER, PermissionType.EXECUTE))
                 userPerms |= PermissionType.EXECUTE.toInt();
 
             return userPerms<<6;

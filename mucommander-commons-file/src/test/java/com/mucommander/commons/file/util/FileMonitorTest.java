@@ -20,7 +20,7 @@ package com.mucommander.commons.file.util;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.PermissionAccesses;
+import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 import org.testng.annotations.AfterMethod;
@@ -98,7 +98,7 @@ public class FileMonitorTest implements FileMonitorConstants {
     public void testPermissionsAttribute() throws IOException {
         setUp(PERMISSIONS_ATTRIBUTE);
 
-        file.changePermission(PermissionAccesses.USER_ACCESS, PermissionType.WRITE, !file.getPermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionType.WRITE));
+        file.changePermission(PermissionAccess.USER, PermissionType.WRITE, !file.getPermissions().getBitValue(PermissionAccess.USER, PermissionType.WRITE));
         assert hasAttributeChanged(PERMISSIONS_ATTRIBUTE);
     }
 

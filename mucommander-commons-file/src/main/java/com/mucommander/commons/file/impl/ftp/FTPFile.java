@@ -407,8 +407,8 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     @Override
-    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
-        changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission.toInt() << (access*3)), enabled));
+    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
+        changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission.toInt() << (access.toInt()*3)), enabled));
     }
 
     /**
@@ -1412,18 +1412,23 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             this.file = file;
         }
 
-        public boolean getBitValue(int access, PermissionType type) {
+        public boolean getBitValue(PermissionAccess access, PermissionType type) {
             int fAccess;
             int fPermission;
 
-            if(access==USER_ACCESS)
-                fAccess = org.apache.commons.net.ftp.FTPFile.USER_ACCESS;
-            else if(access==GROUP_ACCESS)
-                fAccess = org.apache.commons.net.ftp.FTPFile.GROUP_ACCESS;
-            else if(access==OTHER_ACCESS)
-                fAccess = org.apache.commons.net.ftp.FTPFile.WORLD_ACCESS;
-            else
+            switch(access) {
+            case USER:
+            	fAccess = org.apache.commons.net.ftp.FTPFile.USER_ACCESS;
+            	break;
+            case GROUP:
+            	fAccess = org.apache.commons.net.ftp.FTPFile.GROUP_ACCESS;
+            	break;
+            case OTHER:
+            	fAccess = org.apache.commons.net.ftp.FTPFile.WORLD_ACCESS;
+            	break;
+            default:
                 return false;
+            }
 
             switch(type) {
             case READ:

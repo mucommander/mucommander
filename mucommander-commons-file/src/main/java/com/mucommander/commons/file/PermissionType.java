@@ -22,10 +22,10 @@ package com.mucommander.commons.file;
 /**
  * This interface defines constants fields used for designating the three different permission types:
  * {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} and {@link #EXECUTE_PERMISSION}. Their actual value represent
- * the bit to be set and left-shifted with the desired {@link com.mucommander.commons.file.PermissionAccesses permission access}
+ * the bit to be set and left-shifted with the desired {@link com.mucommander.commons.file.PermissionAccess permission access}
  * in a UNIX-style permission int.
  *
- * @see PermissionAccesses
+ * @see PermissionAccess
  * @author Maxence Bernard
  */
 public enum PermissionType {
