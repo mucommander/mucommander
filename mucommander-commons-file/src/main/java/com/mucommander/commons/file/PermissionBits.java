@@ -21,7 +21,7 @@ package com.mucommander.commons.file;
 
 /**
  * This interface provides methods to access file permissions, for every combination of types and accesses defined
- * in {@link com.mucommander.commons.file.PermissionTypes} and {@link com.mucommander.commons.file.PermissionAccesses} respectively.
+ * in {@link com.mucommander.commons.file.PermissionType} and {@link com.mucommander.commons.file.PermissionAccesses} respectively.
  * This interface also defines constants for commonly used permission values.
  *
  * <p>Permission bits can be queried individually using {@link #getBitValue(int, int)} or be represented altogether
@@ -62,7 +62,7 @@ public interface PermissionBits {
 
     /**
      * Returns the value of all the permission bits (9 in total) in a UNIX-style permission int. Each of the permission
-     * bits can be isolated by comparing them against the values defined in {@link com.mucommander.commons.file.PermissionTypes}
+     * bits can be isolated by comparing them against the values defined in {@link com.mucommander.commons.file.PermissionType}
      * and {@link com.mucommander.commons.file.PermissionAccesses}.
      *
      * @return the value of all the permission bits (9 in total) in a UNIX-style permission int
@@ -74,8 +74,8 @@ public interface PermissionBits {
      * if it isn't.
      *
      * @param access one of the values defined in {@link com.mucommander.commons.file.PermissionAccesses}
-     * @param type one of the values defined in {@link com.mucommander.commons.file.PermissionTypes}
+     * @param type permission type
      * @return <code>true</code> if the permission is set, <code>false</code> if it isn't
      */
-    boolean getBitValue(int access, int type);
+    boolean getBitValue(int access, PermissionType type);
 }

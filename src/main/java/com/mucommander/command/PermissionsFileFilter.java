@@ -20,7 +20,7 @@ package com.mucommander.command;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccesses;
-import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.filter.AbstractFileFilter;
 import com.mucommander.commons.runtime.JavaVersion;
 
@@ -28,8 +28,8 @@ import com.mucommander.commons.runtime.JavaVersion;
  * Filter on a file's permissions.
  * @author Nicolas Rinaudo
  */
-public class PermissionsFileFilter extends AbstractFileFilter implements PermissionTypes, PermissionAccesses {
-    private int     permission;
+public class PermissionsFileFilter extends AbstractFileFilter implements PermissionAccesses {
+    private PermissionType permission;
     private boolean filter;
 
     /**
@@ -37,13 +37,13 @@ public class PermissionsFileFilter extends AbstractFileFilter implements Permiss
      * @param permission permission that will be checked against as defined in {@link com.mucommander.commons.file.FilePermissions}.
      * @param filter     whether or not the specified permission flag must be set for a file to be accepted.
      */
-    public PermissionsFileFilter(int permission, boolean filter) {
+    public PermissionsFileFilter(PermissionType permission, boolean filter) {
         this.permission = permission;
         this.filter     = filter;
     }
 
     public boolean accept(AbstractFile file) {
-        if(permission== EXECUTE_PERMISSION && JavaVersion.JAVA_1_5.isCurrentOrLower())
+        if(permission== PermissionType.EXECUTE && JavaVersion.JAVA_1_5.isCurrentOrLower())
             return true;
 
         return filter ? file.getPermissions().getBitValue(USER_ACCESS, permission) : !file.getPermissions().getBitValue(USER_ACCESS, permission);
@@ -53,7 +53,7 @@ public class PermissionsFileFilter extends AbstractFileFilter implements Permiss
      * Returns the permission that this filter will check.
      * @return the permission that this filter will check.
      */
-    public int getPermission() {return permission;}
+    public PermissionType getPermission() {return permission;}
 
     /**
      * Returns <code>true</code> if files must have the filter's permission flag set in order to be accepted.

@@ -407,8 +407,8 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     @Override
-    public void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
-        changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission << (access*3)), enabled));
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
+        changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission.toInt() << (access*3)), enabled));
     }
 
     /**
@@ -1412,7 +1412,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             this.file = file;
         }
 
-        public boolean getBitValue(int access, int type) {
+        public boolean getBitValue(int access, PermissionType type) {
             int fAccess;
             int fPermission;
 
@@ -1425,14 +1425,19 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             else
                 return false;
 
-            if(type==READ_PERMISSION)
-                fPermission = org.apache.commons.net.ftp.FTPFile.READ_PERMISSION;
-            else if(type==WRITE_PERMISSION)
-                fPermission = org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION;
-            else if(type==EXECUTE_PERMISSION)
-                fPermission = org.apache.commons.net.ftp.FTPFile.EXECUTE_PERMISSION;
-            else
-                return false;
+            switch(type) {
+            case READ:
+            	fPermission = org.apache.commons.net.ftp.FTPFile.READ_PERMISSION;
+            	break;
+            case WRITE:
+            	fPermission = org.apache.commons.net.ftp.FTPFile.WRITE_PERMISSION;
+            	break;
+            case EXECUTE:
+            	fPermission = org.apache.commons.net.ftp.FTPFile.EXECUTE_PERMISSION;
+            	break;
+            default:
+            	return false;
+            }
 
             return file.hasPermission(fAccess, fPermission);
         }

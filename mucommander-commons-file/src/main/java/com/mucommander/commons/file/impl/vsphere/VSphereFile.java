@@ -58,6 +58,7 @@ import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.ProtocolFile;
 import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
@@ -544,7 +545,7 @@ public class VSphereFile extends ProtocolFile implements
 
 	@Override
 	@UnsupportedFileOperation
-	public void changePermission(int access, int permission, boolean enabled)
+	public void changePermission(int access, PermissionType permission, boolean enabled)
 			throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(
 				FileOperation.CHANGE_PERMISSION);

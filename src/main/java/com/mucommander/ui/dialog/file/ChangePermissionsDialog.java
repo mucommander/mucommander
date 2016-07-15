@@ -18,9 +18,28 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccesses;
-import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
@@ -31,18 +50,6 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.SizeConstrainedDocument;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 /**
  * This dialog allows the user to change the permissions of the currently selected/marked file(s). The permissions can be
  * selected either by clicking individual read/write/executable checkboxes for each of the user/group/other accesses,
@@ -51,7 +58,7 @@ import java.awt.event.ItemListener;
  * @author Maxence Bernard
  */
 public class ChangePermissionsDialog extends JobDialog
-        implements ActionListener, ItemListener, DocumentListener, PermissionTypes, PermissionAccesses {
+        implements ActionListener, ItemListener, DocumentListener, PermissionAccesses {
 
     private JCheckBox permCheckBoxes[][];
 
@@ -93,18 +100,18 @@ public class ChangePermissionsDialog extends JobDialog
         for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
             gridPanel.add(new JLabel(Translator.get(a==USER_ACCESS ?"permissions.user":a==GROUP_ACCESS?"permissions.group":"permissions.other")));
 
-            for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
+            for(PermissionType p : PermissionType.values()) {
                 permCheckBox = new JCheckBox();
-                permCheckBox.setSelected((defaultPerms & (p<<a*3))!=0);
+                permCheckBox.setSelected((defaultPerms & (p.toInt()<<a*3))!=0);
 
                 // Enable the checkbox only if the permission can be set in the destination
-                if((permSetMask & (p<<a*3))==0)
+                if((permSetMask & (p.toInt()<<a*3))==0)
                     permCheckBox.setEnabled(false);
                 else
                     permCheckBox.addItemListener(this);
 
                 gridPanel.add(permCheckBox);
-                permCheckBoxes[a][p] = permCheckBox;
+                permCheckBoxes[a][p.toInt()] = permCheckBox;
             }
         }
 
@@ -181,11 +188,11 @@ public class ChangePermissionsDialog extends JobDialog
         int perms = 0;
 
         for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
-            for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
-                permCheckBox = permCheckBoxes[a][p];
+            for(PermissionType p : PermissionType.values()) {
+                permCheckBox = permCheckBoxes[a][p.toInt()];
 
                 if(permCheckBox.isSelected())
-                    perms |= (p<<a*3);
+                    perms |= (p.toInt()<<a*3);
             }
         }
 
@@ -216,11 +223,11 @@ public class ChangePermissionsDialog extends JobDialog
         int perms = octalStr.equals("")?0:Integer.parseInt(octalStr, 8);
 
         for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
-            for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
-                permCheckBox = permCheckBoxes[a][p];
+            for(PermissionType p : PermissionType.values()) {
+                permCheckBox = permCheckBoxes[a][p.toInt()];
 
 //                if(permCheckBox.isEnabled())
-                permCheckBox.setSelected((perms & (p<<a*3))!=0);
+                permCheckBox.setSelected((perms & (p.toInt()<<a*3))!=0);
             }
         }
 

@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.ChainedFileFilter;
 import com.mucommander.commons.file.filter.FileFilter;
@@ -345,15 +345,15 @@ public class CommandManager implements CommandBuilder {
             permissionFilter = (PermissionsFileFilter)filter;
 
             switch(permissionFilter.getPermission()) {
-            case PermissionTypes.READ_PERMISSION:
+            case READ:
                 builder.setIsReadable(permissionFilter.getFilter());
                 break;
 
-            case PermissionTypes.WRITE_PERMISSION:
+            case WRITE:
                 builder.setIsWritable(permissionFilter.getFilter());
                 break;
 
-            case PermissionTypes.EXECUTE_PERMISSION:
+            case EXECUTE:
                 builder.setIsExecutable(permissionFilter.getFilter());
                 break;
             }

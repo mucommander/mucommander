@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccesses;
-import com.mucommander.commons.file.PermissionTypes;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -89,8 +89,8 @@ public class TempExecJob extends TempCopyJob {
             if(!currentDestFile.isDirectory()) {        // Do not change directories' permissions
                 try {
                     // Make the temporary file read only
-                    if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION))
-                        currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, false);
+                    if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccesses.USER_ACCESS, PermissionType.WRITE))
+                        currentDestFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionType.WRITE, false);
                 }
                 catch(IOException e) {
                     LOGGER.debug("Caught exeception while changing permissions of "+currentDestFile, e);

@@ -52,7 +52,7 @@ import com.mucommander.commons.io.StreamUtils;
  * @see com.mucommander.commons.file.impl.ProxyFile
  * @author Maxence Bernard
  */
-public abstract class AbstractFile implements FileAttributes, PermissionTypes, PermissionAccesses {
+public abstract class AbstractFile implements FileAttributes, PermissionAccesses {
 
     /** URL representing this file */
     protected FileURL fileURL;
@@ -546,7 +546,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
     /**
      * Changes this file's permissions to the specified permissions int.
      * The permissions int should be constructed using the permission types and accesses defined in
-     * {@link com.mucommander.commons.file.PermissionTypes} and {@link com.mucommander.commons.file.PermissionAccesses}.
+     * {@link com.mucommander.commons.file.PermissionType} and {@link com.mucommander.commons.file.PermissionAccesses}.
      *
      * <p>Implementation note: the default implementation of this method calls sequentially {@link #changePermission(int, int, boolean)},
      * for each permission and access (that's a total 9 calls). This may affect performance on filesystems which need
@@ -564,7 +564,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
 
         PermissionBits mask = getChangeablePermissions();
         for(int a=OTHER_ACCESS; a<=USER_ACCESS; a++) {
-            for(int p=EXECUTE_PERMISSION; p<=READ_PERMISSION; p=p<<1) {
+            for(PermissionType p : PermissionType.values()) {
                 if(mask.getBitValue(a, p))
                     changePermission(a, p, (permissions & (1<<bitShift))!=0);
 
@@ -618,11 +618,11 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
         for(int a=USER_ACCESS; a>=OTHER_ACCESS; a--) {
 
             if(a==USER_ACCESS || (supportedPerms & (7<<bitShift))!=0) {
-                for(int p=READ_PERMISSION; p>=EXECUTE_PERMISSION; p=p>>1) {
-                    if((perms & (p<<bitShift))==0)
+                for(PermissionType p : PermissionType.values()) {
+                    if((perms & (p.toInt()<<bitShift))==0)
                         s += '-';
                     else
-                        s += p==READ_PERMISSION?'r':p==WRITE_PERMISSION?'w':'x';
+                        s += p==PermissionType.READ?'r':p==PermissionType.WRITE?'w':'x';
                 }
             }
 
@@ -1572,7 +1572,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * -- {@link #isFileOperationSupported(FileOperation)} can be called to find out if it is. If the operation isn't
      * supported, a {@link UnsupportedFileOperation} will be thrown when this method is called.</p>
      *
-     * @param access see {@link PermissionTypes} for allowed values
+     * @param access see {@link PermissionType} for allowed values
      * @param permission see {@link PermissionAccesses} for allowed values
      * @param enabled true to enable the flag, false to disable it
      * @throws IOException if the permission couldn't be changed, either because of insufficient permissions or because
@@ -1581,7 +1581,7 @@ public abstract class AbstractFile implements FileAttributes, PermissionTypes, P
      * or is not implemented.
      * @see #getChangeablePermissions()
      */
-    public abstract void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException;
+    public abstract void changePermission(int access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException;
 
     /**
      * Returns information about the owner of this file. The kind of information that is returned is implementation-dependant.

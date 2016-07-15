@@ -282,8 +282,8 @@ public abstract class HadoopFile extends ProtocolFile {
     }
 
     @Override
-    public void changePermission(int access, int permission, boolean enabled) throws IOException {
-        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException {
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access*3)), enabled));
     }
 
     @Override

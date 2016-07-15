@@ -154,7 +154,7 @@ public enum FileOperation {
                     return c.getMethod("changeDate", Long.TYPE);
 
                 case CHANGE_PERMISSION:
-                    return c.getMethod("changePermission", Integer.TYPE, Integer.TYPE, Boolean.TYPE);
+                    return c.getMethod("changePermission", Integer.TYPE, PermissionType.class, Boolean.TYPE);
 
                 case DELETE:
                     return c.getMethod("delete");

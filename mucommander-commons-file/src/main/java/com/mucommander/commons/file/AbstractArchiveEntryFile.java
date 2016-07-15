@@ -188,8 +188,8 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     }
 
     @Override
-    public void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
-        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access*3)), enabled));
     }
 
     @Override

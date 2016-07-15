@@ -52,7 +52,7 @@ public class GroupedPermissionBits implements PermissionBits {
         return permissions;
     }
 
-    public boolean getBitValue(int access, int type) {
-        return (permissions & (type << (access*3))) != 0;
+    public boolean getBitValue(int access, PermissionType type) {
+        return (permissions & (type.toInt() << (access*3))) != 0;
     }
 }

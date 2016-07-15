@@ -117,7 +117,7 @@ public abstract class ProxyFile extends AbstractFile {
     }
 
     @Override
-    public void changePermission(int access, int permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
         file.changePermission(access, permission, enabled);
     }
 

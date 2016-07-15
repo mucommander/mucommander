@@ -277,8 +277,8 @@ import java.net.MalformedURLException;
     }
 
     @Override
-    public void changePermission(int access, int permission, boolean enabled) throws IOException {
-        if(access!=USER_ACCESS || permission!=WRITE_PERMISSION)
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException {
+        if(access!=USER_ACCESS || permission!=PermissionType.WRITE)
             throw new IOException();
 
         if(enabled)
@@ -649,17 +649,19 @@ import java.net.MalformedURLException;
             this.file = file;
         }
 
-        public boolean getBitValue(int access, int type) {
+        public boolean getBitValue(int access, PermissionType type) {
             if(access!=USER_ACCESS)
                 return false;
 
             try {
-                if(type==READ_PERMISSION)
-                    return file.canRead();
-                else if(type==WRITE_PERMISSION)
-                    return file.canWrite();
-                else
-                    return false;
+            	switch(type) {
+            	case READ:
+            		return file.canRead();
+            	case WRITE:
+            		return file.canWrite();
+            	default:
+            		return false;
+            	}
             }
             // Unlike java.io.File, SmbFile#canRead() and SmbFile#canWrite() can throw an SmbException
             catch(SmbException e) {

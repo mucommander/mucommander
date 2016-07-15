@@ -495,7 +495,7 @@ public abstract class AbstractFileTest {
         // Assert that #changePermission throws a proper UnsupportedFileOperationException when called
         UnsupportedFileOperationException e = null;
         try {
-            tempFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionTypes.WRITE_PERMISSION, true);
+            tempFile.changePermission(PermissionAccesses.USER_ACCESS, PermissionType.WRITE, true);
         }
         catch(UnsupportedFileOperationException ex) {
             e = ex;
@@ -527,7 +527,7 @@ public abstract class AbstractFileTest {
         boolean canGetPermission, canSetPermission;
 
         for(int a=PermissionAccesses.OTHER_ACCESS; a<=PermissionAccesses.USER_ACCESS; a++) {
-            for(int p=PermissionTypes.EXECUTE_PERMISSION; p<=PermissionTypes.READ_PERMISSION; p=p<<1) {
+            for(PermissionType p : PermissionType.values()) {
                 bitMask = 1<<bitShift;
 
                 canGetPermission = (getPermMaskInt & bitMask)!=0;
@@ -1960,7 +1960,7 @@ public abstract class AbstractFileTest {
         boolean canGetPermission;
 
         for(int a=PermissionAccesses.OTHER_ACCESS; a<=PermissionAccesses.USER_ACCESS; a++) {
-            for(int p=PermissionTypes.EXECUTE_PERMISSION; p<=PermissionTypes.READ_PERMISSION; p=p<<1) {
+            for(PermissionType p : PermissionType.values()) {
                 bitMask = 1<<bitShift;
 
                 canGetPermission = (getPermMaskInt & bitMask)!=0;

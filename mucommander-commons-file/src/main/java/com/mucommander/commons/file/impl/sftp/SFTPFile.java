@@ -41,6 +41,7 @@ import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.ProtocolFile;
 import com.mucommander.commons.file.SimpleFilePermissions;
 import com.mucommander.commons.file.SyncedFileAttributes;
@@ -330,8 +331,8 @@ public class SFTPFile extends ProtocolFile {
     }
 
     @Override
-    public void changePermission(int access, int permission, boolean enabled) throws IOException {
-        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission << (access*3)), enabled));
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException {
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access*3)), enabled));
     }
 
     @Override

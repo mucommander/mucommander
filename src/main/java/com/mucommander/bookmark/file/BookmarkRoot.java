@@ -122,7 +122,7 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     public FilePermissions getPermissions() {return BookmarkFile.PERMISSIONS;}
     @Override
     @UnsupportedFileOperation
-    public void changePermission(int access, int permission, boolean enabled) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);}
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);}
     @Override
     public PermissionBits getChangeablePermissions() {return PermissionBits.EMPTY_PERMISSION_BITS;}
     @Override

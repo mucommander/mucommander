@@ -28,14 +28,22 @@ package com.mucommander.commons.file;
  * @see PermissionAccesses
  * @author Maxence Bernard
  */
-public interface PermissionTypes {
+public enum PermissionType {
 
     /** Designates the 'execute' permission. */
-    public int EXECUTE_PERMISSION = 1;
-
+    EXECUTE(1),
     /** Designates the 'write' permission. */
-    public int WRITE_PERMISSION = 2;
-
+    WRITE(2),
     /** Designates the 'read' permission. */
-    public int READ_PERMISSION = 4;
+    READ(4);
+
+    private int intValue;
+
+    private PermissionType(int val) {
+		this.intValue = val;
+	}
+
+    public int toInt() {
+    	return intValue;
+    }
 }

@@ -23,6 +23,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.GroupedPermissionBits;
 import com.mucommander.commons.file.IndividualPermissionBits;
 import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.ProtocolFile;
 import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
@@ -196,18 +197,22 @@ public class UNCFile extends ProtocolFile {
     }
 
     @Override
-    public void changePermission(int access, int permission, boolean enabled) throws IOException {
+    public void changePermission(int access, PermissionType permission, boolean enabled) throws IOException {
         // Only the 'user' permissions under Java 1.6 are supported
         if(access!=USER_ACCESS || JavaVersion.JAVA_1_6.isCurrentLower())
             throw new IOException();
 
         boolean success = false;
-        if(permission==READ_PERMISSION)
-            success = file.setReadable(enabled);
-        else if(permission==WRITE_PERMISSION)
-            success = file.setWritable(enabled);
-        else if(permission==EXECUTE_PERMISSION)
-            success = file.setExecutable(enabled);
+        switch(permission) {
+        case READ:
+        	success = file.setReadable(enabled);
+        	break;
+        case WRITE:
+        	success = file.setWritable(enabled);
+        	break;
+        case EXECUTE:
+        	success = file.setExecutable(enabled);
+        }
 
         if(!success)
             throw new IOException();
@@ -702,20 +707,22 @@ public class UNCFile extends ProtocolFile {
             this.file = file;
         }
 
-        public boolean getBitValue(int access, int type) {
+        public boolean getBitValue(int access, PermissionType type) {
             // Only the 'user' permissions are supported
             if(access!=USER_ACCESS)
                 return false;
 
-            if(type==READ_PERMISSION)
-                return file.canRead();
-            else if(type==WRITE_PERMISSION)
-                return file.canWrite();
-            // Execute permission can only be retrieved under Java 1.6 and up
-            else if(type==EXECUTE_PERMISSION && JavaVersion.JAVA_1_6.isCurrentOrHigher())
-                return file.canExecute();
-
-            return false;
+            switch(type) {
+            case READ:
+            	return file.canRead();
+            case WRITE:
+            	return file.canWrite();
+            case EXECUTE:
+            	if (JavaVersion.JAVA_1_6.isCurrentOrHigher())
+                    return file.canExecute();
+            default:
+            	return false;
+            }
         }
 
         /**
@@ -725,14 +732,14 @@ public class UNCFile extends ProtocolFile {
         public int getIntValue() {
             int userPerms = 0;
 
-            if(getBitValue(USER_ACCESS, READ_PERMISSION))
-                userPerms |= READ_PERMISSION;
+            if(getBitValue(USER_ACCESS, PermissionType.READ))
+                userPerms |= PermissionType.READ.toInt();
 
-            if(getBitValue(USER_ACCESS, WRITE_PERMISSION))
-                userPerms |= WRITE_PERMISSION;
+            if(getBitValue(USER_ACCESS, PermissionType.WRITE))
+                userPerms |= PermissionType.WRITE.toInt();
 
-            if(getBitValue(USER_ACCESS, EXECUTE_PERMISSION))
-                userPerms |= EXECUTE_PERMISSION;
+            if(getBitValue(USER_ACCESS, PermissionType.EXECUTE))
+                userPerms |= PermissionType.EXECUTE.toInt();
 
             return userPerms<<6;
         }

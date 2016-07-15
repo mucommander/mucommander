@@ -9,6 +9,7 @@ import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
@@ -42,7 +43,7 @@ class NullableFile extends AbstractFile {
 	}
 
 	@Override
-	public void changePermission(int arg0, int arg1, boolean arg2)
+	public void changePermission(int arg0, PermissionType arg1, boolean arg2)
 			throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
 	}
