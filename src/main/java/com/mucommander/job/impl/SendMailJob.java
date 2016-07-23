@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.MimeTypes;
@@ -26,6 +26,7 @@ import com.mucommander.commons.io.base64.Base64OutputStream;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

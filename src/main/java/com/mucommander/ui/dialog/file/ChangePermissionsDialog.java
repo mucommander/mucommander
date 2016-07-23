@@ -41,7 +41,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.ChangeFileAttributesJob;
+import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ChangePermissionsAction;

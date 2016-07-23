@@ -54,7 +54,7 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
 import com.mucommander.job.FileJobState;
-import com.mucommander.job.TransferFileJob;
+import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.job.progress.JobProgress;
 import com.mucommander.job.progress.JobProgressListener;
 import com.mucommander.job.progress.JobProgressMonitor;

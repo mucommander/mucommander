@@ -16,60 +16,70 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.process.ProcessRunner;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 
 /**
  * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
- * executes each of them with native file associations. The temporary files are deleted when the JVM terminates.
+ * executes them with a specific command. The temporary files are deleted when the JVM terminates.
  *
  * <p>It is important to understand that when this job operates on a set of files, a process is started for each file
- * to execute, so this operation should require confirmation by the user before being attempted.</p>
- *
- * @author Maxence Bernard
+  * to execute, so this operation should require confirmation by the user before being attempted.</p>
+  *
+ * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class TempExecJob extends TempCopyJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TempExecJob.class);
+public class TempOpenWithJob extends TempCopyJob {
+	private static final Logger LOGGER = LoggerFactory.getLogger(TempOpenWithJob.class);
 	
+    /** The command to execute, appended with the temporary file path(s) */
+    private Command command;
+
     /** Files to execute */
-    private FileSet filesToExecute;
+    private FileSet filesToOpen;
+
+    /** This list is populated with temporary files, as they are created by processFile() */
+    private FileSet tempFiles;
+
 
     /**
-     * Creates a new <code>TempExecJob</code> that operates on a single file.
+     * Creates a new <code>TempOpenWithJob</code> that operates on a single file.
      *
      * @param progressDialog the ProgressDialog that monitors this job
      * @param mainFrame the MainFrame this job is attached to
-     * @param fileToExecute the file to copy to a temporary location and execute
+     * @param fileToOpen the file to copy to a temporary location and execute
+     * @param command the command used to execute the temporary file
      */
-    public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute) {
-        this(progressDialog, mainFrame, new FileSet(fileToExecute.getParent(), fileToExecute));
+    public TempOpenWithJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToOpen, Command command) {
+        this(progressDialog, mainFrame, new FileSet(fileToOpen.getParent(), fileToOpen), command);
     }
 
     /**
-     * Creates a new <code>TempExecJob</code> that operates on a set of files. Only a single command get executed, operating on
+     * Creates a new <code>TempOpenWithJob</code> that operates on a set of files. Only a single command get executed, operating on
      * all files.
      *
      * @param progressDialog the ProgressDialog that monitors this job
      * @param mainFrame the MainFrame this job is attached to
-     * @param filesToExecute the set of files to copy to a temporary location and execute
+     * @param filesToOpen the set of files to copy to a temporary location and execute
+     * @param command the command used to execute the temporary file
      */
-    public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToExecute) {
-        super(progressDialog, mainFrame, filesToExecute);
-
-        this.filesToExecute = filesToExecute;
+    public TempOpenWithJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToOpen, Command command) {
+        super(progressDialog, mainFrame, filesToOpen);
+        this.command  = command;
+        this.filesToOpen = filesToOpen;
+        tempFiles = new FileSet(baseDestFolder);
     }
 
 
@@ -82,10 +92,10 @@ public class TempExecJob extends TempCopyJob {
         if(!super.processFile(file, recurseParams))
             return false;
 
-        // TODO: temporary files seem to remain after the JVM quits under Mac OS X, even if the files permissions are unchanged
+        // TODO: temporary files seem to be left after the JVM quits under Mac OS X, even if the files permissions are unchanged
 
-        // Execute the file, only if it is one of the top-level files
-        if(filesToExecute.indexOf(file)!=-1) {
+        // Add the file to the list of files to open, only if it is one of the top-level files
+        if(filesToOpen.indexOf(file)!=-1) {
             if(!currentDestFile.isDirectory()) {        // Do not change directories' permissions
                 try {
                     // Make the temporary file read only
@@ -97,18 +107,22 @@ public class TempExecJob extends TempCopyJob {
                     return false;
                 }
             }
-
-            // Try to open the file.
-            try {
-                DesktopManager.open(currentDestFile);
-                RecentExecutedFilesQL.addFile(file);
-            }
-            catch(Exception e) {
-                LOGGER.debug("Caught exeception while opening "+currentDestFile, e);
-                return false;
-            }
+            
+            tempFiles.add(currentDestFile);
         }
 
         return true;
+    }
+
+    @Override
+    protected void jobCompleted() {
+        super.jobCompleted();
+
+        try {
+            ProcessRunner.execute(command.getTokens(tempFiles), baseDestFolder);
+        }
+        catch(Exception e) {
+            LOGGER.debug("Caught exception executing "+command+" "+tempFiles, e);
+        }
     }
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +37,8 @@ import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.ChecksumInputStream;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.job.FileJobAction;
+import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.SplitFileAction;

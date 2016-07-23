@@ -23,7 +23,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.job.CalculateChecksumJob;
+import com.mucommander.job.impl.CalculateChecksumJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CalculateChecksumAction;
@@ -47,7 +47,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * This dialog prepares a {@link com.mucommander.job.CalculateChecksumJob} and lets the user choose a checksum
+ * This dialog prepares a {@link com.mucommander.job.impl.CalculateChecksumJob} and lets the user choose a checksum
  * algorithm, and a destination for the checksum file.
  *
  * @author Maxence Bernard

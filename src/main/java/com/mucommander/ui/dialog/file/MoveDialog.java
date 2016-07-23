@@ -22,8 +22,8 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.job.MoveJob;
-import com.mucommander.job.TransferFileJob;
+import com.mucommander.job.impl.MoveJob;
+import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.MoveAction;

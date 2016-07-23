@@ -22,7 +22,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.StringUtils;
-import com.mucommander.job.BatchRenameJob;
+import com.mucommander.job.impl.BatchRenameJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.BatchRenameAction;
