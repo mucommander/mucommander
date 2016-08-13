@@ -142,23 +142,18 @@ public class Translator {
 	}
 
     public static void init() {
-    	final Locale locale = getLocale();
-    	final ResourceBundle resourceBundle;
-
-    	final Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
-
-    	// Determines if language is one of the languages declared as available
+        Locale locale = getLocale();
+        // Determines if language is one of the languages declared as available
         if(availableLanguages.contains(locale)) {
-			// Language is available
-			resourceBundle= ResourceBundle.getBundle("dictionary", locale, utf8ResourceBundleControl);
             LOGGER.debug("Language "+locale+" is available.");
         }
         else {
-            // Language is not available, fall back to default language
-            resourceBundle= ResourceBundle.getBundle("dictionary", utf8ResourceBundleControl);
+            locale = Locale.ENGLISH;
             LOGGER.debug("Language "+locale+" is not available, falling back to English");
         }
 
+        final Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
+        ResourceBundle resourceBundle= ResourceBundle.getBundle("dictionary", locale, utf8ResourceBundleControl);
         dictionaryBundle = new Translator.ResolveVariableResourceBundle(resourceBundle);
 
         // Set preferred language in configuration file
@@ -166,7 +161,7 @@ public class Translator {
 
         LOGGER.debug("Current language has been set to "+Translator.language);
 
-        languagesBundle = ResourceBundle.getBundle("languages", new Utf8ResourceBundleControl());
+        languagesBundle = ResourceBundle.getBundle("languages", utf8ResourceBundleControl);
     }
 
     /**
