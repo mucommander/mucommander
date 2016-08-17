@@ -136,6 +136,28 @@ launch4j {
 
 import org.apache.tools.ant.filters.ReplaceTokens
 
+// Windows installer
+task nsis(dependsOn: createExe) {
+    copy {
+        from("$buildDir/launch4j/" + launch4j.outfile)
+        from('package/windows') {
+            include 'mucommander.ico'
+            include 'mucommander.nsi'
+            filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
+                                           MU_ICON: 'mucommander.ico',
+                                           MU_LICENSE: 'license.txt',
+                                           MU_README: 'readme.txt',
+                                           MU_OUT: 'mucommander-setup.exe',
+                                           MU_EXE: launch4j.outfile])
+        }
+        from ('package') {
+	    include 'license.txt',
+	    'readme.txt'
+	}
+        into "$buildDir/tmp/nsis"
+    }
+}
+
 // Unix packaging
 task tgz(dependsOn: shadowJar, type: Tar) {
     from ('build/libs') {
