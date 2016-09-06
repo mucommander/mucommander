@@ -35,6 +35,7 @@ What's new since v0.9.2 ?
 -----------------------
 
 New features:
+- Support for OVA (virtual appliance) files, treat them as tar files
 
 Improvements:
 
