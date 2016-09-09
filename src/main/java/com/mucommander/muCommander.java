@@ -281,6 +281,10 @@ public class muCommander {
      * @throws IOException if an unrecoverable error occurred during startup 
      */
     public static void main(String args[]) throws IOException {
+        new muCommander().run(args);
+    }
+
+    private void run(String args[]) {
         try {
             int i; // Index in the command line arguments.
 
