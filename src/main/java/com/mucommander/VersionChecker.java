@@ -229,14 +229,20 @@ public class VersionChecker extends DefaultHandler {
      */
     @Override
     public void characters(char[] ch, int offset, int length) {
-        if(state == STATE_VERSION)
+        switch(state) {
+        case STATE_VERSION:
             latestVersion += new String(ch, offset, length);
-        else if(state == STATE_DOWNLOAD_URL)
+            break;
+        case STATE_DOWNLOAD_URL:
             downloadURL += new String(ch, offset, length);
-        else if(state == STATE_JAR_URL)
+            break;
+        case STATE_JAR_URL:
             jarURL += new String(ch, offset, length);
-        else if(state == STATE_DATE)
+            break;
+        case STATE_DATE:
             releaseDate += new String(ch, offset, length);
+            break;
+        }
     }
 
     /**
