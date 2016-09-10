@@ -71,3 +71,6 @@
 -keep class com.jcraft.jsch.**
 -keep class com.jcraft.jzlib.ZStream
 -keep class com.jcraft.jsch.Compression
+-keep class com.beust.jcommander.** {
+    public protected private *;
+}

@@ -105,6 +105,9 @@ muCommander uses the following great third party works :
 - the Yanfs library released under the BSD license.
  Yanfs can be found at http://yanfs.dev.java.net .
 
+- the JCommander library released under the Apache License.
+ JCommander can be found at http://jcommander.org .
+
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .
 

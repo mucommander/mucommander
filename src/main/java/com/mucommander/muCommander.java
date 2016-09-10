@@ -21,10 +21,14 @@ package com.mucommander;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
@@ -70,19 +74,59 @@ public class muCommander {
     private static SplashScreen  splashScreen;
     /** Whether or not to display the splashscreen. */
     private static boolean       useSplash;
-    /** Whether or not to display verbose error messages. */
-    private static boolean       verbose;
     /** true while the application is launching, false after it has finished launching */
     public static boolean isLaunching = true;
     /** Launch lock. */
     public static final Object LAUNCH_LOCK = new Object();
 
+    /** Whether or not to display verbose error messages. */
+    @Parameter(names={"-S", "--silent"}, description="Do not print verbose error messages")
+    private boolean silent;
+    @Parameter(names={"-v", "--version"}, description="Print the version and exit", help=true)
+    private boolean version;
+    @Parameter(names={"-h", "--help"}, description="Print the help text and exit", help=true)
+    private boolean help;
+    // Allows users to tweak how file associations are loaded / saved.
+    @Parameter(names={"-a", "--assoc"}, description="Load associations from FILE.")
+    private String assoc;
+    // Allows users to tweak how bookmarks are loaded / saved.
+    @Parameter(names={"-b", "--bookmarks"}, description="Load bookmarks from FILE.")
+    private String bookmark;
+    // Allows users to tweak how configuration is loaded / saved.
+    @Parameter(names={"-c", "--configuration"}, description="Load configuration from FILE")
+    private String configuration;
+    // Allows users to tweak how command bar configuration is loaded / saved.
+    @Parameter(names={"-C", "--commandbar"}, description="Load command bar from FILE.")
+    private String commandbar;
+    // Allows users to change the extensions folder.
+    @Parameter(names={"-e", "--extensions"}, description="Load extensions from FOLDER.")
+    private String extensions;
+    // Allows users to tweak how custom commands are loaded / saved.
+    @Parameter(names={"-f", "--commands"}, description="Load custom commands from FILE.")
+    private String commands;
+    @Parameter(names={"-w", "--fail-on-warnings"}, description="Quits when a warning is encountered during")
+    private boolean fatalWarnings;
+    // Allows users to tweak how keymaps are loaded.
+    @Parameter(names={"-k", "--keymap"}, description="Load keymap from FILE")
+    private String keymap;
+    // Allows users to change the preferences folder.
+    @Parameter(names={"-p", "--preferences"}, description="Store configuration files in FOLDER")
+    private String preferences;
+    // Allows users to tweak how shell history is loaded / saved.
+    @Parameter(names={"-s", "--shell-history"}, description="Load shell history from FILE")
+    private String shellHistory;
+    // Allows users to tweak how toolbar configuration are loaded.
+    @Parameter(names={"-t", "--toolbar"}, description="Load toolbar from FILE")
+    private String toolbar;
+    // Allows users to tweak how credentials are loaded.
+    @Parameter(names={"-u", "--credentials"}, description="Load credentials from FILE")
+    private String credentials;
+    @Parameter(description="[folders]")
+    private List<String> folders = new ArrayList<>();
 
-    // - Initialisation ---------------------------------------------------------
+
+    // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
-    /**
-     * Prevents initialisation of the <code>Launcher</code>.
-     */
     private muCommander() {}
 
 
@@ -106,68 +150,6 @@ public class muCommander {
         }
     }
 
-
-    // - Commandline handling methods -------------------------------------------
-    // --------------------------------------------------------------------------
-    /**
-     * Prints muCommander's command line usage and exits.
-     */
-    private static void printUsage() {
-        System.out.println("Usage: mucommander [options] [folders]");
-        System.out.println("Options:");
-
-        // Allows users to tweak how file associations are loaded / saved.
-        System.out.println(" -a FILE, --assoc FILE             Load associations from FILE.");
-
-        // Allows users to tweak how bookmarks are loaded / saved.
-        System.out.println(" -b FILE, --bookmarks FILE         Load bookmarks from FILE.");
-
-        // Allows users to tweak how configuration is loaded / saved.
-        System.out.println(" -c FILE, --configuration FILE     Load configuration from FILE");
-
-        // Allows users to tweak how command bar configuration is loaded / saved.
-        System.out.println(" -C FILE, --commandbar FILE        Load command bar from FILE.");
-
-        // Allows users to change the extensions folder.
-        System.out.println(" -e FOLDER, --extensions FOLDER    Load extensions from FOLDER.");
-
-        // Allows users to tweak how custom commands are loaded / saved.
-        System.out.println(" -f FILE, --commands FILE          Load custom commands from FILE.");
-
-        // Ignore warnings.
-        System.out.println(" -i, --ignore-warnings             Do not fail on warnings (default).");
-
-        // Allows users to tweak how keymaps are loaded.
-        System.out.println(" -k FILE, --keymap FILE            Load keymap from FILE");
-
-        // Allows users to change the preferences folder.
-        System.out.println(" -p FOLDER, --preferences FOLDER   Store configuration files in FOLDER");
-
-        // muCommander will not print verbose error messages.
-        System.out.println(" -S, --silent                      Do not print verbose error messages");
-
-        // Allows users to tweak how shell history is loaded / saved.
-        System.out.println(" -s FILE, --shell-history FILE     Load shell history from FILE");
-
-        // Allows users to tweak how toolbar configuration are loaded.
-        System.out.println(" -t FILE, --toolbar FILE           Load toolbar from FILE");
-
-        // Allows users to tweak how credentials are loaded.
-        System.out.println(" -u FILE, --credentials FILE       Load credentials from FILE");
-
-        // Text commands.
-        System.out.println(" -h, --help                        Print the help text and exit");
-        System.out.println(" -v, --version                     Print the version and exit");
-
-        // muCommander will print verbose boot error messages.
-        System.out.println(" -V, --verbose                     Print verbose error messages (default)");
-
-        // Pedantic mode.
-        System.out.println(" -w, --fail-on-warnings            Quits when a warning is encountered during");
-        System.out.println("                                   the boot process.");
-        System.exit(0);
-    }
-
     /**
      * Prints muCommander's version to stdout and exits.
      */
@@ -175,9 +157,8 @@ public class muCommander {
         System.out.println(RuntimeConstants.APP_STRING);
         System.out.print("Copyright (C) ");
         System.out.print(RuntimeConstants.COPYRIGHT);
-        System.out.println(" Maxence Bernard");
+        System.out.println(" Arik Hadas");
         System.out.println("This is free software, distributed under the terms of the GNU General Public License.");
-        System.exit(0);
     }
 
     /**
@@ -186,21 +167,21 @@ public class muCommander {
      * @param quit      whether or not to quit after printing the error message.
      * @param exception exception that triggered the error (for verbose output).
      */
-    private static void printError(String msg, Exception exception, boolean quit) {
+    private void printError(String msg, Exception exception, boolean quit) {
         printError(createErrorMessage(msg, exception, quit).toString(), quit);
     }
 
     /**
      * Creates an error message.
      */
-    private static StringBuilder createErrorMessage(String msg, Exception exception, boolean quit) {
+    private StringBuilder createErrorMessage(String msg, Exception exception, boolean quit) {
         StringBuilder error;
 
         error = new StringBuilder();
         if(quit)
             error.append("Warning: ");
         error.append(msg);
-        if(verbose && (exception != null)) {
+        if(!silent && (exception != null)) {
             error.append(": ");
             error.append(exception.getMessage());
         }
@@ -222,7 +203,7 @@ public class muCommander {
     /**
      * Prints a configuration file specific error message.
      */
-    private static void printFileError(String msg, Exception exception, boolean quit) {
+    private void printFileError(String msg, Exception exception, boolean quit) {
         StringBuilder error;
 
         error = createErrorMessage(msg, exception, quit);
@@ -281,138 +262,85 @@ public class muCommander {
      * @throws IOException if an unrecoverable error occurred during startup 
      */
     public static void main(String args[]) throws IOException {
-        new muCommander().run(args);
+        muCommander mu = new muCommander();
+        JCommander jCommander = new JCommander(mu, args);
+        if (mu.help) {
+            jCommander.setProgramName(muCommander.class.getSimpleName());
+            jCommander.usage();
+        }
+        else if (mu.version) {
+            printVersion();
+        }
+        else
+            mu.run();
     }
 
-    private void run(String args[]) {
+    private void run() {
         try {
-            int i; // Index in the command line arguments.
+            // Associations handling.
+            if (assoc != null) {
+                try {com.mucommander.command.CommandManager.setAssociationFile(assoc);}
+                catch(Exception e) {printError("Could not set association files", e, fatalWarnings);}
+            }
 
-            // Initialises fields.
-            // Whether or not to ignore warnings when booting.
-            boolean fatalWarnings = false;
-            verbose               = true;
+            // Custom commands handling.
+            if (commands != null) {
+                try {com.mucommander.command.CommandManager.setCommandFile(commands);}
+                catch(Exception e) {printError("Could not set commands file", e, fatalWarnings);}
+            }
 
-            // - Command line parsing -------------------------------------
-            // ------------------------------------------------------------
-            for(i = 0; i < args.length; i++) {
-                // Print version.
-                if(args[i].equals("-v") || args[i].equals("--version"))
-                    printVersion();
+            // Bookmarks handling.
+            if (bookmark != null) {
+                try {com.mucommander.bookmark.BookmarkManager.setBookmarksFile(bookmark);}
+                catch(Exception e) {printError("Could not set bookmarks file", e, fatalWarnings);}
+            }
 
-                // Print help.
-                else if(args[i].equals("-h") || args[i].equals("--help"))
-                    printUsage();
+            // Configuration handling.
+            if (configuration != null) {
+                try {MuConfigurations.setPreferencesFile(configuration);}
+                catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
+            }
 
-                // Associations handling.
-                else if(args[i].equals("-a") || args[i].equals("--assoc")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {com.mucommander.command.CommandManager.setAssociationFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set association files", e, fatalWarnings);}
-                }
+            // Shell history.
+            if (shellHistory != null) {
+                try {ShellHistoryManager.setHistoryFile(shellHistory);}
+                catch(Exception e) {printError("Could not set shell history file", e, fatalWarnings);}
+            }
 
-                // Custom commands handling.
-                else if(args[i].equals("-f") || args[i].equals("--commands")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {com.mucommander.command.CommandManager.setCommandFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set commands file", e, fatalWarnings);}
-                }
+            // Keymap file.
+            if (keymap != null) {
+                try {com.mucommander.ui.action.ActionKeymapIO.setActionsFile(keymap);}
+                catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
+            }
 
-                // Bookmarks handling.
-                else if(args[i].equals("-b") || args[i].equals("--bookmarks")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {com.mucommander.bookmark.BookmarkManager.setBookmarksFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set bookmarks file", e, fatalWarnings);}
-                }
+            // Toolbar file.
+            if (toolbar != null) {
+                try {ToolBarIO.setDescriptionFile(toolbar);}
+                catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
+            }
 
-                // Configuration handling.
-                else if(args[i].equals("-c") || args[i].equals("--configuration")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {MuConfigurations.setPreferencesFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
-                }
+            // Commandbar file.
+            if (commandbar != null) {
+                try {CommandBarIO.setDescriptionFile(commandbar);}
+                catch(Exception e) {printError("Could not set commandbar description file", e, fatalWarnings);}
+            }
 
-                // Shell history.
-                else if(args[i].equals("-s") || args[i].equals("--shell-history")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {ShellHistoryManager.setHistoryFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set shell history file", e, fatalWarnings);}
-                }
+            // Credentials file.
+            if (credentials != null) {
+                try {com.mucommander.auth.CredentialsManager.setCredentialsFile(credentials);}
+                catch(Exception e) {printError("Could not set credentials file", e, fatalWarnings);}
+            }
 
-                // Keymap file.
-                else if(args[i].equals("-k") || args[i].equals("--keymap")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {com.mucommander.ui.action.ActionKeymapIO.setActionsFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
-                }
+            // Preference folder.
+            if (preferences != null) {
+                try {PlatformManager.setPreferencesFolder(preferences);}
+                catch(Exception e) {printError("Could not set preferences folder", e, fatalWarnings);}
+            }
 
-                // Toolbar file.
-                else if(args[i].equals("-t") || args[i].equals("--toolbar")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {
-                        ToolBarIO.setDescriptionFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
-                }
-
-                // Commandbar file.
-                else if(args[i].equals("-C") || args[i].equals("--commandbar")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {
-                        CommandBarIO.setDescriptionFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set commandbar description file", e, fatalWarnings);}
-                }
-
-                // Credentials file.
-                else if(args[i].equals("-U") || args[i].equals("--credentials")) {
-                    if(i >= args.length - 1)
-                        printError("Missing FILE parameter to " + args[i], null, true);
-                    try {com.mucommander.auth.CredentialsManager.setCredentialsFile(args[++i]);}
-                    catch(Exception e) {printError("Could not set credentials file", e, fatalWarnings);}
-                }
-
-                // Preference folder.
-                else if((args[i].equals("-p") || args[i].equals("--preferences"))) {
-                    if(i >= args.length - 1)
-                        printError("Missing FOLDER parameter to " + args[i], null, true);
-                    try {PlatformManager.setPreferencesFolder(args[++i]);}
-                    catch(Exception e) {printError("Could not set preferences folder", e, fatalWarnings);}
-                }
-
-                // Extensions folder.
-                else if((args[i].equals("-e") || args[i].equals("--extensions"))) {
-                    if(i >= args.length - 1)
-                        printError("Missing FOLDER parameter to " + args[i], null, true);
-                    try {ExtensionManager.setExtensionsFolder(args[++i]);}
-                    catch(Exception e) {printError("Could not set extensions folder", e, fatalWarnings);}
-                }
-
-                // Ignore warnings.
-                else if(args[i].equals("-i") || args[i].equals("--ignore-warnings"))
-                    fatalWarnings = false;
-
-                // Fail on warnings.
-                else if(args[i].equals("-w") || args[i].equals("--fail-on-warnings"))
-                    fatalWarnings = true;
-
-                // Silent mode.
-                else if(args[i].equals("-S") || args[i].equals("--silent"))
-                    verbose = false;
-
-                // Verbose mode.
-                else if(args[i].equals("-V") || args[i].equals("--verbose"))
-                    verbose = true;
-
-                // Illegal argument.
-                else
-                    break;
+            // Extensions folder.
+            if (extensions != null) {
+                try {ExtensionManager.setExtensionsFolder(extensions);}
+                catch(Exception e) {printError("Could not set extensions folder", e, fatalWarnings);}
             }
 
             // - Configuration init ---------------------------------------
@@ -577,8 +505,6 @@ public class muCommander {
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
-            String[] folders = new String[args.length - i];
-            System.arraycopy(args, i, folders, 0, folders.length);
             WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
 
             // If no initial path was specified, start a default main window.

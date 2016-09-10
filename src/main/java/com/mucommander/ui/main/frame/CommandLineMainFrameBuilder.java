@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.frame;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,12 +43,13 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
 
 	private List<MainFrame> mainFrames = new LinkedList<MainFrame>();
 	
-	public CommandLineMainFrameBuilder(String[] folders) {
-		for(int i=0; i < folders.length; i += 2) {
+	public CommandLineMainFrameBuilder(List<String> folders) {
+	    Iterator<String> iterator = folders.iterator();
+		while (iterator.hasNext()) {
 			mainFrames.add(new MainFrame(
-					new ConfFileTableTab(getInitialAbstractPaths(folders[i], FolderPanelType.LEFT)),
+					new ConfFileTableTab(getInitialAbstractPaths(iterator.next(), FolderPanelType.LEFT)),
 					getFileTableConfiguration(FolderPanelType.LEFT, mainFrames.size()),
-					new ConfFileTableTab(getInitialAbstractPaths(i < folders.length - 1 ? folders[i + 1] : null, FolderPanelType.RIGHT)),
+					new ConfFileTableTab(getInitialAbstractPaths(iterator.hasNext() ? iterator.next() : null, FolderPanelType.RIGHT)),
 					getFileTableConfiguration(FolderPanelType.RIGHT, mainFrames.size())));
         }
 	}
