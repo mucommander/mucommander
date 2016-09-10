@@ -71,13 +71,13 @@ public class muCommander {
 	
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
-    private static SplashScreen  splashScreen;
+    private SplashScreen  splashScreen;
     /** Whether or not to display the splashscreen. */
-    private static boolean       useSplash;
+    private boolean       useSplash;
     /** true while the application is launching, false after it has finished launching */
-    public static boolean isLaunching = true;
+    private static boolean isLaunching = true;
     /** Launch lock. */
-    public static final Object LAUNCH_LOCK = new Object();
+    private static final Object LAUNCH_LOCK = new Object();
 
     /** Whether or not to display verbose error messages. */
     @Parameter(names={"-S", "--silent"}, description="Do not print verbose error messages")
@@ -216,7 +216,7 @@ public class muCommander {
     /**
      * Prints the specified startup message.
      */
-    private static void printStartupMessage(String message) {
+    private void printStartupMessage(String message) {
         if(useSplash)
             splashScreen.setLoadingMessage(message);
 
