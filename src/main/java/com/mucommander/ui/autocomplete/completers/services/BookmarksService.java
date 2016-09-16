@@ -41,32 +41,27 @@ public class BookmarksService implements CompletionService, BookmarkListener {
 		// Register as a bookmark-listener, in order to be up-to-date with existing bookmarks.
         BookmarkManager.addBookmarkListener(this);
 	}
-	
+
+	@Override
 	public Vector<String> getPossibleCompletions(String path) {
-		Vector<String> result = new Vector<String>();
+		Vector<String> result = new Vector<>();
 		PrefixFilter filter = PrefixFilter.createPrefixFilter(path);
 		result.addAll(filter.filter(sortedBookmarkNames));
 		result.addAll(filter.filter(sortedBookmarkLocations)); 
 		return result;
 	}
-	
+
+	@Override
 	public String complete(String selectedCompletion) {
-		String result = null;
-		int nbBookmarks = sortedBookmarkNames.length;
-		int i;
-		for (i = 0; i < nbBookmarks; i++)
-			if (sortedBookmarkNames[i].equalsIgnoreCase(selectedCompletion)) {
-				result = sortedBookmarkNames[i];
-				break;
-			}
+		for (String bookmarkLocation : sortedBookmarkLocations)
+			if (bookmarkLocation.equalsIgnoreCase(selectedCompletion))
+				return bookmarkLocation;
 
-		for (i = 0; i < nbBookmarks; i++)
-			if (sortedBookmarkLocations[i].equalsIgnoreCase(selectedCompletion)) {
-				result = sortedBookmarkLocations[i];
-				break;
-			}
+		for (String bookmarkName : sortedBookmarkNames)
+			if (bookmarkName.equalsIgnoreCase(selectedCompletion))
+				return bookmarkName;
 
-		return result;
+		return null;
 	}    
 	
     /**
@@ -107,6 +102,7 @@ public class BookmarksService implements CompletionService, BookmarkListener {
     }
     
     // Bookmarks listening:
+    @Override
 	public void bookmarksChanged() {
 		fetchBookmarks();
 	}
