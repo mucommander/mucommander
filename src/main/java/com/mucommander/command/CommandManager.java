@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.ChainedFileFilter;
 import com.mucommander.commons.file.filter.FileFilter;
@@ -146,9 +145,8 @@ public class CommandManager implements CommandBuilder {
      * @return              the tokens that compose the command that must be executed to open the specified file, <code>null</code> if not found.
      */
     public static String[] getTokensForFile(AbstractFile file, boolean allowDefault) {
-        Command command;
-
-        if((command = getCommandForFile(file, allowDefault)) == null)
+        Command command = getCommandForFile(file, allowDefault);
+        if(command == null)
             return null;
         return command.getTokens(file);
     }
@@ -180,14 +178,14 @@ public class CommandManager implements CommandBuilder {
      * @return              the command that must be executed to open the specified file, <code>null</code> if not found.
      */
     public static Command getCommandForFile(AbstractFile file, boolean allowDefault) {
-        Command command;
-
         // Goes through all known associations and checks whether file matches any.
-        if((command = getCommandForFile(file, associations.iterator())) != null)
+        Command command = getCommandForFile(file, associations.iterator());
+        if(command != null)
             return command;
 
         // Goes through all system associations and checks whether file matches any.
-        if((command = getCommandForFile(file, systemAssociations.iterator())) != null)
+        command = getCommandForFile(file, systemAssociations.iterator());
+        if(command != null)
             return command;
 
         // We haven't found a command explicitely associated with 'file',
@@ -232,14 +230,12 @@ public class CommandManager implements CommandBuilder {
     }
 
     private static void registerCommand(Command command, boolean mark) throws CommandException {
-        Command oldCommand;
-
         // Registers the command and marks command as having been modified.
         setDefaultCommand(command);
 
         LOGGER.debug("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
 
-        oldCommand = commands.put(command.getAlias(), command);
+        Command oldCommand = commands.put(command.getAlias(), command);
         if(mark && !command.equals(oldCommand))
             wereCommandsModified = true;
     }
@@ -274,9 +270,8 @@ public class CommandManager implements CommandBuilder {
     }
     
     private static CommandAssociation createAssociation(String cmd, FileFilter filter) throws CommandException {
-        Command command;
-
-        if((command = getCommandForAlias(cmd)) == null) {
+        Command command = getCommandForAlias(cmd);
+        if(command == null) {
         	LOGGER.debug("Failed to create association as '" + command + "' is not known.");
             throw new CommandException(command + " not found");
         }
@@ -325,7 +320,7 @@ public class CommandManager implements CommandBuilder {
     // -------------------------------------------------------------------------
     private static void buildFilter(FileFilter filter, AssociationBuilder builder) throws CommandException {
         // Filter on the file type.
-        if(filter instanceof AttributeFileFilter) {
+        if (filter instanceof AttributeFileFilter) {
             AttributeFileFilter attributeFilter;
 
             attributeFilter = (AttributeFileFilter)filter;
@@ -339,10 +334,8 @@ public class CommandManager implements CommandBuilder {
                 break;
             }
         }
-        else if(filter instanceof PermissionsFileFilter) {
-            PermissionsFileFilter permissionFilter;
-
-            permissionFilter = (PermissionsFileFilter)filter;
+        else if (filter instanceof PermissionsFileFilter) {
+            PermissionsFileFilter permissionFilter = (PermissionsFileFilter)filter;
 
             switch(permissionFilter.getPermission()) {
             case READ:
@@ -359,9 +352,7 @@ public class CommandManager implements CommandBuilder {
             }
         }
         else if(filter instanceof RegexpFilenameFilter) {
-            RegexpFilenameFilter regexpFilter;
-
-            regexpFilter = (RegexpFilenameFilter)filter;
+            RegexpFilenameFilter regexpFilter = (RegexpFilenameFilter)filter;
             builder.setMask(regexpFilter.getRegularExpression(), regexpFilter.isCaseSensitive());
         }
     }
@@ -447,9 +438,9 @@ public class CommandManager implements CommandBuilder {
      * @see    #writeAssociations()
      */
     public static void setAssociationFile(String path) throws FileNotFoundException {
-        AbstractFile file;
+        AbstractFile file = FileFactory.getFile(path);
 
-        if((file = FileFactory.getFile(path)) == null)
+        if (file == null)
             setAssociationFile(new File(path));
         else
             setAssociationFile(file);
@@ -477,7 +468,7 @@ public class CommandManager implements CommandBuilder {
      * @see    #writeAssociations()
      */
     public static void setAssociationFile(AbstractFile file) throws FileNotFoundException {
-        if(file.isBrowsable())
+        if (file.isBrowsable())
             throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
 
         associationFile = file;
@@ -495,15 +486,12 @@ public class CommandManager implements CommandBuilder {
      * @see                #setAssociationFile(String)
      */
     public static void loadAssociations() throws IOException, CommandException {
-        AbstractFile file;
-        InputStream  in;
-
-        file = getAssociationFile();
+        AbstractFile file = getAssociationFile();
         LOGGER.debug("Loading associations from file: " + file.getAbsolutePath());
 
         // Tries to load the associations file.
         // Associations are not considered to be modified by this. 
-        in = null;
+        InputStream in = null;
         try {AssociationReader.read(in = new BackupInputStream(file), new AssociationFactory());}
         finally {
             wereAssociationsModified = false;
@@ -600,9 +588,8 @@ public class CommandManager implements CommandBuilder {
      * @see    #writeCommands()
      */
     public static void setCommandFile(String path) throws FileNotFoundException {
-        AbstractFile file;
-
-        if((file = FileFactory.getFile(path)) == null)
+        AbstractFile file = FileFactory.getFile(path);
+        if (file == null)
             setCommandFile(new File(path));
         else
             setCommandFile(file);
@@ -693,15 +680,12 @@ public class CommandManager implements CommandBuilder {
      * @see                #setCommandFile(String)
      */
     public static void loadCommands() throws IOException, CommandException {
-        AbstractFile file;
-        InputStream  in;
-
-        file = getCommandFile();
+        AbstractFile file = getCommandFile();
         LOGGER.debug("Loading custom commands from: " + file.getAbsolutePath());
 
         // Tries to load the commands file.
         // Commands are not considered to be modified by this.
-        in = null;
+        InputStream in = null;
         try {CommandReader.read(in = new BackupInputStream(file), new CommandManager());}
         finally {
             wereCommandsModified = false;
@@ -715,19 +699,6 @@ public class CommandManager implements CommandBuilder {
             }
         }
     }
-
-    /*
-    private static void registerDefaultCommand(String alias, String command, String display) {
-        if(getCommandForAlias(alias) == null) {
-            if(command != null) {
-                //                try {registerCommand(CommandParser.getCommand(alias, command, Command.SYSTEM_COMMAND, display));}
-                try {registerCommand(new Command(alias, command, Command.SYSTEM_COMMAND, display));}
-                catch(Exception e) {AppLogger.fine("Failed to register " + command + ": " + e.getMessage());}
-            }
-        }
-    }
-    */
-
 
     // - Unused methods --------------------------------------------------------
     // -------------------------------------------------------------------------
