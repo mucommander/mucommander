@@ -38,7 +38,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeDesktopAdapter.class);
 	
     private static final String FILE_MANAGER_NAME = "Nautilus";
-    private static final String FILE_OPENER       = "gnome-open $f";
+    private static final String FILE_OPENER       = "xdg-open $f";
     private static final String EXE_OPENER        = "$f";
 
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
