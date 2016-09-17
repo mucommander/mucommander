@@ -128,13 +128,7 @@ macAppBundle {
 launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
     copyConfigurable = project.tasks.shadowJar.outputs.files
-    if (project.hasProperty('dontWrapJar')) {
-        dontWrapJar = true
-        jar = 'mucommander.jar'
-    }
-    else {
-        jar = shadowJar.archivePath
-    }
+    jar = shadowJar.archivePath
     outfile = project.tasks.jar.archiveName.replace('jar', 'exe')
     cmdLine = '-p %HOMEPATH%/.mucommander'
     opt = '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader'
@@ -176,27 +170,6 @@ task tgz(dependsOn: shadowJar, type: Tar) {
                                        ARGS: ''])
     }
     into "muCommander-$version"
-    extension = 'tar.gz'
-    compression = Compression.GZIP
-}
-
-// Portable packaging
-task portable(type: Tar) {
-    from ('build/libs') {
-        include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
-    }
-    from ('build/launch4j') {
-        include '*.exe'
-        rename '(.*?)-.*.exe','$1.exe'
-    }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
-        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
-    }
-    into "muCommander-$version"
-    classifier = 'portable'
     extension = 'tar.gz'
     compression = Compression.GZIP
 }
