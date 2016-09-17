@@ -19,6 +19,10 @@
 
 package com.mucommander.commons.file;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * This interface defines constants fields used for designating the three different permission types:
  * {@link #READ_PERMISSION}, {@link #WRITE_PERMISSION} and {@link #EXECUTE_PERMISSION}. Their actual value represent
@@ -45,5 +49,11 @@ public enum PermissionType {
 
     public int toInt() {
     	return intValue;
+    }
+
+    public static List<PermissionType> reverseValues() {
+        List<PermissionType> values = Arrays.asList(PermissionType.values());
+        Collections.reverse(values);
+        return values;
     }
 }
