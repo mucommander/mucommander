@@ -111,6 +111,7 @@ macAppBundle {
     icon = "package/osx/icon.icns"
     bundleAllowMixedLocalizations = "true"
     bundleExtras.put("NSHighResolutionCapable", "true")
+    bundleExtras.put("NSSupportsAutomaticGraphicsSwitching", "true")
     backgroundImage = "package/osx/bg.gif"
     backgroundImageWidth = 450
     backgroundImageHeight = 475
