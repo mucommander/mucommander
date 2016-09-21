@@ -169,7 +169,7 @@ task nsis(dependsOn: createExe) {
 
 // Unix packaging
 task tgz(dependsOn: shadowJar, type: Tar) {
-    from ('build/libs') {
+    from ("$buildDir/libs") {
         include '*.jar'
         rename '(.*?)-.*.jar','$1.jar'
     }
@@ -185,11 +185,11 @@ task tgz(dependsOn: shadowJar, type: Tar) {
 
 // Portable packaging
 task portable(type: Tar) {
-    from ('build/libs') {
+    from ("$buildDir/libs") {
         include '*.jar'
         rename '(.*?)-.*.jar','$1.jar'
     }
-    from ('build/launch4j') {
+    from ("$buildDir/launch4j") {
         include '*.exe'
         rename '(.*?)-.*.exe','$1.exe'
     }
@@ -215,7 +215,7 @@ buildDeb {
     recommends('java-virtual-machine')
     recommends('java2-runtime')
 
-    from ('build/libs') {
+    from ("$buildDir/libs") {
         include '*.jar'
         rename '(.*?)-.*.jar','$1.jar'
     }
@@ -248,7 +248,7 @@ buildRpm {
     recommends('java2-runtime')
     os = LINUX
 
-    from ('build/libs') {
+    from ("$buildDir/libs") {
         include '*.jar'
         rename '(.*?)-.*.jar','$1.jar'
     }
