@@ -248,6 +248,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertHeader(doc,         "muCommander");
             insertNormalString(doc,   "Version: " + RuntimeConstants.VERSION);
             insertNormalString(doc,   "Build date: " + getFormatedDate());
+            insertNormalString(doc,   "Build number: " +  RuntimeConstants.BUILD_NUMBER);
             insertLineBreak(doc);
 
             // VM information.
