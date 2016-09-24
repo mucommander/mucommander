@@ -389,15 +389,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     /////////////////////////////
     
 
-	public void jobAdded(FileJob source, int idx) {
-		// nothing here		
-	}
-
-
-	public void jobRemoved(FileJob source, int idx) {
-		// nothing here		
-	}
-
+    @Override
 	public void jobProgress(FileJob source, int idx, boolean fullUpdate) {
 		if (job.equals(source)) {
 			updateProgressLabel(source.getJobProgress());
