@@ -16,9 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.job.progress;
-
-import com.mucommander.job.FileJob;
+package com.mucommander.job;
 
 import java.util.EventListener;
 

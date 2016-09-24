@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.progress.JobProgress;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.job.ui.UserInputHelper;
 import com.mucommander.text.Translator;
