@@ -98,7 +98,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     private JButton skipButton;
     private JButton stopButton;
     private JCheckBox closeWhenFinishedCheckBox;
-//    private JButton hideButton;
 
     private FileJob job;
     private TransferFileJob transferFileJob;
@@ -293,15 +292,18 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     // FileJobListener implementation //
     ////////////////////////////////////
 
+    @Override
     public void jobStateChanged(FileJob source, FileJobState oldState, FileJobState newState) {
         LOGGER.debug("currentThread="+Thread.currentThread()+" oldState="+oldState+" newState="+newState);
 
-        if (newState == FileJobState.INTERRUPTED) {
+        switch (newState) {
+        case INTERRUPTED:
             // Stop repaint thread and dispose dialog
             stop();
             dispose();
-        }
-        else if (newState == FileJobState.FINISHED) {
+            break;
+
+        case FINISHED:
             //  Dispose dialog only if 'Close when finished option' is selected
             if(closeWhenFinishedCheckBox.isSelected()) {
                 // Stop repaint thread and dispose dialog
@@ -325,8 +327,9 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                     speedChooser.setEnabled(false);
                 }
             }
-        }
-        else if (newState == FileJobState.PAUSED) {
+            break;
+
+        case PAUSED:
             pauseResumeButton.setText(Translator.get("resume"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
 
@@ -335,13 +338,17 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             
             if(transferFileJob!=null)
                 updateCurrentSpeedLabel("N/A");
-        }
-        else if (newState == FileJobState.RUNNING) {
+            break;
+
+        case RUNNING:
             pauseResumeButton.setText(Translator.get("pause"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
 
             // Update buttons mnemonics
             buttonsChoicePanel.updateMnemonics();
+            break;
+
+        default:
         }
     }
 
