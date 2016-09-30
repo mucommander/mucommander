@@ -88,7 +88,13 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	/** Mac OS X 10.7 */
 	MAC_OS_X_10_7("10.7"),
 	/** Mac OS X 10.8 */
-	MAC_OS_X_10_8("10.8");
+	MAC_OS_X_10_8("10.8"),
+	/** Mac OS X 10.8 */
+	MAC_OS_X_10_9("10.9"),
+	/** Mac OS X 10.8 */
+	MAC_OS_X_10_10("10.10"),
+	/** Mac OS X 10.8 */
+	MAC_OS_X_10_11("10.11");
 	
 
     /** Logger used by this class. */
@@ -186,6 +192,15 @@ public enum OsVersion implements ComparableRuntimeProperty {
         }
         // Mac OS X versions
         if (osFamily==OsFamily.MAC_OS_X) {
+        	if(osVersionProp.startsWith("10.11"))
+                return MAC_OS_X_10_11;
+
+        	if(osVersionProp.startsWith("10.10"))
+                return MAC_OS_X_10_10;
+        	
+        	if(osVersionProp.startsWith("10.9"))
+                return MAC_OS_X_10_9;
+
             if(osVersionProp.startsWith("10.8"))
                 return MAC_OS_X_10_8;
 
