@@ -65,6 +65,10 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	WINDOWS_7("Windows 7"),
 	/** Windows 8 */
 	WINDOWS_8("Windows 8"),
+	/** Windows 8 */
+	WINDOWS_8_1("Windows 8.1"),
+	/** Windows 8 */
+	WINDOWS_10("Windows 10"),
 
 
 	///////////////////////
@@ -187,8 +191,14 @@ public enum OsVersion implements ComparableRuntimeProperty {
             if (osNameProp.equals("Windows 8"))
                 return WINDOWS_8;
 
+            if (osNameProp.equals("Windows 8.1"))
+                return WINDOWS_8_1;
+
+            if (osNameProp.equals("Windows 10"))
+                return WINDOWS_10;
+
             // Newer version we don't know of yet, assume latest supported OS version
-            return WINDOWS_8;
+            return WINDOWS_10;
         }
         // Mac OS X versions
         if (osFamily==OsFamily.MAC_OS_X) {
