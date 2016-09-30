@@ -31,13 +31,14 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.9.2 ?
+What's new since v0.9.1 ?
 -----------------------
 
 New features:
-- Support for OVA (virtual appliance) files, treat them as tar files
+- Support for OVA (virtual appliance) files, treat them as tar files.
 
 Improvements:
+- Add button in the toolbar for adding a new tab.
 
 Localization:
 
