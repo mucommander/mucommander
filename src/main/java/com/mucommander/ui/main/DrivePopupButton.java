@@ -147,7 +147,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
         if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
-            setMargin(new Insets(6,8,6,8));
+            setMargin(new Insets(1,1,1,1));
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
         }
