@@ -18,16 +18,18 @@
 
 package com.mucommander.job;
 
-import javax.swing.*;
-import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.event.EventListenerList;
+
 /**
  * A class that monitors jobs progress.
- * @author Mariusz Jakubowski
+ * @author Arik Hadas, Mariusz Jakubowski
  *
  */
 public class JobProgressMonitor implements FileJobListener {
@@ -48,7 +50,7 @@ public class JobProgressMonitor implements FileJobListener {
 	private EventListenerList listenerList = new EventListenerList();
 	
 	/** A list of monitored jobs. */
-	private List<FileJob> jobs = new ArrayList<FileJob>();
+	private List<FileJob> jobs;
 
 	/** An instance of this class */
 	private static final JobProgressMonitor instance = new JobProgressMonitor();
@@ -60,6 +62,7 @@ public class JobProgressMonitor implements FileJobListener {
 	private JobProgressMonitor() {
 		JobProgressTimer timerListener = new JobProgressTimer(); 
     	progressTimer = new Timer(CURRENT_FILE_LABEL_REFRESH_RATE, timerListener);
+    	jobs  = new ArrayList<>();
 	}
 	
 	/**
@@ -227,7 +230,7 @@ public class JobProgressMonitor implements FileJobListener {
 	private class JobProgressTimer implements ActionListener {
 		
 		/** a loop index indicating if this refresh is partial (label only) or full */
-		private int loopCount = 0;
+		private int loopCount;
 
 		public void actionPerformed(ActionEvent e) {
 			loopCount++;
@@ -241,10 +244,9 @@ public class JobProgressMonitor implements FileJobListener {
 			}
 			
 			// for each job calculate new progress and notify listeners
-			for(FileJob job : jobs) {
-				boolean updateFullUI;
+			for (FileJob job : jobs) {
 				JobProgress jobProgress = job.getJobProgress();
-				updateFullUI = jobProgress.calcJobProgress(fullUpdate);
+				boolean updateFullUI = jobProgress.calcJobProgress(fullUpdate);
 				fireJobProgress(job, updateFullUI);
 			}
 			
