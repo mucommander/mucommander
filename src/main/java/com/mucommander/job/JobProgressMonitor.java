@@ -75,78 +75,78 @@ public class JobProgressMonitor implements FileJobListener {
      * Adds a listener to the list that's notified each time a job 
      * progress is updated.
      *
-     * @param	l		the JobProgressListener
+     * @param	l		the JobListener
      */
-    public void addJobProgressListener(JobProgressListener l) {
-    	listenerList.add(JobProgressListener.class, l);
+    public void addJobListener(JobListener l) {
+    	listenerList.add(JobListener.class, l);
     }
 
     /**
      * Removes a listener from the list that's notified each time job
      * progress is updated.
      *
-     * @param	l		the JobProgressListener
+     * @param	l		the JobListener
      */
-    public void removeJobProgressListener(JobProgressListener l) {
-    	listenerList.remove(JobProgressListener.class, l);
+    public void removeJobListener(JobListener l) {
+    	listenerList.remove(JobListener.class, l);
     }
 
     /**
      * Forwards the progress notification event to all
-     * <code>JobProgressListeners</code> that registered
+     * <code>JobListeners</code> that registered
      * themselves as listeners.
      * @param source a job for which the progress has been updated
      * @param fullUpdate if false only file label has been updated 
      * 
-     * @see #addJobProgressListener
-     * @see JobProgressListener#jobProgress
+     * @see #addJobListener
+     * @see JobListener#jobProgress
      */
     private void fireJobProgress(FileJob source, boolean fullUpdate) {
 		int idx = jobs.indexOf(source);
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobProgressListener)listeners[i+1]).jobProgress(source, idx, fullUpdate);
+    		((JobListener)listeners[i+1]).jobProgress(source, idx, fullUpdate);
     	}
     }
     
     /**
      * Forwards the job added notification event to all
-     * <code>JobProgressListeners</code> that registered
+     * <code>JobListeners</code> that registered
      * themselves as listeners.
      * @param source an added job 
      * @param idx index of a job in a list 
      * 
-     * @see #addJobProgressListener
-     * @see JobProgressListener#jobAdded(FileJob, int)
+     * @see #addJobListener
+     * @see JobListener#jobAdded(FileJob, int)
      */
     private void fireJobAdded(FileJob source, int idx) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobProgressListener)listeners[i+1]).jobAdded(source, idx);
+    		((JobListener)listeners[i+1]).jobAdded(source, idx);
     	}    	
     }
     
     /**
      * Forwards the job removed notification event to all
-     * <code>JobProgressListeners</code> that registered
+     * <code>JobListeners</code> that registered
      * themselves as listeners.
      * @param source a removed job
      * @param idx index of a job in a list 
      * 
-     * @see #addJobProgressListener
-     * @see JobProgressListener#jobRemoved(FileJob, int)
+     * @see #addJobListener
+     * @see JobListener#jobRemoved(FileJob, int)
      */
     private void fireJobRemoved(FileJob source, int idx) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobProgressListener)listeners[i+1]).jobRemoved(source, idx);
+    		((JobListener)listeners[i+1]).jobRemoved(source, idx);
     	}    	
     }
 
     /**
      * Adds a new job to the list of monitored jobs. 
      * This method is executed in Swing Thread (EDT).
-     * After adding a new job a {@link JobProgressListener#jobAdded(FileJob, int)} 
+     * After adding a new job a {@link JobListener#jobAdded(FileJob, int)} 
      * event is fired.
      * @param job a job to be added
      */
@@ -172,7 +172,7 @@ public class JobProgressMonitor implements FileJobListener {
     /**
      * Removes a job from a list of monitored jobs.
      * This method is executed in Swing Thread (EDT).
-     * After adding a new job a {@link JobProgressListener#jobRemoved(FileJob, int)} 
+     * After adding a new job a {@link JobListener#jobRemoved(FileJob, int)} 
      * event is fired.
      * @param job a job to be removed
      */
