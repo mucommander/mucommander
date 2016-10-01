@@ -154,6 +154,7 @@ public class JobsManager implements FileJobListener {
     	// ensure that this method is called in EDT
     	if (!SwingUtilities.isEventDispatchThread()) {
     		SwingUtilities.invokeLater(() -> addJob(job));
+    		return;
     	}
 
     	jobs.add(job);
@@ -175,6 +176,7 @@ public class JobsManager implements FileJobListener {
     	// ensure that this method is called in EDT
     	if (!SwingUtilities.isEventDispatchThread()) {
     		SwingUtilities.invokeLater(() -> removeJob(job));
+    		return;
     	}
 
     	jobs.remove(job);
