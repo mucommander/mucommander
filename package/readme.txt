@@ -22,10 +22,8 @@ Copyright (C) 2002-2016 Maxence Bernard.
 Requirements
 ------------
 
-A Java Runtime Environment (JRE) 1.6 or later is required to run muCommander.
-Java 1.7 is recommended, you can download it at http://java.com.
-
-Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
+A Java Runtime Environment (JRE) 1.8 or later is required to run muCommander.
+Java 1.8 is recommended, you can download it at http://java.com.
 
 If you're having problems launching muCommander, make sure the JAVA_HOME environment variable points to the directory
 where your Java runtime is installed.
