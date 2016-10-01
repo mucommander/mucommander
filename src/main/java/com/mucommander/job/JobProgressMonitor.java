@@ -153,11 +153,7 @@ public class JobProgressMonitor implements FileJobListener {
     public void addJob(final FileJob job) {
     	// ensure that this method is called in EDT
     	if (!SwingUtilities.isEventDispatchThread()) {
-    		SwingUtilities.invokeLater(new Runnable() {
-    			public void run() {
-    				addJob(job);
-    			}
-    		});
+    		SwingUtilities.invokeLater(() -> addJob(job));
     	}
 
     	jobs.add(job);
@@ -179,11 +175,7 @@ public class JobProgressMonitor implements FileJobListener {
     public void removeJob(final FileJob job) {
     	// ensure that this method is called in EDT
     	if (!SwingUtilities.isEventDispatchThread()) {
-    		SwingUtilities.invokeLater(new Runnable() {
-    			public void run() {
-    				removeJob(job);
-    			}
-    		});
+    		SwingUtilities.invokeLater(() -> removeJob(job));
     	}
 
     	int idx = jobs.indexOf(job);
@@ -225,11 +217,7 @@ public class JobProgressMonitor implements FileJobListener {
 	 */
 	public void jobStateChanged(final FileJob source, FileJobState oldState, FileJobState newState) {
 		if (newState == FileJobState.FINISHED || newState == FileJobState.INTERRUPTED) {
-			ActionListener jobToRemove = new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					removeJob(source);					
-				}
-			}; 
+			ActionListener jobToRemove = event -> removeJob(source);
 			Timer timer = new Timer(FINISHED_JOB_REMOVE_TIME, jobToRemove);
 			timer.setRepeats(false);
 			timer.start();
