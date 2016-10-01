@@ -23,7 +23,7 @@ import java.util.EventListener;
 /**
  * Interface to be implemented by classes that wish to be notified of progress changes on a particular
  * {@link FileJob}. Those classes need to be registered to receive those events, this can be done by calling
- * {@link JobProgressMonitor#addJobListener(JobListener)}.
+ * {@link JobsManager#addJobListener(JobListener)}.
  *
  * @author Mariusz Jakubowski, Arik Hadas
  */

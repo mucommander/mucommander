@@ -56,7 +56,7 @@ import com.mucommander.job.FileJobListener;
 import com.mucommander.job.FileJobState;
 import com.mucommander.job.JobProgress;
 import com.mucommander.job.JobListener;
-import com.mucommander.job.JobProgressMonitor;
+import com.mucommander.job.JobsManager;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
@@ -256,8 +256,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         initUI();
         
-		JobProgressMonitor.getInstance().addJob(job);
-        JobProgressMonitor.getInstance().addJobListener(this);
+		JobsManager.getInstance().addJob(job);
+        JobsManager.getInstance().addJobListener(this);
 
         showDialog();
     }
@@ -267,7 +267,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
      * Stops repaint thread.
      */
     public void stop() {
-    	JobProgressMonitor.getInstance().removeJobListener(this);
+    	JobsManager.getInstance().removeJobListener(this);
     }
 
 

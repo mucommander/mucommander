@@ -32,7 +32,7 @@ import javax.swing.event.EventListenerList;
  * @author Arik Hadas, Mariusz Jakubowski
  *
  */
-public class JobProgressMonitor implements FileJobListener {
+public class JobsManager implements FileJobListener {
 	
     /** Controls how often should current file label be refreshed (in ms) */
 	private final static int CURRENT_FILE_LABEL_REFRESH_RATE = 100;
@@ -53,23 +53,23 @@ public class JobProgressMonitor implements FileJobListener {
 	private List<FileJob> jobs;
 
 	/** An instance of this class */
-	private static final JobProgressMonitor instance = new JobProgressMonitor();
+	private static final JobsManager instance = new JobsManager();
 		
 	
 	/**
-	 * Creates a new JobProgressMonitor instance.
+	 * Creates a new JobsManager instance.
 	 */
-	private JobProgressMonitor() {
+	private JobsManager() {
 		JobProgressTimer timerListener = new JobProgressTimer(); 
     	progressTimer = new Timer(CURRENT_FILE_LABEL_REFRESH_RATE, timerListener);
     	jobs  = new ArrayList<>();
 	}
 	
 	/**
-	 * Returns the instance of JobProgressMonitor.
-	 * @return the instance of JobProgressMonitor.
+	 * Returns the instance of JobsManager.
+	 * @return the instance of JobsManager.
 	 */
-	public static JobProgressMonitor getInstance() {
+	public static JobsManager getInstance() {
 		return instance;
 	}
     
