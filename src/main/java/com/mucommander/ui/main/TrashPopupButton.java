@@ -39,14 +39,14 @@ import java.awt.*;
  *
  * @author Maxence Bernard
  */
-public class TrashPopupButton extends PopupButton {
+class TrashPopupButton extends PopupButton {
 
     private MainFrame mainFrame;
 
     /** Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected */
     private RolloverButtonAdapter rolloverButtonAdapter;
 
-    public TrashPopupButton(MainFrame mainFrame) {
+    TrashPopupButton(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
         setContentAreaFilled(false);
@@ -89,11 +89,6 @@ public class TrashPopupButton extends PopupButton {
 
         return popupMenu;
     }
-
-
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
 
     /**
      * Replace the default insets to be exactly (2,2,2,2).
