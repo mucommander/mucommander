@@ -102,10 +102,9 @@ public class JobProgressMonitor implements FileJobListener {
      * @see JobListener#jobProgress
      */
     private void fireJobProgress(FileJob source, boolean fullUpdate) {
-		int idx = jobs.indexOf(source);
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobListener)listeners[i+1]).jobProgress(source, idx, fullUpdate);
+    		((JobListener)listeners[i+1]).jobProgress(source, fullUpdate);
     	}
     }
     
@@ -114,15 +113,14 @@ public class JobProgressMonitor implements FileJobListener {
      * <code>JobListeners</code> that registered
      * themselves as listeners.
      * @param source an added job 
-     * @param idx index of a job in a list 
      * 
      * @see #addJobListener
      * @see JobListener#jobAdded(FileJob, int)
      */
-    private void fireJobAdded(FileJob source, int idx) {
+    private void fireJobAdded(FileJob source) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobListener)listeners[i+1]).jobAdded(source, idx);
+    		((JobListener)listeners[i+1]).jobAdded(source);
     	}    	
     }
     
@@ -131,15 +129,14 @@ public class JobProgressMonitor implements FileJobListener {
      * <code>JobListeners</code> that registered
      * themselves as listeners.
      * @param source a removed job
-     * @param idx index of a job in a list 
      * 
      * @see #addJobListener
      * @see JobListener#jobRemoved(FileJob, int)
      */
-    private void fireJobRemoved(FileJob source, int idx) {
+    private void fireJobRemoved(FileJob source) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobListener)listeners[i+1]).jobRemoved(source, idx);
+    		((JobListener)listeners[i+1]).jobRemoved(source);
     	}    	
     }
 
@@ -157,8 +154,7 @@ public class JobProgressMonitor implements FileJobListener {
     	}
 
     	jobs.add(job);
-    	int idx = jobs.size() - 1;
-		fireJobAdded(job, idx);    			
+		fireJobAdded(job);
     	if (!progressTimer.isRunning()) {
     		progressTimer.start();
     	}
@@ -178,14 +174,11 @@ public class JobProgressMonitor implements FileJobListener {
     		SwingUtilities.invokeLater(() -> removeJob(job));
     	}
 
-    	int idx = jobs.indexOf(job);
-		if (idx != -1) {
-			jobs.remove(idx);
-		}
+    	jobs.remove(job);
 		if (jobs.isEmpty()) {
 			progressTimer.stop();
 		}
-		fireJobRemoved(job, idx);
+		fireJobRemoved(job);
 		job.removeFileJobListener(this);
     }
     
