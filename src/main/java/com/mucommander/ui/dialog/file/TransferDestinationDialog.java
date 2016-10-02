@@ -265,10 +265,11 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @param resolvedDest the resolved destination
      */
     private void startJob(PathUtils.ResolvedDestination resolvedDest) {
-        int defaultFileExistsAction;
-        boolean skipErrors;
-        boolean verifyIntegrity;
-        if(enableTransferOptions) {
+        int defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
+        boolean skipErrors = false;
+        boolean verifyIntegrity = false;
+
+        if (enableTransferOptions) {
             // Retrieve default action when a file exists in destination, default choice
             // (if not specified by the user) is 'Ask'
             defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
@@ -281,11 +282,6 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
             skipErrors = skipErrorsCheckBox.isSelected();
             verifyIntegrity = verifyIntegrityCheckBox.isSelected();
-        }
-        else {
-            defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
-            skipErrors = false;
-            verifyIntegrity = false;
         }
 
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, getProgressDialogTitle());
