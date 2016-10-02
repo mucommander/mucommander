@@ -98,6 +98,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     private JButton skipButton;
     private JButton stopButton;
     private JCheckBox closeWhenFinishedCheckBox;
+    private JButton hideButton;
 
     private FileJob job;
     private TransferFileJob transferFileJob;
@@ -109,6 +110,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     private final static String PAUSE_ICON = "pause.png";
     private final static String SKIP_ICON = "skip.png";
     private final static String STOP_ICON = "stop.png";
+    private final static String HIDE_ICON = "hide.png";
     private final static String CURRENT_SPEED_ICON = "speed.png";
 
     // Dialog width is constrained to 320, height is not an issue (always the same)
@@ -229,11 +231,13 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         stopButton = new JButton(Translator.get("stop"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, STOP_ICON));
         stopButton.addActionListener(this);
 
-//        hideButton = new JButton(Translator.get("progress_dialog.hide"));
-//        hideButton.addActionListener(this);
+        hideButton = new JButton(Translator.get("progress_dialog.hide"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, HIDE_ICON));
+        hideButton.addActionListener(this);
 
         this.buttonsChoicePanel = new ButtonChoicePanel(
-                skipButton==null?new JButton[] {pauseResumeButton, stopButton}:new JButton[] {pauseResumeButton, skipButton, stopButton},
+                skipButton==null ?
+                        new JButton[] {pauseResumeButton, stopButton, hideButton} :
+                            new JButton[] {pauseResumeButton, skipButton, stopButton, hideButton},
                 0, getRootPane());
         contentPane.add(buttonsChoicePanel, BorderLayout.SOUTH);
 
@@ -332,6 +336,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         case PAUSED:
             pauseResumeButton.setText(Translator.get("resume"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
+            hideButton.setEnabled(false);
 
             // Update buttons mnemonics
             buttonsChoicePanel.updateMnemonics();
@@ -343,6 +348,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         case RUNNING:
             pauseResumeButton.setText(Translator.get("pause"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
+            hideButton.setEnabled(true);
 
             // Update buttons mnemonics
             buttonsChoicePanel.updateMnemonics();
@@ -429,9 +435,10 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             // Pause/resume job
             job.setPaused(job.getState() != FileJobState.PAUSED);
         }
-//        else if(source==hideButton) {
-//            mainFrame.setState(Frame.ICONIFIED);
-//        }
+        else if(source==hideButton) {
+            job.setBackgroundMode(true);
+            setVisible(false);
+        }
     }
 
 

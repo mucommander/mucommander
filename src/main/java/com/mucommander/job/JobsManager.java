@@ -158,7 +158,6 @@ public class JobsManager implements FileJobListener {
     	}
 
     	jobs.add(job);
-		fireJobAdded(job);
     	if (!progressTimer.isRunning()) {
     		progressTimer.start();
     	}
@@ -180,10 +179,10 @@ public class JobsManager implements FileJobListener {
     	}
 
     	jobs.remove(job);
+        fireJobRemoved(job);
 		if (jobs.isEmpty()) {
 			progressTimer.stop();
 		}
-		fireJobRemoved(job);
 		job.removeFileJobListener(this);
     }
     
@@ -213,6 +212,7 @@ public class JobsManager implements FileJobListener {
 	 * A {@link FileJobListener} implementation.
 	 * Removes a finished job after a small delay.
 	 */
+	@Override
 	public void jobStateChanged(final FileJob source, FileJobState oldState, FileJobState newState) {
 		if (newState == FileJobState.FINISHED || newState == FileJobState.INTERRUPTED) {
 			ActionListener jobToRemove = event -> removeJob(source);
@@ -221,9 +221,14 @@ public class JobsManager implements FileJobListener {
 			timer.start();
 		}		
 	}
-	
-	
-	
+
+	@Override
+	public void jobExecutionModeChanged(FileJob source, boolean background) {
+	    if (background)
+	        fireJobAdded(source);
+	}
+
+
 	/**
      * 
      * This class implements a listener for a job progress timer.

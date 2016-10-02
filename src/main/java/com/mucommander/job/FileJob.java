@@ -125,6 +125,9 @@ public abstract class FileJob implements Runnable {
     /** True if the user asked to automatically skip errors */
     private boolean autoSkipErrors;
 
+    /** Whether or not this job is executed in the background */
+    private boolean backgroundMode;
+
     /**
      * Creates a new FileJob without starting it.
      *
@@ -259,6 +262,28 @@ public abstract class FileJob implements Runnable {
 
         for(FileJobListener listener : listeners.keySet())
             listener.jobStateChanged(this, oldState, jobState);
+    }
+
+
+    /**
+     * Indicates whether or not this job is executed in a non-blocking mode.
+     *
+     * @return true if the job is executed in the background, false otherwise.
+     */
+    public boolean isBackgroundMode() {
+        return backgroundMode;
+    }
+
+    /**
+     * Specifies whether or not this job needs to be executed in a non-blocking mode.
+     *
+     * @param backgroundMode true if the job needs to be executed in the background, false otherwise.
+     */
+    public void setBackgroundMode(boolean backgroundMode) {
+        this.backgroundMode = backgroundMode;
+
+        for(FileJobListener listener : listeners.keySet())
+            listener.jobExecutionModeChanged(this,  true);
     }
 
 
