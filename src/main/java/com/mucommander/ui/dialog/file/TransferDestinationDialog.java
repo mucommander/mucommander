@@ -78,6 +78,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     private JComboBox fileExistsActionComboBox;
     private JCheckBox skipErrorsCheckBox;
     private JCheckBox verifyIntegrityCheckBox;
+    private JCheckBox runInBackgroundCheckBox;
     private JButton okButton;
 
     /** Background thread that is currently being executed, <code>null</code> if there is none. */
@@ -147,9 +148,12 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
             verifyIntegrityCheckBox = new JCheckBox(Translator.get("destination_dialog.verify_integrity"));
             mainPanel.add(verifyIntegrityCheckBox);
-
-            mainPanel.addSpace(10);
         }
+
+        runInBackgroundCheckBox = new JCheckBox(Translator.get("destination_dialog.run_in_background"));
+        mainPanel.add(runInBackgroundCheckBox);
+
+        mainPanel.addSpace(10);
 
         getContentPane().add(mainPanel, BorderLayout.NORTH);
 
@@ -268,6 +272,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         int defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
         boolean skipErrors = false;
         boolean verifyIntegrity = false;
+        boolean runInBackground = runInBackgroundCheckBox.isSelected();
 
         if (enableTransferOptions) {
             // Retrieve default action when a file exists in destination, default choice
@@ -290,6 +295,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         if(job!=null) {
             job.setAutoSkipErrors(skipErrors);
             job.setIntegrityCheckEnabled(verifyIntegrity);
+            job.setRunInBackground(runInBackground);
             progressDialog.start(job);
         }
     }

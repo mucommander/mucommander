@@ -30,18 +30,17 @@ import java.util.EventListener;
 public interface JobListener extends EventListener {
 	
 	/**
-     * Called when a new job has been initiated.
+     * Called when a job starts to execute in the background (non-blocking mode).
 	 * 
 	 * @param source a job added
-	 * @param idx index of a job in a job queue
 	 */
 	default void jobAdded(FileJob source) {}
 	
 	/**
-     * Called when a new job has finished and has been removed from the queue.
+     * Called when a job stops to execute in the background (finished/interrupted/switches
+     * to blocking mode).
 	 * 
 	 * @param source a job removed
-	 * @param idx index of a job in a job queue
 	 */
 	default void jobRemoved(FileJob source) {}
 

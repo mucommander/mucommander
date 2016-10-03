@@ -255,7 +255,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         // Listen to job state changes
         job.addFileJobListener(this);
 
-        if(job instanceof TransferFileJob)
+        if (job instanceof TransferFileJob)
             this.transferFileJob = (TransferFileJob)job;
 
         initUI();
@@ -263,7 +263,12 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 		JobsManager.getInstance().addJob(job);
         JobsManager.getInstance().addJobListener(this);
 
-        showDialog();
+        if (job.isRunInBackground()) {
+            firstTimeActivated = false;
+            job.start();
+        }
+        else
+            showDialog();
     }
 
 
@@ -336,7 +341,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         case PAUSED:
             pauseResumeButton.setText(Translator.get("resume"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
-            hideButton.setEnabled(false);
 
             // Update buttons mnemonics
             buttonsChoicePanel.updateMnemonics();
@@ -348,7 +352,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         case RUNNING:
             pauseResumeButton.setText(Translator.get("pause"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
-            hideButton.setEnabled(true);
 
             // Update buttons mnemonics
             buttonsChoicePanel.updateMnemonics();
@@ -436,7 +439,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             job.setPaused(job.getState() != FileJobState.PAUSED);
         }
         else if(source==hideButton) {
-            job.setBackgroundMode(true);
+            job.setRunInBackground(true);
             setVisible(false);
         }
     }

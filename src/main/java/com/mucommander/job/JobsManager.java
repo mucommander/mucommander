@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -111,15 +112,6 @@ public class JobsManager implements FileJobListener {
     	}
     }
     
-    /**
-     * Forwards the job added notification event to all
-     * <code>JobListeners</code> that registered
-     * themselves as listeners.
-     * @param source an added job 
-     * 
-     * @see #addJobListener
-     * @see JobListener#jobAdded(FileJob, int)
-     */
     private void fireJobAdded(FileJob source) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
@@ -127,15 +119,6 @@ public class JobsManager implements FileJobListener {
     	}    	
     }
     
-    /**
-     * Forwards the job removed notification event to all
-     * <code>JobListeners</code> that registered
-     * themselves as listeners.
-     * @param source a removed job
-     * 
-     * @see #addJobListener
-     * @see JobListener#jobRemoved(FileJob, int)
-     */
     private void fireJobRemoved(FileJob source) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
@@ -158,6 +141,9 @@ public class JobsManager implements FileJobListener {
     	}
 
     	jobs.add(job);
+    	if (job.isRunInBackground()) {
+    	    fireJobAdded(job);
+    	}
     	if (!progressTimer.isRunning()) {
     		progressTimer.start();
     	}
@@ -194,6 +180,11 @@ public class JobsManager implements FileJobListener {
 		return jobs.size();
 	}
 
+	public List<FileJob> getBackgroundJobs() {
+	    return jobs.stream()
+	            .filter(FileJob::isRunInBackground)
+	            .collect(Collectors.toList());
+	}
 	
 	/**
 	 * Returns a progress of a job with specified index.
@@ -226,6 +217,8 @@ public class JobsManager implements FileJobListener {
 	public void jobExecutionModeChanged(FileJob source, boolean background) {
 	    if (background)
 	        fireJobAdded(source);
+	    else
+	        fireJobRemoved(source);
 	}
 
 

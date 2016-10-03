@@ -180,6 +180,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         add(Box.createHorizontalGlue());
 
         JobsPopupButton jobsButton = new JobsPopupButton();
+        jobsButton.setPopupMenuLocation(SwingConstants.TOP);
 
         add(jobsButton);
         add(Box.createRigidArea(new Dimension(2, 0)));

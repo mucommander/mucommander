@@ -126,7 +126,7 @@ public abstract class FileJob implements Runnable {
     private boolean autoSkipErrors;
 
     /** Whether or not this job is executed in the background */
-    private boolean backgroundMode;
+    private boolean runInBackground;
 
     /**
      * Creates a new FileJob without starting it.
@@ -228,7 +228,7 @@ public abstract class FileJob implements Runnable {
 	 * Returns the dialog showing progress of this job.
 	 * @return the progressDialog
 	 */
-	protected ProgressDialog getProgressDialog() {
+	public ProgressDialog getProgressDialog() {
 		return progressDialog;
 	}
 
@@ -270,20 +270,22 @@ public abstract class FileJob implements Runnable {
      *
      * @return true if the job is executed in the background, false otherwise.
      */
-    public boolean isBackgroundMode() {
-        return backgroundMode;
+    public boolean isRunInBackground() {
+        return runInBackground;
     }
 
     /**
      * Specifies whether or not this job needs to be executed in a non-blocking mode.
      *
-     * @param backgroundMode true if the job needs to be executed in the background, false otherwise.
+     * @param runInBackground true if the job needs to be executed in the background, false otherwise.
      */
-    public void setBackgroundMode(boolean backgroundMode) {
-        this.backgroundMode = backgroundMode;
+    public void setRunInBackground(boolean runInBackground) {
+        this.runInBackground = runInBackground;
 
-        for(FileJobListener listener : listeners.keySet())
-            listener.jobExecutionModeChanged(this,  true);
+        if (jobState != FileJobState.NOT_STARTED) {
+            for (FileJobListener listener : listeners.keySet())
+                listener.jobExecutionModeChanged(this,  runInBackground);
+        }
     }
 
 

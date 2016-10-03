@@ -19,23 +19,26 @@ package com.mucommander.ui.main;
 
 import java.awt.Insets;
 
-import javax.swing.JButton;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import com.mucommander.job.FileJob;
 import com.mucommander.job.JobListener;
 import com.mucommander.job.JobsManager;
+import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
 
 /**
  * JobsPopupButton is a button that allows to interact with {@link FileJob}s that are running in the background.
- * {@link com.mucommander.desktop.DesktopManager#getTrash()}.
+ * When the button is clicked, a popup menu is displayed, showing the operations that are currently running
+ * int the background. Clicking on a job displays its progress dialog and removes it from the list of jobs
+ * that are running in the background (the job switches to blocking mode).
  * Note that this button will only be functional when there are jobs running in the background. 
  *
  * @author Arik Hadas
  */
-class JobsPopupButton extends /*PopupButton*/ JButton implements JobListener {
+class JobsPopupButton extends PopupButton implements JobListener {
 
     /** Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected */
     private RolloverButtonAdapter rolloverButtonAdapter;
@@ -46,10 +49,9 @@ class JobsPopupButton extends /*PopupButton*/ JButton implements JobListener {
 
         // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
         // get garbage-collected
-//        rolloverButtonAdapter = new RolloverButtonAdapter();
-//        RolloverButtonAdapter.setButtonDecoration(this);
-//        addMouseListener(rolloverButtonAdapter);
-        setBorder(new EmptyBorder(0, 0, 0, 0));
+        rolloverButtonAdapter = new RolloverButtonAdapter();
+        RolloverButtonAdapter.setButtonDecoration(this);
+        addMouseListener(rolloverButtonAdapter);
 
         setVisible(false);
         JobsManager.getInstance().addJobListener(this);
@@ -57,17 +59,55 @@ class JobsPopupButton extends /*PopupButton*/ JButton implements JobListener {
 
     @Override
     public Insets getInsets() {
-        return new Insets(0, 0, 0, 0);
+        return new Insets(2, 2, 2, 2);
     }
 
     @Override
     public void jobAdded(FileJob source) {
-        setVisible(JobsManager.getInstance().getJobCount() != 0);
+        int nbBackgroundJobs = JobsManager.getInstance().getBackgroundJobs().size(); 
+        setVisible(nbBackgroundJobs != 0);
     }
 
     @Override
     public void jobRemoved(FileJob source) {
-        setVisible(JobsManager.getInstance().getJobCount() != 0);
+        int nbBackgroundJobs = JobsManager.getInstance().getBackgroundJobs().size();
+        setVisible(nbBackgroundJobs != 0);
+        if (!isVisible() && isPopupMenuVisible())
+            popupMenu.setVisible(false);
+    }
+
+    @Override
+    public JPopupMenu getPopupMenu() {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JobsManager jobsManager = JobsManager.getInstance();
+        for (FileJob job : jobsManager.getBackgroundJobs()) {
+            JMenuItem jobItem = new JMenuItem();
+
+            jobItem.setText(String.format("%s (%s%%)",
+                    job.getProgressDialog().getTitle(),
+                    job.getJobProgress().getTotalPercentInt()));
+
+            jobItem.addActionListener(e -> {
+                job.setRunInBackground(false);
+                job.getProgressDialog().showDialog();
+            });
+
+            jobsManager.addJobListener(new JobListener() {
+                @Override
+                public void jobProgress(FileJob source, boolean fullUpdate) {
+                    if (source == job) {
+                        jobItem.setText(String.format("%s (%s%%)",
+                                job.getProgressDialog().getTitle(),
+                                job.getJobProgress().getTotalPercentInt()));
+                    }
+                }
+            });
+
+            popupMenu.add(jobItem);
+        }
+
+        return popupMenu;
     }
 
 }
