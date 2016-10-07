@@ -143,6 +143,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
                 fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
             mainPanel.add(fileExistsActionComboBox);
 
+            mainPanel.addSpace(10);
+
             skipErrorsCheckBox = new JCheckBox(Translator.get("destination_dialog.skip_errors"));
             mainPanel.add(skipErrorsCheckBox);
 
@@ -152,8 +154,6 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
         runInBackgroundCheckBox = new JCheckBox(Translator.get("destination_dialog.run_in_background"));
         mainPanel.add(runInBackgroundCheckBox);
-
-        mainPanel.addSpace(10);
 
         getContentPane().add(mainPanel, BorderLayout.NORTH);
 
@@ -165,7 +165,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         okButton.setEnabled(false);
         JButton cancelButton = new JButton(Translator.get("cancel"));
 
-        YBoxPanel buttonsPanel = new YBoxPanel();
+        YBoxPanel buttonsPanel = new YBoxPanel(10);
         buttonsPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
                 DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
         buttonsPanel.add(fileDetailsPanel);
