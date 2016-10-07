@@ -170,15 +170,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         String newLabel = null;
 //        String newToolTip = null;
 
-        // First tries to find a bookmark matching the specified folder
-        java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
-        int nbBookmarks = bookmarks.size();
-        Bookmark b;
-        for(int i=0; i<nbBookmarks; i++) {
-            b = bookmarks.get(i);
-            if(currentPath.equals(b.getLocation())) {
+        // First try to find a bookmark matching the specified folder
+        for(Bookmark bookmark : BookmarkManager.getBookmarks()) {
+            if(currentPath.equals(bookmark.getLocation())) {
                 // Note: if several bookmarks match current folder, the first one will be used
-                newLabel = b.getName();
+                newLabel = bookmark.getName();
                 break;
             }
         }
@@ -186,12 +182,9 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // If no bookmark matched current folder
         if(newLabel == null) {
             String protocol = currentURL.getScheme();
-            // Remote file, use the protocol's name
-            if(!protocol.equals(FileProtocols.FILE)) {
-                newLabel = protocol.toUpperCase();
-            }
-            // Local file, use volume's name 
-            else {
+            switch (protocol) {
+            // Local file, use volume's name
+            case FileProtocols.FILE:
                 // Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
                 // display 'SMB' which is the underlying protocol
                 if(OsFamily.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
@@ -231,6 +224,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 //                    if(fileSystemView!=null)
 //                        newToolTip = getWindowsExtendedDriveName(volumes[bestIndex]);
                 }
+                break;
+
+            default:
+            	// Remote file, use the protocol's name
+            	newLabel = protocol.toUpperCase();
             }
         }
 		
@@ -340,13 +338,10 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
         // Add boookmarks
         java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
-        int nbBookmarks = bookmarks.size();
-        Bookmark b;   
 
-        if(nbBookmarks>0) {
-            for(int i=0; i<nbBookmarks; i++) {
-                b = bookmarks.get(i);
-                item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), b));
+        if (!bookmarks.isEmpty()) {
+            for(Bookmark bookmark : bookmarks) {
+                item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmark));
                 setMnemonic(item, mnemonicHelper);
             }
         }
