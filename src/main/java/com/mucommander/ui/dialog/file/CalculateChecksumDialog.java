@@ -159,6 +159,8 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
                 DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
 
+        mainPanel.addSpace(3);
+
         mainPanel.add(fileDetailsPanel);
 
 //        mainPanel.add(new HelpButtonPanel(new HelpButton(mainFrame, "CalculateChecksum")));
