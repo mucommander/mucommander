@@ -71,7 +71,7 @@ public class ActionManager {
 
     public static void registerActions() {
     	registerAction(new AddBookmarkAction.Descriptor(),                  new AddBookmarkAction.Factory());
-    	registerAction(new AddTabAction.Descriptor(),						new AddTabAction.Factory());
+    	registerAction(new NewTabAction.Descriptor(),						new NewTabAction.Factory());
     	registerAction(new BatchRenameAction.Descriptor(),                  new BatchRenameAction.Factory());
     	registerAction(new BringAllToFrontAction.Descriptor(),              new BringAllToFrontAction.Factory());
     	registerAction(new CalculateChecksumAction.Descriptor(),            new CalculateChecksumAction.Factory());

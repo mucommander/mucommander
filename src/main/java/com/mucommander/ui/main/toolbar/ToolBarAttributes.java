@@ -21,7 +21,7 @@ package com.mucommander.ui.main.toolbar;
 import java.util.WeakHashMap;
 
 import com.mucommander.ui.action.impl.AddBookmarkAction;
-import com.mucommander.ui.action.impl.AddTabAction;
+import com.mucommander.ui.action.impl.NewTabAction;
 import com.mucommander.ui.action.impl.ConnectToServerAction;
 import com.mucommander.ui.action.impl.EditBookmarksAction;
 import com.mucommander.ui.action.impl.EditCredentialsAction;
@@ -63,7 +63,7 @@ public class ToolBarAttributes {
     /** Default command bar actions: Class instances or null to signify a separator */
     private final static String[] DEFAULT_TOOLBAR_ACTIONS = new String[] {
             NewWindowAction.Descriptor.ACTION_ID,
-            AddTabAction.Descriptor.ACTION_ID,
+            NewTabAction.Descriptor.ACTION_ID,
             null,
             GoBackAction.Descriptor.ACTION_ID,
             GoForwardAction.Descriptor.ACTION_ID,
