@@ -42,6 +42,7 @@ import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
@@ -178,12 +179,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         }
 
         // If no bookmark matched current folder
-        String newLabel = null;
-//        String newToolTip = null;
         String protocol = currentURL.getScheme();
         switch (protocol) {
         // Local file, use volume's name
         case FileProtocols.FILE:
+        	String newLabel = null;
         	// Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
         	// display 'SMB' which is the underlying protocol
         	if(OsFamily.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
@@ -222,18 +222,26 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         		// Not used because the call to FileSystemView is slow
         		//                    if(fileSystemView!=null)
         		//                        newToolTip = getWindowsExtendedDriveName(volumes[bestIndex]);
+
         	}
+        	setText(newLabel);
+    		// Set the folder icon based on the current system icons policy
+    		setIcon(FileIcons.getFileIcon(currentFolder));
+        	break;
+
+        case BookmarkProtocolProvider.BOOKMARK:
+        	String currentFolderName = currentFolder.getName();
+        	setText(currentFolderName.isEmpty() ? Translator.get("bookmarks_menu") : currentFolderName);
+        	setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARK_ICON_NAME));
         	break;
 
         default:
         	// Remote file, use the protocol's name
-        	newLabel = protocol.toUpperCase();
+    		setText(protocol.toUpperCase());
+    		// Set the folder icon based on the current system icons policy
+    		setIcon(FileIcons.getFileIcon(currentFolder));
         }
 		
-        setText(newLabel);
-//        setToolTipText(newToolTip);
-        // Set the folder icon based on the current system icons policy
-        setIcon(FileIcons.getFileIcon(currentFolder));
     }
 
 
