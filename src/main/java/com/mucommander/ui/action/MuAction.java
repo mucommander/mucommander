@@ -18,15 +18,22 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.commons.file.util.ResourceLoader;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 import java.util.Map;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.util.ResourceLoader;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * MuAction extends <code>AbstractAction</code> to add more functionalities and make it easier to integrate within
@@ -51,6 +58,7 @@ import java.util.Map;
  * @author Maxence Bernard
  */
 public abstract class MuAction extends AbstractAction {
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     /** The MainFrame associated with this MuAction */
     protected MainFrame mainFrame;

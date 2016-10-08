@@ -140,7 +140,11 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	public void add(AbstractFile file) {
 		addTab(defaultTabsFactory.createTab(file.getURL()));
 	}
-	
+
+	public void add(FileURL fileURL) {
+		addTab(defaultTabsFactory.createTab(fileURL));
+	}
+
 	public void add(FileTableTab tab) {
 		addAndSelectTab(tab);
 	}
