@@ -167,69 +167,67 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         String currentPath = currentFolder.getAbsolutePath();
         FileURL currentURL = currentFolder.getURL();
 
-        String newLabel = null;
-//        String newToolTip = null;
-
         // First try to find a bookmark matching the specified folder
         for(Bookmark bookmark : BookmarkManager.getBookmarks()) {
             if(currentPath.equals(bookmark.getLocation())) {
                 // Note: if several bookmarks match current folder, the first one will be used
-                newLabel = bookmark.getName();
-                break;
+                setText(bookmark.getName());
+                setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARK_ICON_NAME));
+                return;
             }
         }
-		
+
         // If no bookmark matched current folder
-        if(newLabel == null) {
-            String protocol = currentURL.getScheme();
-            switch (protocol) {
-            // Local file, use volume's name
-            case FileProtocols.FILE:
-                // Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
-                // display 'SMB' which is the underlying protocol
-                if(OsFamily.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
-                    newLabel = "SMB";
-                }
-                else {
-                    // getCanonicalPath() must be avoided under Windows for the following reasons:
-                    // a) it is not necessary, Windows doesn't have symlinks
-                    // b) it triggers the dreaded 'No disk in drive' error popup dialog.
-                    // c) when network drives are present but not mounted (e.g. X:\ mapped onto an SMB share),
-                    // getCanonicalPath which is I/O bound will take a looooong time to execute
+        String newLabel = null;
+//        String newToolTip = null;
+        String protocol = currentURL.getScheme();
+        switch (protocol) {
+        // Local file, use volume's name
+        case FileProtocols.FILE:
+        	// Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
+        	// display 'SMB' which is the underlying protocol
+        	if(OsFamily.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
+        		newLabel = "SMB";
+        	}
+        	else {
+        		// getCanonicalPath() must be avoided under Windows for the following reasons:
+        		// a) it is not necessary, Windows doesn't have symlinks
+        		// b) it triggers the dreaded 'No disk in drive' error popup dialog.
+        		// c) when network drives are present but not mounted (e.g. X:\ mapped onto an SMB share),
+        		// getCanonicalPath which is I/O bound will take a looooong time to execute
 
-                    if(OsFamily.WINDOWS.isCurrent())
-                        currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
-                    else
-                        currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+        		if(OsFamily.WINDOWS.isCurrent())
+        			currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
+        		else
+        			currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
 
-                    int bestLength = -1;
-                    int bestIndex = 0;
-                    String temp;
-                    int len;
-                    for(int i=0; i< volumes.length; i++) {
-                        if(OsFamily.WINDOWS.isCurrent())
-                            temp = volumes[i].getAbsolutePath(false).toLowerCase();
-                        else
-                            temp = volumes[i].getCanonicalPath(false).toLowerCase();
+        		int bestLength = -1;
+        		int bestIndex = 0;
+        		String temp;
+        		int len;
+        		for(int i=0; i< volumes.length; i++) {
+        			if(OsFamily.WINDOWS.isCurrent())
+        				temp = volumes[i].getAbsolutePath(false).toLowerCase();
+        			else
+        				temp = volumes[i].getCanonicalPath(false).toLowerCase();
 
-                        len = temp.length();
-                        if (currentPath.startsWith(temp) && len>bestLength) {
-                            bestIndex = i;
-                            bestLength = len;
-                        }
-                    }
-                    newLabel = volumes[bestIndex].getName();
+        			len = temp.length();
+        			if (currentPath.startsWith(temp) && len>bestLength) {
+        				bestIndex = i;
+        				bestLength = len;
+        			}
+        		}
+        		newLabel = volumes[bestIndex].getName();
 
-                    // Not used because the call to FileSystemView is slow
-//                    if(fileSystemView!=null)
-//                        newToolTip = getWindowsExtendedDriveName(volumes[bestIndex]);
-                }
-                break;
+        		// Not used because the call to FileSystemView is slow
+        		//                    if(fileSystemView!=null)
+        		//                        newToolTip = getWindowsExtendedDriveName(volumes[bestIndex]);
+        	}
+        	break;
 
-            default:
-            	// Remote file, use the protocol's name
-            	newLabel = protocol.toUpperCase();
-            }
+        default:
+        	// Remote file, use the protocol's name
+        	newLabel = protocol.toUpperCase();
         }
 		
         setText(newLabel);
