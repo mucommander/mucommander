@@ -20,6 +20,7 @@ package com.mucommander.commons.file.connection;
 
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -133,7 +134,9 @@ public class ConnectionPool implements Runnable {
      * @return a list of registered ConnectionHandler instances
      */
     public static List<ConnectionHandler> getConnectionHandlersSnapshot() {
-        return new ArrayList<ConnectionHandler>(connectionHandlers);
+    	synchronized (connectionHandlers) {
+    		return new ArrayList<ConnectionHandler>(connectionHandlers);
+    	}
     }
     
     /**
@@ -160,8 +163,8 @@ public class ConnectionPool implements Runnable {
             long now = System.currentTimeMillis();
 
             synchronized(connectionHandlers) {      // Ensures that getConnectionHandler is not currently changing the list while we access it
-                for(ConnectionHandler connHandler : connectionHandlers) {
-
+                for (Iterator<ConnectionHandler> it = connectionHandlers.iterator(); it.hasNext(); ) {
+                	ConnectionHandler connHandler = it.next();
                     synchronized(connHandler) {     // Ensures that no one is trying to acquire a lock on the connection while we access it 
                         if(!connHandler.isLocked()) {   // Do not touch ConnectionHandler if it is currently locked
 
@@ -170,7 +173,7 @@ public class ConnectionPool implements Runnable {
                             if(!connHandler.isConnected()) {
                                 LOGGER.info("Removing unconnected ConnectionHandler {}", connHandler);
 
-                                connectionHandlers.remove(connHandler);
+                                it.remove();
                                 // Notify any thread waiting for a ConnectionHandler to be released
                                 connectionHandlers.notify();
 
@@ -185,7 +188,7 @@ public class ConnectionPool implements Runnable {
                             if(closePeriod!=-1 && now-lastUsed>closePeriod*1000) {
                                 LOGGER.info("Removing timed-out ConnectionHandler {}",connHandler);
 
-                                connectionHandlers.remove(connHandler);
+                                it.remove();
                                 // Notify any thread waiting for a ConnectionHandler to be released
                                 connectionHandlers.notify();
 
@@ -210,7 +213,7 @@ public class ConnectionPool implements Runnable {
                 }
 
                 // Stop monitor thread if there are no more ConnectionHandler
-                if(connectionHandlers.size()==0) {
+                if(connectionHandlers.isEmpty()) {
                     LOGGER.info("No more ConnectionHandler, stopping monitor thread");
                     monitorThread = null;
                 }
