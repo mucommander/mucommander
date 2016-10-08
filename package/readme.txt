@@ -37,10 +37,12 @@ New features:
 
 Improvements:
 - Add button in the toolbar for adding a new tab.
+- Show icons of referenced files while exploring bookmarks.
 
 Localization:
 
 Bug fixes:
+- Fix opening bookmarks that refer to remote files.
 
 Known issues:
 - Some translations may not be up-to-date.
