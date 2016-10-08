@@ -51,6 +51,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.AddBookmarkAction;
+import com.mucommander.ui.action.impl.AddTabAction;
 import com.mucommander.ui.action.impl.BatchRenameAction;
 import com.mucommander.ui.action.impl.BringAllToFrontAction;
 import com.mucommander.ui.action.impl.CalculateChecksumAction;
@@ -226,7 +227,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // File menu
         JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(NewWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(AddTabAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenNativelyAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
