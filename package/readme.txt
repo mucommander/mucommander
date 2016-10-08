@@ -36,7 +36,7 @@ New features:
 - Support for OVA (virtual appliance) files, treat them as tar files.
 
 Improvements:
-- Add button in the toolbar for adding a new tab.
+- Add 'new tab' action to the toolbar and menu bar.
 - Show icons of referenced files while exploring bookmarks.
 
 Localization:
