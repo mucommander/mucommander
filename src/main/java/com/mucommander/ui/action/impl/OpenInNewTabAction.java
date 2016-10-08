@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -70,7 +69,7 @@ public class OpenInNewTabAction extends SelectedFileAction {
 
         FileURL fileURL = file.getURL();
 
-        if (BookmarkProtocolProvider.BOOKMARK.equals(fileURL.getScheme())) {
+        if (BookmarkManager.isBookmark(fileURL)) {
         	String bookmarkLocation = BookmarkManager.getBookmark(file.getName()).getLocation();
         	try {
         		fileURL = FileURL.getFileURL(bookmarkLocation);

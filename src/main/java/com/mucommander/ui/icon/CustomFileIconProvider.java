@@ -27,7 +27,6 @@ import javax.swing.ImageIcon;
 
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileProtocols;
@@ -169,7 +168,7 @@ public class CustomFileIconProvider implements FileIconProvider {
         if(isSymlink)
             file = file.getCanonicalFile();
 
-        if (BookmarkProtocolProvider.BOOKMARK.equals(file.getURL().getScheme())) {
+        if (BookmarkManager.isBookmark(file.getURL())) {
         	for(Bookmark bookmark : BookmarkManager.getBookmarks()) {
                 if(file.getName().equals(bookmark.getName())) {
                     // Note: if several bookmarks match current folder, the first one will be used

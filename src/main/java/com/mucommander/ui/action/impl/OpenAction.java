@@ -28,7 +28,6 @@ import java.util.Set;
 import javax.swing.KeyStroke;
 
 import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
@@ -111,7 +110,7 @@ public class OpenAction extends MuAction {
         	resolvedFile = MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS) ? resolvedFile : file;
         	FileTableTabs tabs = destination.getTabs();
 
-        	if (BookmarkProtocolProvider.BOOKMARK.equals(resolvedFile.getURL().getScheme())) {
+        	if (BookmarkManager.isBookmark(resolvedFile.getURL())) {
         		String bookmarkLocation = BookmarkManager.getBookmark(resolvedFile.getName()).getLocation();
         		FileURL bookmarkURL;
 				try {
