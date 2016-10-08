@@ -34,6 +34,7 @@ What's new since v0.9.1 ?
 
 New features:
 - Support for OVA (virtual appliance) files, treat them as tar files.
+- Add the ability to execute file operations in the background (non-blocking mode).
 
 Improvements:
 - Add 'new tab' action to the toolbar and menu bar.
