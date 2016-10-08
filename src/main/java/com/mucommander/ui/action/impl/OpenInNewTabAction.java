@@ -19,13 +19,16 @@
 package com.mucommander.ui.action.impl;
 
 import java.awt.event.KeyEvent;
+import java.net.MalformedURLException;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
@@ -59,14 +62,26 @@ public class OpenInNewTabAction extends SelectedFileAction {
     
 	@Override
 	public void performAction() {
-		AbstractFile file;
+		AbstractFile file = mainFrame.getActiveTable().getSelectedFile(true, true);
 
         // Retrieves the currently selected file, aborts if none (should not normally happen).
-        if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
+        if(file == null || !file.isBrowsable())
             return;
 
+        FileURL fileURL = file.getURL();
+
+        if (BookmarkProtocolProvider.BOOKMARK.equals(fileURL.getScheme())) {
+        	String bookmarkLocation = BookmarkManager.getBookmark(file.getName()).getLocation();
+        	try {
+        		fileURL = FileURL.getFileURL(bookmarkLocation);
+        	} catch (MalformedURLException e) {
+        		LOGGER.error("Failed to resolve bookmark's location: " + bookmarkLocation);
+        		return;
+        	}
+        }
+
         // Opens the currently selected file in a new tab
-        mainFrame.getActivePanel().getTabs().add(file);
+        mainFrame.getActivePanel().getTabs().add(fileURL);
 	}
 
 	@Override
