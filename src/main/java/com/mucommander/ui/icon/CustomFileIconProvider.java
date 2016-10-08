@@ -18,14 +18,20 @@
 
 package com.mucommander.ui.icon;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.icon.FileIconProvider;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
 import java.util.Hashtable;
 import java.util.Map;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.bookmark.file.BookmarkProtocolProvider;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.icon.FileIconProvider;
 
 /**
  * This {@link com.mucommander.commons.file.icon.FileIconProvider} returns icons from the
@@ -162,6 +168,20 @@ public class CustomFileIconProvider implements FileIconProvider {
         boolean isSymlink = file.isSymlink();
         if(isSymlink)
             file = file.getCanonicalFile();
+
+        if (BookmarkProtocolProvider.BOOKMARK.equals(file.getURL().getScheme())) {
+        	for(Bookmark bookmark : BookmarkManager.getBookmarks()) {
+                if(file.getName().equals(bookmark.getName())) {
+                    // Note: if several bookmarks match current folder, the first one will be used
+                	file = FileFactory.getFile(bookmark.getLocation());
+                	break;
+                }
+            }
+        }
+
+        if (file == null)
+        	return IconManager.getIcon(IconManager.FILE_ICON_SET, DISCONNECTED_ICON_NAME);
+        	
 
         ImageIcon icon;
         // Retrieve the file's extension, null if the file has no extension
