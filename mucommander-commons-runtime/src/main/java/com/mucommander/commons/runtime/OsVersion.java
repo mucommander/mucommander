@@ -65,9 +65,9 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	WINDOWS_7("Windows 7"),
 	/** Windows 8 */
 	WINDOWS_8("Windows 8"),
-	/** Windows 8 */
+	/** Windows 8.1 */
 	WINDOWS_8_1("Windows 8.1"),
-	/** Windows 8 */
+	/** Windows 10 */
 	WINDOWS_10("Windows 10"),
 
 
@@ -75,29 +75,29 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	// Mac OS X versions //
 	///////////////////////
 
-	/** Mac OS X 10.0 */
+	/** Cheetah */
 	MAC_OS_X_10_0("10.0"),
-	/** Mac OS X 10.1 */
+	/** Puma */
 	MAC_OS_X_10_1("10.1"),
-	/** Mac OS X 10.2 */
+	/** Jaguar */
 	MAC_OS_X_10_2("10.2"),
-	/** Mac OS X 10.3 */
+	/** Panther */
 	MAC_OS_X_10_3("10.3"),
-	/** Mac OS X 10.4 */
+	/** Tiger */
 	MAC_OS_X_10_4("10.4"),
-	/** Mac OS X 10.5 */
+	/** Leopard */
 	MAC_OS_X_10_5("10.5"),
-	/** Mac OS X 10.6 */
+	/** Snow Leopard */
 	MAC_OS_X_10_6("10.6"),
-	/** Mac OS X 10.7 */
+	/** Lion */
 	MAC_OS_X_10_7("10.7"),
-	/** Mac OS X 10.8 */
+	/** Mountain Lion */
 	MAC_OS_X_10_8("10.8"),
-	/** Mac OS X 10.8 */
+	/** Mavericks */
 	MAC_OS_X_10_9("10.9"),
-	/** Mac OS X 10.8 */
+	/** Yosemite */
 	MAC_OS_X_10_10("10.10"),
-	/** Mac OS X 10.8 */
+	/** El Capitan */
 	MAC_OS_X_10_11("10.11");
 	
 
