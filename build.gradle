@@ -17,7 +17,7 @@ mainClassName = 'com.mucommander.muCommander'
 
 allprojects {
     group = 'org.mucommander'
-    version = '0.9.1rc2'
+    version = '0.9.1'
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
 }
