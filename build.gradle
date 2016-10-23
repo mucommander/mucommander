@@ -151,6 +151,8 @@ task nsis(dependsOn: createExe) {
         from("$buildDir/launch4j/" + launch4j.outfile)
         from('package/windows') {
             include 'mucommander.ico'
+        }
+        from('package/windows') {
             include 'mucommander.nsi'
             filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
                                            MU_ICON: 'mucommander.ico',
