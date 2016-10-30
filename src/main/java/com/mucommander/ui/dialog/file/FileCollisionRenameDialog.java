@@ -20,7 +20,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.job.CopyJob;
+import com.mucommander.job.impl.CopyJob;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;

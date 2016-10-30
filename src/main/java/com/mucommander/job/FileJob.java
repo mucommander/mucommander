@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.progress.JobProgress;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.job.ui.UserInputHelper;
 import com.mucommander.text.Translator;
@@ -125,6 +124,9 @@ public abstract class FileJob implements Runnable {
 
     /** True if the user asked to automatically skip errors */
     private boolean autoSkipErrors;
+
+    /** Whether or not this job is executed in the background */
+    private boolean runInBackground;
 
     /**
      * Creates a new FileJob without starting it.
@@ -226,7 +228,7 @@ public abstract class FileJob implements Runnable {
 	 * Returns the dialog showing progress of this job.
 	 * @return the progressDialog
 	 */
-	protected ProgressDialog getProgressDialog() {
+	public ProgressDialog getProgressDialog() {
 		return progressDialog;
 	}
 
@@ -260,6 +262,30 @@ public abstract class FileJob implements Runnable {
 
         for(FileJobListener listener : listeners.keySet())
             listener.jobStateChanged(this, oldState, jobState);
+    }
+
+
+    /**
+     * Indicates whether or not this job is executed in a non-blocking mode.
+     *
+     * @return true if the job is executed in the background, false otherwise.
+     */
+    public boolean isRunInBackground() {
+        return runInBackground;
+    }
+
+    /**
+     * Specifies whether or not this job needs to be executed in a non-blocking mode.
+     *
+     * @param runInBackground true if the job needs to be executed in the background, false otherwise.
+     */
+    public void setRunInBackground(boolean runInBackground) {
+        this.runInBackground = runInBackground;
+
+        if (jobState != FileJobState.NOT_STARTED) {
+            for (FileJobListener listener : listeners.keySet())
+                listener.jobExecutionModeChanged(this,  runInBackground);
+        }
     }
 
 

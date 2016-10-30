@@ -179,6 +179,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         add(Box.createHorizontalGlue());
 
+        JobsPopupButton jobsButton = new JobsPopupButton();
+        jobsButton.setPopupMenuLocation(SwingConstants.TOP);
+
+        add(jobsButton);
+        add(Box.createRigidArea(new Dimension(2, 0)));
+
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
         if(DesktopManager.getTrash()!=null) {
             TrashPopupButton trashButton = new TrashPopupButton(mainFrame);

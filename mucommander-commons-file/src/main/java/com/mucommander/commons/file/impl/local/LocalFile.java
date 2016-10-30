@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -613,15 +614,7 @@ public class LocalFile extends ProtocolFile {
         if(IS_WINDOWS)
             return false;
 
-        // Note: this value must not be cached as its value can change over time (canonical path can change)
-        AbstractFile parent = getParent();
-        String canonPath = getCanonicalPath(false);
-        if(parent==null || canonPath==null)
-            return false;
-        else {
-            String parentCanonPath = parent.getCanonicalPath(true);
-            return !canonPath.equalsIgnoreCase(parentCanonPath+getName());
-        }
+        return Files.isSymbolicLink(file.toPath());
     }
 
     @Override

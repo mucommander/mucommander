@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,6 +31,10 @@ import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.job.FileCollisionChecker;
+import com.mucommander.job.FileJob;
+import com.mucommander.job.FileJobAction;
+import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;

@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v0.9.1
+muCommander v0.9.2
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -22,64 +22,28 @@ Copyright (C) 2002-2016 Maxence Bernard.
 Requirements
 ------------
 
-A Java Runtime Environment (JRE) 1.6 or later is required to run muCommander.
-Java 1.7 is recommended, you can download it at http://java.com.
-
-Mac OS X users: your favorite OS already comes with a Java runtime so you're good to go!
+A Java Runtime Environment (JRE) 1.8 or later is required to run muCommander.
+Java 1.8 is recommended, you can download it at http://java.com.
 
 If you're having problems launching muCommander, make sure the JAVA_HOME environment variable points to the directory
 where your Java runtime is installed.
 
 
-What's new since v0.9 ?
+What's new since v0.9.1 ?
 -----------------------
 
 New features:
-- Lock tab capability, which prevents closing/moving the tab or changing its location.
-- New quick list that presents open tabs in the current panel, mapped onto Alt+6 by default (ticket #450).
-- Added the option to set fixed title for tab.
-- Added the following actions: add tab, duplicate tab, clone tab to other panel.
-- Added support for VMware vSphere virtual machines file system, contributed by Yuval Kohavi <yuval.kohavi@intigua.com>
+- Support for OVA (virtual appliance) files, treat them as tar files.
+- Add the ability to execute file operations in the background (non-blocking mode).
 
 Improvements:
-- The state of all windows from last run is now restored on startup.
-- Added the ability to copy the base name of files (ticket #462), contributed by Chen Rozenes.
-- User can choose to always display tabs headers from preferences dialog (even when the panel contains single tab).
-- Add the application name to window title on all OSs except Mac OS X (ticket #501).
-- The visited locations history is now saved per-tab.
-- The recently visited locations quick list now presents the visited locations on all tabs and windows.
-- The content of recently visited locations quick list is now restored from previous run on startup (ticket #471).
-- Added fullscreen support for Mac OS X Lion (ticket #468).
-- Text file editor/viewer restore the full screen mode of last used (closed) editor/viewer on startup.
-- 'Bonjour' support is now disabled by default on Mac OS (on fresh installation, i.e, with no previous 
-  preferences) to prevent firewall dialog which keeps popping up on startup (workaround for ticket #339).
-- Added 'ctrl+m' keystroke to toggle text file editor/viewer full screen mode.
-- Tab can be closed by clicking on its header with middle mouse button.
-- Assign 'ctrl+page_down' keystroke for switching to next tab, and 'ctrl+page_up' for switching to 
-  previous tab (the keystrokes that were previously assigned to those actions remain as alternative keystrokes).
-- Improved names and descriptions presented for tab-related actions.
-- Added new category of actions in the 'shortcuts dialog' for tab-related actions.
-- Changed tab's not-fixed-title to be in the pattern '<host>:<filename>'
-- Show backward/forward locations list when pressing with right click on the back/forward buttons in the toolbar 
-  instead of trigger back/forward actions
-- Keyboard shortcuts can now be set for commands defined at commands.xml (ticket #456), contributed by Jarek Czekalski.
-- Show empty name in the make file/directory dialog when it is opened (ticket #512), contributed by hclsiva.
-- Mac OS X: enabled high-resolution rendering on Retina displays (ticket #518), contributed Alexey Lysiuk.
-- Added Windows 8 and Mac OS X 10.8 to the OS versions.
-- System files can now be filtered also on windows, contributed by Markus Bullmann.
+- Add 'new tab' action to the toolbar and menu bar.
+- Show icons of referenced files while exploring bookmarks.
 
 Localization:
-- Turkish translation has been updated.
 
 Bug fixes:
-- Prevent deadlock which caused the application to freeze while switching tabs on MAC OS.
-- Recycle Bin is now working on Windows 64-bit with a 64-bit Java runtime (ticket #234).
-- Key combinations that contain the TAB key can be set as shortcuts (ticket #465).
-- Fix installation via software center on Ubuntu.
-- Symbolic links cannot be opened (ticket #467).
-- Encoding of text file is changed after being modified by the viewer/editor (ticket #438).
-- Cannot connect to some FTP/SFTP bookmarks if there are more than 4 of them (ticket #525), contributed by Ondrej Dusek.
-- Quick lists on the right panel sometimes not being focused (ticket #552), contributed by Jarek Czekalski.
+- Fix opening bookmarks that refer to remote files.
 
 Known issues:
 - Some translations may not be up-to-date.
@@ -142,6 +106,9 @@ muCommander uses the following great third party works :
 
 - the Yanfs library released under the BSD license.
  Yanfs can be found at http://yanfs.dev.java.net .
+
+- the JCommander library released under the Apache License.
+ JCommander can be found at http://jcommander.org .
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .

@@ -19,10 +19,12 @@
 package com.mucommander.bookmark;
 
 import com.mucommander.PlatformManager;
+import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.collections.VectorChangeListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 
@@ -288,6 +290,15 @@ public class BookmarkManager implements VectorChangeListener {
     public static synchronized void addBookmark(Bookmark b) {bookmarks.add(b);}
 
 
+    /**
+     * Check if a given URL represents a bookmark. 
+     *
+     * @param fileURL the URL to examine
+     * @return true if the given URL represents a bookmark, false otherwise
+     */
+    public static boolean isBookmark(FileURL fileURL) {
+    	return BookmarkProtocolProvider.BOOKMARK.equals(fileURL.getScheme());
+    }
 
     // - Listeners -------------------------------------------------------------
     // -------------------------------------------------------------------------

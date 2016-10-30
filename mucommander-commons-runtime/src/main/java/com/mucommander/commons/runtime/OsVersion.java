@@ -65,30 +65,42 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	WINDOWS_7("Windows 7"),
 	/** Windows 8 */
 	WINDOWS_8("Windows 8"),
+	/** Windows 8.1 */
+	WINDOWS_8_1("Windows 8.1"),
+	/** Windows 10 */
+	WINDOWS_10("Windows 10"),
 
 
 	///////////////////////
 	// Mac OS X versions //
 	///////////////////////
 
-	/** Mac OS X 10.0 */
+	/** Cheetah */
 	MAC_OS_X_10_0("10.0"),
-	/** Mac OS X 10.1 */
+	/** Puma */
 	MAC_OS_X_10_1("10.1"),
-	/** Mac OS X 10.2 */
+	/** Jaguar */
 	MAC_OS_X_10_2("10.2"),
-	/** Mac OS X 10.3 */
+	/** Panther */
 	MAC_OS_X_10_3("10.3"),
-	/** Mac OS X 10.4 */
+	/** Tiger */
 	MAC_OS_X_10_4("10.4"),
-	/** Mac OS X 10.5 */
+	/** Leopard */
 	MAC_OS_X_10_5("10.5"),
-	/** Mac OS X 10.6 */
+	/** Snow Leopard */
 	MAC_OS_X_10_6("10.6"),
-	/** Mac OS X 10.7 */
+	/** Lion */
 	MAC_OS_X_10_7("10.7"),
-	/** Mac OS X 10.8 */
-	MAC_OS_X_10_8("10.8");
+	/** Mountain Lion */
+	MAC_OS_X_10_8("10.8"),
+	/** Mavericks */
+	MAC_OS_X_10_9("10.9"),
+	/** Yosemite */
+	MAC_OS_X_10_10("10.10"),
+	/** El Capitan */
+	MAC_OS_X_10_11("10.11"),
+	/** Sierra */
+	MAC_OS_X_10_12("10.12");
 	
 
     /** Logger used by this class. */
@@ -181,11 +193,29 @@ public enum OsVersion implements ComparableRuntimeProperty {
             if (osNameProp.equals("Windows 8"))
                 return WINDOWS_8;
 
+            if (osNameProp.equals("Windows 8.1"))
+                return WINDOWS_8_1;
+
+            if (osNameProp.equals("Windows 10"))
+                return WINDOWS_10;
+
             // Newer version we don't know of yet, assume latest supported OS version
-            return WINDOWS_8;
+            return WINDOWS_10;
         }
         // Mac OS X versions
         if (osFamily==OsFamily.MAC_OS_X) {
+            if(osVersionProp.startsWith("10.12"))
+                return MAC_OS_X_10_12;
+
+        	if(osVersionProp.startsWith("10.11"))
+                return MAC_OS_X_10_11;
+
+        	if(osVersionProp.startsWith("10.10"))
+                return MAC_OS_X_10_10;
+        	
+        	if(osVersionProp.startsWith("10.9"))
+                return MAC_OS_X_10_9;
+
             if(osVersionProp.startsWith("10.8"))
                 return MAC_OS_X_10_8;
 
@@ -214,7 +244,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
                 return MAC_OS_X_10_0;
 
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_X_10_8;
+            return MAC_OS_X_10_12;
         }
 
         return OsVersion.UNKNOWN_VERSION;

@@ -61,10 +61,6 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
     /** Current button, i.e. the one that currently has focus */
     private int currentButton;
 	
-    /** Total number of buttons */
-    private int nbButtons;
-
-	
     /**
      * Creates a new ButtonChoicePanel and lays out the given buttons on a grid
      * according to the provided number of colums.
@@ -77,7 +73,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
      */
     public ButtonChoicePanel(JButton buttons[], int nbCols, JRootPane rootPane) {
         this.buttons = buttons;
-        this.nbButtons = buttons.length;
+        int nbButtons = buttons.length;
         this.nbCols = nbCols<=0?nbButtons:nbCols;
         this.rootPane = rootPane;
         this.nbRows = nbCols<=0?1:nbButtons/nbCols+(nbButtons%nbCols==0?0:1);
@@ -91,11 +87,8 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
         else {
             setLayout(new GridLayout(0, nbCols));
         }
-        
-        JButton button;
-        for(int i=0; i<nbButtons; i++) {
-            button = buttons[i];
 
+        for (JButton button : buttons) {
             // Listener to key events to transfer focus 
             button.addKeyListener(this);
 
@@ -124,9 +117,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
         MnemonicHelper mnemonicHelper = new MnemonicHelper();
         char mnemonic;
 
-        JButton button;
-        for(int i=0; i<nbButtons; i++) {
-            button = buttons[i];
+        for (JButton button : buttons) {
             mnemonic = mnemonicHelper.getMnemonic(button);
             if(mnemonic!=0)
                 button.setMnemonic(mnemonic);
@@ -142,6 +133,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
     	int keyCode = e.getKeyCode();
 
         int oldCurrentButton = currentButton;
+        int nbButtons = buttons.length;
 
         // LEFT key goes back one button, to the last button if current button is the first one
         if (keyCode==KeyEvent.VK_LEFT) {
@@ -170,9 +162,9 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
         }
         // Click button when a key that corresponds to one of the buttons' mnemonic has been pressed
         else if(!e.isAltDown()) {
-            for(int i=0; i<nbButtons; i++) {
-                if (keyCode==buttons[i].getMnemonic()) {
-                    buttons[i].doClick();
+            for (JButton button : buttons) {
+                if (keyCode==button.getMnemonic()) {
+                    button.doClick();
                     return;
                 }
             }

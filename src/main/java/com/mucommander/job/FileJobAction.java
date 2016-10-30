@@ -25,20 +25,20 @@ import com.mucommander.text.Translator;
  *
  * @author Arik Hadas
  */
-class FileJobAction {
+public interface FileJobAction {
 
-	protected final static int SKIP = 0;
-	protected final static int SKIP_ALL = 1;
-	protected final static int RETRY = 2;
-	protected final static int CANCEL = 3;
-	protected final static int APPEND = 4;
-	protected final static int OK = 5;
+	int SKIP = 0;
+	int SKIP_ALL = 1;
+	int RETRY = 2;
+	int CANCEL = 3;
+	int APPEND = 4;
+	int OK = 5;
 
-	protected final static String SKIP_TEXT = Translator.get("skip");
-	protected final static String SKIP_ALL_TEXT = Translator.get("skip_all");
-	protected final static String RETRY_TEXT = Translator.get("retry");
-	protected final static String CANCEL_TEXT = Translator.get("cancel");
-	protected final static String APPEND_TEXT = Translator.get("resume");
-	protected final static String OK_TEXT = Translator.get("ok");
+	String SKIP_TEXT = Translator.get("skip");
+	String SKIP_ALL_TEXT = Translator.get("skip_all");
+	String RETRY_TEXT = Translator.get("retry");
+	String CANCEL_TEXT = Translator.get("cancel");
+	String APPEND_TEXT = Translator.get("resume");
+	String OK_TEXT = Translator.get("ok");
 
 }

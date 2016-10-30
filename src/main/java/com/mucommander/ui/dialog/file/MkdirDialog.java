@@ -36,7 +36,7 @@ import javax.swing.JTextField;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.job.MkdirJob;
+import com.mucommander.job.impl.MkdirJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
@@ -128,7 +128,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
 
 
     /**
-     * Starts an {@link com.mucommander.job.MkdirJob}. This method is trigged by the 'OK' button or the return key.
+     * Starts an {@link com.mucommander.job.impl.MkdirJob}. This method is trigged by the 'OK' button or the return key.
      */
     public void startJob() {
         String enteredPath = pathField.getText();

@@ -37,9 +37,9 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Arik Hadas
  */
-public class AddTabAction extends MuAction {
+public class NewTabAction extends MuAction {
 
-	public AddTabAction(MainFrame mainFrame, Map<String,Object> properties) {
+	public NewTabAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,12 +56,12 @@ public class AddTabAction extends MuAction {
 	public static class Factory implements ActionFactory {
 
 		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new AddTabAction(mainFrame, properties);
+			return new NewTabAction(mainFrame, properties);
 		}
     }
 
 	public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "AddTab";
+    	public static final String ACTION_ID = "NewTab";
     	
 		public String getId() { return ACTION_ID; }
 

@@ -50,7 +50,7 @@ public abstract class PopupButton extends NonFocusableButton {
     private long popupMenuClosedTime;
 
     /** Non-null while popup menu is visible */
-    private JPopupMenu popupMenu;
+    protected JPopupMenu popupMenu;
 
     /** Location of the popup menu, relative to the button */
     private int popupMenuLocation = BOTTOM;

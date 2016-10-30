@@ -20,23 +20,25 @@ package com.mucommander.ui.action.impl;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.impl.local.LocalFile;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.job.TempExecJob;
+import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
@@ -90,7 +92,7 @@ public class OpenAction extends MuAction {
      * @param file        file to open.
      * @param destination if <code>file</code> is browsable, folder panel in which to open the file.
      */
-    protected void open(final AbstractFile file, FolderPanel destination) {
+    protected void open(AbstractFile file, FolderPanel destination) {
     	AbstractFile resolvedFile;
     	if (file.isSymlink()) {
     		resolvedFile = resolveSymlink(file);
@@ -106,12 +108,29 @@ public class OpenAction extends MuAction {
         // Opens browsable files in the destination FolderPanel.
         if(resolvedFile.isBrowsable()) {
         	resolvedFile = MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS) ? resolvedFile : file;
-
         	FileTableTabs tabs = destination.getTabs();
-        	if (tabs.getCurrentTab().isLocked())
-        		tabs.add(resolvedFile);
-        	else
-        		destination.tryChangeCurrentFolder(resolvedFile);
+
+        	if (BookmarkManager.isBookmark(resolvedFile.getURL())) {
+        		String bookmarkLocation = BookmarkManager.getBookmark(resolvedFile.getName()).getLocation();
+        		FileURL bookmarkURL;
+				try {
+					bookmarkURL = FileURL.getFileURL(bookmarkLocation);
+				} catch (MalformedURLException e) {
+					LOGGER.error("Failed to resolve bookmark's location: " + bookmarkLocation);
+					return;
+				}
+
+        		if (tabs.getCurrentTab().isLocked())
+        			tabs.add(bookmarkURL);
+        		else
+        			destination.tryChangeCurrentFolder(bookmarkURL);
+        	}
+        	else {
+        		if (tabs.getCurrentTab().isLocked())
+        			tabs.add(resolvedFile);
+        		else
+        			destination.tryChangeCurrentFolder(resolvedFile);
+        	}
         }
 
         // Opens local files using their native associations.

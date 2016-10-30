@@ -41,7 +41,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.ChangeFileAttributesJob;
+import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ChangePermissionsAction;
@@ -100,7 +100,7 @@ public class ChangePermissionsDialog extends JobDialog
         for(PermissionAccess a : PermissionAccess.reverseValues()) {
             gridPanel.add(new JLabel(Translator.get(a==PermissionAccess.USER ?"permissions.user":a==PermissionAccess.GROUP?"permissions.group":"permissions.other")));
 
-            for(PermissionType p : PermissionType.values()) {
+            for(PermissionType p : PermissionType.reverseValues()) {
                 permCheckBox = new JCheckBox();
                 permCheckBox.setSelected((defaultPerms & (p.toInt()<<a.toInt()*3))!=0);
 
@@ -188,7 +188,7 @@ public class ChangePermissionsDialog extends JobDialog
         int perms = 0;
 
         for(PermissionAccess a : PermissionAccess.reverseValues()) {
-            for(PermissionType p : PermissionType.values()) {
+            for(PermissionType p : PermissionType.reverseValues()) {
                 permCheckBox = permCheckBoxes[a.toInt()][p.toInt()];
 
                 if(permCheckBox.isSelected())
@@ -223,7 +223,7 @@ public class ChangePermissionsDialog extends JobDialog
         int perms = octalStr.equals("")?0:Integer.parseInt(octalStr, 8);
 
         for(PermissionAccess a : PermissionAccess.reverseValues()) {
-            for(PermissionType p : PermissionType.values()) {
+            for(PermissionType p : PermissionType.reverseValues()) {
                 permCheckBox = permCheckBoxes[a.toInt()][p.toInt()];
 
 //                if(permCheckBox.isEnabled())

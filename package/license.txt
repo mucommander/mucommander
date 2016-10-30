@@ -23,6 +23,7 @@ Additionally, muCommander uses the following third party works:
 - the JNA library under the terms of the GNU Lesser General Public License
 - the JUnRar library under the terms of the GNU Lesser General Public License
 - the Yanfs library under the terms of the Berkeley Software Distribution License
+- the JCommander library under the terms of the Apache License
 - Mark James' icons under the terms of the Creative Commons Attribution License
 
 All the above mentioned licenses are included in this file.

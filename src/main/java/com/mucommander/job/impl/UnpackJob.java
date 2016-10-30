@@ -17,12 +17,14 @@
  */
 
 
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.impl.ProxyFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.job.FileJobAction;
+import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.UnmarkAllAction;

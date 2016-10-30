@@ -106,9 +106,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     }
     
     private void addButtons(String[] actionIds) {
-    	int nbActions = actionIds.length;
-        for(int i=0; i<nbActions; i++) {
-            String actionId = actionIds[i];
+        for (String actionId : actionIds) {
             if(actionId==null)
                 addSeparator(SEPARATOR_DIMENSION);
             else {
@@ -122,17 +120,15 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
         if(USE_MAC_OS_X_CLIENT_PROPERTIES) {
             int nbComponents = getComponentCount();
-            Component comp;
-            boolean hasPrevious, hasNext;
 
             // Set the 'segment position' required for the 'segmented capsule' style  
             for(int i=0; i<nbComponents; i++) {
-                comp = getComponent(i);
+                Component comp = getComponent(i);
                 if(!(comp instanceof JButton))
                     continue;
 
-                hasPrevious = i!=0 && (getComponent(i-1) instanceof JButton);
-                hasNext = i!=nbComponents-1 && (getComponent(i+1) instanceof JButton);
+                boolean hasPrevious = i!=0 && (getComponent(i-1) instanceof JButton);
+                boolean hasNext = i!=nbComponents-1 && (getComponent(i+1) instanceof JButton);
 
                 String segmentPosition;
                 if(hasPrevious && hasNext)

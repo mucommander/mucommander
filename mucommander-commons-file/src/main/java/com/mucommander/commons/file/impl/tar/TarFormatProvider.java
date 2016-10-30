@@ -37,7 +37,7 @@ public class TarFormatProvider implements ArchiveFormatProvider {
 
     /** Static instance of the filename filter that matches archive filenames */
     private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(new String[]
-        {".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".cbt"}
+        {".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".cbt", ".ova"}
     );
 
 

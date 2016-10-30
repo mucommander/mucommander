@@ -16,25 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.job.progress;
+package com.mucommander.job;
 
-import com.mucommander.job.FileJob;
-import com.mucommander.job.FileJobListener;
-import com.mucommander.job.FileJobState;
-
-import javax.swing.*;
-import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.event.EventListenerList;
 
 /**
  * A class that monitors jobs progress.
- * @author Mariusz Jakubowski
+ * @author Arik Hadas, Mariusz Jakubowski
  *
  */
-public class JobProgressMonitor implements FileJobListener {
+public class JobsManager implements FileJobListener {
 	
     /** Controls how often should current file label be refreshed (in ms) */
 	private final static int CURRENT_FILE_LABEL_REFRESH_RATE = 100;
@@ -52,25 +51,26 @@ public class JobProgressMonitor implements FileJobListener {
 	private EventListenerList listenerList = new EventListenerList();
 	
 	/** A list of monitored jobs. */
-	private List<FileJob> jobs = new ArrayList<FileJob>();
+	private List<FileJob> jobs;
 
 	/** An instance of this class */
-	private static final JobProgressMonitor instance = new JobProgressMonitor();
+	private static final JobsManager instance = new JobsManager();
 		
 	
 	/**
-	 * Creates a new JobProgressMonitor instance.
+	 * Creates a new JobsManager instance.
 	 */
-	private JobProgressMonitor() {
+	private JobsManager() {
 		JobProgressTimer timerListener = new JobProgressTimer(); 
     	progressTimer = new Timer(CURRENT_FILE_LABEL_REFRESH_RATE, timerListener);
+    	jobs  = new ArrayList<>();
 	}
 	
 	/**
-	 * Returns the instance of JobProgressMonitor.
-	 * @return the instance of JobProgressMonitor.
+	 * Returns the instance of JobsManager.
+	 * @return the instance of JobsManager.
 	 */
-	public static JobProgressMonitor getInstance() {
+	public static JobsManager getInstance() {
 		return instance;
 	}
     
@@ -79,94 +79,71 @@ public class JobProgressMonitor implements FileJobListener {
      * Adds a listener to the list that's notified each time a job 
      * progress is updated.
      *
-     * @param	l		the JobProgressListener
+     * @param	l		the JobListener
      */
-    public void addJobProgressListener(JobProgressListener l) {
-    	listenerList.add(JobProgressListener.class, l);
+    public void addJobListener(JobListener l) {
+    	listenerList.add(JobListener.class, l);
     }
 
     /**
      * Removes a listener from the list that's notified each time job
      * progress is updated.
      *
-     * @param	l		the JobProgressListener
+     * @param	l		the JobListener
      */
-    public void removeJobProgressListener(JobProgressListener l) {
-    	listenerList.remove(JobProgressListener.class, l);
+    public void removeJobListener(JobListener l) {
+    	listenerList.remove(JobListener.class, l);
     }
 
     /**
      * Forwards the progress notification event to all
-     * <code>JobProgressListeners</code> that registered
+     * <code>JobListeners</code> that registered
      * themselves as listeners.
      * @param source a job for which the progress has been updated
      * @param fullUpdate if false only file label has been updated 
      * 
-     * @see #addJobProgressListener
-     * @see JobProgressListener#jobProgress
+     * @see #addJobListener
+     * @see JobListener#jobProgress
      */
     private void fireJobProgress(FileJob source, boolean fullUpdate) {
-		int idx = jobs.indexOf(source);
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobProgressListener)listeners[i+1]).jobProgress(source, idx, fullUpdate);
+    		((JobListener)listeners[i+1]).jobProgress(source, fullUpdate);
     	}
     }
     
-    /**
-     * Forwards the job added notification event to all
-     * <code>JobProgressListeners</code> that registered
-     * themselves as listeners.
-     * @param source an added job 
-     * @param idx index of a job in a list 
-     * 
-     * @see #addJobProgressListener
-     * @see JobProgressListener#jobAdded(FileJob, int)
-     */
-    private void fireJobAdded(FileJob source, int idx) {
+    private void fireJobAdded(FileJob source) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobProgressListener)listeners[i+1]).jobAdded(source, idx);
+    		((JobListener)listeners[i+1]).jobAdded(source);
     	}    	
     }
     
-    /**
-     * Forwards the job removed notification event to all
-     * <code>JobProgressListeners</code> that registered
-     * themselves as listeners.
-     * @param source a removed job
-     * @param idx index of a job in a list 
-     * 
-     * @see #addJobProgressListener
-     * @see JobProgressListener#jobRemoved(FileJob, int)
-     */
-    private void fireJobRemoved(FileJob source, int idx) {
+    private void fireJobRemoved(FileJob source) {
     	Object[] listeners = listenerList.getListenerList();
     	for (int i = listeners.length-2; i>=0; i-=2) {
-    		((JobProgressListener)listeners[i+1]).jobRemoved(source, idx);
+    		((JobListener)listeners[i+1]).jobRemoved(source);
     	}    	
     }
 
     /**
      * Adds a new job to the list of monitored jobs. 
      * This method is executed in Swing Thread (EDT).
-     * After adding a new job a {@link JobProgressListener#jobAdded(FileJob, int)} 
+     * After adding a new job a {@link JobListener#jobAdded(FileJob, int)} 
      * event is fired.
      * @param job a job to be added
      */
     public void addJob(final FileJob job) {
     	// ensure that this method is called in EDT
     	if (!SwingUtilities.isEventDispatchThread()) {
-    		SwingUtilities.invokeLater(new Runnable() {
-    			public void run() {
-    				addJob(job);
-    			}
-    		});
+    		SwingUtilities.invokeLater(() -> addJob(job));
+    		return;
     	}
 
     	jobs.add(job);
-    	int idx = jobs.size() - 1;
-		fireJobAdded(job, idx);    			
+    	if (job.isRunInBackground()) {
+    	    fireJobAdded(job);
+    	}
     	if (!progressTimer.isRunning()) {
     		progressTimer.start();
     	}
@@ -176,28 +153,22 @@ public class JobProgressMonitor implements FileJobListener {
     /**
      * Removes a job from a list of monitored jobs.
      * This method is executed in Swing Thread (EDT).
-     * After adding a new job a {@link JobProgressListener#jobRemoved(FileJob, int)} 
+     * After adding a new job a {@link JobListener#jobRemoved(FileJob, int)} 
      * event is fired.
      * @param job a job to be removed
      */
     public void removeJob(final FileJob job) {
     	// ensure that this method is called in EDT
     	if (!SwingUtilities.isEventDispatchThread()) {
-    		SwingUtilities.invokeLater(new Runnable() {
-    			public void run() {
-    				removeJob(job);
-    			}
-    		});
+    		SwingUtilities.invokeLater(() -> removeJob(job));
+    		return;
     	}
 
-    	int idx = jobs.indexOf(job);
-		if (idx != -1) {
-			jobs.remove(idx);
-		}
+    	jobs.remove(job);
+        fireJobRemoved(job);
 		if (jobs.isEmpty()) {
 			progressTimer.stop();
 		}
-		fireJobRemoved(job, idx);
 		job.removeFileJobListener(this);
     }
     
@@ -209,6 +180,11 @@ public class JobProgressMonitor implements FileJobListener {
 		return jobs.size();
 	}
 
+	public List<FileJob> getBackgroundJobs() {
+	    return jobs.stream()
+	            .filter(FileJob::isRunInBackground)
+	            .collect(Collectors.toList());
+	}
 	
 	/**
 	 * Returns a progress of a job with specified index.
@@ -227,21 +203,25 @@ public class JobProgressMonitor implements FileJobListener {
 	 * A {@link FileJobListener} implementation.
 	 * Removes a finished job after a small delay.
 	 */
+	@Override
 	public void jobStateChanged(final FileJob source, FileJobState oldState, FileJobState newState) {
 		if (newState == FileJobState.FINISHED || newState == FileJobState.INTERRUPTED) {
-			ActionListener jobToRemove = new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					removeJob(source);					
-				}
-			}; 
+			ActionListener jobToRemove = event -> removeJob(source);
 			Timer timer = new Timer(FINISHED_JOB_REMOVE_TIME, jobToRemove);
 			timer.setRepeats(false);
 			timer.start();
 		}		
 	}
-	
-	
-	
+
+	@Override
+	public void jobExecutionModeChanged(FileJob source, boolean background) {
+	    if (background)
+	        fireJobAdded(source);
+	    else
+	        fireJobRemoved(source);
+	}
+
+
 	/**
      * 
      * This class implements a listener for a job progress timer.
@@ -250,7 +230,7 @@ public class JobProgressMonitor implements FileJobListener {
 	private class JobProgressTimer implements ActionListener {
 		
 		/** a loop index indicating if this refresh is partial (label only) or full */
-		private int loopCount = 0;
+		private int loopCount;
 
 		public void actionPerformed(ActionEvent e) {
 			loopCount++;
@@ -264,10 +244,9 @@ public class JobProgressMonitor implements FileJobListener {
 			}
 			
 			// for each job calculate new progress and notify listeners
-			for(FileJob job : jobs) {
-				boolean updateFullUI;
+			for (FileJob job : jobs) {
 				JobProgress jobProgress = job.getJobProgress();
-				updateFullUI = jobProgress.calcJobProgress(fullUpdate);
+				boolean updateFullUI = jobProgress.calcJobProgress(fullUpdate);
 				fireJobProgress(job, updateFullUI);
 			}
 			

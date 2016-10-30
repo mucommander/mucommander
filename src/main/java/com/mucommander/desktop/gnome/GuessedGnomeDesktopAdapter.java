@@ -22,15 +22,21 @@ import com.mucommander.process.ProcessRunner;
 
 /**
  * 'Guessed' desktop adapter for GNOME. The availability of this desktop depends on the presence of the
- * <code>gnome-open</code> command.
+ * <code>gvfs-open</code> command or the <code>gnome-open</code> command.
  * 
- * @author Nicolas Rinaudo
+ * @author Nicolas Rinaudo, Arik Hadas
  */
 public class GuessedGnomeDesktopAdapter extends GnomeDesktopAdapter {
     public String toString() {return "Gnome Desktop (guessed)";}
 
     @Override
     public boolean isAvailable() {
+        try {
+            ProcessRunner.execute("gvfs-open");
+            return true;
+        }
+        catch(Exception e) {}
+
         try {
             ProcessRunner.execute("gnome-open");
             return true;

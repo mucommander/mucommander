@@ -226,6 +226,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertDetailedUrl(doc,    "JNA",                 "LGPL",                                 "http://jna.dev.java.net");
             insertDetailedUrl(doc,    "JUnRar",              "Freeware",                             "http://sourceforge.net/projects/java-unrar");
             insertDetailedUrl(doc,    "Yanfs",               "BSD",                                  "http://yanfs.dev.java.net");
+            insertDetailedUrl(doc,    "JCommander",          "Apache License",                       "http://jcommander.org");
             insertDetailedUrl(doc,    "Mark James' icons",   "Creative Commons Attribution License", "http://famfamfam.com");
             insertLineBreak(doc);
 
@@ -248,6 +249,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertHeader(doc,         "muCommander");
             insertNormalString(doc,   "Version: " + RuntimeConstants.VERSION);
             insertNormalString(doc,   "Build date: " + getFormatedDate());
+            insertNormalString(doc,   "Build number: " +  RuntimeConstants.BUILD_NUMBER);
             insertLineBreak(doc);
 
             // VM information.

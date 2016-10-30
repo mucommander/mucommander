@@ -54,10 +54,10 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobListener;
 import com.mucommander.job.FileJobState;
-import com.mucommander.job.TransferFileJob;
-import com.mucommander.job.progress.JobProgress;
-import com.mucommander.job.progress.JobProgressListener;
-import com.mucommander.job.progress.JobProgressMonitor;
+import com.mucommander.job.JobProgress;
+import com.mucommander.job.JobListener;
+import com.mucommander.job.JobsManager;
+import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -76,7 +76,7 @@ import com.mucommander.ui.main.StatusBar;
  *
  * @author Maxence Bernard
  */
-public class ProgressDialog extends FocusDialog implements ActionListener, ItemListener, ChangeListener, FileJobListener, JobProgressListener {
+public class ProgressDialog extends FocusDialog implements ActionListener, ItemListener, ChangeListener, FileJobListener, JobListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProgressDialog.class);
 	
     private JLabel currentFileLabel;
@@ -98,7 +98,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     private JButton skipButton;
     private JButton stopButton;
     private JCheckBox closeWhenFinishedCheckBox;
-//    private JButton hideButton;
+    private JButton hideButton;
 
     private FileJob job;
     private TransferFileJob transferFileJob;
@@ -110,11 +110,12 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     private final static String PAUSE_ICON = "pause.png";
     private final static String SKIP_ICON = "skip.png";
     private final static String STOP_ICON = "stop.png";
+    private final static String HIDE_ICON = "hide.png";
     private final static String CURRENT_SPEED_ICON = "speed.png";
 
-    // Dialog width is constrained to 320, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(320,10000);
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
+    // Dialog width is constrained to 410, height is not an issue (always the same)
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(410,10000);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(410,0);
 
     /** Height allocated to the 'speed graph' */
     private final static int SPEED_GRAPH_HEIGHT = 80;
@@ -230,11 +231,13 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         stopButton = new JButton(Translator.get("stop"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, STOP_ICON));
         stopButton.addActionListener(this);
 
-//        hideButton = new JButton(Translator.get("progress_dialog.hide"));
-//        hideButton.addActionListener(this);
+        hideButton = new JButton(Translator.get("progress_dialog.hide"), IconManager.getIcon(IconManager.PROGRESS_ICON_SET, HIDE_ICON));
+        hideButton.addActionListener(this);
 
         this.buttonsChoicePanel = new ButtonChoicePanel(
-                skipButton==null?new JButton[] {pauseResumeButton, stopButton}:new JButton[] {pauseResumeButton, skipButton, stopButton},
+                skipButton==null ?
+                        new JButton[] {pauseResumeButton, stopButton, hideButton} :
+                            new JButton[] {pauseResumeButton, skipButton, stopButton, hideButton},
                 0, getRootPane());
         contentPane.add(buttonsChoicePanel, BorderLayout.SOUTH);
 
@@ -252,15 +255,20 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         // Listen to job state changes
         job.addFileJobListener(this);
 
-        if(job instanceof TransferFileJob)
+        if (job instanceof TransferFileJob)
             this.transferFileJob = (TransferFileJob)job;
 
         initUI();
         
-		JobProgressMonitor.getInstance().addJob(job);
-        JobProgressMonitor.getInstance().addJobProgressListener(this);
+		JobsManager.getInstance().addJob(job);
+        JobsManager.getInstance().addJobListener(this);
 
-        showDialog();
+        if (job.isRunInBackground()) {
+            firstTimeActivated = false;
+            job.start();
+        }
+        else
+            showDialog();
     }
 
 
@@ -268,7 +276,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
      * Stops repaint thread.
      */
     public void stop() {
-    	JobProgressMonitor.getInstance().removeJobProgressListener(this);
+    	JobsManager.getInstance().removeJobListener(this);
     }
 
 
@@ -293,15 +301,18 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     // FileJobListener implementation //
     ////////////////////////////////////
 
+    @Override
     public void jobStateChanged(FileJob source, FileJobState oldState, FileJobState newState) {
         LOGGER.debug("currentThread="+Thread.currentThread()+" oldState="+oldState+" newState="+newState);
 
-        if (newState == FileJobState.INTERRUPTED) {
+        switch (newState) {
+        case INTERRUPTED:
             // Stop repaint thread and dispose dialog
             stop();
             dispose();
-        }
-        else if (newState == FileJobState.FINISHED) {
+            break;
+
+        case FINISHED:
             //  Dispose dialog only if 'Close when finished option' is selected
             if(closeWhenFinishedCheckBox.isSelected()) {
                 // Stop repaint thread and dispose dialog
@@ -325,8 +336,9 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                     speedChooser.setEnabled(false);
                 }
             }
-        }
-        else if (newState == FileJobState.PAUSED) {
+            break;
+
+        case PAUSED:
             pauseResumeButton.setText(Translator.get("resume"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, RESUME_ICON));
 
@@ -335,13 +347,17 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             
             if(transferFileJob!=null)
                 updateCurrentSpeedLabel("N/A");
-        }
-        else if (newState == FileJobState.RUNNING) {
+            break;
+
+        case RUNNING:
             pauseResumeButton.setText(Translator.get("pause"));
             pauseResumeButton.setIcon(IconManager.getIcon(IconManager.PROGRESS_ICON_SET, PAUSE_ICON));
 
             // Update buttons mnemonics
             buttonsChoicePanel.updateMnemonics();
+            break;
+
+        default:
         }
     }
 
@@ -389,16 +405,8 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     /////////////////////////////
     
 
-	public void jobAdded(FileJob source, int idx) {
-		// nothing here		
-	}
-
-
-	public void jobRemoved(FileJob source, int idx) {
-		// nothing here		
-	}
-
-	public void jobProgress(FileJob source, int idx, boolean fullUpdate) {
+    @Override
+	public void jobProgress(FileJob source, boolean fullUpdate) {
 		if (job.equals(source)) {
 			updateProgressLabel(source.getJobProgress());
 			if (fullUpdate) {
@@ -430,9 +438,10 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             // Pause/resume job
             job.setPaused(job.getState() != FileJobState.PAUSED);
         }
-//        else if(source==hideButton) {
-//            mainFrame.setState(Frame.ICONIFIED);
-//        }
+        else if(source==hideButton) {
+            job.setRunInBackground(true);
+            setVisible(false);
+        }
     }
 
 

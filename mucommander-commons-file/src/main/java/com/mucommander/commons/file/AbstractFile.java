@@ -618,7 +618,7 @@ public abstract class AbstractFile implements FileAttributes {
         for(PermissionAccess a : PermissionAccess.reverseValues()) {
 
             if(a==PermissionAccess.USER || (supportedPerms & (7<<bitShift))!=0) {
-                for(PermissionType p : PermissionType.values()) {
+                for(PermissionType p : PermissionType.reverseValues()) {
                     if((perms & (p.toInt()<<bitShift))==0)
                         s += '-';
                     else

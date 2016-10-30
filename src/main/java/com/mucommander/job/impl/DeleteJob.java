@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import java.io.IOException;
 
@@ -30,6 +30,9 @@ import com.mucommander.commons.file.AbstractRWArchiveFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
+import com.mucommander.job.FileJob;
+import com.mucommander.job.FileJobAction;
+import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

@@ -16,45 +16,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.job.progress;
-
-import com.mucommander.job.FileJob;
+package com.mucommander.job;
 
 import java.util.EventListener;
 
 /**
  * Interface to be implemented by classes that wish to be notified of progress changes on a particular
  * {@link FileJob}. Those classes need to be registered to receive those events, this can be done by calling
- * {@link JobProgressMonitor#addJobProgressListener(JobProgressListener)}.
+ * {@link JobsManager#addJobListener(JobListener)}.
  *
- * @author Mariusz Jakubowski
+ * @author Mariusz Jakubowski, Arik Hadas
  */
-public interface JobProgressListener extends EventListener {
+public interface JobListener extends EventListener {
 	
 	/**
-     * Called when a new job has been initiated.
+     * Called when a job starts to execute in the background (non-blocking mode).
 	 * 
 	 * @param source a job added
-	 * @param idx index of a job in a job queue
 	 */
-	public void jobAdded(FileJob source, int idx);
+	default void jobAdded(FileJob source) {}
 	
 	/**
-     * Called when a new job has finished and has been removed from the queue.
+     * Called when a job stops to execute in the background (finished/interrupted/switches
+     * to blocking mode).
 	 * 
 	 * @param source a job removed
-	 * @param idx index of a job in a job queue
 	 */
-	public void jobRemoved(FileJob source, int idx);
+	default void jobRemoved(FileJob source) {}
 
 	/**
      * Called when the progress of the specified FileJob has been updated.
      *
      * @param source the FileJob which progress has been updated
-	 * @param idx index of a job in a job queue
      * @param fullUpdate if false indicates that only file label has been updated
      * @see JobProgress#calcJobProgress
      */
-	public void jobProgress(FileJob source, int idx, boolean fullUpdate);
+	default void jobProgress(FileJob source, boolean fullUpdate) {}
 	
 }

@@ -17,10 +17,12 @@
  */
 
 
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.job.FileJob;
+import com.mucommander.job.FileJobState;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;

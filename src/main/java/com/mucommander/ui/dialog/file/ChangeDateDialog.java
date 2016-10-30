@@ -21,7 +21,7 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.ChangeFileAttributesJob;
+import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;

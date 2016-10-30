@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.job.TransferFileJob;
+import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.icon.SpinningDial;
@@ -78,6 +78,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     private JComboBox fileExistsActionComboBox;
     private JCheckBox skipErrorsCheckBox;
     private JCheckBox verifyIntegrityCheckBox;
+    private JCheckBox runInBackgroundCheckBox;
     private JButton okButton;
 
     /** Background thread that is currently being executed, <code>null</code> if there is none. */
@@ -142,14 +143,17 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
                 fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
             mainPanel.add(fileExistsActionComboBox);
 
+            mainPanel.addSpace(10);
+
             skipErrorsCheckBox = new JCheckBox(Translator.get("destination_dialog.skip_errors"));
             mainPanel.add(skipErrorsCheckBox);
 
             verifyIntegrityCheckBox = new JCheckBox(Translator.get("destination_dialog.verify_integrity"));
             mainPanel.add(verifyIntegrityCheckBox);
-
-            mainPanel.addSpace(10);
         }
+
+        runInBackgroundCheckBox = new JCheckBox(Translator.get("destination_dialog.run_in_background"));
+        mainPanel.add(runInBackgroundCheckBox);
 
         getContentPane().add(mainPanel, BorderLayout.NORTH);
 
@@ -161,7 +165,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         okButton.setEnabled(false);
         JButton cancelButton = new JButton(Translator.get("cancel"));
 
-        YBoxPanel buttonsPanel = new YBoxPanel();
+        YBoxPanel buttonsPanel = new YBoxPanel(10);
         buttonsPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
                 DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
         buttonsPanel.add(fileDetailsPanel);
@@ -265,10 +269,12 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @param resolvedDest the resolved destination
      */
     private void startJob(PathUtils.ResolvedDestination resolvedDest) {
-        int defaultFileExistsAction;
-        boolean skipErrors;
-        boolean verifyIntegrity;
-        if(enableTransferOptions) {
+        int defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
+        boolean skipErrors = false;
+        boolean verifyIntegrity = false;
+        boolean runInBackground = runInBackgroundCheckBox.isSelected();
+
+        if (enableTransferOptions) {
             // Retrieve default action when a file exists in destination, default choice
             // (if not specified by the user) is 'Ask'
             defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
@@ -282,11 +288,6 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             skipErrors = skipErrorsCheckBox.isSelected();
             verifyIntegrity = verifyIntegrityCheckBox.isSelected();
         }
-        else {
-            defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
-            skipErrors = false;
-            verifyIntegrity = false;
-        }
 
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, getProgressDialogTitle());
         TransferFileJob job = createTransferFileJob(progressDialog, resolvedDest, defaultFileExistsAction);
@@ -294,6 +295,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         if(job!=null) {
             job.setAutoSkipErrors(skipErrors);
             job.setIntegrityCheckEnabled(verifyIntegrity);
+            job.setRunInBackground(runInBackground);
             progressDialog.start(job);
         }
     }
