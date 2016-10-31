@@ -21,6 +21,7 @@ package com.mucommander.text;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,33 +72,33 @@ public class Translator {
     }
 
     static {
-    	registerLocale(new Locale("AR"));
-    	registerLocale(new Locale("BE"));
-    	registerLocale(new Locale("CA"));
-    	registerLocale(new Locale("CS"));
-    	registerLocale(new Locale("DA"));
-    	registerLocale(new Locale("DE"));
-    	registerLocale(new Locale("EN"));
-    	registerLocale(new Locale("EN", "GB"));
-    	registerLocale(new Locale("ES"));
-    	registerLocale(new Locale("FR"));
-    	registerLocale(new Locale("HU"));
-    	registerLocale(new Locale("IT"));
-    	registerLocale(new Locale("JA"));
-    	registerLocale(new Locale("KO"));
-    	registerLocale(new Locale("NB"));
-    	registerLocale(new Locale("NL"));
-    	registerLocale(new Locale("PL"));
-    	registerLocale(new Locale("PT", "BR"));
-    	registerLocale(new Locale("RO"));
-    	registerLocale(new Locale("RU"));
-    	registerLocale(new Locale("SK"));
-    	registerLocale(new Locale("SL"));
-    	registerLocale(new Locale("SV"));
-    	registerLocale(new Locale("TR"));
-    	registerLocale(new Locale("UK"));
-    	registerLocale(new Locale("ZH", "CN"));
-    	registerLocale(new Locale("ZH", "TW"));
+    	registerLocale(Locale.forLanguageTag("ar"));
+    	registerLocale(Locale.forLanguageTag("be"));
+    	registerLocale(Locale.forLanguageTag("ca"));
+    	registerLocale(Locale.forLanguageTag("cs"));
+    	registerLocale(Locale.forLanguageTag("da"));
+    	registerLocale(Locale.forLanguageTag("de"));
+    	registerLocale(Locale.forLanguageTag("en"));
+    	registerLocale(Locale.forLanguageTag("en-GB"));
+    	registerLocale(Locale.forLanguageTag("es"));
+    	registerLocale(Locale.forLanguageTag("fr"));
+    	registerLocale(Locale.forLanguageTag("hu"));
+    	registerLocale(Locale.forLanguageTag("it"));
+    	registerLocale(Locale.forLanguageTag("ja"));
+    	registerLocale(Locale.forLanguageTag("ko"));
+    	registerLocale(Locale.forLanguageTag("nb"));
+    	registerLocale(Locale.forLanguageTag("nl"));
+    	registerLocale(Locale.forLanguageTag("pl"));
+    	registerLocale(Locale.forLanguageTag("pt-BR"));
+    	registerLocale(Locale.forLanguageTag("ro"));
+    	registerLocale(Locale.forLanguageTag("ru"));
+    	registerLocale(Locale.forLanguageTag("sk"));
+    	registerLocale(Locale.forLanguageTag("sl"));
+    	registerLocale(Locale.forLanguageTag("sv"));
+    	registerLocale(Locale.forLanguageTag("tr"));
+    	registerLocale(Locale.forLanguageTag("uk"));
+    	registerLocale(Locale.forLanguageTag("zh-CN"));
+    	registerLocale(Locale.forLanguageTag("zh-TW"));
     }
 
     public static void registerLocale(Locale locale) {
@@ -116,7 +117,7 @@ public class Translator {
     	}
 
     	LOGGER.info("Using language set in preferences: "+localeNameFromConf);
-    	return localeNameFromConf.contains("_") ? new Locale(localeNameFromConf.split("_")[0], localeNameFromConf.split("_")[1]) : new Locale(localeNameFromConf);
+    	return Locale.forLanguageTag(localeNameFromConf.replace('_', '-'));
     }
 
 	private static final class Utf8ResourceBundleControl extends ResourceBundle.Control {
@@ -130,7 +131,7 @@ public class Translator {
 			URL resourceURL = loader.getResource(resourceName);
 			if (resourceURL != null) {
 				try {
-					return new PropertyResourceBundle(new InputStreamReader(resourceURL.openStream(), "UTF-8"));
+					return new PropertyResourceBundle(new InputStreamReader(resourceURL.openStream(), StandardCharsets.UTF_8));
 				} catch (Exception e) {
 		            LOGGER.debug("Language "+locale+" failed to load, non english characters might be broken",e);
 				}
@@ -156,7 +157,7 @@ public class Translator {
         dictionaryBundle = new Translator.ResolveVariableResourceBundle(resourceBundle);
 
         // Set preferred language in configuration file
-        MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, locale.toString());
+        MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, locale.toLanguageTag());
 
         LOGGER.debug("Current language has been set to "+Translator.language);
 
