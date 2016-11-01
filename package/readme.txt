@@ -44,6 +44,7 @@ Localization:
 
 Bug fixes:
 - Fix opening bookmarks that refer to remote files.
+- Fix switching to a specific window using keyboard shortcut.
 
 Known issues:
 - Some translations may not be up-to-date.
