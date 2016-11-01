@@ -18,11 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
+import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
-
-import java.util.Map;
 
 /**
  * Recalls window number 1 (brings it to the front). 
@@ -41,7 +42,12 @@ public class RecallWindow1Action extends RecallWindowAction {
 			return new RecallWindow1Action(mainFrame, properties);
 		}
     }
-    
+
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
+
     public static class Descriptor extends RecallWindowAction.Descriptor {
         public static final String ACTION_ID = RecallWindowAction.Descriptor.ACTION_ID+"1";
 
