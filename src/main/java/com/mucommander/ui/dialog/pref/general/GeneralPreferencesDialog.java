@@ -60,10 +60,12 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     public static final int FOLDERS_TAB    = 1;
     /** Identifier of the 'appearance' tab. */
     public static final int APPEARANCE_TAB = 2;
+    /** Identifier of the 'shortcuts' tab. */
+    public static final int SHORTCUTS_TAB  = 3;
     /** Identifier of the 'mail' tab. */
-    public static final int MAIL_TAB       = 3;
+    public static final int MAIL_TAB       = 4;
     /** Identifier of the 'misc' tab. */
-    public static final int MISC_TAB       = 4;
+    public static final int MISC_TAB       = 5;
 
 
 
