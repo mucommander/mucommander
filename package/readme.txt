@@ -33,8 +33,8 @@ What's new since v0.9.1 ?
 -----------------------
 
 New features:
-- Support for OVA (virtual appliance) files, treat them as tar files.
 - Add the ability to execute file operations in the background (non-blocking mode).
+- Support for OVA (virtual appliance) files, treat them as tar files.
 
 Improvements:
 - Add 'new tab' action to the toolbar and menu bar.
@@ -45,6 +45,7 @@ Localization:
 Bug fixes:
 - Fix opening bookmarks that refer to remote files.
 - Fix switching to a specific window using keyboard shortcut.
+- Files are launched according to the native file association on Gnome (regression introduced in 0.9.1). 
 
 Known issues:
 - Some translations may not be up-to-date.
