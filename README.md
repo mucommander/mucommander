@@ -12,18 +12,27 @@ It runs on any operating system with Java support (Mac OS X, Windows, Linux, *BS
 Official website: http://www.mucommander.com  
 Copyright (C) 2002-2016 Maxence Bernard.
 
+Contribution
+------------
+
+There are several ways to contribute to muCommander:  
+
+- Found a bug or thinking about a useful feature that is missing? [File an issue](https://github.com/mucommander/mucommander/issues)
+- Want to fix a bug or implement a feature? We are using the standard [GitHub flow](https://guides.github.com/introduction/flow/): fork, make the changes and submit a pull request. Changes are merged to the *master* branch. See the next section for tips for developing muCommander.
+- If you happen to speak a language that muCommander is not available in or able to improve existing tranlations, you can help translate the interface using the [zanata platform](https://translate.zanata.org/project/view/mucommander).
 
 Development
 -----------
 
-**Prerequisites**  
- - Java Development Kit (JDK) 1.6 or later  
- - Git  
+**Prerequisites**
+
+  - Java Development Kit (JDK) 1.6 or later  
+  - Git
 
 **Code Editing**  
 After cloning the source code repository from GitHub, you would probably want to import the project to an Integrated Development Environment (IDE) such as Eclipse or IntelliJ.
 
-The code repository of muCommander is comprised of a main project that contains its core functionality and several sub-projects. These projects are defined as Gradle projects. Most of the popular IDEs today allow you to import Gradle projects out-of-the-box or via an IDE plugin. By importing the main project that is located at the root directory of the repository you will get all the required code in the IDE.
+The code repository of muCommander is comprised of a main project that contains its core functionality and several sub-projects. These projects are Gradle projects. Most of the popular IDEs today allow you to import Gradle projects out-of-the-box or via an IDE plugin. By importing the main project that is located at the root directory of the repository you will get all the required code in the IDE.
 
 **Build from Command Line**  
 The use of Gradle wrapper significantely simplifies the build from the command line. The following commands can be invoked from the root directory of the repositoring with no further installation.
@@ -38,6 +47,8 @@ It is recommended that whenever you get unclear compilation error and before sub
 ./gradlew clean run
 ```    
 
+**Packaging**  
+TODO
 License
 -------
 
