@@ -18,6 +18,8 @@
 
 package com.mucommander.desktop.gnome;
 
+import com.mucommander.process.ProcessRunner;
+
 /**
  * @author Nicolas Rinaudo
  */
@@ -31,5 +33,22 @@ public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
         String var = System.getenv(ENV_VAR);
 
         return var != null && !var.trim().equals("");
+    }
+
+    @Override
+    protected String getFileOpenerCommand() {
+        try {
+            ProcessRunner.execute(GVFS_OPEN);
+            return GVFS_OPEN;
+        }
+        catch(Exception e) {}
+
+        try {
+            ProcessRunner.execute(GNOME_OPEN);
+            return GNOME_OPEN;
+        }
+        catch(Exception e) {}
+
+        return XDG_OPEN;
     }
 }

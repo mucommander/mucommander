@@ -38,8 +38,11 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeDesktopAdapter.class);
 	
     private static final String FILE_MANAGER_NAME = "Nautilus";
-    private static final String FILE_OPENER       = "xdg-open $f";
     private static final String EXE_OPENER        = "$f";
+
+    protected static final String GVFS_OPEN  = "gvfs-open";
+    protected static final String GNOME_OPEN = "gnome-open";
+    protected static final String XDG_OPEN   = "xdg-open";
 
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
     private int multiClickInterval;
@@ -50,16 +53,19 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
     @Override
     public abstract boolean isAvailable();
 
+    protected abstract String getFileOpenerCommand();
+
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
         // Initialises trash management.
         DesktopManager.setTrashProvider(new GnomeTrashProvider());
-        
+
+        String fileOpener = String.format("%s $f", getFileOpenerCommand());
         try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER,  CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  fileOpener, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   fileOpener, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, fileOpener, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
 
             // Disabled actual permissions checking as this will break normal +x files.
             // With this, a +x PDF file will not be opened.
