@@ -61,10 +61,10 @@ class CommandOpen extends LocalFileOperation {
 
     @Override
     public void execute(AbstractFile file) throws IOException {
-        Command command;
+        Command command = CommandManager.getCommandForFile(file, allowDefault);
 
         // Attemps to find a command that matches the specified target.
-        if((command = CommandManager.getCommandForFile(file, allowDefault)) == null)
+        if (command == null)
             throw new UnsupportedOperationException();
 
         // If found, executes it.

@@ -59,17 +59,13 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     @Override
     public boolean isLeftMouseButton(MouseEvent e) {
-        int modifiers;
-
-        modifiers = e.getModifiers();
+        int modifiers = e.getModifiers();
         return (modifiers & MouseEvent.BUTTON1_MASK) != 0 && !e.isControlDown();
     }
 
     @Override
     public boolean isRightMouseButton(MouseEvent e) {
-        int modifiers;
-
-        modifiers = e.getModifiers();
+        int modifiers = e.getModifiers();
         return (modifiers & MouseEvent.BUTTON3_MASK) != 0 || ((modifiers & MouseEvent.BUTTON1_MASK) != 0 && e.isControlDown());
     }
 

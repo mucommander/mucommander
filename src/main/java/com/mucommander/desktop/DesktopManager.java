@@ -204,12 +204,10 @@ public class DesktopManager {
      * @throws DesktopInitialisationException if an error occured while initialising desktops.
      */
     public static void init(boolean install) throws DesktopInitialisationException {
-        DesktopAdapter current;
-
         // Browses desktop from the last registered to the first, to make sure that
         // custom desktop adapters are used before the default ones.
         for(int i = desktops.size() - 1; i >= 0; i--) {
-            current = desktops.elementAt(i);
+            DesktopAdapter current = desktops.elementAt(i);
             if(current.isAvailable()) {
                 desktop = current;
                 LOGGER.debug("Using desktop: " + desktop);
@@ -256,14 +254,13 @@ public class DesktopManager {
      * Registers the specified operation for the specified type and priority.
      */
     private static void innerRegisterOperation(String type, int priority, DesktopOperation operation) {
-        List<DesktopOperation> container;
-
         // Makes sure we have a container for operations of the specified priority.
         if(operations[priority] == null)
             operations[priority] = new Hashtable<String, List<DesktopOperation>>();
 
+        List<DesktopOperation> container = operations[priority].get(type);
         // Makes sure we have a container for operations of the specified type.
-        if((container = operations[priority].get(type)) == null)
+        if (container == null)
             operations[priority].put(type, container = new Vector<DesktopOperation>());
 
         // Creates the requested entry.
@@ -288,26 +285,28 @@ public class DesktopManager {
     }
 
     private static DesktopOperation getAvailableOperation(String type, int priority) {
-        DesktopOperation       operation;
-        List<DesktopOperation> container;
+        List<DesktopOperation> container = getOperations(type, priority);
 
         // If the operation vector is null, no need to look further.
-        if((container = getOperations(type, priority)) != null)
-            for(int i = container.size() - 1; i >= 0; i--)
-                if((operation = container.get(i)).isAvailable())
+        if((container ) != null)
+            for(int i = container.size() - 1; i >= 0; i--) {
+                DesktopOperation operation = container.get(i); 
+                if (operation.isAvailable())
                     return operation;
+            }
         return null;
     }
 
     private static DesktopOperation getSupportedOperation(String type, int priority, Object[] target) {
-        DesktopOperation       operation;
-        List<DesktopOperation> container;
+        List<DesktopOperation> container = getOperations(type, priority);
 
         // If the operation vector is null, no need to look further.
-        if((container = getOperations(type, priority)) != null)
-            for(int i = container.size() - 1; i >= 0; i--)
-                if((operation = container.get(i)).canExecute(target))
+        if (container != null)
+            for(int i = container.size() - 1; i >= 0; i--) {
+                DesktopOperation operation = container.get(i);
+                if (operation.canExecute(target))
                     return operation;
+            }
         return null;
     }
 
@@ -340,27 +339,27 @@ public class DesktopManager {
     public static boolean isOperationSupported(String type, Object[] target) {return getSupportedOperation(type, target) != null;}
 
     public static void executeOperation(String type, Object[] target) throws IOException, UnsupportedOperationException {
-        DesktopOperation operation;
+        DesktopOperation operation = getSupportedOperation(type, target);
 
-        if((operation = getSupportedOperation(type, target)) != null)
+        if (operation!= null)
             operation.execute(target);
         else
             throw new UnsupportedOperationException();
     }
 
     public static String getOperationName(String type) throws UnsupportedOperationException {
-        DesktopOperation operation;
+        DesktopOperation operation = getAvailableOperation(type);
 
-        if((operation = getAvailableOperation(type)) != null)
+        if (operation != null)
             return operation.getName();
         throw new UnsupportedOperationException();
 
    }
 
     public static String getOperationName(String type, Object[] target) throws UnsupportedOperationException {
-        DesktopOperation operation;
+        DesktopOperation operation = getSupportedOperation(type, target);
 
-        if((operation = getSupportedOperation(type, target)) != null)
+        if (operation != null)
             return operation.getName();
         throw new UnsupportedOperationException();
     }
@@ -448,12 +447,8 @@ public class DesktopManager {
      * @return an instance of the AbstractTrash implementation that can be used on the current platform, or <code>null</code> if none is available.
      */
     public static AbstractTrash getTrash() {
-        TrashProvider provider;
-
-        if((provider = getTrashProvider()) == null)
-            return null;
-
-        return provider.getTrash();
+        TrashProvider provider = getTrashProvider();
+        return provider == null ? null : provider.getTrash();
     }
 
     /**

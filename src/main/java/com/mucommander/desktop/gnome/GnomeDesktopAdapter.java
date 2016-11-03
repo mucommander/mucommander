@@ -61,7 +61,6 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER,  CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
 
-            FileFilter filter;
             // Disabled actual permissions checking as this will break normal +x files.
             // With this, a +x PDF file will not be opened.
             /*
@@ -70,7 +69,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
                 filter = new PermissionsFileFilter(PermissionTypes.EXECUTE_PERMISSION, true);
             else
             */
-                filter = new RegexpFilenameFilter("[^.]+", true);
+            FileFilter filter = new RegexpFilenameFilter("[^.]+", true);
 
             CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, filter);
 
