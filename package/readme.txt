@@ -47,6 +47,7 @@ Bug fixes:
 - Fix opening bookmarks that refer to remote files.
 - Fix switching to a specific window using keyboard shortcut.
 - Files are launched according to the native file association on Gnome (regression introduced in 0.9.1). 
+- Show an error message when failing to read a local folder instead of showing it as empty.
 
 Known issues:
 - Some translations may not be up-to-date.

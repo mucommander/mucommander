@@ -239,6 +239,16 @@ public abstract class AbstractFile implements FileAttributes {
         return getName().startsWith(".");
     }
 
+    /**
+     * Return <code>true</code> if the application can read this file.
+     *
+     * TODO: need to be overridden with a correct check for each file type.
+     *
+     * @return true if the application can read this file.
+     */
+    public boolean canRead() {
+        return true;
+    }
 
     /**
      * Returns the root folder of this file, i.e. the top-level parent folder that has no parent folder. The returned

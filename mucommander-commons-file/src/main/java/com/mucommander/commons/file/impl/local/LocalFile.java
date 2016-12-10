@@ -1027,6 +1027,11 @@ public class LocalFile extends ProtocolFile {
         return file.isHidden();
     }
 
+    @Override
+    public boolean canRead() {
+        return file.canRead();
+    }
+
     /**
      * Overridden to play nice with platforms that have root drives -- for those, the drive's root (e.g. <code>C:\</code>)
      * is returned instead of <code>/</code>.
@@ -1398,4 +1403,5 @@ public class LocalFile extends ProtocolFile {
             return filter.accept(name);
         }
     }
+
 }

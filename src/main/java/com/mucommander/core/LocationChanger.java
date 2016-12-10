@@ -385,6 +385,11 @@ public class LocationChanger {
     }
 
 
+    private void showFailedToReadFolderDialog() {
+        InformationDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("failed_to_read_folder"));
+    }
+
+
     /**
      * Displays a popup dialog informing the user that the requested folder couldn't be opened.
      *
@@ -695,6 +700,14 @@ public class LocationChanger {
 								break;
 							}
 
+							if (!file.canRead()) {
+							    // Restore default cursor
+							    mainFrame.setCursor(Cursor.getDefaultCursor());
+
+							    showFailedToReadFolderDialog();
+							    break;
+							}
+
 							// File is a regular directory, all good
 							if(file.isDirectory()) {
 								// Just continue
@@ -768,6 +781,10 @@ public class LocationChanger {
 								showFolderDoesNotExistDialog();
 								break;
 							}
+						}
+						else if (!folder.canRead()) {
+						    showFailedToReadFolderDialog();
+						    break;
 						}
 
 						// Checks if canonical should be followed. If that is the case, the file is invalidated
