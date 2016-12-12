@@ -55,8 +55,6 @@ import javax.swing.table.TableColumnModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jidesoft.swing.DefaultOverlayable;
-import com.jidesoft.swing.StyledLabelBuilder;
 import com.mucommander.commons.collections.Enumerator;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -253,7 +251,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         	}
 
 			private JLabel createRefreshNonExistingLocationLabel() {
-				JLabel label = StyledLabelBuilder.createStyledLabel("{Refresh to reconnect:f:darkGray}");
+				JLabel label = new JLabel("Refresh to reconnect");
                 label.setIcon(MuAction.getStandardIcon(RefreshAction.class));
                 return label;
 			}
