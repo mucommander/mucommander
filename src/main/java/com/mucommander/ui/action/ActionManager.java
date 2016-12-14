@@ -188,6 +188,7 @@ public class ActionManager {
     	registerAction(new CustomizeCommandBarAction.Descriptor(),          new CustomizeCommandBarAction.Factory());
         registerAction(new ShowDebugConsoleAction.Descriptor(),             new ShowDebugConsoleAction.Factory());
         registerAction(new ShowFilePropertiesAction.Descriptor(),           new ShowFilePropertiesAction.Factory());
+        registerAction(new ShowFilePopupMenuAction.Descriptor(),            new ShowFilePopupMenuAction.Factory());
     	registerAction(new ShowKeyboardShortcutsAction.Descriptor(),        new ShowKeyboardShortcutsAction.Factory());
     	registerAction(new ShowParentFoldersQLAction.Descriptor(),          new ShowParentFoldersQLAction.Factory());
     	registerAction(new ShowPreferencesAction.Descriptor(),              new ShowPreferencesAction.Factory());
