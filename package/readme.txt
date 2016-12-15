@@ -40,6 +40,7 @@ Improvements:
 - Add 'new tab' action to the toolbar and menu bar.
 - Show icons of referenced files while exploring bookmarks.
 - Set the initial name of a new directory/file according to the current selection (as it was before 0.9.1).
+- Add a keyboard shortcut (by default mapped to the context menu key) for showing context menu for the selected file.
 
 Localization:
 
