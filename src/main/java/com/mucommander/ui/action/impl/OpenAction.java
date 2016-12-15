@@ -170,11 +170,12 @@ public class OpenAction extends MuAction {
      */
     @Override
     public void performAction() {
-        AbstractFile file;
-
-        // Retrieves the currently selected file, aborts if none.
+        // Retrieves the currently selected file.
         // Note: a CachedFile instance is retrieved to avoid blocking the event thread.
-        if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null)
+        AbstractFile file = mainFrame.getActiveTable().getSelectedFile(true, true);
+
+        // Aborts if none.
+        if (file == null)
             return;
 
         // Opens the currently selected file.

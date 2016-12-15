@@ -704,11 +704,8 @@ public abstract class AbstractFile implements FileAttributes {
      * @see    #getExtension()
      */
     public final String getNameWithoutExtension() {
-        String name;
-        int    position;
-
-        name     = getName();
-        position = name.lastIndexOf('.');
+        String name = getName();
+        int position = name.lastIndexOf('.');
 
         if((position<=0) || (position == name.length() - 1))
             return name;

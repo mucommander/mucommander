@@ -462,24 +462,24 @@ public class FileFactory {
 
         // Extract every filename from the path from left to right and for each of them, see if it looks like an archive.
         // If it does, create the appropriate protocol file and wrap it with an archive file.
-        while(pt.hasMoreFilenames()) {
+        while (pt.hasMoreFilenames()) {
             // Test if the filename's extension looks like a supported archive format...
             // Note that the archive can also be a directory with an archive extension.
-            if(isArchiveFilename(pt.nextFilename())) {
+            if (isArchiveFilename(pt.nextFilename())) {
                 // Remove trailing separator of file, some file protocols such as SFTP don't like trailing separators.
                 // On the contrary, directories without a trailing slash are fine.
                 String currentPath = PathUtils.removeTrailingSeparator(pt.getCurrentPath(), pathSeparator);
 
                 // Test if current file is an archive and if it is, create an archive entry file instead of a raw
                 // protocol file
-                if(currentFile==null || !currentFile.isArchive()) {
+                if (currentFile==null || !currentFile.isArchive()) {
                     // Create a fresh FileURL with the current path
                     FileURL clonedURL = (FileURL)fileURL.clone();
                     clonedURL.setPath(currentPath);
 
                     // Look for a cached file instance before creating a new one
                     currentFile = filePool.get(clonedURL);
-                    if(currentFile==null) {
+                    if (currentFile==null) {
                         currentFile = wrapArchive(createRawFile(clonedURL, authenticator, instantiationParams));
                         // Add the intermediate file instance to the cache
                         filePool.put(clonedURL, currentFile);
@@ -490,7 +490,7 @@ public class FileFactory {
                 else {          // currentFile is an AbstractArchiveFile
                     // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
                     AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length()), pathSeparator));
-                    if(tempEntryFile.isArchive()) {
+                    if (tempEntryFile.isArchive()) {
                         currentFile = tempEntryFile;
                         lastFileResolved = true;
                     }
@@ -668,9 +668,9 @@ public class FileFactory {
         // Comparing the filename against each and every archive extension has a cost, so we only perform the test if
         // the filename contains a dot '.' character, since most of the time this method is called with a filename that
         // doesn't match any of the filters.
-        if(filename.indexOf('.')!=-1) {
-            ArchiveFormatProvider provider;
-            if((provider = getArchiveFormatProvider(filename)) != null) {
+        if (filename.indexOf('.')!=-1) {
+            ArchiveFormatProvider provider = getArchiveFormatProvider(filename);
+            if (provider != null) {
                 return provider.getFile(file);
             }
         }
