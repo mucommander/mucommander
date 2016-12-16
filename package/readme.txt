@@ -34,6 +34,7 @@ What's new since v0.9.1 ?
 
 New features:
 - Add the ability to execute file operations in the background (non-blocking mode).
+- Add "Open as" menu that allows to open archive files that do not end with their expected file extension.
 - Support for OVA (virtual appliance) files, treat them as tar files.
 
 Improvements:

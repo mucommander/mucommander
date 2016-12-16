@@ -67,6 +67,8 @@ public abstract class AbstractFile implements FileAttributes {
     // 65536, no more gain (not sure why).
     public final static int IO_BUFFER_SIZE = 65536;
 
+    /** Extension that is specified by the user, not as part of the filename */
+    private String customExtension;
 
     /**
      * Creates a new file instance with the given URL.
@@ -1939,4 +1941,22 @@ public abstract class AbstractFile implements FileAttributes {
      * is none
      */
     public abstract Object getUnderlyingFileObject();
+
+    /**
+     * Returns the extension that was specified by the user for the file using "open as" operation.
+     *
+     * @return an extension specified by the user, null if unspecified
+     */
+    public String getCustomExtension() {
+        return customExtension;
+    }
+
+    /**
+     * Sets a custom extension for the file that should be used when opening the file rather than the one indicated by its name.
+     *
+     * @param customExtension The extension that should be used when opening the file
+     */
+    public void setCustomExtension(String customExtension) {
+        this.customExtension = customExtension;
+    }
 }

@@ -682,6 +682,14 @@ public class FileFactory {
         return file;
     }
 
+    /**
+     * Same as wrapArchive(AbstractFile) but using the given extension rather than the file's extension.
+     */
+    public static AbstractFile wrapArchive(AbstractFile file, String extension) throws IOException {
+        String filename = "tmp" + extension;
+        ArchiveFormatProvider provider = getArchiveFormatProvider(filename);
+        return provider != null ? provider.getFile(file) : file;
+    }
 
     /**
      * Returns the default {@link com.mucommander.commons.file.icon.FileIconProvider} instance. The default provider class

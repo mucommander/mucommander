@@ -73,7 +73,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
     private TarInputStream createTarStream(long entryOffset) throws IOException, UnsupportedFileOperationException {
         InputStream in = file.getInputStream();
 
-        String name = getName();
+        String name = getCustomExtension() != null ? getCustomExtension() : getName();
             // Gzip-compressed file
         if(StringUtils.endsWithIgnoreCase(name, "tgz") || StringUtils.endsWithIgnoreCase(name, "tar.gz"))
                 // Note: this will fail for gz/tgz entries inside a tar file (IOException: Not in GZIP format),

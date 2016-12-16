@@ -140,6 +140,7 @@ public class ActionManager {
     	registerAction(new NewWindowAction.Descriptor(),     		        new NewWindowAction.Factory());
     	registerAction(new NextTabAction.Descriptor(),						new NextTabAction.Factory());
     	registerAction(new OpenAction.Descriptor(),          				new OpenAction.Factory());
+        registerAction(new OpenAsAction.Descriptor(),                       new OpenAsAction.Factory());
     	registerAction(new OpenInBothPanelsAction.Descriptor(),             new OpenInBothPanelsAction.Factory());
     	registerAction(new OpenInNewTabAction.Descriptor(),					new OpenInNewTabAction.Factory());
     	registerAction(new OpenInOtherPanelAction.Descriptor(),             new OpenInOtherPanelAction.Factory());

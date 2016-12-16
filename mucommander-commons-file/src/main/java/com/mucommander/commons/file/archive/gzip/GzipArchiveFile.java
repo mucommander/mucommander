@@ -55,7 +55,7 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
 
     @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException {
-        String extension = getExtension();
+        String extension = getCustomExtension() != null ? getCustomExtension() : getExtension();
         String name = getName();
 		
         if(extension!=null) {
