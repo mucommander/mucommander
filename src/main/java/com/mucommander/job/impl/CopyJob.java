@@ -24,11 +24,11 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.file.AbstractArchiveFile;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.AbstractRWArchiveFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
+import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;

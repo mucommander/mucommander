@@ -19,7 +19,7 @@
 package com.mucommander.job.impl;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.AbstractRWArchiveFile;
+import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.job.FileJobAction;

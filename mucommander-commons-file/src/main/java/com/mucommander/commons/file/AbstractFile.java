@@ -31,6 +31,9 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.swing.Icon;
 
+import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
+import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
 import com.mucommander.commons.file.compat.CompatURLStreamHandler;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;

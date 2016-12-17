@@ -29,6 +29,8 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
+import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 import com.mucommander.commons.file.icon.FileIconProvider;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.commons.file.protocol.FileProtocols;
@@ -133,15 +135,15 @@ public class FileFactory {
 
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
-        registerArchiveFormat(new com.mucommander.commons.file.impl.zip.ZipFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.tar.TarFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.gzip.GzipFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.bzip2.Bzip2FormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.iso.IsoFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.ar.ArFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.lst.LstFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.rar.RarFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.impl.sevenzip.SevenZipFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.zip.ZipFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.tar.TarFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.gzip.GzipFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.bzip2.Bzip2FormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.iso.IsoFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.ar.ArFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.lst.LstFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.rar.RarFormatProvider());
+        registerArchiveFormat(new com.mucommander.commons.file.archive.sevenzip.SevenZipFormatProvider());
 
         // Set the default FileIconProvider instance
         defaultFileIconProvider = new SwingFileIconProvider();

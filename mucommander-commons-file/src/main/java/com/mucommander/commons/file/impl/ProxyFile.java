@@ -41,7 +41,7 @@ import java.net.URL;
  * All <code>AbstractFile</code> public methods (abstract or not) are delegated to the proxied file.
  * The {@link #getProxiedFile()} method allows to retrieve the proxied file instance.
  *
- * <p>This class is useful for wrapper files, such as {@link com.mucommander.commons.file.AbstractArchiveFile archive files},
+ * <p>This class is useful for wrapper files, such as {@link com.mucommander.commons.file.archive.AbstractArchiveFile archive files},
  * that provide additional functionalities over an existing <code>AbstractFile</code> instance (the proxied file).
  * By implementing/overriding every <code>AbstractFile</code> methods, <code>ProxyFile</code> ensures that
  * all <code>AbstractFile</code> methods can safely be used, even if they are overridden by the proxied
@@ -52,7 +52,7 @@ import java.net.URL;
  * proxy method invocations, so any modifications made to {@link com.mucommander.commons.file.AbstractFile} must be also
  * reflected in <code>ProxyFile</code>.
  *
- * @see com.mucommander.commons.file.AbstractArchiveFile
+ * @see com.mucommander.commons.file.archive.AbstractArchiveFile
  * @author Maxence Bernard
  */
 public abstract class ProxyFile extends AbstractFile {

@@ -19,9 +19,9 @@
 
 package com.mucommander.commons.file.util;
 
-import com.mucommander.commons.file.AbstractArchiveFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 
 import org.slf4j.Logger;

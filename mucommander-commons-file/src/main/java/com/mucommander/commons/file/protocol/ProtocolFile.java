@@ -19,9 +19,9 @@
 
 package com.mucommander.commons.file.protocol;
 
-import com.mucommander.commons.file.AbstractArchiveFile;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
 
 /**
  * Super class of all file protocol implementations (by opposition to {@link AbstractArchiveFile archive file} 

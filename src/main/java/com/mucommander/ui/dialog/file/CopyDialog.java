@@ -22,10 +22,10 @@ package com.mucommander.ui.dialog.file;
 import java.util.List;
 import java.util.Vector;
 
-import com.mucommander.commons.file.AbstractArchiveEntryFile;
-import com.mucommander.commons.file.AbstractArchiveFile;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.ArchiveEntry;
+import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
+import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.impl.CopyJob;
