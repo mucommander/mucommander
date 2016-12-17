@@ -35,28 +35,16 @@ import java.io.IOException;
  */
 public class IsoFormatProvider implements ArchiveFormatProvider {
 
-    /**
-     * Array of format extensions
-     */
-    private final static String FORMAT_EXTENSIONS[] = {
-            ".iso",
-            ".nrg",
-    };
+    /** extensions of archive filenames */
+    public static final String[] EXTENSIONS = new String[] {".iso", ".nrg"};
 
-    /**
-     * Static instance of the filename filter that matches archive filenames
-     */
-    private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(FORMAT_EXTENSIONS);
-
-    //////////////////////////////////////////
-    // ArchiveFormatProvider implementation //
-    //////////////////////////////////////////
-
+    @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
         return new IsoArchiveFile(file);
     }
 
+    @Override
     public FilenameFilter getFilenameFilter() {
-        return filenameFilter;
+        return new ExtensionFilenameFilter(EXTENSIONS);
     }
 }

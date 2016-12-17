@@ -35,19 +35,16 @@ import java.io.IOException;
  */
 public class LstFormatProvider implements ArchiveFormatProvider {
 
-    /** Static instance of the filename filter that matches archive filenames */
-    private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(".lst");
+    /** extensions of archive filenames */
+    public static final String[] EXTENSIONS = new String[] {".lst"};
 
-
-    //////////////////////////////////////////
-    // ArchiveFormatProvider implementation //
-    //////////////////////////////////////////
-
+    @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
         return new LstArchiveFile(file);
     }
 
+    @Override
     public FilenameFilter getFilenameFilter() {
-        return filenameFilter;
+        return new ExtensionFilenameFilter(EXTENSIONS);
     }
 }

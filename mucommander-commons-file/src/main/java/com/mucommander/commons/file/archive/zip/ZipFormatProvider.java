@@ -35,21 +35,18 @@ import java.io.IOException;
  */
 public class ZipFormatProvider implements ArchiveFormatProvider {
 
-    /** Static instance of the filename filter that matches archive filenames */
-    private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(new String[]
-        {".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf", ".egg", ".epub", ".cbz"}
-    );
+    /** extensions of archive filenames */
+    public static final String[] EXTENSIONS = new String[]
+            {".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf", ".egg", ".epub", ".cbz"};
 
 
-    //////////////////////////////////////////
-    // ArchiveFormatProvider implementation //
-    //////////////////////////////////////////
-
+    @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
         return new ZipArchiveFile(file);
     }
 
+    @Override
     public FilenameFilter getFilenameFilter() {
-        return filenameFilter;
+        return new ExtensionFilenameFilter(EXTENSIONS);
     }
 }

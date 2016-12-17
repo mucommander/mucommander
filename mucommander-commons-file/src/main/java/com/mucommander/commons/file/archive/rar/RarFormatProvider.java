@@ -34,21 +34,17 @@ import java.io.IOException;
  * @author Arik Hadas
  */
 public class RarFormatProvider implements ArchiveFormatProvider {
-	/** Static instance of the filename filter that matches archive filenames */
-    private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(new String[]
-        {".rar", ".cbr"}
-    );
 
+    /** extensions of archive filenames */
+    public static final String[] EXTENSIONS = new String[] {".rar", ".cbr"};
 
-    //////////////////////////////////////////
-    // ArchiveFormatProvider implementation //
-    //////////////////////////////////////////
-
+    @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
         return new RarArchiveFile(file);
     }
 
+    @Override
     public FilenameFilter getFilenameFilter() {
-        return filenameFilter;
+        return new ExtensionFilenameFilter(EXTENSIONS);
     }
 }

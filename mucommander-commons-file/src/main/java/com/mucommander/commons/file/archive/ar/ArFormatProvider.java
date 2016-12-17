@@ -35,21 +35,17 @@ import java.io.IOException;
  */
 public class ArFormatProvider implements ArchiveFormatProvider {
 
-    /** Static instance of the filename filter that matches archive filenames */
-    private final static ExtensionFilenameFilter filenameFilter = new ExtensionFilenameFilter(new String[]
-        {".ar", ".a", ".deb", ".udeb"}
-    );
+    /** extensions of archive filenames */
+    public static final String[] EXTENSIONS = new String[] {".ar", ".a", ".deb", ".udeb"};
 
 
-    //////////////////////////////////////////
-    // ArchiveFormatProvider implementation //
-    //////////////////////////////////////////
-
+    @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
         return new ArArchiveFile(file);
     }
 
+    @Override
     public FilenameFilter getFilenameFilter() {
-        return filenameFilter;
+        return new ExtensionFilenameFilter(EXTENSIONS);
     }
 }
