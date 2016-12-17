@@ -21,11 +21,12 @@ package com.mucommander.commons.file.impl;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

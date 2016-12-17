@@ -24,7 +24,7 @@ import java.awt.Image;
 import java.util.Vector;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.text.Translator;

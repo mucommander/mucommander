@@ -20,12 +20,12 @@
 package com.mucommander.commons.file.icon.impl;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.icon.CacheableFileIconProvider;
 import com.mucommander.commons.file.icon.CachedFileIconProvider;
 import com.mucommander.commons.file.icon.IconCache;
 import com.mucommander.commons.file.icon.LocalFileIconProvider;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.SilenceableOutputStream;
 import com.mucommander.commons.runtime.OsFamily;

@@ -19,8 +19,8 @@
 package com.mucommander.desktop.windows;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.commons.file.impl.local.SpecialWindowsLocation;
+import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.SpecialWindowsLocation;
 import com.mucommander.commons.file.util.Shell32;
 import com.mucommander.commons.file.util.Shell32API;
 import com.mucommander.desktop.DesktopManager;

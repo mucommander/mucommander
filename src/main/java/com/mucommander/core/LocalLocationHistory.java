@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.ui.main.FolderPanel;
 
 /**

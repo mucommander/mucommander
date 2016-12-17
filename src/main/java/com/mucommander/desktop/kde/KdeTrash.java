@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.process.ProcessRunner;
 

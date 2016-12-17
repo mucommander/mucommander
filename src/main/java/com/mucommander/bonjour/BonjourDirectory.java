@@ -32,8 +32,8 @@ import javax.jmdns.ServiceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.FileProtocols;
 
 /**
  * Collects and maintains a list of available Bonjour/Zeroconf services using the JmDNS library.

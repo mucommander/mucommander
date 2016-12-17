@@ -20,7 +20,7 @@ package com.mucommander.ui.main.tabs;
 
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.text.Translator;

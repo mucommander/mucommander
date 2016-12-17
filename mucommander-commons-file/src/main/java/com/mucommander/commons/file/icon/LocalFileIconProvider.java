@@ -21,7 +21,7 @@ package com.mucommander.commons.file.icon;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,10 +32,10 @@ import java.io.IOException;
  * implementations that are only able to provide icons for local files.
  *
  * <p>This class implements {@link #getFileIcon(com.mucommander.commons.file.AbstractFile, java.awt.Dimension)} and passes on
- * requests for local file icons to {@link #getLocalFileIcon(com.mucommander.commons.file.impl.local.LocalFile, com.mucommander.commons.file.AbstractFile, java.awt.Dimension)}.
+ * requests for local file icons to {@link #getLocalFileIcon(com.mucommander.commons.file.protocol.local.LocalFile, com.mucommander.commons.file.AbstractFile, java.awt.Dimension)}.
  * On the other hand, requests for non-local file icons are transformed to local ones, by creating a local temporary
  * file with the same name (best effort) and extension (guaranteed) as the non-local file, and passes on the file
- * to {@link #getLocalFileIcon(com.mucommander.commons.file.impl.local.LocalFile, com.mucommander.commons.file.AbstractFile, java.awt.Dimension)}.</p>
+ * to {@link #getLocalFileIcon(com.mucommander.commons.file.protocol.local.LocalFile, com.mucommander.commons.file.AbstractFile, java.awt.Dimension)}.</p>
  *
  * @author Maxence Bernard
  */

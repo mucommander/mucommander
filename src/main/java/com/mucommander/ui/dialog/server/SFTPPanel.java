@@ -33,9 +33,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileProtocols;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.impl.sftp.SFTPFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.sftp.SFTPFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;

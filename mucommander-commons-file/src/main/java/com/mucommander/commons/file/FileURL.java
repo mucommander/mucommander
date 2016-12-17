@@ -21,7 +21,8 @@
 package com.mucommander.commons.file;
 
 import com.mucommander.commons.file.compat.CompatURLStreamHandler;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;

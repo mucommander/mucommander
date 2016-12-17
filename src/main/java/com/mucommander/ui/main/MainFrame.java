@@ -40,7 +40,7 @@ import javax.swing.table.TableColumnModel;
 import com.apple.eawt.FullScreenUtilities;
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;

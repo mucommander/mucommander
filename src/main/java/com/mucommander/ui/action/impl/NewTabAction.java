@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;

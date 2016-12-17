@@ -19,6 +19,8 @@
 package com.mucommander.commons.file.impl.zip;
 
 import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.impl.zip.ZipArchiveFile;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -28,7 +30,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * An {@link AbstractFileTest} implementation, which performs tests on {@link AbstractArchiveEntryFile}
- * entries located inside a {@link ZipArchiveFile} residing in a temporary {@link com.mucommander.commons.file.impl.local.LocalFile}.
+ * entries located inside a {@link ZipArchiveFile} residing in a temporary {@link com.mucommander.commons.file.protocol.local.LocalFile}.
  *
  * @author Maxence Bernard
  */

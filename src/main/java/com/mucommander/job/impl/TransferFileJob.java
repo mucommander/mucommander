@@ -31,7 +31,7 @@ import com.apple.eio.FileManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.ByteCounter;
 import com.mucommander.commons.io.ChecksumInputStream;

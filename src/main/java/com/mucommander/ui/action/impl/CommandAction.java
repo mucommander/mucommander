@@ -26,8 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.command.Command;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.impl.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;

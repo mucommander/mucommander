@@ -20,7 +20,7 @@ package com.mucommander.desktop.osx;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.ui.macosx.AppleScript;
 import org.slf4j.Logger;

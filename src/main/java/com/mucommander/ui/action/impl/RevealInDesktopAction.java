@@ -26,7 +26,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;

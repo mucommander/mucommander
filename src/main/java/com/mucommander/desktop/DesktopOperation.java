@@ -52,7 +52,7 @@ import java.io.IOException;
  * <p>
  * An operation is said to available if it will accept any parameter that matches its contract. For example,
  * an operation that works on local files will be available if it accepts any <code>java.io.File</code>, <code>String</code>
- * or {@link com.mucommander.commons.file.impl.local.LocalFile} parameter.
+ * or {@link com.mucommander.commons.file.protocol.local.LocalFile} parameter.
  * </p>
  * <p>
  * An operation is said to be supported for a specific parameter subset it will accept any parameter that
@@ -112,7 +112,7 @@ public interface DesktopOperation {
      * <ul>
      *   <li>
      *     <code>true</code> if the parameter array contains a single instance of either <code>java.io.File</code>,
-     *     <code>String</code> or {@link com.mucommander.commons.file.impl.local.LocalFile} and that instance describes the
+     *     <code>String</code> or {@link com.mucommander.commons.file.protocol.local.LocalFile} and that instance describes the
      *     path to a valid XML file.
      *   </li>
      *   <li>

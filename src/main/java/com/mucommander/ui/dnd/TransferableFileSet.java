@@ -20,7 +20,7 @@ package com.mucommander.ui.dnd;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.util.FileSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

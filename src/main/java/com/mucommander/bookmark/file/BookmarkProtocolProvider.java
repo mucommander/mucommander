@@ -23,7 +23,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.ProtocolProvider;
+import com.mucommander.commons.file.protocol.ProtocolProvider;
 
 import java.io.IOException;
 

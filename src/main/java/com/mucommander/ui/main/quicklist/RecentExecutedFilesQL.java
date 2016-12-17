@@ -24,8 +24,8 @@ import java.util.LinkedList;
 import javax.swing.Icon;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileProtocols;
-import com.mucommander.commons.file.impl.local.LocalFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;

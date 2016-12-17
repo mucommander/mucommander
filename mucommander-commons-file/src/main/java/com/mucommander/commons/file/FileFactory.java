@@ -31,8 +31,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.icon.FileIconProvider;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
-import com.mucommander.commons.file.impl.local.LocalFile;
-import com.mucommander.commons.file.impl.local.LocalProtocolProvider;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.ProtocolProvider;
+import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.LocalProtocolProvider;
 import com.mucommander.commons.file.util.FilePool;
 import com.mucommander.commons.file.util.PathTokenizer;
 import com.mucommander.commons.file.util.PathUtils;
@@ -115,19 +117,19 @@ public class FileFactory {
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
         registerProtocol(FileProtocols.FILE, new LocalProtocolProvider());
-        registerProtocol(FileProtocols.SMB, new com.mucommander.commons.file.impl.smb.SMBProtocolProvider());
-        registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.commons.file.impl.http.HTTPProtocolProvider());
+        registerProtocol(FileProtocols.SMB, new com.mucommander.commons.file.protocol.smb.SMBProtocolProvider());
+        registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.commons.file.protocol.http.HTTPProtocolProvider());
         registerProtocol(FileProtocols.HTTPS, protocolProvider);
-        registerProtocol(FileProtocols.FTP, new com.mucommander.commons.file.impl.ftp.FTPProtocolProvider());
-        registerProtocol(FileProtocols.NFS, new com.mucommander.commons.file.impl.nfs.NFSProtocolProvider());
-        registerProtocol(FileProtocols.SFTP, new com.mucommander.commons.file.impl.sftp.SFTPProtocolProvider());
+        registerProtocol(FileProtocols.FTP, new com.mucommander.commons.file.protocol.ftp.FTPProtocolProvider());
+        registerProtocol(FileProtocols.NFS, new com.mucommander.commons.file.protocol.nfs.NFSProtocolProvider());
+        registerProtocol(FileProtocols.SFTP, new com.mucommander.commons.file.protocol.sftp.SFTPProtocolProvider());
         if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
             // Hadoop requires Java 1.6
-            registerProtocol(FileProtocols.HDFS, new com.mucommander.commons.file.impl.hadoop.HDFSProtocolProvider());
+            registerProtocol(FileProtocols.HDFS, new com.mucommander.commons.file.protocol.hadoop.HDFSProtocolProvider());
 //            registerProtocol(FileProtocols.S3, new com.mucommander.commons.file.impl.hadoop.S3ProtocolProvider());
         }
-        registerProtocol(FileProtocols.S3, new com.mucommander.commons.file.impl.s3.S3ProtocolProvider());
-        registerProtocol(FileProtocols.VSPHERE, new com.mucommander.commons.file.impl.vsphere.VSphereProtocolProvider());
+        registerProtocol(FileProtocols.S3, new com.mucommander.commons.file.protocol.s3.S3ProtocolProvider());
+        registerProtocol(FileProtocols.VSPHERE, new com.mucommander.commons.file.protocol.vsphere.VSphereProtocolProvider());
 
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.

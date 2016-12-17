@@ -34,7 +34,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileProtocols;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;

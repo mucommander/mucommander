@@ -18,8 +18,9 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.commons.file.impl.local.LocalFileTest;
 import org.testng.annotations.Test;
+
+import com.mucommander.commons.file.protocol.local.LocalFileTest;
 
 import java.io.IOException;
 

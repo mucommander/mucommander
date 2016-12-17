@@ -19,7 +19,7 @@
 package com.mucommander.desktop;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.impl.http.HTTPFile;
+import com.mucommander.commons.file.protocol.http.HTTPFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -123,7 +123,7 @@ public abstract class UrlOperation implements DesktopOperation {
      * By default, this method will return <code>null</code> unless <code>target</code>:
      * <ul>
      *   <li>has a length of 1.</li>
-     *   <li>contains an instance of either <code>java.io.File</code>,{@link com.mucommander.commons.file.impl.local.LocalFile} or <code>String</code>.</li>
+     *   <li>contains an instance of either <code>java.io.File</code>,{@link com.mucommander.commons.file.protocol.local.LocalFile} or <code>String</code>.</li>
      * </ul>
      * </p>
      * <p>
