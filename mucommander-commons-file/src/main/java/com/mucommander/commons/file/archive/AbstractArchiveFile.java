@@ -23,10 +23,11 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.ProxyFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.impl.ProxyFile;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -23,8 +23,8 @@ import java.util.Date;
 import javax.swing.table.AbstractTableModel;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.filter.FileFilter;
-import com.mucommander.commons.file.impl.CachedFile;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfigurations;

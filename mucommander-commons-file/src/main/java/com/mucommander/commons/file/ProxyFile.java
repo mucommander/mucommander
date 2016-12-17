@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.commons.file.impl;
+package com.mucommander.commons.file;
 
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.filter.FileFilter;

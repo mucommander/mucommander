@@ -37,7 +37,6 @@ import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
 import com.mucommander.commons.file.compat.CompatURLStreamHandler;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.impl.ProxyFile;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.ChecksumInputStream;
 import com.mucommander.commons.io.FileTransferException;
@@ -52,7 +51,7 @@ import com.mucommander.commons.io.StreamUtils;
  * methods should be used to get a file instance from a path or {@link FileURL} location.</p>
  *
  * @see com.mucommander.commons.file.FileFactory
- * @see com.mucommander.commons.file.impl.ProxyFile
+ * @see com.mucommander.commons.file.ProxyFile
  * @author Maxence Bernard
  */
 public abstract class AbstractFile implements FileAttributes {

@@ -16,11 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.file.impl;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.DummyFile;
-import com.mucommander.commons.file.FileURL;
+package com.mucommander.commons.file;
 
 import java.net.MalformedURLException;
 

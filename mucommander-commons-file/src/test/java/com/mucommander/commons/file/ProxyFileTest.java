@@ -16,17 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.file.impl;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.AbstractFileTest;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileOperation;
-import org.testng.annotations.Test;
+package com.mucommander.commons.file;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+import org.testng.annotations.Test;
 
 /**
  * An {@link AbstractFileTest} implementation for {@link ProxyFile}, with some additional

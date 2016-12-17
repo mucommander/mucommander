@@ -435,7 +435,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 
     /**
-     * Returns the file that is currently selected (highlighted), wrapped in a {@link com.mucommander.commons.file.impl.CachedFile}
+     * Returns the file that is currently selected (highlighted), wrapped in a {@link com.mucommander.commons.file.CachedFile}
      * instance if the corresponding parameter is <code>true</code>. If the currently selected file is the
      * parent folder '..', the parent folder is returned only if the corresponding parameter is <code>true</code>.
      *

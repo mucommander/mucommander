@@ -17,11 +17,8 @@
  */
 
 
-package com.mucommander.commons.file.impl;
+package com.mucommander.commons.file;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

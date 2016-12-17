@@ -20,7 +20,8 @@ package com.mucommander.commons.file.util;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.impl.TestFile;
+import com.mucommander.commons.file.TestFile;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
