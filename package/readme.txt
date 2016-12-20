@@ -49,6 +49,7 @@ Bug fixes:
 - Fix switching to a specific window using keyboard shortcut.
 - Files are launched according to the native file association on Gnome (regression introduced in 0.9.1). 
 - Show an error message when failing to read a local folder instead of showing it as empty.
+- Fix local copy when the target filename starts with a tilde.
 
 Known issues:
 - Some translations may not be up-to-date.
