@@ -166,7 +166,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 // - '/' and OS doesn't use root drives (Unix-style path)
                 // - a drive letter and OS uses root drives (Windows-style) [support both C:\ and C:/ style]
                 // - a ~ character (refers to the user home folder)
-                if((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || url.startsWith("~")) {
+                if ((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || url.startsWith("~/") || url.equals("~")) {
                     handleLocalFilePath(url, fileURL);
 
                     // All done, return
