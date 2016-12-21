@@ -59,13 +59,16 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
         String name = getName();
 		
         if(extension!=null) {
-            extension = extension.toLowerCase();
-			
             // Remove the 'gz' or 'tgz' extension from the entry's name
-            if(extension.equals("tgz"))
+            switch(extension.toLowerCase()) {
+            case "tgz":
                 name = name.substring(0, name.length()-3)+"tar";
-            else if(extension.equals("gz"))
+                break;
+            case "gz":
                 name = name.substring(0, name.length()-3);
+                break;
+            default:
+            }
         }
 
         return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1, true));

@@ -65,13 +65,16 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
         String name = getName();
 		
         if(extension!=null) {
-            extension = extension.toLowerCase();
-			
             // Remove the 'bz2' or 'tbz2' extension from the entry's name
-            if(extension.equals("tbz2"))
+            switch(extension.toLowerCase()) {
+            case "tbz2":
                 name = name.substring(0, name.length()-4)+"tar";
-            else if(extension.equals("bz2"))
+                break;
+            case "bz2":
                 name = name.substring(0, name.length()-4);
+                break;
+            default:
+            }
         }
 
         return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1, true));
