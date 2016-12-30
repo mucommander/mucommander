@@ -52,6 +52,7 @@ Bug fixes:
 - Files are launched according to the native file association on Gnome (regression introduced in 0.9.1). 
 - Fix local copy when the target filename starts with a tilde.
 - Fix the ability to move files to trash on Windows.
+- Fix selection of Ukraine translation.
 
 Known issues:
 - Some translations may not be up-to-date.
