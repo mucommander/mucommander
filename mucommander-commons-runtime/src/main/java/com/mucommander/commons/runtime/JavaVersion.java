@@ -119,8 +119,8 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     static JavaVersion parseSystemProperty(String javaVersionProp) {
         // Java version property should never be null or empty, but better be safe than sorry ...
         if (javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals(""))
-            // Assume java 1.5 (first supported Java version)
-            return JavaVersion.JAVA_1_5;
+            // Assume java 1.6 (first supported Java version)
+            return JavaVersion.JAVA_1_6;
         // Java 1.8
         if (javaVersionProp.startsWith("1.8"))
             return JavaVersion.JAVA_1_8;
