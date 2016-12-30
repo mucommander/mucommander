@@ -42,6 +42,7 @@ Improvements:
 - Show icons of referenced files while exploring bookmarks.
 - Set the initial name of a new directory/file according to the current selection (as it was before 0.9.1).
 - Add a keyboard shortcut (by default mapped to the context menu key) for showing context menu for the selected file.
+- Show an error message when failing to read a local folder instead of showing it as empty.
 
 Localization:
 
@@ -49,8 +50,8 @@ Bug fixes:
 - Fix opening bookmarks that refer to remote files.
 - Fix switching to a specific window using keyboard shortcut.
 - Files are launched according to the native file association on Gnome (regression introduced in 0.9.1). 
-- Show an error message when failing to read a local folder instead of showing it as empty.
 - Fix local copy when the target filename starts with a tilde.
+- Fix the ability to move files to trash on Windows.
 
 Known issues:
 - Some translations may not be up-to-date.
