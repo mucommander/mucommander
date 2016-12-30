@@ -79,7 +79,6 @@ shadowJar {
     exclude 'com/sun/jna/linux-x86-64/**'
     exclude 'com/sun/jna/openbsd-x86/**'
     exclude 'com/sun/jna/openbsd-x86-64/**'
-    exclude 'com/sun/jna/platform/**'
     exclude 'com/sun/jna/sunos-sparc/**'
     exclude 'com/sun/jna/sunos-sparcv9/**'
     exclude 'com/sun/jna/sunos-x86/**'
