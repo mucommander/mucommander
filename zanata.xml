@@ -2,7 +2,7 @@
 <config xmlns="http://zanata.org/namespace/config/">
   <url>https://translate.zanata.org/zanata/</url>
   <project>mucommander</project>
-  <project-version>0.9.1</project-version>
+  <project-version>0.9.2</project-version>
   <project-type>properties</project-type>
 
   <locales>
