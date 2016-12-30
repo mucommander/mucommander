@@ -6,28 +6,28 @@
   <project-type>properties</project-type>
 
   <locales>
-    <locale>sl</locale>
-    <locale>uk</locale>
+    <locale>ar</locale>
+    <locale>ca</locale>
+    <locale>cs</locale>
+    <locale>da</locale>
+    <locale>de</locale>
+    <locale>en-GB</locale>
+    <locale>es</locale>
+    <locale>fr</locale>
+    <locale>hu</locale>
+    <locale>it</locale>
+    <locale>ko</locale>
+    <locale>nb</locale>
+    <locale>nl</locale>
+    <locale>pl</locale>
+    <locale>pt-BR</locale>
     <locale>ro</locale>
     <locale>ru</locale>
-    <locale>hu</locale>
     <locale>sk</locale>
-    <locale>pl</locale>
-    <locale>ca</locale>
+    <locale>sl</locale>
     <locale>sv</locale>
-    <locale>nb</locale>
-    <locale>da</locale>
-    <locale>it</locale>
-    <locale>fr</locale>
     <locale>tr</locale>
-    <locale>ar</locale>
-    <locale>es</locale>
-    <locale>cs</locale>
-    <locale>de</locale>
-    <locale>nl</locale>
-    <locale>ko</locale>
-    <locale>pt-BR</locale>
-    <locale>en-GB</locale>
+    <locale>uk</locale>
     <locale>zh-CN</locale>
     <locale>zh-TW</locale>
   </locales>
