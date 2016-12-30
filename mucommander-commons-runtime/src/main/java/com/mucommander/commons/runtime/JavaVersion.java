@@ -46,7 +46,9 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     /** Java 1.6.x */
     JAVA_1_6("1.6"),
     /** Java 1.7.x */
-    JAVA_1_7("1.7");
+    JAVA_1_7("1.7"),
+    /** Java 1.8.x */
+    JAVA_1_8("1.8");
 
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JavaVersion.class);
@@ -119,6 +121,9 @@ public enum JavaVersion implements ComparableRuntimeProperty {
         if (javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals(""))
             // Assume java 1.5 (first supported Java version)
             return JavaVersion.JAVA_1_5;
+        // Java 1.8
+        if (javaVersionProp.startsWith("1.8"))
+            return JavaVersion.JAVA_1_8;
         // Java 1.7
         if (javaVersionProp.startsWith("1.7"))
             return JavaVersion.JAVA_1_7;
@@ -145,7 +150,7 @@ public enum JavaVersion implements ComparableRuntimeProperty {
             return JavaVersion.JAVA_1_0;
 
         // Newer version we don't know of yet, assume latest supported Java version
-        return JavaVersion.JAVA_1_6;
+        return JavaVersion.JAVA_1_8;
     }
 
     /**
