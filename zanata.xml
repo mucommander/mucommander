@@ -3,7 +3,7 @@
   <url>https://translate.zanata.org/zanata/</url>
   <project>mucommander</project>
   <project-version>0.9.2</project-version>
-  <project-type>properties</project-type>
+  <project-type>utf8properties</project-type>
 
   <locales>
     <locale>ar</locale>
