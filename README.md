@@ -48,7 +48,28 @@ It is recommended that whenever you get unclear compilation error and before sub
 ```    
 
 **Packaging**  
-TODO
+The different distributions of muCommander are based on a shadow-jar, standalone jar that contains all the required dependencies and filter their unneeded parts. The creation of the shadow-jar is done by the following command:  
+```
+./gradlew shadowJar
+```
+
+The creation of a DMG file for MAC OS (produced in build/distributions):  
+```
+./gradlew createDmg
+```
+
+The creation of an EXE file for Windows (produced in build/launch4j):  
+```
+./gradlew createExe
+```
+
+The creation of a TGZ file for Linux/Unix (produced in build/distributions):  
+```
+./gradlew tgz
+```
+
+More packaging options are described in [our wiki](https://github.com/mucommander/mucommander/wiki/Packaging).
+
 License
 -------
 
