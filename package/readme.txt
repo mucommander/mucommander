@@ -43,6 +43,7 @@ Improvements:
 - Set the initial name of a new directory/file according to the current selection (as it was before 0.9.1).
 - Add a keyboard shortcut (by default mapped to the context menu key) for showing context menu for the selected file.
 - Show an error message when failing to read a local folder instead of showing it as empty.
+- Move/rename operations move symlinks instead of deleting them.
 
 Localization:
 

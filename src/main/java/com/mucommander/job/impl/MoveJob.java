@@ -105,6 +105,7 @@ public class MoveJob extends AbstractCopyJob {
         if (destFile == null)
             return false;
 
+        /*
         // Do not follow symlink, simply delete it and return
         if(file.isSymlink()) {
             do {		// Loop for retry
@@ -124,6 +125,7 @@ public class MoveJob extends AbstractCopyJob {
                 }
             } while(true);
         }
+        */
 
         destFile = checkForCollision(file, destFolder, destFile, renameMode);
         if (destFile == null)
