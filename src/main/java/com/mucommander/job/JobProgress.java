@@ -103,8 +103,7 @@ public class JobProgress {
 		}
 
 		if (transferFileJob != null) {
-			bytesTotal = transferFileJob.getTotalByteCounter().getByteCount()
-					- transferFileJob.getTotalSkippedByteCounter().getByteCount();
+			bytesTotal = transferFileJob.getTotalByteCount() - transferFileJob.getTotalSkippedByteCount();
 			totalBps = (long) (bytesTotal * 1000d / effectiveJobTime);
 			if (now - lastTime > 0) { // To avoid divisions by zero 
 				currentBps = (long) ((bytesTotal - lastBytesTotal) * 1000d / (now - lastTime));
@@ -134,8 +133,7 @@ public class JobProgress {
 					fileProgressText += DurationFormat.getInfiniteSymbol();
 				} else {
 					currentFileRemainingTime = (long) ((1000 * (currentFileSize - 
-							transferFileJob.getCurrentFileByteCounter().getByteCount())) / 
-							(float) totalBps);
+							transferFileJob.getCurrentFileByteCount())) / (float) totalBps);
 					fileProgressText += DurationFormat.format(currentFileRemainingTime);
 				}
 			}

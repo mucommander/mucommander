@@ -133,7 +133,7 @@ public class ArchiveJob extends TransferFileJob {
                 // Retry loops
                 if(ret==FileJobAction.RETRY) {
                     // Reset processed bytes currentFileByteCounter
-                    getCurrentFileByteCounter().reset();
+                    resetCurrentFileByteCounter();
 
                     continue;
                 }

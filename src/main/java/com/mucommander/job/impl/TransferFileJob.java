@@ -452,7 +452,7 @@ public abstract class TransferFileJob extends FileJob {
         if(currentFileSize<=0)
             return 0;
         else
-            return getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
+            return getCurrentFileByteCount()/(float)currentFileSize;
     }
 
     /**
@@ -460,8 +460,15 @@ public abstract class TransferFileJob extends FileJob {
      *
      * @return the number of bytes that have been processed in the current file
      */
-    public ByteCounter getCurrentFileByteCounter() {
-        return currentFileByteCounter;
+    public long getCurrentFileByteCount() {
+        return currentFileByteCounter.getByteCount();
+    }
+
+    /**
+     * Resets the number of bytes that have been processed in the current file.
+     */
+    public void resetCurrentFileByteCounter() {
+        currentFileByteCounter.reset();
     }
 
     /**
@@ -470,8 +477,8 @@ public abstract class TransferFileJob extends FileJob {
      *
      * @return the number of bytes that have been skipped in the current file
      */
-    public ByteCounter getCurrentFileSkippedByteCounter() {
-        return currentFileSkippedByteCounter;
+    public long getCurrentFileSkippedByteCount() {
+        return currentFileSkippedByteCounter.getByteCount();
     }
 
     /**
@@ -485,22 +492,22 @@ public abstract class TransferFileJob extends FileJob {
 
 
     /**
-     * Returns a {@link ByteCounter} that holds the total number of bytes that have been processed by this job so far.
+     * Returns the total number of bytes that have been processed by this job so far.
      *
-     * @return a ByteCounter that holds the total number of bytes that have been processed by this job so far
+     * @return the total number of bytes that have been processed by this job so far
      */
-    public ByteCounter getTotalByteCounter() {
-        return totalByteCounter;
+    public long getTotalByteCount() {
+        return totalByteCounter.getByteCount();
     }
 
     /**
-     * Returns a {@link ByteCounter} that holds the total number of bytes that have been skipped by this job so far.
+     * Returns the total number of bytes that have been skipped by this job so far.
      * Bytes are skipped when file transfers are resumed.
      *
-     * @return a ByteCounter that holds the total number of bytes that have been skipped by this job so far
+     * @return the total number of bytes that have been skipped by this job so far
      */
-    public ByteCounter getTotalSkippedByteCounter() {
-        return totalSkippedByteCounter;
+    public long getTotalSkippedByteCount() {
+        return totalSkippedByteCounter.getByteCount();
     }
 
 
@@ -618,7 +625,7 @@ public abstract class TransferFileJob extends FileJob {
             // Add current file's progress
             long currentFileSize = getCurrentFile().getSize();
             if(currentFileSize>0)
-                nbFilesProcessed += getCurrentFileByteCounter().getByteCount()/(float)currentFileSize;
+                nbFilesProcessed += getCurrentFileByteCount() / (float)currentFileSize;
         }
 
         return nbFilesProcessed/(float)nbFiles;
