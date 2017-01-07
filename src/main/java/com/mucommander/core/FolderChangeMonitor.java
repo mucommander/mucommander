@@ -67,7 +67,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     /** Current folder's date */
     private long currentFolderDate;
 
-    /** Folder check/refresh while be skipped while this field is set to <code>true</code> */ 
+    /** Folder check/refresh is skipped while this field is set to <code>true</code> */
     private boolean paused;
 
     /** Number of milliseconds to wait before next folder check */
@@ -165,20 +165,15 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     public void run() {
         // TODO: it would be more efficient to use a wait/notify scheme rather than sleeping. 
         // It would also allow folders to be checked immediately upon certain conditions such as a window becoming activated.
-
-        int nbInstances;
-        FolderChangeMonitor monitor;
-        boolean folderRefreshed;
-		
         while(monitorThread!=null) {
-			
             // Sleep for a while
             try { Thread.sleep(TICK);}
             catch(InterruptedException e) {}
 			
             // Loop on instances
-            nbInstances = instances.size();
+            int nbInstances = instances.size();
             for(int i=0; i<nbInstances; i++) {
+                FolderChangeMonitor monitor;
                 try { monitor = instances.get(i); }
                 catch(Exception e) { continue; } // Exception may be raised when an instance is removed
 				
@@ -191,7 +186,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                     // the folder has been refreshed.
                     if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
                         // Checks folder contents and refreshes view if necessary
-                        folderRefreshed = monitor.checkAndRefresh();
+                        boolean folderRefreshed = monitor.checkAndRefresh();
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
 
                         // If folder change check took an average of N milliseconds, we will wait at least N*WAIT_MULTIPLIER before next check
