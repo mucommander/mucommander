@@ -493,11 +493,11 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         // Stop job if it isn't already
         FileJobState jobState = job.getState();
-        if(!(jobState == FileJobState.FINISHED || jobState == FileJobState.INTERRUPTED))
+        if (jobState != FileJobState.FINISHED && jobState != FileJobState.INTERRUPTED)
             job.interrupt();
 
         // Remember 'advanced panel' expanded state
-        if(collapseExpandButton!=null)
+        if (collapseExpandButton != null)
         	MuConfigurations.getPreferences().setVariable(MuPreference.PROGRESS_DIALOG_EXPANDED, collapseExpandButton.getExpandedState());
 
         // Remember 'close window when finished' option state

@@ -206,8 +206,7 @@ public class JobsManager implements FileJobListener {
 	@Override
 	public void jobStateChanged(final FileJob source, FileJobState oldState, FileJobState newState) {
 		if (newState == FileJobState.FINISHED || newState == FileJobState.INTERRUPTED) {
-			ActionListener jobToRemove = event -> removeJob(source);
-			Timer timer = new Timer(FINISHED_JOB_REMOVE_TIME, jobToRemove);
+			Timer timer = new Timer(FINISHED_JOB_REMOVE_TIME, event -> removeJob(source));
 			timer.setRepeats(false);
 			timer.start();
 		}		
