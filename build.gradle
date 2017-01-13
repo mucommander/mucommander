@@ -281,6 +281,7 @@ task(afterEclipseImport)  << {
     f.append('encoding//src/main/resources/dictionary_cs.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_da.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_de.properties=UTF-8\n')
+    f.append('encoding//src/main/resources/dictionary_en.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_en_GB.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_es.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_fr.properties=UTF-8\n')

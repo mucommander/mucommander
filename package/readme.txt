@@ -54,6 +54,7 @@ Bug fixes:
 - Fix local copy when the target filename starts with a tilde.
 - Fix the ability to move files to trash on Windows.
 - Fix selection of Ukraine translation.
+- Fix selection of English translation in non-English systems.
 
 Known issues:
 - Some translations may not be up-to-date.
