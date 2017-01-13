@@ -55,6 +55,7 @@ Bug fixes:
 - Fix the ability to move files to trash on Windows.
 - Fix selection of Ukraine translation.
 - Fix selection of English translation in non-English systems.
+- Fix the initial language selection that was incorrect in some systems.
 
 Known issues:
 - Some translations may not be up-to-date.

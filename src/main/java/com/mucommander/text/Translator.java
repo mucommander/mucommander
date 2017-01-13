@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -105,7 +106,7 @@ public class Translator {
     	availableLanguages.add(locale);
     }
 
-    private static Locale getLocale() {
+    private static Locale loadLocale() {
     	String localeNameFromConf = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
     	if (localeNameFromConf == null) {
     		// language is not set in preferences, use system's language
@@ -141,17 +142,26 @@ public class Translator {
 		}
 	}
 
-    public static void init() {
-        Locale locale = getLocale();
-        // Determines if language is one of the languages declared as available
-        if(availableLanguages.contains(locale)) {
-            LOGGER.debug("Language "+locale+" is available.");
-        }
-        else {
-            locale = Locale.ENGLISH;
-            LOGGER.debug("Language "+locale+" is not available, falling back to English");
-        }
+	private static Locale match(Locale loadedLocale) {
+	    for (Locale locale : availableLanguages)
+	        if (locale.getLanguage().equals(loadedLocale.getLanguage())
+	                && Objects.equals(locale.getCountry(), loadedLocale.getCountry())) {
+	            LOGGER.info("Found exact match (language+country) for locale {}", locale);
+	            return locale;
+	        }
 
+	    for (Locale locale : availableLanguages)
+            if (locale.getLanguage().equals(loadedLocale.getLanguage())) {
+                LOGGER.info("Found close match (language) for locale {}", loadedLocale);
+                return locale;
+            }
+
+	    LOGGER.info("Locale {} is not available, falling back to English", loadedLocale);
+	    return Locale.ENGLISH;
+	}
+
+    public static void init() {
+        Locale locale = match(loadLocale());
         final Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
         ResourceBundle resourceBundle= ResourceBundle.getBundle("dictionary", locale, utf8ResourceBundleControl);
         dictionaryBundle = new Translator.ResolveVariableResourceBundle(resourceBundle);
