@@ -180,6 +180,10 @@ public class JobsManager implements FileJobListener {
 		return jobs.size();
 	}
 
+	/**
+	 * Returns jobs that are running in the background.
+	 * @return jobs that are running in the background.
+	 */
 	public List<FileJob> getBackgroundJobs() {
 	    return jobs.stream()
 	            .filter(FileJob::isRunInBackground)
