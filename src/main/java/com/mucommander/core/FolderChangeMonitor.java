@@ -186,13 +186,13 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                     // the folder has been refreshed.
                     if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
                         // Checks folder contents and refreshes view if necessary
-                        boolean folderRefreshed = monitor.checkAndRefresh();
+                        monitor.checkAndRefresh();
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
 
                         // If folder change check took an average of N milliseconds, we will wait at least N*WAIT_MULTIPLIER before next check
-                        monitor.waitBeforeCheckTime = monitor.nbSamples==0?
+                        monitor.waitBeforeCheckTime = monitor.nbSamples==0 ?
                             checkPeriod
-                            :Math.max(folderRefreshed?waitAfterRefresh:checkPeriod, (int)(WAIT_MULTIPLIER*(monitor.totalCheckTime/(float)monitor.nbSamples)));
+                            : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(monitor.totalCheckTime/(float)monitor.nbSamples)));
                     }
                 }					
             }		
@@ -246,9 +246,9 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      *
      * @return <code>true</code> if the folder was refreshed.
      */
-    private synchronized boolean checkAndRefresh() {
+    private synchronized void checkAndRefresh() {
         if(paused || disableAutoRefreshFilter.match(currentFolder))
-            return false;
+            return;
 
         // Update time average next loop
         long timeStamp = System.currentTimeMillis();
@@ -268,8 +268,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
         }
-		
-        return false;
     }
 
 
