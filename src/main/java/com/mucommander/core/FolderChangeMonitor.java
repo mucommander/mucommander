@@ -181,7 +181,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 // - MainFrame is in the foreground
                 // - monitor is not paused
                 // - current folder is not being changed
-                if(monitor.folderPanel.getMainFrame().isForegroundActive() && !folderChanging && !monitor.paused) {
+                if(monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging && !monitor.paused) {
                     // By checking FolderPanel.getLastFolderChangeTime(), we ensure that we don't check right after
                     // the folder has been refreshed.
                     if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
