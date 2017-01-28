@@ -165,14 +165,14 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     public void run() {
         // TODO: it would be more efficient to use a wait/notify scheme rather than sleeping. 
         // It would also allow folders to be checked immediately upon certain conditions such as a window becoming activated.
-        while(monitorThread!=null) {
+        while (monitorThread!=null) {
             // Sleep for a while
             try { Thread.sleep(TICK);}
             catch(InterruptedException e) {}
 			
             // Loop on instances
             int nbInstances = instances.size();
-            for(int i=0; i<nbInstances; i++) {
+            for (int i=0; i<nbInstances; i++) {
                 FolderChangeMonitor monitor;
                 try { monitor = instances.get(i); }
                 catch(Exception e) { continue; } // Exception may be raised when an instance is removed
@@ -181,7 +181,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 // - MainFrame is in the foreground
                 // - monitor is not paused
                 // - current folder is not being changed
-                if(monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging && !monitor.paused) {
+                if (monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging && !monitor.paused) {
                     if (disableAutoRefreshFilter.match(monitor.currentFolder)) {
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
                         monitor.waitBeforeCheckTime = checkPeriod;
@@ -189,7 +189,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                     }
                     // By checking FolderPanel.getLastFolderChangeTime(), we ensure that we don't check right after
                     // the folder has been refreshed.
-                    if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
+                    if (System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
                         // Checks folder contents and refreshes view if necessary
                         monitor.waitBeforeCheckTime = monitor.checkAndRefresh();
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
@@ -248,16 +248,17 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * Note that folder change check took an average of N milliseconds, the returned value will be at least N*WAIT_MULTIPLIER
      */
     private synchronized long checkAndRefresh() {
-        if (!isFolderDateChanged())
+        if (isFolderDateChanged()) {
+            // Try and refresh current folder in a separate thread as to not lock monitor thread
+            folderPanel.tryRefreshCurrentFolder();
             return nbSamples==0 ?
-                    checkPeriod
-                    : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));;
+                    waitAfterRefresh
+                    : Math.max(waitAfterRefresh, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
+        }
 
-        // Try and refresh current folder in a separate thread as to not lock monitor thread
-        folderPanel.tryRefreshCurrentFolder();
         return nbSamples==0 ?
-                waitAfterRefresh
-                : Math.max(waitAfterRefresh, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
+                checkPeriod
+                : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
     }
 
     /**
