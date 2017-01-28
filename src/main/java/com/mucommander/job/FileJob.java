@@ -762,17 +762,15 @@ public abstract class FileJob implements Runnable {
      */
     public final void run() {
         FileTable activeTable = getMainFrame().getActiveTable();
-        AbstractFile currentFile;
 
         // Notify that this job has started
         jobStarted();
 
         // Loop on all source files, checking that job has not been interrupted
-        for(int i=0; i<nbFiles; i++) {
-            currentFile = files.elementAt(i);
+        for (currentFileIndex=0; currentFileIndex<nbFiles; currentFileIndex++) {
+            AbstractFile currentFile = files.elementAt(currentFileIndex);
 
             // Change current file and advance file index
-            currentFileIndex = i;
             nextFile(currentFile);
 
             // Process current file
@@ -784,19 +782,18 @@ public abstract class FileJob implements Runnable {
 
             // Unmark file in active table if 'auto unmark' is enabled
             // and file was processed successfully
-            if(autoUnmark && success) {
+            if (autoUnmark && success) {
                 // Do not repaint rows individually as it would be too expensive
                 activeTable.setFileMarked(currentFile, false, false);
             }
+        }
 
-            // If last file was reached without any user interruption, all files have been processed with or
-            // without errors, switch to FINISHED state and notify listeners
-            if(i==nbFiles-1) {
-                currentFileIndex++;
-                stop();
-                jobCompleted();
-                setState(FileJobState.FINISHED);
-            }
+        // If last file was reached without any user interruption, all files have been processed with or
+        // without errors, switch to FINISHED state and notify listeners
+        if (currentFileIndex == nbFiles && getState() != FileJobState.INTERRUPTED) {
+            stop();
+            jobCompleted();
+            setState(FileJobState.FINISHED);
         }
 
         // Refresh tables's current folders, based on the job's refresh policy.
