@@ -191,13 +191,13 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                     // the folder has been refreshed.
                     if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
                         // Checks folder contents and refreshes view if necessary
-                        monitor.checkAndRefresh();
+                        boolean folderRefreshed = monitor.checkAndRefresh();
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
 
                         // If folder change check took an average of N milliseconds, we will wait at least N*WAIT_MULTIPLIER before next check
                         monitor.waitBeforeCheckTime = monitor.nbSamples==0 ?
                             checkPeriod
-                            : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(monitor.totalCheckTime/(float)monitor.nbSamples)));
+                            : Math.max(folderRefreshed?waitAfterRefresh:checkPeriod, (int)(WAIT_MULTIPLIER*(monitor.totalCheckTime/(float)monitor.nbSamples)));
                     }
                 }					
             }		
@@ -251,7 +251,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      *
      * @return <code>true</code> if the folder was refreshed.
      */
-    private synchronized void checkAndRefresh() {
+    private synchronized boolean checkAndRefresh() {
         // Update time average next loop
         long timeStamp = System.currentTimeMillis();
 		
@@ -264,12 +264,14 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Has date changed ?
         // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
         // what we want (the folder will be changed to a 'workable' folder).
-        if(date!=currentFolderDate) {
-            LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
-			
-            // Try and refresh current folder in a separate thread as to not lock monitor thread
-            folderPanel.tryRefreshCurrentFolder();
-        }
+        if (date == currentFolderDate)
+            return false;
+
+        LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
+
+        // Try and refresh current folder in a separate thread as to not lock monitor thread
+        folderPanel.tryRefreshCurrentFolder();
+        return true;
     }
 
 
