@@ -247,7 +247,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * @return <code>true</code> if the folder was refreshed.
      */
     private synchronized void checkAndRefresh() {
-        if(paused || disableAutoRefreshFilter.match(currentFolder))
+        if (disableAutoRefreshFilter.match(currentFolder))
             return;
 
         // Update time average next loop
