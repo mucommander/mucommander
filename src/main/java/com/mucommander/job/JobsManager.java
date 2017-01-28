@@ -153,11 +153,11 @@ public class JobsManager implements FileJobListener {
     /**
      * Removes a job from a list of monitored jobs.
      * This method is executed in Swing Thread (EDT).
-     * After adding a new job a {@link JobListener#jobRemoved(FileJob, int)} 
+     * After removing a job a {@link JobListener#jobRemoved(FileJob, int)} 
      * event is fired.
      * @param job a job to be removed
      */
-    public void removeJob(final FileJob job) {
+    private void removeJob(final FileJob job) {
     	// ensure that this method is called in EDT
     	if (!SwingUtilities.isEventDispatchThread()) {
     		SwingUtilities.invokeLater(() -> removeJob(job));
