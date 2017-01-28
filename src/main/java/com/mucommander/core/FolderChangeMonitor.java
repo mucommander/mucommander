@@ -191,13 +191,8 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                     // the folder has been refreshed.
                     if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
                         // Checks folder contents and refreshes view if necessary
-                        boolean folderRefreshed = monitor.checkAndRefresh();
+                        monitor.waitBeforeCheckTime = monitor.checkAndRefresh();
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
-
-                        // If folder change check took an average of N milliseconds, we will wait at least N*WAIT_MULTIPLIER before next check
-                        monitor.waitBeforeCheckTime = monitor.nbSamples==0 ?
-                            checkPeriod
-                            : Math.max(folderRefreshed?waitAfterRefresh:checkPeriod, (int)(WAIT_MULTIPLIER*(monitor.totalCheckTime/(float)monitor.nbSamples)));
                     }
                 }					
             }		
@@ -249,9 +244,10 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * Checks if current file table's folder has changed and if it hasn't, checks if current folder's date has changed
      * and if it has, refresh the file table.
      *
-     * @return <code>true</code> if the folder was refreshed.
+     * @return the time (msec) to wait before next refresh attempt
+     * Note that folder change check took an average of N milliseconds, the returned value will be at least N*WAIT_MULTIPLIER
      */
-    private synchronized boolean checkAndRefresh() {
+    private synchronized long checkAndRefresh() {
         // Update time average next loop
         long timeStamp = System.currentTimeMillis();
 		
@@ -265,13 +261,17 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
         // what we want (the folder will be changed to a 'workable' folder).
         if (date == currentFolderDate)
-            return false;
+            return nbSamples==0 ?
+                    checkPeriod
+                    : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));;
 
         LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
 
         // Try and refresh current folder in a separate thread as to not lock monitor thread
         folderPanel.tryRefreshCurrentFolder();
-        return true;
+        return nbSamples==0 ?
+                waitAfterRefresh
+                : Math.max(waitAfterRefresh, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
     }
 
 
