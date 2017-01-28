@@ -181,6 +181,16 @@ public class JobsManager implements FileJobListener {
 	}
 
 	/**
+	 * Removes the given job from the jobs collection. Should be called when the job is ended.
+	 * @param job a job to remove
+	 */
+	void jobEnded(FileJob job) {
+	    Timer timer = new Timer(FINISHED_JOB_REMOVE_TIME, event -> removeJob(job));
+	    timer.setRepeats(false);
+	    timer.start();
+	}
+
+	/**
 	 * Returns jobs that are running in the background.
 	 * @return jobs that are running in the background.
 	 */
@@ -209,11 +219,6 @@ public class JobsManager implements FileJobListener {
 	 */
 	@Override
 	public void jobStateChanged(final FileJob source, FileJobState oldState, FileJobState newState) {
-		if (newState == FileJobState.FINISHED || newState == FileJobState.INTERRUPTED) {
-			Timer timer = new Timer(FINISHED_JOB_REMOVE_TIME, event -> removeJob(source));
-			timer.setRepeats(false);
-			timer.start();
-		}		
 	}
 
 	@Override

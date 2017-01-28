@@ -798,6 +798,8 @@ public abstract class FileJob implements Runnable {
 
         // Refresh tables's current folders, based on the job's refresh policy.
         refreshTables();
+
+        JobsManager.getInstance().jobEnded(this);
     }
 
 
