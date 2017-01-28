@@ -248,24 +248,10 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * Note that folder change check took an average of N milliseconds, the returned value will be at least N*WAIT_MULTIPLIER
      */
     private synchronized long checkAndRefresh() {
-        // Update time average next loop
-        long timeStamp = System.currentTimeMillis();
-		
-        // Check folder's date
-        long date = currentFolder.getDate();
-
-        totalCheckTime += System.currentTimeMillis()-timeStamp;
-        nbSamples++;
-		
-        // Has date changed ?
-        // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
-        // what we want (the folder will be changed to a 'workable' folder).
-        if (date == currentFolderDate)
+        if (!isFolderDateChanged())
             return nbSamples==0 ?
                     checkPeriod
                     : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));;
-
-        LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
 
         // Try and refresh current folder in a separate thread as to not lock monitor thread
         folderPanel.tryRefreshCurrentFolder();
@@ -274,6 +260,27 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 : Math.max(waitAfterRefresh, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
     }
 
+    /**
+     * Has date changed ?
+     * Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
+     * what we want (the folder will be changed to a 'workable' folder).
+     */
+    private boolean isFolderDateChanged() {
+        // Update time average next loop
+        long timeStamp = System.currentTimeMillis();
+
+        // Check folder's date
+        long date = currentFolder.getDate();
+
+        totalCheckTime += System.currentTimeMillis()-timeStamp;
+        nbSamples++;
+
+        if (date == currentFolderDate)
+            return false;
+
+        LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
+        return true;
+    }
 
     /////////////////////////////////////
     // LocationListener implementation //
