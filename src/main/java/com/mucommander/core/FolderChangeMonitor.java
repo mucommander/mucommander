@@ -182,6 +182,11 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 // - monitor is not paused
                 // - current folder is not being changed
                 if(monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging && !monitor.paused) {
+                    if (disableAutoRefreshFilter.match(monitor.currentFolder)) {
+                        monitor.lastCheckTimestamp = System.currentTimeMillis();
+                        monitor.waitBeforeCheckTime = checkPeriod;
+                        continue;
+                    }
                     // By checking FolderPanel.getLastFolderChangeTime(), we ensure that we don't check right after
                     // the folder has been refreshed.
                     if(System.currentTimeMillis()-Math.max(monitor.lastCheckTimestamp, monitor.folderPanel.getLastFolderChangeTime())>monitor.waitBeforeCheckTime) {
@@ -247,9 +252,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * @return <code>true</code> if the folder was refreshed.
      */
     private synchronized void checkAndRefresh() {
-        if (disableAutoRefreshFilter.match(currentFolder))
-            return;
-
         // Update time average next loop
         long timeStamp = System.currentTimeMillis();
 		
