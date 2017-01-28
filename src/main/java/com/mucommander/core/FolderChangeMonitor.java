@@ -34,6 +34,7 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.job.JobsManager;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
@@ -181,7 +182,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 // - MainFrame is in the foreground
                 // - monitor is not paused
                 // - current folder is not being changed
-                if (monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging && !monitor.paused) {
+                if (monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging) {
                     if (disableAutoRefreshFilter.match(monitor.currentFolder)) {
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
                         monitor.waitBeforeCheckTime = checkPeriod;
@@ -209,22 +210,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 
 
     /**
-     * Suspends or resumes this monitor.
-     *
-     * @param paused true to supsend, false to resume
-     */
-    public void setPaused(boolean paused) {
-        // Note: this method should *not* be synchronized as it would potentially lock while the folder is being
-        // checked/refreshed
-        this.paused = paused;
-
-        // Check folder for changes immediately as setPaused(false) is often called after a FileJob
-        if(!paused)
-            this.waitBeforeCheckTime = 0;
-    }
-	
-	
-    /**
      * Forces this monitor to update current folder information. This method should be called when a folder has been
      * manually refreshed, so that this monitor doesn't detect changes and try to refresh the table again.
      *
@@ -248,7 +233,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * Note that folder change check took an average of N milliseconds, the returned value will be at least N*WAIT_MULTIPLIER
      */
     private synchronized long checkAndRefresh() {
-        if (isFolderDateChanged()) {
+        if (!isFileJobOperatesOnFolder() && isFolderDateChanged()) {
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
             return nbSamples==0 ?
@@ -259,6 +244,10 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         return nbSamples==0 ?
                 checkPeriod
                 : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
+    }
+
+    private boolean isFileJobOperatesOnFolder() {
+        return JobsManager.getInstance().mayFolderChangeByExistingJob(currentFolder);
     }
 
     /**

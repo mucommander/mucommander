@@ -28,6 +28,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.EventListenerList;
 
+import com.mucommander.commons.file.AbstractFile;
+
 /**
  * A class that monitors jobs progress.
  * @author Arik Hadas, Mariusz Jakubowski
@@ -178,6 +180,17 @@ public class JobsManager implements FileJobListener {
 	 */
 	public int getJobCount() {
 		return jobs.size();
+	}
+
+	/**
+	 * Checks if the given folder may change by any of the existing running job.
+	 * @param folder a folder to check
+	 * @return true if the folder may change by existing job, false otherwise
+	 */
+	public boolean mayFolderChangeByExistingJob(AbstractFile folder) {
+	    return jobs.stream()
+	            .filter(job -> job.getState() != FileJobState.PAUSED)
+	            .anyMatch(job -> job.hasFolderChanged(folder));
 	}
 
 	/**

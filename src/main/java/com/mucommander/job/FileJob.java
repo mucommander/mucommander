@@ -211,11 +211,6 @@ public abstract class FileJob implements Runnable {
         if(getState() != FileJobState.NOT_STARTED)
             return;
 
-        // Pause auto-refresh during file job as it potentially modifies the current folders contents
-        // and would potentially cause folder panel to auto-refresh
-        getMainFrame().getLeftPanel().getFolderChangeMonitor().setPaused(true);
-        getMainFrame().getRightPanel().getFolderChangeMonitor().setPaused(true);
-
         setState(FileJobState.RUNNING);
         startDate = System.currentTimeMillis();
 
@@ -663,10 +658,6 @@ public abstract class FileJob implements Runnable {
 
         // Repaint the status bar as marked files have changed
         mainFrame.getStatusBar().updateSelectedFilesInfo();
-
-        // Resume current folders auto-refresh
-        getMainFrame().getLeftPanel().getFolderChangeMonitor().setPaused(false);
-        getMainFrame().getRightPanel().getFolderChangeMonitor().setPaused(false);
     }
 	
 
