@@ -107,7 +107,8 @@ class SFTPConnectionHandler extends ConnectionHandler {
             // Re-throw exception
             throw e;
 		} catch (JSchException e) {
-			LOGGER.info("Caught exception while authenticating", e);
+			LOGGER.info("Caught exception while authenticating: {}", e.getMessage());
+			LOGGER.debug("Exception:", e);
             throwAuthException(e.getMessage());
 		}
     }
