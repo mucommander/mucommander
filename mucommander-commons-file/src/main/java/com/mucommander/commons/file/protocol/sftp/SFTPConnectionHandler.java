@@ -28,6 +28,7 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.UIKeyboardInteractive;
 import com.jcraft.jsch.UserInfo;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
@@ -138,7 +139,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
         // maintain connections open without limit.
     }
 
-    private class PasswordAuthentication implements UserInfo {
+    private class PasswordAuthentication implements UserInfo, UIKeyboardInteractive {
 
     	@Override
 		public void showMessage(String message) {
@@ -168,6 +169,18 @@ class SFTPConnectionHandler extends ConnectionHandler {
 		public String getPassphrase() {
 			return credentials.getPassword();
 		}
+
+        @Override
+        public String[] promptKeyboardInteractive(String destination,
+                String name,
+                String instruction,
+                String[] prompt,
+                boolean[] echo) {
+            String[] result = new String[prompt.length];
+            for (int i=0; i<echo.length; i++)
+                result[i] = echo[i] ? credentials.getLogin() : credentials.getPassword();
+            return result;
+        }
     }
 
 }
