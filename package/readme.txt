@@ -56,6 +56,7 @@ Bug fixes:
 - Fix selection of Ukraine translation.
 - Fix selection of English translation in non-English systems.
 - Fix the initial language selection that was incorrect in some systems.
+- Support user authentication with keyboard-interactive for sftp (regression introduced in 0.9.1).
 
 Known issues:
 - Some translations may not be up-to-date.
