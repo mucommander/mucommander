@@ -26,7 +26,7 @@ Development
 
 **Prerequisites**
 
-  - Java Development Kit (JDK) 1.6 or later  
+  - Java Development Kit (JDK) 1.8 or later  
   - Git
 
 **Code Editing**  
