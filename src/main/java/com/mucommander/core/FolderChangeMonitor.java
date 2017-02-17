@@ -68,9 +68,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     /** Current folder's date */
     private long currentFolderDate;
 
-    /** Folder check/refresh is skipped while this field is set to <code>true</code> */
-    private boolean paused;
-
     /** Number of milliseconds to wait before next folder check */
     private long waitBeforeCheckTime;
 	
@@ -180,7 +177,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 				
                 // Check for changes in current folder and refresh it only if :
                 // - MainFrame is in the foreground
-                // - monitor is not paused
                 // - current folder is not being changed
                 if (monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging) {
                     if (disableAutoRefreshFilter.match(monitor.currentFolder)) {
@@ -226,14 +222,14 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 	
 	
     /**
-     * Checks if current file table's folder has changed and if it hasn't, checks if current folder's date has changed
-     * and if it has, refresh the file table.
+     * Refresh the file table if running file jobs could not change the current file table's folder and if current
+     * folder's date has changed.
      *
      * @return the time (msec) to wait before next refresh attempt
      * Note that folder change check took an average of N milliseconds, the returned value will be at least N*WAIT_MULTIPLIER
      */
     private synchronized long checkAndRefresh() {
-        if (!isFileJobOperatesOnFolder() && isFolderDateChanged()) {
+        if (!mayFolderChangeByFileJob() && isFolderDateChanged()) {
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
             return nbSamples==0 ?
@@ -246,7 +242,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
     }
 
-    private boolean isFileJobOperatesOnFolder() {
+    private boolean mayFolderChangeByFileJob() {
         return JobsManager.getInstance().mayFolderChangeByExistingJob(currentFolder);
     }
 
