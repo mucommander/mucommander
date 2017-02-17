@@ -20,8 +20,8 @@ package com.mucommander.job;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
@@ -65,7 +65,7 @@ public class JobsManager implements FileJobListener {
 	private JobsManager() {
 		JobProgressTimer timerListener = new JobProgressTimer(); 
     	progressTimer = new Timer(CURRENT_FILE_LABEL_REFRESH_RATE, timerListener);
-    	jobs  = new ArrayList<>();
+        jobs  = new CopyOnWriteArrayList<>();
 	}
 	
 	/**
