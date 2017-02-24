@@ -72,6 +72,7 @@ Known issues:
   sites. This seems to be a Windows firewall problem, with a possible workaround:
   http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7077696
 - Unpacking files from 7z archive files can be slow.
+- Need to enable NTLM authentication manually in order to authenticate to Samba >= 4.5. This is done by adding 'ntlm auth = yes' to smb.conf.
 
 License
 -------
