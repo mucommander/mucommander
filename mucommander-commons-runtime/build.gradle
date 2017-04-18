@@ -5,7 +5,7 @@ plugins {
 repositories.jcenter()
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.5'
-    testCompile 'org.testng:testng:6.8.1'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    testCompile 'org.testng:testng:6.11'
 }
 
