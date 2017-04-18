@@ -1214,7 +1214,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 
             // If not, throw an exception using the reply string
             if(!FTPReply.isPositiveCompletion(replyCode)) {
-                if(replyCode==FTPReply.CODE_503 || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
+                if(replyCode==FTPReply.BAD_COMMAND_SEQUENCE || replyCode==FTPReply.NEED_PASSWORD || replyCode==FTPReply.NOT_LOGGED_IN)
                     throwAuthException(ftpClient.getReplyString());
                 else
                     throw new IOException(ftpClient.getReplyString());
