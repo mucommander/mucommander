@@ -37,14 +37,14 @@ dependencies {
     compile project('mucommander-commons-conf')
     compile project('mucommander-commons-collections')
 
-    compile 'org.jmdns:jmdns:3.5.0'
-    compile 'org.slf4j:slf4j-api:1.7.13'
-    compile 'ch.qos.logback:logback-core:1.1.3'
-    compile 'ch.qos.logback:logback-classic:1.1.3'
-    compile 'com.beust:jcommander:1.48'
+    compile 'org.jmdns:jmdns:3.5.1'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'ch.qos.logback:logback-core:1.2.3'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compile 'com.beust:jcommander:1.66'
     compile files('libs/java-extension.jar')
 
-    testCompile 'org.testng:testng:6.9.10'
+    testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
 }
 
