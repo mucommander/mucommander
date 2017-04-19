@@ -19,7 +19,9 @@ There are several ways to contribute to muCommander:
 
 - Found a bug or thinking about a useful feature that is missing? [File an issue](https://github.com/mucommander/mucommander/issues)
 - Want to fix a bug or implement a feature? We are using the standard [GitHub flow](https://guides.github.com/introduction/flow/): fork, make the changes and submit a pull request. Changes are merged to the *master* branch. See the next section for tips for developing muCommander.
-- If you happen to speak a language that muCommander is not available in or able to improve existing tranlations, you can help translate the interface using the [zanata platform](https://translate.zanata.org/project/view/mucommander).
+- If you happen to speak a language that muCommander is not available in or able to improve existing tranlations, you can help translate the interface using the [zanata platform](https://translate.zanata.org/project/view/mucommander).  
+
+If you want to get involved in muCommander or have any question or issue to discuss, you are more than welcome to join our rooms on [Gitter](https://gitter.im/mucommander).  
 
 Development
 -----------
