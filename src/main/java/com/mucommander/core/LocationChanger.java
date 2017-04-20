@@ -333,7 +333,6 @@ public class LocationChanger {
      * </p>
      *
      * @param folder folder to be made current folder
-     * @param children current folder's files (value of folder.ls())
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
 	 * @throws IOException 

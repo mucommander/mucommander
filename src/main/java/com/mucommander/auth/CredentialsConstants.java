@@ -28,7 +28,7 @@ interface CredentialsConstants {
     /** Root element */
     static final String ELEMENT_ROOT     = "credentials_list";
 
-    /** Element for each credential item, containg a URL, login and password */
+    /** Element for each credential item, containing a URL, login and password */
     static final String ELEMENT_CREDENTIALS = "credentials";
 
     /** Element containing the credentials' URL */

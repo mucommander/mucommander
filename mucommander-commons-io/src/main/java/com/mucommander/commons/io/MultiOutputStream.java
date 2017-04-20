@@ -25,7 +25,7 @@ import java.util.Vector;
 
 /**
  * <code>MultiOutputStream</code> 'multiplies' a stream by forwarding the data that is written to it to several
- * registered output streams. Similarily, {@link #flush()} and {@link #close()} call the same method on all registered
+ * registered output streams. Similarly, {@link #flush()} and {@link #close()} call the same method on all registered
  * output streams.
  * Until one or more OutputStream is registered, this stream acts as a sink: all OutputStream operations are no-ops.
  *

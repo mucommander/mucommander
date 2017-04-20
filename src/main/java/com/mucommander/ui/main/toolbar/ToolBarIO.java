@@ -81,7 +81,6 @@ public abstract class ToolBarIO extends DefaultHandler {
     
     /**
      * Writes the current tool bar to the user's tool bar file.
-     * @throws IOException 
      * @throws IOException
      */
     public static void saveToolBar() throws IOException {

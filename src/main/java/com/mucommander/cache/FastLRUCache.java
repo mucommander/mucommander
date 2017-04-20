@@ -133,7 +133,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
         // Look for expired items and purge them (if any)
         purgeExpiredItems();	
 
-        // Look for a value correponding to the specified key in the cache map
+        // Look for a value corresponding to the specified key in the cache map
         Object[] value = cacheMap.get(key);
 
         if(value==null) {

@@ -68,9 +68,7 @@ public class LocationManager {
      * This method saves the given {@link AbstractFile}, and notify the {@link LocationListener}s that
      * the location was changed to it.
      * 
-     * @param currentFolder the {@link AbstractFile} that is going to be presented in the {@link FolderPanel}
-     * @throws IOException 
-     * @throws UnsupportedFileOperationException 
+     * @param folder the {@link AbstractFile} that is going to be presented in the {@link FolderPanel}
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) {
     	LOGGER.trace("calling ls()");

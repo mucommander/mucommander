@@ -207,7 +207,7 @@ public class ArchiveJob extends TransferFileJob {
     }
 
     /**
-     * Overriden method to close the archiver.
+     * Overridden method to close the archiver.
      */
     @Override
     public void jobStopped() {

@@ -294,7 +294,7 @@ public class SendMailJob extends TransferFileJob {
 
     /**
      * This method is called when this job starts, before the first call to {@link #processFile(AbstractFile,Object) processFile()} is made.
-     * This method here does nothing but it can be overriden by subclasses to perform some first-time initializations.
+     * This method here does nothing but it can be overridden by subclasses to perform some first-time initializations.
      */
     @Override
     protected void jobStarted() {

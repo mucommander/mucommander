@@ -215,7 +215,7 @@ public class CopyJob extends AbstractCopyJob {
         if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable())
             optimizeArchive((AbstractRWArchiveFile)archiveFile);
 
-        // If this job correponds to a 'local copy' of a single file and in the same directory,
+        // If this job corresponds to a 'local copy' of a single file and in the same directory,
         // select the copied file in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && baseDestFolder.equalsCanonical(files.elementAt(0).getParent())) {
             // Resolve new file instance now that it exists: some remote files do not immediately update file attributes

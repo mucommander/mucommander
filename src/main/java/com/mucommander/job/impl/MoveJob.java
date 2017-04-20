@@ -78,7 +78,7 @@ public class MoveJob extends AbstractCopyJob {
      * @param file the file or folder to move
      * @param recurseParams destination folder where the given file will be moved (null for top level files)
      * 
-     * @return <code>true</code> if the file has been moved completly (copied + deleted).
+     * @return <code>true</code> if the file has been moved completely (copied + deleted).
      */
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
@@ -293,7 +293,7 @@ public class MoveJob extends AbstractCopyJob {
                 && !(sourceArchiveFile!=null && destArchiveFile.equalsCanonical(sourceArchiveFile)))
             optimizeArchive((AbstractRWArchiveFile)destArchiveFile);
 
-        // If this job correponds to a file renaming in the same directory, select the renamed file
+        // If this job corresponds to a file renaming in the same directory, select the renamed file
         // in the active table after this job has finished (and hasn't been cancelled)
         if(files.size()==1 && newName!=null && baseDestFolder.equalsCanonical(files.elementAt(0).getParent())) {
             // Resolve new file instance now that it exists: some remote files do not immediately update file attributes

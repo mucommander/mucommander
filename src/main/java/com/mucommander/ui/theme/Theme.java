@@ -87,7 +87,7 @@ public class Theme extends ThemeData {
 
     private void init(ThemeListener listener, int type, String name) {
         // This might seem like a roundabout way of doing things, but it's actually necessary.
-        // If we didn't explicitely call a defaultValuesListener method, proGuard would 'optimise'
+        // If we didn't explicitly call a defaultValuesListener method, proGuard would 'optimise'
         // the instance out with catastrophic results (the listener would become a weak reference,
         // be removed by the garbage collector, and all our carefully crafted event system would
         // crumble).

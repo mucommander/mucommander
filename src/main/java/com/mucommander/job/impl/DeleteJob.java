@@ -39,7 +39,7 @@ import com.mucommander.ui.main.MainFrame;
 
 /**
  * This class is responsible for deleting a set of files. This job can operate in two modes, depending on the boolean
- * value specified in the construtor:
+ * value specified in the constructor:
  * <ul>
  *  <li>moveToTrash enabled: files are moved to the trash returned by {@link DesktopManager#getTrash()}.
  *  <li>moveToTrash disabled: files are permanently deleted, i.e deleted files cannot be recovered. In this mode,

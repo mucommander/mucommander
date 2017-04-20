@@ -103,7 +103,7 @@ public class AutocompletedEditableCombobox extends EditableComboBox {
 	public void respondToEnterKeyPressing(KeyEvent keyEvent) {
 		// Combo popup menu is visible
 		if(isPopupVisible()) {
-			// Under Java 1.5 or lower, we need to explicitely hide the popup.
+			// Under Java 1.5 or lower, we need to explicitly hide the popup.
 			if(JavaVersion.JAVA_1_5.isCurrentOrLower())
 				hidePopup();
 			

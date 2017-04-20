@@ -209,13 +209,13 @@ public class Translator {
     }
 
     /**
-     * Returns the localized text String for the given key expressd in the current language, or in the default language
+     * Returns the localized text String for the given key expressed in the current language, or in the default language
      * if there is no value for the current language. Entry parameters (%1, %2, ...), if any, are replaced by the
      * specified values.
      *
      * @param key key of the requested dictionary entry (case-insensitive)
      * @param paramValues array of parameters which will be used as values for variables.
-     * @return the localized text String for the given key expressd in the current language
+     * @return the localized text String for the given key expressed in the current language
      */
     public static String get(String key, String... paramValues) {
     	if (dictionaryBundle.containsKey(key))

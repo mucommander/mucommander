@@ -57,7 +57,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     /**
      * Creates a new preferences dialog.
      * @param parent parent of the dialog.
-     * @param title  title of the dialg.
+     * @param title  title of the dialog.
      */
     public PreferencesDialog(Frame parent, String title) {
         super(parent, title, parent);
@@ -67,7 +67,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     /**
      * Creates a new preferences dialog.
      * @param parent parent of the dialog.
-     * @param title  title of the dialg.
+     * @param title  title of the dialog.
      */
     public PreferencesDialog(Dialog parent, String title) {
         super(parent, title, parent);
@@ -180,7 +180,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
      * Notifies all panels that changes are about to be commited.
      * <p>
      * This gives preference panels a chance to display warning or errors before changes are
-     * commited.
+     * committed.
      * </p>
      * @return <code>true</code> if all preference panels are ok with commiting the changes, <code>false</code> otherwise.
      */

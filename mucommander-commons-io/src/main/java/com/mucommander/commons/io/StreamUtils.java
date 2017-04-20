@@ -21,7 +21,7 @@ package com.mucommander.commons.io;
 import java.io.*;
 
 /**
- * This class provides convience static methods that operate on streams. All read/write buffers are allocated using
+ * This class provides convenience static methods that operate on streams. All read/write buffers are allocated using
  * {@link BufferPool} for memory efficiency reasons.
  *
  * @author Maxence Bernard
