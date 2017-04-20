@@ -170,7 +170,7 @@ public class OSXTrash extends QueuedTrash {
      * files a chance to be queued and regrouped as a single AppleScript call. If some files were queued during
      * that period, the thread will wait an additional {@link OSXTrash#QUEUE_PERIOD}, and so on.<p>
      *
-     * <p>There are several reasons for doing that instead of executing an AppleScript synchroneously for each file
+     * <p>There are several reasons for doing that instead of executing an AppleScript synchronously for each file
      * passed to {@link OSXTrash#moveToTrash(com.mucommander.commons.file.AbstractFile)} :
      * <ul>
      *  <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it. Calling

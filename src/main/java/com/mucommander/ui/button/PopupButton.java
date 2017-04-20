@@ -165,7 +165,7 @@ public abstract class PopupButton extends NonFocusableButton {
         setSelected(true);
 
         // Note: focus MUST NOT be requested on the popup menu because:
-        // a/ it's not necessary, focus is automatically transfered to the popup menu
+        // a/ it's not necessary, focus is automatically transferred to the popup menu
         // b/ it creates a weird bug under Windows which prevents enter key from selecting any menu item
     }
 

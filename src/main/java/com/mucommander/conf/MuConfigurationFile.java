@@ -64,7 +64,7 @@ abstract class MuConfigurationFile implements ConfigurationSource {
     /**
      * Returns the path to the configuration file.
      * @return             the path to the configuration file.
-     * @throws IOException if an error occured while locating the default configuration file.
+     * @throws IOException if an error occurred while locating the default configuration file.
      */
     private synchronized AbstractFile getConfigurationFile() throws IOException {
         if(configurationFile == null)

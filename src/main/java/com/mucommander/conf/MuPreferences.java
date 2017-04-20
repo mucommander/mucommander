@@ -472,7 +472,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/**
 	 * Check whether the preferences file exists
 	 * @return             true if the preferences file exits, false otherwise.
-	 * @throws IOException if an error occured.
+	 * @throws IOException if an error occurred.
 	 */
 	boolean isFileExists() throws IOException {
 		return configuration.getSource().isExists();

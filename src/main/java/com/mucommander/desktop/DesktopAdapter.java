@@ -36,7 +36,7 @@ import java.awt.event.MouseEvent;
  * <p>
  * This is achieved through the {@link #isAvailable()} method. While it has a fairly
  * simple contract, this method can prove quite difficult to implement properly.<br>
- * The <code>com.mucommander.commons.runtime</code> package provides helpfull classes for this,
+ * The <code>com.mucommander.commons.runtime</code> package provides helpful classes for this,
  * but application developers might end up having to try to run commands to see if they work
  * (this can be done through the {@link com.mucommander.process.ProcessRunner} class), query
  * environment variables, ...

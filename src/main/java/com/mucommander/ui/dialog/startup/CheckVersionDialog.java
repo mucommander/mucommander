@@ -144,7 +144,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         }
         // Check failed
         catch(Exception e) {
-            // If the version check was not iniated by the user (i.e. was automatic),
+            // If the version check was not initiated by the user (i.e. was automatic),
             // we do not need to inform the user that the check failed
             if(!userInitiated) {
                 dispose();

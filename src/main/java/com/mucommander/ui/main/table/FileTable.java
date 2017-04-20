@@ -309,7 +309,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             // Displays an ascending/descending arrow
             tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
-                    ? sortInfo.getAscendingOrder()?"ascending":"decending"      // decending is mispelled but this is OK
+                    ? sortInfo.getAscendingOrder()?"ascending":"decending"      // 'decending' is misspelled but this is OK
                     :null);
 
             // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.

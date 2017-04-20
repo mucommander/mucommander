@@ -309,7 +309,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
     // -----------------------------------------------------------------------------------
     /**
      * Notifies the RunDialog that an action has been performed.
-     * @param e describes the action that occured.
+     * @param e describes the action that occurred.
      */
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -406,7 +406,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
             repaint();
         }
         catch(Exception e) {
-            // Notifies the user that an error occured and resets to normal state.
+            // Notifies the user that an error occurred and resets to normal state.
             addToTextArea(Translator.get("generic_error"));
             switchToRunState();
         }

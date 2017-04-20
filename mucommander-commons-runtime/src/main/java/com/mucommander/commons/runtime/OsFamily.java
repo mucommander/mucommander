@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
  * This class represents a non-versioned family of operating system, like <code>Windows</code> or <code>Linux</code>. 
  * The current runtime instance is determined using the value of the <code>os.name</code> system property.
  *
- * @see OsFamilies
  * @see OsVersion
  * @author Maxence Bernard, Arik Hadas
  */
@@ -60,7 +59,7 @@ public enum OsFamily {
     /** Holds the OsFamily of the current runtime environment  */
     private static OsFamily currentValue;
 
-    /**
+    /*
      * Determines the current value by parsing the corresponding system property. This method is called automatically
      * by this class the first time the current value is accessed. However, this method has been made public to allow
      * to force the initialization if it needs to happen at a predictable time.

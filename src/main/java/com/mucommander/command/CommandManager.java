@@ -188,7 +188,7 @@ public class CommandManager implements CommandBuilder {
         if(command != null)
             return command;
 
-        // We haven't found a command explicitely associated with 'file',
+        // We haven't found a command explicitly associated with 'file',
         // but we might have a generic file opener.
         if(defaultCommand != null)
             return defaultCommand;

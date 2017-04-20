@@ -112,7 +112,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
     /** Holds the OsVersion of the current runtime environment  */
     private static OsVersion currentValue;
 
-    /**
+    /*
      * Determines the current value by parsing the corresponding system property. This method is called automatically
      * by this class the first time the current value is accessed. However, this method has been made public to allow
      * to force the initialization if it needs to happen at a predictable time.

@@ -81,7 +81,7 @@ public class TempCopyJob extends CopyJob {
         }
         catch(IOException e) {
             // Should never happen under normal circumstances.
-            LOGGER.warn("Caught exception instanciating temporary file, this should not happen!");
+            LOGGER.warn("Caught exception instantiating temporary file, this should not happen!");
             return files.getName();
         }
     }

@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
  * Being a {@link com.mucommander.commons.runtime.ComparableRuntimeProperty}, versions of Java are ordered and can be compared
  * against each other.
  *
- * @see JavaVersions
  * @author Maxence Bernard, Arik Hadas
 */
 public enum JavaVersion implements ComparableRuntimeProperty {

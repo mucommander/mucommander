@@ -189,7 +189,7 @@ public class ExtensionManager {
     /**
      * Returns the folder in which all extensions are stored.
      * @return             the folder in which all extensions are stored.
-     * @throws IOException if an error occured while locating the default extensions folder.
+     * @throws IOException if an error occurred while locating the default extensions folder.
      * @see                #setExtensionsFolder(AbstractFile)
      */
     public static AbstractFile getExtensionsFolder() throws IOException {

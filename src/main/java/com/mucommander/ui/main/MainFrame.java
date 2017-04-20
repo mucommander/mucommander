@@ -395,7 +395,7 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Returns the {@link CommandBar}, i.e. the component that contains shortcuts to certains actions such as
+     * Returns the {@link CommandBar}, i.e. the component that contains shortcuts to certain actions such as
      * View, Edit, Copy, Move, etc...
      * Note that a non-null instance of {@link CommandBar} is returned even if it is currently hidden.
      *

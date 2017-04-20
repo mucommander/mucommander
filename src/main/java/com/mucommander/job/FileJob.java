@@ -336,7 +336,7 @@ public abstract class FileJob implements Runnable {
     }
     
     /**
-     * Sets the timestamp in miliseconds when this job is paused.
+     * Sets the timestamp in milliseconds when this job is paused.
      */
     private void setPauseStartDate() {
         this.pauseStartDate = System.currentTimeMillis();
@@ -363,9 +363,9 @@ public abstract class FileJob implements Runnable {
 
 
     /**
-     * Returns the number of milliseconds this job effectively spent processing files, exclusing any pause time.
+     * Returns the number of milliseconds this job effectively spent processing files, excluding any pause time.
      *
-     * @return the number of milliseconds this job effectively spent processing files, exclusing any pause time
+     * @return the number of milliseconds this job effectively spent processing files, excluding any pause time
      */
     public long getEffectiveJobTime() {
         // If job hasn't start yet, return 0
@@ -520,7 +520,7 @@ public abstract class FileJob implements Runnable {
     /**
      * This method is called when this job has been paused, either by the user, or by the job when asking for user input.
      * 
-     * <p>This method implementation does nothing but it can be overriden by subclasses to do whatever is needed
+     * <p>This method implementation does nothing but it can be overridden by subclasses to do whatever is needed
      * when the job has been paused.
      */
     protected void jobPaused() {
@@ -531,7 +531,7 @@ public abstract class FileJob implements Runnable {
     /**
      * This method is called when this job has been resumed after being paused.
      *
-     * <p>This method implementation does nothing but it can be overriden by subclasses to do whatever is needed
+     * <p>This method implementation does nothing but it can be overridden by subclasses to do whatever is needed
      * when the job has returned from pause.
      */
     protected void jobResumed() {
@@ -542,7 +542,7 @@ public abstract class FileJob implements Runnable {
     /**
      * This method is called when this job has been stopped. The call happens after all calls to {@link #processFile(AbstractFile,Object)} and
      * {@link #jobCompleted()}.
-     * This method implementation does nothing but it can be overriden by subclasses to properly terminate the job.
+     * This method implementation does nothing but it can be overridden by subclasses to properly terminate the job.
      * This is where you want to close any opened connections.
      *
      * <p>Note that unlike {@link #jobCompleted()} this method is always called, whether the job has been completed (all

@@ -40,7 +40,7 @@ import java.util.Vector;
  * <p>
  * This mechanism allows to group calls to the underlying trash. It is effective when the atomic operation
  * of moving a file to the trash has a high cost and {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} is called
- * repeatedly. One thing to note is since the move is performed asynchroneously,
+ * repeatedly. One thing to note is since the move is performed asynchronously,
  * {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} returns immediately without waiting for the file to be moved,
  * {@link #waitForPendingOperations()} can be used to wait for the files to have effectively been moved.
  * </p>
@@ -80,7 +80,7 @@ public abstract class QueuedTrash extends AbstractTrash {
      * Implementation notes: this method adds the given file to the queue of files to be moved to the trash and returns
      * immediately, i.e. without waiting for the file to be moved. The specified file will only be added to the queue if
      * {@link #canMoveToTrash(com.mucommander.commons.file.AbstractFile)} returned <code>true</code> for it.
-     * Since the actual move is performed asynchroneously, this method has no way of
+     * Since the actual move is performed asynchronously, this method has no way of
      * knowing if the file was successfully moved to the trash. So this method will return <code>true</code> if the
      * given file has been scheduled to be moved to the trash, but it may end up failing to be moved for whatever reason.
      */

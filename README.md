@@ -37,7 +37,7 @@ After cloning the source code repository from GitHub, you would probably want to
 The code repository of muCommander is comprised of a main project that contains its core functionality and several sub-projects. These projects are Gradle projects. Most of the popular IDEs today allow you to import Gradle projects out-of-the-box or via an IDE plugin. By importing the main project that is located at the root directory of the repository you will get all the required code in the IDE.
 
 **Build from Command Line**  
-The use of Gradle wrapper significantely simplifies the build from the command line. The following commands can be invoked from the root directory of the repositoring with no further installation.
+The use of Gradle wrapper significantly simplifies the build from the command line. The following commands can be invoked from the root directory of the repositoring with no further installation.
 
 You can run the application by typing:  
 ```

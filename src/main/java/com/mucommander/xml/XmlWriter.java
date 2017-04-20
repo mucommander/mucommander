@@ -48,7 +48,7 @@ public class XmlWriter {
     // -------------------------------------------------------------------
     /** Forbiden XML characters. */
     private final static String[] ENTITIES            = new String[] {"&", "\"" , "'", "<", ">"};
-    /** What to replace forbiden XML characters with. */
+    /** What to replace forbidden XML characters with. */
     private final static String[] ENTITY_REPLACEMENTS = new String[] {"&amp;", "&quot;", "&apos;", "&lt;", "&gt;"};
 
 

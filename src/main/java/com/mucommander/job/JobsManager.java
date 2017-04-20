@@ -131,7 +131,7 @@ public class JobsManager implements FileJobListener {
     /**
      * Adds a new job to the list of monitored jobs. 
      * This method is executed in Swing Thread (EDT).
-     * After adding a new job a {@link JobListener#jobAdded(FileJob, int)} 
+     * After adding a new job a {@link JobListener#jobAdded(FileJob)}
      * event is fired.
      * @param job a job to be added
      */
@@ -155,7 +155,7 @@ public class JobsManager implements FileJobListener {
     /**
      * Removes a job from a list of monitored jobs.
      * This method is executed in Swing Thread (EDT).
-     * After removing a job a {@link JobListener#jobRemoved(FileJob, int)} 
+     * After removing a job a {@link JobListener#jobRemoved(FileJob)}
      * event is fired.
      * @param job a job to be removed
      */
