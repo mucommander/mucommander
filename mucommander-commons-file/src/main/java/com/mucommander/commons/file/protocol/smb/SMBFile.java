@@ -430,10 +430,6 @@ import java.net.MalformedURLException;
 
         boolean isDirectory = file.isDirectory();
 
-        // SmbFile#renameTo() throws an IOException if the destination exists (instead of overwriting the file)
-        if(destFile.exists())
-            destFile.delete();
-
         // Rename the file
         file.renameTo(((SMBFile)destFile).file);
 
