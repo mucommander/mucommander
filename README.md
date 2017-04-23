@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/mucommander/mucommander.svg)](https://travis-ci.org/mucommander/mucommander)
 [![Dependency Status](https://www.versioneye.com/user/projects/545fe410868332aa70000093/badge.svg?style=flat)](https://www.versioneye.com/user/projects/545fe410868332aa70000093)
 [![Coverity Scan](https://scan.coverity.com/projects/3642/badge.svg)](https://scan.coverity.com/projects/3642)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/mucommander/Lobby)
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.  
 It runs on any operating system with Java support (Mac OS X, Windows, Linux, *BSD, Solaris...).
