@@ -126,7 +126,7 @@ public class CopyJob extends AbstractCopyJob {
             return false;
 
         if (file.isSymlink()) {
-            return tryCopySymlinkFile(file, destFolder);
+            return tryCopySymlinkFile(file, destFile);
         }
 
         // Copy directory recursively
