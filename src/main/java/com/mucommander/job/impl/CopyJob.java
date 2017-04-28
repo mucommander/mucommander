@@ -97,26 +97,23 @@ public class CopyJob extends AbstractCopyJob {
             return false;
 		
         // Destination folder
-        AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
+        AbstractFile destFolder = recurseParams==null ? baseDestFolder : (AbstractFile)recurseParams;
 		
         // Is current file in base folder ?
         boolean isFileInBaseFolder = files.indexOf(file)!=-1;
 
         // Determine filename in destination
-        String destFileName;
-        if(isFileInBaseFolder && newName!=null)
-            destFileName = newName;
-       	else
-            destFileName = file.getName();
+        String destFileName = isFileInBaseFolder && newName!=null ? newName : file.getName();
 
         // Create destination AbstractFile instance
         AbstractFile destFile = createDestinationFile(destFolder, destFileName);
         if (destFile == null)
             return false;
+
         currentDestFile = destFile;
 
         // Do nothing if file is a symlink (skip file and return)
-        if(file.isSymlink())
+        if (file.isSymlink())
             return true;
 
         destFile = checkForCollision(file, destFolder, destFile, false);
@@ -124,9 +121,9 @@ public class CopyJob extends AbstractCopyJob {
             return false;
 
         // Copy directory recursively
-        if(file.isDirectory()) {
+        if (file.isDirectory()) {
             // Create the folder in the destination folder if it doesn't exist
-            if(!(destFile.exists() && destFile.isDirectory())) {
+            if (!destFile.exists() || !destFile.isDirectory()) {
                 // Loop for retry
                 do {
                     try {
@@ -136,7 +133,7 @@ public class CopyJob extends AbstractCopyJob {
                         // Unable to create folder
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
                         // Retry loops
-                        if(ret==FileJobAction.RETRY)
+                        if (ret==FileJobAction.RETRY)
                             continue;
                         // Cancel or close dialog return false
                         return false;
@@ -150,12 +147,13 @@ public class CopyJob extends AbstractCopyJob {
             do {		// Loop for retry
                 try {
                     // for each file in folder...
-                    AbstractFile subFiles[] = file.ls();
-//filesDiscovered(subFiles);
-                    for(int i=0; i<subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
+                    for (AbstractFile subFile : file.ls()) {
+                        if (getState() == FileJobState.INTERRUPTED)
+                            break;
+
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
-                        nextFile(subFiles[i]);
-                        processFile(subFiles[i], destFile);
+                        nextFile(subFile);
+                        processFile(subFile, destFile);
                     }
 
                     // Set currentDestFile back to the enclosing folder in case an overridden processFile method
@@ -163,7 +161,7 @@ public class CopyJob extends AbstractCopyJob {
                     currentDestFile = destFile;
 
                     // Only when finished with folder, set destination folder's date to match the original folder one
-                    if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                    if (destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
                         try {
                             destFile.changeDate(file.getDate());
                         }
@@ -179,7 +177,7 @@ public class CopyJob extends AbstractCopyJob {
                     // file.ls() failed
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY)
+                    if (ret==FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog returns false
                     return false;
