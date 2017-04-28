@@ -186,42 +186,14 @@ public abstract class TransferFileJob extends FileJob {
         }
 
         // Preserve source file's date
-        if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
-            try {
-                destFile.changeDate(sourceFile.getDate());
-            }
-            catch (IOException e) {
-                LOGGER.debug("failed to change the date of "+destFile, e);
-                // Fail silently
-            }
-        }
+        tryCopyFileDate(sourceFile, destFile);
 
         // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
         // and use default permissions for the rest of them.
-        if(destFile.isFileOperationSupported(FileOperation.CHANGE_PERMISSION)) {
-            try {
-                destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
-            }
-            catch(IOException e) {
-                LOGGER.debug("failed to import "+sourceFile+" permissions into "+destFile, e);
-                // Fail silently
-            }
-        }
+        tryCopyFilePermissions(sourceFile, destFile);
 
         // Under Mac OS X only, preserving the file type and creator
-        if(OsFamily.MAC_OS_X.isCurrent()
-            && sourceFile.hasAncestor(LocalFile.class)
-            && destFile.hasAncestor(LocalFile.class)) {
-
-            String sourcePath = sourceFile.getAbsolutePath();
-            try {
-                FileManager.setFileTypeAndCreator(destFile.getAbsolutePath(), FileManager.getFileType(sourcePath), FileManager.getFileCreator(sourcePath));
-            }
-            catch(IOException e) {
-                // Swallow the exception and do not interrupt the transfer
-                LOGGER.debug("Error while setting Mac OS X file type and creator on destination", e);
-            }
-        }
+        tryCopyFileTypeAndCreator(sourceFile, destFile);
 
         // This block is executed only if integrity check has been enabled (disabled by default)
         if(integrityCheckEnabled) {
@@ -262,6 +234,49 @@ public abstract class TransferFileJob extends FileJob {
             // Compare both checksums and throw an exception if they don't match
             if(!sourceChecksum.equals(destinationChecksum)) {
                 throw new FileTransferException(FileTransferError.CHECKSUM_MISMATCH);
+            }
+        }
+    }
+
+
+    private void tryCopyFileTypeAndCreator(AbstractFile sourceFile, AbstractFile destFile) {
+        if (OsFamily.MAC_OS_X.isCurrent()
+            && sourceFile.hasAncestor(LocalFile.class)
+            && destFile.hasAncestor(LocalFile.class)) {
+
+            String sourcePath = sourceFile.getAbsolutePath();
+            try {
+                FileManager.setFileTypeAndCreator(destFile.getAbsolutePath(), FileManager.getFileType(sourcePath), FileManager.getFileCreator(sourcePath));
+            }
+            catch(IOException e) {
+                // Swallow the exception and do not interrupt the transfer
+                LOGGER.debug("Error while setting Mac OS X file type and creator on destination", e);
+            }
+        }
+    }
+
+
+    private void tryCopyFilePermissions(AbstractFile sourceFile, AbstractFile destFile) {
+        if(destFile.isFileOperationSupported(FileOperation.CHANGE_PERMISSION)) {
+            try {
+                destFile.importPermissions(sourceFile, FilePermissions.DEFAULT_FILE_PERMISSIONS);  // use #importPermissions(AbstractFile, int) to avoid isDirectory test
+            }
+            catch(IOException e) {
+                LOGGER.debug("failed to import "+sourceFile+" permissions into "+destFile, e);
+                // Fail silently
+            }
+        }
+    }
+
+
+    private void tryCopyFileDate(AbstractFile sourceFile, AbstractFile destFile) {
+        if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+            try {
+                destFile.changeDate(sourceFile.getDate());
+            }
+            catch (IOException e) {
+                LOGGER.debug("failed to change the date of "+destFile, e);
+                // Fail silently
             }
         }
     }
