@@ -19,8 +19,11 @@
 
 package com.mucommander.job.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -290,6 +293,30 @@ public abstract class TransferFileJob extends FileJob {
         finally {
             closeCurrentInputStream();
         }
+    }
+
+    protected boolean tryCopySymlinkFile(AbstractFile sourceFile, AbstractFile destFile) {
+        Path sourcePath = ((File) sourceFile.getUnderlyingFileObject()).toPath();
+        Path destPath = ((File) destFile.getUnderlyingFileObject()).toPath();
+
+        try {
+            Files.createSymbolicLink(destPath, Files.readSymbolicLink(sourcePath));
+        } catch (IOException e) {
+            LOGGER.debug("failed to create symbolic link "+destFile, e);
+            return false;
+        }
+
+        // Preserve source file's date
+        tryCopyFileDate(sourceFile, destFile);
+
+        // Preserve source file's permissions: preserve only the permissions bits that are supported by the source file
+        // and use default permissions for the rest of them.
+        tryCopyFilePermissions(sourceFile, destFile);
+
+        // Under Mac OS X only, preserving the file type and creator
+        tryCopyFileTypeAndCreator(sourceFile, destFile);
+
+        return true;
     }
 
     /**

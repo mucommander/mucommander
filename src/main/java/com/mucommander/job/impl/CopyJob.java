@@ -29,6 +29,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
@@ -112,13 +113,21 @@ public class CopyJob extends AbstractCopyJob {
 
         currentDestFile = destFile;
 
-        // Do nothing if file is a symlink (skip file and return)
-        if (file.isSymlink())
+        // Do nothing if file is a symlink and either the source or the destination
+        // is non-local (skip file and return)
+        if (file.isSymlink() && (
+                !file.hasAncestor(LocalFile.class) ||
+                !destFile.hasAncestor(LocalFile.class))) {
             return true;
+        }
 
         destFile = checkForCollision(file, destFolder, destFile, false);
         if (destFile == null)
             return false;
+
+        if (file.isSymlink()) {
+            return tryCopySymlinkFile(file, destFolder);
+        }
 
         // Copy directory recursively
         if (file.isDirectory()) {
