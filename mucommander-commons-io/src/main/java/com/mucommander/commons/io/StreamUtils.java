@@ -109,7 +109,7 @@ public class StreamUtils {
                 nbRead = in.read(buffer, 0, (int)Math.min(buffer.length, length));	// the result of min will be int
             }
             catch(IOException e) {
-                throw new FileTransferException(FileTransferException.READING_SOURCE);
+                throw new FileTransferException(FileTransferError.READING_SOURCE);
             }
 
             if(nbRead==-1)
@@ -119,7 +119,7 @@ public class StreamUtils {
                 out.write(buffer, 0, nbRead);
             }
             catch(IOException e) {
-                throw new FileTransferException(FileTransferException.WRITING_DESTINATION, totalRead);
+                throw new FileTransferException(FileTransferError.WRITING_DESTINATION, totalRead);
             }
 
             length -= nbRead;
@@ -180,7 +180,7 @@ public class StreamUtils {
                     nbRead = isr.read(buffer, 0, buffer.length);
                 }
                 catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.READING_SOURCE);
+                    throw new FileTransferException(FileTransferError.READING_SOURCE);
                 }
 
                 if(nbRead==-1)
@@ -192,7 +192,7 @@ public class StreamUtils {
                     osw.flush();
                 }
                 catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+                    throw new FileTransferException(FileTransferError.WRITING_DESTINATION);
                 }
 
                 totalRead += nbRead;

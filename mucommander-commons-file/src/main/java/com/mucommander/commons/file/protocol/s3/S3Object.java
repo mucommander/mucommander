@@ -21,6 +21,7 @@ package com.mucommander.commons.file.protocol.s3;
 
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.StreamUtils;
@@ -99,7 +100,7 @@ public class S3Object extends S3File {
             atts.updateExpirationDate();
         }
         catch(S3ServiceException e) {
-            throw new FileTransferException(FileTransferException.UNKNOWN_REASON);
+            throw new FileTransferException(FileTransferError.UNKNOWN);
         }
         finally {
             // Close the InputStream, no matter what
@@ -314,7 +315,7 @@ public class S3Object extends S3File {
     public void copyStream(InputStream in, boolean append, long length) throws FileTransferException {
         if(append) {
 //            throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
-            throw new FileTransferException(FileTransferException.READING_SOURCE);
+            throw new FileTransferException(FileTransferError.READING_SOURCE);
         }
 
         // TODO: compute md5 ?
@@ -334,7 +335,7 @@ public class S3Object extends S3File {
                 tempOut = tempFile.getOutputStream();
             }
             catch(IOException e) {
-                throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+                throw new FileTransferException(FileTransferError.OPENING_DESTINATION);
             }
 
             try {
@@ -357,7 +358,7 @@ public class S3Object extends S3File {
                     tempIn = tempFile.getInputStream();
                 }
                 catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+                    throw new FileTransferException(FileTransferError.OPENING_SOURCE);
                 }
 
                 putObject(tempIn, tempFile.getSize());

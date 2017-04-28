@@ -39,6 +39,7 @@ import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.ChecksumInputStream;
+import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
@@ -379,7 +380,7 @@ public abstract class AbstractFile implements FileAttributes {
         }
         catch(IOException e) {
             // TODO: re-throw UnsupportedFileOperationException ? 
-            throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+            throw new FileTransferException(FileTransferError.OPENING_DESTINATION);
         }
 
         try {
@@ -391,7 +392,7 @@ public abstract class AbstractFile implements FileAttributes {
                 out.close();
             }
             catch(IOException e) {
-                throw new FileTransferException(FileTransferException.CLOSING_DESTINATION);
+                throw new FileTransferException(FileTransferError.CLOSING_DESTINATION);
             }
         }
     }
@@ -495,7 +496,7 @@ public abstract class AbstractFile implements FileAttributes {
             deleteRecursively();
         }
         catch(IOException e) {
-            throw new FileTransferException(FileTransferException.DELETING_SOURCE);
+            throw new FileTransferException(FileTransferError.DELETING_SOURCE);
         }
     }
 
@@ -1139,16 +1140,16 @@ public abstract class AbstractFile implements FileAttributes {
             }
 
             if(!isAllowedCaseVariation)
-                throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
+                throw new FileTransferException(FileTransferError.SOURCE_AND_DESTINATION_IDENTICAL);
         }
 
         // Throw an exception if source is a parent of destination
         if(!filesEqual && isParentOf(destFile))      // Note: isParentOf(destFile) returns true if both files are equal
-            throw new FileTransferException(FileTransferException.SOURCE_PARENT_OF_DESTINATION);
+            throw new FileTransferException(FileTransferError.SOURCE_PARENT_OF_DESTINATION);
 
         // Throw an exception if the source file does not exist
         if(!exists())
-            throw new FileTransferException(FileTransferException.FILE_NOT_FOUND);
+            throw new FileTransferException(FileTransferError.FILE_NOT_FOUND);
     }
 
     /**
@@ -1220,7 +1221,7 @@ public abstract class AbstractFile implements FileAttributes {
                 destFile.mkdir();
             }
             catch(IOException e) {
-                throw new FileTransferException(FileTransferException.WRITING_DESTINATION);
+                throw new FileTransferException(FileTransferError.WRITING_DESTINATION);
             }
 
             AbstractFile children[];
@@ -1228,7 +1229,7 @@ public abstract class AbstractFile implements FileAttributes {
                 children = sourceFile.ls();
             }
             catch(IOException e) {
-                throw new FileTransferException(FileTransferException.READING_SOURCE);
+                throw new FileTransferException(FileTransferError.READING_SOURCE);
             }
 
             AbstractFile destChild;
@@ -1237,7 +1238,7 @@ public abstract class AbstractFile implements FileAttributes {
                     destChild = destFile.getDirectChild(child.getName());
                 }
                 catch (IOException e) {
-                    throw new FileTransferException(FileTransferException.OPENING_DESTINATION);
+                    throw new FileTransferException(FileTransferError.OPENING_DESTINATION);
                 }
 
                 copyRecursively(child, destChild);
@@ -1250,7 +1251,7 @@ public abstract class AbstractFile implements FileAttributes {
                 in = sourceFile.getInputStream();
             }
             catch(IOException e) {
-                throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+                throw new FileTransferException(FileTransferError.OPENING_SOURCE);
             }
 
             try {
@@ -1262,7 +1263,7 @@ public abstract class AbstractFile implements FileAttributes {
                     in.close();
                 }
                 catch(IOException e) {
-                    throw new FileTransferException(FileTransferException.CLOSING_SOURCE);
+                    throw new FileTransferException(FileTransferError.CLOSING_SOURCE);
                 }
             }
         }
@@ -1423,7 +1424,7 @@ public abstract class AbstractFile implements FileAttributes {
             return cin.getChecksumString();
         }
         catch(IOException e) {
-            throw new FileTransferException(FileTransferException.READING_SOURCE);
+            throw new FileTransferException(FileTransferError.READING_SOURCE);
         }
     }
 

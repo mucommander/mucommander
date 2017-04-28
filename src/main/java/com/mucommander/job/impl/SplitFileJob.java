@@ -35,6 +35,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.ChecksumInputStream;
+import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.job.FileJobAction;
@@ -177,7 +178,7 @@ public class SplitFileJob extends AbstractCopyJob {
 				long written = StreamUtils.copyStream(origFileStream, out, BufferPool.getDefaultBufferSize(), partSize);
 				sizeLeft -= written;
 			} catch (FileTransferException e) {
-				if (e.getReason() == FileTransferException.WRITING_DESTINATION) {
+				if (e.getReason() == FileTransferError.WRITING_DESTINATION) {
 					// out of disk space - ask a user for a new disk
 					recalculateCRC = true;		// recalculate CRC (DigestInputStream doesn't support mark() and reset())
 					out.close();

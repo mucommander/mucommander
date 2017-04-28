@@ -28,64 +28,21 @@ import java.io.IOException;
  */
 public class FileTransferException extends IOException {
 
-    /** Reason not known / not specified */
-    public final static int UNKNOWN_REASON = 0;
-
-    /** Source and destination files are identical */
-    public final static int SOURCE_AND_DESTINATION_IDENTICAL = 1;
-
-    /** Source file could not be opened for read */
-    public final static int OPENING_SOURCE = 2;
-
-    /** Destination file could not be opened for write */
-    public final static int OPENING_DESTINATION = 3;
-
-    /** An error occurred while reading the source file */
-    public final static int READING_SOURCE = 4;
-
-    /** An error occurred while writing the destination file */
-    public final static int WRITING_DESTINATION = 5;
-
-    /** An error occurred while deleting the source file (used when moving a file) */
-    public final static int DELETING_SOURCE = 6;
-
-    /** Source file could not be closed */
-    public final static int CLOSING_SOURCE = 7;
-
-    /** Destination file could not be closed */
-    public final static int CLOSING_DESTINATION = 8;
-
-    /** Destination file exists */
-    public final static int DESTINATION_EXISTS = 9;
-
-    /** File not found (does not exist) */
-    public final static int FILE_NOT_FOUND = 10;
-
-    /** Source file is a parent of the destination file */
-    public final static int SOURCE_PARENT_OF_DESTINATION = 11;
-
-    /** An error occurred while reading the destination file */
-    public final static int READING_DESTINATION = 12;
-
-    /** The checksum of the source and destination files don't match */
-    public final static int CHECKSUM_MISMATCH = 13;
-
-
-    protected int reason;
+    protected FileTransferError reason;
 
 	private long bytesWritten;
 
 
-    public FileTransferException(int reason) {
+    public FileTransferException(FileTransferError reason) {
         this.reason = reason;
     }
 
-    public FileTransferException(int reason, long bytesWritten) {
+    public FileTransferException(FileTransferError reason, long bytesWritten) {
         this.reason = reason;
         this.bytesWritten = bytesWritten;
     }
     
-    public int getReason() {
+    public FileTransferError getReason() {
         return reason;
     }
 

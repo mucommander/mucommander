@@ -67,6 +67,7 @@ import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
@@ -745,9 +746,7 @@ public class VSphereFile extends ProtocolFile implements
 				doCopyRemoteFileName(in, length);
 			} catch (IOException e) {
 				LOGGER.error("Failed copying stream", e);
-				throw new FileTransferException(
-						FileTransferException.UNKNOWN_REASON);
-
+				throw new FileTransferException(FileTransferError.UNKNOWN);
 			}
 		}
 	}

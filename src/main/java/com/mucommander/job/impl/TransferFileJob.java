@@ -36,6 +36,7 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.ByteCounter;
 import com.mucommander.commons.io.ChecksumInputStream;
 import com.mucommander.commons.io.CounterInputStream;
+import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.ThroughputLimitInputStream;
 import com.mucommander.commons.io.security.MuProvider;
@@ -122,7 +123,7 @@ public abstract class TransferFileJob extends FileJob {
 
         // Throw a specific FileTransferException if source and destination files are identical
         if(sourceFile.equalsCanonical(destFile))
-            throw new FileTransferException(FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL);
+            throw new FileTransferException(FileTransferError.SOURCE_AND_DESTINATION_IDENTICAL);
 
         // Determine whether or not AbstractFile.copyRemotelyTo() should be used to copy the file.
         // Some file protocols do not provide a getOutputStream() method and require the use of copyRemotelyTo(). Some other
@@ -169,7 +170,7 @@ public abstract class TransferFileJob extends FileJob {
                 }
                 catch(Exception e) {
                     LOGGER.debug("IOException caught, throwing FileTransferException", e);
-                    throw new FileTransferException(FileTransferException.OPENING_SOURCE);
+                    throw new FileTransferException(FileTransferError.OPENING_SOURCE);
                 }
 
                 // Copy source stream to destination file
@@ -242,7 +243,7 @@ public abstract class TransferFileJob extends FileJob {
                     sourceChecksum = calculateChecksum(sourceFile);
                 }
                 catch(Exception e) {
-                    throw new FileTransferException(FileTransferException.READING_SOURCE);
+                    throw new FileTransferException(FileTransferError.READING_SOURCE);
                 }
             }
 
@@ -253,14 +254,14 @@ public abstract class TransferFileJob extends FileJob {
                 destinationChecksum = calculateChecksum(destFile);
             }
             catch(Exception e) {
-                throw new FileTransferException(FileTransferException.READING_DESTINATION);
+                throw new FileTransferException(FileTransferError.READING_DESTINATION);
             }
 
             LOGGER.debug("Destination checksum= "+destinationChecksum);
 
             // Compare both checksums and throw an exception if they don't match
             if(!sourceChecksum.equals(destinationChecksum)) {
-                throw new FileTransferException(FileTransferException.CHECKSUM_MISMATCH);
+                throw new FileTransferException(FileTransferError.CHECKSUM_MISMATCH);
             }
         }
     }
@@ -286,7 +287,7 @@ public abstract class TransferFileJob extends FileJob {
      */
     protected boolean tryCopyFile(AbstractFile sourceFile, AbstractFile destFile, boolean append, String errorDialogTitle) {
         // Copy file to destination
-        do {				// Loop for retry
+        do {  // Loop for retry
             try {
                 copyFile(sourceFile, destFile, append);
                 return true;
@@ -302,23 +303,22 @@ public abstract class TransferFileJob extends FileJob {
                 // Print the exception's stack trace
                 LOGGER.debug("Copy failed", e);
 
-                int reason = e.getReason();
                 int choice;
-                switch(reason) {
+                switch(e.getReason()) {
                     // Could not open source file for read
-                    case FileTransferException.OPENING_SOURCE:
+                    case OPENING_SOURCE:
                         choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", sourceFile.getName()));
                         break;
                     // Could not open destination file for write
-                    case FileTransferException.OPENING_DESTINATION:
+                    case OPENING_DESTINATION:
                         choice = showErrorDialog(errorDialogTitle, Translator.get("cannot_write_file", destFile.getName()));
                         break;
                     // Source and destination files are identical
-                    case FileTransferException.SOURCE_AND_DESTINATION_IDENTICAL:
+                    case SOURCE_AND_DESTINATION_IDENTICAL:
                         choice = showErrorDialog(errorDialogTitle, Translator.get("same_source_destination"));
                         break;
                     // Checksum of source and destination files don't match
-                    case FileTransferException.CHECKSUM_MISMATCH:
+                    case CHECKSUM_MISMATCH:
                         choice = showErrorDialog(errorDialogTitle, Translator.get("integrity_check_error"));
                         break;
                     default:
