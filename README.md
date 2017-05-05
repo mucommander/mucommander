@@ -77,6 +77,6 @@ License
 -------
 
 muCommander is released under the terms of the GNU General Public License.  
-Please refer to the 'license.txt' file bundled with muCommander.
+Please refer to the [license.txt file](https://github.com/mucommander/mucommander/blob/master/package/license.txt) bundled with muCommander.
 
 
