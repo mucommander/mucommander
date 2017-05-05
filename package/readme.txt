@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v0.9.2
+muCommander v0.9.3
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -29,36 +29,16 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.9.1 ?
+What's new since v0.9.2 ?
 -----------------------
 
 New features:
-- Add the ability to execute file operations in the background (non-blocking mode).
-- Add "Open as" menu that allows to open archive files that do not end with their expected file extension.
-- Support for OVA (virtual appliance) files, treat them as tar files.
 
 Improvements:
-- Add 'new tab' action to the toolbar and menu bar.
-- Show icons of referenced files while exploring bookmarks.
-- Set the initial name of a new directory/file according to the current selection (as it was before 0.9.1).
-- Add a keyboard shortcut (by default mapped to the context menu key) for showing context menu for the selected file.
-- Show an error message when failing to read a local folder instead of showing it as empty.
-- Move/rename operations now move symlinks instead of deleting them.
-- Symbolic links are now copied between local folders. 
 
 Localization:
 
 Bug fixes:
-- Fix opening bookmarks that refer to remote files.
-- Fix switching to a specific window using keyboard shortcut.
-- Files are launched according to the native file association on Gnome (regression introduced in 0.9.1). 
-- Fix local copy when the target filename starts with a tilde.
-- Fix the ability to move files to trash on Windows.
-- Fix selection of Ukraine translation.
-- Fix selection of English translation in non-English systems.
-- Fix the initial language selection that was incorrect in some systems.
-- Support user authentication with keyboard-interactive for sftp (regression introduced in 0.9.1).
-- Changing the case of a filename over SMB no longer removes it.
 
 Known issues:
 - Some translations may not be up-to-date.
