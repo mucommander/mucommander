@@ -33,30 +33,28 @@ What's new since v0.9.1 ?
 -----------------------
 
 New features:
-- Add the ability to execute file operations in the background (non-blocking mode).
-- Add "Open as" menu that allows to open archive files that do not end with their expected file extension.
-- Support for OVA (virtual appliance) files, treat them as tar files.
+- Enable the execution of file operations in the background (non-blocking mode).
+- Introduce "Open as" menu for opening archive files whose name does not end with their typical file extension.
+- Add support for OVA (virtual appliance) files. They are treated as tar files.
+- Add a keyboard shortcut for displaying context menu for the selected file. It is mapped by default to the context menu key.  
 
 Improvements:
-- Add 'new tab' action to the toolbar and menu bar.
-- Show icons of referenced files while exploring bookmarks.
-- Set the initial name of a new directory/file according to the current selection (as it was before 0.9.1).
-- Add a keyboard shortcut (by default mapped to the context menu key) for showing context menu for the selected file.
-- Show an error message when failing to read a local folder instead of showing it as empty.
-- Move/rename operations move symlinks instead of deleting them.
-
-Localization:
+- Add the 'new tab' action to the toolbar and menu bar.
+- The icons of the referenced files are now shown while exploring bookmarks.
+- Use the name of the currently selected file as the default name in make file and make directory dialogs (as it usedto be before 0.9.1).
 
 Bug fixes:
-- Fix opening bookmarks that refer to remote files.
-- Fix switching to a specific window using keyboard shortcut.
-- Files are launched according to the native file association on Gnome (regression introduced in 0.9.1). 
-- Fix local copy when the target filename starts with a tilde.
-- Fix the ability to move files to trash on Windows.
-- Fix selection of Ukraine translation.
-- Fix selection of English translation in non-English systems.
-- Fix the initial language selection that was incorrect in some systems.
-- Support user authentication with keyboard-interactive for sftp (regression introduced in 0.9.1).
+- Error message is now shown when attempting to browse local folders that cannot be read rather than showing them as empty.
+- Renaming a symbolic link no longer deletes it.
+- Fix a failure in opening bookmarks that refer to remote files.
+- Fix switching to a particular window using a keyboard shortcut.
+- Files are launched according to the native file association in Gnome (regression introduced in 0.9.1). 
+- Local copy now works when the target filename starts with a tilde.
+- Fix issues in moving files to trash on Windows.
+- Fix the selection of Ukraine translation.
+- Fix the selection of English translation in non-English systems.
+- Fix the wrong initial language selection in some systems.
+- Fix user authentication with keyboard-interactive for sftp (regression introduced in 0.9.1).
 - Changing the case of a filename over SMB no longer removes it.
 
 Known issues:
