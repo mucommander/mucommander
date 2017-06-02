@@ -1,6 +1,6 @@
 /*
  * Circular Byte Buffer
- * Copyright (C) 2002-2016 Stephen Ostermiller
+ * Copyright (C) 2002-2017 Stephen Ostermiller
  * http://ostermiller.org/contact.pl?regarding=Java+Utilities
  *
  * This program is free software; you can redistribute it and/or modify
