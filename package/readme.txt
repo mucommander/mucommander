@@ -208,5 +208,5 @@ Documentation
 -------------
 
 Documentation on how to use, customize and extend muCommander is available at:
-https://github.com/mucommander
+https://github.com/mucommander/mucommander/wiki
 
