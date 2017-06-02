@@ -36,7 +36,7 @@ New features:
 - Enable the execution of file operations in the background (non-blocking mode).
 - Introduce "Open as" menu for opening archive files whose name does not end with their typical file extension.
 - Add support for OVA (virtual appliance) files. They are treated as tar files.
-- Add a keyboard shortcut for displaying context menu for the selected file. It is mapped by default to the context menu key.  
+- Add a keyboard shortcut for displaying context menu for the selected file. It is mapped by default to the context menu key.
 
 Improvements:
 - Add the 'new tab' action to the toolbar and menu bar.
@@ -48,7 +48,7 @@ Bug fixes:
 - Renaming a symbolic link no longer deletes it.
 - Fix a failure in opening bookmarks that refer to remote files.
 - Fix switching to a particular window using a keyboard shortcut.
-- Files are launched according to the native file association in Gnome (regression introduced in 0.9.1). 
+- Files are launched according to the native file association in Gnome (regression introduced in 0.9.1).
 - Local copy now works when the target filename starts with a tilde.
 - Fix issues in moving files to trash on Windows.
 - Fix the selection of Ukraine translation.
