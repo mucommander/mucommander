@@ -41,7 +41,7 @@ New features:
 Improvements:
 - Add the 'new tab' action to the toolbar and menu bar.
 - The icons of the referenced files are now shown while exploring bookmarks.
-- Use the name of the currently selected file as the default name in make file and make directory dialogs (as it usedto be before 0.9.1).
+- Use the name of the currently selected file as the default name in make file and make directory dialogs (as it was before 0.9.1).
 
 Bug fixes:
 - Error message is now shown when attempting to browse local folders that cannot be read rather than showing them as empty.
