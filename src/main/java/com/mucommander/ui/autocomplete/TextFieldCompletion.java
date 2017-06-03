@@ -77,6 +77,11 @@ public class TextFieldCompletion extends CompletionType {
 
     	autocompletedtextComp.getDocument().addDocumentListener(documentListener);
 
+        // In previous versions of muCommander, the 'home' and 'end' keys were forwarded
+        // to the pop-up list (if opened), which I found surprising. This version handles
+        // the 'home' and 'end' keys always in the text field, like Firefox and others do.
+        boolean SHOULD_HOME_AND_END_KEYS_WORK_ON_POPUP_LIST = false;
+
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
         	@Override
             public void keyPressed(KeyEvent keyEvent) {
@@ -140,15 +145,22 @@ public class TextFieldCompletion extends CompletionType {
                 	}
                 	break;
                 case KeyEvent.VK_HOME:
-                	if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
-                		selectFirstValue();
-                		keyEvent.consume();
+                    if (SHOULD_HOME_AND_END_KEYS_WORK_ON_POPUP_LIST) {
+                        if (autocompletedtextComp.isEnabled() && isPopupListShowing()) {
+                            selectFirstValue();
+                            keyEvent.consume();
+                        }
                 	}
+                    else {
+                        hideAutocompletionPopup();
+                    }
                 	break;
                 case KeyEvent.VK_END:
-                	if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
-                		selectLastValue();
-                		keyEvent.consume();
+                    if (SHOULD_HOME_AND_END_KEYS_WORK_ON_POPUP_LIST) {
+                        if (autocompletedtextComp.isEnabled() && isPopupListShowing()) {
+                            selectLastValue();
+                            keyEvent.consume();
+                        }
                 	}
                 	break;
                 case KeyEvent.VK_LEFT:
