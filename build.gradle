@@ -86,6 +86,7 @@ shadowJar {
     exclude 'com/sun/jna/w32ce-arm/**'
     exclude 'org/eclipse/**'
     exclude 'jdtCompilerAdapter.jar'
+    exclude 'LICENSE*'
 }
 
 task proguard(type: proguard.gradle.ProGuardTask) {
