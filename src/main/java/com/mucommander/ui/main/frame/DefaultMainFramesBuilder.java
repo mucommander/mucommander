@@ -56,8 +56,8 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 	public MainFrame[] build() {
 		int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
 
-		// if there're no windows saved in the snapshot file, open one window with default settings
-		if (nbFrames == 0) {
+		// if there is no window saved in the snapshot file or custom folders are set, open one window with default settings
+		if (nbFrames == 0 || MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM)) {
 			MainFrame mainFrame = new MainFrame(
 					new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
 					getFileTableConfiguration(FolderPanelType.LEFT, -1),

@@ -39,6 +39,7 @@ Improvements:
 Localization:
 
 Bug fixes:
+- If custom folders are set, they are always loaded now on startup.
 
 Known issues:
 - Some translations may not be up-to-date.
