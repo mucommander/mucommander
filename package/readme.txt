@@ -42,6 +42,8 @@ Bug fixes:
 - If custom folders are set, they are always loaded now on startup.
 
 Known issues:
+- Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
+  can be solved by executing: xattr -d com.apple.quarantine <jar_name>.jar
 - Some translations may not be up-to-date.
 - Mac OS X: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
   up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
