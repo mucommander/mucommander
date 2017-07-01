@@ -45,6 +45,14 @@
     public protected private *;
 }
 
+-keep class * extends com.sun.jna.Structure {
+    public *;
+}
+
+-keep class * extends com.sun.jna.PointerType {
+    public *;
+ }
+
 -keep class com.vmware.vim25.** {
     public protected private *;
 }
