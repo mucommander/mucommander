@@ -365,8 +365,7 @@ public interface Kernel32API extends W32API {
         protected List getFieldOrder() {
             return Arrays.asList(
                     "dwFileAttributes", "ftCreationTime", "ftLastAccessTime", "ftLastWriteTime",
-                    "nFileSizeHigh", "nFileSizeLow", "nFileSizeLow", "dwReserved0", "dwReserved1",
-                    "cFileName", "cAlternateFileName");
+                    "nFileSizeHigh", "nFileSizeLow", "dwReserved0", "dwReserved1", "cFileName", "cAlternateFileName");
         }
     }
 
