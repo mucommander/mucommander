@@ -65,6 +65,8 @@ public class ToggleUseSinglePanelAction extends MuAction {
             mainFrame.getSplitPane().setSplitRatio(previousRatio);
             showInactivePanel();
         }
+
+        MuConfigurations.getPreferences().setVariable(MuPreference.USE_SINGLE_PANEL_VIEW, isSinglePanelViewNow);
     }
 
     @Override
