@@ -240,9 +240,6 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final String  USE_SINGLE_PANEL_VIEW              = FILE_TABLE_SECTION + '.' + "use_single_panel_view";
 	/** Default value for 'Show folders first' option. */
 	public static final boolean DEFAULT_USE_SINGLE_PANEL_VIEW      = false;
-	/** Controls whether symlinks should be followed when changing directory. */
-
-
 
 	/** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
 	static final String VERSION_ATTRIBUTE = "version";
