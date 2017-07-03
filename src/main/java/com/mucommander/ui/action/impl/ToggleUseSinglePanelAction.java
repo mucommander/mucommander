@@ -22,8 +22,9 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
@@ -33,12 +34,12 @@ import com.mucommander.ui.main.MainFrame;
 /**
  * Toggles isVisible state of the right panel, imitating single/two panel view switch.
  */
-public class ToggleSinglePanelAction extends MuAction {
+public class ToggleUseSinglePanelAction extends MuAction {
 
     private static final float TWO_PANELS_DEFAULT_RATIO = 0.5f;
     private float previousRatio = TWO_PANELS_DEFAULT_RATIO;
 
-    ToggleSinglePanelAction(MainFrame mainFrame, Map<String, Object> properties) {
+    ToggleUseSinglePanelAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,7 +57,6 @@ public class ToggleSinglePanelAction extends MuAction {
         // we want to restore old two panel ratio
         boolean isSinglePanelViewNow = mainFrame.toggleSinglePanel();
 
-        
         if (isSinglePanelViewNow) {
             previousRatio = mainFrame.getSplitPane().getSplitRatio();
             hideInactivePanel();
@@ -65,7 +65,6 @@ public class ToggleSinglePanelAction extends MuAction {
             mainFrame.getSplitPane().setSplitRatio(previousRatio);
             showInactivePanel();
         }
-
     }
 
     @Override
@@ -76,7 +75,7 @@ public class ToggleSinglePanelAction extends MuAction {
     public static class Factory implements ActionFactory {
 
         public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
-            return new ToggleSinglePanelAction(mainFrame, properties);
+            return new ToggleUseSinglePanelAction(mainFrame, properties);
         }
     }
 
