@@ -261,10 +261,10 @@ public class MainFrame extends JFrame implements LocationListener {
 
         ActionKeymap.registerActions(this);
 
-        // Fire table change events on registered ActivePanelListener instances, to notify of the intial active table.
+        // Fire table change events on registered ActivePanelListener instances, to notify of the initial active table.
         fireActivePanelChanged(activeTable.getFolderPanel());
 
-        // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their subcomponents.
+        // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their sub components.
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
 
         if(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SINGLE_PANEL_VIEW, MuPreferences.DEFAULT_USE_SINGLE_PANEL_VIEW)) {
