@@ -209,7 +209,7 @@ public class ActionManager {
     	registerAction(new SplitFileAction.Descriptor(),            		new SplitFileAction.Factory());
     	registerAction(new SplitHorizontallyAction.Descriptor(),            new SplitHorizontallyAction.Factory());
     	registerAction(new SplitVerticallyAction.Descriptor(),              new SplitVerticallyAction.Factory());
-    	registerAction(new ToggleSinglePanelAction.Descriptor(),            new ToggleSinglePanelAction.Factory());
+    	registerAction(new ToggleUseSinglePanelAction.Descriptor(),            new ToggleUseSinglePanelAction.Factory());
     	registerAction(new StopAction.Descriptor(),                         new StopAction.Factory());
     	registerAction(new SwapFoldersAction.Descriptor(),       	        new SwapFoldersAction.Factory());
     	registerAction(new SwitchActiveTableAction.Descriptor(),            new SwitchActiveTableAction.Factory());
