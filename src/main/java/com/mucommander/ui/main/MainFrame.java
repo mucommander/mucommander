@@ -51,6 +51,7 @@ import com.mucommander.conf.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.CloseWindowAction;
+import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import com.mucommander.ui.button.ToolbarMoreButton;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
@@ -265,6 +266,10 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their subcomponents.
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
+
+        if(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SINGLE_PANEL_VIEW, MuPreferences.DEFAULT_USE_SINGLE_PANEL_VIEW)) {
+            ActionManager.performAction(ToggleUseSinglePanelAction.Descriptor.ACTION_ID, this);
+        }
     }
 
     public MainFrame(ConfFileTableTab leftTab, FileTableConfiguration leftTableConf,
