@@ -23,6 +23,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.net.MalformedURLException;
 
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,7 +140,12 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         }
 
         mainFrame.setBounds(new Rectangle(x, y, width, height));
-        
+
+        // Retrieve the Frame's SinglePanelView toggle state...
+        if (MuConfigurations.getSnapshot().getBooleanVariable(MuSnapshot.getSinglePanelViewToggleState(index))) {
+            ActionManager.performAction(ToggleUseSinglePanelAction.Descriptor.ACTION_ID, mainFrame);
+        }
+
         return mainFrame;
 	}
 	
