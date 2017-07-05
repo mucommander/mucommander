@@ -266,11 +266,6 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their sub components.
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
-
-        // Restore single panel view state
-        if(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SINGLE_PANEL_VIEW, MuPreferences.DEFAULT_USE_SINGLE_PANEL_VIEW)) {
-            ActionManager.performAction(ToggleUseSinglePanelAction.Descriptor.ACTION_ID, this);
-        }
     }
 
     public MainFrame(ConfFileTableTab leftTab, FileTableConfiguration leftTableConf,
