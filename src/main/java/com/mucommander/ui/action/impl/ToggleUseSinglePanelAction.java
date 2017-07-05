@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -66,7 +65,7 @@ public class ToggleUseSinglePanelAction extends MuAction {
             showInactivePanel();
         }
 
-        MuConfigurations.getPreferences().setVariable(MuPreference.USE_SINGLE_PANEL_VIEW, isSinglePanelViewNow);
+        MuConfigurations.getSnapshot().setVariable("", mainFrame.isSinglePanel());
     }
 
     @Override
