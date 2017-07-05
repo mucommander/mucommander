@@ -120,7 +120,9 @@ public class MuSnapshot {
     public static final String  HORIZONTAL_SPLIT_ORIENTATION       = "horizontal";
     /** Default split pane orientation. */
     public static final String  DEFAULT_SPLIT_ORIENTATION          = VERTICAL_SPLIT_ORIENTATION;
-    
+    /** Single panel view toggle state */
+    public static final String  SINGLE_PANEL_VIEW_TOGGLE_STATE     = "single_panel_view";
+
     // - Panels variables ----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the dynamic information contained in the folder panels */
@@ -262,6 +264,15 @@ public class MuSnapshot {
     	return getWindowPropertiesSection(window) + "." + SPLIT_ORIENTATION;
     }
 
+    /**
+     * Returns snapshot property string for the state of the single panel view toggle for a given window
+     * @param window index of MainFrame
+     * @return the string representation of the toggle state property key
+     */
+    public static String getSinglePanelViewToggleState(int window) {
+        return getWindowPropertiesSection(window) + "." + SINGLE_PANEL_VIEW_TOGGLE_STATE;
+    }
+
 	/**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.FolderPanel},
      * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
@@ -275,7 +286,7 @@ public class MuSnapshot {
     }
 	
 	/**
-     * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.FoldersTreePanel},
+     * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.tree.FoldersTreePanel},
      * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
      * @param window index of MainFrame
@@ -323,7 +334,7 @@ public class MuSnapshot {
     }
     
     /**
-     * Returns the CONFIGURATION section that describes the sorting of the specified {@link com.mucommander.ui.main.FileTable},
+     * Returns the CONFIGURATION section that describes the sorting of the specified {@link com.mucommander.ui.main.table.FileTable},
      * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      * 
      * @param window index of MainFrame
@@ -622,7 +633,6 @@ public class MuSnapshot {
 
         // Save right panel dynamic properties
         setPanelAttributes(index, false, mainFrame.getRightPanel());
-
     }
     
     private void setPanelAttributes(int index, boolean isLeft, FolderPanel panel) {
@@ -696,7 +706,7 @@ public class MuSnapshot {
     	configuration.setVariable(MuSnapshot.getTreeVisiblityVariable(index, isLeft), panel.isTreeVisible());
         configuration.setVariable(MuSnapshot.getTreeWidthVariable(index, isLeft), panel.getTreeWidth());
     }
-    
+
     private void setWindowAttributes(int index, MainFrame currentMainFrame) {
         Rectangle bounds = currentMainFrame.getBounds();
         configuration.setVariable(getX(index), (int)bounds.getX());
@@ -708,5 +718,8 @@ public class MuSnapshot {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
     	configuration.setVariable(getSplitOrientation(index), currentMainFrame.getSplitPane().getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuSnapshot.VERTICAL_SPLIT_ORIENTATION:MuSnapshot.HORIZONTAL_SPLIT_ORIENTATION);
+
+        // Save single panel view toggle state
+        configuration.setVariable(getSinglePanelViewToggleState(index), currentMainFrame.isSinglePanel());
     }
 }
