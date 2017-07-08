@@ -79,3 +79,4 @@
 -keep class com.beust.jcommander.** {
     public protected private *;
 }
+-keep class com.mucommander.ui.macosx.EAWTHandler { public *; }
