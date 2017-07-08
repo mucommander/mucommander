@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.conf.MuConfigurations;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -64,8 +63,6 @@ public class ToggleUseSinglePanelAction extends MuAction {
             mainFrame.getSplitPane().setSplitRatio(previousRatio);
             showInactivePanel();
         }
-
-        MuConfigurations.getSnapshot().setVariable("", mainFrame.isSinglePanel());
     }
 
     @Override
