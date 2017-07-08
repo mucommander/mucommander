@@ -35,6 +35,7 @@ What's new since v0.9.2 ?
 New features:
 
 Improvements:
+- The last setting of single panel view for each window is now restored on startup.
 
 Localization:
 
