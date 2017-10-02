@@ -21,7 +21,7 @@ package com.mucommander.ui.viewer;
 import com.mucommander.commons.file.AbstractFile;
 
 /**
- * A common interface for instanciating {@link FileEditor} implementations, and finding out if a editor is capable
+ * A common interface for instantiating {@link FileEditor} implementations, and finding out if a editor is capable
  * of editing a particular file.
  *
  * @author Nicolas Rinaudo, Maxence Bernard
@@ -30,7 +30,7 @@ public interface EditorFactory {
     /**
      * Returns <code>true</code> if this factory can create a file editor for the specified file.
      * <p>
-     * The FileEditor may base its decision stricly upon the file's name and its extension or may wish to read some of
+     * The FileEditor may base its decision strictly upon the file's name and its extension or may wish to read some of
      * the file and compare it to a magic number.
      * </p>
      * @param  file file for which a editor must be created.

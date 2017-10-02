@@ -28,7 +28,7 @@ import com.mucommander.ui.main.MainFrame;
 
 /**
  * A specialized <code>JFrame</code> that displays a {@link FileEditor} for a given file and provides some common
- * editing functionalities. The {@link FileEditor} instance is provided by {@link EditorRegistrar}.
+ * editing functionality. The {@link FileEditor} instance is provided by {@link EditorRegistrar}.
  *
  * @author Maxence Bernard, Arik Hadas
  */

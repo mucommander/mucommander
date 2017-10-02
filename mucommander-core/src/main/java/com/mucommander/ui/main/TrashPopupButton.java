@@ -35,7 +35,7 @@ import java.awt.*;
  * {@link com.mucommander.desktop.DesktopManager#getTrash()}.
  * When the button is clicked, a popup menu is displayed, allowing to perform a choice of actions such as opening
  * the trash or emptying it.
- * Note that this button will only be functional if a trash is avaiable on the current platform. 
+ * Note that this button will only be functional if a trash is available on the current platform.
  *
  * @author Maxence Bernard
  */

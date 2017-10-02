@@ -87,7 +87,7 @@ public class SplashScreen extends JWindow {
 
         // Resolve the URL of the splash logo image within the JAR file and create an ImageIcon
         // Note: DO NOT use IconManager to load the icon as it would trigger ConfigurationManager's initialization
-        // and we don't want that, we want SpashScreen to be displayed as soon as possible
+        // and we don't want that, we want SplashScreen to be displayed as soon as possible
         ImageIcon imageIcon = new ImageIcon(ResourceLoader.getResourceAsURL(SPLASH_IMAGE_PATH));
 
         // Wait for the image to be fully loaded
