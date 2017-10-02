@@ -171,8 +171,8 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
      * the number of bytes that could be read, normally <code>blockLen</code> but can be less.
      *
      * <p>Note that <code>blockLen</code> may be smaller than {@link #blockSize} if the end of file is near, to prevent
-     * <code>EOF</code> from being reached. In other words, <code>fileOffset+blockLen</code> should theorically not
-     * exceed the file's length, but this could happen in the unlikely event that the file just shrinked after
+     * <code>EOF</code> from being reached. In other words, <code>fileOffset+blockLen</code> should theoretically not
+     * exceed the file's length, but this could happen in the unlikely event that the file just shrunk after
      * {@link #getLength()} was last called. So this method's implementation should handle the case where
      * <code>EOF</code> is reached prematurely and return the number of bytes that were actually read.</p>
      *

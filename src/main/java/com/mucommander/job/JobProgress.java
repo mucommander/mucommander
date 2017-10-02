@@ -64,7 +64,7 @@ public class JobProgress {
 	 * 			 <code>true</code> update all information about processed file.<br/>
 	 * 			 <code>false</code> update only label of a processed file.<br/>
 	 * 		     Note that if a job has just finished this flag is ignored 
-	 * 			 and all variables are recalulated.
+	 * 			 and all variables are recalculated.
 	 * @return <code>true</code> if full job progress has been updated,
 	 *         <code>false</code> if only label has been updated.
 	 */

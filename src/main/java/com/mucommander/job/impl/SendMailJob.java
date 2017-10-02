@@ -75,9 +75,9 @@ public class SendMailJob extends TransferFileJob {
 
     /** Connection variable */
     private BufferedReader in;
-    /** OuputStream to the SMTP server */
+    /** OutputStream to the SMTP server */
     private OutputStream out;
-    /** Base64OuputStream to the SMTP server */
+    /** Base64OutputStream to the SMTP server */
     private Base64OutputStream out64;
     /** Socket connection to the SMTP server */
     private Socket socket;

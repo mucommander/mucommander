@@ -44,7 +44,7 @@ public final class StringUtils {
      * exceptions is so huge that it was deemed an acceptable issue.
      * </p>
      * <p>
-     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * Note that this method will return <code>true</code> if <code>b</code> is an empty string.
      * </p>
      * @param a string to test.
      * @param b suffix to test for.
@@ -63,7 +63,7 @@ public final class StringUtils {
      * exceptions is so huge that it was deemed an acceptable issue.
      * </p>
      * <p>
-     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * Note that this method will return <code>true</code> if <code>b</code> is an empty string.
      * </p>
      * @param  a                              string to test.
      * @param  b                              suffix to test for.
@@ -103,7 +103,7 @@ public final class StringUtils {
      * exceptions is so huge that it was deemed an acceptable issue.
      * </p>
      * <p>
-     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * Note that this method will return <code>true</code> if <code>b</code> is an empty string.
      * </p>
      * @param a string to test.
      * @param b suffix to test for.
@@ -120,7 +120,7 @@ public final class StringUtils {
      * exceptions is so huge that it was deemed an acceptable issue.
      * </p>
      * <p>
-     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * Note that this method will return <code>true</code> if <code>b</code> is an empty string.
      * </p>
      * @param  a                              string to test.
      * @param  b                              suffix to test for.
@@ -179,7 +179,7 @@ public final class StringUtils {
     /**
      * Returns <code>true</code> if <code>a</code> starts with <code>b</code> regardless of the case.
      * <p>
-     * Note that this method will return <code>true</code> if <code>b</code> is an emptry string.
+     * Note that this method will return <code>true</code> if <code>b</code> is an empty string.
      * </p>
      * @param a string to test.
      * @param b prefix to test for.
@@ -247,7 +247,7 @@ public final class StringUtils {
 
     /**
      * Capitalizes the given string, making its first character upper case, and the rest of them lower case.
-     * This method reeturns an empty string if <code>null</code> or an empty string is passed.
+     * This method returns an empty string if <code>null</code> or an empty string is passed.
      *
      * @param s the string to capitalize
      * @return the capitalized string

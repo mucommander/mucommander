@@ -41,7 +41,7 @@ import java.util.NoSuchElementException;
  * 	scheme://[login[:password]@]host[:port][/path][?query]
  * </pre>
  *
- * <h3>Instanciation</h3>
+ * <h3>Instantiation</h3>
  * <p>
  * FileURL cannot be instantiated directly, instances can be created using {@link #getFileURL(String)}.
  * Unlike the <code>java.net.URL</code> and <code>java.net.URI</code> classes, FileURL instances are mutable --
@@ -520,7 +520,7 @@ public class FileURL implements Cloneable {
      * Returns this scheme's guest credentials, <code>null</code> if the scheme doesn't have any.
      * <p>
      * Guest credentials offer a way to authenticate a URL as a 'guest' on file protocols that require a set of
-     * credentials to establish a connection. The returned credentials are provided with no guarantee that the fileystem
+     * credentials to establish a connection. The returned credentials are provided with no guarantee that the filesystem
      * will actually accept them and allow the request/connection. The notion of 'guest' credentials may or may not
      * have a meaning depending on the underlying file protocol.
      * </p>

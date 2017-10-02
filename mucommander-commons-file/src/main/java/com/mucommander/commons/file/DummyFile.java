@@ -28,7 +28,7 @@ import java.io.OutputStream;
 /**
  * This class is an implementation of <code>AbstractFile</code> which implements all methods as no-op (that do nothing)
  * that return default values. It makes it easy to quickly create a <code>AbstractFile</code> implementation by simply
- * overridding the methods that are needed, for example as an anonymous class inside a method.
+ * overriding the methods that are needed, for example as an anonymous class inside a method.
  *
  * <p>This class should NOT be subclassed for proper AbstractFile implementations. It should only be used in certain
  * circumstances that require creating a quick AbstractFile implementation where only a few methods will be used.</p>

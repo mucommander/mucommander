@@ -55,10 +55,10 @@ public interface FileProtocols {
     /** Protocol for files served by a SMB/CIFS server. */
     String SMB       = "smb";
 
-    /** Protocol for files served by a web server using Webdav/HTTP. */
+    /** Protocol for files served by a web server using WebDAV/HTTP. */
     String WEBDAV    = "webdav";
 
-    /** Protocol for files served by a web server using Webdav/HTTPS. */
+    /** Protocol for files served by a web server using WebDAV/HTTPS. */
     String WEBDAVS   = "webdavs";
     
     /** Protocol for files served by a web server using vSphere. */

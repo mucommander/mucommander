@@ -301,7 +301,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     /**
      * Attempts to change this file's date using the <i>'SITE UTIME'</i> FTP command.
-     * This command seems to be implemeted by modern FTP servers such as ProFTPd or PureFTP Server but since it is not
+     * This command seems to be implemented by modern FTP servers such as ProFTPd or PureFTP Server but since it is not
      * part of the basic FTP command set, it may as well not be supported by the remote server.
      */
     @Override

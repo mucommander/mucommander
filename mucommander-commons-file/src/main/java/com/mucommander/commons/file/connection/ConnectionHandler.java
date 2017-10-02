@@ -97,7 +97,7 @@ public abstract class ConnectionHandler {
 
 
     /**
-     * Checks if the connection is currenty active (as returned by {@link #isConnected()} and if it isn't, starts it
+     * Checks if the connection is currently active (as returned by {@link #isConnected()} and if it isn't, starts it
      * by calling {@link #startConnection()}. Returns true if the connection was properly started, false if the
      * connection was already active, or throws an IOException if the connection could not be started.
      *

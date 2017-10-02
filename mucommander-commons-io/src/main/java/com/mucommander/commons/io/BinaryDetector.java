@@ -97,7 +97,7 @@ public class BinaryDetector {
      * This method returns <code>true</code> if it thinks that the bytes correspond to binary data.
      *
      * <p>A maximum of {@link #RECOMMENDED_BYTE_SIZE} will be read from the <code>InputStream</code>. The
-     * stream will not be closed and will not be repositionned after the bytes have been read. It is up to the calling
+     * stream will not be closed and will not be repositioned after the bytes have been read. It is up to the calling
      * method to use the <code>InputStream#mark()</code> and <code>InputStream#reset()</code> methods (if supported)
      * or reopen the stream if needed.
      * </p>

@@ -94,12 +94,12 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * Skips (up to) the specified number of bytes and returns the number of bytes effectively skipped.
      * The exact given number of bytes will be skipped as long as the current offset as returned by {@link #getOffset()}
      * plus the number of bytes to skip doesn't exceed the length of this stream as returned by {@link #getLength()}.
-     * If it does, all the remaining bytes will be skipped so that the offset of this stream will be positionned to
+     * If it does, all the remaining bytes will be skipped so that the offset of this stream will be positioned to
      * {@link #getLength()}.
-     * Returns <code>-1</code> if the offset is already positionned to the end of the stream when this method is called.
+     * Returns <code>-1</code> if the offset is already positioned to the end of the stream when this method is called.
      *
      * @param n number of bytes to skip
-     * @return the number of bytes that have effectively been skipped, -1 if the offset is already positionned to the
+     * @return the number of bytes that have effectively been skipped, -1 if the offset is already positioned to the
      * end of the stream when this method is called
      * @throws IOException if something went wrong
      */
@@ -142,7 +142,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
 
     /**
      * Overrides <code>InputStream.mark()</code> to provide a working implementation of the method. The given readLimit
-     * is simply ignored, the stream can be repositionned using {@link #reset()} with no limit on the number of bytes
+     * is simply ignored, the stream can be repositioned using {@link #reset()} with no limit on the number of bytes
      * read after <code>mark()</code> has been called.
      *
      * @param readLimit this parameter has no effect and is simply ignored

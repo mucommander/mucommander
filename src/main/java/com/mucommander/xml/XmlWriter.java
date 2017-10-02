@@ -229,7 +229,7 @@ public class XmlWriter {
     /**
      * Writes an element opening sequence.
      * <p>
-     * This is a covenience method and is stricly equivalent to calling
+     * This is a convenience method and is strictly equivalent to calling
      * <code>{@link #startElement(String,XmlAttributes,boolean) startElement}(name, attributes, false)</code>.
      * </p>
      * @param  name        name of the element to open.

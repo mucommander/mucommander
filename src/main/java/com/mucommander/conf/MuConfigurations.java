@@ -33,7 +33,7 @@ import com.mucommander.commons.conf.ConfigurationListener;
  */
 public class MuConfigurations {
 
-	/** Static configurations of muConnabder */
+	/** Static configurations of muCommander */
 	private static final MuPreferences preferences = new MuPreferences();
 	/** Dynamic configurations of muCommander */
 	private static final MuSnapshot snapshot = new MuSnapshot();

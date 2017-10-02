@@ -44,7 +44,7 @@ public interface AssociationBuilder {
 
     /**
      * Notifies the builder that the current association declaration is finished.
-     * @throws CommandException if an error ocurs.
+     * @throws CommandException if an error occurs.
      */
     public void endAssociation() throws CommandException;
 

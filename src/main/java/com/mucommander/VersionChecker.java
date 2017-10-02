@@ -38,7 +38,7 @@ import com.mucommander.commons.file.FileFactory;
  * - date of latest release.<br>
  * - latest official version.<br>
  * - where to download the latest version from.<br>
- * This class is used to access those informations and compare them with what is known
+ * This class is used to access that information and compare them with what is known
  * of the current one, making it possible to notify users of new releases.
  * </p>
  * <p>
@@ -54,7 +54,7 @@ import com.mucommander.commons.file.FileFactory;
  *     else
  *         System.out.println("You've got the latest muCommander version");
  *    }
- * catch(Exception e) {System.err.println("An error occured.");}
+ * catch(Exception e) {System.err.println("An error occurred.");}
  * </pre>
  * </p>
  * <p>
@@ -171,7 +171,7 @@ public class VersionChecker extends DefaultHandler {
     public boolean isNewVersionAvailable() {
         // If the local and remote versions are the same, compares release dates.
         if(latestVersion.equals(RuntimeConstants.VERSION.trim().toLowerCase())) {
-            // This ensures backward compatiblity - if the remote version file does not contain
+            // This ensures backward compatibility - if the remote version file does not contain
             // release date information, ignore it.
             if(releaseDate.equals(""))
                 return true;

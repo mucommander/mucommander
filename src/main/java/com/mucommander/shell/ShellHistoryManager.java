@@ -160,7 +160,7 @@ public class ShellHistoryManager {
         if(historyEnd == history.length)
             historyEnd = 0;
 
-        // Clears items from the begining of the buffer if necessary.
+        // Clears items from the beginning of the buffer if necessary.
         if(historyEnd == historyStart) {
             if(++historyStart == history.length)
                 historyStart = 0;
@@ -228,7 +228,7 @@ public class ShellHistoryManager {
      * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
      * @return             the path to the shell history file.
-     * @throws IOException if an error occured while locating the default shell history file.
+     * @throws IOException if an error occurred while locating the default shell history file.
      * @see                #setHistoryFile(File)
      * @see                #setHistoryFile(String)
      * @see                #setHistoryFile(AbstractFile)

@@ -72,7 +72,7 @@ public class muCommander {
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     private SplashScreen  splashScreen;
-    /** Whether or not to display the splashscreen. */
+    /** Whether or not to display the splash screen. */
     private boolean       useSplash;
     /** true while the application is launching, false after it has finished launching */
     private static boolean isLaunching = true;
@@ -163,7 +163,7 @@ public class muCommander {
 
     /**
      * Prints the specified error message to stderr.
-     * @param msg       error message to print to stder.
+     * @param msg       error message to print to stderr.
      * @param quit      whether or not to quit after printing the error message.
      * @param exception exception that triggered the error (for verbose output).
      */

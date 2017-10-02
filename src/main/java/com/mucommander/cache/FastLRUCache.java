@@ -28,7 +28,7 @@ import java.util.Map;
  * LRU cache implementation which uses <code>LinkedHashMap</code> which provides fast retrieval and insertion
  * operations.
  * 
- * <p>The only area this implemention is slow at, is checking for and removing expired elements which
+ * <p>The only area this implementation is slow at, is checking for and removing expired elements which
  * requires traversing all values and <code>LinkedHashMap</code> is slow at that. 
  * To minimize the impact this could have on performance, this operation is not systematically performed
  * for each call to <code>get()</code> and <code>set()</code> methods, unless the cache is full. 

@@ -122,7 +122,7 @@ public final class Credentials {
      * </p>
      *
      * @param o the Object to test for equality
-     * @param passwordSensitive true if passwords need to be equal for credentials instanes to match
+     * @param passwordSensitive true if passwords need to be equal for credentials instances to match
      * @return true if this and the specified instance are equal
      */
     public boolean equals(Object o, boolean passwordSensitive) {

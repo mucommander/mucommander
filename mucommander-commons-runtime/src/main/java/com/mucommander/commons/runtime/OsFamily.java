@@ -97,7 +97,7 @@ public enum OsFamily {
      *  <li>{@link #FREEBSD}</li>
      *  <li>{@link #AIX}</li>
      *  <li>{@link #HP_UX}</li>
-     *  <li>{@link #UNKNOWN_OS_FAMILY}: the reasonning for this being that most alternative OSes are Unix-based.</li>
+     *  <li>{@link #UNKNOWN_OS_FAMILY}: the reason for this being that most alternative OSes are Unix-based.</li>
      * </ul>
      *
      * @return <code>true</code> if the current OS is UNIX-based

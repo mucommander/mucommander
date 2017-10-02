@@ -308,7 +308,7 @@ public class StreamUtils {
      *
      * @param in the InputStream to read from
      * @param b the buffer into which the stream data is copied
-     * @return the same byte array that was passed, returned only for convience
+     * @return the same byte array that was passed, returned only for convenience
      * @throws java.io.EOFException if EOF is reached before all bytes have been read
      * @throws IOException if an I/O error occurs
      */
@@ -327,7 +327,7 @@ public class StreamUtils {
      * @param b the buffer into which the stream data is copied
      * @param off specifies where the copy should start in the buffer
      * @param len the number of bytes to read
-     * @return the same byte array that was passed, returned only for convience
+     * @return the same byte array that was passed, returned only for convenience
      * @throws java.io.EOFException if EOF is reached before all bytes have been read
      * @throws IOException if an I/O error occurs
      */

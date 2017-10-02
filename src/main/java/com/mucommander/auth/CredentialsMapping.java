@@ -23,7 +23,7 @@ import com.mucommander.commons.file.FileURL;
 
 /**
  * CredentialsMapping associates a {@link Credentials} instance with a 'realm' , that is the location to a server.
- * It also adds the notion of persistency, allowing to specify whether the credentials should be saved to disk when the
+ * It also adds the notion of persistence, allowing to specify whether the credentials should be saved to disk when the
  * application quits and restored next time the application starts.
  *
  * @see CredentialsManager 
