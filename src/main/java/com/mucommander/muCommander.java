@@ -263,7 +263,8 @@ public class muCommander {
      */
     public static void main(String args[]) throws IOException {
         muCommander mu = new muCommander();
-        JCommander jCommander = new JCommander(mu, args);
+        JCommander jCommander = new JCommander(mu);
+        jCommander.parse(args);
         if (mu.help) {
             jCommander.setProgramName(muCommander.class.getSimpleName());
             jCommander.usage();
