@@ -121,7 +121,7 @@ public abstract class FilePresenter extends JScrollPane {
     }
 	
 	/**
-	 * Open a given AbstraceFile for display.
+	 * Open a given AbstractFile for display.
 	 * 
 	 * @param file the file to be presented
 	 * @throws IOException in case of an I/O problem

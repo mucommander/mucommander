@@ -550,7 +550,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 	
     public void componentShown(ComponentEvent e) {
         // Invoked when the component has been made visible (apparently not called when just created)
-        // Status bar needs to be updated sihce it is not updated when not visible
+        // Status bar needs to be updated since it is not updated when not visible
         updateStatusInfo();
     }     
 

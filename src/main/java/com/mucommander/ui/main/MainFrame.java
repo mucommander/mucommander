@@ -228,7 +228,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Adds buttons that allow to collapse and expand the split pane in both directions
         splitPane.setOneTouchExpandable(true);
 
-        // Disable all the JSPlitPane accessibility shortcuts that are registered by default, as some of them
+        // Disable all the JSplitPane accessibility shortcuts that are registered by default, as some of them
         // conflict with default mucommander action shortcuts (e.g. F6 and F8) 
         splitPane.disableAccessibilityShortcuts();
 
@@ -615,7 +615,7 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Forces a refrehs of the frame's folder panel.
+     * Forces a refresh of the frame's folder panel.
      */
     public void tryRefreshCurrentFolders() {
         leftFolderPanel.tryRefreshCurrentFolder();
