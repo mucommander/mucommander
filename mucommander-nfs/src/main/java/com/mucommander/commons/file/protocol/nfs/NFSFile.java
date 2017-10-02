@@ -106,7 +106,7 @@ public class NFSFile extends ProtocolFile {
         // Create the NFS URL used by XFile.
 
         // The general syntax for NFS URLs is : nfs://<host>:<port><url-path>, as specified by RFC 2054
-        // Additionaly, XFile allows some special flags to be used in the port part of the URL to specify connection
+        // Additionally, XFile allows some special flags to be used in the port part of the URL to specify connection
         // properties. Those flags must be placed after the port, and before the colon character delimiting the end of
         // the port part.
         // Here's the list of allowed flags (quoted from com.sun.nfs.NfsURL):
@@ -119,7 +119,7 @@ public class NFSFile extends ProtocolFile {
         //
         // The 'm' flag must be specified, otherwise regular NFS shares (i.e. non WebNFS-enabled ones) that don't
         // specify a public filehandle will fail. However, using this flag has two unfortunate consequences:
-        // - the NFS version fails to be properly negociated as it normally does (try v3 then fall back on v2): the
+        // - the NFS version fails to be properly negotiated as it normally does (try v3 then fall back on v2): the
         //  NFS version must be specified in the URL.
         // - an extra slash character must be added before the path part, otherwise it is considered as relative to
         //  the public filehandle and will thus fail to resolve.

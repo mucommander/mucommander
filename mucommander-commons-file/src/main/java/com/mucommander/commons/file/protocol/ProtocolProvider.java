@@ -30,7 +30,7 @@ import com.mucommander.commons.file.FileURL;
  * This interface allows {@link FileFactory} to instantiate {@link AbstractFile} implementations.
  * <p>
  * For {@link AbstractFile} implementations to be automatically instantiated by {@link FileFactory}, this interface
- * needs to be implemented and an instance registered with {@link FileFactory} and binded to a protocol identifier.
+ * needs to be implemented and an instance registered with {@link FileFactory} and bound to a protocol identifier.
  * </p>
  *
  * @author Nicolas Rinaudo, Maxence Bernard

@@ -193,7 +193,7 @@ public class AbstractFileClassLoader extends ClassLoader {
     /**
      * Returns the absolute path of the requested library.
      * @param name name of the library to load.
-     * @return the absolute path of the requested library if found, <code>null</code> otheriwse.
+     * @return the absolute path of the requested library if found, <code>null</code> otherwise.
      */
     @Override
     protected String findLibrary(String name) {

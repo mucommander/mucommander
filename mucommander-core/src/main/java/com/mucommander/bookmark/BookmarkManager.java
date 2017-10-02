@@ -32,7 +32,7 @@ import java.io.*;
 import java.util.WeakHashMap;
 
 /**
- * This class manages the boomark list and its parsing and storage as an XML file.
+ * This class manages the bookmark list and its parsing and storage as an XML file.
  * <p>
  * It monitors any changes made to the bookmarks and when changes are made, fires change events to registered
  * listeners.

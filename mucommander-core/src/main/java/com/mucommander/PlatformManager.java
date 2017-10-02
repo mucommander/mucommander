@@ -110,7 +110,7 @@ public class PlatformManager {
     public static void setPreferencesFolder(File folder) throws IOException {setPreferencesFolder(FileFactory.getFile(folder.getAbsolutePath()));}
 
     /**
-     * Sets the path to the folder in which muCommande rwill look for its preferences.
+     * Sets the path to the folder in which muCommander will look for its preferences.
      * <p>
      * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
      * this method will create it.

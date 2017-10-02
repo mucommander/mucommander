@@ -41,7 +41,7 @@ import java.net.URL;
  * The {@link #getProxiedFile()} method allows to retrieve the proxied file instance.
  *
  * <p>This class is useful for wrapper files, such as {@link com.mucommander.commons.file.archive.AbstractArchiveFile archive files},
- * that provide additional functionalities over an existing <code>AbstractFile</code> instance (the proxied file).
+ * that provide additional functionality over an existing <code>AbstractFile</code> instance (the proxied file).
  * By implementing/overriding every <code>AbstractFile</code> methods, <code>ProxyFile</code> ensures that
  * all <code>AbstractFile</code> methods can safely be used, even if they are overridden by the proxied
  * file instance's class.

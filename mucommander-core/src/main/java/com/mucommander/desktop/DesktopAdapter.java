@@ -97,7 +97,7 @@ public interface DesktopAdapter {
     public boolean isLeftMouseButton(MouseEvent e);
 
     /**
-     * Checks whether the specified <code>MouseEvent</code> is a left-click for this destop.
+     * Checks whether the specified <code>MouseEvent</code> is a left-click for this desktop.
      * <p>
      * There are some cases where Java doesn't detect mouse events properly - for example,
      * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>
@@ -111,7 +111,7 @@ public interface DesktopAdapter {
     public boolean isRightMouseButton(MouseEvent e);
 
     /**
-     * Checks whether the specified <code>MouseEvent</code> is a left-click for this destop.
+     * Checks whether the specified <code>MouseEvent</code> is a left-click for this desktop.
      * <p>
      * There are some cases where Java doesn't detect mouse events properly - for example,
      * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>

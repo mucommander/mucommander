@@ -98,7 +98,7 @@ public abstract class LRUCache<K, V> {
 
 
     ///////////////////////
-    // Absctract methods //
+    // Abstract methods //
     ///////////////////////
 
     /**

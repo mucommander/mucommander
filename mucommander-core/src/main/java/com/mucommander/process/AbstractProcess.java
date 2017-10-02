@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * muCommander specific version of a process, allowing various types of processes to be executed.
  * <p>
  * Unlike normal instances of <code>java.lang.Process</code>, abstract processes
- * will empty their own streams, preventing deadlocks from occuring on some systems.
+ * will empty their own streams, preventing deadlocks from occurring on some systems.
  * </p>
  * <p>
  * Note that abstract processes should not be created directly. They should be
@@ -119,7 +119,7 @@ public abstract class AbstractProcess {
     /**
      * Makes the current thread wait for the process to die.
      * @return the process' exit code.
-     * @throws InterruptedException thrown if the current thread is interrupted while wainting on the process to die.
+     * @throws InterruptedException thrown if the current thread is interrupted while waiting on the process to die.
      * @throws IOException          thrown if an error occurs while waiting for the process to die.
      */
     public abstract int waitFor() throws InterruptedException, IOException;

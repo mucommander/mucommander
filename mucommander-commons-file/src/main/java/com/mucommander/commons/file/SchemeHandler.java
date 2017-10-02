@@ -80,7 +80,7 @@ public interface SchemeHandler {
      * Returns the scheme's guest credentials, <code>null</code> if the scheme doesn't have any.
      * <p>
      * Guest credentials offer a way to authenticate a URL as a 'guest' on file protocols that require a set of
-     * credentials to establish a connection. The returned credentials are provided with no guarantee that the fileystem
+     * credentials to establish a connection. The returned credentials are provided with no guarantee that the filesystem
      * will actually accept them and allow the request/connection. The notion of 'guest' credentials may or may not
      * have a meaning depending on the underlying file protocol.
      * </p>

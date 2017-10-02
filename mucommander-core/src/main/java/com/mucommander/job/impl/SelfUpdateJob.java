@@ -42,7 +42,7 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This job self-updates the muCommmander with a new JAR file that is fetched from a specified remote file.
+ * This job self-updates the muCommander with a new JAR file that is fetched from a specified remote file.
  * The update process boils down to the following steps:
  * <ul>
  *  <li>First, all classes of the existing JAR files are loaded in memory, to ensure that the shutdown sequence has all

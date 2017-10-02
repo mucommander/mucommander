@@ -29,7 +29,7 @@ import java.awt.*;
  *
  * <p>This class does not actually provide icons nor does it manage the contents of the cache ; it delegates these tasks
  * to a {@link CacheableFileIconProvider} instance. All this class does is use the cache implementation to harness its
- * befinits and take all the credit for it.</br>
+ * benefits and take all the credit for it.</br>
  * When an icon is requested, a cache lookup is performed. If a cached value is found, it is returned. If not, the icon
  * is fetched from the underlying provider and added to the cache.</p>
  *

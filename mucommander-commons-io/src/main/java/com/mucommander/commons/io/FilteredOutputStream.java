@@ -26,7 +26,7 @@ import java.io.OutputStream;
  *
  * <p>Unlike <code>java.io.FilterOutputStream</code>, this method delegates all methods to an underlying OutputStream
  * and nothing more. In particular, {@link #write(byte[])} and {@link #write(byte[], int, int)} do <b>not</b>
- * call {@link #write(int)} repeatedly (very unefficient) but delegate to the corresponding OutputStream methods. This
+ * call {@link #write(int)} repeatedly (very inefficient) but delegate to the corresponding OutputStream methods. This
  * makes this class much safer to use from a performance perspective than <code>java.io.FilteredOutputStream</code>.
  * </p>
  *

@@ -366,7 +366,7 @@ public class FileFactory {
      * @param parent the returned file's parent
      * @return an instance of <code>AbstractFile</code> for the specified absolute path.
      * @throws java.io.IOException if something went wrong during file or file url creation.
-     * @throws AuthException if additionnal authentication information is required to create the file
+     * @throws AuthException if additional authentication information is required to create the file
      */
     public static AbstractFile getFile(String absPath, AbstractFile parent) throws AuthException, IOException {
         return getFile(FileURL.getFileURL(absPath), parent);
