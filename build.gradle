@@ -6,11 +6,11 @@ buildscript {
 
 plugins {
     id 'application'
-    id 'org.ajoberstar.grgit' version '1.3.2'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-    id 'edu.sc.seis.macAppBundle' version '2.1.6'
-    id 'edu.sc.seis.launch4j' version '1.6.1'
-    id 'nebula.ospackage' version '3.5.0'
+    id 'org.ajoberstar.grgit' version '2.0.1'
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
+    id 'edu.sc.seis.macAppBundle' version '2.1.7'
+    id 'edu.sc.seis.launch4j' version '2.1.0'
+    id 'nebula.ospackage' version '4.4.2'
 }
 
 mainClassName = 'com.mucommander.muCommander'
@@ -24,7 +24,8 @@ allprojects {
 
 ext {
     // Open the Git repository in the current directory.
-    git = org.ajoberstar.grgit.Grgit.open(file('.'))
+    // git = org.ajoberstar.grgit.Grgit.open(file('.'))
+    git = grgit.open()
 
     // Get commit id of HEAD.
     revision = git.head().id
@@ -37,11 +38,11 @@ dependencies {
     compile project('mucommander-commons-conf')
     compile project('mucommander-commons-collections')
 
-    compile 'org.jmdns:jmdns:3.5.1'
+    compile 'org.jmdns:jmdns:3.5.3'
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile 'com.beust:jcommander:1.66'
+    compile 'com.beust:jcommander:1.72'
     compile files('libs/java-extension.jar')
 
     testCompile 'org.testng:testng:6.11'

@@ -6,7 +6,7 @@ repositories.jcenter()
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'com.ibm.icu:icu4j:58.2'
+    compile 'com.ibm.icu:icu4j:59.1'
 
     testCompile 'org.testng:testng:6.11'
 }
