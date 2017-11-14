@@ -24,6 +24,8 @@ import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.SwingUtilities;
+
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
@@ -48,17 +50,17 @@ import com.mucommander.ui.theme.ThemeManager;
 /**
  * A TextField which is located on each panel and used to display the location presented in the panel's file-table,
  * and for letting the user change this location.
- * 
+ *
  * This TextField support:
  * - auto-completion
  * - location changing progress indicator
  * - Theme settings
- * 
+ *
  * @author Maxence Bernard, Arik Hadas
  */
 
 public class LocationTextField extends ProgressTextField implements LocationListener, FocusListener, ThemeListener {
-	/** FolderPanel this text field is displayed in */
+    /** FolderPanel this text field is displayed in */
     private FolderPanel folderPanel;
 
     /** True while a folder is being changed after a path was entered in the location field and validated by the user */
@@ -87,7 +89,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
 
         this.folderPanel = folderPanel;
 
-    	// Applies theme values.
+        // Applies theme values.
         setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
         setDisabledTextColor(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
         setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
@@ -102,31 +104,31 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // Listen to focus events to temporarily disable the MainFrame's JMenuBar when this component has the keyboard focus.
         // Not doing so would trigger unwanted menu bar actions when typing.
         addFocusListener(this);
-        
+
         enableAutoCompletion();
-        
+
         ThemeManager.addCurrentThemeListener(this);
     }
-    
+
     /**
      * Adds auto-completion capabilities to this text field.
      */
     private void enableAutoCompletion() {
-    	new TextFieldCompletion(new AutocompleterTextComponent(this) {
+        new TextFieldCompletion(new AutocompleterTextComponent(this) {
 
-			@Override
+            @Override
             public void OnEnterPressed(KeyEvent keyEvent) {
-				if (textFieldValidated()) // if a malformed url was entered.
-					folderChangeCompleted(false);		        
-				
-				// /!\ Consume the event so to prevent JTextField from firing an ActionEvent
-				keyEvent.consume();
-			}
+                if (textFieldValidated()) // if a malformed url was entered.
+                    folderChangeCompleted(false);
 
-			@Override
+                // /!\ Consume the event so to prevent JTextField from firing an ActionEvent
+                keyEvent.consume();
+            }
+
+            @Override
             public void OnEscPressed(KeyEvent keyEvent) {
-				textFieldCancelled();
-			}
+                textFieldCancelled();
+            }
         }, CompleterFactory.getLocationCompleter());
     }
 
@@ -164,27 +166,28 @@ public class LocationTextField extends ProgressTextField implements LocationList
     // LocationListener methods //
     //////////////////////////////
 
+    @Override
     public void locationChanging(LocationEvent e) {
         // Change the location field's text to the folder being changed, only if the folder change was not initiated
-        // by the location field (to preserve the path entered by the user while the folder is being changed) 
+        // by the location field (to preserve the path entered by the user while the folder is being changed)
         if(!folderChangeInitiatedByLocationField) {
             FileURL folderURL = e.getFolderURL();
 
             String locationText;
             if(folderURL.getScheme().equals(FileProtocols.FILE)) {
                 // Do not display the URL's scheme & host for local files
-            	if (FileURL.LOCALHOST.equals(folderURL.getHost())) {
-            		locationText = folderURL.getPath();
-            		// Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
-            		if(LocalFile.hasRootDrives())
-            			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
-            	}
-            	// For network files with FILE scheme display the URL in UNC format
-            	else {
-            		locationText = "\\\\" + folderURL.getHost() + folderURL.getPath().replace('/', '\\');
-            		if(!locationText.endsWith(UNCFile.SEPARATOR))
+                if (FileURL.LOCALHOST.equals(folderURL.getHost())) {
+                    locationText = folderURL.getPath();
+                    // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+                    if(LocalFile.hasRootDrives())
+                        locationText = PathUtils.removeLeadingSeparator(locationText, "/");
+                }
+                // For network files with FILE scheme display the URL in UNC format
+                else {
+                    locationText = "\\\\" + folderURL.getHost() + folderURL.getPath().replace('/', '\\');
+                    if(!locationText.endsWith(UNCFile.SEPARATOR))
                         locationText += UNCFile.SEPARATOR;
-            	}
+                }
             }
             // Display the full URL for protocols other than 'file'
             else {
@@ -199,17 +202,20 @@ public class LocationTextField extends ProgressTextField implements LocationList
         setEnabled(false);
     }
 
+    @Override
     public void locationChanged(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path
         folderChangeCompleted(true);
     }
 
+    @Override
     public void locationCancelled(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path.
         // If the path was entered in the location field, keep the path to give the user a chance to correct it.
         folderChangeCompleted(false);
     }
 
+    @Override
     public void locationFailed(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path.
         // If the path was entered in the location field, keep the path to give the user a chance to correct it.
@@ -217,7 +223,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
     }
 
     /**
-     * 
+     *
      * @return true if a malformed url was entered, false otherwise.
      */
     public boolean textFieldValidated() {
@@ -233,25 +239,25 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // those files can still be manually crafted and thus exist on one's hard drive.
         // Mucommander should in theory be able to access such files without any problem but this hasn't been tested.
         if(OsFamily.WINDOWS.isCurrent() && location.indexOf(":\\")==1) {
-            // Looks for trailing spaces and if some 
+            // Looks for trailing spaces and if some
             Matcher matcher = windowsTrailingSpacePattern.matcher(location);
             if(matcher.find())
                 location = location.substring(0, matcher.start());
         }
-                
-        // Save the path that was entered in case the location change fails or is cancelled 
+
+        // Save the path that was entered in case the location change fails or is cancelled
         locationFieldTextSave = location;
-        
-        // Indicate we search for location corresponding to the given string. 
+
+        // Indicate we search for location corresponding to the given string.
         // it will be false we'll find one.
         boolean tryToInterpretEnteredString = true;
 
         // Look for a bookmark which name is the entered string (case insensitive)
         Bookmark b = BookmarkManager.getBookmark(location);
         if(b!=null) {
-        	// Change the current folder to the bookmark's location
-        	setText(location = b.getLocation());
-        	tryToInterpretEnteredString = false;
+            // Change the current folder to the bookmark's location
+            setText(location = b.getLocation());
+            tryToInterpretEnteredString = false;
         }
 
         // Look for a volume whose name is the entered string (case insensitive)
@@ -259,23 +265,23 @@ public class LocationTextField extends ProgressTextField implements LocationList
         for(int i=0; tryToInterpretEnteredString && i<volumes.length; i++) {
             if(volumes[i].getName().equalsIgnoreCase(location)) {
                 // Change the current folder to the volume folder
-            	setText(location = volumes[i].getAbsolutePath());
-            	tryToInterpretEnteredString = false;
+                setText(location = volumes[i].getAbsolutePath());
+                tryToInterpretEnteredString = false;
             }
         }
 
         // Todo: replace this by env:// filesystem ?
         // Look for a system variable which name is the entered string (case insensitive)
         if (tryToInterpretEnteredString && location.startsWith("$")) {
-        	String variableKey = location.substring(1);
-        	String variableValue = System.getenv(variableKey);
-        	if (variableValue != null)
-        		setText(location = variableValue);        	
-        }        
-        
+            String variableKey = location.substring(1);
+            String variableValue = System.getenv(variableKey);
+            if (variableValue != null)
+                setText(location = variableValue);
+        }
+
         // Remember that the folder change was initiated by the location field
         folderChangeInitiatedByLocationField = true;
-        
+
         // Change folder
         return folderPanel.tryChangeCurrentFolder(location) == null;
     }
@@ -290,17 +296,28 @@ public class LocationTextField extends ProgressTextField implements LocationList
     // FocusListener methods //
     ///////////////////////////
 
+    @Override
     public void focusGained(FocusEvent e) {
         // Disable menu bar when this component has gained focus
         folderPanel.getMainFrame().getJMenuBar().setEnabled(false);
+
+        // (upon focus) have text selected, so as to save the user the need to manually do so
+        final LocationTextField THIS = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                THIS.selectAll();
+            }
+        });
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
 //    	// If we are not in the middle of a folder change, and focus has been
 //    	// lost then ensure location field's text is set to the current directory.
 //    	if (!folderPanel.isFolderChanging())
 //    		locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
-    	
+
         // Enable menu bar when this component has lost focus
         folderPanel.getMainFrame().getJMenuBar().setEnabled(true);
     }
@@ -312,6 +329,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
     /**
      * Receives theme color changes notifications.
      */
+    @Override
     public void colorChanged(ColorChangedEvent event) {
         switch(event.getColorId()) {
         case Theme.LOCATION_BAR_PROGRESS_COLOR:
@@ -328,11 +346,11 @@ public class LocationTextField extends ProgressTextField implements LocationList
             break;
 
         case Theme.LOCATION_BAR_SELECTED_FOREGROUND_COLOR:
-        	setSelectedTextColor(event.getColor());
+            setSelectedTextColor(event.getColor());
             break;
 
         case Theme.LOCATION_BAR_SELECTED_BACKGROUND_COLOR:
-        	setSelectionColor(event.getColor());
+            setSelectionColor(event.getColor());
             break;
         }
     }
@@ -340,6 +358,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
     /**
      * Receives theme font changes notifications.
      */
+    @Override
     public void fontChanged(FontChangedEvent event) {
         if(event.getFontId() == Theme.LOCATION_BAR_FONT)
             setFont(event.getFont());
