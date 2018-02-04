@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -51,47 +51,44 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
         int entryDepth = entry.getDepth();
         int slashPos = 0;
         DefaultMutableTreeNode node = this;
-        for(int d=1; d<=entryDepth; d++) {
-            if(d==entryDepth && !entry.isDirectory()) {
+        for (int d = 1; d <= entryDepth; d++) {
+            if (d == entryDepth && !entry.isDirectory()) {
                 // Create a leaf node for the entry
                 entry.setExists(true);      // the entry has to exist
                 node.add(new DefaultMutableTreeNode(entry, true));
                 break;
             }
 
-            String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
+            String subPath = d == entryDepth ? entryPath : entryPath.substring(0, (slashPos = entryPath.indexOf('/', slashPos) + 1));
 
             int nbChildren = node.getChildCount();
             DefaultMutableTreeNode childNode = null;
             boolean matchFound = false;
-            for(int c=0; c<nbChildren; c++) {
-                childNode = (DefaultMutableTreeNode)node.getChildAt(c);
+            for (int c = 0; c < nbChildren; c++) {
+                childNode = (DefaultMutableTreeNode) node.getChildAt(c);
                 // Path comparison is 'trailing slash insensitive'
-                if(PathUtils.pathEquals(((ArchiveEntry)childNode.getUserObject()).getPath(), subPath, "/")) {
+                if (PathUtils.pathEquals(((ArchiveEntry) childNode.getUserObject()).getPath(), subPath, "/")) {
                     // Found a match
                     matchFound = true;
                     break;
                 }
             }
 
-            if(matchFound) {
-                if(d==entryDepth) {
-                    LOGGER.trace("Replacing entry for node "+childNode);
+            if (matchFound) {
+                if (d == entryDepth) {
+                    LOGGER.trace("Replacing entry for node " + childNode);
                     // Replace existing entry
                     childNode.setUserObject(entry);
-                }
-                else {
+                } else {
                     node = childNode;
                 }
-            }
-            else {
-                if(d==entryDepth) {
+            } else {
+                if (d == entryDepth) {
                     // Create a leaf node for the entry
                     entry.setExists(true);      // the entry has to exist
                     node.add(new DefaultMutableTreeNode(entry, true));
-                }
-                else {
-                    LOGGER.trace("Creating node for "+subPath);
+                } else {
+                    LOGGER.trace("Creating node for " + subPath);
                     childNode = new DefaultMutableTreeNode(new ArchiveEntry(subPath, true, entry.getDate(), 0, true), true);
                     node.add(childNode);
                     node = childNode;
@@ -116,23 +113,23 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
         int entryDepth = ArchiveEntry.getDepth(entryPath);
         int slashPos = 0;
         DefaultMutableTreeNode currentNode = this;
-        for(int d=1; d<=entryDepth; d++) {
-            String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
+        for (int d = 1; d <= entryDepth; d++) {
+            String subPath = d == entryDepth ? entryPath : entryPath.substring(0, (slashPos = entryPath.indexOf('/', slashPos) + 1));
 
             int nbChildren = currentNode.getChildCount();
             DefaultMutableTreeNode matchNode = null;
-            for(int c=0; c<nbChildren; c++) {
-                DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)currentNode.getChildAt(c);
+            for (int c = 0; c < nbChildren; c++) {
+                DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) currentNode.getChildAt(c);
 
                 // Path comparison is 'trailing slash insensitive'
-                if(PathUtils.pathEquals(((ArchiveEntry)childNode.getUserObject()).getPath(), subPath, "/")) {
+                if (PathUtils.pathEquals(((ArchiveEntry) childNode.getUserObject()).getPath(), subPath, "/")) {
                     // Found the node, let's return it
                     matchNode = childNode;
                     break;
                 }
             }
 
-            if(matchNode==null)
+            if (matchNode == null)
                 return null;    // No node maching the provided path, return null
 
             currentNode = matchNode;

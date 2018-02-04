@@ -25,21 +25,21 @@ import com.mucommander.commons.conf.WriterConfigurationException;
 import java.io.Writer;
 
 /**
-* @author Maxence Bernard
-*/
+ * @author Maxence Bernard
+ */
 class VersionedXmlConfigurationWriterFactory extends ConfigurationWriterFactory<ConfigurationBuilder> {
-    
-	/**
-	 * Constructor
-	 * 
-	 * @param rootElementName the name of the root element in the XML file
-	 */
-	public VersionedXmlConfigurationWriterFactory(String rootElementName) {
-		super(rootElementName);
-	}
-	
-	@Override
-	public ConfigurationBuilder getWriterInstance(Writer out) throws WriterConfigurationException {
+
+    /**
+     * Constructor
+     *
+     * @param rootElementName the name of the root element in the XML file
+     */
+    public VersionedXmlConfigurationWriterFactory(String rootElementName) {
+        super(rootElementName);
+    }
+
+    @Override
+    public ConfigurationBuilder getWriterInstance(Writer out) throws WriterConfigurationException {
         return new VersionedXmlConfigurationWriter(out, getRootElementName());
     }
 }

@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,7 +19,16 @@
 
 package com.mucommander.commons.file;
 
-import java.awt.Dimension;
+import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
+import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
+import com.mucommander.commons.file.compat.CompatURLStreamHandler;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.FilenameFilter;
+import com.mucommander.commons.io.*;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,22 +37,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import javax.swing.Icon;
-
-import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
-import com.mucommander.commons.file.archive.AbstractArchiveFile;
-import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
-import com.mucommander.commons.file.compat.CompatURLStreamHandler;
-import com.mucommander.commons.file.filter.FileFilter;
-import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.io.BufferPool;
-import com.mucommander.commons.io.ChecksumInputStream;
-import com.mucommander.commons.io.FileTransferError;
-import com.mucommander.commons.io.FileTransferException;
-import com.mucommander.commons.io.RandomAccessInputStream;
-import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.io.StreamUtils;
 
 /**
  * <code>AbstractFile</code> is the superclass of all files.
@@ -79,7 +72,6 @@ public abstract class AbstractFile implements FileAttributes {
     protected AbstractFile(FileURL url) {
         this.fileURL = url;
     }
-
 
 
     /////////////////////////
@@ -132,10 +124,10 @@ public abstract class AbstractFile implements FileAttributes {
     public String getName() {
         String name = fileURL.getFilename();
         // If filename is null, use host instead
-        if(name==null) {
+        if (name == null) {
             name = fileURL.getHost();
             // If host is null, return an empty string
-            if(name==null)
+            if (name == null)
                 return "";
         }
 
@@ -157,7 +149,7 @@ public abstract class AbstractFile implements FileAttributes {
         return getExtension(getName());
     }
 
-    
+
     /**
      * Returns the absolute path to this file:
      * <ul>
@@ -203,7 +195,7 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public AbstractFile getCanonicalFile() {
         String canonicalPath = getCanonicalPath(false);
-        if(canonicalPath.equals(getAbsolutePath(false)))
+        if (canonicalPath.equals(getAbsolutePath(false)))
             return this;
 
         try {
@@ -211,8 +203,7 @@ public abstract class AbstractFile implements FileAttributes {
             canonicalURL.setCredentials(fileURL.getCredentials());
 
             return FileFactory.getFile(canonicalURL);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return this;
         }
     }
@@ -239,7 +230,7 @@ public abstract class AbstractFile implements FileAttributes {
      * of hidden files.</p>
      *
      * @return true if this file is hidden
-     */	
+     */
     public boolean isHidden() {
         return getName().startsWith(".");
     }
@@ -267,7 +258,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @return the root folder that contains this file
      */
     public AbstractFile getRoot() {
-        FileURL rootURL = (FileURL)getURL().clone();
+        FileURL rootURL = (FileURL) getURL().clone();
         rootURL.setPath("/");
 
         return FileFactory.getFile(rootURL);
@@ -330,7 +321,7 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public InputStream getInputStream(long offset) throws IOException, UnsupportedFileOperationException {
         // Use a random access input stream when available
-        if(isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
+        if (isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
             RandomAccessInputStream rais = getRandomAccessInputStream();
             rais.seek(offset);
 
@@ -344,12 +335,12 @@ public abstract class AbstractFile implements FileAttributes {
 
         return in;
     }
-	
+
 
     /**
      * Copies the contents of the given <code>InputStream</code> to this file, appending or overwriting the file
      * if it exists. It is noteworthy that the provided <code>InputStream</code> will <b>not</b> be closed by this method.
-     * 
+     *
      * <p>This method should be overridden by filesystems that do not offer a {@link #getOutputStream()}
      * implementation, but that can take an <code>InputStream</code> and use it to write the file.
      * For this reason, it is recommended to use this method to write a file, rather than copying streams manually using
@@ -376,22 +367,19 @@ public abstract class AbstractFile implements FileAttributes {
         OutputStream out;
 
         try {
-            out = append?getAppendOutputStream():getOutputStream();
-        }
-        catch(IOException e) {
+            out = append ? getAppendOutputStream() : getOutputStream();
+        } catch (IOException e) {
             // TODO: re-throw UnsupportedFileOperationException ? 
             throw new FileTransferException(FileTransferError.OPENING_DESTINATION);
         }
 
         try {
             StreamUtils.copyStream(in, out, IO_BUFFER_SIZE);
-        }
-        finally {
+        } finally {
             // Close stream even if copyStream() threw an IOException
             try {
                 out.close();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 throw new FileTransferException(FileTransferError.CLOSING_DESTINATION);
             }
         }
@@ -425,13 +413,12 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public final void copyTo(AbstractFile destFile) throws IOException {
         // First, try to perform a remote copy of the file if the operation is supported
-        if(isFileOperationSupported(FileOperation.COPY_REMOTELY)) {
+        if (isFileOperationSupported(FileOperation.COPY_REMOTELY)) {
             try {
                 copyRemotelyTo(destFile);
                 // Operation was a success, all done.
                 return;
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Fail silently
             }
         }
@@ -475,13 +462,12 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public final void moveTo(AbstractFile destFile) throws IOException {
         // First, try to rename the file if the operation is supported
-        if(isFileOperationSupported(FileOperation.RENAME)) {
+        if (isFileOperationSupported(FileOperation.RENAME)) {
             try {
                 renameTo(destFile);
                 // Rename was a success, all done.
                 return;
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Fail silently
             }
         }
@@ -494,8 +480,7 @@ public abstract class AbstractFile implements FileAttributes {
         // Note that the file won't be deleted if copyTo() failed (threw an IOException)
         try {
             deleteRecursively();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             throw new FileTransferException(FileTransferError.DELETING_SOURCE);
         }
     }
@@ -513,10 +498,10 @@ public abstract class AbstractFile implements FileAttributes {
      * or not implemented by the underlying filesystem.
      */
     public void mkfile() throws IOException, UnsupportedFileOperationException {
-        if(exists())
+        if (exists())
             throw new IOException();
 
-        if(isFileOperationSupported(FileOperation.WRITE_FILE))
+        if (isFileOperationSupported(FileOperation.WRITE_FILE))
             getOutputStream().close();
         else
             copyStream(new ByteArrayInputStream(new byte[]{}), false, 0);
@@ -535,7 +520,7 @@ public abstract class AbstractFile implements FileAttributes {
      * or not implemented by the underlying filesystem.
      */
     public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
-        return filter==null?ls():filter.filter(ls());
+        return filter == null ? ls() : filter.filter(ls());
     }
 
 
@@ -554,7 +539,7 @@ public abstract class AbstractFile implements FileAttributes {
      * or not implemented by the underlying filesystem.
      */
     public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
-        return filter==null?ls():filter.filter(ls());
+        return filter == null ? ls() : filter.filter(ls());
     }
 
 
@@ -578,10 +563,10 @@ public abstract class AbstractFile implements FileAttributes {
         int bitShift = 0;
 
         PermissionBits mask = getChangeablePermissions();
-        for(PermissionAccess a : PermissionAccess.values()) {
-            for(PermissionType p : PermissionType.values()) {
-                if(mask.getBitValue(a, p))
-                    changePermission(a, p, (permissions & (1<<bitShift))!=0);
+        for (PermissionAccess a : PermissionAccess.values()) {
+            for (PermissionType p : PermissionType.values()) {
+                if (mask.getBitValue(a, p))
+                    changePermission(a, p, (permissions & (1 << bitShift)) != 0);
 
                 bitShift++;
             }
@@ -621,23 +606,23 @@ public abstract class AbstractFile implements FileAttributes {
         int supportedPerms = permissions.getMask().getIntValue();
 
         String s = "";
-        s += isSymlink()?'l':isDirectory()?'d':'-';
+        s += isSymlink() ? 'l' : isDirectory() ? 'd' : '-';
 
         int perms = permissions.getIntValue();
 
-        int bitShift = PermissionAccess.USER.toInt() *3;
+        int bitShift = PermissionAccess.USER.toInt() * 3;
 
         // Permissions go by triplets (rwx), there are 3 of them for respectively 'owner', 'group' and 'other' accesses.
         // The first one ('owner') will always be displayed, regardless of the permission bit mask. 'Group' and 'other'
         // will be displayed only if the permission mask contains information about them (at least one permission bit).
-        for(PermissionAccess a : PermissionAccess.reverseValues()) {
+        for (PermissionAccess a : PermissionAccess.reverseValues()) {
 
-            if(a==PermissionAccess.USER || (supportedPerms & (7<<bitShift))!=0) {
-                for(PermissionType p : PermissionType.reverseValues()) {
-                    if((perms & (p.toInt()<<bitShift))==0)
+            if (a == PermissionAccess.USER || (supportedPerms & (7 << bitShift)) != 0) {
+                for (PermissionType p : PermissionType.reverseValues()) {
+                    if ((perms & (p.toInt() << bitShift)) == 0)
                         s += '-';
                     else
-                        s += p==PermissionType.READ?'r':p==PermissionType.WRITE?'w':'x';
+                        s += p == PermissionType.READ ? 'r' : p == PermissionType.WRITE ? 'w' : 'x';
                 }
             }
 
@@ -712,7 +697,7 @@ public abstract class AbstractFile implements FileAttributes {
         String name = getName();
         int position = name.lastIndexOf('.');
 
-        if((position<=0) || (position == name.length() - 1))
+        if ((position <= 0) || (position == name.length() - 1))
             return name;
 
         return name.substring(0, position);
@@ -736,7 +721,7 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public final String getAbsolutePath(boolean appendSeparator) {
         String path = getAbsolutePath();
-        return appendSeparator?addTrailingSeparator(path): removeTrailingSeparator(path);
+        return appendSeparator ? addTrailingSeparator(path) : removeTrailingSeparator(path);
     }
 
 
@@ -749,7 +734,7 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public final String getCanonicalPath(boolean appendSeparator) {
         String path = getCanonicalPath();
-        return appendSeparator?addTrailingSeparator(path): removeTrailingSeparator(path);
+        return appendSeparator ? addTrailingSeparator(path) : removeTrailingSeparator(path);
     }
 
 
@@ -765,8 +750,8 @@ public abstract class AbstractFile implements FileAttributes {
      * @throws IOException if the child file could not be instantiated
      */
     public final AbstractFile getChild(String relativePath) throws IOException {
-        FileURL childURL = (FileURL)getURL().clone();
-        childURL.setPath(addTrailingSeparator(childURL.getPath())+ relativePath);
+        FileURL childURL = (FileURL) getURL().clone();
+        childURL.setPath(addTrailingSeparator(childURL.getPath()) + relativePath);
 
         return FileFactory.getFile(childURL, true);
     }
@@ -781,8 +766,7 @@ public abstract class AbstractFile implements FileAttributes {
     public final AbstractFile getChildSilently(String relativePath) {
         try {
             return getChild(relativePath);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return null;
         }
     }
@@ -804,7 +788,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @throws IOException in any of the cases listed above
      */
     public final AbstractFile getDirectChild(String filename) throws IOException {
-        if(filename.indexOf(getSeparator())!=-1)
+        if (filename.indexOf(getSeparator()) != -1)
             throw new IOException();
 
         AbstractFile childFile = getChild(filename);
@@ -842,7 +826,7 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public final void mkdirs() throws IOException, UnsupportedFileOperationException {
         AbstractFile parent;
-        if(((parent=getParent())!=null) && !parent.exists())
+        if (((parent = getParent()) != null) && !parent.exists())
             parent.mkdirs();
 
         mkdir();
@@ -874,8 +858,8 @@ public abstract class AbstractFile implements FileAttributes {
      * @return the immediate ancestor of this <code>AbstractFile</code> if it has one, <code>this</code> otherwise
      */
     public final AbstractFile getAncestor() {
-        if(this instanceof ProxyFile)
-            return ((ProxyFile)this).getProxiedFile();
+        if (this instanceof ProxyFile)
+            return ((ProxyFile) this).getProxiedFile();
 
         return this;
     }
@@ -893,17 +877,17 @@ public abstract class AbstractFile implements FileAttributes {
      * file has no such ancestor.
      */
     public final <T extends AbstractFile> T getAncestor(Class<T> abstractFileClass) {
-    	AbstractFile ancestor = this;
+        AbstractFile ancestor = this;
         AbstractFile lastAncestor;
 
         do {
-            if(abstractFileClass.isAssignableFrom(ancestor.getClass()))
+            if (abstractFileClass.isAssignableFrom(ancestor.getClass()))
                 return (T) ancestor;
 
             lastAncestor = ancestor;
             ancestor = ancestor.getAncestor();
         }
-        while(lastAncestor!=ancestor);
+        while (lastAncestor != ancestor);
 
         return null;
     }
@@ -916,7 +900,7 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public final AbstractFile getTopAncestor() {
         AbstractFile topAncestor = this;
-        while(topAncestor.hasAncestor())
+        while (topAncestor.hasAncestor())
             topAncestor = topAncestor.getAncestor();
 
         return topAncestor;
@@ -948,13 +932,13 @@ public abstract class AbstractFile implements FileAttributes {
         AbstractFile lastAncestor;
 
         do {
-            if(abstractFileClass.isAssignableFrom(ancestor.getClass()))
+            if (abstractFileClass.isAssignableFrom(ancestor.getClass()))
                 return true;
 
             lastAncestor = ancestor;
             ancestor = ancestor.getAncestor();
         }
-        while(lastAncestor!=ancestor);
+        while (lastAncestor != ancestor);
 
         return false;
     }
@@ -985,9 +969,9 @@ public abstract class AbstractFile implements FileAttributes {
      * @return the parent {@link AbstractArchiveFile} that contains this file
      */
     public final AbstractArchiveFile getParentArchive() {
-        if(hasAncestor(AbstractArchiveFile.class))
+        if (hasAncestor(AbstractArchiveFile.class))
             return getAncestor(AbstractArchiveFile.class);
-        else if(hasAncestor(AbstractArchiveEntryFile.class))
+        else if (hasAncestor(AbstractArchiveEntryFile.class))
             return getAncestor(AbstractArchiveEntryFile.class).getArchiveFile();
 
         return null;
@@ -1068,8 +1052,7 @@ public abstract class AbstractFile implements FileAttributes {
 
         try {
             return calculateChecksum(in, messageDigest);
-        }
-        finally {
+        } finally {
             in.close();
         }
     }
@@ -1086,8 +1069,8 @@ public abstract class AbstractFile implements FileAttributes {
         // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
         // are exceptions that's why we still have to test if path ends with a separator
         String separator = getSeparator();
-        if(!path.endsWith(separator))
-            return path+separator;
+        if (!path.endsWith(separator))
+            return path + separator;
         return path;
     }
 
@@ -1102,9 +1085,9 @@ public abstract class AbstractFile implements FileAttributes {
         // Remove trailing slash if path is not '/' or trailing backslash if path does not end with ':\'
         // (Reminder: C: is C's current folder, while C:\ is C's root)
         String separator = getSeparator();
-        if(path.endsWith(separator)
-           && !((separator.equals("/") && path.length()==1) || (separator.equals("\\") && path.charAt(path.length()-2)==':')))
-            path = path.substring(0, path.length()-1);
+        if (path.endsWith(separator)
+                && !((separator.equals("/") && path.length() == 1) || (separator.equals("\\") && path.charAt(path.length() - 2) == ':')))
+            path = path.substring(0, path.length() - 1);
         return path;
     }
 
@@ -1129,26 +1112,26 @@ public abstract class AbstractFile implements FileAttributes {
 
         // Throw an exception of a specific kind if the source and destination files refer to the same file
         boolean filesEqual = this.equalsCanonical(destFile);
-        if(filesEqual) {
+        if (filesEqual) {
             // If case variations are allowed and the destination filename is a case variation of the source,
             // do not throw an exception.
-            if(allowCaseVariations) {
+            if (allowCaseVariations) {
                 String sourceFileName = getName();
                 String destFileName = destFile.getName();
-                if(sourceFileName.equalsIgnoreCase(destFileName) && !sourceFileName.equals(destFileName))
+                if (sourceFileName.equalsIgnoreCase(destFileName) && !sourceFileName.equals(destFileName))
                     isAllowedCaseVariation = true;
             }
 
-            if(!isAllowedCaseVariation)
+            if (!isAllowedCaseVariation)
                 throw new FileTransferException(FileTransferError.SOURCE_AND_DESTINATION_IDENTICAL);
         }
 
         // Throw an exception if source is a parent of destination
-        if(!filesEqual && isParentOf(destFile))      // Note: isParentOf(destFile) returns true if both files are equal
+        if (!filesEqual && isParentOf(destFile))      // Note: isParentOf(destFile) returns true if both files are equal
             throw new FileTransferException(FileTransferError.SOURCE_PARENT_OF_DESTINATION);
 
         // Throw an exception if the source file does not exist
-        if(!exists())
+        if (!exists())
             throw new FileTransferException(FileTransferError.FILE_NOT_FOUND);
     }
 
@@ -1172,9 +1155,9 @@ public abstract class AbstractFile implements FileAttributes {
      * @see #checkCopyPrerequisites(AbstractFile, boolean)
      */
     protected final void checkCopyRemotelyPrerequisites(AbstractFile destFile, boolean allowCaseVariations, boolean allowDifferentHosts) throws IOException, FileTransferException {
-        if(!fileURL.schemeEquals(fileURL)
-        || !destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())
-        || (!allowDifferentHosts && !destFile.getURL().hostEquals(fileURL)))
+        if (!fileURL.schemeEquals(fileURL)
+                || !destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())
+                || (!allowDifferentHosts && !destFile.getURL().hostEquals(fileURL)))
             throw new IOException();
 
         checkCopyPrerequisites(destFile, allowCaseVariations);
@@ -1213,22 +1196,20 @@ public abstract class AbstractFile implements FileAttributes {
      * @throws FileTransferException if an error occurred while copying the file
      */
     protected final void copyRecursively(AbstractFile sourceFile, AbstractFile destFile) throws FileTransferException {
-        if(sourceFile.isSymlink())
+        if (sourceFile.isSymlink())
             return;
 
-        if(sourceFile.isDirectory()) {
+        if (sourceFile.isDirectory()) {
             try {
                 destFile.mkdir();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 throw new FileTransferException(FileTransferError.WRITING_DESTINATION);
             }
 
             AbstractFile children[];
             try {
                 children = sourceFile.ls();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 throw new FileTransferException(FileTransferError.READING_SOURCE);
             }
 
@@ -1236,33 +1217,28 @@ public abstract class AbstractFile implements FileAttributes {
             for (AbstractFile child : children) {
                 try {
                     destChild = destFile.getDirectChild(child.getName());
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     throw new FileTransferException(FileTransferError.OPENING_DESTINATION);
                 }
 
                 copyRecursively(child, destChild);
             }
-        }
-        else {
+        } else {
             InputStream in;
 
             try {
                 in = sourceFile.getInputStream();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 throw new FileTransferException(FileTransferError.OPENING_SOURCE);
             }
 
             try {
                 destFile.copyStream(in, false, sourceFile.getSize());
-            }
-            finally {
+            } finally {
                 // Close stream even if copyStream() threw an IOException
                 try {
                     in.close();
-                }
-                catch(IOException e) {
+                } catch (IOException e) {
                     throw new FileTransferException(FileTransferError.CLOSING_SOURCE);
                 }
             }
@@ -1279,7 +1255,7 @@ public abstract class AbstractFile implements FileAttributes {
      * or not implemented by the underlying filesystem.
      */
     protected final void deleteRecursively(AbstractFile file) throws IOException, UnsupportedFileOperationException {
-        if(file.isDirectory() && !file.isSymlink()) {
+        if (file.isDirectory() && !file.isSymlink()) {
             AbstractFile children[] = file.ls();
             for (AbstractFile child : children)
                 deleteRecursively(child);
@@ -1313,7 +1289,7 @@ public abstract class AbstractFile implements FileAttributes {
      * or not implemented by the underlying filesystem.
      */
     public final void importPermissions(AbstractFile sourceFile) throws IOException, UnsupportedFileOperationException {
-        importPermissions(sourceFile,isDirectory()
+        importPermissions(sourceFile, isDirectory()
                 ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                 : FilePermissions.DEFAULT_FILE_PERMISSIONS);
     }
@@ -1377,10 +1353,10 @@ public abstract class AbstractFile implements FileAttributes {
         int lastDotPos = filename.lastIndexOf('.');
 
         int len;
-        if(lastDotPos<=0 || lastDotPos==(len=filename.length())-1)
+        if (lastDotPos <= 0 || lastDotPos == (len = filename.length()) - 1)
             return null;
 
-        return filename.substring(lastDotPos+1, len);
+        return filename.substring(lastDotPos + 1, len);
     }
 
 
@@ -1394,16 +1370,16 @@ public abstract class AbstractFile implements FileAttributes {
      *
      * @return the file's base name - without its extension, if the filename doesn't have an extension returns the filename as received
      */
-    public String getBaseName() { 
-    	String fileName = getName(); 
-    	int lastDotPos = fileName.lastIndexOf('.');
-    	 
-         if(lastDotPos<=0 || lastDotPos==fileName.length()-1)
-             return fileName;
-         
-         return fileName.substring(0, lastDotPos);
+    public String getBaseName() {
+        String fileName = getName();
+        int lastDotPos = fileName.lastIndexOf('.');
+
+        if (lastDotPos <= 0 || lastDotPos == fileName.length() - 1)
+            return fileName;
+
+        return fileName.substring(0, lastDotPos);
     }
-    
+
     /**
      * Returns the checksum (also referred to as <i>hash</i> or <i>digest</i>) of the given <code>InputStream</code>
      * calculated by reading the stream and feeding the bytes to the given <code>MessageDigest</code> until EOF is
@@ -1422,13 +1398,12 @@ public abstract class AbstractFile implements FileAttributes {
         try {
             StreamUtils.readUntilEOF(cin);
             return cin.getChecksumString();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             throw new FileTransferException(FileTransferError.READING_SOURCE);
         }
     }
 
-    
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -1449,10 +1424,10 @@ public abstract class AbstractFile implements FileAttributes {
      * @see #equalsCanonical(Object)
      */
     public boolean equals(Object o) {
-        if(o==null || !(o instanceof AbstractFile))
+        if (o == null || !(o instanceof AbstractFile))
             return false;
 
-        return getURL().equals(((AbstractFile)o).getURL(), true, true);
+        return getURL().equals(((AbstractFile) o).getURL(), true, true);
     }
 
     /**
@@ -1475,12 +1450,12 @@ public abstract class AbstractFile implements FileAttributes {
      * @see #equals(Object)
      */
     public boolean equalsCanonical(Object o) {
-        if(o==null || !(o instanceof AbstractFile))
+        if (o == null || !(o instanceof AbstractFile))
             return false;
 
         // TODO: resolve hostnames ?
 
-        return getCanonicalPath(false).equals(((AbstractFile)o).getCanonicalPath(false));
+        return getCanonicalPath(false).equals(((AbstractFile) o).getCanonicalPath(false));
     }
 
     /**
@@ -1535,14 +1510,14 @@ public abstract class AbstractFile implements FileAttributes {
      * @return this file's size in bytes, 0 if this file doesn't exist, -1 if the size is undetermined
      */
     public abstract long getSize();
-	
+
     /**
      * Returns this file's parent, <code>null</code> if it doesn't have one.
      *
      * @return this file's parent, <code>null</code> if it doesn't have one
      */
     public abstract AbstractFile getParent();
-	
+
     /**
      * Sets this file's parent. <code>null</code> can be specified if this file doesn't have a parent.
      *
@@ -1677,7 +1652,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @return <code>true</code> if this file is a system file
      */
     public abstract boolean isSystem();
-	
+
     /**
      * Returns the children files that this file contains. For this operation to be successful, this file must be
      * 'browsable', i.e. {@link #isBrowsable()} must return <code>true</code>.

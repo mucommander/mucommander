@@ -24,26 +24,26 @@ import java.awt.event.KeyEvent;
 
 /**
  * This <code>AutocompleterTextComponent</code> implements {@link #OnEnterPressed(java.awt.event.KeyEvent)}
- * and {@link #OnEscPressed(java.awt.event.KeyEvent)} as the typical AutocompletedEditableCombobox's ops. 
- * 
+ * and {@link #OnEscPressed(java.awt.event.KeyEvent)} as the typical AutocompletedEditableCombobox's ops.
+ *
  * @author Arik Hadas
  */
 
 public class TypicalAutocompleterEditableCombobox extends AutocompleterTextComponent {
-	protected AutocompletedEditableCombobox editableCombobox;
-	
-	public TypicalAutocompleterEditableCombobox(AutocompletedEditableCombobox editableCombobox) {
-		super(editableCombobox);		
-		this.editableCombobox = editableCombobox;		
-	}
+    protected AutocompletedEditableCombobox editableCombobox;
 
-	@Override
+    public TypicalAutocompleterEditableCombobox(AutocompletedEditableCombobox editableCombobox) {
+        super(editableCombobox);
+        this.editableCombobox = editableCombobox;
+    }
+
+    @Override
     public void OnEnterPressed(KeyEvent keyEvent) {
-		editableCombobox.respondToEnterKeyPressing(keyEvent);
-	}
+        editableCombobox.respondToEnterKeyPressing(keyEvent);
+    }
 
-	@Override
+    @Override
     public void OnEscPressed(KeyEvent keyEvent) {
-		editableCombobox.respondToEscapeKeyPressing(keyEvent);
-	}
+        editableCombobox.respondToEscapeKeyPressing(keyEvent);
+    }
 }

@@ -18,13 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
+
+import java.util.Map;
 
 /**
  * Shows/hides the 'Owner' column of the currently active FileTable. If the column is currently visible, this action
@@ -34,23 +34,25 @@ import com.mucommander.ui.main.table.Column;
  */
 public class ToggleOwnerColumnAction extends ToggleColumnAction {
 
-    public ToggleOwnerColumnAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleOwnerColumnAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, Column.OWNER);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ToggleOwnerColumnAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ToggleOwnerColumnAction(mainFrame, properties);
+        }
     }
 
     public static class Descriptor extends ToggleColumnAction.Descriptor {
-        public Descriptor() { super(Column.OWNER); }
+        public Descriptor() {
+            super(Column.OWNER);
+        }
     }
 }

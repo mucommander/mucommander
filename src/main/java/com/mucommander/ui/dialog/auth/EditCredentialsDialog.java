@@ -18,22 +18,6 @@
 
 package com.mucommander.ui.dialog.auth;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.collections.AlteredVector;
@@ -49,18 +33,27 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.list.SortableListPanel;
 import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**
  * This dialog contains a list of all persistent credentials and allows the user to edit, remove, go to and reorder them.
- *
+ * <p>
  * <p>If the contents of this list is modified, credentials will be saved to disk when this dialog is disposed.</p>
  *
  * @author Maxence Bernard
  */
 public class EditCredentialsDialog extends FocusDialog implements ActionListener, ListSelectionListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(EditCredentialsDialog.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(EditCredentialsDialog.class);
+
     private MainFrame mainFrame;
 
     private JButton removeButton;
@@ -76,11 +69,10 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     private CredentialsMapping lastSelectedItem;
 
     // Dialog's size has to be at least 400x300
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(440,330);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(440, 330);
 
     // Dialog's size has to be at most 600x400
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(600,400);
-
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(600, 400);
 
 
     public EditCredentialsDialog(MainFrame mainFrame) {
@@ -105,11 +97,11 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
 
         // Add login field
         this.loginField = new JTextField();
-        compPanel.addRow(Translator.get("login")+":", loginField, 5);
+        compPanel.addRow(Translator.get("login") + ":", loginField, 5);
 
         // Add password field
         this.passwordField = new JPasswordField();
-        compPanel.addRow(Translator.get("password")+":", passwordField, 10);
+        compPanel.addRow(Translator.get("password") + ":", passwordField, 10);
 
         YBoxPanel yPanel = new YBoxPanel(10);
         yPanel.add(compPanel);
@@ -150,7 +142,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
 
         // table will receive initial focus
         setInitialFocusComponent(credentialsList);
-		
+
         // Selects 'Done' button when enter is pressed
         getRootPane().setDefaultButton(closeButton);
 
@@ -175,7 +167,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
 
         boolean componentsEnabled = false;
 
-        if(!credentialsList.isSelectionEmpty() && credentials.size()>0) {
+        if (!credentialsList.isSelectionEmpty() && credentials.size() > 0) {
             componentsEnabled = true;
 
             CredentialsMapping credentialsMapping = (CredentialsMapping) credentialsList.getSelectedValue();
@@ -200,10 +192,10 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     private void modifyCredentials() {
         // Make sure that the item still exists (could have been removed) before trying to modify its value
         int itemIndex = credentials.indexOf(lastSelectedItem);
-        if(lastSelectedItem!=null && itemIndex!=-1) {
+        if (lastSelectedItem != null && itemIndex != -1) {
             credentials.setElementAt(new CredentialsMapping(new Credentials(loginField.getText(), new String(passwordField.getPassword())), lastSelectedItem.getRealm(), true), itemIndex);
         }
-        
+
         this.lastSelectedItem = (CredentialsMapping) credentialsList.getSelectedValue();
     }
 
@@ -216,9 +208,12 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         super.dispose();
 
         // Write credentials file to disk, only if changes were made
-        try {CredentialsManager.writeCredentials(false);}
+        try {
+            CredentialsManager.writeCredentials(false);
+        }
         // We should probably pop an error dialog here...
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
     }
 
 
@@ -230,18 +225,17 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         Object source = e.getSource();
 
         // Dispose the dialog (credentials save is performed in dispose())
-        if (source== closeButton)  {
+        if (source == closeButton) {
             // Commit current credentials modifications.
             // Note: if the dialog is cancelled, current modifications will be cancelled (i.e. not committed) 
             modifyCredentials();
-            
+
             dispose();
-        }
-        else if(source==goToButton) {
+        } else if (source == goToButton) {
             // Dispose dialog first
             dispose();
             // Go to credentials' realm location
-            mainFrame.getActivePanel().tryChangeCurrentFolder(((CredentialsMapping)credentialsList.getSelectedValue()).getRealm());
+            mainFrame.getActivePanel().tryChangeCurrentFolder(((CredentialsMapping) credentialsList.getSelectedValue()).getRealm());
         }
     }
 
@@ -251,9 +245,9 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
     ///////////////////////////////////
 
     public void valueChanged(ListSelectionEvent e) {
-        LOGGER.trace("called, e.getValueIsAdjusting="+e.getValueIsAdjusting()+" getSelectedIndex="+ credentialsList.getSelectedIndex());
+        LOGGER.trace("called, e.getValueIsAdjusting=" + e.getValueIsAdjusting() + " getSelectedIndex=" + credentialsList.getSelectedIndex());
 
-        if(e.getValueIsAdjusting())
+        if (e.getValueIsAdjusting())
             return;
 
         // Commit current credentials modifications

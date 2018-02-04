@@ -41,33 +41,40 @@ import java.beans.PropertyChangeListener;
  * </li>
  * </ul>
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class SystemDefaultFont extends DefaultFont implements PropertyChangeListener {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Name of the {@link UIManager#getFont(Object)} font property} to query. */
-    private String          property;
-    /** Current value of the default font. */
-    private Font            font;
-    /** Used to create instance of the component whose font will be retrieved (in case {@link #property} isn't set). */
+    /**
+     * Name of the {@link UIManager#getFont(Object)} font property} to query.
+     */
+    private String property;
+    /**
+     * Current value of the default font.
+     */
+    private Font font;
+    /**
+     * Used to create instance of the component whose font will be retrieved (in case {@link #property} isn't set).
+     */
     private ComponentMapper mapper;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of {@link SystemDefaultFont}.
+     *
      * @param property {@link UIManager} property to query for the default font.
      * @param mapper   component mapper to use when the {@link UIManager} property isn't set.
      */
     public SystemDefaultFont(String property, ComponentMapper mapper) {
         UIManager.addPropertyChangeListener(this);
         this.property = property;
-        this.mapper   = mapper;
+        this.mapper = mapper;
     }
-
 
 
     // - DefaultFont implementation ------------------------------------------------------------------------------------
@@ -75,18 +82,17 @@ public class SystemDefaultFont extends DefaultFont implements PropertyChangeList
     @Override
     public Font getFont(ThemeData data) {
         // If the font hasn't been identified yet...
-        if(font == null)
+        if (font == null)
             // ... try to retrieve it from the UIManager.
-            if((font = UIManager.getFont(property)) == null)
+            if ((font = UIManager.getFont(property)) == null)
                 // If the current l&f didn't set the right propery, attempt to retrieve it from a component of the
                 // desired type.
-                if((font = mapper.getComponent().getFont()) == null)
+                if ((font = mapper.getComponent().getFont()) == null)
                     // If that failed, defaults to SansSerif (guaranteed to be supported by the VM).
                     font = Font.decode("SansSerif");
 
         return font;
     }
-
 
 
     // - PropertyChangeListener implementation -------------------------------------------------------------------------
@@ -96,16 +102,16 @@ public class SystemDefaultFont extends DefaultFont implements PropertyChangeList
 
         // Monitors changes to both the global look & feel and the target property and react to them if necessary. 
         name = evt.getPropertyName().toLowerCase();
-        if(name.equals("lookandfeel") || name.equalsIgnoreCase(property)) {
+        if (name.equals("lookandfeel") || name.equalsIgnoreCase(property)) {
             Font oldFont;
 
             oldFont = font;
 
             // We first set font to null to ensure that the value is refreshed.
-            font    = null;
-            font    = getFont(null);
+            font = null;
+            font = getFont(null);
 
-            if(!font.equals(oldFont))
+            if (!font.equals(oldFont))
                 notifyChange(font);
         }
     }

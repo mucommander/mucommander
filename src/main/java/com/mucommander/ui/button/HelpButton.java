@@ -18,27 +18,26 @@
 
 package com.mucommander.ui.button;
 
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.border.EmptyBorder;
-
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.ui.action.impl.GoToDocumentationAction;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.util.Hashtable;
+import java.util.Map;
+
 /**
  * This is a contextual 'Help' button to be used wherever help is available or needed. When clicked, it opens
  * muCommander's online documentation in the system's default browser. If a specified help topic is passed to the
  * constructor, the browser will open the said topic. If no topic is specified, the base documentation URL will be opened.
- *
+ * <p>
  * <p>Unless explicitely set, this button has a standard help icon but no text label. A tooltip is displayed when
  * hovering over the button.</p>
  *
- * @see com.mucommander.ui.action.impl.GoToDocumentationAction
  * @author Maxence Bernard
+ * @see com.mucommander.ui.action.impl.GoToDocumentationAction
  */
 public class HelpButton extends JButton {
 
@@ -63,7 +62,7 @@ public class HelpButton extends JButton {
         GoToDocumentationAction action = new GoToDocumentationAction(mainFrame, properties);
         setAction(action);
 
-        if(helpTopic!=null)
+        if (helpTopic != null)
             setHelpTopic(helpTopic);
 
         // Note: the button's text and icon must be set after the action otherwise they'll be replaced by the action's
@@ -74,14 +73,13 @@ public class HelpButton extends JButton {
         // Use the action's label as a tooltip
         setToolTipText(action.getLabel());
 
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
             // If running Mac OS X 10.5 (and up), use the special client property to have a standard help button.
             putClientProperty("JButton.buttonType", "help");
 
             // Remove the action's icon
             setIcon(null);
-        }
-        else {
+        } else {
             setContentAreaFilled(false);
             setBorderPainted(false);
             setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -96,9 +94,9 @@ public class HelpButton extends JButton {
      * @return the help topic this button will open when clicked, <code>null</code> if there is none
      */
     public String getHelpTopic() {
-        return (String)getAction().getValue(GoToDocumentationAction.TOPIC_PROPERTY_KEY);
+        return (String) getAction().getValue(GoToDocumentationAction.TOPIC_PROPERTY_KEY);
     }
-    
+
     /**
      * Sets the help topic this button will open when clicked, <code>null</code> to open the base documentation URL.
      *

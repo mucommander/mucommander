@@ -27,41 +27,43 @@ import java.util.Vector;
 /**
  * MnemonicHelper provides a way to easily set mnemonics to UI components, without having to bother
  * with remembering which ones have already been assigned to another component.
- *
+ * <p>
  * <p>To use it: simply create a new instance and keep calling {@link #getMnemonic(String)}
  * to get mnemonics from the giving pieces of text.</p>
- * 
+ *
  * @author Maxence Bernard
  */
 public class MnemonicHelper {
 
-    /** Current list of previously assigned mnemonics */
+    /**
+     * Current list of previously assigned mnemonics
+     */
     private List<Character> takenMnemonics;
-	
-	
+
+
     /**
      * Creates a new blank MnemonicHelper.
      */
     public MnemonicHelper() {
         takenMnemonics = new Vector<Character>();
     }
-	
-	
+
+
     /**
      * Finds and returns first character in the given string that's not already as a mnemonic.
-     *
+     * <p>
      * <p>Returned mnemonic will be added to current internal list of taken mnemonics
      * and won't ever be used again by this instance.</p>
      *
+     * @param text text to get a mnemonic from.
      * @return the character to be used as a mnemonic, always in lower case, 0 if no
      * mnemonic was available for this piece of text. 0 is returned if a <code>null</code> string is passed.
-     * @param text text to get a mnemonic from.
      */
     public char getMnemonic(String text) {
         // Returns 0 in case of null string
-        if(text==null || text.length()==0)
+        if (text == null || text.length() == 0)
             return 0;
-		
+
         // Find first letter available for mnemonic (keyboard shortcut)
         int mnemonicPos = 0;
         char mnemonic;
@@ -69,12 +71,12 @@ public class MnemonicHelper {
         int textLength = text.length();
         do {
             mnemonic = text.charAt(mnemonicPos++);
-            if(!isMnemonicUsed(mnemonic)) {
+            if (!isMnemonicUsed(mnemonic)) {
                 takenMnemonics.add(mnemonic);
                 return mnemonic;
             }
         }
-        while(mnemonicPos<textLength);
+        while (mnemonicPos < textLength);
 
         return 0;
     }
@@ -101,7 +103,7 @@ public class MnemonicHelper {
      * @return whether or not the character is already used in the mnemonics array.
      */
     public boolean isMnemonicUsed(char ch) {
-        return takenMnemonics.indexOf(new Character(ch))!=-1;
+        return takenMnemonics.indexOf(new Character(ch)) != -1;
     }
 
 

@@ -26,10 +26,10 @@ import java.io.InputStream;
  * <code>BoundedInputStream</code> is an InputStream that has a set limit to the number of bytes that can be read or
  * skipped from it. What happens when the limit is reached is controlled at creation time: <code>read</code> and
  * <code>skip</code> methods can either throw a {@link StreamOutOfBoundException} or simply return <code>-1</code>.
- *
+ * <p>
  * <p>The limit has no effect if it is set to a value that is higher than the number of bytes remaining in the
  * underlying stream.</p>
- *
+ * <p>
  * <p>This class is particularly useful for reading archives that are a concatenation of files, tarballs for instance.</p>
  *
  * @author Maxence Bernard
@@ -47,15 +47,15 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
      * Creates a new <code>BoundedInputStream</code> over the specified stream, allowing a maximum of
      * <code>allowedBytes</code> to be read or skipped. If <code>allowedBytes</code> is equal to <code>-1</code>, this
      * stream is not bounded and acts as a normal stream.
-     *
+     * <p>
      * <p>If the <code>throwStreamOutOfBoundException</code> parameter is <code>true</code>, <code>read</code> and
      * <code>skip</code> methods will throw a {@link StreamOutOfBoundException} when an attempt to read or skip beyond
      * that limit is made. If <code>false</code>, <code>-1</code> will be returned.</p>
      *
-     * @param in the stream to be bounded
-     * @param allowedBytes the total number of bytes that are allowed to be read or skipped, <code>-1</code> for no limit
+     * @param in                             the stream to be bounded
+     * @param allowedBytes                   the total number of bytes that are allowed to be read or skipped, <code>-1</code> for no limit
      * @param throwStreamOutOfBoundException <code>true</code> to throw when an attempt to read or skip beyond the byte
-     * limit is made, <code>false</code> to simply return <code>-1</code>
+     *                                       limit is made, <code>false</code> to simply return <code>-1</code>
      */
     public BoundedInputStream(InputStream in, long allowedBytes, boolean throwStreamOutOfBoundException) {
         super(in);
@@ -70,10 +70,10 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
      * was created.
      *
      * @return -1 if this BoundedInputStream was configured not to throw a StreamOutOfBoundException
-     * @throws StreamOutOfBoundException if this BoundedInputStream was configured to throw a StreamOutOfBoundException  
+     * @throws StreamOutOfBoundException if this BoundedInputStream was configured to throw a StreamOutOfBoundException
      */
     protected int handleStreamOutOfBound() throws StreamOutOfBoundException {
-        if(throwStreamOutOfBoundException)
+        if (throwStreamOutOfBoundException)
             throw new StreamOutOfBoundException(allowedBytes);
 
         return -1;
@@ -93,7 +93,7 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
     }
 
     public synchronized long getRemainingBytes() {
-        return allowedBytes<=-1?Long.MAX_VALUE:allowedBytes-totalRead;
+        return allowedBytes <= -1 ? Long.MAX_VALUE : allowedBytes - totalRead;
     }
 
 
@@ -103,7 +103,7 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
 
     @Override
     public synchronized int read() throws IOException {
-        if(getRemainingBytes()==0)
+        if (getRemainingBytes() == 0)
             return handleStreamOutOfBound();
 
         int i = in.read();
@@ -119,12 +119,12 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
 
     @Override
     public synchronized int read(byte b[], int off, int len) throws IOException {
-        int canRead = (int)Math.min(getRemainingBytes(), len);
-        if(canRead==0)
+        int canRead = (int) Math.min(getRemainingBytes(), len);
+        if (canRead == 0)
             return handleStreamOutOfBound();
 
         int nbRead = in.read(b, off, canRead);
-        if(nbRead>0)
+        if (nbRead > 0)
             totalRead += nbRead;
 
         return nbRead;
@@ -132,12 +132,12 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
 
     @Override
     public synchronized long skip(long n) throws IOException {
-        int canSkip = (int)Math.min(getRemainingBytes(), n);
-        if(canSkip==0)
+        int canSkip = (int) Math.min(getRemainingBytes(), n);
+        if (canSkip == 0)
             return handleStreamOutOfBound();
 
         long nbSkipped = in.skip(canSkip);
-        if(nbSkipped>0)
+        if (nbSkipped > 0)
             totalRead += nbSkipped;
 
         return nbSkipped;
@@ -145,7 +145,7 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
 
     @Override
     public synchronized int available() throws IOException {
-        return Math.min(in.available(), (int)getRemainingBytes());
+        return Math.min(in.available(), (int) getRemainingBytes());
     }
 
     // Methods not implemented

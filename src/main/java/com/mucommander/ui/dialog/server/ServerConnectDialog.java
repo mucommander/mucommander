@@ -56,7 +56,7 @@ import java.util.Vector;
 public class ServerConnectDialog extends FocusDialog implements ActionListener, ChangeListener {
 
     private FolderPanel folderPanel;
-	
+
     private JButton cancelButton;
     private ServerPanel currentServerPanel;
 
@@ -67,8 +67,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     private JCheckBox saveCredentialsCheckBox;
 
     // Dialog's width has to be at least 320
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
-	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480, 0);
+
     private static Class<? extends ServerPanel> lastPanelClass = FTPPanel.class;
 
 
@@ -80,13 +80,13 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     public ServerConnectDialog(FolderPanel folderPanel) {
         this(folderPanel, lastPanelClass);
     }
-	
-		
+
+
     /**
      * Creates a new <code>ServerConnectDialog</code> that changes the current folder on the specified {@link FolderPanel}.
      * The specified panel is selected when the dialog appears.
      *
-     * @param folderPanel the panel on which to change the current folder
+     * @param folderPanel      the panel on which to change the current folder
      * @param selectPanelClass class of the ServerPanel to select
      */
     public ServerConnectDialog(FolderPanel folderPanel, Class<? extends ServerPanel> selectPanelClass) {
@@ -96,7 +96,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
         MainFrame mainFrame = folderPanel.getMainFrame();
         Container contentPane = getContentPane();
-		
+
         this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         addTab(FileProtocols.FTP, new FTPPanel(this, mainFrame), selectPanelClass);
@@ -113,10 +113,10 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
         // Listen to tab change events
         tabbedPane.addChangeListener(this);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
-		
+
         YBoxPanel yPanel = new YBoxPanel();
         XBoxPanel xPanel = new XBoxPanel();
-        xPanel.add(new JLabel(Translator.get("server_connect_dialog.server_url")+":"));
+        xPanel.add(new JLabel(Translator.get("server_connect_dialog.server_url") + ":"));
         xPanel.addSpace(5);
         urlLabel = new JLabel("");
         updateURLLabel();
@@ -135,23 +135,23 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
         yPanel.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this));
 
         contentPane.add(yPanel, BorderLayout.SOUTH);
-		
+
         // initial focus
-        setInitialFocusComponent(currentServerPanel);		
-		
+        setInitialFocusComponent(currentServerPanel);
+
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
     }
 
 
     public void addTab(String protocol, ServerPanel serverPanel, Class<? extends ServerPanel> selectPanelClass) {
-        if(!FileFactory.isRegisteredProtocol(protocol))
+        if (!FileFactory.isRegisteredProtocol(protocol))
             return;
 
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(serverPanel, BorderLayout.NORTH);
         tabbedPane.addTab(protocol.toUpperCase(), northPanel);
 
-        if(selectPanelClass.equals(serverPanel.getClass()))
+        if (selectPanelClass.equals(serverPanel.getClass()))
             tabbedPane.setSelectedComponent(northPanel);
 
         serverPanels.add(serverPanel);
@@ -161,9 +161,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     protected void updateURLLabel() {
         try {
             FileURL url = currentServerPanel.getServerURL();
-            urlLabel.setText(url==null?" ":url.toString(false));
-        }
-        catch(MalformedURLException ex) {
+            urlLabel.setText(url == null ? " " : url.toString(false));
+        } catch (MalformedURLException ex) {
             urlLabel.setText(" ");
         }
     }
@@ -171,16 +170,16 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     private ServerPanel getCurrentServerPanel() {
         return serverPanels.get(tabbedPane.getSelectedIndex());
     }
-	
-	
+
+
     ////////////////////////////
     // ActionListener methods //
     ////////////////////////////
-	
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if (source==cancelButton) {
+        if (source == cancelButton) {
             dispose();
             return;
         }
@@ -188,16 +187,15 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
         try {
             currentServerPanel.dialogValidated();
 
-            FileURL serverURL = currentServerPanel.getServerURL();	// Can throw a MalformedURLException
+            FileURL serverURL = currentServerPanel.getServerURL();    // Can throw a MalformedURLException
 
             // Create a CredentialsMapping instance and pass to Folder so that it uses it to connect to the folder and
             // adds to CredentialsManager once the folder has been successfully changed
             Credentials credentials = serverURL.getCredentials();
             CredentialsMapping credentialsMapping;
-            if(credentials!=null) {
+            if (credentials != null) {
                 credentialsMapping = new CredentialsMapping(credentials, serverURL, saveCredentialsCheckBox.isSelected());
-            }
-            else {
+            } else {
                 credentialsMapping = null;
             }
 
@@ -205,17 +203,16 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
             // Change the current folder
             folderPanel.tryChangeCurrentFolder(serverURL, credentialsMapping);
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
             InformationDialog.showErrorDialog(this, Translator.get("table.folder_access_error_title"), Translator.get("folder_does_not_exist"));
         }
     }
-	
-	
+
+
     ///////////////////////////
     // ChangeListener method //
     ///////////////////////////
-	
+
     public void stateChanged(ChangeEvent e) {
         currentServerPanel = getCurrentServerPanel();
         lastPanelClass = currentServerPanel.getClass();

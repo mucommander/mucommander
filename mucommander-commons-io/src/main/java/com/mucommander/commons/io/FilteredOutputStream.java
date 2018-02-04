@@ -23,7 +23,7 @@ import java.io.OutputStream;
 
 /**
  * This class provides a proper implementation of an OutputStream filter.
- *
+ * <p>
  * <p>Unlike <code>java.io.FilterOutputStream</code>, this method delegates all methods to an underlying OutputStream
  * and nothing more. In particular, {@link #write(byte[])} and {@link #write(byte[], int, int)} do <b>not</b>
  * call {@link #write(int)} repeatedly (very unefficient) but delegate to the corresponding OutputStream methods. This
@@ -34,7 +34,9 @@ import java.io.OutputStream;
  */
 public class FilteredOutputStream extends OutputStream {
 
-    /** The underlying OutputStream to filter */
+    /**
+     * The underlying OutputStream to filter
+     */
     protected OutputStream out;
 
     /**

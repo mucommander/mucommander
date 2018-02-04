@@ -1,51 +1,47 @@
 package com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.SevenZip;
 
-import java.io.IOException;
-
 import com.mucommander.commons.file.archive.sevenzip.provider.Common.ObjectVector;
-import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.HRESULT;
-import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.ICompressProgressInfo;
-import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.IInStream;
 import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.IArchiveExtractCallback;
 import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.IInArchive;
 import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.SevenZipEntry;
 import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Common.LocalCompressProgressInfo;
 import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Common.LocalProgress;
+import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.HRESULT;
+import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.ICompressProgressInfo;
+import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.IInStream;
 
-
-
-
+import java.io.IOException;
 
 
 public class Handler implements com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.IInArchive {
-    
+
     // useless LongVector _fileInfoPopIDs = new LongVector();
-    
+
     IInStream _inStream;
-    
+
     ArchiveDatabaseEx _database;
-    
+
     int _numThreads;
-    
+
     public Handler() {
         _numThreads = 1; // TBD
-        
+
         _database = new ArchiveDatabaseEx();
-        
+
     }
-    
+
     public int Open(IInStream stream) throws IOException {
-        return Open(stream,kMaxCheckStartPosition);
+        return Open(stream, kMaxCheckStartPosition);
     }
-    
-    
+
+
     public int Open(
             IInStream stream, // InStream *stream
             long maxCheckStartPosition // const UInt64 *maxCheckStartPosition,
             // IArchiveOpenCallback *openArchiveCallback */
-            ) throws IOException {
+    ) throws IOException {
         close();
-        
+
         // useless _fileInfoPopIDs.clear();
         // TBD try
         {
@@ -59,7 +55,7 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                   IID_ICryptoGetTextPassword, &getTextPassword);
             }
              */
-            
+
             InArchive archive = new InArchive();
             int ret = archive.Open(stream, maxCheckStartPosition);
             if (ret != HRESULT.S_OK) return ret;
@@ -68,19 +64,19 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
             _database.Fill();
             _inStream = stream;
         }
-        
+
         // FillPopIDs(); // useless _fileInfoPopIDs
-        
+
         return HRESULT.S_OK;
     }
-    
-    public int Extract(int [] indices, int numItems,
-            int testModeSpec, IArchiveExtractCallback extractCallbackSpec) throws IOException {
-        
+
+    public int Extract(int[] indices, int numItems,
+                       int testModeSpec, IArchiveExtractCallback extractCallbackSpec) throws IOException {
+
         boolean testMode = (testModeSpec != 0);
         IArchiveExtractCallback extractCallback = extractCallbackSpec;
         long importantTotalUnPacked = 0;
-        
+
         boolean allFilesMode = (numItems == -1);
         if (allFilesMode)
             numItems =
@@ -89,14 +85,14 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                     // #else
                     _database.Files.size();
         // #endif
-        
-        if(numItems == 0)
+
+        if (numItems == 0)
             return HRESULT.S_OK;
-        
+
         ObjectVector<ExtractFolderInfo> extractFolderInfoVector = new ObjectVector<ExtractFolderInfo>();
-        for(int ii = 0; ii < numItems; ii++) {
+        for (int ii = 0; ii < numItems; ii++) {
             int ref2Index = allFilesMode ? ii : indices[ii];
-            
+
             {
         /*
       #ifdef _7Z_VOL
@@ -112,10 +108,10 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                 ArchiveDatabaseEx database = _database;
                 int fileIndex = ref2Index;
                 //#endif
-                
+
                 int folderIndex = database.FileIndexToFolderIndexMap.get(fileIndex);
                 if (folderIndex == com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.SevenZip.InArchive.kNumNoIndex) {
-                    extractFolderInfoVector.add( new ExtractFolderInfo(
+                    extractFolderInfoVector.add(new ExtractFolderInfo(
                             // #ifdef _7Z_VOL
                             // volumeIndex,
                             // #endif
@@ -130,7 +126,7 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
         #endif
          */
                         ) {
-                    extractFolderInfoVector.add( new ExtractFolderInfo(
+                    extractFolderInfoVector.add(new ExtractFolderInfo(
             /*
             #ifdef _7Z_VOL
             volumeIndex,
@@ -142,13 +138,13 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                     importantTotalUnPacked += unPackSize;
                     extractFolderInfoVector.Back().UnPackSize = unPackSize;
                 }
-                
+
                 ExtractFolderInfo efi = extractFolderInfoVector.Back();
-                
+
                 // const CFolderInfo &folderInfo = m_dam_Folders[folderIndex];
                 int startIndex = database.FolderStartFileIndex.get(folderIndex); // CNum
                 for (int index = efi.ExtractStatuses.size();
-                index <= fileIndex - startIndex; index++) {
+                     index <= fileIndex - startIndex; index++) {
                     // UInt64 unPackSize = _database.Files[startIndex + index].UnPackSize;
                     // Count partial_folder_size
                     // efi.UnPackSize += unPackSize;
@@ -157,45 +153,45 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                 }
             }
         }
-        
+
         extractCallback.SetTotal(importantTotalUnPacked);
-        
+
         Decoder decoder = new Decoder(
                 // #ifdef _ST_MODE
                 false
                 // #else
                 // true
                 // #endif
-                );
-        
+        );
+
         long currentImportantTotalUnPacked = 0;
         long totalFolderUnPacked;
-        
-        for(int i = 0; i < extractFolderInfoVector.size(); i++,
+
+        for (int i = 0; i < extractFolderInfoVector.size(); i++,
                 currentImportantTotalUnPacked += totalFolderUnPacked) {
             ExtractFolderInfo efi = extractFolderInfoVector.get(i);
             totalFolderUnPacked = efi.UnPackSize;
-            
+
             int res = extractCallback.SetCompleted(currentImportantTotalUnPacked);
             if (res != HRESULT.S_OK) return res;
-            
+
             FolderOutStream folderOutStream = new FolderOutStream();
             java.io.OutputStream outStream = folderOutStream;
-            
+
             // #ifdef _7Z_VOL
             // const CVolume &volume = _volumes[efi.VolumeIndex];
             // const CArchiveDatabaseEx &database = volume.Database;
             // #else
             ArchiveDatabaseEx database = _database;
             //#endif
-            
+
             int startIndex; // CNum
             if (efi.FileIndex != InArchive.kNumNoIndex)
                 startIndex = efi.FileIndex;
             else
                 startIndex = database.FolderStartFileIndex.get(efi.FolderIndex);
-            
-            
+
+
             int result = folderOutStream.Init(database,
                     // #ifdef _7Z_VOL
                     // volume.StartRef2Index,
@@ -204,24 +200,24 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                     // #endif
                     startIndex,
                     efi.ExtractStatuses, extractCallback, testMode);
-            
+
             if (result != HRESULT.S_OK) return result;
-            
+
             if (efi.FileIndex != InArchive.kNumNoIndex)
                 continue;
-            
+
             int folderIndex = efi.FolderIndex; // CNum
             Folder folderInfo = database.Folders.get(folderIndex);
-            
+
             LocalProgress localProgressSpec = new LocalProgress();
             ICompressProgressInfo progress = localProgressSpec;
             localProgressSpec.Init(extractCallback, false);
-            
+
             LocalCompressProgressInfo localCompressProgressSpec =
                     new LocalCompressProgressInfo();
             ICompressProgressInfo compressProgress = localCompressProgressSpec;
-            localCompressProgressSpec.Init(progress, ICompressProgressInfo.INVALID , currentImportantTotalUnPacked);
-            
+            localCompressProgressSpec.Init(progress, ICompressProgressInfo.INVALID, currentImportantTotalUnPacked);
+
             int packStreamIndex = database.FolderStartPackStreamIndex.get(folderIndex); // CNum
             long folderStartPackPos = database.GetFolderStreamPos(folderIndex, 0);
             
@@ -232,7 +228,7 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
       extractCallback.QueryInterface(IID_ICryptoGetTextPassword, &getTextPassword);
     #endif
      */
-            
+
             try {
                 result = decoder.Decode(
                         // #ifdef _7Z_VOL
@@ -252,8 +248,8 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                         // #ifdef COMPRESS_MT
                         // , true, _numThreads
                         // #endif
-                        );
-                
+                );
+
                 if (result == HRESULT.S_FALSE) {
                     result = folderOutStream.FlushCorrupted(IInArchive.NExtract_NOperationResult_kDataError);
                     if (result != HRESULT.S_OK) return result;
@@ -271,7 +267,7 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                     if (result != HRESULT.S_OK) return result;
                     continue;
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("IOException : " + e);
                 e.printStackTrace();
                 result = folderOutStream.FlushCorrupted(IInArchive.NExtract_NOperationResult_kDataError);
@@ -281,8 +277,8 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
         }
         return HRESULT.S_OK;
     }
-    
-    
+
+
     public int close() throws IOException {
 /*
         #ifdef _7Z_VOL
@@ -299,11 +295,11 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
         _database.Clear();
         return 0;
     }
-    
+
     public int size() {
         return _database.Files.size();
     }
-    
+
     long getPackSize(int index2) {
         long packSize = 0;
         int folderIndex = _database.FileIndexToFolderIndexMap.get(index2);
@@ -313,11 +309,11 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
         }
         return packSize;
     }
-    
-    static int GetUInt32FromMemLE(byte [] p , int off) {
-        return p[off] | (((int)p[off + 1]) << 8) | (((int)p[off + 2]) << 16) | (((int)p[off +3]) << 24);
+
+    static int GetUInt32FromMemLE(byte[] p, int off) {
+        return p[off] | (((int) p[off + 1]) << 8) | (((int) p[off + 2]) << 16) | (((int) p[off + 3]) << 24);
     }
-    
+
     static String GetStringForSizeValue(int value) {
         for (int i = 31; i >= 0; i--)
             if ((1 << i) == value)
@@ -335,10 +331,10 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
         }
         return result;
     }
-    
+
     String getMethods(int index2) {
         String ret = "";
-        
+
         int folderIndex = _database.FileIndexToFolderIndexMap.get(index2);
         if (folderIndex != InArchive.kNumNoIndex) {
             Folder folderInfo = _database.Folders.get(folderIndex);
@@ -347,20 +343,20 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                 CoderInfo coderInfo = folderInfo.Coders.get(i);
                 if (methodsString != "")
                     methodsString += ' ';
-                
+
                 // MethodInfo methodInfo;
-                
+
                 boolean methodIsKnown;
-                
+
                 for (int j = 0; j < coderInfo.AltCoders.size(); j++) {
                     if (j > 0)
                         methodsString += "|";
                     AltCoderInfo altCoderInfo = coderInfo.AltCoders.get(j);
-                    
+
                     String methodName = "";
-                    
+
                     methodIsKnown = true;
-                    
+
                     if (altCoderInfo.MethodID.equals(MethodID.k_Copy))
                         methodName = "Copy";
                     else if (altCoderInfo.MethodID.equals(MethodID.k_LZMA))
@@ -381,14 +377,14 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                         methodName = "7zAES";
                     else
                         methodIsKnown = false;
-                    
+
                     if (methodIsKnown) {
                         methodsString += methodName;
-                        
+
                         if (altCoderInfo.MethodID.equals(MethodID.k_LZMA)) {
                             if (altCoderInfo.Properties.GetCapacity() >= 5) {
                                 methodsString += ":";
-                                int dicSize = GetUInt32FromMemLE(altCoderInfo.Properties.data(),1);
+                                int dicSize = GetUInt32FromMemLE(altCoderInfo.Properties.data(), 1);
                                 methodsString += GetStringForSizeValue(dicSize);
                             }
                         }
@@ -431,23 +427,23 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
             }
             ret = methodsString;
         }
-        
+
         return ret;
     }
-    
+
     public SevenZipEntry getEntry(int index) {
         com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.SevenZip.FileItem item = _database.Files.get(index);
         int index2 = index;
-        
+
         long crc = -1;
         if (item.IsFileCRCDefined) {
             crc = item.FileCRC & 0xFFFFFFFFL;
         }
-        
+
         long position = -1;
         if (item.IsStartPosDefined)
             position = item.StartPos;
-        
+
         SevenZipEntry entry = new SevenZipEntry(
                 item.name,
                 getPackSize(index2),
@@ -458,9 +454,9 @@ public class Handler implements com.mucommander.commons.file.archive.sevenzip.pr
                 item.IsDirectory,
                 item.Attributes,
                 getMethods(index2)
-                );
-        
+        );
+
         return entry;
     }
-    
+
 }

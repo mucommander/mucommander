@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -72,7 +72,7 @@ import java.util.Date;
  * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
  * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
  * file. It was forked at version 1.7.1 of Ant.</p>
- * 
+ *
  * @author Apache Ant, Maxence Bernard
  */
 public class TarEntry implements TarConstants {
@@ -133,7 +133,7 @@ public class TarEntry implements TarConstants {
     /**
      * Construct an empty entry and prepares the header values.
      */
-    private TarEntry () {
+    private TarEntry() {
         this.magic = new StringBuffer(TMAGIC);
         this.name = new StringBuffer();
         this.linkName = new StringBuffer();
@@ -456,7 +456,7 @@ public class TarEntry implements TarConstants {
      */
     public boolean isGNULongNameEntry() {
         return linkFlag == LF_GNUTYPE_LONGNAME
-                           && name.toString().equals(GNU_LONGLINK);
+                && name.toString().equals(GNU_LONGLINK);
     }
 
     /**

@@ -28,7 +28,7 @@ import java.util.Map;
  * SelectedFilesAction is an abstract action that operates on the currently active FileTable, and is enabled only
  * when at least one file is marked, or when a file other than the parent folder file '..' is selected.
  * When none of those conditions is satisfied, this action is disabled.
- *
+ * <p>
  * <p>Optionally, a FileFilter can be specified using {@link #setSelectedFileFilter(com.mucommander.commons.file.filter.FileFilter) setSelectedFileFilter}
  * to further restrict the enabled condition to files that match the filter.</p>
  *
@@ -36,13 +36,13 @@ import java.util.Map;
  */
 public abstract class SelectedFilesAction extends SelectedFileAction {
 
-    public SelectedFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectedFilesAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
-        return fileTable.getFileTableModel().getNbMarkedFiles()>0 || super.getFileTableCondition(fileTable);
+        return fileTable.getFileTableModel().getNbMarkedFiles() > 0 || super.getFileTableCondition(fileTable);
     }
 
 
@@ -54,7 +54,7 @@ public abstract class SelectedFilesAction extends SelectedFileAction {
     public final void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         // Perform the action only if at least one file is selected/marked
-        if(files.size()>0)
+        if (files.size() > 0)
             performAction(files);
     }
 
@@ -62,7 +62,7 @@ public abstract class SelectedFilesAction extends SelectedFileAction {
     //////////////////////
     // Abstract methods //
     //////////////////////
-    
+
     /**
      * Performs the action on the files that were selected/marked by the user in the currently active table.
      *

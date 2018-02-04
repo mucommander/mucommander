@@ -20,38 +20,33 @@ package com.mucommander.ui.autocomplete.completers;
 
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
-import com.mucommander.ui.autocomplete.completers.services.AllFilesService;
-import com.mucommander.ui.autocomplete.completers.services.BookmarksService;
-import com.mucommander.ui.autocomplete.completers.services.CompletionService;
-import com.mucommander.ui.autocomplete.completers.services.FilteredFilesService;
-import com.mucommander.ui.autocomplete.completers.services.SystemVariablesService;
-import com.mucommander.ui.autocomplete.completers.services.VolumesService;
+import com.mucommander.ui.autocomplete.completers.services.*;
 
 /**
  * A factory class to produce completion-services.
- * 
+ *
  * @author Arik Hadas
  */
 
 public class ServiceFactory {
-	
-	public static CompletionService getAllFilesService() {
-		return new AllFilesService();
-	}
-	
-	public static CompletionService getBrowsableFilesService() {
-		return new FilteredFilesService(new AttributeFileFilter(FileAttribute.BROWSABLE));
-	}
-	
-	public static CompletionService getVolumesService() {
-		return new VolumesService();
-	}
-	
-	public static CompletionService getBookmarksService() {
-		return new BookmarksService();
-	}
-	
-	public static CompletionService getSystemVariablesService() {
-		return new SystemVariablesService();
-	}
+
+    public static CompletionService getAllFilesService() {
+        return new AllFilesService();
+    }
+
+    public static CompletionService getBrowsableFilesService() {
+        return new FilteredFilesService(new AttributeFileFilter(FileAttribute.BROWSABLE));
+    }
+
+    public static CompletionService getVolumesService() {
+        return new VolumesService();
+    }
+
+    public static CompletionService getBookmarksService() {
+        return new BookmarksService();
+    }
+
+    public static CompletionService getSystemVariablesService() {
+        return new SystemVariablesService();
+    }
 }

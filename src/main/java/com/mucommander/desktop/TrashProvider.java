@@ -20,19 +20,19 @@ package com.mucommander.desktop;
 
 /**
  * TrashProvider provides a way to instantiate {@link AbstractTrash} implementations.
- *
+ * <p>
  * <p>Trash providers can be registered with {@link DesktopManager#setTrashProvider(TrashProvider)}
  * for them to become the default trash one.</p>
  *
+ * @author Nicolas Rinaudo
  * @see com.mucommander.desktop.AbstractTrash
  * @see DesktopManager#setTrashProvider(TrashProvider)
- * @author Nicolas Rinaudo
  */
 public interface TrashProvider {
 
     /**
      * Returns a trash instance.
-     * 
+     *
      * @return a trash instance
      */
     public AbstractTrash getTrash();

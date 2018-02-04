@@ -24,30 +24,30 @@ import java.util.Vector;
  * CompletionService is used to handle completions according to certain criteria.
  * It defines 2 methods:
  * * <ul>
- *   <li>getPossibleCompletions - return possible completions for a given path</li>
- *   <li>complete - return a path corresponding to a given completion</li>
+ * <li>getPossibleCompletions - return possible completions for a given path</li>
+ * <li>complete - return a path corresponding to a given completion</li>
  * </ul>
- * 
+ *
  * @author Arik Hadas
  */
 
 public interface CompletionService {
-	
-	/**
-	 * Return a group of suggested completions corresponding to the given path, 
-	 * according to this service's criteria.
-	 * 
-	 * @param path - a path.
-	 * @return a Vector of possible completions.
-	 */
-	public Vector<String> getPossibleCompletions(String path);
-	
-	/**
-	 *  If the given completion match one of my suggested completions, return 
-	 *  a corresponding path, null otherwise.
-	 *   
-	 * @param selectedCompletion - string that represent a completion.
-	 * @return a path if the given completion was suggested by this service, null otherwise. 
-	 */
-	public String complete(String selectedCompletion);
+
+    /**
+     * Return a group of suggested completions corresponding to the given path,
+     * according to this service's criteria.
+     *
+     * @param path - a path.
+     * @return a Vector of possible completions.
+     */
+    public Vector<String> getPossibleCompletions(String path);
+
+    /**
+     * If the given completion match one of my suggested completions, return
+     * a corresponding path, null otherwise.
+     *
+     * @param selectedCompletion - string that represent a completion.
+     * @return a path if the given completion was suggested by this service, null otherwise.
+     */
+    public String complete(String selectedCompletion);
 }

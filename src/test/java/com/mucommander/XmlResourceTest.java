@@ -43,8 +43,8 @@ public class XmlResourceTest {
      * application's JAR file or from a regular directory. Archive files found in the application's path will also be
      * searched for XML files.
      *
-     * @throws IOException if a file or a folder couldn't be accessed
-     * @throws SAXException if an error was found in one of the XML documents
+     * @throws IOException                  if a file or a folder couldn't be accessed
+     * @throws SAXException                 if an error was found in one of the XML documents
      * @throws ParserConfigurationException if 'a serious configuration error' occurred in the XML parser
      */
     @Test
@@ -63,8 +63,8 @@ public class XmlResourceTest {
      * even a recoverable one. Any archive contained in the folder will be searched for XML files.
      *
      * @param folder the folder in which to look for XML files recursively.
-     * @throws IOException if a file or a folder couldn't be accessed
-     * @throws SAXException if an error was found in one of the XML documents
+     * @throws IOException                  if a file or a folder couldn't be accessed
+     * @throws SAXException                 if an error was found in one of the XML documents
      * @throws ParserConfigurationException if 'a serious configuration error' occurred in the XML parser
      */
     private void testXMLFiles(AbstractFile folder) throws SAXException, IOException, ParserConfigurationException {
@@ -82,19 +82,19 @@ public class XmlResourceTest {
      * whenever an error is encountered in one of the XML files, even a recoverable one.
      *
      * @param file the file to parse and check for well-formedness.
-     * @throws IOException if there was an error reading the file
-     * @throws SAXException if an error was found in XML document
+     * @throws IOException                  if there was an error reading the file
+     * @throws SAXException                 if an error was found in XML document
      * @throws ParserConfigurationException 'a serious configuration error' occurred in the XML parser
      */
     private void testXMLDocument(AbstractFile file) throws SAXException, IOException, ParserConfigurationException {
-        System.out.println("Parsing "+file.getAbsolutePath());
+        System.out.println("Parsing " + file.getAbsolutePath());
 
         SAXParserFactory.newInstance().newSAXParser().parse(file.getInputStream(), new SAXErrorHandler());
     }
 
     /**
      * This SAX handler reports errors that are found in the parsed XML document on the standard ouput and throws
-     * exceptions to the parser. 
+     * exceptions to the parser.
      */
     private static class SAXErrorHandler extends DefaultHandler {
 
@@ -117,7 +117,7 @@ public class XmlResourceTest {
         }
 
         private void printSAXError(SAXParseException e, String errorType) {
-            System.out.println("SAX "+errorType+" at line "+e.getLineNumber()+", column "+e.getColumnNumber()+" : "+e);
+            System.out.println("SAX " + errorType + " at line " + e.getLineNumber() + ", column " + e.getColumnNumber() + " : " + e);
         }
     }
 

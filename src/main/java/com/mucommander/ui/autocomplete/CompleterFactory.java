@@ -25,20 +25,20 @@ import com.mucommander.ui.autocomplete.completers.PathCompleter;
 
 /**
  * A factory class to produce completers.
- * 
+ *
  * @author Arik Hadas
  */
 public class CompleterFactory {
-	
-	public static Completer getComboboxOptionsCompleter() {
-		return new ComboboxOptionsCompleter();
-	}
-	
-	public static Completer getPathCompleter() {
-		return new PathCompleter();
-	}
-	
-	public static Completer getLocationCompleter() {
-		return new LocationCompleter();
-	}
+
+    public static Completer getComboboxOptionsCompleter() {
+        return new ComboboxOptionsCompleter();
+    }
+
+    public static Completer getPathCompleter() {
+        return new PathCompleter();
+    }
+
+    public static Completer getLocationCompleter() {
+        return new LocationCompleter();
+    }
 }

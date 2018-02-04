@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,19 +19,19 @@
 
 package com.mucommander.commons.file.archive.zip;
 
+import com.mucommander.commons.file.archive.ArchiveEntry;
+import com.mucommander.commons.file.archive.ArchiveEntryIterator;
+
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import com.mucommander.commons.file.archive.ArchiveEntry;
-import com.mucommander.commons.file.archive.ArchiveEntryIterator;
 
 /**
  * An <code>ArchiveEntryIterator</code> that iterates through a {@link ZipInputStream}.
  *
  * @author Maxence Bernard
  */
-public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
+public class JavaUtilZipEntryIterator implements ArchiveEntryIterator {
 
     /** InputStream to the archive file */
     private ZipInputStream zin;
@@ -78,18 +78,16 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
         try {
             ZipEntry entry = zin.getNextEntry();
 
-            if(entry==null)
+            if (entry == null)
                 return null;
 
             return ZipArchiveFile.createArchiveEntry(new com.mucommander.commons.file.archive.zip.provider.ZipEntry(entry));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // java.util.zip.ZipInputStream can throw an IllegalArgumentException when the filename/comment encoding
             // is not UTF-8 as expected (ZipInputStream always expects UTF-8). The more general Exception is caught
             // (just to be safe) and an IOException thrown.
             throw new IOException();
-        }
-        catch(Error e) {
+        } catch (Error e) {
             // ZipInputStream#getNextEntry() will throw a java.lang.InternalError ("invalid compression method")
             // if the compression method is different from DEFLATED or STORED (happens with IMPLODED for example).
             throw new IOException();

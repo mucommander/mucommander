@@ -101,10 +101,10 @@ public class S3Panel extends ServerPanel {
     @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
-        if(!lastInitialDir.startsWith("/"))
-            lastInitialDir = "/"+lastInitialDir;
+        if (!lastInitialDir.startsWith("/"))
+            lastInitialDir = "/" + lastInitialDir;
 
-        FileURL url = FileURL.getFileURL(FileProtocols.S3+"://"+lastServer+lastInitialDir);
+        FileURL url = FileURL.getFileURL(FileProtocols.S3 + "://" + lastServer + lastInitialDir);
 
         // Set credentials
         url.setCredentials(new Credentials(lastUsername, lastPassword));
@@ -124,8 +124,10 @@ public class S3Panel extends ServerPanel {
     public void dialogValidated() {
         // Commits the current spinner value in case it was being edited and 'enter' was pressed
         // (the spinner value would otherwise not be committed)
-        try { portSpinner.commitEdit(); }
-        catch(ParseException e) { }
+        try {
+            portSpinner.commitEdit();
+        } catch (ParseException e) {
+        }
 
         updateValues();
     }

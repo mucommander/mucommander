@@ -18,20 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action pops up the 'Connect to Server' dialog that assists the user in connecting to a remote server.
@@ -41,10 +34,10 @@ import com.mucommander.ui.main.MainFrame;
 @InvokesDialog
 public class ConnectToServerAction extends ActiveTabAction {
 
-    public ConnectToServerAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ConnectToServerAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-    
+
     /**
      * Enables or disables this action based on the currently active folder's
      * current tab is not locked, this action will be enabled, if not it will be disabled.
@@ -59,27 +52,35 @@ public class ConnectToServerAction extends ActiveTabAction {
         new ServerConnectDialog(mainFrame.getActivePanel()).showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ConnectToServerAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ConnectToServerAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ConnectToServer";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "ConnectToServer";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

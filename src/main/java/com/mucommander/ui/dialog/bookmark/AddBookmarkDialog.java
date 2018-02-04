@@ -54,10 +54,10 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
     private JButton cancelButton;
 
     // Dialog's width has to be at least 320
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
 
     // Dialog's width has to be at most 400
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400, 10000);
 
 
     public AddBookmarkDialog(MainFrame mainFrame) {
@@ -76,16 +76,16 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
         nameField.setEditable(true);
         // Monitors text changes to disable 'Add' button if name field is empty
         nameField.getDocument().addDocumentListener(this);
-        compPanel.addRow(Translator.get("name")+":", nameField, 10);
-		
+        compPanel.addRow(Translator.get("name") + ":", nameField, 10);
+
         // Add URL field, non editable
         this.locationField = new JTextField(currentFolder.getCanonicalPath());
-        compPanel.addRow(Translator.get("location")+":", locationField, 10);
+        compPanel.addRow(Translator.get("location") + ":", locationField, 10);
 
         mainPanel.add(compPanel);
 
         contentPane.add(mainPanel, BorderLayout.NORTH);
-				
+
         addButton = new JButton(Translator.get("add_bookmark_dialog.add"));
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(addButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
@@ -97,46 +97,47 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
         // Packs dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-	
+
         showDialog();
     }
 
-	
+
     /**
      * Checks if bookmark name is empty (or white space), and enable/disable 'Add' button
      * accordingly, in order to prevent user from adding a bookmark with an empty name.
      */
     private void checkEmptyName() {
-        if(nameField.getText().trim().equals("")) {
-            if(addButton.isEnabled())
+        if (nameField.getText().trim().equals("")) {
+            if (addButton.isEnabled())
                 addButton.setEnabled(false);
-        }
-        else {
-            if(!addButton.isEnabled())
+        } else {
+            if (!addButton.isEnabled())
                 addButton.setEnabled(true);
         }
     }
-	
-	
+
+
     ///////////////////////////
     // ActionListener method //
     ///////////////////////////
-	
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-		
-        if (source==addButton)  {
+
+        if (source == addButton) {
             // Starts by disposing the dialog
             dispose();
 
             // Add bookmark and write bookmarks file to disk
             BookmarkManager.addBookmark(new Bookmark(nameField.getText(), locationField.getText()));
-            try {BookmarkManager.writeBookmarks(false);}
+            try {
+                BookmarkManager.writeBookmarks(false);
+            }
             // We should probably pop an error dialog here.
-            catch(Exception e2) {}
-        }
-        else if (source==cancelButton)  {
-            dispose();			
+            catch (Exception e2) {
+            }
+        } else if (source == cancelButton) {
+            dispose();
         }
     }
 
@@ -144,17 +145,17 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
     //////////////////////////////
     // DocumentListener methods //
     //////////////////////////////
-	
+
     public void changedUpdate(DocumentEvent e) {
         checkEmptyName();
     }
-	
-	
+
+
     public void insertUpdate(DocumentEvent e) {
         checkEmptyName();
     }
-	
-	
+
+
     public void removeUpdate(DocumentEvent e) {
         checkEmptyName();
     }

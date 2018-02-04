@@ -39,17 +39,20 @@ import java.io.InputStreamReader;
 class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Used to preview the editor's theme. */
+    /**
+     * Used to preview the editor's theme.
+     */
     private JTextArea preview;
-
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a new file table editor.
+     *
      * @param parent    dialog containing the panel.
-     * @param themeData  themeData being edited.
+     * @param themeData themeData being edited.
      */
     public FileEditorPanel(PreferencesDialog parent, ThemeData themeData) {
         super(parent, Translator.get("theme_editor.editor_tab"), themeData);
@@ -57,17 +60,18 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
     }
 
 
-
     // - UI initialisation ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates the JPanel that contains all of the color configuration elements.
+     *
      * @param fontChooser font chooser used by the editor panel.
      * @return the JPanel that contains all of the color configuration elements.
      */
     private JPanel createColorsPanel(FontChooser fontChooser) {
         ProportionalGridPanel gridPanel;   // Contains all the color buttons.
-        JPanel                colorsPanel; // Used to wrap the colors panel in a flow layout.
+        JPanel colorsPanel; // Used to wrap the colors panel in a flow layout.
 
         // Initialisation.
         gridPanel = new ProportionalGridPanel(3);
@@ -77,9 +81,9 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
 
         // Color buttons.
         addColorButtons(gridPanel, fontChooser, "theme_editor.normal",
-                        ThemeData.EDITOR_FOREGROUND_COLOR, ThemeData.EDITOR_BACKGROUND_COLOR).addPropertyChangeListener(this);
+                ThemeData.EDITOR_FOREGROUND_COLOR, ThemeData.EDITOR_BACKGROUND_COLOR).addPropertyChangeListener(this);
         addColorButtons(gridPanel, fontChooser, "theme_editor.selected",
-                        ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR).addPropertyChangeListener(this);
+                ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR).addPropertyChangeListener(this);
 
         // Wraps everything in a flow layout.
         colorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -93,12 +97,12 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
      * Initialises the panel's UI.
      */
     private void initUI() {
-        YBoxPanel   configurationPanel; // Contains all the configuration elements.
+        YBoxPanel configurationPanel; // Contains all the configuration elements.
         FontChooser fontChooser;        // Used to select a font.
-        JPanel      mainPanel;          // Main panel.
+        JPanel mainPanel;          // Main panel.
 
         // Font chooser and preview initialisation.
-        mainPanel   = new JPanel(new BorderLayout());
+        mainPanel = new JPanel(new BorderLayout());
         fontChooser = createFontChooser(ThemeData.EDITOR_FONT);
         mainPanel.add(createPreviewPanel(), BorderLayout.EAST);
         addFontChooserListener(fontChooser, preview);
@@ -117,10 +121,11 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
 
     /**
      * Creates the file editor preview panel.
+     *
      * @return the file editor preview panel.
      */
     private JPanel createPreviewPanel() {
-        JPanel      panel;  // Preview panel.
+        JPanel panel;  // Preview panel.
         JScrollPane scroll; // Wraps the preview text are.
 
         // Initialises the preview text area.
@@ -147,11 +152,11 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
      */
     public void propertyChange(PropertyChangeEvent event) {
         // Background color changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
+        if (event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
             setBackgroundColors();
 
-        // Foreground color changed.
-        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
+            // Foreground color changed.
+        else if (event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
             setForegroundColors();
     }
 
@@ -167,38 +172,39 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
     }
 
 
-
     // - Misc. ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private void loadText() {
-        char[]            buffer; // Buffer for each chunk of data read from the license file.
-        int               count;  // Number of characters read from the last read operation.
+        char[] buffer; // Buffer for each chunk of data read from the license file.
+        int count;  // Number of characters read from the last read operation.
         InputStreamReader in;     // Stream on the license file.
 
-        in   = null;
+        in = null;
         try {
-            in     = new InputStreamReader(FileEditorPanel.class.getResourceAsStream(RuntimeConstants.LICENSE));
+            in = new InputStreamReader(FileEditorPanel.class.getResourceAsStream(RuntimeConstants.LICENSE));
             buffer = new char[2048];
 
-            while((count = in.read(buffer)) != -1)
+            while ((count = in.read(buffer)) != -1)
                 preview.append(new String(buffer, 0, count));
-        }
-        catch(Exception e) {}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
+        } catch (Exception e) {
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                }
             }
         }
     }
 
 
-
     // - Modification management ---------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Ignored.
      */
     @Override
-    public void commit() {}
+    public void commit() {
+    }
 }

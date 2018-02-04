@@ -55,7 +55,7 @@ public class FixedByteArrayOutputStream extends OutputStream {
 
     @Override
     public synchronized void write(int b) throws IOException {
-        bytes[offset++] = (byte)b;
+        bytes[offset++] = (byte) b;
     }
 
     @Override

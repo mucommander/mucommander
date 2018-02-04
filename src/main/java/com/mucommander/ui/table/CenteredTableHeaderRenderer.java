@@ -24,30 +24,37 @@ import java.awt.*;
 
 /**
  * A TableCellRenderer which can be used to center the text in table's headers.
- * 
+ *
  * @author Arik Hadas
  */
 public class CenteredTableHeaderRenderer extends JLabel implements TableCellRenderer {
 
-	public CenteredTableHeaderRenderer() {
-		setHorizontalAlignment(JLabel.CENTER);
+    public CenteredTableHeaderRenderer() {
+        setHorizontalAlignment(JLabel.CENTER);
         setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-	}
-			
+    }
+
     public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
-    	// Configure the component with the specified value
+                                                   boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
+        // Configure the component with the specified value
         setText(value.toString());
         return this;
     }
 
     // The following methods override the defaults for performance reasons
     @Override
-    public void validate() {}
+    public void validate() {
+    }
+
     @Override
-    public void revalidate() {}
+    public void revalidate() {
+    }
+
     @Override
-    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
+    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+    }
+
     @Override
-    public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
+    public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {
+    }
 }

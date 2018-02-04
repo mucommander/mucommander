@@ -18,15 +18,14 @@
 
 package com.mucommander;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.runtime.OsFamily;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This class takes care of platform-specific issues, such as getting screen dimensions and issuing commands.
@@ -34,11 +33,13 @@ import com.mucommander.commons.runtime.OsFamily;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class PlatformManager {
-	private static final Logger LOGGER = LoggerFactory.getLogger(PlatformManager.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformManager.class);
+
     // - Preferences folder -----------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Folder in which to store the preferences. */
+    /**
+     * Folder in which to store the preferences.
+     */
     private static AbstractFile prefFolder;
 
     /**
@@ -46,28 +47,29 @@ public class PlatformManager {
      * <p>
      * This folder is:
      * <ul>
-     *  <li><code>~/Library/Preferences/muCommander/</code> under MAC OS X.</li>
-     *  <li><code>~/.mucommander/</code> under all other OSes.</li>
+     * <li><code>~/Library/Preferences/muCommander/</code> under MAC OS X.</li>
+     * <li><code>~/.mucommander/</code> under all other OSes.</li>
      * </ul>
      * </p>
      * <p>
      * If the default preferences folder doesn't exist, this method will create it.
      * </p>
+     *
      * @return the path to the default muCommander preferences folder.
      */
     public static AbstractFile getDefaultPreferencesFolder() {
         File folder;
 
         // Mac OS X specific folder (~/Library/Preferences/muCommander)
-        if(OsFamily.MAC_OS_X.isCurrent())
-            folder = new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");
-        // For all other platforms, use generic folder (~/.mucommander)
+        if (OsFamily.MAC_OS_X.isCurrent())
+            folder = new File(System.getProperty("user.home") + "/Library/Preferences/muCommander");
+            // For all other platforms, use generic folder (~/.mucommander)
         else
             folder = new File(System.getProperty("user.home"), "/.mucommander");
 
         // Makes sure the folder exists.
-        if(!folder.exists())
-            if(!folder.mkdir())
+        if (!folder.exists())
+            if (!folder.mkdir())
                 LOGGER.warn("Could not create preference folder: " + folder.getAbsolutePath());
 
         return FileFactory.getFile(folder.getAbsolutePath());
@@ -84,12 +86,13 @@ public class PlatformManager {
      * Otherwise, the {@link #getDefaultPreferencesFolder() default preference folder} will be
      * used.
      * </p>
+     *
      * @return the path to the user's preference folder.
-     * @see    #setPreferencesFolder(AbstractFile)
+     * @see #setPreferencesFolder(AbstractFile)
      */
     public static AbstractFile getPreferencesFolder() {
         // If the preferences folder has been set, use it.
-        if(prefFolder != null)
+        if (prefFolder != null)
             return prefFolder;
 
         return getDefaultPreferencesFolder();
@@ -101,13 +104,16 @@ public class PlatformManager {
      * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
      * this method will create it.
      * </p>
-     * @param  folder      path to the folder in which muCommander will look for its preferences.
+     *
+     * @param folder path to the folder in which muCommander will look for its preferences.
      * @throws IOException if an IO error occurs.
-     * @see                #getPreferencesFolder()
-     * @see                #setPreferencesFolder(String)
-     * @see                #setPreferencesFolder(AbstractFile)
+     * @see #getPreferencesFolder()
+     * @see #setPreferencesFolder(String)
+     * @see #setPreferencesFolder(AbstractFile)
      */
-    public static void setPreferencesFolder(File folder) throws IOException {setPreferencesFolder(FileFactory.getFile(folder.getAbsolutePath()));}
+    public static void setPreferencesFolder(File folder) throws IOException {
+        setPreferencesFolder(FileFactory.getFile(folder.getAbsolutePath()));
+    }
 
     /**
      * Sets the path to the folder in which muCommande rwill look for its preferences.
@@ -115,16 +121,17 @@ public class PlatformManager {
      * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
      * this method will create it.
      * </p>
-     * @param  path        path to the folder in which muCommander will look for its preferences.
+     *
+     * @param path path to the folder in which muCommander will look for its preferences.
      * @throws IOException if an IO error occurs.
-     * @see                #getPreferencesFolder()
-     * @see                #setPreferencesFolder(File)
-     * @see                #setPreferencesFolder(AbstractFile)
+     * @see #getPreferencesFolder()
+     * @see #setPreferencesFolder(File)
+     * @see #setPreferencesFolder(AbstractFile)
      */
     public static void setPreferencesFolder(String path) throws IOException {
         AbstractFile folder;
 
-        if((folder = FileFactory.getFile(path)) == null)
+        if ((folder = FileFactory.getFile(path)) == null)
             setPreferencesFolder(new File(path));
         else
             setPreferencesFolder(folder);
@@ -136,16 +143,17 @@ public class PlatformManager {
      * If <code>folder</code> is a file, its parent folder will be used instead. If it doesn't exist,
      * this method will create it.
      * </p>
-     * @param  folder      path to the folder in which muCommander will look for its preferences.
+     *
+     * @param folder path to the folder in which muCommander will look for its preferences.
      * @throws IOException if an IO error occurs.
-     * @see                #getPreferencesFolder()
-     * @see                #setPreferencesFolder(String)
-     * @see                #setPreferencesFolder(File)
+     * @see #getPreferencesFolder()
+     * @see #setPreferencesFolder(String)
+     * @see #setPreferencesFolder(File)
      */
     public static void setPreferencesFolder(AbstractFile folder) throws IOException {
-        if(!folder.exists())
+        if (!folder.exists())
             folder.mkdir();
-        else if(!folder.isBrowsable())
+        else if (!folder.isBrowsable())
             folder = folder.getParent();
         prefFolder = folder;
     }

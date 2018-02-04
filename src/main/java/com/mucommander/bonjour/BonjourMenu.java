@@ -31,7 +31,7 @@ import javax.swing.event.MenuListener;
  * An abstract JMenu that contains an item for each Bonjour service available
  * (as returned {@link BonjourDirectory#getServices()} displaying the Bonjour service's name. When an item is clicked,
  * the action returned by {@link #getMenuItemAction(BonjourService)} is returned.
- *
+ * <p>
  * <p>Note: the items list is refreshed each time the menu is selected. In other words, a new instance of BonjourMenu
  * does not have to be created in order to see new Bonjour services.</p>
  *
@@ -70,29 +70,27 @@ public abstract class BonjourMenu extends JMenu implements MenuListener {
         // Remove previous menu items (if any)
         removeAll();
 
-        if(BonjourDirectory.isActive()) {
+        if (BonjourDirectory.isActive()) {
             BonjourService services[] = BonjourDirectory.getServices();
             int nbServices = services.length;
 
-            if(nbServices>0) {
+            if (nbServices > 0) {
                 // Add a menu item for each Bonjour service.
                 // When clicked, the corresponding URL will opened in the active table.
                 JMenuItem menuItem;
                 MnemonicHelper mnemonicHelper = new MnemonicHelper();
 
-                for(int i=0; i<nbServices; i++) {
+                for (int i = 0; i < nbServices; i++) {
                     menuItem = new JMenuItem(getMenuItemAction(services[i]));
                     menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
 
                     add(menuItem);
                 }
-            }
-            else {
+            } else {
                 // Inform that no service have been discovered
                 add(new JMenuItem(Translator.get("bonjour.no_service_discovered"))).setEnabled(false);
             }
-        }
-        else {
+        } else {
             // Inform that Bonjour support has been disabled
             add(new JMenuItem(Translator.get("bonjour.bonjour_disabled"))).setEnabled(false);
         }

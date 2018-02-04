@@ -31,45 +31,49 @@ import java.awt.*;
  * @author Arik Hadas
  */
 public abstract class PrefTable extends JTable implements PrefComponent {
-	
-	private TableModelListener dialogListener;
 
-	public PrefTable() { super(); }
-	
-	public PrefTable(TableModel model) { super(model); }
-	
-	/**
-	 * This function sets the widths of the table's columns according to the given array.
-	 *
-	 * @param percentages - array that contains the width of each column in percentage
-	 * 	from the width of the whole table.
-	 */
-	public void setPreferredColumnWidths(double[] percentages) {
-		final Dimension tableDim = this.getPreferredSize();
-		double total = 0;
-		int nbColumns = getColumnModel().getColumnCount();
-		
-		for (int i = 0; i < nbColumns; ++i)
-			total += percentages[i];
-		
-		for (int i = 0; i < nbColumns; ++i) {
-			TableColumn column = getColumnModel().getColumn(i);
-			column.setPreferredWidth((int) (tableDim.width * (percentages[i] / total)));
-		}
-	}
+    private TableModelListener dialogListener;
 
-	public void addDialogListener(final PreferencesDialog dialog) {
-		getModel().addTableModelListener(dialogListener = new TableModelListener() {			
-			public void tableChanged(TableModelEvent e) {
-				dialog.componentChanged(PrefTable.this);
-			}
-		});
-	}
-	
-	@Override
+    public PrefTable() {
+        super();
+    }
+
+    public PrefTable(TableModel model) {
+        super(model);
+    }
+
+    /**
+     * This function sets the widths of the table's columns according to the given array.
+     *
+     * @param percentages - array that contains the width of each column in percentage
+     *                    from the width of the whole table.
+     */
+    public void setPreferredColumnWidths(double[] percentages) {
+        final Dimension tableDim = this.getPreferredSize();
+        double total = 0;
+        int nbColumns = getColumnModel().getColumnCount();
+
+        for (int i = 0; i < nbColumns; ++i)
+            total += percentages[i];
+
+        for (int i = 0; i < nbColumns; ++i) {
+            TableColumn column = getColumnModel().getColumn(i);
+            column.setPreferredWidth((int) (tableDim.width * (percentages[i] / total)));
+        }
+    }
+
+    public void addDialogListener(final PreferencesDialog dialog) {
+        getModel().addTableModelListener(dialogListener = new TableModelListener() {
+            public void tableChanged(TableModelEvent e) {
+                dialog.componentChanged(PrefTable.this);
+            }
+        });
+    }
+
+    @Override
     public void setModel(TableModel model) {
-		if (dialogListener != null)
-			model.addTableModelListener(dialogListener);
-		super.setModel(model);
-	}
+        if (dialogListener != null)
+            model.addTableModelListener(dialogListener);
+        super.setModel(model);
+    }
 }

@@ -28,11 +28,13 @@ package com.mucommander.commons.conf;
  * Since <code>WriterConfigurationException</code> subclasses {@link ConfigurationException}, it
  * inherits his capacity to wrap other exceptions.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class WriterConfigurationException extends ConfigurationException {
     /**
      * Creates a new writer configuration exception.
+     *
      * @param message the error message.
      */
     public WriterConfigurationException(String message) {
@@ -45,6 +47,7 @@ public class WriterConfigurationException extends ConfigurationException {
      * The existing exception will be embedded in the new one, and its message will
      * become the default message for the <code>WriterConfigurationException</code>.
      * </p>
+     *
      * @param cause the exception to be wrapped in a <code>WriterConfigurationException</code>.
      */
     public WriterConfigurationException(Throwable cause) {
@@ -56,6 +59,7 @@ public class WriterConfigurationException extends ConfigurationException {
      * <p>
      * The existing exception will be embedded in the new one, but the new exception will have its own message.
      * </p>
+     *
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>WriterConfigurationException</code>.
      */

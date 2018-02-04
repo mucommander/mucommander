@@ -31,28 +31,35 @@ import com.mucommander.desktop.DesktopInitialisationException;
  */
 public class WinNtDesktopAdapter extends WindowsDesktopAdapter {
     private static final String FILE_OPENER_COMMAND = "cmd /c start \"\" \"$f\"";
-    private static final String EXE_OPENER_COMMAND  = "cmd /c $f";
-    private static final String EXE_REGEXP          = ".*\\.exe";
+    private static final String EXE_OPENER_COMMAND = "cmd /c $f";
+    private static final String EXE_REGEXP = ".*\\.exe";
 
-    public String toString() {return "Windows NT+ Desktop";}
+    public String toString() {
+        return "Windows NT+ Desktop";
+    }
 
     @Override
-    public boolean isAvailable() {return super.isAvailable() && OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT) >= 0;}
+    public boolean isAvailable() {
+        return super.isAvailable() && OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT) >= 0;
+    }
 
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
         super.init(install);
         try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER_COMMAND,  CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS, EXE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
 
             CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, new RegexpFilenameFilter(EXE_REGEXP, false));
+        } catch (CommandException e) {
+            throw new DesktopInitialisationException(e);
         }
-        catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
 
     @Override
-    public String getDefaultShell() {return "cmd /c";}
+    public String getDefaultShell() {
+        return "cmd /c";
+    }
 }

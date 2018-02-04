@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -105,8 +105,8 @@ public abstract class ConnectionHandler {
      * @throws IOException if the connection could not be started
      */
     public boolean checkConnection() throws IOException {
-        if(!isConnected()) {
-            LOGGER.info("not connected, starting connection, this="+this);
+        if (!isConnected()) {
+            LOGGER.info("not connected, starting connection, this=" + this);
             startConnection();
             return true;
         }
@@ -121,7 +121,7 @@ public abstract class ConnectionHandler {
      * @return true if it could be locked, false if it is already locked.
      */
     public synchronized boolean acquireLock() {
-        if(isLocked) {
+        if (isLocked) {
             LOGGER.info("!!!!! acquireLock() returning false, should not happen !!!!!", new Throwable());
             return false;
         }
@@ -137,8 +137,8 @@ public abstract class ConnectionHandler {
      * @return true if it could be locked, false if it is not locked
      */
     public boolean releaseLock() {
-        synchronized(this) {
-            if(!isLocked) {
+        synchronized (this) {
+            if (!isLocked) {
                 LOGGER.info("!!!!! releaseLock() returning false, should not happen !!!!!", new Throwable());
                 return false;
             }
@@ -258,10 +258,10 @@ public abstract class ConnectionHandler {
      * @see Credentials#equals(Object, boolean)
      */
     public boolean equals(Object o) {
-        if(o==null || !(o instanceof ConnectionHandler))
+        if (o == null || !(o instanceof ConnectionHandler))
             return false;
 
-        ConnectionHandler connHandler = (ConnectionHandler)o;
+        ConnectionHandler connHandler = (ConnectionHandler) o;
 
         return equals(connHandler.realm, connHandler.credentials);
     }
@@ -278,15 +278,15 @@ public abstract class ConnectionHandler {
      */
     public boolean equals(FileURL realm, Credentials credentials) {
 
-        if(!this.realm.equals(realm, false, true))
+        if (!this.realm.equals(realm, false, true))
             return false;
 
         // Compare credentials. One or both Credentials instances may be null.
 
         // Note: Credentials.equals() considers null as equal to empty Credentials (see Credentials#isEmpty())
-        return (this.credentials==null && credentials==null)
-            || (this.credentials!=null && this.credentials.equals(credentials, true))
-            || (credentials!=null && credentials.equals(this.credentials, true));
+        return (this.credentials == null && credentials == null)
+                || (this.credentials != null && this.credentials.equals(credentials, true))
+                || (credentials != null && credentials.equals(this.credentials, true));
     }
 
 
@@ -299,7 +299,7 @@ public abstract class ConnectionHandler {
      * @throws AuthException always throws the created AuthException
      */
     public void throwAuthException(String message) throws AuthException {
-        FileURL clonedRealm = (FileURL)realm.clone();
+        FileURL clonedRealm = (FileURL) realm.clone();
         clonedRealm.setCredentials(credentials);
 
         throw new AuthException(clonedRealm, message);

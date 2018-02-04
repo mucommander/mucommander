@@ -18,18 +18,6 @@
 
 package com.mucommander.ui.dialog.tab;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.SetTabTitleAction;
@@ -40,40 +28,55 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.SizeConstrainedDocument;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  * This dialog allow the user to enter a title for the currently selected tab.
  * Empty title means that the tab title will be based on the current location
  * presented in the tab.
- * 
+ *
  * @author Arik Hadas
  */
 public class TabTitleDialog extends FocusDialog implements ActionListener {
-	
-	/** Ensure the dialog width is at least 300 */
-	private static final Dimension MINIMUM_SIZE = new Dimension(250, 0);
-	
-	/** OK button. */
+
+    /**
+     * Ensure the dialog width is at least 300
+     */
+    private static final Dimension MINIMUM_SIZE = new Dimension(250, 0);
+
+    /**
+     * OK button.
+     */
     private JButton okButton;
-    
-    /** Cancel button. */
+
+    /**
+     * Cancel button.
+     */
     private JButton cancelButton;
 
-    /** The text field in which the title is entered */
+    /**
+     * The text field in which the title is entered
+     */
     private JTextField titleTextField;
 
-    /** The FolderPanel to which this tab belongs */
+    /**
+     * The FolderPanel to which this tab belongs
+     */
     private FolderPanel folderPanel;
 
-	public TabTitleDialog(MainFrame mainFrame, FolderPanel folderPanel) {
+    public TabTitleDialog(MainFrame mainFrame, FolderPanel folderPanel) {
         super(mainFrame, ActionProperties.getActionLabel(SetTabTitleAction.Descriptor.ACTION_ID), folderPanel);
 
         this.folderPanel = folderPanel;
 
         initUI();
     }
-  
+
     private void initUI() {
-    	titleTextField = new JTextField();
+        titleTextField = new JTextField();
         titleTextField.setDocument(new SizeConstrainedDocument(31));
         titleTextField.setText(folderPanel.getTabs().getCurrentTab().getTitle());
         titleTextField.selectAll();
@@ -81,8 +84,8 @@ public class TabTitleDialog extends FocusDialog implements ActionListener {
         okButton = new JButton(Translator.get("ok"));
         cancelButton = new JButton(Translator.get("cancel"));
 
-    	// Get content-pane and set its layout.
-    	Container contentPane = getContentPane();
+        // Get content-pane and set its layout.
+        Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         // Add customization panel
@@ -96,27 +99,28 @@ public class TabTitleDialog extends FocusDialog implements ActionListener {
     }
 
     private JPanel createInnerPanel() {
-    	XBoxPanel panel = new XBoxPanel();
-    	panel.add(new JLabel(Translator.get("title") + ":"));
-    	panel.addSpace(10);
-    	panel.add(titleTextField);//, BorderLayout.CENTER);
-    	panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    	return panel;
+        XBoxPanel panel = new XBoxPanel();
+        panel.add(new JLabel(Translator.get("title") + ":"));
+        panel.addSpace(10);
+        panel.add(titleTextField);//, BorderLayout.CENTER);
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        return panel;
     }
 
     public void changeTabTitle() {
-    	String title = titleTextField.getText().trim();
-    	folderPanel.getTabs().setTitle(title.length() == 0 ? null : title);
+        String title = titleTextField.getText().trim();
+        folderPanel.getTabs().setTitle(title.length() == 0 ? null : title);
     }
-    
+
     // - Listener code ----------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Reacts to buttons being pushed.
      */
     public void actionPerformed(ActionEvent e) {
         dispose();
-        
+
         if (e.getSource() == okButton)
             changeTabTitle();
     }

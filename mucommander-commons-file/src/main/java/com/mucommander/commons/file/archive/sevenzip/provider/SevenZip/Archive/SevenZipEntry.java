@@ -1,22 +1,22 @@
 package com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive;
 
 public class SevenZipEntry {
-    
+
     long LastWriteTime;
-    
+
     long UnPackSize;
     long PackSize;
-    
+
     int Attributes;
     long FileCRC;
-    
+
     boolean IsDirectory;
-    
+
     String Name;
     String Methods;
-    
+
     long Position;
-    
+
     public SevenZipEntry(
             String name,
             long packSize,
@@ -27,7 +27,7 @@ public class SevenZipEntry {
             boolean isDir,
             int att,
             String methods) {
-        
+
         this.Name = name;
         this.PackSize = packSize;
         this.UnPackSize = unPackSize;
@@ -38,62 +38,62 @@ public class SevenZipEntry {
         this.Attributes = att;
         this.Methods = methods;
     }
-    
+
     public long getCompressedSize() {
         return PackSize;
     }
-    
+
     public long getSize() {
         return UnPackSize;
     }
-    
+
     public long getCrc() {
         return FileCRC;
     }
-    
+
     public String getName() {
         return Name;
     }
-    
+
     public long getTime() {
         return LastWriteTime;
     }
-    
+
     public long getPosition() {
         return Position;
     }
-    
+
     public boolean isDirectory() {
         return IsDirectory;
     }
-    
+
     static final String kEmptyAttributeChar = ".";
     static final String kDirectoryAttributeChar = "D";
-    static final String kReadonlyAttributeChar  = "R";
-    static final String kHiddenAttributeChar    = "H";
-    static final String kSystemAttributeChar    = "S";
-    static final String kArchiveAttributeChar   = "A";
-    static public final int FILE_ATTRIBUTE_READONLY =            0x00000001  ;
-    static public final int FILE_ATTRIBUTE_HIDDEN    =           0x00000002  ;
-    static public final int FILE_ATTRIBUTE_SYSTEM    =           0x00000004  ;
+    static final String kReadonlyAttributeChar = "R";
+    static final String kHiddenAttributeChar = "H";
+    static final String kSystemAttributeChar = "S";
+    static final String kArchiveAttributeChar = "A";
+    static public final int FILE_ATTRIBUTE_READONLY = 0x00000001;
+    static public final int FILE_ATTRIBUTE_HIDDEN = 0x00000002;
+    static public final int FILE_ATTRIBUTE_SYSTEM = 0x00000004;
     static public final int FILE_ATTRIBUTE_DIRECTORY = 0x00000010;
-    static public final int FILE_ATTRIBUTE_ARCHIVE  =            0x00000020  ;
-    
+    static public final int FILE_ATTRIBUTE_ARCHIVE = 0x00000020;
+
     public String getAttributesString() {
         String ret = "";
         ret += ((Attributes & FILE_ATTRIBUTE_DIRECTORY) != 0 || IsDirectory) ?
-            kDirectoryAttributeChar: kEmptyAttributeChar;
-        ret += ((Attributes & FILE_ATTRIBUTE_READONLY) != 0)?
-            kReadonlyAttributeChar: kEmptyAttributeChar;
+                kDirectoryAttributeChar : kEmptyAttributeChar;
+        ret += ((Attributes & FILE_ATTRIBUTE_READONLY) != 0) ?
+                kReadonlyAttributeChar : kEmptyAttributeChar;
         ret += ((Attributes & FILE_ATTRIBUTE_HIDDEN) != 0) ?
-            kHiddenAttributeChar: kEmptyAttributeChar;
+                kHiddenAttributeChar : kEmptyAttributeChar;
         ret += ((Attributes & FILE_ATTRIBUTE_SYSTEM) != 0) ?
-            kSystemAttributeChar: kEmptyAttributeChar;
+                kSystemAttributeChar : kEmptyAttributeChar;
         ret += ((Attributes & FILE_ATTRIBUTE_ARCHIVE) != 0) ?
-            kArchiveAttributeChar: kEmptyAttributeChar;
+                kArchiveAttributeChar : kEmptyAttributeChar;
         return ret;
     }
-    
+
     public String getMethods() {
         return Methods;
     }

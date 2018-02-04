@@ -37,11 +37,11 @@ dependencies {
     compile project('mucommander-commons-conf')
     compile project('mucommander-commons-collections')
 
-    compile 'org.jmdns:jmdns:3.5.1'
+    compile 'org.jmdns:jmdns:3.5.3'
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile 'com.beust:jcommander:1.66'
+    compile 'com.beust:jcommander:1.72'
     compile files('libs/java-extension.jar')
 
     testCompile 'org.testng:testng:6.11'
@@ -51,14 +51,14 @@ dependencies {
 jar {
     manifest {
         attributes("Main-Class": mainClassName,
-                   "Specification-Title": "muCommander",
-                   "Specification-Vendor": "Arik Hadas",
-                   "Specification-Version": version,
-                   "Implementation-Title": "muCommander",
-                   "Implementation-Vendor": "Arik Hadas",
-                   "Implementation-Version": revision.substring(0, 7),
-                   "Build-Date": new Date().format('yyyyMMdd'),
-                   "Build-URL": "http://www.mucommander.com/version/nightly.xml")
+                "Specification-Title": "muCommander",
+                "Specification-Vendor": "Arik Hadas",
+                "Specification-Version": version,
+                "Implementation-Title": "muCommander",
+                "Implementation-Vendor": "Arik Hadas",
+                "Implementation-Version": revision.substring(0, 7),
+                "Build-Date": new Date().format('yyyyMMdd'),
+                "Build-URL": "http://www.mucommander.com/version/nightly.xml")
     }
 }
 
@@ -133,8 +133,7 @@ launch4j {
     if (project.hasProperty('dontWrapJar')) {
         dontWrapJar = true
         jar = 'mucommander.jar'
-    }
-    else {
+    } else {
         jar = shadowJar.archivePath
     }
     outfile = project.tasks.jar.archiveName.replace('jar', 'exe')
@@ -154,30 +153,30 @@ task nsis(dependsOn: createExe) {
         from('package/windows') {
             include 'mucommander.nsi'
             filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
-                                           MU_ICON: 'mucommander.ico',
+                                           MU_ICON   : 'mucommander.ico',
                                            MU_LICENSE: 'license.txt',
-                                           MU_README: 'readme.txt',
-                                           MU_OUT: 'mucommander-setup.exe',
-                                           MU_EXE: launch4j.outfile])
+                                           MU_README : 'readme.txt',
+                                           MU_OUT    : 'mucommander-setup.exe',
+                                           MU_EXE    : launch4j.outfile])
         }
-        from ('package') {
-	    include 'license.txt',
-	    'readme.txt'
-	}
+        from('package') {
+            include 'license.txt',
+                    'readme.txt'
+        }
         into "$buildDir/tmp/nsis"
     }
 }
 
 // Unix packaging
 task tgz(dependsOn: shadowJar, type: Tar) {
-    from ("$buildDir/libs") {
+    from("$buildDir/libs") {
         include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
+        rename '(.*?)-.*.jar', '$1.jar'
     }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
+    from('package') { include 'license.txt', 'readme.txt' }
+    from('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
+                                       ARGS     : ''])
     }
     into "muCommander-$version"
     extension = 'tar.gz'
@@ -186,18 +185,18 @@ task tgz(dependsOn: shadowJar, type: Tar) {
 
 // Portable packaging
 task portable(type: Tar) {
-    from ("$buildDir/libs") {
+    from("$buildDir/libs") {
         include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
+        rename '(.*?)-.*.jar', '$1.jar'
     }
-    from ("$buildDir/launch4j") {
+    from("$buildDir/launch4j") {
         include '*.exe'
-        rename '(.*?)-.*.exe','$1.exe'
+        rename '(.*?)-.*.exe', '$1.exe'
     }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
+    from('package') { include 'license.txt', 'readme.txt' }
+    from('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
+                                       ARGS     : ''])
     }
     into "muCommander-$version"
     classifier = 'portable'
@@ -216,23 +215,23 @@ buildDeb {
     recommends('java-virtual-machine')
     recommends('java2-runtime')
 
-    from ("$buildDir/libs") {
+    from("$buildDir/libs") {
         include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
+        rename '(.*?)-.*.jar', '$1.jar'
     }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
+    from('package') { include 'license.txt', 'readme.txt' }
+    from('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
+                                       ARGS     : ''])
     }
     into '/usr/share/mucommander'
 
-    from ('src/main/resources/images/mucommander') {
+    from('src/main/resources/images/mucommander') {
         include 'icon128_24.png'
         into '/usr/share/pixmaps/'
         rename '.*', 'mucommander.png'
     }
-    from ('package/unix') {
+    from('package/unix') {
         include 'mucommander.desktop'
         into '/usr/share/applications'
     }
@@ -249,23 +248,23 @@ buildRpm {
     recommends('java2-runtime')
     os = LINUX
 
-    from ("$buildDir/libs") {
+    from("$buildDir/libs") {
         include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
+        rename '(.*?)-.*.jar', '$1.jar'
     }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
+    from('package') { include 'license.txt', 'readme.txt' }
+    from('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
+                                       ARGS     : ''])
     }
     into '/usr/share/mucommander'
 
-    from ('src/main/resources/images/mucommander/icon128_24.png') {
+    from('src/main/resources/images/mucommander/icon128_24.png') {
         rename '.*', 'mucommander.png'
         addParentDirs = false
         into '/usr/share/pixmaps'
     }
-    from ('package/unix') {
+    from('package/unix') {
         include 'mucommander.desktop'
         addParentDirs = false
         into '/usr/share/applications'

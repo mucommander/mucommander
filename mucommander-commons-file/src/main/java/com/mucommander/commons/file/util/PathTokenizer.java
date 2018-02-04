@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -69,7 +69,7 @@ public class PathTokenizer implements Enumeration<String> {
     private int currentIndex;
     /** Path part that has been tokenized. */
     private StringBuffer currentPath;
-    /** Last separators token. */ 
+    /** Last separators token. */
     private String lastSeparator;
 
     /** Default separator characters. */
@@ -101,7 +101,7 @@ public class PathTokenizer implements Enumeration<String> {
         // Split the path into tokens
         StringTokenizer st = new StringTokenizer(path, separators, true);
         Vector<String> tokensV = new Vector<String>();
-        while(st.hasMoreTokens()) {
+        while (st.hasMoreTokens()) {
             tokensV.add(st.nextToken());
         }
 
@@ -109,16 +109,15 @@ public class PathTokenizer implements Enumeration<String> {
         tokens = new String[tokensV.size()];
         int nbTokens = tokens.length;
 
-        if(reverseOrder) {
-            for(int i=0; i<nbTokens; i++)
-                tokens[i] = tokensV.elementAt(nbTokens-i-1);
-        }
-        else {
+        if (reverseOrder) {
+            for (int i = 0; i < nbTokens; i++)
+                tokens[i] = tokensV.elementAt(nbTokens - i - 1);
+        } else {
             tokensV.toArray(tokens);
         }
 
         // Initialize current path
-        if(reverseOrder)
+        if (reverseOrder)
             currentPath = new StringBuffer(path);
         else
             currentPath = new StringBuffer(path.length());
@@ -136,7 +135,7 @@ public class PathTokenizer implements Enumeration<String> {
         lastSeparator = "";
 
         String token;
-        while(currentIndex<tokens.length && separators.indexOf(token=tokens[currentIndex])!=-1) {
+        while (currentIndex < tokens.length && separators.indexOf(token = tokens[currentIndex]) != -1) {
             // Update last separator
             lastSeparator += token;
 
@@ -153,12 +152,12 @@ public class PathTokenizer implements Enumeration<String> {
      * @return <code>true</code> if this PathTokenizer has more filename tokens, <code>false</code> otherwise.
      */
     public boolean hasMoreFilenames() {
-        return currentIndex<tokens.length;
+        return currentIndex < tokens.length;
     }
 
     private void handleToken(String token) {
-        if(reverseOrder)
-            currentPath.setLength(currentPath.length()-token.length());
+        if (reverseOrder)
+            currentPath.setLength(currentPath.length() - token.length());
         else
             currentPath.append(token);
     }
@@ -172,7 +171,7 @@ public class PathTokenizer implements Enumeration<String> {
      * @throws NoSuchElementException if no more tokens are available
      */
     public String nextFilename() throws NoSuchElementException {
-        if(currentIndex<tokens.length) {
+        if (currentIndex < tokens.length) {
             String token = tokens[currentIndex++];
 
             // Update current path
@@ -182,8 +181,7 @@ public class PathTokenizer implements Enumeration<String> {
             skipSeparators();
 
             return token;
-        }
-        else
+        } else
             throw new NoSuchElementException();
     }
 

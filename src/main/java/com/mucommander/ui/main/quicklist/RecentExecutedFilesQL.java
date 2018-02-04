@@ -18,11 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
-import javax.swing.Icon;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
@@ -37,30 +32,36 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
+import javax.swing.*;
+import java.io.IOException;
+import java.util.LinkedList;
+
 /**
  * This quick list shows recently executed files.
- * 
+ *
  * @author Arik Hadas
  */
 
 public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
-	private static LinkedList<AbstractFile> list = new LinkedList<AbstractFile>();
-	private static final int MAX_NUM_OF_ELEMENTS = 10;
-	private FolderPanel folderPanel;
-	
-	public RecentExecutedFilesQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID), Translator.get("recent_executed_files_quick_list.empty_message"));
-		
-		this.folderPanel = folderPanel;
-	}
-	
-	@Override
-    protected void acceptListItem(AbstractFile item) {
-		MainFrame mainFrame = WindowManager.getCurrentMainFrame();
+    private static LinkedList<AbstractFile> list = new LinkedList<AbstractFile>();
+    private static final int MAX_NUM_OF_ELEMENTS = 10;
+    private FolderPanel folderPanel;
 
-		if(item.getURL().getScheme().equals(FileProtocols.FILE) && (item.hasAncestor(LocalFile.class))) {
-            try { DesktopManager.open(item); }
-            catch(IOException e) {}
+    public RecentExecutedFilesQL(FolderPanel folderPanel) {
+        super(folderPanel, ActionProperties.getActionLabel(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID), Translator.get("recent_executed_files_quick_list.empty_message"));
+
+        this.folderPanel = folderPanel;
+    }
+
+    @Override
+    protected void acceptListItem(AbstractFile item) {
+        MainFrame mainFrame = WindowManager.getCurrentMainFrame();
+
+        if (item.getURL().getScheme().equals(FileProtocols.FILE) && (item.hasAncestor(LocalFile.class))) {
+            try {
+                DesktopManager.open(item);
+            } catch (IOException e) {
+            }
         }
 
         // Copies non-local file in a temporary local file and opens them using their native association.
@@ -69,21 +70,21 @@ public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
             TempExecJob job = new TempExecJob(progressDialog, mainFrame, item);
             progressDialog.start(job);
         }
-	}
-	
-	public static void addFile(AbstractFile file) {
-		if (!list.remove(file) && list.size() > MAX_NUM_OF_ELEMENTS)
-			list.removeLast();
-		list.addFirst(file);
-	}
+    }
 
-	@Override
+    public static void addFile(AbstractFile file) {
+        if (!list.remove(file) && list.size() > MAX_NUM_OF_ELEMENTS)
+            list.removeLast();
+        list.addFirst(file);
+    }
+
+    @Override
     protected AbstractFile[] getData() {
-		return list.toArray(new AbstractFile[0]);
-	}
+        return list.toArray(new AbstractFile[0]);
+    }
 
-	@Override
+    @Override
     protected Icon itemToIcon(AbstractFile item) {
-		return getIconOfFile(item);
-	}
+        return getIconOfFile(item);
+    }
 }

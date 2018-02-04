@@ -19,11 +19,6 @@
 
 package com.mucommander.job.impl;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
@@ -36,34 +31,48 @@ import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * This class is responsible for deleting a set of files. This job can operate in two modes, depending on the boolean
  * value specified in the constructor:
  * <ul>
- *  <li>moveToTrash enabled: files are moved to the trash returned by {@link DesktopManager#getTrash()}.
- *  <li>moveToTrash disabled: files are permanently deleted, i.e deleted files cannot be recovered. In this mode,
+ * <li>moveToTrash enabled: files are moved to the trash returned by {@link DesktopManager#getTrash()}.
+ * <li>moveToTrash disabled: files are permanently deleted, i.e deleted files cannot be recovered. In this mode,
  * folders are deleted recursively
  * </ul>
  *
  * @author Maxence Bernard
  */
 public class DeleteJob extends FileJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteJob.class);
-	
-    /** Title used for error dialogs */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeleteJob.class);
+
+    /**
+     * Title used for error dialogs
+     */
     private String errorDialogTitle;
 
-    /** If true, files will be moved to the trash instead of being deleted */
+    /**
+     * If true, files will be moved to the trash instead of being deleted
+     */
     private boolean moveToTrash;
 
-    /** Trash instance, null if moveToTrash is false */
+    /**
+     * Trash instance, null if moveToTrash is false
+     */
     private AbstractTrash trash;
 
-    /** The archive that contains the deleted files (may be null) */ 
+    /**
+     * The archive that contains the deleted files (may be null)
+     */
     private AbstractRWArchiveFile archiveToOptimize;
 
-    /** True when an archive is being optimized */
+    /**
+     * True when an archive is being optimized
+     */
     private boolean isOptimizingArchive;
 
 
@@ -71,10 +80,10 @@ public class DeleteJob extends FileJob {
      * Creates a new DeleteJob without starting it.
      *
      * @param progressDialog dialog which shows this job's progress
-     * @param mainFrame mainFrame this job has been triggered by
-     * @param files files which are going to be deleted
-     * @param moveToTrash if true, files will be moved to the trash, if false they will be permanently deleted.
-     * Should be true only if a trash is available on the current platform.
+     * @param mainFrame      mainFrame this job has been triggered by
+     * @param files          files which are going to be deleted
+     * @param moveToTrash    if true, files will be moved to the trash, if false they will be permanently deleted.
+     *                       Should be true only if a trash is available on the current platform.
      */
     public DeleteJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, boolean moveToTrash) {
         super(progressDialog, mainFrame, files);
@@ -82,7 +91,7 @@ public class DeleteJob extends FileJob {
         this.errorDialogTitle = Translator.get("delete_dialog.error_title");
 
         this.moveToTrash = moveToTrash;
-        if(moveToTrash)
+        if (moveToTrash)
             trash = DesktopManager.getTrash();
     }
 
@@ -94,7 +103,7 @@ public class DeleteJob extends FileJob {
      * @throws IOException if an error occurred while deleting the file
      */
     private void deleteFile(AbstractFile file) throws IOException {
-        if(moveToTrash)
+        if (moveToTrash)
             trash.moveToTrash(file);
         else
             file.delete();
@@ -106,11 +115,10 @@ public class DeleteJob extends FileJob {
     ////////////////////////////
 
     /**
-     * Deletes recursively the given file or folder. 
+     * Deletes recursively the given file or folder.
      *
-     * @param file the file or folder to delete
+     * @param file          the file or folder to delete
      * @param recurseParams not used
-     * 
      * @return <code>true</code> if the file has been completely deleted.
      */
     @Override
@@ -120,59 +128,57 @@ public class DeleteJob extends FileJob {
 
         // Delete files recursively, only if trash is not used.
         int ret;
-        if(!moveToTrash && file.isDirectory()) {
+        if (!moveToTrash && file.isDirectory()) {
             String filePath = file.getAbsolutePath();
-            filePath = filePath.substring(getBaseSourceFolder().getAbsolutePath(false).length()+1, filePath.length());
+            filePath = filePath.substring(getBaseSourceFolder().getAbsolutePath(false).length() + 1, filePath.length());
 
             // Important: symlinks must *not* be followed -- following symlinks could have disastrous effects.
-            if(!file.isSymlink()) {
-                do {		// Loop for retry
+            if (!file.isSymlink()) {
+                do {        // Loop for retry
                     // Delete each file in this folder
                     try {
                         AbstractFile subFiles[] = file.ls();
-                        for(int i=0; i<subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
+                        for (int i = 0; i < subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
                             // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                             nextFile(subFiles[i]);
                             processFile(subFiles[i], null);
                         }
                         break;
-                    }
-                    catch(IOException e) {
+                    } catch (IOException e) {
                         LOGGER.debug("IOException caught", e);
 
                         ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", filePath));
                         // Retry loops
-                        if(ret==FileJobAction.RETRY)
+                        if (ret == FileJobAction.RETRY)
                             continue;
                         // Cancel, skip or close dialog returns false
                         return false;
                     }
-                } while(true);
+                } while (true);
             }
         }
         // Return now if the job was interrupted, so that we do not attempt to delete this folder
         if (getState() == FileJobState.INTERRUPTED)
             return false;
 
-        do {		// Loop for retry
+        do {        // Loop for retry
             try {
                 deleteFile(file);
 
                 return true;
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 LOGGER.debug("IOException caught", e);
 
                 ret = showErrorDialog(errorDialogTitle,
-                                      Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())
-                                      );
+                        Translator.get(file.isDirectory() ? "cannot_delete_folder" : "cannot_delete_file", file.getName())
+                );
                 // Retry loops
-                if(ret==FileJobAction.RETRY)
+                if (ret == FileJobAction.RETRY)
                     continue;
                 // Cancel, skip or close dialog returns false
                 return false;
             }
-        } while(true);
+        } while (true);
     }
 
     // This job modifies baseFolder and subfolders
@@ -190,7 +196,7 @@ public class DeleteJob extends FileJob {
     protected void jobStopped() {
         super.jobStopped();
 
-        if(moveToTrash)
+        if (moveToTrash)
             trash.waitForPendingOperations();
     }
 
@@ -201,18 +207,17 @@ public class DeleteJob extends FileJob {
         // If the source files are located inside an archive, optimize the archive file
         AbstractArchiveFile archiveFile = getBaseSourceFolder().getParentArchive();
 
-        if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable()) {
-            while(true) {
+        if (archiveFile != null && archiveFile.isArchive() && archiveFile.isWritable()) {
+            while (true) {
                 try {
-                    archiveToOptimize = ((AbstractRWArchiveFile)archiveFile);
+                    archiveToOptimize = ((AbstractRWArchiveFile) archiveFile);
                     isOptimizingArchive = true;
 
                     archiveToOptimize.optimizeArchive();
 
                     break;
-                }
-                catch(IOException e) {
-                    if(showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName()))==FileJobAction.RETRY)
+                } catch (IOException e) {
+                    if (showErrorDialog(errorDialogTitle, Translator.get("error_while_optimizing_archive", archiveFile.getName())) == FileJobAction.RETRY)
                         continue;
 
                     break;
@@ -225,7 +230,7 @@ public class DeleteJob extends FileJob {
 
     @Override
     public String getStatusString() {
-        if(isOptimizingArchive)
+        if (isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());
 
         return Translator.get("delete.deleting_file", getCurrentFilename());

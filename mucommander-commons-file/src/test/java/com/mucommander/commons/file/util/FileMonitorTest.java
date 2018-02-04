@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -48,7 +48,7 @@ public class FileMonitorTest implements FileMonitorConstants {
     /** Number of milliseconds to wait for an attribute change before timing out */
     private final static int TIMEOUT = 5000;
 
-    
+
     /**
      * Validates that FileMonitor properly reports {@link FileMonitor#DATE_ATTRIBUTE} changes when a file's date changes.
      *
@@ -58,10 +58,10 @@ public class FileMonitorTest implements FileMonitorConstants {
     public void testDateAttribute() throws IOException {
         setUp(DATE_ATTRIBUTE);
 
-        file.changeDate(file.getDate()-2000);
+        file.changeDate(file.getDate() - 2000);
         assert hasAttributeChanged(DATE_ATTRIBUTE);
 
-        file.changeDate(file.getDate()+2000);
+        file.changeDate(file.getDate() + 2000);
         assert hasAttributeChanged(DATE_ATTRIBUTE);
     }
 
@@ -81,9 +81,8 @@ public class FileMonitorTest implements FileMonitorConstants {
             assert hasAttributeChanged(SIZE_ATTRIBUTE);
 
             raos.setLength(0);
-        }
-        finally {
-            if(raos!=null)
+        } finally {
+            if (raos != null)
                 raos.close();
         }
     }
@@ -171,9 +170,11 @@ public class FileMonitorTest implements FileMonitorConstants {
         file.mkfile();
 
         // Waits until the file truly exists (I/O are usually asynchroneous)
-        while(!file.exists()) {
-            try { Thread.sleep(POLL_PERIOD); }
-            catch(InterruptedException e) {}
+        while (!file.exists()) {
+            try {
+                Thread.sleep(POLL_PERIOD);
+            } catch (InterruptedException e) {
+            }
         }
 
         // Create the monitor, change listener and start monitoring file changes
@@ -198,19 +199,19 @@ public class FileMonitorTest implements FileMonitorConstants {
         boolean hasAttributeChanged = false;
 
         try {
-            synchronized(fileChangeTracker) {
-                hasAttributeChanged = (attribute&fileChangeTracker.getChangedAttributes())!=0;
+            synchronized (fileChangeTracker) {
+                hasAttributeChanged = (attribute & fileChangeTracker.getChangedAttributes()) != 0;
 
-                if(!hasAttributeChanged) {
+                if (!hasAttributeChanged) {
                     // Waits until FileChangeTracker calls notify to report an attribute change; give up after
                     // TIMEOUT milliseconds
                     fileChangeTracker.wait(TIMEOUT);
                 }
 
-                hasAttributeChanged = (attribute&fileChangeTracker.getChangedAttributes())!=0;
+                hasAttributeChanged = (attribute & fileChangeTracker.getChangedAttributes()) != 0;
             }
+        } catch (InterruptedException e) {
         }
-        catch(InterruptedException e) {}
 
         // Resets FileChangeTracker to be ready to detect the next attribute change
         fileChangeTracker.reset();
@@ -248,7 +249,7 @@ public class FileMonitorTest implements FileMonitorConstants {
         ///////////////////////////////////////
 
         public void fileChanged(AbstractFile file, int changedAttributes) {
-            synchronized(this) {
+            synchronized (this) {
                 this.changedAttributes |= changedAttributes;
 
                 notify();   // Notify that hasAttributeChanged(int) method that an attribute has changed 

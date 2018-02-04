@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,14 +19,7 @@
 
 package com.mucommander.commons.file.archive;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileOperation;
-import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.PermissionAccess;
-import com.mucommander.commons.file.PermissionType;
-import com.mucommander.commons.file.UnsupportedFileOperation;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.io.ByteUtils;
@@ -122,7 +115,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
         // Replace all occurrences of the entry's separator by the archive file's separator, only if the separator is
         // not "/" (i.e. the entry path separator).
         String separator = getSeparator();
-        if(!separator.equals("/"))
+        if (!separator.equals("/"))
             path = path.replace("/", separator);
 
         return path;
@@ -142,7 +135,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     public long getSize() {
         return entry.getSize();
     }
-	
+
     @Override
     public boolean isDirectory() {
         return entry.isDirectory();
@@ -163,7 +156,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
         return archiveFile.ls(this, filter, null);
     }
-	
+
     @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
         return archiveFile.ls(this, null, filter);
@@ -173,10 +166,10 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     public AbstractFile getParent() {
         return parent;
     }
-	
+
     @Override
     public void setParent(AbstractFile parent) {
-        this.parent = parent;	
+        this.parent = parent;
     }
 
     /**
@@ -188,7 +181,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     public boolean exists() {
         return entry.exists();
     }
-	
+
     @Override
     public FilePermissions getPermissions() {
         // Return the entry's permissions
@@ -197,7 +190,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
-        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access.toInt()*3)), enabled));
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access.toInt() * 3)), enabled));
     }
 
     @Override
@@ -207,7 +200,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
 
     @Override
     public boolean canGetOwner() {
-        return entry.getOwner()!=null;
+        return entry.getOwner() != null;
     }
 
     @Override
@@ -217,7 +210,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
 
     @Override
     public boolean canGetGroup() {
-        return entry.getGroup()!=null;
+        return entry.getGroup() != null;
     }
 
     /**
@@ -261,7 +254,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     }
 
     /**
-     * Delegates to the archive file's {@link AbstractArchiveFile#getEntryInputStream(ArchiveEntry,ArchiveEntryIterator)}}
+     * Delegates to the archive file's {@link AbstractArchiveFile#getEntryInputStream(ArchiveEntry, ArchiveEntryIterator)}}
      * method.
      *
      * @throws UnsupportedFileOperationException if the underlying archive file does not support
@@ -339,7 +332,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
         return entry;
     }
 
-    
+
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -361,7 +354,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     @Override
     public String getAbsolutePath() {
         // Use the archive file's absolute path and append the entry's relative path to it
-        return archiveFile.getAbsolutePath(true)+getRelativeEntryPath();
+        return archiveFile.getAbsolutePath(true) + getRelativeEntryPath();
     }
 
     /**
@@ -370,7 +363,7 @@ public abstract class AbstractArchiveEntryFile extends AbstractFile {
     @Override
     public String getCanonicalPath() {
         // Use the archive file's canonical path and append the entry's relative path to it
-        return archiveFile.getCanonicalPath(true)+getRelativeEntryPath();
+        return archiveFile.getCanonicalPath(true) + getRelativeEntryPath();
     }
 
     /**

@@ -28,7 +28,7 @@ import java.util.Vector;
 
 /**
  * QueuedTrash is an {@link AbstractTrash} which moves files to the trash asynchroneously.
- *
+ * <p>
  * <p>
  * When {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} is called, the file is added to a queue.
  * The file is not moved to the trash immediately: the trash will wait a period of {@link #QUEUE_PERIOD} milliseconds
@@ -36,7 +36,7 @@ import java.util.Vector;
  * so on. When no more files are added were added during the period, {@link #moveToTrash(java.util.Vector)} is called
  * with the list of queued files to move to the trash.
  * </p>
- *
+ * <p>
  * <p>
  * This mechanism allows to group calls to the underlying trash. It is effective when the atomic operation
  * of moving a file to the trash has a high cost and {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} is called
@@ -49,16 +49,24 @@ import java.util.Vector;
  */
 public abstract class QueuedTrash extends AbstractTrash {
 
-    /** Contains the files that are waiting to be moved to the trash */
+    /**
+     * Contains the files that are waiting to be moved to the trash
+     */
     private final static List<AbstractFile> queuedFiles = new Vector<AbstractFile>();
 
-    /** Use to synchronize access to the trash */
+    /**
+     * Use to synchronize access to the trash
+     */
     protected final static Object moveToTrashLock = new Object();
 
-    /** Thread that performs the actual job of moving files to the trash */
+    /**
+     * Thread that performs the actual job of moving files to the trash
+     */
     protected static Thread moveToTrashThread;
 
-    /** Amount of time in millisecondes to wait for additional files before moving them to the trash */
+    /**
+     * Amount of time in millisecondes to wait for additional files before moving them to the trash
+     */
     protected final static int QUEUE_PERIOD = 1000;
 
 
@@ -86,15 +94,15 @@ public abstract class QueuedTrash extends AbstractTrash {
      */
     @Override
     public boolean moveToTrash(AbstractFile file) {
-        if(!canMoveToTrash(file))
+        if (!canMoveToTrash(file))
             return false;
 
-        synchronized(moveToTrashLock) {
+        synchronized (moveToTrashLock) {
             // Queue the given file
             queuedFiles.add(file);
 
             // Create a new thread and start it if one isn't already running
-            if(moveToTrashThread ==null) {
+            if (moveToTrashThread == null) {
                 moveToTrashThread = new MoveToTrashThread();
                 moveToTrashThread.start();
             }
@@ -105,13 +113,12 @@ public abstract class QueuedTrash extends AbstractTrash {
 
     @Override
     public void waitForPendingOperations() {
-        synchronized(moveToTrashLock) {
-            if(moveToTrashThread!=null) {
+        synchronized (moveToTrashLock) {
+            if (moveToTrashThread != null) {
                 try {
                     // Wait until moveToTrashThread wakes this thread up
                     moveToTrashLock.wait();
-                }
-                catch(InterruptedException e) {
+                } catch (InterruptedException e) {
                 }
             }
         }
@@ -123,7 +130,7 @@ public abstract class QueuedTrash extends AbstractTrash {
 
     /**
      * Performs the actual job of moving files to the trash.
-     *
+     * <p>
      * <p>The thread starts by waiting {@link com.mucommander.desktop.osx.OSXTrash#QUEUE_PERIOD} milliseconds before moving them to give additional
      * files a chance to be queued and regrouped as a single call to {@link QueuedTrash#moveToTrash(java.util.List)}.
      * If more files were queued during that period, the thread will wait an additional {@link com.mucommander.desktop.osx.OSXTrash# QUEUE_PERIOD},
@@ -140,13 +147,13 @@ public abstract class QueuedTrash extends AbstractTrash {
 
                 try {
                     Thread.sleep(QUEUE_PERIOD);
+                } catch (InterruptedException e) {
                 }
-                catch(InterruptedException e) {}
             }
-            while(queueSize!=queuedFiles.size());
+            while (queueSize != queuedFiles.size());
 
-            synchronized(moveToTrashLock) {     // Files can't be added to queue while files are moved to trash
-                if(!moveToTrash(queuedFiles))
+            synchronized (moveToTrashLock) {     // Files can't be added to queue while files are moved to trash
+                if (!moveToTrash(queuedFiles))
                     InformationDialog.showErrorDialog(WindowManager.getCurrentMainFrame(), Translator.get("delete_dialog.move_to_trash.option"), Translator.get("delete_dialog.move_to_trash.failed"));
 
                 queuedFiles.clear();

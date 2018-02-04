@@ -20,7 +20,10 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -29,17 +32,20 @@ import java.util.Map;
 
 /**
  * User configurable variant of {@link InternalViewAction}.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class ViewAction extends InternalViewAction {
     // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of <code>ViewAction</code>.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public ViewAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ViewAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,20 +62,28 @@ public class ViewAction extends InternalViewAction {
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ViewAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ViewAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "View";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "View";
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0);
+        }
     }
 }

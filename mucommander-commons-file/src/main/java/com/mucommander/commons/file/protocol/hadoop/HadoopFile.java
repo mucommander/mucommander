@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -65,7 +65,7 @@ public abstract class HadoopFile extends ProtocolFile {
 
     /** Default Hadoop Configuration, whose values are fetched from XML configuration files. */
     protected final static Configuration DEFAULT_CONFIGURATION = new Configuration();
-    
+
 
     protected HadoopFile(FileURL url) throws IOException {
         this(url, null, null);
@@ -74,27 +74,23 @@ public abstract class HadoopFile extends ProtocolFile {
     protected HadoopFile(FileURL url, FileSystem fs, FileStatus fileStatus) throws IOException {
         super(url);
 
-        if(fs==null) {
+        if (fs == null) {
             try {
                 this.fs = getHadoopFileSystem(url);
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 throw e;
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 // FileSystem implementations throw IllegalArgumentException under various circumstances
                 throw new IOException(e.getMessage());
             }
-        }
-        else {
+        } else {
             this.fs = fs;
         }
 
-        if(fileStatus==null) {
+        if (fileStatus == null) {
             this.path = new Path(fileURL.getPath());
             this.fileAttributes = new HadoopFileAttributes();
-        }
-        else {
+        } else {
             this.fileAttributes = new HadoopFileAttributes(fileStatus);
             this.path = fileStatus.getPath();
         }
@@ -102,14 +98,14 @@ public abstract class HadoopFile extends ProtocolFile {
 
     private OutputStream getOutputStream(boolean append) throws IOException {
         OutputStream out = new CounterOutputStream(
-            append?fs.append(path):fs.create(path, true),
-            new ByteCounter() {
-                @Override
-                public synchronized void add(long nbBytes) {
-                    fileAttributes.addToSize(nbBytes);
-                    fileAttributes.setDate(System.currentTimeMillis());
+                append ? fs.append(path) : fs.create(path, true),
+                new ByteCounter() {
+                    @Override
+                    public synchronized void add(long nbBytes) {
+                        fileAttributes.addToSize(nbBytes);
+                        fileAttributes.setDate(System.currentTimeMillis());
+                    }
                 }
-            }
         ) {
             @Override
             public void close() throws IOException {
@@ -135,9 +131,9 @@ public abstract class HadoopFile extends ProtocolFile {
 
     @Override
     public AbstractFile getParent() {
-        if(!parentValSet) {
+        if (!parentValSet) {
             FileURL parentFileURL = this.fileURL.getParent();
-            if(parentFileURL!=null)
+            if (parentFileURL != null)
                 parent = FileFactory.getFile(fileURL.getParent());
 
             parentValSet = true;
@@ -230,7 +226,7 @@ public abstract class HadoopFile extends ProtocolFile {
 
     @Override
     public void mkdir() throws IOException {
-        if(exists() || !fs.mkdirs(path))
+        if (exists() || !fs.mkdirs(path))
             throw new IOException();
 
         // Update local attributes
@@ -242,7 +238,7 @@ public abstract class HadoopFile extends ProtocolFile {
 
     @Override
     public void delete() throws IOException {
-        if(!fs.delete(path, false))
+        if (!fs.delete(path, false))
             throw new IOException();
 
         // Update local attributes
@@ -258,14 +254,14 @@ public abstract class HadoopFile extends ProtocolFile {
 
         // Delete the destination if it already exists as FileSystem#rename would otherwise fail.
         // Note: HadoopFile#delete() does not delete directories recursively (good).
-        if(destFile.exists())
+        if (destFile.exists())
             destFile.delete();
 
-        if(!fs.rename(path, ((HadoopFile)destFile).path))
+        if (!fs.rename(path, ((HadoopFile) destFile).path))
             throw new IOException();
 
         // Update destination file attributes by fetching them from the server
-        ((HadoopFileAttributes)destFile.getUnderlyingFileObject()).fetchAttributes();
+        ((HadoopFileAttributes) destFile.getUnderlyingFileObject()).fetchAttributes();
 
         // Update this file's attributes locally
         fileAttributes.setExists(false);
@@ -284,7 +280,7 @@ public abstract class HadoopFile extends ProtocolFile {
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
-        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access.toInt()*3)), enabled));
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access.toInt() * 3)), enabled));
     }
 
     @Override
@@ -366,25 +362,25 @@ public abstract class HadoopFile extends ProtocolFile {
     public AbstractFile[] ls(FilenameFilter filter) throws IOException {
         // We need to ensure that the file is a directory: if it isn't listStatus returns an empty array but doesn't
         // throw an exception
-        if(!exists() || !isDirectory())
+        if (!exists() || !isDirectory())
             throw new IOException();
 
-        FileStatus[] statuses = filter==null
-                ?fs.listStatus(path)
-                :fs.listStatus(path, new HadoopFilenameFilter(filter));
+        FileStatus[] statuses = filter == null
+                ? fs.listStatus(path)
+                : fs.listStatus(path, new HadoopFilenameFilter(filter));
 
-        int nbChildren = statuses==null?0:statuses.length;
+        int nbChildren = statuses == null ? 0 : statuses.length;
         AbstractFile[] children = new AbstractFile[nbChildren];
         String parentPath = fileURL.getPath();
-        if(!parentPath.endsWith("/"))
+        if (!parentPath.endsWith("/"))
             parentPath += "/";
         FileURL childURL;
         FileStatus childStatus;
 
-        for(int i=0; i<nbChildren; i++) {
+        for (int i = 0; i < nbChildren; i++) {
             childStatus = statuses[i];
 
-            childURL = (FileURL)fileURL.clone();
+            childURL = (FileURL) fileURL.clone();
             childURL.setPath(parentPath + childStatus.getPath().getName());
 
             children[i] = FileFactory.getFile(childURL, this, fs, childStatus);
@@ -395,7 +391,7 @@ public abstract class HadoopFile extends ProtocolFile {
 
     @Override
     public void changePermissions(int permissions) throws IOException, UnsupportedFileOperationException {
-       fs.setPermission(path, new FsPermission((short)permissions));
+        fs.setPermission(path, new FsPermission((short) permissions));
 
         // Update local attributes
         fileAttributes.setPermissions(new SimpleFilePermissions(permissions));
@@ -459,21 +455,20 @@ public abstract class HadoopFile extends ProtocolFile {
         private void fetchAttributes() throws AuthException {
             // Do not update attributes while the file is being written, as they are not reflected immediately on the
             // name node.
-            if(isWriting)
+            if (isWriting)
                 return;
 
             try {
                 setAttributes(fs.getFileStatus(path));
                 setExists(true);
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // File doesn't exist on the server
                 setExists(false);
                 setDefaultFileAttributes(getURL(), this);
 
                 // Rethrow AuthException
-                if(e instanceof AuthException)
-                    throw (AuthException)e;
+                if (e instanceof AuthException)
+                    throw (AuthException) e;
             }
         }
 
@@ -487,7 +482,7 @@ public abstract class HadoopFile extends ProtocolFile {
             setDate(fileStatus.getModificationTime());
             setSize(fileStatus.getLen());
             setPermissions(new SimpleFilePermissions(
-               fileStatus.getPermission().toShort() & PermissionBits.FULL_PERMISSION_INT
+                    fileStatus.getPermission().toShort() & PermissionBits.FULL_PERMISSION_INT
             ));
             setOwner(fileStatus.getOwner());
             setGroup(fileStatus.getGroup());
@@ -499,7 +494,7 @@ public abstract class HadoopFile extends ProtocolFile {
          * @param increment number of bytes to add to the current size attribute's value
          */
         private void addToSize(long increment) {
-            setSize(getSize()+increment);
+            setSize(getSize() + increment);
         }
 
 
@@ -511,8 +506,7 @@ public abstract class HadoopFile extends ProtocolFile {
         public void updateAttributes() {
             try {
                 fetchAttributes();
-            }
-            catch(Exception e) {        // AuthException
+            } catch (Exception e) {        // AuthException
                 LOGGER.info("Failed to update attributes", e);
             }
         }
@@ -573,7 +567,7 @@ public abstract class HadoopFile extends ProtocolFile {
         ///////////////////////////////
         // PathFilter implementation //
         ///////////////////////////////
-                                       
+
         public boolean accept(Path path) {
             return filenameFilter.accept(path.getName());
         }

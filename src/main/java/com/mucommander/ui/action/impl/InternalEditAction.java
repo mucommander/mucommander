@@ -18,56 +18,54 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
-
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.FileOperationFilter;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
 
+import javax.swing.*;
+import java.util.Map;
+
 /**
  * Opens the current file in edit mode.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class InternalEditAction extends AbstractViewerAction {
     // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of <code>EditAction</code>.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public InternalEditAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public InternalEditAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Edit requires being able to write the file (in addition to view requirements)
         setSelectedFileFilter(new AndFileFilter(
-            new FileOperationFilter(FileOperation.WRITE_FILE),
-            getSelectedFileFilter()
+                new FileOperationFilter(FileOperation.WRITE_FILE),
+                getSelectedFileFilter()
         ));
 
         ImageIcon icon;
-        if((icon = getStandardIcon(EditAction.class)) != null)
+        if ((icon = getStandardIcon(EditAction.class)) != null)
             setIcon(icon);
     }
 
 
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Opens the internal editor on the specified file.
+     *
      * @param file file to edit.
      */
     @Override
@@ -80,28 +78,36 @@ public class InternalEditAction extends AbstractViewerAction {
         return null;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new InternalEditAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new InternalEditAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "InternalEdit";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "InternalEdit";
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

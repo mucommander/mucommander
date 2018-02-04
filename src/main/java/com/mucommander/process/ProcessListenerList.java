@@ -23,18 +23,21 @@ import java.util.Vector;
 
 /**
  * Convenience class used to have more than one listener on any given process.
+ *
  * @author Nicolas Rinaudo
  */
 public class ProcessListenerList implements ProcessListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    /** All registered listeners. */
+    /**
+     * All registered listeners.
+     */
     private List<ProcessListener> listeners;
-
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Creates a new process listener list.
      */
@@ -43,30 +46,36 @@ public class ProcessListenerList implements ProcessListener {
     }
 
 
-
     // - Listener registration -----------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Adds the specified listener to the list of listeners.
+     *
      * @param listener process listener to add.
      */
-    public void add(ProcessListener listener) {listeners.add(listener);}
+    public void add(ProcessListener listener) {
+        listeners.add(listener);
+    }
 
     /**
      * Removes the specified listener from the list of listeners.
+     *
      * @param listener process listener to remove.
      */
-    public void remove(ProcessListener listener) {listeners.remove(listener);}
-
+    public void remove(ProcessListener listener) {
+        listeners.remove(listener);
+    }
 
 
     // - Listener code -------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Propagates the <i>process died</i> event to all registered listeners.
      */
     public void processDied(int returnValue) {
-        for(ProcessListener listener : listeners)
+        for (ProcessListener listener : listeners)
             listener.processDied(returnValue);
     }
 
@@ -74,7 +83,7 @@ public class ProcessListenerList implements ProcessListener {
      * Propagates the <i>process output</i> event to all registered listeners.
      */
     public void processOutput(byte[] buffer, int offset, int length) {
-        for(ProcessListener listener : listeners)
+        for (ProcessListener listener : listeners)
             listener.processOutput(buffer, offset, length);
     }
 
@@ -82,7 +91,7 @@ public class ProcessListenerList implements ProcessListener {
      * Propagates the <i>process output</i> event to all registered listeners.
      */
     public void processOutput(String output) {
-        for(ProcessListener listener : listeners)
+        for (ProcessListener listener : listeners)
             listener.processOutput(output);
     }
 }

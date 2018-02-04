@@ -19,26 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.impl.TransferFileJob;
@@ -48,6 +28,18 @@ import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -66,8 +58,8 @@ import com.mucommander.ui.text.FilePathField;
  * @author Maxence Bernard
  */
 public abstract class TransferDestinationDialog extends JobDialog implements ActionListener, DocumentListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TransferDestinationDialog.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransferDestinationDialog.class);
+
     protected String errorDialogTitle;
     private boolean enableTransferOptions;
 
@@ -81,31 +73,33 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     private JCheckBox runInBackgroundCheckBox;
     private JButton okButton;
 
-    /** Background thread that is currently being executed, <code>null</code> if there is none. */
+    /**
+     * Background thread that is currently being executed, <code>null</code> if there is none.
+     */
     private Thread thread;
 
     // Dialog size constraints
-    protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
+    protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 0);
     // Dialog width should not exceed 360, height is not an issue (always the same)
-    protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+    protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400, 10000);
 
-	
+
     private final static int DEFAULT_ACTIONS[] = {
-        FileCollisionDialog.CANCEL_ACTION,
-        FileCollisionDialog.SKIP_ACTION,
-        FileCollisionDialog.OVERWRITE_ACTION,
-        FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION,
-        FileCollisionDialog.RESUME_ACTION,
-        FileCollisionDialog.RENAME_ACTION
+            FileCollisionDialog.CANCEL_ACTION,
+            FileCollisionDialog.SKIP_ACTION,
+            FileCollisionDialog.OVERWRITE_ACTION,
+            FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION,
+            FileCollisionDialog.RESUME_ACTION,
+            FileCollisionDialog.RENAME_ACTION
     };
 
     private final static String DEFAULT_ACTIONS_TEXT[] = {
-        FileCollisionDialog.CANCEL_TEXT,
-        FileCollisionDialog.SKIP_TEXT,
-        FileCollisionDialog.OVERWRITE_TEXT,
-        FileCollisionDialog.OVERWRITE_IF_OLDER_TEXT,
-        FileCollisionDialog.RESUME_TEXT,
-        FileCollisionDialog.RENAME_TEXT
+            FileCollisionDialog.CANCEL_TEXT,
+            FileCollisionDialog.SKIP_TEXT,
+            FileCollisionDialog.OVERWRITE_TEXT,
+            FileCollisionDialog.OVERWRITE_IF_OLDER_TEXT,
+            FileCollisionDialog.RESUME_TEXT,
+            FileCollisionDialog.RENAME_TEXT
     };
 
 
@@ -116,7 +110,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         this.enableTransferOptions = enableTransferOptions;
 
         mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel(labelText+" :"));
+        mainPanel.add(new JLabel(labelText + " :"));
 
         // Create a path field with auto-completion capabilities
         pathField = new FilePathField();
@@ -131,15 +125,15 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         pathField.getDocument().addDocumentListener(this);
 
         // Path field will receive initial focus
-        setInitialFocusComponent(pathField);		
+        setInitialFocusComponent(pathField);
 
-        if(enableTransferOptions) {
+        if (enableTransferOptions) {
             // Combo box that allows the user to choose the default action when a file already exists in destination
-            mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
+            mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action") + " :"));
             fileExistsActionComboBox = new JComboBox();
             fileExistsActionComboBox.addItem(Translator.get("ask"));
             int nbChoices = DEFAULT_ACTIONS_TEXT.length;
-            for(int i=0; i<nbChoices; i++)
+            for (int i = 0; i < nbChoices; i++)
                 fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
             mainPanel.add(fileExistsActionComboBox);
 
@@ -233,8 +227,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * Interrupts the ongoing thread if there is one, does nothing otherwise.
      */
     private synchronized void interruptOngoingThread() {
-        if(thread!=null) {
-            LOGGER.trace("Calling interrupt() on "+thread);
+        if (thread != null) {
+            LOGGER.trace("Calling interrupt() on " + thread);
             thread.interrupt();
             // Set the current thread to null
             thread = null;
@@ -255,12 +249,12 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * </p>
      *
      * @param resolvedDest the resolved destination
-     * @param destPath the path, as it was entered in the path field
+     * @param destPath     the path, as it was entered in the path field
      * @return <code>true</code> if the given resolved destination is valid
      */
-	protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
-        return (resolvedDest!=null && (files.size()==1 || resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER));
-	}
+    protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
+        return (resolvedDest != null && (files.size() == 1 || resolvedDest.getDestinationType() == PathUtils.ResolvedDestination.EXISTING_FOLDER));
+    }
 
     /**
      * This method is called after the destination has been validated to start the job, with the resolved destination
@@ -278,10 +272,10 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             // Retrieve default action when a file exists in destination, default choice
             // (if not specified by the user) is 'Ask'
             defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
-            if(defaultFileExistsAction==0)
+            if (defaultFileExistsAction == 0)
                 defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
             else
-                defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
+                defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction - 1];
             // Note: we don't remember default action on purpose: we want the user to specify it each time,
             // it would be too dangerous otherwise.
 
@@ -292,7 +286,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, getProgressDialogTitle());
         TransferFileJob job = createTransferFileJob(progressDialog, resolvedDest, defaultFileExistsAction);
 
-        if(job!=null) {
+        if (job != null) {
             job.setAutoSkipErrors(skipErrors);
             job.setIntegrityCheckEnabled(verifyIntegrity);
             job.setRunInBackground(runInBackground);
@@ -304,8 +298,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * Called when the path has changed while {@link InitialPathRetriever} is running.
      */
     private void textUpdated() {
-        synchronized(this) {
-            if(thread!=null && thread instanceof InitialPathRetriever) {
+        synchronized (this) {
+            if (thread != null && thread instanceof InitialPathRetriever) {
                 // Interrupt InitialPathRetriever
                 interruptOngoingThread();
 
@@ -341,15 +335,14 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if(source == okButton) {
+        if (source == okButton) {
             // Disable the OK button and path field while the current path is being resolved
             okButton.setEnabled(false);
             pathField.setEnabled(false);
 
             // Start resolving the path
             startThread(new PathResolver());
-        }
-        else {              // Cancel button
+        } else {              // Cancel button
             dispose();
         }
     }
@@ -361,7 +354,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
     /**
      * Called when the dialog has just been created to compute the initial path, based on the user file selection.
-     *
+     * <p>
      * <p>This method is called from a dedicated thread so that it can safely perform I/O operations without any chance
      * of locking the event thread.</p>
      *
@@ -374,12 +367,12 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * Called after the dialog has been confirmed by the user and the resolved destination has been
      * {@link #isValidDestination(PathUtils.ResolvedDestination, String) validated} to create the
      * {@link TransferFileJob} instance that will subsequently be started.
-     *
+     * <p>
      * <p>This method is called from a dedicated thread so that it can safely perform I/O operations without any chance
      * of locking the event thread.</p>
      *
-     * @param progressDialog the progress dialog that will show the job's progression
-     * @param resolvedDest the resolved and validated destination
+     * @param progressDialog          the progress dialog that will show the job's progression
+     * @param resolvedDest            the resolved and validated destination
      * @param defaultFileExistsAction the value of the 'default action when file exists' choice
      * @return the {@link TransferFileJob} instance that will subsequently be started
      */
@@ -403,7 +396,9 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      */
     private class InitialPathRetriever extends Thread {
 
-        /** True if the thread has been interrupted */
+        /**
+         * True if the thread has been interrupted
+         */
         private boolean interrupted;
 
         @Override
@@ -416,7 +411,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
                     public void run() {
                         spinningDial.setAnimated(false);
 
-                        if(!interrupted) {
+                        if (!interrupted) {
                             // Document change events are no longer needed
                             pathField.getDocument().removeDocumentListener(TransferDestinationDialog.this);
 
@@ -427,17 +422,15 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
                         }
                     }
                 });
-            }
-            catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 LOGGER.trace("Interrupted", e);
-            }
-            catch(InvocationTargetException e) {
+            } catch (InvocationTargetException e) {
                 LOGGER.debug("Caught exception", e);
             }
 
             // Set the current thread to null
-            synchronized(TransferDestinationDialog.this) {
-                if(thread==this)        // This thread may have been interrupted already
+            synchronized (TransferDestinationDialog.this) {
+                if (thread == this)        // This thread may have been interrupted already
                     thread = null;
             }
         }
@@ -464,7 +457,9 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      */
     private class PathResolver extends Thread {
 
-        /** True if the thread has been interrupted */
+        /**
+         * True if the thread has been interrupted
+         */
         private boolean interrupted;
 
         @Override
@@ -480,14 +475,12 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             // Perform UI tasks in the AWT event thread
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    if(interrupted) {
+                    if (interrupted) {
                         dispose();
-                    }
-                    else if(isValid) {
+                    } else if (isValid) {
                         dispose();
                         startJob(resolvedDest);
-                    }
-                    else {
+                    } else {
                         showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
                         // Re-enable the OK button and path field so that a new path can be entered
                         okButton.setEnabled(true);
@@ -497,8 +490,8 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             });
 
             // Set the current thread to null
-            synchronized(TransferDestinationDialog.this) {
-                if(thread==this)        // This thread may have been interrupted already
+            synchronized (TransferDestinationDialog.this) {
+                if (thread == this)        // This thread may have been interrupted already
                     thread = null;
             }
         }

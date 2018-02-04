@@ -28,7 +28,7 @@ import java.io.PipedOutputStream;
  * {@link #setExternalFailure(java.io.IOException)} with an <code>IOException</code> that will be thrown by
  * read/skip/available methods thereafter. This method ensures that the <code>IOException</code> will be propagated
  * to any thread that is currently executing a read/skip/available method of this class.
- *
+ * <p>
  * <p>This class overcomes a limitation of <code>PipedInputStream</code> whose read/skip/available methods do not
  * throw an <code>IOException</code> when the stream is closed from another thread in the midst of their execution.
  * </p>
@@ -37,7 +37,9 @@ import java.io.PipedOutputStream;
  */
 public class FailSafePipedInputStream extends PipedInputStream {
 
-    /** An IOException to be thrown by read/skip/available methods */
+    /**
+     * An IOException to be thrown by read/skip/available methods
+     */
     private volatile IOException failure;
 
 
@@ -67,12 +69,11 @@ public class FailSafePipedInputStream extends PipedInputStream {
     public void setExternalFailure(IOException failure) {
         this.failure = failure;
 
-        if(failure!=null) {
+        if (failure != null) {
             // Close the PipedInputStream to have any other thread blocked in a read/skip/available return immediately
             try {
                 super.close();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Swallow the exception
             }
         }
@@ -84,7 +85,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
      * @throws java.io.IOException if an external failure has been registered
      */
     protected void checkExternalFailure() throws IOException {
-        if(failure!=null)
+        if (failure != null)
             throw failure;
     }
 

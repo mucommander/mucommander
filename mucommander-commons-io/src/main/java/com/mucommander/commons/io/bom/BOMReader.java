@@ -27,7 +27,7 @@ import java.io.UnsupportedEncodingException;
  * <code>BOMReader</code> is a <code>Reader</code> which provides support for Byte-Order Marks (BOM).
  * A BOM is a byte sequence found at the beginning of a Unicode text stream which indicates the encoding of the text
  * that follows.
- *
+ * <p>
  * <p>
  * This class uses a {@link BOMInputStream} for BOM handling and serves a dual purpose:<br>
  * 1) it allows to auto-detect the encoding when a BOM is present in the underlying stream and use it.<br>
@@ -35,8 +35,8 @@ import java.io.UnsupportedEncodingException;
  * the stream and never returned by the <code>read</code> methods.
  * </p>
  *
- * @see BOMInputStream
  * @author Maxence Bernard
+ * @see BOMInputStream
  */
 public class BOMReader extends InputStreamReader {
 
@@ -57,7 +57,7 @@ public class BOMReader extends InputStreamReader {
      * <code>InputStream</code> to auto-detect a potential {@link BOM} and use the associated encoding.
      * If no BOM is found at the beginning of the stream, the specified default encoding is assumed.
      *
-     * @param in the underlying InputStream
+     * @param in              the underlying InputStream
      * @param defaultEncoding the encoding used if the stream doesn't contain a BOM
      * @throws IOException if an error occurred while detecting the BOM or initializing this reader.
      */
@@ -69,12 +69,12 @@ public class BOMReader extends InputStreamReader {
      * Creates a new <code>BOMReader</code> using the given {@link BOMInputStream}. If the <code>BOMInputStream</code>
      * does not contain a {@link BOM}, the specified default encoding is assumed.
      *
-     * @param bomIn the underlying BOMInputStream
+     * @param bomIn           the underlying BOMInputStream
      * @param defaultEncoding the encoding used if the stream doesn't contain a BOM
      * @throws UnsupportedEncodingException if the encoding associated with the BOM or the default encoding is not
-     * supported by the Java runtime 
+     *                                      supported by the Java runtime
      */
     public BOMReader(BOMInputStream bomIn, String defaultEncoding) throws UnsupportedEncodingException {
-        super(bomIn, bomIn.getBOM()==null?defaultEncoding:bomIn.getBOM().getEncoding());
+        super(bomIn, bomIn.getBOM() == null ? defaultEncoding : bomIn.getBOM().getEncoding());
     }
 }

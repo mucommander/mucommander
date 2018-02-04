@@ -25,7 +25,7 @@ import java.io.InputStream;
  * <code>BOMInputStream</code> is an <code>InputStream</code> which provides support for Byte-Order Marks (BOM).
  * A BOM is a byte sequence found at the beginning of a Unicode text stream which indicates the encoding of the text
  * that follows.
- *
+ * <p>
  * <p>
  * This class serves a dual purpose:<br>
  * 1) it allows to detect a BOM in the underlying stream and determine the encoding used by the stream:
@@ -33,49 +33,59 @@ import java.io.InputStream;
  * 2) it allows to discard the BOM from a Unicode stream: the leading bytes corresponding to the BOM are swallowed by
  * the stream and never returned by the <code>read</code> methods.
  * </p>
- *
- *<p>
+ * <p>
+ * <p>
  * The following BOMs are supported by this class:
  * <ul>
- *  <li>{@link #UTF8_BOM UTF-8}</li>
- *  <li>{@link #UTF16_BE_BOM UTF-16 Big Endian}</li>
- *  <li>{@link #UTF16_LE_BOM UTF-16 Little Endian}</li>
- *  <li>{@link #UTF32_BE_BOM UTF-32 Big Endian}.</li>
- *  <li>{@link #UTF32_LE_BOM UTF-32 Little Endian}</li>
+ * <li>{@link #UTF8_BOM UTF-8}</li>
+ * <li>{@link #UTF16_BE_BOM UTF-16 Big Endian}</li>
+ * <li>{@link #UTF16_LE_BOM UTF-16 Little Endian}</li>
+ * <li>{@link #UTF32_BE_BOM UTF-32 Big Endian}.</li>
+ * <li>{@link #UTF32_LE_BOM UTF-32 Little Endian}</li>
  * </ul>
  * Note that UTF-32 encodings (both Little and Big Endians) are usually <b>not</b> supported by Java runtimes
  * out of the box.
  * <p>
  *
- * @see BOMReader
  * @author Maxence Bernard
+ * @see BOMReader
  */
 public class BOMInputStream extends InputStream implements BOMConstants {
 
-    /** The underlying InputStream that feeds bytes to this stream */
+    /**
+     * The underlying InputStream that feeds bytes to this stream
+     */
     private InputStream in;
 
-    /** Contains the BOM that was detected in the stream, null if none was found */
+    /**
+     * Contains the BOM that was detected in the stream, null if none was found
+     */
     private BOM bom;
 
-    /** Bytes that were swallowed by this stream when searching for a BOM, null if a BOM was found */
+    /**
+     * Bytes that were swallowed by this stream when searching for a BOM, null if a BOM was found
+     */
     private byte leadingBytes[];
 
-    /** Current offset within the {@link #leadingBytes} array */
+    /**
+     * Current offset within the {@link #leadingBytes} array
+     */
     private int leadingBytesOff;
 
     private byte oneByteBuf[];
 
-    /** Contains the max signature length of supported BOMs */
+    /**
+     * Contains the max signature length of supported BOMs
+     */
     private final static int MAX_BOM_LENGTH;
 
     static {
         // Calculates MAX_BOM_LENGTH
         int maxLen = SUPPORTED_BOMS[0].getSignature().length;
         int len;
-        for(int i=1; i<SUPPORTED_BOMS.length; i++) {
+        for (int i = 1; i < SUPPORTED_BOMS.length; i++) {
             len = SUPPORTED_BOMS[i].getSignature().length;
-            if(len>maxLen)
+            if (len > maxLen)
                 maxLen = len;
         }
 
@@ -96,10 +106,10 @@ public class BOMInputStream extends InputStream implements BOMConstants {
         byte bytes[] = new byte[MAX_BOM_LENGTH];
         int nbRead;
         int totalRead = 0;
-        while((nbRead=in.read(bytes, totalRead, MAX_BOM_LENGTH-totalRead))!=-1 && (totalRead+=nbRead)<MAX_BOM_LENGTH);
+        while ((nbRead = in.read(bytes, totalRead, MAX_BOM_LENGTH - totalRead)) != -1 && (totalRead += nbRead) < MAX_BOM_LENGTH) ;
 
         // Truncate the byte array if the stream ended before MAX_BOM_LENGTH
-        if(totalRead<MAX_BOM_LENGTH) {
+        if (totalRead < MAX_BOM_LENGTH) {
             byte tempBytes[] = new byte[totalRead];
             System.arraycopy(bytes, 0, tempBytes, 0, totalRead);
             bytes = tempBytes;
@@ -111,24 +121,23 @@ public class BOMInputStream extends InputStream implements BOMConstants {
         byte[] tempBomSig;
 
         // Looks for the best (longest) signature match
-        for(int i=0; i<SUPPORTED_BOMS.length; i++) {
+        for (int i = 0; i < SUPPORTED_BOMS.length; i++) {
             tempBom = SUPPORTED_BOMS[i];
             tempBomSig = tempBom.getSignature();
-            if(tempBomSig.length>bestMatchLength && startsWith(bytes, tempBomSig)) {
+            if (tempBomSig.length > bestMatchLength && startsWith(bytes, tempBomSig)) {
                 bestMatchIndex = i;
                 bestMatchLength = tempBomSig.length;
             }
         }
 
         // Keep the bytes that do not correspond to a BOM to have the read methods return them
-        if(bestMatchIndex!=-1) {
+        if (bestMatchIndex != -1) {
             bom = SUPPORTED_BOMS[bestMatchIndex];
-            if(bestMatchLength<MAX_BOM_LENGTH) {
+            if (bestMatchLength < MAX_BOM_LENGTH) {
                 leadingBytes = bytes;
                 leadingBytesOff = bestMatchLength;
             }
-        }
-        else {
+        } else {
             leadingBytes = bytes;
             leadingBytesOff = 0;
         }
@@ -144,11 +153,11 @@ public class BOMInputStream extends InputStream implements BOMConstants {
     private static boolean startsWith(byte b1[], byte b2[]) {
         int b1Len = b1.length;
         int b2Len = b2.length;
-        if(b1Len<b2Len)
+        if (b1Len < b2Len)
             return false;
 
-        for(int i=0; i<b2Len; i++) {
-            if(b2[i]!= b1[i])
+        for (int i = 0; i < b2Len; i++) {
+            if (b2[i] != b1[i])
                 return false;
         }
 
@@ -172,12 +181,12 @@ public class BOMInputStream extends InputStream implements BOMConstants {
 
     @Override
     public int read() throws IOException {
-        if(oneByteBuf==null)
+        if (oneByteBuf == null)
             oneByteBuf = new byte[1];
 
         int ret = read(oneByteBuf, 0, 1);
 
-        return ret==-1?-1:oneByteBuf[0];
+        return ret == -1 ? -1 : oneByteBuf[0];
     }
 
     @Override
@@ -187,10 +196,10 @@ public class BOMInputStream extends InputStream implements BOMConstants {
 
     @Override
     public int read(byte b[], int off, int len) throws IOException {
-        if(leadingBytes==null || leadingBytesOff>=leadingBytes.length)
+        if (leadingBytes == null || leadingBytesOff >= leadingBytes.length)
             return in.read(b, off, len);
 
-        int nbBytes = Math.min(leadingBytes.length-leadingBytesOff, len);
+        int nbBytes = Math.min(leadingBytes.length - leadingBytesOff, len);
         System.arraycopy(leadingBytes, leadingBytesOff, b, off, nbBytes);
 
         leadingBytesOff += nbBytes;

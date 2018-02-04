@@ -36,9 +36,9 @@ import java.awt.event.ActionListener;
 public class BatchRenameConfirmationDialog extends FocusDialog implements ActionListener {
 
     private JButton btnRename;
-    
+
     private boolean proceedWithRename = false;
- 
+
     public BatchRenameConfirmationDialog(MainFrame mainFrame, FileSet files, int changed, int unchanged) {
         super(mainFrame, ActionProperties.getActionLabel(BatchRenameAction.Descriptor.ACTION_ID), mainFrame);
 
@@ -56,24 +56,24 @@ public class BatchRenameConfirmationDialog extends FocusDialog implements Action
 
         // Call dispose() when dialog is closed
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        
+
         // Size dialog and show it to the screen
         setResizable(false);
         showDialog();
     }
-    
-    
+
+
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==btnRename) {
+        if (e.getSource() == btnRename) {
             proceedWithRename = true;
         }
         dispose();
     }
-    
+
     public boolean isProceedWithRename() {
         return proceedWithRename;
     }

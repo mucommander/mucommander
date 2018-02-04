@@ -19,15 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.FlowLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archiver.Archiver;
 import com.mucommander.commons.file.util.FileSet;
@@ -42,6 +33,11 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 
 /**
  * This dialog allows the user to pack marked files to an archive file of a selected format (Zip, TAR, ...)
@@ -53,13 +49,17 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
 
     private JComboBox formatsComboBox;
     private int formats[];
-	
+
     private JTextArea commentArea;
 
-    /** Used to keep track of the last selected archive format. */
+    /**
+     * Used to keep track of the last selected archive format.
+     */
     private int lastFormatIndex;
 
-    /** Last archive format used (Zip initially), selected by default when this dialog is created */
+    /**
+     * Last archive format used (Zip initially), selected by default when this dialog is created
+     */
     private static int lastFormat = Archiver.ZIP_FORMAT;
 
 
@@ -68,13 +68,13 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
 
         // Retrieve available formats for single file or many file archives
         int nbFiles = files.size();
-        this.formats = Archiver.getFormats(nbFiles>1 || (nbFiles>0 && files.elementAt(0).isDirectory()));
+        this.formats = Archiver.getFormats(nbFiles > 1 || (nbFiles > 0 && files.elementAt(0).isDirectory()));
         int nbFormats = formats.length;
 
-        int initialFormat = formats[0];		// this value will only be used if last format is not available
-        int initialFormatIndex = 0;			// this value will only be used if last format is not available
-        for(int i=0; i<nbFormats; i++) {
-            if(formats[i]==lastFormat) {
+        int initialFormat = formats[0];        // this value will only be used if last format is not available
+        int initialFormatIndex = 0;            // this value will only be used if last format is not available
+        for (int i = 0; i < nbFormats; i++) {
+            if (formats[i] == lastFormat) {
                 initialFormat = formats[i];
                 initialFormatIndex = i;
                 break;
@@ -86,28 +86,28 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         // Archive formats combo box
 
         JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        tempPanel.add(new JLabel(Translator.get("pack_dialog.archive_format")));		
+        tempPanel.add(new JLabel(Translator.get("pack_dialog.archive_format")));
         this.formatsComboBox = new JComboBox();
-        for(int i=0; i<nbFormats; i++)
+        for (int i = 0; i < nbFormats; i++)
             formatsComboBox.addItem(Archiver.getFormatName(formats[i]));
 
         formatsComboBox.setSelectedIndex(lastFormatIndex);
-		
+
         formatsComboBox.addItemListener(this);
         tempPanel.add(formatsComboBox);
 
         YBoxPanel mainPanel = getMainPanel();
-        mainPanel.add(tempPanel);		
+        mainPanel.add(tempPanel);
         mainPanel.addSpace(10);
-		
+
         // Comment area, enabled only if selected archive format has comment support
-		
+
         mainPanel.add(new JLabel(Translator.get("comment")));
         commentArea = new JTextArea();
         commentArea.setRows(4);
         mainPanel.add(commentArea);
     }
-	
+
 
     //////////////////////////////////////////////
     // TransferDestinationDialog implementation //
@@ -121,15 +121,14 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         // Computes the archive's default name:
         // - if it only contains one file, uses that file's name.
         // - if it contains more than one file, uses the FileSet's parent folder's name.
-        if(files.size() == 1) {
+        if (files.size() == 1) {
             file = files.elementAt(0);
             fileName = file.isDirectory() && !DesktopManager.isApplication(file)
-                    ?file.getName()
-                    :file.getNameWithoutExtension();
-        }
-        else {
+                    ? file.getName()
+                    : file.getNameWithoutExtension();
+        } else {
             file = files.getBaseFolder();
-            fileName = file.isRoot()?"":DesktopManager.isApplication(file)?file.getNameWithoutExtension():file.getName();
+            fileName = file.isRoot() ? "" : DesktopManager.isApplication(file) ? file.getNameWithoutExtension() : file.getName();
         }
 
         return new PathFieldContent(initialPath + fileName + "." + Archiver.getFormatExtension(lastFormat), initialPath.length(), initialPath.length() + fileName.length());
@@ -140,7 +139,7 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         // Remember last format used, for next time this dialog is invoked
         lastFormat = formats[formatsComboBox.getSelectedIndex()];
 
-        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null);
+        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat) ? commentArea.getText() : null);
     }
 
     @Override
@@ -155,11 +154,11 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
 
     @Override
     protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
-        if(resolvedDest==null)
+        if (resolvedDest == null)
             return false;
 
         int destType = resolvedDest.getDestinationType();
-        return destType==PathUtils.ResolvedDestination.NEW_FILE || destType==PathUtils.ResolvedDestination.EXISTING_FILE;
+        return destType == PathUtils.ResolvedDestination.NEW_FILE || destType == PathUtils.ResolvedDestination.EXISTING_FILE;
     }
 
 
@@ -173,24 +172,24 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         FilePathField pathField = getPathField();
 
         // Updates the GUI if, and only if, the format selection has changed.
-        if(lastFormatIndex != (newFormatIndex = formatsComboBox.getSelectedIndex())) {
+        if (lastFormatIndex != (newFormatIndex = formatsComboBox.getSelectedIndex())) {
 
             String fileName = pathField.getText();  // Name of the destination archive file.
-            String oldFormatExtension = Archiver.getFormatExtension(formats[lastFormatIndex]);	// Old/current format's extension
-            if(fileName.endsWith("." + oldFormatExtension)) {
+            String oldFormatExtension = Archiver.getFormatExtension(formats[lastFormatIndex]);    // Old/current format's extension
+            if (fileName.endsWith("." + oldFormatExtension)) {
                 int selectionStart;
                 int selectionEnd;
 
                 // Saves the old selection.
                 selectionStart = pathField.getSelectionStart();
-                selectionEnd   = pathField.getSelectionEnd();
+                selectionEnd = pathField.getSelectionEnd();
 
                 // Computes the new file name.
                 fileName = fileName.substring(0, fileName.length() - oldFormatExtension.length()) +
-                    Archiver.getFormatExtension(formats[newFormatIndex]);
+                        Archiver.getFormatExtension(formats[newFormatIndex]);
 
                 // Makes sure that the selection stays somewhat coherent.
-                if(selectionEnd == pathField.getText().length())
+                if (selectionEnd == pathField.getText().length())
                     selectionEnd = fileName.length();
 
                 // Resets the file path field.

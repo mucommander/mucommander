@@ -34,24 +34,30 @@ import java.io.InputStreamReader;
 
 /**
  * Dialog used to display muCommander's license file.
+ *
  * @author Nicolas Rinaudo
  */
 public class LicenseDialog extends FocusDialog implements ActionListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LicenseDialog.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(LicenseDialog.class);
+
     // - UI components ----------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Button used to close the dialog. */
-    private JButton     okButton;
-    /** Panel in which to display the license. */
+    /**
+     * Button used to close the dialog.
+     */
+    private JButton okButton;
+    /**
+     * Panel in which to display the license.
+     */
     private JScrollPane licensePanel;
-
 
 
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Creates a new license dialog centered on the specified window.
+     *
      * @param dialog window on which to center the new dialog.
      */
     public LicenseDialog(Dialog dialog) {
@@ -61,6 +67,7 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
 
     /**
      * Creates a new license dialog centered on the specified window.
+     *
      * @param frame window on which to center the new dialog.
      */
     public LicenseDialog(Frame frame) {
@@ -71,8 +78,10 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
 
     // - UI initialisation ------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Creates the 'ok' button panel.
+     *
      * @return the 'ok' button panel.
      */
     private JPanel createButtonPanel() {
@@ -90,6 +99,7 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
 
     /**
      * Creates the panel in which the license text is displayed.
+     *
      * @return the panel in which the license text is displayed.
      */
     private JScrollPane createLicensePanel() {
@@ -109,7 +119,7 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
 
         // Sets the scroll policy and preferred dimensions.
         licensePanel = new JScrollPane(license, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        licensePanel.getViewport().setPreferredSize(new Dimension((int)license.getPreferredSize().getWidth(), 400));
+        licensePanel.getViewport().setPreferredSize(new Dimension((int) license.getPreferredSize().getWidth(), 400));
 
         return licensePanel;
     }
@@ -118,7 +128,7 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
      * Initialises the dialog's UI.
      */
     private void initUI() {
-        Container   contentPane;
+        Container contentPane;
 
         contentPane = getContentPane();
 
@@ -131,54 +141,59 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
         getRootPane().setDefaultButton(okButton);
 
         // Makes sure the scroll pane is initialises on its first line.
-        SwingUtilities.invokeLater(new Runnable() {public void run() {licensePanel.getViewport().setViewPosition(new Point(0,0));}});
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                licensePanel.getViewport().setViewPosition(new Point(0, 0));
+            }
+        });
         pack();
     }
 
 
-
     // - IO code ----------------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Loads the license text.
+     *
      * @return the license text.
      */
     private String getLicenseText() {
-        StringBuilder     text;   // Stores the license text.
-        char[]            buffer; // Buffer for each chunk of data read from the license file.
-        int               count;  // Number of characters read from the last read operation.
+        StringBuilder text;   // Stores the license text.
+        char[] buffer; // Buffer for each chunk of data read from the license file.
+        int count;  // Number of characters read from the last read operation.
         InputStreamReader in;     // Stream on the license file.
 
-        in   = null;
+        in = null;
         text = new StringBuilder();
         try {
-            in     = new InputStreamReader(LicenseDialog.class.getResourceAsStream(RuntimeConstants.LICENSE));
+            in = new InputStreamReader(LicenseDialog.class.getResourceAsStream(RuntimeConstants.LICENSE));
             buffer = new char[2048];
 
-            while((count = in.read(buffer)) != -1)
+            while ((count = in.read(buffer)) != -1)
                 text.append(buffer, 0, count);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.warn("Failed to read license file", e);
-        }
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                }
             }
         }
         return text.toString();
     }
 
 
-
     // - Listener code ----------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * If the event originates from the OK button, closes the window.
      */
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == okButton)
+        if (e.getSource() == okButton)
             dispose();
     }
 }

@@ -33,18 +33,24 @@ import java.util.WeakHashMap;
  * The menu contains a checkbox menu item for each of the preferred encodings, and a special item that invokes a dialog
  * that allows the list of preferred encodings to be customized.
  *
- * @see EncodingPreferences
  * @author Maxence Bernard
+ * @see EncodingPreferences
  */
 public class EncodingMenu extends JMenu {
 
-    /** Contains all registered encoding listeners, stored as weak references */
+    /**
+     * Contains all registered encoding listeners, stored as weak references
+     */
     protected final WeakHashMap<EncodingListener, ?> listeners = new WeakHashMap<EncodingListener, Object>();
 
-    /** the dialog/frame that owns this component */
+    /**
+     * the dialog/frame that owns this component
+     */
     protected DialogOwner dialogOwner;
 
-    /** The encoding that is currently selected, may be null */
+    /**
+     * The encoding that is currently selected, may be null
+     */
     protected String selectedEncoding;
 
 
@@ -61,7 +67,7 @@ public class EncodingMenu extends JMenu {
      * Creates a new <code>EncodingMenu</code> with the specified encoding initially selected (may be <code>null</code>).
      * If the encoding is not one of the preferred encodings, it is added as the first encoding in the menu.
      *
-     * @param dialogOwner the frame that owns this menu
+     * @param dialogOwner      the frame that owns this menu
      * @param selectedEncoding the encoding initially selected, <code>null</code> for none
      */
     public EncodingMenu(final DialogOwner dialogOwner, String selectedEncoding) {
@@ -82,26 +88,26 @@ public class EncodingMenu extends JMenu {
         java.util.List<String> encodings = EncodingPreferences.getPreferredEncodings();
 
         // Add the current encoding if it is not in the list of preferred encodings
-        if(selectedEncoding!=null && !encodings.contains(selectedEncoding))
+        if (selectedEncoding != null && !encodings.contains(selectedEncoding))
             encodings.add(0, selectedEncoding);
 
         // Add preferred encodings to the menu
         int nbEncodings = encodings.size();
         JCheckBoxMenuItem item;
         ButtonGroup group = new ButtonGroup();
-        for(String enc: encodings) {
+        for (String enc : encodings) {
             item = new JCheckBoxMenuItem(enc);
 
             // Select the current encoding, if there is one
-            if(selectedEncoding!=null && selectedEncoding.equals(enc))
+            if (selectedEncoding != null && selectedEncoding.equals(enc))
                 item.setSelected(true);
 
             // Listen to checkbox actions
             item.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String oldEncoding = selectedEncoding;
-                    selectedEncoding = ((JCheckBoxMenuItem)e.getSource()).getText();
-                    if(!oldEncoding.equals(selectedEncoding)) {
+                    selectedEncoding = ((JCheckBoxMenuItem) e.getSource()).getText();
+                    if (!oldEncoding.equals(selectedEncoding)) {
                         // Notify listeners of the new encoding
                         fireEncodingListener(oldEncoding, EncodingMenu.this.selectedEncoding);
                     }
@@ -115,14 +121,14 @@ public class EncodingMenu extends JMenu {
         add(new JSeparator());
 
         // 'Customize' menu item
-        JMenuItem customizeItem = new JMenuItem(Translator.get("customize")+"...");
+        JMenuItem customizeItem = new JMenuItem(Translator.get("customize") + "...");
         customizeItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Window owner = dialogOwner.getOwner();
-                if(owner instanceof Frame)
-                    new PreferredEncodingsDialog((Frame)owner).showDialog();
+                if (owner instanceof Frame)
+                    new PreferredEncodingsDialog((Frame) owner).showDialog();
                 else
-                    new PreferredEncodingsDialog((Dialog)owner).showDialog();
+                    new PreferredEncodingsDialog((Dialog) owner).showDialog();
 
                 removeAll();
                 populateMenu();
@@ -146,19 +152,19 @@ public class EncodingMenu extends JMenu {
     //////////////////////
 
     public void addEncodingListener(EncodingListener listener) {
-        synchronized(listeners) {
+        synchronized (listeners) {
             listeners.put(listener, null);
         }
     }
 
     public void removeEncodingListener(EncodingListener listener) {
-        synchronized(listeners) {
+        synchronized (listeners) {
             listeners.remove(listener);
         }
     }
 
     protected void fireEncodingListener(String oldEncoding, String newEncoding) {
-        synchronized(listeners) {
+        synchronized (listeners) {
             for (EncodingListener listener : listeners.keySet())
                 listener.encodingChanged(this, oldEncoding, newEncoding);
         }

@@ -19,12 +19,6 @@
 
 package com.mucommander.job.impl;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
@@ -39,6 +33,11 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 /**
@@ -47,8 +46,8 @@ import com.mucommander.ui.main.MainFrame;
  * @author Maxence Bernard
  */
 public class MkdirJob extends FileJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MkdirJob.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(MkdirJob.class);
+
     private AbstractFile destFolder;
 
     private boolean mkfileMode;
@@ -63,7 +62,7 @@ public class MkdirJob extends FileJob {
 
         this.destFolder = fileSet.getBaseFolder();
         this.mkfileMode = false;
-		
+
         setAutoUnmark(false);
     }
 
@@ -98,17 +97,17 @@ public class MkdirJob extends FileJob {
 
         do {
             try {
-                LOGGER.debug("Creating "+file);
+                LOGGER.debug("Creating " + file);
 
                 // Check for file collisions, i.e. if the file already exists in the destination
                 int collision = FileCollisionChecker.checkForCollision(null, file);
-                if(collision!=FileCollisionChecker.NO_COLLOSION) {
+                if (collision != FileCollisionChecker.NO_COLLOSION) {
                     // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                     // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
                     int choice = waitForUserResponse(new FileCollisionDialog(getMainFrame(), getMainFrame(), collision, null, file, false, false));
 
                     // Overwrite file
-                    if (choice==FileCollisionDialog.OVERWRITE_ACTION) {
+                    if (choice == FileCollisionDialog.OVERWRITE_ACTION) {
                         // Delete the file
                         file.delete();
                     }
@@ -121,9 +120,9 @@ public class MkdirJob extends FileJob {
                 }
 
                 // Create file
-                if(mkfileMode) {
+                if (mkfileMode) {
                     // Use mkfile
-                    if(allocateSpace==-1) {
+                    if (allocateSpace == -1) {
                         file.mkfile();
                     }
                     // Allocate the requested number of bytes
@@ -131,9 +130,9 @@ public class MkdirJob extends FileJob {
                         OutputStream mkfileOut = null;
                         try {
                             // using RandomAccessOutputStream if we can have one
-                            if(file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
+                            if (file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
                                 mkfileOut = file.getRandomAccessOutputStream();
-                                ((RandomAccessOutputStream)mkfileOut).setLength(allocateSpace);
+                                ((RandomAccessOutputStream) mkfileOut).setLength(allocateSpace);
                             }
                             // manually otherwise
                             else {
@@ -146,21 +145,21 @@ public class MkdirJob extends FileJob {
                                 try {
                                     long remaining = allocateSpace;
                                     int nbWrite;
-                                    while (remaining>0 && getState() != FileJobState.INTERRUPTED) {
-                                        nbWrite = (int)(remaining>bufferSize?bufferSize:remaining);
+                                    while (remaining > 0 && getState() != FileJobState.INTERRUPTED) {
+                                        nbWrite = (int) (remaining > bufferSize ? bufferSize : remaining);
                                         mkfileOut.write(buffer, 0, nbWrite);
                                         remaining -= nbWrite;
                                     }
-                                }
-                                finally {
+                                } finally {
                                     BufferPool.releaseByteArray(buffer);
                                 }
                             }
-                        }
-                        finally {
-                            if(mkfileOut!=null)
-                                try { mkfileOut.close(); }
-                                catch(IOException e) {}
+                        } finally {
+                            if (mkfileOut != null)
+                                try {
+                                    mkfileOut.close();
+                                } catch (IOException e) {
+                                }
                         }
                     }
                 }
@@ -176,9 +175,8 @@ public class MkdirJob extends FileJob {
                 // Select newly created file when job is finished
                 selectFileWhenFinished(file);
 
-                return true;		// Return Success
-            }
-            catch(IOException e) {
+                return true;        // Return Success
+            } catch (IOException e) {
                 // In mkfile mode, interrupting the job will close the OutputStream and cause an IOException to be
                 // thrown, this is normal behavior
                 if (mkfileMode && getState() == FileJobState.INTERRUPTED)
@@ -187,20 +185,20 @@ public class MkdirJob extends FileJob {
                 LOGGER.debug("IOException caught", e);
 
                 int action = showErrorDialog(
-                     Translator.get("error"),
-                     Translator.get(mkfileMode?"cannot_write_file":"cannot_create_folder", file.getAbsolutePath()),
-                     new String[]{FileJobAction.RETRY_TEXT, FileJobAction.CANCEL_TEXT},
-                     new int[]{FileJobAction.RETRY, FileJobAction.CANCEL}
+                        Translator.get("error"),
+                        Translator.get(mkfileMode ? "cannot_write_file" : "cannot_create_folder", file.getAbsolutePath()),
+                        new String[]{FileJobAction.RETRY_TEXT, FileJobAction.CANCEL_TEXT},
+                        new int[]{FileJobAction.RETRY, FileJobAction.CANCEL}
                 );
                 // Retry (loop)
-                if(action==FileJobAction.RETRY)
+                if (action == FileJobAction.RETRY)
                     continue;
-				
+
                 // Cancel action
-                return false;		// Return Failure
-            }    
+                return false;        // Return Failure
+            }
         }
-        while(true);
+        while (true);
     }
 
     /**

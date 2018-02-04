@@ -28,7 +28,7 @@ package com.mucommander.bookmark;
  * @author Maxence Bernard
  */
 public interface BookmarkListener {
-	
+
     /**
      * This method is invoked when a bookmark has been added, removed or modified.
      */

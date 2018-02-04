@@ -34,7 +34,7 @@ import java.awt.event.ComponentEvent;
 public class MultiLineLabel extends JTextArea {
 
     /**
-     * Equivalent to calling {@link #MultiLineLabel(String, boolean)} with auto-repack enabled. 
+     * Equivalent to calling {@link #MultiLineLabel(String, boolean)} with auto-repack enabled.
      *
      * @param text the initial label's text
      */
@@ -54,14 +54,14 @@ public class MultiLineLabel extends JTextArea {
      * {@link #setRows(int)} or {@link #setColumns(int)}.</br>
      * For reference, here are links to the afore-mentionned issue:
      * <ul>
-     *  <li>http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4924163</li>
-     *  <li>http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4446522</li>
+     * <li>http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4924163</li>
+     * <li>http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4446522</li>
      * </ul>
      * </p>
      *
-     * @param text the initial label's text
+     * @param text       the initial label's text
      * @param autoRepack if <code>true</code>, an extra call to the <code>pack()</code> method of the Window that
-     * contains this component will be automatically issued after this component has first been layed out.
+     *                   contains this component will be automatically issued after this component has first been layed out.
      */
     public MultiLineLabel(String text, boolean autoRepack) {
         super(text);
@@ -75,13 +75,13 @@ public class MultiLineLabel extends JTextArea {
         setForeground((Color) UIManager.get("Label.foreground"));
         setFont((Font) UIManager.get("Label.font"));
 
-        if(autoRepack) {
+        if (autoRepack) {
             addComponentListener(new ComponentAdapter() {
                 @Override
                 public void componentResized(ComponentEvent e) {
                     Container tla = getTopLevelAncestor();
-                    if(tla instanceof Window)
-                        ((Window)tla).pack();
+                    if (tla instanceof Window)
+                        ((Window) tla).pack();
 
                     removeComponentListener(this);
                 }

@@ -18,17 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action transfers focus to the location field of the currently active FolderPanel to edit or type in
@@ -38,7 +33,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ChangeLocationAction extends ActiveTabAction {
 
-    public ChangeLocationAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ChangeLocationAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -51,33 +46,41 @@ public class ChangeLocationAction extends ActiveTabAction {
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
     }
-    
+
     @Override
     public void performAction() {
         mainFrame.getActivePanel().changeCurrentLocation();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ChangeLocationAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ChangeLocationAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ChangeLocation";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "ChangeLocation";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

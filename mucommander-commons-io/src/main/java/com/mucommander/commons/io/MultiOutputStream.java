@@ -33,7 +33,9 @@ import java.util.Vector;
  */
 public class MultiOutputStream extends OutputStream {
 
-    /** Registered OutputStreams */
+    /**
+     * Registered OutputStreams
+     */
     protected Vector<OutputStream> streams = new Vector<OutputStream>();
 
     /**
@@ -98,7 +100,7 @@ public class MultiOutputStream extends OutputStream {
     @Override
     public synchronized void write(int b) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
-        while(elements.hasMoreElements())
+        while (elements.hasMoreElements())
             elements.nextElement().write(b);
     }
 
@@ -112,7 +114,7 @@ public class MultiOutputStream extends OutputStream {
     @Override
     public synchronized void write(byte b[], int off, int len) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
-        while(elements.hasMoreElements())
+        while (elements.hasMoreElements())
             elements.nextElement().write(b, off, len);
     }
 
@@ -126,7 +128,7 @@ public class MultiOutputStream extends OutputStream {
     @Override
     public synchronized void write(byte b[]) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
-        while(elements.hasMoreElements())
+        while (elements.hasMoreElements())
             elements.nextElement().write(b);
     }
 
@@ -140,7 +142,7 @@ public class MultiOutputStream extends OutputStream {
     @Override
     public synchronized void flush() throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
-        while(elements.hasMoreElements())
+        while (elements.hasMoreElements())
             elements.nextElement().flush();
     }
 
@@ -154,7 +156,7 @@ public class MultiOutputStream extends OutputStream {
     @Override
     public void close() throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
-        while(elements.hasMoreElements())
+        while (elements.hasMoreElements())
             elements.nextElement().close();
     }
 }

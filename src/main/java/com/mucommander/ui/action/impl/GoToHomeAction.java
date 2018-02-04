@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.Map;
 
 /**
  * This action changes the current folder of the currently active FolderPanel to the user home folder.
@@ -39,10 +33,10 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class GoToHomeAction extends ActiveTabAction {
 
-    public GoToHomeAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoToHomeAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-    
+
     /**
      * Enables or disables this action based on the currently active folder's
      * current tab is not locked, this action will be enabled, if not it will be disabled.
@@ -56,31 +50,39 @@ public class GoToHomeAction extends ActiveTabAction {
     public void performAction() {
         // Changes the current folder to make it the user home folder
         AbstractFile homeFolder = LocalFile.getUserHome();
-        if(homeFolder!=null)
+        if (homeFolder != null)
             mainFrame.getActivePanel().tryChangeCurrentFolder(homeFolder);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new GoToHomeAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new GoToHomeAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "GoToHome";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "GoToHome";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

@@ -18,7 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
@@ -36,10 +39,12 @@ import java.util.Map;
  */
 public class GoToDocumentationAction extends OpenURLInBrowserAction implements PropertyChangeListener {
 
-    /** Key to the topic property */
+    /**
+     * Key to the topic property
+     */
     public final static String TOPIC_PROPERTY_KEY = "topic";
 
-    public GoToDocumentationAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoToDocumentationAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, "help.png"));
@@ -58,11 +63,11 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
      */
     private void updateURL() {
         String url = com.mucommander.RuntimeConstants.DOCUMENTATION_URL;
-        String topic = (String)getValue(TOPIC_PROPERTY_KEY);
+        String topic = (String) getValue(TOPIC_PROPERTY_KEY);
 
         // If there is a topic, append it to the URL
-        if(topic!=null) {
-            if(url.endsWith("/"))
+        if (topic != null) {
+            if (url.endsWith("/"))
                 url += "/";
 
             url += topic;
@@ -78,27 +83,35 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
 
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
 
-        if(propertyChangeEvent.getPropertyName().equals(TOPIC_PROPERTY_KEY)) {
+        if (propertyChangeEvent.getPropertyName().equals(TOPIC_PROPERTY_KEY)) {
             updateURL();
         }
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new GoToDocumentationAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new GoToDocumentationAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "GoToDocumentation";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "GoToDocumentation";
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.MISC;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

@@ -34,14 +34,16 @@ class CommandBrowse extends UrlOperation {
     // - Desktop operation implementation --------------------------------
     // -------------------------------------------------------------------
     @Override
-    public boolean isAvailable() {return CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS) != null;}
+    public boolean isAvailable() {
+        return CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS) != null;
+    }
 
     @Override
     public void execute(URL url) throws IOException {
-        Command      command;
+        Command command;
         AbstractFile target;
 
-        if((command = CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS)) == null)
+        if ((command = CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS)) == null)
             throw new UnsupportedOperationException();
 
         target = FileFactory.getFile(url.toString());
@@ -50,8 +52,11 @@ class CommandBrowse extends UrlOperation {
 
     /**
      * Returns the operation's name.
+     *
      * @return the operation's name.
      */
     @Override
-    public String getName() {return "openURL bridge";}
+    public String getName() {
+        return "openURL bridge";
+    }
 }

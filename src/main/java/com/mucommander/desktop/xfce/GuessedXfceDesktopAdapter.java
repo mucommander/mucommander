@@ -23,18 +23,21 @@ import com.mucommander.process.ProcessRunner;
 /**
  * 'Guessed' desktop adapter for Xfce. The availability of this desktop depends on the presence of the
  * <code>exo-open</code> command.
- * 
+ *
  * @author Arik Hadas
  */
 public class GuessedXfceDesktopAdapter extends XfceDesktopAdapter {
-	public String toString() {return "Xfce Desktop (guessed)";}
+    public String toString() {
+        return "Xfce Desktop (guessed)";
+    }
 
     @Override
     public boolean isAvailable() {
         try {
             ProcessRunner.execute("exo-open");
             return true;
+        } catch (Exception e) {
+            return false;
         }
-        catch(Exception e) {return false;}
     }
 }

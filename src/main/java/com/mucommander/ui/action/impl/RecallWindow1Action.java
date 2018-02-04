@@ -18,29 +18,29 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
+import java.util.Map;
+
 /**
- * Recalls window number 1 (brings it to the front). 
+ * Recalls window number 1 (brings it to the front).
  *
  * @author Maxence Bernard
  */
 public class RecallWindow1Action extends RecallWindowAction {
 
-    public RecallWindow1Action(MainFrame mainFrame, Map<String,Object> properties) {
+    public RecallWindow1Action(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, 1);
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new RecallWindow1Action(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new RecallWindow1Action(mainFrame, properties);
+        }
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RecallWindow1Action extends RecallWindowAction {
     }
 
     public static class Descriptor extends RecallWindowAction.Descriptor {
-        public static final String ACTION_ID = RecallWindowAction.Descriptor.ACTION_ID+"1";
+        public static final String ACTION_ID = RecallWindowAction.Descriptor.ACTION_ID + "1";
 
         public Descriptor() {
             super(1);

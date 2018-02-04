@@ -18,29 +18,24 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
-
 /**
  * Close the current selected tab
- * 
+ *
  * @author Arik Hadas
  */
 public class CloseTabAction extends ActiveTabAction {
 
-    public CloseTabAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CloseTabAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-    
+
     /**
      * Enables or disables this action based on the currently active folder's
      * current tab is not locked and is not the only tab in the panel,
@@ -49,36 +44,44 @@ public class CloseTabAction extends ActiveTabAction {
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
-        		    mainFrame.getActivePanel().getTabs().getTabsCount() > 1);
+                mainFrame.getActivePanel().getTabs().getTabsCount() > 1);
     }
 
     @Override
     public void performAction() {
         // Changes the current folder to make it the user home folder
-    	mainFrame.getActivePanel().getTabs().closeCurrentTab();
+        mainFrame.getActivePanel().getTabs().closeCurrentTab();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new CloseTabAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new CloseTabAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "CloseTab";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "CloseTab";
 
-		public ActionCategory getCategory() { return ActionCategory.TAB; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.TAB;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

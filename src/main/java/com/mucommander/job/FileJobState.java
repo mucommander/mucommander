@@ -24,14 +24,24 @@ package com.mucommander.job;
  * @author Arik Hadas
  */
 public enum FileJobState {
-	/** Indicates that this job has not started yet, this is a temporary state */
-	NOT_STARTED, 
-	/** Indicates that this job is currently processing files, this is a temporary state */
-	RUNNING,
-	/** Indicates that this job is currently paused, waiting for user response, this is a temporary state */
-	PAUSED,
-	/** Indicates that this job has been interrupted by the end user, this is a permanent state */
-	INTERRUPTED,
-	/** Indicates that this job has naturally finished (i.e. without being interrupted), this is a permanent state */
-	FINISHED
+    /**
+     * Indicates that this job has not started yet, this is a temporary state
+     */
+    NOT_STARTED,
+    /**
+     * Indicates that this job is currently processing files, this is a temporary state
+     */
+    RUNNING,
+    /**
+     * Indicates that this job is currently paused, waiting for user response, this is a temporary state
+     */
+    PAUSED,
+    /**
+     * Indicates that this job has been interrupted by the end user, this is a permanent state
+     */
+    INTERRUPTED,
+    /**
+     * Indicates that this job has naturally finished (i.e. without being interrupted), this is a permanent state
+     */
+    FINISHED
 }

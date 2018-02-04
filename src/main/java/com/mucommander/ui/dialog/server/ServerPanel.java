@@ -34,7 +34,7 @@ import java.net.MalformedURLException;
 
 /**
  * This abstract class represents a panel that helps the user initiate a connection to a servers using a certain file
- * protocol. This class is agnostic with respect to the file protocol used -- subclasses implement a specific file 
+ * protocol. This class is agnostic with respect to the file protocol used -- subclasses implement a specific file
  * protocol.
  *
  * @author Maxence Bernard
@@ -43,17 +43,17 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
 
     protected ServerConnectDialog dialog;
     protected MainFrame mainFrame;
-	
-	
+
+
     protected ServerPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
         // Add a 10-pixel gap label and text component
         super(10);
-		
+
         this.dialog = dialog;
         this.mainFrame = mainFrame;
     }
-	
-	
+
+
     @Override
     public Insets getInsets() {
         return new Insets(8, 6, 8, 6);
@@ -72,7 +72,7 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
         spinner.setEditor(editor);
 
         // Any changes made to the spinner will update the URL label
-        spinner.addChangeListener(new ChangeListener(){
+        spinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 dialog.updateURLLabel();
             }
@@ -80,10 +80,10 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
 
         return spinner;
     }
-	
+
     protected void addTextFieldListeners(JTextField textField, boolean updateLabel) {
         textField.addActionListener(dialog);
-        if(updateLabel) {
+        if (updateLabel) {
             textField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     dialog.updateURLLabel();
@@ -105,7 +105,7 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
     // Abstract methoods //
     ///////////////////////
 
-    /** 
+    /**
      * Returns the current server URL represented by this panel, <code>null</code> if it is not available.
      * This method may be called at any time by {@link ServerConnectDialog}.
      *

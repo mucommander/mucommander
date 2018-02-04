@@ -28,14 +28,18 @@ package com.mucommander.desktop;
  * If the application needs to pass through other types of exceptions, it must wrap them in a
  * <code>DesktopInitialisationException</code> or an exception derived from it.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class DesktopInitialisationException extends Exception {
     /**
      * Creates a new desktop initialisation exception.
+     *
      * @param message the error message.
      */
-    public DesktopInitialisationException(String message) {super(message);}
+    public DesktopInitialisationException(String message) {
+        super(message);
+    }
 
 
     /**
@@ -44,17 +48,23 @@ public class DesktopInitialisationException extends Exception {
      * The existing exception will be embedded in the new one, and its message will
      * become the default message for the <code>DesktopInitialisationException</code>.
      * </p>
+     *
      * @param cause the exception to be wrapped in a <code>DesktopInitialisationException</code>.
      */
-    public DesktopInitialisationException(Throwable cause) {super(cause);}
+    public DesktopInitialisationException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * Creates a new desktop initialisation exception from an existing exception.
      * <p>
      * The existing exception will be embedded in the new one, but the new exception will have its own message.
      * </p>
+     *
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>DesktopInitialisationException</code>.
      */
-    public DesktopInitialisationException(String message, Throwable cause) {super(message, cause);}
+    public DesktopInitialisationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

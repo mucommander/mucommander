@@ -18,30 +18,31 @@
 
 package com.mucommander.ui.popup;
 
-import javax.swing.Action;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
+
 /**
  * Abstract class for popup menus that display MuActions.
- * 
+ *
  * @author Maxence Bernard, Nicolas Rinaudo, Arik Hadas
  */
 public abstract class MuActionsPopupMenu extends JPopupMenu {
 
-	/** Parent MainFrame instance */
+    /**
+     * Parent MainFrame instance
+     */
     private MainFrame mainFrame;
-    
+
     public MuActionsPopupMenu(MainFrame mainFrame) {
-    	this.mainFrame = mainFrame;
+        this.mainFrame = mainFrame;
     }
-    
+
     /**
      * Adds the MuAction denoted by the given ID to this popup menu, as a <code>JMenuItem</code>.
+     *
      * @param actionId action ID
      */
     protected JMenuItem addAction(String actionId) {
@@ -50,8 +51,8 @@ public abstract class MuActionsPopupMenu extends JPopupMenu {
 
     @Override
     public final JMenuItem add(Action a) {
-    	JMenuItem item = super.add(a);
-    	MenuToolkit.configureActionMenuItem(item);
-    	return item;
+        JMenuItem item = super.add(a);
+        MenuToolkit.configureActionMenuItem(item);
+        return item;
     }
 }

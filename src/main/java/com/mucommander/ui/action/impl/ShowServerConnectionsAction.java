@@ -18,20 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.server.ShowServerConnectionsDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * Displays a dialog which shows a list of open server connections and allows the user to close them.
@@ -41,7 +34,7 @@ import com.mucommander.ui.main.MainFrame;
 @InvokesDialog
 public class ShowServerConnectionsAction extends MuAction {
 
-    public ShowServerConnectionsAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ShowServerConnectionsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -50,27 +43,35 @@ public class ShowServerConnectionsAction extends MuAction {
         new ShowServerConnectionsDialog(mainFrame);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ShowServerConnectionsAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ShowServerConnectionsAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ShowServerConnections";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "ShowServerConnections";
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

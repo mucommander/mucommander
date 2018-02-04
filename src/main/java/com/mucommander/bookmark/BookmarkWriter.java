@@ -34,7 +34,9 @@ import java.io.OutputStream;
 class BookmarkWriter implements BookmarkConstants, BookmarkBuilder {
     private XmlWriter out;
 
-    public BookmarkWriter(OutputStream stream) throws IOException {out = new XmlWriter(stream);}
+    public BookmarkWriter(OutputStream stream) throws IOException {
+        out = new XmlWriter(stream);
+    }
 
     public void startBookmarks() throws BookmarkException {
         // Root element
@@ -46,13 +48,17 @@ class BookmarkWriter implements BookmarkConstants, BookmarkBuilder {
 
             out.startElement(ELEMENT_ROOT, attributes);
             out.println();
+        } catch (IOException e) {
+            throw new BookmarkException(e);
         }
-        catch(IOException e) {throw new BookmarkException(e);}
     }
 
     public void endBookmarks() throws BookmarkException {
-        try {out.endElement(ELEMENT_ROOT);}
-        catch(IOException e) {throw new BookmarkException(e);}
+        try {
+            out.endElement(ELEMENT_ROOT);
+        } catch (IOException e) {
+            throw new BookmarkException(e);
+        }
     }
 
     public void addBookmark(String name, String location) throws BookmarkException {
@@ -73,7 +79,8 @@ class BookmarkWriter implements BookmarkConstants, BookmarkBuilder {
 
             // End bookmark element
             out.endElement(ELEMENT_BOOKMARK);
+        } catch (IOException e) {
+            throw new BookmarkException(e);
         }
-        catch(IOException e) {throw new BookmarkException(e);}
     }
 }

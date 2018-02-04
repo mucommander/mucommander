@@ -44,7 +44,7 @@ public class CredentialsWriter implements CredentialsConstants {
      */
     static void write(OutputStream stream) throws IOException {
 
-        XmlWriter out  = new XmlWriter(stream);
+        XmlWriter out = new XmlWriter(stream);
 
         // Root element, add the encryption method used
         XmlAttributes attributes = new XmlAttributes();
@@ -60,7 +60,7 @@ public class CredentialsWriter implements CredentialsConstants {
         Enumeration<String> propertyKeys;
         String name;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             credentialsMapping = iterator.next();
             realm = credentialsMapping.getRealm();
 
@@ -87,7 +87,7 @@ public class CredentialsWriter implements CredentialsConstants {
 
             // Write properties, each property is stored in a separate 'property' element
             propertyKeys = realm.getPropertyNames();
-            while(propertyKeys.hasMoreElements()) {
+            while (propertyKeys.hasMoreElements()) {
                 name = propertyKeys.nextElement();
                 attributes = new XmlAttributes();
                 attributes.add(ATTRIBUTE_NAME, name);

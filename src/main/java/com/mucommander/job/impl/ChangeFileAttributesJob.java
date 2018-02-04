@@ -18,11 +18,6 @@
 
 package com.mucommander.job.impl;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
@@ -32,13 +27,17 @@ import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * @author Maxence Bernard
  */
 public class ChangeFileAttributesJob extends FileJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFileAttributesJob.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFileAttributesJob.class);
+
     private boolean recurseOnDirectories;
 
     private int permissions = -1;
@@ -71,55 +70,52 @@ public class ChangeFileAttributesJob extends FileJob {
         if (getState() == FileJobState.INTERRUPTED)
             return false;
 
-        if(recurseOnDirectories && file.isDirectory()) {
-            do {		// Loop for retries
+        if (recurseOnDirectories && file.isDirectory()) {
+            do {        // Loop for retries
                 try {
                     AbstractFile children[] = file.ls();
                     int nbChildren = children.length;
 
-                    for(int i=0; i<nbChildren && getState() != FileJobState.INTERRUPTED; i++) {
+                    for (int i = 0; i < nbChildren && getState() != FileJobState.INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(children[i]);
                         processFile(children[i], null);
                     }
 
                     break;
-                }
-                catch(IOException e) {
+                } catch (IOException e) {
                     // Unable to open source file
                     int ret = showErrorDialog("", Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
-                    if(ret==FileJobAction.RETRY)
+                    if (ret == FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog return false
                     return false;
                 }
             }
-            while(true);
+            while (true);
         }
 
-        if(permissions!=-1) {
-            if(!file.isFileOperationSupported(FileOperation.CHANGE_PERMISSION))
+        if (permissions != -1) {
+            if (!file.isFileOperationSupported(FileOperation.CHANGE_PERMISSION))
                 return false;
 
             try {
                 file.changePermissions(permissions);
                 return true;
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 return false;
             }
         }
 
-        if(!file.isFileOperationSupported(FileOperation.CHANGE_DATE))
+        if (!file.isFileOperationSupported(FileOperation.CHANGE_DATE))
             return false;
 
         try {
             file.changeDate(date);
             return true;
-        }
-        catch (IOException e) {
-            LOGGER.debug("failed to change the date of "+file, e);
+        } catch (IOException e) {
+            LOGGER.debug("failed to change the date of " + file, e);
             return false;
         }
     }

@@ -18,22 +18,6 @@
 
 package com.mucommander.ui.notifier;
 
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.util.Hashtable;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.ui.action.AWTActionProxy;
 import com.mucommander.ui.action.ActionManager;
@@ -43,35 +27,56 @@ import com.mucommander.ui.action.impl.NewWindowAction;
 import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * SystemTrayNotifier implements a notifier that uses the System Tray to display notifications. When enabled, this
  * notifier displays an icon in the systrem tray that recalls the current {@link com.mucommander.ui.main.MainFrame}
  * when double-clicked, or shows a popup menu with additional actions ('Bring all to front', 'Quit') when right-clicked.
- *
+ * <p>
  * <p>This notifier is available only with Java 1.6 and up.</p>
  *
  * @author Maxence Bernard
  */
 public class SystemTrayNotifier extends AbstractNotifier implements ActionListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SystemTrayNotifier.class);
-	
-    /** TrayIcon being displayed in the system tray, null when this notifier is not enabled */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SystemTrayNotifier.class);
+
+    /**
+     * TrayIcon being displayed in the system tray, null when this notifier is not enabled
+     */
     private TrayIcon trayIcon;
 
-    /** Is this notifier enabled ? */
+    /**
+     * Is this notifier enabled ?
+     */
     private boolean isEnabled;
 
-    /** Name of the tray icon image */
+    /**
+     * Name of the tray icon image
+     */
     private final static String TRAY_ICON_NAME = "icon16_8.png";
 
-    /** Width of the muCommander tray icon */
+    /**
+     * Width of the muCommander tray icon
+     */
     private final static int TRAY_ICON_WIDTH = 16;
 
-    /** Height of the muCommander tray icon */
+    /**
+     * Height of the muCommander tray icon
+     */
     private final static int TRAY_ICON_HEIGHT = 16;
 
-    /** System tray message types for the different notification types */
+    /**
+     * System tray message types for the different notification types
+     */
     private final static Map<NotificationType, TrayIcon.MessageType> MESSAGE_TYPES;
 
     static {
@@ -102,13 +107,13 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
 
     @Override
     public boolean setEnabled(boolean enabled) {
-        if(enabled) {
+        if (enabled) {
             // No need to bother if the current Java runtime version is not 1.6 or up, or if SystemTray is not available
-            if(JavaVersion.JAVA_1_6.isCurrentLower() || !SystemTray.isSupported())
+            if (JavaVersion.JAVA_1_6.isCurrentLower() || !SystemTray.isSupported())
                 return false;
 
             // If System Tray has already been initialized
-            if(trayIcon!=null) {
+            if (trayIcon != null) {
                 return (isEnabled = true);
             }
 
@@ -118,10 +123,10 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
             Dimension trayIconSize = systemTray.getTrayIconSize();
             // If the sytem tray icon size is larger than the icon size, center the icon as the default is to display
             // the icon in the top left corner which is plain ugly
-            if(trayIconSize.width>TRAY_ICON_WIDTH || trayIconSize.height>TRAY_ICON_HEIGHT) {
+            if (trayIconSize.width > TRAY_ICON_WIDTH || trayIconSize.height > TRAY_ICON_HEIGHT) {
                 // The buffered image uses ARGB for transparency
                 BufferedImage bi = new BufferedImage(trayIconSize.width, trayIconSize.height, BufferedImage.TYPE_INT_ARGB);
-                bi.getGraphics().drawImage(iconImage, (trayIconSize.width-TRAY_ICON_WIDTH)/2, (trayIconSize.height-TRAY_ICON_HEIGHT)/2, null);
+                bi.getGraphics().drawImage(iconImage, (trayIconSize.width - TRAY_ICON_WIDTH) / 2, (trayIconSize.height - TRAY_ICON_HEIGHT) / 2, null);
                 iconImage = bi;
             }
 
@@ -147,15 +152,13 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
                 trayIcon.addActionListener(this);
 
                 return (isEnabled = true);
-            }
-            catch(java.awt.AWTException e) {
+            } catch (java.awt.AWTException e) {
                 trayIcon = null;
 
                 return (isEnabled = false);
             }
-        }
-        else {
-            if(trayIcon!=null) {
+        } else {
+            if (trayIcon != null) {
                 // Remove tray icon from the system tray
                 SystemTray.getSystemTray().remove(trayIcon);
                 trayIcon.removeActionListener(this);
@@ -169,14 +172,14 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
 
     @Override
     public boolean isEnabled() {
-        return trayIcon!=null && isEnabled;
+        return trayIcon != null && isEnabled;
     }
 
     @Override
     public boolean displayNotification(NotificationType notificationType, String title, String description) {
-        LOGGER.debug("notificationType="+notificationType+" title="+title+" description="+description);
+        LOGGER.debug("notificationType=" + notificationType + " title=" + title + " description=" + description);
 
-        if(!isEnabled()) {
+        if (!isEnabled()) {
             LOGGER.debug("Ignoring notification, this notifier is not enabled");
 
             return false;
@@ -213,7 +216,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
         // Even though this is a bit of a shot in the dark, this may fix a problem reported under Linux where the
         // tray icon stayed after the application had quit:
         /// http://www.mucommander.com/forums/viewtopic.php?t=604
-        if(isEnabled())
+        if (isEnabled())
             setEnabled(false);
 
         super.finalize();

@@ -25,9 +25,13 @@ package com.mucommander.ui.notifier;
  */
 public enum NotificationType {
 
-    /** Used to indicate that a job has finished */
+    /**
+     * Used to indicate that a job has finished
+     */
     JOB_COMPLETED,
 
-    /** Used to indicate that a job has failed */
+    /**
+     * Used to indicate that a job has failed
+     */
     JOB_ERROR
 }

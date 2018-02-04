@@ -30,176 +30,185 @@ import com.mucommander.ui.tabs.TabUpdater;
 import com.mucommander.utils.Callback;
 
 /**
-* HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
-* 
-* @author Arik Hadas
-*/
+ * HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
+ *
+ * @author Arik Hadas
+ */
 public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements LocationListener {
 
-	/** FolderPanel containing those tabs */
-	private FolderPanel folderPanel;
+    /**
+     * FolderPanel containing those tabs
+     */
+    private FolderPanel folderPanel;
 
-	/** Factory of instances of FileTableTab */
-	private TabFactory<FileTableTab, FileURL> defaultTabsFactory;
+    /**
+     * Factory of instances of FileTableTab
+     */
+    private TabFactory<FileTableTab, FileURL> defaultTabsFactory;
 
-	/** Factory of instances of FileTableTab */
-	private TabFactory<FileTableTab, FileTableTab> clonedTabsFactory;
+    /**
+     * Factory of instances of FileTableTab
+     */
+    private TabFactory<FileTableTab, FileTableTab> clonedTabsFactory;
 
-	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, ConfFileTableTab[] initialTabs) {
-		super(new FileTableTabsWithoutHeadersViewerFactory(folderPanel), new FileTableTabsWithHeadersViewerFactory(mainFrame, folderPanel));
+    public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, ConfFileTableTab[] initialTabs) {
+        super(new FileTableTabsWithoutHeadersViewerFactory(folderPanel), new FileTableTabsWithHeadersViewerFactory(mainFrame, folderPanel));
 
-		this.folderPanel = folderPanel;
+        this.folderPanel = folderPanel;
 
-		defaultTabsFactory = new DefaultFileTableTabFactory(folderPanel);
-		clonedTabsFactory = new ClonedFileTableTabFactory(folderPanel);
+        defaultTabsFactory = new DefaultFileTableTabFactory(folderPanel);
+        clonedTabsFactory = new ClonedFileTableTabFactory(folderPanel);
 
-		// Register to location change events
-		folderPanel.getLocationManager().addLocationListener(this);
+        // Register to location change events
+        folderPanel.getLocationManager().addLocationListener(this);
 
-		// Add the initial folders
-		for (FileTableTab tab : initialTabs)
-			addTab(clonedTabsFactory.createTab(tab));
-	}
+        // Add the initial folders
+        for (FileTableTab tab : initialTabs)
+            addTab(clonedTabsFactory.createTab(tab));
+    }
 
-	@Override
-	public void selectTab(int index) {
-		super.selectTab(index);
+    @Override
+    public void selectTab(int index) {
+        super.selectTab(index);
 
-		show(index);
-	}
+        show(index);
+    }
 
-	@Override
-	protected void show(final int tabIndex) {
-		folderPanel.tryChangeCurrentFolderInternal(getTab(tabIndex).getLocation(), new Callback() {
-			public void call() {
-				fireActiveTabChanged();
-			}
-		});
-	};
+    @Override
+    protected void show(final int tabIndex) {
+        folderPanel.tryChangeCurrentFolderInternal(getTab(tabIndex).getLocation(), new Callback() {
+            public void call() {
+                fireActiveTabChanged();
+            }
+        });
+    }
 
-	/**
-	 * Return the currently selected tab
-	 * 
-	 * @return currently selected tab
-	 */
-	public FileTableTab getCurrentTab() {
-		return getTab(getSelectedIndex());
-	}
+    ;
 
-	private void updateTabLocation(final FileURL location) {
-		updateCurrentTab(new TabUpdater<FileTableTab>() {
+    /**
+     * Return the currently selected tab
+     *
+     * @return currently selected tab
+     */
+    public FileTableTab getCurrentTab() {
+        return getTab(getSelectedIndex());
+    }
 
-			public void update(FileTableTab tab) {
-				tab.setLocation(location);
-			}
-		});
-	}
-	
-	private void updateTabLocking(final boolean lock) {
-		updateCurrentTab(new TabUpdater<FileTableTab>() {
-			
-			public void update(FileTableTab tab) {
-				tab.setLocked(lock);
-			}
-		});
-	}
+    private void updateTabLocation(final FileURL location) {
+        updateCurrentTab(new TabUpdater<FileTableTab>() {
 
-	private void updateTabTitle(final String title) {
-		updateCurrentTab(new TabUpdater<FileTableTab>() {
+            public void update(FileTableTab tab) {
+                tab.setLocation(location);
+            }
+        });
+    }
 
-			public void update(FileTableTab tab) {
-				tab.setTitle(title);
-			}
-		});
-	}
+    private void updateTabLocking(final boolean lock) {
+        updateCurrentTab(new TabUpdater<FileTableTab>() {
 
-	@Override
-	protected boolean showSingleTabHeader() {
-		int nbTabs = getTabs().count();
-		
-		if (nbTabs == 1) {
-			FileTableTab tab = getTab(0);
-			
-			// If there's just single tab that is locked don't remove his header
-			if (tab.isLocked())
-				return true;
-		}
-		
-		return super.showSingleTabHeader();
-	}
-	
-	@Override
-	protected FileTableTab removeTab() {
-		return !getCurrentTab().isLocked() ? super.removeTab() : null;
-	}
-	
-	/********************
-	 * MuActions support
-	 ********************/
-	
-	public void add(AbstractFile file) {
-		addTab(defaultTabsFactory.createTab(file.getURL()));
-	}
+            public void update(FileTableTab tab) {
+                tab.setLocked(lock);
+            }
+        });
+    }
 
-	public void add(FileURL fileURL) {
-		addTab(defaultTabsFactory.createTab(fileURL));
-	}
+    private void updateTabTitle(final String title) {
+        updateCurrentTab(new TabUpdater<FileTableTab>() {
 
-	public void add(FileTableTab tab) {
-		addAndSelectTab(tab);
-	}
-	
-	public FileTableTab closeCurrentTab() {
-		return removeTab();
-	}
-	
-	public void closeDuplicateTabs() {
-		removeDuplicateTabs();
-	}
-	
-	public void closeOtherTabs() {
-		removeOtherTabs();
-	}
-	
-	public void duplicate() {
-		add(clonedTabsFactory.createTab(getCurrentTab()));
-	}
-	
-	public void lock() {
-		updateTabLocking(true);
-	}
-	
-	public void unlock() {
-		updateTabLocking(false);
-	}
+            public void update(FileTableTab tab) {
+                tab.setTitle(title);
+            }
+        });
+    }
 
-	public void setTitle(String title) {
-		updateTabTitle(title);
-	}
+    @Override
+    protected boolean showSingleTabHeader() {
+        int nbTabs = getTabs().count();
 
-	/****************
-	 * Other Actions
-	 ****************/
-	
-	public void close(FileTableTabHeader fileTableTabHeader) {
-		removeTab(fileTableTabHeader);
-	}
-	
-	/**********************************
-	 * LocationListener Implementation
-	 **********************************/
-	
-	public void locationChanged(LocationEvent locationEvent) {
-		updateTabLocation(folderPanel.getCurrentFolder().getURL());
-	}
+        if (nbTabs == 1) {
+            FileTableTab tab = getTab(0);
 
-	public void locationCancelled(LocationEvent locationEvent) {
-		updateTabLocation(folderPanel.getCurrentFolder().getURL());
-	}
+            // If there's just single tab that is locked don't remove his header
+            if (tab.isLocked())
+                return true;
+        }
 
-	public void locationFailed(LocationEvent locationEvent) {
-		updateTabLocation(folderPanel.getCurrentFolder().getURL());
-	}
-	
-	public void locationChanging(LocationEvent locationEvent) { }
+        return super.showSingleTabHeader();
+    }
+
+    @Override
+    protected FileTableTab removeTab() {
+        return !getCurrentTab().isLocked() ? super.removeTab() : null;
+    }
+
+    /********************
+     * MuActions support
+     ********************/
+
+    public void add(AbstractFile file) {
+        addTab(defaultTabsFactory.createTab(file.getURL()));
+    }
+
+    public void add(FileURL fileURL) {
+        addTab(defaultTabsFactory.createTab(fileURL));
+    }
+
+    public void add(FileTableTab tab) {
+        addAndSelectTab(tab);
+    }
+
+    public FileTableTab closeCurrentTab() {
+        return removeTab();
+    }
+
+    public void closeDuplicateTabs() {
+        removeDuplicateTabs();
+    }
+
+    public void closeOtherTabs() {
+        removeOtherTabs();
+    }
+
+    public void duplicate() {
+        add(clonedTabsFactory.createTab(getCurrentTab()));
+    }
+
+    public void lock() {
+        updateTabLocking(true);
+    }
+
+    public void unlock() {
+        updateTabLocking(false);
+    }
+
+    public void setTitle(String title) {
+        updateTabTitle(title);
+    }
+
+    /****************
+     * Other Actions
+     ****************/
+
+    public void close(FileTableTabHeader fileTableTabHeader) {
+        removeTab(fileTableTabHeader);
+    }
+
+    /**********************************
+     * LocationListener Implementation
+     **********************************/
+
+    public void locationChanged(LocationEvent locationEvent) {
+        updateTabLocation(folderPanel.getCurrentFolder().getURL());
+    }
+
+    public void locationCancelled(LocationEvent locationEvent) {
+        updateTabLocation(folderPanel.getCurrentFolder().getURL());
+    }
+
+    public void locationFailed(LocationEvent locationEvent) {
+        updateTabLocation(folderPanel.getCurrentFolder().getURL());
+    }
+
+    public void locationChanging(LocationEvent locationEvent) {
+    }
 }

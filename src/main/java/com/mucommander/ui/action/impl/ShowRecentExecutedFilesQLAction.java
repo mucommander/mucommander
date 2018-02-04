@@ -18,57 +18,60 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.QuickLists;
 
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
+
 /**
  * This action shows RecentExecutedFilesQL on the current active FileTable.
- * 
+ *
  * @author Arik Hadas
  */
 
 public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
-	
-	public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Map<String,Object> properties) {
-		super(mainFrame, properties);
-	}
-	
-	@Override
-    public void performAction() {
-		openQuickList(QuickLists.RECENT_EXECUTED_FILES);
-	}
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
-
-	public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ShowRecentExecutedFilesQLAction(mainFrame, properties);
-		}
+    public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Map<String, Object> properties) {
+        super(mainFrame, properties);
     }
-	
-	public static class Descriptor extends AbstractActionDescriptor {
-		public static final String ACTION_ID = "ShowRecentExecutedFilesQL";
-		
-		public String getId() { return ACTION_ID; }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+    @Override
+    public void performAction() {
+        openQuickList(QuickLists.RECENT_EXECUTED_FILES);
+    }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_3, KeyEvent.ALT_DOWN_MASK); }
+    public static class Factory implements ActionFactory {
+
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ShowRecentExecutedFilesQLAction(mainFrame, properties);
+        }
+    }
+
+    public static class Descriptor extends AbstractActionDescriptor {
+        public static final String ACTION_ID = "ShowRecentExecutedFilesQL";
+
+        public String getId() {
+            return ACTION_ID;
+        }
+
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
+
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_3, KeyEvent.ALT_DOWN_MASK);
+        }
     }
 }

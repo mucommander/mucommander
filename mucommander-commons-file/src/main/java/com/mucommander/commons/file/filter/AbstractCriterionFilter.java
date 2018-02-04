@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -70,7 +70,7 @@ public abstract class AbstractCriterionFilter<C> extends AbstractFileFilter impl
      * @return true if this filter matched the given value, according to the current inverted mode
      */
     public boolean match(C value) {
-        if(inverted)
+        if (inverted)
             return reject(value);
 
         return accept(value);
@@ -99,9 +99,9 @@ public abstract class AbstractCriterionFilter<C> extends AbstractFileFilter impl
         Vector<C> filteredValuesV = new Vector<C>();
         int nbvalues = values.length;
         C value;
-        for(int i=0; i<nbvalues; i++) {
+        for (int i = 0; i < nbvalues; i++) {
             value = values[i];
-            if(accept(value))
+            if (accept(value))
                 filteredValuesV.add(value);
         }
 
@@ -119,8 +119,8 @@ public abstract class AbstractCriterionFilter<C> extends AbstractFileFilter impl
      */
     public boolean match(C values[]) {
         int nbFiles = values.length;
-        for(int i=0; i<nbFiles; i++)
-            if(!match(values[i]))
+        for (int i = 0; i < nbFiles; i++)
+            if (!match(values[i]))
                 return false;
 
         return true;
@@ -135,8 +135,8 @@ public abstract class AbstractCriterionFilter<C> extends AbstractFileFilter impl
      */
     public boolean accept(C values[]) {
         int nbFiles = values.length;
-        for(int i=0; i<nbFiles; i++)
-            if(!accept(values[i]))
+        for (int i = 0; i < nbFiles; i++)
+            if (!accept(values[i]))
                 return false;
 
         return true;
@@ -151,8 +151,8 @@ public abstract class AbstractCriterionFilter<C> extends AbstractFileFilter impl
      */
     public boolean reject(C values[]) {
         int nbFiles = values.length;
-        for(int i=0; i<nbFiles; i++)
-            if(!reject(values[i]))
+        for (int i = 0; i < nbFiles; i++)
+            if (!reject(values[i]))
                 return false;
 
         return true;

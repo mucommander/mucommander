@@ -24,204 +24,202 @@ import com.mucommander.text.Translator;
 
 /**
  * Contains information about job progress.
- *
  */
 public class JobProgress {
-	private FileJob job;
-	private TransferFileJob transferFileJob;
+    private FileJob job;
+    private TransferFileJob transferFileJob;
 
-	private long effectiveJobTime;
-	private long lastTime;
-	private int totalPercentInt;
-	private String totalProgressText;
-	private int filePercentInt;
-	private String fileProgressText;
-	private long currentBps;
-	private long bytesTotal;
-	private long totalBps;
-	private long lastBytesTotal;
-	private String jobStatusString;
-	private long jobPauseStartDate;
+    private long effectiveJobTime;
+    private long lastTime;
+    private int totalPercentInt;
+    private String totalProgressText;
+    private int filePercentInt;
+    private String fileProgressText;
+    private long currentBps;
+    private long bytesTotal;
+    private long totalBps;
+    private long lastBytesTotal;
+    private String jobStatusString;
+    private long jobPauseStartDate;
 
-	public JobProgress(FileJob job) {
-		this.job = job;
-		if (job instanceof TransferFileJob) {
-			this.transferFileJob = (TransferFileJob) job;
-		}
-		lastBytesTotal = 0;
-		lastTime = System.currentTimeMillis();
-	}
+    public JobProgress(FileJob job) {
+        this.job = job;
+        if (job instanceof TransferFileJob) {
+            this.transferFileJob = (TransferFileJob) job;
+        }
+        lastBytesTotal = 0;
+        lastTime = System.currentTimeMillis();
+    }
 
-	
-	/**
-	 * Calculates the job progress status. This method calculates variables used
-	 * to show job progress information. It can update information only on a
-	 * processed file (when <code>labelOnly</code> is <code>true</code>). If
-	 * <code>labelOnly</code> is false it will try to update full information on
-	 * a job progress (e.g. percent completed, bytes per second, etc.).
-	 * 
-	 * @param fullUpdate
-	 * 			 <code>true</code> update all information about processed file.<br/>
-	 * 			 <code>false</code> update only label of a processed file.<br/>
-	 * 		     Note that if a job has just finished this flag is ignored 
-	 * 			 and all variables are recalulated.
-	 * @return <code>true</code> if full job progress has been updated,
-	 *         <code>false</code> if only label has been updated.
-	 */
-	public boolean calcJobProgress(boolean fullUpdate) {
-		FileJobState jobState = job.getState();
-		jobPauseStartDate = job.getPauseStartDate();
-		if (jobState == FileJobState.FINISHED || jobState == FileJobState.INTERRUPTED) {
-			jobStatusString = Translator.get("progress_dialog.job_finished");
-			// Job just finished, let's loop one more time to ensure that
-			// components (progress bar in particular)
-			// reflect job completion
-			fullUpdate = true;
-		} else {
-			jobStatusString = job.getStatusString();
-		}
-		if (!fullUpdate) {
-			return false;
-		}
-		// Do not refresh progress information is job is paused, simply sleep
-		if (jobState == FileJobState.PAUSED) {
-			return false;
-		}
-		// Now is updated with current time, or job end date if job has finished
-		// already.
-		long now = job.getEndDate();
-		if (now == 0) { // job hasn't finished yet
-			now = System.currentTimeMillis();
-		}
 
-		long currentFileRemainingTime = 0;
-		long totalRemainingTime;
+    /**
+     * Calculates the job progress status. This method calculates variables used
+     * to show job progress information. It can update information only on a
+     * processed file (when <code>labelOnly</code> is <code>true</code>). If
+     * <code>labelOnly</code> is false it will try to update full information on
+     * a job progress (e.g. percent completed, bytes per second, etc.).
+     *
+     * @param fullUpdate <code>true</code> update all information about processed file.<br/>
+     *                   <code>false</code> update only label of a processed file.<br/>
+     *                   Note that if a job has just finished this flag is ignored
+     *                   and all variables are recalulated.
+     * @return <code>true</code> if full job progress has been updated,
+     * <code>false</code> if only label has been updated.
+     */
+    public boolean calcJobProgress(boolean fullUpdate) {
+        FileJobState jobState = job.getState();
+        jobPauseStartDate = job.getPauseStartDate();
+        if (jobState == FileJobState.FINISHED || jobState == FileJobState.INTERRUPTED) {
+            jobStatusString = Translator.get("progress_dialog.job_finished");
+            // Job just finished, let's loop one more time to ensure that
+            // components (progress bar in particular)
+            // reflect job completion
+            fullUpdate = true;
+        } else {
+            jobStatusString = job.getStatusString();
+        }
+        if (!fullUpdate) {
+            return false;
+        }
+        // Do not refresh progress information is job is paused, simply sleep
+        if (jobState == FileJobState.PAUSED) {
+            return false;
+        }
+        // Now is updated with current time, or job end date if job has finished
+        // already.
+        long now = job.getEndDate();
+        if (now == 0) { // job hasn't finished yet
+            now = System.currentTimeMillis();
+        }
 
-		effectiveJobTime = job.getEffectiveJobTime();
-		if (effectiveJobTime == 0) {
-			effectiveJobTime = 1; // To avoid potential zero divisions
-		}
+        long currentFileRemainingTime = 0;
+        long totalRemainingTime;
 
-		if (transferFileJob != null) {
-			bytesTotal = transferFileJob.getTotalByteCount() - transferFileJob.getTotalSkippedByteCount();
-			totalBps = (long) (bytesTotal * 1000d / effectiveJobTime);
-			if (now - lastTime > 0) { // To avoid divisions by zero 
-				currentBps = (long) ((bytesTotal - lastBytesTotal) * 1000d / (now - lastTime));
-			} else {
-				currentBps = 0;
-			}
+        effectiveJobTime = job.getEffectiveJobTime();
+        if (effectiveJobTime == 0) {
+            effectiveJobTime = 1; // To avoid potential zero divisions
+        }
 
-			// Update current file progress bar
-			float filePercentFloat = transferFileJob.getFilePercentDone();
-			filePercentInt = (int) (100 * filePercentFloat);
+        if (transferFileJob != null) {
+            bytesTotal = transferFileJob.getTotalByteCount() - transferFileJob.getTotalSkippedByteCount();
+            totalBps = (long) (bytesTotal * 1000d / effectiveJobTime);
+            if (now - lastTime > 0) { // To avoid divisions by zero
+                currentBps = (long) ((bytesTotal - lastBytesTotal) * 1000d / (now - lastTime));
+            } else {
+                currentBps = 0;
+            }
 
-			fileProgressText = filePercentInt + "%";
-			// Append estimated remaining time (ETA) if current file transfer is
-			// not already finished (100%)
-			if (filePercentFloat < 1) {
-				fileProgressText += " - ";
+            // Update current file progress bar
+            float filePercentFloat = transferFileJob.getFilePercentDone();
+            filePercentInt = (int) (100 * filePercentFloat);
 
-				long currentFileSize = transferFileJob.getCurrentFileSize();
-				// If current file size is not available, ETA cannot be
-				// calculated
-				if (currentFileSize == -1) {
-					fileProgressText += "?";
-				}
-				// Avoid potential divisions by zero
-				else if (totalBps == 0) {
-					currentFileRemainingTime = -1;
-					fileProgressText += DurationFormat.getInfiniteSymbol();
-				} else {
-					currentFileRemainingTime = (long) ((1000 * (currentFileSize - 
-							transferFileJob.getCurrentFileByteCount())) / (float) totalBps);
-					fileProgressText += DurationFormat.format(currentFileRemainingTime);
-				}
-			}
+            fileProgressText = filePercentInt + "%";
+            // Append estimated remaining time (ETA) if current file transfer is
+            // not already finished (100%)
+            if (filePercentFloat < 1) {
+                fileProgressText += " - ";
 
-			lastBytesTotal = bytesTotal;
-			lastTime = now;
-		}
+                long currentFileSize = transferFileJob.getCurrentFileSize();
+                // If current file size is not available, ETA cannot be
+                // calculated
+                if (currentFileSize == -1) {
+                    fileProgressText += "?";
+                }
+                // Avoid potential divisions by zero
+                else if (totalBps == 0) {
+                    currentFileRemainingTime = -1;
+                    fileProgressText += DurationFormat.getInfiniteSymbol();
+                } else {
+                    currentFileRemainingTime = (long) ((1000 * (currentFileSize -
+                            transferFileJob.getCurrentFileByteCount())) / (float) totalBps);
+                    fileProgressText += DurationFormat.format(currentFileRemainingTime);
+                }
+            }
 
-		// Update total progress bar
-		// Total job percent is based on the *number* of files remaining, not
-		// their actual size.
-		// So this is very approximate.
-		float totalPercentFloat = job.getTotalPercentDone();
-		totalPercentInt = (int) (100 * totalPercentFloat);
+            lastBytesTotal = bytesTotal;
+            lastTime = now;
+        }
 
-		totalProgressText = totalPercentInt + "%";
+        // Update total progress bar
+        // Total job percent is based on the *number* of files remaining, not
+        // their actual size.
+        // So this is very approximate.
+        float totalPercentFloat = job.getTotalPercentDone();
+        totalPercentInt = (int) (100 * totalPercentFloat);
 
-		// Add a rough estimate of the total remaining time (ETA):
-		// total remaining time is based on the total job percent completed
-		// which itself is based on the *number*
-		// of files remaining, not their actual size. So this is very
-		// approximate.
-		// Do not add ETA if job is already finished (100%)
-		if (totalPercentFloat < 1) {
-			totalProgressText += " - ";
+        totalProgressText = totalPercentInt + "%";
 
-			// Avoid potential divisions by zero
-			if (totalPercentFloat == 0) {
-				totalProgressText += "?";
-			} else {
-				// Make sure that total ETA is never smaller than current file
-				// ETA
-				totalRemainingTime = (long) ((1 - totalPercentFloat) * 
-						(effectiveJobTime / totalPercentFloat));
-				totalRemainingTime = Math.max(totalRemainingTime,
-						currentFileRemainingTime);
-				totalProgressText += DurationFormat.format(totalRemainingTime);
-			}
-		}
-		return true;
-	}
+        // Add a rough estimate of the total remaining time (ETA):
+        // total remaining time is based on the total job percent completed
+        // which itself is based on the *number*
+        // of files remaining, not their actual size. So this is very
+        // approximate.
+        // Do not add ETA if job is already finished (100%)
+        if (totalPercentFloat < 1) {
+            totalProgressText += " - ";
 
-	public String getJobStatusString() {
-		return jobStatusString;
-	}
+            // Avoid potential divisions by zero
+            if (totalPercentFloat == 0) {
+                totalProgressText += "?";
+            } else {
+                // Make sure that total ETA is never smaller than current file
+                // ETA
+                totalRemainingTime = (long) ((1 - totalPercentFloat) *
+                        (effectiveJobTime / totalPercentFloat));
+                totalRemainingTime = Math.max(totalRemainingTime,
+                        currentFileRemainingTime);
+                totalProgressText += DurationFormat.format(totalRemainingTime);
+            }
+        }
+        return true;
+    }
 
-	public boolean isTransferFileJob() {
-		return transferFileJob != null;
-	}
+    public String getJobStatusString() {
+        return jobStatusString;
+    }
 
-	public int getFilePercentInt() {
-		return filePercentInt;
-	}
+    public boolean isTransferFileJob() {
+        return transferFileJob != null;
+    }
 
-	public String getFileProgressText() {
-		return fileProgressText;
-	}
+    public int getFilePercentInt() {
+        return filePercentInt;
+    }
 
-	public long getBytesTotal() {
-		return bytesTotal;
-	}
+    public String getFileProgressText() {
+        return fileProgressText;
+    }
 
-	public long getTotalBps() {
-		return totalBps;
-	}
+    public long getBytesTotal() {
+        return bytesTotal;
+    }
 
-	public long getLastTime() {
-		return lastTime;
-	}
+    public long getTotalBps() {
+        return totalBps;
+    }
 
-	public long getCurrentBps() {
-		return currentBps;
-	}
+    public long getLastTime() {
+        return lastTime;
+    }
 
-	public int getTotalPercentInt() {
-		return totalPercentInt;
-	}
+    public long getCurrentBps() {
+        return currentBps;
+    }
 
-	public String getTotalProgressText() {
-		return totalProgressText;
-	}
+    public int getTotalPercentInt() {
+        return totalPercentInt;
+    }
 
-	public long getEffectiveJobTime() {
-		return effectiveJobTime;
-	}
+    public String getTotalProgressText() {
+        return totalProgressText;
+    }
 
-	public long getJobPauseStartDate() {
-		return jobPauseStartDate;
-	}
+    public long getEffectiveJobTime() {
+        return effectiveJobTime;
+    }
+
+    public long getJobPauseStartDate() {
+        return jobPauseStartDate;
+    }
 
 }

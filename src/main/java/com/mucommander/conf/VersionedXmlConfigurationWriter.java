@@ -49,7 +49,10 @@ class VersionedXmlConfigurationWriter extends XmlConfigurationWriter {
 
         attributes.addAttribute("", MuPreferences.VERSION_ATTRIBUTE, MuPreferences.VERSION_ATTRIBUTE, "string", RuntimeConstants.VERSION);
 
-        try {out.startElement("", rootElementName, rootElementName, attributes);}
-        catch(SAXException e) {throw new ConfigurationException(e);}
+        try {
+            out.startElement("", rootElementName, rootElementName, attributes);
+        } catch (SAXException e) {
+            throw new ConfigurationException(e);
+        }
     }
 }

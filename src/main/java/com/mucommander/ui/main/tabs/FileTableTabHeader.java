@@ -18,39 +18,31 @@
 
 package com.mucommander.ui.main.tabs;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.plaf.basic.BasicButtonUI;
-
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
 
-/**
-* This panel is the header of the presented tabs under Java 1.6 and above.
-* The panel contains a button for closing the tab.
-* 
-* @author Arik Hadas, Maxence Bernard
-*/
-public class FileTableTabHeader extends JPanel implements ActionListener {
-	
-	private FolderPanel folderPanel;
-	
-	private JLabel lockedIcon;
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-	private static final String CLOSE_ICON_NAME = "close.png";
+/**
+ * This panel is the header of the presented tabs under Java 1.6 and above.
+ * The panel contains a button for closing the tab.
+ *
+ * @author Arik Hadas, Maxence Bernard
+ */
+public class FileTableTabHeader extends JPanel implements ActionListener {
+
+    private FolderPanel folderPanel;
+
+    private JLabel lockedIcon;
+
+    private static final String CLOSE_ICON_NAME = "close.png";
     private static final String CLOSE_ROLLOVER_ICON_NAME = "close_rollover.png";
     private static final int CLOSE_ICON_SIZE = 12;
-    
+
     public static final String LOCKED_ICON_NAME = "lock.png";
     public static final int LOCKED_ICON_SIZE = 12;
 
@@ -71,11 +63,11 @@ public class FileTableTabHeader extends JPanel implements ActionListener {
         gbc.gridx = 0;
         lockedIcon.setVisible(false);
         add(lockedIcon, gbc);
-        
+
         // Label
         JLabel label = new JLabel();
         Font font = new JLabel().getFont();
-        label.setFont(font.deriveFont(font.getStyle(), font.getSize()-2));
+        label.setFont(font.deriveFont(font.getStyle(), font.getSize() - 2));
         // Add extra space between the label and the button
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
         gbc.weightx = 1;
@@ -83,45 +75,45 @@ public class FileTableTabHeader extends JPanel implements ActionListener {
         add(label, gbc);
 
         if (closable && !tab.isLocked()) {
-        	// Close tab button
-        	JButton closeButton = new CloseButton();
-        	closeButton.addActionListener(this);
-        	gbc.weightx = 1;    // required otherwise extra width may be redistributed around the button
-        	gbc.gridx = 2;
-        	add(closeButton, gbc);
+            // Close tab button
+            JButton closeButton = new CloseButton();
+            closeButton.addActionListener(this);
+            gbc.weightx = 1;    // required otherwise extra width may be redistributed around the button
+            gbc.gridx = 2;
+            add(closeButton, gbc);
         }
 
         setText(tab.getDisplayableTitle());
-        
+
         lockedIcon.setVisible(tab.isLocked());
     }
 
     private void setText(String text) {
-    	JLabel label = (JLabel)getComponent(1); 
+        JLabel label = (JLabel) getComponent(1);
 
         // Truncate the title if it is too long.
         // Note: 31 is the maximum title length displayed in tabs by Firefox and Safari at the time of this writing
-        if(text.length()>31)
+        if (text.length() > 31)
             text = text.substring(0, 32) + "…";
 
-    	label.setText(text);
+        label.setText(text);
 
-    	validate();
+        validate();
     }
-    
+
     /********************************
-	 * ActionListener Implementation
-	 ********************************/
-    
-	public void actionPerformed(ActionEvent e) {
-    	folderPanel.getTabs().close(this);
-	}
-    
+     * ActionListener Implementation
+     ********************************/
+
+    public void actionPerformed(ActionEvent e) {
+        folderPanel.getTabs().close(this);
+    }
+
     /**************************************************
-	 * Buttons which are presented in the tab's header
-	 **************************************************/
+     * Buttons which are presented in the tab's header
+     **************************************************/
     private class CloseButton extends JButton {
-    	 
+
         public CloseButton() {
             setPreferredSize(new Dimension(CLOSE_ICON_SIZE, CLOSE_ICON_SIZE));
             //Make the button looks the same for all Laf's
@@ -141,7 +133,7 @@ public class FileTableTabHeader extends JPanel implements ActionListener {
         // Remove default insets
         @Override
         public Insets getInsets() {
-            return new Insets(0,0,0,0);
+            return new Insets(0, 0, 0, 0);
         }
 
         // We don't want to update UI for this button
@@ -149,11 +141,11 @@ public class FileTableTabHeader extends JPanel implements ActionListener {
         public void updateUI() {
         }
     }
-    
+
     private class LockedIcon extends JLabel {
-   	 
+
         public LockedIcon() {
-        	super(IconManager.getIcon(IconManager.COMMON_ICON_SET, LOCKED_ICON_NAME));
+            super(IconManager.getIcon(IconManager.COMMON_ICON_SET, LOCKED_ICON_NAME));
             setPreferredSize(new Dimension(LOCKED_ICON_SIZE, LOCKED_ICON_SIZE));
             //No need to be focusable
             setFocusable(false);
@@ -162,7 +154,7 @@ public class FileTableTabHeader extends JPanel implements ActionListener {
         // Remove default insets
         @Override
         public Insets getInsets() {
-            return new Insets(0,0,0,0);
+            return new Insets(0, 0, 0, 0);
         }
     }
 }

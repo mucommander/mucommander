@@ -56,7 +56,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     private EncodingSelectBox encodingSelectBox;
     private JCheckBox passiveCheckBox;
     private JCheckBox anonymousCheckBox;
-	
+
     private static String lastServer = "";
     private static String lastUsername = "";
     private static String lastInitialDir = "/";
@@ -65,7 +65,9 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     // Not static so that it is not remembered (for security reasons)
     private String lastPassword = "";
 
-    /** Passive mode is enabled by default because of firewall restrictions */
+    /**
+     * Passive mode is enabled by default because of firewall restrictions
+     */
     private static boolean passiveMode = true;
     private static boolean anonymousUser;
 
@@ -80,7 +82,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         addRow(Translator.get("server_connect_dialog.server"), serverField, 15);
 
         // Username field, initialized to last username entered or 'anonymous' if anonymous user was previously selected
-        usernameField = new JTextField(anonymousUser?ANONYMOUS_CREDENTIALS.getLogin():lastUsername);
+        usernameField = new JTextField(anonymousUser ? ANONYMOUS_CREDENTIALS.getLogin() : lastUsername);
         usernameField.selectAll();
         usernameField.setEditable(!anonymousUser);
         addTextFieldListeners(usernameField, false);
@@ -96,7 +98,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         initialDirField.selectAll();
         addTextFieldListeners(initialDirField, true);
         addRow(Translator.get("server_connect_dialog.initial_dir"), initialDirField, 5);
-	
+
         // Port field, initialized to last port (default is 21)
         portSpinner = createPortSpinner(lastPort);
         addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
@@ -125,10 +127,10 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         addRow("", passiveCheckBox, 0);
     }
 
-	
+
     private void updateValues() {
         lastServer = serverField.getText();
-        if(!anonymousUser) {
+        if (!anonymousUser) {
             lastUsername = usernameField.getText();
             lastPassword = new String(passwordField.getPassword());
         }
@@ -136,21 +138,21 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         lastInitialDir = initialDirField.getText();
         lastPort = (Integer) portSpinner.getValue();
     }
-	
-	
+
+
     ////////////////////////////////
     // ServerPanel implementation //
     ////////////////////////////////
-	
+
     @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
-        if(!lastInitialDir.startsWith("/"))
-            lastInitialDir = "/"+lastInitialDir;
-			
-        FileURL url = FileURL.getFileURL(FileProtocols.FTP+"://"+lastServer+lastInitialDir);
+        if (!lastInitialDir.startsWith("/"))
+            lastInitialDir = "/" + lastInitialDir;
 
-        if(anonymousUser)
+        FileURL url = FileURL.getFileURL(FileProtocols.FTP + "://" + lastServer + lastInitialDir);
+
+        if (anonymousUser)
             url.setCredentials(new Credentials(ANONYMOUS_CREDENTIALS.getLogin(), new String(passwordField.getPassword())));
         else
             url.setCredentials(new Credentials(lastUsername, lastPassword));
@@ -159,14 +161,14 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         url.setPort(lastPort);
 
         // Set passiveMode property to true (default) or false
-        url.setProperty(FTPFile.PASSIVE_MODE_PROPERTY_NAME, ""+passiveMode);
+        url.setProperty(FTPFile.PASSIVE_MODE_PROPERTY_NAME, "" + passiveMode);
 
         // Set FTP encoding property
         url.setProperty(FTPFile.ENCODING_PROPERTY_NAME, encodingSelectBox.getSelectedEncoding());
 
         // Set connection retry properties
-        url.setProperty(FTPFile.NB_CONNECTION_RETRIES_PROPERTY_NAME, ""+nbRetriesSpinner.getValue());
-        url.setProperty(FTPFile.CONNECTION_RETRY_DELAY_PROPERTY_NAME, ""+retryDelaySpinner.getValue());
+        url.setProperty(FTPFile.NB_CONNECTION_RETRIES_PROPERTY_NAME, "" + nbRetriesSpinner.getValue());
+        url.setProperty(FTPFile.CONNECTION_RETRY_DELAY_PROPERTY_NAME, "" + retryDelaySpinner.getValue());
 
         return url;
     }
@@ -180,8 +182,10 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     public void dialogValidated() {
         // Commits the current spinner value in case it was being edited and 'enter' was pressed
         // (the spinner value would otherwise not be committed)
-        try { portSpinner.commitEdit(); }
-        catch(ParseException e) { }
+        try {
+            portSpinner.commitEdit();
+        } catch (ParseException e) {
+        }
 
         updateValues();
     }
@@ -190,23 +194,21 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     ////////////////////////////
     // ActionListener methods //
     ////////////////////////////
-	
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-		
-        if(source == passiveCheckBox) {
+
+        if (source == passiveCheckBox) {
             passiveMode = passiveCheckBox.isSelected();
-        }
-        else if (source == anonymousCheckBox) {
+        } else if (source == anonymousCheckBox) {
             updateValues();
             anonymousUser = anonymousCheckBox.isSelected();
-            if(anonymousUser) {
+            if (anonymousUser) {
                 usernameField.setEnabled(false);
                 usernameField.setText(ANONYMOUS_CREDENTIALS.getLogin());
                 passwordField.setEnabled(false);
                 passwordField.setText(ANONYMOUS_CREDENTIALS.getPassword());
-            }
-            else {
+            } else {
                 usernameField.setEnabled(true);
                 usernameField.setText(lastUsername);
                 passwordField.setEnabled(true);

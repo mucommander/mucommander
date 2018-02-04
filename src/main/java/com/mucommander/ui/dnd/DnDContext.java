@@ -25,18 +25,24 @@ import com.mucommander.ui.main.FolderPanel;
  * The getters are static since only one drag-and-drop operation can be performed at the same time. The information
  * returned by the getters is meaningful only when a drag-and-drop is being carried out.
  *
- * @see FileDragSourceListener
  * @author Maxence Bernard
+ * @see FileDragSourceListener
  */
 public class DnDContext {
 
-    /** Has the drag operation been initiated by muCommander ? */
+    /**
+     * Has the drag operation been initiated by muCommander ?
+     */
     private static boolean dragInitiatedByMucommander;
 
-    /** FolderPanel instance which initiated the drag */
+    /**
+     * FolderPanel instance which initiated the drag
+     */
     private static FolderPanel dragInitiator;
 
-    /** Current drag gesture modifiers */
+    /**
+     * Current drag gesture modifiers
+     */
     private static int dragGestureModifiersEx;
 
 
@@ -79,7 +85,7 @@ public class DnDContext {
     public static int getDragGestureModifiersEx() {
         return dragGestureModifiersEx;
     }
-    
+
     /**
      * This method is called by {@link FileDragSourceListener}.
      */

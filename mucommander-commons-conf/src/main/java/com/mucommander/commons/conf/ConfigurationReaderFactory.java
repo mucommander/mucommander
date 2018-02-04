@@ -29,13 +29,15 @@ package com.mucommander.commons.conf;
  * }
  * </pre>
  * </p>
+ *
  * @author Nicolas Rinaudo
- * @see    ConfigurationReader
+ * @see ConfigurationReader
  */
 public interface ConfigurationReaderFactory<T extends ConfigurationReader> {
     /**
      * Creates an instance of {@link ConfigurationReader}.
-     * @return                              an instance of {@link ConfigurationReader}.
+     *
+     * @return an instance of {@link ConfigurationReader}.
      * @throws ReaderConfigurationException if the factory wasn't properly configured.
      */
     T getReaderInstance() throws ReaderConfigurationException;

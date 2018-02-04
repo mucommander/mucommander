@@ -73,15 +73,15 @@ public class Base64Test {
         String s;
         int slen;
         // Repeats the test
-        for(int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             // Generates a string with:
             // - a random length of up to 1000 characters
             // - random contents, where each byte's value is randomly chosen between 0 and 255
             slen = random.nextInt(1000);
 
             sb = new StringBuffer();
-            for(int j=0; j<slen; j++)
-                sb.append((char)random.nextInt(256));
+            for (int j = 0; j < slen; j++)
+                sb.append((char) random.nextInt(256));
 
             s = sb.toString();
 
@@ -98,17 +98,16 @@ public class Base64Test {
         char c;
         boolean exceptionCaught;
 
-        for(c=0; c<256; c++) {
+        for (c = 0; c < 256; c++) {
             // Skip allowed Base64 characters, including the special '=' character used for padding
-            if((c>='0' && c<='9') || (c>='A' && c<='Z') || (c>='a' && c<='z') || c=='+' || c=='/' || c=='=')
+            if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '+' || c == '/' || c == '=')
                 continue;
 
             exceptionCaught = false;
 
             try {
-                Base64Decoder.decode(c+"===");      // Add padding at the end
-            }
-            catch(IOException e) {
+                Base64Decoder.decode(c + "===");      // Add padding at the end
+            } catch (IOException e) {
                 exceptionCaught = true;
             }
 
@@ -123,10 +122,10 @@ public class Base64Test {
     @Test
     public void testInvalidLength() {
         String invalidLengthStrings[] = {
-            "a", "ab", "abc",
-            "=", "a=", "a==", "ab=",
-            "0000a", "0000ab", "0000abc",
-            "0000a=", "0000a==", "0000ab="
+                "a", "ab", "abc",
+                "=", "a=", "a==", "ab=",
+                "0000a", "0000ab", "0000abc",
+                "0000a=", "0000a==", "0000ab="
         };
 
         boolean exceptionCaught;
@@ -136,8 +135,7 @@ public class Base64Test {
 
             try {
                 Base64Decoder.decode(invalidLengthString);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 exceptionCaught = true;
             }
 
@@ -153,15 +151,15 @@ public class Base64Test {
      */
     @Test
     public void testPresetTables() throws IOException {
-        Base64Table[] tables = new Base64Table[] {
-            Base64Table.STANDARD_TABLE,
-            Base64Table.URL_SAFE_TABLE,
-            Base64Table.FILENAME_SAFE_TABLE,
-            Base64Table.REGEXP_SAFE_TABLE,
+        Base64Table[] tables = new Base64Table[]{
+                Base64Table.STANDARD_TABLE,
+                Base64Table.URL_SAFE_TABLE,
+                Base64Table.FILENAME_SAFE_TABLE,
+                Base64Table.REGEXP_SAFE_TABLE,
         };
 
         String sample = "The quick brown fox jumps over the lazy dog.";
-        for(Base64Table table: tables) {
+        for (Base64Table table : tables) {
             // Ensure that the table passes Base64Table constructor's tests
             new Base64Table(table.getEncodingTable(), table.getPaddingChar());
 
@@ -175,32 +173,32 @@ public class Base64Test {
      * Tests {@link Base64Table#Base64Table(byte[], byte)} with invalid parameter values.
      */
     @Test
-    public void testCustomBase64Table()  {
-        testInvalidBase64Table(null, (byte)'a');
-        testInvalidBase64Table(new byte[]{}, (byte)'a');
+    public void testCustomBase64Table() {
+        testInvalidBase64Table(null, (byte) 'a');
+        testInvalidBase64Table(new byte[]{}, (byte) 'a');
 
         byte[] validEncodingTable = Base64Table.STANDARD_TABLE.getEncodingTable();
 
-        testInvalidBase64Table(validEncodingTable, (byte)'a');
+        testInvalidBase64Table(validEncodingTable, (byte) 'a');
 
         byte[] invalidEncodingTable = new byte[63];
         System.arraycopy(validEncodingTable, 0, invalidEncodingTable, 0, 63);
 
-        testInvalidBase64Table(invalidEncodingTable, (byte)'a');
+        testInvalidBase64Table(invalidEncodingTable, (byte) 'a');
 
         invalidEncodingTable = new byte[64];
         System.arraycopy(validEncodingTable, 0, invalidEncodingTable, 0, 64);
         invalidEncodingTable[63] = 'b';
 
-        testInvalidBase64Table(invalidEncodingTable, (byte)'a');
+        testInvalidBase64Table(invalidEncodingTable, (byte) 'a');
 
         // Test a valid custom Base64 table
         new Base64Table(new byte[]{
-                'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
-                'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
-                'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
-                'w','x','y','z','0','1','2','3','4','5','6','7','8','9','@','!'
-        }, (byte)'%');
+                'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '!'
+        }, (byte) '%');
     }
 
 
@@ -208,15 +206,14 @@ public class Base64Test {
      * Tries to create a <code>Base64Table</code> with the specified parameters and asserts that it throws
      * an {@link IllegalArgumentException}.
      *
-     * @param table the base64 character table. The array must be 64 bytes long and must not contain any duplicate values.
-         * @param paddingChar the ASCII character used for padding. This character must not already be used in the table.
-         */
+     * @param table       the base64 character table. The array must be 64 bytes long and must not contain any duplicate values.
+     * @param paddingChar the ASCII character used for padding. This character must not already be used in the table.
+     */
     private void testInvalidBase64Table(byte[] table, byte paddingChar) {
         boolean exceptionThrown = false;
         try {
             new Base64Table(table, paddingChar);
-        }
-        catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             exceptionThrown = true;
         }
 

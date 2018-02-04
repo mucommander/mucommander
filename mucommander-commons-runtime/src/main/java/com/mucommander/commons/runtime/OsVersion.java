@@ -28,88 +28,146 @@ import org.slf4j.LoggerFactory;
  * Being a {@link com.mucommander.commons.runtime.ComparableRuntimeProperty}, OS versions are ordered and can be compared
  * against each other.
  *
+ * @author Maxence Bernard, Arik Hadas
  * @see OsVersions
  * @see OsFamily
- * @author Maxence Bernard, Arik Hadas
  */
 public enum OsVersion implements ComparableRuntimeProperty {
-	/** Unknown OS version */
-	UNKNOWN_VERSION("Unknown"),
+    /**
+     * Unknown OS version
+     */
+    UNKNOWN_VERSION("Unknown"),
 
-	//////////////////////
-	// Windows versions //
-	//////////////////////
+    //////////////////////
+    // Windows versions //
+    //////////////////////
 
-	// Windows 9X subfamily
+    // Windows 9X subfamily
 
-	/** Windows 95 */
-	WINDOWS_95("Windows 95"),
-	/** Windows 98 */
-	WINDOWS_98("Windows 98"),
-	/** Windows Me */
-	WINDOWS_ME("Windows Me"),
+    /**
+     * Windows 95
+     */
+    WINDOWS_95("Windows 95"),
+    /**
+     * Windows 98
+     */
+    WINDOWS_98("Windows 98"),
+    /**
+     * Windows Me
+     */
+    WINDOWS_ME("Windows Me"),
 
-	// Windows NT subfamily
+    // Windows NT subfamily
 
-	/** Windows NT */
-	WINDOWS_NT("Windows NT"),
-	/** Windows 2000 */
-	WINDOWS_2000("Windows 2000"),
-	/** Windows XP */
-	WINDOWS_XP("Windows XP"),
-	/** Windows 2003 */
-	WINDOWS_2003("Windows 2003"),
-	/** Windows Vista */
-	WINDOWS_VISTA("Windows Vista"),
-	/** Windows 7 */
-	WINDOWS_7("Windows 7"),
-	/** Windows 8 */
-	WINDOWS_8("Windows 8"),
-	/** Windows 8.1 */
-	WINDOWS_8_1("Windows 8.1"),
-	/** Windows 10 */
-	WINDOWS_10("Windows 10"),
+    /**
+     * Windows NT
+     */
+    WINDOWS_NT("Windows NT"),
+    /**
+     * Windows 2000
+     */
+    WINDOWS_2000("Windows 2000"),
+    /**
+     * Windows XP
+     */
+    WINDOWS_XP("Windows XP"),
+    /**
+     * Windows 2003
+     */
+    WINDOWS_2003("Windows 2003"),
+    /**
+     * Windows Vista
+     */
+    WINDOWS_VISTA("Windows Vista"),
+    /**
+     * Windows 7
+     */
+    WINDOWS_7("Windows 7"),
+    /**
+     * Windows 8
+     */
+    WINDOWS_8("Windows 8"),
+    /**
+     * Windows 8.1
+     */
+    WINDOWS_8_1("Windows 8.1"),
+    /**
+     * Windows 10
+     */
+    WINDOWS_10("Windows 10"),
 
 
-	///////////////////////
-	// Mac OS X versions //
-	///////////////////////
+    ///////////////////////
+    // Mac OS X versions //
+    ///////////////////////
 
-	/** Cheetah */
-	MAC_OS_X_10_0("10.0"),
-	/** Puma */
-	MAC_OS_X_10_1("10.1"),
-	/** Jaguar */
-	MAC_OS_X_10_2("10.2"),
-	/** Panther */
-	MAC_OS_X_10_3("10.3"),
-	/** Tiger */
-	MAC_OS_X_10_4("10.4"),
-	/** Leopard */
-	MAC_OS_X_10_5("10.5"),
-	/** Snow Leopard */
-	MAC_OS_X_10_6("10.6"),
-	/** Lion */
-	MAC_OS_X_10_7("10.7"),
-	/** Mountain Lion */
-	MAC_OS_X_10_8("10.8"),
-	/** Mavericks */
-	MAC_OS_X_10_9("10.9"),
-	/** Yosemite */
-	MAC_OS_X_10_10("10.10"),
-	/** El Capitan */
-	MAC_OS_X_10_11("10.11"),
-	/** Sierra */
-	MAC_OS_X_10_12("10.12");
-	
+    /**
+     * Cheetah
+     */
+    MAC_OS_X_10_0("10.0"),
+    /**
+     * Puma
+     */
+    MAC_OS_X_10_1("10.1"),
+    /**
+     * Jaguar
+     */
+    MAC_OS_X_10_2("10.2"),
+    /**
+     * Panther
+     */
+    MAC_OS_X_10_3("10.3"),
+    /**
+     * Tiger
+     */
+    MAC_OS_X_10_4("10.4"),
+    /**
+     * Leopard
+     */
+    MAC_OS_X_10_5("10.5"),
+    /**
+     * Snow Leopard
+     */
+    MAC_OS_X_10_6("10.6"),
+    /**
+     * Lion
+     */
+    MAC_OS_X_10_7("10.7"),
+    /**
+     * Mountain Lion
+     */
+    MAC_OS_X_10_8("10.8"),
+    /**
+     * Mavericks
+     */
+    MAC_OS_X_10_9("10.9"),
+    /**
+     * Yosemite
+     */
+    MAC_OS_X_10_10("10.10"),
+    /**
+     * El Capitan
+     */
+    MAC_OS_X_10_11("10.11"),
+    /**
+     * Sierra
+     */
+    MAC_OS_X_10_12("10.12");
 
-    /** Logger used by this class. */
+
+    /**
+     * Logger used by this class.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsVersion.class);
 
-    /** The String representation of this RuntimeProperty, set at creation time */
+    /**
+     * The String representation of this RuntimeProperty, set at creation time
+     */
     protected final String stringRepresentation;
 
-    /** Holds the OsVersion of the current runtime environment  */
+    /**
+     * Holds the OsVersion of the current runtime environment
+     */
     private static OsVersion currentValue;
 
     /*
@@ -118,16 +176,16 @@ public enum OsVersion implements ComparableRuntimeProperty {
      * to force the initialization if it needs to happen at a predictable time.
      */
     static {
-    	currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getRawSystemProperty(), OsFamily.getCurrent());
-    	LOGGER.info("Current OS version: {}", currentValue);
+        currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getRawSystemProperty(), OsFamily.getCurrent());
+        LOGGER.info("Current OS version: {}", currentValue);
     }
 
 
     OsVersion(String stringRepresentation) {
-    	this.stringRepresentation = stringRepresentation;
+        this.stringRepresentation = stringRepresentation;
     }
 
-    
+
     ////////////////////
     // Static methods //
     ////////////////////
@@ -154,15 +212,15 @@ public enum OsVersion implements ComparableRuntimeProperty {
      * Returns an <code>OsVersion</code> instance corresponding to the specified system property's value.
      *
      * @param osVersionProp the value of the "os.version" system property
-     * @param osNameProp the value of the "os.name" system property
-     * @param osFamily the current OS family
+     * @param osNameProp    the value of the "os.name" system property
+     * @param osFamily      the current OS family
      * @return an OsVersion instance corresponding to the specified system property's value
      */
     static OsVersion parseSystemProperty(String osVersionProp, String osNameProp, OsFamily osFamily) {
         // This website holds a collection of system property values under many OSes:
         // http://lopica.sourceforge.net/os.html
 
-        if(osFamily==OsFamily.WINDOWS) {
+        if (osFamily == OsFamily.WINDOWS) {
             if (osNameProp.equals("Windows 95"))
                 return WINDOWS_95;
 
@@ -203,23 +261,23 @@ public enum OsVersion implements ComparableRuntimeProperty {
             return WINDOWS_10;
         }
         // Mac OS X versions
-        if (osFamily==OsFamily.MAC_OS_X) {
-            if(osVersionProp.startsWith("10.12"))
+        if (osFamily == OsFamily.MAC_OS_X) {
+            if (osVersionProp.startsWith("10.12"))
                 return MAC_OS_X_10_12;
 
-        	if(osVersionProp.startsWith("10.11"))
+            if (osVersionProp.startsWith("10.11"))
                 return MAC_OS_X_10_11;
 
-        	if(osVersionProp.startsWith("10.10"))
+            if (osVersionProp.startsWith("10.10"))
                 return MAC_OS_X_10_10;
-        	
-        	if(osVersionProp.startsWith("10.9"))
+
+            if (osVersionProp.startsWith("10.9"))
                 return MAC_OS_X_10_9;
 
-            if(osVersionProp.startsWith("10.8"))
+            if (osVersionProp.startsWith("10.8"))
                 return MAC_OS_X_10_8;
 
-            if(osVersionProp.startsWith("10.7"))
+            if (osVersionProp.startsWith("10.7"))
                 return MAC_OS_X_10_7;
 
             if (osVersionProp.startsWith("10.6"))
@@ -256,7 +314,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
      * @return true if this instance is the same as the current runtime's value
      */
     public boolean isCurrent() {
-        return this==currentValue;
+        return this == currentValue;
     }
 
     //////////////////////////////////////////////
@@ -264,20 +322,20 @@ public enum OsVersion implements ComparableRuntimeProperty {
     //////////////////////////////////////////////
 
     public boolean isCurrentOrLower() {
-		return currentValue.compareTo(this)<=0;
-	}
+        return currentValue.compareTo(this) <= 0;
+    }
 
-	public boolean isCurrentLower() {
-		return currentValue.compareTo(this)<0;
-	}
+    public boolean isCurrentLower() {
+        return currentValue.compareTo(this) < 0;
+    }
 
-	public boolean isCurrentOrHigher() {
-		return currentValue.compareTo(this)>=0;
-	}
+    public boolean isCurrentOrHigher() {
+        return currentValue.compareTo(this) >= 0;
+    }
 
-	public boolean isCurrentHigher() {
-		return currentValue.compareTo(this)>0;
-	}
+    public boolean isCurrentHigher() {
+        return currentValue.compareTo(this) > 0;
+    }
 
     ////////////////////////
     // Overridden methods //

@@ -25,8 +25,8 @@ import java.io.IOException;
 /**
  * A test case for {@link com.mucommander.commons.io.BoundedOutputStream}.
  *
- * @see com.mucommander.commons.io.BoundedOutputStream
  * @author Maxence Bernard, Nicolas Rinaudo
+ * @see com.mucommander.commons.io.BoundedOutputStream
  */
 public class BoundedOutputStreamTest {
 
@@ -59,20 +59,29 @@ public class BoundedOutputStreamTest {
         assert 4 == bout.getAllowedBytes();
 
         boolean exceptionThrown = false;
-        try { bout.write(0); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            bout.write(0);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { bout.write(new byte[1]); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            bout.write(new byte[1]);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { bout.write(new byte[1], 0, 1); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            bout.write(new byte[1], 0, 1);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 

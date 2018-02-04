@@ -18,39 +18,46 @@
 
 package com.mucommander.ui.main.tree;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * A class that monitors IOThread if it is running or has been blocked.
- * This class maintains a list of tasks to execute and a thread that 
+ * This class maintains a list of tasks to execute and a thread that
  * executes these tasks. It checks periodically if the IOThread is running.
- * If IOThread has been blocked then it's killed and a new IOThread is 
+ * If IOThread has been blocked then it's killed and a new IOThread is
  * instantiated. Then the next task from the list will be executed.
- * @author Mariusz Jakubowski
  *
+ * @author Mariusz Jakubowski
  */
 public class AbstractIOThreadManager extends Thread {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIOThreadManager.class);
-	
-    /** a queue with tasks to execute */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIOThreadManager.class);
+
+    /**
+     * a queue with tasks to execute
+     */
     protected final List<Runnable> queue = Collections.synchronizedList(new ArrayList<Runnable>());
 
-    /** a thread that executes tasks */
+    /**
+     * a thread that executes tasks
+     */
     protected IOThread ioThread;
-    
-    /** a time after i/o thread is marked as blocked */
+
+    /**
+     * a time after i/o thread is marked as blocked
+     */
     protected long blockThreshold;
-    
+
 
     /**
      * Creates a new monitoring thread.
-     * @param name a name of this thread
+     *
+     * @param name           a name of this thread
      * @param blockThreshold a time after an i/o task is marked as blocked [ms]
      */
     public AbstractIOThreadManager(String name, long blockThreshold) {
@@ -64,23 +71,23 @@ public class AbstractIOThreadManager extends Thread {
      * Adds new task to execute. A task is an instance of Runnable interface.
      * A proper exception handling within the Runnable instance have to be implemented.
      * If this task rises an exception, this exception is printed to stderr.
+     *
      * @param task a task to be executed
      */
     public void addTask(Runnable task) {
         queue.add(task);
-        synchronized(ioThread) {
+        synchronized (ioThread) {
             ioThread.notify();
         }
     }
-    
 
-    
+
     @Override
     public void run() {
         while (!interrupted()) {
             synchronized (queue) {
                 if (ioThread.isBlocked()) {
-                	LOGGER.debug("Killing IOThread " + ioThread);
+                    LOGGER.debug("Killing IOThread " + ioThread);
                     ioThread.interrupt();
                     ioThread = new IOThread(queue, blockThreshold);
                     ioThread.start();
@@ -94,6 +101,6 @@ public class AbstractIOThreadManager extends Thread {
         }
         ioThread.interrupt();
     }
-    
-    
+
+
 }

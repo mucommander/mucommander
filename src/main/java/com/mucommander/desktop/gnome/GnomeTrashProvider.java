@@ -23,9 +23,9 @@ import com.mucommander.desktop.TrashProvider;
 
 /**
  * Provider for the Trash in GNOME Desktop Environment
- * 
- * @see GnomeTrash
+ *
  * @author David Kovar (kowy)
+ * @see GnomeTrash
  */
 public class GnomeTrashProvider implements TrashProvider {
     public AbstractTrash getTrash() {

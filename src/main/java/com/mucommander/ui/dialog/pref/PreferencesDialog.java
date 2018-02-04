@@ -34,28 +34,40 @@ import java.util.Vector;
 
 /**
  * Dialog meant to let users edit software preferences.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public abstract class PreferencesDialog extends FocusDialog implements ActionListener {
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Displays the different panels. */
-    private JTabbedPane                      tabbedPane;
-    /** Stores the different panels. */
+    /**
+     * Displays the different panels.
+     */
+    private JTabbedPane tabbedPane;
+    /**
+     * Stores the different panels.
+     */
     private java.util.List<PreferencesPanel> prefPanels;
-    /** Apply button. */
-    private JButton                          applyButton;
-    /** OK button. */
-    private JButton                          okButton;
-    /** Cancel button. */
-    private JButton                          cancelButton;
-
+    /**
+     * Apply button.
+     */
+    private JButton applyButton;
+    /**
+     * OK button.
+     */
+    private JButton okButton;
+    /**
+     * Cancel button.
+     */
+    private JButton cancelButton;
 
 
     // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Creates a new preferences dialog.
+     *
      * @param parent parent of the dialog.
      * @param title  title of the dialog.
      */
@@ -66,6 +78,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
     /**
      * Creates a new preferences dialog.
+     *
      * @param parent parent of the dialog.
      * @param title  title of the dialog.
      */
@@ -75,16 +88,16 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     }
 
 
-
     // - UI code ----------------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Initializes the tabbed panel's UI.
      */
     private void initUI() {
         Container contentPane;
         XBoxPanel buttonsPanel;
-        JPanel    tempPanel;
+        JPanel tempPanel;
 
         // Initializes the tabbed pane.
         prefPanels = new Vector<PreferencesPanel>();
@@ -99,12 +112,12 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         buttonsPanel = new XBoxPanel();
         buttonsPanel.add(applyButton = new JButton(Translator.get("apply")));
         buttonsPanel.addSpace(20);
-        buttonsPanel.add(okButton     = new JButton(Translator.get("ok")));
+        buttonsPanel.add(okButton = new JButton(Translator.get("ok")));
         buttonsPanel.add(cancelButton = new JButton(Translator.get("cancel")));
-        
+
         // Disable "commit buttons".
         okButton.setEnabled(false);
-    	applyButton.setEnabled(false);
+        applyButton.setEnabled(false);
 
         // Buttons listening.
         applyButton.addActionListener(this);
@@ -122,7 +135,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
 
     private Component getTabbedPanel(PreferencesPanel prefPanel, boolean scroll) {
-        if(scroll) {
+        if (scroll) {
             JScrollPane scrollPane = new JScrollPane(prefPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setBorder(null);
 
@@ -133,6 +146,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
     /**
      * Adds the specified preferences panel to this dialog.
+     *
      * @param prefPanel panel to add.
      * @param iconName  name of the icon that represents this dialog.
      * @param scroll    whether this panel should be wrapped in a scroll panel.
@@ -144,13 +158,17 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
     /**
      * Adds a new preferences panel and creates a new tab with an icon.
+     *
      * @param prefPanel panel to add.
      * @param iconName  name of the icon that represents this dialog.
      */
-    public void addPreferencesPanel(PreferencesPanel prefPanel, String iconName) {addPreferencesPanel(prefPanel, iconName, true);}
+    public void addPreferencesPanel(PreferencesPanel prefPanel, String iconName) {
+        addPreferencesPanel(prefPanel, iconName, true);
+    }
 
     /**
      * Adds the specified preferences panel to this dialog.
+     *
      * @param prefPanel panel to add.
      * @param scroll    whether this panel should be wrapped in a scroll panel.
      */
@@ -161,9 +179,12 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
     /**
      * Adds the specified preferences panel to this dialog.
+     *
      * @param prefPanel panel to add.
      */
-    public void addPreferencesPanel(PreferencesPanel prefPanel) {addPreferencesPanel(prefPanel, true);}
+    public void addPreferencesPanel(PreferencesPanel prefPanel) {
+        addPreferencesPanel(prefPanel, true);
+    }
 
     /**
      * Calls {@link PreferencesPanel#commit()} on all registered preference panels.
@@ -171,7 +192,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     public void commit() {
         // Ask pref panels to commit changes
         int nbPanels = prefPanels.size();
-        for(int i = 0; i < nbPanels; i++)
+        for (int i = 0; i < nbPanels; i++)
             prefPanels.get(i).commit();
         setCommitButtonsEnabled(false);
     }
@@ -182,27 +203,31 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
      * This gives preference panels a chance to display warning or errors before changes are
      * committed.
      * </p>
+     *
      * @return <code>true</code> if all preference panels are ok with commiting the changes, <code>false</code> otherwise.
      */
     public boolean checkCommit() {
         // Ask pref panels to commit changes
         int nbPanels = prefPanels.size();
-        for(int i = 0; i < nbPanels; i++)
-            if(!prefPanels.get(i).checkCommit())
+        for (int i = 0; i < nbPanels; i++)
+            if (!prefPanels.get(i).checkCommit())
                 return false;
         return true;
     }
 
     /**
      * Sets the currently active tab.
+     *
      * @param index index of the tab to select.
      */
-    public void setActiveTab(int index) {tabbedPane.setSelectedIndex(index);}
-
+    public void setActiveTab(int index) {
+        tabbedPane.setSelectedIndex(index);
+    }
 
 
     // - Listener code ----------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Reacts to buttons being pushed.
      */
@@ -211,7 +236,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
         // Commit changes
         if (source == okButton || source == applyButton) {
-            if(!checkCommit())
+            if (!checkCommit())
                 return;
             commit();
         }
@@ -223,25 +248,28 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
 
     /**
      * Returns the index of the currently selected configuration panel.
+     *
      * @return the index of the currently selected configuration panel.
      */
-    public int getSelectedPanelIndex() {return tabbedPane.getSelectedIndex();}
-    
+    public int getSelectedPanelIndex() {
+        return tabbedPane.getSelectedIndex();
+    }
+
     /**
      * This function set the "commit buttons", i.e apply & ok buttons, enabled\disabled
      * according to the given parameter.
-     * 
+     *
      * @param enable - parameter that indicated if the commit button will turn to be
-     *  enabled (true) or disabled (false).
+     *               enabled (true) or disabled (false).
      */
     protected void setCommitButtonsEnabled(boolean enable) {
-    	okButton.setEnabled(enable);
-    	applyButton.setEnabled(enable);
+        okButton.setEnabled(enable);
+        applyButton.setEnabled(enable);
     }
-    
+
     /**
      * Function that will be called when the user change a value in a PrefComponent in this dialog.
-     * 
+     *
      * @param component - the PrefComponent that its value was changed.
      */
     public abstract void componentChanged(PrefComponent component);

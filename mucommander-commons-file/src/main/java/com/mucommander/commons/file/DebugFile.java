@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,7 +41,7 @@ public class DebugFile extends ProxyFile {
     /** Used to randomize the latency for each calls to slowed-down methods */
     private static Random random = new Random();
 
-    
+
     /**
      * Creates a DebugFile that proxies the calls made to the given AbstractFile's methods, with no latency.
      *
@@ -60,7 +60,7 @@ public class DebugFile extends ProxyFile {
      */
     public DebugFile(AbstractFile file, int maxLatency) {
         super(file);
-        
+
         this.maxLatency = maxLatency;
     }
 
@@ -82,11 +82,11 @@ public class DebugFile extends ProxyFile {
      * Sleeps a random number of milliseconds, up to {@link #maxLatency}.
      */
     private void lag() {
-        if(maxLatency>0) {
+        if (maxLatency > 0) {
             try {
                 Thread.sleep(random.nextInt(maxLatency));
+            } catch (InterruptedException e) {
             }
-            catch(InterruptedException e) {}
         }
     }
 
@@ -94,7 +94,7 @@ public class DebugFile extends ProxyFile {
      * Returns the debug string printed for all calls made to the AbstractFile methods overridden by this class.
      */
     private String getDebugString() {
-        return "called on "+super.getAbsolutePath()+" ("+file.getClass().getName()+")";
+        return "called on " + super.getAbsolutePath() + " (" + file.getClass().getName() + ")";
     }
 
 

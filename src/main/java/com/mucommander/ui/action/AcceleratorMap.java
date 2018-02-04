@@ -18,90 +18,89 @@
 
 package com.mucommander.ui.action;
 
-import javax.swing.*;
-
 import com.mucommander.commons.util.Pair;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 /**
  * Data structure that maps KeyStroke (accelerator) to MuAction id.
- * 
+ *
  * @author Arik Hadas
  */
 public class AcceleratorMap {
-    
-	// Accelerator types
-	public final static int PRIMARY_ACCELERATOR = 1;
+
+    // Accelerator types
+    public final static int PRIMARY_ACCELERATOR = 1;
     public final static int ALTERNATIVE_ACCELERATOR = 2;
-    
+
     // Maps KeyStrokes to MuAction id and accelerator type (PRIMARY_ACCELERATOR/ALTERNATIVE_ACCELERATOR) pair.
-	private static HashMap<KeyStroke, Pair<String, Integer>> map = new HashMap<KeyStroke, Pair<String, Integer>>();
-    
-	/**
-	 * Register KeyStroke to MuAction as primary accelerator.
-	 * 
-	 * @param ks - accelerator
-	 * @param actionId - id of MuAction to which the given accelerator would be registered.
-	 */
-	public void putAccelerator(KeyStroke ks, String actionId) {
-		put(ks, actionId, PRIMARY_ACCELERATOR);
-	}
-	
-	/**
-	 * Register KeyStroke to MuAction as alternative accelerator.
-	 * 
-	 * @param ks - alternative accelerator.
-	 * @param actionId - id of MuAction to which the given accelerator would be registered.
-	 */
-	public void putAlternativeAccelerator(KeyStroke ks, String actionId) {
-		put(ks, actionId, ALTERNATIVE_ACCELERATOR);
-	}
-	
-	/**
-	 * Return id of MuAction that accelerator is registered to.
-	 * 
-	 * @param ks - accelerator.
-	 * @return id of MuAction that the given accelerator is registered to.
-	 */
-    public String getActionId(KeyStroke ks) {
-    	Pair<String, Integer> idAndType = getActionIdAndAcceleratorTypeOfKeyStroke(ks);
-    	return idAndType != null ? idAndType.first : null;
+    private static HashMap<KeyStroke, Pair<String, Integer>> map = new HashMap<KeyStroke, Pair<String, Integer>>();
+
+    /**
+     * Register KeyStroke to MuAction as primary accelerator.
+     *
+     * @param ks       - accelerator
+     * @param actionId - id of MuAction to which the given accelerator would be registered.
+     */
+    public void putAccelerator(KeyStroke ks, String actionId) {
+        put(ks, actionId, PRIMARY_ACCELERATOR);
     }
-    
+
+    /**
+     * Register KeyStroke to MuAction as alternative accelerator.
+     *
+     * @param ks       - alternative accelerator.
+     * @param actionId - id of MuAction to which the given accelerator would be registered.
+     */
+    public void putAlternativeAccelerator(KeyStroke ks, String actionId) {
+        put(ks, actionId, ALTERNATIVE_ACCELERATOR);
+    }
+
+    /**
+     * Return id of MuAction that accelerator is registered to.
+     *
+     * @param ks - accelerator.
+     * @return id of MuAction that the given accelerator is registered to.
+     */
+    public String getActionId(KeyStroke ks) {
+        Pair<String, Integer> idAndType = getActionIdAndAcceleratorTypeOfKeyStroke(ks);
+        return idAndType != null ? idAndType.first : null;
+    }
+
     /**
      * Return accelerator type.
-     * 
+     *
      * @param ks - accelerator.
      * @return the type of the given accelerator (primary(1)/alternative(2)/not registered(0)).
      */
     public int getAcceleratorType(KeyStroke ks) {
-    	Pair<String, Integer> idAndType = getActionIdAndAcceleratorTypeOfKeyStroke(ks);
-    	return idAndType != null ? idAndType.second : 0;
+        Pair<String, Integer> idAndType = getActionIdAndAcceleratorTypeOfKeyStroke(ks);
+        return idAndType != null ? idAndType.second : 0;
     }
-    
+
     /**
      * Remove accelerator.
-     * 
+     *
      * @param ks - accelerator.
      */
     public void remove(KeyStroke ks) {
-    	map.remove(ks);
+        map.remove(ks);
     }
-    
+
     /**
      * Remove all accelerators.
      */
     public void clear() {
-    	map.clear();
+        map.clear();
     }
-    
+
     private void put(KeyStroke ks, String actionId, int acceleratorType) {
-    	if (ks != null)
-    		map.put(ks, new Pair<String, Integer>(actionId, acceleratorType));
+        if (ks != null)
+            map.put(ks, new Pair<String, Integer>(actionId, acceleratorType));
     }
-    
+
     private Pair<String, Integer> getActionIdAndAcceleratorTypeOfKeyStroke(KeyStroke ks) {
-    	return map.get(ks);
+        return map.get(ks);
     }
 }

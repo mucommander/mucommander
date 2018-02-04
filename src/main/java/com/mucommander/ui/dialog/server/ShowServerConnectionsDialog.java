@@ -52,12 +52,12 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
     private JButton closeButton;
 
     // Dialog's size has to be at least 400x300
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(400,300);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(400, 300);
 
     // Dialog's size has to be at most 600x400
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(600,400);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(600, 400);
 
-    
+
     public ShowServerConnectionsDialog(MainFrame mainFrame) {
         super(mainFrame, ActionProperties.getActionLabel(ShowServerConnectionsAction.Descriptor.ACTION_ID), mainFrame);
 
@@ -79,12 +79,12 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
                 // Show login (but not password) in the URL
                 // Note: realm returned by ConnectionHandler does not contain credentials
-                FileURL clonedRealm = (FileURL)connHandler.getRealm().clone();
+                FileURL clonedRealm = (FileURL) connHandler.getRealm().clone();
                 Credentials loginCredentials = new Credentials(connHandler.getCredentials().getLogin(), "");
                 clonedRealm.setCredentials(loginCredentials);
 
                 return clonedRealm.toString(true)
-                        +" ("+Translator.get(connHandler.isLocked()?"server_connections_dialog.connection_busy":"server_connections_dialog.connection_idle")+")";
+                        + " (" + Translator.get(connHandler.isLocked() ? "server_connections_dialog.connection_busy" : "server_connections_dialog.connection_idle") + ")";
             }
         });
 
@@ -92,8 +92,8 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         connectionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Select the first connection in the list
-        boolean hasConnections = connections.size()>0;
-        if(hasConnections)
+        boolean hasConnections = connections.size() > 0;
+        if (hasConnections)
             connectionList.setSelectedIndex(0);
 
         contentPane.add(
@@ -110,7 +110,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         disconnectButton = new JButton(Translator.get("server_connections_dialog.disconnect"));
         disconnectButton.setMnemonic(mnemonicHelper.getMnemonic(disconnectButton));
         disconnectButton.setEnabled(hasConnections);
-        if(hasConnections)
+        if (hasConnections)
             disconnectButton.addActionListener(this);
 
         buttonGroupPanel.add(disconnectButton);
@@ -119,7 +119,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         goToButton = new JButton(Translator.get("go_to"));
         goToButton.setMnemonic(mnemonicHelper.getMnemonic(goToButton));
         goToButton.setEnabled(hasConnections);
-        if(hasConnections)
+        if (hasConnections)
             goToButton.addActionListener(this);
         buttonGroupPanel.add(goToButton);
 
@@ -155,15 +155,15 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
         Object source = e.getSource();
 
         // Disconnects the selected connection
-        if(source==disconnectButton) {
+        if (source == disconnectButton) {
             int selectedIndex = connectionList.getSelectedIndex();
 
-            if(selectedIndex>=0 && selectedIndex<connections.size()) {
+            if (selectedIndex >= 0 && selectedIndex < connections.size()) {
                 final ConnectionHandler connHandler = connections.get(selectedIndex);
 
                 // Close connection in a separate thread as I/O can lock.
                 // Todo: Add a confirmation dialog if the connection is active as it will stop whatever the connection is currently doing
-                new Thread(){
+                new Thread() {
                     @Override
                     public void run() {
                         connHandler.closeConnection();
@@ -176,23 +176,23 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
                 connectionList.repaint();
 
                 // Disable contextual butons if there are no more connections
-                if(connections.size()==0) {
+                if (connections.size() == 0) {
                     disconnectButton.setEnabled(false);
                     goToButton.setEnabled(false);
                 }
             }
         }
         // Goes to the selected connection
-        else if (source==goToButton)  {
+        else if (source == goToButton) {
             // Dispose the dialog first
             dispose();
 
             int selectedIndex = connectionList.getSelectedIndex();
-            if(selectedIndex>=0 && selectedIndex<connections.size())
+            if (selectedIndex >= 0 && selectedIndex < connections.size())
                 mainFrame.getActivePanel().tryChangeCurrentFolder(connections.get(selectedIndex).getRealm());
         }
         // Dispose the dialog
-        else if (source==closeButton)  {
+        else if (source == closeButton) {
             dispose();
         }
     }

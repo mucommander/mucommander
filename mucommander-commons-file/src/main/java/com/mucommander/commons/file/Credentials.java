@@ -1,21 +1,20 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 
 package com.mucommander.commons.file;
@@ -30,7 +29,7 @@ public final class Credentials {
 
     private String login;
     private String password;
-	
+
     /**
      * Creates a new instance with the supplied login and password.
      * Any provided null values will be replaced by empty strings.
@@ -40,11 +39,11 @@ public final class Credentials {
      */
     public Credentials(String login, String password) {
         // Replace null values by empty strings
-        if(login==null)
-            login="";
+        if (login == null)
+            login = "";
 
-        if(password==null)
-            password="";
+        if (password == null)
+            password = "";
 
         this.login = login;
         this.password = password;
@@ -58,7 +57,7 @@ public final class Credentials {
     public String getLogin() {
         return login;
     }
-	
+
     /**
      * Returns the password part. The returned password may be an empty string but never <code>null</code>.
      *
@@ -76,7 +75,7 @@ public final class Credentials {
     public String getMaskedPassword() {
         int passwordLength = password.length();
         StringBuffer maskedPasswordSb = new StringBuffer(passwordLength);
-        for(int i=0; i<passwordLength; i++)
+        for (int i = 0; i < passwordLength; i++)
             maskedPasswordSb.append('*');
 
         return maskedPasswordSb.toString();
@@ -127,16 +126,16 @@ public final class Credentials {
      */
     public boolean equals(Object o, boolean passwordSensitive) {
         // Empty Credentials and null are equivalent
-        if(o==null)
+        if (o == null)
             return isEmpty();
 
-        if(!(o instanceof Credentials)) // Note: this class is declared final so we don't need to worry about subclasses
+        if (!(o instanceof Credentials)) // Note: this class is declared final so we don't need to worry about subclasses
             return false;
 
-        Credentials credentials = (Credentials)o;
+        Credentials credentials = (Credentials) o;
 
         return credentials.login.equals(this.login)
-            && (!passwordSensitive || credentials.password.equals(this.password));
+                && (!passwordSensitive || credentials.password.equals(this.password));
     }
 
     /**
@@ -148,8 +147,7 @@ public final class Credentials {
     public Object clone() {
         try {
             return super.clone();
-        }
-        catch(CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             // Should never happen
             return null;
         }

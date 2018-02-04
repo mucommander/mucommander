@@ -18,24 +18,16 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.Component;
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action allows to cycle forward through the current FolderPanel's focusable components: file table, folder tree
@@ -45,7 +37,7 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class FocusNextAction extends MuAction {
 
-    public FocusNextAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public FocusNextAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Perform the action also when in 'no events' mode
@@ -57,7 +49,7 @@ public class FocusNextAction extends MuAction {
         Component focusOwner = mainFrame.getFocusOwner();
 
         // Abort if the focus is not in the MainFrame this action is tied to
-        if(focusOwner==null)
+        if (focusOwner == null)
             return;
 
         FolderPanel folderPanel = mainFrame.getActivePanel();
@@ -67,11 +59,11 @@ public class FocusNextAction extends MuAction {
 
         // Request focus on the 'next' component, the cycle order being from left to right, top to bottom.
         Component nextComponent;
-        if(focusOwner==locationField)
-            nextComponent = folderPanel.isTreeVisible()?tree:fileTable;
-        else if(focusOwner==tree)
+        if (focusOwner == locationField)
+            nextComponent = folderPanel.isTreeVisible() ? tree : fileTable;
+        else if (focusOwner == tree)
             nextComponent = fileTable;
-        else if(focusOwner==fileTable)
+        else if (focusOwner == fileTable)
             nextComponent = locationField;
         else
             return;
@@ -79,27 +71,35 @@ public class FocusNextAction extends MuAction {
         FocusRequester.requestFocusInWindow(nextComponent);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new FocusNextAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new FocusNextAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "FocusNext";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "FocusNext";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

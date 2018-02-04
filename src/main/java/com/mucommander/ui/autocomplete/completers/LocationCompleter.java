@@ -23,33 +23,33 @@ import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import java.util.Vector;
 
 /**
- * LocationCompleter is a Completer based on locations, meaning root folders, 
+ * LocationCompleter is a Completer based on locations, meaning root folders,
  * browsable file paths, bookmarks and system variables.
- * 
+ *
  * @author Arik Hadas, based on the code of Santhosh Kumar: http://www.jroller.com/santhosh/entry/file_path_autocompletion
  */
 
 public class LocationCompleter extends Completer {
-	
-	public LocationCompleter(){ 
+
+    public LocationCompleter() {
         registerService(ServiceFactory.getVolumesService());
         registerService(ServiceFactory.getBrowsableFilesService());
         registerService(ServiceFactory.getBookmarksService());
         registerService(ServiceFactory.getSystemVariablesService());
     }
 
-	@Override
-    protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
-    	return getPossibleCompletionsFromServices(component.getText());
-    }
- 
     @Override
-    public void updateTextComponent(final String selected, AutocompleterTextComponent comp){
-        if(selected==null) 
+    protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
+        return getPossibleCompletionsFromServices(component.getText());
+    }
+
+    @Override
+    public void updateTextComponent(final String selected, AutocompleterTextComponent comp) {
+        if (selected == null)
             return;
-        
-        String location = tryToCompleteFromServices(selected);        
+
+        String location = tryToCompleteFromServices(selected);
         if (comp.isEnabled() && location != null)
-        	comp.setText(location);
+            comp.setText(location);
     }
 }

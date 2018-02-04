@@ -18,71 +18,75 @@
 
 package com.mucommander.conf;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * This class contains the configurations of muCommander and exposes their API methods.
  * It provides global access to the configurations without using singletons.
- * 
+ *
  * @author Arik Hadas
  */
 public class MuConfigurations {
 
-	/** Static configurations of muConnabder */
-	private static final MuPreferences preferences = new MuPreferences();
-	/** Dynamic configurations of muCommander */
-	private static final MuSnapshot snapshot = new MuSnapshot();
-	
-	/////////////////////////
-	// API for preferences //
-	/////////////////////////
-	
-	public static MuPreferencesAPI getPreferences() {
-		return preferences;
-	}
-	
-	public static void loadPreferences() throws IOException, ConfigurationException {
-		preferences.read();
-	}
-	
-	public static void savePreferences() throws IOException, ConfigurationException {
-		preferences.write();
-	}
-	
-	public static void setPreferencesFile(String path) throws FileNotFoundException {
-		preferences.setConfigurationFile(path);
-	}
-	
-	public static boolean isPreferencesFileExists() throws IOException {
-		return preferences.isFileExists();
-	}
-	
+    /**
+     * Static configurations of muConnabder
+     */
+    private static final MuPreferences preferences = new MuPreferences();
+    /**
+     * Dynamic configurations of muCommander
+     */
+    private static final MuSnapshot snapshot = new MuSnapshot();
+
+    /////////////////////////
+    // API for preferences //
+    /////////////////////////
+
+    public static MuPreferencesAPI getPreferences() {
+        return preferences;
+    }
+
+    public static void loadPreferences() throws IOException, ConfigurationException {
+        preferences.read();
+    }
+
+    public static void savePreferences() throws IOException, ConfigurationException {
+        preferences.write();
+    }
+
+    public static void setPreferencesFile(String path) throws FileNotFoundException {
+        preferences.setConfigurationFile(path);
+    }
+
+    public static boolean isPreferencesFileExists() throws IOException {
+        return preferences.isFileExists();
+    }
+
     public static void addPreferencesListener(ConfigurationListener listener) {
-    	preferences.addConfigurationListener(listener);
+        preferences.addConfigurationListener(listener);
     }
 
     public static void removePreferencesListener(ConfigurationListener listener) {
-    	preferences.removeConfigurationListener(listener);
+        preferences.removeConfigurationListener(listener);
     }
 
     //////////////////////
     // API for snapshot //
     //////////////////////
-    
+
     public static Configuration getSnapshot() {
-    	return snapshot.getConfiguration();
+        return snapshot.getConfiguration();
     }
-    
+
     public static void loadSnapshot() throws IOException, ConfigurationException {
-    	snapshot.read();
+        snapshot.read();
     }
-    
+
     public static void saveSnapshot() throws IOException, ConfigurationException {
-    	snapshot.write();
+        snapshot.write();
     }
 }

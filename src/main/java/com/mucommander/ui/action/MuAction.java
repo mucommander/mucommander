@@ -18,33 +18,28 @@
 
 package com.mucommander.ui.action;
 
+import com.mucommander.commons.file.util.ResourceLoader;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 import java.util.Map;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.file.util.ResourceLoader;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * MuAction extends <code>AbstractAction</code> to add more functionalities and make it easier to integrate within
  * muCommander. The biggest difference with <code>AbstractAction</code> is that MuAction instances are bound to a
  * specific {@link MainFrame}.<br>
  * Note that by being an Action, MuAction can be used in every Swing components that accept Action instances.
- *
+ * <p>
  * <p>The MuAction class is abstract. MuAction subclasses must implement the {@link #performAction()} method
  * to provide a response to the action trigger, and must provide a constructor with the
  * {@link #MuAction(MainFrame, Map)} signature.
- *
+ * <p>
  * <p>MuAction subclasses should not be instantiated directly, {@link ActionManager}'s <code>getActionInstance</code>
  * methods should be used instead. Using {@link ActionManager} to retrieve a MuAction ensures that only one instance
  * exists for a given {@link com.mucommander.ui.main.MainFrame}. This is particularly important because actions are stateful and can be used
@@ -53,39 +48,47 @@ import com.mucommander.ui.main.MainFrame;
  * {@link MainFrame} saves some memory and also CPU cycles as some actions listen to particular events to change
  * their state accordingly.
  *
+ * @author Maxence Bernard
  * @see ActionManager
  * @see ActionKeymap
- * @author Maxence Bernard
  */
 public abstract class MuAction extends AbstractAction {
-	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    /** The MainFrame associated with this MuAction */
+    /**
+     * The MainFrame associated with this MuAction
+     */
     protected MainFrame mainFrame;
 
-    /** if true, action events are ignored while the MainFrame is in 'no events mode'. Enabled by default. */
+    /**
+     * if true, action events are ignored while the MainFrame is in 'no events mode'. Enabled by default.
+     */
     private boolean honourNoEventsMode = true;
 
-    /** if true, #performAction() is called from a separate thread (and not from the event thread) when this action is
-     * performed. Disabled by default. */
+    /**
+     * if true, #performAction() is called from a separate thread (and not from the event thread) when this action is
+     * performed. Disabled by default.
+     */
     private boolean performActionInSeparateThread = false;
 
-    /** Name of the alternate accelerator KeyStroke property */
+    /**
+     * Name of the alternate accelerator KeyStroke property
+     */
     public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
-    
+
     /**
      * Creates a new <code>MuAction</code> associated with the specified {@link MainFrame}. The properties contained by
      * the given {@link Hashtable} are used to initialize this action's property map.
      *
-     * @param mainFrame the MainFrame to associate with this new MuAction
+     * @param mainFrame  the MainFrame to associate with this new MuAction
      * @param properties the initial properties to use in this action. The Hashtable may simply be empty if no initial
-     * properties are specified.
+     *                   properties are specified.
      */
-    public MuAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MuAction(MainFrame mainFrame, Map<String, Object> properties) {
         this.mainFrame = mainFrame;
-        
+
         // Add properties to this Action.
-        for(String key : properties.keySet())
+        for (String key : properties.keySet())
             putValue(key, properties.get(key));
     }
 
@@ -105,7 +108,7 @@ public abstract class MuAction extends AbstractAction {
      * @return the label of this action, <code>null</code> if this action has no label
      */
     public String getLabel() {
-        return (String)getValue(Action.NAME);
+        return (String) getValue(Action.NAME);
     }
 
     /**
@@ -126,7 +129,7 @@ public abstract class MuAction extends AbstractAction {
      * @return the tooltip text of this action, <code>null</code> if this action has no tooltip
      */
     public String getToolTipText() {
-        return (String)getValue(Action.SHORT_DESCRIPTION);
+        return (String) getValue(Action.SHORT_DESCRIPTION);
     }
 
     /**
@@ -147,7 +150,7 @@ public abstract class MuAction extends AbstractAction {
      * @return the icon of this action, <code>null</code> if this action has no icon
      */
     public ImageIcon getIcon() {
-        return (ImageIcon)getValue(Action.SMALL_ICON);
+        return (ImageIcon) getValue(Action.SMALL_ICON);
     }
 
     /**
@@ -168,7 +171,7 @@ public abstract class MuAction extends AbstractAction {
      * @return the accelerator KeyStroke of this action, <code>null</code> if this action has no accelerator
      */
     public KeyStroke getAccelerator() {
-        return (KeyStroke)getValue(Action.ACCELERATOR_KEY);
+        return (KeyStroke) getValue(Action.ACCELERATOR_KEY);
     }
 
     /**
@@ -189,7 +192,7 @@ public abstract class MuAction extends AbstractAction {
      * @return the alternate accelerator KeyStroke of this action, <code>null</code> if it doesn't have any
      */
     public KeyStroke getAlternateAccelerator() {
-        return (KeyStroke)getValue(ALTERNATE_ACCELERATOR_PROPERTY_KEY);
+        return (KeyStroke) getValue(ALTERNATE_ACCELERATOR_PROPERTY_KEY);
     }
 
     /**
@@ -213,9 +216,9 @@ public abstract class MuAction extends AbstractAction {
      * @return <code>true</code> if both keystrokes' char, code and modifiers are equal
      */
     protected boolean acceleratorsEqual(KeyStroke ks1, KeyStroke ks2) {
-        return ks1.getKeyChar()==ks2.getKeyChar()
-            && ks1.getKeyCode()==ks2.getKeyCode()
-            && ks1.getModifiers()==ks2.getModifiers();
+        return ks1.getKeyChar() == ks2.getKeyChar()
+                && ks1.getKeyCode() == ks2.getKeyCode()
+                && ks1.getModifiers() == ks2.getModifiers();
     }
 
     /**
@@ -228,11 +231,11 @@ public abstract class MuAction extends AbstractAction {
      */
     public boolean isAccelerator(KeyStroke keyStroke) {
         KeyStroke accelerator = getAccelerator();
-        if(accelerator!=null && acceleratorsEqual(accelerator, keyStroke))
+        if (accelerator != null && acceleratorsEqual(accelerator, keyStroke))
             return true;
 
         accelerator = getAlternateAccelerator();
-        return accelerator!=null && acceleratorsEqual(accelerator, keyStroke);
+        return accelerator != null && acceleratorsEqual(accelerator, keyStroke);
     }
 
 
@@ -245,13 +248,13 @@ public abstract class MuAction extends AbstractAction {
      */
     public String getAcceleratorText() {
         KeyStroke accelerator = getAccelerator();
-        if(accelerator==null)
+        if (accelerator == null)
             return null;
 
         String text = KeyEvent.getKeyText(accelerator.getKeyCode());
         int modifiers = accelerator.getModifiers();
-        if(modifiers!=0)
-            text = KeyEvent.getKeyModifiersText(modifiers)+"+"+text;
+        if (modifiers != 0)
+            text = KeyEvent.getKeyModifiersText(modifiers) + "+" + text;
 
         return text;
     }
@@ -275,7 +278,7 @@ public abstract class MuAction extends AbstractAction {
      * By default (unless this method has been called), 'no events mode' is honoured.
      *
      * @param honourNoEventsMode if true, actions events will be ignored while the <code>MainFrame</code> associated
-     * with this action is in 'no events mode'
+     *                           with this action is in 'no events mode'
      */
     public void setHonourNoEventsMode(boolean honourNoEventsMode) {
         this.honourNoEventsMode = honourNoEventsMode;
@@ -286,7 +289,7 @@ public abstract class MuAction extends AbstractAction {
      * Returns <code>true</code> if {@link #performAction()} is called from a separate thread (and not from the event
      * thread) when this action is performed. By default, <code>false</code> is returned, i.e. actions are performed
      * from the main event thread.
-     *
+     * <p>
      * <p>Actions that have the potential to hold the caller thread for a substantial amount of time should perform the
      * action in a separate thread, to avoid locking the event thread.</p>
      *
@@ -301,12 +304,12 @@ public abstract class MuAction extends AbstractAction {
      * Sets whether {@link #performAction()} is called from a separate thread (and not from the event thread) when this
      * action is performed. By default (unless this method has been called), actions are performed from the main event
      * thread.
-     *
+     * <p>
      * <p>Actions that have the potential to hold the caller thread for a substantial amount of time should perform the
      * action in a separate thread, to avoid locking the event thread.</p>
      *
      * @param performActionInSeparateThread <code>true</code> to have {@link #performAction()} called from a separate
-     * thread (and not from the event thread) when this action is performed
+     *                                      thread (and not from the event thread) when this action is performed
      */
     public void setPerformActionInSeparateThread(boolean performActionInSeparateThread) {
         this.performActionInSeparateThread = performActionInSeparateThread;
@@ -344,8 +347,8 @@ public abstract class MuAction extends AbstractAction {
      */
     public static ImageIcon getStandardIcon(Class<? extends MuAction> action) {
         // Look for an icon image file with the /action/<classname>.png path and use it if it exists
-    	String iconPath = getStandardIconPath(action);
-        if(ResourceLoader.getResourceAsURL(iconPath) == null)
+        String iconPath = getStandardIconPath(action);
+        if (ResourceLoader.getResourceAsURL(iconPath) == null)
             return null;
         return IconManager.getIcon(iconPath);
     }
@@ -362,7 +365,7 @@ public abstract class MuAction extends AbstractAction {
     }
 
     private static String getActionName(Class<? extends MuAction> action) {
-    	return action.getSimpleName().replace("Action", "");
+        return action.getSimpleName().replace("Action", "");
     }
 
     ///////////////////////////////////
@@ -376,16 +379,15 @@ public abstract class MuAction extends AbstractAction {
      */
     public void actionPerformed(ActionEvent e) {
         // Discard this event while in 'no events mode'
-        if(!(mainFrame.getNoEventsMode() && honourNoEventsMode())) {
-            if(performActionInSeparateThread()) {
+        if (!(mainFrame.getNoEventsMode() && honourNoEventsMode())) {
+            if (performActionInSeparateThread()) {
                 new Thread() {
                     @Override
                     public void run() {
                         performAction();
                     }
                 }.start();
-            }
-            else {
+            } else {
                 performAction();
             }
         }
@@ -403,6 +405,7 @@ public abstract class MuAction extends AbstractAction {
 
     /**
      * Returns the <code>ActionDescriptor</code> of the action.
+     *
      * @return the <code>ActionDescriptor</code> of the action.
      */
     public abstract ActionDescriptor getDescriptor();

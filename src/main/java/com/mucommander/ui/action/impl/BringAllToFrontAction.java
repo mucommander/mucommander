@@ -18,18 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import javax.swing.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Brings all MainFrame windows to front, from the last window index to the first, except for the current
@@ -37,18 +32,18 @@ import com.mucommander.ui.main.WindowManager;
  * After this action has been performed, minimized windows will return to a normal state and windows will be stacked
  * in the following order:
  * <ul>
- *  <li>Current MainFrame
- *  <li>MainFrame #1
- *  <li>MainFrame #2
- *  <li>...
- *  <li>MainFrame #N
+ * <li>Current MainFrame
+ * <li>MainFrame #1
+ * <li>MainFrame #2
+ * <li>...
+ * <li>MainFrame #N
  * </ul>
  *
  * @author Maxence Bernard
  */
 public class BringAllToFrontAction extends MuAction {
 
-    public BringAllToFrontAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public BringAllToFrontAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -59,9 +54,9 @@ public class BringAllToFrontAction extends MuAction {
 
         int nbMainFrames = mainFrames.size();
         MainFrame mainFrame;
-        for(int i=nbMainFrames-1; i>=0; i--) {
+        for (int i = nbMainFrames - 1; i >= 0; i--) {
             mainFrame = mainFrames.get(i);
-            if(mainFrame!=currentMainFrame) {
+            if (mainFrame != currentMainFrame) {
                 mainFrame.toFront();
             }
         }
@@ -69,27 +64,35 @@ public class BringAllToFrontAction extends MuAction {
         currentMainFrame.toFront();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new BringAllToFrontAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new BringAllToFrontAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "BringAllToFront";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "BringAllToFront";
 
-		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.WINDOW;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

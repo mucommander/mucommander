@@ -31,33 +31,38 @@ import java.awt.event.ActionListener;
 
 
 /**
- * 
- *
  * @author Maxence Bernard
  */
 public class QuestionDialog extends FocusDialog implements ActionListener, DialogResult {
-	
-    /** Dialog owner */
+
+    /**
+     * Dialog owner
+     */
     private JButton buttons[];
     private int actionValues[];
-	
+
     private int retValue = DIALOG_DISPOSED_ACTION;
 
     private YBoxPanel mainPanel;
 
-    /** This value is returned by {@link #getActionValue()} when the dialog has been disposed without the user
-     * selecting a custom action */
+    /**
+     * This value is returned by {@link #getActionValue()} when the dialog has been disposed without the user
+     * selecting a custom action
+     */
     public final static int DIALOG_DISPOSED_ACTION = -1;
 
-    /** Minimum dialog size */
+    /**
+     * Minimum dialog size
+     */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 0);
 
-    /** Maximum dialog size */
+    /**
+     * Maximum dialog size
+     */
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480, 10000);
 
 
     /**
-     *
      * @param actionValues values for actions, each of them must be >= 0
      */
     public QuestionDialog(Frame owner, String title, String msg, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
@@ -66,7 +71,6 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
     }
 
     /**
-     *
      * @param actionValues values for actions, each of them must be >= 0
      */
     public QuestionDialog(Dialog owner, String title, String msg, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
@@ -75,7 +79,6 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
     }
 
     /**
-     *
      * @param actionValues values for actions, each of them must be >= 0
      */
     public QuestionDialog(Frame owner, String title, Component msgComp, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
@@ -84,7 +87,6 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
     }
 
     /**
-     *
      * @param actionValues values for actions, each of them must be >= 0
      */
     public QuestionDialog(Dialog owner, String title, Component msgComp, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
@@ -92,7 +94,7 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
         init(msgComp, actionText, actionValues, maxNbCols);
     }
 
-	
+
     protected QuestionDialog(Frame owner, String title, Component locationRelative) {
         super(owner, title, locationRelative);
     }
@@ -100,8 +102,8 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
     protected QuestionDialog(Dialog owner, String title, Component locationRelative) {
         super(owner, title, locationRelative);
     }
-	
-	
+
+
     protected void init(Component comp, String actionText[], int actionValues[], int maxNbCols) {
         this.actionValues = actionValues;
 
@@ -111,29 +113,29 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
 
         mainPanel = new YBoxPanel();
 
-        if(comp!=null) {
+        if (comp != null) {
             mainPanel.addSpace(5);
             mainPanel.add(comp);
             mainPanel.addSpace(10);
         }
-		
+
         int nbButtons = actionText.length;
         buttons = new JButton[nbButtons];
         String text;
-		
-        for(int i=0; i<nbButtons; i++) {
+
+        for (int i = 0; i < nbButtons; i++) {
             text = actionText[i];
 
             buttons[i] = new JButton(text);
             buttons[i].addActionListener(this);
         }
-		
+
         setInitialFocusComponent(buttons[0]);
         mainPanel.add(new ButtonChoicePanel(buttons, maxNbCols, getRootPane()));
-		
+
         getContentPane().add(mainPanel, BorderLayout.NORTH);
     }
-	
+
 
     /**
      * Adds a component to this dialog, under the buttons panel.
@@ -143,8 +145,8 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
     protected void addComponent(JComponent comp) {
         mainPanel.add(comp);
     }
-	
-	
+
+
     /**
      * Shows this dialog, waits for an action/button to be selected and returns the selected action's value.
      * The dialog may be closed without the user selecting a custom action. In this case,
@@ -166,13 +168,13 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-		
-        for(int i=0; i<buttons.length; i++)
-            if (buttons[i]==source) {
+
+        for (int i = 0; i < buttons.length; i++)
+            if (buttons[i] == source) {
                 retValue = actionValues[i];
                 break;
             }
-	
+
         dispose();
     }
 

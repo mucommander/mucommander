@@ -20,13 +20,20 @@ package com.mucommander.shell;
 
 /**
  * Defines the structure of the shell history XML file.
+ *
  * @author Nicolas Rinaudo
  */
 interface ShellHistoryConstants {
-    /** Name of the XML file's root element. */
-    static final String ROOT_ELEMENT    = "history";
-    /** Name of a command element in the XML file. */
+    /**
+     * Name of the XML file's root element.
+     */
+    static final String ROOT_ELEMENT = "history";
+    /**
+     * Name of a command element in the XML file.
+     */
     static final String COMMAND_ELEMENT = "command";
-    /** Name of the root element's attribute containing the muCommander version that was used to create the shell history file */
-    static final String ATTRIBUTE_VERSION      = "version";
+    /**
+     * Name of the root element's attribute containing the muCommander version that was used to create the shell history file
+     */
+    static final String ATTRIBUTE_VERSION = "version";
 }

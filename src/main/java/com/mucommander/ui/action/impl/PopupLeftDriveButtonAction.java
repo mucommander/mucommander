@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.ActiveTabListener;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * Pops up the DrivePopupButton (the drop down button that allows to quickly select a volume or bookmark)
@@ -40,48 +34,56 @@ import com.mucommander.ui.tabs.ActiveTabListener;
  */
 public class PopupLeftDriveButtonAction extends MuAction implements ActiveTabListener {
 
-    public PopupLeftDriveButtonAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public PopupLeftDriveButtonAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
-        
+
         mainFrame.getLeftPanel().getTabs().addActiveTabListener(this);
-        
+
         activeTabChanged();
     }
 
     /**
-     * Enables or disables this action based on the current tab is not locked, 
+     * Enables or disables this action based on the current tab is not locked,
      * this action will be enabled, if not it will be disabled.
      */
-	public void activeTabChanged() {
-		setEnabled(!mainFrame.getLeftPanel().getTabs().getCurrentTab().isLocked());
-	}
+    public void activeTabChanged() {
+        setEnabled(!mainFrame.getLeftPanel().getTabs().getCurrentTab().isLocked());
+    }
 
     @Override
     public void performAction() {
         mainFrame.getLeftPanel().getDriveButton().popupMenu();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new PopupLeftDriveButtonAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new PopupLeftDriveButtonAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "PopupLeftDriveButton";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "PopupLeftDriveButton";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.ALT_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.ALT_DOWN_MASK);
+        }
     }
 }

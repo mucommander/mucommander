@@ -35,17 +35,22 @@ import java.util.Date;
  */
 public class CustomDateFormat implements ConfigurationListener {
 
-    /** Singleton instance */
+    /**
+     * Singleton instance
+     */
     private static CustomDateFormat singleton;
 
-    /** Custom SimpleDateFormat instance */
+    /**
+     * Custom SimpleDateFormat instance
+     */
     private static SimpleDateFormat dateFormat;
 
 
     /**
      * Creates a new CustomDateFormat instance.
      */
-    private CustomDateFormat() {}
+    private CustomDateFormat() {
+    }
 
 
     /**
@@ -68,16 +73,16 @@ public class CustomDateFormat implements ConfigurationListener {
      * @return the given format string with '/' separator characters replaced by the given separator character.
      */
     public static String replaceDateSeparator(String dateFormatString, String separator) {
-        if(separator==null || separator.equals("/"))
+        if (separator == null || separator.equals("/"))
             return dateFormatString;
 
         StringBuilder dateFormatStringSB = new StringBuilder();
         int pos1 = 0;
         int pos2;
-        while((pos2=dateFormatString.indexOf('/', pos1))>-1) {
+        while ((pos2 = dateFormatString.indexOf('/', pos1)) > -1) {
             dateFormatStringSB.append(dateFormatString.substring(pos1, pos2));
             dateFormatStringSB.append(separator);
-            pos1 = pos2+1;
+            pos1 = pos2 + 1;
         }
         dateFormatStringSB.append(dateFormatString.substring(pos1, dateFormatString.length()));
         return dateFormatStringSB.toString();
@@ -86,13 +91,13 @@ public class CustomDateFormat implements ConfigurationListener {
 
     /**
      * Returns the date format stored in the preferences and used by this class to format dates.
-     * The format of the returned string is the one used by the <code>java.text.SimpleDateFormat</code> class. 
+     * The format of the returned string is the one used by the <code>java.text.SimpleDateFormat</code> class.
      */
     public static String getDateFormatString() {
         return replaceDateSeparator(
-        		MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT, MuPreferences.DEFAULT_DATE_FORMAT),
-        		MuConfigurations.getPreferences().getVariable(MuPreference.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR))
-        + " " + MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT, MuPreferences.DEFAULT_TIME_FORMAT);
+                MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT, MuPreferences.DEFAULT_DATE_FORMAT),
+                MuConfigurations.getPreferences().getVariable(MuPreference.DATE_SEPARATOR, MuPreferences.DEFAULT_DATE_SEPARATOR))
+                + " " + MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT, MuPreferences.DEFAULT_TIME_FORMAT);
     }
 
 
@@ -110,10 +115,10 @@ public class CustomDateFormat implements ConfigurationListener {
     private static SimpleDateFormat createDateFormat() {
         return new SimpleDateFormat(getDateFormatString());
     }
-	
-	
+
+
     /**
-     * Formats the given with custom date format and returns a formatted date string. 
+     * Formats the given with custom date format and returns a formatted date string.
      *
      * @return a formatted string representing the given date.
      */
@@ -125,7 +130,7 @@ public class CustomDateFormat implements ConfigurationListener {
         // it must be synchronized externally."
         return dateFormat.format(date);
     }
-	
+
 
     ///////////////////////////////////
     // ConfigurationListener methods //

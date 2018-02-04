@@ -26,8 +26,8 @@ import java.io.UnsupportedEncodingException;
  * <code>Base64Encoder</code> provides methods to ease the encoding of strings and byte arrays in base64.
  * The {@link Base64OutputStream} class is used under the hood to perform the actual base64 encoding.
  *
- * @see Base64OutputStream
  * @author Maxence Bernard
+ * @see Base64OutputStream
  */
 public abstract class Base64Encoder {
 
@@ -45,7 +45,7 @@ public abstract class Base64Encoder {
      * Base64-encodes the given byte array using {@link Base64Table#STANDARD_TABLE} using the given Base64 table
      * and returns the result.
      *
-     * @param b bytes to base64-encode
+     * @param b     bytes to base64-encode
      * @param table the table to use to encode data
      * @return the base64-encoded String
      */
@@ -56,7 +56,7 @@ public abstract class Base64Encoder {
     /**
      * Shorthand for {@link #encode(byte[], int, int, Base64Table)} invoked with {@link Base64Table#STANDARD_TABLE}.
      *
-     * @param b bytes to base64-encode
+     * @param b   bytes to base64-encode
      * @param off position to the first byte in the array to be encoded
      * @param len number of bytes in the array to encode
      * @return the base64-encoded String
@@ -68,9 +68,9 @@ public abstract class Base64Encoder {
     /**
      * Base64-encodes the given byte array, from off to len, and returns the result.
      *
-     * @param b bytes to base64-encode
-     * @param off position to the first byte in the array to be encoded
-     * @param len number of bytes in the array to encode
+     * @param b     bytes to base64-encode
+     * @param off   position to the first byte in the array to be encoded
+     * @param len   number of bytes in the array to encode
      * @param table the table to use to encode data
      * @return the base64-encoded String
      */
@@ -83,14 +83,13 @@ public abstract class Base64Encoder {
             out64.writePadding();
 
             return new String(bout.toByteArray());
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             // Should never happen
             return null;
-        }
-        finally {
-            try { out64.close(); }
-            catch(IOException e) {
+        } finally {
+            try {
+                out64.close();
+            } catch (IOException e) {
                 // Should never happen
             }
         }
@@ -106,8 +105,7 @@ public abstract class Base64Encoder {
     public static String encode(String s) {
         try {
             return encode(s, "UTF-8", Base64Table.STANDARD_TABLE);
-        }
-        catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             // Should never happen, UTF-8 is necessarily supported by the Java runtime
             return null;
         }
@@ -117,9 +115,9 @@ public abstract class Base64Encoder {
      * Base64-encodes the given String and returns result. The specified encoding is used for tranforming
      * the string into bytes.
      *
-     * @param s the String to base64-encode
+     * @param s        the String to base64-encode
      * @param encoding the character encoding to use for transforming the string into bytes
-     * @param table the table to use to encode data
+     * @param table    the table to use to encode data
      * @return the base64-encoded String
      * @throws UnsupportedEncodingException if the specified encoding is not supported by the Java runtime
      */

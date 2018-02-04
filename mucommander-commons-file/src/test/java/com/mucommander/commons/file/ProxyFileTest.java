@@ -1,28 +1,28 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.mucommander.commons.file;
 
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
-import org.testng.annotations.Test;
 
 /**
  * An {@link AbstractFileTest} implementation for {@link ProxyFile}, with some additional
@@ -56,20 +56,20 @@ public class ProxyFileTest extends AbstractFileTest {
 
     @Override
     public FileOperation[] getSupportedOperations() {
-        return new FileOperation[] {
-            FileOperation.READ_FILE,
-            FileOperation.RANDOM_READ_FILE,
-            FileOperation.WRITE_FILE,
-            FileOperation.APPEND_FILE,
-            FileOperation.RANDOM_WRITE_FILE,
-            FileOperation.CREATE_DIRECTORY,
-            FileOperation.LIST_CHILDREN,
-            FileOperation.DELETE,
-            FileOperation.RENAME,
-            FileOperation.CHANGE_DATE,
-            FileOperation.CHANGE_PERMISSION,
-            FileOperation.GET_FREE_SPACE,
-            FileOperation.GET_TOTAL_SPACE
+        return new FileOperation[]{
+                FileOperation.READ_FILE,
+                FileOperation.RANDOM_READ_FILE,
+                FileOperation.WRITE_FILE,
+                FileOperation.APPEND_FILE,
+                FileOperation.RANDOM_WRITE_FILE,
+                FileOperation.CREATE_DIRECTORY,
+                FileOperation.LIST_CHILDREN,
+                FileOperation.DELETE,
+                FileOperation.RENAME,
+                FileOperation.CHANGE_DATE,
+                FileOperation.CHANGE_PERMISSION,
+                FileOperation.GET_FREE_SPACE,
+                FileOperation.GET_TOTAL_SPACE
         };
     }
 
@@ -94,7 +94,7 @@ public class ProxyFileTest extends AbstractFileTest {
         // This test can't pass as ProxyFile instance are not cached, only the underlying protocol file.
     }
 
-    
+
     /////////////////////////////
     // Additional test methods //
     /////////////////////////////
@@ -124,12 +124,11 @@ public class ProxyFileTest extends AbstractFileTest {
 
             try {
                 proxyFileMethod = proxyFileClass.getMethod(abstractFileMethod.getName(), abstractFileMethod.getParameterTypes());
-            }
-            catch (Exception e) {    // NoSuchMethodException, SecurityException
+            } catch (Exception e) {    // NoSuchMethodException, SecurityException
                 proxyFileMethod = null;
             }
 
-            assert proxyFileMethod != null && (proxyFileMethod.getDeclaringClass().equals(proxyFileClass)):
+            assert proxyFileMethod != null && (proxyFileMethod.getDeclaringClass().equals(proxyFileClass)) :
                     abstractFileMethod.getName() + " not overridden by " + proxyFileClass.getName();
         }
 

@@ -27,21 +27,24 @@ import java.awt.*;
  * Care should be exercised when using this class, however: it doesn't check for infinite recursion, meaning it's
  * entirely possible to freeze muCommander by linking a color to itself as a default.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class LinkedDefaultColor extends DefaultColor implements ThemeListener {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Identifier of the current theme color to default to. */
+    /**
+     * Identifier of the current theme color to default to.
+     */
     private int colorId;
-
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of {@link LinkedDefaultColor}.
+     *
      * @param colorId identifier of the current theme color to default to.
      */
     public LinkedDefaultColor(int colorId) {
@@ -50,20 +53,18 @@ public class LinkedDefaultColor extends DefaultColor implements ThemeListener {
     }
 
 
-
     // - DefaultColor implementation -----------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public Color getColor(ThemeData data) {
-        return data.getColor(colorId); 
+        return data.getColor(colorId);
     }
-
 
 
     // - ThemeListener implementation ----------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public void colorChanged(ColorChangedEvent event) {
-        if(event.getColorId() == colorId)
+        if (event.getColorId() == colorId)
             notifyChange(event.getColor());
     }
 

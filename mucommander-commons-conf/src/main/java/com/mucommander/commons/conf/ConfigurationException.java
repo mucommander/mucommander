@@ -30,14 +30,18 @@ package com.mucommander.commons.conf;
  * If the application needs to pass through other types of exceptions, it must wrap them in a
  * <code>ConfigurationException</code> or an exception derived from it.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class ConfigurationException extends Exception {
     /**
      * Creates a new configuration exception.
+     *
      * @param message the error message.
      */
-    public ConfigurationException(String message) {super(message);}
+    public ConfigurationException(String message) {
+        super(message);
+    }
 
     /**
      * Creates a new configuration exception wrapping an existing exception.
@@ -45,17 +49,23 @@ public class ConfigurationException extends Exception {
      * The existing exception will be embedded in the new one, and its message will
      * become the default message for the <code>ConfigurationException</code>.
      * </p>
+     *
      * @param cause the exception to be wrapped in a <code>ConfigurationException</code>.
      */
-    public ConfigurationException(Throwable cause) {super(cause);}
+    public ConfigurationException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * Creates a new configuration exception from an existing exception.
      * <p>
      * The existing exception will be embedded in the new one, but the new exception will have its own message.
      * </p>
+     *
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>ConfigurationException</code>.
      */
-    public ConfigurationException(String message, Throwable cause) {super(message, cause);}
+    public ConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -32,38 +32,40 @@ import java.awt.*;
  * @author Arik Hadas
  */
 
-abstract class QuickListItem extends JMenuItem implements ThemeListener {	
-	
-	protected static final int X_AXIS_OFFSET = 5;
-	
-	protected Font FONT;
-	protected Dimension dimension;
-	
-	public QuickListItem(String text) {
-		super(text);
-		setEnabled(false);
-		
-		ThemeManager.addCurrentThemeListener(this);
-	}
-	
-	@Override
+abstract class QuickListItem extends JMenuItem implements ThemeListener {
+
+    protected static final int X_AXIS_OFFSET = 5;
+
+    protected Font FONT;
+    protected Dimension dimension;
+
+    public QuickListItem(String text) {
+        super(text);
+        setEnabled(false);
+
+        ThemeManager.addCurrentThemeListener(this);
+    }
+
+    @Override
     public void setFont(Font font) {
-		FONT = font;
-		dimension = new Dimension((int) Math.ceil(getFontMetrics(font).stringWidth(getText()) * 1.1), (int) (font.getSize() * 1.5));
-		setPreferredSize(dimension);
-		setSize(dimension);
-	}
-	
-	/**
-	 * This function returns the item's dimension which is based on the item's font.
-	 */
-	@Override
-    public Dimension getPreferredSize() { return dimension; }
-	
-	/////////////////////////////
-	/// ThemeListener methods ///
-	/////////////////////////////
-	abstract public void colorChanged(ColorChangedEvent event);
-	
-	abstract public void fontChanged(FontChangedEvent event);
+        FONT = font;
+        dimension = new Dimension((int) Math.ceil(getFontMetrics(font).stringWidth(getText()) * 1.1), (int) (font.getSize() * 1.5));
+        setPreferredSize(dimension);
+        setSize(dimension);
+    }
+
+    /**
+     * This function returns the item's dimension which is based on the item's font.
+     */
+    @Override
+    public Dimension getPreferredSize() {
+        return dimension;
+    }
+
+    /////////////////////////////
+    /// ThemeListener methods ///
+    /////////////////////////////
+    abstract public void colorChanged(ColorChangedEvent event);
+
+    abstract public void fontChanged(FontChangedEvent event);
 }

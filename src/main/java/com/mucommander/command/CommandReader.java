@@ -30,38 +30,44 @@ import java.io.InputStream;
 /**
  * Class used to parse custom commands XML files.
  * <p>
- * Command file parsing is done through the {@link #read(InputStream,CommandBuilder) read} method, which is
+ * Command file parsing is done through the {@link #read(InputStream, CommandBuilder) read} method, which is
  * the only way to interact with this class.
  * </p>
  * <p>
  * Note that while this class knows how to read the content of an command XML file, its role is not to interpret it. This
  * is done by instances of {@link CommandBuilder}.
  * </p>
- * @see    CommandsXmlConstants
- * @see    CommandBuilder
- * @see    CommandWriter
+ *
  * @author Nicolas Rinaudo
+ * @see CommandsXmlConstants
+ * @see CommandBuilder
+ * @see CommandWriter
  */
 public class CommandReader extends DefaultHandler implements CommandsXmlConstants {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Where to send building messages. */
+    /**
+     * Where to send building messages.
+     */
     private CommandBuilder builder;
-
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Creates a new command reader.
+     *
      * @param b where to send custom command events.
      */
-    private CommandReader(CommandBuilder b) {builder = b;}
-
+    private CommandReader(CommandBuilder b) {
+        builder = b;
+    }
 
 
     // - XML interaction -----------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Parses the content of the specified input stream.
      * <p>
@@ -76,40 +82,49 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
      * however, so while the builder is guaranteed to receive correct messages, it might not receive all declared
      * commands.
      * </p>
-     * @param  in        where to read command data from.
-     * @param  b         where to send building events to.
+     *
+     * @param in where to read command data from.
+     * @param b  where to send building events to.
      * @throws Exception thrown if any error occurs.
      */
     public static void read(InputStream in, CommandBuilder b) throws CommandException, IOException {
         b.startBuilding();
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in, new CommandReader(b));}
-        catch(ParserConfigurationException e) {throw new CommandException(e);}
-        catch(SAXException e) {throw new CommandException(e);}
-        finally {b.endBuilding();}
+        try {
+            SAXParserFactory.newInstance().newSAXParser().parse(in, new CommandReader(b));
+        } catch (ParserConfigurationException e) {
+            throw new CommandException(e);
+        } catch (SAXException e) {
+            throw new CommandException(e);
+        } finally {
+            b.endBuilding();
+        }
     }
-
 
 
     // - XML methods ---------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * This method is public as an implementation side effect and should not be called directly.
      */
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // New custom command declaration.
-        if(qName.equals(ELEMENT_COMMAND)) {
+        if (qName.equals(ELEMENT_COMMAND)) {
             String alias = attributes.getValue(ATTRIBUTE_ALIAS);
             String command = attributes.getValue(ATTRIBUTE_VALUE);
 
             // Makes sure the required attributes are there.
-            if(alias != null && command != null) {
-            	CommandType type = CommandType.parseCommandType(attributes.getValue(ATTRIBUTE_TYPE));
-            	String display = attributes.getValue(ATTRIBUTE_DISPLAY);
+            if (alias != null && command != null) {
+                CommandType type = CommandType.parseCommandType(attributes.getValue(ATTRIBUTE_TYPE));
+                String display = attributes.getValue(ATTRIBUTE_DISPLAY);
 
-            	// Creates the command and passes it to the builder.
-            	try {builder.addCommand(new Command(alias, command, type, display));}
-            	catch(CommandException e) {throw new SAXException(e);}
+                // Creates the command and passes it to the builder.
+                try {
+                    builder.addCommand(new Command(alias, command, type, display));
+                } catch (CommandException e) {
+                    throw new SAXException(e);
+                }
             }
         }
     }

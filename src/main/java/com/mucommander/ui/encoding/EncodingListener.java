@@ -30,7 +30,7 @@ public interface EncodingListener {
     /**
      * Called when the currently selected encoding has changed.
      *
-     * @param source component in which the event occurred
+     * @param source      component in which the event occurred
      * @param oldEncoding previously selected encoding
      * @param newEncoding newly selected encoding
      */

@@ -3,10 +3,10 @@ package com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.
 import com.mucommander.commons.file.archive.sevenzip.provider.Common.LongVector;
 
 public interface CoderMixer2 {
-    
+
     void ReInit();
 
     void SetBindInfo(BindInfo bindInfo);
 
-    void SetCoderInfo(int coderIndex,LongVector inSizes, LongVector outSizes);
+    void SetCoderInfo(int coderIndex, LongVector inSizes, LongVector outSizes);
 }

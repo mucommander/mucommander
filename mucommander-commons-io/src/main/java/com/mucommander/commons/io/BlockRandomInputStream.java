@@ -25,7 +25,7 @@ import java.io.IOException;
  * is geared towards resources that are read block by block, either because of a particular constrain or for performance
  * reasons. This class typically comes in handy for network resources such as HTTP which have to request a block range
  * for reading the resource.
- *
+ * <p>
  * <p>Seeking inside the file is implemented transparently by reading a block starting at the seek offset.
  * If {@link #seek(long)} is called with an offset that is within the current block, no read occurs.
  * The block size should be carefully chosen as it affects seek performance and thus overall performance greatly:
@@ -37,25 +37,35 @@ import java.io.IOException;
  */
 public abstract class BlockRandomInputStream extends RandomAccessInputStream {
 
-    /** Block size, i.e. length of the {@link #block} array */
+    /**
+     * Block size, i.e. length of the {@link #block} array
+     */
     protected final int blockSize;
 
-    /** Contains the current file block. Data may end before the array does. */
+    /**
+     * Contains the current file block. Data may end before the array does.
+     */
     private final byte block[];
 
-    /** Current offset within the block array to the next byte to return */
+    /**
+     * Current offset within the block array to the next byte to return
+     */
     private int blockOff;
 
-    /** Length of the current block */
+    /**
+     * Length of the current block
+     */
     private int blockLen;
 
-    /** Global offset within the file */
+    /**
+     * Global offset within the file
+     */
     private long offset;
 
 
     /**
      * Creates a new <code>BlockRandomInputStream</code> using the specified block size.
-     *
+     * <p>
      * <p>The block size should be carefully chosen as it affects seek performance and thus overall performance greatly:
      * the larger the block size, the more data is fetched when seeking outside the current block and consequently the
      * longer it takes to reposition the stream. On the other hand, a larger block size will yield better performance
@@ -75,7 +85,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
      * @throws IOException if an I/O error occurred
      */
     private boolean eofReached() throws IOException {
-        return offset>=getLength();
+        return offset >= getLength();
     }
 
     /**
@@ -85,7 +95,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
      * @throws IOException if an I/O error occurred
      */
     private void checkBuffer() throws IOException {
-        if(blockOff >= blockLen)      // True initially
+        if (blockOff >= blockLen)      // True initially
             readBlock();
     }
 
@@ -96,7 +106,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
      * @throws IOException if an I/O error occurred
      */
     private void readBlock() throws IOException {
-        int len = Math.min((int)(getLength()-offset), blockSize);
+        int len = Math.min((int) (getLength() - offset), blockSize);
         // update len with the number of bytes actually read
         len = readBlock(offset, block, len);
 
@@ -112,7 +122,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
 
     @Override
     public int read() throws IOException {
-        if(eofReached())
+        if (eofReached())
             return -1;
 
         checkBuffer();
@@ -120,17 +130,17 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
         int ret = block[blockOff];
 
         blockOff++;
-        offset ++;
+        offset++;
 
         return ret;
     }
 
     @Override
     public int read(byte b[], int off, int len) throws IOException {
-        if(len==0)
+        if (len == 0)
             return 0;
 
-        if(eofReached())
+        if (eofReached())
             return -1;
 
         checkBuffer();
@@ -150,8 +160,8 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
 
     public void seek(long newOffset) throws IOException {
         // If the new offset is within the current buffer's range, simply reposition the offsets
-        if(newOffset>=offset && newOffset<offset+ blockLen) {
-            blockOff += (int)(newOffset-offset);
+        if (newOffset >= offset && newOffset < offset + blockLen) {
+            blockOff += (int) (newOffset - offset);
             offset = newOffset;
         }
         // If not, retrieve a block of data starting at the new offset and fill the buffer with it
@@ -169,7 +179,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
     /**
      * Reads a block, that spawns from <code>fileOffset</code> to <code>fileOffset+blockLen</code>, an returns
      * the number of bytes that could be read, normally <code>blockLen</code> but can be less.
-     *
+     * <p>
      * <p>Note that <code>blockLen</code> may be smaller than {@link #blockSize} if the end of file is near, to prevent
      * <code>EOF</code> from being reached. In other words, <code>fileOffset+blockLen</code> should theorically not
      * exceed the file's length, but this could happen in the unlikely event that the file just shrinked after
@@ -177,8 +187,8 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
      * <code>EOF</code> is reached prematurely and return the number of bytes that were actually read.</p>
      *
      * @param fileOffset global file offset that marks the beginning of the block
-     * @param block the array to fill with data, starting at 0
-     * @param blockLen number of bytes to read
+     * @param block      the array to fill with data, starting at 0
+     * @param blockLen   number of bytes to read
      * @return the number of bytes that were actually read, normally blockLen unless
      * @throws IOException if an I/O error occurred
      */

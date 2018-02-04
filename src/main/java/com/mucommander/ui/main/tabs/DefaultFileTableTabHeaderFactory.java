@@ -21,18 +21,17 @@ package com.mucommander.ui.main.tabs;
 import com.mucommander.ui.main.FolderPanel;
 
 /**
- * 
  * @author Arik Hadas
  */
 public class DefaultFileTableTabHeaderFactory extends FileTableTabHeaderFactory {
 
-	public DefaultFileTableTabHeaderFactory(FolderPanel folderPanel) {
-		super(folderPanel);
-	}
-	
-	@Override
-	public FileTableTabHeader create(FileTableTab tab) {
-		return new FileTableTabHeader(folderPanel, true, tab);
-	}
+    public DefaultFileTableTabHeaderFactory(FolderPanel folderPanel) {
+        super(folderPanel);
+    }
+
+    @Override
+    public FileTableTabHeader create(FileTableTab tab) {
+        return new FileTableTabHeader(folderPanel, true, tab);
+    }
 
 }

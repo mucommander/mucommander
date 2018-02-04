@@ -44,27 +44,33 @@ import java.util.Iterator;
  * Note that even though this component is affected by themes, it's impossible to edit the current theme while it's being displayed.
  * For this reason, the RunDialog doesn't listen to theme modifications.
  * </p>
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class ShellComboBox extends AutocompletedEditableCombobox implements EditableComboBoxListener, ShellHistoryListener, PopupMenuListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Input field used to type in commands. */
+    /**
+     * Input field used to type in commands.
+     */
     private JTextField input;
-    /** Where to run commands. */
-    private RunDialog  parent;
-
+    /**
+     * Where to run commands.
+     */
+    private RunDialog parent;
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Creates a new shell combo box.
+     *
      * @param parent where to execute commands.
      */
     public ShellComboBox(RunDialog parent) {
-    	super(CompleterFactory.getComboboxOptionsCompleter());
-    	
+        super(CompleterFactory.getComboboxOptionsCompleter());
+
         this.parent = parent;
 
         // Sets the combo box's editor.
@@ -84,12 +90,12 @@ public class ShellComboBox extends AutocompletedEditableCombobox implements Edit
         ShellHistoryManager.addListener(this);
 
         // Select first item in the combo box (if any)
-        if(getItemCount()>0)
+        if (getItemCount() > 0)
             setSelectedIndex(0);
 
         // Automatically update the text field's contents when an item is selected in this combo box
         setComboSelectionUpdatesTextField(true);
-        
+
         // Listener to actions fired by this EditableComboBox
         addEditableComboBoxListener(this);
     }
@@ -99,25 +105,24 @@ public class ShellComboBox extends AutocompletedEditableCombobox implements Edit
      */
     private void populateHistory() {
         Iterator<String> iterator;
-        String   command;
+        String command;
 
         // Empties the content of the combo box
         removeAllItems();
 
         // Iterates through all shell history elements.
         iterator = ShellHistoryManager.getHistoryIterator();
-        command  = null;
-        while(iterator.hasNext())
+        command = null;
+        while (iterator.hasNext())
             insertItemAt((command = iterator.next()), 0);
 
         // If the list is not empty, initialises the input field on the last command.
-        if(command != null) {
+        if (command != null) {
             input.setText(command);
             input.setSelectionStart(0);
             input.setSelectionEnd(command.length());
         }
     }
-
 
 
     // - Misc. ----------------------------------------------------------------------
@@ -130,52 +135,57 @@ public class ShellComboBox extends AutocompletedEditableCombobox implements Edit
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 
-        if(enabled) {
+        if (enabled) {
             input.setSelectionStart(0);
             input.setSelectionEnd(input.getText().length());
         }
     }
 
 
-
     // - EditableComboBoxListener implementation ------------------------------------
     // ------------------------------------------------------------------------------
 
-    public void comboBoxSelectionChanged(SaneComboBox source) {}
+    public void comboBoxSelectionChanged(SaneComboBox source) {
+    }
 
-    public void textFieldValidated(EditableComboBox source) {parent.runCommand(input.getText());}
+    public void textFieldValidated(EditableComboBox source) {
+        parent.runCommand(input.getText());
+    }
 
-    public void textFieldCancelled(EditableComboBox source) {parent.dispose();}
+    public void textFieldCancelled(EditableComboBox source) {
+        parent.dispose();
+    }
 
 
     // - Shell listener code --------------------------------------------------------
     // ------------------------------------------------------------------------------
 
     public void historyChanged(String command) {
-    	command = command.trim();
-		insertItemAt(command, 0);
+        command = command.trim();
+        insertItemAt(command, 0);
     }
-    
+
     public void historyCleared() {
         removeAllItems();
         input.setText("");
     }
 
 
-
     // - Popup menu listening -------------------------------------------------------
     // ------------------------------------------------------------------------------
+
     /**
      * Ignored.
      */
-    public void popupMenuCanceled(PopupMenuEvent e) {}
+    public void popupMenuCanceled(PopupMenuEvent e) {
+    }
 
     /**
      * Makes sure the selection is always the first element in the list.
      */
     public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
         setComboSelectionUpdatesTextField(false);
-        if(getItemCount() > 0)
+        if (getItemCount() > 0)
             setSelectedIndex(0);
 
         setComboSelectionUpdatesTextField(true);
@@ -184,14 +194,19 @@ public class ShellComboBox extends AutocompletedEditableCombobox implements Edit
     /**
      * Ignored.
      */
-    public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+    public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+    }
 
 
     // - Command handling -----------------------------------------------------------
     // ------------------------------------------------------------------------------
+
     /**
      * Returns the current shell command.
+     *
      * @return the current shell command.
      */
-    public String getCommand() {return input.getText();}
+    public String getCommand() {
+        return input.getText();
+    }
 }
