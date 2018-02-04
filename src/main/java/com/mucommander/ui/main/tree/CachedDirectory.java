@@ -19,51 +19,56 @@
 
 package com.mucommander.ui.main.tree;
 
-import java.util.Arrays;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.ProxyFile;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.util.Arrays;
 
 /**
  * A class that holds cached children of a directory.
- * 
+ *
  * @author Mariusz Jakubowski
- * 
  */
 public class CachedDirectory extends ProxyFile {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CachedDirectory.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(CachedDirectory.class);
+
     private static final ImageIcon NOT_ACCESSIBLE_ICON = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NOT_ACCESSIBLE_FILE);
 
-    /** an array of cached children */
+    /**
+     * an array of cached children
+     */
     private AbstractFile[] cachedChildren = null;
-    
-    /** a flag indicating that a thread is running, caching children */
+
+    /**
+     * a flag indicating that a thread is running, caching children
+     */
     private boolean readingChildren = false;
-    
-    /** a timestamp of last modification time of this directory */
+
+    /**
+     * a timestamp of last modification time of this directory
+     */
     private long lsTimeStamp = -1;
-    
-    /** a cache in which this object is stored */
+
+    /**
+     * a cache in which this object is stored
+     */
     private DirectoryCache cache;
 
-    /** a cached icon */
+    /**
+     * a cached icon
+     */
     private Icon cachedIcon;
-    
+
 
     /**
      * Creates a new instance.
-     * 
+     *
      * @param directory a directory to cache
      */
     public CachedDirectory(AbstractFile directory, DirectoryCache cache) {
@@ -74,6 +79,7 @@ public class CachedDirectory extends ProxyFile {
     /**
      * Checks if this directory is already cached. If it isn't cached then a new
      * cache thread is started.
+     *
      * @return true if directory is cached, false otherwise
      */
     public synchronized boolean isCached() {
@@ -124,12 +130,12 @@ public class CachedDirectory extends ProxyFile {
                 cachedChild.setCachedIcon(icons[i]);
             }
         }
-        
+
         final AbstractFile[] children2 = children;
         try {
             /*
              * Set cache to new value. This is invoked in swing thread
-             * so event listeners are called from right thread. 
+             * so event listeners are called from right thread.
              */
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
@@ -143,7 +149,8 @@ public class CachedDirectory extends ProxyFile {
 
     /**
      * Sets cache information.
-     * @param children array of children of this directory
+     *
+     * @param children    array of children of this directory
      * @param lsTimeStamp timestamp of cache
      */
     private synchronized void setLsCache(AbstractFile[] children, long lsTimeStamp) {
@@ -162,6 +169,7 @@ public class CachedDirectory extends ProxyFile {
     /**
      * Sets a flag that indicates if caching thread is running. This method also
      * initializes spinning icon.
+     *
      * @param readingChildren
      */
     private synchronized void setReadingChildren(boolean readingChildren) {
@@ -171,22 +179,25 @@ public class CachedDirectory extends ProxyFile {
 
     /**
      * Gets cached children.
+     *
      * @return cached children.
      */
     public synchronized AbstractFile[] get() {
         return cachedChildren;
     }
-    
+
     /**
-     * Gets a cached icon for this folder. 
+     * Gets a cached icon for this folder.
+     *
      * @return a cached icon
      */
     public Icon getCachedIcon() {
         return cachedIcon;
     }
-    
+
     /**
      * Sets a cached icon for this folder.
+     *
      * @param cachedIcon a cached icon
      */
     public void setCachedIcon(Icon cachedIcon) {

@@ -18,91 +18,90 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-
 /**
  * This <code>CompletionService</code> handles file paths completion.
- * 
+ *
  * @author Arik Hadas
  */
 
 public abstract class FilesService implements CompletionService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FilesService.class);
-	
-	private String cachedDirectoryName;
-	private String[] cachedDirectoryFileNames;
-	private long cachedDirectoryDate;
-	
-	public FilesService() {
-		cachedDirectoryFileNames = new String[0];
-		cachedDirectoryDate = -1;
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilesService.class);
 
-	/**
-	 * This abstract function gets a directory and should return it's children
-	 * files that match a certain criteria.
-	 * 
-	 * @param directory - a directory.
-	 * @return subgroup of the given directory's children files.
-	 * @throws IOException
-	 */
-	protected abstract AbstractFile[] getFiles(AbstractFile directory) throws IOException;
-	
-	public Vector<String> getPossibleCompletions(String path) {
-		Vector<String> result = new Vector<String>();
-		int index = Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/'));	
-		if (index != -1) {
-	        String currentDirectoryName = path.substring(0, index+1);
-	        
-	        AbstractFile currentDirectory = FileFactory.getFile(currentDirectoryName);
-	        if (currentDirectory != null && currentDirectory.exists()) {	        
-		        long currentDirectoryDate = currentDirectory.getDate();
-		        if (cachedDirectoryName == null || !cachedDirectoryName.equals(currentDirectoryName) || currentDirectoryDate != cachedDirectoryDate) {
-		        	AbstractFile[] currentDirectoryFiles;
-					try {
-						currentDirectoryFiles = getFiles(currentDirectory);
-					} catch (IOException e) {
+    private String cachedDirectoryName;
+    private String[] cachedDirectoryFileNames;
+    private long cachedDirectoryDate;
+
+    public FilesService() {
+        cachedDirectoryFileNames = new String[0];
+        cachedDirectoryDate = -1;
+    }
+
+    /**
+     * This abstract function gets a directory and should return it's children
+     * files that match a certain criteria.
+     *
+     * @param directory - a directory.
+     * @return subgroup of the given directory's children files.
+     * @throws IOException
+     */
+    protected abstract AbstractFile[] getFiles(AbstractFile directory) throws IOException;
+
+    public Vector<String> getPossibleCompletions(String path) {
+        Vector<String> result = new Vector<String>();
+        int index = Math.max(path.lastIndexOf('\\'), path.lastIndexOf('/'));
+        if (index != -1) {
+            String currentDirectoryName = path.substring(0, index + 1);
+
+            AbstractFile currentDirectory = FileFactory.getFile(currentDirectoryName);
+            if (currentDirectory != null && currentDirectory.exists()) {
+                long currentDirectoryDate = currentDirectory.getDate();
+                if (cachedDirectoryName == null || !cachedDirectoryName.equals(currentDirectoryName) || currentDirectoryDate != cachedDirectoryDate) {
+                    AbstractFile[] currentDirectoryFiles;
+                    try {
+                        currentDirectoryFiles = getFiles(currentDirectory);
+                    } catch (IOException e) {
                         LOGGER.debug("Caught exception", e);
-						return new Vector<String>();
-					}
-		
-		        	int nbCurrentDirectoryFiles = currentDirectoryFiles.length;
-		        	cachedDirectoryFileNames = new String[nbCurrentDirectoryFiles];
-		        	
-		        	for (int i=0; i<nbCurrentDirectoryFiles; i++) {
-		        		AbstractFile abstractFileI = currentDirectoryFiles[i];
-						cachedDirectoryFileNames[i] = abstractFileI.getName() + (abstractFileI.isDirectory() ? abstractFileI.getSeparator() : "");
-		        	}
-		        	
-		        	Arrays.sort(cachedDirectoryFileNames, String.CASE_INSENSITIVE_ORDER);
-		        	
-		        	cachedDirectoryName = currentDirectory.getAbsolutePath() + (currentDirectory.isDirectory() ? "" : currentDirectory.getSeparator());
-		        	cachedDirectoryDate = currentDirectoryDate;
-		        }
-				
-		        final String prefix = index==path.length()-1 ? null : path.substring(index + 1).toLowerCase();
-		        result = PrefixFilter.createPrefixFilter(prefix).filter(cachedDirectoryFileNames);
-	        }
-		}
-		return result;
-	}
-	
-	public String complete(String selectedCompletion) {
-		String result = null;
-       	int nbCachedFileNames = cachedDirectoryFileNames.length;
-        for (int i=0; i < nbCachedFileNames; i++)
-        	if (cachedDirectoryFileNames[i].equalsIgnoreCase(selectedCompletion)) {
-        		result = cachedDirectoryName + cachedDirectoryFileNames[i];
-        		break;
-        	}
+                        return new Vector<String>();
+                    }
+
+                    int nbCurrentDirectoryFiles = currentDirectoryFiles.length;
+                    cachedDirectoryFileNames = new String[nbCurrentDirectoryFiles];
+
+                    for (int i = 0; i < nbCurrentDirectoryFiles; i++) {
+                        AbstractFile abstractFileI = currentDirectoryFiles[i];
+                        cachedDirectoryFileNames[i] = abstractFileI.getName() + (abstractFileI.isDirectory() ? abstractFileI.getSeparator() : "");
+                    }
+
+                    Arrays.sort(cachedDirectoryFileNames, String.CASE_INSENSITIVE_ORDER);
+
+                    cachedDirectoryName = currentDirectory.getAbsolutePath() + (currentDirectory.isDirectory() ? "" : currentDirectory.getSeparator());
+                    cachedDirectoryDate = currentDirectoryDate;
+                }
+
+                final String prefix = index == path.length() - 1 ? null : path.substring(index + 1).toLowerCase();
+                result = PrefixFilter.createPrefixFilter(prefix).filter(cachedDirectoryFileNames);
+            }
+        }
         return result;
-	}
+    }
+
+    public String complete(String selectedCompletion) {
+        String result = null;
+        int nbCachedFileNames = cachedDirectoryFileNames.length;
+        for (int i = 0; i < nbCachedFileNames; i++)
+            if (cachedDirectoryFileNames[i].equalsIgnoreCase(selectedCompletion)) {
+                result = cachedDirectoryName + cachedDirectoryFileNames[i];
+                break;
+            }
+        return result;
+    }
 }

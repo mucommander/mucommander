@@ -61,7 +61,9 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         }
     };
 
-    /** Comparator of actions according to their labels */
+    /**
+     * Comparator of actions according to their labels
+     */
     private static final Comparator<String> ACTIONS_COMPARATOR = new Comparator<String>() {
         public int compare(String id1, String id2) {
             String label1 = ActionProperties.getActionLabel(id1);
@@ -86,14 +88,14 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         Map<ActionCategory, LinkedList<String>> categoryToItsActionsWithShortcutsIdsMap = createCategoryToItsActionsWithShortcutsMap();
 
         //Create tab and panel for each category
-        for(ActionCategory category: categoryToItsActionsWithShortcutsIdsMap.keySet()) {
+        for (ActionCategory category : categoryToItsActionsWithShortcutsIdsMap.keySet()) {
             // Get the list of actions from the above category which have shortcuts assigned to them
             LinkedList<String> categoryActionsWithShortcuts = categoryToItsActionsWithShortcutsIdsMap.get(category);
             Collections.sort(categoryActionsWithShortcuts, ACTIONS_COMPARATOR);
 
             // If there is at least one action in the category with shortcuts assigned to it, add tab for the category
             if (!categoryActionsWithShortcuts.isEmpty())
-                addTopic(tabbedPane, ""+category, categoryActionsWithShortcuts.iterator());
+                addTopic(tabbedPane, "" + category, categoryActionsWithShortcuts.iterator());
         }
 
         // Create tab for quick-search category 
@@ -118,7 +120,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         Hashtable<ActionCategory, LinkedList<String>> categoryToItsActionsWithShortcutsIdsMap = new Hashtable<ActionCategory, LinkedList<String>>();
 
         // Initialize empty LinkedList for each category
-        for(ActionCategory category : ActionProperties.getActionCategory())
+        for (ActionCategory category : ActionProperties.getActionCategory())
             categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<String>());
 
         // Go over all action ids
@@ -189,8 +191,8 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
             shortcutsRep = KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
 
             shortcut = ActionKeymap.getAlternateAccelerator(actionId);
-            if(shortcut!=null)
-                shortcutsRep += " / "+ KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
+            if (shortcut != null)
+                shortcutsRep += " / " + KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(shortcut);
 
             compPanel.addRow(shortcutsRep, new JLabel(ActionProperties.getActionDescription(actionId)), 5);
         }
@@ -200,7 +202,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         List<String> vec = new Vector<String>(actionsToShortcutsMap.keySet());
         Collections.sort(vec);
 
-        for(String action : vec)
+        for (String action : vec)
             compPanel.addRow(actionsToShortcutsMap.get(action), new JLabel(Translator.get(action)), 5);
     }
 

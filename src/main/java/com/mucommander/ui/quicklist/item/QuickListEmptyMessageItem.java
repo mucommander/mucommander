@@ -28,47 +28,47 @@ import java.awt.*;
 /**
  * This class represent an item that will be shown in a QuickList which doesn't
  * contain any elements, with a relevant message.
- * 
+ *
  * @author Arik Hadas
  */
 
 public class QuickListEmptyMessageItem extends QuickListItem {
-	
-	protected Color foreground;
-	protected Color background;
-	
-	public QuickListEmptyMessageItem(String text) {
-		super(text);
-		foreground = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR);
-		background = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR);
-		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));
-	}
-	
-	@Override
+
+    protected Color foreground;
+    protected Color background;
+
+    public QuickListEmptyMessageItem(String text) {
+        super(text);
+        foreground = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR);
+        background = ThemeManager.getCurrentColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR);
+        setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));
+    }
+
+    @Override
     protected final void paintComponent(Graphics g) {
-		Graphics2D graphics = (Graphics2D) g;
-		
-		// paint the background of this item with lightGray color
-		graphics.setColor(background);
-		graphics.fillRect(0, 0, getWidth(), getHeight());
+        Graphics2D graphics = (Graphics2D) g;
 
-		// draw message:		
-		graphics.setFont(FONT);
-		graphics.setColor(foreground);
-		graphics.drawString(getText(), X_AXIS_OFFSET, (int) graphics.getFontMetrics().getLineMetrics(this.getText(), graphics).getHeight());
-	}
+        // paint the background of this item with lightGray color
+        graphics.setColor(background);
+        graphics.fillRect(0, 0, getWidth(), getHeight());
 
-	@Override
+        // draw message:
+        graphics.setFont(FONT);
+        graphics.setColor(foreground);
+        graphics.drawString(getText(), X_AXIS_OFFSET, (int) graphics.getFontMetrics().getLineMetrics(this.getText(), graphics).getHeight());
+    }
+
+    @Override
     public void colorChanged(ColorChangedEvent event) {
-		if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR)
-			background = event.getColor();
-			
-		else if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR)
-			foreground = event.getColor();
-	}
-	
-	@Override
+        if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR)
+            background = event.getColor();
+
+        else if (event.getColorId() == ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR)
+            foreground = event.getColor();
+    }
+
+    @Override
     public void fontChanged(FontChangedEvent event) {
-		setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));
-	}
+        setFont(ThemeManager.getCurrentFont(ThemeData.QUICK_LIST_ITEM_FONT));
+    }
 }

@@ -18,18 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action adds a new tab in the active panel with the location
@@ -39,36 +34,44 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class NewTabAction extends MuAction {
 
-	public NewTabAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public NewTabAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
-	@Override
-	public void performAction() {
-		mainFrame.getActivePanel().getTabs().add(LocalFile.getUserHome());
-	}
-
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
-
-	public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new NewTabAction(mainFrame, properties);
-		}
+    @Override
+    public void performAction() {
+        mainFrame.getActivePanel().getTabs().add(LocalFile.getUserHome());
     }
 
-	public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "NewTab";
-    	
-		public String getId() { return ACTION_ID; }
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
-		public ActionCategory getCategory() { return ActionCategory.TAB; }
+    public static class Factory implements ActionFactory {
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new NewTabAction(mainFrame, properties);
+        }
+    }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK); }
+    public static class Descriptor extends AbstractActionDescriptor {
+        public static final String ACTION_ID = "NewTab";
+
+        public String getId() {
+            return ACTION_ID;
+        }
+
+        public ActionCategory getCategory() {
+            return ActionCategory.TAB;
+        }
+
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

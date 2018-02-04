@@ -39,13 +39,15 @@ public enum Column {
     OWNER(true, false, FileComparator.OWNER_CRITERION, "ToggleOwnerColumn", "SortByOwner"),
     GROUP(true, false, FileComparator.GROUP_CRITERION, "ToggleGroupColumn", "SortByGroup");
 
-    private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<Integer,Column>(){{
-      for (Column column : Column.values()) {
-        put(column.ordinal(), column);
-      }
+    private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<Integer, Column>() {{
+        for (Column column : Column.values()) {
+            put(column.ordinal(), column);
+        }
     }};
 
-    /** Standard minimum column width */
+    /**
+     * Standard minimum column width
+     */
     private final static int STANDARD_MINIMUM_WIDTH = 2 * CellLabel.CELL_BORDER_WIDTH;
 
     private String label;
@@ -57,7 +59,7 @@ public enum Column {
 
     private Column(boolean hasMinimumWidth, boolean showByDefault, int fileComparatorCriterion, String toggleActionId, String sortByActionId) {
         this.label = Translator.get(toString());
-        this.minimumWidth = hasMinimumWidth?STANDARD_MINIMUM_WIDTH:0;
+        this.minimumWidth = hasMinimumWidth ? STANDARD_MINIMUM_WIDTH : 0;
         this.showByDefault = showByDefault;
         this.fileComparatorCriterion = fileComparatorCriterion;
         this.toggleActionId = toggleActionId;
@@ -107,7 +109,7 @@ public enum Column {
      * @return the column instance that has the specified {@link #ordinal()} value.
      */
     public static Column valueOf(int ordinal) {
-      return ORDINAL_TO_ENUM_MAPPING.get(ordinal);
+        return ORDINAL_TO_ENUM_MAPPING.get(ordinal);
     }
 
     /**

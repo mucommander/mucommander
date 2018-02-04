@@ -23,7 +23,7 @@ import java.io.OutputStream;
 
 /**
  * <code>RandomAccessOutputStream</code> is an <code>OutputStream</code> with random access.
- *
+ * <p>
  * <b>Important:</b> <code>BufferedOutputStream</code> or any class wrapping a standard <code>OutputStream</code>
  * and using an internal buffer CANNOT be used with a <code>RandomAccessInputStream</code> if the {@link #seek(long)}
  * method is to be used. Doing so would corrupt the write buffer and yield to data inconsistencies.
@@ -56,7 +56,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
     /**
      * Writes <code>len</code> bytes from the specified byte array starting at offset <code>off</code> to this file.
      *
-     * @param b the data to write
+     * @param b   the data to write
      * @param off the start offset in the data array
      * @param len the number of bytes to write
      * @throws IOException if an I/O error occurs
@@ -66,13 +66,13 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
 
     /**
      * Sets the length of the file.
-     *
+     * <p>
      * <p>If the present length of the file as returned by the {@link #getLength()} method is greater than the
      * <code>newLength</code> argument then the file will be truncated. In this case, if the file offset as returned
      * by the {@link #getOffset()} method is greater than <code>newLength</code> then the
      * offset will be equal to <code>newLength</code> after this method returns .</p>
-     *
-     * <p>If the present length of the file as returned by the {@link #getLength()} method is smaller than the 
+     * <p>
+     * <p>If the present length of the file as returned by the {@link #getLength()} method is smaller than the
      * <code>newLength</code> argument then the file will be extended. In this case, the contents of the extended
      * portion of the file are not defined.</p>
      *

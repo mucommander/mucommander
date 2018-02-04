@@ -28,43 +28,53 @@ import java.io.IOException;
 
 /**
  * Class used to provide an output stream on a bookmark.
+ *
  * @author Nicolas Rinaudo
  */
 class BookmarkOutputStream extends ByteArrayOutputStream implements BookmarkBuilder {
     // - Stream methods --------------------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Parses the content that has been written.
+     *
      * @throws IOException if an error occurs.
      */
     @Override
     public void close() throws IOException {
         super.close();
 
-        try {BookmarkManager.readBookmarks(new ByteArrayInputStream(toByteArray()), this);}
-        catch(IOException e) {throw e;}
-        catch(Exception e) {throw new IOException(e.getMessage());}
+        try {
+            BookmarkManager.readBookmarks(new ByteArrayInputStream(toByteArray()), this);
+        } catch (IOException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IOException(e.getMessage());
+        }
     }
-
 
 
     // - Bookmark builder methods ----------------------------------------------
     // -------------------------------------------------------------------------
-    /**
-     * Ignored.
-     */
-    public void startBookmarks() {}
 
     /**
      * Ignored.
      */
-    public void endBookmarks() {}
+    public void startBookmarks() {
+    }
+
+    /**
+     * Ignored.
+     */
+    public void endBookmarks() {
+    }
 
     /**
      * Adds the specified bookmark to the bookmark manager
      * <p>
      * Note that this method will remove any previous bookmark of the same name.
      * </p>
+     *
      * @param name     name of the new bookmark.
      * @param location location of the new bookmark.
      */
@@ -74,7 +84,7 @@ class BookmarkOutputStream extends ByteArrayOutputStream implements BookmarkBuil
 
         // Creates the new bookmark and checks for conflicts.
         newBookmark = new Bookmark(name, location);
-        if((oldBookmark = BookmarkManager.getBookmark(name)) != null)
+        if ((oldBookmark = BookmarkManager.getBookmark(name)) != null)
             BookmarkManager.removeBookmark(oldBookmark);
 
         // Adds the new bookmark.

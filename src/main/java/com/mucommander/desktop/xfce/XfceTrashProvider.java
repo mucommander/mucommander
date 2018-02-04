@@ -24,15 +24,15 @@ import com.mucommander.desktop.TrashProvider;
 /**
  * This class is a trash provider for the {@link XfceTrash Xfce trash}.
  *
- * @see XfceTrash
  * @author Arik Hadas
+ * @see XfceTrash
  */
 public class XfceTrashProvider implements TrashProvider {
 
-	/*******************************
-	 * TrashProvider Implementation
-	 *******************************/
-	public AbstractTrash getTrash() {
-		return new XfceTrash();
-	}
+    /*******************************
+     * TrashProvider Implementation
+     *******************************/
+    public AbstractTrash getTrash() {
+        return new XfceTrash();
+    }
 }

@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.Map;
 
 /**
  * Opens the trash in the default file manager of the current OS/Desktop manager. This action is enabled only
@@ -41,11 +35,11 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class OpenTrashAction extends MuAction {
 
-    public OpenTrashAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenTrashAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         AbstractTrash trash = DesktopManager.getTrash();
-        setEnabled(trash!=null && trash.canOpen());
+        setEnabled(trash != null && trash.canOpen());
     }
 
     @Override
@@ -53,27 +47,35 @@ public class OpenTrashAction extends MuAction {
         DesktopManager.getTrash().open();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new OpenTrashAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new OpenTrashAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenTrash";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "OpenTrash";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

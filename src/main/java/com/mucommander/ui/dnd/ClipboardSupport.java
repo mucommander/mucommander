@@ -38,8 +38,7 @@ public class ClipboardSupport {
     public static Transferable getClipboardContents() {
         try {
             return getClipboard().getContents(null);
-        }
-        catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             return null;
         }
     }
@@ -52,8 +51,8 @@ public class ClipboardSupport {
     public static void setClipboardContents(Transferable transferable) {
         try {
             getClipboard().setContents(transferable, null);
+        } catch (IllegalStateException e) {
         }
-        catch(IllegalStateException e) {}
     }
 
 
@@ -64,7 +63,7 @@ public class ClipboardSupport {
     public static FileSet getClipboardFiles() {
         Transferable transferable = getClipboardContents();
         // Return null if Clipboard has no contents
-        if(transferable==null)
+        if (transferable == null)
             return null;
 
         // May return null if no file could be retrieved from the transferable instance

@@ -25,11 +25,17 @@ package com.mucommander.command;
  * @author Arik Hadas
  */
 public enum CommandType {
-	/** Describes <i>normal</i> commands. */
+    /**
+     * Describes <i>normal</i> commands.
+     */
     NORMAL_COMMAND,
-    /** Describes <i>system</i> commands. */
+    /**
+     * Describes <i>system</i> commands.
+     */
     SYSTEM_COMMAND(CommandsXmlConstants.VALUE_SYSTEM),
-    /** Describes <i>invisible</i> commands. */
+    /**
+     * Describes <i>invisible</i> commands.
+     */
     INVISIBLE_COMMAND(CommandsXmlConstants.VALUE_INVISIBLE);
 
     private String value;
@@ -38,8 +44,8 @@ public enum CommandType {
     }
 
     CommandType(String value) {
-    	this();
-    	this.value = value;
+        this();
+        this.value = value;
     }
 
     /**
@@ -47,27 +53,28 @@ public enum CommandType {
      * <p>
      * Note that this method is not strict in the arguments it receives:
      * <ul>
-     *   <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_SYSTEM}, {@link Command#SYSTEM_COMMAND} will be returned.</li>
-     *   <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_INVISIBLE}, {@link Command#INVISIBLE_COMMAND} will be returned.</li>
-     *   <li>In any other case, {@link Command#NORMAL_COMMAND} will be returned.</li>
+     * <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_SYSTEM}, {@link Command#SYSTEM_COMMAND} will be returned.</li>
+     * <li>If <code>type</code> equals {CommandsXmlConstants#VALUE_INVISIBLE}, {@link Command#INVISIBLE_COMMAND} will be returned.</li>
+     * <li>In any other case, {@link Command#NORMAL_COMMAND} will be returned.</li>
      * </ul>
      * </p>
-     * @param  type String representation of type to analyze.
+     *
+     * @param type String representation of type to analyze.
      * @return <code>type</code>'s integer equivalent.
      */
     public static CommandType parseCommandType(String value) {
-    	if (value == null)
-    		return NORMAL_COMMAND;
+        if (value == null)
+            return NORMAL_COMMAND;
 
-    	for (CommandType type : CommandType.values())
-    		if (value.equals(type.value))
-    			return type;
+        for (CommandType type : CommandType.values())
+            if (value.equals(type.value))
+                return type;
 
-    	return NORMAL_COMMAND;
+        return NORMAL_COMMAND;
     }
 
     @Override
     public String toString() {
-    	return value;
+        return value;
     }
 }

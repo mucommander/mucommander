@@ -18,121 +18,144 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
+import com.mucommander.PlatformManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.mucommander.PlatformManager;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * This class contains the common things for reading and writing the command-bar actions and modifier.
- * 
+ *
  * @author Arik Hadas
  */
 public abstract class CommandBarIO extends DefaultHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarIO.class);
-	
-	/* Variables used for XML parsing */
-	/** Root element */
-	protected static final String ROOT_ELEMENT = "command_bar";
-	/** Attribute containing the last muCommander version that was used to create the file */
-	protected static final String VERSION_ATTRIBUTE  = "version";
-	protected static final String MODIFIER_ATTRIBUTE = "modifier";
-    /** Element describing one of the button in the list */
-	protected static final String BUTTON_ELEMENT = "button";
-    /** Attribute containing the action class associated with the button */
-	protected static final String ACTION_ATTRIBUTE = "action";
-	/** Attribute containing the alternative action class associated with the button */
-	protected static final String ALT_ACTION_ATTRIBUTE = "alt_action";
-	/** Attribute containing the action id associated with the button */
-	protected static final String ACTION_ID_ATTRIBUTE = "action_id";
-	/** Attribute containing the alternative action id associated with the button */
-	protected static final String ALT_ACTION_ID_ATTRIBUTE = "alt_action_id";
- 
-	/** Default command bar descriptor filename */
-	protected final static String DEFAULT_COMMAND_BAR_FILE_NAME = "command_bar.xml";
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarIO.class);
 
-    /** Path to the command bar descriptor resource file within the application JAR file */
-	protected final static String COMMAND_BAR_RESOURCE_PATH = "/" + DEFAULT_COMMAND_BAR_FILE_NAME;
+    /* Variables used for XML parsing */
+    /**
+     * Root element
+     */
+    protected static final String ROOT_ELEMENT = "command_bar";
+    /**
+     * Attribute containing the last muCommander version that was used to create the file
+     */
+    protected static final String VERSION_ATTRIBUTE = "version";
+    protected static final String MODIFIER_ATTRIBUTE = "modifier";
+    /**
+     * Element describing one of the button in the list
+     */
+    protected static final String BUTTON_ELEMENT = "button";
+    /**
+     * Attribute containing the action class associated with the button
+     */
+    protected static final String ACTION_ATTRIBUTE = "action";
+    /**
+     * Attribute containing the alternative action class associated with the button
+     */
+    protected static final String ALT_ACTION_ATTRIBUTE = "alt_action";
+    /**
+     * Attribute containing the action id associated with the button
+     */
+    protected static final String ACTION_ID_ATTRIBUTE = "action_id";
+    /**
+     * Attribute containing the alternative action id associated with the button
+     */
+    protected static final String ALT_ACTION_ID_ATTRIBUTE = "alt_action_id";
 
-    /** Command bar descriptor file used when calling {@link #loadCommandBar()} */
-	protected static AbstractFile commandBarFile;
-	
-	/** CommandBarWriter instance */
-	private static CommandBarWriter commandBarWriter;
-	
-	/** Whether the command-bar has been modified and should be saved */
+    /**
+     * Default command bar descriptor filename
+     */
+    protected final static String DEFAULT_COMMAND_BAR_FILE_NAME = "command_bar.xml";
+
+    /**
+     * Path to the command bar descriptor resource file within the application JAR file
+     */
+    protected final static String COMMAND_BAR_RESOURCE_PATH = "/" + DEFAULT_COMMAND_BAR_FILE_NAME;
+
+    /**
+     * Command bar descriptor file used when calling {@link #loadCommandBar()}
+     */
+    protected static AbstractFile commandBarFile;
+
+    /**
+     * CommandBarWriter instance
+     */
+    private static CommandBarWriter commandBarWriter;
+
+    /**
+     * Whether the command-bar has been modified and should be saved
+     */
     protected static boolean wasCommandBarModified;
-	
-	/**
+
+    /**
      * Parses the XML file describing the command bar's buttons and associated actions.
      * If the file doesn't exist yet, it is copied from the default resource file within the JAR.
-     *
+     * <p>
      * This method must be called before instantiating CommandBar for the first time.
      */
     public static void loadCommandBar() throws Exception {
 
-    	// Load user's file if exist
-    	AbstractFile commandBarFile = getDescriptionFile();
-    	if(commandBarFile != null && commandBarFile.exists()) {
-    		CommandBarReader reader = new CommandBarReader(commandBarFile);
-    		CommandBarAttributes.setAttributes(reader.getActionsRead(), reader.getAlternateActionsRead(), reader.getModifierRead());
-    	}
-    	else {
-    		CommandBarAttributes.restoreDefault();
-    		LOGGER.debug(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
-    	}
-    	
-    	// initialize the writer after setting the command-bar initial attributes:
-    	commandBarWriter = CommandBarWriter.create();
+        // Load user's file if exist
+        AbstractFile commandBarFile = getDescriptionFile();
+        if (commandBarFile != null && commandBarFile.exists()) {
+            CommandBarReader reader = new CommandBarReader(commandBarFile);
+            CommandBarAttributes.setAttributes(reader.getActionsRead(), reader.getAlternateActionsRead(), reader.getModifierRead());
+        } else {
+            CommandBarAttributes.restoreDefault();
+            LOGGER.debug(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
+        }
+
+        // initialize the writer after setting the command-bar initial attributes:
+        commandBarWriter = CommandBarWriter.create();
     }
-    
+
     /**
      * Mark that actions were modified and therefore should be saved.
      */
-    public static void setModified() { wasCommandBarModified = true; }
-    
+    public static void setModified() {
+        wasCommandBarModified = true;
+    }
+
     /**
      * Writes the current command bar to the user's command bar file.
-     * @throws IOException 
+     *
+     * @throws IOException
      * @throws IOException
      */
     public static void saveCommandBar() throws IOException {
-    	if (CommandBarAttributes.areDefaultAttributes()) {
-    		AbstractFile commandBarFile = getDescriptionFile();
-        	if(commandBarFile != null && commandBarFile.exists()) {
-        		LOGGER.info("Command bar use default settings, removing descriptor file");
-        		commandBarFile.delete();
-        	}
-        	else
-        		LOGGER.debug("Command bar not modified, not saving");
-    	}
-    	else if (commandBarWriter != null) {
-    		if (wasCommandBarModified)
-    			commandBarWriter.write();
-    		else
-    			LOGGER.debug("Command bar not modified, not saving");
-    	}
-    	else
-    		LOGGER.warn("Could not save command bar. writer is null");
+        if (CommandBarAttributes.areDefaultAttributes()) {
+            AbstractFile commandBarFile = getDescriptionFile();
+            if (commandBarFile != null && commandBarFile.exists()) {
+                LOGGER.info("Command bar use default settings, removing descriptor file");
+                commandBarFile.delete();
+            } else
+                LOGGER.debug("Command bar not modified, not saving");
+        } else if (commandBarWriter != null) {
+            if (wasCommandBarModified)
+                commandBarWriter.write();
+            else
+                LOGGER.debug("Command bar not modified, not saving");
+        } else
+            LOGGER.warn("Could not save command bar. writer is null");
     }
-	
-	/**
+
+    /**
      * Sets the path to the command bar description file to be loaded when calling {@link #loadCommandBar()}.
      * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
-     * @param  path                  path to the command bar descriptor file
+     *
+     * @param path path to the command bar descriptor file
      * @throws FileNotFoundException if the specified file is not accessible.
      */
     public static void setDescriptionFile(String path) throws FileNotFoundException {
         AbstractFile file;
 
-        if((file = FileFactory.getFile(path)) == null)
+        if ((file = FileFactory.getFile(path)) == null)
             setDescriptionFile(new File(path));
         else
             setDescriptionFile(file);
@@ -141,26 +164,30 @@ public abstract class CommandBarIO extends DefaultHandler {
     /**
      * Sets the path to the command bar description file to be loaded when calling {@link #loadCommandBar()}.
      * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
-     * @param  file                  path to the command bar descriptor file
+     *
+     * @param file path to the command bar descriptor file
      * @throws FileNotFoundException if the specified file is not accessible.
      */
-    public static void setDescriptionFile(File file) throws FileNotFoundException {setDescriptionFile(FileFactory.getFile(file.getAbsolutePath()));}
+    public static void setDescriptionFile(File file) throws FileNotFoundException {
+        setDescriptionFile(FileFactory.getFile(file.getAbsolutePath()));
+    }
 
     /**
      * Sets the path to the command bar description file to be loaded when calling {@link #loadCommandBar()}.
      * By default, this file is {@link #DEFAULT_COMMAND_BAR_FILE_NAME} within the preferences folder.
-     * @param  file                  path to the command bar descriptor file
+     *
+     * @param file path to the command bar descriptor file
      * @throws FileNotFoundException if the specified file is not accessible.
      */
     public static void setDescriptionFile(AbstractFile file) throws FileNotFoundException {
         // Makes sure file can be used as a commandbar description file.
-        if(file.isBrowsable())
+        if (file.isBrowsable())
             throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
         commandBarFile = file;
     }
 
     public static AbstractFile getDescriptionFile() throws IOException {
-        if(commandBarFile == null)
+        if (commandBarFile == null)
             return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMAND_BAR_FILE_NAME);
         return commandBarFile;
     }

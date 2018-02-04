@@ -26,8 +26,8 @@ import java.security.MessageDigest;
  * This class extends <code>java.security.DigestInputStream</code> and adds convenience methods that return the
  * digest/checksum expressed in various forms.
  *
- * @see com.mucommander.commons.io.ChecksumOutputStream
  * @author Maxence Bernard
+ * @see com.mucommander.commons.io.ChecksumOutputStream
  */
 public class ChecksumInputStream extends DigestInputStream {
 

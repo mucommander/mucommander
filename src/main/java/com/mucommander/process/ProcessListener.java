@@ -21,14 +21,16 @@ package com.mucommander.process;
 
 /**
  * Implementations of this interface can listen to a process' state and streams.
- * @see com.mucommander.process.AbstractProcess
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
+ * @see com.mucommander.process.AbstractProcess
  */
 public interface ProcessListener {
-	
-    /** 
+
+    /**
      * This method is called when the process dies. No more calls to <code>processOutput</code> and
      * <code>processError</code> will be made past this call.
+     *
      * @param returnValue the value returned by the process (return code).
      */
     public void processDied(int returnValue);
@@ -37,8 +39,9 @@ public interface ProcessListener {
      * This method is called whenever the process sends data to its output streams (stdout or stderr).
      * <p>
      * The output passed to this method is encoded. Listener that need to work with raw bytes should
-     * use {@link #processOutput(byte[],int,int)} instead.
+     * use {@link #processOutput(byte[], int, int)} instead.
      * </p>
+     *
      * @param output contains the encoded process output.
      */
     public void processOutput(String output);
@@ -49,6 +52,7 @@ public interface ProcessListener {
      * The output passed to this method is raw and doesn't take encoding into account. Listeners that
      * need to work with properly encoded output should use {@link #processOutput(String)} instead.
      * </p>
+     *
      * @param buffer contains the process' output.
      * @param offset offset in buffer at which the process' output starts.
      * @param length length of the process' output in buffer.

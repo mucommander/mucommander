@@ -22,41 +22,67 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class represents a non-versioned family of operating system, like <code>Windows</code> or <code>Linux</code>. 
+ * This class represents a non-versioned family of operating system, like <code>Windows</code> or <code>Linux</code>.
  * The current runtime instance is determined using the value of the <code>os.name</code> system property.
  *
- * @see OsVersion
  * @author Maxence Bernard, Arik Hadas
+ * @see OsVersion
  */
 public enum OsFamily {
-	/** Windows */
+    /**
+     * Windows
+     */
     WINDOWS("Windows"),
-    /** Mac OS X */
+    /**
+     * Mac OS X
+     */
     MAC_OS_X("Mac OS X"),
-    /** Linux */
+    /**
+     * Linux
+     */
     LINUX("Linux"),
-    /** Solaris */
+    /**
+     * Solaris
+     */
     SOLARIS("Solaris"),
-    /** OS/2 */
+    /**
+     * OS/2
+     */
     OS_2("OS/2"),
-    /** FreeBSD */
+    /**
+     * FreeBSD
+     */
     FREEBSD("FreeBSD"),
-    /** AIX */
+    /**
+     * AIX
+     */
     AIX("AIX"),
-    /** HP-UX */
+    /**
+     * HP-UX
+     */
     HP_UX("HP-UX"),
-    /** OpenVMS */
+    /**
+     * OpenVMS
+     */
     OPENVMS("OpenVMS"),
-    /** Other OS */
+    /**
+     * Other OS
+     */
     UNKNOWN_OS_FAMILY("Unknown");
 
-    /** Logger used by this class. */
+    /**
+     * Logger used by this class.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsFamily.class);
 
-    /** The String representation of this RuntimeProperty, set at creation time */
+    /**
+     * The String representation of this RuntimeProperty, set at creation time
+     */
     protected final String stringRepresentation;
 
-    /** Holds the OsFamily of the current runtime environment  */
+    /**
+     * Holds the OsFamily of the current runtime environment
+     */
     private static OsFamily currentValue;
 
     /*
@@ -65,13 +91,13 @@ public enum OsFamily {
      * to force the initialization if it needs to happen at a predictable time.
      */
     static {
-    	currentValue = parseSystemProperty(getRawSystemProperty());
-    	LOGGER.info("Current OS family: {}", currentValue);
+        currentValue = parseSystemProperty(getRawSystemProperty());
+        LOGGER.info("Current OS family: {}", currentValue);
     }
 
-    
+
     OsFamily(String stringRepresentation) {
-    	this.stringRepresentation = stringRepresentation;
+        this.stringRepresentation = stringRepresentation;
     }
 
 
@@ -91,25 +117,25 @@ public enum OsFamily {
     /**
      * Returns <code>true</code> if this OS family is UNIX-based. The following OS families are considered UNIX-based:
      * <ul>
-     *  <li>{@link #LINUX}</li>
-     *  <li>{@link #MAC_OS_X}</li>
-     *  <li>{@link #SOLARIS}</li>
-     *  <li>{@link #FREEBSD}</li>
-     *  <li>{@link #AIX}</li>
-     *  <li>{@link #HP_UX}</li>
-     *  <li>{@link #UNKNOWN_OS_FAMILY}: the reasonning for this being that most alternative OSes are Unix-based.</li>
+     * <li>{@link #LINUX}</li>
+     * <li>{@link #MAC_OS_X}</li>
+     * <li>{@link #SOLARIS}</li>
+     * <li>{@link #FREEBSD}</li>
+     * <li>{@link #AIX}</li>
+     * <li>{@link #HP_UX}</li>
+     * <li>{@link #UNKNOWN_OS_FAMILY}: the reasonning for this being that most alternative OSes are Unix-based.</li>
      * </ul>
      *
      * @return <code>true</code> if the current OS is UNIX-based
      */
     public boolean isUnixBased() {
-        return this==MAC_OS_X
-                || this==LINUX
-                || this==SOLARIS
-                || this==FREEBSD
-                || this==AIX
-                || this==HP_UX
-                || this== UNKNOWN_OS_FAMILY;
+        return this == MAC_OS_X
+                || this == LINUX
+                || this == SOLARIS
+                || this == FREEBSD
+                || this == AIX
+                || this == HP_UX
+                || this == UNKNOWN_OS_FAMILY;
 
         // Not UNIX-based: WINDOWS, OS/2 and OpenVMS
     }
@@ -176,7 +202,7 @@ public enum OsFamily {
      * @return true if this instance is the same as the current runtime's value
      */
     public boolean isCurrent() {
-        return this==currentValue;
+        return this == currentValue;
     }
 
     ////////////////////////

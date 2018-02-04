@@ -29,21 +29,27 @@ import java.awt.event.ActionListener;
 
 /**
  * Dialog which let users customize UI element.
- * 
+ *
  * @author Arik Hadas.
  */
 public abstract class CustomizeDialog extends FocusDialog implements ActionListener {
-	
-	public static final Dimension PREFERRED_SIZE = new Dimension(700, 500);
-	
-	/** Apply button. */
-    private JButton     applyButton;
-	/** OK button. */
-    private JButton     okButton;
-    /** Cancel button. */
-    private JButton     cancelButton;
 
-	public CustomizeDialog(Frame parent, String title) {
+    public static final Dimension PREFERRED_SIZE = new Dimension(700, 500);
+
+    /**
+     * Apply button.
+     */
+    private JButton applyButton;
+    /**
+     * OK button.
+     */
+    private JButton okButton;
+    /**
+     * Cancel button.
+     */
+    private JButton cancelButton;
+
+    public CustomizeDialog(Frame parent, String title) {
         super(parent, title, parent);
         initUI();
     }
@@ -52,43 +58,43 @@ public abstract class CustomizeDialog extends FocusDialog implements ActionListe
         super(parent, title, parent);
         initUI();
     }
-  
+
     private void initUI() {
-    	XBoxPanel buttonsPanel;
-    	JPanel    tempPanel;
-    	Container contentPane;
-    	
-    	// Get content-pane and set its layout.
+        XBoxPanel buttonsPanel;
+        JPanel tempPanel;
+        Container contentPane;
+
+        // Get content-pane and set its layout.
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
-        
+
         // Add customization panel
         contentPane.add(createCustomizationPanel(), BorderLayout.CENTER);
-    	
-    	// Buttons panel.
+
+        // Buttons panel.
         buttonsPanel = new XBoxPanel();
         buttonsPanel.add(applyButton = new JButton(Translator.get("apply")));
         buttonsPanel.addSpace(20);
-        buttonsPanel.add(okButton     = new JButton(Translator.get("ok")));
+        buttonsPanel.add(okButton = new JButton(Translator.get("ok")));
         buttonsPanel.add(cancelButton = new JButton(Translator.get("cancel")));
-        
+
         // Disable "commit buttons".
         applyButton.setEnabled(false);
         okButton.setEnabled(false);
-        
+
         // Buttons listening.
         applyButton.addActionListener(this);
         okButton.addActionListener(this);
         cancelButton.addActionListener(this);
-        
+
         // Aligns the button panel to the right.
         tempPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         tempPanel.add(buttonsPanel);
         contentPane.add(tempPanel, BorderLayout.SOUTH);
-        
+
         // Selects OK when enter is pressed
         getRootPane().setDefaultButton(cancelButton);
-        
+
         // Set preferred size
         setPreferredSize(PREFERRED_SIZE);
     }
@@ -100,11 +106,12 @@ public abstract class CustomizeDialog extends FocusDialog implements ActionListe
     protected abstract JPanel createCustomizationPanel();
 
     protected abstract void commit();
-    
+
     protected abstract void componentChanged();
-    
+
     // - Listener code ----------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Reacts to buttons being pushed.
      */
@@ -117,19 +124,19 @@ public abstract class CustomizeDialog extends FocusDialog implements ActionListe
 
         // Disable OK & Apply buttons
         if (source == applyButton)
-        	setCommitButtonsEnabled(false);
-        
+            setCommitButtonsEnabled(false);
+
         // Dispose dialog
         if (source == okButton || source == cancelButton)
             dispose();
     }
-    
+
     protected void setCommitButtonsEnabled(boolean enabled) {
-    	applyButton.setEnabled(enabled);
-    	okButton.setEnabled(enabled);
-    	
-    	// if commit buttons are enabled then set the "okButton" as default button, 
-    	// otherwise set the "cancelButton" as default button.
-    	getRootPane().setDefaultButton(enabled ? okButton : cancelButton);
+        applyButton.setEnabled(enabled);
+        okButton.setEnabled(enabled);
+
+        // if commit buttons are enabled then set the "okButton" as default button,
+        // otherwise set the "cancelButton" as default button.
+        getRootPane().setDefaultButton(enabled ? okButton : cancelButton);
     }
 }

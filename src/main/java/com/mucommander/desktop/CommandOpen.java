@@ -31,29 +31,31 @@ import java.io.IOException;
 class CommandOpen extends LocalFileOperation {
     // - Instance fields -------------------------------------------------
     // -------------------------------------------------------------------
-    /** Whether or not the 'run as executable' command can be used if no better alternative is found. */
+    /**
+     * Whether or not the 'run as executable' command can be used if no better alternative is found.
+     */
     private boolean allowDefault;
-
 
 
     // - Initialisation --------------------------------------------------
     // -------------------------------------------------------------------
-    public CommandOpen(boolean allowDefault) {this.allowDefault = allowDefault;}
-
+    public CommandOpen(boolean allowDefault) {
+        this.allowDefault = allowDefault;
+    }
 
 
     // - Desktop operation implementation --------------------------------
     // -------------------------------------------------------------------
     @Override
     public boolean isAvailable() {
-        if(allowDefault)
+        if (allowDefault)
             return true;
         return CommandManager.getCommandForAlias(CommandManager.FILE_OPENER_ALIAS) != null;
     }
 
     @Override
     public boolean canExecute(AbstractFile file) {
-        if(allowDefault)
+        if (allowDefault)
             return true;
 
         return CommandManager.getCommandForFile(file, false) != null;
@@ -73,8 +75,11 @@ class CommandOpen extends LocalFileOperation {
 
     /**
      * Returns the operation's name.
+     *
      * @return the operation's name.
      */
     @Override
-    public String getName() {return "open bridge";}
+    public String getName() {
+        return "open bridge";
+    }
 }

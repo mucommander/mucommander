@@ -28,29 +28,29 @@ import javax.swing.event.DocumentListener;
  * @author Arik Hadas
  */
 public abstract class PrefTextField extends JTextField implements PrefComponent {
-	
-	public PrefTextField(int columns) {
-		super(columns);
-	}
-	
-	public PrefTextField(String text) {
-		super(text);
-	}
-	
-	public void addDialogListener(final PreferencesDialog dialog) {
-		getDocument().addDocumentListener(new DocumentListener() {
 
-			public void changedUpdate(DocumentEvent e) {
-				dialog.componentChanged(PrefTextField.this);	
-			}
+    public PrefTextField(int columns) {
+        super(columns);
+    }
 
-			public void insertUpdate(DocumentEvent e) {
-				dialog.componentChanged(PrefTextField.this);
-			}
+    public PrefTextField(String text) {
+        super(text);
+    }
 
-			public void removeUpdate(DocumentEvent e) {
-				dialog.componentChanged(PrefTextField.this);	
-			}
-		});
-	}
+    public void addDialogListener(final PreferencesDialog dialog) {
+        getDocument().addDocumentListener(new DocumentListener() {
+
+            public void changedUpdate(DocumentEvent e) {
+                dialog.componentChanged(PrefTextField.this);
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                dialog.componentChanged(PrefTextField.this);
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                dialog.componentChanged(PrefTextField.this);
+            }
+        });
+    }
 }

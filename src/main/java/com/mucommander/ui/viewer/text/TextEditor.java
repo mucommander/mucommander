@@ -18,24 +18,6 @@
 
 package com.mucommander.ui.viewer.text;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.bom.BOMWriter;
@@ -48,6 +30,17 @@ import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.viewer.FileEditor;
 import com.mucommander.ui.viewer.FileFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**
@@ -56,9 +49,11 @@ import com.mucommander.ui.viewer.FileFrame;
  * @author Maxence Bernard, Nicolas Rinaudo, Arik Hadas
  */
 class TextEditor extends FileEditor implements DocumentListener, EncodingListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TextEditor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextEditor.class);
 
-    /** Menu bar */
+    /**
+     * Menu bar
+     */
     // Menus //
     private JMenu editMenu;
     private JMenu viewMenu;
@@ -75,77 +70,77 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
 
     private TextEditorImpl textEditorImpl;
     private TextViewer textViewerDelegate;
-    
+
     public TextEditor() {
-    	textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true)) {
-    		
-    		@Override
-    		protected void setComponentToPresent(JComponent component) {
-    			TextEditor.this.setComponentToPresent(component);
-    		}
-    		
-    		@Override
-    		protected void showLineNumbers(boolean show) {
-    			TextEditor.this.setRowHeaderView(show ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
-    	    }
-    		
-    		@Override
-    		protected void initMenuBarItems() {
-    			// Edit menu
-    	        editMenu = new JMenu(Translator.get("text_editor.edit"));
-    	        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+        textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true)) {
 
-    	        copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.copy"), menuItemMnemonicHelper, null, TextEditor.this);
+            @Override
+            protected void setComponentToPresent(JComponent component) {
+                TextEditor.this.setComponentToPresent(component);
+            }
 
-    	        cutItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.cut"), menuItemMnemonicHelper, null, TextEditor.this);
-    	        pasteItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.paste"), menuItemMnemonicHelper, null, TextEditor.this);
+            @Override
+            protected void showLineNumbers(boolean show) {
+                TextEditor.this.setRowHeaderView(show ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
+            }
 
-    	        selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.select_all"), menuItemMnemonicHelper, null, TextEditor.this);
-    	        editMenu.addSeparator();
+            @Override
+            protected void initMenuBarItems() {
+                // Edit menu
+                editMenu = new JMenu(Translator.get("text_editor.edit"));
+                MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
-    	        findItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), TextEditor.this);
-    	        findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), TextEditor.this);
-    	        findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), TextEditor.this);
-    	        
-    	        viewMenu = new JMenu(Translator.get("text_editor.view"));
-    	        
-    	        toggleLineWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_wrap"), menuItemMnemonicHelper, null, TextEditor.this);
-    	        toggleLineWrapItem.setSelected(textEditorImpl.isWrap());
-    	        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_numbers"), menuItemMnemonicHelper, null, TextEditor.this);
-    	        toggleLineNumbersItem.setSelected(TextEditor.this.getRowHeader().getView() != null);
-    		}
-    	};
-    	
-    	setComponentToPresent(textEditorImpl.getTextArea());
+                copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.copy"), menuItemMnemonicHelper, null, TextEditor.this);
+
+                cutItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.cut"), menuItemMnemonicHelper, null, TextEditor.this);
+                pasteItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.paste"), menuItemMnemonicHelper, null, TextEditor.this);
+
+                selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.select_all"), menuItemMnemonicHelper, null, TextEditor.this);
+                editMenu.addSeparator();
+
+                findItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), TextEditor.this);
+                findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), TextEditor.this);
+                findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), TextEditor.this);
+
+                viewMenu = new JMenu(Translator.get("text_editor.view"));
+
+                toggleLineWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_wrap"), menuItemMnemonicHelper, null, TextEditor.this);
+                toggleLineWrapItem.setSelected(textEditorImpl.isWrap());
+                toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_numbers"), menuItemMnemonicHelper, null, TextEditor.this);
+                toggleLineNumbersItem.setSelected(TextEditor.this.getRowHeader().getView() != null);
+            }
+        };
+
+        setComponentToPresent(textEditorImpl.getTextArea());
     }
-    
+
     protected void setComponentToPresent(JComponent component) {
-		getViewport().add(component);
-	}
-    
-    void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
-    	textViewerDelegate.loadDocument(in, encoding, documentListener);
+        getViewport().add(component);
     }
-    
+
+    void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
+        textViewerDelegate.loadDocument(in, encoding, documentListener);
+    }
+
     private void write(OutputStream out) throws IOException {
-    	textEditorImpl.write(new BOMWriter(out, textViewerDelegate.getEncoding())); 
+        textEditorImpl.write(new BOMWriter(out, textViewerDelegate.getEncoding()));
     }
 
     @Override
     public JMenuBar getMenuBar() {
-    	JMenuBar menuBar = super.getMenuBar();
+        JMenuBar menuBar = super.getMenuBar();
 
-    	// Encoding menu
-         EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(getFrame()), textViewerDelegate.getEncoding());
-         encodingMenu.addEncodingListener(this);
+        // Encoding menu
+        EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(getFrame()), textViewerDelegate.getEncoding());
+        encodingMenu.addEncodingListener(this);
 
-         menuBar.add(editMenu);
-         menuBar.add(viewMenu);
-         menuBar.add(encodingMenu);
-         
-    	return menuBar;
+        menuBar.add(editMenu);
+        menuBar.add(viewMenu);
+        menuBar.add(encodingMenu);
+
+        return menuBar;
     }
-    
+
 
     ///////////////////////////////
     // FileEditor implementation //
@@ -158,11 +153,11 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         try {
             out = destFile.getOutputStream();
             write(out);
-        }
-        finally {
-            if(out != null) {
-                try {out.close();}
-                catch(IOException e) {
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
                     // Ignored
                 }
             }
@@ -173,12 +168,11 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
         setSaveNeeded(false);
 
         // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh (see ticket #258)
-        if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+        if (destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
             try {
                 destFile.getParent().changeDate(System.currentTimeMillis());
-            }
-            catch (IOException e) {
-                LOGGER.debug("failed to change the date of "+destFile, e);
+            } catch (IOException e) {
+                LOGGER.debug("failed to change the date of " + destFile, e);
                 // Fail silently
             }
         }
@@ -186,32 +180,32 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
 
     @Override
     public void setFrame(final FileFrame frame) {
-    	super.setFrame(frame);
-    	
-    	frame.setFullScreen(TextViewer.isFullScreen());
+        super.setFrame(frame);
 
-    	getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
-    	getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
-    		public void actionPerformed(ActionEvent e){
-    			TextViewer.setFullScreen(!frame.isFullScreen());
-    			frame.setFullScreen(TextViewer.isFullScreen());
-    		}
-    	});
+        frame.setFullScreen(TextViewer.isFullScreen());
+
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
+        getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                TextViewer.setFullScreen(!frame.isFullScreen());
+                frame.setFullScreen(TextViewer.isFullScreen());
+            }
+        });
     }
 
     @Override
     public void show(AbstractFile file) throws IOException {
-    	textViewerDelegate.startEditing(file, this);
+        textViewerDelegate.startEditing(file, this);
     }
-    
+
     /////////////////////////////////////
     // DocumentListener implementation //
     /////////////////////////////////////
-	
+
     public void changedUpdate(DocumentEvent e) {
         setSaveNeeded(true);
     }
-	
+
     public void insertUpdate(DocumentEvent e) {
         setSaveNeeded(true);
     }
@@ -219,7 +213,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     public void removeUpdate(DocumentEvent e) {
         setSaveNeeded(true);
     }
-    
+
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
@@ -227,43 +221,42 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if(source == copyItem)
-        	textEditorImpl.copy();
-        else if(source == cutItem)
-        	textEditorImpl.cut();
-        else if(source == pasteItem)
-        	textEditorImpl.paste();
-        else if(source == selectAllItem)
-        	textEditorImpl.selectAll();
-        else if(source == findItem)
-        	textEditorImpl.find();
-        else if(source == findNextItem)
-        	textEditorImpl.findNext();
-        else if(source == findPreviousItem)
-        	textEditorImpl.findPrevious();
-        else if(source == toggleLineWrapItem)
-        	textViewerDelegate.wrapLines(toggleLineWrapItem.isSelected());
-        else if(source == toggleLineNumbersItem)
-        	textViewerDelegate.showLineNumbers(toggleLineNumbersItem.isSelected());
+        if (source == copyItem)
+            textEditorImpl.copy();
+        else if (source == cutItem)
+            textEditorImpl.cut();
+        else if (source == pasteItem)
+            textEditorImpl.paste();
+        else if (source == selectAllItem)
+            textEditorImpl.selectAll();
+        else if (source == findItem)
+            textEditorImpl.find();
+        else if (source == findNextItem)
+            textEditorImpl.findNext();
+        else if (source == findPreviousItem)
+            textEditorImpl.findPrevious();
+        else if (source == toggleLineWrapItem)
+            textViewerDelegate.wrapLines(toggleLineWrapItem.isSelected());
+        else if (source == toggleLineNumbersItem)
+            textViewerDelegate.showLineNumbers(toggleLineNumbersItem.isSelected());
         else
-        	super.actionPerformed(e);
+            super.actionPerformed(e);
     }
-    
+
     /////////////////////////////////////
     // EncodingListener implementation //
     /////////////////////////////////////
 
     public void encodingChanged(Object source, String oldEncoding, String newEncoding) {
-    	if(!askSave())
-    		return;         // Abort if the file could not be saved
+        if (!askSave())
+            return;         // Abort if the file could not be saved
 
-    	try {
-    		// Reload the file using the new encoding
-    		// Note: loadDocument closes the InputStream
-    		loadDocument(getCurrentFile().getInputStream(), newEncoding, null);
-    	}
-    	catch(IOException ex) {
-    		InformationDialog.showErrorDialog(getFrame(), Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", getCurrentFile().getName()));
-    	}
+        try {
+            // Reload the file using the new encoding
+            // Note: loadDocument closes the InputStream
+            loadDocument(getCurrentFile().getInputStream(), newEncoding, null);
+        } catch (IOException ex) {
+            InformationDialog.showErrorDialog(getFrame(), Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", getCurrentFile().getName()));
+        }
     }
 }

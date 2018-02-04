@@ -22,9 +22,9 @@ package com.mucommander.ui.macosx;
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
-import com.mucommander.muCommander;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.muCommander;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.WindowManager;
 
@@ -79,7 +79,7 @@ class EAWTHandler implements ApplicationListener {
 
         AbstractFile file = FileFactory.getFile(event.getFilename());
         FolderPanel activePanel = WindowManager.getCurrentMainFrame().getActivePanel();
-        if(file.isBrowsable())
+        if (file.isBrowsable())
             activePanel.tryChangeCurrentFolder(file);
         else
             activePanel.tryChangeCurrentFolder(file.getParent(), file, false);

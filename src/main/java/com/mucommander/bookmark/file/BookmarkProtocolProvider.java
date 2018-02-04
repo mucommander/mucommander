@@ -35,14 +35,16 @@ import java.io.IOException;
  */
 public class BookmarkProtocolProvider implements ProtocolProvider {
 
-    /** Protocol for the virtual bookmarks file system. */
+    /**
+     * Protocol for the virtual bookmarks file system.
+     */
     public static final String BOOKMARK = "bookmark";
 
     public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
         // If the URL contains a path but no host, it's illegal.
         // If it contains neither host nor path, we're browsing bookmarks://
-        if(url.getHost() == null) {
-            if(url.getPath().equals("/"))
+        if (url.getHost() == null) {
+            if (url.getPath().equals("/"))
                 return new BookmarkRoot(url);
             throw new IOException();
         }
@@ -53,15 +55,15 @@ public class BookmarkProtocolProvider implements ProtocolProvider {
             Bookmark bookmark;
             // If the bookmark doesn't exist, but a path is specified, throws an exception.
             // Otherwise, returns the requested bookmark.
-            if((bookmark = BookmarkManager.getBookmark(url.getHost())) == null) {
-                if(!url.getPath().equals("/"))
+            if ((bookmark = BookmarkManager.getBookmark(url.getHost())) == null) {
+                if (!url.getPath().equals("/"))
                     throw new IOException();
                 return new BookmarkFile(new Bookmark(url.getHost(), url.getPath()));
             }
 
             // If the bookmark exists, and a path is specified, creates a new path
             // from the bookmark's location and the specified path.
-            if(!url.getPath().equals("/"))
+            if (!url.getPath().equals("/"))
                 return FileFactory.getFile(bookmark.getLocation() + url.getPath());
 
             // Otherwise, creates a new bookmark file.

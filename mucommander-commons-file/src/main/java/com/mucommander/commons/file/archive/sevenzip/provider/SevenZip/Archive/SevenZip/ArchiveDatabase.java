@@ -12,7 +12,7 @@ class ArchiveDatabase {
     public ObjectVector<Folder> Folders = new ObjectVector<Folder>();
     public IntVector NumUnPackStreamsVector = new IntVector();
     public ObjectVector<FileItem> Files = new ObjectVector<FileItem>();
-    
+
     void Clear() {
         PackSizes.clear();
         PackCRCsDefined.clear();

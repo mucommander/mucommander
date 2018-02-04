@@ -24,8 +24,8 @@ import com.mucommander.desktop.TrashProvider;
 /**
  * This class is a trash provider for the {@link OSXTrash Mac OS X trash}.
  *
- * @see OSXTrash
  * @author Maxence Bernard
+ * @see OSXTrash
  */
 public class OSXTrashProvider implements TrashProvider {
 

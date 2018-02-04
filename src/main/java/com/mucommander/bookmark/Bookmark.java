@@ -22,14 +22,15 @@ package com.mucommander.bookmark;
 /**
  * Represents a bookmark.
  * <p>Bookmarks are simple name/location pairs:
- *   <ul>
- *     <li>The name is a String describing the bookmark.</li>
- *     <li>
- *       The location should designate a path or file URL. The designated location may not exist or may not even be
- *       a valid path or URL, so it is up to classes that call {@link #getLocation()} to deal with it appropriately.
- *     </li>
- *   </ul>
+ * <ul>
+ * <li>The name is a String describing the bookmark.</li>
+ * <li>
+ * The location should designate a path or file URL. The designated location may not exist or may not even be
+ * a valid path or URL, so it is up to classes that call {@link #getLocation()} to deal with it appropriately.
+ * </li>
+ * </ul>
  * </p>
+ *
  * @author Maxence Bernard
  */
 public class Bookmark implements Cloneable {
@@ -40,7 +41,7 @@ public class Bookmark implements Cloneable {
     /**
      * Creates a new Bookmark using the given name and location.
      *
-     * @param name name given to this bookmark
+     * @param name     name given to this bookmark
      * @param location location (path or URL) this bookmark points to
      */
     public Bookmark(String name, String location) {
@@ -52,8 +53,9 @@ public class Bookmark implements Cloneable {
 
     /**
      * Returns this bookmark's name.
+     *
      * @return this bookmark's name.
-     * @see    #setName(String)
+     * @see #setName(String)
      */
     public String getName() {
         return name;
@@ -63,15 +65,16 @@ public class Bookmark implements Cloneable {
     /**
      * Changes this bookmark's name to the given one and fires an event to registered {@link BookmarkListener}
      * instances.
+     *
      * @param newName bookmark's new name.
-     * @see           #getName()
+     * @see #getName()
      */
     public void setName(String newName) {
         // Replace null values by empty strings
-        if(newName==null)
+        if (newName == null)
             newName = "";
 
-        if(!newName.equals(this.name)) {
+        if (!newName.equals(this.name)) {
             this.name = newName;
 
             // Notify registered listeners of the change
@@ -83,8 +86,9 @@ public class Bookmark implements Cloneable {
     /**
      * Returns this bookmark's location which should normally designate a path or file URL, but which isn't
      * necessarily valid nor exists.
+     *
      * @return this bookmark's location.
-     * @see    #setLocation(String)
+     * @see #setLocation(String)
      */
     public String getLocation() {
         return location;
@@ -94,15 +98,16 @@ public class Bookmark implements Cloneable {
     /**
      * Changes this bookmark's location to the given one and fires an event to registered {@link BookmarkListener}
      * instances.
+     *
      * @param newLocation bookmark's new location.
-     * @see               #getLocation()
+     * @see #getLocation()
      */
     public void setLocation(String newLocation) {
         // Replace null values by empty strings
-        if(newLocation==null)
+        if (newLocation == null)
             newLocation = "";
 
-        if(!newLocation.equals(this.location)) {
+        if (!newLocation.equals(this.location)) {
             this.location = newLocation;
 
             // Notify registered listeners of the change
@@ -115,7 +120,9 @@ public class Bookmark implements Cloneable {
      * Returns a clone of this bookmark.
      */
     @Override
-    public Object clone() throws CloneNotSupportedException {return super.clone();}
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 
     /**
@@ -126,11 +133,11 @@ public class Bookmark implements Cloneable {
     }
 
     public boolean equals(Object object) {
-        if(!(object instanceof Bookmark))
+        if (!(object instanceof Bookmark))
             return false;
 
         Bookmark bookmark;
-        bookmark = (Bookmark)object;
+        bookmark = (Bookmark) object;
         return bookmark.getName().equals(name);
     }
 }

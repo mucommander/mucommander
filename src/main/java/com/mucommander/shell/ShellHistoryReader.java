@@ -27,32 +27,45 @@ import java.io.InputStream;
 
 /**
  * Parses XML shell history files and populates the {@link com.mucommander.shell.ShellHistoryManager}.
+ *
  * @author Nicolas Rinaudo
  */
 class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants {
     // - Reader statuses -----------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Parsing hasn't started. */
+    /**
+     * Parsing hasn't started.
+     */
     private static final int STATUS_UNKNOWN = 0;
-    /** Currently parsing the root tag. */
-    private static final int STATUS_ROOT    = 1;
-    /** Currently parsing a command tag. */
+    /**
+     * Currently parsing the root tag.
+     */
+    private static final int STATUS_ROOT = 1;
+    /**
+     * Currently parsing a command tag.
+     */
     private static final int STATUS_COMMAND = 2;
-
 
 
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Reader's current status. */
-    private int          status;
-    /** Buffer for the current command. */
+    /**
+     * Reader's current status.
+     */
+    private int status;
+    /**
+     * Buffer for the current command.
+     */
     private StringBuilder command;
-    /** muCommander version that was used to write the shell history file */
+    /**
+     * muCommander version that was used to write the shell history file
+     */
     private String version;
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Creates a new shell history reader.
      */
@@ -76,18 +89,22 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
 
     // - XML interaction -----------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Reads shell history from the specified input stream.
+     *
      * @param in where to read the history from.
      */
-    public static void read(InputStream in) throws Exception {SAXParserFactory.newInstance().newSAXParser().parse(in, new ShellHistoryReader());}
+    public static void read(InputStream in) throws Exception {
+        SAXParserFactory.newInstance().newSAXParser().parse(in, new ShellHistoryReader());
+    }
 
     /**
      * Notifies the reader that CDATA has been encountered.
      */
     @Override
     public void characters(char[] ch, int start, int length) {
-        if(status == STATUS_COMMAND)
+        if (status == STATUS_COMMAND)
             command.append(ch, start, length);
     }
 
@@ -97,13 +114,13 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Root element declaration.
-        if(qName.equals(ROOT_ELEMENT) && (status == STATUS_UNKNOWN)) {
+        if (qName.equals(ROOT_ELEMENT) && (status == STATUS_UNKNOWN)) {
             status = STATUS_ROOT;
             version = attributes.getValue(ATTRIBUTE_VERSION);
         }
 
         // Command element declaration.
-        else if(qName.equals(COMMAND_ELEMENT) && status == STATUS_ROOT)
+        else if (qName.equals(COMMAND_ELEMENT) && status == STATUS_ROOT)
             status = STATUS_COMMAND;
     }
 
@@ -113,11 +130,11 @@ class ShellHistoryReader extends DefaultHandler implements ShellHistoryConstants
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         // Root element finished.
-        if(qName.equals(ROOT_ELEMENT) && (status == STATUS_ROOT))
+        if (qName.equals(ROOT_ELEMENT) && (status == STATUS_ROOT))
             status = STATUS_UNKNOWN;
 
-        // Command element finished.
-        else if(qName.equals(COMMAND_ELEMENT) && (status == STATUS_COMMAND)) {
+            // Command element finished.
+        else if (qName.equals(COMMAND_ELEMENT) && (status == STATUS_COMMAND)) {
             status = STATUS_ROOT;
 
             // Adds the current command to shell history.

@@ -18,41 +18,22 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.regex.PatternSyntaxException;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.file.filter.AndFileFilter;
-import com.mucommander.commons.file.filter.AttributeFileFilter;
+import com.mucommander.commons.file.filter.*;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
-import com.mucommander.commons.file.filter.ContainsFilenameFilter;
-import com.mucommander.commons.file.filter.EndsWithFilenameFilter;
-import com.mucommander.commons.file.filter.EqualsFilenameFilter;
-import com.mucommander.commons.file.filter.FileFilter;
-import com.mucommander.commons.file.filter.PassThroughFileFilter;
-import com.mucommander.commons.file.filter.RegexpFilenameFilter;
-import com.mucommander.commons.file.filter.StartsWithFilenameFilter;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * This dialog allows the user to add (mark) or remove (unmark) files from the current selection,
@@ -61,16 +42,18 @@ import com.mucommander.ui.main.table.FileTable;
  * @author Maxence Bernard
  */
 public class FileSelectionDialog extends FocusDialog implements ActionListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FileSelectionDialog.class);
-	
-    /* Filename comparison criteria */		
-    private final static int CONTAINS    = 0;
-    private final static int STARTS_WITH = 1;
-    private final static int ENDS_WIDTH  = 2;
-    private final static int IS          = 3;
-    private final static int REGEXP      = 4;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileSelectionDialog.class);
 
-    /** Add to or remove from selection ? */	 
+    /* Filename comparison criteria */
+    private final static int CONTAINS = 0;
+    private final static int STARTS_WITH = 1;
+    private final static int ENDS_WIDTH = 2;
+    private final static int IS = 3;
+    private final static int REGEXP = 4;
+
+    /**
+     * Add to or remove from selection ?
+     */
     private boolean addToSelection;
 
     private JComboBox comparisonComboBox;
@@ -82,34 +65,34 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
     private JButton okButton;
 
     private MainFrame mainFrame;
-	
-    /** 
+
+    /**
      * Is selection case sensitive? (initially false)
      * <br>Note: this field is static so the value is kept after the dialog is OKed.
-     */ 
+     */
     private static boolean caseSensitive = false;
 
-    /** 
+    /**
      * Does the selection include folders? (initially false)
      * <br>Note: this field is static so the value is kept after the dialog is OKed.
-     */ 
+     */
     private static boolean includeFolders = false;
-	
-    /** 
+
+    /**
      * Filename comparison: contains, starts with, ends with, is ?
      * <br>Note: this field is static so the value is kept after the dialog is OKed.
-     */ 
+     */
     private static int comparison = CONTAINS;
 
-    /** 
+    /**
      * Keyword which has last been typed to mark or unmark files.
      * <br>Note: this field is static so the value is kept after the dialog is OKed.
-     */ 
+     */
     private static String keywordString = "*";
-	
 
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400, 10000);
 
 
     /**
@@ -119,8 +102,8 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
      */
     public FileSelectionDialog(MainFrame mainFrame, boolean addToSelection) {
 
-        super(mainFrame, Translator.get(addToSelection?"file_selection_dialog.mark":"file_selection_dialog.unmark"), mainFrame);
-	
+        super(mainFrame, Translator.get(addToSelection ? "file_selection_dialog.mark" : "file_selection_dialog.unmark"), mainFrame);
+
         this.mainFrame = mainFrame;
         this.addToSelection = addToSelection;
 
@@ -128,7 +111,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         contentPane.setLayout(new BorderLayout());
 
         YBoxPanel northPanel = new YBoxPanel(5);
-        JLabel label = new JLabel(Translator.get(addToSelection?"file_selection_dialog.mark_description":"file_selection_dialog.unmark_description")+" :");
+        JLabel label = new JLabel(Translator.get(addToSelection ? "file_selection_dialog.mark_description" : "file_selection_dialog.unmark_description") + " :");
         northPanel.add(label);
 
         JPanel tempPanel = new JPanel();
@@ -141,7 +124,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         comparisonComboBox.addItem(Translator.get("file_selection_dialog.matches_regexp"));
         comparisonComboBox.setSelectedIndex(comparison);
         tempPanel.add(comparisonComboBox);
-				
+
         // selectionField is initialized with last textfield's value (if any)
         selectionField = new JTextField(keywordString);
         selectionField.addActionListener(this);
@@ -152,19 +135,19 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
         // Add some vertical space
         northPanel.addSpace(10);
-		
+
         caseSensitiveCheckBox = new JCheckBox(Translator.get("file_selection_dialog.case_sensitive"), caseSensitive);
         northPanel.add(caseSensitiveCheckBox);
 
         includeFoldersCheckBox = new JCheckBox(Translator.get("file_selection_dialog.include_folders"), includeFolders);
         northPanel.add(includeFoldersCheckBox);
-		
+
         northPanel.addSpace(10);
         northPanel.add(Box.createVerticalGlue());
 
         contentPane.add(northPanel, BorderLayout.NORTH);
 
-        okButton = new JButton(Translator.get(addToSelection?"file_selection_dialog.mark":"file_selection_dialog.unmark"));
+        okButton = new JButton(Translator.get(addToSelection ? "file_selection_dialog.mark" : "file_selection_dialog.unmark"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, new JButton(Translator.get("cancel")), getRootPane(), this), BorderLayout.SOUTH);
 
         // Selection field receives initial keyboard focus
@@ -178,14 +161,14 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
     ////////////////////////////
     // ActionListener methods //
     ////////////////////////////
-	
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
         FileTable activeTable = mainFrame.getActiveTable();
 
         // Action coming from the selection dialog
-        if ((source==okButton || source==selectionField)) {
+        if ((source == okButton || source == selectionField)) {
             // Save values for next time this dialog is invoked
             caseSensitive = caseSensitiveCheckBox.isSelected();
             includeFolders = includeFoldersCheckBox.isSelected();
@@ -194,11 +177,10 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
             String testString;
             keywordString = selectionField.getText();
-            if(comparison!=REGEXP) {
+            if (comparison != REGEXP) {
                 // Remove '*' characters
                 testString = keywordString.replace("*", "");
-            }
-            else {
+            } else {
                 testString = keywordString;
             }
 
@@ -221,8 +203,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
                 default:
                     try {
                         filter = new RegexpFilenameFilter(testString, caseSensitive);
-                    }
-                    catch(PatternSyntaxException ex) {
+                    } catch (PatternSyntaxException ex) {
                         // Todo: let the user know the regexp is invalid
                         LOGGER.debug("Invalid regexp", ex);
 
@@ -233,10 +214,10 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
             }
 
             // If folders are excluded, add a regular file filter and chain it with an AndFileFilter
-            if(!includeFolders) {
+            if (!includeFolders) {
                 filter = new AndFileFilter(
-                    new AttributeFileFilter(FileAttribute.FILE),
-                    filter
+                        new AttributeFileFilter(FileAttribute.FILE),
+                        filter
                 );
             }
 
@@ -248,7 +229,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
             activeTable.repaint();
         }
-		
+
         dispose();
     }
 

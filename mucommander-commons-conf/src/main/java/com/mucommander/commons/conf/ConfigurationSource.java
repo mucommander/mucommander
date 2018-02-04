@@ -40,26 +40,30 @@ import java.io.Writer;
  * {@link FileConfigurationSource},
  * which will open input and output streams on a local file.
  * </p>
+ *
  * @author Nicolas Rinaudo
- * @see    FileConfigurationSource
+ * @see FileConfigurationSource
  */
 public interface ConfigurationSource {
     /**
      * Returns an input stream on the configuration source.
-     * @return             an input stream on the configuration source.
+     *
+     * @return an input stream on the configuration source.
      * @throws IOException if any I/O error occurs.
      */
     Reader getReader() throws IOException;
 
     /**
      * Returns an output stream on the configuration source.
-     * @return             an output stream on the configuration source.
+     *
+     * @return an output stream on the configuration source.
      * @throws IOException if any I/O error occurs.
      */
     Writer getWriter() throws IOException;
-    
+
     /**
      * Returns whether this source exists
+     *
      * @return true if the source exists, false otherwise.
      */
     boolean isExists() throws IOException;

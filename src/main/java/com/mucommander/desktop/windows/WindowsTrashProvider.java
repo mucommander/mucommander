@@ -26,8 +26,8 @@ import com.mucommander.desktop.TrashProvider;
 /**
  * This class is a trash provider for the {@link WindowsTrash Windows trash}.
  *
- * @see WindowsTrash
  * @author Maxence Bernard
+ * @see WindowsTrash
  */
 public class WindowsTrashProvider implements TrashProvider {
 

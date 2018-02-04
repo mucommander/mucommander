@@ -29,34 +29,44 @@ import java.awt.event.KeyEvent;
 /**
  * DynamicList extends JList to work with an {@link AlteredVector} of items which values can be dynamically modified
  * and automatically reflected in the list, also keeping the current selection consistent.
- *
+ * <p>
  * <p>It also provides actions to:
  * <ul>
  * <li>move the currently selected item up (mapped to 'Shift+UP' and 'Shift+LEFT')
  * <li>move the currently selected item down (mapped to 'Shift+DOWN' and 'Shift+RIGHT')
  * <li>remove the currently selected item and selects the previous one (if any) (mapped to 'DELETE' and 'BACKSPACE')
  * </ul>
- *
+ * <p>
  * <p>This list only works in 'single selection mode', that means only one item can be selected at a time.
  *
  * @author Maxence Bernard
  */
 public class DynamicList<E> extends JList {
 
-    /** Items displayed in the JList */
+    /**
+     * Items displayed in the JList
+     */
     private AlteredVector<E> items;
 
-    /** Custom ListModel that handles modifications made to the AlteredVector */
+    /**
+     * Custom ListModel that handles modifications made to the AlteredVector
+     */
     private DynamicListModel model;
 
-    /** Action instance which moves the currently selected item up when triggered */
+    /**
+     * Action instance which moves the currently selected item up when triggered
+     */
     private MoveUpAction moveUpAction;
 
-    /** Action instance which moves the currently selected item down when triggered */
+    /**
+     * Action instance which moves the currently selected item down when triggered
+     */
     private MoveDownAction moveDownAction;
 
-    /** Action instance which, when triggered, removes the currently selected item from the list
-     * and selects the previous item (if any). */
+    /**
+     * Action instance which, when triggered, removes the currently selected item from the list
+     * and selects the previous item (if any).
+     */
     private RemoveAction removeAction;
 
 
@@ -70,7 +80,7 @@ public class DynamicList<E> extends JList {
         }
 
         public Object getElementAt(int i) {
-            if(i<0 || i>=items.size())
+            if (i < 0 || i >= items.size())
                 return null;
 
             return items.elementAt(i);
@@ -93,11 +103,11 @@ public class DynamicList<E> extends JList {
         //////////////////////////
 
         public void elementsAdded(int startIndex, int nbAdded) {
-            model.notifyAdded(startIndex, startIndex+nbAdded-1);
+            model.notifyAdded(startIndex, startIndex + nbAdded - 1);
         }
 
         public void elementsRemoved(int startIndex, int nbRemoved) {
-            model.notifyRemoved(startIndex, startIndex+nbRemoved-1);
+            model.notifyRemoved(startIndex, startIndex + nbRemoved - 1);
         }
 
         public void elementChanged(int index) {
@@ -152,16 +162,16 @@ public class DynamicList<E> extends JList {
         public void actionPerformed(ActionEvent actionEvent) {
             int selectedIndex = getSelectedIndex();
 
-            if(!isIndexValid(selectedIndex))
+            if (!isIndexValid(selectedIndex))
                 return;
 
             items.removeElementAt(selectedIndex);
 
             // Select previous item (if there is one) and make sure it is visible.
             int nbItems = items.size();
-            if(nbItems>0)
-                selectAndScroll(Math.min(selectedIndex, nbItems-1));
-            
+            if (nbItems > 0)
+                selectAndScroll(Math.min(selectedIndex, nbItems - 1));
+
             // Request focus back on the list
             requestFocus();
         }
@@ -171,7 +181,7 @@ public class DynamicList<E> extends JList {
     /**
      * Creates a new DynamicList using the items stored in the given {@link AlteredVector}.
      * These items (if any) will be visible whenever this list is visible, and the first item (if any) will be selected.
-     *
+     * <p>
      * <p>Any change made to the AlteredVector will be automatically reflected in the list, except for changes
      * made to the item instances themselves for which {@link #itemModified(int, boolean)} will need to
      * be called explicitely.
@@ -185,7 +195,7 @@ public class DynamicList<E> extends JList {
         this.model = new DynamicListModel();
 
         setModel(model);
-        
+
         // Listen to changes made to the Vector
         this.items.addVectorChangeListener(model);
 
@@ -193,8 +203,8 @@ public class DynamicList<E> extends JList {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Select first item, if there is at least one
-        if(items.size()>0)
-           setSelectedIndex(0);
+        if (items.size() > 0)
+            setSelectedIndex(0);
 
         // Create action instances
         this.moveUpAction = new MoveUpAction();
@@ -255,7 +265,7 @@ public class DynamicList<E> extends JList {
      * @return true if the given index is without the bounds of the items.
      */
     public boolean isIndexValid(int index) {
-        return index>=0 && index<items.size();
+        return index >= 0 && index < items.size();
     }
 
 
@@ -263,12 +273,12 @@ public class DynamicList<E> extends JList {
      * This method should be called whenever an item in the items vector has been modified in order to properly
      * repaint the list and reflect the change.
      *
-     * @param index index of the item in the Vector that has been modified
+     * @param index      index of the item in the Vector that has been modified
      * @param selectItem if true, the modified item will be selected
      */
     public void itemModified(int index, boolean selectItem) {
         // Make sure that the given index is not out of bounds
-        if(!isIndexValid(index))
+        if (!isIndexValid(index))
             return;
 
         // Notify ListModel in order to properly repaint list
@@ -279,30 +289,29 @@ public class DynamicList<E> extends JList {
     /**
      * Moves the item located at the given index up or down, swapping its place with the previous or next item.
      *
-     * @param index the item to move
+     * @param index  the item to move
      * @param moveUp if true the item at the given index will be moved up, if not moved down
      */
     public void moveItem(int index, boolean moveUp) {
         // Make sure that the given index is not out of bounds
-        if(!isIndexValid(index))
+        if (!isIndexValid(index))
             return;
 
         int newIndex;
 
         // Calculate the new index for the item to move
-        if (moveUp)  {
+        if (moveUp) {
             // Item is already at the top, do nothing
-            if(index<1)
+            if (index < 1)
                 return;
 
-            newIndex = index-1;
-        }
-        else {
+            newIndex = index - 1;
+        } else {
             // Item is already at the bottom, do nothing
-            if(index>=items.size()-1)
+            if (index >= items.size() - 1)
                 return;
 
-            newIndex = index+1;
+            newIndex = index + 1;
         }
 
         // Swap values in the Vector

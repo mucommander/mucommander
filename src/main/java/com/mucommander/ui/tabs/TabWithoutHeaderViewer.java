@@ -18,64 +18,74 @@
 
 package com.mucommander.ui.tabs;
 
-import java.awt.Component;
-
-import javax.swing.JComponent;
+import javax.swing.*;
+import java.awt.*;
 
 /**
-* Component that presents tab with no header
-* 
-* @author Arik Hadas
-*/
+ * Component that presents tab with no header
+ *
+ * @author Arik Hadas
+ */
 public class TabWithoutHeaderViewer<T extends Tab> extends TabsViewer<T> {
 
-	/** The component to be displayed in the tab */
-	private JComponent component;
+    /**
+     * The component to be displayed in the tab
+     */
+    private JComponent component;
 
-	public TabWithoutHeaderViewer(TabsCollection<T> tabs, JComponent component) {
-		super(component, tabs);
+    public TabWithoutHeaderViewer(TabsCollection<T> tabs, JComponent component) {
+        super(component, tabs);
 
-		this.component = component;
-	}
+        this.component = component;
+    }
 
-	@Override
-	public void requestFocus() {
-		component.requestFocusInWindow();
-	}
+    @Override
+    public void requestFocus() {
+        component.requestFocusInWindow();
+    }
 
-	@Override
-	public int getSelectedTabIndex() {
-		return 0;
-	}
+    @Override
+    public int getSelectedTabIndex() {
+        return 0;
+    }
 
-	@Override
-	public void add(T tab, int index) {
-		if (index > 0)
-			throw new IllegalArgumentException("Unable to add tab at index > 0 to single tab display");
-		add(tab);
-	}
+    @Override
+    public void add(T tab, int index) {
+        if (index > 0)
+            throw new IllegalArgumentException("Unable to add tab at index > 0 to single tab display");
+        add(tab);
+    }
 
-	@Override
-	public void update(T tab, int index) { }
+    @Override
+    public void update(T tab, int index) {
+    }
 
-	@Override
-	public void setSelectedTabIndex(int index) { }
+    @Override
+    public void setSelectedTabIndex(int index) {
+    }
 
-	@Override
-	public void add(T tab) { }
+    @Override
+    public void add(T tab) {
+    }
 
-	@Override
-	public T removeCurrentTab() { return null; }
+    @Override
+    public T removeCurrentTab() {
+        return null;
+    }
 
-	@Override
-	public void removeOtherTabs() { }
+    @Override
+    public void removeOtherTabs() {
+    }
 
-	@Override
-	public void removeTab(Component header) { }
+    @Override
+    public void removeTab(Component header) {
+    }
 
-	@Override
-	public void removeDuplicateTabs() { }
+    @Override
+    public void removeDuplicateTabs() {
+    }
 
-	@Override
-	public void removeTab(int index) { }
+    @Override
+    public void removeTab(int index) {
+    }
 }

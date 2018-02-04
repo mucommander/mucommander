@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,24 +40,24 @@ import com.mucommander.commons.file.AbstractFile;
  */
 public class AttributeFileFilter extends AbstractFileFilter {
 
-	public enum FileAttribute {
-		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isDirectory() directory}. */
-		DIRECTORY,
-		/** Tests if the file is a regular file, i.e. not a directory. This is equivalent to negating {@link #DIRECTORY}. */
-		FILE,
-		/** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isBrowsable() browsable}. */
-		BROWSABLE,
-		/** Tests if the file is an {@link com.mucommander.commons.file.AbstractFile#isArchive() archive}. */
-		ARCHIVE,
-		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSymlink() symlink}. */
-		SYMLINK,
-		/** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isHidden() hidden}. */
-		HIDDEN,
-		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isRoot() root folder}. */
-		ROOT,
-		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSystem() system file}. */
-		SYSTEM;
-	}
+    public enum FileAttribute {
+        /** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isDirectory() directory}. */
+        DIRECTORY,
+        /** Tests if the file is a regular file, i.e. not a directory. This is equivalent to negating {@link #DIRECTORY}. */
+        FILE,
+        /** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isBrowsable() browsable}. */
+        BROWSABLE,
+        /** Tests if the file is an {@link com.mucommander.commons.file.AbstractFile#isArchive() archive}. */
+        ARCHIVE,
+        /** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSymlink() symlink}. */
+        SYMLINK,
+        /** Tests if the file is {@link com.mucommander.commons.file.AbstractFile#isHidden() hidden}. */
+        HIDDEN,
+        /** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isRoot() root folder}. */
+        ROOT,
+        /** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSystem() system file}. */
+        SYSTEM;
+    }
 
     /** The attribute to test files against */
     private FileAttribute attribute;
@@ -110,7 +110,7 @@ public class AttributeFileFilter extends AbstractFileFilter {
     ///////////////////////////////
 
     public boolean accept(AbstractFile file) {
-        switch(attribute) {
+        switch (attribute) {
             case DIRECTORY:
                 return file.isDirectory();
             case FILE:
@@ -125,10 +125,10 @@ public class AttributeFileFilter extends AbstractFileFilter {
                 return file.isHidden();
             case ROOT:
                 return file.isRoot();
-		    case SYSTEM:
-			    return file.isSystem();
-		    default:
-		    	return true;
+            case SYSTEM:
+                return file.isSystem();
+            default:
+                return true;
         }
     }
 }

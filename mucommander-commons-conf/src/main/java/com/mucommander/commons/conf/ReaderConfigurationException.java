@@ -28,14 +28,18 @@ package com.mucommander.commons.conf;
  * Since <code>ReaderConfigurationException</code> subclasses {@link ConfigurationException}, it
  * inherits his capacity to wrap other exceptions.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class ReaderConfigurationException extends ConfigurationException {
     /**
      * Creates a new reader configuration exception.
+     *
      * @param message the error message.
      */
-    public ReaderConfigurationException(String message) {super(message);}
+    public ReaderConfigurationException(String message) {
+        super(message);
+    }
 
     /**
      * Creates a new reader configuration exception wrapping an existing exception.
@@ -43,17 +47,23 @@ public class ReaderConfigurationException extends ConfigurationException {
      * The existing exception will be embedded in the new one, and its message will
      * become the default message for the <code>ReaderConfigurationException</code>.
      * </p>
+     *
      * @param cause the exception to be wrapped in a <code>ReaderConfigurationException</code>.
      */
-    public ReaderConfigurationException(Throwable cause) {super(cause);}
+    public ReaderConfigurationException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * Creates a new reader configuration exception from an existing exception.
      * <p>
      * The existing exception will be embedded in the new one, but the new exception will have its own message.
      * </p>
+     *
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>ReaderConfigurationException</code>.
      */
-    public ReaderConfigurationException(String message, Throwable cause) {super(message, cause);}
+    public ReaderConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

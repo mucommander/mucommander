@@ -18,22 +18,20 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Vector;
-
-import javax.xml.parsers.SAXParserFactory;
-
+import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.io.backup.BackupInputStream;
+import com.mucommander.ui.action.ActionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import com.mucommander.RuntimeConstants;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.io.backup.BackupInputStream;
-import com.mucommander.ui.action.ActionManager;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * This class parses the XML file describing the toolbar's buttons and associated actions.
@@ -41,9 +39,11 @@ import com.mucommander.ui.action.ActionManager;
  * @author Maxence Bernard, Arik Hadas
  */
 public class ToolBarReader extends ToolBarIO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarReader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarReader.class);
 
-    /** Temporarily used for XML parsing */
+    /**
+     * Temporarily used for XML parsing
+     */
     private List<String> actionIdsV;
 
     /**
@@ -53,18 +53,21 @@ public class ToolBarReader extends ToolBarIO {
         InputStream in;
 
         in = null;
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(descriptionFile), this);}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(IOException e) {}
+        try {
+            SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(descriptionFile), this);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
             }
         }
     }
-    
+
     public String[] getActionsRead() {
-    	int nbActions = actionIdsV.size();
-    	String[] actionIds = new String[nbActions];
+        int nbActions = actionIdsV.size();
+        String[] actionIds = new String[nbActions];
         actionIdsV.toArray(actionIds);
         return actionIds;
     }
@@ -79,39 +82,37 @@ public class ToolBarReader extends ToolBarIO {
     }
 
     @Override
-    public void endDocument() {}
+    public void endDocument() {
+    }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if(qName.equals(BUTTON_ELEMENT)) {
-        	// Resolve action id
-        	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
-        	if (actionIdAttribute != null) {
-        		if (ActionManager.isActionExist(actionIdAttribute))
-        			actionIdsV.add(actionIdAttribute);
-        		else
-        			LOGGER.warn("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
-        	}
-        	else {
-        		// Resolve action class
-        		String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
-        		String actionId = ActionManager.extrapolateId(actionClassAttribute);
-        		if (ActionManager.isActionExist(actionId))
-        			actionIdsV.add(actionId);
-        		else
-        			LOGGER.warn("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
-        	}
-        }
-        else if(qName.equals(SEPARATOR_ELEMENT)) {
+        if (qName.equals(BUTTON_ELEMENT)) {
+            // Resolve action id
+            String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
+            if (actionIdAttribute != null) {
+                if (ActionManager.isActionExist(actionIdAttribute))
+                    actionIdsV.add(actionIdAttribute);
+                else
+                    LOGGER.warn("Error in " + DEFAULT_TOOLBAR_FILE_NAME + ": action id \"" + actionIdAttribute + "\" not found");
+            } else {
+                // Resolve action class
+                String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
+                String actionId = ActionManager.extrapolateId(actionClassAttribute);
+                if (ActionManager.isActionExist(actionId))
+                    actionIdsV.add(actionId);
+                else
+                    LOGGER.warn("Error in " + DEFAULT_TOOLBAR_FILE_NAME + ": action id for class " + actionClassAttribute + " was not found");
+            }
+        } else if (qName.equals(SEPARATOR_ELEMENT)) {
             actionIdsV.add(null);
-        }
-        else if (qName.equals(ROOT_ELEMENT)) {
-        	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
+        } else if (qName.equals(ROOT_ELEMENT)) {
+            // Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
             String fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
 
             // if the file's version is not up-to-date, update the file to the current version at quitting.
             if (!RuntimeConstants.VERSION.equals(fileVersion))
-            	setModified();
+                setModified();
         }
     }
 }

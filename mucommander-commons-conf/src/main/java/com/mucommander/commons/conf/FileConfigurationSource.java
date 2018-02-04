@@ -23,25 +23,31 @@ import java.nio.charset.Charset;
 
 /**
  * Configuration source that work on a {@link File} instance.
+ *
  * @author Nicolas Rinaudo
  */
 public class FileConfigurationSource implements ConfigurationSource {
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Path to the file on which to open input and output streams. */
-    private final File    file;
-    /** File's charset. */
+    /**
+     * Path to the file on which to open input and output streams.
+     */
+    private final File file;
+    /**
+     * File's charset.
+     */
     private final Charset charset;
-
 
 
     // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a source that will open streams on the specified file.
+     *
      * @param file file in which the configuration data is located.
      * @deprecated Application developers should use {@link #FileConfigurationSource(File, Charset)} instead. This
-     *             constructor assumes the specified file to be <code>UTF-8</code> encoded.
+     * constructor assumes the specified file to be <code>UTF-8</code> encoded.
      */
     @Deprecated
     public FileConfigurationSource(File file) {
@@ -50,17 +56,19 @@ public class FileConfigurationSource implements ConfigurationSource {
 
     /**
      * Creates a source on the specified file and charset.
-     * @param file file in which the configuration data is located.
+     *
+     * @param file    file in which the configuration data is located.
      * @param charset charset in which the file is encoded.
      */
     public FileConfigurationSource(File file, Charset charset) {
-        this.file    = file;
+        this.file = file;
         this.charset = charset;
     }
 
     /**
      * Creates a source on the specified file and charset.
-     * @param file file in which the configuration data is located.
+     *
+     * @param file    file in which the configuration data is located.
      * @param charset charset in which the file is encoded.
      */
     public FileConfigurationSource(File file, String charset) {
@@ -69,9 +77,10 @@ public class FileConfigurationSource implements ConfigurationSource {
 
     /**
      * Creates a source that will open streams on the specified file.
-     * @param path  path to the file in which the configuration data is located.
+     *
+     * @param path path to the file in which the configuration data is located.
      * @deprecated Application developers should use {@link #FileConfigurationSource(String, Charset)} instead. This
-     *             constructor assumes the specified file to be <code>UTF-8</code> encoded.
+     * constructor assumes the specified file to be <code>UTF-8</code> encoded.
      */
     @Deprecated
     public FileConfigurationSource(String path) {
@@ -80,7 +89,8 @@ public class FileConfigurationSource implements ConfigurationSource {
 
     /**
      * Creates a source on the specified file and charset.
-     * @param path  path to the file in which the configuration data is located.
+     *
+     * @param path    path to the file in which the configuration data is located.
      * @param charset charset in which the file is encoded.
      */
     public FileConfigurationSource(String path, String charset) {
@@ -89,7 +99,8 @@ public class FileConfigurationSource implements ConfigurationSource {
 
     /**
      * Creates a source on the specified file and charset.
-     * @param path  path to the file in which the configuration data is located.
+     *
+     * @param path    path to the file in which the configuration data is located.
      * @param charset charset in which the file is encoded.
      */
     public FileConfigurationSource(String path, Charset charset) {
@@ -97,11 +108,12 @@ public class FileConfigurationSource implements ConfigurationSource {
     }
 
 
-
     // - File access ---------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the file on which input and output streams are opened.
+     *
      * @return the file on which input and output streams are opened.
      */
     public File getFile() {
@@ -110,12 +122,12 @@ public class FileConfigurationSource implements ConfigurationSource {
 
     /**
      * Returns the charset in which the {@link #getFile() configuration file} is encoded.
+     *
      * @return the charset in which the {@link #getFile() configuration file} is encoded.
      */
     public Charset getCharset() {
         return charset;
     }
-
 
 
     // - Source methods ------------------------------------------------------------------------------------------------
@@ -130,8 +142,8 @@ public class FileConfigurationSource implements ConfigurationSource {
         return new OutputStreamWriter(new FileOutputStream(file), charset);
     }
 
-	@Override
-	public boolean isExists() {
-		return file.exists();
-	}
+    @Override
+    public boolean isExists() {
+        return file.exists();
+    }
 }

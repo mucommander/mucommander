@@ -26,8 +26,8 @@ import java.io.IOException;
 /**
  * A test case for {@link com.mucommander.commons.io.BoundedInputStream}.
  *
- * @see com.mucommander.commons.io.BoundedInputStream
  * @author Maxence Bernard, Nicolas Rinaudo
+ * @see com.mucommander.commons.io.BoundedInputStream
  */
 public class BoundedInputStreamTest {
 
@@ -46,22 +46,22 @@ public class BoundedInputStreamTest {
         assert 4 == bin.getRemainingBytes();
         assert 4 == bin.getAllowedBytes();
 
-        assert bin.read()!=-1;
+        assert bin.read() != -1;
         assert 1 == bin.getProcessedBytes();
         assert 3 == bin.getRemainingBytes();
         assert 4 == bin.getAllowedBytes();
 
-        assert bin.read(new byte[1])!=-1;
+        assert bin.read(new byte[1]) != -1;
         assert 2 == bin.getProcessedBytes();
         assert 2 == bin.getRemainingBytes();
         assert 4 == bin.getAllowedBytes();
 
-        assert bin.read(new byte[1], 0, 1)!=-1;
+        assert bin.read(new byte[1], 0, 1) != -1;
         assert 3 == bin.getProcessedBytes();
         assert 1 == bin.getRemainingBytes();
         assert 4 == bin.getAllowedBytes();
 
-        assert bin.skip(1)!=-1;
+        assert bin.skip(1) != -1;
         assert 4 == bin.getProcessedBytes();
         assert 0 == bin.getRemainingBytes();
         assert 4 == bin.getAllowedBytes();
@@ -78,36 +78,48 @@ public class BoundedInputStreamTest {
         prepareBoundedStream(bin);
 
         boolean exceptionThrown = false;
-        try { bin.read(); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            bin.read();
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { bin.read(new byte[1]); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            bin.read(new byte[1]);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { bin.read(new byte[1], 0, 1); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            bin.read(new byte[1], 0, 1);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { bin.skip(1); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            bin.skip(1);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
-        
+
         assert 4 == bin.getProcessedBytes();
         assert 0 == bin.getRemainingBytes();
         assert 4 == bin.getAllowedBytes();
 
         // Attempt to read a chunk larger than the remaining bytes and assert that it does not throw a StreamOutOfBoundException
         bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4, true);
-        assert bin.read(new byte[6])!=-1;
+        assert bin.read(new byte[6]) != -1;
 
         assert 4 == bin.getProcessedBytes();
         assert 0 == bin.getRemainingBytes();
@@ -135,7 +147,7 @@ public class BoundedInputStreamTest {
 
         // Attempt to read a chunk larger than the remaining bytes and assert that it does not return -1
         bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), 4, false);
-        assert bin.read(new byte[6])!=-1;
+        assert bin.read(new byte[6]) != -1;
     }
 
     /**
@@ -150,24 +162,24 @@ public class BoundedInputStreamTest {
         assert Long.MAX_VALUE == bin.getRemainingBytes();
         assert -1 == bin.getAllowedBytes();
 
-        assert bin.read()!=-1;
+        assert bin.read() != -1;
         assert 1 == bin.getProcessedBytes();
         assert Long.MAX_VALUE == bin.getRemainingBytes();
         assert -1 == bin.getAllowedBytes();
 
-        assert bin.read(new byte[1])!=-1;
+        assert bin.read(new byte[1]) != -1;
         assert 2 == bin.getProcessedBytes();
         assert Long.MAX_VALUE == bin.getRemainingBytes();
         assert -1 == bin.getAllowedBytes();
 
-        assert bin.read(new byte[1], 0, 1)!=-1;
+        assert bin.read(new byte[1], 0, 1) != -1;
         assert 3 == bin.getProcessedBytes();
         assert Long.MAX_VALUE == bin.getRemainingBytes();
         assert -1 == bin.getAllowedBytes();
 
         long totalRead = 0;
-        while(bin.read()!=-1)
-            totalRead ++;
+        while (bin.read() != -1)
+            totalRead++;
 
         assert 8 == totalRead;
     }

@@ -25,24 +25,31 @@ package com.mucommander.commons.conf;
  * {@link Configuration}'s {@link Configuration#addConfigurationListener(ConfigurationListener) addConfigurationListener} method.
  * Each such listener object gets this <code>ConfigurationEvent</code> when the event occurs.
  * </p>
- * @see    ConfigurationListener
- * @see    Configuration
+ *
  * @author Nicolas Rinaudo
+ * @see ConfigurationListener
+ * @see Configuration
  */
 public class ConfigurationEvent {
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Name of the variable that has been modified. */
-    private final String        name;
-    /** Variable's new value. */
-    private final String        value;
-    /** Configuration to which the event relates. */
-    private  final Configuration configuration;
-
+    /**
+     * Name of the variable that has been modified.
+     */
+    private final String name;
+    /**
+     * Variable's new value.
+     */
+    private final String value;
+    /**
+     * Configuration to which the event relates.
+     */
+    private final Configuration configuration;
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new configuration event.
      * <p>
@@ -53,22 +60,24 @@ public class ConfigurationEvent {
      * <code>null</code> is an accepted value for parameter <code>value</code>, and will be
      * interpreted to mean that the variable has been deleted.
      * </p>
+     *
      * @param configuration configuration to which the event relates.
      * @param name          name of the variable that was modified.
      * @param value         value of the variable that was modified.
      */
     public ConfigurationEvent(Configuration configuration, String name, String value) {
-        this.name          = name;
-        this.value         = value;
+        this.name = name;
+        this.value = value;
         this.configuration = configuration;
     }
 
 
-
     // - Variable access -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the configuration to which the event relates.
+     *
      * @return the configuration to which the event relates.
      */
     public Configuration getConfiguration() {
@@ -82,6 +91,7 @@ public class ConfigurationEvent {
      * modified variable is <code>test.somevar</code>, this is what this method will return,
      * not <code>somevar</code>.
      * </p>
+     *
      * @return the name of the variable that was modified.
      */
     public String getVariable() {
@@ -93,6 +103,7 @@ public class ConfigurationEvent {
      * <p>
      * If the variable has been deleted, this method will return <code>null</code>.
      * </p>
+     *
      * @return the new value for the modified variable.
      */
     public String getValue() {
@@ -104,7 +115,8 @@ public class ConfigurationEvent {
      * <p>
      * If the variable has been deleted, this method will return 0.
      * </p>
-     * @return                       the new value for the modified variable.
+     *
+     * @return the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as an integer.
      */
     public int getIntegerValue() throws NumberFormatException {
@@ -116,7 +128,8 @@ public class ConfigurationEvent {
      * <p>
      * If the variable has been deleted, this method will return 0.
      * </p>
-     * @return                       the new value for the modified variable.
+     *
+     * @return the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as a float
      */
     public float getFloatValue() throws NumberFormatException {
@@ -128,6 +141,7 @@ public class ConfigurationEvent {
      * <p>
      * If the variable has been deleted, this method will return <code>false</code>.
      * </p>
+     *
      * @return the new value for the modified variable.
      */
     public boolean getBooleanValue() {
@@ -139,7 +153,8 @@ public class ConfigurationEvent {
      * <p>
      * If the variable has been deleted, this method will return 0.
      * </p>
-     * @return                       the new value for the modified variable.
+     *
+     * @return the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as a long.
      */
     public long getLongValue() throws NumberFormatException {
@@ -151,7 +166,8 @@ public class ConfigurationEvent {
      * <p>
      * If the variable has been deleted, this method will return 0.
      * </p>
-     * @return                       the new value for the modified variable.
+     *
+     * @return the new value for the modified variable.
      * @throws NumberFormatException if {@link #getValue()} cannot be cast as a double.
      */
     public double getDoubleValue() {
@@ -163,8 +179,9 @@ public class ConfigurationEvent {
      * <p>
      * If the variable has been deleted, this method will return null.
      * </p>
-     * @param  separator string used to tokenise the variable's value.
-     * @return           the new value for the modified variable.
+     *
+     * @param separator string used to tokenise the variable's value.
+     * @return the new value for the modified variable.
      */
     public ValueList getListValue(String separator) {
         return ConfigurationSection.getListValue(value, separator);

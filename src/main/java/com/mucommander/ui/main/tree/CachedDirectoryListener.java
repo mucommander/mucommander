@@ -24,13 +24,13 @@ import java.util.EventListener;
 
 /**
  * An interface that listeners to a directory cache must implement.
- * @author Mariusz Jakubowski
  *
+ * @author Mariusz Jakubowski
  */
 public interface CachedDirectoryListener extends EventListener {
-   
+
     public void cachingStarted(AbstractFile parent);
-    
+
     public void cachingEnded(AbstractFile parent);
 
 }

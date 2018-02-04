@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,9 +41,8 @@ public class C {
 
     static {
         try {
-            INSTANCE = (CLibrary)Native.loadLibrary("c", CLibrary.class);
-        }
-        catch(Throwable e) {
+            INSTANCE = (CLibrary) Native.loadLibrary("c", CLibrary.class);
+        } catch (Throwable e) {
             LOGGER.info("Unable to load C library", e);
 
             // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported by JNA.
@@ -57,7 +56,7 @@ public class C {
      * @return <code>true</code> if the C standard library can be accessed on the current OS/CPU architecture
      */
     public static boolean isAvailable() {
-        return INSTANCE!=null;
+        return INSTANCE != null;
     }
 
     /**

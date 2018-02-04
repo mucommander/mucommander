@@ -33,52 +33,64 @@ import java.io.InputStream;
  * This class' role is to choose which of the original or backup file should be read in order to ensure
  * that the data is not corrupt.
  * </p>
- * @see BackupOutputStream
+ *
  * @author Nicolas Rinaudo
+ * @see BackupOutputStream
  */
 public class BackupInputStream extends FilterInputStream implements BackupConstants {
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
-    /**
-     * Opens a backup input stream on the specified file.
-     * @param     file        file to open for reading.
-     * @exception IOException thrown if any IO related error occurs.
-     */
-    public BackupInputStream(File file) throws IOException {super(getInputStream(FileFactory.getFile(file.getAbsolutePath())));}
 
     /**
      * Opens a backup input stream on the specified file.
-     * @param     path        path to the file to open for reading.
-     * @exception IOException thrown if any IO related error occurs.
+     *
+     * @param file file to open for reading.
+     * @throws IOException thrown if any IO related error occurs.
      */
-    public BackupInputStream(String path) throws IOException {super(getInputStream(FileFactory.getFile((new File(path)).getAbsolutePath())));}
+    public BackupInputStream(File file) throws IOException {
+        super(getInputStream(FileFactory.getFile(file.getAbsolutePath())));
+    }
 
     /**
      * Opens a backup input stream on the specified file.
-     * @param     file        file to open for reading.
-     * @exception IOException thrown if any IO related error occurs.
+     *
+     * @param path path to the file to open for reading.
+     * @throws IOException thrown if any IO related error occurs.
      */
-    public BackupInputStream(AbstractFile file) throws IOException {super(getInputStream(file));}
+    public BackupInputStream(String path) throws IOException {
+        super(getInputStream(FileFactory.getFile((new File(path)).getAbsolutePath())));
+    }
+
+    /**
+     * Opens a backup input stream on the specified file.
+     *
+     * @param file file to open for reading.
+     * @throws IOException thrown if any IO related error occurs.
+     */
+    public BackupInputStream(AbstractFile file) throws IOException {
+        super(getInputStream(file));
+    }
 
     /**
      * Opens a stream on the right file.
      * <p>
      * If a backup file is found, and is bigger than the target file, then it will be used.
      * </p>
-     * @param     file        file on which to open an input stream.
-     * @return                a stream on the right file.
-     * @exception IOException thrown if any IO related error occurs.
+     *
+     * @param file file on which to open an input stream.
+     * @return a stream on the right file.
+     * @throws IOException thrown if any IO related error occurs.
      */
     private static InputStream getInputStream(AbstractFile file) throws IOException {
         AbstractFile backup;
         FileURL test;
 
-        test = (FileURL)file.getURL().clone();
+        test = (FileURL) file.getURL().clone();
         test.setPath(test.getPath() + BACKUP_SUFFIX);
 
         // Checks whether the backup file is a better choice than the target one.
         backup = FileFactory.getFile(test);
-        if(backup != null && backup.exists() && (file.getSize() < backup.getSize()))
+        if (backup != null && backup.exists() && (file.getSize() < backup.getSize()))
             return backup.getInputStream();
 
         // Opens a stream on the target file.

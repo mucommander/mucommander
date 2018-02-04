@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,7 +34,7 @@ import java.io.OutputStream;
  * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
  * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
  * file. It was forked at version 1.7.1 of Ant.</p>
- * 
+ *
  * @author Apache Ant, Maxence Bernard
  */
 public class TarOutputStream extends FilterOutputStream {
@@ -47,16 +47,16 @@ public class TarOutputStream extends FilterOutputStream {
     /** GNU tar extensions are used to store long file names in the archive. */
     public static final int LONGFILE_GNU = 2;
 
-    protected boolean   debug;
-    protected long      currSize;
-    protected String    currName;
-    protected long      currBytes;
-    protected byte[]    oneBuf;
-    protected byte[]    recordBuf;
-    protected int       assemLen;
-    protected byte[]    assemBuf;
+    protected boolean debug;
+    protected long currSize;
+    protected String currName;
+    protected long currBytes;
+    protected byte[] oneBuf;
+    protected byte[] recordBuf;
+    protected int assemLen;
+    protected byte[] assemBuf;
     protected TarBuffer buffer;
-    protected int       longFileMode = LONGFILE_ERROR;
+    protected int longFileMode = LONGFILE_ERROR;
 
     private boolean closed = false;
 
@@ -147,10 +147,9 @@ public class TarOutputStream extends FilterOutputStream {
         if (!closed) {
             try {
                 finish();
-            
+
                 buffer.close();
-            }
-            finally {
+            } finally {
                 BufferPool.releaseByteArray(assemBuf);
                 BufferPool.releaseByteArray(recordBuf);
                 BufferPool.releaseByteArray(oneBuf);
@@ -188,7 +187,7 @@ public class TarOutputStream extends FilterOutputStream {
                 // create a TarEntry for the LongLink, the contents
                 // of which are the entry's name
                 TarEntry longLinkEntry = new TarEntry(TarConstants.GNU_LONGLINK,
-                                                      TarConstants.LF_GNUTYPE_LONGNAME);
+                        TarConstants.LF_GNUTYPE_LONGNAME);
 
                 longLinkEntry.setSize(entry.getName().length() + 1);
                 putNextEntry(longLinkEntry);
@@ -197,8 +196,8 @@ public class TarOutputStream extends FilterOutputStream {
                 closeEntry();
             } else if (longFileMode != LONGFILE_TRUNCATE) {
                 throw new RuntimeException("file name '" + entry.getName()
-                                             + "' is too long ( > "
-                                             + TarConstants.NAMELEN + " bytes)");
+                        + "' is too long ( > "
+                        + TarConstants.NAMELEN + " bytes)");
             }
         }
 
@@ -239,9 +238,9 @@ public class TarOutputStream extends FilterOutputStream {
 
         if (currBytes < currSize) {
             throw new IOException("entry '" + currName + "' closed at '"
-                                  + currBytes
-                                  + "' before the '" + currSize
-                                  + "' bytes specified in the header were written");
+                    + currBytes
+                    + "' before the '" + currSize
+                    + "' bytes specified in the header were written");
         }
     }
 
@@ -291,9 +290,9 @@ public class TarOutputStream extends FilterOutputStream {
     public void write(byte[] wBuf, int wOffset, int numToWrite) throws IOException {
         if ((currBytes + numToWrite) > currSize) {
             throw new IOException("request to write '" + numToWrite
-                                  + "' bytes exceeds size in header of '"
-                                  + currSize + "' bytes for entry '"
-                                  + currName + "'");
+                    + "' bytes exceeds size in header of '"
+                    + currSize + "' bytes for entry '"
+                    + currName + "'");
 
             //
             // We have to deal with assembly!!!
@@ -309,9 +308,9 @@ public class TarOutputStream extends FilterOutputStream {
                 int aLen = recordBuf.length - assemLen;
 
                 System.arraycopy(assemBuf, 0, recordBuf, 0,
-                                 assemLen);
+                        assemLen);
                 System.arraycopy(wBuf, wOffset, recordBuf,
-                                 assemLen, aLen);
+                        assemLen, aLen);
                 buffer.writeRecord(recordBuf);
 
                 currBytes += recordBuf.length;
@@ -320,7 +319,7 @@ public class TarOutputStream extends FilterOutputStream {
                 assemLen = 0;
             } else {
                 System.arraycopy(wBuf, wOffset, assemBuf, assemLen,
-                                 numToWrite);
+                        numToWrite);
 
                 wOffset += numToWrite;
                 assemLen += numToWrite;
@@ -336,7 +335,7 @@ public class TarOutputStream extends FilterOutputStream {
         while (numToWrite > 0) {
             if (numToWrite < recordBuf.length) {
                 System.arraycopy(wBuf, wOffset, assemBuf, assemLen,
-                                 numToWrite);
+                        numToWrite);
 
                 assemLen += numToWrite;
 

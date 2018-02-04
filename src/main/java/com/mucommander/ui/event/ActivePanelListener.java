@@ -27,8 +27,8 @@ import com.mucommander.ui.main.FolderPanel;
  * Those classes need to be registered to receive those events, this can be done by calling
  * {@link com.mucommander.ui.main.MainFrame#addActivePanelListener(ActivePanelListener)}.
  *
- * @see com.mucommander.ui.main.MainFrame
  * @author Maxence Bernard
+ * @see com.mucommander.ui.main.MainFrame
  */
 public interface ActivePanelListener {
 

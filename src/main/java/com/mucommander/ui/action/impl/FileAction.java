@@ -32,7 +32,7 @@ import java.util.Map;
  * FileAction is an abstract action that operates on the currently active FileTable. It is enabled only when
  * the table condition as tested by {@link #getFileTableCondition(FileTable) getFileTableCondition()}
  * method is satisfied.
- *
+ * <p>
  * <p>Those tests are performed when:
  * <ul>
  * <li>the selected file on the currently active FileTable has changed
@@ -44,16 +44,18 @@ import java.util.Map;
  */
 public abstract class FileAction extends MuAction implements TableSelectionListener, ActivePanelListener {
 
-    /** Filter that restricts the enabled condition to files that match it (can be null) */
+    /**
+     * Filter that restricts the enabled condition to files that match it (can be null)
+     */
     protected FileFilter filter;
 
 
-    public FileAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public FileAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
         init(mainFrame);
     }
 
-    
+
     private void init(MainFrame mainFrame) {
         mainFrame.addActivePanelListener(this);
         mainFrame.getLeftPanel().getFileTable().addTableSelectionListener(this);
@@ -67,7 +69,7 @@ public abstract class FileAction extends MuAction implements TableSelectionListe
     /**
      * Enables/disables this action if both of the {@link #getFileTableCondition(FileTable)} and file filter
      * (if there is one) tests are satisfied.
-     *
+     * <p>
      * <p>This method is called each time:
      * <ul>
      * <li>the selected file on the currently active FileTable has changed
@@ -103,7 +105,7 @@ public abstract class FileAction extends MuAction implements TableSelectionListe
      */
     public void selectedFileChanged(FileTable source) {
         // No need to update state if the originating FileTable is not the currently active one 
-        if(source==mainFrame.getActiveTable())
+        if (source == mainFrame.getActiveTable())
             updateEnabledState(source);
     }
 
@@ -112,7 +114,7 @@ public abstract class FileAction extends MuAction implements TableSelectionListe
      */
     public void markedFilesChanged(FileTable source) {
         // No need to update state if the originating FileTable is not the currently active one
-        if(source==mainFrame.getActiveTable())
+        if (source == mainFrame.getActiveTable())
             updateEnabledState(source);
     }
 

@@ -28,11 +28,11 @@ import java.awt.event.MouseListener;
  * This rollover effect gives the user a visual indication that the button can be pressed (in other words, that the
  * button is indeed a button), while not cluttering the interface with button borders.
  * Such buttons are particularly effective for toolbars, where a large number of buttons are usually present.
- *
+ * <p>
  * <p>
  * To 'rollover-enable' a button, the {@link #setButtonDecoration(javax.swing.JButton)} method must first be called to
  * set decoration properties. Then, the button must register an instance of <code>RolloverButtonAdapter</code> as a
- * mouse listener. Note that a single <code>RolloverButtonAdapter</code> instance can be registered with several buttons.  
+ * mouse listener. Note that a single <code>RolloverButtonAdapter</code> instance can be registered with several buttons.
  * </p>
  *
  * @author Maxence Bernard
@@ -63,11 +63,11 @@ public class RolloverButtonAdapter implements MouseListener {
     ///////////////////////////
 
     public void mouseEntered(MouseEvent e) {
-        ((JButton)e.getSource()).setBorderPainted(true);
+        ((JButton) e.getSource()).setBorderPainted(true);
     }
 
     public void mouseExited(MouseEvent e) {
-        ((JButton)e.getSource()).setBorderPainted(false);
+        ((JButton) e.getSource()).setBorderPainted(false);
     }
 
     public void mouseClicked(MouseEvent e) {

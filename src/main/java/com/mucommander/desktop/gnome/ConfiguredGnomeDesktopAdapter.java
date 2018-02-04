@@ -26,7 +26,9 @@ import com.mucommander.process.ProcessRunner;
 public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
     private static final String ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
 
-    public String toString() {return "Gnome Desktop";}
+    public String toString() {
+        return "Gnome Desktop";
+    }
 
     @Override
     public boolean isAvailable() {
@@ -40,14 +42,14 @@ public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
         try {
             ProcessRunner.execute(GVFS_OPEN);
             return GVFS_OPEN;
+        } catch (Exception e) {
         }
-        catch(Exception e) {}
 
         try {
             ProcessRunner.execute(GNOME_OPEN);
             return GNOME_OPEN;
+        } catch (Exception e) {
         }
-        catch(Exception e) {}
 
         return XDG_OPEN;
     }

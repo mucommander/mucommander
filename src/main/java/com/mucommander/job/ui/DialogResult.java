@@ -19,9 +19,9 @@
 package com.mucommander.job.ui;
 
 /**
- * An interface marking a dialog which can return a value. 
- * @author Mariusz Jakubowski
+ * An interface marking a dialog which can return a value.
  *
+ * @author Mariusz Jakubowski
  */
 public interface DialogResult {
     public Object getUserInput();

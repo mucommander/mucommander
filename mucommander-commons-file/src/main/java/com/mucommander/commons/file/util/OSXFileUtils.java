@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,19 +19,18 @@
 
 package com.mucommander.commons.file.util;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 
 /**
  * This class contains methods for file operations that are specific to Mac OS X.
@@ -62,7 +61,7 @@ public class OSXFileUtils {
      * @return the Spotlight/Finder comment of the specified file
      */
     public static String getSpotlightComment(AbstractFile file) {
-        if(!(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()))
+        if (!(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()))
             return null;
 
         InputStream pin = null;
@@ -70,7 +69,7 @@ public class OSXFileUtils {
             Process process = Runtime.getRuntime().exec(new String[]{"mdls", "-name", "kMDItemFinderComment", file.getAbsolutePath()});
             process.waitFor();
 
-            if(process.exitValue()!=0)
+            if (process.exitValue() != 0)
                 return null;
 
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -85,23 +84,23 @@ public class OSXFileUtils {
             String output = new String(bout.toByteArray());
             Matcher matcher = MDLS_COMMENT_PATTERN.matcher(output);
 
-            if(matcher.find()) {
+            if (matcher.find()) {
                 // Strip off the quotes surrounding the comment
                 String group = matcher.group();
-                return group.substring(1, group.length()-1);
+                return group.substring(1, group.length() - 1);
             }
 
             return null;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.info("Caught exception", e);
 
             return null;
-        }
-        finally {
-            if(pin!=null)
-                try { pin.close(); }
-                catch(IOException e) {}
+        } finally {
+            if (pin != null)
+                try {
+                    pin.close();
+                } catch (IOException e) {
+                }
         }
     }
 }

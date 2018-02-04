@@ -35,13 +35,19 @@ import java.beans.PropertyChangeListener;
  */
 public class PreviewLabel extends JLabel implements PropertyChangeListener, Cloneable {
 
-    /** Color painted on top of the label. */
+    /**
+     * Color painted on top of the label.
+     */
     private Color overlayColor;
 
-    /** Label's border, if necessary. */
+    /**
+     * Label's border, if necessary.
+     */
     private Border border;
 
-    /** Controls whether the overlay should be painted over or under the text. */
+    /**
+     * Controls whether the overlay should be painted over or under the text.
+     */
     private boolean overlayUnderText;
 
     public final static String FOREGROUND_COLOR_PROPERTY_NAME = "PreviewLabel.ForegroundColor";
@@ -66,7 +72,7 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
     }
 
     public void setTextPainted(boolean b) {
-        if(b)
+        if (b)
             setText(Translator.get("sample_text"));
         else
             setText(" ");
@@ -109,9 +115,9 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
     public Object clone() throws CloneNotSupportedException {
         PreviewLabel label;
 
-        label = (PreviewLabel)super.clone();
+        label = (PreviewLabel) super.clone();
         label.addPropertyChangeListener(label);
-        
+
         return label;
     }
 
@@ -126,25 +132,25 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
         g.setColor(getBackground());
         g.fillRect(0, 0, width, height);
 
-        if(!overlayUnderText)
+        if (!overlayUnderText)
             paintText(g);
 
-        if(overlayColor != null) {
+        if (overlayColor != null) {
             g.setColor(overlayColor);
-            g.fillRect(0, 0, width/2, height);
+            g.fillRect(0, 0, width / 2, height);
         }
 
-        if(overlayUnderText)
+        if (overlayUnderText)
             paintText(g);
 
-        if(border != null)
+        if (border != null)
             border.paintBorder(this, g, 0, 0, width, height);
     }
 
     @Override
     public Dimension getPreferredSize() {
         Dimension dimension = super.getPreferredSize();
-        dimension.setSize(dimension.getWidth()+8, dimension.getHeight()+6);
+        dimension.setSize(dimension.getWidth() + 8, dimension.getHeight() + 6);
 
         return dimension;
     }
@@ -157,18 +163,15 @@ public class PreviewLabel extends JLabel implements PropertyChangeListener, Clon
         String name = event.getPropertyName();
         Object value = event.getNewValue();
 
-        if(FOREGROUND_COLOR_PROPERTY_NAME.equals(name)) {
-            super.setForeground((Color)value);
-        }
-        else if(BACKGROUND_COLOR_PROPERTY_NAME.equals(name)) {
-            super.setBackground((Color)value);
-        }
-        else if(OVERLAY_COLOR_PROPERTY_NAME.equals(name)) {
-            overlayColor = (Color)value;
+        if (FOREGROUND_COLOR_PROPERTY_NAME.equals(name)) {
+            super.setForeground((Color) value);
+        } else if (BACKGROUND_COLOR_PROPERTY_NAME.equals(name)) {
+            super.setBackground((Color) value);
+        } else if (OVERLAY_COLOR_PROPERTY_NAME.equals(name)) {
+            overlayColor = (Color) value;
             repaint();
-        }
-        else if(BORDER_COLOR_PROPERTY_NAME.equals(name)) {
-            border = new LineBorder((Color)value, 1);
+        } else if (BORDER_COLOR_PROPERTY_NAME.equals(name)) {
+            border = new LineBorder((Color) value, 1);
             repaint();
         }
     }

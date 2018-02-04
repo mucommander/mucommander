@@ -37,47 +37,49 @@ import java.beans.PropertyChangeListener;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener {
-    private static final int OK       = 0;
-    private static final int WARNING  = 1;
+    private static final int OK = 0;
+    private static final int WARNING = 1;
     private static final int CRITICAL = 2;
 
     private final static int WARNING_LEVEL_COLOR_IDS[] = {
-        ThemeData.STATUS_BAR_OK_COLOR,
-        ThemeData.STATUS_BAR_WARNING_COLOR,
-        ThemeData.STATUS_BAR_CRITICAL_COLOR
+            ThemeData.STATUS_BAR_OK_COLOR,
+            ThemeData.STATUS_BAR_WARNING_COLOR,
+            ThemeData.STATUS_BAR_CRITICAL_COLOR
     };
 
     private final static String WARNING_LEVEL_LABELS[] = {
-        Translator.get("theme_editor.free_space.ok"),
-        Translator.get("theme_editor.free_space.warning"),
-        Translator.get("theme_editor.free_space.critical")
+            Translator.get("theme_editor.free_space.ok"),
+            Translator.get("theme_editor.free_space.warning"),
+            Translator.get("theme_editor.free_space.critical")
     };
 
-    private final static int VOLUME_INFO_SIZE_FORMAT    = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
-    private final static long TOTAL_SIZE                = 85899345920l;
-    private final static long NORMAL_SIZE               = TOTAL_SIZE / 2;
-    private final static long WARNING_SIZE              = TOTAL_SIZE / 10;
-    private final static long CRITICAL_SIZE             = TOTAL_SIZE / 100;
+    private final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
+    private final static long TOTAL_SIZE = 85899345920l;
+    private final static long NORMAL_SIZE = TOTAL_SIZE / 2;
+    private final static long WARNING_SIZE = TOTAL_SIZE / 10;
+    private final static long CRITICAL_SIZE = TOTAL_SIZE / 100;
 
     private final static int WARNING_DRAW_PERCENTAGE[] = {50, 10, 1};
 
     private final static String WARNING_LEVEL_TEXT[] = {
-        Translator.get("status_bar.volume_free", SizeFormat.format(NORMAL_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT)),
-        Translator.get("status_bar.volume_free", SizeFormat.format(WARNING_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT)),
-        Translator.get("status_bar.volume_free", SizeFormat.format(CRITICAL_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT))
+            Translator.get("status_bar.volume_free", SizeFormat.format(NORMAL_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT)),
+            Translator.get("status_bar.volume_free", SizeFormat.format(WARNING_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT)),
+            Translator.get("status_bar.volume_free", SizeFormat.format(CRITICAL_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT))
     };
 
-    private JLabel  normalPreview;
+    private JLabel normalPreview;
     private Preview okPreview;
     private Preview warningPreview;
     private Preview criticalPreview;
-    
+
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a new file table editor.
-     * @param parent   dialog containing the panel.
+     *
+     * @param parent    dialog containing the panel.
      * @param themeData themeData being edited.
      */
     public StatusBarPanel(PreferencesDialog parent, ThemeData themeData) {
@@ -87,8 +89,8 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
 
     private JPanel createGeneralPanel(FontChooser chooser, ColorButton foreground) {
         YBoxPanel mainPanel;
-        JPanel    colorPanel;
-        JPanel    flowPanel;
+        JPanel colorPanel;
+        JPanel flowPanel;
 
         // Initialises the color panel.
         colorPanel = new ProportionalGridPanel(2);
@@ -110,8 +112,8 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
     }
 
     private JPanel createFreeSpacePanel(FontChooser chooser, ColorButton foreground, ColorButton background, ColorButton border) {
-        JPanel       colorPanel;
-        JPanel       flowPanel;
+        JPanel colorPanel;
+        JPanel flowPanel;
         PreviewLabel previewLabel;
 
         colorPanel = new ProportionalGridPanel(2);
@@ -122,7 +124,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
         colorPanel.add(createCaptionLabel("theme_editor.border"));
         colorPanel.add(border);
 
-        for(int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             previewLabel = new PreviewLabel();
             previewLabel.setOverlayUnderText(true);
             previewLabel.setTextPainted(true);
@@ -156,15 +158,15 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
 
     private JPanel createPreviewPanel(FontChooser fontChooser) {
         YBoxPanel previewPanel;
-        Insets    insets;
+        Insets insets;
 
         previewPanel = new YBoxPanel();
 
         addPreviewLabel(previewPanel, normalPreview = new JLabel(Translator.get("status_bar.selected_files", "3", "14")), "theme_editor.normal", fontChooser);
         normalPreview.setForeground(themeData.getColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR));
 
-        addPreviewLabel(previewPanel, okPreview       = new Preview(OK),       "theme_editor.free_space.ok", fontChooser);
-        addPreviewLabel(previewPanel, warningPreview  = new Preview(WARNING),  "theme_editor.free_space.warning", fontChooser);
+        addPreviewLabel(previewPanel, okPreview = new Preview(OK), "theme_editor.free_space.ok", fontChooser);
+        addPreviewLabel(previewPanel, warningPreview = new Preview(WARNING), "theme_editor.free_space.warning", fontChooser);
         addPreviewLabel(previewPanel, criticalPreview = new Preview(CRITICAL), "theme_editor.free_space.critical", fontChooser);
 
         previewPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
@@ -179,13 +181,13 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
      * Initialises the panel's UI.
      */
     private void initUI() {
-        JPanel       mainPanel;
-        ColorButton  foreground;
-        ColorButton  background;
-        ColorButton  border;
+        JPanel mainPanel;
+        ColorButton foreground;
+        ColorButton background;
+        ColorButton border;
         PreviewLabel previewLabel;
         PreviewLabel borderPreviewLabel;
-        FontChooser  fontChooser;
+        FontChooser fontChooser;
 
         JTabbedPane tabbedPane;
         fontChooser = createFontChooser(ThemeData.STATUS_BAR_FONT);
@@ -198,7 +200,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
 
         // Initialises the background and border color buttons.
         background = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel = new PreviewLabel());
-        border     = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME, borderPreviewLabel = new PreviewLabel());
+        border = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME, borderPreviewLabel = new PreviewLabel());
 
         // Initialises the background color preview.
         previewLabel.setTextPainted(true);
@@ -214,7 +216,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
         addFontChooserListener(fontChooser, borderPreviewLabel);
         borderPreviewLabel.addPropertyChangeListener(this);
 
-        tabbedPane   = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         tabbedPane.add(Translator.get("theme_editor.general"), createGeneralPanel(fontChooser, foreground));
         tabbedPane.add(Translator.get("theme_editor.free_space"), createFreeSpacePanel(fontChooser, foreground, background, border));
 
@@ -232,29 +234,31 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
 
     // - Modification management ---------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Ignored.
      */
     @Override
-    public void commit() {}
-
+    public void commit() {
+    }
 
 
     // - Property listening --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Refreshes the UI depending on the property event.
      */
     public void propertyChange(PropertyChangeEvent event) {
         // Repaints previews when the overlay or background color have been changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME) || event.getPropertyName().equals(PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME)) {
+        if (event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME) || event.getPropertyName().equals(PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME)) {
             okPreview.repaint();
             warningPreview.repaint();
             criticalPreview.repaint();
         }
 
         // Resets the preview labels' foreground color.
-        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME)) {
+        else if (event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME)) {
             Color color;
 
             color = themeData.getColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR);
@@ -266,13 +270,12 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
         }
 
         // Resets the preview labels' borders.
-        else if(event.getPropertyName().equals(PreviewLabel.BORDER_COLOR_PROPERTY_NAME)) {
+        else if (event.getPropertyName().equals(PreviewLabel.BORDER_COLOR_PROPERTY_NAME)) {
             okPreview.refreshBorder();
             warningPreview.refreshBorder();
             criticalPreview.refreshBorder();
         }
     }
-
 
 
     // - Preview labels ------------------------------------------------------------------
@@ -301,9 +304,9 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
 
             width = ((getWidth() - 2) * WARNING_DRAW_PERCENTAGE[type]) / 100;
 
-            if(type == OK)
+            if (type == OK)
                 g.setColor(themeData.getColor(ThemeData.STATUS_BAR_OK_COLOR));
-            else if(type == WARNING)
+            else if (type == WARNING)
                 g.setColor(themeData.getColor(ThemeData.STATUS_BAR_WARNING_COLOR));
             else
                 g.setColor(themeData.getColor(ThemeData.STATUS_BAR_CRITICAL_COLOR));

@@ -8,228 +8,217 @@
 <!-- =================================================== -->
 
 <theme>
-  <!-- = File table appearance ========================= -->
-  <!-- ================================================= -->
-  <file_table>
-    <font                            family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
-    <border                          color="868686"/>
-    <inactive_border                 color="868686"/>
-    <outline                         color="3875d7"/>
-    <inactive_outline                color="c0c0c0"/>
+    <!-- = File table appearance ========================= -->
+    <!-- ================================================= -->
+    <file_table>
+        <font family="Lucida Grande,Tahoma,Lucida Sans" size="12"/>
+        <border color="868686"/>
+        <inactive_border color="868686"/>
+        <outline color="3875d7"/>
+        <inactive_outline color="c0c0c0"/>
 
-    <normal>
-      <background                    color="ffffff"/>
-      <inactive_background           color="f5f5f5"/>
-    </normal>
+        <normal>
+            <background color="ffffff"/>
+            <inactive_background color="f5f5f5"/>
+        </normal>
 
-    <alternate>
-      <background                    color="ffffff"/>
-      <inactive_background           color="f5f5f5"/>
-    </alternate>
+        <alternate>
+            <background color="ffffff"/>
+            <inactive_background color="f5f5f5"/>
+        </alternate>
 
-    <selected>
-      <background                    color="3875d7"/>
-      <secondary_background          color="3875d7"/>
-      <inactive_background           color="c0c0c0"/>
-      <inactive_secondary_background color="c0c0c0"/>
-    </selected>
+        <selected>
+            <background color="3875d7"/>
+            <secondary_background color="3875d7"/>
+            <inactive_background color="c0c0c0"/>
+            <inactive_secondary_background color="c0c0c0"/>
+        </selected>
 
-    <unmatched>
-      <foreground                    color="404040"/>
-      <background                    color="d1d1d1"/>
-    </unmatched>
-
-
-
-    <!-- = Hidden files ================================ -->
-    <!-- =============================================== -->
-    <hidden>
-      <normal>
-        <inactive_foreground color="666666"/>
-        <foreground          color="666666"/>
-      </normal>
-      <selected>
-        <inactive_foreground color="666666"/>
-        <foreground          color="ffffff"/>
-      </selected>
-    </hidden>
+        <unmatched>
+            <foreground color="404040"/>
+            <background color="d1d1d1"/>
+        </unmatched>
 
 
-
-    <!-- = Folders ===================================== -->
-    <!-- =============================================== -->
-    <folder>
-      <normal>
-        <inactive_foreground color="000000"/>
-        <foreground          color="000000"/>
-      </normal>
-      <selected>
-        <inactive_foreground color="000000"/>
-        <foreground          color="ffffff"/>
-      </selected>
-    </folder>
-
+        <!-- = Hidden files ================================ -->
+        <!-- =============================================== -->
+        <hidden>
+            <normal>
+                <inactive_foreground color="666666"/>
+                <foreground color="666666"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="666666"/>
+                <foreground color="ffffff"/>
+            </selected>
+        </hidden>
 
 
-    <!-- = Archive ===================================== -->
-    <!-- =============================================== -->
-    <archive>
-      <normal>
-        <inactive_foreground color="000000"/>
-        <foreground          color="000000"/>
-      </normal>
-      <selected>
-        <inactive_foreground color="000000"/>
-        <foreground          color="ffffff"/>
-      </selected>
-    </archive>
+        <!-- = Folders ===================================== -->
+        <!-- =============================================== -->
+        <folder>
+            <normal>
+                <inactive_foreground color="000000"/>
+                <foreground color="000000"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="000000"/>
+                <foreground color="ffffff"/>
+            </selected>
+        </folder>
 
 
-
-    <!-- = Symlink ===================================== -->
-    <!-- =============================================== -->
-    <symlink>
-      <normal>
-        <inactive_foreground color="0000ee"/>
-        <foreground          color="0000ee"/>
-      </normal>
-      <selected>
-        <inactive_foreground color="0000ee"/>
-        <foreground          color="ffffff"/>
-      </selected>
-    </symlink>
-
+        <!-- = Archive ===================================== -->
+        <!-- =============================================== -->
+        <archive>
+            <normal>
+                <inactive_foreground color="000000"/>
+                <foreground color="000000"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="000000"/>
+                <foreground color="ffffff"/>
+            </selected>
+        </archive>
 
 
-    <!-- = Marked ====================================== -->
-    <!-- =============================================== -->
-    <marked>
-      <normal>
-        <inactive_foreground color="cc0000"/>
-        <foreground          color="cc0000"/>
-      </normal>
-      <selected>
-        <inactive_foreground color="cc0000"/>
-        <foreground          color="cc0000"/>
-      </selected>
-    </marked>
+        <!-- = Symlink ===================================== -->
+        <!-- =============================================== -->
+        <symlink>
+            <normal>
+                <inactive_foreground color="0000ee"/>
+                <foreground color="0000ee"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="0000ee"/>
+                <foreground color="ffffff"/>
+            </selected>
+        </symlink>
 
 
-
-    <!-- = Plain file ================================== -->
-    <!-- =============================================== -->
-    <file>
-      <normal>
-        <inactive_foreground color="000000"/>
-        <foreground          color="000000"/>
-      </normal>
-      <selected>
-        <inactive_foreground color="000000"/>
-        <foreground          color="ffffff"/>
-      </selected>
-    </file>
-  </file_table>
+        <!-- = Marked ====================================== -->
+        <!-- =============================================== -->
+        <marked>
+            <normal>
+                <inactive_foreground color="cc0000"/>
+                <foreground color="cc0000"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="cc0000"/>
+                <foreground color="cc0000"/>
+            </selected>
+        </marked>
 
 
-
-  <!-- = Shell appearance ============================== -->
-  <!-- ================================================= -->
-  <shell>
-    <font family="Monospaced,Lucida Sans Typewriter" size ="12" bold="true"/>
-
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <foreground color="000000"/>
-      <background color="ffffff"/>
-    </normal>
-
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selected>
-      <foreground color="ffffff"/>
-      <background color="3875d7"/>
-    </selected>
-  </shell>
+        <!-- = Plain file ================================== -->
+        <!-- =============================================== -->
+        <file>
+            <normal>
+                <inactive_foreground color="000000"/>
+                <foreground color="000000"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="000000"/>
+                <foreground color="ffffff"/>
+            </selected>
+        </file>
+    </file_table>
 
 
+    <!-- = Shell appearance ============================== -->
+    <!-- ================================================= -->
+    <shell>
+        <font family="Monospaced,Lucida Sans Typewriter" size="12" bold="true"/>
 
-  <!-- = Shell history appearance ====================== -->
-  <!-- ================================================= -->
-  <shell_history>
-    <font family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <foreground color="000000"/>
+            <background color="ffffff"/>
+        </normal>
 
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <foreground color="000000"/>
-      <background color="ffffff"/>
-    </normal>
-
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selected>
-      <foreground color="ffffff"/>
-      <background color="3875d7"/>
-    </selected>
-  </shell_history>
-
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selected>
+            <foreground color="ffffff"/>
+            <background color="3875d7"/>
+        </selected>
+    </shell>
 
 
-  <!-- = Editor appearance ============================= -->
-  <!-- ================================================= -->
-  <editor>
-    <font family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
+    <!-- = Shell history appearance ====================== -->
+    <!-- ================================================= -->
+    <shell_history>
+        <font family="Lucida Grande,Tahoma,Lucida Sans" size="12"/>
 
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <foreground color="000000"/>
-      <background color="ffffff"/>
-    </normal>
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <foreground color="000000"/>
+            <background color="ffffff"/>
+        </normal>
 
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selected>
-      <foreground color="ffffff"/>
-      <background color="3875d7"/>
-    </selected>
-  </editor>
-
-
-
-  <!-- = Location bar appearance ======================= -->
-  <!-- ================================================= -->
-  <location_bar>
-    <font family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
-    <progress color="3875d7" alpha="40"/>
-
-    <!-- = Default appearance ========================== -->
-    <!-- =============================================== -->
-    <normal>
-      <foreground color="000000"/>
-      <background color="ffffff"/>
-    </normal>
-
-    <!-- = Selected appearance ========================= -->
-    <!-- =============================================== -->
-    <selected>
-      <foreground color="ffffff"/>
-      <background color="3875d7"/>
-    </selected>
-  </location_bar>
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selected>
+            <foreground color="ffffff"/>
+            <background color="3875d7"/>
+        </selected>
+    </shell_history>
 
 
+    <!-- = Editor appearance ============================= -->
+    <!-- ================================================= -->
+    <editor>
+        <font family="Lucida Grande,Tahoma,Lucida Sans" size="12"/>
 
-  <!-- = Status bar appearance ========================= -->
-  <!-- ================================================= -->
-  <status_bar>
-    <font      family="Lucida Grande,Tahoma,Lucida Sans" size ="12"/>
-    <foreground color="000000"/>
-    <border     color="868686"/>
-    <background color="d6d6d6"/>
-    <ok         color="5dc23c"/>
-    <warning    color="f6dc6c"/>
-    <critical   color="e6594e"/>
-  </status_bar>
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <foreground color="000000"/>
+            <background color="ffffff"/>
+        </normal>
+
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selected>
+            <foreground color="ffffff"/>
+            <background color="3875d7"/>
+        </selected>
+    </editor>
+
+
+    <!-- = Location bar appearance ======================= -->
+    <!-- ================================================= -->
+    <location_bar>
+        <font family="Lucida Grande,Tahoma,Lucida Sans" size="12"/>
+        <progress color="3875d7" alpha="40"/>
+
+        <!-- = Default appearance ========================== -->
+        <!-- =============================================== -->
+        <normal>
+            <foreground color="000000"/>
+            <background color="ffffff"/>
+        </normal>
+
+        <!-- = Selected appearance ========================= -->
+        <!-- =============================================== -->
+        <selected>
+            <foreground color="ffffff"/>
+            <background color="3875d7"/>
+        </selected>
+    </location_bar>
+
+
+    <!-- = Status bar appearance ========================= -->
+    <!-- ================================================= -->
+    <status_bar>
+        <font family="Lucida Grande,Tahoma,Lucida Sans" size="12"/>
+        <foreground color="000000"/>
+        <border color="868686"/>
+        <background color="d6d6d6"/>
+        <ok color="5dc23c"/>
+        <warning color="f6dc6c"/>
+        <critical color="e6594e"/>
+    </status_bar>
 </theme>

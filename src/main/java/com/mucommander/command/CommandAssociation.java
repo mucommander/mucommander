@@ -23,44 +23,57 @@ import com.mucommander.commons.file.filter.FileFilter;
 
 /**
  * Associates a command to a set of file filters.
+ *
  * @author Nicolas Rinaudo
  */
 class CommandAssociation {
 
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Command associated to this file name filter. */
-    private Command    command;
+    /**
+     * Command associated to this file name filter.
+     */
+    private Command command;
     private FileFilter fileFilter;
-
 
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Creates a new <code>CommandAssociation</code>.
+     *
      * @param command command that must be executed if the association is matched.
      * @param filter  filter that files must match in order to be taken into account by the association.
      */
     public CommandAssociation(Command command, FileFilter filter) {
-        this.command    = command;
+        this.command = command;
         this.fileFilter = filter;
     }
 
     /**
      * Returns <code>true</code> if the specified file matches the association.
-     * @param  file file to match against the association.
-     * @return      <code>true</code> if the specified file matches the association, <code>false</code> otherwise.
+     *
+     * @param file file to match against the association.
+     * @return <code>true</code> if the specified file matches the association, <code>false</code> otherwise.
      */
-    public boolean accept(AbstractFile file) {return fileFilter.match(file);}
+    public boolean accept(AbstractFile file) {
+        return fileFilter.match(file);
+    }
 
     // - Command retrieval -----------------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Returns the command used in the association.
+     *
      * @return the command used in the association.
      */
-    public Command getCommand() {return command;}
+    public Command getCommand() {
+        return command;
+    }
 
-    public FileFilter getFilter() {return fileFilter;}
+    public FileFilter getFilter() {
+        return fileFilter;
+    }
 }

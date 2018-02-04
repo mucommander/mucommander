@@ -34,7 +34,7 @@ public class LocalCopyDialog extends CopyDialog {
      * Creates a new <code>LocalCopyDialog</code>.
      *
      * @param mainFrame the main frame that spawned this dialog.
-     * @param files files to be copied
+     * @param files     files to be copied
      */
     public LocalCopyDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files);

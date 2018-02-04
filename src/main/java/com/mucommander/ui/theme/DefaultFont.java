@@ -31,18 +31,21 @@ import java.util.Vector;
  * If, for example, a font should default to the look and feel defined TextArea font and the look and feel is changed,
  * the corresponding {@link DefaultFont} instance will catch that event and notify the current theme of the change.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public abstract class DefaultFont {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** List of fonts linked to this default value. */
+    /**
+     * List of fonts linked to this default value.
+     */
     private Vector<Integer> linkedFonts;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of {@link DefaultFont}.
      */
@@ -51,15 +54,16 @@ public abstract class DefaultFont {
     }
 
 
-
     // - Event propagation ---------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Registers a theme font as defaulting to the current instance.
      * <p>
      * If the default font's value were to change, the current theme will automatically be notified of the change and
      * ultimately propagate to all registered theme listeners if necessary.
      * </p>
+     *
      * @param fontId identifier of the font that uses this instance as a default value.
      */
     public void link(Integer fontId) {
@@ -68,21 +72,23 @@ public abstract class DefaultFont {
 
     /**
      * Notifies the current theme of a default value change to all linked fonts.
+     *
      * @param font new default font value.
      */
     protected void notifyChange(Font font) {
-        for(int i : linkedFonts)
+        for (int i : linkedFonts)
             ThemeData.triggerFontEvent(i, font);
     }
 
 
-
     // - Abstract methods ----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the font this default value represents.
-     * @param  data contains all the current theme values.
-     * @return      the font this default value represents.
+     *
+     * @param data contains all the current theme values.
+     * @return the font this default value represents.
      */
     public abstract Font getFont(ThemeData data);
 }

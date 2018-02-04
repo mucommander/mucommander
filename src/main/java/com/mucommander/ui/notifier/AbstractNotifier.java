@@ -18,16 +18,14 @@
 
 package com.mucommander.ui.notifier;
 
-import java.awt.SystemTray;
-
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.main.WindowManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * AbstractNotifier is a generic representation of a system notifier. It also provides factory methods to
@@ -40,24 +38,26 @@ import com.mucommander.ui.main.WindowManager;
  * The notifier instance returnd by {@link #getNotifier()} is platform-dependent. At this time, two notifier
  * implementations are available:
  * <ul>
- *  <li>{@link GrowlNotifier}: for Mac OS X, requires Growl to be installed
- *  <li>{@link SystemTrayNotifier}: for Java 1.6 and up, using the java.awt.SystemTray API
+ * <li>{@link GrowlNotifier}: for Mac OS X, requires Growl to be installed
+ * <li>{@link SystemTrayNotifier}: for Java 1.6 and up, using the java.awt.SystemTray API
  * </ul>
  * </p>
  *
  * @author Maxence Bernard
  */
 public abstract class AbstractNotifier {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractNotifier.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractNotifier.class);
 
-    /** AbstractNotifier instance, null if none is available on the current platform */
+    /**
+     * AbstractNotifier instance, null if none is available on the current platform
+     */
     private static AbstractNotifier notifier;
 
     static {
         // Finds and creates a suitable AbstractNotifier instance for the platform, if there is one
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if (OsFamily.MAC_OS_X.isCurrent())
             notifier = new GrowlNotifier();
-        else if(JavaVersion.JAVA_1_6.isCurrentOrHigher() && SystemTray.isSupported())
+        else if (JavaVersion.JAVA_1_6.isCurrentOrHigher() && SystemTray.isSupported())
             notifier = new SystemTrayNotifier();
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractNotifier {
      * @return true if an AbstractNotifier instance is available
      */
     public static boolean isAvailable() {
-        return notifier!=null;
+        return notifier != null;
     }
 
     /**
@@ -89,16 +89,16 @@ public abstract class AbstractNotifier {
      * notification could be displayed. The notification will not be displayed if the current muCommander window
      * (or one of its child windows) is presently in the foreground, so that the user doesn't get notified for things
      * that he/she can already see on the screen.
-     *
+     * <p>
      * <p>
      * The notification will not be displayed if:
      * <ul>
-     *  <li>muCommander is in the foreground
-     *  <li>this notifier is not enabled
-     *  <li>the notification could not be delivered because of an error
+     * <li>muCommander is in the foreground
+     * <li>this notifier is not enabled
+     * <li>the notification could not be delivered because of an error
      * </ul>
      * </p>
-     *
+     * <p>
      * <p>
      * Note that this method is executed in a separate thread after all pending Swing events have been processed,
      * to ensure in the event of a window being made inactive that the notification will not be triggered. This method
@@ -107,23 +107,23 @@ public abstract class AbstractNotifier {
      * </p>
      *
      * @param notificationType one of the available notification types, see {@link NotificationType} for possible values
-     * @param title the title of the notification to display
-     * @param description the description of the notification to display
+     * @param title            the title of the notification to display
+     * @param description      the description of the notification to display
      */
     public void displayBackgroundNotification(final NotificationType notificationType, final String title, final String description) {
         SwingUtilities.invokeLater(
-            new Thread() {
-                @Override
-                public void run() {
-                    if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
-                    	LOGGER.debug("Ignoring notification, application is in foreground");
-                        return;
-                    }
+                new Thread() {
+                    @Override
+                    public void run() {
+                        if (WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
+                            LOGGER.debug("Ignoring notification, application is in foreground");
+                            return;
+                        }
 
-                    if(!displayNotification(notificationType, title, description))
-                    	LOGGER.debug("Notification failed to be displayed");
+                        if (!displayNotification(notificationType, title, description))
+                            LOGGER.debug("Notification failed to be displayed");
+                    }
                 }
-            }
         );
     }
 
@@ -135,7 +135,7 @@ public abstract class AbstractNotifier {
     /**
      * Enables/disables this notifier and returns <code>true</code> if the operation succeeded. A typical case
      * for returning false, is when the underlying notification system (e.g. Growl under Mac OS X) could not be reached.
-     * 
+     *
      * @param enabled true to enable this notifier, false to disable it
      * @return true if the operation succeeded
      */
@@ -152,18 +152,18 @@ public abstract class AbstractNotifier {
      * Displays a notification with the specified type, title and description and returns <code>true</code> if the
      * notification could be displayed. Unlike {@link #displayBackgroundNotification(NotificationType, String, String)}, the
      * notification will be attempted for display even if muCommander is currently in the foreground.
-     *
+     * <p>
      * <p>
      * Returns <code>true</code> if the notification could be displayed, <code>false</code> if:
      * <ul>
-     *  <li>this notifier is not enabled
-     *  <li>the notification could not be delivered because of an error
+     * <li>this notifier is not enabled
+     * <li>the notification could not be delivered because of an error
      * </ul>
      * </p>
      *
      * @param notificationType one of the available notification types, see {@link NotificationType} for possible values
-     * @param title the title of the notification to display
-     * @param description the description of the notification to display
+     * @param title            the title of the notification to display
+     * @param description      the description of the notification to display
      * @return true if the notification was properly sent, false otherwise
      */
     public abstract boolean displayNotification(NotificationType notificationType, String title, String description);

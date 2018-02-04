@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,7 +45,7 @@ public abstract class FileURLTestCase {
     protected String getSchemePath(String path) {
         String separator = getPathSeparator();
 
-        if(!separator.equals("/"))
+        if (!separator.equals("/"))
             path = "/" + path.replace("/", separator);
 
         return path;
@@ -65,13 +65,13 @@ public abstract class FileURLTestCase {
      */
     protected FileURL getURL(String login, String password, String host, int port, String path, String query) throws MalformedURLException {
         String scheme = getScheme();
-        StringBuffer sb = new StringBuffer(scheme+"://");
+        StringBuffer sb = new StringBuffer(scheme + "://");
 
-        if(host!=null) {
-            if(login!=null) {
+        if (host != null) {
+            if (login != null) {
                 sb.append(login);
 
-                if(password!=null) {
+                if (password != null) {
                     sb.append(':');
                     sb.append(password);
                 }
@@ -81,7 +81,7 @@ public abstract class FileURLTestCase {
 
             sb.append(host);
 
-            if(port!=-1) {
+            if (port != -1) {
                 sb.append(':');
                 sb.append(port);
             }
@@ -90,7 +90,7 @@ public abstract class FileURLTestCase {
         path = getSchemePath(path);
         sb.append(path);
 
-        if(query!=null) {
+        if (query != null) {
             sb.append('?');
             sb.append(query);
         }
@@ -101,12 +101,12 @@ public abstract class FileURLTestCase {
 
         assert scheme.equals(url.getScheme());
 
-        if(host!=null) {
-            if(login!=null) {
+        if (host != null) {
+            if (login != null) {
                 assert login.equals(url.getLogin());
                 assert url.containsCredentials();
 
-                if(password!=null)
+                if (password != null)
                     assert password.equals(url.getPassword());
 
                 assert new Credentials(login, password).equals(url.getCredentials(), true);
@@ -116,11 +116,10 @@ public abstract class FileURLTestCase {
             assert port == url.getPort();
         }
 
-        if(query!=null && !isQueryParsed()) {
+        if (query != null && !isQueryParsed()) {
             assert url.getQuery() == null;
-            path = path+"?"+query;
-        }
-        else if(query == null)
+            path = path + "?" + query;
+        } else if (query == null)
             assert url.getQuery() == null;
         else
             assert query.equals(url.getQuery());
@@ -167,7 +166,7 @@ public abstract class FileURLTestCase {
      * @throws MalformedURLException should never happen
      */
     protected FileURL getRootURL() throws MalformedURLException {
-        return FileURL.getFileURL(getScheme()+":///");
+        return FileURL.getFileURL(getScheme() + ":///");
     }
 
     /**
@@ -181,8 +180,7 @@ public abstract class FileURLTestCase {
         try {
             FileURL.getFileURL(url);
             return true;
-        }
-        catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             return false;
         }
     }
@@ -196,7 +194,7 @@ public abstract class FileURLTestCase {
     protected void assertEquals(FileURL url1, FileURL url2) {
         assert url1.equals(url2);
         assert url2.equals(url1);
-        assert url1.hashCode()==url2.hashCode();
+        assert url1.hashCode() == url2.hashCode();
     }
 
     /**
@@ -216,8 +214,8 @@ public abstract class FileURLTestCase {
         assert url2.equals(url1, compareCredentials, compareProperties);
 
         // Compare hash codes only if both flags are true.
-        if(compareCredentials && compareProperties)
-            assert url1.hashCode()==url2.hashCode();
+        if (compareCredentials && compareProperties)
+            assert url1.hashCode() == url2.hashCode();
     }
 
     /**
@@ -257,7 +255,6 @@ public abstract class FileURLTestCase {
     }
 
 
-
     //////////////////
     // Test methods //
     //////////////////
@@ -279,7 +276,7 @@ public abstract class FileURLTestCase {
         assert expectedDefaultPort == url.getHandler().getStandardPort();
 
         // Assert that the default port value is valid: either -1 or comprised between 1 and 65535
-        assert expectedDefaultPort==-1||(expectedDefaultPort>0 && expectedDefaultPort<65536);
+        assert expectedDefaultPort == -1 || (expectedDefaultPort > 0 && expectedDefaultPort < 65536);
     }
 
 
@@ -296,11 +293,10 @@ public abstract class FileURLTestCase {
 
         // Assert that the guest credentials values returned by the FileURL and its handler match the expected one
         // and are consistent
-        if(expectedGuestCredentials == null) {
+        if (expectedGuestCredentials == null) {
             assert url.getGuestCredentials() == null;
             assert url.getHandler().getGuestCredentials() == null;
-        }
-        else {
+        } else {
             assert expectedGuestCredentials.equals(url.getGuestCredentials());
             assert expectedGuestCredentials.equals(url.getHandler().getGuestCredentials());
         }
@@ -323,13 +319,13 @@ public abstract class FileURLTestCase {
         assert expectedAuthenticationType.equals(url.getAuthenticationType());
         assert expectedAuthenticationType.equals(url.getHandler().getAuthenticationType());
 
-        assert expectedAuthenticationType==AuthenticationType.NO_AUTHENTICATION
-                || expectedAuthenticationType==AuthenticationType.AUTHENTICATION_REQUIRED
-                || expectedAuthenticationType==AuthenticationType.AUTHENTICATION_OPTIONAL;
+        assert expectedAuthenticationType == AuthenticationType.NO_AUTHENTICATION
+                || expectedAuthenticationType == AuthenticationType.AUTHENTICATION_REQUIRED
+                || expectedAuthenticationType == AuthenticationType.AUTHENTICATION_OPTIONAL;
 
-        if(expectedAuthenticationType== AuthenticationType.NO_AUTHENTICATION)
+        if (expectedAuthenticationType == AuthenticationType.NO_AUTHENTICATION)
             assert url.getGuestCredentials() == null;
-     }
+    }
 
     /**
      * Ensures that the values returned by {@link FileURL#getPathSeparator()} and {@link SchemeHandler#getPathSeparator()}
@@ -376,10 +372,9 @@ public abstract class FileURLTestCase {
         FileURL url = getURL(null, null, "host", -1, "/path", "query&param=value");
         String query = url.getQuery();
 
-        if(isQueryParsed()) {
+        if (isQueryParsed()) {
             assert "query&param=value".equals(query);
-        }
-        else {
+        } else {
             assert query == null;
         }
     }
@@ -387,7 +382,7 @@ public abstract class FileURLTestCase {
 
     /**
      * Ensures that FileURL#getParent() works as expected.
-     * 
+     *
      * @throws MalformedURLException should not happen
      */
     @Test
@@ -472,7 +467,7 @@ public abstract class FileURLTestCase {
         String urlEncodedString = "%3A%40%26%3D%2B%24%2C%2F%3Ft%25%23%5B%5D";
 
         url.setCredentials(new Credentials(urlDecodedString, urlDecodedString));
-        String urlRep = url.getScheme()+"://"+urlEncodedString+":"+urlEncodedString+"@";
+        String urlRep = url.getScheme() + "://" + urlEncodedString + ":" + urlEncodedString + "@";
         assert urlRep.equals(url.toString(true, false));
 
         url = FileURL.getFileURL(urlRep);
@@ -532,7 +527,7 @@ public abstract class FileURLTestCase {
         assert url.getQuery() == null;
         assert url.getFilename() == null;
         assert url.getProperty("name") == null;
-        assert (scheme+"://").equals(url.toString(true, false));
+        assert (scheme + "://").equals(url.toString(true, false));
 
         // Path cannot be null, the path is supposed to be "/" if a null or empty value is specified
         url.setPath(null);
@@ -558,7 +553,7 @@ public abstract class FileURLTestCase {
         assert "path".equals(getURL("/path/").getFilename());
         assert getRootURL().getFilename() == null : "/";
 
-        assert (isQueryParsed()?"file":"file?param=value").equals(getURL(null, null, null, -1, "/path/to/file", "param=value").getFilename());
+        assert (isQueryParsed() ? "file" : "file?param=value").equals(getURL(null, null, null, -1, "/path/to/file", "param=value").getFilename());
     }
 
     /**
@@ -570,17 +565,17 @@ public abstract class FileURLTestCase {
     public void testStringRepresentation() throws MalformedURLException {
         FileURL url = getURL("login", "password", "host", 10000, "/path", "query");
         String path = getSchemePath("/path");
-        String urlString = getScheme()+"://host:10000"+path+"?query";
+        String urlString = getScheme() + "://host:10000" + path + "?query";
 
         assert urlString.equals(url.toString());
         assert urlString.equals(url.toString(false));
         assert urlString.equals(url.toString(false, false));
 
-        urlString = getScheme()+"://login:password@host:10000"+path+"?query";
+        urlString = getScheme() + "://login:password@host:10000" + path + "?query";
         assert urlString.equals(url.toString(true));
         assert urlString.equals(url.toString(true, false));
 
-        urlString = getScheme()+"://login:********@host:10000"+path+"?query";
+        urlString = getScheme() + "://login:********@host:10000" + path + "?query";
         assert urlString.equals(url.toString(true, true));
     }
 
@@ -593,16 +588,16 @@ public abstract class FileURLTestCase {
     @Test
     public void testEquals() throws MalformedURLException {
         // No query part, as it is not parsed by all schemes
-        FileURL url1 = getURL("login", "password", "host", 10000, "/path",  null);
+        FileURL url1 = getURL("login", "password", "host", 10000, "/path", null);
         url1.setProperty("name", "value");
-        FileURL url2 = (FileURL)url1.clone();
+        FileURL url2 = (FileURL) url1.clone();
 
         // Assert that both URLs are equal
         assertEquals(url1, url2);
         assertEquals(url1, url2, true, true);
 
         // Add a trailing path separator to one of the URL's path and assert they are still equal
-        url1.setPath(url1.getPath()+url1.getPathSeparator());
+        url1.setPath(url1.getPath() + url1.getPathSeparator());
         assertEquals(url1, url2);
         assertEquals(url1, url2, true, true);
 
@@ -698,7 +693,7 @@ public abstract class FileURLTestCase {
         FileURL url = getURL("login", "password", "host", 10000, "/path/to", "query");
         url.setProperty("name", "value");
 
-        FileURL clonedURL = (FileURL)url.clone();
+        FileURL clonedURL = (FileURL) url.clone();
 
         // Assert that both instances are equal according to FileURL#equals
         assertEquals(url, clonedURL);
@@ -707,7 +702,7 @@ public abstract class FileURLTestCase {
         assert url.toString(true).equals(clonedURL.toString(true));
 
         // Assert that both instances are not one and the same
-        assert url!=clonedURL;
+        assert url != clonedURL;
 
         // Assert that the property has survived the cloning
         assert "value".equals(clonedURL.getProperty("name"));
@@ -726,9 +721,9 @@ public abstract class FileURLTestCase {
         assert !canParse("scheme:/");
 
         // Invalid port (non-numeric)
-        assert !canParse(getScheme()+"://host:port/path");
+        assert !canParse(getScheme() + "://host:port/path");
     }
-    
+
 
     //////////////////////
     // Abstract methods //
@@ -743,6 +738,6 @@ public abstract class FileURLTestCase {
     protected abstract Credentials getGuestCredentials();
 
     protected abstract String getPathSeparator();
-    
+
     protected abstract boolean isQueryParsed();
 }

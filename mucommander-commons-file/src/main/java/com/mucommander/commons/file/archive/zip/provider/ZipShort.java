@@ -21,7 +21,7 @@ package com.mucommander.commons.file.archive.zip.provider;
 /**
  * Utility class that represents a two byte integer with conversion
  * rules for the big endian byte order of ZIP files.
- *
+ * <p>
  * <p>--------------------------------------------------------------------------------------------------------------<br>
  * <br>
  * This class is based off the <code>org.apache.tools.zip</code> package of the <i>Apache Ant</i> project. The Ant
@@ -36,31 +36,35 @@ public final class ZipShort implements Cloneable {
 
     /**
      * Create instance from a number.
+     *
      * @param value the int to store as a ZipShort
      */
-    public ZipShort (int value) {
+    public ZipShort(int value) {
         this.value = value;
     }
 
     /**
      * Create instance from bytes.
+     *
      * @param bytes the bytes to store as a ZipShort
      */
-    public ZipShort (byte[] bytes) {
+    public ZipShort(byte[] bytes) {
         this(bytes, 0);
     }
 
     /**
      * Create instance from the two bytes starting at offset.
-     * @param bytes the bytes to store as a ZipShort
+     *
+     * @param bytes  the bytes to store as a ZipShort
      * @param offset the offset to start
      */
-    public ZipShort (byte[] bytes, int offset) {
+    public ZipShort(byte[] bytes, int offset) {
         value = ZipShort.getValue(bytes, offset);
     }
 
     /**
      * Get value as two bytes in big endian byte order.
+     *
      * @return the value as a a two byte array in big endian byte order
      */
     public byte[] getBytes() {
@@ -72,6 +76,7 @@ public final class ZipShort implements Cloneable {
 
     /**
      * Get value as Java int.
+     *
      * @return value as a Java int
      */
     public int getValue() {
@@ -80,6 +85,7 @@ public final class ZipShort implements Cloneable {
 
     /**
      * Converts the given short value as two bytes in big endian byte order.
+     *
      * @param value the short value (stored as an int) to convert
      * @return the converted value as a byte array in big endian byte order
      */
@@ -90,7 +96,8 @@ public final class ZipShort implements Cloneable {
     /**
      * Converts the given short value as two bytes in big endian byte order. The specified byte array is used to store
      * the result, starting at offset 0. The returned byte array is the same as the given one.
-     * @param value the short value (stored as an int) to convert
+     *
+     * @param value  the short value (stored as an int) to convert
      * @param result the byte array in which to store the value in big endian byte order
      * @return the converted value as a byte array in big endian byte order
      */
@@ -101,20 +108,22 @@ public final class ZipShort implements Cloneable {
     /**
      * Converts the given short value as two bytes in big endian byte order. The specified byte array is used to store
      * the result, starting at the given offset. The returned byte array is the same as the given one.
-     * @param value the short value (stored as an int) to convert
+     *
+     * @param value  the short value (stored as an int) to convert
      * @param result the byte array in which to store the value in big endian byte order
-     * @param off offset at which to start writing the result in the array
+     * @param off    offset at which to start writing the result in the array
      * @return the converted value as a byte array in big endian byte order
      */
     public static byte[] getBytes(int value, byte[] result, int off) {
         result[off] = (byte) (value & 0xFF);
-        result[off+1] = (byte) ((value & 0xFF00) >> 8);
+        result[off + 1] = (byte) ((value & 0xFF00) >> 8);
         return result;
     }
 
     /**
      * Helper method to get the value as a java int from two bytes starting at given array offset
-     * @param bytes the array of bytes
+     *
+     * @param bytes  the array of bytes
      * @param offset the offset to start
      * @return the correspondanding java int value
      */
@@ -126,6 +135,7 @@ public final class ZipShort implements Cloneable {
 
     /**
      * Helper method to get the value as a java int from a two-byte array
+     *
      * @param bytes the array of bytes
      * @return the correspondanding java int value
      */
@@ -135,6 +145,7 @@ public final class ZipShort implements Cloneable {
 
     /**
      * Override to make two instances with same value equal.
+     *
      * @param o an object to compare
      * @return true if the objects are equal
      */
@@ -147,6 +158,7 @@ public final class ZipShort implements Cloneable {
 
     /**
      * Override to make two instances with same value equal.
+     *
      * @return the value stored in the ZipShort
      */
     public int hashCode() {

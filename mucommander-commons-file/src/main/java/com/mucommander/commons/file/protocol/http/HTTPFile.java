@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -96,15 +96,15 @@ public class HTTPFile extends ProtocolFile {
 
     private boolean parentValSet;
     protected AbstractFile parent;
-	
+
     /** Permissions for HTTP files: r-- (400 octal). Only the 'user' permissions bits are supported. */
     private final static FilePermissions PERMISSIONS = new SimpleFilePermissions(256, 448);
 
     /** User agent used for all HTTP connections made by HTTPFile */
     // TODO: add file API version, like muCommander-file-API/1.0
-    public static final String USER_AGENT = "muCommander-file-API (Java "+System.getProperty("java.vm.version")
-                                            + "; " + System.getProperty("os.name") + " " +
-                                            System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
+    public static final String USER_AGENT = "muCommander-file-API (Java " + System.getProperty("java.vm.version")
+            + "; " + System.getProperty("os.name") + " " +
+            System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
 
     /** Matches HTML and XHTML attribute key/value pairs, where the value is surrounded by Single Quotes */
     private final static Pattern linkAttributePatternSQ = Pattern.compile("(src|href|SRC|HREF)=\\\'.*?\\\'");
@@ -118,12 +118,12 @@ public class HTTPFile extends ProtocolFile {
         this(fileURL, new URL(fileURL.toString(false)));
     }
 
-	
+
     protected HTTPFile(FileURL fileURL, URL url) throws IOException {
         super(fileURL);
 
         String scheme = fileURL.getScheme().toLowerCase();
-        if((!scheme.equals(FileProtocols.HTTP) && !scheme.equals(FileProtocols.HTTPS)) || fileURL.getHost()==null)
+        if ((!scheme.equals(FileProtocols.HTTP) && !scheme.equals(FileProtocols.HTTPS)) || fileURL.getHost() == null)
             throw new IOException();
 
         this.url = url;
@@ -137,11 +137,10 @@ public class HTTPFile extends ProtocolFile {
         //  - URL's path has no filename (e.g. http://www.mucommander.com/) or path ends with '/' (e.g. http://www.mucommander.com/download/)
         //  - URL has a query part (works most of the time, must not always)
         //  - URL has an extension that registered with an HTML/XHTML mime type
-        if((filename==null || fileURL.getPath().endsWith("/") || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))!=null && isParsableMimeType(mimeType)))) {
+        if ((filename == null || fileURL.getPath().endsWith("/") || fileURL.getQuery() != null || ((mimeType = MimeTypes.getMimeType(this)) != null && isParsableMimeType(mimeType)))) {
             attributes.setDirectory(true);
             resolve = false;
-        }
-        else {
+        } else {
             resolve = true;
         }
     }
@@ -167,8 +166,8 @@ public class HTTPFile extends ProtocolFile {
      * @return <code>true</code> if the given mime type corresponds to HTML or XHTML and can be parsed
      */
     private boolean isParsableMimeType(String mimeType) {
-        return mimeType!=null
-           && (mimeType.startsWith("text/html") || mimeType.startsWith("application/xhtml+xml") || mimeType.startsWith("application/xml"));
+        return mimeType != null
+                && (mimeType.startsWith("text/html") || mimeType.startsWith("application/xhtml+xml") || mimeType.startsWith("application/xml"));
     }
 
 
@@ -196,9 +195,9 @@ public class HTTPFile extends ProtocolFile {
 
             // Resolve date: use last-modified header, if not set use date header, and if still not set use System.currentTimeMillis
             long date = conn.getLastModified();
-            if(date==0) {
+            if (date == 0) {
                 date = conn.getDate();
-                if(date==0)
+                if (date == 0)
                     date = System.currentTimeMillis();
             }
             attributes.setDate(date);
@@ -208,16 +207,14 @@ public class HTTPFile extends ProtocolFile {
 
             // Test if content is HTML
             String contentType = conn.getContentType();
-            if(isParsableMimeType(contentType))
+            if (isParsableMimeType(contentType))
                 attributes.setDirectory(true);
 
             // File was successfully resolved on the remote HTTP server and thus exists
             attributes.setExists(true);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             LOGGER.info("Failed to resolve file {}", url, e);
-        }
-        finally {
+        } finally {
             // Mark the file as resolved, even if the request failed
             fileResolved = true;
         }
@@ -235,14 +232,14 @@ public class HTTPFile extends ProtocolFile {
      */
     private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
         // Get URLConnection instance
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
         // If credentials are contained in this HTTPFile's FileURL, use them for Basic HTTP Authentication
         Credentials credentials = fileURL.getCredentials();
-        if(credentials!=null)
+        if (credentials != null)
             conn.setRequestProperty(
-                "Authorization",
-                "Basic "+ Base64Encoder.encode(credentials.getLogin()+":"+credentials.getPassword())
+                    "Authorization",
+                    "Basic " + Base64Encoder.encode(credentials.getLogin() + ":" + credentials.getPassword())
             );
 
         // Set user-agent header.
@@ -268,30 +265,29 @@ public class HTTPFile extends ProtocolFile {
         LOGGER.info("response code = {}", responseCode);
 
         // If we got a 401 (Unauthorized) response, throw an AuthException to ask for credentials
-        if(responseCode==401)
+        if (responseCode == 401)
             throw new AuthException(fileURL, conn.getResponseMessage());
 
-        if(responseCode<200 || responseCode>=400)
+        if (responseCode < 200 || responseCode >= 400)
             throw new IOException(conn.getResponseMessage());
     }
 
     private void checkResolveFile() {
-        if(resolve && !fileResolved) {
+        if (resolve && !fileResolved) {
             try {
                 resolveFile();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 LOGGER.info("Failed to resolve {}", url, e);
                 // file will be considered as resolved
             }
         }
     }
 
-	
+
     /////////////////////////////////////////
     // AbstractFile methods implementation //
     /////////////////////////////////////////
-	
+
     @Override
     public long getDate() {
         checkResolveFile();
@@ -309,29 +305,29 @@ public class HTTPFile extends ProtocolFile {
     public void changeDate(long date) throws UnsupportedFileOperationException {
         throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
     }
-	
+
     @Override
     public long getSize() {
         checkResolveFile();
 
-        return attributes.getSize();	// Size == -1 if not known
+        return attributes.getSize();    // Size == -1 if not known
     }
-	
+
     @Override
     public AbstractFile getParent() {
-        if(!parentValSet) {
+        if (!parentValSet) {
             FileURL parentURL = fileURL.getParent();
-            if(parentURL==null)
+            if (parentURL == null)
                 this.parent = null;
             else {
                 this.parent = FileFactory.getFile(parentURL);
             }
             this.parentValSet = true;
         }
-		
+
         return this.parent;
     }
-	
+
 
     @Override
     public void setParent(AbstractFile parent) {
@@ -341,10 +337,12 @@ public class HTTPFile extends ProtocolFile {
 
     @Override
     public boolean exists() {
-        if(!fileResolved) {
+        if (!fileResolved) {
             // Note: file will only be resolved once, even if the request failed
-            try { resolveFile(); }
-            catch(IOException e) {}
+            try {
+                resolveFile();
+            } catch (IOException e) {
+            }
         }
 
         return attributes.exists();
@@ -392,7 +390,7 @@ public class HTTPFile extends ProtocolFile {
 
         return attributes.isDirectory();
     }
-	
+
     @Override
     public boolean isSymlink() {
         return false;
@@ -553,7 +551,7 @@ public class HTTPFile extends ProtocolFile {
 
                 // Test if reponse code is in the 3xx range (redirection) and if 'Location' field is set
                 String locationHeader = conn.getHeaderField("Location");
-                if(responseCode>=300 && responseCode<400 && locationHeader!=null) {
+                if (responseCode >= 300 && responseCode < 400 && locationHeader != null) {
                     // Redirect to Location field and remember context url
                     LOGGER.info("Location header = {}", conn.getHeaderField("Location"));
                     contextURL = new URL(contextURL, locationHeader);
@@ -562,31 +560,30 @@ public class HTTPFile extends ProtocolFile {
                 }
 
                 break;
-            } while(true);
+            } while (true);
 
             // Retrieve content type and throw an IOException if doesn't correspond to a parsable type (HTML/XHTML)
             String contentType = conn.getContentType();
-            if(contentType==null || !isParsableMimeType(contentType))
+            if (contentType == null || !isParsableMimeType(contentType))
                 throw new IOException("Document cannot be parsed (not HTML or XHTML)");  // Todo: localize this message
-			
+
             int pos;
             String enc = null;
             // Extract content type information (if any)
-            if((pos=contentType.indexOf("charset"))!=-1 || (pos=contentType.indexOf("Charset"))!=-1) {
+            if ((pos = contentType.indexOf("charset")) != -1 || (pos = contentType.indexOf("Charset")) != -1) {
                 StringTokenizer st = new StringTokenizer(contentType.substring(pos, contentType.length()));
                 enc = st.nextToken();
             }
-			
+
             // Use the encoding reported in HTTP header if there was one, otherwise just use the default encoding
             InputStream in = conn.getInputStream();
             InputStreamReader ir;
-            if(enc==null)
+            if (enc == null)
                 ir = new InputStreamReader(in);
             else {
                 try {
                     ir = new InputStreamReader(in, enc);
-                }
-                catch(UnsupportedEncodingException e) {
+                } catch (UnsupportedEncodingException e) {
                     ir = new InputStreamReader(in);
                 }
             }
@@ -601,30 +598,30 @@ public class HTTPFile extends ProtocolFile {
             Credentials credentials = fileURL.getCredentials();
 
             String parentPath = fileURL.getPath();
-            if(!parentPath.endsWith("/"))
+            if (!parentPath.endsWith("/"))
                 parentPath += "/";
 
             String parentHost = fileURL.getHost();
 
-            FileURL tempChildURL = (FileURL)fileURL.clone();
+            FileURL tempChildURL = (FileURL) fileURL.clone();
 
             Pattern pattern;
             String line, match, link;
-            while((line=br.readLine())!=null) {
-                for(pattern=linkAttributePatternSQ;; pattern=linkAttributePatternDQ) {
+            while ((line = br.readLine()) != null) {
+                for (pattern = linkAttributePatternSQ; ; pattern = linkAttributePatternDQ) {
                     Matcher matcher = pattern.matcher(line);
-                    while(matcher.find()) {
+                    while (matcher.find()) {
                         match = matcher.group();
-                        link = match.substring(match.indexOf(pattern==linkAttributePatternSQ?'\'':'\"')+1, match.length()-1);
+                        link = match.substring(match.indexOf(pattern == linkAttributePatternSQ ? '\'' : '\"') + 1, match.length() - 1);
 
                         // These are not proper URLs, skip them
-                        if(link.startsWith("mailto") || link.startsWith("MAILTO")
-                        || link.startsWith("#")
-                        || link.startsWith("javascript:"))
+                        if (link.startsWith("mailto") || link.startsWith("MAILTO")
+                                || link.startsWith("#")
+                                || link.startsWith("javascript:"))
                             continue;
 
                         // Don't add the same link more than once
-                        if(childrenURL.contains(link))
+                        if (childrenURL.contains(link))
                             continue;
 
                         try {
@@ -635,20 +632,19 @@ public class HTTPFile extends ProtocolFile {
                             childFileURL = FileURL.getFileURL(childURL.toExternalForm());
                             // Keep the parent's credentials (HTTP basic authentication), only if the host is the same.
                             // It would otherwise be unsafe.
-                            if(parentHost.equals(childFileURL.getHost()))
+                            if (parentHost.equals(childFileURL.getHost()))
                                 childFileURL.setCredentials(credentials);
 
                             // TODO: resolve file here instead of in the constructor, and multiplex requests just like a browser
 
                             children.add(FileFactory.getFile(childFileURL, null, childURL, childURL.toString()));
                             childrenURL.add(link);
-                        }
-                        catch(IOException e) {
+                        } catch (IOException e) {
                             LOGGER.info("Cannot create child: {}", e);
                         }
                     }
 
-                    if(pattern==linkAttributePatternDQ)
+                    if (pattern == linkAttributePatternDQ)
                         break;
                 }
             }
@@ -656,22 +652,20 @@ public class HTTPFile extends ProtocolFile {
             AbstractFile childrenArray[] = new AbstractFile[children.size()];
             children.toArray(childrenArray);
             return childrenArray;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.info("Exception caught while parsing HTML, throwing IOException", e);
 
-            if(e instanceof IOException)
-                throw (IOException)e;
+            if (e instanceof IOException)
+                throw (IOException) e;
 
             throw new IOException();
-        }
-        finally {
+        } finally {
             try {
                 // Try and close URL connection
-                if(br!=null)
+                if (br != null)
                     br.close();
+            } catch (IOException e) {
             }
-            catch(IOException e) {}
         }
     }
 
@@ -687,8 +681,11 @@ public class HTTPFile extends ProtocolFile {
 
     @Override
     public String getName() {
-        try {return java.net.URLDecoder.decode(super.getName(), "utf-8");}
-        catch(Exception e) {return super.getName();}
+        try {
+            return java.net.URLDecoder.decode(super.getName(), "utf-8");
+        } catch (Exception e) {
+            return super.getName();
+        }
     }
 
     /**
@@ -700,7 +697,7 @@ public class HTTPFile extends ProtocolFile {
         HttpURLConnection conn = getHttpURLConnection(this.url);
 
         // Set header that allows to resume transfer
-        conn.setRequestProperty("Range", "bytes="+offset+"-");
+        conn.setRequestProperty("Range", "bytes=" + offset + "-");
 
         // Establish connection
         conn.connect();
@@ -735,11 +732,11 @@ public class HTTPFile extends ProtocolFile {
             super(CHUNK_SIZE);
 
             // HEAD the HTTP resource to get its length
-            if(!fileResolved)
+            if (!fileResolved)
                 resolveFile();
 
             length = getSize();
-            if(length == -1)        // Knowing the content length is required
+            if (length == -1)        // Knowing the content length is required
                 throw new IOException();
         }
 
@@ -752,7 +749,7 @@ public class HTTPFile extends ProtocolFile {
             HttpURLConnection conn = getHttpURLConnection(url);
 
             // Note: 'Range' may not be supported by the HTTP server, in that case an IOException will be thrown
-            conn.setRequestProperty("Range", "bytes="+fileOffset +"-"+ Math.min(fileOffset+blockLen, length-1));
+            conn.setRequestProperty("Range", "bytes=" + fileOffset + "-" + Math.min(fileOffset + blockLen, length - 1));
 
             conn.connect();
             checkHTTPResponse(conn);
@@ -762,17 +759,16 @@ public class HTTPFile extends ProtocolFile {
             try {
                 int totalRead = 0;
                 int read;
-                while(totalRead<blockLen) {
-                    read = in.read(block, totalRead, blockLen-totalRead);
-                    if(read==-1)
+                while (totalRead < blockLen) {
+                    read = in.read(block, totalRead, blockLen - totalRead);
+                    if (read == -1)
                         break;
 
                     totalRead += read;
                 }
 
                 return totalRead;
-            }
-            finally {
+            } finally {
                 in.close();
             }
         }

@@ -20,6 +20,7 @@ package com.mucommander.ui.theme;
 
 /**
  * Implementations of this interface can listen to changes in the current theme.
+ *
  * @author Nicolas Rinaudo
  */
 public interface ThemeListener {

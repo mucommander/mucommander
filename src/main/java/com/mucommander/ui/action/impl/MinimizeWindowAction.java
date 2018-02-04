@@ -18,22 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.JFrame;
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * Minimizes the {@link MainFrame} this action is associated with.
@@ -43,7 +35,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class MinimizeWindowAction extends MuAction {
 
-    public MinimizeWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MinimizeWindowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -52,34 +44,42 @@ public class MinimizeWindowAction extends MuAction {
         mainFrame.setExtendedState(JFrame.ICONIFIED);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new MinimizeWindowAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new MinimizeWindowAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MinimizeWindow";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "MinimizeWindow";
 
-		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.WINDOW;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.META_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.META_DOWN_MASK);
+        }
 
         @Override
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
-            String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID)+".mac_os_x";
-            if(OsFamily.MAC_OS_X.isCurrent() && Translator.hasValue(macLabelKey, false))
+            String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID) + ".mac_os_x";
+            if (OsFamily.MAC_OS_X.isCurrent() && Translator.hasValue(macLabelKey, false))
                 return Translator.get(macLabelKey);
 
             return super.getLabel();

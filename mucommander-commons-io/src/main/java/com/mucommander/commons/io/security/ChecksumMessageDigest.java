@@ -29,14 +29,16 @@ import java.util.zip.Checksum;
  */
 public class ChecksumMessageDigest extends MessageDigest {
 
-    /** The Checksum instance that performs all of the checksumming work */
+    /**
+     * The Checksum instance that performs all of the checksumming work
+     */
     private Checksum checksum;
 
     /**
      * Creates a new <code>ChecksumMessageDigest</code> that delegates all the checksumming work to the given
-     * <code>Checksum</code> instance. 
+     * <code>Checksum</code> instance.
      *
-     * @param checksum the Checksum responsible for calculating the checksum
+     * @param checksum  the Checksum responsible for calculating the checksum
      * @param algorithm the name of the checksum algorithm implemented by the Checksum
      */
     public ChecksumMessageDigest(Checksum checksum, String algorithm) {
@@ -82,10 +84,10 @@ public class ChecksumMessageDigest extends MessageDigest {
         long crcLong = checksum.getValue();
 
         byte[] crcBytes = new byte[4];
-        crcBytes[0] = (byte)((crcLong>>24) & 0xFF);
-        crcBytes[1] = (byte)((crcLong>>16) & 0xFF);
-        crcBytes[2] = (byte)((crcLong>>8) & 0xFF);
-        crcBytes[3] = (byte)(crcLong & 0xFF);
+        crcBytes[0] = (byte) ((crcLong >> 24) & 0xFF);
+        crcBytes[1] = (byte) ((crcLong >> 16) & 0xFF);
+        crcBytes[2] = (byte) ((crcLong >> 8) & 0xFF);
+        crcBytes[3] = (byte) (crcLong & 0xFF);
 
         return crcBytes;
     }

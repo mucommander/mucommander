@@ -34,17 +34,21 @@ import java.awt.*;
  * LongerLabel2 [Component2]<br>
  *       Label3 [Component3]<br>
  * </pre>
- *
+ * <p>
  * <p>Vertical space between labels and components, and horizontal space between rows can both be specified.
  *
  * @author Maxence Bernard
  */
 public class XAlignedComponentPanel extends JPanel {
 
-    /** Gridbag layout constraints */
+    /**
+     * Gridbag layout constraints
+     */
     private GridBagConstraints c;
 
-    /** Number of pixels between labels and components */
+    /**
+     * Number of pixels between labels and components
+     */
     private int xSpace;
 
     /**
@@ -80,7 +84,7 @@ public class XAlignedComponentPanel extends JPanel {
 
         // Number of pixels between labels and components
         this.xSpace = xSpace;
-		
+
         // Init gridbag constraints.
         this.c = new GridBagConstraints();
         this.c.anchor = GridBagConstraints.EAST;
@@ -94,8 +98,8 @@ public class XAlignedComponentPanel extends JPanel {
      * Adds a new row with the given label and component, the component taking all the horizontal space left
      * by the widest label in this XAlignedComponentPanel.
      *
-     * @param label text that describes the component
-     * @param component JComponent instance, will take all remaining width space
+     * @param label       text that describes the component
+     * @param component   JComponent instance, will take all remaining width space
      * @param ySpaceAfter number of pixels to be inserted after this row
      */
     public void addRow(String label, JComponent component, int ySpaceAfter) {
@@ -107,20 +111,20 @@ public class XAlignedComponentPanel extends JPanel {
      * Adds a new row with the given label and component, the component taking all the horizontal space left
      * by the widest label in this XAlignedComponentPanel.
      *
-     * @param label the label component that describes the component
-     * @param component JComponent instance that will take all remaining width space
+     * @param label       the label component that describes the component
+     * @param component   JComponent instance that will take all remaining width space
      * @param ySpaceAfter number of pixels to be inserted after this row
      */
     public void addRow(JComponent label, JComponent component, int ySpaceAfter) {
-        if(firstComponent ==null)
+        if (firstComponent == null)
             firstComponent = component;
-		
+
         // Prepare grid bag constraints for label
         c.gridwidth = GridBagConstraints.RELATIVE;
         c.fill = GridBagConstraints.NONE;
         c.weightx = 0.0;
         c.insets = new Insets(0, 0, ySpaceAfter, xSpace);
-		
+
         add(label, c);
 
         // Prepare grid bag constraints for component
@@ -136,7 +140,7 @@ public class XAlignedComponentPanel extends JPanel {
     /**
      * Adds a new row with the specified component left-aligned and taking all available width space.
      *
-     * @param component JComponent instance that will take all available width space
+     * @param component   JComponent instance that will take all available width space
      * @param ySpaceAfter number of pixels to be inserted after this row
      */
     public void addRow(JComponent component, int ySpaceAfter) {
@@ -145,29 +149,28 @@ public class XAlignedComponentPanel extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
         c.insets = new Insets(0, 0, ySpaceAfter, 0);
-	
+
         add(component, c);
     }
-	
-	
-	
+
+
     /**
      * Overrides JPanel#requestFocus() method to request focus on the first component
      * and select its contents if it is an instance of JTextComponent.
      */
     @Override
     public void requestFocus() {
-        if(firstComponent ==null)
+        if (firstComponent == null)
             super.requestFocus();
         else {
-            if(firstComponent instanceof JTextComponent) {
+            if (firstComponent instanceof JTextComponent) {
                 JTextComponent textComponent = (JTextComponent) firstComponent;
                 String text = textComponent.getText();
-                if(!text.equals("")) {
+                if (!text.equals("")) {
                     textComponent.setSelectionStart(0);
                     textComponent.setSelectionEnd(text.length());
                 }
-            }			
+            }
             firstComponent.requestFocus();
         }
     }

@@ -43,8 +43,8 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
      * than its extension. This is not the case for directories where the extension is usually an artifact of a
      * filename that contains a '.'.
      *
-     * @param file the file to be copied or renamed
-     * @param path the destination path
+     * @param file          the file to be copied or renamed
+     * @param path          the destination path
      * @param filenameStart offset to the start of the filename in the given file
      * @return a {@link PathFieldContent} wrapping the given path and a selection corresponding to the filename
      */
@@ -53,7 +53,7 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
 
         // If the current file is a directory and not an application file (e.g. Mac OS X .app directory), select
         // the whole file name.
-        if(file.isDirectory() && !DesktopManager.isApplication(file)) {
+        if (file.isDirectory() && !DesktopManager.isApplication(file)) {
             endPosition = path.length();
         }
         // Otherwise, select the file name without its extension, except when empty ('.DS_Store', for example).
@@ -61,7 +61,7 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
             endPosition = path.lastIndexOf('.');
 
             // Text is selected so that user can directly type and replace path
-            endPosition = endPosition>filenameStart?endPosition:path.length();
+            endPosition = endPosition > filenameStart ? endPosition : path.length();
         }
 
         return new PathFieldContent(path, filenameStart, endPosition);
@@ -75,9 +75,9 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
     @Override
     protected PathFieldContent computeInitialPath(FileSet files) {
         String fieldText;     // Text to display in the destination field.
-        int    startPosition; // Index of the first selected character in the destination field.
-        int    endPosition;   // Index of the last selected character in the destination field.
-        int    nbFiles = files.size();
+        int startPosition; // Index of the first selected character in the destination field.
+        int endPosition;   // Index of the last selected character in the destination field.
+        int nbFiles = files.size();
 
         // Fill text field with absolute path, and if there is only one file,
         // append file's name
@@ -85,20 +85,18 @@ public abstract class AbstractCopyDialog extends TransferDestinationDialog {
         // Append filename to destination path if there is only one file to copy
         // and if the file is not a directory that already exists in destination
         // (otherwise folder would be copied into the destination folder)
-        if(nbFiles==1) {
+        if (nbFiles == 1) {
             AbstractFile file = files.elementAt(0);
             AbstractFile destFile;
 
-            startPosition  = fieldText.length();
+            startPosition = fieldText.length();
 
-            if(!(file.isDirectory() && (destFile= FileFactory.getFile(fieldText+file.getName()))!=null && destFile.exists() && destFile.isDirectory())) {
+            if (!(file.isDirectory() && (destFile = FileFactory.getFile(fieldText + file.getName())) != null && destFile.exists() && destFile.isDirectory())) {
                 return selectDestinationFilename(file, fieldText + file.getName(), startPosition);
-            }
-            else
+            } else
                 endPosition = fieldText.length();
-        }
-        else {
-            endPosition   = fieldText.length();
+        } else {
+            endPosition = fieldText.length();
             startPosition = 0;
         }
 

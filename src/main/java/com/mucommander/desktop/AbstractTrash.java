@@ -24,23 +24,23 @@ import com.mucommander.commons.file.AbstractFile;
  * AbstractTrash is an abstract representation of a file trash, i.e. a temporary place where deleted files are stored
  * before the trash is emptied. A trash implementation provides methods to access basic trash operations: move files
  * to the trash, empty the trash, ...
- *
+ * <p>
  * <p>Since AbstractTrash implementations are system-dependent, they should not be instantiated directly.
  * Use {@link DesktopManager#getTrash()} to retrieve an instance of a trash implementation that can
  * be used on the current platform.<br>
  * Also, some AbstractTrash subclasses may not be able to provide working implementations for all trash operations;
  * probe methods are provided to find out if a particular operation is available.</p>
  *
+ * @author Maxence Bernard
  * @see TrashProvider
  * @see DesktopManager#getTrash()
- * @author Maxence Bernard
  */
 public abstract class AbstractTrash {
 
     /**
      * Returns <code>true</code> if the specified file is eligible for being moved to the trash. This doesn't mean that
      * a call to {@link #moveToTrash(com.mucommander.commons.file.AbstractFile)} will necessarily succeed, but it should at least ensure that basic
-     * prerequisites are met. 
+     * prerequisites are met.
      *
      * @param file the file to test
      * @return true if the given file can be moved to the trash
@@ -73,11 +73,11 @@ public abstract class AbstractTrash {
      * Returns <code>true</code> if the given file is a trash folder, or one of its children.
      * For example, if <code>/home/someuser/.Trash</code> is a trash folder, calling this method with:
      * <ul>
-     *  <li><code>/home/someuser/.Trash</code> will return <code>true</code>
-     *  <li><code>/home/someuser/.Trash/somefolder/somefile</code> will return <code>true</code>
-     *  <li><code>/home/someuser/Desktop</code> will return <code>false</code>
+     * <li><code>/home/someuser/.Trash</code> will return <code>true</code>
+     * <li><code>/home/someuser/.Trash/somefolder/somefile</code> will return <code>true</code>
+     * <li><code>/home/someuser/Desktop</code> will return <code>false</code>
      * </ul>
-     *
+     * <p>
      * <p>Note that this method does not check the existence of the given file, the test is solely based on the
      * file's path.
      *
@@ -109,7 +109,7 @@ public abstract class AbstractTrash {
     /**
      * Waits (locks the caller thread) until all pending trash operations are completed.
      * This method can be useful since some <code>AbstractTrash</code> implementations are asynchroneous, i.e. perform
-     * operations in separate threads.   
+     * operations in separate threads.
      */
     public abstract void waitForPendingOperations();
 }

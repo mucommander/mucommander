@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -74,14 +74,14 @@ public class PathUtilsTest {
         assertResult(PathUtils.resolveDestination(baseRoot.getURL().toString(true), baseRoot), baseRoot, expectedType);
         // Relative paths
         assertResult(PathUtils.resolveDestination(".", baseFolder), baseFolder, expectedType);
-        assertResult(PathUtils.resolveDestination("."+baseFolder.getSeparator(), baseFolder), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination("." + baseFolder.getSeparator(), baseFolder), baseFolder, expectedType);
         assertResult(PathUtils.resolveDestination(baseFolder.getName(), baseParent), baseFolder, expectedType);
-        assertResult(PathUtils.resolveDestination(baseFolder.getName()+separator, baseParent), baseFolder, expectedType);
-        assertResult(PathUtils.resolveDestination("."+separator+baseFolder.getName(), baseParent), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination(baseFolder.getName() + separator, baseParent), baseFolder, expectedType);
+        assertResult(PathUtils.resolveDestination("." + separator + baseFolder.getName(), baseParent), baseFolder, expectedType);
         // Archive path as folder (with a trailing separator)
-        assertResult(PathUtils.resolveDestination(existingArchive.getURL().toString(true)+separator, baseFolder), existingArchive, expectedType);
-        assertResult(PathUtils.resolveDestination(existingArchiveFilename+separator, baseFolder), existingArchive, expectedType);
-        assertResult(PathUtils.resolveDestination("."+separator+existingArchiveFilename+separator, baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination(existingArchive.getURL().toString(true) + separator, baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination(existingArchiveFilename + separator, baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination("." + separator + existingArchiveFilename + separator, baseFolder), existingArchive, expectedType);
 
         // Test a bunch of destination paths that denote an existing regular file
 
@@ -91,11 +91,11 @@ public class PathUtilsTest {
         assertResult(PathUtils.resolveDestination(existingFile.getURL().toString(true), baseRoot), existingFile, expectedType);
         // Relative paths
         assertResult(PathUtils.resolveDestination(existingFilename, baseFolder), existingFile, expectedType);
-        assertResult(PathUtils.resolveDestination("."+separator+existingFilename, baseFolder), existingFile, expectedType);
+        assertResult(PathUtils.resolveDestination("." + separator + existingFilename, baseFolder), existingFile, expectedType);
         // Archive path as regular file (without a trailing separator)
         assertResult(PathUtils.resolveDestination(existingArchive.getURL().toString(true), baseFolder), existingArchive, expectedType);
         assertResult(PathUtils.resolveDestination(existingArchiveFilename, baseFolder), existingArchive, expectedType);
-        assertResult(PathUtils.resolveDestination("."+separator+existingArchiveFilename, baseFolder), existingArchive, expectedType);
+        assertResult(PathUtils.resolveDestination("." + separator + existingArchiveFilename, baseFolder), existingArchive, expectedType);
 
         // Test a bunch of destination paths that denote a new/non-existing regular file
 
@@ -105,12 +105,12 @@ public class PathUtilsTest {
         assertResult(PathUtils.resolveDestination(nonExistentFile.getURL().toString(true), baseRoot), nonExistentFile, expectedType);
         // Relative paths
         assertResult(PathUtils.resolveDestination(nonExistentFilename, baseFolder), nonExistentFile, expectedType);
-        assertResult(PathUtils.resolveDestination("."+separator+nonExistentFilename, baseFolder), nonExistentFile, expectedType);
+        assertResult(PathUtils.resolveDestination("." + separator + nonExistentFilename, baseFolder), nonExistentFile, expectedType);
 
         // Test invalid destination paths
 
         // neither the file nor its parent exist
-        assert PathUtils.resolveDestination(nonExistentFilename+separator+nonExistentFilename, baseFolder) == null;
+        assert PathUtils.resolveDestination(nonExistentFilename + separator + nonExistentFilename, baseFolder) == null;
         assert PathUtils.resolveDestination(nonExistentFilename, baseFolder.getChild(nonExistentFilename)) == null;
         // relative path and no base folder
         assert PathUtils.resolveDestination(nonExistentFilename, null) == null;
@@ -140,7 +140,7 @@ public class PathUtilsTest {
         assert expectedDestinationFile.equals(file);
         assert expectedDestinationType == type;
 
-        if(type==PathUtils.ResolvedDestination.EXISTING_FOLDER)
+        if (type == PathUtils.ResolvedDestination.EXISTING_FOLDER)
             assert file.equals(folder);
         else
             assert file.getParent().equals(folder);
@@ -171,7 +171,7 @@ public class PathUtilsTest {
         assert 2 == PathUtils.getDepth("/home/maxence/", "/");
 
         assert 1 == PathUtils.getDepth("/home/maxence", "\\");
-        assert 1 == PathUtils.getDepth("C:", "\\"); 
+        assert 1 == PathUtils.getDepth("C:", "\\");
         assert 1 == PathUtils.getDepth("C:\\", "\\");
         assert 2 == PathUtils.getDepth("C:\\home", "\\");
         assert 2 == PathUtils.getDepth("C:\\home\\", "\\");

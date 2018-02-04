@@ -30,7 +30,7 @@ public interface FileJobListener {
     /**
      * Called when the state of the specified FileJob has changed.
      *
-     * @param source the FileJob which state has changed
+     * @param source   the FileJob which state has changed
      * @param oldState the FileJob's state prior to the change, see FileJob's constant fields for possible values
      * @param newState the new FileJob's state, see FileJob's constant fields for possible values
      */
@@ -38,8 +38,10 @@ public interface FileJobListener {
 
     /**
      * Called when the execution mode (blocking/non-blocking) of the specified FileJob has changed.
-     * @param source the FileJob which execution mode has changed
+     *
+     * @param source     the FileJob which execution mode has changed
      * @param background true if the FileJob is now executed in a non-blocking mode, false otherwise.
      */
-    default void jobExecutionModeChanged(FileJob source, boolean background) {}
+    default void jobExecutionModeChanged(FileJob source, boolean background) {
+    }
 }

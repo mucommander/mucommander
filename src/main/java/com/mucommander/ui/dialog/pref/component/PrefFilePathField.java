@@ -25,7 +25,7 @@ import com.mucommander.ui.autocomplete.TextFieldCompletion;
 /**
  * @author Arik Hadas
  */
-public abstract class PrefFilePathField  extends PrefTextField {
+public abstract class PrefFilePathField extends PrefTextField {
 
     public PrefFilePathField(String text) {
         super(text);

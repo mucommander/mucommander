@@ -31,21 +31,24 @@ import java.text.ParsePosition;
  */
 public class SizeFormatTest {
 
-    private final static long KB_1 = (long)Math.pow(2, 10);
-    private final static long MB_1 = (long)Math.pow(2, 20);
-    private final static long GB_1 = (long)Math.pow(2, 30);
-    private final static long TB_1 = (long)Math.pow(2, 40);
+    private final static long KB_1 = (long) Math.pow(2, 10);
+    private final static long MB_1 = (long) Math.pow(2, 20);
+    private final static long GB_1 = (long) Math.pow(2, 30);
+    private final static long TB_1 = (long) Math.pow(2, 40);
 
-    private final static long[] UNITS = { KB_1, MB_1, GB_1, TB_1 };
+    private final static long[] UNITS = {KB_1, MB_1, GB_1, TB_1};
 
-    private final static DecimalFormat DECIMAL_FORMAT = (DecimalFormat)NumberFormat.getInstance();
+    private final static DecimalFormat DECIMAL_FORMAT = (DecimalFormat) NumberFormat.getInstance();
 
-    private final static String DECIMAL_SEPARATOR = ""+DECIMAL_FORMAT.getDecimalFormatSymbols().getDecimalSeparator();
+    private final static String DECIMAL_SEPARATOR = "" + DECIMAL_FORMAT.getDecimalFormatSymbols().getDecimalSeparator();
 
     static {
         // SizeFormat uses localized strings
-        try { Translator.init(); }
-        catch(Exception e) { throw new RuntimeException(e); }
+        try {
+            Translator.init();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

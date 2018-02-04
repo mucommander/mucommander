@@ -18,26 +18,27 @@
 
 package com.mucommander.ui.dnd;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.FlavorEvent;
 import java.awt.datatransfer.FlavorListener;
 
-import javax.swing.Action;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * ClipboardNotifier allows an action to be dynamically enabled when the clipboard contains files, and disabled otherwise.
- *
+ * <p>
  * <p>ClipboardNotifier requires Java 1.5 and does not work under Mac OS X (tested under Tiger with Java 1.5.0_06).
  *
  * @author Maxence Bernard
  */
 public class ClipboardNotifier implements FlavorListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClipboardNotifier.class);
-	
-    /** The action to dynamically enable/disable */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClipboardNotifier.class);
+
+    /**
+     * The action to dynamically enable/disable
+     */
     private Action action;
 
     /**
@@ -63,8 +64,7 @@ public class ClipboardNotifier implements FlavorListener {
     private void toggleActionState() {
         try {
             action.setEnabled(ClipboardSupport.getClipboard().isDataFlavorAvailable(DataFlavor.javaFileListFlavor));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // Works around "java.lang.IllegalStateException: cannot open system clipboard" thrown when the clipboard
             // is currently unavailable (ticket #164).
 

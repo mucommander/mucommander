@@ -18,122 +18,141 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
+import com.mucommander.PlatformManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.mucommander.PlatformManager;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
- * 
  * @author Arik Hadas
  */
 public abstract class ToolBarIO extends DefaultHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarIO.class);
-	
-	/* Variables used for XML parsing */
-	/** Root element */
-	protected static final String ROOT_ELEMENT = "toolbar";
-	/** Attribute containing the last muCommander version that was used to create the file */
-	protected static final String VERSION_ATTRIBUTE  = "version";
-    /** Element describing one of the button in the list */
-	protected static final String BUTTON_ELEMENT = "button";
-    /** Attribute containing the action class associated with the button */
-	protected static final String ACTION_ATTRIBUTE  = "action";
-	/** Attribute containing the action id associated with the button */
-	protected static final String ACTION_ID_ATTRIBUTE  = "action_id";
-    /** Element describing one of the separator in the list */
-	protected static final String SEPARATOR_ELEMENT = "separator";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarIO.class);
 
-	/** Default toolbar descriptor filename */
+    /* Variables used for XML parsing */
+    /**
+     * Root element
+     */
+    protected static final String ROOT_ELEMENT = "toolbar";
+    /**
+     * Attribute containing the last muCommander version that was used to create the file
+     */
+    protected static final String VERSION_ATTRIBUTE = "version";
+    /**
+     * Element describing one of the button in the list
+     */
+    protected static final String BUTTON_ELEMENT = "button";
+    /**
+     * Attribute containing the action class associated with the button
+     */
+    protected static final String ACTION_ATTRIBUTE = "action";
+    /**
+     * Attribute containing the action id associated with the button
+     */
+    protected static final String ACTION_ID_ATTRIBUTE = "action_id";
+    /**
+     * Element describing one of the separator in the list
+     */
+    protected static final String SEPARATOR_ELEMENT = "separator";
+
+    /**
+     * Default toolbar descriptor filename
+     */
     protected final static String DEFAULT_TOOLBAR_FILE_NAME = "toolbar.xml";
 
-    /** Toolbar descriptor file used when calling {@link #loadDescriptionFile()} */
+    /**
+     * Toolbar descriptor file used when calling {@link #loadDescriptionFile()}
+     */
     private static AbstractFile descriptionFile;
-    
-    /** ToolBarWriter instance */
-	private static ToolBarWriter toolBarWriter;
-    
-    /** Whether the command-bar has been modified and should be saved */
+
+    /**
+     * ToolBarWriter instance
+     */
+    private static ToolBarWriter toolBarWriter;
+
+    /**
+     * Whether the command-bar has been modified and should be saved
+     */
     protected static boolean wasToolBarModified;
-    
+
     /**
      * Parses the XML file describing the toolbar's buttons and associated actions.
      * If the file doesn't exist, default toolbar elements will be used.
      */
     public static void loadDescriptionFile() throws Exception {
-    	AbstractFile descriptionFile = getDescriptionFile();
+        AbstractFile descriptionFile = getDescriptionFile();
         if (descriptionFile != null && descriptionFile.exists()) {
-        	ToolBarReader reader = new ToolBarReader(descriptionFile);
-        	ToolBarAttributes.setActions(reader.getActionsRead());
-        }
-        else
-        	LOGGER.debug("User toolbar.xml was not found, using default toolbar");
-        
+            ToolBarReader reader = new ToolBarReader(descriptionFile);
+            ToolBarAttributes.setActions(reader.getActionsRead());
+        } else
+            LOGGER.debug("User toolbar.xml was not found, using default toolbar");
+
         toolBarWriter = ToolBarWriter.create();
     }
-    
+
     /**
      * Writes the current tool bar to the user's tool bar file.
+     *
      * @throws IOException
      */
     public static void saveToolBar() throws IOException {
-    	if (ToolBarAttributes.areDefaultAttributes()) {
-    		AbstractFile toolBarFile = getDescriptionFile();
-    		if (toolBarFile != null && toolBarFile.exists()) {
-    			LOGGER.info("Toolbar use default settings, removing descriptor file");
-    			toolBarFile.delete();
-    		}
-    		else
-    			LOGGER.debug("Toolbar not modified, not saving");
-    	}
-    	else if (toolBarWriter != null) {
-    		if (wasToolBarModified)
-    			toolBarWriter.write();
-    		else
-    			LOGGER.debug("Toolbar not modified, not saving");
-    	}
-    	else
-    		LOGGER.warn("Could not save toolbar. writer is null");
+        if (ToolBarAttributes.areDefaultAttributes()) {
+            AbstractFile toolBarFile = getDescriptionFile();
+            if (toolBarFile != null && toolBarFile.exists()) {
+                LOGGER.info("Toolbar use default settings, removing descriptor file");
+                toolBarFile.delete();
+            } else
+                LOGGER.debug("Toolbar not modified, not saving");
+        } else if (toolBarWriter != null) {
+            if (wasToolBarModified)
+                toolBarWriter.write();
+            else
+                LOGGER.debug("Toolbar not modified, not saving");
+        } else
+            LOGGER.warn("Could not save toolbar. writer is null");
     }
-    
+
     /**
      * Mark that actions were modified and therefore should be saved.
      */
-    public static void setModified() { wasToolBarModified = true; }
-    
+    public static void setModified() {
+        wasToolBarModified = true;
+    }
+
     /**
      * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
      * By default, this file is {@link #DEFAULT_TOOLBAR_FILE_NAME} within the preferences folder.
+     *
      * @param file path to the toolbar descriptor file
      */
     public static void setDescriptionFile(AbstractFile file) throws FileNotFoundException {
-        if(file.isBrowsable())
+        if (file.isBrowsable())
             throw new FileNotFoundException("Not a valid file: " + file);
         descriptionFile = file;
     }
 
     public static AbstractFile getDescriptionFile() throws IOException {
-        if(descriptionFile == null)
+        if (descriptionFile == null)
             return PlatformManager.getPreferencesFolder().getChild(DEFAULT_TOOLBAR_FILE_NAME);
         return descriptionFile;
     }
-    
+
     /**
      * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
      * By default, this file is {@link #DEFAULT_TOOLBAR_FILE_NAME} within the preferences folder.
+     *
      * @param path path to the toolbar descriptor file
      */
     public static void setDescriptionFile(String path) throws FileNotFoundException {
         AbstractFile file;
 
-        if((file = FileFactory.getFile(path)) == null)
+        if ((file = FileFactory.getFile(path)) == null)
             setDescriptionFile(new File(path));
         else
             setDescriptionFile(file);
@@ -142,7 +161,10 @@ public abstract class ToolBarIO extends DefaultHandler {
     /**
      * Sets the path to the toolbar description file to be loaded when calling {@link #loadDescriptionFile()}.
      * By default, this file is {@link #DEFAULT_TOOLBAR_FILE_NAME} within the preferences folder.
+     *
      * @param file path to the toolbar descriptor file
      */
-    public static void setDescriptionFile(File file) throws FileNotFoundException {setDescriptionFile(FileFactory.getFile(file.getAbsolutePath()));}
+    public static void setDescriptionFile(File file) throws FileNotFoundException {
+        setDescriptionFile(FileFactory.getFile(file.getAbsolutePath()));
+    }
 }

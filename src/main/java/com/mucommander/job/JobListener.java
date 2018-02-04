@@ -28,29 +28,32 @@ import java.util.EventListener;
  * @author Mariusz Jakubowski, Arik Hadas
  */
 public interface JobListener extends EventListener {
-	
-	/**
+
+    /**
      * Called when a job starts to execute in the background (non-blocking mode).
-	 * 
-	 * @param source a job added
-	 */
-	default void jobAdded(FileJob source) {}
-	
-	/**
+     *
+     * @param source a job added
+     */
+    default void jobAdded(FileJob source) {
+    }
+
+    /**
      * Called when a job stops to execute in the background (finished/interrupted/switches
      * to blocking mode).
-	 * 
-	 * @param source a job removed
-	 */
-	default void jobRemoved(FileJob source) {}
+     *
+     * @param source a job removed
+     */
+    default void jobRemoved(FileJob source) {
+    }
 
-	/**
+    /**
      * Called when the progress of the specified FileJob has been updated.
      *
-     * @param source the FileJob which progress has been updated
+     * @param source     the FileJob which progress has been updated
      * @param fullUpdate if false indicates that only file label has been updated
      * @see JobProgress#calcJobProgress
      */
-	default void jobProgress(FileJob source, boolean fullUpdate) {}
-	
+    default void jobProgress(FileJob source, boolean fullUpdate) {
+    }
+
 }

@@ -2,19 +2,17 @@ package com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Archive.
 
 import com.mucommander.commons.file.archive.sevenzip.provider.Common.LongVector;
 
-class InArchiveInfo
-{
+class InArchiveInfo {
     public byte ArchiveVersion_Major;
     public byte ArchiveVersion_Minor;
-    
+
     public long StartPosition;
     public long StartPositionAfterHeader;
     public long DataStartPosition;
-    public long DataStartPosition2;    
+    public long DataStartPosition2;
     LongVector FileInfoPopIDs = new LongVector();
-    
-    void Clear()
-    {
+
+    void Clear() {
         FileInfoPopIDs.clear();
-    }    
+    }
 }

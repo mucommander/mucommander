@@ -18,11 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.Icon;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -30,9 +25,13 @@ import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
+import javax.swing.*;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * This quick list shows the parent folders of the current location in the FileTable.
- * 
+ *
  * @author Arik Hadas
  */
 public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> {

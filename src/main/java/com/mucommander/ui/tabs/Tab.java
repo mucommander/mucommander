@@ -19,9 +19,9 @@
 package com.mucommander.ui.tabs;
 
 /**
-* Interface for tabs.
-* 
-* @author Arik Hadas
-*/
+ * Interface for tabs.
+ *
+ * @author Arik Hadas
+ */
 public interface Tab {
 }

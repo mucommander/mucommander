@@ -55,8 +55,7 @@ public class GuessedKde4DesktopAdapter extends Kde4DesktopAdapter {
         try {
             ProcessRunner.execute(BASE_COMMAND);
             return true;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }

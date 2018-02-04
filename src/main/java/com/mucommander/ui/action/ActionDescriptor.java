@@ -22,30 +22,30 @@ import javax.swing.*;
 
 /**
  * Each MuAction is registered with an object of ActionDescriptor type
- * that provides its properties. ActionDescriptor is an interface that 
- * defines those action's properties. 
- * 
+ * that provides its properties. ActionDescriptor is an interface that
+ * defines those action's properties.
+ *
  * @author Arik Hadas
  */
 public interface ActionDescriptor {
-	
-	String getId();
-	
-	String getDescription();
-	
-	ActionCategory getCategory();
-	
-	String getLabel();
-	
-	String getLabelKey();
-	
-	KeyStroke getDefaultKeyStroke();
-	
-	KeyStroke getDefaultAltKeyStroke();
-	
-	ImageIcon getIcon();
-	
-	String getTooltip();
+
+    String getId();
+
+    String getDescription();
+
+    ActionCategory getCategory();
+
+    String getLabel();
+
+    String getLabelKey();
+
+    KeyStroke getDefaultKeyStroke();
+
+    KeyStroke getDefaultAltKeyStroke();
+
+    ImageIcon getIcon();
+
+    String getTooltip();
 
     /**
      * Returns <code>true</code> if the action requires parameters at creation time.

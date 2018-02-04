@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * Marks/unmarks the previous block's rows in the current {@link FileTable}, starting with the
@@ -40,11 +34,13 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class MarkPreviousBlockAction extends MarkBackwardAction {
 
-    /** Number of file/rows a block represents */
+    /**
+     * Number of file/rows a block represents
+     */
     // TODO: make this value configurable
     private static final int BLOCK_SIZE = 5;
 
-    public MarkPreviousBlockAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkPreviousBlockAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -53,26 +49,34 @@ public class MarkPreviousBlockAction extends MarkBackwardAction {
         return BLOCK_SIZE;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new MarkPreviousBlockAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new MarkPreviousBlockAction(mainFrame, properties);
+        }
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MarkPreviousBlock";
+        public static final String ACTION_ID = "MarkPreviousBlock";
 
-		public String getId() { return ACTION_ID; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.SHIFT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

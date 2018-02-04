@@ -3,34 +3,33 @@
     <!-- = File table appearance ========================= -->
     <!-- ================================================= -->
     <file_table>
-        <font                            family="Lucida Grande,Arial,Lucida Sans" size="13"/>
-        <border                          color="404040"/>
-        <inactive_border                 color="404040"/>
-        <outline                         color="00ffff"/>
-        <inactive_outline                color="cccccc"/>
+        <font family="Lucida Grande,Arial,Lucida Sans" size="13"/>
+        <border color="404040"/>
+        <inactive_border color="404040"/>
+        <outline color="00ffff"/>
+        <inactive_outline color="cccccc"/>
 
         <normal>
-            <background                    color="000084"/>
-            <inactive_background           color="000084"/>
+            <background color="000084"/>
+            <inactive_background color="000084"/>
         </normal>
 
         <selected>
-            <background                    color="00ffff"/>
-            <secondary_background          color="00ffff"/>
-            <inactive_background           color="cccccc"/>
+            <background color="00ffff"/>
+            <secondary_background color="00ffff"/>
+            <inactive_background color="cccccc"/>
             <inactive_secondary_background color="cccccc"/>
         </selected>
 
         <alternate>
-            <background                    color="000084"/>
-            <inactive_background           color="000084"/>
+            <background color="000084"/>
+            <inactive_background color="000084"/>
         </alternate>
 
         <unmatched>
-            <foreground                   color="00a8a8"/>
-            <background                   color="000084"/>
+            <foreground color="00a8a8"/>
+            <background color="000084"/>
         </unmatched>
-
 
 
         <!-- = Hidden files ================================ -->
@@ -38,14 +37,13 @@
         <hidden>
             <normal>
                 <inactive_foreground color="c0c0c0"/>
-                <foreground          color="c0c0c0"/>
+                <foreground color="c0c0c0"/>
             </normal>
             <selected>
                 <inactive_foreground color="000080"/>
-                <foreground          color="000080"/>
+                <foreground color="000080"/>
             </selected>
         </hidden>
-
 
 
         <!-- = Folders ===================================== -->
@@ -53,14 +51,13 @@
         <folder>
             <normal>
                 <inactive_foreground color="ffffff"/>
-                <foreground          color="ffffff"/>
+                <foreground color="ffffff"/>
             </normal>
             <selected>
                 <inactive_foreground color="000080"/>
-                <foreground          color="000080"/>
+                <foreground color="000080"/>
             </selected>
         </folder>
-
 
 
         <!-- = Archive ===================================== -->
@@ -68,11 +65,11 @@
         <archive>
             <normal>
                 <inactive_foreground color="40ff40"/>
-                <foreground          color="40ff40"/>
+                <foreground color="40ff40"/>
             </normal>
             <selected>
                 <inactive_foreground color="000080"/>
-                <foreground          color="000080"/>
+                <foreground color="000080"/>
             </selected>
         </archive>
 
@@ -82,14 +79,13 @@
         <symlink>
             <normal>
                 <inactive_foreground color="cc00cc"/>
-                <foreground          color="cc00cc"/>
+                <foreground color="cc00cc"/>
             </normal>
             <selected>
                 <inactive_foreground color="000080"/>
-                <foreground          color="000080"/>
+                <foreground color="000080"/>
             </selected>
         </symlink>
-
 
 
         <!-- = Marked ====================================== -->
@@ -97,14 +93,13 @@
         <marked>
             <normal>
                 <inactive_foreground color="ffff00"/>
-                <foreground          color="ffff00"/>
+                <foreground color="ffff00"/>
             </normal>
             <selected>
                 <inactive_foreground color="ffc532"/>
-                <foreground          color="ffc532"/>
+                <foreground color="ffc532"/>
             </selected>
         </marked>
-
 
 
         <!-- = Plain file ================================== -->
@@ -112,21 +107,20 @@
         <file>
             <normal>
                 <inactive_foreground color="00f0f0"/>
-                <foreground          color="00f0f0"/>
+                <foreground color="00f0f0"/>
             </normal>
             <selected>
                 <inactive_foreground color="000080"/>
-                <foreground          color="000080"/>
+                <foreground color="000080"/>
             </selected>
         </file>
     </file_table>
 
 
-
     <!-- = Shell appearance ============================== -->
     <!-- ================================================= -->
     <shell>
-        <font family="Monospaced,Lucida Sans Typewriter" size ="12" bold="true"/>
+        <font family="Monospaced,Lucida Sans Typewriter" size="12" bold="true"/>
 
         <!-- = Default appearance ========================== -->
         <!-- =============================================== -->
@@ -142,7 +136,6 @@
             <foreground color="ffffff"/>
         </selected>
     </shell>
-
 
 
     <!-- = Shell history appearance ====================== -->
@@ -166,7 +159,6 @@
     </shell_history>
 
 
-
     <!-- = Editor appearance ============================= -->
     <!-- ================================================= -->
     <editor>
@@ -186,7 +178,6 @@
             <foreground color="000000"/>
         </selected>
     </editor>
-
 
 
     <!-- = Location bar appearance ======================= -->
@@ -211,8 +202,8 @@
 
     <quick_list>
         <header>
-            <foreground           color="ffffff"/>
-            <background           color="000055"/>
+            <foreground color="ffffff"/>
+            <background color="000055"/>
             <secondary_background color="000055"/>
         </header>
     </quick_list>

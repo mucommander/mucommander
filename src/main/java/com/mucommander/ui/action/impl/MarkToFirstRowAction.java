@@ -18,23 +18,17 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * Marks/unmarks files in the active FileTable, from the currently selected row to the first row (inclusive).
  * The first row will also become the currently selected row.
- *
+ * <p>
  * <p>The currently selected row's marked state determines whether the rows will be marked or unmarked : if the selected
  * row is marked, the rows will be unmarked and vice-versa.
  *
@@ -42,7 +36,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class MarkToFirstRowAction extends MarkBackwardAction {
 
-    public MarkToFirstRowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkToFirstRowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -51,26 +45,34 @@ public class MarkToFirstRowAction extends MarkBackwardAction {
         return mainFrame.getActiveTable().getSelectedRow();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new MarkToFirstRowAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new MarkToFirstRowAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MarkToFirstRow";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "MarkToFirstRow";
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_HOME, KeyEvent.SHIFT_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_HOME, KeyEvent.SHIFT_DOWN_MASK);
+        }
     }
 }

@@ -23,7 +23,7 @@ import java.io.IOException;
 /**
  * BufferedRandomOutputStream is a buffered output stream for {@link RandomAccessOutputStream} which, unlike a regular
  * <code>java.io.BufferedOutputStream</code>, makes it safe to seek in the underlying <code>RandomAccessOutputStream</code>.
- *
+ * <p>
  * <p>This class uses {@link BufferPool} to create the internal buffer, to avoid excessive memory allocation and
  * garbage collection. The buffer is released when this stream is closed.</p>
  *
@@ -31,16 +31,24 @@ import java.io.IOException;
  */
 public class BufferedRandomOutputStream extends RandomAccessOutputStream {
 
-    /** The underlying random access output stream */
+    /**
+     * The underlying random access output stream
+     */
     private RandomAccessOutputStream raos;
 
-    /** The buffer where written bytes are accumulated before being sent to the underlying output stream */
+    /**
+     * The buffer where written bytes are accumulated before being sent to the underlying output stream
+     */
     private byte buffer[];
 
-    /** The current number of bytes waiting to be flushed to the underlying output stream */
+    /**
+     * The current number of bytes waiting to be flushed to the underlying output stream
+     */
     private int count;
 
-    /** The default buffer size if none is specified */
+    /**
+     * The default buffer size if none is specified
+     */
     public final static int DEFAULT_BUFFER_SIZE = 65536;
 
 
@@ -94,7 +102,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
         if (count >= buffer.length)
             flushBuffer();
 
-        buffer[count++] = (byte)b;
+        buffer[count++] = (byte) b;
     }
 
     /**
@@ -111,7 +119,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
     /**
      * Writes <code>len</code> bytes from the specified byte array starting at offset <code>off</code> to this
      * buffered output stream.
-     *
+     * <p>
      * <p>Usually this method stores bytes from the given array into this
      * stream's buffer, flushing the buffer to the underlying output stream as
      * needed. However, if the requested data length is equal or larger than this stream's
@@ -119,7 +127,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * bytes directly to the underlying output stream. Thus redundant
      * <code>RandomBufferedOutputStream</code>s will not copy data unnecessarily.</p>
      *
-     * @param b the data.
+     * @param b   the data.
      * @param off the start offset in the data.
      * @param len the number of bytes to write.
      * @throws IOException if an I/O error occurs.
@@ -190,11 +198,10 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      */
     @Override
     public synchronized void close() throws IOException {
-        if(buffer!=null) {      // buffer is null if close() was already called
+        if (buffer != null) {      // buffer is null if close() was already called
             try {
                 flush();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Continue anyway
             }
 
@@ -213,7 +220,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
     @Override
     protected void finalize() throws Throwable {
         // If this stream hasn't been closed, release the buffer before finalizing the object
-        if(buffer!=null)
+        if (buffer != null)
             BufferPool.releaseByteArray(buffer);
 
         super.finalize();

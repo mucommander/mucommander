@@ -32,23 +32,31 @@ import java.awt.event.MouseListener;
 /**
  * ProportionalSplitPane is a JSplitPane that is able to maintain the divider's location constant proportionally when
  * the window it is attached to is resized, or when its orientation is changed.
- *
+ * <p>
  * <p>Another added feature is the ability to restore a split ratio of 0.5f (same size for both panels) when
  * the divider component is double-clicked.
  *
  * @author Maxence Bernard
  */
 public class ProportionalSplitPane extends JSplitPane implements ComponentListener, MouseListener {
-    /** Last known width of the window this split pane is attached to. */
+    /**
+     * Last known width of the window this split pane is attached to.
+     */
     private int windowWidth;
 
-    /** Last known absolute divider location */
+    /**
+     * Last known absolute divider location
+     */
     private int lastDividerLocation = -1;
 
-    /** Current proportional divider location, initially 0.5f (same size for both panels) */
+    /**
+     * Current proportional divider location, initially 0.5f (same size for both panels)
+     */
     private float splitRatio = 0.5f;
 
-    /** Window this split pane is attached to */
+    /**
+     * Window this split pane is attached to
+     */
     private Window window;
 
 
@@ -86,19 +94,19 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         divider.addMouseListener(this);
 
         // Set null minimum size for both components so that divider can be moved all the way left/up and right/down
-        Dimension nullDimension = new Dimension(0,0);
-        if(leftComponent!=null)
+        Dimension nullDimension = new Dimension(0, 0);
+        if (leftComponent != null)
             leftComponent.setMinimumSize(nullDimension);
-        if(rightComponent!=null)
+        if (rightComponent != null)
             rightComponent.setMinimumSize(nullDimension);
     }
 
 
     /**
-     * Updates the divider component's location to keep the current proportional divider location. 
+     * Updates the divider component's location to keep the current proportional divider location.
      */
     public void updateDividerLocation() {
-        if(!window.isVisible())
+        if (!window.isVisible())
             return;
 
         // Reset the last divider location to make sure that the next call to moveComponent doesn't
@@ -111,7 +119,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
 
     /**
      * Sets the constant, proportional divider's location. The given float but be comprised between 0 and 1, 0 meaning
-     * completely left (or top), 1 right completely (or bottom).   
+     * completely left (or top), 1 right completely (or bottom).
      *
      * @param splitRatio the proportional divider's location, comprised between 0 and 1.
      */
@@ -133,7 +141,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
      * Returns the split pane divider component.
      */
     public BasicSplitPaneDivider getDividerComponent() {
-        return ((BasicSplitPaneUI)getUI()).getDivider();
+        return ((BasicSplitPaneUI) getUI()).getDivider();
     }
 
 
@@ -178,7 +186,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         Object source = e.getSource();
 
 
-        if(source==window) {
+        if (source == window) {
             // Note: the window/split pane may not be visible when this method is called for the first time
 
             // Makes sure that windowWidth is never 0 in #componentMoved.
@@ -188,33 +196,32 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
     }
 
     public void componentMoved(ComponentEvent e) {
-        if(e.getSource() == getDividerComponent()) {
+        if (e.getSource() == getDividerComponent()) {
             // Ignore this event if the divider's location hasn't changed, or if the initial divider's location
             // hasn't been set yet
-            if(lastDividerLocation == -1) {
+            if (lastDividerLocation == -1) {
                 lastDividerLocation = getDividerLocation();
                 return;
-            }
-            else if(lastDividerLocation==getDividerLocation())
+            } else if (lastDividerLocation == getDividerLocation())
                 return;
 
             // This is a bit tricky: we want to ignore events triggered by the divider moving because the window was
             // resized in such a way that it didn't have a choice (window width smaller than current divider location).
             // Such events are managed by the componentResized method.
-            if(windowWidth != window.getWidth()) {
+            if (windowWidth != window.getWidth()) {
                 windowWidth = window.getWidth();
                 return;
             }
 
             // Divider has been moved, calculate new split ratio
             lastDividerLocation = getDividerLocation();
-            splitRatio = lastDividerLocation / (float)(getOrientation()==HORIZONTAL_SPLIT?getWidth():getHeight());
+            splitRatio = lastDividerLocation / (float) (getOrientation() == HORIZONTAL_SPLIT ? getWidth() : getHeight());
         }
     }
 
     public void componentShown(ComponentEvent e) {
         // Called when the window is made visible
-        if(e.getSource()==window) {
+        if (e.getSource() == window) {
             // Set initial divider's location
             updateDividerLocation();
         }
@@ -229,7 +236,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
     ///////////////////////////
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        if(DesktopManager.isLeftMouseButton(mouseEvent) && mouseEvent.getClickCount()==2)
+        if (DesktopManager.isLeftMouseButton(mouseEvent) && mouseEvent.getClickCount() == 2)
             setSplitRatio(0.5f);
     }
 

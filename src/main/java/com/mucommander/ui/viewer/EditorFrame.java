@@ -18,12 +18,11 @@
 
 package com.mucommander.ui.viewer;
 
-import java.awt.Dimension;
-import java.awt.Image;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
+
+import java.awt.*;
 
 
 /**
@@ -35,14 +34,14 @@ import com.mucommander.ui.main.MainFrame;
 public class EditorFrame extends FileFrame {
 
     private FileEditor editor;
-	
+
     private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
 
     /**
      * Creates a new EditorFrame to start viewing the given file.
-     *
+     * <p>
      * <p>This constructor has package access only, EditorFrame can to be created by
-     * {@link EditorRegistrar#createEditorFrame(MainFrame,AbstractFile,Image)}.
+     * {@link EditorRegistrar#createEditorFrame(MainFrame, AbstractFile, Image)}.
      */
     EditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         super(mainFrame, file, icon);
@@ -59,22 +58,22 @@ public class EditorFrame extends FileFrame {
 
     @Override
     public void dispose() {
-    	if(editor==null || editor.askSave())   /// Returns true if the file does not have any unsaved change or if the user refused to save the changes
-    		super.dispose();
+        if (editor == null || editor.askSave())   /// Returns true if the file does not have any unsaved change or if the user refused to save the changes
+            super.dispose();
     }
-    
+
     @Override
-	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
-		return editor = EditorRegistrar.createFileEditor(file, EditorFrame.this);
-	}
+    protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
+        return editor = EditorRegistrar.createFileEditor(file, EditorFrame.this);
+    }
 
     @Override
     protected String getGenericErrorDialogTitle() {
-    	return Translator.get("file_editor.edit_error_title");
+        return Translator.get("file_editor.edit_error_title");
     }
 
     @Override
     protected String getGenericErrorDialogMessage() {
-    	return Translator.get("file_editor.edit_error");
+        return Translator.get("file_editor.edit_error");
     }
 }

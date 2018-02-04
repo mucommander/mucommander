@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -66,52 +66,52 @@ public abstract class Archiver {
 
     /** Boolean array describing for each format if it can store more than one entry */
     private final static boolean SUPPORTS_MANY_ENTRIES[] = {
-        true,
-        false,
-        false,
-        true,
-        true,
-        true
+            true,
+            false,
+            false,
+            true,
+            true,
+            true
     };
-	
+
     /** Array of single entry formats: many entries formats are considered to be single entry formats as well */
     private final static int SINGLE_ENTRY_FORMATS[] = {
-        ZIP_FORMAT,
-        GZ_FORMAT,
-        BZ2_FORMAT,
-        TAR_FORMAT,
-        TAR_GZ_FORMAT,
-        TAR_BZ2_FORMAT
+            ZIP_FORMAT,
+            GZ_FORMAT,
+            BZ2_FORMAT,
+            TAR_FORMAT,
+            TAR_GZ_FORMAT,
+            TAR_BZ2_FORMAT
     };
 
     /** Array of many entries formats */
     private final static int MANY_ENTRIES_FORMATS[] = {
-        ZIP_FORMAT,
-        TAR_FORMAT,
-        TAR_GZ_FORMAT,
-        TAR_BZ2_FORMAT
+            ZIP_FORMAT,
+            TAR_FORMAT,
+            TAR_GZ_FORMAT,
+            TAR_BZ2_FORMAT
     };
-	
+
     /** Array of format names */
     private final static String FORMAT_NAMES[] = {
-        "Zip",
-        "Gzip",
-        "Bzip2",
-        "Tar",
-        "Tar/Gzip",
-        "Tar/Bzip2"
+            "Zip",
+            "Gzip",
+            "Bzip2",
+            "Tar",
+            "Tar/Gzip",
+            "Tar/Bzip2"
     };
 
     /** Array of format extensions */
     private final static String FORMAT_EXTENSIONS[] = {
-        "zip",
-        "gz",
-        "bz2",
-        "tar",
-        "tar.gz",
-        "tar.bz2"
+            "zip",
+            "gz",
+            "bz2",
+            "tar",
+            "tar.gz",
+            "tar.bz2"
     };
-	
+
 
     /** The underlying stream this archiver is writing to */
     protected OutputStream out;
@@ -119,8 +119,8 @@ public abstract class Archiver {
     protected int format;
     /** Archive format's name of this Archiver */
     protected String formatName;
-	
-	
+
+
     /**
      * Creates a new Archiver.
      *
@@ -139,22 +139,22 @@ public abstract class Archiver {
         return out;
     }
 
-    
+
     /**
      * Returns the archiver format used by this Archiver. See format constants.
      */
     public int getFormat() {
         return this.format;
     }
-	
+
     /**
      * Sets the archiver format used by this Archiver, for internal use only.
      */
     private void setFormat(int format) {
         this.format = format;
     }
-	
-	
+
+
     /**
      * Returns the name of the archive format used by this Archiver.
      */
@@ -162,7 +162,7 @@ public abstract class Archiver {
         return FORMAT_NAMES[this.format];
     }
 
-	
+
     /**
      * Returns true if the format used by this Archiver can store more than one entry.
      */
@@ -203,11 +203,11 @@ public abstract class Archiver {
     protected String normalizePath(String entryPath, boolean isDirectory) {
         // Replace any \ character by /
         entryPath = entryPath.replace('\\', '/');
-		
+
         // If entry is a directory, make sure the path contains a trailing / 
-        if(isDirectory && !entryPath.endsWith("/"))
+        if (isDirectory && !entryPath.endsWith("/"))
             entryPath += "/";
-		
+
         return entryPath;
     }
 
@@ -234,21 +234,20 @@ public abstract class Archiver {
     public static Archiver getArchiver(AbstractFile file, int format) throws IOException, UnsupportedFileOperationException {
         OutputStream out = null;
 
-        if(file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
+        if (file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
             try {
                 // Important: if the file exists, it has to be overwritten as AbstractFile#getRandomAccessOutputStream()
                 // does NOT overwrite the file. This fixes bug #30.
-                if(file.exists())
+                if (file.exists())
                     file.delete();
-                
+
                 out = new BufferedRandomOutputStream(file.getRandomAccessOutputStream());
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Fall back to a regular OutputStream
             }
         }
 
-        if(out==null)
+        if (out == null)
             out = new BufferedOutputStream(file.getOutputStream());
 
         return getArchiver(out, format);
@@ -269,7 +268,7 @@ public abstract class Archiver {
     public static Archiver getArchiver(OutputStream out, int format) throws IOException {
         Archiver archiver;
 
-        switch(format) {
+        switch (format) {
             case ZIP_FORMAT:
                 archiver = new ZipArchiver(out);
                 break;
@@ -292,7 +291,7 @@ public abstract class Archiver {
             default:
                 return null;
         }
-		
+
         archiver.setFormat(format);
 
         return archiver;
@@ -325,10 +324,10 @@ public abstract class Archiver {
      * @param manyEntries if true, a list of many entries formats (a subset of single entry formats) will be returned
      */
     public static int[] getFormats(boolean manyEntries) {
-        return manyEntries? MANY_ENTRIES_FORMATS : SINGLE_ENTRY_FORMATS;
+        return manyEntries ? MANY_ENTRIES_FORMATS : SINGLE_ENTRY_FORMATS;
     }
 
-	
+
     /**
      * Returns the name of the given archive format. The returned name can be used for display in a GUI.
      *
@@ -338,7 +337,7 @@ public abstract class Archiver {
         return FORMAT_NAMES[format];
     }
 
-	
+
     /**
      * Returns the default archive format extension. Note: some formats such as Tar/Gzip have several common
      * extensions (e.g. tar.gz or tgz), the most common one will be returned.
@@ -348,8 +347,8 @@ public abstract class Archiver {
     public static String getFormatExtension(int format) {
         return FORMAT_EXTENSIONS[format];
     }
-	
-	
+
+
     /**
      * Returns true if the specified archive format supports storage of more than one entry.
      *
@@ -358,18 +357,18 @@ public abstract class Archiver {
     public static boolean formatSupportsManyFiles(int format) {
         return SUPPORTS_MANY_ENTRIES[format];
     }
-	
-	
+
+
     /**
      * Returns true if the specified archive format can store an optional comment.
      *
      * @param format an archive format	 
      */
     public static boolean formatSupportsComment(int format) {
-        return format==ZIP_FORMAT;
+        return format == ZIP_FORMAT;
     }
-	
-	
+
+
     //////////////////////
     // Abstract methods //
     //////////////////////
@@ -378,7 +377,7 @@ public abstract class Archiver {
      * Creates a new entry in the archive using the given relative path and file attributes, and returns an
      * <code>OutputStream</code> to write the entry's contents. The specified file attributes are used to determine
      * whether the entry is a directory or a regular file, and to set the entry's size, permissions and date.
-     * 
+     *
      * <p>If the entry is a regular file (not a directory), an OutputStream which can be used to write the contents
      * of the entry will be returned, <code>null</code> otherwise. The OutputStream <b>must not</b> be closed once
      * it has been used (Archiver takes care of this), only the {@link #close() close} method has to be called when

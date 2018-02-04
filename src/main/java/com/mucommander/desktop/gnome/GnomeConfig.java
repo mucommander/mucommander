@@ -18,12 +18,12 @@
 
 package com.mucommander.desktop.gnome;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Provides access to the GNOME configuration, using the <code>gconftool</code> command.
@@ -31,9 +31,11 @@ import org.slf4j.LoggerFactory;
  * @author Maxence Bernard
  */
 public class GnomeConfig {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeConfig.class);
-	
-    /** Name of the command to invoke for retrieving configuration values */
+    private static final Logger LOGGER = LoggerFactory.getLogger(GnomeConfig.class);
+
+    /**
+     * Name of the command to invoke for retrieving configuration values
+     */
     private static String CONFIG_COMMAND = "gconftool";
 
     /**
@@ -42,31 +44,32 @@ public class GnomeConfig {
      * @param key key to the configuration value to retrieve.
      * @return the configuration value corresponding to the given key, <code>null</code> if this key has no value.
      * @throws IOException if an error occurred while invoking the <code>gconftool</code> command, for instance if the
-     * command isn't available in the path.
+     *                     command isn't available in the path.
      */
     public static String getValue(String key) throws IOException {
         BufferedReader br = null;
         try {
-            Process process = Runtime.getRuntime().exec(CONFIG_COMMAND+" -g "+key);
+            Process process = Runtime.getRuntime().exec(CONFIG_COMMAND + " -g " + key);
 
             br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = br.readLine();
 
-            LOGGER.debug(CONFIG_COMMAND+" returned '"+line+"' for "+key);
+            LOGGER.debug(CONFIG_COMMAND + " returned '" + line + "' for " + key);
 
-            if(line==null || (line=line.trim()).equals("") || line.startsWith("No value set for"))
+            if (line == null || (line = line.trim()).equals("") || line.startsWith("No value set for"))
                 return null;
 
             return line;
-        }
-        catch(IOException e) {
-            LOGGER.debug("Error while retrieving value for "+key, e);
+        } catch (IOException e) {
+            LOGGER.debug("Error while retrieving value for " + key, e);
 
             throw e;
-        }
-        finally {
-            if(br!=null)
-                try { br.close(); } catch(IOException e) {}
+        } finally {
+            if (br != null)
+                try {
+                    br.close();
+                } catch (IOException e) {
+                }
         }
     }
 }

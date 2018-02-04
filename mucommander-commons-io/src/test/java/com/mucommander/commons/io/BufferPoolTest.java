@@ -33,7 +33,7 @@ public class BufferPoolTest {
 
     /**
      * Tests <code>BufferPool</code> with byte array (<code>byte[]</code>) buffers.
-     *
+     * <p>
      * <p>This method invokes {@link #testBuffer(com.mucommander.commons.io.BufferPool.BufferFactory)} with a
      * {@link BufferPool.ByteArrayFactory} instance.</p>
      */
@@ -44,7 +44,7 @@ public class BufferPoolTest {
 
     /**
      * Tests <code>BufferPool</code> with char array (<code>char[]</code>) buffers.
-     *
+     * <p>
      * <p>This method invokes {@link #testBuffer(com.mucommander.commons.io.BufferPool.BufferFactory)} with a
      * {@link BufferPool.CharArrayFactory} instance.</p>
      */
@@ -55,7 +55,7 @@ public class BufferPoolTest {
 
     /**
      * Tests <code>BufferPool</code> with <code>ByteBuffer</code> buffers.
-     *
+     * <p>
      * <p>This method invokes {@link #testBuffer(com.mucommander.commons.io.BufferPool.BufferFactory)} with a
      * {@link BufferPool.ByteBufferFactory} instance.</p>
      */
@@ -66,7 +66,7 @@ public class BufferPoolTest {
 
     /**
      * Tests <code>BufferPool</code> with <code>CharBuffer</code> buffers.
-     *
+     * <p>
      * <p>This method invokes {@link #testBuffer(com.mucommander.commons.io.BufferPool.BufferFactory)} with a
      * {@link BufferPool.CharBufferFactory} instance.</p>
      */
@@ -77,7 +77,7 @@ public class BufferPoolTest {
 
     /**
      * Tests <code>BufferPool</code> with <code>ByteBuffer</code> buffers.
-     *
+     * <p>
      * <p>This test assumes that no buffer with size=={@link #TEST_BUFFER_SIZE_1} or size=={@link #TEST_BUFFER_SIZE_2}
      * exist in the pool when the test starts. It also assumes that no other thread uses <code>BufferPool</code> while
      * the test is being performed. <code>BufferPool</code> will be left in the same state as it was right before the
@@ -97,7 +97,7 @@ public class BufferPoolTest {
         // Create a new buffer with size=TEST_BUFFER_SIZE_1, assert that it is different from the first one
         Object buffer2 = BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_1);
         assertBufferSize(buffer2, factory, TEST_BUFFER_SIZE_1);
-        assert buffer2!=buffer1;
+        assert buffer2 != buffer1;
 
         // Create a new buffer with size=TEST_BUFFER_SIZE_2
         Object buffer3 = BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_2);
@@ -114,31 +114,31 @@ public class BufferPoolTest {
 
         // Assert that releasing buffer3 and requesting a buffer with size=TEST_BUFFER_SIZE_2 brings back buffer3
         BufferPool.releaseBuffer(buffer3, factory);
-        assertBufferCount(originalBufferCount+1, factory);
+        assertBufferCount(originalBufferCount + 1, factory);
         assert BufferPool.containsBuffer(buffer3, factory);
-        assert buffer3==BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_2);
+        assert buffer3 == BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_2);
         assertBufferCount(originalBufferCount, factory);
         assert !BufferPool.containsBuffer(buffer3, factory);
 
         // Release all buffer instances and assert that the buffer count grows accordingly
         Object[] buffers = new Object[]{buffer2, buffer3, buffer1};
-        for(int b=0; b<buffers.length; b++) {
+        for (int b = 0; b < buffers.length; b++) {
             // Call releaseBuffer twice and assert that the buffer is added to the pool only the first time
             assert BufferPool.releaseBuffer(buffers[b], factory);
             assert BufferPool.containsBuffer(buffers[b], factory);
-            assertBufferCount(originalBufferCount+(b+1), factory);
+            assertBufferCount(originalBufferCount + (b + 1), factory);
 
             assert !BufferPool.releaseBuffer(buffers[b], factory);
             assert BufferPool.containsBuffer(buffers[b], factory);
-            assertBufferCount(originalBufferCount+(b+1), factory);
+            assertBufferCount(originalBufferCount + (b + 1), factory);
         }
 
         // Retrieve all the buffers we created to leave BufferPool as it was before the test
         // and assert that the buffer count diminishes accordingly
         buffers = new Object[]{buffer3, buffer1, buffer2};
-        for(int b=0; b<buffers.length; b++) {
+        for (int b = 0; b < buffers.length; b++) {
             BufferPool.getBuffer(factory, getBufferLength(buffers[b], factory));
-            assertBufferCount(originalBufferCount+(3-b-1), factory);
+            assertBufferCount(originalBufferCount + (3 - b - 1), factory);
         }
 
         // Test the initial default buffer size
@@ -159,9 +159,9 @@ public class BufferPoolTest {
         BufferPool.setMaxPoolSize(TEST_MAX_POOL_SIZE);
         assert TEST_MAX_POOL_SIZE == BufferPool.getMaxPoolSize();
         long bufferSize = getBufferSize(BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_1), factory);    // in bytes
-        int nbBuffers = (int)(TEST_MAX_POOL_SIZE/bufferSize);
+        int nbBuffers = (int) (TEST_MAX_POOL_SIZE / bufferSize);
         buffers = new Object[nbBuffers];
-        for(int i=0; i<nbBuffers; i++)
+        for (int i = 0; i < nbBuffers; i++)
             buffers[i] = BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_1);
 
         Object extraBuffer = BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_1);
@@ -169,10 +169,10 @@ public class BufferPoolTest {
         assert originalPoolSize == BufferPool.getPoolSize();
         long lastPoolSize = originalPoolSize;
         long newPoolSize;
-        for(int i=0; i<nbBuffers; i++) {
+        for (int i = 0; i < nbBuffers; i++) {
             assert BufferPool.releaseBuffer(buffers[i], factory);
             newPoolSize = BufferPool.getPoolSize();
-            assert lastPoolSize+bufferSize == newPoolSize;
+            assert lastPoolSize + bufferSize == newPoolSize;
             lastPoolSize = newPoolSize;
         }
         // At this point, the BufferPool should be maxed out, try adding one more buffer and assert that this fails
@@ -180,7 +180,7 @@ public class BufferPoolTest {
 
         // Retrieve all the buffers we created to leave BufferPool as it was before the test
         // and assert that the pool returns to its original size
-        for(int i=0; i<nbBuffers; i++)
+        for (int i = 0; i < nbBuffers; i++)
             BufferPool.getBuffer(factory, TEST_BUFFER_SIZE_1);
 
         assert originalPoolSize == BufferPool.getPoolSize();
@@ -191,8 +191,8 @@ public class BufferPoolTest {
     /**
      * Asserts that the given buffer's size matches the specified one.
      *
-     * @param buffer the buffer to test
-     * @param factory the factory that was used to create the buffer
+     * @param buffer       the buffer to test
+     * @param factory      the factory that was used to create the buffer
      * @param expectedSize the expected buffer size
      */
     private void assertBufferSize(Object buffer, BufferPool.BufferFactory factory, int expectedSize) {
@@ -202,7 +202,7 @@ public class BufferPoolTest {
     /**
      * Returns the length of the given buffer, as defined by {@link com.mucommander.commons.io.BufferPool.BufferContainer#getLength()}.
      *
-     * @param buffer the buffer for which to return the length
+     * @param buffer  the buffer for which to return the length
      * @param factory the factory that was used to create the buffer
      * @return the length of the given buffer
      */
@@ -213,7 +213,7 @@ public class BufferPoolTest {
     /**
      * Returns the size in bytes of the given buffer, as defined by {@link com.mucommander.commons.io.BufferPool.BufferContainer#getSize()}.
      *
-     * @param buffer the buffer for which to return the size
+     * @param buffer  the buffer for which to return the size
      * @param factory the factory that was used to create the buffer
      * @return the size in bytes of the given buffer
      */
@@ -225,7 +225,7 @@ public class BufferPoolTest {
      * Asserts that BufferPool contains <code>expectedCount</code> buffers of the kind corresponding to the factory.
      *
      * @param expectedCount the expected number of buffers
-     * @param factory the factory corresponding to the kind of buffer to count
+     * @param factory       the factory corresponding to the kind of buffer to count
      */
     private void assertBufferCount(int expectedCount, BufferPool.BufferFactory factory) {
         assert expectedCount == BufferPool.getBufferCount(factory);

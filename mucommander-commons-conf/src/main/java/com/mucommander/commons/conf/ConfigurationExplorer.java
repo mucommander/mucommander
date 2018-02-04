@@ -20,20 +20,24 @@ package com.mucommander.commons.conf;
 
 /**
  * Helper class meant for instances of {@link Configuration} to explore their own configuration tree.
+ *
  * @author Nicolas Rinaudo
  */
 class ConfigurationExplorer {
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Current section. */
+    /**
+     * Current section.
+     */
     private ConfigurationSection section;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new explorer on the specified section.
+     *
      * @param root section from which to start exploring.
      */
     public ConfigurationExplorer(ConfigurationSection root) {
@@ -41,11 +45,12 @@ class ConfigurationExplorer {
     }
 
 
-
     // - Exploration methods -------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the current section.
+     *
      * @return the current section.
      */
     public ConfigurationSection getSection() {
@@ -54,18 +59,19 @@ class ConfigurationExplorer {
 
     /**
      * Move to the specified section.
-     * @param  name   name of the current section's subsection in which to move.
-     * @param  create if <code>true</code> and <code>name</code> doesn't exist, it will be created.
-     * @return        <code>true</code> if we could move to <code>name</code>, <code>false</code> otherwise.
+     *
+     * @param name   name of the current section's subsection in which to move.
+     * @param create if <code>true</code> and <code>name</code> doesn't exist, it will be created.
+     * @return <code>true</code> if we could move to <code>name</code>, <code>false</code> otherwise.
      */
     public boolean moveTo(String name, boolean create) {
         ConfigurationSection buffer; // Buffer for the subsection.
 
         // Checks whether the requested subsection exists.
-        if((buffer = section.getSection(name)) == null) {
+        if ((buffer = section.getSection(name)) == null) {
             // If it doesn't exist, either return false or create it depending on
             // parameters.
-            if(create) {
+            if (create) {
                 section = section.addSection(name);
                 return true;
             }

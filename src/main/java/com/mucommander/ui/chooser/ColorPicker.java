@@ -39,7 +39,9 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
 
     private WeakHashMap<ColorChangeListener, ?> listeners = new WeakHashMap<ColorChangeListener, Object>();
 
-    /** True if this component is supported (java.awt.Robot can be used) */
+    /**
+     * True if this component is supported (java.awt.Robot can be used)
+     */
     private static boolean isSupported;
 
 
@@ -47,8 +49,7 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
         try {
             new Robot();
             isSupported = true;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // java.awt.Robot constructor throws an AWTException "if the platform configuration does not allow low-level input control."
             // In this case, isSupported will be false
         }
@@ -66,21 +67,20 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
 
 
     public void setActive(boolean active) {
-        if(active==isActive)
+        if (active == isActive)
             return;
 
         final Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-        if(active) {
-            if(!isVisible())
+        if (active) {
+            if (!isVisible())
                 return;
 
             try {
                 // Create a java.awt.Robot operating on the screen device that contains the window this component is in.
                 // Not sure what happens if the window spawns across 2 screens...
                 robot = new Robot(getTopLevelAncestor().getGraphicsConfiguration().getDevice());
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 // If Robot is not available, ColorPicker will simply be ineffective, clicking it won't do anything
                 return;
             }
@@ -92,14 +92,13 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     // Listen to all mouse events on the window that contains this button 
-                    toolkit.addAWTEventListener(ColorPicker.this, AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_EVENT_MASK);
+                    toolkit.addAWTEventListener(ColorPicker.this, AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
 
                     // Leave this button selected until a color is picked or this button is pressed again (to cancel) 
                     setSelected(true);
                 }
             });
-        }
-        else {
+        } else {
             // Stop listening to mouse events
             toolkit.removeAWTEventListener(this);
 
@@ -128,10 +127,10 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
 
 
     private void setPickerCursor(Color fillColor) {
-        ImageIcon cursorIcon = (ImageIcon)getIcon();
+        ImageIcon cursorIcon = (ImageIcon) getIcon();
         int iconWidth = cursorIcon.getIconWidth();
         int iconHeight = cursorIcon.getIconHeight();
-        int colorRGB  = fillColor.getRGB();
+        int colorRGB = fillColor.getRGB();
 
         // Retrieve the cursor icon fill mask as an alpha-enabled BufferedImage
         BufferedImage iconMaskBi = new BufferedImage(iconWidth, iconHeight, BufferedImage.TYPE_INT_ARGB);
@@ -139,10 +138,10 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
         g.drawImage(IconManager.getIcon(IconManager.COMMON_ICON_SET, "picker_mask.png").getImage(), 0, 0, null);
 
         // Replace solid (non-transparent) pixels with specified fill color
-        for(int y=0; y<iconHeight; y++) {
-            for(int x=0; x<iconWidth; x++) {
+        for (int y = 0; y < iconHeight; y++) {
+            for (int x = 0; x < iconWidth; x++) {
                 int rgba = iconMaskBi.getRGB(x, y);
-                if((rgba>>24)!=0)
+                if ((rgba >> 24) != 0)
                     iconMaskBi.setRGB(x, y, colorRGB);
             }
         }
@@ -153,7 +152,7 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
         g.drawImage(cursorIcon.getImage(), 0, 0, null);
         g.drawImage(iconMaskBi, 0, 0, null);
 
-        setCustomCursor(Toolkit.getDefaultToolkit().createCustomCursor(iconBi, new Point(0,15), getClass().getName()));
+        setCustomCursor(Toolkit.getDefaultToolkit().createCustomCursor(iconBi, new Point(0, 15), getClass().getName()));
     }
 
     private void setCustomCursor(Cursor cursor) {
@@ -162,7 +161,7 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
 
     private void fireColorPicked(Color color) {
         // Iterate on all listeners
-        for(ColorChangeListener listener : listeners.keySet())
+        for (ColorChangeListener listener : listeners.keySet())
             listener.colorChanged(new ColorChangeEvent(this, color));
     }
 
@@ -181,27 +180,27 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
     /////////////////////////////////////
 
     public void eventDispatched(AWTEvent awtEvent) {
-        if(awtEvent instanceof MouseEvent) {
-            MouseEvent mouseEvent = (MouseEvent)awtEvent;
+        if (awtEvent instanceof MouseEvent) {
+            MouseEvent mouseEvent = (MouseEvent) awtEvent;
 
             Point mousePoint = mouseEvent.getPoint();
-            Component source = (Component)mouseEvent.getSource();
+            Component source = (Component) mouseEvent.getSource();
 
             // Convert the mouse X/Y into screen coordinates
             SwingUtilities.convertPointToScreen(mousePoint, source);
 
-            int x = (int)mousePoint.getX();
-            int y = (int)mousePoint.getY();
+            int x = (int) mousePoint.getX();
+            int y = (int) mousePoint.getY();
 
             // Retrieve the color of the pixel the mouse is currently over
             Color color = robot.getPixelColor(x, y);
 
             int button = mouseEvent.getButton();
-            if(button!=MouseEvent.NOBUTTON) {
+            if (button != MouseEvent.NOBUTTON) {
                 // If left button was clicked (not released)
-                if(button==MouseEvent.BUTTON1 && (mouseEvent.getModifiers()&MouseEvent.MOUSE_CLICKED)!=0) {
+                if (button == MouseEvent.BUTTON1 && (mouseEvent.getModifiers() & MouseEvent.MOUSE_CLICKED) != 0) {
                     // If this color picker was clicked, cancel the color picking without firing an event
-                    if(source!=this)
+                    if (source != this)
                         fireColorPicked(color);
 
                     // Consume the event so that it doesn't get caught by a clicked component

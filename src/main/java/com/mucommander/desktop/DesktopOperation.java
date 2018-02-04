@@ -31,8 +31,8 @@ import java.io.IOException;
  * they can prove to be quite complex to understand and use. Before writing an implementation of
  * this interface, application developers should make sure they understand the following points:
  * <ul>
- *   <li>Generic execution</li>
- *   <li><i>Available</i> Vs <i>Supported</i></li>
+ * <li>Generic execution</li>
+ * <li><i>Available</i> Vs <i>Supported</i></li>
  * </ul>
  * </p>
  * <h3>Generic execution</h3>
@@ -45,7 +45,7 @@ import java.io.IOException;
  * </p>
  * <p>
  * At the time of writing, the API uses two different types of operations: {@link DesktopManager#BROWSE URL browsing}
- *  and {@link DesktopManager#OPEN local file opening}.
+ * and {@link DesktopManager#OPEN local file opening}.
  * Adapters have been provided for these: {@link UrlOperation} and {@link LocalFileOperation}.
  * </p>
  * <h3><i>Available</i> Vs <i>Supported</i></h3>
@@ -64,6 +64,7 @@ import java.io.IOException;
  * For example, an operation that deals with XML files only will be supported for any parameter that describes a local XML file,
  * but won't be available as it will refuse plain text files.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public interface DesktopOperation {
@@ -73,6 +74,7 @@ public interface DesktopOperation {
      * The returned value might be displayed to the user. It should thus be made as
      * human readable as possible and, if possible, localised.
      * </p>
+     *
      * @return the operation's name.
      */
     public String getName();
@@ -89,8 +91,9 @@ public interface DesktopOperation {
      * any and all HTTP URLs is available. However, an operation of type
      * {@link DesktopManager#OPEN} that only accepts XML files isn't.
      * </p>
+     *
      * @return <code>true</code> if the operation is available, <code>false</code> otherwise.
-     * @see    #canExecute(Object[])
+     * @see #canExecute(Object[])
      */
     public boolean isAvailable();
 
@@ -110,19 +113,20 @@ public interface DesktopOperation {
      * <p>
      * For example, a {@link DesktopManager#OPEN} operation that only accept XML files will return:
      * <ul>
-     *   <li>
-     *     <code>true</code> if the parameter array contains a single instance of either <code>java.io.File</code>,
-     *     <code>String</code> or {@link com.mucommander.commons.file.protocol.local.LocalFile} and that instance describes the
-     *     path to a valid XML file.
-     *   </li>
-     *   <li>
-     *     <code>false</code> if the specified parameters are not valid or if they do not describe the path to
-     *     a valid XML file.
-     *   </li>
+     * <li>
+     * <code>true</code> if the parameter array contains a single instance of either <code>java.io.File</code>,
+     * <code>String</code> or {@link com.mucommander.commons.file.protocol.local.LocalFile} and that instance describes the
+     * path to a valid XML file.
+     * </li>
+     * <li>
+     * <code>false</code> if the specified parameters are not valid or if they do not describe the path to
+     * a valid XML file.
+     * </li>
      * </ul>
      * </p
-     * @param  target parameters to check.
-     * @return        <code>true</code> if the operation can be executed with the specified parameters, <code>false</code> otherwise.
+     *
+     * @param target parameters to check.
+     * @return <code>true</code> if the operation can be executed with the specified parameters, <code>false</code> otherwise.
      */
     public boolean canExecute(Object[] target);
 
@@ -132,7 +136,8 @@ public interface DesktopOperation {
      * There is no guarantee that this method is available for the specified parameters. This must be checked
      * through {@link #canExecute(Object[])}.
      * </p>
-     * @param  target                        parameters on which to execute the operation.
+     *
+     * @param target parameters on which to execute the operation.
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported for the specified parameters.
      */

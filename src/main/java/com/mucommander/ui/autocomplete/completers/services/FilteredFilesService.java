@@ -26,19 +26,19 @@ import java.io.IOException;
 /**
  * This <code>FilesService</code> returns filtered files in a given directory,
  * according to a certain <code>FileFilter</code>.
- * 
+ *
  * @author Arik Hadas
  */
 
 public class FilteredFilesService extends FilesService {
-	private FileFilter fileFilter;
-	
-	public FilteredFilesService(FileFilter fileFilter) {
-		this.fileFilter = fileFilter;
-	}
+    private FileFilter fileFilter;
 
-	@Override
+    public FilteredFilesService(FileFilter fileFilter) {
+        this.fileFilter = fileFilter;
+    }
+
+    @Override
     protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
-		return fileFilter.filter(directory.ls());
-	}
+        return fileFilter.filter(directory.ls());
+    }
 }

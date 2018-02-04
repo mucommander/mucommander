@@ -40,13 +40,13 @@ public class HDFSPanel extends ServerPanel {
 
     private JTextField serverField;
     private JTextField usernameField;
-//    private JTextField groupField;
+    //    private JTextField groupField;
     private JTextField initialDirField;
     private JSpinner portSpinner;
 
     private static String lastServer = "";
     private static String lastUsername = HDFSFile.getDefaultUsername();
-//    private static String lastGroup = HDFSFile.getDefaultGroup();
+    //    private static String lastGroup = HDFSFile.getDefaultGroup();
     private static String lastInitialDir = "/";
     private static int lastPort = FileURL.getRegisteredHandler(FileProtocols.HDFS).getStandardPort();
 
@@ -100,10 +100,10 @@ public class HDFSPanel extends ServerPanel {
     @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
-        if(!lastInitialDir.startsWith("/"))
-            lastInitialDir = "/"+lastInitialDir;
+        if (!lastInitialDir.startsWith("/"))
+            lastInitialDir = "/" + lastInitialDir;
 
-        FileURL url = FileURL.getFileURL(FileProtocols.HDFS+"://"+lastServer+lastInitialDir);
+        FileURL url = FileURL.getFileURL(FileProtocols.HDFS + "://" + lastServer + lastInitialDir);
 
         // Set user and group
         url.setCredentials(new Credentials(lastUsername, ""));
@@ -124,8 +124,10 @@ public class HDFSPanel extends ServerPanel {
     public void dialogValidated() {
         // Commits the current spinner value in case it was being edited and 'enter' was pressed
         // (the spinner value would otherwise not be committed)
-        try { portSpinner.commitEdit(); }
-        catch(ParseException e) { }
+        try {
+            portSpinner.commitEdit();
+        } catch (ParseException e) {
+        }
 
         updateValues();
     }

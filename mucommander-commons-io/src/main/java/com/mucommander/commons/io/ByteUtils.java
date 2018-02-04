@@ -28,13 +28,13 @@ public class ByteUtils {
     /**
      * Sets/unsets a bit in the given integer.
      *
-     * @param i the permission int
-     * @param bit the bit to set
+     * @param i       the permission int
+     * @param bit     the bit to set
      * @param enabled true to enable the bit, false to disable it
      * @return the modified permission int
      */
     public static int setBit(int i, int bit, boolean enabled) {
-        if(enabled)
+        if (enabled)
             i |= bit;
         else
             i &= ~bit;
@@ -55,9 +55,9 @@ public class ByteUtils {
 
         int bytesLen = bytes.length;
         String hexByte;
-        for(int i=0; i<bytesLen; i++) {
+        for (int i = 0; i < bytesLen; i++) {
             hexByte = Integer.toHexString(bytes[i] & 0xFF);
-            if(hexByte.length()==1)
+            if (hexByte.length() == 1)
                 sb.append('0');
             sb.append(hexByte);
         }

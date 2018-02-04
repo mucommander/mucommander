@@ -32,7 +32,7 @@ public class StreamUtils {
      * This method is a shorthand for {@link #copyStream(java.io.InputStream, java.io.OutputStream, int)} called with a
      * {@link BufferPool#getDefaultBufferSize() default buffer size}.
      *
-     * @param in the InputStream to read from
+     * @param in  the InputStream to read from
      * @param out the OutputStream to write to
      * @return the number of bytes that were copied
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
@@ -45,8 +45,8 @@ public class StreamUtils {
      * This method is a shorthand for {@link #copyStream(java.io.InputStream, java.io.OutputStream, int, long)} called
      * with a {@link Long#MAX_VALUE}.
      *
-     * @param in the InputStream to read from
-     * @param out the OutputStream to write to
+     * @param in         the InputStream to read from
+     * @param out        the OutputStream to write to
      * @param bufferSize size of the buffer to use, in bytes
      * @return the number of bytes that were copied
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
@@ -54,15 +54,15 @@ public class StreamUtils {
     public static long copyStream(InputStream in, OutputStream out, int bufferSize) throws FileTransferException {
         return copyStream(in, out, bufferSize, Long.MAX_VALUE);
     }
-    
+
     /**
      * Shorthand for {@link #copyStream(InputStream, OutputStream, byte[], long)} called with a buffer of the specified
      * size retrieved from {@link BufferPool}.
      *
-     * @param in the InputStream to read from
-     * @param out the OutputStream to write to
+     * @param in         the InputStream to read from
+     * @param out        the OutputStream to write to
      * @param bufferSize size of the buffer to use, in bytes
-     * @param length number of bytes to copy from InputStream
+     * @param length     number of bytes to copy from InputStream
      * @return the number of bytes that were copied
      * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
      */
@@ -71,29 +71,28 @@ public class StreamUtils {
         byte buffer[] = BufferPool.getByteArray(bufferSize);
         try {
             return copyStream(in, out, buffer, length);
-        }
-        finally {
+        } finally {
             // Make the buffer available for further use
             BufferPool.releaseByteArray(buffer);
         }
     }
-    
+
     /**
      * Copies up to <code>length</code> bytes from the given <code>InputStream</code> to the specified
-     * </code>OutputStream</code>, less if the end-of-file was reached before that. 
+     * </code>OutputStream</code>, less if the end-of-file was reached before that.
      * This method does *NOT* close any of the given streams.
-     *
+     * <p>
      * <p>Read and write operations use the specified buffer, making the use of a <code>BufferedInputStream</code>
      * unnecessary. A <code>BufferedOutputStream</code> also isn't necessary, unless this method
      * is called repeatedly with the same <code>OutputStream</code> and with potentially small <code>InputStream</code>
      * (smaller than the buffer's size): in this case, providing a <code>BufferedOutputStream</code> will further
      * improve performance by grouping calls to the underlying <code>OutputStream</code> write method.</p>
-     *
+     * <p>
      * <p>Copy progress can optionally be monitored by supplying a {@link com.mucommander.commons.io.CounterInputStream} and/or
      * {@link com.mucommander.commons.io.CounterOutputStream}.</p>
      *
-     * @param in the InputStream to read from
-     * @param out the OutputStream to write to
+     * @param in     the InputStream to read from
+     * @param out    the OutputStream to write to
      * @param buffer buffer to use for copying
      * @param length number of bytes to copy from InputStream
      * @return the number of bytes that were copied
@@ -104,21 +103,19 @@ public class StreamUtils {
         int nbRead;
         long totalRead = 0;
 
-        while(length>0) {
+        while (length > 0) {
             try {
-                nbRead = in.read(buffer, 0, (int)Math.min(buffer.length, length));	// the result of min will be int
-            }
-            catch(IOException e) {
+                nbRead = in.read(buffer, 0, (int) Math.min(buffer.length, length));    // the result of min will be int
+            } catch (IOException e) {
                 throw new FileTransferException(FileTransferError.READING_SOURCE);
             }
 
-            if(nbRead==-1)
+            if (nbRead == -1)
                 break;
 
             try {
                 out.write(buffer, 0, nbRead);
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 throw new FileTransferException(FileTransferError.WRITING_DESTINATION, totalRead);
             }
 
@@ -133,12 +130,12 @@ public class StreamUtils {
      * This method is a shorthand for {@link #transcode(java.io.InputStream, String, java.io.OutputStream, String, int)}
      * called with a {@link BufferPool#getDefaultBufferSize() default buffer size}.
      *
-     * @param in the InputStream to read from
-     * @param inCharset the source charset
-     * @param out the OutputStream to write to
+     * @param in         the InputStream to read from
+     * @param inCharset  the source charset
+     * @param out        the OutputStream to write to
      * @param outCharset the destination charset
      * @return the number of bytes that were transcoded
-     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
+     * @throws FileTransferException        if something went wrong while reading from or writing to one of the provided streams
      * @throws UnsupportedEncodingException if any of the two charsets are not supported by the JVM
      */
     public static long transcode(InputStream in, String inCharset, OutputStream out, String outCharset) throws FileTransferException, UnsupportedEncodingException {
@@ -149,17 +146,17 @@ public class StreamUtils {
      * Converts a stream from a charset to another, copying the contents of the given <code>InputStream</code> to the
      * <code>OutputStream</code>. A {@link java.io.UnsupportedEncodingException} is thrown if any of the two charsets
      * are not supported by the JVM.
-     *
+     * <p>
      * <p>Apart from the transcoding part, this method operates exactly like {@link #copyStream(java.io.InputStream, java.io.OutputStream, int)}.
      * In particular, none of the given streams are closed.</p>
      *
-     * @param in the InputStream to read the data from
-     * @param inCharset the source charset
-     * @param out the OutputStream to write to
+     * @param in         the InputStream to read the data from
+     * @param inCharset  the source charset
+     * @param out        the OutputStream to write to
      * @param outCharset the destination charset
      * @param bufferSize size of the buffer to use, in bytes
      * @return the number of bytes that were transcoded
-     * @throws FileTransferException if something went wrong while reading from or writing to one of the provided streams
+     * @throws FileTransferException        if something went wrong while reading from or writing to one of the provided streams
      * @throws UnsupportedEncodingException if any of the two charsets are not supported by the JVM
      * @see #copyStream(java.io.InputStream, java.io.OutputStream, int)
      * @see java.nio.charset.Charset#isSupported(String)
@@ -175,23 +172,21 @@ public class StreamUtils {
             int nbRead;
             long totalRead = 0;
 
-            while(true) {
+            while (true) {
                 try {
                     nbRead = isr.read(buffer, 0, buffer.length);
-                }
-                catch(IOException e) {
+                } catch (IOException e) {
                     throw new FileTransferException(FileTransferError.READING_SOURCE);
                 }
 
-                if(nbRead==-1)
+                if (nbRead == -1)
                     break;
 
                 try {
                     osw.write(buffer, 0, nbRead);
                     // Let's not forget to flush as the writer will *not* be closed (to avoid closing the OutputStream)
                     osw.flush();
-                }
-                catch(IOException e) {
+                } catch (IOException e) {
                     throw new FileTransferException(FileTransferError.WRITING_DESTINATION);
                 }
 
@@ -199,8 +194,7 @@ public class StreamUtils {
             }
 
             return totalRead;
-        }
-        finally {
+        } finally {
             // Make the buffer available for further use
             BufferPool.releaseCharArray(buffer);
         }
@@ -210,9 +204,9 @@ public class StreamUtils {
      * This method is a shorthand for {@link #fillWithConstant(java.io.OutputStream, byte, long, int)} called with a
      * {@link BufferPool#getDefaultBufferSize default buffer size}.
      *
-     * @param out the OutputStream to write to
+     * @param out   the OutputStream to write to
      * @param value the byte constant to write len times
-     * @param len number of bytes to write
+     * @param len   number of bytes to write
      * @throws java.io.IOException if an error occurred while writing
      */
     public static void fillWithConstant(OutputStream out, byte value, long len) throws IOException {
@@ -223,9 +217,9 @@ public class StreamUtils {
      * Writes the specified byte constant <code>len</code> times to the given <code>OutputStream</code>.
      * This method does *NOT* close the stream when it is finished.
      *
-     * @param out the OutputStream to write to
-     * @param value the byte constant to write len times
-     * @param len number of bytes to write
+     * @param out        the OutputStream to write to
+     * @param value      the byte constant to write len times
+     * @param len        number of bytes to write
      * @param bufferSize size of the buffer to use, in bytes
      * @throws java.io.IOException if an error occurred while writing
      */
@@ -234,21 +228,20 @@ public class StreamUtils {
         byte buffer[] = BufferPool.getByteArray(bufferSize);
 
         // Fill the buffer with the constant byte value, not necessary if the value is zero
-        if(value!=0) {
-            for(int i=0; i<bufferSize; i++)
+        if (value != 0) {
+            for (int i = 0; i < bufferSize; i++)
                 buffer[i] = value;
         }
 
         try {
             long remaining = len;
             int nbWrite;
-            while(remaining>0) {
-                nbWrite = (int)(remaining>bufferSize?bufferSize:remaining);
+            while (remaining > 0) {
+                nbWrite = (int) (remaining > bufferSize ? bufferSize : remaining);
                 out.write(buffer, 0, nbWrite);
                 remaining -= nbWrite;
             }
-        }
-        finally {
+        } finally {
             BufferPool.releaseByteArray(buffer);
         }
     }
@@ -257,11 +250,11 @@ public class StreamUtils {
      * This method is a shorthand for {@link #copyChunk(RandomAccessInputStream, RandomAccessOutputStream, long, long, long, int)}
      * called with a {@link BufferPool#getDefaultBufferSize default buffer size}.
      *
-     * @param rais the source stream
-     * @param raos the destination stream
-     * @param srcOffset offset to the beginning of the chunk in the source stream
+     * @param rais       the source stream
+     * @param raos       the destination stream
+     * @param srcOffset  offset to the beginning of the chunk in the source stream
      * @param destOffset offset to the beginning of the chunk in the destination stream
-     * @param length number of bytes to copy
+     * @param length     number of bytes to copy
      * @throws java.io.IOException if an error occurred while copying data
      */
     public static void copyChunk(RandomAccessInputStream rais, RandomAccessOutputStream raos, long srcOffset, long destOffset, long length) throws IOException {
@@ -272,11 +265,11 @@ public class StreamUtils {
      * Copies a chunk of data from the given {@link com.mucommander.commons.io.RandomAccessInputStream} to the specified
      * {@link com.mucommander.commons.io.RandomAccessOutputStream}.
      *
-     * @param rais the source stream
-     * @param raos the destination stream
-     * @param srcOffset offset to the beginning of the chunk in the source stream
+     * @param rais       the source stream
+     * @param raos       the destination stream
+     * @param srcOffset  offset to the beginning of the chunk in the source stream
      * @param destOffset offset to the beginning of the chunk in the destination stream
-     * @param length number of bytes to copy
+     * @param length     number of bytes to copy
      * @param bufferSize size of the buffer to use, in bytes
      * @throws java.io.IOException if an error occurred while copying data
      */
@@ -290,14 +283,13 @@ public class StreamUtils {
         try {
             long remaining = length;
             int nbBytes;
-            while(remaining>0) {
-                nbBytes = (int)(remaining<bufferSize?remaining:bufferSize);
+            while (remaining > 0) {
+                nbBytes = (int) (remaining < bufferSize ? remaining : bufferSize);
                 rais.readFully(buffer, 0, nbBytes);
                 raos.write(buffer, 0, nbBytes);
                 remaining -= nbBytes;
             }
-        }
-        finally {
+        } finally {
             BufferPool.releaseByteArray(buffer);
         }
     }
@@ -307,10 +299,10 @@ public class StreamUtils {
      * This method is a shorthand for {@link #readFully(java.io.InputStream, byte[], int, int)}.
      *
      * @param in the InputStream to read from
-     * @param b the buffer into which the stream data is copied
+     * @param b  the buffer into which the stream data is copied
      * @return the same byte array that was passed, returned only for convience
      * @throws java.io.EOFException if EOF is reached before all bytes have been read
-     * @throws IOException if an I/O error occurs
+     * @throws IOException          if an I/O error occurs
      */
     public static byte[] readFully(InputStream in, byte b[]) throws EOFException, IOException {
         return readFully(in, b, 0, b.length);
@@ -319,20 +311,20 @@ public class StreamUtils {
     /**
      * Reads exactly <code>len</code> bytes from the <code>InputStream</code> and copies them into the byte array,
      * starting at position <code>off</code>.
-     *
+     * <p>
      * <p>This method calls the <code>read()</code> method of the given stream until the requested number of bytes have
      * been skipped, or throws an {@link EOFException} if the end of file has been reached prematurely.</p>
      *
-     * @param in the InputStream to read from
-     * @param b the buffer into which the stream data is copied
+     * @param in  the InputStream to read from
+     * @param b   the buffer into which the stream data is copied
      * @param off specifies where the copy should start in the buffer
      * @param len the number of bytes to read
      * @return the same byte array that was passed, returned only for convience
      * @throws java.io.EOFException if EOF is reached before all bytes have been read
-     * @throws IOException if an I/O error occurs
+     * @throws IOException          if an I/O error occurs
      */
     public static byte[] readFully(InputStream in, byte b[], int off, int len) throws EOFException, IOException {
-        if(len>0) {
+        if (len > 0) {
             int totalRead = 0;
             do {
                 int nbRead = in.read(b, off + totalRead, len - totalRead);
@@ -348,33 +340,33 @@ public class StreamUtils {
 
     /**
      * Skips exactly <code>n</code>bytes from the given InputStream.
-     *
+     * <p>
      * <p>This method calls the <code>skip()</code> method of the given stream until the requested number of bytes have
      * been skipped, or throws an {@link EOFException} if the end of file has been reached prematurely.</p>
      *
      * @param in the InputStream to skip bytes from
-     * @param n the number of bytes to skip
+     * @param n  the number of bytes to skip
      * @throws java.io.EOFException if the EOF is reached before all bytes have been skipped
-     * @throws java.io.IOException if an I/O error occurs
+     * @throws java.io.IOException  if an I/O error occurs
      */
     public static void skipFully(InputStream in, long n) throws IOException {
-        if(n<=0)
+        if (n <= 0)
             return;
 
         do {
             long nbSkipped = in.skip(n);
-            if(nbSkipped<0)
+            if (nbSkipped < 0)
                 throw new EOFException();
 
             n -= nbSkipped;
-        } while(n>0);
+        } while (n > 0);
     }
 
     /**
      * This method is a shorthand for {@link #readUpTo(java.io.InputStream, byte[], int, int) readUpTo(in, b, 0, b.length)}.
      *
      * @param in the InputStream to read from
-     * @param b the buffer into which the stream data is copied
+     * @param b  the buffer into which the stream data is copied
      * @return the number of bytes that have been read, can be less than len if EOF has been reached prematurely
      * @throws IOException if an I/O error occurs
      */
@@ -385,14 +377,14 @@ public class StreamUtils {
     /**
      * Reads up to <code>len</code> bytes from the <code>InputStream</code> and copies them into the byte array,
      * starting at position <code>off</code>.
-     *
+     * <p>
      * <p>This method differs from {@link #readFully(java.io.InputStream, byte[], int, int)} in that it does not throw
      * a <code>java.io.EOFException</code> if the end of stream is reached before all bytes have been read. In that
      * case (and in that case only), the number of bytes returned by this method will be lower than <code>len</code>.
      * </p>
      *
-     * @param in the InputStream to read from
-     * @param b the buffer into which the stream data is copied
+     * @param in  the InputStream to read from
+     * @param b   the buffer into which the stream data is copied
      * @param off specifies where the copy should start in the buffer
      * @param len the number of bytes to read
      * @return the number of bytes that have been read, can be less than len if EOF has been reached prematurely
@@ -400,7 +392,7 @@ public class StreamUtils {
      */
     public static int readUpTo(InputStream in, byte b[], int off, int len) throws IOException {
         int totalRead = 0;
-        if(len>0) {
+        if (len > 0) {
             do {
                 int nbRead = in.read(b, off + totalRead, len - totalRead);
                 if (nbRead < 0)
@@ -429,7 +421,7 @@ public class StreamUtils {
      * This method reads the given InputStream until the End Of File is reached, discarding all the data that is read
      * in the process. It is noteworthy that this method does <b>not</b> close the stream.
      *
-     * @param in the InputStream to read
+     * @param in         the InputStream to read
      * @param bufferSize size of the read buffer
      * @throws IOException if an I/O error occurs
      */
@@ -439,14 +431,13 @@ public class StreamUtils {
 
         try {
             int nbRead;
-            while(true) {
+            while (true) {
                 nbRead = in.read(buffer, 0, buffer.length);
 
-                if(nbRead==-1)
+                if (nbRead == -1)
                     break;
             }
-        }
-        finally {
+        } finally {
             BufferPool.releaseByteArray(buffer);
         }
     }

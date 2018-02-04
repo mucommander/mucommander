@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action moves the current {@link FileTable}'s selection to the next page.
@@ -39,23 +33,23 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class SelectNextPageAction extends SelectForwardAction {
 
-    public SelectNextPageAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectNextPageAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     protected int getRowIncrement() {
         // Note: the page row increment varies with the file table's height
-        return mainFrame.getActiveTable().getPageRowIncrement()+1;
+        return mainFrame.getActiveTable().getPageRowIncrement() + 1;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
-        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
             return new SelectNextPageAction(mainFrame, properties);
         }
     }

@@ -52,7 +52,7 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
         return true;
     }
 
-    
+
     //////////////////////////////////
     // MouseListener implementation //
     //////////////////////////////////
@@ -63,21 +63,21 @@ public class FileTableHeader extends JTableHeader implements MouseListener {
         table.requestFocus();
 
         // One of the table headers was left-clicked, sort the table by the clicked column's criterion
-        if(DesktopManager.isLeftMouseButton(e)) {
+        if (DesktopManager.isLeftMouseButton(e)) {
             // If the table was already sorted by this criteria, reverse order
-            if (table.getSortInfo().getCriterion()==col)
+            if (table.getSortInfo().getCriterion() == col)
                 table.reverseSortOrder();
             else
                 table.sortBy(col);
         }
         // One of the table headers was right-clicked, popup a menu that offers to hide the column
-        else if(DesktopManager.isRightMouseButton(e)) {
+        else if (DesktopManager.isRightMouseButton(e)) {
             JPopupMenu popupMenu = new JPopupMenu();
             MainFrame mainFrame = table.getFolderPanel().getMainFrame();
 
             JCheckBoxMenuItem checkboxMenuItem;
-            for(Column c : Column.values()) {
-                if(c==Column.NAME)
+            for (Column c : Column.values()) {
+                if (c == Column.NAME)
                     continue;
 
                 checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(c.getToggleColumnActionId(), mainFrame));

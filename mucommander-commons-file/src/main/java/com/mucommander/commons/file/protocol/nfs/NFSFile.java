@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -128,24 +128,24 @@ public class NFSFile extends ProtocolFile {
 
         // Determines the NFS version (v2 or v3) to be used, based on the version property
         String nfsVersion = fileURL.getProperty(NFS_VERSION_PROPERTY_NAME);
-        if(nfsVersion==null)
+        if (nfsVersion == null)
             nfsVersion = DEFAULT_NFS_VERSION;
 
         // Determines the NFS transport protocol (Auto, TCP or UDP) to be used, based on the protocol property
         String nfsProtocol = fileURL.getProperty(NFS_PROTOCOL_PROPERTY_NAME);
-        nfsProtocol = NFS_PROTOCOL_TCP.equals(nfsProtocol)?"t":NFS_PROTOCOL_UDP.equals(nfsProtocol)?"u":"";
+        nfsProtocol = NFS_PROTOCOL_TCP.equals(nfsProtocol) ? "t" : NFS_PROTOCOL_UDP.equals(nfsProtocol) ? "u" : "";
 
         // Omit port part if none is contained in the FileURL or if it is 2049
         int port = fileURL.getPort();
-        String portString = port==-1||port==2049?"":""+port;
+        String portString = port == -1 || port == 2049 ? "" : "" + port;
 
         // Create the XFile instance with the weird NFS url
-        this.file = new XFile("nfs://"+fileURL.getHost()+":"+portString+nfsVersion+nfsProtocol+"m"+"/"+fileURL.getPath());
+        this.file = new XFile("nfs://" + fileURL.getHost() + ":" + portString + nfsVersion + nfsProtocol + "m" + "/" + fileURL.getPath());
 
         // Retrieve the absolute path from the FileURL and NOT from the XFile instance which will return those weird flags
         this.absPath = fileURL.toString();
         // Remove trailing separator (if any)
-        this.absPath = absPath.endsWith(SEPARATOR)?absPath.substring(0,absPath.length()-1):absPath;
+        this.absPath = absPath.endsWith(SEPARATOR) ? absPath.substring(0, absPath.length() - 1) : absPath;
 
         this.permissions = new NFSFilePermissions(file);
     }
@@ -182,7 +182,7 @@ public class NFSFile extends ProtocolFile {
         // Retrieve parent AbstractFile and cache it
         if (!parentValueSet) {
             FileURL parentURL = getURL().getParent();
-            if(parentURL != null) {
+            if (parentURL != null) {
                 parent = FileFactory.getFile(parentURL);
                 // Note: parent may be null if it can't be resolved
             }
@@ -321,7 +321,7 @@ public class NFSFile extends ProtocolFile {
     public void delete() throws IOException {
         boolean ret = file.delete();
 
-        if(!ret)
+        if (!ret)
             throw new IOException();
     }
 
@@ -335,7 +335,7 @@ public class NFSFile extends ProtocolFile {
         checkRenamePrerequisites(destFile, true, false);
 
         // Rename file
-        if(!file.renameTo(((NFSFile)destFile).file))
+        if (!file.renameTo(((NFSFile) destFile).file))
             throw new IOException();
     }
 
@@ -394,22 +394,22 @@ public class NFSFile extends ProtocolFile {
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
         String names[] = file.list();
 
-        if(names==null)
+        if (names == null)
             throw new IOException();
 
-        if(filenameFilter!=null)
+        if (filenameFilter != null)
             names = filenameFilter.filter(names);
 
         AbstractFile children[] = new AbstractFile[names.length];
         FileURL childURL;
         String baseURLPath = fileURL.getPath();
-        if(!baseURLPath.endsWith("/"))
+        if (!baseURLPath.endsWith("/"))
             baseURLPath += SEPARATOR;
 
-        for(int i=0; i<names.length; i++) {
+        for (int i = 0; i < names.length; i++) {
             // Clone this file's URL with the connection properties and set the child file's path
-            childURL = (FileURL)fileURL.clone();
-            childURL.setPath(baseURLPath+names[i]);
+            childURL = (FileURL) fileURL.clone();
+            childURL.setPath(baseURLPath + names[i]);
 
             // Create the child NFSFile using this file as a parent
             children[i] = FileFactory.getFile(childURL, this);
@@ -520,14 +520,14 @@ public class NFSFile extends ProtocolFile {
         public void setLength(long newLength) throws IOException {
             // This operation is supported only if the new length is greater (or equal) than the current length
             long currentLength = getLength();
-            if(newLength<currentLength)
+            if (newLength < currentLength)
                 throw new IOException();
 
-            if(newLength==currentLength)
+            if (newLength == currentLength)
                 return;
 
             // Extend the file's length by seeking to the end and writing a byte
-            seek(newLength-1);
+            seek(newLength - 1);
             write(0);
         }
     }
@@ -547,16 +547,16 @@ public class NFSFile extends ProtocolFile {
         }
 
         public boolean getBitValue(PermissionAccess access, PermissionType type) {
-            if(access!= PermissionAccess.USER)
+            if (access != PermissionAccess.USER)
                 return false;
 
-            switch(type) {
-            case READ:
-            	return file.canRead();
-            case WRITE:
-            	return file.canWrite();
-            default:
-            	return false;
+            switch (type) {
+                case READ:
+                    return file.canRead();
+                case WRITE:
+                    return file.canWrite();
+                default:
+                    return false;
             }
         }
 

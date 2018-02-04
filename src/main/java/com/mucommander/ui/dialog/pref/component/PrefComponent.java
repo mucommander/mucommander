@@ -22,22 +22,21 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
 
 /**
  * Interface for components in preferences panels in which changes can be trackered.
- * 
+ *
  * @author Arik Hadas
  */
 public interface PrefComponent {
-	
-	/**
-	 * 
-	 * @param dialog - parent dialog of the component parent panel.
-	 */
-	public void addDialogListener(final PreferencesDialog dialog);
-	
-	/**
-	 * This function checks if the component's value was changed from the value that is saved
-	 * in MuConfiguration.
-	 * 
-	 * @return true if component's value differ from the value at MuConfiguration, else otherwise.
-	 */
-	public boolean hasChanged();
+
+    /**
+     * @param dialog - parent dialog of the component parent panel.
+     */
+    public void addDialogListener(final PreferencesDialog dialog);
+
+    /**
+     * This function checks if the component's value was changed from the value that is saved
+     * in MuConfiguration.
+     *
+     * @return true if component's value differ from the value at MuConfiguration, else otherwise.
+     */
+    public boolean hasChanged();
 }

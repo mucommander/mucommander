@@ -31,17 +31,21 @@ import com.mucommander.ui.main.FolderPanel;
  */
 public class LocationEvent {
 
-    /** FolderPanel where location has or is being changed */
+    /**
+     * FolderPanel where location has or is being changed
+     */
     private FolderPanel folderPanel;
 
-    /** URL of the folder that has or is being changed */
+    /**
+     * URL of the folder that has or is being changed
+     */
     private FileURL folderURL;
 
     /**
      * Creates a new LocationEvent.
      *
      * @param folderPanel FolderPanel where location has or is being changed.
-     * @param folderURL url of the folder that has or is being changed
+     * @param folderURL   url of the folder that has or is being changed
      */
     public LocationEvent(FolderPanel folderPanel, FileURL folderURL) {
         this.folderPanel = folderPanel;

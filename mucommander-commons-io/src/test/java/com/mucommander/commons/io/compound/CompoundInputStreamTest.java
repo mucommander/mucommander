@@ -34,20 +34,24 @@ import java.util.Vector;
  */
 public class CompoundInputStreamTest {
 
-    /** Test strings */
+    /**
+     * Test strings
+     */
     private final static String[] TEST_STRINGS = {
-        "",
-        "this",
-        "is",
-        "a",
-        "",
-        "test",
-        ""
+            "",
+            "this",
+            "is",
+            "a",
+            "",
+            "test",
+            ""
     };
 
-    /** Concatenation of the strings contained by {@link #TEST_STRINGS} */
+    /**
+     * Concatenation of the strings contained by {@link #TEST_STRINGS}
+     */
     private final static String TEST_FLATTENED_STRINGS;
-    
+
     static {
         StringBuffer sb = new StringBuffer();
         for (String testString : TEST_STRINGS)
@@ -65,7 +69,7 @@ public class CompoundInputStreamTest {
     private static Iterator<ByteArrayInputStream> getTestInputStreamIterator() {
         Vector<ByteArrayInputStream> v = new Vector<ByteArrayInputStream>();
 
-        for (String testString : TEST_STRINGS) 
+        for (String testString : TEST_STRINGS)
             v.add(new ByteArrayInputStream(testString.getBytes()));
 
         return v.iterator();
@@ -101,13 +105,13 @@ public class CompoundInputStreamTest {
 
         assert !in.isMerged();
 
-        for(int i=0; i<TEST_STRINGS.length; i++) {
+        for (int i = 0; i < TEST_STRINGS.length; i++) {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             StreamUtils.copyStream(in, bout);
             assert TEST_STRINGS[i].equals(bout.toString());
 
             // Try to advance to the next stream
-            assert (i != TEST_STRINGS.length-1) == in.advanceInputStream();
+            assert (i != TEST_STRINGS.length - 1) == in.advanceInputStream();
         }
     }
 }

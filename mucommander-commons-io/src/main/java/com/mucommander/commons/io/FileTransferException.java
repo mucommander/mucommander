@@ -30,7 +30,7 @@ public class FileTransferException extends IOException {
 
     protected FileTransferError reason;
 
-	private long bytesWritten;
+    private long bytesWritten;
 
 
     public FileTransferException(FileTransferError reason) {
@@ -41,17 +41,17 @@ public class FileTransferException extends IOException {
         this.reason = reason;
         this.bytesWritten = bytesWritten;
     }
-    
+
     public FileTransferError getReason() {
         return reason;
     }
 
-	public long getBytesWritten() {
-		return bytesWritten;
-	}
+    public long getBytesWritten() {
+        return bytesWritten;
+    }
 
-	public String toString() {
-        return super.toString()+" reason="+reason;
+    public String toString() {
+        return super.toString() + " reason=" + reason;
     }
 
 }

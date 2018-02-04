@@ -26,26 +26,26 @@ import com.mucommander.ui.tabs.TabsViewerFactory;
 import com.mucommander.ui.tabs.TabsWithHeaderViewer;
 
 /**
-* Factory that creates viewers presenting tabs with headers
-* 
-* @author Arik Hadas
-*/
+ * Factory that creates viewers presenting tabs with headers
+ *
+ * @author Arik Hadas
+ */
 public class FileTableTabsWithHeadersViewerFactory implements TabsViewerFactory<FileTableTab> {
 
-	private FolderPanel folderPanel;
-	private MainFrame mainFrame;
-	
-	public FileTableTabsWithHeadersViewerFactory(MainFrame mainFrame, FolderPanel folderPanel) {
-		this.folderPanel = folderPanel;
-		this.mainFrame = mainFrame;
-	}
+    private FolderPanel folderPanel;
+    private MainFrame mainFrame;
 
-	/***********************************
-	 * TabsViewerFactory Implementation
-	 ***********************************/
-	
-	public TabsViewer<FileTableTab> create(TabsCollection<FileTableTab> tabs) {
-		FileTableTabHeaderFactory headersFactory = tabs.count() == 1 ? new NotClosableFileTableTabHeaderFactory(folderPanel) : new DefaultFileTableTabHeaderFactory(folderPanel);
-		return new TabsWithHeaderViewer<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent(), headersFactory));
-	}
+    public FileTableTabsWithHeadersViewerFactory(MainFrame mainFrame, FolderPanel folderPanel) {
+        this.folderPanel = folderPanel;
+        this.mainFrame = mainFrame;
+    }
+
+    /***********************************
+     * TabsViewerFactory Implementation
+     ***********************************/
+
+    public TabsViewer<FileTableTab> create(TabsCollection<FileTableTab> tabs) {
+        FileTableTabHeaderFactory headersFactory = tabs.count() == 1 ? new NotClosableFileTableTabHeaderFactory(folderPanel) : new DefaultFileTableTabHeaderFactory(folderPanel);
+        return new TabsWithHeaderViewer<FileTableTab>(tabs, new FileTableTabbedPane(mainFrame, folderPanel, folderPanel.getFileTable().getAsUIComponent(), headersFactory));
+    }
 }

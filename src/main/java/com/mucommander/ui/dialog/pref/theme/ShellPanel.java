@@ -37,16 +37,17 @@ import java.beans.PropertyChangeListener;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
-    private JTextArea        shellPreview;
+    private JTextArea shellPreview;
     private EditableComboBox historyPreview;
-
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a new file table editor.
-     * @param parent   dialog containing the panel.
+     *
+     * @param parent    dialog containing the panel.
      * @param themeData themeData being edited.
      */
     public ShellPanel(PreferencesDialog parent, ThemeData themeData) {
@@ -55,10 +56,10 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
     }
 
     private JComponent createConfigurationPanel(int fontId, int foregroundId, int backgroundId, int selectedForegroundId, int selectedBackgroundId, JComponent fontListener) {
-        YBoxPanel             mainPanel;
+        YBoxPanel mainPanel;
         ProportionalGridPanel colorPanel;
-        JPanel                flowPanel;
-        FontChooser           fontChooser;
+        JPanel flowPanel;
+        FontChooser fontChooser;
 
         mainPanel = new YBoxPanel();
 
@@ -83,8 +84,8 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
     }
 
     private JPanel createPreviewPanel() {
-        JPanel      panel;
-        YBoxPanel   headerPanel;
+        JPanel panel;
+        YBoxPanel headerPanel;
         JScrollPane scroll;
 
         panel = new JPanel(new BorderLayout());
@@ -97,7 +98,7 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
         historyPreview.addItem("java -version");
 
         headerPanel.addSpace(10);
-        headerPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
+        headerPanel.add(new JLabel(Translator.get("run_dialog.command_output") + ":"));
 
         panel.add(headerPanel, BorderLayout.NORTH);
 
@@ -121,21 +122,21 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
      * Initialises the panel's UI.
      */
     private void initUI() {
-        JPanel      mainPanel;
+        JPanel mainPanel;
         JTabbedPane tabbedPane;
-        JPanel      previewPanel;
+        JPanel previewPanel;
 
         setLayout(new BorderLayout());
 
-        tabbedPane   = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         previewPanel = createPreviewPanel();
 
         tabbedPane.add(Translator.get("theme_editor.shell_tab"),
-                       createConfigurationPanel(ThemeData.SHELL_FONT, ThemeData.SHELL_FOREGROUND_COLOR, ThemeData.SHELL_BACKGROUND_COLOR,
-                                                ThemeData.SHELL_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_SELECTED_BACKGROUND_COLOR, shellPreview));
+                createConfigurationPanel(ThemeData.SHELL_FONT, ThemeData.SHELL_FOREGROUND_COLOR, ThemeData.SHELL_BACKGROUND_COLOR,
+                        ThemeData.SHELL_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_SELECTED_BACKGROUND_COLOR, shellPreview));
         tabbedPane.add(Translator.get("theme_editor.shell_history_tab"),
-                       createConfigurationPanel(ThemeData.SHELL_HISTORY_FONT, ThemeData.SHELL_HISTORY_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_BACKGROUND_COLOR,
-                                                ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, historyPreview));
+                createConfigurationPanel(ThemeData.SHELL_HISTORY_FONT, ThemeData.SHELL_HISTORY_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_BACKGROUND_COLOR,
+                        ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, historyPreview));
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
@@ -146,11 +147,11 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
 
     public void propertyChange(PropertyChangeEvent event) {
         // Background color changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
+        if (event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
             setBackgroundColors();
 
-        // Foreground color changed.
-        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
+            // Foreground color changed.
+        else if (event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
             setForegroundColors();
     }
 
@@ -170,9 +171,9 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
     }
 
 
-
     // - Modification management ---------------------------------------------------------
     // -----------------------------------------------------------------------------------
     @Override
-    public void commit() {}
+    public void commit() {
+    }
 }

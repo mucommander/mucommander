@@ -33,14 +33,18 @@ package com.mucommander.commons.conf;
  * Since <code>ConfigurationStructureException</code> subclasses {@link ConfigurationException}, it
  * inherits his capacity to wrap other exceptions.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class ConfigurationStructureException extends ConfigurationException {
     /**
      * Creates a new configuration structure exception.
+     *
      * @param message the error message.
      */
-    public ConfigurationStructureException(String message) {super(message);}
+    public ConfigurationStructureException(String message) {
+        super(message);
+    }
 
     /**
      * Creates a new configuration structure exception wrapping an existing exception.
@@ -48,17 +52,23 @@ public class ConfigurationStructureException extends ConfigurationException {
      * The existing exception will be embedded in the new one, and its message will
      * become the default message for the <code>ConfigurationStructureException</code>.
      * </p>
+     *
      * @param cause the exception to be wrapped in a <code>ConfigurationStructureException</code>.
      */
-    public ConfigurationStructureException(Throwable cause) {super(cause);}
+    public ConfigurationStructureException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * Creates a new configuration structure exception from an existing exception.
      * <p>
      * The existing exception will be embedded in the new one, but the new exception will have its own message.
      * </p>
+     *
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>ConfigurationStructureException</code>.
      */
-    public ConfigurationStructureException(String message, Throwable cause) {super(message, cause);}
+    public ConfigurationStructureException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

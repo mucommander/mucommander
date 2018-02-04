@@ -30,14 +30,16 @@ import java.io.IOException;
 class InternalOpen extends LocalFileOperation {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Underlying desktop instance. */
+    /**
+     * Underlying desktop instance.
+     */
     private Desktop desktop;
     private boolean initialized = false;
 
 
-
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Creates a new <code>InternalOpen</code> instance.
      */
@@ -46,7 +48,7 @@ class InternalOpen extends LocalFileOperation {
 
     private Desktop getDesktop() {
         if (!initialized) {
-            if(Desktop.isDesktopSupported())
+            if (Desktop.isDesktopSupported())
                 desktop = Desktop.getDesktop();
             initialized = true;
         }
@@ -56,31 +58,39 @@ class InternalOpen extends LocalFileOperation {
 
     // - DesktopOperation implementation -------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Returns <code>true</code> if this operation is available.
      * <p>
      * This operation is available if:
      * <ul>
-     *   <li>Desktops are supported by the current system (<code>Desktop.isDesktopSupported()</code> returns <code>true</code>).</li>
-     *   <li>File opening is supported by the desktop (<code>Desktop.isSupported(Desktop.Action.OPEN)</code> returns <code>true</code>).</li>
+     * <li>Desktops are supported by the current system (<code>Desktop.isDesktopSupported()</code> returns <code>true</code>).</li>
+     * <li>File opening is supported by the desktop (<code>Desktop.isSupported(Desktop.Action.OPEN)</code> returns <code>true</code>).</li>
      * </ul>
      * </p>
+     *
      * @return <code>true</code> if this operations is available, <code>false</code> otherwise.
      */
     @Override
-    public boolean isAvailable() {return getDesktop() != null && getDesktop().isSupported(Desktop.Action.OPEN);}
+    public boolean isAvailable() {
+        return getDesktop() != null && getDesktop().isSupported(Desktop.Action.OPEN);
+    }
 
     @Override
     public void execute(AbstractFile file) throws IOException {
-        if(isAvailable())
+        if (isAvailable())
             getDesktop().open(new File(file.getAbsolutePath()));
         else
             throw new UnsupportedOperationException();
     }
+
     /**
      * Returns the action's label.
+     *
      * @return the action's label.
      */
     @Override
-    public String getName() {return "java.awt.Desktop open file";}
+    public String getName() {
+        return "java.awt.Desktop open file";
+    }
 }

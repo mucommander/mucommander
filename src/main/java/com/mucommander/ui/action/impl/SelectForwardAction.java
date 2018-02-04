@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public abstract class SelectForwardAction extends MuAction {
 
-    public SelectForwardAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectForwardAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public abstract class SelectForwardAction extends MuAction {
     public void performAction() {
         FileTable activeTable = mainFrame.getActiveTable();
 
-        activeTable.selectRow(Math.min(activeTable.getSelectedRow()+getRowIncrement(), activeTable.getRowCount()-1));
+        activeTable.selectRow(Math.min(activeTable.getSelectedRow() + getRowIncrement(), activeTable.getRowCount() - 1));
     }
 
 

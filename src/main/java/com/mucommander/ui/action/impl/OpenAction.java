@@ -18,15 +18,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
@@ -38,17 +29,21 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
 import com.mucommander.ui.main.tabs.FileTableTabs;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This action 'opens' the currently selected file or folder in the active FileTable.
@@ -64,10 +59,11 @@ import com.mucommander.ui.main.tabs.FileTableTabs;
 public class OpenAction extends MuAction {
     /**
      * Creates a new <code>OpenAction</code> with the specified parameters.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public OpenAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -76,70 +72,68 @@ public class OpenAction extends MuAction {
      * <p>
      * <code>file</code> will be opened using the following rules:
      * <ul>
-     *   <li>
-     *     If <code>file</code> is {@link com.mucommander.commons.file.AbstractFile#isBrowsable() browsable},
-     *     it will be opened in <code>destination</code>.
-     *   </li>
-     *   <li>
-     *     If <code>file</code> is local, it will be opened using its native associations.
-     *   </li>
-     *   <li>
-     *     If <code>file</code> is remote, it will first be copied in a temporary local file and
-     *     then opened using its native association.
-     *   </li>
+     * <li>
+     * If <code>file</code> is {@link com.mucommander.commons.file.AbstractFile#isBrowsable() browsable},
+     * it will be opened in <code>destination</code>.
+     * </li>
+     * <li>
+     * If <code>file</code> is local, it will be opened using its native associations.
+     * </li>
+     * <li>
+     * If <code>file</code> is remote, it will first be copied in a temporary local file and
+     * then opened using its native association.
+     * </li>
      * </ul>
      * </p>
+     *
      * @param file        file to open.
      * @param destination if <code>file</code> is browsable, folder panel in which to open the file.
      */
     protected void open(AbstractFile file, FolderPanel destination) {
-    	AbstractFile resolvedFile;
-    	if (file.isSymlink()) {
-    		resolvedFile = resolveSymlink(file);
+        AbstractFile resolvedFile;
+        if (file.isSymlink()) {
+            resolvedFile = resolveSymlink(file);
 
-    		if (resolvedFile == null) {
-    			InformationDialog.showErrorDialog(mainFrame, Translator.get("cannot_open_cyclic_symlink"));
-    			return;
-    		}
-    	}
-    	else
-    		resolvedFile = file;
+            if (resolvedFile == null) {
+                InformationDialog.showErrorDialog(mainFrame, Translator.get("cannot_open_cyclic_symlink"));
+                return;
+            }
+        } else
+            resolvedFile = file;
 
         // Opens browsable files in the destination FolderPanel.
-        if(resolvedFile.isBrowsable()) {
-        	resolvedFile = MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS) ? resolvedFile : file;
-        	FileTableTabs tabs = destination.getTabs();
+        if (resolvedFile.isBrowsable()) {
+            resolvedFile = MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS) ? resolvedFile : file;
+            FileTableTabs tabs = destination.getTabs();
 
-        	if (BookmarkManager.isBookmark(resolvedFile.getURL())) {
-        		String bookmarkLocation = BookmarkManager.getBookmark(resolvedFile.getName()).getLocation();
-        		FileURL bookmarkURL;
-				try {
-					bookmarkURL = FileURL.getFileURL(bookmarkLocation);
-				} catch (MalformedURLException e) {
-					LOGGER.error("Failed to resolve bookmark's location: " + bookmarkLocation);
-					return;
-				}
+            if (BookmarkManager.isBookmark(resolvedFile.getURL())) {
+                String bookmarkLocation = BookmarkManager.getBookmark(resolvedFile.getName()).getLocation();
+                FileURL bookmarkURL;
+                try {
+                    bookmarkURL = FileURL.getFileURL(bookmarkLocation);
+                } catch (MalformedURLException e) {
+                    LOGGER.error("Failed to resolve bookmark's location: " + bookmarkLocation);
+                    return;
+                }
 
-        		if (tabs.getCurrentTab().isLocked())
-        			tabs.add(bookmarkURL);
-        		else
-        			destination.tryChangeCurrentFolder(bookmarkURL);
-        	}
-        	else {
-        		if (tabs.getCurrentTab().isLocked())
-        			tabs.add(resolvedFile);
-        		else
-        			destination.tryChangeCurrentFolder(resolvedFile);
-        	}
+                if (tabs.getCurrentTab().isLocked())
+                    tabs.add(bookmarkURL);
+                else
+                    destination.tryChangeCurrentFolder(bookmarkURL);
+            } else {
+                if (tabs.getCurrentTab().isLocked())
+                    tabs.add(resolvedFile);
+                else
+                    destination.tryChangeCurrentFolder(resolvedFile);
+            }
         }
 
         // Opens local files using their native associations.
-        else if(resolvedFile.getURL().getScheme().equals(FileProtocols.FILE) && (resolvedFile.hasAncestor(LocalFile.class))) {
+        else if (resolvedFile.getURL().getScheme().equals(FileProtocols.FILE) && (resolvedFile.hasAncestor(LocalFile.class))) {
             try {
-            	DesktopManager.open(resolvedFile);
-            	RecentExecutedFilesQL.addFile(resolvedFile);
-    		}
-            catch(IOException e) {
+                DesktopManager.open(resolvedFile);
+                RecentExecutedFilesQL.addFile(resolvedFile);
+            } catch (IOException e) {
                 InformationDialog.showErrorDialog(mainFrame);
             }
         }
@@ -153,16 +147,16 @@ public class OpenAction extends MuAction {
     }
 
     protected AbstractFile resolveSymlink(AbstractFile symlink) {
-    	return resolveSymlink(symlink, new HashSet<AbstractFile>());
+        return resolveSymlink(symlink, new HashSet<AbstractFile>());
     }
 
     private AbstractFile resolveSymlink(AbstractFile file, Set<AbstractFile> visitedFiles) {
-    	if (visitedFiles.contains(file))
-    		return null;
-    	else {
-    		visitedFiles.add(file);
-    		return file.isSymlink() ? resolveSymlink(file.getCanonicalFile(), visitedFiles) : file;
-    	}
+        if (visitedFiles.contains(file))
+            return null;
+        else {
+            visitedFiles.add(file);
+            return file.isSymlink() ? resolveSymlink(file.getCanonicalFile(), visitedFiles) : file;
+        }
     }
 
     /**
@@ -183,27 +177,35 @@ public class OpenAction extends MuAction {
 
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new OpenAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new OpenAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "Open";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "Open";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0); }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+        }
     }
 }

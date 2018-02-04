@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -101,9 +101,9 @@ public abstract class AbstractFileTest {
         Iterator<AbstractFile> iterator = filesToDelete.iterator();
 
         AbstractFile file;
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             file = iterator.next();
-            if(file.exists())
+            if (file.exists())
                 file.deleteRecursively();
         }
     }
@@ -121,7 +121,7 @@ public abstract class AbstractFileTest {
      * @return the same file that as passed, allowing this method to be chained
      */
     protected AbstractFile deleteWhenFinished(AbstractFile fileToDelete) {
-        if(!filesToDelete.contains(fileToDelete))
+        if (!filesToDelete.contains(fileToDelete))
             filesToDelete.add(fileToDelete);
 
         return fileToDelete;
@@ -152,14 +152,13 @@ public abstract class AbstractFileTest {
         // Ensure that integer is not maxed out as we'll be adding 1 to it 
         maxChunkSize = Math.max(maxChunkSize, Integer.MAX_VALUE);
 
-        while(remaining>0) {
-            chunkSize = random.nextInt(1+(int)Math.min(remaining, maxChunkSize));
+        while (remaining > 0) {
+            chunkSize = random.nextInt(1 + (int) Math.min(remaining, maxChunkSize));
 
-            if(chunkSize==1) {
+            if (chunkSize == 1) {
                 // Use OutputStream#write(int) to write a single byte
                 out.write(random.nextInt(256));
-            }
-            else {
+            } else {
                 // Use OutputStream#write(byte[]) to write several bytes
                 bytes = new byte[chunkSize];
                 random.nextBytes(bytes);
@@ -204,8 +203,7 @@ public abstract class AbstractFileTest {
     protected void sleep(long timeMs) {
         try {
             Thread.sleep(timeMs);
-        }
-        catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             // Should not happen, and even if it did, it's no big deal as the test that called this method will most
             // likely fail
         }
@@ -218,7 +216,7 @@ public abstract class AbstractFileTest {
      * @return a pseudo unique filename
      */
     protected String getPseudoUniqueFilename(String prefix) {
-        return (prefix==null?"":prefix+"_")+System.currentTimeMillis()+(new Random().nextInt(10000));
+        return (prefix == null ? "" : prefix + "_") + System.currentTimeMillis() + (new Random().nextInt(10000));
     }
 
     /**
@@ -229,11 +227,11 @@ public abstract class AbstractFileTest {
      * @return true if both byte arrays are equal
      */
     protected boolean byteArraysEqual(byte b1[], byte b2[]) {
-        if(b1.length!=b2.length)
+        if (b1.length != b2.length)
             return false;
 
-        for(int i=0; i<b1.length; i++)
-            if(b1[i]!=b2[i])
+        for (int i = 0; i < b1.length; i++)
+            if (b1[i] != b2[i])
                 return false;
 
         return true;
@@ -279,8 +277,7 @@ public abstract class AbstractFileTest {
 
         try {
             return calculateMd5(in);
-        }
-        finally {
+        } finally {
             in.close();
         }
     }
@@ -315,15 +312,18 @@ public abstract class AbstractFileTest {
             in2 = file2.getInputStream();
 
             assertInputStreamEquals(in1, in2);
-        }
-        finally {
-            if(in1!=null)
-                try { in1.close(); }
-                catch(IOException e) {}
+        } finally {
+            if (in1 != null)
+                try {
+                    in1.close();
+                } catch (IOException e) {
+                }
 
-            if(in2!=null)
-                try { in2.close(); }
-                catch(IOException e) {}
+            if (in2 != null)
+                try {
+                    in2.close();
+                } catch (IOException e) {
+                }
         }
     }
 
@@ -372,7 +372,7 @@ public abstract class AbstractFileTest {
         AbstractFile unicodeFile = baseFolder.getDirectChild(unicodeFilename);
         assert unicodeFilename.equals(unicodeFile.getName());
 
-        if(directory)
+        if (directory)
             unicodeFile.mkdir();
         else
             unicodeFile.mkfile();
@@ -409,10 +409,10 @@ public abstract class AbstractFileTest {
 
         // If the file is authenticated, test if the given path contains credentials and if it does not, add the
         // credentials to it.
-        if(file.getURL().containsCredentials()) {
+        if (file.getURL().containsCredentials()) {
             FileURL fileURL = FileURL.getFileURL(path);
 
-            if(!fileURL.containsCredentials()) {
+            if (!fileURL.containsCredentials()) {
                 fileURL.setCredentials(file.getURL().getCredentials());
                 path = fileURL.toString(true);
             }
@@ -423,9 +423,9 @@ public abstract class AbstractFileTest {
         AbstractFile resolvedFile = FileFactory.getFile(path);
         assert resolvedFile != null;
         assert resolvedFile.equals(file);  // Shallow equals
-        assert resolvedFile.isDirectory()==file.isDirectory();
+        assert resolvedFile.isDirectory() == file.isDirectory();
 
-        if(!file.isDirectory())
+        if (!file.isDirectory())
             assertContentsEquals(file, resolvedFile);       // Deep equals (compares contents)
     }
 
@@ -441,13 +441,13 @@ public abstract class AbstractFileTest {
         assert volume.equals(volume.getVolume());
 
         // Volumes may not always exist -- for instance, removable drives under Windows.
-        if(volume.exists()) {
+        if (volume.exists()) {
             // If the volume exists, it must be a directory
             assert volume.isDirectory();
 
             // Assert that children of the volume are located on the volume (test the first children only)
             AbstractFile[] children = volume.ls();
-            if(children.length>0)
+            if (children.length > 0)
                 assert volume.equals(children[0].getVolume());
         }
     }
@@ -463,7 +463,7 @@ public abstract class AbstractFileTest {
      * @throws IOException in case of an error
      */
     protected void copyTo(AbstractFile sourceFile, AbstractFile destFile, boolean useRemoteCopy) throws IOException {
-        if(useRemoteCopy)
+        if (useRemoteCopy)
             sourceFile.copyRemotelyTo(destFile);
         else
             sourceFile.copyTo(destFile);
@@ -480,7 +480,7 @@ public abstract class AbstractFileTest {
      * @throws IOException in case of an error
      */
     protected void moveTo(AbstractFile sourceFile, AbstractFile destFile, boolean useRenameTo) throws IOException {
-        if(useRenameTo)
+        if (useRenameTo)
             sourceFile.renameTo(destFile);
         else
             sourceFile.moveTo(destFile);
@@ -496,8 +496,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.changePermission(PermissionAccess.USER, PermissionType.WRITE, true);
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.CHANGE_PERMISSION);
@@ -526,27 +525,27 @@ public abstract class AbstractFileTest {
         int bitMask;
         boolean canGetPermission, canSetPermission;
 
-        for(PermissionAccess a : PermissionAccess.values()) {
-            for(PermissionType p : PermissionType.values()) {
-                bitMask = 1<<bitShift;
+        for (PermissionAccess a : PermissionAccess.values()) {
+            for (PermissionType p : PermissionType.values()) {
+                bitMask = 1 << bitShift;
 
-                canGetPermission = (getPermMaskInt & bitMask)!=0;
-                assert getPermMask.getBitValue(a, p)==canGetPermission:"inconsistent bit and int value for ("+a+", "+p+")";
+                canGetPermission = (getPermMaskInt & bitMask) != 0;
+                assert getPermMask.getBitValue(a, p) == canGetPermission : "inconsistent bit and int value for (" + a + ", " + p + ")";
 
-                canSetPermission = (setPermMaskInt & bitMask)!=0;
-                assert setPermMask.getBitValue(a, p)==canSetPermission: "inconsistent bit and int value for ("+a+", "+p+")";
+                canSetPermission = (setPermMaskInt & bitMask) != 0;
+                assert setPermMask.getBitValue(a, p) == canSetPermission : "inconsistent bit and int value for (" + a + ", " + p + ")";
 
-                if(canSetPermission) {
-                    for(boolean enabled=true; ;) {
+                if (canSetPermission) {
+                    for (boolean enabled = true; ; ) {
                         tempFile.changePermission(a, p, enabled);
-                        tempFile.changePermissions(enabled?bitMask:(0777&~bitMask));
+                        tempFile.changePermissions(enabled ? bitMask : (0777 & ~bitMask));
 
-                        if(canGetPermission) {
-                            assert tempFile.getPermissions().getBitValue(a, p)==enabled: "permission bit ("+a+", "+p+") should be "+enabled;
-                            assert ((tempFile.getPermissions().getIntValue() & bitMask)!=0)==enabled: "permission "+bitShift+" should be "+enabled;
+                        if (canGetPermission) {
+                            assert tempFile.getPermissions().getBitValue(a, p) == enabled : "permission bit (" + a + ", " + p + ") should be " + enabled;
+                            assert ((tempFile.getPermissions().getIntValue() & bitMask) != 0) == enabled : "permission " + bitShift + " should be " + enabled;
                         }
 
-                        if(!enabled)
+                        if (!enabled)
                             break;
 
                         enabled = false;
@@ -568,8 +567,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.changeDate(System.currentTimeMillis());
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.CHANGE_DATE);
@@ -587,7 +585,7 @@ public abstract class AbstractFileTest {
         long date;
 
         // Assert that changeDate succeeds (does not throw an exception)
-        tempFile.changeDate(date=(tempFile.getDate()-1000));
+        tempFile.changeDate(date = (tempFile.getDate() - 1000));
 
         // Assert that the getDate returns the date that was set
         assert date == tempFile.getDate();
@@ -603,8 +601,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.getInputStream();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.READ_FILE);
@@ -612,8 +609,7 @@ public abstract class AbstractFileTest {
         // And again with #getInputStream(long)
         try {
             tempFile.getInputStream(27);
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.READ_FILE);
@@ -632,8 +628,7 @@ public abstract class AbstractFileTest {
         ioExceptionThrown = false;
         try {
             tempFile.getInputStream();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -679,8 +674,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.getRandomAccessInputStream();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.RANDOM_READ_FILE);
@@ -699,8 +693,7 @@ public abstract class AbstractFileTest {
         ioExceptionThrown = false;
         try {
             tempFile.getRandomAccessInputStream();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -736,15 +729,17 @@ public abstract class AbstractFileTest {
 
         // Assert that readFully methods throw an EOFException
         boolean eofExceptionThrown = false;
-        try { rais.readFully(b); }
-        catch(EOFException e) {
+        try {
+            rais.readFully(b);
+        } catch (EOFException e) {
             eofExceptionThrown = true;
         }
         assert eofExceptionThrown;
 
         eofExceptionThrown = false;
-        try { rais.readFully(b, 0, 1); }
-        catch(EOFException e) {
+        try {
+            rais.readFully(b, 0, 1);
+        } catch (EOFException e) {
             eofExceptionThrown = true;
         }
         assert eofExceptionThrown;
@@ -762,8 +757,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.getOutputStream();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.WRITE_FILE);
@@ -815,8 +809,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.getAppendOutputStream();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.APPEND_FILE);
@@ -871,8 +864,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.getRandomAccessOutputStream();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.RANDOM_WRITE_FILE);
@@ -963,8 +955,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.delete();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.DELETE);
@@ -980,8 +971,7 @@ public abstract class AbstractFileTest {
         boolean ioExceptionThrown = false;
         try {
             tempFile.delete();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1004,8 +994,7 @@ public abstract class AbstractFileTest {
         ioExceptionThrown = false;
         try {
             tempFile.delete();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1022,8 +1011,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.mkdir();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.CREATE_DIRECTORY);
@@ -1045,8 +1033,7 @@ public abstract class AbstractFileTest {
         boolean ioExceptionThrown = false;
         try {
             tempFile.mkdir();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1059,8 +1046,7 @@ public abstract class AbstractFileTest {
         ioExceptionThrown = false;
         try {
             tempFile.mkdir();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1077,8 +1063,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.ls();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.LIST_CHILDREN);
@@ -1094,8 +1079,7 @@ public abstract class AbstractFileTest {
         boolean ioExceptionThrown = false;
         try {
             tempFile.ls();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1106,8 +1090,7 @@ public abstract class AbstractFileTest {
         ioExceptionThrown = false;
         try {
             tempFile.ls();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1151,13 +1134,12 @@ public abstract class AbstractFileTest {
         try {
             copyTo(tempFile, destFile, useRemoteCopy);
             success = true;
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             assert !(e instanceof UnsupportedFileOperationException);
             success = false;
         }
 
-        if(success) {     // If copyTo/copyRemotelyTo succeeded
+        if (success) {     // If copyTo/copyRemotelyTo succeeded
             // Assert that the checksum of source and destination match
             assertContentsEquals(tempFile, destFile);
 
@@ -1171,8 +1153,11 @@ public abstract class AbstractFileTest {
             // Assert that copyTo/copyRemotelyTo fails when the source and destination files are the same
             destFile.delete();
             boolean exceptionThrown = false;
-            try { copyTo(tempFile, tempFile, useRemoteCopy); }
-            catch(FileTransferException e) { exceptionThrown = true; }
+            try {
+                copyTo(tempFile, tempFile, useRemoteCopy);
+            } catch (FileTransferException e) {
+                exceptionThrown = true;
+            }
 
             assert exceptionThrown;
             assert !destFile.exists();
@@ -1180,8 +1165,11 @@ public abstract class AbstractFileTest {
             // Assert that copyTo/copyRemotelyTo fails when the source file doesn't exist
             tempFile.delete();
             exceptionThrown = false;
-            try { copyTo(tempFile, destFile, useRemoteCopy); }
-            catch(FileTransferException e) { exceptionThrown = true; }
+            try {
+                copyTo(tempFile, destFile, useRemoteCopy);
+            } catch (FileTransferException e) {
+                exceptionThrown = true;
+            }
 
             assert exceptionThrown;
             assert !destFile.exists();
@@ -1196,15 +1184,17 @@ public abstract class AbstractFileTest {
             // subfolder of the source
             AbstractFile subFolder = tempFile.getDirectChild("subfolder");
             exceptionThrown = false;
-            try { copyTo(tempFile, subFolder, useRemoteCopy); }
-            catch(FileTransferException e) { exceptionThrown = true; }
+            try {
+                copyTo(tempFile, subFolder, useRemoteCopy);
+            } catch (FileTransferException e) {
+                exceptionThrown = true;
+            }
 
             assert exceptionThrown;
             assert !subFolder.exists();
 
             // Todo: test copyTo on a large, randomly-generated file tree
-        }
-        else {                              // copyTo failed gracefully
+        } else {                              // copyTo failed gracefully
             System.out.println("Warning: AbstractFile#copyTo(AbstractFile) did not succeed, test skipped");
 
             // Assert that the destination file does not exist
@@ -1222,8 +1212,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.copyRemotelyTo(getTemporaryFile());
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.COPY_REMOTELY);
@@ -1260,13 +1249,12 @@ public abstract class AbstractFileTest {
         try {
             moveTo(tempFile, destFile, useRenameTo);
             success = true;
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             assert !(e instanceof UnsupportedFileOperationException);
             success = false;
         }
 
-        if(success) {     // If moveTo/renameTo succeeded
+        if (success) {     // If moveTo/renameTo succeeded
             // Assert that the source file is gone and the destination file exists
             assert !tempFile.exists();
             assert destFile.exists();
@@ -1289,8 +1277,11 @@ public abstract class AbstractFileTest {
             createFile(tempFile, 1);
             destFile.delete();
             boolean exceptionThrown = false;
-            try { moveTo(tempFile, tempFile, useRenameTo); }
-            catch(FileTransferException e) { exceptionThrown = true; }
+            try {
+                moveTo(tempFile, tempFile, useRenameTo);
+            } catch (FileTransferException e) {
+                exceptionThrown = true;
+            }
 
             assert exceptionThrown;
             assert tempFile.exists();
@@ -1299,8 +1290,11 @@ public abstract class AbstractFileTest {
             // Assert that moveTo/renameTo fails when the source file doesn't exist
             tempFile.delete();
             exceptionThrown = false;
-            try { moveTo(tempFile, destFile, useRenameTo); }
-            catch(FileTransferException e) { exceptionThrown = true; }
+            try {
+                moveTo(tempFile, destFile, useRenameTo);
+            } catch (FileTransferException e) {
+                exceptionThrown = true;
+            }
 
             assert exceptionThrown;
             assert !destFile.exists();
@@ -1316,16 +1310,18 @@ public abstract class AbstractFileTest {
             tempFile.mkdir();
             AbstractFile subFolder = tempFile.getDirectChild("subfolder");
             exceptionThrown = false;
-            try { moveTo(tempFile, subFolder, useRenameTo); }
-            catch(FileTransferException e) { exceptionThrown = true; }
+            try {
+                moveTo(tempFile, subFolder, useRenameTo);
+            } catch (FileTransferException e) {
+                exceptionThrown = true;
+            }
 
             assert exceptionThrown;
             assert tempFile.exists();
             assert !subFolder.exists();
 
             // Todo: test moveTo/renameTo on a large, randomly-generated file tree
-        }
-        else {
+        } else {
             // moveTo/renameTo failed, which is not considered as an error: this can happen under normal circumstances
             System.out.println("Warning: AbstractFile#renameTo(AbstractFile) did not succeed, test skipped");
 
@@ -1344,8 +1340,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.renameTo(getTemporaryFile());
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.RENAME);
@@ -1371,8 +1366,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.getFreeSpace();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.GET_FREE_SPACE);
@@ -1384,7 +1378,7 @@ public abstract class AbstractFileTest {
      * @throws IOException should not happen
      */
     protected void testGetFreeSpaceSupported() throws IOException {
-        assert tempFile.getFreeSpace()>=0;
+        assert tempFile.getFreeSpace() >= 0;
 
         // Note: it would be interesting to assert that allocating space to a file diminishes free space accordingly
         // but it is not possible to guarantee that free space is not altered by another process.
@@ -1400,8 +1394,7 @@ public abstract class AbstractFileTest {
         UnsupportedFileOperationException e = null;
         try {
             tempFile.getTotalSpace();
-        }
-        catch(UnsupportedFileOperationException ex) {
+        } catch (UnsupportedFileOperationException ex) {
             e = ex;
         }
         assertUnsupportedFileOperationException(e, FileOperation.GET_TOTAL_SPACE);
@@ -1413,7 +1406,7 @@ public abstract class AbstractFileTest {
      * @throws IOException should not happen
      */
     protected void testGetTotalSpaceSupported() throws IOException {
-        assert tempFile.getTotalSpace()>=0;
+        assert tempFile.getTotalSpace() >= 0;
     }
 
 
@@ -1579,7 +1572,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testJavaNetURL() throws IOException, NoSuchAlgorithmException {
-        URL url; 
+        URL url;
 
         // Test path resolution on a regular file
 
@@ -1595,7 +1588,7 @@ public abstract class AbstractFileTest {
 
         // Test data integrity of the InputStream returned by URL#openConnection()#getInputStream()
 
-        if(tempFile.isFileOperationSupported(FileOperation.READ_FILE)) {
+        if (tempFile.isFileOperationSupported(FileOperation.READ_FILE)) {
             InputStream urlIn = url.openConnection().getInputStream();
             assert urlIn != null;
             InputStream fileIn = tempFile.getInputStream();
@@ -1608,7 +1601,7 @@ public abstract class AbstractFileTest {
 
         // Test data integrity of the OutputStream returned by URL#openStream()
 
-        if(tempFile.isFileOperationSupported(FileOperation.WRITE_FILE)) {
+        if (tempFile.isFileOperationSupported(FileOperation.WRITE_FILE)) {
             tempFile.delete();
             url = tempFile.getJavaNetURL();
             assert url != null;
@@ -1657,7 +1650,7 @@ public abstract class AbstractFileTest {
         assert root.isBrowsable();
         assert root.getParent() == null;
 
-        if(!tempFile.equals(root))
+        if (!tempFile.equals(root))
             assert !tempFile.isRoot();
 
         // Assert that getRoot() on the root file returns the same file
@@ -1671,7 +1664,7 @@ public abstract class AbstractFileTest {
         // Assert that children of the root folder yield the same root folder and are not root folder themselves
         // (test the first children only)
         AbstractFile[] children = root.ls();
-        if(children.length>0) {
+        if (children.length > 0) {
             assert root.equals(children[0].getRoot());
             assert !children[0].isRoot();
         }
@@ -1709,7 +1702,7 @@ public abstract class AbstractFileTest {
         AbstractFile child;
 
         // Tests all parents until the root is reached
-        while((parent=file.getParent())!=null) {
+        while ((parent = file.getParent()) != null) {
             assert parent.isParentOf(file);
 
             // a file that has a parent shouldn't be a root file
@@ -1725,7 +1718,7 @@ public abstract class AbstractFileTest {
 
         // Assert that the root file's parent URL is null: if that is not the case, the parent file should have been
         // resolved.
-        assert file.getURL().getParent()==null;
+        assert file.getURL().getParent() == null;
 
         // A file that has no parent should be a root file
         assert file.isRoot();
@@ -1761,7 +1754,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testDelete() throws IOException {
-        if(tempFile.isFileOperationSupported(FileOperation.DELETE))
+        if (tempFile.isFileOperationSupported(FileOperation.DELETE))
             testDeleteSupported();
         else
             testDeleteUnsupported();
@@ -1774,7 +1767,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testMkdir() throws IOException {
-        if(tempFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY))
+        if (tempFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY))
             testMkdirSupported();
         else
             testMkdirUnsupported();
@@ -1788,13 +1781,13 @@ public abstract class AbstractFileTest {
     @Test
     public void testMkdirs() throws IOException {
         // Require the 'create directory' operation to be supported
-        if(!tempFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY))
-        return;
+        if (!tempFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY))
+            return;
 
         // Assert that a directory can be created when the file doesn't already exist (without throwing an IOException)
         AbstractFile dir1 = tempFile.getDirectChild("dir1");
         AbstractFile dir2 = dir1.getDirectChild("dir2");
-        AbstractFile dir2b = dir1.getChild("dir2"+dir1.getSeparator());     // Same file with a trailing separator
+        AbstractFile dir2b = dir1.getChild("dir2" + dir1.getSeparator());     // Same file with a trailing separator
         dir2.mkdirs();
 
         // Assert that the file exists after the directory has been created
@@ -1820,8 +1813,7 @@ public abstract class AbstractFileTest {
         boolean ioExceptionThrown = false;
         try {
             dir2.mkdirs();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1834,8 +1826,7 @@ public abstract class AbstractFileTest {
         ioExceptionThrown = false;
         try {
             dir2.mkdir();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1859,8 +1850,7 @@ public abstract class AbstractFileTest {
         boolean ioExceptionThrown = false;
         try {
             tempFile.mkfile();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1873,8 +1863,7 @@ public abstract class AbstractFileTest {
         ioExceptionThrown = false;
         try {
             tempFile.mkfile();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             ioExceptionThrown = true;
         }
 
@@ -1889,7 +1878,7 @@ public abstract class AbstractFileTest {
     @Test
     public void testIsDirectory() throws IOException {
         // Same file with a trailing separator
-        FileURL tempFileURLB = (FileURL)tempFile.getURL().clone();
+        FileURL tempFileURLB = (FileURL) tempFile.getURL().clone();
         tempFileURLB.setPath(tempFile.addTrailingSeparator(tempFileURLB.getPath()));
         AbstractFile tempFileB = FileFactory.getFile(tempFileURLB, true);
 
@@ -1930,7 +1919,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testChangePermissions() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.CHANGE_PERMISSION))
+        if (tempFile.isFileOperationSupported(FileOperation.CHANGE_PERMISSION))
             testChangePermissionsSupported();
         else
             testChangePermissionsUnsupported();
@@ -1959,16 +1948,16 @@ public abstract class AbstractFileTest {
         int bitMask;
         boolean canGetPermission;
 
-        for(PermissionAccess a : PermissionAccess.values()) {
-            for(PermissionType p : PermissionType.values()) {
-                bitMask = 1<<bitShift;
+        for (PermissionAccess a : PermissionAccess.values()) {
+            for (PermissionType p : PermissionType.values()) {
+                bitMask = 1 << bitShift;
 
-                canGetPermission = (getPermMaskInt & bitMask)!=0;
-                assert getPermMask.getBitValue(a, p)==canGetPermission: "inconsistent bit and int value for ("+a+", "+p+")";
+                canGetPermission = (getPermMaskInt & bitMask) != 0;
+                assert getPermMask.getBitValue(a, p) == canGetPermission : "inconsistent bit and int value for (" + a + ", " + p + ")";
 
-                if(canGetPermission) {
-                    assert permissions.getBitValue(a, p)==((permissions.getIntValue() & bitMask)!=0):
-                            "inconsistent bit and int value for ("+a+", "+p+")";
+                if (canGetPermission) {
+                    assert permissions.getBitValue(a, p) == ((permissions.getIntValue() & bitMask) != 0) :
+                            "inconsistent bit and int value for (" + a + ", " + p + ")";
                 }
 
                 bitShift++;
@@ -1986,7 +1975,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testChangeDate() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.CHANGE_DATE))
+        if (tempFile.isFileOperationSupported(FileOperation.CHANGE_DATE))
             testChangeDateSupported();
         else
             testChangeDateUnsupported();
@@ -2007,7 +1996,7 @@ public abstract class AbstractFileTest {
         sleep(1000);    // Sleep a full second, some filesystems may only have a one-second granularity
         createFile(tempFile, 1);  // 1 byte should be enough
 
-        assert tempFile.getDate()>date;
+        assert tempFile.getDate() > date;
     }
 
     /**
@@ -2020,7 +2009,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testGetInputStream() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.READ_FILE))
+        if (tempFile.isFileOperationSupported(FileOperation.READ_FILE))
             testGetInputStreamSupported();
         else
             testGetInputStreamUnsupported();
@@ -2036,7 +2025,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testGetRandomAccessInputStream() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.RANDOM_READ_FILE))
+        if (tempFile.isFileOperationSupported(FileOperation.RANDOM_READ_FILE))
             testGetRandomAccessInputStreamSupported();
         else
             testGetRandomAccessInputStreamUnsupported();
@@ -2052,7 +2041,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testGetOutputStream() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.WRITE_FILE))
+        if (tempFile.isFileOperationSupported(FileOperation.WRITE_FILE))
             testGetOutputStreamSupported();
         else
             testGetOutputStreamUnsupported();
@@ -2068,7 +2057,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testGetAppendOutputStream() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.APPEND_FILE))
+        if (tempFile.isFileOperationSupported(FileOperation.APPEND_FILE))
             testGetAppendOutputStreamSupported();
         else
             testGetAppendOutputStreamUnsupported();
@@ -2084,7 +2073,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testGetRandomAccessOutputStream() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE))
+        if (tempFile.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE))
             testGetRandomAccessOutputStreamSupported();
         else
             testGetRandomAccessOutputStreamUnsupported();
@@ -2097,7 +2086,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testLs() throws IOException {
-        if(tempFile.isFileOperationSupported(FileOperation.LIST_CHILDREN))
+        if (tempFile.isFileOperationSupported(FileOperation.LIST_CHILDREN))
             testLsSupported();
         else
             testLsUnsupported();
@@ -2110,7 +2099,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testFreeSpace() throws IOException {
-        if(tempFile.isFileOperationSupported(FileOperation.GET_FREE_SPACE))
+        if (tempFile.isFileOperationSupported(FileOperation.GET_FREE_SPACE))
             testGetFreeSpaceSupported();
         else
             testGetFreeSpaceUnsupported();
@@ -2123,7 +2112,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testTotalSpace() throws IOException {
-        if(tempFile.isFileOperationSupported(FileOperation.GET_TOTAL_SPACE))
+        if (tempFile.isFileOperationSupported(FileOperation.GET_TOTAL_SPACE))
             testGetTotalSpaceSupported();
         else
             testGetTotalSpaceUnsupported();
@@ -2148,7 +2137,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testRenameTo() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.RENAME))
+        if (tempFile.isFileOperationSupported(FileOperation.RENAME))
             testRenameToSupported();
         else
             testRenameToUnsupported();
@@ -2173,7 +2162,7 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testCopyRemotelyTo() throws IOException, NoSuchAlgorithmException {
-        if(tempFile.isFileOperationSupported(FileOperation.COPY_REMOTELY))
+        if (tempFile.isFileOperationSupported(FileOperation.COPY_REMOTELY))
             testCopyRemotelyToSupported();
         else
             testCopyRemotelyToUnsupported();
@@ -2186,23 +2175,23 @@ public abstract class AbstractFileTest {
      */
     @Test
     public void testIcon() throws IOException {
-        Icon    icon;
+        Icon icon;
         boolean isHeadless;
 
         // Skips the test if under OS X (this would create a new instance of JFileChooser, which fails 
         isHeadless = GraphicsEnvironment.isHeadless();
-        if(isHeadless && OsFamily.MAC_OS_X.isCurrent())
+        if (isHeadless && OsFamily.MAC_OS_X.isCurrent())
             return;
 
         // Some icon providers will fail (return a null icon) if the file doesn't exist
         tempFile.mkfile();
 
         icon = tempFile.getIcon();
-        if(!isHeadless)
+        if (!isHeadless)
             assert icon != null;
 
         icon = tempFile.getIcon(new Dimension(16, 16));
-        if(!isHeadless)
+        if (!isHeadless)
             assert icon != null;
     }
 
@@ -2247,11 +2236,11 @@ public abstract class AbstractFileTest {
 
         Class<? extends AbstractFile> fileClass = tempFile.getClass();
         Method m;
-        for(FileOperation op: FileOperation.values()) {
+        for (FileOperation op : FileOperation.values()) {
             m = op.getCorrespondingMethod(fileClass);
             assert supportedOps.contains(op) ==
-                !fileClass.getMethod(m.getName(), m.getParameterTypes()).isAnnotationPresent(UnsupportedFileOperation.class)
-                    :"File operation "+op+" does not match annotation of method "+m.getName();
+                    !fileClass.getMethod(m.getName(), m.getParameterTypes()).isAnnotationPresent(UnsupportedFileOperation.class)
+                    : "File operation " + op + " does not match annotation of method " + m.getName();
         }
     }
 
@@ -2267,7 +2256,7 @@ public abstract class AbstractFileTest {
 
         AbstractFile tempFile = getTemporaryFile();
         Class<? extends AbstractFile> fileClass = tempFile.getClass();
-        for(FileOperation op: FileOperation.values()) {
+        for (FileOperation op : FileOperation.values()) {
             boolean opSupported = supportedOps.contains(op);
             assert opSupported == tempFile.isFileOperationSupported(op);
             assert opSupported == AbstractFile.isFileOperationSupported(op, fileClass);
@@ -2283,19 +2272,19 @@ public abstract class AbstractFileTest {
     @Test
     public void testFileInstanceCaching() throws Exception {
         AbstractFile file;
-        for(int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             file = getTemporaryFile();
-            for(int j=0; j<5; j++) {
+            for (int j = 0; j < 5; j++) {
                 // Resolve by path
                 String pathT = file.addTrailingSeparator(file.getURL().toString(true, false));
                 String pathNT = file.removeTrailingSeparator(pathT);
-                assert FileFactory.getFile(pathT)==file;
-                assert FileFactory.getFile(pathNT)==file;
+                assert FileFactory.getFile(pathT) == file;
+                assert FileFactory.getFile(pathNT) == file;
 
                 // Resolve by URL
-                assert FileFactory.getFile(file.getURL())==file;
-                assert FileFactory.getFile(FileURL.getFileURL(pathT))==file;
-                assert FileFactory.getFile(FileURL.getFileURL(pathNT))==file;
+                assert FileFactory.getFile(file.getURL()) == file;
+                assert FileFactory.getFile(FileURL.getFileURL(pathT)) == file;
+                assert FileFactory.getFile(FileURL.getFileURL(pathNT)) == file;
             }
         }
 

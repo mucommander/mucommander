@@ -18,17 +18,16 @@
 
 package com.mucommander.job.impl;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * This job copies a file or a set of files to a temporary folder and makes the temporary file(s) read-only.
@@ -37,14 +36,14 @@ import com.mucommander.ui.main.MainFrame;
  * @author Maxence Bernard
  */
 public class TempCopyJob extends CopyJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TempCopyJob.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(TempCopyJob.class);
+
     /**
      * Creates a new <code>TempExecJob</code> that operates on a single file.
      *
      * @param progressDialog the ProgressDialog that monitors this job
-     * @param mainFrame the MainFrame this job is attached to
-     * @param fileToCopy the file to copy to a temporary location
+     * @param mainFrame      the MainFrame this job is attached to
+     * @param fileToCopy     the file to copy to a temporary location
      */
     public TempCopyJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToCopy) {
         super(progressDialog, mainFrame, new FileSet(fileToCopy.getParent(), fileToCopy), FileFactory.getTemporaryFolder(), getTemporaryFileName(fileToCopy), TransferMode.COPY, FileCollisionDialog.OVERWRITE_ACTION);
@@ -54,8 +53,8 @@ public class TempCopyJob extends CopyJob {
      * Creates a new <code>TempExecJob</code> that operates on a single file.
      *
      * @param progressDialog the ProgressDialog that monitors this job
-     * @param mainFrame the MainFrame this job is attached to
-     * @param filesToCopy the file to copy to a temporary location
+     * @param mainFrame      the MainFrame this job is attached to
+     * @param filesToCopy    the file to copy to a temporary location
      */
     public TempCopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToCopy) {
         super(progressDialog, mainFrame, filesToCopy, getTemporaryFolder(filesToCopy), null, TransferMode.COPY, FileCollisionDialog.OVERWRITE_ACTION);
@@ -67,8 +66,7 @@ public class TempCopyJob extends CopyJob {
         try {
             tempFolder = FileFactory.getTemporaryFile(files.getBaseFolder().getName(), true);
             tempFolder.mkdir();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             tempFolder = FileFactory.getTemporaryFolder();
         }
 
@@ -78,8 +76,7 @@ public class TempCopyJob extends CopyJob {
     protected static String getTemporaryFileName(AbstractFile files) {
         try {
             return FileFactory.getTemporaryFile(files.getName(), true).getName();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             // Should never happen under normal circumstances.
             LOGGER.warn("Caught exception instantiating temporary file, this should not happen!");
             return files.getName();

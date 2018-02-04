@@ -18,50 +18,34 @@
 
 package com.mucommander.ui.main.toolbar;
 
-import java.util.WeakHashMap;
+import com.mucommander.ui.action.impl.*;
 
-import com.mucommander.ui.action.impl.AddBookmarkAction;
-import com.mucommander.ui.action.impl.NewTabAction;
-import com.mucommander.ui.action.impl.ConnectToServerAction;
-import com.mucommander.ui.action.impl.EditBookmarksAction;
-import com.mucommander.ui.action.impl.EditCredentialsAction;
-import com.mucommander.ui.action.impl.EmailAction;
-import com.mucommander.ui.action.impl.GoBackAction;
-import com.mucommander.ui.action.impl.GoForwardAction;
-import com.mucommander.ui.action.impl.GoToHomeAction;
-import com.mucommander.ui.action.impl.GoToParentAction;
-import com.mucommander.ui.action.impl.MarkGroupAction;
-import com.mucommander.ui.action.impl.NewWindowAction;
-import com.mucommander.ui.action.impl.PackAction;
-import com.mucommander.ui.action.impl.RevealInDesktopAction;
-import com.mucommander.ui.action.impl.RunCommandAction;
-import com.mucommander.ui.action.impl.SetSameFolderAction;
-import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
-import com.mucommander.ui.action.impl.ShowPreferencesAction;
-import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
-import com.mucommander.ui.action.impl.StopAction;
-import com.mucommander.ui.action.impl.SwapFoldersAction;
-import com.mucommander.ui.action.impl.UnmarkGroupAction;
-import com.mucommander.ui.action.impl.UnpackAction;
+import java.util.WeakHashMap;
 
 /**
  * This class is responsible to handle the attributes of ToolBars - their actions and separators.
  * Every ToolBar should get its attributes from this class, and register in it for receiving attributes modifications.
- * 
+ *
  * @author Arik Hadas
  */
 public class ToolBarAttributes {
-	
-	/** Command bar actions: Class instances or null to signify a separator */
+
+    /**
+     * Command bar actions: Class instances or null to signify a separator
+     */
     private static String actionIds[];
-    
+
     private static boolean useDefaultActions = true;
-    
-    /** Contains all registered toolbar-attributes listeners, stored as weak references */
+
+    /**
+     * Contains all registered toolbar-attributes listeners, stored as weak references
+     */
     private final static WeakHashMap<ToolBarAttributesListener, ?> listeners = new WeakHashMap<ToolBarAttributesListener, Object>();
-    
-    /** Default command bar actions: Class instances or null to signify a separator */
-    private final static String[] DEFAULT_TOOLBAR_ACTIONS = new String[] {
+
+    /**
+     * Default command bar actions: Class instances or null to signify a separator
+     */
+    private final static String[] DEFAULT_TOOLBAR_ACTIONS = new String[]{
             NewWindowAction.Descriptor.ACTION_ID,
             NewTabAction.Descriptor.ACTION_ID,
             null,
@@ -108,16 +92,16 @@ public class ToolBarAttributes {
         int start = 0;
         int end = actions.length;
 
-        while(start<end && actions[start]==null)
+        while (start < end && actions[start] == null)
             start++;
 
-        if(start==end)
+        if (start == end)
             return new String[]{};
 
-        while(end>start && actions[end-1]==null)
+        while (end > start && actions[end - 1] == null)
             end--;
 
-        int newLen = end-start;
+        int newLen = end - start;
         String newActions[] = new String[newLen];
         System.arraycopy(actions, start, newActions, 0, newLen);
 
@@ -132,37 +116,37 @@ public class ToolBarAttributes {
      */
     public static void setActions(String[] actions) {
         ToolBarAttributes.actionIds = trimActionsArray(actions);
-    	useDefaultActions = false;
-    	fireActionsChanged();
+        useDefaultActions = false;
+        fireActionsChanged();
     }
-    
+
     /**
      * Check whether the default attributes are used.
-     * 
+     *
      * @return true if the default attributes are used, false otherwise.
      */
     public static boolean areDefaultAttributes() {
-    	if (useDefaultActions)
-    		return true;
-    		
-    	int nbActions = actionIds.length;
-    	
-    	if (nbActions != DEFAULT_TOOLBAR_ACTIONS.length)
-    		return false;
-    	
-    	for (int i=0; i<nbActions; ++i)
-    		if (!equals(actionIds[i], DEFAULT_TOOLBAR_ACTIONS[i]))
-    			return false;
-    	
-    	return true;
+        if (useDefaultActions)
+            return true;
+
+        int nbActions = actionIds.length;
+
+        if (nbActions != DEFAULT_TOOLBAR_ACTIONS.length)
+            return false;
+
+        for (int i = 0; i < nbActions; ++i)
+            if (!equals(actionIds[i], DEFAULT_TOOLBAR_ACTIONS[i]))
+                return false;
+
+        return true;
     }
-    
+
     private static boolean equals(Object action1, Object action2) {
-    	if (action1 == null)
-    		return action2 == null;
-    	return action1.equals(action2);
+        if (action1 == null)
+            return action2 == null;
+        return action1.equals(action2);
     }
-    
+
     /**
      * Returns the actions classes that constitute the toolbar. <code>null</code> elements are used to insert a separator
      * between buttons.
@@ -170,22 +154,26 @@ public class ToolBarAttributes {
      * @return the actions classes that constitute the toolbar.
      */
     public static String[] getActions() {
-    	return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actionIds;
+        return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actionIds;
     }
-    
+
     // - Listeners -------------------------------------------------------------
     // -------------------------------------------------------------------------
     public static void addToolBarAttributesListener(ToolBarAttributesListener listener) {
-    	synchronized(listeners) {listeners.put(listener, null);}
+        synchronized (listeners) {
+            listeners.put(listener, null);
+        }
     }
-    
+
     public static void removeToolBarAttributesListener(ToolBarAttributesListener listener) {
-    	synchronized(listeners) {listeners.remove(listener);}
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
     }
-    
+
     public static void fireActionsChanged() {
-    	synchronized(listeners) {
-            for(ToolBarAttributesListener listener : listeners.keySet())
+        synchronized (listeners) {
+            for (ToolBarAttributesListener listener : listeners.keySet())
                 listener.toolBarActionsChanged();
         }
     }

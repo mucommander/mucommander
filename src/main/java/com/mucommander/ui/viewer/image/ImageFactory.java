@@ -29,17 +29,19 @@ import com.mucommander.ui.viewer.ViewerFactory;
  * @author Nicolas Rinaudo
  */
 public class ImageFactory implements ViewerFactory {
-    /** Used to filter out file extensions that the image viewer cannot open. */
+    /**
+     * Used to filter out file extensions that the image viewer cannot open.
+     */
     private ExtensionFilenameFilter filter;
 
     public ImageFactory() {
-        filter = new ExtensionFilenameFilter(new String[] {".png", ".gif", ".jpg", ".jpeg"});
+        filter = new ExtensionFilenameFilter(new String[]{".png", ".gif", ".jpg", ".jpeg"});
         filter.setCaseSensitive(false);
     }
 
     public boolean canViewFile(AbstractFile file) {
         // Do not allow directories
-        if(file.isDirectory())
+        if (file.isDirectory())
             return false;
 
         return filter.accept(file);

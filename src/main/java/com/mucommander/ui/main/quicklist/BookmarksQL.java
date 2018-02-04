@@ -18,8 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import javax.swing.Icon;
-
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
@@ -31,42 +29,44 @@ import com.mucommander.ui.action.impl.ShowBookmarksQLAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
+import javax.swing.*;
+
 /**
  * This quick list shows existing bookmarks.
- * 
+ *
  * @author Arik Hadas
  */
 public class BookmarksQL extends QuickListWithIcons<Bookmark> implements BookmarkListener {
-	private Bookmark[] cachedBookmarks;
-	private FolderPanel folderPanel;
+    private Bookmark[] cachedBookmarks;
+    private FolderPanel folderPanel;
 
-	public BookmarksQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowBookmarksQLAction.Descriptor.ACTION_ID), Translator.get("bookmarks_menu.no_bookmark"));
-		
-		this.folderPanel = folderPanel;
-		
-		bookmarksChanged();
-		BookmarkManager.addBookmarkListener(this);
-	}
+    public BookmarksQL(FolderPanel folderPanel) {
+        super(folderPanel, ActionProperties.getActionLabel(ShowBookmarksQLAction.Descriptor.ACTION_ID), Translator.get("bookmarks_menu.no_bookmark"));
 
-	@Override
+        this.folderPanel = folderPanel;
+
+        bookmarksChanged();
+        BookmarkManager.addBookmarkListener(this);
+    }
+
+    @Override
     protected void acceptListItem(Bookmark item) {
-		folderPanel.tryChangeCurrentFolder(item.getLocation()); //change with text validate
-	}
+        folderPanel.tryChangeCurrentFolder(item.getLocation()); //change with text validate
+    }
 
-	@Override
+    @Override
     protected Bookmark[] getData() {
-		return cachedBookmarks;
-	}
-	
-	@Override
-    protected Icon itemToIcon(Bookmark item) {
-		return getIconOfFile(FileFactory.getFile(item.getLocation()));
-	}
+        return cachedBookmarks;
+    }
 
-	public void bookmarksChanged() {
-		AlteredVector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
-		cachedBookmarks = new Bookmark[bookmarks.size()];
-		bookmarks.toArray(cachedBookmarks);
-	}
+    @Override
+    protected Icon itemToIcon(Bookmark item) {
+        return getIconOfFile(FileFactory.getFile(item.getLocation()));
+    }
+
+    public void bookmarksChanged() {
+        AlteredVector<Bookmark> bookmarks = BookmarkManager.getBookmarks();
+        cachedBookmarks = new Bookmark[bookmarks.size()];
+        bookmarks.toArray(cachedBookmarks);
+    }
 }
