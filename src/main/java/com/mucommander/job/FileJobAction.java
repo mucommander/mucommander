@@ -27,18 +27,18 @@ import com.mucommander.text.Translator;
  */
 public interface FileJobAction {
 
-	int SKIP = 0;
-	int SKIP_ALL = 1;
-	int RETRY = 2;
-	int CANCEL = 3;
-	int APPEND = 4;
-	int OK = 5;
+    int SKIP = 0;
+    int SKIP_ALL = 1;
+    int RETRY = 2;
+    int CANCEL = 3;
+    int APPEND = 4;
+    int OK = 5;
 
-	String SKIP_TEXT = Translator.get("skip");
-	String SKIP_ALL_TEXT = Translator.get("skip_all");
-	String RETRY_TEXT = Translator.get("retry");
-	String CANCEL_TEXT = Translator.get("cancel");
-	String APPEND_TEXT = Translator.get("resume");
-	String OK_TEXT = Translator.get("ok");
+    String SKIP_TEXT = Translator.get("skip");
+    String SKIP_ALL_TEXT = Translator.get("skip_all");
+    String RETRY_TEXT = Translator.get("retry");
+    String CANCEL_TEXT = Translator.get("cancel");
+    String APPEND_TEXT = Translator.get("resume");
+    String OK_TEXT = Translator.get("ok");
 
 }

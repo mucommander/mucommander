@@ -18,125 +18,121 @@
 
 package com.mucommander.ui.main.frame;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.net.MalformedURLException;
-
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.MuSnapshot;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.tabs.ConfFileTableTab;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.net.MalformedURLException;
 
 /**
- * 
  * @author Arik Hadas
  */
 public class DefaultMainFramesBuilder extends MainFrameBuilder {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMainFramesBuilder.class);
-	
-	private Configuration snapshot = MuConfigurations.getSnapshot();
-	
-	public DefaultMainFramesBuilder() { }
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMainFramesBuilder.class);
 
-	@Override
-	public int getSelectedFrame() {
-		return Math.max(snapshot.getIntegerVariable(MuSnapshot.getSelectedWindow()), 0);
-	}
+    private Configuration snapshot = MuConfigurations.getSnapshot();
 
-	@Override
-	public MainFrame[] build() {
-		int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
+    public DefaultMainFramesBuilder() {
+    }
 
-		// if there is no window saved in the snapshot file or custom folders are set, open one window with default settings
-		if (nbFrames == 0 || MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM)) {
-			MainFrame mainFrame = new MainFrame(
-					new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
-					getFileTableConfiguration(FolderPanelType.LEFT, -1),
-					new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
-					getFileTableConfiguration(FolderPanelType.RIGHT, -1));
-			
-			Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-	        // Full screen bounds are not reliable enough, in particular under Linux+Gnome
-	        // so we simply make the initial window 4/5 of screen's size, and center it.
-	        // This should fit under any window manager / platform
-	        int x      = screenSize.width / 10;
-	        int y      = screenSize.height / 10;
-	        int width  = (int)(screenSize.width * 0.8);
-	        int height = (int)(screenSize.height * 0.8);
+    @Override
+    public int getSelectedFrame() {
+        return Math.max(snapshot.getIntegerVariable(MuSnapshot.getSelectedWindow()), 0);
+    }
 
-	        mainFrame.setBounds(new Rectangle(x, y, width, height));
+    @Override
+    public MainFrame[] build() {
+        int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
 
-	        return new MainFrame[] {mainFrame};
-		}
-		else {
-			MainFrame[] mainFrames = new MainFrame[nbFrames];
-			for (int i=0; i<mainFrames.length; ++i)
-				mainFrames[i] = createMainFrame(i);
+        // if there is no window saved in the snapshot file or custom folders are set, open one window with default settings
+        if (nbFrames == 0 || MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM)) {
+            MainFrame mainFrame = new MainFrame(
+                    new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
+                    getFileTableConfiguration(FolderPanelType.LEFT, -1),
+                    new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
+                    getFileTableConfiguration(FolderPanelType.RIGHT, -1));
 
-			return mainFrames;
-		}
-	}
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            // Full screen bounds are not reliable enough, in particular under Linux+Gnome
+            // so we simply make the initial window 4/5 of screen's size, and center it.
+            // This should fit under any window manager / platform
+            int x = screenSize.width / 10;
+            int y = screenSize.height / 10;
+            int width = (int) (screenSize.width * 0.8);
+            int height = (int) (screenSize.height * 0.8);
 
-	private MainFrame createMainFrame(int index) {
-		int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
-		ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
-		for (int i=0; i<nbTabsInLeftPanel; ++i)
-			leftTabs[i] = new ConfFileTableTab(
-									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
-									restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))),
-									snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, true, i)));
-		
-		int nbTabsInRightPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, false));
-		ConfFileTableTab[] rightTabs = new ConfFileTableTab[nbTabsInRightPanel];
-		for (int i=0; i<nbTabsInRightPanel; ++i)
-			rightTabs[i] = new ConfFileTableTab(
-									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
-									restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
-									snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
-		
-		MainFrame mainFrame = new MainFrame(
-				leftTabs,
-				getInitialSelectedTab(FolderPanelType.LEFT, index),
-				getFileTableConfiguration(FolderPanelType.LEFT, index),
-				rightTabs,
-				getInitialSelectedTab(FolderPanelType.RIGHT, index),
-				getFileTableConfiguration(FolderPanelType.RIGHT, index));
-		
-		// Retrieve last saved window bounds
-		Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-        int x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getX(index));
-        int y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getY(index));
-        int width  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getWidth(index));
+            mainFrame.setBounds(new Rectangle(x, y, width, height));
+
+            return new MainFrame[]{mainFrame};
+        } else {
+            MainFrame[] mainFrames = new MainFrame[nbFrames];
+            for (int i = 0; i < mainFrames.length; ++i)
+                mainFrames[i] = createMainFrame(i);
+
+            return mainFrames;
+        }
+    }
+
+    private MainFrame createMainFrame(int index) {
+        int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
+        ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
+        for (int i = 0; i < nbTabsInLeftPanel; ++i)
+            leftTabs[i] = new ConfFileTableTab(
+                    snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
+                    restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))),
+                    snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, true, i)));
+
+        int nbTabsInRightPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, false));
+        ConfFileTableTab[] rightTabs = new ConfFileTableTab[nbTabsInRightPanel];
+        for (int i = 0; i < nbTabsInRightPanel; ++i)
+            rightTabs[i] = new ConfFileTableTab(
+                    snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
+                    restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
+                    snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
+
+        MainFrame mainFrame = new MainFrame(
+                leftTabs,
+                getInitialSelectedTab(FolderPanelType.LEFT, index),
+                getFileTableConfiguration(FolderPanelType.LEFT, index),
+                rightTabs,
+                getInitialSelectedTab(FolderPanelType.RIGHT, index),
+                getFileTableConfiguration(FolderPanelType.RIGHT, index));
+
+        // Retrieve last saved window bounds
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getX(index));
+        int y = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getY(index));
+        int width = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getWidth(index));
         int height = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getHeight(index));
 
         // Retrieves the last known size of the screen.
-        int lastScreenWidth  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_WIDTH);
+        int lastScreenWidth = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_WIDTH);
         int lastScreenHeight = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_HEIGHT);
 
         // If no previous location was saved, or if the resolution has changed,
         // reset the window's dimensions to their default values.
-        if(x == -1 || y == -1 || width == -1 || height == -1 ||
-           screenSize.width != lastScreenWidth ||  screenSize.height != lastScreenHeight
-           || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
+        if (x == -1 || y == -1 || width == -1 || height == -1 ||
+                screenSize.width != lastScreenWidth || screenSize.height != lastScreenHeight
+                || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
 
             // Full screen bounds are not reliable enough, in particular under Linux+Gnome
             // so we simply make the initial window 4/5 of screen's size, and center it.
             // This should fit under any window manager / platform
-            x      = screenSize.width / 10;
-            y      = screenSize.height / 10;
-            width  = (int)(screenSize.width * 0.8);
-            height = (int)(screenSize.height * 0.8);
+            x = screenSize.width / 10;
+            y = screenSize.height / 10;
+            width = (int) (screenSize.width * 0.8);
+            height = (int) (screenSize.height * 0.8);
         }
 
         mainFrame.setBounds(new Rectangle(x, y, width, height));
@@ -147,22 +143,22 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         }
 
         return mainFrame;
-	}
-	
-    private int getInitialSelectedTab(FolderPanelType folderPanelType, int window) {
-    	// Checks which kind of initial path we're dealing with.
-    	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
-    	
-    	return isCustom ? 
-    		0 :
-    		MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
     }
-    
+
+    private int getInitialSelectedTab(FolderPanelType folderPanelType, int window) {
+        // Checks which kind of initial path we're dealing with.
+        boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
+
+        return isCustom ?
+                0 :
+                MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
+    }
+
     private FileURL restoreFileURL(String url) {
-    	try {
-			return FileURL.getFileURL(url);
-		} catch (MalformedURLException e) {
-			return getHomeFolder().getURL();
-		}
+        try {
+            return FileURL.getFileURL(url);
+        } catch (MalformedURLException e) {
+            return getHomeFolder().getURL();
+        }
     }
 }

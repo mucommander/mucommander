@@ -32,7 +32,9 @@ import java.io.OutputStream;
  */
 public class SilenceableOutputStream extends FilterOutputStream {
 
-    /** When true, write methods are no-op */
+    /**
+     * When true, write methods are no-op
+     */
     private boolean silenced;
 
 
@@ -41,7 +43,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
      * <code>OutputStream</code> when not silenced. By default, this <code>SilenceableOutputStream</code> is not
      * silenced.
      *
-     * @param out the OutputStream to forward the data written to when not silenced  
+     * @param out the OutputStream to forward the data written to when not silenced
      */
     public SilenceableOutputStream(OutputStream out) {
         super(out);
@@ -51,7 +53,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
      * Creates a new <code>SilenceableOutputStream</code> that forwards written data to the specified
      * <code>OutputStream</code> when not silenced.
      *
-     * @param out the OutputStream to forward the data written to when not silenced
+     * @param out      the OutputStream to forward the data written to when not silenced
      * @param silenced initial silenced state
      */
     public SilenceableOutputStream(OutputStream out, boolean silenced) {
@@ -66,7 +68,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
      * this stream will not print messages that were previously written while the stream was silenced.
      *
      * @param silenced <code>true</code> to have <code>write</code> methods become no-ops, <code>false</code> to have
-     * them forward the data to the underlying <code>OutputStream</code>
+     *                 them forward the data to the underlying <code>OutputStream</code>
      */
     public void setSilenced(boolean silenced) {
         this.silenced = silenced;
@@ -92,7 +94,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        if(silenced)
+        if (silenced)
             return;
 
         out.write(b);
@@ -100,7 +102,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
 
     @Override
     public void write(byte[] b) throws IOException {
-        if(silenced)
+        if (silenced)
             return;
 
         out.write(b);
@@ -108,7 +110,7 @@ public class SilenceableOutputStream extends FilterOutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        if(silenced)
+        if (silenced)
             return;
 
         out.write(b, off, len);

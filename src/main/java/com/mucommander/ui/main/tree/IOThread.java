@@ -18,32 +18,39 @@
 
 package com.mucommander.ui.main.tree;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
- * A thread that executes i/o operations. 
- * @author Mariusz Jakubowski
+ * A thread that executes i/o operations.
  *
+ * @author Mariusz Jakubowski
  */
 public class IOThread extends Thread {
-	private static final Logger LOGGER = LoggerFactory.getLogger(IOThread.class);
-	
-    /** a queue with tasks to execute */
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOThread.class);
+
+    /**
+     * a queue with tasks to execute
+     */
     private List<Runnable> queue;
-    
-    /** a time after this thread is marked as blocked */
+
+    /**
+     * a time after this thread is marked as blocked
+     */
     private long blockThreshold;
 
-    /** a time when this thread signalled that is alive */
+    /**
+     * a time when this thread signalled that is alive
+     */
     private volatile long lastActionTime = 0;
-    
-    
+
+
     /**
      * Creates a new instance of an IOThread.
-     * @param queue a queue with tasks
+     *
+     * @param queue          a queue with tasks
      * @param blockThreshold a time after this thread is marked as blocked [ms]
      */
     public IOThread(List<Runnable> queue, long blockThreshold) {
@@ -51,14 +58,13 @@ public class IOThread extends Thread {
         this.queue = queue;
         this.blockThreshold = blockThreshold;
     }
-    
-    
-    
+
+
     @Override
     public void run() {
-        
+
         while (!interrupted()) {
-            lastActionTime = System.currentTimeMillis(); 
+            lastActionTime = System.currentTimeMillis();
             while (queue.size() > 0) {
                 Runnable task = queue.remove(0);
                 try {
@@ -66,7 +72,7 @@ public class IOThread extends Thread {
                 } catch (Exception e) {
                     LOGGER.debug("Caught exception", e);
                 }
-                lastActionTime = System.currentTimeMillis(); 
+                lastActionTime = System.currentTimeMillis();
             }
             try {
                 synchronized (this) {
@@ -76,16 +82,17 @@ public class IOThread extends Thread {
                 break;
             }
         }
-        
+
     }
-    
+
     /**
-     * Checks if current thread is blocked. This is done by checking if 
+     * Checks if current thread is blocked. This is done by checking if
      * last action time is smaller than block threshold.
+     *
      * @return true if thread is running
      */
     public boolean isBlocked() {
-        return (lastActionTime != 0) && (System.currentTimeMillis() - lastActionTime > blockThreshold); 
+        return (lastActionTime != 0) && (System.currentTimeMillis() - lastActionTime > blockThreshold);
     }
-    
+
 }

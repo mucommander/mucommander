@@ -38,7 +38,9 @@ import java.util.WeakHashMap;
  */
 public class AlteredVector<E> extends Vector<E> {
 
-    /** Contains all registered listeners, stored as weak references */
+    /**
+     * Contains all registered listeners, stored as weak references
+     */
     private WeakHashMap<VectorChangeListener, Object> listeners = new WeakHashMap<VectorChangeListener, Object>();
 
 
@@ -61,12 +63,12 @@ public class AlteredVector<E> extends Vector<E> {
 
     /**
      * Adds the specified VectorChangeListener to the list of registered listeners.
-     *
+     * <p>
      * <p>Listeners are stored as weak references so {@link #removeVectorChangeListener(VectorChangeListener)}
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
      *
      * @param listener the VectorChangeListener to add to the list of registered listeners.
-     * @see            #removeVectorChangeListener(VectorChangeListener)
+     * @see #removeVectorChangeListener(VectorChangeListener)
      */
     public void addVectorChangeListener(VectorChangeListener listener) {
         listeners.put(listener, null);
@@ -76,7 +78,7 @@ public class AlteredVector<E> extends Vector<E> {
      * Removes the specified VectorChangeListener from the list of registered listeners.
      *
      * @param listener the VectorChangeListener to remove from the list of registered listeners.
-     * @see            #addVectorChangeListener(VectorChangeListener)
+     * @see #addVectorChangeListener(VectorChangeListener)
      */
     public void removeVectorChangeListener(VectorChangeListener listener) {
         listeners.remove(listener);
@@ -87,10 +89,10 @@ public class AlteredVector<E> extends Vector<E> {
      * This method is called when one or more elements has been added to this AlteredVector to notify listeners.
      *
      * @param startIndex index at which the first element has been added
-     * @param nbAdded number of elements added
+     * @param nbAdded    number of elements added
      */
     private void fireElementsAddedEvent(int startIndex, int nbAdded) {
-        for(VectorChangeListener listener : listeners.keySet())
+        for (VectorChangeListener listener : listeners.keySet())
             listener.elementsAdded(startIndex, nbAdded);
     }
 
@@ -98,10 +100,10 @@ public class AlteredVector<E> extends Vector<E> {
      * This method is called when one or more elements has been removed from this AlteredVector to notify listeners.
      *
      * @param startIndex index at which the first element has been removed
-     * @param nbRemoved number of elements removed
+     * @param nbRemoved  number of elements removed
      */
     private void fireElementsRemovedEvent(int startIndex, int nbRemoved) {
-        for(VectorChangeListener listener : listeners.keySet())
+        for (VectorChangeListener listener : listeners.keySet())
             listener.elementsRemoved(startIndex, nbRemoved);
     }
 
@@ -111,7 +113,7 @@ public class AlteredVector<E> extends Vector<E> {
      * @param index index of the element that has been changed
      */
     private void fireElementChangedEvent(int index) {
-        for(VectorChangeListener listener : listeners.keySet())
+        for (VectorChangeListener listener : listeners.keySet())
             listener.elementChanged(index);
     }
 
@@ -154,14 +156,14 @@ public class AlteredVector<E> extends Vector<E> {
     public void addElement(E o) {
         super.addElement(o);
 
-        fireElementsAddedEvent(size()-1, 1);
+        fireElementsAddedEvent(size() - 1, 1);
     }
 
     @Override
     public boolean add(E o) {
         addElement(o);
 
-        fireElementsAddedEvent(size()-1, 1);
+        fireElementsAddedEvent(size() - 1, 1);
 
         return true;
     }
@@ -172,7 +174,7 @@ public class AlteredVector<E> extends Vector<E> {
 
         boolean b = super.addAll(collection);
 
-        fireElementsAddedEvent(sizeBefore, size()-sizeBefore);
+        fireElementsAddedEvent(sizeBefore, size() - sizeBefore);
 
         return b;
     }
@@ -183,7 +185,7 @@ public class AlteredVector<E> extends Vector<E> {
 
         boolean b = super.addAll(i, collection);
 
-        fireElementsAddedEvent(i, size()-sizeBefore);
+        fireElementsAddedEvent(i, size() - sizeBefore);
 
         return b;
     }
@@ -208,7 +210,7 @@ public class AlteredVector<E> extends Vector<E> {
     public boolean removeElement(Object o) {
         int index = indexOf(o);
 
-        if(index==-1)
+        if (index == -1)
             return false;
 
         removeElementAt(index);

@@ -23,13 +23,15 @@ package com.mucommander.extension;
  * <p>
  * <code>ClassFilter</code> implementations are meant to be used in conjunction with {@link ClassFinder}.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public interface ClassFilter {
     /**
      * Returns <code>true</code> if the specified class must be used.
-     * @param  c class that must be evaluated.
-     * @return   <code>true</code> if the specified class must be used, <code>false</code> otherwise.
+     *
+     * @param c class that must be evaluated.
+     * @return <code>true</code> if the specified class must be used, <code>false</code> otherwise.
      */
     public boolean accept(Class<?> c);
 }

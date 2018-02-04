@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,10 +35,9 @@ public class XmlAttributesTest {
     /** Name of the second test attribute. */
     private static final String TEST_ATTRIBUTE_2 = "attribute2";
     /** First value of the test attribute. */
-    private static final String TEST_VALUE_1     = "value1";
+    private static final String TEST_VALUE_1 = "value1";
     /** Second value of the test attribute. */
-    private static final String TEST_VALUE_2     = "value2";
-
+    private static final String TEST_VALUE_2 = "value2";
 
 
     // - Instance fields -----------------------------------------------------------------------------------------------
@@ -47,9 +46,9 @@ public class XmlAttributesTest {
     private XmlAttributes attributes;
 
 
-
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Initialises the test case.
      */
@@ -59,9 +58,9 @@ public class XmlAttributesTest {
     }
 
 
-
     // - Test code -----------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Runs the basic tests.
      */
@@ -86,7 +85,7 @@ public class XmlAttributesTest {
     @Test
     public void testNames() {
         Iterator<String> names;
-        String   buffer;
+        String buffer;
 
         // Makes sure the names method works on an empty set of attributes.
         names = attributes.names();
@@ -117,17 +116,17 @@ public class XmlAttributesTest {
         try {
             names.remove();
             throw new AssertionError();
+        } catch (Exception e) {
         }
-        catch(Exception e) {}
     }
 
     /**
      * Makes sure the specified attribute name has the right value.
      */
     private void checkAttribute(String name) {
-        if(name.equals(TEST_ATTRIBUTE_1))
+        if (name.equals(TEST_ATTRIBUTE_1))
             assert TEST_VALUE_1.equals(attributes.getValue(TEST_ATTRIBUTE_1));
-        else if(name.equals(TEST_ATTRIBUTE_2))
+        else if (name.equals(TEST_ATTRIBUTE_2))
             assert TEST_VALUE_2.equals(attributes.getValue(TEST_ATTRIBUTE_2));
         else
             throw new AssertionError();

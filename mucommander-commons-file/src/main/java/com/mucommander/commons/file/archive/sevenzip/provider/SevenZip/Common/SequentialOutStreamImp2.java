@@ -1,21 +1,22 @@
 package com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.Common;
 
 public class SequentialOutStreamImp2 extends java.io.OutputStream {
-    byte []_buffer;
+    byte[] _buffer;
     int _size;
     int _pos;
-    public void Init(byte [] buffer, int size) {
+
+    public void Init(byte[] buffer, int size) {
         _buffer = buffer;
         _pos = 0;
         _size = size;
     }
-    
+
     public void write(int b) throws java.io.IOException {
         throw new java.io.IOException("SequentialOutStreamImp2 - write() not implemented");
     }
-    
-    public void write(byte [] data,int off, int size) throws java.io.IOException {
-        for(int i = 0 ; i < size ; i++) {
+
+    public void write(byte[] data, int off, int size) throws java.io.IOException {
+        for (int i = 0; i < size; i++) {
             if (_pos < _size) {
                 _buffer[_pos++] = data[off + i];
             } else {

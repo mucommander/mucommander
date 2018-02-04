@@ -44,27 +44,39 @@ import java.io.StringWriter;
  * This class uses {@link InformationPane} to display the icon and the main and caption messages.
  * </p>
  *
- * @see InformationPane
  * @author Maxence Bernard
+ * @see InformationPane
  */
 public class InformationDialog {
 
-    /** Minimum dialog size */
+    /**
+     * Minimum dialog size
+     */
     private static final Dimension MIN_DIALOG_SIZE = new Dimension(360, 0);
 
-    /** Maximum dialog size */
+    /**
+     * Maximum dialog size
+     */
     private static final Dimension MAX_DIALOG_SIZE = new Dimension(480, 10000);
 
-    /** Error dialog type */
+    /**
+     * Error dialog type
+     */
     public static final int ERROR_DIALOG_TYPE = 1;
 
-    /** Information dialog type */
+    /**
+     * Information dialog type
+     */
     public static final int INFORMATION_DIALOG_TYPE = 2;
 
-    /** Warning dialog type */
+    /**
+     * Warning dialog type
+     */
     public static final int WARNING_DIALOG_TYPE = 3;
 
-    /** Question dialog type */
+    /**
+     * Question dialog type
+     */
     public static final int QUESTION_DIALOG_TYPE = 4;
 
 
@@ -81,8 +93,8 @@ public class InformationDialog {
      * Brings up an error dialog with the specified message and a generic localized title.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param message the error message to display in the dialog
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param message         the error message to display in the dialog
      */
     public static void showErrorDialog(Component parentComponent, String message) {
         showErrorDialog(parentComponent, null, message, null, null);
@@ -92,9 +104,9 @@ public class InformationDialog {
      * Brings up an error dialog with the specified title and message.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param title the dialog's title, <code>null</code> for a generic localized title.
-     * @param message the error message to display in the dialog, <code>null</code> for a generic localized message.
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param title           the dialog's title, <code>null</code> for a generic localized title.
+     * @param message         the error message to display in the dialog, <code>null</code> for a generic localized message.
      */
     public static void showErrorDialog(Component parentComponent, String title, String message) {
         showErrorDialog(parentComponent, title, message, null, null);
@@ -104,10 +116,10 @@ public class InformationDialog {
      * Brings up an error dialog with the specified title, main and caption messages.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param title the dialog's title, <code>null</code> for a generic localized title.
-     * @param message the error message to display in the dialog, <code>null</code> for a generic localized message.
-     * @param captionMessage the caption message to display underneath the error message, <code>null</code> for none.
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param title           the dialog's title, <code>null</code> for a generic localized title.
+     * @param message         the error message to display in the dialog, <code>null</code> for a generic localized message.
+     * @param captionMessage  the caption message to display underneath the error message, <code>null</code> for none.
      */
     public static void showErrorDialog(Component parentComponent, String title, String message, String captionMessage) {
         showErrorDialog(parentComponent, title, message, captionMessage, null);
@@ -118,22 +130,22 @@ public class InformationDialog {
      * exception inside an expandable panel.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param title the dialog's title, <code>null</code> for a generic localized title.
-     * @param message the error message to display in the dialog, <code>null</code> for a generic localized message.
-     * @param captionMessage the caption message to display underneath the error message, <code>null</code> for none.
-     * @param throwable exception for which to show the stack trace, <code>null</code> for none.
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param title           the dialog's title, <code>null</code> for a generic localized title.
+     * @param message         the error message to display in the dialog, <code>null</code> for a generic localized message.
+     * @param captionMessage  the caption message to display underneath the error message, <code>null</code> for none.
+     * @param throwable       exception for which to show the stack trace, <code>null</code> for none.
      */
     public static void showErrorDialog(Component parentComponent, String title, String message, String captionMessage, Throwable throwable) {
-        showDialog(ERROR_DIALOG_TYPE, parentComponent, title==null?Translator.get("error"):title, message==null?Translator.get("generic_error"):message, captionMessage, throwable);
+        showDialog(ERROR_DIALOG_TYPE, parentComponent, title == null ? Translator.get("error") : title, message == null ? Translator.get("generic_error") : message, captionMessage, throwable);
     }
 
-   /**
+    /**
      * Brings up a warning dialog with the specified message and a generic localized title.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param message the main message to display in the dialog
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param message         the main message to display in the dialog
      */
     public static void showWarningDialog(Component parentComponent, String message) {
         showWarningDialog(parentComponent, null, message, null);
@@ -143,9 +155,9 @@ public class InformationDialog {
      * Brings up a warning dialog with the specified title and message.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param title the dialog's title, <code>null</code> for a generic localized title.
-     * @param message the main message to display in the dialog.
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param title           the dialog's title, <code>null</code> for a generic localized title.
+     * @param message         the main message to display in the dialog.
      */
     public static void showWarningDialog(Component parentComponent, String title, String message) {
         showWarningDialog(parentComponent, title, message, null);
@@ -155,44 +167,44 @@ public class InformationDialog {
      * Brings up a warning dialog with the specified title, main and caption messages.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param title the dialog's title, <code>null</code> for a generic localized title.
-     * @param message the main message to display in the dialog, <code>null</code> for a generic localized message.
-     * @param captionMessage the caption message to display underneath the main message, <code>null</code> for none.
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param title           the dialog's title, <code>null</code> for a generic localized title.
+     * @param message         the main message to display in the dialog, <code>null</code> for a generic localized message.
+     * @param captionMessage  the caption message to display underneath the main message, <code>null</code> for none.
      */
     public static void showWarningDialog(Component parentComponent, String title, String message, String captionMessage) {
-        showDialog(WARNING_DIALOG_TYPE, parentComponent, title==null?Translator.get("warning"):title, message, captionMessage, null);
+        showDialog(WARNING_DIALOG_TYPE, parentComponent, title == null ? Translator.get("warning") : title, message, captionMessage, null);
     }
 
     /**
      * Brings up a dialog of the specified type and with the specified title, main and caption messages, and stack trace
      * of the specified exception inside an expandable panel.
      *
-     * @param dialogType type of dialog, see constant fields for allow values.
+     * @param dialogType      type of dialog, see constant fields for allow values.
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
-     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
-     * @param title the dialog's title, <code>null</code> for a generic localized title, if one exists for the
-     * dialog type.
-     * @param message the main message to display in the dialog, <code>null</code> for a generic localized message, if
-     * one exists for the dialog type.
-     * @param captionMessage the caption message to display underneath the main message, <code>null</code> for none.
-     * @param throwable exception for which to show the stack trace, <code>null</code> for none.
+     *                        or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param title           the dialog's title, <code>null</code> for a generic localized title, if one exists for the
+     *                        dialog type.
+     * @param message         the main message to display in the dialog, <code>null</code> for a generic localized message, if
+     *                        one exists for the dialog type.
+     * @param captionMessage  the caption message to display underneath the main message, <code>null</code> for none.
+     * @param throwable       exception for which to show the stack trace, <code>null</code> for none.
      */
     public static void showDialog(int dialogType, Component parentComponent, String title, String message, String captionMessage, Throwable throwable) {
         Window owner = DialogToolkit.getWindowForComponent(parentComponent);
 
         final FocusDialog dialog;
-        if(owner instanceof Frame)
-            dialog = new FocusDialog((Frame)owner, title, parentComponent);
+        if (owner instanceof Frame)
+            dialog = new FocusDialog((Frame) owner, title, parentComponent);
         else
-            dialog = new FocusDialog((Dialog)owner, title, parentComponent);
+            dialog = new FocusDialog((Dialog) owner, title, parentComponent);
 
         dialog.setMinimumSize(MIN_DIALOG_SIZE);
         dialog.setMaximumSize(MAX_DIALOG_SIZE);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        InformationPane informationPane = new InformationPane(message, captionMessage, captionMessage==null?Font.PLAIN:Font.BOLD, getInformationPaneIconId(dialogType));
+        InformationPane informationPane = new InformationPane(message, captionMessage, captionMessage == null ? Font.PLAIN : Font.BOLD, getInformationPaneIconId(dialogType));
         mainPanel.add(informationPane);
         mainPanel.addSpace(10);
 
@@ -209,7 +221,7 @@ public class InformationDialog {
         mainPanel.add(buttonPanel);
 
         // Show the exception's stack trace in an expandable/collapsible panel
-        if(throwable !=null) {
+        if (throwable != null) {
             JTextArea detailsArea = new JTextArea();
             detailsArea.setEditable(false);
 
@@ -231,7 +243,7 @@ public class InformationDialog {
 
         buttonPanel.add(Box.createVerticalGlue());
         buttonPanel.add(okPanel);
-        
+
         dialog.getContentPane().add(mainPanel);
 
         // Give initial keyboard focus to the 'OK' button
@@ -251,7 +263,7 @@ public class InformationDialog {
      */
     private static int getInformationPaneIconId(int dialogType) {
         int iconId;
-        switch(dialogType) {
+        switch (dialogType) {
             case ERROR_DIALOG_TYPE:
                 iconId = InformationPane.ERROR_ICON;
                 break;

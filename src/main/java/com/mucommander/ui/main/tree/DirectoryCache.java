@@ -27,30 +27,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class holds cached directories. 
+ * This class holds cached directories.
  * It maps AbstractFiles to DirectoryCache instances.
- * @author Mariusz Jakubowski
  *
+ * @author Mariusz Jakubowski
  */
 public class DirectoryCache {
-    
-    /** a map that holds cached folders */
+
+    /**
+     * a map that holds cached folders
+     */
     private Map<AbstractFile, CachedDirectory> cache;
-    
-    /** Comparator used to sort folders */
+
+    /**
+     * Comparator used to sort folders
+     */
     private FileComparator sort;
 
-    /** A file filter */
+    /**
+     * A file filter
+     */
     private FileFilter filter;
 
-    /** Listeners. */
+    /**
+     * Listeners.
+     */
     protected EventListenerList listenerList = new EventListenerList();
 
 
     /**
      * Creates a new directory cache.
+     *
      * @param filter filter used to filter children directories.
-     * @param sort a comparator used to sort children
+     * @param sort   a comparator used to sort children
      */
     public DirectoryCache(FileFilter filter, FileComparator sort) {
         //this.cache = Collections.synchronizedMap(new HashMap());
@@ -75,8 +84,9 @@ public class DirectoryCache {
 
     /**
      * Fires a cachingStarted or cachingEnded event on all listeners.
+     *
      * @param cachedDirectory a directory those children has been cached
-     * @param readingChildren 
+     * @param readingChildren
      */
     public void fireChildrenCached(CachedDirectory cachedDirectory, boolean readingChildren) {
         Object[] listeners = listenerList.getListenerList();
@@ -90,7 +100,7 @@ public class DirectoryCache {
             }
         }
     }
-    
+
     public void addCachedDirectoryListener(CachedDirectoryListener l) {
         listenerList.add(CachedDirectoryListener.class, l);
     }
@@ -110,7 +120,7 @@ public class DirectoryCache {
     public synchronized void put(AbstractFile key, CachedDirectory value) {
         cache.put(key, value);
     }
-    
+
     /**
      * Deletes entry and all children from the cache.
      */
@@ -126,10 +136,11 @@ public class DirectoryCache {
             }
         }
     }
-    
+
     /**
      * Gets a cached instance of a file. If the cached instance
      * of the file doesn't exists it's added to the cache.
+     *
      * @param key an AbstractFile instance
      * @return a cached file instance
      */
@@ -141,6 +152,6 @@ public class DirectoryCache {
         }
         return cachedDir;
     }
-   
+
 
 }

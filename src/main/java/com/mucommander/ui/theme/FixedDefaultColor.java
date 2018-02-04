@@ -22,26 +22,29 @@ import java.awt.*;
 
 /**
  * {@link DefaultColor} implementation that maps to a fixed value.
+ *
  * @author Nicolas Rinaudo
  */
 public class FixedDefaultColor extends DefaultColor {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Color to default to. */
+    /**
+     * Color to default to.
+     */
     private Color color;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of {@link FixedDefaultColor}.
+     *
      * @param color color to default to.
      */
     public FixedDefaultColor(Color color) {
         this.color = color;
     }
-
 
 
     // - DefaultColor implementation -----------------------------------------------------------------------------------

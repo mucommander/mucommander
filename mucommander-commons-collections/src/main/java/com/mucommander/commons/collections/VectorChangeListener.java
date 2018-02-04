@@ -20,7 +20,7 @@ package com.mucommander.commons.collections;
 
 /**
  * Interface to be implemented by classes that wish to be notified of changes made to an {@link AlteredVector}.
- *
+ * <p>
  * <p>Those classes need to be registered as listeners to receive those events, this can be done by calling
  * {@link AlteredVector#addVectorChangeListener(VectorChangeListener)}.
  *
@@ -32,7 +32,7 @@ public interface VectorChangeListener {
      * This method is called when one or more elements has been added to the AlteredVector.
      *
      * @param startIndex index at which the first element has been added
-     * @param nbAdded number of elements added
+     * @param nbAdded    number of elements added
      */
     void elementsAdded(int startIndex, int nbAdded);
 
@@ -40,7 +40,7 @@ public interface VectorChangeListener {
      * This method is called when one or more elements has been removed from the AlteredVector.
      *
      * @param startIndex index at which the first element has been removed
-     * @param nbRemoved number of elements removed
+     * @param nbRemoved  number of elements removed
      */
     void elementsRemoved(int startIndex, int nbRemoved);
 

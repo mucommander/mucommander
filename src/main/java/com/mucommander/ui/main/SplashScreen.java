@@ -28,54 +28,78 @@ import java.awt.*;
 
 /**
  * Splash screen that gets displayed on muCommander startup.
- *
+ * <p>
  * <p>The splash screen is made of a logo image on top of which is displayed muCommander version number (in the top right corner)
- * and a loading message (in the lower left corner) which is updated by {@link com.mucommander.muCommander} to show startup progress. 
- * It is then closed by {@link com.mucommander.muCommander} when muCommander is fully started and ready for use.</p> 
+ * and a loading message (in the lower left corner) which is updated by {@link com.mucommander.muCommander} to show startup progress.
+ * It is then closed by {@link com.mucommander.muCommander} when muCommander is fully started and ready for use.</p>
  *
  * @author Maxence Bernard
  */
 public class SplashScreen extends JWindow {
 
-    /** muCommander version displayed on this splash screen */
+    /**
+     * muCommander version displayed on this splash screen
+     */
     private String version;
 
-    /** Current loading message displayed on this splash screen */
+    /**
+     * Current loading message displayed on this splash screen
+     */
     private String loadingMessage;
 
-    /** Font used to display version and loading message on this splash screen */
+    /**
+     * Font used to display version and loading message on this splash screen
+     */
     private Font customFont;
 
-    /** Path to the splash screen logo image within the JAR file */
-    private final static String SPLASH_IMAGE_PATH = IconManager.getIconSetFolder(IconManager.MUCOMMANDER_ICON_SET)+"splash.png";
+    /**
+     * Path to the splash screen logo image within the JAR file
+     */
+    private final static String SPLASH_IMAGE_PATH = IconManager.getIconSetFolder(IconManager.MUCOMMANDER_ICON_SET) + "splash.png";
 
-    /** Name of the font used to display text on this splash screen */
+    /**
+     * Name of the font used to display text on this splash screen
+     */
     private final static String FONT_NAME = "Courier";
-    /** Style of the font used to display text on this splash screen */
+    /**
+     * Style of the font used to display text on this splash screen
+     */
 //    private final static int FONT_STYLE = Font.PLAIN;
     private final static int FONT_STYLE = Font.BOLD;
-    /** Size of the font used to display text on this splash screen */
+    /**
+     * Size of the font used to display text on this splash screen
+     */
     private final static int FONT_SIZE = 11;
-	
-    /** Color of the text displayed on this splash screen */ 
+
+    /**
+     * Color of the text displayed on this splash screen
+     */
     private final static Color TEXT_COLOR = new Color(192, 238, 241);
     private final static Color SHADOW_TEXT_COLOR = new Color(0, 86, 117);
 
-    /** Number of pixels between the loading message and the left side of the splash image */
+    /**
+     * Number of pixels between the loading message and the left side of the splash image
+     */
     private final static int LOADING_MSG_MARGIN_X = 4;
-    /** Number of pixels between the loading message and the bottom of the splash image */
+    /**
+     * Number of pixels between the loading message and the bottom of the splash image
+     */
     private final static int LOADING_MSG_MARGIN_Y = 6;
 
-    /** Number of pixels between the version information and the right side of the splash image */
+    /**
+     * Number of pixels between the version information and the right side of the splash image
+     */
     private final static int VERSION_MARGIN_X = 5;
-    /** Number of pixels between the version information and the top of the splash image */
+    /**
+     * Number of pixels between the version information and the top of the splash image
+     */
     private final static int VERSION_MARGIN_Y = 3;
 
 
     /**
      * Creates and displays a new SplashScreen, with the given version string and initial loading message.
      *
-     * @param version muCommander version string which will be displayed in the top right corner
+     * @param version        muCommander version string which will be displayed in the top right corner
      * @param loadingMessage initial loading message, displayed in the lower left corner
      */
     public SplashScreen(String version, String loadingMessage) {
@@ -93,18 +117,20 @@ public class SplashScreen extends JWindow {
         // Wait for the image to be fully loaded
         MediaTracker mediaTracker = new MediaTracker(this);
         mediaTracker.addImage(imageIcon.getImage(), 0);
-        try { mediaTracker.waitForID(0); }
-        catch(InterruptedException e) {}
+        try {
+            mediaTracker.waitForID(0);
+        } catch (InterruptedException e) {
+        }
 
         setContentPane(new JLabel(imageIcon));
-		
+
         // Set size manually instead of using pack(), because of a bug under 1.3.1/Win32 which
         // eats a 1-pixel row of the image
         //		pack();
         int width = imageIcon.getIconWidth();
         int height = imageIcon.getIconHeight();
         setSize(width, height);
-        
+
         DialogToolkit.centerOnScreen(this);
 
         // Display the splash screen
@@ -113,7 +139,7 @@ public class SplashScreen extends JWindow {
 
 
     /**
-     * Repaints this SplashScreen to display the new given loading message, replacing the previous one. 
+     * Repaints this SplashScreen to display the new given loading message, replacing the previous one.
      *
      * @param msg the new loading message to be displayed
      */
@@ -134,24 +160,24 @@ public class SplashScreen extends JWindow {
 
         // Display loading message in the lower left corner
         int textX = LOADING_MSG_MARGIN_X;
-        int textY = getHeight()-LOADING_MSG_MARGIN_Y; 
+        int textY = getHeight() - LOADING_MSG_MARGIN_Y;
 
         g.setColor(SHADOW_TEXT_COLOR);
-        g.drawString(loadingMessage, textX-1, textY-1);
+        g.drawString(loadingMessage, textX - 1, textY - 1);
 
         g.setColor(TEXT_COLOR);
         g.drawString(loadingMessage, textX, textY);
 
         // Display version in the top right corner
         // Get FontRenderContext instance to calculate text width and height
-        java.awt.font.FontRenderContext fontRenderContext = ((Graphics2D)g).getFontRenderContext();
+        java.awt.font.FontRenderContext fontRenderContext = ((Graphics2D) g).getFontRenderContext();
         java.awt.geom.Rectangle2D textBounds = new java.awt.font.TextLayout(version, customFont, fontRenderContext).getBounds();
 
-        textX = getWidth()-(int)textBounds.getWidth()-VERSION_MARGIN_X;
-        textY = (int)textBounds.getHeight()+VERSION_MARGIN_Y;
+        textX = getWidth() - (int) textBounds.getWidth() - VERSION_MARGIN_X;
+        textY = (int) textBounds.getHeight() + VERSION_MARGIN_Y;
 
         g.setColor(SHADOW_TEXT_COLOR);
-        g.drawString(version, textX-1, textY-1);
+        g.drawString(version, textX - 1, textY - 1);
 
         g.setColor(TEXT_COLOR);
         g.drawString(version, textX, textY);

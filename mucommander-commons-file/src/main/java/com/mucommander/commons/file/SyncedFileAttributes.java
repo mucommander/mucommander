@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -56,7 +56,7 @@ public abstract class SyncedFileAttributes extends SimpleFileAttributes {
     public SyncedFileAttributes(long ttl, boolean updateAttributesNow) {
         setTtl(ttl);    // also sets the expiration date
 
-       if(updateAttributesNow)
+        if (updateAttributesNow)
             checkForExpiration(true);   // force attributes update
     }
 
@@ -111,9 +111,9 @@ public abstract class SyncedFileAttributes extends SimpleFileAttributes {
      */
     public void updateExpirationDate() {
         setExpirationDate(
-            ttl<0
-                ?Long.MAX_VALUE
-                :System.currentTimeMillis()+getTtl());
+                ttl < 0
+                        ? Long.MAX_VALUE
+                        : System.currentTimeMillis() + getTtl());
     }
 
     /**
@@ -121,13 +121,13 @@ public abstract class SyncedFileAttributes extends SimpleFileAttributes {
      * passed, <code>false</code> if attributes are still 'fresh'. This method also returns <code>false</code> if
      * automatic attributes' update has been disabled ('time to live' set to a negative value), or if attributes are
      * currently being updated.
-     *  
+     *
      * @return <code>true</code> if attributes have expired
      */
     public boolean hasExpired() {
-        return ttl>=0           // prevents automatic updates if ttl is set to a negative value
-            && !isUpdating()    // causes getters to return the current value while attributes are being updated
-            && System.currentTimeMillis()>expirationDate;
+        return ttl >= 0           // prevents automatic updates if ttl is set to a negative value
+                && !isUpdating()    // causes getters to return the current value while attributes are being updated
+                && System.currentTimeMillis() > expirationDate;
     }
 
     /**
@@ -155,7 +155,7 @@ public abstract class SyncedFileAttributes extends SimpleFileAttributes {
      * @param forceUpdate if true, attributes will systematically be updated, without checking the expiration date
      */
     protected void checkForExpiration(boolean forceUpdate) {
-        if(forceUpdate || hasExpired()) {
+        if (forceUpdate || hasExpired()) {
             // After this method is called, hasExpired() returns false so that implementations of updateAttributes()
             // can query attribute getters without entering a loop of death.
             setUpdating(true);

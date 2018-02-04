@@ -18,37 +18,35 @@
 
 package com.mucommander.ui.layout;
 
-import java.awt.Component;
-import java.awt.LayoutManager;
-
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
- * This panel should be used instead of creating temporary panels only for layout purpose. 
+ * This panel should be used instead of creating temporary panels only for layout purpose.
  * Using Fluent Interface technique, the add component calls can be chained and the resulting
  * code becomes more readable.
- * 
+ * <p>
  * Note: The caller to {@link #add(Component)} should be very careful not to assume
  * the returned object is the object that was just added (as in {@link JPanel#add(Component)})
- * 
+ *
  * @author Arik Hadas
  */
 public class FluentPanel extends JPanel {
 
-	public FluentPanel(LayoutManager layoutManager) {
-		super(layoutManager);
-	}
-	
-	@Override
-	public FluentPanel add(Component comp) {
-		super.add(comp);
+    public FluentPanel(LayoutManager layoutManager) {
+        super(layoutManager);
+    }
 
-		return this;
-	}
+    @Override
+    public FluentPanel add(Component comp) {
+        super.add(comp);
 
-	public FluentPanel add(Component comp, String constraints) {
-		super.add(comp, constraints);
-		
-		return this;
-	}
+        return this;
+    }
+
+    public FluentPanel add(Component comp, String constraints) {
+        super.add(comp, constraints);
+
+        return this;
+    }
 }

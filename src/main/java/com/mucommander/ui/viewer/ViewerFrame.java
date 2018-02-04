@@ -16,15 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
-package com.mucommander.ui.viewer;
 
-import java.awt.Dimension;
-import java.awt.Image;
+package com.mucommander.ui.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
+
+import java.awt.*;
 
 
 /**
@@ -34,14 +33,14 @@ import com.mucommander.ui.main.MainFrame;
  * @author Maxence Bernard, Arik Hadas
  */
 public class ViewerFrame extends FileFrame {
-	
+
     private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
-	
+
     /**
      * Creates a new ViewerFrame to start viewing the given file.
-     *
+     * <p>
      * <p>This constructor has package access only, ViewerFrame need to be created can
-     * {@link ViewerRegistrar#createViewerFrame(MainFrame,AbstractFile,Image)}.
+     * {@link ViewerRegistrar#createViewerFrame(MainFrame, AbstractFile, Image)}.
      */
     ViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         super(mainFrame, file, icon);
@@ -53,21 +52,21 @@ public class ViewerFrame extends FileFrame {
 
     @Override
     public Dimension getMinimumSize() {
-    	return MIN_DIMENSION;
+        return MIN_DIMENSION;
     }
 
-	@Override
-	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
-		return ViewerRegistrar.createFileViewer(file, ViewerFrame.this);
-	}
+    @Override
+    protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
+        return ViewerRegistrar.createFileViewer(file, ViewerFrame.this);
+    }
 
-	@Override
-	protected String getGenericErrorDialogTitle() {
-		return Translator.get("file_viewer.view_error_title");
-	}
+    @Override
+    protected String getGenericErrorDialogTitle() {
+        return Translator.get("file_viewer.view_error_title");
+    }
 
-	@Override
+    @Override
     protected String getGenericErrorDialogMessage() {
-		return Translator.get("file_viewer.view_error");
-	}
+        return Translator.get("file_viewer.view_error");
+    }
 }

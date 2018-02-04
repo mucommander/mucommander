@@ -31,45 +31,50 @@ import java.io.Writer;
  * }
  * </pre>
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public abstract class ConfigurationWriterFactory<T extends ConfigurationBuilder> {
-	
-	/** The name of the root element of the XML file */
-	private String rootElementName;
-	
-	/**
-	 * Constructor
-	 * For backward compatibility using root element "prefs" it not mentioned otherwise
-	 */
-	public ConfigurationWriterFactory() {
-		this("prefs");
-	}
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param rootElementName the name of the root element in the XML file
-	 */
-	public ConfigurationWriterFactory(String rootElementName) {
-		this.rootElementName = rootElementName;
-	}
-	
-	/**
-	 * Returns the name of the root element of the XML file
-	 * @return the name of the root element of the XML file
-	 */
-	protected String getRootElementName() {
-		return rootElementName;
-	}
-	
+
+    /**
+     * The name of the root element of the XML file
+     */
+    private String rootElementName;
+
+    /**
+     * Constructor
+     * For backward compatibility using root element "prefs" it not mentioned otherwise
+     */
+    public ConfigurationWriterFactory() {
+        this("prefs");
+    }
+
+    /**
+     * Constructor
+     *
+     * @param rootElementName the name of the root element in the XML file
+     */
+    public ConfigurationWriterFactory(String rootElementName) {
+        this.rootElementName = rootElementName;
+    }
+
+    /**
+     * Returns the name of the root element of the XML file
+     *
+     * @return the name of the root element of the XML file
+     */
+    protected String getRootElementName() {
+        return rootElementName;
+    }
+
     /**
      * Creates an instance of {@link ConfigurationBuilder}.
      * <p>
      * The returned builder instance will serialize configuration events to the specified writer.
      * </p>
-     * @param  out                          where to write the configuration data.
-     * @return                              an instance of {@link ConfigurationBuilder}.
+     *
+     * @param out where to write the configuration data.
+     * @return an instance of {@link ConfigurationBuilder}.
      * @throws WriterConfigurationException if the factory wasn't properly configured.
      */
     public abstract T getWriterInstance(Writer out) throws WriterConfigurationException;

@@ -36,7 +36,7 @@ import java.io.InputStream;
  * The {@link #MAX_RECOMMENDED_BYTE_SIZE} field controls that threshold: if a supplied byte array is larger than this
  * value, the additional bytes will not be processed by the <code>detectEncoding</code> methods. Therefore, this value
  * should be taken into account if bytes are to be fetched specifically for the purpose of detecting the encoding.
- *
+ * <p>
  * <p>
  * EncodingDetector uses <i>ICU4J</i> under the hood. Here's a list of encodings that can currently be detected:
  * <pre>
@@ -72,12 +72,13 @@ import java.io.InputStream;
 public class EncodingDetector {
     private static final Logger LOGGER = LoggerFactory.getLogger(EncodingDetector.class);
 
-    /** Maximum number of bytes that the detectEncoding methods will process.
+    /**
+     * Maximum number of bytes that the detectEncoding methods will process.
      * <p>
      * See http://philip.html5.org/data/charsets.html and http://philip.html5.org/data/encoding-detection.svg
      * for why 4096 is the recommended size.
      * </p>
-     *  */
+     */
     public final static int MAX_RECOMMENDED_BYTE_SIZE = 4096;
 
 
@@ -96,47 +97,47 @@ public class EncodingDetector {
      * <code>null</code> if there is none (not enough data or confidence).
      * Note that the returned character encoding may not be available on the Java runtime -- use
      * <code>java.nio.Charset#isSupported(String)</code> to determine if it is available.
-     *
+     * <p>
      * <p>A maximum of {@link #MAX_RECOMMENDED_BYTE_SIZE} will be read from the array. If the array is larger than this
      * value, all further bytes will be ignored.</p>
      *
      * @param bytes the bytes for which to detect the encoding
-     * @param off the array offset at which the data to process starts
-     * @param len length of the data in the array
+     * @param off   the array offset at which the data to process starts
+     * @param len   length of the data in the array
      * @return the best guess at the encoding, null if there is none (not enough data or confidence)
      */
     public static String detectEncoding(byte bytes[], int off, int len) {
         // The current ICU CharsetDetector class will throw an ArrayIndexOutOfBoundsException exception if the
         // supplied array is less than 4 bytes long. In that case, return null.
-        if(len<4)
+        if (len < 4)
             return null;
 
         // Trim the array if it is too long, detecting the charset is an expensive operation and past a certain point,
         // having more bytes won't help any further        
-        if(len > MAX_RECOMMENDED_BYTE_SIZE)
-                len = MAX_RECOMMENDED_BYTE_SIZE;
+        if (len > MAX_RECOMMENDED_BYTE_SIZE)
+            len = MAX_RECOMMENDED_BYTE_SIZE;
 
         // CharsetDetector will process the array fully, so if the data does not start at 0 or ends before the array's
         // length, create a new array that fits the data exactly
-        if(off>0 || len<bytes.length) {
+        if (off > 0 || len < bytes.length) {
             byte tmp[] = new byte[len];
             System.arraycopy(bytes, off, tmp, 0, len);
             bytes = tmp;
         }
-        
+
         CharsetDetector cd = new CharsetDetector();
         cd.setText(bytes);
 
         CharsetMatch cm = cd.detect();
 
         // Debug info
-        LOGGER.trace("bestMatch getName()={}, getConfidence()={}", (cm==null?"null":cm.getName()),
-                     (cm==null?"null":Integer.toString(cm.getConfidence())));
+        LOGGER.trace("bestMatch getName()={}, getConfidence()={}", (cm == null ? "null" : cm.getName()),
+                (cm == null ? "null" : Integer.toString(cm.getConfidence())));
 //            CharsetMatch cms[] = cd.detectAll();
 //            for(int i=0; i<cms.length; i++)
 //                CommonsLogger.finest("getName()="+cms[i].getName()+" getConfidence()="+cms[i].getConfidence());
 
-        return cm==null?null:cm.getName();
+        return cm == null ? null : cm.getName();
     }
 
 
@@ -145,10 +146,10 @@ public class EncodingDetector {
      * encoded, and returns the best guess or <code>null</code> if there is none (not enough data or confidence).
      * Note that the returned character encoding may or may not be available on the Java runtime -- use
      * <code>java.nio.Charset#isSupported(String)</code> to determine if it is available.
-     *
+     * <p>
      * <p>A maximum of {@link #MAX_RECOMMENDED_BYTE_SIZE} will be read from the <code>InputStream</code>. The
      * stream will not be closed and will not be repositionned after the bytes have been read. It is up to the calling
-     * method to use the <code>InputStream#mark()</code> and <code>InputStream#reset()</code> methods (if supported) 
+     * method to use the <code>InputStream#mark()</code> and <code>InputStream#reset()</code> methods (if supported)
      * or reopen the stream if needed.
      * </p>
      *
@@ -161,8 +162,7 @@ public class EncodingDetector {
 
         try {
             return detectEncoding(buf, 0, StreamUtils.readUpTo(in, buf));
-        }
-        finally {
+        } finally {
             BufferPool.releaseByteArray(buf);
         }
     }
@@ -179,6 +179,7 @@ public class EncodingDetector {
 
     /**
      * Lists all detectable encodings as returned by {@link #getDetectableEncodings()} to the standard output.
+     *
      * @param args command line arguments.
      */
     public static void main(String args[]) {

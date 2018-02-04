@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,7 +47,7 @@ public class LocalFileURLTest extends FileURLTestCase {
     public void testLocalPathParsing() throws MalformedURLException {
         FileURL url;
         // For OSes that use backslash as a path separator and have a notion of 'root drives' like Windows (C:\ D:\ ...).
-        if("\\".equals(getPathSeparator())) {
+        if ("\\".equals(getPathSeparator())) {
             assert "\\".equals(getPathSeparator());
 
             url = FileURL.getFileURL("C:\\");
@@ -136,7 +136,7 @@ public class LocalFileURLTest extends FileURLTestCase {
         FileURL url = FileURL.getFileURL("\\\\host\\share");
 
         // UNC path will be transformed into either a 'file' or a 'smb' URL, depending on the current OS
-        assert (OsFamily.WINDOWS.isCurrent()?"file":"smb").equals(url.getScheme());
+        assert (OsFamily.WINDOWS.isCurrent() ? "file" : "smb").equals(url.getScheme());
         assert "host".equals(url.getHost());
         assert "/share".equals(url.getPath());
     }

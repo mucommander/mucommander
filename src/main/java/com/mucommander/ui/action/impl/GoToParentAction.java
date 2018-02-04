@@ -18,20 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action changes the current folder of the currently active FolderPanel to the current folder's parent.
@@ -42,10 +36,11 @@ import com.mucommander.ui.main.MainFrame;
 public class GoToParentAction extends ActiveTabAction {
     /**
      * Creates a new <code>GoToParentAction</code> with the specified parameters.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public GoToParentAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoToParentAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -58,9 +53,8 @@ public class GoToParentAction extends ActiveTabAction {
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
-        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+                mainFrame.getActivePanel().getCurrentFolder().getParent() != null);
     }
-
 
 
     ///////////////////////
@@ -70,24 +64,24 @@ public class GoToParentAction extends ActiveTabAction {
     /**
      * Updates <code>panel</code>'s location to its parent.
      *
-     * @param  panel in which to change the location.
+     * @param panel in which to change the location.
      * @return <code>true</code> if <code>panel</code> has a parent, <code>false</code> otherwise.
      */
     protected boolean goToParent(FolderPanel panel) {
-    	AbstractFile parent;
+        AbstractFile parent;
 
-        if((parent = panel.getCurrentFolder().getParent()) != null) {
-        	panel.tryChangeCurrentFolder(parent, null, true);
+        if ((parent = panel.getCurrentFolder().getParent()) != null) {
+            panel.tryChangeCurrentFolder(parent, null, true);
             return true;
         }
         return false;
     }
 
 
-
     /////////////////////////////
     // MuAction implementation //
     /////////////////////////////
+
     /**
      * Goes to the current location's parent in the active panel.
      */
@@ -98,27 +92,35 @@ public class GoToParentAction extends ActiveTabAction {
         goToParent(mainFrame.getActivePanel());
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new GoToParentAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new GoToParentAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "GoToParent";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "GoToParent";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0); }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
+        }
     }
 }

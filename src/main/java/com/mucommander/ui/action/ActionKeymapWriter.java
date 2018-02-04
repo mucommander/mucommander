@@ -18,110 +18,109 @@
 
 package com.mucommander.ui.action;
 
+import com.mucommander.RuntimeConstants;
+import com.mucommander.io.backup.BackupOutputStream;
+import com.mucommander.ui.text.KeyStrokeUtils;
+import com.mucommander.xml.XmlAttributes;
+import com.mucommander.xml.XmlWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.RuntimeConstants;
-import com.mucommander.io.backup.BackupOutputStream;
-import com.mucommander.ui.text.KeyStrokeUtils;
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
-
 /**
  * This class is responsible for writing the actions.
- * When actions are modified, they are written to the user's actions file. 
- * 
+ * When actions are modified, they are written to the user's actions file.
+ *
  * @author Maxence Bernard, Arik Hadas
  */
 class ActionKeymapWriter extends ActionKeymapIO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ActionKeymapWriter.class);
-	
-	ActionKeymapWriter() {}
-	
-	public void create() throws IOException {
-		BackupOutputStream bos = new BackupOutputStream(getActionsFile());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActionKeymapWriter.class);
 
-		try {
-			new Writer(bos).writeKeyMap(null);
-		} catch (Exception e) {
-			LOGGER.debug("Caught exception", e);
-		} finally {
-			bos.close();
-		}
-	}
-	
-	void write() throws IOException {
-		Map<String, KeyStroke[]> combinedMapping = new Hashtable<String, KeyStroke[]>();
-		Iterator<String> modifiedActionsIterator = ActionKeymap.getCustomizedActions();
+    ActionKeymapWriter() {
+    }
 
-		while(modifiedActionsIterator.hasNext()) {
-			String actionId = modifiedActionsIterator.next();
-			KeyStroke[] keyStrokes = new KeyStroke[2];
-			keyStrokes[0] = ActionKeymap.getAccelerator(actionId);
-			keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionId);
+    public void create() throws IOException {
+        BackupOutputStream bos = new BackupOutputStream(getActionsFile());
 
-			combinedMapping.put(actionId, keyStrokes);
-		}
-		
-		BackupOutputStream bos = new BackupOutputStream(getActionsFile());
+        try {
+            new Writer(bos).writeKeyMap(null);
+        } catch (Exception e) {
+            LOGGER.debug("Caught exception", e);
+        } finally {
+            bos.close();
+        }
+    }
 
-		try {
-			new Writer(bos).writeKeyMap(combinedMapping);
-			wereActionsModified = false;
-		} catch (Exception e) {
-			LOGGER.debug("Caught exception", e);
-		} finally {
-			bos.close();
-		}
-	}
-	
+    void write() throws IOException {
+        Map<String, KeyStroke[]> combinedMapping = new Hashtable<String, KeyStroke[]>();
+        Iterator<String> modifiedActionsIterator = ActionKeymap.getCustomizedActions();
+
+        while (modifiedActionsIterator.hasNext()) {
+            String actionId = modifiedActionsIterator.next();
+            KeyStroke[] keyStrokes = new KeyStroke[2];
+            keyStrokes[0] = ActionKeymap.getAccelerator(actionId);
+            keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionId);
+
+            combinedMapping.put(actionId, keyStrokes);
+        }
+
+        BackupOutputStream bos = new BackupOutputStream(getActionsFile());
+
+        try {
+            new Writer(bos).writeKeyMap(combinedMapping);
+            wereActionsModified = false;
+        } catch (Exception e) {
+            LOGGER.debug("Caught exception", e);
+        } finally {
+            bos.close();
+        }
+    }
+
     private static class Writer {
-    	private XmlWriter writer = null;
+        private XmlWriter writer = null;
 
-    	private Writer(OutputStream stream) throws IOException {
-    		this.writer = new XmlWriter(stream);
-    	}
-    	
-    	private void writeKeyMap(Map<String, KeyStroke[]> actionMap) throws IOException {
-    		try {
-    			writer.writeCommentLine("See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file");
-    			
-    			XmlAttributes rootElementAttributes = new XmlAttributes();
-				rootElementAttributes.add(VERSION_ATTRIBUTE, RuntimeConstants.VERSION);
-    			
-    			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
+        private Writer(OutputStream stream) throws IOException {
+            this.writer = new XmlWriter(stream);
+        }
 
-    			if (actionMap != null) {
-                    for(String actionId: actionMap.keySet())
-    					addMapping(actionId, actionMap.get(actionId));
-    			}
+        private void writeKeyMap(Map<String, KeyStroke[]> actionMap) throws IOException {
+            try {
+                writer.writeCommentLine("See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file");
 
-    		} finally {
-    			writer.endElement(ROOT_ELEMENT);
-    		}
-    	}
+                XmlAttributes rootElementAttributes = new XmlAttributes();
+                rootElementAttributes.add(VERSION_ATTRIBUTE, RuntimeConstants.VERSION);
 
-    	private void addMapping(String actionId, KeyStroke[] keyStrokes) throws IOException {
-    		XmlAttributes attributes = new XmlAttributes();
-    		attributes.add(ID_ATTRIBUTE, actionId);
+                writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
 
-    	    LOGGER.trace("     Writing mapping of "  + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
+                if (actionMap != null) {
+                    for (String actionId : actionMap.keySet())
+                        addMapping(actionId, actionMap.get(actionId));
+                }
 
-    		if (keyStrokes[0] != null)
-    			attributes.add(PRIMARY_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[0]));
+            } finally {
+                writer.endElement(ROOT_ELEMENT);
+            }
+        }
 
-    		if (keyStrokes[1] != null)
-    			attributes.add(ALTERNATE_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[1]));
-    		
-    		writer.writeStandAloneElement(ACTION_ELEMENT, attributes);
-    	}
+        private void addMapping(String actionId, KeyStroke[] keyStrokes) throws IOException {
+            XmlAttributes attributes = new XmlAttributes();
+            attributes.add(ID_ATTRIBUTE, actionId);
+
+            LOGGER.trace("     Writing mapping of " + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
+
+            if (keyStrokes[0] != null)
+                attributes.add(PRIMARY_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[0]));
+
+            if (keyStrokes[1] != null)
+                attributes.add(ALTERNATE_KEYSTROKE_ATTRIBUTE, KeyStrokeUtils.getKeyStrokeRepresentation(keyStrokes[1]));
+
+            writer.writeStandAloneElement(ACTION_ELEMENT, attributes);
+        }
     }
 }

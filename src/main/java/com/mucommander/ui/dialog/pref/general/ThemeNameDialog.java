@@ -31,33 +31,44 @@ import java.awt.event.ActionListener;
 
 /**
  * Dialog used to ask a new theme name to the user.
+ *
  * @author Nicolas Rinaudo
  */
 public class ThemeNameDialog extends FocusDialog implements ActionListener {
     // - UI fields -----------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Field in which the user will enter the new name. */
+    /**
+     * Field in which the user will enter the new name.
+     */
     private JTextField nameField;
-    /** Ok button. */
-    private JButton    okButton;
-    /** Cancel button. */
-    private JButton    cancelButton;
-
+    /**
+     * Ok button.
+     */
+    private JButton okButton;
+    /**
+     * Cancel button.
+     */
+    private JButton cancelButton;
 
 
     // - Misc. fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Whether the dialog was closed by the ok button or by cancelling it. */
+    /**
+     * Whether the dialog was closed by the ok button or by cancelling it.
+     */
     private boolean wasValidated;
-    /** Maximum dimensions for the dialog. */
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480,10000);	
-
+    /**
+     * Maximum dimensions for the dialog.
+     */
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480, 10000);
 
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a new name dialog with the specified owner.
+     *
      * @param owner component that will own this dialog.
      * @param name  current name.
      */
@@ -68,6 +79,7 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
 
     /**
      * Creates a new name dialog with the specified owner.
+     *
      * @param owner component that will own this dialog.
      * @param name  current name.
      */
@@ -77,13 +89,14 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
     }
 
 
-
     // - UI initialisation ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates the panel in which we'll store the label and name field.
-     * @param  name current name.
-     * @return      the panel in which we'll store the label and name field.
+     *
+     * @param name current name.
+     * @return the panel in which we'll store the label and name field.
      */
     private JPanel createNamePanel(String name) {
         XAlignedComponentPanel panel;
@@ -111,8 +124,8 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
         panel.add(createNamePanel(name));
 
         // Creates the button panel.
-        panel.add(new ButtonChoicePanel(new JButton[] {okButton = new JButton(Translator.get("ok")), cancelButton = new JButton(Translator.get("cancel"))},
-                                        2, getRootPane()));
+        panel.add(new ButtonChoicePanel(new JButton[]{okButton = new JButton(Translator.get("ok")), cancelButton = new JButton(Translator.get("cancel"))},
+                2, getRootPane()));
         okButton.addActionListener(this);
         cancelButton.addActionListener(this);
         getContentPane().add(panel, BorderLayout.NORTH);
@@ -120,14 +133,17 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
     }
 
 
-
     // - Status queries ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Returns the name entered by the user.
+     *
      * @return the name entered by the user.
      */
-    public String getText() {return nameField.getText();}
+    public String getText() {
+        return nameField.getText();
+    }
 
     /**
      * Called when the dialog is closed through the ESC button.
@@ -140,6 +156,7 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
 
     /**
      * Shows the dialog and returns <code>true</code> if it was validated by the user.
+     *
      * @return <code>true</code> if it was validated by the user, <code>false</code> otherwise.
      */
     public boolean wasValidated() {
@@ -149,12 +166,13 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
 
     /**
      * Called when OK or Cancel have been pressed.
+     *
      * @param e describes the event.
      */
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == okButton)
+        if (e.getSource() == okButton)
             wasValidated = true;
-        else if(e.getSource() == cancelButton)
+        else if (e.getSource() == cancelButton)
             wasValidated = false;
         dispose();
     }

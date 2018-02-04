@@ -18,24 +18,16 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.Component;
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action allows to cycle backward through the current {@link FolderPanel}'s focusable components: file table,
@@ -46,7 +38,7 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class FocusPreviousAction extends MuAction {
 
-    public FocusPreviousAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public FocusPreviousAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Perform the action also when in 'no events' mode
@@ -58,7 +50,7 @@ public class FocusPreviousAction extends MuAction {
         Component focusOwner = mainFrame.getFocusOwner();
 
         // Abort if the focus is not in the MainFrame this action is tied to
-        if(focusOwner==null)
+        if (focusOwner == null)
             return;
 
         FolderPanel folderPanel = mainFrame.getActivePanel();
@@ -68,11 +60,11 @@ public class FocusPreviousAction extends MuAction {
 
         // Request focus on the 'previous' component, the cycle order being from right to left, bottom to top.
         Component previousComponent;
-        if(focusOwner==fileTable)
-            previousComponent = folderPanel.isTreeVisible()?tree:locationField;
-        else if(focusOwner==tree)
+        if (focusOwner == fileTable)
+            previousComponent = folderPanel.isTreeVisible() ? tree : locationField;
+        else if (focusOwner == tree)
             previousComponent = locationField;
-        else if(focusOwner==locationField)
+        else if (focusOwner == locationField)
             previousComponent = fileTable;
         else
             return;
@@ -80,27 +72,35 @@ public class FocusPreviousAction extends MuAction {
         FocusRequester.requestFocusInWindow(previousComponent);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new FocusPreviousAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new FocusPreviousAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "FocusPrevious";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "FocusPrevious";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

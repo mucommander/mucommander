@@ -25,7 +25,7 @@ import com.mucommander.conf.MuPreferences;
 /**
  * This class holds information describes how a {@link FileTable} is currently sorted: sort criterion,
  * ascending/descending order, whether directories are displayed first or mixed with regular files.
- *
+ * <p>
  * <p>The values are not meant to be changed outside this package: all setters are package-protected.
  * Use {@link FileTable} methods to change how the table is sorted.</p>
  *
@@ -33,13 +33,19 @@ import com.mucommander.conf.MuPreferences;
  */
 public class SortInfo implements Cloneable {
 
-    /** Current sort criterion */
+    /**
+     * Current sort criterion
+     */
     private Column criterion = Column.NAME;
 
-    /** Ascending/descending order */
+    /**
+     * Ascending/descending order
+     */
     private boolean ascendingOrder = true;
 
-    /** Should folders be displayed first, or mixed with regular files */
+    /**
+     * Should folders be displayed first, or mixed with regular files
+     */
     private boolean showFoldersFirst = MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_FOLDERS_FIRST, MuPreferences.DEFAULT_SHOW_FOLDERS_FIRST);
 
 
@@ -110,9 +116,8 @@ public class SortInfo implements Cloneable {
     @Override
     public SortInfo clone() {
         try {
-            return (SortInfo)super.clone();
-        }
-        catch(CloneNotSupportedException e) {
+            return (SortInfo) super.clone();
+        } catch (CloneNotSupportedException e) {
             // Should never happen
             return null;
         }

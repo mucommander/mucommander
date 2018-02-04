@@ -20,11 +20,13 @@ package com.mucommander.commons.conf;
 
 /**
  * Test case for the {@link ValueIterator} class.
+ *
  * @author Nicolas Rinaudo
  */
 public class ValueIteratorTest extends ValueListTest {
     /**
      * Tests the {@link ValueIterator#nextValue()} method.
+     *
      * @param values test data.
      */
     @Override
@@ -32,7 +34,7 @@ public class ValueIteratorTest extends ValueListTest {
         ValueIterator iterator;
 
         iterator = values.valueIterator();
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             assert iterator.hasNext();
             assert Integer.toString(i + 1).equals(iterator.nextValue());
         }
@@ -41,6 +43,7 @@ public class ValueIteratorTest extends ValueListTest {
 
     /**
      * Tests the {@link ValueIterator#nextIntegerValue()} method.
+     *
      * @param values test data.
      */
     @Override
@@ -48,7 +51,7 @@ public class ValueIteratorTest extends ValueListTest {
         ValueIterator iterator;
 
         iterator = values.valueIterator();
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             assert iterator.hasNext();
             assert i + 1 == iterator.nextIntegerValue();
         }
@@ -57,6 +60,7 @@ public class ValueIteratorTest extends ValueListTest {
 
     /**
      * Tests the {@link ValueIterator#nextLongValue()} method.
+     *
      * @param values test data.
      */
     @Override
@@ -64,7 +68,7 @@ public class ValueIteratorTest extends ValueListTest {
         ValueIterator iterator;
 
         iterator = values.valueIterator();
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             assert iterator.hasNext();
             assert i + 1 == iterator.nextLongValue();
         }
@@ -72,6 +76,7 @@ public class ValueIteratorTest extends ValueListTest {
 
     /**
      * Tests the {@link ValueIterator#nextFloatValue()} method.
+     *
      * @param values test data.
      */
     @Override
@@ -79,7 +84,7 @@ public class ValueIteratorTest extends ValueListTest {
         ValueIterator iterator;
 
         iterator = values.valueIterator();
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             assert iterator.hasNext();
             assert i + 1.5 == iterator.nextFloatValue();
         }
@@ -87,6 +92,7 @@ public class ValueIteratorTest extends ValueListTest {
 
     /**
      * Tests the {@link ValueIterator#nextDoubleValue()} method.
+     *
      * @param values test data.
      */
     @Override
@@ -94,7 +100,7 @@ public class ValueIteratorTest extends ValueListTest {
         ValueIterator iterator;
 
         iterator = values.valueIterator();
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             assert iterator.hasNext();
             assert i + 1.5 == iterator.nextDoubleValue();
         }
@@ -102,6 +108,7 @@ public class ValueIteratorTest extends ValueListTest {
 
     /**
      * Tests the {@link ValueIterator#nextBooleanValue()} method.
+     *
      * @param values test data.
      */
     @Override
@@ -109,7 +116,7 @@ public class ValueIteratorTest extends ValueListTest {
         ValueIterator iterator;
 
         iterator = values.valueIterator();
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             assert iterator.hasNext();
             assert (i % 2 == 0) == iterator.nextBooleanValue();
         }
@@ -117,6 +124,7 @@ public class ValueIteratorTest extends ValueListTest {
 
     /**
      * Tests the {@link ValueIterator#nextListValue(String)} method.
+     *
      * @param values    test data.
      * @param separator separator to use when creating list values.
      */

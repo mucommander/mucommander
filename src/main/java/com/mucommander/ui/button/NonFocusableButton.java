@@ -18,12 +18,9 @@
 
 package com.mucommander.ui.button;
 
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-
 import com.mucommander.commons.runtime.OsFamily;
+
+import javax.swing.*;
 
 /**
  * NonFocusableButton is a JButton which is non focusable, i.e. that cannot hold keyboard focus.

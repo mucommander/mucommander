@@ -18,11 +18,6 @@
 
 package com.mucommander.job.impl;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -40,39 +35,53 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * This job self-updates the muCommmander with a new JAR file that is fetched from a specified remote file.
  * The update process boils down to the following steps:
  * <ul>
- *  <li>First, all classes of the existing JAR files are loaded in memory, to ensure that the shutdown sequence has all
+ * <li>First, all classes of the existing JAR files are loaded in memory, to ensure that the shutdown sequence has all
  * the classes it needs, including those that haven't been used yet.</li>
- *  <li>The new JAR file is downloaded (using {@link CopyJob}) to a temporary location</li>
- *  <li>The new JAR file is moved from the temporary location to the main application JAR file, overwriting the previous
+ * <li>The new JAR file is downloaded (using {@link CopyJob}) to a temporary location</li>
+ * <li>The new JAR file is moved from the temporary location to the main application JAR file, overwriting the previous
  * JAR file.
- *  <li>muCommander is restarted: this involves starting a new application instance and shutting down the current one.
- *  The specifics of this step are platform-dependant.</li>
+ * <li>muCommander is restarted: this involves starting a new application instance and shutting down the current one.
+ * The specifics of this step are platform-dependant.</li>
  * </ul>
  *
  * @author Maxence Bernard
  */
 public class SelfUpdateJob extends CopyJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SelfUpdateJob.class);
-	
-    /** The JAR file to be updated */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SelfUpdateJob.class);
+
+    /**
+     * The JAR file to be updated
+     */
     private AbstractFile destJar;
 
-    /** The temporary file where the remote JAR file is copied, before being moved to its final location */
+    /**
+     * The temporary file where the remote JAR file is copied, before being moved to its final location
+     */
     private AbstractFile tempDestJar;
 
-    /** The ClassLoader to use for loading all classes from the JAR file */
+    /**
+     * The ClassLoader to use for loading all classes from the JAR file
+     */
     private ClassLoader classLoader;
 
-    /** Filters directories and class files, used for loading classes from the JAR file */
+    /**
+     * Filters directories and class files, used for loading classes from the JAR file
+     */
     private OrFileFilter directoryOrClassFileFilter;
 
-    /** True if classes haven't been loaded yet */ 
-    private boolean loadingClasses =  true;
+    /**
+     * True if classes haven't been loaded yet
+     */
+    private boolean loadingClasses = true;
 
 
     public SelfUpdateJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile remoteJarFile) {
@@ -91,16 +100,15 @@ public class SelfUpdateJob extends CopyJob {
         this.classLoader = getClass().getClassLoader();
 
         directoryOrClassFileFilter = new OrFileFilter(
-            new AttributeFileFilter(FileAttribute.DIRECTORY),
-            new ExtensionFilenameFilter(".class")
+                new AttributeFileFilter(FileAttribute.DIRECTORY),
+                new ExtensionFilenameFilter(".class")
         );
     }
 
     private static AbstractFile getTempDestJar(AbstractFile destJar) {
         try {
             return createTemporaryFolder().getChild(destJar.getName());
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return destJar;
         }
     }
@@ -110,8 +118,7 @@ public class SelfUpdateJob extends CopyJob {
         try {
             tempFolder = FileFactory.getTemporaryFile("mucomander-self-update", true);
             tempFolder.mkdir();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             tempFolder = FileFactory.getTemporaryFolder();
         }
 
@@ -135,16 +142,15 @@ public class SelfUpdateJob extends CopyJob {
      * @throws Exception if an error occurred while loading the classes
      */
     private void loadClassRecurse(AbstractFile file) throws Exception {
-        if(file.isBrowsable()) {
+        if (file.isBrowsable()) {
             AbstractFile[] children = file.ls(directoryOrClassFileFilter);
             for (AbstractFile child : children)
                 loadClassRecurse(child);
-        }
-        else {          // .class file
+        } else {          // .class file
 
             String classname = file.getAbsolutePath(false);
             // Strip off the JAR file's path and ".class" extension
-            classname = classname.substring(destJar.getAbsolutePath(true).length(), classname.length()-6);
+            classname = classname.substring(destJar.getAbsolutePath(true).length(), classname.length() - 6);
             // Replace separator characters by '.'
             classname = classname.replace(destJar.getSeparator(), ".");
             // We now have a class name, e.g. "com.mucommander.Launcher"
@@ -152,10 +158,9 @@ public class SelfUpdateJob extends CopyJob {
             try {
                 classLoader.loadClass(classname);
 
-                LOGGER.trace("Loaded class "+classname);
-            }
-            catch(java.lang.NoClassDefFoundError e) {
-                LOGGER.debug("Caught an error while loading class "+classname, e);
+                LOGGER.trace("Loaded class " + classname);
+            } catch (java.lang.NoClassDefFoundError e) {
+                LOGGER.debug("Caught an error while loading class " + classname, e);
             }
         }
     }
@@ -167,7 +172,7 @@ public class SelfUpdateJob extends CopyJob {
 
     @Override
     public String getStatusString() {
-        if(loadingClasses) {
+        if (loadingClasses) {
             return Translator.get("version_dialog.preparing_for_update");
         }
 
@@ -183,8 +188,7 @@ public class SelfUpdateJob extends CopyJob {
             // This will ensure that the shutdown sequence, which invokes so not-yet-loaded classes goes down smoothly.
             loadClassRecurse(destJar);
             loadingClasses = false;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.debug("Caught exception", e);
 
             // Todo: display an error message
@@ -197,31 +201,30 @@ public class SelfUpdateJob extends CopyJob {
         try {
             AbstractFile parent;
             // Mac OS X
-            if(OsFamily.MAC_OS_X.isCurrent()) {
+            if (OsFamily.MAC_OS_X.isCurrent()) {
                 parent = destJar.getParent();
 
                 // Look for an .app container that encloses the JAR file
-                if(parent.getName().equals("Java")
-                &&(parent=parent.getParent())!=null && parent.getName().equals("Resources")
-                &&(parent=parent.getParent())!=null && parent.getName().equals("Contents")
-                &&(parent=parent.getParent())!=null && "app".equals(parent.getExtension())) {
+                if (parent.getName().equals("Java")
+                        && (parent = parent.getParent()) != null && parent.getName().equals("Resources")
+                        && (parent = parent.getParent()) != null && parent.getName().equals("Contents")
+                        && (parent = parent.getParent()) != null && "app".equals(parent.getExtension())) {
 
                     String appPath = parent.getAbsolutePath();
 
-                    LOGGER.debug("Opening "+appPath);
+                    LOGGER.debug("Opening " + appPath);
 
                     // Open -W wait for the current muCommander .app to terminate, before re-opening it
-                    ProcessRunner.execute(new String[]{"/bin/sh", "-c", "open -W "+appPath+" && open "+appPath});
+                    ProcessRunner.execute(new String[]{"/bin/sh", "-c", "open -W " + appPath + " && open " + appPath});
 
                     return;
                 }
-            }
-            else {
+            } else {
                 parent = destJar.getParent();
                 EqualsFilenameFilter launcherFilter;
 
                 // Windows
-                if(OsFamily.WINDOWS.isCurrent()) {
+                if (OsFamily.WINDOWS.isCurrent()) {
                     // Look for a muCommander.exe launcher located in the same folder as the JAR file
                     launcherFilter = new EqualsFilenameFilter("muCommander.exe", false);
 
@@ -235,7 +238,7 @@ public class SelfUpdateJob extends CopyJob {
                 AbstractFile[] launcherFile = parent.ls(launcherFilter);
 
                 // If a launcher file was found, execute it
-                if(launcherFile!=null && launcherFile.length==1) {
+                if (launcherFile != null && launcherFile.length == 1) {
                     DesktopManager.open(launcherFile[0]);
 
                     return;
@@ -244,27 +247,24 @@ public class SelfUpdateJob extends CopyJob {
 
             // No platform-specific launcher found, launch the Jar directly
             ProcessRunner.execute(new String[]{"java", "-jar", destJar.getAbsolutePath()});
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             LOGGER.debug("Caught exception", e);
             // Todo: we might want to do something about this
-        }
-        finally {
+        } finally {
             WindowManager.quit();
         }
     }
 
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(!super.processFile(file, recurseParams))
+        if (!super.processFile(file, recurseParams))
             return false;
 
         // Move the file from the temporary location to its final destination
         try {
             tempDestJar.moveTo(destJar);
             return true;
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }

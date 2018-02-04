@@ -29,7 +29,7 @@ package com.mucommander.command;
  * Associations XML files must match the following DTD:
  * <pre>
  * &lt;!ELEMENT associations (association*)&gt;
- * 
+ *
  * &lt;!ELEMENT association (filename?,symlink?,hidden?,readable?,writable?,executable?)&gt;
  * &lt;!ATTLIST association command CDATA #REQUIRED&gt;
  *
@@ -53,32 +53,38 @@ package com.mucommander.command;
  * &lt;!ATTLIST executable value (true|false) #REQUIRED&gt;
  * </pre>
  * </p>
+ *
+ * @author Nicolas Rinaudo
  * @see AssociationReader
  * @see AssociationWriter
- * @author Nicolas Rinaudo
  */
 interface AssociationsXmlConstants {
     // - XML elements ----------------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Root element. */
-    public static final String ELEMENT_ROOT          = "associations";
-    /** Custom association definition element. */
-    public static final String ELEMENT_ASSOCIATION   = "association";
-    public static final String ELEMENT_MASK          = "filename";
-    public static final String ELEMENT_IS_SYMLINK    = "symlink";
-    public static final String ELEMENT_IS_HIDDEN     = "hidden";
-    public static final String ELEMENT_IS_READABLE   = "readable";
-    public static final String ELEMENT_IS_WRITABLE   = "writable";
+    /**
+     * Root element.
+     */
+    public static final String ELEMENT_ROOT = "associations";
+    /**
+     * Custom association definition element.
+     */
+    public static final String ELEMENT_ASSOCIATION = "association";
+    public static final String ELEMENT_MASK = "filename";
+    public static final String ELEMENT_IS_SYMLINK = "symlink";
+    public static final String ELEMENT_IS_HIDDEN = "hidden";
+    public static final String ELEMENT_IS_READABLE = "readable";
+    public static final String ELEMENT_IS_WRITABLE = "writable";
     public static final String ELEMENT_IS_EXECUTABLE = "executable";
-
 
 
     // - Custom association structure ------------------------------------------
     // -------------------------------------------------------------------------
-    /** Name of the attribute containing the alias of the command to execute in this association. */
-    public static final String ATTRIBUTE_COMMAND        = "command";
-    public static final String ATTRIBUTE_VALUE          = "value";
+    /**
+     * Name of the attribute containing the alias of the command to execute in this association.
+     */
+    public static final String ATTRIBUTE_COMMAND = "command";
+    public static final String ATTRIBUTE_VALUE = "value";
     public static final String ATTRIBUTE_CASE_SENSITIVE = "case_sensitive";
-    public static final String VALUE_TRUE               = "true";
-    public static final String VALUE_FALSE              = "false";
+    public static final String VALUE_TRUE = "true";
+    public static final String VALUE_FALSE = "false";
 }

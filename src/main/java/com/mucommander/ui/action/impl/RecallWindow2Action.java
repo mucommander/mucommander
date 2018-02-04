@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Map;
 
 /**
  * Recalls window number 2 (brings it to the front).
@@ -32,15 +32,15 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class RecallWindow2Action extends RecallWindowAction {
 
-    public RecallWindow2Action(MainFrame mainFrame, Map<String,Object> properties) {
+    public RecallWindow2Action(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, 2);
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new RecallWindow2Action(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new RecallWindow2Action(mainFrame, properties);
+        }
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RecallWindow2Action extends RecallWindowAction {
     }
 
     public static class Descriptor extends RecallWindowAction.Descriptor {
-        public static final String ACTION_ID = RecallWindowAction.Descriptor.ACTION_ID+"2";
+        public static final String ACTION_ID = RecallWindowAction.Descriptor.ACTION_ID + "2";
 
         public Descriptor() {
             super(2);

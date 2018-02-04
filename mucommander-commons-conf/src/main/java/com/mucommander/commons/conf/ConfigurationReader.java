@@ -41,8 +41,9 @@ import java.io.Reader;
  * In addition, most readers will have an associated writer used to write configuration files in a
  * format that the reader will understand.
  * </p>
+ *
  * @author Nicolas Rinaudo
- * @see    ConfigurationReaderFactory
+ * @see ConfigurationReaderFactory
  */
 public interface ConfigurationReader {
     /**
@@ -52,8 +53,9 @@ public interface ConfigurationReader {
      * than {@link ConfigurationException configuration} exceptions. This will allow applications to report errors in a
      * way that is useful for users.
      * </p>
-     * @param in                      where to read the configuration information from.
-     * @param builder                 where to send configuration messages to.
+     *
+     * @param in      where to read the configuration information from.
+     * @param builder where to send configuration messages to.
      * @throws IOException            if an I/O error occurs.
      * @throws ConfigurationException if another type of error occurs, in which case that error must be returned by <code>ConfigurationException.getCause()</code>.
      */

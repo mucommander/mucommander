@@ -27,13 +27,17 @@ import org.xml.sax.SAXException;
  */
 public class VersionedXmlConfigurationReader extends XmlConfigurationReader {
 
-    /** True until the root element has been parsed */
+    /**
+     * True until the root element has been parsed
+     */
     private boolean isRootElement = true;
 
-    /** the version that was used to write the configuration file */
+    /**
+     * the version that was used to write the configuration file
+     */
     private String version;
 
-    
+
     /**
      * Returns the muCommander version that was used to write the configuration file, <code>null</code> if it is unknown.
      * <p>
@@ -55,7 +59,7 @@ public class VersionedXmlConfigurationReader extends XmlConfigurationReader {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         super.startElement(uri, localName, qName, attributes);
 
-        if(isRootElement) {
+        if (isRootElement) {
             version = attributes.getValue(MuPreferences.VERSION_ATTRIBUTE);
             isRootElement = false;
         }

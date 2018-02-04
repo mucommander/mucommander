@@ -18,36 +18,36 @@
 
 package com.mucommander.ui.tabs;
 
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 /**
-* TabbedPane that contains implementations of Tab interface
-* 
-* @author Arik Hadas
-*/
+ * TabbedPane that contains implementations of Tab interface
+ *
+ * @author Arik Hadas
+ */
 public abstract class TabbedPane<T extends Tab> extends JTabbedPane {
 
-	/**
-	 * Add tab to the end of the tabbedpane 
-	 * 
-	 * @param tab - implementation of Tab interface
-	 */
-	public abstract void add(T tab);
-	
-	/**
-	 * Add tab in a given index
-	 * 
-	 * @param tab - implementation of Tab interface
-	 * @param index - the index in which the tab would be added
-	 */
-	public abstract void add(T tab, int index);
-	
-	/**
-	 * Update tab in a given index
-	 * The updated tab would be selected in the end of the operation
-	 * 
-	 * @param tab - implementation of Tab interface
-	 * @param index - the index of the tab to be updated
-	 */
-	public abstract void update(T tab, int index);
+    /**
+     * Add tab to the end of the tabbedpane
+     *
+     * @param tab - implementation of Tab interface
+     */
+    public abstract void add(T tab);
+
+    /**
+     * Add tab in a given index
+     *
+     * @param tab   - implementation of Tab interface
+     * @param index - the index in which the tab would be added
+     */
+    public abstract void add(T tab, int index);
+
+    /**
+     * Update tab in a given index
+     * The updated tab would be selected in the end of the operation
+     *
+     * @param tab   - implementation of Tab interface
+     * @param index - the index of the tab to be updated
+     */
+    public abstract void update(T tab, int index);
 }

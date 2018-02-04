@@ -18,13 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.Icon;
-
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowTabsQLAction;
@@ -37,53 +30,61 @@ import com.mucommander.ui.main.tabs.PrintableFileTableTabFactory;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 import com.mucommander.ui.tabs.TabFactory;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * This quick list shows the tabs contained in the FolderPanel.
- * 
+ *
  * @author Arik Hadas
  */
 public class TabsQL extends QuickListWithIcons<FileTableTab> {
 
-	/** The FolderPanel that contains the tabs */
-	private FolderPanel folderPanel;
-	
-	private TabFactory<FileTableTab, FileTableTab> tabsFactory = new PrintableFileTableTabFactory();
-	
-	Icon lockedTabIcon = IconManager.getIcon(IconManager.COMMON_ICON_SET, FileTableTabHeader.LOCKED_ICON_NAME);
-	Icon unlockedTabIcon = new EmptyIcon(8, 9);
-	
-	public TabsQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowTabsQLAction.Descriptor.ACTION_ID), Translator.get("tabs_quick_list.empty_message"));
-		
-		this.folderPanel = folderPanel;
-	}
+    /**
+     * The FolderPanel that contains the tabs
+     */
+    private FolderPanel folderPanel;
 
-	@Override
-	protected Icon getImageIconOfItemImp(final FileTableTab item,  final Dimension preferredSize) {
-		return itemToIcon(item);
-	}
+    private TabFactory<FileTableTab, FileTableTab> tabsFactory = new PrintableFileTableTabFactory();
 
-	@Override
-	protected Icon itemToIcon(FileTableTab item) {
-		return item.isLocked() ? lockedTabIcon : unlockedTabIcon;
-	}
+    Icon lockedTabIcon = IconManager.getIcon(IconManager.COMMON_ICON_SET, FileTableTabHeader.LOCKED_ICON_NAME);
+    Icon unlockedTabIcon = new EmptyIcon(8, 9);
 
-	@Override
-	protected FileTableTab[] getData() {
-		List<FileTableTab> tabsList = new ArrayList<FileTableTab>();
-		Iterator<FileTableTab> tabsIterator = folderPanel.getTabs().iterator();
-		
-		while(tabsIterator.hasNext())
-			tabsList.add(tabsFactory.createTab(tabsIterator.next()));
-		
-		// Remove the selected tab from the list
-		tabsList.remove(folderPanel.getTabs().getSelectedIndex());
-		
-		return tabsList.toArray(new FileTableTab[0]);
-	}
+    public TabsQL(FolderPanel folderPanel) {
+        super(folderPanel, ActionProperties.getActionLabel(ShowTabsQLAction.Descriptor.ACTION_ID), Translator.get("tabs_quick_list.empty_message"));
 
-	@Override
-	protected void acceptListItem(FileTableTab item) {
-		folderPanel.getTabs().selectTab(item);
-	}
+        this.folderPanel = folderPanel;
+    }
+
+    @Override
+    protected Icon getImageIconOfItemImp(final FileTableTab item, final Dimension preferredSize) {
+        return itemToIcon(item);
+    }
+
+    @Override
+    protected Icon itemToIcon(FileTableTab item) {
+        return item.isLocked() ? lockedTabIcon : unlockedTabIcon;
+    }
+
+    @Override
+    protected FileTableTab[] getData() {
+        List<FileTableTab> tabsList = new ArrayList<FileTableTab>();
+        Iterator<FileTableTab> tabsIterator = folderPanel.getTabs().iterator();
+
+        while (tabsIterator.hasNext())
+            tabsList.add(tabsFactory.createTab(tabsIterator.next()));
+
+        // Remove the selected tab from the list
+        tabsList.remove(folderPanel.getTabs().getSelectedIndex());
+
+        return tabsList.toArray(new FileTableTab[0]);
+    }
+
+    @Override
+    protected void acceptListItem(FileTableTab item) {
+        folderPanel.getTabs().selectTab(item);
+    }
 }

@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -49,11 +49,11 @@ public class ResourceLoaderTest {
     @Test
     public void testResourceAsURL() throws IOException {
         assertReadable(ResourceLoader.getResourceAsURL(getExistingResourcePath()));
-        assertReadable(ResourceLoader.getResourceAsURL("/"+getExistingResourcePath()));
+        assertReadable(ResourceLoader.getResourceAsURL("/" + getExistingResourcePath()));
         assert ResourceLoader.getResourceAsURL(getNonExistingResourcePath()) == null;
 
         assertReadable(ResourceLoader.getResourceAsURL(getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
-        assertReadable(ResourceLoader.getResourceAsURL("/"+getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
+        assertReadable(ResourceLoader.getResourceAsURL("/" + getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
         assert ResourceLoader.getResourceAsURL(getNonExistingResourcePath(), getThisClassLoader(), getRootPackageFile()) == null;
     }
 
@@ -79,11 +79,11 @@ public class ResourceLoaderTest {
     @Test
     public void testResourceAsStream() throws IOException {
         assertReadable(ResourceLoader.getResourceAsStream(getExistingResourcePath()));
-        assertReadable(ResourceLoader.getResourceAsStream("/"+getExistingResourcePath()));
+        assertReadable(ResourceLoader.getResourceAsStream("/" + getExistingResourcePath()));
         assert ResourceLoader.getResourceAsStream(getNonExistingResourcePath()) == null;
 
         assertReadable(ResourceLoader.getResourceAsStream(getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
-        assertReadable(ResourceLoader.getResourceAsStream("/"+getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
+        assertReadable(ResourceLoader.getResourceAsStream("/" + getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
         assert ResourceLoader.getResourceAsStream(getNonExistingResourcePath(), getThisClassLoader(), getRootPackageFile()) == null;
     }
 
@@ -109,11 +109,11 @@ public class ResourceLoaderTest {
     @Test
     public void testResourceAsFile() throws IOException {
         assertReadable(ResourceLoader.getResourceAsFile(getExistingResourcePath()));
-        assertReadable(ResourceLoader.getResourceAsFile("/"+getExistingResourcePath()));
+        assertReadable(ResourceLoader.getResourceAsFile("/" + getExistingResourcePath()));
         assert ResourceLoader.getResourceAsFile(getNonExistingResourcePath()) == null;
 
         assertReadable(ResourceLoader.getResourceAsFile(getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
-        assertReadable(ResourceLoader.getResourceAsFile("/"+getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
+        assertReadable(ResourceLoader.getResourceAsFile("/" + getExistingResourcePath(), getThisClassLoader(), getRootPackageFile()));
         assert ResourceLoader.getResourceAsFile(getNonExistingResourcePath(), getThisClassLoader(), getRootPackageFile()) == null;
     }
 
@@ -205,7 +205,7 @@ public class ResourceLoaderTest {
     }
 
     private String getExistingResourcePath() {
-        return "com/mucommander/commons/file/util/"+getExistingResourceName();
+        return "com/mucommander/commons/file/util/" + getExistingResourceName();
     }
 
     private String getNonExistingResourceName() {
@@ -213,6 +213,6 @@ public class ResourceLoaderTest {
     }
 
     private String getNonExistingResourcePath() {
-        return "com/mucommander/commons/file/util/"+getNonExistingResourceName();
+        return "com/mucommander/commons/file/util/" + getNonExistingResourceName();
     }
 }

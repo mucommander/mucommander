@@ -25,13 +25,13 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
 
-import javax.swing.JSeparator;
+import javax.swing.*;
 
 /**
  * Contextual popup menu invoked by FileTable when right-clicking on a file or a group of files.
- *
+ * <p>
  * The following items are displayed (see constructor code for conditions) :
- *
+ * <p>
  * Open
  * Open in new tab
  * Open natively
@@ -49,7 +49,7 @@ import javax.swing.JSeparator;
  * Delete
  * ----
  * Properties
- * 
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class TablePopupMenu extends MuActionsPopupMenu {
@@ -57,17 +57,17 @@ public class TablePopupMenu extends MuActionsPopupMenu {
     /**
      * Creates a new TablePopupMenu.
      *
-     * @param mainFrame parent MainFrame instance
-     * @param currentFolder current folder in table
-     * @param clickedFile right-clicked file, can be null if user clicked on the folder table background
+     * @param mainFrame           parent MainFrame instance
+     * @param currentFolder       current folder in table
+     * @param clickedFile         right-clicked file, can be null if user clicked on the folder table background
      * @param parentFolderClicked true if user right-clicked on the parent '..' folder
-     * @param markedFiles list of marked files, can be empty but never null
+     * @param markedFiles         list of marked files, can be empty but never null
      */
     public TablePopupMenu(MainFrame mainFrame, AbstractFile currentFolder, AbstractFile clickedFile, boolean parentFolderClicked, FileSet markedFiles) {
         super(mainFrame);
-        
+
         // 'Open ...' actions displayed if a single file was clicked
-        if(clickedFile!=null || parentFolderClicked) {
+        if (clickedFile != null || parentFolderClicked) {
             addAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID);
             add(new OpenWithMenu(mainFrame));
@@ -78,18 +78,18 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         }
 
         // 'Reveal in desktop' displayed only if clicked file is a local file and the OS is capable of doing this
-        if(DesktopManager.canOpenInFileManager(currentFolder))
+        if (DesktopManager.canOpenInFileManager(currentFolder))
             addAction(com.mucommander.ui.action.impl.RevealInDesktopAction.Descriptor.ACTION_ID);
 
         add(new JSeparator());
 
         // 'Copy name(s)' and 'Copy path(s)' are displayed only if a single file was clicked or files are marked
-        if(clickedFile!=null || markedFiles.size()>0) {
+        if (clickedFile != null || markedFiles.size() > 0) {
             addAction(com.mucommander.ui.action.impl.CopyFilesToClipboardAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFileNamesAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFileBaseNamesAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID);
-            
+
             add(new JSeparator());
         }
 
@@ -101,7 +101,7 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         add(new JSeparator());
 
         // 'Rename' displayed if a single file was clicked
-        if(clickedFile!=null)
+        if (clickedFile != null)
             addAction(com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID);
 
         addAction(com.mucommander.ui.action.impl.DeleteAction.Descriptor.ACTION_ID);

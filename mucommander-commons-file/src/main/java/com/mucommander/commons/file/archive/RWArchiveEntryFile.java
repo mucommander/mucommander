@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,12 +19,7 @@
 
 package com.mucommander.commons.file.archive;
 
-import com.mucommander.commons.file.FileOperation;
-import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.PermissionBits;
-import com.mucommander.commons.file.SimpleFilePermissions;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.*;
 import com.mucommander.commons.io.ByteCounter;
 import com.mucommander.commons.io.CounterOutputStream;
 
@@ -53,10 +48,9 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
      */
     private boolean updateEntryAttributes() {
         try {
-            ((AbstractRWArchiveFile)archiveFile).updateEntry(entry);
+            ((AbstractRWArchiveFile) archiveFile).updateEntry(entry);
             return true;
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }
@@ -72,20 +66,20 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
      */
     @Override
     public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
-        if(!entry.exists())
+        if (!entry.exists())
             throw new IOException();
 
         long oldDate = entry.getDate();
         entry.setDate(lastModified);
 
         boolean success = updateEntryAttributes();
-        if(!success) {
+        if (!success) {
             // restore old date if attributes could not be updated
             entry.setDate(oldDate);
             throw new IOException();
         }
     }
-    
+
     /**
      * Always returns {@link PermissionBits#FULL_PERMISSION_BITS}.
      */
@@ -114,17 +108,17 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
      */
     @Override
     public void delete() throws IOException, UnsupportedFileOperationException {
-        if(!entry.exists())
+        if (!entry.exists())
             throw new IOException();
 
-        AbstractRWArchiveFile rwArchiveFile = (AbstractRWArchiveFile)archiveFile;
+        AbstractRWArchiveFile rwArchiveFile = (AbstractRWArchiveFile) archiveFile;
 
         // Throw an IOException if this entry is a non-empty directory
-        if(isDirectory()) {
+        if (isDirectory()) {
             ArchiveEntryTree tree = rwArchiveFile.getArchiveEntryTree();
-            if(tree!=null) {
+            if (tree != null) {
                 DefaultMutableTreeNode node = tree.findEntryNode(entry.getPath());
-                if(node!=null && node.getChildCount()>0)
+                if (node != null && node.getChildCount() > 0)
                     throw new IOException();
             }
         }
@@ -152,10 +146,10 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
      */
     @Override
     public void mkdir() throws IOException, UnsupportedFileOperationException {
-        if(entry.exists())
+        if (entry.exists())
             throw new IOException();
 
-        AbstractRWArchiveFile rwArchivefile = (AbstractRWArchiveFile)archiveFile;
+        AbstractRWArchiveFile rwArchivefile = (AbstractRWArchiveFile) archiveFile;
         // Update the ArchiveEntry
         entry.setDirectory(true);
         entry.setDate(System.currentTimeMillis());
@@ -181,21 +175,20 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
      */
     @Override
     public OutputStream getOutputStream() throws IOException, UnsupportedFileOperationException {
-        if(entry.exists()) {
+        if (entry.exists()) {
             try {
                 delete();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Go ahead and try to add the file anyway
             }
         }
 
         // Update the ArchiveEntry's size as data gets written to the OutputStream
-        OutputStream out = new CounterOutputStream(((AbstractRWArchiveFile)archiveFile).addEntry(entry),
+        OutputStream out = new CounterOutputStream(((AbstractRWArchiveFile) archiveFile).addEntry(entry),
                 new ByteCounter() {
                     @Override
                     public synchronized void add(long nbBytes) {
-                        entry.setSize(entry.getSize()+nbBytes);
+                        entry.setSize(entry.getSize() + nbBytes);
                         entry.setDate(System.currentTimeMillis());
                     }
                 });
@@ -206,7 +199,7 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
 
     @Override
     public void changePermissions(int permissions) throws IOException {
-        if(!entry.exists())
+        if (!entry.exists())
             throw new IOException();
 
         FilePermissions oldPermissions = entry.getPermissions();
@@ -214,10 +207,10 @@ public class RWArchiveEntryFile extends AbstractArchiveEntryFile {
         entry.setPermissions(newPermissions);
 
         boolean success = updateEntryAttributes();
-        if(!success)        // restore old permissions if attributes could not be updated
+        if (!success)        // restore old permissions if attributes could not be updated
             entry.setPermissions(oldPermissions);
 
-        if(!success)
+        if (!success)
             throw new IOException();
     }
 }

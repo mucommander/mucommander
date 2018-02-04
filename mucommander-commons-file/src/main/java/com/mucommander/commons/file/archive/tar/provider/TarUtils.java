@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,9 +43,9 @@ public class TarUtils {
      * @return The long value of the octal string.
      */
     public static long parseOctal(byte[] header, int offset, int length) {
-        long    result = 0;
+        long result = 0;
         boolean stillPadding = true;
-        int     end = offset + length;
+        int end = offset + length;
 
         for (int i = offset; i < end; ++i) {
             if (header[i] == 0) {
@@ -79,7 +79,7 @@ public class TarUtils {
      */
     public static StringBuffer parseName(byte[] header, int offset, int length) {
         StringBuffer result = new StringBuffer(length);
-        int          end = offset + length;
+        int end = offset + length;
 
         for (int i = offset; i < end; ++i) {
             if (header[i] == 0) {
@@ -125,7 +125,7 @@ public class TarUtils {
      * @return The integer value of the octal bytes.
      */
     public static int getOctalBytes(long value, byte[] buf, int offset, int length) {
-        int    idx = length - 1;
+        int idx = length - 1;
 
         buf[offset + idx] = 0;
         --idx;

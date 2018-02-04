@@ -21,6 +21,7 @@ package com.mucommander.ui.combobox;
 
 /**
  * Interface to be implemented by classes that wish to be notified of selections occuring on a {@link SaneComboBox}.
+ *
  * @author Maxence Bernard
  */
 public interface ComboBoxListener {

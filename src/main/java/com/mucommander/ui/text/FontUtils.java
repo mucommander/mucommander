@@ -31,7 +31,7 @@ public class FontUtils {
     /**
      * Changes the style of the given component's font. Other attributes of the font are left unchanged.
      *
-     * @param comp the component for which to change the font
+     * @param comp     the component for which to change the font
      * @param newStyle the new Font style to use, see <code>java.awt.Font</code> for allowed values
      * @return the component that was passed, for convenience only
      */
@@ -43,7 +43,7 @@ public class FontUtils {
     /**
      * Changes the size of the given component's font. Other attributes of the font are left unchanged.
      *
-     * @param comp the component for which to change the font
+     * @param comp    the component for which to change the font
      * @param newSize the new Font size to use, see <code>java.awt.Font</code> for allowed values
      * @return the component that was passed, for convenience only
      */
@@ -55,9 +55,9 @@ public class FontUtils {
     /**
      * Changes the style and size of the given component's font. Other attributes of the font are left unchanged.
      *
-     * @param comp the component for which to change the font
+     * @param comp     the component for which to change the font
      * @param newStyle the new Font style to use, see <code>java.awt.Font</code> for allowed values
-     * @param newSize the new Font size to use, see <code>java.awt.Font</code> for allowed values
+     * @param newSize  the new Font size to use, see <code>java.awt.Font</code> for allowed values
      * @return the component that was passed, for convenience only
      */
     public static JComponent changeStyleAndSize(JComponent comp, int newStyle, float newSize) {
@@ -97,7 +97,7 @@ public class FontUtils {
      * @return the component that was passed, for convenience only
      */
     public static JComponent makeBoldItalic(JComponent comp) {
-        changeStyle(comp, Font.BOLD|Font.ITALIC);
+        changeStyle(comp, Font.BOLD | Font.ITALIC);
         return comp;
     }
 
@@ -112,6 +112,7 @@ public class FontUtils {
         changeStyle(comp, Font.PLAIN);
         return comp;
     }
+
     /**
      * Decreases the size of the given component's font by 2 units. Other attributes of the font are left unchanged.
      *
@@ -119,7 +120,7 @@ public class FontUtils {
      * @return the component that was passed, for convenience only
      */
     public static JComponent makeMini(JComponent comp) {
-        changeSize(comp, comp.getFont().getSize()-2);
+        changeSize(comp, comp.getFont().getSize() - 2);
         return comp;
     }
 }

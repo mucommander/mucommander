@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -73,8 +73,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
             // Fully read the 60 file header bytes. If it cannot be read, it most likely means we've reached
             // the end of the archive.
             StreamUtils.readFully(in, fileHeader);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return null;
         }
 
@@ -86,7 +85,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
             // and parse date as a long.
             // If the entry is the special // GNU one (see below), date is null and thus should not be parsed
             // (would throw a NumberFormatException)
-            long date = name.equals("//")?0:Long.parseLong(new String(fileHeader, 16, 12).trim()) * 1000;
+            long date = name.equals("//") ? 0 : Long.parseLong(new String(fileHeader, 16, 12).trim()) * 1000;
 
             // No use for file's Owner ID, Group ID and mode at the moment, skip them
 
@@ -96,7 +95,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
 
             // BSD variant : BSD ar store extended filenames by placing the string "#1/" followed by the file name length
             // in the file name field, and appending the real filename to the file header.
-            if(name.startsWith("#1/")) {
+            if (name.startsWith("#1/")) {
                 // Read extended name
                 int extendedNameLength = Integer.parseInt(name.substring(3, name.length()));
                 name = new String(StreamUtils.readFully(in, new byte[extendedNameLength])).trim();
@@ -107,35 +106,35 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
             // this record is referred to by future headers. A header references an extended filename by storing a "/"
             // followed by a decimal offset to the start of the filename in the extended filename data section.
             // This entry appears first in the archive, i.e. before any other entries.
-            else if(name.equals("//")) {
-                this.gnuExtendedNames = StreamUtils.readFully(in, new byte[(int)size]);
+            else if (name.equals("//")) {
+                this.gnuExtendedNames = StreamUtils.readFully(in, new byte[(int) size]);
 
                 // Skip one padding byte if size is odd
-                if(size%2!=0)
+                if (size % 2 != 0)
                     StreamUtils.skipFully(in, 1);
 
                 // Don't return this entry which should not be visible, but recurse to return next entry instead
                 return getNextEntry();
             }
             // GNU variant: entry with an extended name, look up extended name in // entry
-            else if(this.gnuExtendedNames!=null && name.startsWith("/")) {
+            else if (this.gnuExtendedNames != null && name.startsWith("/")) {
                 int off = Integer.parseInt(name.substring(1, name.length()));
                 name = "";
                 byte b;
-                while((b=this.gnuExtendedNames[off++])!='/')
-                    name += (char)b;
+                while ((b = this.gnuExtendedNames[off++]) != '/')
+                    name += (char) b;
             }
 
             return new ArchiveEntry(name, false, date, size, true);
         }
         // Re-throw IOException
-        catch(IOException e) {
+        catch (IOException e) {
             LOGGER.info("Caught IOException", e);
 
             throw e;
         }
         // Catch any other exceptions (NumberFormatException for instance) and throw an IOException instead
-        catch(Exception e2) {
+        catch (Exception e2) {
             LOGGER.info("Caught Exception", e2);
 
             throw new IOException();
@@ -148,10 +147,10 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
     /////////////////////////////////////////
 
     public ArchiveEntry nextEntry() throws IOException {
-        if(currentEntry!=null) {
+        if (currentEntry != null) {
             // Skip the current entry's data, plus 1 padding byte if size is odd
             long size = currentEntry.getSize();
-            StreamUtils.skipFully(in, size + (size%2));
+            StreamUtils.skipFully(in, size + (size % 2));
         }
 
         // Get the next entry, if any

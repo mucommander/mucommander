@@ -26,20 +26,24 @@ import java.util.NoSuchElementException;
  * <p>
  * Instances of this class can only be retrieved through {@link ValueList#valueIterator()}.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class ValueIterator implements Iterator<String> {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Wrapped iterator. */
+    /**
+     * Wrapped iterator.
+     */
     private final Iterator<String> iterator;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new <code>ValueIterator</code> wrapping the specified <code>iterator</code>.
+     *
      * @param iterator iterator to wrap.
      */
     ValueIterator(Iterator<String> iterator) {
@@ -47,12 +51,13 @@ public class ValueIterator implements Iterator<String> {
     }
 
 
-
     // - Iterator implementation ---------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns <code>true</code> if the iteration has more elements.
      * (In other words, returns <code>true</code> if next would return an element rather than throwing an exception.)
+     *
      * @return <code>true</code> if the iteration has more elements.
      */
     public boolean hasNext() {
@@ -61,7 +66,8 @@ public class ValueIterator implements Iterator<String> {
 
     /**
      * Returns the next element in the iteration.
-     * @return                        the next element in the iteration.
+     *
+     * @return the next element in the iteration.
      * @throws NoSuchElementException if the iteration has no more elements.
      */
     public String next() {
@@ -76,12 +82,13 @@ public class ValueIterator implements Iterator<String> {
     }
 
 
-
     // - Value casting -------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the next value in the iterator as a string.
-     * @return                        the next value in the iterator as a string.
+     *
+     * @return the next value in the iterator as a string.
      * @throws NoSuchElementException if the iteration has no more elements.
      */
     public String nextValue() {
@@ -90,7 +97,8 @@ public class ValueIterator implements Iterator<String> {
 
     /**
      * Returns the next value in the iterator as a integer.
-     * @return                        the next value in the iterator as a integer.
+     *
+     * @return the next value in the iterator as a integer.
      * @throws NoSuchElementException if the iteration has no more elements.
      * @throws NumberFormatException  if the value cannot be cast to an integer.
      */
@@ -100,7 +108,8 @@ public class ValueIterator implements Iterator<String> {
 
     /**
      * Returns the next value in the iterator as a float.
-     * @return                        the next value in the iterator as a float.
+     *
+     * @return the next value in the iterator as a float.
      * @throws NoSuchElementException if the iteration has no more elements.
      * @throws NumberFormatException  if the value cannot be cast to a float.
      */
@@ -110,7 +119,8 @@ public class ValueIterator implements Iterator<String> {
 
     /**
      * Returns the next value in the iterator as a long.
-     * @return                        the next value in the iterator as a long.
+     *
+     * @return the next value in the iterator as a long.
      * @throws NoSuchElementException if the iteration has no more elements.
      * @throws NumberFormatException  if the value cannot be cast to a long.
      */
@@ -120,7 +130,8 @@ public class ValueIterator implements Iterator<String> {
 
     /**
      * Returns the next value in the iterator as a double.
-     * @return                        the next value in the iterator as a double.
+     *
+     * @return the next value in the iterator as a double.
      * @throws NoSuchElementException if the iteration has no more elements.
      * @throws NumberFormatException  if the value cannot be cast to a double.
      */
@@ -130,7 +141,8 @@ public class ValueIterator implements Iterator<String> {
 
     /**
      * Returns the next value in the iterator as a boolean.
-     * @return                        the next value in the iterator as a boolean.
+     *
+     * @return the next value in the iterator as a boolean.
      * @throws NoSuchElementException if the iteration has no more elements.
      */
     public boolean nextBooleanValue() {
@@ -139,8 +151,9 @@ public class ValueIterator implements Iterator<String> {
 
     /**
      * Returns the next value in the iterator as a {@link ValueList}.
-     * @param  separator              stirng used to tokenise the next value.
-     * @return                        the next value in the iterator as a {@link ValueList}.
+     *
+     * @param separator stirng used to tokenise the next value.
+     * @return the next value in the iterator as a {@link ValueList}.
      * @throws NoSuchElementException if the iteration has no more elements.
      */
     public ValueList nextListValue(String separator) {

@@ -30,12 +30,12 @@ import java.util.Vector;
 /**
  * <code>AutocompletedEditableCombobox</code> is an editable combo-box that provides
  * auto-completion capabilities based on the given <code>Completer</code>.
- * 
+ *
  * @author Arik Hadas
  */
 public class AutocompletedEditableCombobox extends EditableComboBox {
 
-	/**
+    /**
      * Creates a new editable combo box and a JTextField to be used as the editor.
      * Has the same effect as calling {@link EditableComboBox#EditableComboBox(javax.swing.JTextField)} with a null value.
      */
@@ -48,7 +48,7 @@ public class AutocompletedEditableCombobox extends EditableComboBox {
      * Creates a new editable combo box using the given text field as the editor.
      *
      * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
+     *                  will be created and used.
      */
     public AutocompletedEditableCombobox(JTextField textField, Completer completer) {
         super(textField);
@@ -58,8 +58,8 @@ public class AutocompletedEditableCombobox extends EditableComboBox {
     /**
      * Creates a new editable combo box using the given text field as the editor and ComboBoxModel.
      *
-     * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
+     * @param textField     the text field to be used as the combo box's editor. If null, a new JTextField instance
+     *                      will be created and used.
      * @param comboBoxModel the ComboBoxModel to use for this combo box
      */
     public AutocompletedEditableCombobox(JTextField textField, ComboBoxModel comboBoxModel, Completer completer) {
@@ -71,8 +71,8 @@ public class AutocompletedEditableCombobox extends EditableComboBox {
      * Creates a new editable combo box using the given text field as the editor and items to populate the initial items list.
      *
      * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
-     * @param items items used to populate the initial items list.
+     *                  will be created and used.
+     * @param items     items used to populate the initial items list.
      */
     public AutocompletedEditableCombobox(JTextField textField, Object[] items, Completer completer) {
         super(textField, items);
@@ -83,59 +83,59 @@ public class AutocompletedEditableCombobox extends EditableComboBox {
      * Creates a new editable combo box using the given text field as the editor and items to populate the initial items list.
      *
      * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
-     * @param items items used to populate the initial items list.
+     *                  will be created and used.
+     * @param items     items used to populate the initial items list.
      */
     public AutocompletedEditableCombobox(JTextField textField, Vector<Object> items, Completer completer) {
         super(textField, items);
         enableAutoCompletion(completer);
     }
-    
+
     private void enableAutoCompletion(Completer completer) {
-    	new EditableComboboxCompletion(new TypicalAutocompleterEditableCombobox(this), completer);
+        new EditableComboboxCompletion(new TypicalAutocompleterEditableCombobox(this), completer);
     }
-	
+
     /**
      * The desired behavior of this editable combo-box when enter key is pressed.
-     * 
-     * @param keyEvent - the KeyEvent that occurred. 
+     *
+     * @param keyEvent - the KeyEvent that occurred.
      */
-	public void respondToEnterKeyPressing(KeyEvent keyEvent) {
-		// Combo popup menu is visible
-		if(isPopupVisible()) {
-			// Under Java 1.5 or lower, we need to explicitly hide the popup.
-			if(JavaVersion.JAVA_1_5.isCurrentOrLower())
-				hidePopup();
-			
-			// Note that since the event is not consumed, JComboBox will catch it and fire
-		}
-		// Combo popup menu is not visible, these events really belong to the text field
-		else {
-			// Notify listeners that the text field has been validated
-			fireComboFieldValidated();
-            
+    public void respondToEnterKeyPressing(KeyEvent keyEvent) {
+        // Combo popup menu is visible
+        if (isPopupVisible()) {
+            // Under Java 1.5 or lower, we need to explicitly hide the popup.
+            if (JavaVersion.JAVA_1_5.isCurrentOrLower())
+                hidePopup();
+
+            // Note that since the event is not consumed, JComboBox will catch it and fire
+        }
+        // Combo popup menu is not visible, these events really belong to the text field
+        else {
+            // Notify listeners that the text field has been validated
+            fireComboFieldValidated();
+
             // /!\ Consume the event so to prevent JComboBox from firing an ActionEvent (default JComboBox behavior)
             keyEvent.consume();
-		}		
-	}
+        }
+    }
 
-	/**
+    /**
      * The desired behavior of this editable combo-box when escape key is pressed.
-     * 
-     * @param keyEvent - the KeyEvent that occurred. 
+     *
+     * @param keyEvent - the KeyEvent that occurred.
      */
-	public void respondToEscapeKeyPressing(KeyEvent keyEvent) {
-		// Combo popup menu is visible
-		if(isPopupVisible()) {
-			 // Explicitely hide popup menu, JComboBox does not seem do it automatically (at least under Mac OS X + Java 1.5 and Java 1.4)
+    public void respondToEscapeKeyPressing(KeyEvent keyEvent) {
+        // Combo popup menu is visible
+        if (isPopupVisible()) {
+            // Explicitely hide popup menu, JComboBox does not seem do it automatically (at least under Mac OS X + Java 1.5 and Java 1.4)
             hidePopup();
             // Consume the event so that it is not propagated, since dialogs catch this event to close the window
             keyEvent.consume();
-		}
-		// Combo popup menu is not visible, these events really belong to the text field
-        else {
-        	// Notify listeners that the text field has been cancelled
-        	fireComboFieldCancelled();
         }
-	}
+        // Combo popup menu is not visible, these events really belong to the text field
+        else {
+            // Notify listeners that the text field has been cancelled
+            fireComboFieldCancelled();
+        }
+    }
 }

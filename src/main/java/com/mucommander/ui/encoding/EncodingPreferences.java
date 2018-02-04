@@ -18,37 +18,39 @@
 
 package com.mucommander.ui.encoding;
 
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Vector;
-
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
 
 /**
  * This class allows to retrieve and set character encoding preferences. It is used by UI components that let the user
  * choose an encoding, thus limiting this list to a reasonable amount of choices instead of displaying all supported
  * character encodings.
  *
+ * @author Maxence Bernard
  * @see EncodingMenu
  * @see EncodingSelectBox
- * @author Maxence Bernard
  */
 public class EncodingPreferences {
 
-    /** Default list of preferred encodings, comma-separated. */
-    public static final String[] DEFAULT_PREFERRED_ENCODINGS = new String[] {
-        "UTF-8",
-        "UTF-16",
-        "ISO-8859-1",
-        "windows-1252",
-        "KOI8-R",
-        "Big5",
-        "GB18030",
-        "EUC-KR",
-        "Shift_JIS",
-        "ISO-2022-JP",
-        "EUC-JP",
+    /**
+     * Default list of preferred encodings, comma-separated.
+     */
+    public static final String[] DEFAULT_PREFERRED_ENCODINGS = new String[]{
+            "UTF-8",
+            "UTF-16",
+            "ISO-8859-1",
+            "windows-1252",
+            "KOI8-R",
+            "Big5",
+            "GB18030",
+            "EUC-KR",
+            "Shift_JIS",
+            "ISO-2022-JP",
+            "EUC-JP",
     };
 
 
@@ -59,7 +61,7 @@ public class EncodingPreferences {
      */
     public static List<String> getPreferredEncodings() {
         List<String> vector = MuConfigurations.getPreferences().getListVariable(MuPreference.PREFERRED_ENCODINGS, ",");
-        if(vector==null) {
+        if (vector == null) {
             vector = getDefaultPreferredEncodings();
             MuConfigurations.getPreferences().setVariable(MuPreference.PREFERRED_ENCODINGS, vector, ",");
         }
@@ -89,6 +91,6 @@ public class EncodingPreferences {
      * @param encodings the user-defined list of preferred encodings
      */
     public static void setPreferredEncodings(List<String> encodings) {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.PREFERRED_ENCODINGS, encodings, ",");
+        MuConfigurations.getPreferences().setVariable(MuPreference.PREFERRED_ENCODINGS, encodings, ",");
     }
 }

@@ -35,22 +35,31 @@ import java.io.Writer;
  * <p>
  * Information on the XML file format can be found {@link XmlConfigurationReader here}.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class XmlConfigurationWriter implements ConfigurationBuilder {
     // - Class constants -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Factory used to create instances of {@link XmlConfigurationWriter}. */
+    /**
+     * Factory used to create instances of {@link XmlConfigurationWriter}.
+     */
     public static final ConfigurationWriterFactory<XmlConfigurationWriter> FACTORY;
 
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Writer on the destination XML stream. */
+    /**
+     * Writer on the destination XML stream.
+     */
     protected final ContentHandler out;
-    /** Empty XML attributes (avoids creating a new instance on each <code>startElement</code> call). */
-    private   final Attributes     emptyAttributes = new AttributesImpl();
-    /** Root element name. */
-    protected   final String rootElementName;
+    /**
+     * Empty XML attributes (avoids creating a new instance on each <code>startElement</code> call).
+     */
+    private final Attributes emptyAttributes = new AttributesImpl();
+    /**
+     * Root element name.
+     */
+    protected final String rootElementName;
 
 
     // - Initialization ------------------------------------------------------------------------------------------------
@@ -65,10 +74,11 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
 
     /**
      * Creates a new instance of XML configuration writer.
+     *
      * @param out where to write the configuration data.
      */
     protected XmlConfigurationWriter(Writer out, String rootElementName) {
-    	this.rootElementName = rootElementName;
+        this.rootElementName = rootElementName;
         this.out = createHandler(out);
     }
 
@@ -77,15 +87,18 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     // -----------------------------------------------------------------------------------------------------------------
     private static ContentHandler createHandler(Writer out) {
         SAXTransformerFactory factory;
-        TransformerHandler    transformer;
+        TransformerHandler transformer;
 
         // Initializes the transformer factory.
-        factory = (SAXTransformerFactory)SAXTransformerFactory.newInstance();
+        factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
         factory.setAttribute("indent-number", 4);
 
         // Creates a new transformer.
-        try {transformer = factory.newTransformerHandler();}
-        catch(TransformerConfigurationException e) {throw new IllegalStateException(e);}
+        try {
+            transformer = factory.newTransformerHandler();
+        } catch (TransformerConfigurationException e) {
+            throw new IllegalStateException(e);
+        }
 
         // Enables indentation.
         transformer.getTransformer().setOutputProperty(OutputKeys.INDENT, "yes");
@@ -100,22 +113,28 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     }
 
 
-
     // - Builder methods -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     protected void startElement(String name) throws ConfigurationException {
-        try {out.startElement("", name, name, emptyAttributes);}
-        catch(SAXException e) {throw new ConfigurationException(e);}
+        try {
+            out.startElement("", name, name, emptyAttributes);
+        } catch (SAXException e) {
+            throw new ConfigurationException(e);
+        }
     }
 
     protected void endElement(String name) throws ConfigurationException {
-        try {out.endElement("", name, name);}
-        catch(SAXException e) {throw new ConfigurationException(e);}
+        try {
+            out.endElement("", name, name);
+        } catch (SAXException e) {
+            throw new ConfigurationException(e);
+        }
     }
 
     /**
      * Starts a new configuration section.
-     * @param  name                   name of the new section.
+     *
+     * @param name name of the new section.
      * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occurred.
      */
     public void startSection(String name) throws ConfigurationException {
@@ -124,7 +143,8 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
 
     /**
      * Ends a configuration section.
-     * @param  name                   name of the closed section.
+     *
+     * @param name name of the closed section.
      * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occurred.
      */
     public void endSection(String name) throws ConfigurationException {
@@ -133,8 +153,9 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
 
     /**
      * Creates a new variable in the current section.
-     * @param  name                   name of the new variable.
-     * @param  value                  value of the new variable.
+     *
+     * @param name  name of the new variable.
+     * @param value value of the new variable.
      * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occurred.
      */
     public void addVariable(String name, String value) throws ConfigurationException {
@@ -145,31 +166,36 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
             data = value.toCharArray();
             out.characters(data, 0, data.length);
             endElement(name);
+        } catch (SAXException e) {
+            throw new ConfigurationException(e);
         }
-        catch(SAXException e) {throw new ConfigurationException(e);}
     }
 
     /**
      * Writes the XML header.
+     *
      * @throws ConfigurationException as a wrapper for any exception that might have occurred.
      */
     public void startConfiguration() throws ConfigurationException {
         try {
             out.startDocument();
             startElement(rootElementName);
+        } catch (SAXException e) {
+            throw new ConfigurationException(e);
         }
-        catch(SAXException e) {throw new ConfigurationException(e);}
     }
 
     /**
      * Writes the XML footer.
+     *
      * @throws ConfigurationException as a wrapper for any <code>IOException</code> that might have occurred.
      */
     public void endConfiguration() throws ConfigurationException {
         try {
             endElement(rootElementName);
             out.endDocument();
+        } catch (SAXException e) {
+            throw new ConfigurationException(e);
         }
-        catch(SAXException e) {throw new ConfigurationException(e);}
     }
 }

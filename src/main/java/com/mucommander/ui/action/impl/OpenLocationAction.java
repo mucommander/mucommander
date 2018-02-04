@@ -18,8 +18,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
 import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.commons.file.AbstractFile;
@@ -29,6 +27,8 @@ import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.impl.BatchRenameAction.Descriptor;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Map;
 
 /**
  * This action opens a specified location in the current active FileTable. The location can be designated by either a
@@ -47,34 +47,34 @@ public class OpenLocationAction extends ActiveTabAction {
      * Creates a new OpenLocationAction instance using the provided url's string representation
      * (with credentials stripped out) as label.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, FileURL url) {
-        this(mainFrame, properties, url, url.getScheme().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, FileURL url) {
+        this(mainFrame, properties, url, url.getScheme().equals(FileProtocols.FILE) ? url.getPath() : url.toString(false));
     }
 
     /**
      * Creates a new OpenLocationAction instance using the provided FileURL and label.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, FileURL url, String label) {
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, FileURL url, String label) {
         super(mainFrame, properties);
 
         this.url = url;
         setLabel(label);
-        setToolTipText(url.getScheme().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
+        setToolTipText(url.getScheme().equals(FileProtocols.FILE) ? url.getPath() : url.toString(false));
     }
 
 
     /**
-     * Creates a new OpenLocationAction instance using the filename of the provided AbstractFile 
+     * Creates a new OpenLocationAction instance using the filename of the provided AbstractFile
      * as label.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, AbstractFile file) {
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, AbstractFile file) {
         this(mainFrame, properties, file, file.getName());
     }
 
     /**
      * Creates a new OpenLocationAction instance using the provided AbstractFile and label.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, AbstractFile file, String label) {
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, AbstractFile file, String label) {
         super(mainFrame, properties);
 
         this.file = file;
@@ -86,14 +86,14 @@ public class OpenLocationAction extends ActiveTabAction {
     /**
      * Creates a new OpenLocationAction instance using the provided path as label.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, String path) {
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, String path) {
         this(mainFrame, properties, path, path);
     }
 
     /**
      * Creates a new OpenLocationAction instance using the provided path and label.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, String path, String label) {
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, String path, String label) {
         super(mainFrame, properties);
 
         this.path = path;
@@ -106,7 +106,7 @@ public class OpenLocationAction extends ActiveTabAction {
      * Convenience constructor, same effect as calling {@link #OpenLocationAction(MainFrame, Map, String, String)} with
      * {@link Bookmark#getLocation()} and {@link Bookmark#getName()}.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, Bookmark bookmark) {
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, Bookmark bookmark) {
         this(mainFrame, properties, bookmark.getLocation(), bookmark.getName());
     }
 
@@ -115,7 +115,7 @@ public class OpenLocationAction extends ActiveTabAction {
      * Convenience constructor, same effect as calling {@link #OpenLocationAction(MainFrame, Map, FileURL, String)} with
      * {@link BonjourService#getURL()} and {@link BonjourService#getNameWithProtocol()} ()}.
      */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, BonjourService bonjourService) {
+    public OpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, BonjourService bonjourService) {
         this(mainFrame, properties, bonjourService.getURL(), bonjourService.getNameWithProtocol());
     }
 
@@ -145,19 +145,17 @@ public class OpenLocationAction extends ActiveTabAction {
     @Override
     public void performAction() {
         FolderPanel folderPanel = getFolderPanel();
-        if(url!=null) {
+        if (url != null) {
             folderPanel.tryChangeCurrentFolder(url);
-        }
-        else if(file!=null) {
+        } else if (file != null) {
             folderPanel.tryChangeCurrentFolder(file);
-        }
-        else if(path!=null) {
+        } else if (path != null) {
             folderPanel.tryChangeCurrentFolder(path);
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 }

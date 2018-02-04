@@ -20,11 +20,11 @@ package com.mucommander.ui.main;
 
 /**
  * Enum of quick lists implemented in muCommander
- * 
+ *
  * @author Arik Hadas
  */
 public enum QuickLists {
-	PARENT_FOLDERS,
+    PARENT_FOLDERS,
     RECENT_ACCESSED_LOCATIONS,
     RECENT_EXECUTED_FILES,
     BOOKMARKS,

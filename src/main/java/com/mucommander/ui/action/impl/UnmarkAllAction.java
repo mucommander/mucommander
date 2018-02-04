@@ -32,31 +32,39 @@ import java.util.Map;
  */
 public class UnmarkAllAction extends MarkAllAction {
 
-    public UnmarkAllAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public UnmarkAllAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, false);
     }
 
     @Override
     public ActionDescriptor getDescriptor() {
-    	return new Descriptor();
+        return new Descriptor();
     }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new UnmarkAllAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new UnmarkAllAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "UnmarkAll";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "UnmarkAll";
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

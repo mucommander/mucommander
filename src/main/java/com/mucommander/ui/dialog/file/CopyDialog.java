@@ -19,9 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.util.List;
-import java.util.Vector;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
@@ -29,21 +26,24 @@ import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.impl.CopyJob;
+import com.mucommander.job.impl.CopyJob.TransferMode;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.job.impl.UnpackJob;
-import com.mucommander.job.impl.CopyJob.TransferMode;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CopyAction;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.List;
+import java.util.Vector;
 
 
 /**
  * Dialog invoked when the user wants to copy currently selected files. The destination field is pre-filled with
  * the 'other' panel's path and, if there is only one file to copy, with the source file's name.
  *
- * @see com.mucommander.ui.action.impl.CopyAction
  * @author Maxence Bernard
+ * @see com.mucommander.ui.action.impl.CopyAction
  */
 public class CopyDialog extends AbstractCopyDialog {
 
@@ -51,14 +51,14 @@ public class CopyDialog extends AbstractCopyDialog {
      * Creates a new <code>CopyDialog</code>.
      *
      * @param mainFrame the main frame that spawned this dialog.
-     * @param files files to be copied
+     * @param files     files to be copied
      */
     public CopyDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
-              ActionProperties.getActionLabel(CopyAction.Descriptor.ACTION_ID),
-              Translator.get("copy_dialog.destination"),
-              Translator.get("copy"),
-              Translator.get("copy_dialog.error_title"));
+                ActionProperties.getActionLabel(CopyAction.Descriptor.ACTION_ID),
+                Translator.get("copy_dialog.destination"),
+                Translator.get("copy"),
+                Translator.get("copy_dialog.error_title"));
     }
 
 
@@ -71,38 +71,37 @@ public class CopyDialog extends AbstractCopyDialog {
         AbstractFile baseFolder = files.getBaseFolder();
         AbstractArchiveFile parentArchiveFile = baseFolder.getParentArchive();
         TransferFileJob job;
-        String newName = resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName();
+        String newName = resolvedDest.getDestinationType() == PathUtils.ResolvedDestination.EXISTING_FOLDER ? null : resolvedDest.getDestinationFile().getName();
 
         // If the source files are located inside an archive, use UnpackJob instead of CopyJob to unpack archives in
         // their natural order (more efficient)
-        if(parentArchiveFile!=null) {
+        if (parentArchiveFile != null) {
             // Add all selected archive entries to a vector
             int nbFiles = files.size();
             List<ArchiveEntry> selectedEntries = new Vector<ArchiveEntry>();
-            for(int i=0; i<nbFiles; i++) {
-                selectedEntries.add((ArchiveEntry)files.elementAt(i).getAncestor(AbstractArchiveEntryFile.class).getUnderlyingFileObject());
+            for (int i = 0; i < nbFiles; i++) {
+                selectedEntries.add((ArchiveEntry) files.elementAt(i).getAncestor(AbstractArchiveEntryFile.class).getUnderlyingFileObject());
             }
 
             job = new UnpackJob(
-                progressDialog,
-                mainFrame,
-                parentArchiveFile,
-                PathUtils.getDepth(baseFolder.getAbsolutePath(), baseFolder.getSeparator()) - PathUtils.getDepth(parentArchiveFile.getAbsolutePath(), parentArchiveFile.getSeparator()),
-                resolvedDest.getDestinationFolder(),
-                newName,
-                defaultFileExistsAction,
-                selectedEntries
+                    progressDialog,
+                    mainFrame,
+                    parentArchiveFile,
+                    PathUtils.getDepth(baseFolder.getAbsolutePath(), baseFolder.getSeparator()) - PathUtils.getDepth(parentArchiveFile.getAbsolutePath(), parentArchiveFile.getSeparator()),
+                    resolvedDest.getDestinationFolder(),
+                    newName,
+                    defaultFileExistsAction,
+                    selectedEntries
             );
-        }
-        else {
+        } else {
             job = new CopyJob(
-                progressDialog,
-                mainFrame,
-                files,
-                resolvedDest.getDestinationFolder(),
-                newName,
-                TransferMode.COPY,
-                defaultFileExistsAction);
+                    progressDialog,
+                    mainFrame,
+                    files,
+                    resolvedDest.getDestinationFolder(),
+                    newName,
+                    TransferMode.COPY,
+                    defaultFileExistsAction);
         }
 
         return job;

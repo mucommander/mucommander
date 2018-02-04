@@ -18,57 +18,56 @@
 
 package com.mucommander.ui.quicklist;
 
+import com.mucommander.ui.quicklist.item.QuickListEmptyMessageItem;
+
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.SwingUtilities;
-
-import com.mucommander.ui.quicklist.item.QuickListEmptyMessageItem;
-
 /**
  * FileTablePopupWithEmptyMsg is a FileTablePopup which contains EmptyMessageItem.
- * 
+ *
  * @author Arik Hadas
  */
 
 class QuickListWithEmptyMsg extends QuickList {
-	protected QuickListEmptyMessageItem emptyMenuItem;
-	
-	public QuickListWithEmptyMsg(QuickListContainer container, String header, String emptyPopupHeader) {
-		super(container, header);
-		
-		add(emptyMenuItem = new QuickListEmptyMessageItem(emptyPopupHeader));
-		
-		addKeyListenerToList();
-		addFocusListener(this);
-	}
-	
-	@Override
-    protected boolean prepareForShowing(QuickListContainer container) {
-		getFocus();
-		return true;
-	}
-	
-	@Override
-	public void getFocus(){
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				requestFocus();
-			}
-		});
-	}
-	
-	private void addKeyListenerToList() {		
-		addKeyListener(new KeyAdapter() {
+    protected QuickListEmptyMessageItem emptyMenuItem;
 
-			public void keyPressed(KeyEvent e) {
-				switch(e.getKeyCode()) {				
-				default:
-					nextFocusableComponent().requestFocus();
-					break;
-				}				
-			}
-		});
-	}
+    public QuickListWithEmptyMsg(QuickListContainer container, String header, String emptyPopupHeader) {
+        super(container, header);
+
+        add(emptyMenuItem = new QuickListEmptyMessageItem(emptyPopupHeader));
+
+        addKeyListenerToList();
+        addFocusListener(this);
+    }
+
+    @Override
+    protected boolean prepareForShowing(QuickListContainer container) {
+        getFocus();
+        return true;
+    }
+
+    @Override
+    public void getFocus() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                requestFocus();
+            }
+        });
+    }
+
+    private void addKeyListenerToList() {
+        addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    default:
+                        nextFocusableComponent().requestFocus();
+                        break;
+                }
+            }
+        });
+    }
 
 }

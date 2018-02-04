@@ -30,17 +30,19 @@ import java.awt.*;
  */
 public class XBoxPanel extends JPanel {
 
-    /** Custom insets, can be null if custom insets haven't been specified with {@link #setInsets(Insets)} */
+    /**
+     * Custom insets, can be null if custom insets haven't been specified with {@link #setInsets(Insets)}
+     */
     private Insets insets;
-	
-	
+
+
     /**
      * Creates a new JPanel with a vertical BoxLayout (BoxLayout.X_AXIS).
      */
     public XBoxPanel() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
     }
-	
+
 
     /**
      * Creates a new JPanel with a vertical BoxLayout (BoxLayout.X_AXIS) and
@@ -51,14 +53,14 @@ public class XBoxPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(nbPixels, 0)));
     }
 
-	
+
     /**
      * Aligns the given component on the left and adds it to this panel.
      */
     @Override
     public Component add(Component comp) {
-        if(comp instanceof JComponent)
-            ((JComponent)comp).setAlignmentX(LEFT_ALIGNMENT);
+        if (comp instanceof JComponent)
+            ((JComponent) comp).setAlignmentX(LEFT_ALIGNMENT);
 
         return super.add(comp);
     }
@@ -69,20 +71,20 @@ public class XBoxPanel extends JPanel {
     public void addSpace(int nbPixels) {
         add(Box.createRigidArea(new Dimension(nbPixels, 0)));
     }
-	
-	
+
+
     /**
      * Sets this panel's insets.
      */
     public void setInsets(Insets insets) {
         this.insets = insets;
     }
-	
+
     /**
      * Returns this panel's insets.
      */
     @Override
     public Insets getInsets() {
-        return insets==null?super.getInsets():insets;
+        return insets == null ? super.getInsets() : insets;
     }
 }

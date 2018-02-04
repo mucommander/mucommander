@@ -27,29 +27,37 @@ import java.io.File;
 
 /**
  * Runs tests on {@link Command}.
+ *
  * @author Nicolas Rinaudo
  */
 public class CommandTest {
     // - Constants -------------------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Test command's alias. */
-    private static final String ALIAS        = "alias";
-    /** Test command's command. */
-    private static final String COMMAND      = "ls -la";
-    /** Test command's display name. */
+    /**
+     * Test command's alias.
+     */
+    private static final String ALIAS = "alias";
+    /**
+     * Test command's command.
+     */
+    private static final String COMMAND = "ls -la";
+    /**
+     * Test command's display name.
+     */
     private static final String DISPLAY_NAME = "test";
-
 
 
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Used while testing keyword substitution. */
+    /**
+     * Used while testing keyword substitution.
+     */
     private AbstractFile[] files;
-
 
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Creates a batch of files used for testing.
      */
@@ -66,13 +74,14 @@ public class CommandTest {
             files[5] = FileFactory.getFile(System.getProperty("java.home") + System.getProperty("file.separator") + "test.txt");
         }
         // This is assumed never to happen.
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
     }
-
 
 
     // - Simple keyword substitution -------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Tests the <code>$f</code> keyword.
      */
@@ -88,19 +97,20 @@ public class CommandTest {
         // Makes sure multiple file substitution works.
         tokens = Command.getTokens("$f", files);
         assert files.length == tokens.length;
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
             assert files[i].getAbsolutePath().equals(tokens[i]);
     }
 
     /**
      * Returns the specified file's parent, or an empty string if it doesn't have one.
-     * @param  file file whose parent should be returned.
-     * @return      the specified file's parent, or an empty string if it doesn't have one.
+     *
+     * @param file file whose parent should be returned.
+     * @return the specified file's parent, or an empty string if it doesn't have one.
      */
     private String getParent(AbstractFile file) {
         AbstractFile parent;
 
-        if((parent = file.getParent()) == null)
+        if ((parent = file.getParent()) == null)
             return "";
         return parent.getAbsolutePath();
     }
@@ -120,18 +130,19 @@ public class CommandTest {
         // Makes sure multiple file substitution works.
         tokens = Command.getTokens("$p", files);
         assert files.length == tokens.length;
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
             assert getParent(files[i]).equals(tokens[i]);
     }
 
     /**
      * Returns the specified file's extension, or <code>""</code> if it doesn't have one.
+     *
      * @return the specified file's extension.
      */
     private String getExtension(AbstractFile file) {
         String ext;
 
-        if((ext = file.getExtension()) == null)
+        if ((ext = file.getExtension()) == null)
             return "";
         return ext;
     }
@@ -156,7 +167,7 @@ public class CommandTest {
         // Makes sure multiple file substitution works.
         tokens = Command.getTokens("$e", files);
         assert files.length == tokens.length;
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
             assert getExtension(files[i]).equals(tokens[i]);
     }
 
@@ -175,7 +186,7 @@ public class CommandTest {
         // Makes sure multiple file substitution works.
         tokens = Command.getTokens("$b", files);
         assert files.length == tokens.length;
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
             assert files[i].getNameWithoutExtension().equals(tokens[i]);
     }
 
@@ -194,7 +205,7 @@ public class CommandTest {
         // Makes sure multiple file substitution works.
         tokens = Command.getTokens("$n", files);
         assert files.length == tokens.length;
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
             assert files[i].getName().equals(tokens[i]);
     }
 
@@ -217,9 +228,9 @@ public class CommandTest {
     }
 
 
-
     // - Tokenisation ----------------------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Runs tests on parsing behaviour with illegal keywords.
      */
@@ -253,21 +264,21 @@ public class CommandTest {
      */
     @Test
     public void testParsingWithSubstitution() {
-        String[]      tokens;
+        String[] tokens;
         StringBuilder buffer;
 
         // Makes sure keywords are tokenised when not escaped.
         tokens = Command.getTokens("ls $f", files);
         assert 1 + files.length == tokens.length;
         assert "ls".equals(tokens[0]);
-        for(int i = 0; i < files.length; i++)
+        for (int i = 0; i < files.length; i++)
             assert tokens[i + 1].equals(files[i].getAbsolutePath());
 
         // Makes sure keywords are not tokenised when escaped.
         tokens = Command.getTokens("ls \"$f\"", files);
         buffer = new StringBuilder("\"");
         buffer.append(files[0].getAbsolutePath());
-        for(int i = 1; i < files.length; i++) {
+        for (int i = 1; i < files.length; i++) {
             buffer.append(' ');
             buffer.append(files[i].getAbsolutePath());
         }
@@ -275,7 +286,7 @@ public class CommandTest {
         assert 2 == tokens.length;
         assert "ls".equals(tokens[0]);
         assert buffer.toString().equals(tokens[1]);
-        
+
         // Makes sure that keyword substitution happens even if the keyword
         // is not a single token.
         tokens = Command.getTokens("ls$fla", files[0]);
@@ -285,7 +296,7 @@ public class CommandTest {
         tokens = Command.getTokens("ls$fla", files);
         assert files.length == tokens.length;
         assert ("ls" + files[0].getAbsolutePath()).equals(tokens[0]);
-        for(int i = 1; i < files.length - 1; i++)
+        for (int i = 1; i < files.length - 1; i++)
             assert files[i].getAbsolutePath().equals(tokens[i]);
         assert (files[files.length - 1].getAbsolutePath() + "la").equals(tokens[tokens.length - 1]);
     }
@@ -337,7 +348,7 @@ public class CommandTest {
         // - escape spaces.
         // - are remoed from the command.
         tokens = Command.getTokens("ls My\\ Documents");
-        assert 2 ==tokens.length;
+        assert 2 == tokens.length;
         assert "ls".equals(tokens[0]);
         assert "My Documents".equals(tokens[1]);
 
@@ -356,9 +367,9 @@ public class CommandTest {
     }
 
 
-
     // - Constructors tests ----------------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Makes sure the specified command matches the specified arguments.
      */
@@ -369,11 +380,10 @@ public class CommandTest {
         assert type == command.getType();
 
         // Tests context dependant values.
-        if(isDisplayNameSet) {
+        if (isDisplayNameSet) {
             assert command.isDisplayNameSet();
             assert DISPLAY_NAME.equals(command.getDisplayName());
-        }
-        else {
+        } else {
             assert !command.isDisplayNameSet();
             assert ALIAS.equals(command.getDisplayName());
         }

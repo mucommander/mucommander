@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -195,17 +195,17 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
      * monitoring is not needed anymore, in order to prevent unnecessary resource hogging.</p>
      */
     public synchronized void startMonitoring() {
-        if(monitorThread ==null) {
+        if (monitorThread == null) {
             monitorThread = new Thread(this);
             monitorThread.start();
 
             isInitialized = false;
             // Wait until the thread has been started and initial file attributes have been fetched
-            while(!isInitialized) {
+            while (!isInitialized) {
                 try {
                     wait();     // run() will notify when initialization is complete
+                } catch (InterruptedException e) {
                 }
-                catch(InterruptedException e) {}
             }
         }
     }
@@ -223,7 +223,7 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
      * @return true if this FileMonitor is currently monitoring the file.
      */
     public synchronized boolean isMonitoring() {
-        return monitorThread!=null;
+        return monitorThread != null;
     }
 
 
@@ -237,11 +237,11 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
         LOGGER.info("firing an event to registered listeners, changed attributes={}", changedAttributes);
 
         // Iterate on all listeners
-        for(FileChangeListener listener : listeners.keySet())
+        for (FileChangeListener listener : listeners.keySet())
             listener.fileChanged(file, changedAttributes);
     }
 
-    
+
     /////////////////////////////
     // Runnable implementation //
     /////////////////////////////
@@ -249,13 +249,13 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
     public void run() {
         Thread thisThread = monitorThread;
 
-        long lastDate = (attributes&DATE_ATTRIBUTE)!=0?file.getDate():0;
-        long lastSize = (attributes&SIZE_ATTRIBUTE)!=0?file.getSize():0;
-        int lastPermissions = (attributes&PERMISSIONS_ATTRIBUTE)!=0?file.getPermissions().getIntValue():0;
-        boolean lastIsDirectory = (attributes&IS_DIRECTORY_ATTRIBUTE)!=0 && file.isDirectory();
-        boolean lastExists = (attributes&EXISTS_ATTRIBUTE)!=0 && file.exists();
+        long lastDate = (attributes & DATE_ATTRIBUTE) != 0 ? file.getDate() : 0;
+        long lastSize = (attributes & SIZE_ATTRIBUTE) != 0 ? file.getSize() : 0;
+        int lastPermissions = (attributes & PERMISSIONS_ATTRIBUTE) != 0 ? file.getPermissions().getIntValue() : 0;
+        boolean lastIsDirectory = (attributes & IS_DIRECTORY_ATTRIBUTE) != 0 && file.isDirectory();
+        boolean lastExists = (attributes & EXISTS_ATTRIBUTE) != 0 && file.exists();
 
-        synchronized(this) {
+        synchronized (this) {
             // We are now ready to detect file changes, notify the thread that started this thread
             isInitialized = true;
             notify();
@@ -268,54 +268,53 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
         int tempInt;
         boolean tempBool;
 
-        while(monitorThread ==thisThread) {
+        while (monitorThread == thisThread) {
             changedAttributes = 0;
             now = System.currentTimeMillis();
 
-            if((attributes&DATE_ATTRIBUTE)!=0) {
-                if((tempLong=file.getDate())!=lastDate) {
+            if ((attributes & DATE_ATTRIBUTE) != 0) {
+                if ((tempLong = file.getDate()) != lastDate) {
                     lastDate = tempLong;
                     changedAttributes |= DATE_ATTRIBUTE;
                 }
             }
 
-            if(monitorThread ==thisThread && (attributes&SIZE_ATTRIBUTE)!=0) {
-                if((tempLong=file.getSize())!=lastSize) {
+            if (monitorThread == thisThread && (attributes & SIZE_ATTRIBUTE) != 0) {
+                if ((tempLong = file.getSize()) != lastSize) {
                     lastSize = tempLong;
                     changedAttributes |= SIZE_ATTRIBUTE;
                 }
             }
 
-            if(monitorThread ==thisThread && (attributes&PERMISSIONS_ATTRIBUTE)!=0) {
-                if((tempInt=file.getPermissions().getIntValue())!=lastPermissions) {
+            if (monitorThread == thisThread && (attributes & PERMISSIONS_ATTRIBUTE) != 0) {
+                if ((tempInt = file.getPermissions().getIntValue()) != lastPermissions) {
                     lastPermissions = tempInt;
                     changedAttributes |= PERMISSIONS_ATTRIBUTE;
                 }
             }
 
-            if(monitorThread ==thisThread && (attributes& IS_DIRECTORY_ATTRIBUTE)!=0) {
-                if((tempBool=file.isDirectory())!=lastIsDirectory) {
+            if (monitorThread == thisThread && (attributes & IS_DIRECTORY_ATTRIBUTE) != 0) {
+                if ((tempBool = file.isDirectory()) != lastIsDirectory) {
                     lastIsDirectory = tempBool;
                     changedAttributes |= IS_DIRECTORY_ATTRIBUTE;
                 }
             }
 
-            if(monitorThread ==thisThread && (attributes&EXISTS_ATTRIBUTE)!=0) {
-                if((tempBool=file.exists())!=lastExists) {
+            if (monitorThread == thisThread && (attributes & EXISTS_ATTRIBUTE) != 0) {
+                if ((tempBool = file.exists()) != lastExists) {
                     lastExists = tempBool;
                     changedAttributes |= EXISTS_ATTRIBUTE;
                 }
             }
 
-            if(changedAttributes!=0)
+            if (changedAttributes != 0)
                 fireFileChangeEvent(changedAttributes);
 
             // Get some well-deserved rest: sleep for the specified poll period minus the time we spent
             // for this iteration
             try {
-                Thread.sleep(Math.max(pollPeriod-(System.currentTimeMillis()-now), 0));
-            }
-            catch(InterruptedException e) {
+                Thread.sleep(Math.max(pollPeriod - (System.currentTimeMillis() - now), 0));
+            } catch (InterruptedException e) {
             }
         }
     }

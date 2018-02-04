@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,7 +29,7 @@ import java.net.URLConnection;
 
 /**
  * @author Maxence Bernard
-*/
+ */
 class CompatURLConnection extends URLConnection {
 
     protected AbstractFile file;
@@ -43,7 +43,7 @@ class CompatURLConnection extends URLConnection {
     public CompatURLConnection(URL url, AbstractFile file) throws IOException {
         super(url);
 
-        if(file!=null) {
+        if (file != null) {
             this.file = file;
             connected = true;
         }
@@ -55,7 +55,7 @@ class CompatURLConnection extends URLConnection {
      * @throws IOException if an error occurred while connecting this URLConnection
      */
     private void checkConnected() throws IOException {
-        if(!connected)
+        if (!connected)
             connect();
     }
 
@@ -72,7 +72,7 @@ class CompatURLConnection extends URLConnection {
      */
     @Override
     public void connect() throws IOException {
-        if(!connected) {
+        if (!connected) {
             file = FileFactory.getFile(url.toString(), true);
             connected = true;
         }
@@ -103,8 +103,7 @@ class CompatURLConnection extends URLConnection {
             checkConnected();
 
             return file.getDate();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return 0;
         }
     }
@@ -119,9 +118,8 @@ class CompatURLConnection extends URLConnection {
         try {
             checkConnected();
 
-            return (int)file.getSize();
-        }
-        catch(IOException e) {
+            return (int) file.getSize();
+        } catch (IOException e) {
             return -1;
         }
     }

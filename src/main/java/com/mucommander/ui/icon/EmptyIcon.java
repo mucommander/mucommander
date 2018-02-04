@@ -18,39 +18,37 @@
 
 package com.mucommander.ui.icon;
 
-import java.awt.Component;
-import java.awt.Graphics;
-
-import javax.swing.Icon;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Empty {@link Icon} in the specified size that can be used as a place holder
- * 
+ *
  * @author Arik Hadas
  */
 public class EmptyIcon implements Icon {
 
-	private int width;
-	private int height;
+    private int width;
+    private int height;
 
-	public EmptyIcon(int size) {
-		this.width = size;
-		this.height = size;
-	}
+    public EmptyIcon(int size) {
+        this.width = size;
+        this.height = size;
+    }
 
-	public EmptyIcon(int width, int height) {
-		this.width = width;
-		this.height = height;
-	}
+    public EmptyIcon(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
-	public int getIconHeight() {
-		return height;
-	}
+    public int getIconHeight() {
+        return height;
+    }
 
-	public int getIconWidth() {
-		return width;
-	}
+    public int getIconWidth() {
+        return width;
+    }
 
-	public void paintIcon(Component c, Graphics g, int x, int y) {
-	}
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+    }
 }

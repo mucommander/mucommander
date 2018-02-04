@@ -18,53 +18,63 @@
 
 package com.mucommander.ui.tabs;
 
-import java.awt.Component;
-
-import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Initial value for TabsDisplay object.
- * 
+ *
  * @author Arik Hadas
  */
 class NullableTabsViewer<T extends Tab> extends TabsViewer<T> {
 
-	public NullableTabsViewer() {
-		super(new JLabel(), null);
-	}
+    public NullableTabsViewer() {
+        super(new JLabel(), null);
+    }
 
-	@Override
-	public void add(T tab) { }
+    @Override
+    public void add(T tab) {
+    }
 
-	@Override
-	public void add(T tab, int index) { }
+    @Override
+    public void add(T tab, int index) {
+    }
 
-	@Override
-	public void update(T tab, int index) { }
+    @Override
+    public void update(T tab, int index) {
+    }
 
-	@Override
-	public void remove(int index) { }
+    @Override
+    public void remove(int index) {
+    }
 
-	@Override
-	public int getSelectedTabIndex() {
-		return 0;
-	}
+    @Override
+    public int getSelectedTabIndex() {
+        return 0;
+    }
 
-	@Override
-	public void setSelectedTabIndex(int index) { }
+    @Override
+    public void setSelectedTabIndex(int index) {
+    }
 
-	@Override
-	public T removeCurrentTab() { return null; }
+    @Override
+    public T removeCurrentTab() {
+        return null;
+    }
 
-	@Override
-	public void removeOtherTabs() { }
+    @Override
+    public void removeOtherTabs() {
+    }
 
-	@Override
-	public void removeTab(Component header) { }
+    @Override
+    public void removeTab(Component header) {
+    }
 
-	@Override
-	public void removeDuplicateTabs() { }
+    @Override
+    public void removeDuplicateTabs() {
+    }
 
-	@Override
-	public void removeTab(int index) { }
+    @Override
+    public void removeTab(int index) {
+    }
 }

@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,12 +19,11 @@
 
 package com.mucommander.commons.file.archive.bzip2;
 
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
 import com.mucommander.commons.file.archive.SingleArchiveEntryIterator;
-
 import org.apache.tools.bzip2.CBZip2InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,21 +62,21 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         String extension = getCustomExtension() != null ? getCustomExtension() : getExtension();
         String name = getName();
-		
-        if(extension!=null) {
+
+        if (extension != null) {
             // Remove the 'bz2' or 'tbz2' extension from the entry's name
-            switch(extension.toLowerCase()) {
-            case "tbz2":
-                name = name.substring(0, name.length()-4)+"tar";
-                break;
-            case "bz2":
-                name = name.substring(0, name.length()-4);
-                break;
-            default:
+            switch (extension.toLowerCase()) {
+                case "tbz2":
+                    name = name.substring(0, name.length() - 4) + "tar";
+                    break;
+                case "bz2":
+                    name = name.substring(0, name.length() - 4);
+                    break;
+                default:
             }
         }
 
-        return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1, true));
+        return new SingleArchiveEntryIterator(new ArchiveEntry("/" + name, false, getDate(), -1, true));
     }
 
     @Override
@@ -98,8 +97,7 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
             // "CBZip2InputStream reads bytes from the compressed source stream via the single byte {@link java.io.InputStream#read()
             // read()} method exclusively. Thus you should consider to use a buffered source stream."
             return new CBZip2InputStream(new BufferedInputStream(in));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded
             // so we need to catch those and throw them as IOException
             LOGGER.info("Exception caught while creating CBZip2InputStream, throwing IOException", e);

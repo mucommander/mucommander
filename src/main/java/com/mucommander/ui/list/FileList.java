@@ -27,7 +27,7 @@ import java.awt.*;
 /**
  * FileList is a <code>JList</code> that displays information about a list of files: each row displays a file's name
  * and icon.
- *
+ * <p>
  * <p>Since all <code>AbstractFile</code> methods are I/O bound and potentially lock-prone, it is not a good idea to
  * call them on request from the main event thread. To work around this, the constructor can preload all the information
  * subsequently needed by this list. This has a cost since all files will have to queried at init time, even if some
@@ -39,26 +39,36 @@ import java.awt.*;
  */
 public class FileList extends JList {
 
-    /** Files to display */
+    /**
+     * Files to display
+     */
     protected FileSet files;
-    /** True if file attribute preloading has been enabled */
+    /**
+     * True if file attribute preloading has been enabled
+     */
     protected boolean fileAttributesPreloaded;
 
-    /** Preloaded filenames, null if preloading is not enabled */
+    /**
+     * Preloaded filenames, null if preloading is not enabled
+     */
     protected String[] filenames;
-    /** Preloaded file icons, null if preloading is not enabled */
+    /**
+     * Preloaded file icons, null if preloading is not enabled
+     */
     protected Icon[] icons;
 
-    /** Custom font by the JLabel */
+    /**
+     * Custom font by the JLabel
+     */
     protected Font customFont;
 
 
     /**
-     * Creates a new FileList where each file in the given {@link FileSet} is displayed on a separate row. 
+     * Creates a new FileList where each file in the given {@link FileSet} is displayed on a separate row.
      *
-     * @param files the set of files to display
+     * @param files                 the set of files to display
      * @param preloadFileAttributes enables/disables file attribute preloading. It should always enabled unless it is known
-     * for certain that the underlying files are not I/O bound and cannot lock.
+     *                              for certain that the underlying files are not I/O bound and cannot lock.
      */
     public FileList(final FileSet files, boolean preloadFileAttributes) {
         this.files = files;
@@ -67,14 +77,14 @@ public class FileList extends JList {
 
         // Very important: allows the JList to operate in fixed cell height mode, which makes it substantially faster
         // to initialize when there is a large number of rows.
-        if(nbFiles>0)
+        if (nbFiles > 0)
             setPrototypeCellValue(files.elementAt(0));
 
-        if(preloadFileAttributes) {
+        if (preloadFileAttributes) {
             filenames = new String[nbFiles];
             icons = new Icon[nbFiles];
             AbstractFile file;
-            for(int i=0; i<nbFiles; i++) {
+            for (int i = 0; i < nbFiles; i++) {
                 file = files.elementAt(i);
                 filenames[i] = file.getName();
                 icons[i] = file.getIcon();
@@ -95,22 +105,21 @@ public class FileList extends JList {
         });
 
         customFont = new JLabel().getFont();
-        customFont = customFont.deriveFont(customFont.getStyle(), customFont.getSize()-2);
+        customFont = customFont.deriveFont(customFont.getStyle(), customFont.getSize() - 2);
 
         // Use a custom ListCellRenderer
         setCellRenderer(new DefaultListCellRenderer() {
 
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 label.setFont(customFont);
 
-                if(FileList.this.fileAttributesPreloaded) {
+                if (FileList.this.fileAttributesPreloaded) {
                     label.setText(filenames[index]);
                     label.setIcon(icons[index]);
-                }
-                else {
-                    AbstractFile file = (AbstractFile)value;
+                } else {
+                    AbstractFile file = (AbstractFile) value;
                     label.setText(file.getName());
                     label.setIcon(file.getIcon());
                 }

@@ -26,8 +26,8 @@ import java.io.IOException;
 /**
  * A test case for {@link com.mucommander.commons.io.BoundedReader}.
  *
- * @see com.mucommander.commons.io.BoundedReader
  * @author Maxence Bernard, Nicolas Rinaudo
+ * @see com.mucommander.commons.io.BoundedReader
  */
 public class BoundedReaderTest {
 
@@ -46,22 +46,22 @@ public class BoundedReaderTest {
         assert 4 == br.getRemainingCharacters();
         assert 4 == br.getAllowedCharacters();
 
-        assert br.read()!=-1;
+        assert br.read() != -1;
         assert 1 == br.getReadCounter();
         assert 3 == br.getRemainingCharacters();
         assert 4 == br.getAllowedCharacters();
 
-        assert br.read(new char[1])!=-1;
+        assert br.read(new char[1]) != -1;
         assert 2 == br.getReadCounter();
         assert 2 == br.getRemainingCharacters();
         assert 4 == br.getAllowedCharacters();
 
-        assert br.read(new char[1], 0, 1)!=-1;
+        assert br.read(new char[1], 0, 1) != -1;
         assert 3 == br.getReadCounter();
         assert 1 == br.getRemainingCharacters();
         assert 4 == br.getAllowedCharacters();
 
-        assert br.skip(1)!=-1;
+        assert br.skip(1) != -1;
         assert 4 == br.getReadCounter();
         assert 0 == br.getRemainingCharacters();
         assert 4 == br.getAllowedCharacters();
@@ -78,26 +78,38 @@ public class BoundedReaderTest {
         prepareBoundedReader(br);
 
         boolean exceptionThrown = false;
-        try { br.read(); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            br.read();
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { br.read(new char[1]); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            br.read(new char[1]);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { br.read(new char[1], 0, 1); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            br.read(new char[1], 0, 1);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
         exceptionThrown = false;
-        try { br.skip(1); }
-        catch(StreamOutOfBoundException e) { exceptionThrown = true; }
+        try {
+            br.skip(1);
+        } catch (StreamOutOfBoundException e) {
+            exceptionThrown = true;
+        }
 
         assert exceptionThrown;
 
@@ -107,7 +119,7 @@ public class BoundedReaderTest {
 
         // Attempt to read a chunk larger than the remaining characters and assert that it does not throw a StreamOutOfBoundException
         br = new BoundedReader(new CharArrayReader(TEST_CHARACTERS), 4);
-        assert br.read(new char[6])!=-1;
+        assert br.read(new char[6]) != -1;
     }
 
     /**
@@ -131,7 +143,7 @@ public class BoundedReaderTest {
 
         // Attempt to read a chunk larger than the remaining characters and assert that it does not return -1
         br = new BoundedReader(new CharArrayReader(TEST_CHARACTERS), 4);
-        assert br.read(new char[6])!=-1;
+        assert br.read(new char[6]) != -1;
     }
 
     /**
@@ -146,24 +158,24 @@ public class BoundedReaderTest {
         assert Long.MAX_VALUE == br.getRemainingCharacters();
         assert -1 == br.getAllowedCharacters();
 
-        assert br.read()!=-1;
+        assert br.read() != -1;
         assert 1 == br.getReadCounter();
         assert Long.MAX_VALUE == br.getRemainingCharacters();
         assert -1 == br.getAllowedCharacters();
 
-        assert br.read(new char[1])!=-1;
+        assert br.read(new char[1]) != -1;
         assert 2 == br.getReadCounter();
         assert Long.MAX_VALUE == br.getRemainingCharacters();
         assert -1 == br.getAllowedCharacters();
 
-        assert br.read(new char[1], 0, 1)!=-1;
+        assert br.read(new char[1], 0, 1) != -1;
         assert 3 == br.getReadCounter();
         assert Long.MAX_VALUE == br.getRemainingCharacters();
         assert -1 == br.getAllowedCharacters();
 
         long totalRead = 0;
-        while(br.read()!=-1)
-            totalRead ++;
+        while (br.read() != -1)
+            totalRead++;
 
         assert 8 == totalRead;
     }

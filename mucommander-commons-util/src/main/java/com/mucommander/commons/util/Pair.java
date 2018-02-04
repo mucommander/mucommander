@@ -20,33 +20,34 @@ package com.mucommander.commons.util;
 
 /**
  * Simple structure of two elements.
- * 
- * Note that this class does not support concurrent usage, and does not exposes setters and 
+ * <p>
+ * Note that this class does not support concurrent usage, and does not exposes setters and
  * getters methods, on purpose in order to expose simple API similar to C++ pair structure.
- * 
+ *
  * @author Arik Hadas
  */
 public class Pair<FIRST, SECOND> {
 
-	/* first element */
-	public FIRST first;
-	/* second element */
-	public SECOND second;
-	
-	/**
-	 * Empty Constructor
-	 * The elements should be assigned after the class instantiation
-	 */
-	public Pair() { }
-	
-	/**
-	 * Constructor that take the two elements as parameters
-	 * 
-	 * @param first - first element
-	 * @param second - second element
-	 */
-	public Pair(FIRST first, SECOND second) {
-		this.first = first;
-		this.second = second;
-	}
+    /* first element */
+    public FIRST first;
+    /* second element */
+    public SECOND second;
+
+    /**
+     * Empty Constructor
+     * The elements should be assigned after the class instantiation
+     */
+    public Pair() {
+    }
+
+    /**
+     * Constructor that take the two elements as parameters
+     *
+     * @param first  - first element
+     * @param second - second element
+     */
+    public Pair(FIRST first, SECOND second) {
+        this.first = first;
+        this.second = second;
+    }
 }

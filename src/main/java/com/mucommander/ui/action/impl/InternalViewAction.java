@@ -18,42 +18,37 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
-
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.ViewerRegistrar;
 
+import javax.swing.*;
+import java.util.Map;
+
 /**
  * Opens the current file in view mode.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class InternalViewAction extends AbstractViewerAction {
     // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of <code>InternalViewAction</code>.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public InternalViewAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public InternalViewAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         ImageIcon icon;
-        if((icon = getStandardIcon(ViewAction.class)) != null)
+        if ((icon = getStandardIcon(ViewAction.class)) != null)
             setIcon(icon);
     }
-
 
 
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
@@ -68,28 +63,36 @@ public class InternalViewAction extends AbstractViewerAction {
         return null;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new InternalViewAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new InternalViewAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "InternalView";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "InternalView";
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

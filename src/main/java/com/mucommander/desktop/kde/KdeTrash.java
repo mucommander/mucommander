@@ -18,19 +18,18 @@
 
 package com.mucommander.desktop.kde;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.process.ProcessRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * This class provides access to the KDE trash. Only local files (or locally mounted files) can be moved to the trash.
- *
+ * <p>
  * <p>
  * <b>Implementation notes:</b><br>
  * <br>
@@ -38,16 +37,20 @@ import com.mucommander.process.ProcessRunner;
  * the trash and it is thus more effective to group files to be moved instead of spawning multiple processes.<br>
  * </p>
  *
- * @see Kde3TrashProvider
  * @author Maxence Bernard
+ * @see Kde3TrashProvider
  */
 class KdeTrash extends QueuedTrash {
-	private static final Logger LOGGER = LoggerFactory.getLogger(KdeTrash.class);
-	
-    /** Command that empties the trash */
+    private static final Logger LOGGER = LoggerFactory.getLogger(KdeTrash.class);
+
+    /**
+     * Command that empties the trash
+     */
     private final static String EMPTY_TRASH_COMMAND = "ktrash --empty";
 
-    /** Command that allows to interact with the trash */
+    /**
+     * Command that allows to interact with the trash
+     */
     private String baseCommand;
 
     /**
@@ -70,8 +73,7 @@ class KdeTrash extends QueuedTrash {
         try {
             ProcessRunner.execute(command).waitFor();
             return true;
-        }
-        catch(Exception e) {    // IOException, InterruptedException
+        } catch (Exception e) {    // IOException, InterruptedException
             LOGGER.debug("Caught exception", e);
             return false;
         }
@@ -88,8 +90,7 @@ class KdeTrash extends QueuedTrash {
         try {
             ProcessRunner.execute(command).waitFor();
             return true;
-        }
-        catch(Exception e) {    // IOException, InterruptedException
+        } catch (Exception e) {    // IOException, InterruptedException
             LOGGER.debug("Caught exception", e);
             return false;
         }
@@ -123,7 +124,7 @@ class KdeTrash extends QueuedTrash {
     @Override
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
-            && (file.getAbsolutePath(true).indexOf("/.local/share/Trash/") != -1);
+                && (file.getAbsolutePath(true).indexOf("/.local/share/Trash/") != -1);
     }
 
     /**
@@ -136,7 +137,7 @@ class KdeTrash extends QueuedTrash {
 
     @Override
     public void open() {
-        executeAndWait(baseCommand+" exec trash:/");
+        executeAndWait(baseCommand + " exec trash:/");
     }
 
     /**
@@ -155,16 +156,16 @@ class KdeTrash extends QueuedTrash {
     @Override
     protected boolean moveToTrash(List<AbstractFile> queuedFiles) {
         int nbFiles = queuedFiles.size();
-        String tokens[] = new String[nbFiles+3];
+        String tokens[] = new String[nbFiles + 3];
 
         tokens[0] = baseCommand;
         tokens[1] = "move";
 
-        for(int i=0; i<nbFiles; i++) {
-            tokens[i+2] = queuedFiles.get(i).getAbsolutePath();
+        for (int i = 0; i < nbFiles; i++) {
+            tokens[i + 2] = queuedFiles.get(i).getAbsolutePath();
         }
 
-        tokens[nbFiles+2] = "trash:/";
+        tokens[nbFiles + 2] = "trash:/";
 
         return executeAndWait(tokens);
     }

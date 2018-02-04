@@ -18,40 +18,43 @@
 
 package com.mucommander.ui.encoding;
 
-import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.WeakHashMap;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.DialogOwner;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.WeakHashMap;
 
 /**
  * This compound component lets the user choose a character encoding among a list of {@link EncodingPreferences#getPreferredEncodings()
  * preferred encodings} using a combo box, and customize the list of preferred encodings when the 'customize' button
  * is pressed.
-
+ *
  * @author Maxence Bernard
  */
 public class EncodingSelectBox extends JPanel {
 
-    /** Allows the encoding to be selected */
+    /**
+     * Allows the encoding to be selected
+     */
     protected SaneComboBox comboBox;
 
-    /** Button that invokes the dialog that allows to customize the list of preferred encodings */
+    /**
+     * Button that invokes the dialog that allows to customize the list of preferred encodings
+     */
     protected JButton customizeButton;
 
-    /** Contains all registered encoding listeners, stored as weak references */
+    /**
+     * Contains all registered encoding listeners, stored as weak references
+     */
     protected final WeakHashMap<EncodingListener, ?> listeners = new WeakHashMap<EncodingListener, Object>();
 
-    /** The encoding that is currently selected, may be null */
+    /**
+     * The encoding that is currently selected, may be null
+     */
     protected String currentEncoding;
 
 
@@ -67,11 +70,11 @@ public class EncodingSelectBox extends JPanel {
     /**
      * Creates a new <code>EncodingSelectBox</code> with the specified encoding initially selected.
      * The encoding must be one of the preferred encodings, or <code>null</code>. In the latter case, the first encoding
-     * will be selected. 
+     * will be selected.
      *
-     * @param dialogOwner the dialog/frame that owns this component
+     * @param dialogOwner      the dialog/frame that owns this component
      * @param selectedEncoding the encoding that will be initially selected, <code>null</code> for the first preferred
-     * encoding
+     *                         encoding
      */
     public EncodingSelectBox(final DialogOwner dialogOwner, String selectedEncoding) {
         super(new BorderLayout());
@@ -82,9 +85,9 @@ public class EncodingSelectBox extends JPanel {
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String oldEncoding = currentEncoding;
-                currentEncoding = (String)comboBox.getSelectedItem();
+                currentEncoding = (String) comboBox.getSelectedItem();
 
-                if(currentEncoding==null || !currentEncoding.equals(oldEncoding)) {
+                if (currentEncoding == null || !currentEncoding.equals(oldEncoding)) {
                     // Notify listeners of the new encoding
                     fireEncodingListener(oldEncoding, EncodingSelectBox.this.currentEncoding);
                 }
@@ -96,7 +99,7 @@ public class EncodingSelectBox extends JPanel {
         // Customize button
         customizeButton = new JButton("...");
         // Mac OS X: small component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if (OsFamily.MAC_OS_X.isCurrent())
             customizeButton.putClientProperty("JComponent.sizeVariant", "small");
 
         customizeButton.addActionListener(new ActionListener() {
@@ -104,10 +107,10 @@ public class EncodingSelectBox extends JPanel {
                 String selectedEncoding = getSelectedEncoding();
 
                 Window owner = dialogOwner.getOwner();
-                if(owner instanceof Frame)
-                    new PreferredEncodingsDialog((Frame)owner).showDialog();
+                if (owner instanceof Frame)
+                    new PreferredEncodingsDialog((Frame) owner).showDialog();
                 else
-                    new PreferredEncodingsDialog((Dialog)owner).showDialog();
+                    new PreferredEncodingsDialog((Dialog) owner).showDialog();
 
                 comboBox.removeAllItems();
                 populateComboBox(selectedEncoding);
@@ -127,19 +130,18 @@ public class EncodingSelectBox extends JPanel {
         java.util.List<String> encodings = EncodingPreferences.getPreferredEncodings();
 
         // Ignore the specified encoding if it is not in the list of preferred encodings
-        if(selectEncoding!=null && !encodings.contains(selectEncoding))
+        if (selectEncoding != null && !encodings.contains(selectEncoding))
             selectEncoding = null;
 
         // Add preferred encodings to the combo box
         int nbEncodings = encodings.size();
-        for(String encoding: encodings)
+        for (String encoding : encodings)
             comboBox.addItem(encoding);
 
-        if(selectEncoding!=null) {
+        if (selectEncoding != null) {
             comboBox.setSelectedItem(selectEncoding);
             currentEncoding = selectEncoding;
-        }
-        else if(nbEncodings>0) {
+        } else if (nbEncodings > 0) {
             comboBox.setSelectedItem(encodings.get(0));
             currentEncoding = selectEncoding;
         }
@@ -153,32 +155,32 @@ public class EncodingSelectBox extends JPanel {
     public String getSelectedEncoding() {
         int index = comboBox.getSelectedIndex();
 
-        if(index==-1)
+        if (index == -1)
             return null;
 
-        return (String)comboBox.getItemAt(index);
+        return (String) comboBox.getItemAt(index);
     }
-    
+
 
     //////////////////////
     // Listener methods //
     //////////////////////
 
     public void addEncodingListener(EncodingListener listener) {
-        synchronized(listeners) {
+        synchronized (listeners) {
             listeners.put(listener, null);
         }
     }
 
     public void removeEncodingListener(EncodingListener listener) {
-        synchronized(listeners) {
+        synchronized (listeners) {
             listeners.remove(listener);
         }
     }
 
     protected void fireEncodingListener(String oldEncoding, String newEncoding) {
-        synchronized(listeners) {
-            for(EncodingListener listener : listeners.keySet())
+        synchronized (listeners) {
+            for (EncodingListener listener : listeners.keySet())
                 listener.encodingChanged(this, oldEncoding, newEncoding);
         }
 

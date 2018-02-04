@@ -18,29 +18,23 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
+
+import javax.swing.*;
+import java.util.Map;
 
 /**
  * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.StatusBar} depending on its
  * current visible state: if it is visible, hides it, if not shows it.
- *
+ * <p>
  * <p>This action's label will be updated to reflect the current visible state.
- *
+ * <p>
  * <p>Each time this action is executed, the new current visible state is stored in the configuration so that
  * new MainFrame windows will use it to determine whether the StatusBar has to be made visible or not.
  *
@@ -48,13 +42,13 @@ import com.mucommander.ui.main.StatusBar;
  */
 public class ToggleStatusBarAction extends MuAction {
 
-    public ToggleStatusBarAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleStatusBarAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
         updateLabel(MuConfigurations.getPreferences().getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
     }
 
     private void updateLabel(boolean visible) {
-        setLabel(Translator.get(visible?Descriptor.ACTION_ID+".hide":Descriptor.ACTION_ID+".show"));
+        setLabel(Translator.get(visible ? Descriptor.ACTION_ID + ".hide" : Descriptor.ACTION_ID + ".show"));
     }
 
     @Override
@@ -70,30 +64,40 @@ public class ToggleStatusBarAction extends MuAction {
         mainFrame.validate();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ToggleStatusBarAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ToggleStatusBarAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ToggleStatusBar";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "ToggleStatusBar";
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
 
         @Override
-        public String getLabelKey() { return ACTION_ID+".show"; }
+        public String getLabelKey() {
+            return ACTION_ID + ".show";
+        }
     }
 }

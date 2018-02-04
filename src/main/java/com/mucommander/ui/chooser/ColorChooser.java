@@ -39,34 +39,48 @@ import java.awt.event.ActionListener;
  * </p>
  * <p>
  * This component can be used either as a regular widget and be added to a <code>container</code> or as
- * a dialog box through the {@link #createDialog(Frame,ColorChooser) createDialog} method.
+ * a dialog box through the {@link #createDialog(Frame, ColorChooser) createDialog} method.
  * </p>
+ *
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class ColorChooser extends YBoxPanel implements ChangeListener {
 
     // - UI components ----------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Component that displays a preview of the current color */
+    /**
+     * Component that displays a preview of the current color
+     */
     private JComponent previewComponent;
-    /** Color chooser. */
-    private JColorChooser  chooser;
-    /** Alpha transparency chooser. */
+    /**
+     * Color chooser.
+     */
+    private JColorChooser chooser;
+    /**
+     * Alpha transparency chooser.
+     */
     private IntegerChooser alpha;
 
 
     // - Color editing ----------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** Currently selected color. */
-    private Color          currentColor;
-    /** Color on which the dialog was initialised. */
+    /**
+     * Currently selected color.
+     */
+    private Color currentColor;
+    /**
+     * Color on which the dialog was initialised.
+     */
     private Color initialColor;
-    /** Property to change in the preview component when the current color changes */
+    /**
+     * Property to change in the preview component when the current color changes
+     */
     private String previewColorPropertyName;
 
 
     // - Localisation -----------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Overrides the default, incomplete Swing translations.
      */
@@ -74,26 +88,26 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
         String buffer;
 
         // Tab labels.
-        UIManager.put("ColorChooser.rgbNameText",        Translator.get("color_chooser.rgb"));
-        UIManager.put("ColorChooser.hsbNameText",        Translator.get("color_chooser.hsb"));
-        UIManager.put("ColorChooser.swatchesNameText",   Translator.get("color_chooser.swatches"));
+        UIManager.put("ColorChooser.rgbNameText", Translator.get("color_chooser.rgb"));
+        UIManager.put("ColorChooser.hsbNameText", Translator.get("color_chooser.hsb"));
+        UIManager.put("ColorChooser.swatchesNameText", Translator.get("color_chooser.swatches"));
 
         // Red color name.
-        UIManager.put("ColorChooser.rgbRedText",         buffer = Translator.get("color_chooser.red"));
-        UIManager.put("ColorChooser.hsbRedText",         buffer);
+        UIManager.put("ColorChooser.rgbRedText", buffer = Translator.get("color_chooser.red"));
+        UIManager.put("ColorChooser.hsbRedText", buffer);
 
         // Green color name.
-        UIManager.put("ColorChooser.rgbGreenText",       buffer = Translator.get("color_chooser.green"));
-        UIManager.put("ColorChooser.hsbGreenText",       buffer);
+        UIManager.put("ColorChooser.rgbGreenText", buffer = Translator.get("color_chooser.green"));
+        UIManager.put("ColorChooser.hsbGreenText", buffer);
 
         // Blue color name.
-        UIManager.put("ColorChooser.rgbBlueText",        buffer = Translator.get("color_chooser.blue"));
-        UIManager.put("ColorChooser.hsbBlueText",        buffer);
+        UIManager.put("ColorChooser.rgbBlueText", buffer = Translator.get("color_chooser.blue"));
+        UIManager.put("ColorChooser.hsbBlueText", buffer);
 
         // HSB tab specific strings.
-        UIManager.put("ColorChooser.hsbHueText",         Translator.get("color_chooser.hue"));
-        UIManager.put("ColorChooser.hsbSaturationText",  Translator.get("color_chooser.saturation"));
-        UIManager.put("ColorChooser.hsbBrightnessText",  Translator.get("color_chooser.brightness"));
+        UIManager.put("ColorChooser.hsbHueText", Translator.get("color_chooser.hue"));
+        UIManager.put("ColorChooser.hsbSaturationText", Translator.get("color_chooser.saturation"));
+        UIManager.put("ColorChooser.hsbBrightnessText", Translator.get("color_chooser.brightness"));
 
         // Swatches tab specific strings.
         UIManager.put("ColorChooser.swatchesRecentText", Translator.get("color_chooser.recent"));
@@ -111,7 +125,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
     }
 
     public ColorChooser(Color initialColor, JComponent previewComponent, String previewColorPropertyName) {
-        this.currentColor  = initialColor;
+        this.currentColor = initialColor;
         this.initialColor = initialColor;
 
         // Initialises the UI.
@@ -121,7 +135,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
         alpha.setValue(initialColor.getAlpha());
         chooser.setColor(initialColor);
 
-        if(previewComponent!=null && previewColorPropertyName!=null) {
+        if (previewComponent != null && previewColorPropertyName != null) {
             this.previewComponent = previewComponent;
             this.previewColorPropertyName = previewColorPropertyName;
             add(createPreviewPanel(previewComponent));
@@ -131,14 +145,15 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
     }
 
 
-
     // - Dialog creation --------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Creates a dialog containing the specified color chooser.
-     * @param  parent  component on which to center the dialog.
-     * @param  chooser chooser to use within the dialog.
-     * @return         a dialog containing the specified chooser.
+     *
+     * @param parent  component on which to center the dialog.
+     * @param chooser chooser to use within the dialog.
+     * @return a dialog containing the specified chooser.
      */
     public static FocusDialog createDialog(Dialog parent, ColorChooser chooser) {
         return new ChooserDialog(parent, chooser);
@@ -146,14 +161,14 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
 
     /**
      * Creates a dialog containing the specified color chooser.
-     * @param  parent  component on which to center the dialog.
-     * @param  chooser chooser to use within the dialog.
-     * @return         a dialog containing the specified chooser.
+     *
+     * @param parent  component on which to center the dialog.
+     * @param chooser chooser to use within the dialog.
+     * @return a dialog containing the specified chooser.
      */
     public static FocusDialog createDialog(Frame parent, ColorChooser chooser) {
         return new ChooserDialog(parent, chooser);
     }
-
 
 
     // - UI Initialisation ------------------------------------------------------
@@ -164,7 +179,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
      * Creates the preview panel.
      */
     private JPanel createPreviewPanel(JComponent previewComponent) {
-        JPanel    panel;
+        JPanel panel;
         Dimension size;
 
         // Sets the label's preferred size (same width as the chooser, twice the normal label height).
@@ -215,8 +230,10 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
 
     // - Color / font management ------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Returns the color selected by the user.
+     *
      * @return the color selected by the user.
      */
     public Color getColor() {
@@ -232,13 +249,14 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
 
     /**
      * Resets the dialog to the initial color.
+     *
      * @param updateUI if set to <code>false</code>, the component's UI won't be updated.
      */
     private void reset(boolean updateUI) {
         currentColor = initialColor;
 
         /// Propagates the color to the choosers.
-        if(updateUI) {
+        if (updateUI) {
             alpha.setValue(currentColor.getAlpha());
             chooser.setColor(currentColor);
 
@@ -251,7 +269,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
      * Update the preview panel to the current color.
      */
     private void updatePreview() {
-        if(previewComponent!=null) {
+        if (previewComponent != null) {
             previewComponent.putClientProperty(previewColorPropertyName, currentColor);
         }
     }
@@ -263,7 +281,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
         Color buffer;
 
         // Creates the new current color.
-        buffer       = chooser.getColor();
+        buffer = chooser.getColor();
         currentColor = new Color(buffer.getRed(), buffer.getGreen(), buffer.getBlue(), alpha.getValue());
 
         updatePreview();
@@ -272,16 +290,24 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
 
     // - Chooser dialog ---------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Component used to present a <code>ColorChooser</code> from within a modal dialog.
+     *
      * @author Nicolas Rinaudo
      */
     private static class ChooserDialog extends FocusDialog implements ActionListener {
-        /** Resets the color to the original one. */
+        /**
+         * Resets the color to the original one.
+         */
         private JButton resetButton;
-        /** Closes the dialog without applying the color selection. */
+        /**
+         * Closes the dialog without applying the color selection.
+         */
         private JButton cancelButton;
-        /** Color chooser contained by this dialog. */
+        /**
+         * Color chooser contained by this dialog.
+         */
         private ColorChooser chooser;
 
         /**
@@ -304,7 +330,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
          * Initialises the dialog's UI.
          */
         private void initUI(ColorChooser chooser) {
-            Container   contentPane;
+            Container contentPane;
 
             this.chooser = chooser;
 
@@ -322,7 +348,7 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
          */
         private JPanel createButtonsPanel() {
             XBoxPanel buttonsPanel;
-            JPanel    panel;
+            JPanel panel;
             JButton okButton;
 
             // Creates the panel and buttons.
@@ -362,12 +388,12 @@ public class ColorChooser extends YBoxPanel implements ChangeListener {
          */
         public void actionPerformed(ActionEvent e) {
             // Resets the current color.
-            if(e.getSource() == resetButton)
+            if (e.getSource() == resetButton)
                 chooser.reset(true);
 
-            // Closes the dialog, applying modifications if necessary.
+                // Closes the dialog, applying modifications if necessary.
             else {
-                if(e.getSource() == cancelButton)
+                if (e.getSource() == cancelButton)
                     chooser.reset(false);
                 dispose();
             }

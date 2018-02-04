@@ -77,7 +77,7 @@ public class SortableListPanel<E> extends JPanel {
         add(buttonPanel, BorderLayout.EAST);
     }
 
-    
+
     /**
      * Returns the {@link DynamicList} used by this SortableListPanel.
      *

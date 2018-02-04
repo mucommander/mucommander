@@ -27,21 +27,27 @@ import com.mucommander.commons.file.FileURL;
  */
 public class BonjourService {
 
-    /** the unqualified name of the service, e.g. 'foobar' */
+    /**
+     * the unqualified name of the service, e.g. 'foobar'
+     */
     private String name;
 
-    /** the url pointing to the service's location */
+    /**
+     * the url pointing to the service's location
+     */
     private FileURL url;
 
-    /** the fully qualified name of the service, e.g. 'foobar._http._tcp.local' */
+    /**
+     * the fully qualified name of the service, e.g. 'foobar._http._tcp.local'
+     */
     private String fullyQualifiedName;
 
 
     /**
      * Creates a new BonjourService instance using the given name and URL.
      *
-     * @param name the unqualified name of the service, e.g. 'foobar'
-     * @param url the url pointing to the service's location
+     * @param name               the unqualified name of the service, e.g. 'foobar'
+     * @param url                the url pointing to the service's location
      * @param fullyQualifiedName the fully qualified name of the service, e.g. 'foobar._http._tcp.local'
      */
     public BonjourService(String name, FileURL url, String fullyQualifiedName) {
@@ -66,7 +72,7 @@ public class BonjourService {
      * @return the name appended with the URL's scheme.
      */
     public String getNameWithProtocol() {
-        return name+" ["+url.getScheme().toUpperCase()+"]";
+        return name + " [" + url.getScheme().toUpperCase() + "]";
     }
 
     /**
@@ -96,10 +102,10 @@ public class BonjourService {
      * Returns <code>true</code> if the given Object is a BonjourService instance with the same fully qualified name.
      */
     public boolean equals(Object o) {
-        if(!(o instanceof BonjourService))
+        if (!(o instanceof BonjourService))
             return false;
 
-        return fullyQualifiedName.equals(((BonjourService)o).fullyQualifiedName);
+        return fullyQualifiedName.equals(((BonjourService) o).fullyQualifiedName);
     }
 
 
@@ -107,6 +113,6 @@ public class BonjourService {
      * Returns a String representation of this BonjourService in the form name / url.
      */
     public String toString() {
-        return name+" / "+url.toString(false);
+        return name + " / " + url.toString(false);
     }
 }

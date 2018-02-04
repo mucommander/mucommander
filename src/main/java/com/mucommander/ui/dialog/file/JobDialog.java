@@ -37,7 +37,9 @@ import javax.swing.*;
  */
 public abstract class JobDialog extends FocusDialog {
 
-    /** Number of files displayed in the 'file details' text area */
+    /**
+     * Number of files displayed in the 'file details' text area
+     */
     private final static int NB_FILE_DETAILS_ROWS = 10;
 
     protected MainFrame mainFrame;
@@ -57,7 +59,7 @@ public abstract class JobDialog extends FocusDialog {
      * Displays an error dialog with the specified message and title.
      *
      * @param message the error message
-     * @param title the error title
+     * @param title   the error title
      */
     protected void showErrorDialog(String message, String title) {
         InformationDialog.showErrorDialog(mainFrame, title, message);
@@ -76,7 +78,7 @@ public abstract class JobDialog extends FocusDialog {
     /**
      * Creates and returns a 'File details' panel, showing details about the files that the job will operate on. The file details
      * are loaded in a separate thread, when the panel becomes visible.
-     *  
+     *
      * @return a 'File details' panel, showing details about the files that the job will operate on
      */
     protected AsyncPanel createFileDetailsPanel() {
@@ -99,7 +101,7 @@ public abstract class JobDialog extends FocusDialog {
      * @return a button that expands/collapses the specified 'File details' panel
      */
     protected CollapseExpandButton createFileDetailsButton(JPanel detailsPanel) {
-        collapseExpandButton = new CollapseExpandButton(Translator.get("nb_files", ""+files.size()), detailsPanel, false);
+        collapseExpandButton = new CollapseExpandButton(Translator.get("nb_files", "" + files.size()), detailsPanel, false);
         return collapseExpandButton;
     }
 
@@ -108,7 +110,7 @@ public abstract class JobDialog extends FocusDialog {
      * with a space separation between the two components.
      *
      * @param fileDetailsButton the button that expands/collapses the 'File details' panel
-     * @param buttonsPanel the panel that contains the OK/cancel control buttons
+     * @param buttonsPanel      the panel that contains the OK/cancel control buttons
      * @return a panel where the specified 'File details' button and OK/cancel control buttons are laid out on a single row
      */
     protected JPanel createButtonsPanel(JButton fileDetailsButton, JPanel buttonsPanel) {
@@ -121,9 +123,10 @@ public abstract class JobDialog extends FocusDialog {
 
         return panel;
     }
-    
+
     /**
      * Sets the list of files used by this job.
+     *
      * @param files
      */
     protected void setFiles(FileSet files) {

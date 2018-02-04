@@ -19,20 +19,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
@@ -50,18 +36,25 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 
 /**
  * Dialog invoked when the user wants to create a new folder or an empty file in the current folder.
  *
+ * @author Maxence Bernard
  * @see MkdirAction
  * @see MkfileAction
- * @author Maxence Bernard
  */
 public class MkdirDialog extends FocusDialog implements ActionListener, ItemListener {
 
     private MainFrame mainFrame;
-	
+
     private JTextField pathField;
 
     private JCheckBox allocateSpaceCheckBox;
@@ -72,9 +65,9 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
     private boolean mkfileMode;
 
     // Dialog size constraints
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
     // Dialog width should not exceed 360, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400, 10000);
 
 
     /**
@@ -83,14 +76,14 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
      * @param mkfileMode if true, the dialog will operate in 'mkfile' mode, if false in 'mkdir' mode
      */
     public MkdirDialog(MainFrame mainFrame, boolean mkfileMode) {
-        super(mainFrame, ActionManager.getActionInstance(mkfileMode?MkfileAction.Descriptor.ACTION_ID:MkdirAction.Descriptor.ACTION_ID,mainFrame).getLabel(), mainFrame);
+        super(mainFrame, ActionManager.getActionInstance(mkfileMode ? MkfileAction.Descriptor.ACTION_ID : MkdirAction.Descriptor.ACTION_ID, mainFrame).getLabel(), mainFrame);
         this.mainFrame = mainFrame;
         this.mkfileMode = mkfileMode;
 
         Container contentPane = getContentPane();
 
         YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel(ActionProperties.getActionTooltip(mkfileMode?MkfileAction.Descriptor.ACTION_ID:MkdirAction.Descriptor.ACTION_ID)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionTooltip(mkfileMode ? MkfileAction.Descriptor.ACTION_ID : MkdirAction.Descriptor.ACTION_ID) + " :"));
 
         // Create a path field with auto-completion capabilities
         pathField = new FilePathField();
@@ -107,10 +100,10 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         }
         mainPanel.add(pathField);
 
-        if(mkfileMode) {
+        if (mkfileMode) {
             JPanel tempPanel = new JPanel(new BorderLayout());
 
-            allocateSpaceCheckBox = new JCheckBox(Translator.get("mkfile_dialog.allocate_space")+":", false);
+            allocateSpaceCheckBox = new JCheckBox(Translator.get("mkfile_dialog.allocate_space") + ":", false);
             allocateSpaceCheckBox.addItemListener(this);
             tempPanel.add(allocateSpaceCheckBox, BorderLayout.WEST);
 
@@ -120,10 +113,10 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
 
             mainPanel.add(tempPanel);
         }
-        
+
         mainPanel.addSpace(10);
         contentPane.add(mainPanel, BorderLayout.NORTH);
-        
+
         okButton = new JButton(Translator.get("create"));
         JButton cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
@@ -136,7 +129,6 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
     }
 
 
-
     /**
      * Starts an {@link com.mucommander.job.impl.MkdirJob}. This method is trigged by the 'OK' button or the return key.
      */
@@ -146,14 +138,14 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         // Resolves destination folder
         PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActivePanel().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
-        if (resolvedDest==null) {
+        if (resolvedDest == null) {
             InformationDialog.showErrorDialog(mainFrame, Translator.get("invalid_path", enteredPath));
             return;
         }
 
         // Checks if the directory already exists and reports the error if that's the case
         int destinationType = resolvedDest.getDestinationType();
-        if(destinationType==PathUtils.ResolvedDestination.EXISTING_FOLDER) {
+        if (destinationType == PathUtils.ResolvedDestination.EXISTING_FOLDER) {
             InformationDialog.showErrorDialog(mainFrame, Translator.get("directory_already_exists", enteredPath));
             return;
         }
@@ -168,8 +160,8 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, getTitle());
 
         MkdirJob job;
-        if(mkfileMode)
-            job = new MkdirJob(progressDialog, mainFrame, fileSet, allocateSpaceCheckBox.isSelected()?allocateSpaceChooser.getValue():-1);
+        if (mkfileMode)
+            job = new MkdirJob(progressDialog, mainFrame, fileSet, allocateSpaceCheckBox.isSelected() ? allocateSpaceChooser.getValue() : -1);
         else
             job = new MkdirJob(progressDialog, mainFrame, fileSet);
 
@@ -180,13 +172,13 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
-	
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         dispose();
-		
+
         // OK Button
-        if(source == okButton || source == pathField) {
+        if (source == okButton || source == pathField) {
             startJob();
         }
     }

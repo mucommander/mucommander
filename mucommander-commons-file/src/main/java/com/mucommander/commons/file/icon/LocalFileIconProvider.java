@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -56,15 +56,14 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
             LocalFile tempFile = FileFactory.getTemporaryFile(nonLocalFile.getName(), false).getAncestor(LocalFile.class);
 
             // Create a directory
-            if(nonLocalFile.isDirectory())
+            if (nonLocalFile.isDirectory())
                 tempFile.mkdir();
-            // Create a regular file
+                // Create a regular file
             else
                 tempFile.getOutputStream().close();
 
             return tempFile;
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return null;
         }
     }
@@ -80,8 +79,8 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
         AbstractFile topFile = originalFile.getTopAncestor();
         Icon icon;
 
-        if(topFile instanceof LocalFile) {
-            icon = getLocalFileIcon((LocalFile)topFile, originalFile, preferredResolution);
+        if (topFile instanceof LocalFile) {
+            icon = getLocalFileIcon((LocalFile) topFile, originalFile, preferredResolution);
         }
         // File is a remote file: create a temporary local file (or directory) with the same extension to grab the icon
         // and then delete the file. This operation is I/O bound and thus expensive, so an LRU is used to cache
@@ -89,7 +88,7 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
         else {
             // Create the temporary, local file
             LocalFile tempFile = createTempLocalFile(topFile);
-            if(tempFile==null) {
+            if (tempFile == null) {
                 // No temp file, no icon!
                 return null;
             }
@@ -100,8 +99,7 @@ public abstract class LocalFileIconProvider implements FileIconProvider {
             // Delete the temporary file
             try {
                 tempFile.delete();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Not much to do
             }
         }

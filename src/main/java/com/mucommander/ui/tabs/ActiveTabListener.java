@@ -21,10 +21,10 @@ package com.mucommander.ui.tabs;
 /**
  * Interface to be implemented by classes that wish to be notified of tabs switching
  * or when properties of the active tab changed
- * 
+ *
  * @author Arik Hadas
  */
 public interface ActiveTabListener {
 
-	void activeTabChanged();
+    void activeTabChanged();
 }

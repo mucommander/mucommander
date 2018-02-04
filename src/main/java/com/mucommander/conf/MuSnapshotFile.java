@@ -21,23 +21,22 @@ package com.mucommander.conf;
 import java.io.FileNotFoundException;
 
 /**
- * 
  * @author Arik Hadas
  */
 public class MuSnapshotFile extends MuConfigurationFile {
-	
-	private static final String DEFAULT_SNAPSHOT_FILE_NAME = "snapshot.xml";
-	
-	public static MuSnapshotFile getSnapshotFile() {
-		try {
-			return new MuSnapshotFile();
-		} catch (FileNotFoundException e) {
-			// Not possible exception??
-			return null;
-		}
-	}
-	
-	private MuSnapshotFile() throws FileNotFoundException {
-		super(null, DEFAULT_SNAPSHOT_FILE_NAME);
-	}
+
+    private static final String DEFAULT_SNAPSHOT_FILE_NAME = "snapshot.xml";
+
+    public static MuSnapshotFile getSnapshotFile() {
+        try {
+            return new MuSnapshotFile();
+        } catch (FileNotFoundException e) {
+            // Not possible exception??
+            return null;
+        }
+    }
+
+    private MuSnapshotFile() throws FileNotFoundException {
+        super(null, DEFAULT_SNAPSHOT_FILE_NAME);
+    }
 }

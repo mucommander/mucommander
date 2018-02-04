@@ -32,19 +32,24 @@ import java.io.OutputStream;
 
 /**
  * Represents the root of the <code>bookmarks://</code> file system.
+ *
  * @author Nicolas Rinaudo
  */
 class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
-    /** Time at which the bookmarks were last modified. */
+    /**
+     * Time at which the bookmarks were last modified.
+     */
     private long lastModified;
-
 
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
-    public BookmarkRoot() throws IOException {this(FileURL.getFileURL(BookmarkProtocolProvider.BOOKMARK + "://"));}
+    public BookmarkRoot() throws IOException {
+        this(FileURL.getFileURL(BookmarkProtocolProvider.BOOKMARK + "://"));
+    }
+
     public BookmarkRoot(FileURL url) {
         super(url);
         lastModified = System.currentTimeMillis();
@@ -52,46 +57,53 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     }
 
 
-
     // - AbstractFile methods --------------------------------------------------
     // -------------------------------------------------------------------------
     @Override
     public AbstractFile[] ls() throws IOException {
         AbstractFile[] files;
-        Object[]       buffer;
+        Object[] buffer;
 
         // Retrieves all available bookmarks.
         buffer = BookmarkManager.getBookmarks().toArray();
-        files  = new AbstractFile[buffer.length];
+        files = new AbstractFile[buffer.length];
 
         // Creates the associated instances of BookmarkFile
-        for(int i = 0; i < files.length; i++)
-            files[i] = new BookmarkFile((Bookmark)buffer[i]);
+        for (int i = 0; i < files.length; i++)
+            files[i] = new BookmarkFile((Bookmark) buffer[i]);
         return files;
     }
 
     @Override
-    public String getName() {return "";}
+    public String getName() {
+        return "";
+    }
 
     @Override
-    public boolean isDirectory() {return true;}
-
+    public boolean isDirectory() {
+        return true;
+    }
 
 
     // - Bookmarks synchronisation ---------------------------------------------
     // -------------------------------------------------------------------------
+
     /**
      * Stores the current date as the date of last modification.
      */
-    public void bookmarksChanged() {lastModified = System.currentTimeMillis();}
+    public void bookmarksChanged() {
+        lastModified = System.currentTimeMillis();
+    }
 
     /**
      * Returns the date at which the bookmark list was last modified.
+     *
      * @return the date at which the bookmark list was last modified.
      */
     @Override
-    public long getDate() {return lastModified;}
-
+    public long getDate() {
+        return lastModified;
+    }
 
 
     // - Unused methods --------------------------------------------------------
@@ -100,68 +112,144 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     // return an 'operation non supported' value or return a default value.
 
     @Override
-    public AbstractFile getParent() {return null;}
+    public AbstractFile getParent() {
+        return null;
+    }
+
     @Override
     @UnsupportedFileOperation
-    public void delete() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.DELETE);}
+    public void delete() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.DELETE);
+    }
+
     @Override
     @UnsupportedFileOperation
-    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);}
+    public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
+    }
+
     @Override
     @UnsupportedFileOperation
-    public void renameTo(AbstractFile destFile) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RENAME);}
+    public void renameTo(AbstractFile destFile) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.RENAME);
+    }
+
     @Override
     @UnsupportedFileOperation
-    public void changeDate(long lastModified) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);}
+    public void changeDate(long lastModified) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
+    }
+
     @Override
-    public long getSize() {return -1;}
+    public long getSize() {
+        return -1;
+    }
+
     @Override
-    public void setParent(AbstractFile parent) {}
+    public void setParent(AbstractFile parent) {
+    }
+
     @Override
-    public boolean exists() {return true;}
+    public boolean exists() {
+        return true;
+    }
+
     @Override
-    public FilePermissions getPermissions() {return BookmarkFile.PERMISSIONS;}
-    @Override
-    @UnsupportedFileOperation
-    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);}
-    @Override
-    public PermissionBits getChangeablePermissions() {return PermissionBits.EMPTY_PERMISSION_BITS;}
-    @Override
-    public boolean isSymlink() {return false;}
-    @Override
-    public boolean isSystem() {return false;}
-    @Override
-    @UnsupportedFileOperation
-    public void mkdir() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);}
-    @Override
-    @UnsupportedFileOperation
-    public InputStream getInputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.READ_FILE);}
-    @Override
-    @UnsupportedFileOperation
-    public OutputStream getOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);}
+    public FilePermissions getPermissions() {
+        return BookmarkFile.PERMISSIONS;
+    }
+
     @Override
     @UnsupportedFileOperation
-    public OutputStream getAppendOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);}
+    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
+    }
+
+    @Override
+    public PermissionBits getChangeablePermissions() {
+        return PermissionBits.EMPTY_PERMISSION_BITS;
+    }
+
+    @Override
+    public boolean isSymlink() {
+        return false;
+    }
+
+    @Override
+    public boolean isSystem() {
+        return false;
+    }
+
     @Override
     @UnsupportedFileOperation
-    public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);}
+    public void mkdir() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);
+    }
+
     @Override
     @UnsupportedFileOperation
-    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);}
+    public InputStream getInputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.READ_FILE);
+    }
+
     @Override
     @UnsupportedFileOperation
-    public long getFreeSpace() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);}
+    public OutputStream getOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);
+    }
+
     @Override
     @UnsupportedFileOperation
-    public long getTotalSpace() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);}
+    public OutputStream getAppendOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
+    }
+
     @Override
-    public Object getUnderlyingFileObject() {return null;}
+    @UnsupportedFileOperation
+    public RandomAccessInputStream getRandomAccessInputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);
+    }
+
     @Override
-    public String getOwner() {return null;}
+    @UnsupportedFileOperation
+    public RandomAccessOutputStream getRandomAccessOutputStream() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
+    }
+
     @Override
-    public boolean canGetOwner() {return false;}
+    @UnsupportedFileOperation
+    public long getFreeSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
+    }
+
     @Override
-    public String getGroup() {return null;}
+    @UnsupportedFileOperation
+    public long getTotalSpace() throws UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
+    }
+
     @Override
-    public boolean canGetGroup() {return false;}
+    public Object getUnderlyingFileObject() {
+        return null;
+    }
+
+    @Override
+    public String getOwner() {
+        return null;
+    }
+
+    @Override
+    public boolean canGetOwner() {
+        return false;
+    }
+
+    @Override
+    public String getGroup() {
+        return null;
+    }
+
+    @Override
+    public boolean canGetGroup() {
+        return false;
+    }
 }

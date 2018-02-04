@@ -24,11 +24,13 @@ import java.util.Vector;
 
 /**
  * Test case for the {@link ValueList} class.
+ *
  * @author Nicolas Rinaudo
  */
 public class ValueListTest {
     // - Test data generation ------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a <code>(0, 1, 2, 3, 4, 5, 6, 7)</code> vector.
      */
@@ -36,7 +38,7 @@ public class ValueListTest {
         Vector<Integer> data;
 
         data = new Vector<Integer>();
-        for(int i = 1; i < 8; i++)
+        for (int i = 1; i < 8; i++)
             data.add(i);
         return data;
     }
@@ -48,7 +50,7 @@ public class ValueListTest {
         Vector<Float> data;
 
         data = new Vector<Float>();
-        for(int i = 1; i < 8; i++)
+        for (int i = 1; i < 8; i++)
             data.add(new Float(i + 0.5));
         return data;
     }
@@ -60,77 +62,84 @@ public class ValueListTest {
         Vector<Boolean> data;
 
         data = new Vector<Boolean>();
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             data.add(i % 2 == 0);
         return data;
     }
 
 
-
     // - Value casting tests -------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Tests the {@link ValueList#valueAt(int)} method.
+     *
      * @param values test data.
      */
     protected void testStringValues(ValueList values) {
         assert values.size() == 7;
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             assert Integer.toString(i + 1).equals(values.valueAt(i));
     }
 
     /**
      * Tests the {@link ValueList#integerValueAt(int)} method.
+     *
      * @param values test data.
      */
     protected void testIntegerValues(ValueList values) {
         assert values.size() == 7;
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             assert i + 1 == values.integerValueAt(i);
     }
 
     /**
      * Tests the {@link ValueList#longValueAt(int)} method.
+     *
      * @param values test data.
      */
     protected void testLongValues(ValueList values) {
         assert values.size() == 7;
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             assert i + 1 == values.longValueAt(i);
     }
 
     /**
      * Tests the {@link ValueList#floatValueAt(int)} method.
+     *
      * @param values test data.
      */
     protected void testFloatValues(ValueList values) {
         assert values.size() == 7;
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             assert i + 1.5 == values.floatValueAt(i);
     }
 
     /**
      * Tests the {@link ValueList#doubleValueAt(int)} method.
+     *
      * @param values test data.
      */
     protected void testDoubleValues(ValueList values) {
         assert values.size() == 7;
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             assert i + 1.5 == values.doubleValueAt(i);
     }
 
     /**
      * Tests the {@link ValueList#booleanValueAt(int)} method.
+     *
      * @param values test data.
      */
     protected void testBooleanValues(ValueList values) {
         assert values.size() == 7;
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             assert (i % 2 == 0) == values.booleanValueAt(i);
     }
 
     /**
-     * Tests the {@link ValueList#listValueAt(int,String)} method.
+     * Tests the {@link ValueList#listValueAt(int, String)} method.
+     *
      * @param values    test data.
      * @param separator separator to use when creating list values.
      */
@@ -144,9 +153,9 @@ public class ValueListTest {
     }
 
 
-
     // - Unit tests ----------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Tests the {@link ValueList#valueAt(int)} method.
      */
@@ -200,7 +209,7 @@ public class ValueListTest {
      */
     @Test
     public void testListValues() {
-        Vector<String>    data;
+        Vector<String> data;
 
         data = new Vector<String>();
         data.add(ValueList.toString(createIntegerData(), ";"));
@@ -210,7 +219,7 @@ public class ValueListTest {
         data.add(ValueList.toString(createFloatData(), ";"));
         data.add(ValueList.toString(createBooleanData(), ";"));
 
-        testListValues(new ValueList(ValueList.toString(data, " - "), " - ") , ";");
+        testListValues(new ValueList(ValueList.toString(data, " - "), " - "), ";");
 
     }
 }

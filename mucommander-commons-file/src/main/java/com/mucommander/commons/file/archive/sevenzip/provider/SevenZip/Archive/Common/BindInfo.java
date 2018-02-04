@@ -8,14 +8,14 @@ public class BindInfo {
     public RecordVector<BindPair> BindPairs = new RecordVector<BindPair>();
     public IntVector InStreams = new IntVector();
     public IntVector OutStreams = new IntVector();
-    
+
     public void Clear() {
         Coders.clear();
         BindPairs.clear();
         InStreams.clear();
         OutStreams.clear();
     }
-      
+
     public int FindBinderForInStream(int inStream) // const
     {
         for (int i = 0; i < BindPairs.size(); i++)
@@ -23,7 +23,7 @@ public class BindInfo {
                 return i;
         return -1;
     }
-    
+
     public int FindBinderForOutStream(int outStream) // const
     {
         for (int i = 0; i < BindPairs.size(); i++)
@@ -31,7 +31,7 @@ public class BindInfo {
                 return i;
         return -1;
     }
-    
+
     public int GetCoderInStreamIndex(int coderIndex) // const
     {
         int streamIndex = 0;
@@ -39,7 +39,7 @@ public class BindInfo {
             streamIndex += Coders.get(i).NumInStreams;
         return streamIndex;
     }
-    
+
     public int GetCoderOutStreamIndex(int coderIndex) // const
     {
         int streamIndex = 0;
@@ -47,12 +47,12 @@ public class BindInfo {
             streamIndex += Coders.get(i).NumOutStreams;
         return streamIndex;
     }
-    
+
     public void FindInStream(int streamIndex,
-            int [] coderIndex, // UInt32 &coderIndex
-            int [] coderStreamIndex // UInt32 &coderStreamIndex
-            )
-            
+                             int[] coderIndex, // UInt32 &coderIndex
+                             int[] coderStreamIndex // UInt32 &coderStreamIndex
+    )
+
     {
         for (coderIndex[0] = 0; coderIndex[0] < Coders.size(); coderIndex[0]++) {
             int curSize = Coders.get(coderIndex[0]).NumInStreams;
@@ -64,10 +64,10 @@ public class BindInfo {
         }
         throw new UnknownError("1");
     }
-    
+
     public void FindOutStream(int streamIndex,
-            int [] coderIndex, // UInt32 &coderIndex,
-            int [] coderStreamIndex /* , UInt32 &coderStreamIndex */ ) {
+                              int[] coderIndex, // UInt32 &coderIndex,
+                              int[] coderStreamIndex /* , UInt32 &coderStreamIndex */) {
         for (coderIndex[0] = 0; coderIndex[0] < Coders.size(); coderIndex[0]++) {
             int curSize = Coders.get(coderIndex[0]).NumOutStreams;
             if (streamIndex < curSize) {
@@ -78,6 +78,6 @@ public class BindInfo {
         }
         throw new UnknownError("1");
     }
-    
+
 }
 

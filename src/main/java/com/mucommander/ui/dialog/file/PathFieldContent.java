@@ -45,7 +45,7 @@ public class PathFieldContent {
      * Sets the given {@link JTextField}'s text, selection start and end with that contained by this
      * <code>PathFieldContent</code>.
      *
-     * @param pathField instance of {@link JTextField} to update   
+     * @param pathField instance of {@link JTextField} to update
      */
     public void feedToPathField(JTextField pathField) {
         // Set the initial path

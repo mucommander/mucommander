@@ -18,11 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.Icon;
-
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
@@ -33,6 +28,10 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
+
+import javax.swing.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This quick list shows recently accessed locations.

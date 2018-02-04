@@ -28,7 +28,9 @@ import java.util.Iterator;
  */
 public class IteratorCompoundReader extends CompoundReader {
 
-    /** Iterator containing the readers to be concatenated */
+    /**
+     * Iterator containing the readers to be concatenated
+     */
     private Iterator<? extends Reader> readerIterator;
 
     /**
@@ -36,9 +38,9 @@ public class IteratorCompoundReader extends CompoundReader {
      * {@link Iterator} and the specified mode.
      *
      * @param readerIterator an Iterator that contains the {@link Reader} instances to be used
-     * by this <code>CompoundReader</code>.
-     * @param merged <code>true</code> if the reader should be merged, acting as a single reader, or considered
-     * as separate readers that have to be {@link #advanceReader() advanced manually}.
+     *                       by this <code>CompoundReader</code>.
+     * @param merged         <code>true</code> if the reader should be merged, acting as a single reader, or considered
+     *                       as separate readers that have to be {@link #advanceReader() advanced manually}.
      */
     public IteratorCompoundReader(Iterator<? extends Reader> readerIterator, boolean merged) {
         super(merged);
@@ -53,6 +55,6 @@ public class IteratorCompoundReader extends CompoundReader {
 
     @Override
     public Reader getNextReader() {
-        return readerIterator.hasNext()?readerIterator.next():null;
+        return readerIterator.hasNext() ? readerIterator.next() : null;
     }
 }

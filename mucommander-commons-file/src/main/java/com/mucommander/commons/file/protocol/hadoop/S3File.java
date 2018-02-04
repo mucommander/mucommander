@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -55,7 +55,7 @@ public class S3File extends HadoopFile {
 
     @Override
     protected FileSystem getHadoopFileSystem(FileURL url) throws IOException {
-        if(!url.containsCredentials())
+        if (!url.containsCredentials())
             throw new AuthException(url);
 
         // Note: getRealm returns a fresh instance every time
@@ -63,7 +63,7 @@ public class S3File extends HadoopFile {
 
         // Import credentials
         Credentials creds = url.getCredentials();
-        if(creds!=null) {
+        if (creds != null) {
             // URL-encode secret as it may contain non URL-safe characters ('+' and '/')
             realm.setCredentials(new Credentials(creds.getLogin(), URLEncoder.encode(creds.getPassword(), "UTF-8")));
         }

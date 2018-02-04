@@ -33,89 +33,89 @@ import com.mucommander.ui.tabs.Tab;
  */
 public abstract class FileTableTab implements Tab {
 
-	/**
-	 * Setter for the location presented in the tab
-	 * 
-	 * @param location the file that is going to be presented in the tab
-	 */
-	public abstract void setLocation(FileURL location);
+    /**
+     * Setter for the location presented in the tab
+     *
+     * @param location the file that is going to be presented in the tab
+     */
+    public abstract void setLocation(FileURL location);
 
-	/**
-	 * Getter for the location presented in the tab
-	 * 
-	 * @return the file that is being presented in the tab
-	 */
-	public abstract FileURL getLocation();
-	
-	/**
-	 * Set the tab to be locked or unlocked according to the given flag
-	 * 
-	 * @param locked flag that indicates whether the tab should be locked or not
-	 */
-	public abstract void setLocked(boolean locked);
-	
-	/**
-	 * Returns whether the tab is locked
-	 * 
-	 * @return indication whether the tab is locked
-	 */
-	public abstract boolean isLocked();
+    /**
+     * Getter for the location presented in the tab
+     *
+     * @return the file that is being presented in the tab
+     */
+    public abstract FileURL getLocation();
 
-	/**
-	 * Set the title of the tab to the given string
-	 * 
-	 * @param title - predefined title to be assigned to the tab, null for no predefined title
-	 */
-	public abstract void setTitle(String title);
+    /**
+     * Set the tab to be locked or unlocked according to the given flag
+     *
+     * @param locked flag that indicates whether the tab should be locked or not
+     */
+    public abstract void setLocked(boolean locked);
 
-	/**
-	 * Returns the title that was assigned for the tab
-	 * 
-	 * @return the title that was assigned for the tab, null is returned if no title was assigned
-	 */
-	public abstract String getTitle();
+    /**
+     * Returns whether the tab is locked
+     *
+     * @return indication whether the tab is locked
+     */
+    public abstract boolean isLocked();
 
-	/**
-	 * Returns a string representation for the tab:
-	 *  the tab's fixed title will be returned if such title was assigned,
-	 *  otherwise, a string representation will be created based on the tab's location:
-	 *    for local file, the filename will be returned ("/" in case the root folder is presented)
-	 *    for remote file, the returned pattern will be "\<host\>:\<filename\>"
-	 * 
-	 * @return String representation of the tab
-	 */
-	public String getDisplayableTitle() {
-		String title = getTitle();
+    /**
+     * Set the title of the tab to the given string
+     *
+     * @param title - predefined title to be assigned to the tab, null for no predefined title
+     */
+    public abstract void setTitle(String title);
 
-		return title != null ? title : createDisplayableTitleFromLocation(getLocation());
-	}
+    /**
+     * Returns the title that was assigned for the tab
+     *
+     * @return the title that was assigned for the tab, null is returned if no title was assigned
+     */
+    public abstract String getTitle();
 
-	private String createDisplayableTitleFromLocation(FileURL location) {
-	    if (BookmarkManager.isBookmark(location) && location.getHost() == null)
-	        return Translator.get("bookmarks_menu");
+    /**
+     * Returns a string representation for the tab:
+     * the tab's fixed title will be returned if such title was assigned,
+     * otherwise, a string representation will be created based on the tab's location:
+     * for local file, the filename will be returned ("/" in case the root folder is presented)
+     * for remote file, the returned pattern will be "\<host\>:\<filename\>"
+     *
+     * @return String representation of the tab
+     */
+    public String getDisplayableTitle() {
+        String title = getTitle();
 
-		boolean local = FileURL.LOCALHOST.equals(location.getHost());
+        return title != null ? title : createDisplayableTitleFromLocation(getLocation());
+    }
 
-		return getHostRepresentation(location.getHost(), local) + getFilenameRepresentation(location.getFilename(), local);
-	}
+    private String createDisplayableTitleFromLocation(FileURL location) {
+        if (BookmarkManager.isBookmark(location) && location.getHost() == null)
+            return Translator.get("bookmarks_menu");
 
-	private String getHostRepresentation(String host, boolean local) {
-		return local ? "" : host + ":";
-	}
+        boolean local = FileURL.LOCALHOST.equals(location.getHost());
 
-	private String getFilenameRepresentation(String filename, boolean local) {
-		// Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
-		if(local && LocalFile.hasRootDrives() && filename != null)
-			return PathUtils.removeLeadingSeparator(filename, "/");
-		// Under other OSes, if the filename is empty return "/"
-		else
-			return filename == null ? "/" : filename;
-	}
+        return getHostRepresentation(location.getHost(), local) + getFilenameRepresentation(location.getFilename(), local);
+    }
 
-	/**
-	 * Returns the tracker of the last accessed locations within the tab
-	 * 
-	 * @return tracker of the last accessed locations within the tab
-	 */
-	public abstract LocalLocationHistory getLocationHistory();
+    private String getHostRepresentation(String host, boolean local) {
+        return local ? "" : host + ":";
+    }
+
+    private String getFilenameRepresentation(String filename, boolean local) {
+        // Under for OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
+        if (local && LocalFile.hasRootDrives() && filename != null)
+            return PathUtils.removeLeadingSeparator(filename, "/");
+            // Under other OSes, if the filename is empty return "/"
+        else
+            return filename == null ? "/" : filename;
+    }
+
+    /**
+     * Returns the tracker of the last accessed locations within the tab
+     *
+     * @return tracker of the last accessed locations within the tab
+     */
+    public abstract LocalLocationHistory getLocationHistory();
 }

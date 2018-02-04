@@ -17,7 +17,6 @@
  */
 
 
-
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.util.FileSet;
@@ -33,9 +32,9 @@ import com.mucommander.ui.main.MainFrame;
 /**
  * Dialog invoked when the user wants to move or rename currently selected files.
  *
+ * @author Maxence Bernard
  * @see com.mucommander.ui.action.impl.MoveAction
  * @see com.mucommander.ui.action.impl.RenameAction
- * @author Maxence Bernard
  */
 public class MoveDialog extends AbstractCopyDialog {
 
@@ -59,7 +58,7 @@ public class MoveDialog extends AbstractCopyDialog {
                 mainFrame,
                 files,
                 resolvedDest.getDestinationFolder(),
-                resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                resolvedDest.getDestinationType() == PathUtils.ResolvedDestination.EXISTING_FOLDER ? null : resolvedDest.getDestinationFile().getName(),
                 defaultFileExistsAction,
                 false);
     }

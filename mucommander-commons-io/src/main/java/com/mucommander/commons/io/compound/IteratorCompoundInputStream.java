@@ -28,7 +28,9 @@ import java.util.Iterator;
  */
 public class IteratorCompoundInputStream extends CompoundInputStream {
 
-    /** Iterator containing the InputStreams to be concatenated */
+    /**
+     * Iterator containing the InputStreams to be concatenated
+     */
     private Iterator<? extends InputStream> inputStreamIterator;
 
     /**
@@ -36,9 +38,9 @@ public class IteratorCompoundInputStream extends CompoundInputStream {
      * {@link Iterator} and the specified mode.
      *
      * @param inputStreamIterator an Iterator that contains the {@link InputStream} instances to be used
-     * by this <code>CompoundInputStream</code>.
-     * @param merged <code>true</code> if the streams should be merged, acting as a single stream, or considered
-     * as separate streams that have to be {@link #advanceInputStream() advanced manually}.
+     *                            by this <code>CompoundInputStream</code>.
+     * @param merged              <code>true</code> if the streams should be merged, acting as a single stream, or considered
+     *                            as separate streams that have to be {@link #advanceInputStream() advanced manually}.
      */
     public IteratorCompoundInputStream(Iterator<? extends InputStream> inputStreamIterator, boolean merged) {
         super(merged);
@@ -53,6 +55,6 @@ public class IteratorCompoundInputStream extends CompoundInputStream {
 
     @Override
     public InputStream getNextInputStream() {
-        return inputStreamIterator.hasNext()?inputStreamIterator.next():null;
+        return inputStreamIterator.hasNext() ? inputStreamIterator.next() : null;
     }
 }

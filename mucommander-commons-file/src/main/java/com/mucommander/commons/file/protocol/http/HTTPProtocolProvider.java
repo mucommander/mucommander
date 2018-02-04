@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,7 +22,6 @@ package com.mucommander.commons.file.protocol.http;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,14 +44,13 @@ public class HTTPProtocolProvider implements ProtocolProvider {
     static {
         try {
             disableCertificateVerifications();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.info("Failed to install a custom TrustManager", e);
         }
     }
 
     /**
-	 * Installs a custom <code>javax.net.ssl.X509TrustManager</code> and <code>javax.net.ssl.HostnameVerifier</code>
+     * Installs a custom <code>javax.net.ssl.X509TrustManager</code> and <code>javax.net.ssl.HostnameVerifier</code>
      * to bypass the default SSL certificate verifications and blindly trust all SSL certificates, even if they are
      * self-signed, expired, or do not match the requested hostname.
      * As a result in such cases, <code>HttpsURLConnection#openConnection()</code> will succeed instead of throwing a
@@ -65,8 +63,8 @@ public class HTTPProtocolProvider implements ProtocolProvider {
      * failing untrusted connections.</p>
      *
      * @throws Exception if an error occurred while installing the custom X509TrustManager.
-	 */
-	private static void disableCertificateVerifications() throws Exception {
+     */
+    private static void disableCertificateVerifications() throws Exception {
         // Todo: find a way to warn the user when the server cannot be trusted
 
         // Create a custom X509 trust manager that does not validate certificate chains
@@ -74,6 +72,7 @@ public class HTTPProtocolProvider implements ProtocolProvider {
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
+
             public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
             }
 
@@ -88,17 +87,17 @@ public class HTTPProtocolProvider implements ProtocolProvider {
 
         // Create and install a custom hostname verifier that allows hostname mismatches
         HostnameVerifier permissiveHostnameVerifier = new HostnameVerifier() {
-           public boolean verify(String urlHostName, SSLSession session) {
-               return true;
-           }
+            public boolean verify(String urlHostName, SSLSession session) {
+                return true;
+            }
 
         };
-       HttpsURLConnection.setDefaultHostnameVerifier(permissiveHostnameVerifier);
+        HttpsURLConnection.setDefaultHostnameVerifier(permissiveHostnameVerifier);
     }
-    
+
     public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return instantiationParams.length==0
-            ?new HTTPFile(url)
-            :new HTTPFile(url, (URL)instantiationParams[0]);
+        return instantiationParams.length == 0
+                ? new HTTPFile(url)
+                : new HTTPFile(url, (URL) instantiationParams[0]);
     }
 }

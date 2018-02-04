@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * This job renames a group of files to new names defined by Batch-Rename Dialog.
+ *
  * @author Mariusz Jakubowski
  */
 public class BatchRenameJob extends MoveJob {

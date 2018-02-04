@@ -32,8 +32,8 @@ import java.util.Calendar;
 
 /**
  * Batch rename dialog test case.
- * @author Mariusz Jakubowski
  *
+ * @author Mariusz Jakubowski
  */
 public class BatchRenameTest {
 
@@ -43,8 +43,8 @@ public class BatchRenameTest {
     private TestFile abcdef_ghi_jkl;
 
     private static class TestFile extends DummyFile {
-        private static long         date;
-        private        AbstractFile parent;
+        private static long date;
+        private AbstractFile parent;
 
         static {
             Calendar c = Calendar.getInstance();
@@ -76,7 +76,7 @@ public class BatchRenameTest {
     @BeforeClass
     protected void setUp() throws Exception {
         TestFile parent = new TestFile(FileFactory.getTemporaryFolder() + "parent", null);
-        
+
         abcdef = new TestFile(FileFactory.getTemporaryFolder() + "abcdef", parent);
         abcdef_ghi = new TestFile(FileFactory.getTemporaryFolder() + "abcdef.ghi", parent);
         abcdef_ghi_jkl = new TestFile(FileFactory.getTemporaryFolder() + "abcdef.ghi.jkl", parent);

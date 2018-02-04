@@ -35,7 +35,7 @@ import java.awt.*;
  * {@link com.mucommander.desktop.DesktopManager#getTrash()}.
  * When the button is clicked, a popup menu is displayed, allowing to perform a choice of actions such as opening
  * the trash or emptying it.
- * Note that this button will only be functional if a trash is avaiable on the current platform. 
+ * Note that this button will only be functional if a trash is avaiable on the current platform.
  *
  * @author Maxence Bernard
  */
@@ -43,7 +43,9 @@ class TrashPopupButton extends PopupButton {
 
     private MainFrame mainFrame;
 
-    /** Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected */
+    /**
+     * Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected
+     */
     private RolloverButtonAdapter rolloverButtonAdapter;
 
     TrashPopupButton(MainFrame mainFrame) {
@@ -64,22 +66,21 @@ class TrashPopupButton extends PopupButton {
         JPopupMenu popupMenu = new JPopupMenu();
 
         AbstractTrash trash = DesktopManager.getTrash();
-        if(trash!=null) {
-            if(trash.canOpen())
+        if (trash != null) {
+            if (trash.canOpen())
                 popupMenu.add(ActionManager.getActionInstance(OpenTrashAction.Descriptor.ACTION_ID, mainFrame));
 
-            if(trash.canEmpty()) {
+            if (trash.canEmpty()) {
                 JMenuItem emptyTrashItem = new JMenuItem(ActionManager.getActionInstance(EmptyTrashAction.Descriptor.ACTION_ID, mainFrame));
 
                 // Retrieve the number of items that the trash contains, -1 if this information is not available.
                 int itemCount = trash.getItemCount();
-                if(itemCount==0) {
+                if (itemCount == 0) {
                     // Disable the 'empty trash' action if the trash contains no item
                     emptyTrashItem.setEnabled(false);
-                }
-                else if(itemCount>0) {
+                } else if (itemCount > 0) {
                     // Append the number of items to the menu item's label
-                    emptyTrashItem.setText(emptyTrashItem.getText()+" ("+itemCount+")");
+                    emptyTrashItem.setText(emptyTrashItem.getText() + " (" + itemCount + ")");
                 }
                 // Note: 'empty trash' is enabled if itemCount==-1
 

@@ -26,16 +26,16 @@ import java.io.InputStream;
 
 /**
  * <code>RandomAccessInputStream</code> is an <code>InputStream</code> with random access.
- *
+ * <p>
  * The following <code>java.io.InputStream</code> methods are overridden to provide an improved implementation:
  * <ul>
- *   <li>{@link #mark(int)}</li>
- *   <li>{@link #reset()}</li>
- *   <li>{@link #markSupported()}</li>
- *   <li>{@link #skip(long)}</li>
- *   <li>{@link #available()}</li>
+ * <li>{@link #mark(int)}</li>
+ * <li>{@link #reset()}</li>
+ * <li>{@link #markSupported()}</li>
+ * <li>{@link #skip(long)}</li>
+ * <li>{@link #available()}</li>
  * </ul>
- *
+ * <p>
  * <b>Important:</b> <code>BufferedInputStream</code> or any wrapper <code>InputStream</code> class that uses a read buffer
  * CANNOT be used with a <code>RandomAccessInputStream</code> if the {@link #seek(long)} method is to be used. Doing so
  * would corrupt the read buffer and yield to data inconsistencies.
@@ -43,10 +43,14 @@ import java.io.InputStream;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public abstract class RandomAccessInputStream extends InputStream implements RandomAccess {
-    /** Logger used by this class. */
+    /**
+     * Logger used by this class.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(RandomAccessInputStream.class);
 
-    /** The last offset set by {@link #mark(int)} */
+    /**
+     * The last offset set by {@link #mark(int)}
+     */
     private long markOffset;
 
 
@@ -64,7 +68,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      *
      * @param b the buffer into which the data is read.
      * @throws java.io.EOFException if this file reaches the end before reading all the bytes.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException          if an I/O error occurs.
      */
     public void readFully(byte b[]) throws IOException {
         StreamUtils.readFully(this, b, 0, b.length);
@@ -75,11 +79,11 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * This method reads repeatedly from the file until the requested number of bytes are read. This method blocks until
      * the requested number of bytes are read, the end of the stream is detected, or an exception is thrown.
      *
-     * @param b the buffer into which the data is read.
+     * @param b   the buffer into which the data is read.
      * @param off the start offset of the data.
      * @param len the number of bytes to read.
-     * @throws java.io.EOFException  if this file reaches the end before reading all the bytes.
-     * @throws IOException if an I/O error occurs.
+     * @throws java.io.EOFException if this file reaches the end before reading all the bytes.
+     * @throws IOException          if an I/O error occurs.
      */
     public void readFully(byte b[], int off, int len) throws IOException {
         StreamUtils.readFully(this, b, off, len);
@@ -105,14 +109,14 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      */
     @Override
     public long skip(long n) throws IOException {
-        if(n<=0)
+        if (n <= 0)
             return 0;
 
         long offset = getOffset();
         long length = getLength();
 
         // Return -1 if the offset is already at the end of the stream
-        if(offset>=length)
+        if (offset >= length)
             return -1;
 
         // Makes sure not to go beyond the end of the stream
@@ -137,7 +141,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      */
     @Override
     public int available() throws IOException {
-        return (int)(getLength() - getOffset() - 1);
+        return (int) (getLength() - getOffset() - 1);
     }
 
     /**
@@ -150,10 +154,10 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
     @Override
     public synchronized void mark(int readLimit) {
         try {
-			this.markOffset = getOffset();
-		} catch (IOException e) {
+            this.markOffset = getOffset();
+        } catch (IOException e) {
             LOGGER.info("Caught exception", e);
-		}
+        }
     }
 
     /**
@@ -183,7 +187,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * Reads up to <code>len</code> bytes of data from this file into an array of bytes. This method blocks until at
      * least one byte of input is available.
      *
-     * @param b the buffer into which the data is read
+     * @param b   the buffer into which the data is read
      * @param off the start offset of the data
      * @param len the maximum number of bytes read
      * @return the total number of bytes read into the buffer, or -1 if there is no more data because the end of the

@@ -18,12 +18,13 @@
 
 package com.mucommander.ui.encoding;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.FocusDialog;
+import com.mucommander.ui.layout.YBoxPanel;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -31,35 +32,30 @@ import java.awt.event.WindowEvent;
 import java.nio.charset.Charset;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.FocusDialog;
-import com.mucommander.ui.layout.YBoxPanel;
-
 /**
  * This dialog allows the list of preferred character encodings to be modified by the end user. Each of the supported
  * encodings are represented as a checkbox and can individually be selected/unselected. A 'revert to defaults' button
  * allows the {@link EncodingPreferences#getDefaultPreferredEncodings() default preferred encodings} to be used.
  *
- * @see EncodingPreferences 
  * @author Maxence Bernard
+ * @see EncodingPreferences
  */
 public class PreferredEncodingsDialog extends FocusDialog {
 
-    /** Contains all the checkbox added to this dialog */
+    /**
+     * Contains all the checkbox added to this dialog
+     */
     private java.util.List<JCheckBox> checkboxes;
 
-    /** Minimum dimensions of this dialog */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(300,0);
+    /**
+     * Minimum dimensions of this dialog
+     */
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(300, 0);
 
-    /** Maximum dimensions of this dialog */
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(550,400);
+    /**
+     * Maximum dimensions of this dialog
+     */
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(550, 400);
 
     /**
      * Creates a new PreferredEncodingsDialog, without showing it on screen.
@@ -84,17 +80,17 @@ public class PreferredEncodingsDialog extends FocusDialog {
 
     protected void init() {
         // Mac OS X: small window borders
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if (OsFamily.MAC_OS_X.isCurrent())
             getRootPane().putClientProperty("Window.style", "small");
 
         Container contentPane = getContentPane();
 
         // Label
 
-        JLabel label = new JLabel(Translator.get("preferred_encodings")+":");
+        JLabel label = new JLabel(Translator.get("preferred_encodings") + ":");
 
         // Mac OS X: small component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if (OsFamily.MAC_OS_X.isCurrent())
             label.putClientProperty("JComponent.sizeVariant", "small");
 
         contentPane.add(label, BorderLayout.NORTH);
@@ -105,10 +101,10 @@ public class PreferredEncodingsDialog extends FocusDialog {
 
         checkboxes = new Vector<JCheckBox>();
         JCheckBox checkbox;
-        for(String enc : Charset.availableCharsets().keySet()) {
+        for (String enc : Charset.availableCharsets().keySet()) {
             checkbox = new JCheckBox(enc);
             // Mac OS X: component size
-            if(OsFamily.MAC_OS_X.isCurrent())
+            if (OsFamily.MAC_OS_X.isCurrent())
                 checkbox.putClientProperty("JComponent.sizeVariant", "small");
 
             checkboxes.add(checkbox);
@@ -124,10 +120,10 @@ public class PreferredEncodingsDialog extends FocusDialog {
 
         JButton defaultsButton = new JButton(Translator.get("reset"));
         // Mac OS X: component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if (OsFamily.MAC_OS_X.isCurrent())
             defaultsButton.putClientProperty("JComponent.sizeVariant", "small");
 
-        defaultsButton.addActionListener(new ActionListener(){
+        defaultsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 selectCheckboxes(EncodingPreferences.getDefaultPreferredEncodings());
             }
@@ -147,9 +143,9 @@ public class PreferredEncodingsDialog extends FocusDialog {
                 int nbCheckboxes = checkboxes.size();
                 java.util.List<String> preferredEncodings = new Vector<String>();
 
-                for(int i=0; i<nbCheckboxes; i++) {
+                for (int i = 0; i < nbCheckboxes; i++) {
                     checkbox = checkboxes.get(i);
-                    if(checkbox.isSelected())
+                    if (checkbox.isSelected())
                         preferredEncodings.add(checkbox.getText());
                 }
 
@@ -166,7 +162,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
     protected void selectCheckboxes(java.util.List<String> selectedEncodings) {
         JCheckBox checkbox;
         int nbCheckboxes = checkboxes.size();
-        for(int i=0; i<nbCheckboxes; i++) {
+        for (int i = 0; i < nbCheckboxes; i++) {
             checkbox = checkboxes.get(i);
             checkbox.setSelected(selectedEncodings.contains(checkbox.getText()));
         }

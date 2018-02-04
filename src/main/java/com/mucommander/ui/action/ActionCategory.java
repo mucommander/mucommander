@@ -22,44 +22,50 @@ import com.mucommander.text.Translator;
 
 /**
  * ActionCategory represent category that can be associated with MuAction action.
- * 
+ *
  * @author Arik Hadas
  */
 public enum ActionCategory {
-	ALL("all") {
-		@Override
+    ALL("all") {
+        @Override
         public boolean contains(String actionId) {
             return true;
-		}
-	},
-	NAVIGATION("navigation"),
-	SELECTION("selection"),
-	VIEW("view"),
-	FILES("file_operations"),
-	WINDOW("windows"),
-	TAB("tabs"),
-	MISC("misc"),
-	COMMANDS("commands");
+        }
+    },
+    NAVIGATION("navigation"),
+    SELECTION("selection"),
+    VIEW("view"),
+    FILES("file_operations"),
+    WINDOW("windows"),
+    TAB("tabs"),
+    MISC("misc"),
+    COMMANDS("commands");
 
-	/** The category's label key in the dictionary file */
-	private String descriptionKey;
-	 
-	ActionCategory(String descriptionKey) {
-		this.descriptionKey = "action_categories." + descriptionKey;
-	}
+    /**
+     * The category's label key in the dictionary file
+     */
+    private String descriptionKey;
 
-	public String getDescriptionKey() { return descriptionKey; } 
+    ActionCategory(String descriptionKey) {
+        this.descriptionKey = "action_categories." + descriptionKey;
+    }
 
-	public String getDescription() { return Translator.get(descriptionKey); }
-	
-	public boolean contains(String actionId) {
-		ActionCategory actionCategory = ActionProperties.getActionCategory(actionId);
-		return actionCategory != null && descriptionKey.equals(actionCategory.getDescriptionKey());
-	}
+    public String getDescriptionKey() {
+        return descriptionKey;
+    }
 
-	@Override
-	public String toString() { 
-		String description = getDescription();
-		return description != null ? description : getDescriptionKey();
-	}
+    public String getDescription() {
+        return Translator.get(descriptionKey);
+    }
+
+    public boolean contains(String actionId) {
+        ActionCategory actionCategory = ActionProperties.getActionCategory(actionId);
+        return actionCategory != null && descriptionKey.equals(actionCategory.getDescriptionKey());
+    }
+
+    @Override
+    public String toString() {
+        String description = getDescription();
+        return description != null ? description : getDescriptionKey();
+    }
 }

@@ -53,26 +53,30 @@ package com.mucommander.command;
  * Done.
  * </pre>
  * </p>
+ *
  * @author Nicolas Rinaudo
- * @see    CommandReader
- * @see    CommandManager#buildCommands(CommandBuilder)
+ * @see CommandReader
+ * @see CommandManager#buildCommands(CommandBuilder)
  */
 public interface CommandBuilder {
     /**
      * Notifies the builder that command building is about to start.
+     *
      * @throws CommandException if an error occurs.
      */
     public void startBuilding() throws CommandException;
 
     /**
      * Notifies the builder that command building is finished.
+     *
      * @throws CommandException if an error occurs.
      */
     public void endBuilding() throws CommandException;
 
     /**
      * Notifies the builder that a new command has been found.
-     * @param  command          command that has been found.
+     *
+     * @param command command that has been found.
      * @throws CommandException if an error occurs.
      */
     public void addCommand(Command command) throws CommandException;

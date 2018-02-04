@@ -18,31 +18,28 @@
 
 package com.mucommander.ui.icon;
 
-import java.awt.Dimension;
-import java.awt.Image;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.FileIconProvider;
 import com.mucommander.commons.runtime.OsFamily;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * <code>FileIcons</code> provides several methods to retrieve file icons for a given file:
  * <ul>
- *  <li>{@link #getSystemFileIcon(AbstractFile)}: returns a system icon, provided by the underlying OS/desktop manager.
- *   Under supported platforms, those file icons are the same as the ones displayed in the default file manager.</li>
- *  <li>{@link #getCustomFileIcon(AbstractFile)}: returns a custom icon, fetched from the muCommander icon set and
+ * <li>{@link #getSystemFileIcon(AbstractFile)}: returns a system icon, provided by the underlying OS/desktop manager.
+ * Under supported platforms, those file icons are the same as the ones displayed in the default file manager.</li>
+ * <li>{@link #getCustomFileIcon(AbstractFile)}: returns a custom icon, fetched from the muCommander icon set and
  * based on the file's kind (archive, folder...) and extension.</li>
- *  <li}{@link #getFileIcon(AbstractFile)} returns either a system icon or a custom icon, depending on the current
+ * <li}{@link #getFileIcon(AbstractFile)} returns either a system icon or a custom icon, depending on the current
  * system icons policy. The default policy is {@link #DEFAULT_SYSTEM_ICONS_POLICY} and can be changed using
  * {@link #setSystemIconsPolicy(String)}.</li>
  * </ul>
  * Icons can be requested indifferently for any type of {@link AbstractFile} files: local files, remote files,
  * archives entries... The </p>
- *
+ * <p>
  * <p>It is important to note that not all platforms have proper support for system file icons.
  * The {@link #hasProperSystemIcons()} method can be used to determine if the current platform properly supports system
  * icons. Non-supported platforms may return no icon (<code>null</code> values), or icons that do not resemble the
@@ -52,36 +49,58 @@ import com.mucommander.commons.runtime.OsFamily;
  */
 public class FileIcons {
 
-    /** Never use system file icons */
+    /**
+     * Never use system file icons
+     */
     public final static String USE_SYSTEM_ICONS_NEVER = "never";
-    /** Use system file icons only for applications */
+    /**
+     * Use system file icons only for applications
+     */
     public final static String USE_SYSTEM_ICONS_APPLICATIONS = "applications";
-    /** Always use system file icons */
+    /**
+     * Always use system file icons
+     */
     public final static String USE_SYSTEM_ICONS_ALWAYS = "always";
 
-    /** Default policy for system icons */
+    /**
+     * Default policy for system icons
+     */
     public final static String DEFAULT_SYSTEM_ICONS_POLICY = USE_SYSTEM_ICONS_APPLICATIONS;
 
-    /** Default icon scale factor (no rescaling) */
+    /**
+     * Default icon scale factor (no rescaling)
+     */
     public final static float DEFAULT_SCALE_FACTOR = 1.0f;
 
-    /** Base width and height of icons for a scale factor of 1 */
+    /**
+     * Base width and height of icons for a scale factor of 1
+     */
     private final static int BASE_ICON_DIMENSION = 16;
 
-    /** Controls if and when system file icons should be used instead of custom icons */
+    /**
+     * Controls if and when system file icons should be used instead of custom icons
+     */
     private static String systemIconsPolicy = DEFAULT_SYSTEM_ICONS_POLICY;
 
-    /** Current icon scale factor */
+    /**
+     * Current icon scale factor
+     */
     private static float scaleFactor = DEFAULT_SCALE_FACTOR;
 
-    /** FileIconProvider instance for custom icons */
+    /**
+     * FileIconProvider instance for custom icons
+     */
     private static FileIconProvider customFileIconProvider;
 
-    /** FileIconProvider instance for system icons */
+    /**
+     * FileIconProvider instance for system icons
+     */
     private static FileIconProvider systemFileIconProvider;
 
-    /** Current dimension of returned file icons */
-    private static Dimension iconDimension = new Dimension((int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR), (int)(BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR));
+    /**
+     * Current dimension of returned file icons
+     */
+    private static Dimension iconDimension = new Dimension((int) (BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR), (int) (BASE_ICON_DIMENSION * DEFAULT_SCALE_FACTOR));
 
 
     /**
@@ -113,7 +132,7 @@ public class FileIcons {
      * ({@link #getSystemFileIcon(AbstractFile, Dimension)} returned <code>null</code>), an icon from the
      * custom icon set will be returned instead. Therefore, this method never returns <code>null</code>.
      *
-     * @param file the AbstractFile instance for which an icon will be returned
+     * @param file          the AbstractFile instance for which an icon will be returned
      * @param iconDimension the icon's dimension
      * @return an icon for the given file
      * @see #getSystemIconsPolicy()
@@ -121,15 +140,15 @@ public class FileIcons {
     public static Icon getFileIcon(AbstractFile file, Dimension iconDimension) {
         boolean systemIcon = false;
 
-        if(USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy))
+        if (USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy))
             systemIcon = true;
 
-        if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy))
+        if (USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy))
             systemIcon = com.mucommander.desktop.DesktopManager.isApplication(file);
 
-        if(systemIcon) {
+        if (systemIcon) {
             Icon icon = getSystemFileIcon(file, iconDimension);
-            if(icon!=null)
+            if (icon != null)
                 return icon;
             // If the system icon could not be resolved, return a custom file icon
         }
@@ -154,7 +173,7 @@ public class FileIcons {
      * {@link #getCustomFileIconProvider() custom file icon provider}. This method is guaranteed to never return
      * <code>null</code>.
      *
-     * @param file the file for which an icon is to be returned
+     * @param file          the file for which an icon is to be returned
      * @param iconDimension the icon's dimension
      * @return a custom icon for the given file
      * @see #getCustomFileIconProvider()
@@ -180,7 +199,7 @@ public class FileIcons {
      * Returns <code>null</code> if the icon couldn't be retrieved, either because the file doesn't exist or for
      * any other reason.
      *
-     * @param file the file for which an icon is to be returned
+     * @param file          the file for which an icon is to be returned
      * @param iconDimension the icon's dimension
      * @return a system icon for the given file
      */
@@ -193,17 +212,17 @@ public class FileIcons {
      * {@link FileIconProvider}. This method takes care of up/down-scaling the icon returned by the provider if it
      * doesn't match the specified dimension.
      *
-     * @param fip the FileIconProvider from which to fetch the icon
-     * @param file the file for which an icon is to be returned
-     * @param iconDimension the icon's dimension 
+     * @param fip           the FileIconProvider from which to fetch the icon
+     * @param file          the file for which an icon is to be returned
+     * @param iconDimension the icon's dimension
      * @return an icon for the specified file
      */
     private static Icon getFileProviderIcon(FileIconProvider fip, AbstractFile file, Dimension iconDimension) {
         Icon icon = fip.getFileIcon(file, iconDimension);
-        if(icon==null)
+        if (icon == null)
             return null;
 
-        if(iconDimension.width==icon.getIconWidth() && iconDimension.height==icon.getIconHeight())
+        if (iconDimension.width == icon.getIconWidth() && iconDimension.height == icon.getIconHeight())
             return icon;    // the icon already has the right dimension
 
         // Scale the icon to the target dimension
@@ -259,7 +278,7 @@ public class FileIcons {
         return iconDimension;
     }
 
-	
+
     /**
      * Returns the current icon scale factor, initialized by default to {@link #DEFAULT_SCALE_FACTOR}.
      *
@@ -276,11 +295,11 @@ public class FileIcons {
      * @throws IllegalArgumentException if factor is lower or equal to 0
      */
     public static void setScaleFactor(float factor) {
-        if(scaleFactor<=0)
-            throw new IllegalArgumentException("Scale factor must be greater than 0, ("+factor+")");
+        if (scaleFactor <= 0)
+            throw new IllegalArgumentException("Scale factor must be greater than 0, (" + factor + ")");
 
         scaleFactor = factor;
-        iconDimension = new Dimension((int)(BASE_ICON_DIMENSION *scaleFactor), (int)(BASE_ICON_DIMENSION*scaleFactor));
+        iconDimension = new Dimension((int) (BASE_ICON_DIMENSION * scaleFactor), (int) (BASE_ICON_DIMENSION * scaleFactor));
     }
 
 
@@ -311,7 +330,7 @@ public class FileIcons {
      * Returns <code>true</code> if the current platform is able to retrieve system icons that match the ones used in
      * the OS's default file manager. If <code>false</code> is returned and {@link #getSystemFileIcon(com.mucommander.commons.file.AbstractFile)}
      * is used or {@link #getFileIcon(com.mucommander.commons.file.AbstractFile)} together with a system policy different from
-     * {@link #USE_SYSTEM_ICONS_NEVER}, the returned icon will probably look very bad. 
+     * {@link #USE_SYSTEM_ICONS_NEVER}, the returned icon will probably look very bad.
      *
      * @return true if the current platform is able to retrieve system icons that match the ones used in the OS's
      * default file manager

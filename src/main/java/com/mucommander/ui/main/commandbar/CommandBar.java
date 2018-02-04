@@ -37,22 +37,34 @@ import java.awt.event.MouseListener;
  */
 public class CommandBar extends JPanel implements KeyListener, MouseListener, CommandBarAttributesListener {
 
-    /** Parent MainFrame instance */
+    /**
+     * Parent MainFrame instance
+     */
     private MainFrame mainFrame;
 
-    /** True when modifier key is pressed */
+    /**
+     * True when modifier key is pressed
+     */
     private boolean modifierDown;
 
-    /** Command bar buttons */
+    /**
+     * Command bar buttons
+     */
     private CommandBarButton buttons[];
-    
-    /** Command bar actions */
+
+    /**
+     * Command bar actions
+     */
     private static String actionIds[];
-    
-    /** Command bar alternate actions */
+
+    /**
+     * Command bar alternate actions
+     */
     private static String alternateActionIds[];
-    
-    /** Modifier key that triggers the display of alternate actions when pressed */
+
+    /**
+     * Modifier key that triggers the display of alternate actions when pressed
+     */
     private static KeyStroke modifier;
 
     /**
@@ -69,28 +81,28 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
         addMouseListener(this);
 
         actionIds = CommandBarAttributes.getActions();
-		alternateActionIds = CommandBarAttributes.getAlternateActions();
+        alternateActionIds = CommandBarAttributes.getAlternateActions();
         modifier = CommandBarAttributes.getModifier();
-        
+
         addButtons();
-        
+
         CommandBarAttributes.addCommandBarAttributesListener(this);
     }
-    
+
     /**
      * Add buttons and separators to the command-bar panel according to the actions array.
-     * 
+     * <p>
      * actions array must be initialized before this function is called.
      */
     private void addButtons() {
-    	setLayout(new GridLayout(0,actionIds.length));
-    	
-    	// Create buttons and add them to this command bar
+        setLayout(new GridLayout(0, actionIds.length));
+
+        // Create buttons and add them to this command bar
         int nbButtons = actionIds.length;
         buttons = new CommandBarButton[nbButtons];
-        for(int i=0; i<nbButtons; i++) {
-        	buttons[i] = CommandBarButton.create(actionIds[i], mainFrame);
-        	buttons[i].addMouseListener(this);
+        for (int i = 0; i < nbButtons; i++) {
+            buttons[i] = CommandBarButton.create(actionIds[i], mainFrame);
+            buttons[i].addMouseListener(this);
             add(buttons[i]);
         }
     }
@@ -101,15 +113,15 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
      */
     public void setAlternateActionsMode(boolean on) {
         // Do nothing if command bar is not currently visible
-        if(!isVisible())
+        if (!isVisible())
             return;
 
-        if(this.modifierDown != on) {
+        if (this.modifierDown != on) {
             this.modifierDown = on;
 
             int nbButtons = buttons.length;
-            for(int i=0; i<nbButtons; i++)
-                buttons[i].setButtonAction(on && alternateActionIds[i]!=null?alternateActionIds[i]:actionIds[i], mainFrame);
+            for (int i = 0; i < nbButtons; i++)
+                buttons[i].setButtonAction(on && alternateActionIds[i] != null ? alternateActionIds[i] : actionIds[i], mainFrame);
         }
     }
 
@@ -119,13 +131,13 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
 
     public void keyPressed(KeyEvent e) {
         // Display alternate actions when the modifier key is pressed
-        if(e.getKeyCode() == modifier.getKeyCode())
+        if (e.getKeyCode() == modifier.getKeyCode())
             setAlternateActionsMode(true);
     }
 
     public void keyReleased(KeyEvent e) {
         // Display regular actions when the modifier key is released
-        if(e.getKeyCode() == modifier.getKeyCode())
+        if (e.getKeyCode() == modifier.getKeyCode())
             setAlternateActionsMode(false);
     }
 
@@ -143,9 +155,9 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.ToggleCommandBarAction.Descriptor.ACTION_ID, mainFrame));
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.CustomizeCommandBarAction.Descriptor.ACTION_ID, mainFrame));
-			// Get the click location in  the CommandBar's coordinate system. 
-			// The location returned by the MouseEvent is in the source component (button) coordinate system. it's converted using SwingUtilities to the CommandBar's coordinate system.
-			Point clickLocation = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), this);
+            // Get the click location in  the CommandBar's coordinate system.
+            // The location returned by the MouseEvent is in the source component (button) coordinate system. it's converted using SwingUtilities to the CommandBar's coordinate system.
+            Point clickLocation = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), this);
             popupMenu.show(this, clickLocation.x, clickLocation.y);
             popupMenu.setVisible(true);
         }
@@ -163,17 +175,17 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
     public void mouseExited(MouseEvent e) {
     }
 
-    
+
     //////////////////////////////////////////
     // CommandBarAttributesListener methods //
     //////////////////////////////////////////
-    
+
     public void commandBarAttributeChanged() {
-		actionIds = CommandBarAttributes.getActions();
-		alternateActionIds = CommandBarAttributes.getAlternateActions();
-		modifier = CommandBarAttributes.getModifier();
-		removeAll();
-		addButtons();
-		doLayout();
-	}
+        actionIds = CommandBarAttributes.getActions();
+        alternateActionIds = CommandBarAttributes.getAlternateActions();
+        modifier = CommandBarAttributes.getModifier();
+        removeAll();
+        addButtons();
+        doLayout();
+    }
 }

@@ -18,9 +18,6 @@
 
 package com.mucommander.desktop.kde;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -29,17 +26,23 @@ import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.desktop.TrashProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
-	private static final Logger LOGGER = LoggerFactory.getLogger(KdeDesktopAdapter.class);
-	
-    /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
+    private static final Logger LOGGER = LoggerFactory.getLogger(KdeDesktopAdapter.class);
+
+    /**
+     * Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called
+     */
     private int multiClickInterval;
 
-    /** Key to the double-click interval value in the KDE configuration */
+    /**
+     * Key to the double-click interval value in the KDE configuration
+     */
     private String DOUBLE_CLICK_CONFIG_KEY = "DoubleClickInterval";
 
     @Override
@@ -49,22 +52,22 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
 
         // Registers KDE specific commands.
         try {
-            String execCommand = getBaseCommand()+" exec $f";
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  execCommand, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   execCommand, CommandType.SYSTEM_COMMAND, null));
+            String execCommand = getBaseCommand() + " exec $f";
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, getFileManagerName()));
+        } catch (CommandException e) {
+            throw new DesktopInitialisationException(e);
         }
-        catch(CommandException e) {throw new DesktopInitialisationException(e);}
 
         // Multi-click interval retrieval
         try {
             String value = KdeConfig.getValue(DOUBLE_CLICK_CONFIG_KEY);
-            if(value==null)
+            if (value == null)
                 multiClickInterval = super.getMultiClickInterval();
 
             multiClickInterval = Integer.parseInt(value);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.debug("Error while retrieving double-click interval from gconftool", e);
             multiClickInterval = super.getMultiClickInterval();
         }
@@ -81,6 +84,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
      * X Window's configuration, not in KDE's. See <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5076635">
      * Java Bug 5076635</a> for more information.
      * </p>
+     *
      * @return the <code>DoubleClickInterval</code> KDE configuration value.
      */
     @Override

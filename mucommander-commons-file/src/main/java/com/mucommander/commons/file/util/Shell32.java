@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,11 +38,10 @@ public class Shell32 {
     private static Shell32API INSTANCE;
 
     static {
-        if(OsFamily.WINDOWS.isCurrent()) {        // Don't even bother if we're not running Windows
+        if (OsFamily.WINDOWS.isCurrent()) {        // Don't even bother if we're not running Windows
             try {
-                INSTANCE = (Shell32API)Native.loadLibrary("shell32", Shell32API.class, Shell32API.DEFAULT_OPTIONS);
-            }
-            catch(Throwable e) {
+                INSTANCE = (Shell32API) Native.loadLibrary("shell32", Shell32API.class, Shell32API.DEFAULT_OPTIONS);
+            } catch (Throwable e) {
                 // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported by JNA.
                 INSTANCE = null;
             }
@@ -55,7 +54,7 @@ public class Shell32 {
      * @return <code>true</code> if the Shell32 API can be accessed on the current OS/CPU architecture
      */
     public static boolean isAvailable() {
-        return INSTANCE!=null;
+        return INSTANCE != null;
     }
 
     /**

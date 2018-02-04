@@ -18,8 +18,6 @@
 
 package com.mucommander.desktop.osx;
 
-import java.awt.event.MouseEvent;
-
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -30,18 +28,24 @@ import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 
+import java.awt.event.MouseEvent;
+
 /**
  * @author Nicolas Rinaudo
  */
 public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     private static final String OPENER_COMMAND = "open $f";
     private static final String FINDER_COMMAND = "open -a Finder $f";
-    private static final String FINDER_NAME    = "Finder";
+    private static final String FINDER_NAME = "Finder";
 
-    public String toString() {return "MAC OS X Desktop";}
+    public String toString() {
+        return "MAC OS X Desktop";
+    }
 
     @Override
-    public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.MAC_OS_X);}
+    public boolean isAvailable() {
+        return OsFamily.getCurrent().equals(OsFamily.MAC_OS_X);
+    }
 
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
@@ -50,11 +54,12 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
         // Registers OS X specific commands.
         try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FINDER_COMMAND, CommandType.SYSTEM_COMMAND, FINDER_NAME));
+        } catch (CommandException e) {
+            throw new DesktopInitialisationException(e);
         }
-        catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
 
     @Override
@@ -80,6 +85,6 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         String extension = file.getExtension();
 
         // the isDirectory() test comes last as it is I/O bound
-        return extension!=null && extension.equalsIgnoreCase("app") && file.isDirectory();
+        return extension != null && extension.equalsIgnoreCase("app") && file.isDirectory();
     }
 }

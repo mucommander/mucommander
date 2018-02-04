@@ -22,17 +22,28 @@ import java.awt.*;
 
 public class ColorChangedEvent {
     private Theme source;
-    private int   colorId;
-    private Color  color;
+    private int colorId;
+    private Color color;
 
     ColorChangedEvent(Theme source, int colorId, Color color) {
         this.source = source;
         this.colorId = colorId;
-        this.color   = color;
+        this.color = color;
     }
 
-    public boolean isDefaultColor() {return source == null;}
-    public Theme getSource() {return source;}
-    public int getColorId() {return colorId;}
-    public Color getColor() {return color;}
+    public boolean isDefaultColor() {
+        return source == null;
+    }
+
+    public Theme getSource() {
+        return source;
+    }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 }

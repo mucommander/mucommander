@@ -45,27 +45,37 @@ import java.awt.event.ItemListener;
  * Confirmation dialog invoked when the user wants to delete currently selected files. It allows to choose between two
  * different ways of deleting files: move them to the trash or permanently erase them. The former choice is only given
  * if a trash is available on the current platform and capable of moving the selected files.
- * The choice (use trash or not) is saved in the preferences and reused next time this dialog is invoked.   
+ * The choice (use trash or not) is saved in the preferences and reused next time this dialog is invoked.
  *
- * @see com.mucommander.ui.action.impl.DeleteAction
  * @author Maxence Bernard
+ * @see com.mucommander.ui.action.impl.DeleteAction
  */
 public class DeleteDialog extends JobDialog implements ItemListener, ActionListener {
 
-    /** Should files be moved to the trash or permanently erased */
+    /**
+     * Should files be moved to the trash or permanently erased
+     */
     private boolean moveToTrash;
 
-    /** Allows to control whether files should be moved to trash when deleted or permanently erased */
+    /**
+     * Allows to control whether files should be moved to trash when deleted or permanently erased
+     */
     private JCheckBox moveToTrashCheckBox;
 
-    /** Informs the user about the consequences of deleting files, based on the current 'Move to trash' choice */
+    /**
+     * Informs the user about the consequences of deleting files, based on the current 'Move to trash' choice
+     */
     private InformationPane informationPane;
 
-    /** The button that confirms deletion */
+    /**
+     * The button that confirms deletion
+     */
     private JButton deleteButton;
 
-    /** Dialog size constraints */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
+    /**
+     * Dialog size constraints
+     */
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 0);
 
 
     public DeleteDialog(MainFrame mainFrame, FileSet files, boolean deletePermanently) {
@@ -82,7 +92,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         // - the base folder can be moved to the trash (the eligibility conditions should be the same as the files to-be-deleted)
         AbstractTrash trash = DesktopManager.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
-        if(trash!=null && !baseFolder.isArchive() && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
+        if (trash != null && !baseFolder.isArchive() && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
             moveToTrash = !deletePermanently;
 
             moveToTrashCheckBox = new JCheckBox(Translator.get("delete_dialog.move_to_trash.option"), moveToTrash);
@@ -104,7 +114,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
 
         mainPanel.add(fileDetailsPanel);
 
-        if(moveToTrashCheckBox!=null)
+        if (moveToTrashCheckBox != null)
             mainPanel.add(moveToTrashCheckBox);
 
         getContentPane().add(mainPanel);
@@ -127,10 +137,10 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
      * Updates the information pane to reflect the current 'Move to trash' choice.
      */
     private void updateDialog() {
-        informationPane.getMainLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation":"delete_dialog.permanently_delete.confirmation"));
-        informationPane.getCaptionLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation_details":"this_operation_cannot_be_undone"));
-        informationPane.setIcon(moveToTrash?null: InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
-        setTitle(ActionManager.getActionInstance(moveToTrash?DeleteAction.Descriptor.ACTION_ID:PermanentDeleteAction.Descriptor.ACTION_ID, mainFrame).getLabel());
+        informationPane.getMainLabel().setText(Translator.get(moveToTrash ? "delete_dialog.move_to_trash.confirmation" : "delete_dialog.permanently_delete.confirmation"));
+        informationPane.getCaptionLabel().setText(Translator.get(moveToTrash ? "delete_dialog.move_to_trash.confirmation_details" : "this_operation_cannot_be_undone"));
+        informationPane.setIcon(moveToTrash ? null : InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
+        setTitle(ActionManager.getActionInstance(moveToTrash ? DeleteAction.Descriptor.ACTION_ID : PermanentDeleteAction.Descriptor.ACTION_ID, mainFrame).getLabel());
     }
 
 
@@ -153,7 +163,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         // Start by disposing this dialog
         dispose();
 
-        if(e.getSource()==deleteButton) {
+        if (e.getSource() == deleteButton) {
             // Starts deleting files
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));
             DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, files, moveToTrash);

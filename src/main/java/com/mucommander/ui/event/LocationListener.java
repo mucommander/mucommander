@@ -25,16 +25,16 @@ package com.mucommander.ui.event;
  * FolderPanel. Those classes need to be registered to receive those events, this can be done by calling
  * {@link LocationManager#addLocationListener(LocationListener)}.
  *
- * @see com.mucommander.ui.main.FolderPanel
  * @author Maxence Bernard
+ * @see com.mucommander.ui.main.FolderPanel
  */
 public interface LocationListener {
-	
+
     /**
      * This method is invoked when the current folder is being changed.
-     *
+     * <p>
      * <p>A call to either {@link #locationChanged(LocationEvent)}, {@link #locationCancelled(LocationEvent)} or
-     * {@link #locationFailed(LocationEvent)} will always follow to indicate the outcome of the folder change. 
+     * {@link #locationFailed(LocationEvent)} will always follow to indicate the outcome of the folder change.
      *
      * @param locationEvent describes the location change event
      */

@@ -22,7 +22,7 @@ public class LocalCompressProgressInfo implements ICompressProgressInfo {
             _outStartValue = outStartValue;
 
     }
-    
+
     public int SetRatioInfo(long inSize, long outSize) {
         long inSizeNew, outSizeNew;
         long inSizeNewPointer;
@@ -32,14 +32,14 @@ public class LocalCompressProgressInfo implements ICompressProgressInfo {
             inSizeNewPointer = inSizeNew;
         } else
             inSizeNewPointer = ICompressProgressInfo.INVALID;
-        
+
         if (_outStartValueIsAssigned && outSize != ICompressProgressInfo.INVALID) {
             outSizeNew = _outStartValue + (outSize);
             outSizeNewPointer = outSizeNew;
         } else
             outSizeNewPointer = ICompressProgressInfo.INVALID;
         return _progress.SetRatioInfo(inSizeNewPointer, outSizeNewPointer);
-        
+
     }
-    
+
 }

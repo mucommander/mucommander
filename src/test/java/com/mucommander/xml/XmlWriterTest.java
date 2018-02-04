@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,18 +33,18 @@ import java.io.IOException;
  * @author Nicolas Rinaudo
  */
 public class XmlWriterTest {
-    private static final String ROOT_ELEMENT       = "root";
+    private static final String ROOT_ELEMENT = "root";
     private static final String ENTITIES_ATTRIBUTE = "entities";
-    private static final String ENTITIES_STRING    = "&\"'<>";
-
+    private static final String ENTITIES_STRING = "&\"'<>";
 
 
     // - XML reading -----------------------------------------------------
     // -------------------------------------------------------------------
+
     /**
      * Reads the content of the specified byte array in a DOM Document.
      * @param  bytes       content of the XML document.
-     * @return             the content of the specified byte array in a DOM Document.
+     * @return the content of the specified byte array in a DOM Document.
      * @throws Exception if any error occurs.
      */
     private Document getDocument(byte[] bytes) throws Exception {
@@ -52,23 +52,23 @@ public class XmlWriterTest {
     }
 
 
-
     // - JUnit tests -----------------------------------------------------
     // -------------------------------------------------------------------
+
     /**
      * Makes sure that XML entities are escaped properly.
      * @throws IOException if an error occurs.
      */
     @Test
     public void testXmlEntities() throws Exception {
-        XmlWriter             writer;
-        XmlAttributes         attributes;
+        XmlWriter writer;
+        XmlAttributes attributes;
         ByteArrayOutputStream out;
-        Node                  node;
-        Element               element;
+        Node node;
+        Element element;
 
         // Creates an XML document with CDATA and attributes that need escaping.
-        writer     = new XmlWriter(out = new ByteArrayOutputStream());
+        writer = new XmlWriter(out = new ByteArrayOutputStream());
         attributes = new XmlAttributes();
         attributes.add(ENTITIES_ATTRIBUTE, ENTITIES_STRING);
         writer.startElement(ROOT_ELEMENT, attributes);
@@ -85,7 +85,7 @@ public class XmlWriterTest {
 
         // Looks for the CDATA.
         node = element.getFirstChild();
-        while(node != null && node.getNodeType() != Node.TEXT_NODE)
+        while (node != null && node.getNodeType() != Node.TEXT_NODE)
             node = node.getNextSibling();
 
         // Makes sure we found the CDATA and that it is equal to ENTITIES_STRING.

@@ -28,37 +28,63 @@ import org.slf4j.LoggerFactory;
  * against each other.
  *
  * @author Maxence Bernard, Arik Hadas
-*/
+ */
 public enum JavaVersion implements ComparableRuntimeProperty {
-	/** Java 1.0.x */
+    /**
+     * Java 1.0.x
+     */
     JAVA_1_0("1.0"),
-    /** Java 1.1.x */
+    /**
+     * Java 1.1.x
+     */
     JAVA_1_1("1.1"),
-    /** Java 1.2.x */
+    /**
+     * Java 1.2.x
+     */
     JAVA_1_2("1.2"),
-    /** Java 1.3.x */
+    /**
+     * Java 1.3.x
+     */
     JAVA_1_3("1.3"),
-    /** Java 1.4.x */
+    /**
+     * Java 1.4.x
+     */
     JAVA_1_4("1.4"),
-    /** Java 1.5.x */
+    /**
+     * Java 1.5.x
+     */
     JAVA_1_5("1.5"),
-    /** Java 1.6.x */
+    /**
+     * Java 1.6.x
+     */
     JAVA_1_6("1.6"),
-    /** Java 1.7.x */
+    /**
+     * Java 1.7.x
+     */
     JAVA_1_7("1.7"),
-    /** Java 1.8.x */
+    /**
+     * Java 1.8.x
+     */
     JAVA_1_8("1.8");
 
-    /** Logger used by this class. */
+    /**
+     * Logger used by this class.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(JavaVersion.class);
 
-    /** Holds the JavaVersion of the current runtime environment  */
+    /**
+     * Holds the JavaVersion of the current runtime environment
+     */
     private static JavaVersion currentValue;
 
-    /** Holds the String representation of the current JVM architecture  */
+    /**
+     * Holds the String representation of the current JVM architecture
+     */
     private static String currentArchitecture;
 
-    /** The String representation of this RuntimeProperty, set at creation time */
+    /**
+     * The String representation of this RuntimeProperty, set at creation time
+     */
     protected final String stringRepresentation;
 
     /**
@@ -67,15 +93,15 @@ public enum JavaVersion implements ComparableRuntimeProperty {
      * to force the initialization if it needs to happen at a predictable time.
      */
     static {
-    	currentValue = parseSystemProperty(getRawSystemProperty());
-    	currentArchitecture = System.getProperty("os.arch");
-    	LOGGER.info("Current Java version: {}", currentValue);
-    	LOGGER.info("Current JVM architecture: {}", currentArchitecture);
+        currentValue = parseSystemProperty(getRawSystemProperty());
+        currentArchitecture = System.getProperty("os.arch");
+        LOGGER.info("Current Java version: {}", currentValue);
+        LOGGER.info("Current JVM architecture: {}", currentArchitecture);
     }
 
 
     JavaVersion(String stringRepresentation) {
-    	this.stringRepresentation = stringRepresentation;
+        this.stringRepresentation = stringRepresentation;
     }
 
     ////////////////////
@@ -88,7 +114,7 @@ public enum JavaVersion implements ComparableRuntimeProperty {
      * @return <code>true</code> if the JVM architecture is amd64, and <code>false</code> otherwise.
      */
     public static boolean isAmd64Architecture() {
-    	return "amd64".equals(currentArchitecture);
+        return "amd64".equals(currentArchitecture);
     }
 
     /**
@@ -117,7 +143,7 @@ public enum JavaVersion implements ComparableRuntimeProperty {
      */
     static JavaVersion parseSystemProperty(String javaVersionProp) {
         // Java version property should never be null or empty, but better be safe than sorry ...
-        if (javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals(""))
+        if (javaVersionProp == null || (javaVersionProp = javaVersionProp.trim()).equals(""))
             // Assume java 1.6 (first supported Java version)
             return JavaVersion.JAVA_1_6;
         // Java 1.8
@@ -158,28 +184,28 @@ public enum JavaVersion implements ComparableRuntimeProperty {
      * @return true if this instance is the same as the current runtime's value
      */
     public boolean isCurrent() {
-        return this==currentValue;
+        return this == currentValue;
     }
 
     //////////////////////////////////////////////
     // ComparableRuntimeProperty implementation //
     //////////////////////////////////////////////
 
-	public boolean isCurrentOrLower() {
-		return currentValue.compareTo(this)<=0;
-	}
+    public boolean isCurrentOrLower() {
+        return currentValue.compareTo(this) <= 0;
+    }
 
-	public boolean isCurrentLower() {
-		return currentValue.compareTo(this)<0;
-	}
+    public boolean isCurrentLower() {
+        return currentValue.compareTo(this) < 0;
+    }
 
-	public boolean isCurrentOrHigher() {
-		return currentValue.compareTo(this)>=0;
-	}
+    public boolean isCurrentOrHigher() {
+        return currentValue.compareTo(this) >= 0;
+    }
 
-	public boolean isCurrentHigher() {
-		return currentValue.compareTo(this)>0;
-	}
+    public boolean isCurrentHigher() {
+        return currentValue.compareTo(this) > 0;
+    }
 
     ////////////////////////
     // Overridden methods //

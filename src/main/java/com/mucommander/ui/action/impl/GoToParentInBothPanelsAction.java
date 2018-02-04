@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * Changes the current directory to its parent and tries to do the same in the inactive panel.
@@ -46,17 +40,20 @@ import com.mucommander.ui.main.MainFrame;
  * This action opens both files synchronously: it will wait for the active panel location change confirmation
  * before performing the inactive one.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class GoToParentInBothPanelsAction extends ActiveTabAction {
     // - Initialization ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a new <code>GoToParentInBothPanelsAction</code> instance with the specified parameters.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public GoToParentInBothPanelsAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoToParentInBothPanelsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Perform this action in a separate thread, to avoid locking the event thread
@@ -71,31 +68,34 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
-        		   !mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked() &&
-        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+                !mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked() &&
+                mainFrame.getActivePanel().getCurrentFolder().getParent() != null);
     }
 
     // - Action code ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Opens both the active and inactive folder panel's parent directories.
      */
     @Override
     public void performAction() {
-        Thread       openThread;
+        Thread openThread;
         AbstractFile parent;
 
         // If the current panel has a parent file, navigate to it.
-        if((parent = mainFrame.getActivePanel().getCurrentFolder().getParent()) != null) {
+        if ((parent = mainFrame.getActivePanel().getCurrentFolder().getParent()) != null) {
             openThread = mainFrame.getActivePanel().tryChangeCurrentFolder(parent);
 
             // If the inactive panel has a parent file, wait for the current panel change to be complete and navigate
             // to it.
-            if((parent = mainFrame.getInactivePanel().getCurrentFolder().getParent()) != null) {
-                if(openThread != null) {
-                    while(openThread.isAlive()) {
-                        try {openThread.join();}
-                        catch(InterruptedException e) {}
+            if ((parent = mainFrame.getInactivePanel().getCurrentFolder().getParent()) != null) {
+                if (openThread != null) {
+                    while (openThread.isAlive()) {
+                        try {
+                            openThread.join();
+                        } catch (InterruptedException e) {
+                        }
                     }
                 }
                 mainFrame.getInactivePanel().tryChangeCurrentFolder(parent);
@@ -103,27 +103,35 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new GoToParentInBothPanelsAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new GoToParentInBothPanelsAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "GoToParentInBothPanels";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "GoToParentInBothPanels";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

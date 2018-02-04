@@ -31,10 +31,14 @@ import java.awt.*;
  */
 public class ProgressTextField extends JTextField {
 
-    /** Progress value, between 0 and 100 */
+    /**
+     * Progress value, between 0 and 100
+     */
     private int progressValue;
 
-    /** Background color used to symbolize progress */
+    /**
+     * Background color used to symbolize progress
+     */
     private Color progressColor;
 
     /**
@@ -42,14 +46,14 @@ public class ProgressTextField extends JTextField {
      * and progress color which will be used as background color to show progress.
      *
      * @param initialProgressValue initial progress value, between 0 and 100
-     * @param progressColor background color used to symbolize progress
+     * @param progressColor        background color used to symbolize progress
      */
     public ProgressTextField(int initialProgressValue, Color progressColor) {
         this.progressValue = initialProgressValue;
         this.progressColor = progressColor;
     }
-	
-	
+
+
     /**
      * Sets current progress value and repaints this component.
      *
@@ -71,15 +75,16 @@ public class ProgressTextField extends JTextField {
 
     /**
      * Sets the color used to represent progress.
+     *
      * @param color new progress color.
      */
     public void setProgressColor(Color color) {
-        if(color != null && progressColor != null && !color.equals(progressColor)) {
+        if (color != null && progressColor != null && !color.equals(progressColor)) {
             progressColor = color;
             repaint();
         }
     }
-	
+
     /**
      * Override JTextField's paint method to show progress information.
      */
@@ -87,9 +92,9 @@ public class ProgressTextField extends JTextField {
     public void paint(Graphics g) {
         super.paint(g);
 
-        if(progressValue>0) {
+        if (progressValue > 0) {
             g.setColor(progressColor);
-            g.fillRect(0, 0, (int)(getWidth()*progressValue/(float)100), getHeight());
+            g.fillRect(0, 0, (int) (getWidth() * progressValue / (float) 100), getHeight());
         }
     }
 }

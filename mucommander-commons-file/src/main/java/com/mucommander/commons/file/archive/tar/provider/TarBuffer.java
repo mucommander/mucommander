@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,7 +40,7 @@ import java.util.Arrays;
  * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
  * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
  * file. It was forked at version 1.7.1 of Ant.</p>
- * 
+ *
  * @author Apache Ant, Maxence Bernard
  */
 public class TarBuffer {
@@ -51,15 +51,15 @@ public class TarBuffer {
     /** Default block size */
     public static final int DEFAULT_BLKSIZE = (DEFAULT_RCDSIZE * 20);
 
-    private InputStream     inStream;
-    private OutputStream    outStream;
-    private byte[]          blockBuffer;
-    private int             currBlkIdx;
-    private int             currRecIdx;
-    private int             blockSize;
-    private int             recordSize;
-    private int             recsPerBlock;
-    private boolean         debug;
+    private InputStream inStream;
+    private OutputStream outStream;
+    private byte[] blockBuffer;
+    private int currBlkIdx;
+    private int currRecIdx;
+    private int blockSize;
+    private int recordSize;
+    private int recsPerBlock;
+    private boolean debug;
 
     /**
      * Constructor for a TarBuffer on an input stream.
@@ -176,7 +176,7 @@ public class TarBuffer {
     public boolean skipRecord() throws IOException {
         if (debug) {
             System.err.println("SkipRecord: recIdx = " + currRecIdx
-                               + " blkIdx = " + currBlkIdx);
+                    + " blkIdx = " + currBlkIdx);
         }
 
         if (inStream == null) {
@@ -204,11 +204,11 @@ public class TarBuffer {
     public boolean readRecord(byte[] recordBuf) throws IOException {
         if (debug) {
             System.err.println("ReadRecord: recIdx = " + currRecIdx
-                               + " blkIdx = " + currBlkIdx);
+                    + " blkIdx = " + currBlkIdx);
         }
 
-        if(recordBuf.length!=recordSize)
-            throw new IOException("specified record buffer doesn't match record size: "+recordSize);
+        if (recordBuf.length != recordSize)
+            throw new IOException("specified record buffer doesn't match record size: " + recordSize);
 
         if (inStream == null) {
             throw new IOException("reading from an output buffer");
@@ -221,8 +221,8 @@ public class TarBuffer {
         }
 
         System.arraycopy(blockBuffer,
-                         (currRecIdx * recordSize), recordBuf, 0,
-                         recordSize);
+                (currRecIdx * recordSize), recordBuf, 0,
+                recordSize);
 
         currRecIdx++;
 
@@ -251,7 +251,7 @@ public class TarBuffer {
 
         while (bytesNeeded > 0) {
             long numBytes = inStream.read(blockBuffer, offset,
-                                               bytesNeeded);
+                    bytesNeeded);
 
             //
             // NOTE
@@ -290,8 +290,8 @@ public class TarBuffer {
             if (numBytes != blockSize) {
                 if (debug) {
                     System.err.println("ReadBlock: INCOMPLETE READ "
-                                       + numBytes + " of " + blockSize
-                                       + " bytes read.");
+                            + numBytes + " of " + blockSize
+                            + " bytes read.");
                 }
             }
         }
@@ -314,7 +314,7 @@ public class TarBuffer {
             long numBytes = inStream.skip(bytesToSkip);
             // Adopt the same 'generous' behavior as #readBlock(), i.e. allow a premature EOF only if at least
             // a byte was properly skipped.
-            if(numBytes==-1) {
+            if (numBytes == -1) {
                 return bytesToSkip != blockSize;
             }
 
@@ -375,7 +375,7 @@ public class TarBuffer {
     public void writeRecord(byte[] record) throws IOException {
         if (debug) {
             System.err.println("WriteRecord: recIdx = " + currRecIdx
-                               + " blkIdx = " + currBlkIdx);
+                    + " blkIdx = " + currBlkIdx);
         }
 
         if (outStream == null) {
@@ -384,9 +384,9 @@ public class TarBuffer {
 
         if (record.length != recordSize) {
             throw new IOException("record to write has length '"
-                                  + record.length
-                                  + "' which is not the record size of '"
-                                  + recordSize + "'");
+                    + record.length
+                    + "' which is not the record size of '"
+                    + recordSize + "'");
         }
 
         if (currRecIdx >= recsPerBlock) {
@@ -394,8 +394,8 @@ public class TarBuffer {
         }
 
         System.arraycopy(record, 0, blockBuffer,
-                         (currRecIdx * recordSize),
-                         recordSize);
+                (currRecIdx * recordSize),
+                recordSize);
 
         currRecIdx++;
     }
@@ -412,7 +412,7 @@ public class TarBuffer {
     public void writeRecord(byte[] buf, int offset) throws IOException {
         if (debug) {
             System.err.println("WriteRecord: recIdx = " + currRecIdx
-                               + " blkIdx = " + currBlkIdx);
+                    + " blkIdx = " + currBlkIdx);
         }
 
         if (outStream == null) {
@@ -421,9 +421,9 @@ public class TarBuffer {
 
         if ((offset + recordSize) > buf.length) {
             throw new IOException("record has length '" + buf.length
-                                  + "' with offset '" + offset
-                                  + "' which is less than the record size of '"
-                                  + recordSize + "'");
+                    + "' with offset '" + offset
+                    + "' which is less than the record size of '"
+                    + recordSize + "'");
         }
 
         if (currRecIdx >= recsPerBlock) {
@@ -431,8 +431,8 @@ public class TarBuffer {
         }
 
         System.arraycopy(buf, offset, blockBuffer,
-                         (currRecIdx * recordSize),
-                         recordSize);
+                (currRecIdx * recordSize),
+                recordSize);
 
         currRecIdx++;
     }
@@ -500,9 +500,8 @@ public class TarBuffer {
                     inStream = null;
                 }
             }
-        }
-        finally {
-            if(blockBuffer!=null) {
+        } finally {
+            if (blockBuffer != null) {
                 BufferPool.releaseByteArray(blockBuffer);
                 blockBuffer = null;
             }

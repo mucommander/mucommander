@@ -18,11 +18,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -38,26 +33,31 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CombineFilesAction;
 import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * Dialog used to combine file parts into the original file.
- * 
+ *
  * @author Mariusz Jakubowski
  */
 public class CombineFilesDialog extends TransferDestinationDialog {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CombineFilesDialog.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(CombineFilesDialog.class);
+
     private AbstractFile destFolder;
 
     /**
      * Creates a new combine file dialog.
-     * @param mainFrame the main frame
-     * @param files a list of files to combine
+     *
+     * @param mainFrame  the main frame
+     * @param files      a list of files to combine
      * @param destFolder default destination folder
      */
     public CombineFilesDialog(MainFrame mainFrame, FileSet files, AbstractFile destFolder) {
-        super(mainFrame, files, 
-        		ActionProperties.getActionLabel(CombineFilesAction.Descriptor.ACTION_ID),
+        super(mainFrame, files,
+                ActionProperties.getActionLabel(CombineFilesAction.Descriptor.ACTION_ID),
                 Translator.get("copy_dialog.destination"),
                 Translator.get("combine"),
                 Translator.get("combine_files_dialog.error_title"),
@@ -67,30 +67,31 @@ public class CombineFilesDialog extends TransferDestinationDialog {
     }
 
     /**
-     * Searches for parts of a file.  
+     * Searches for parts of a file.
+     *
      * @param part1 first part of a file
      */
     private void searchParts(AbstractFile part1) {
-		AbstractFile parent = part1.getParent();
-		if (parent == null) {
-			return;
-		}
-		String ext = part1.getExtension();
-		int firstIndex;
-		try {
-			firstIndex = Integer.parseInt(ext);
-		} catch (NumberFormatException e) {
-			return;
-		}
+        AbstractFile parent = part1.getParent();
+        if (parent == null) {
+            return;
+        }
+        String ext = part1.getExtension();
+        int firstIndex;
+        try {
+            firstIndex = Integer.parseInt(ext);
+        } catch (NumberFormatException e) {
+            return;
+        }
 
-		AndFileFilter filter = new AndFileFilter(
-            new StartsWithFilenameFilter(part1.getNameWithoutExtension(), false),
-            new AttributeFileFilter(FileAttribute.FILE),
-            new EqualsFilenameFilter(part1.getName(), false, true)
+        AndFileFilter filter = new AndFileFilter(
+                new StartsWithFilenameFilter(part1.getNameWithoutExtension(), false),
+                new AttributeFileFilter(FileAttribute.FILE),
+                new EqualsFilenameFilter(part1.getName(), false, true)
         );
 
-		try {
-			AbstractFile[] otherParts = parent.ls(filter);
+        try {
+            AbstractFile[] otherParts = parent.ls(filter);
             for (AbstractFile otherPart : otherParts) {
                 String ext2 = otherPart.getExtension();
                 try {
@@ -101,21 +102,21 @@ public class CombineFilesDialog extends TransferDestinationDialog {
                     // nothing
                 }
             }
-		} catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.debug("Caught exception", e);
-		}
-		setFiles(files);
-	}
+        }
+        setFiles(files);
+    }
 
     @Override
     protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
         // The path entered doesn't correspond to any existing folder
-        if (resolvedDest==null) {
+        if (resolvedDest == null) {
             showErrorDialog(Translator.get("invalid_path", destPath), errorDialogTitle);
             return false;
         }
         return true;
-	}
+    }
 
 
     //////////////////////////////////////////////
@@ -126,7 +127,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
     protected PathFieldContent computeInitialPath(FileSet files) {
         String path = destFolder.getAbsolutePath(true) + files.elementAt(0).getNameWithoutExtension();
         if (files.size() == 1) {
-        	searchParts(files.elementAt(0));
+            searchParts(files.elementAt(0));
         }
 
         return new PathFieldContent(path);
@@ -134,9 +135,9 @@ public class CombineFilesDialog extends TransferDestinationDialog {
 
     @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, ResolvedDestination resolvedDest, int defaultFileExistsAction) {
-		return new CombineFilesJob(progressDialog, mainFrame,
-		       files, resolvedDest.getDestinationFile(), defaultFileExistsAction);
-	}
+        return new CombineFilesJob(progressDialog, mainFrame,
+                files, resolvedDest.getDestinationFile(), defaultFileExistsAction);
+    }
 
     @Override
     protected String getProgressDialogTitle() {

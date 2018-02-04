@@ -33,38 +33,44 @@ import java.util.List;
 /**
  * OSXTrash provides access to the Mac OS X Finder's trash. Only local files (or locally mounted files) can be moved
  * to the trash.
- *
  * <p>
- *   <b>Implementation notes:</b><br/>
- *   <br/>
- *   This trash is implemented as a {@link com.mucommander.desktop.QueuedTrash} for several reasons:
- *   <ul>
- *    <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it.
- *        Moving files to the trash repeatedly would play the sound as many times as the Finder has been told to move a
- *        file, which is obviously ugly.</li>
- *    <li>executing an AppleScript has a cost as it has to be compiled first. When files are moved repeatedly, it is
- *        more efficient to group files and execute only one AppleScript.</li>
- *   </ul>
- *   <br/>
- *   This class uses {@link com.mucommander.ui.macosx.AppleScript} to interact with the trash.
+ * <p>
+ * <b>Implementation notes:</b><br/>
+ * <br/>
+ * This trash is implemented as a {@link com.mucommander.desktop.QueuedTrash} for several reasons:
+ * <ul>
+ * <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it.
+ * Moving files to the trash repeatedly would play the sound as many times as the Finder has been told to move a
+ * file, which is obviously ugly.</li>
+ * <li>executing an AppleScript has a cost as it has to be compiled first. When files are moved repeatedly, it is
+ * more efficient to group files and execute only one AppleScript.</li>
+ * </ul>
+ * <br/>
+ * This class uses {@link com.mucommander.ui.macosx.AppleScript} to interact with the trash.
  * </p>
  *
- * @see OSXTrashProvider
  * @author Maxence Bernard
+ * @see OSXTrashProvider
  */
 public class OSXTrash extends QueuedTrash {
-	private static final Logger LOGGER = LoggerFactory.getLogger(OSXTrash.class);
-	
-    /** AppleScript that reveals the trash in Finder */
-    private final static String REVEAL_TRASH_APPLESCRIPT =
-        "tell application \"Finder\" to open trash\n" +
-        "activate application \"Finder\"\n";
+    private static final Logger LOGGER = LoggerFactory.getLogger(OSXTrash.class);
 
-    /** AppleScript that counts and returns the number of items in Trash */
+    /**
+     * AppleScript that reveals the trash in Finder
+     */
+    private final static String REVEAL_TRASH_APPLESCRIPT =
+            "tell application \"Finder\" to open trash\n" +
+                    "activate application \"Finder\"\n";
+
+    /**
+     * AppleScript that counts and returns the number of items in Trash
+     */
     private final static String COUNT_TRASH_ITEMS_APPLESCRIPT =
             "tell application \"Finder\" to return count of items in trash";
 
-    /** AppleScript that empties the trash */
+    /**
+     * AppleScript that empties the trash
+     */
     private final static String EMPTY_TRASH_APPLESCRIPT = "tell application \"Finder\" to empty trash";
 
     /**
@@ -74,25 +80,25 @@ public class OSXTrash extends QueuedTrash {
      * for more info about this workaround.
      */
     private final static String MOVE_TO_TRASH_APPLESCRIPT_NO_UNICODE =
-        // Loads the contents of the UTF8-encoded file which path is contained in the 'tmpFilePath' variable.
-        // This variable must be set before the beginning of the script. This file contains the list of files to move
-        // to the trash, separated by EOL characters. The file must NOT end with a trailing EOL.
-        "set tmpFile to (open for access (POSIX file tmpFilePath))\n" +
-        "set tmpFileContents to (read tmpFile for (get eof tmpFile) as «class utf8»)\n" +
-        "close access tmpFile\n" +
-        // Split the file contents into a list of lines, each line representing a POSIX file path to delete
-        "set posixFileList to every paragraph of tmpFileContents\n" +
-        // Convert the list of POSIX paths into a list of file objects. Note that internally AppleScript uses
-        // a Mac-specific colon-separated path notation rather than the POSIX one.
-        "set fileCount to the number of items in posixFileList\n" +
-        "set fileList to {}\n" +
-        "repeat with i from 1 to the fileCount\n" +
-            "set posixFile to item i of posixFileList\n" +
-            "copy POSIX file posixFile to the end of fileList\n" +
-        "end repeat\n" +
-        // Tell the Finder to move those files to the trash. Note that the file list must contain file objects and not
-        // POSIX paths, hence the previous step. 
-        "tell application \"Finder\" to move fileList to the trash";
+            // Loads the contents of the UTF8-encoded file which path is contained in the 'tmpFilePath' variable.
+            // This variable must be set before the beginning of the script. This file contains the list of files to move
+            // to the trash, separated by EOL characters. The file must NOT end with a trailing EOL.
+            "set tmpFile to (open for access (POSIX file tmpFilePath))\n" +
+                    "set tmpFileContents to (read tmpFile for (get eof tmpFile) as «class utf8»)\n" +
+                    "close access tmpFile\n" +
+                    // Split the file contents into a list of lines, each line representing a POSIX file path to delete
+                    "set posixFileList to every paragraph of tmpFileContents\n" +
+                    // Convert the list of POSIX paths into a list of file objects. Note that internally AppleScript uses
+                    // a Mac-specific colon-separated path notation rather than the POSIX one.
+                    "set fileCount to the number of items in posixFileList\n" +
+                    "set fileList to {}\n" +
+                    "repeat with i from 1 to the fileCount\n" +
+                    "set posixFile to item i of posixFileList\n" +
+                    "copy POSIX file posixFile to the end of fileList\n" +
+                    "end repeat\n" +
+                    // Tell the Finder to move those files to the trash. Note that the file list must contain file objects and not
+                    // POSIX paths, hence the previous step.
+                    "tell application \"Finder\" to move fileList to the trash";
 
 
     //////////////////////////////////
@@ -123,7 +129,7 @@ public class OSXTrash extends QueuedTrash {
     @Override
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
-            && (file.getAbsolutePath(true).indexOf("/.Trash/") != -1);
+                && (file.getAbsolutePath(true).indexOf("/.Trash/") != -1);
     }
 
     /**
@@ -133,13 +139,12 @@ public class OSXTrash extends QueuedTrash {
     @Override
     public int getItemCount() {
         StringBuilder output = new StringBuilder();
-        if(!AppleScript.execute(COUNT_TRASH_ITEMS_APPLESCRIPT, output))
+        if (!AppleScript.execute(COUNT_TRASH_ITEMS_APPLESCRIPT, output))
             return -1;
 
         try {
             return Integer.parseInt(output.toString().trim());
-        }
-        catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             LOGGER.debug("Caught an exception", e);
             return -1;
         }
@@ -165,18 +170,18 @@ public class OSXTrash extends QueuedTrash {
 
     /**
      * Performs the actual job of moving files to the trash using AppleScript.
-     *
+     * <p>
      * <p>The thread starts by waiting {@link OSXTrash#QUEUE_PERIOD} milliseconds before moving them to give additional
      * files a chance to be queued and regrouped as a single AppleScript call. If some files were queued during
      * that period, the thread will wait an additional {@link OSXTrash#QUEUE_PERIOD}, and so on.<p>
-     *
+     * <p>
      * <p>There are several reasons for doing that instead of executing an AppleScript synchronously for each file
      * passed to {@link OSXTrash#moveToTrash(com.mucommander.commons.file.AbstractFile)} :
      * <ul>
-     *  <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it. Calling
+     * <li>the Finder plays a sound when it has been told to move a file to the trash and is done with it. Calling
      * moveToTrash repeatedly would play the sound as many times as the method has been called (believe me it's ugly
      * and a show-stopper!)
-     *  <li>executing an AppleScript has a cost as it has to be compiled first. If moveToTrash is called repeatedly, it
+     * <li>executing an AppleScript has a cost as it has to be compiled first. If moveToTrash is called repeatedly, it
      * is more efficient to regroup files to be moved and execute only one AppleScript.
      * </ul>
      */
@@ -186,12 +191,12 @@ public class OSXTrash extends QueuedTrash {
 
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
         // script (AppleScript 2.0 / Mac OS X 10.5 or higher).
-        if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {
+        if (AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {
             int nbFiles = queuedFiles.size();
             appleScript = "tell application \"Finder\" to move {";
-            for(int i=0; i<nbFiles; i++) {
-                appleScript += "posix file \""+queuedFiles.get(i).getAbsolutePath()+"\"";
-                if(i<nbFiles-1)
+            for (int i = 0; i < nbFiles; i++) {
+                appleScript += "posix file \"" + queuedFiles.get(i).getAbsolutePath() + "\"";
+                if (i < nbFiles - 1)
                     appleScript += ", ";
             }
             appleScript += "} to the trash";
@@ -210,16 +215,16 @@ public class OSXTrash extends QueuedTrash {
                 tmpFile = FileFactory.getTemporaryFile("trash_files.muco", false);
                 tmpOut = new OutputStreamWriter(tmpFile.getOutputStream(), "utf-8");
 
-                for(int i=0; i<nbFiles; i++) {
+                for (int i = 0; i < nbFiles; i++) {
                     tmpOut.write(queuedFiles.get(i).getAbsolutePath());
-                    if(i<nbFiles-1)
+                    if (i < nbFiles - 1)
                         tmpOut.write("\n");
                 }
 
                 tmpOut.close();
 
                 // Set the 'tmpFilePath' variable to the path of the temporary file we just created
-                appleScript = "set tmpFilePath to \""+tmpFile.getAbsolutePath()+"\"\n";
+                appleScript = "set tmpFilePath to \"" + tmpFile.getAbsolutePath() + "\"\n";
                 appleScript += MOVE_TO_TRASH_APPLESCRIPT_NO_UNICODE;
 
                 boolean success = AppleScript.execute(appleScript, null);
@@ -228,20 +233,21 @@ public class OSXTrash extends QueuedTrash {
                 tmpFile.delete();
 
                 return success;
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 LOGGER.debug("Caught IOException", e);
 
-                if(tmpOut!=null) {
-                    try { tmpOut.close(); }
-                    catch(IOException e1) {
+                if (tmpOut != null) {
+                    try {
+                        tmpOut.close();
+                    } catch (IOException e1) {
                         // There's not much we can do about it
                     }
                 }
 
-                if(tmpFile!=null) {
-                    try { tmpFile.delete(); }
-                    catch(IOException e2) {
+                if (tmpFile != null) {
+                    try {
+                        tmpFile.delete();
+                    } catch (IOException e2) {
                         // There's not much we can do about it
                     }
                 }

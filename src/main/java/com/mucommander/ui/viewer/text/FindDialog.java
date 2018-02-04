@@ -34,13 +34,19 @@ import java.awt.event.ActionListener;
  */
 public class FindDialog extends FocusDialog implements ActionListener {
 
-    /** The text field where a search string can be entered */
+    /**
+     * The text field where a search string can be entered
+     */
     private JTextField findField;
 
-    /** The 'OK' button */
+    /**
+     * The 'OK' button
+     */
     private JButton okButton;
 
-    /** true if the dialog was validated by the user */
+    /**
+     * true if the dialog was validated by the user
+     */
     private boolean wasValidated;
 
     /**
@@ -52,7 +58,7 @@ public class FindDialog extends FocusDialog implements ActionListener {
         super(editorFrame, Translator.get("text_viewer.find"), editorFrame);
 
         Container contentPane = getContentPane();
-        contentPane.add(new JLabel(Translator.get("text_viewer.find")+":"), BorderLayout.NORTH);
+        contentPane.add(new JLabel(Translator.get("text_viewer.find") + ":"), BorderLayout.NORTH);
 
         findField = new JTextField(20);
         findField.addActionListener(this);
@@ -95,7 +101,7 @@ public class FindDialog extends FocusDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        wasValidated = source== okButton || source==findField;
+        wasValidated = source == okButton || source == findField;
 
         dispose();
     }

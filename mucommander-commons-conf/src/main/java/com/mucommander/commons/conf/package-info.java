@@ -18,7 +18,7 @@
  * variable's value if known.
  * </li>
  * <li>
- * {@link com.mucommander.commons.conf.Configuration#getVariable(String,String) Advanced retrieval}, which returns
+ * {@link com.mucommander.commons.conf.Configuration#getVariable(String, String) Advanced retrieval}, which returns
  * a variable's value and set it to a default value if not known.
  * </li>
  * <li>
@@ -26,7 +26,7 @@
  * whether a variable exists or not.
  * </li>
  * <li>
- * {@link com.mucommander.commons.conf.Configuration#renameVariable(String,String) Renaming}, which changes a
+ * {@link com.mucommander.commons.conf.Configuration#renameVariable(String, String) Renaming}, which changes a
  * variable's name as well as the section it belongs to.
  * </li>
  * <li>
@@ -34,7 +34,7 @@
  * the configuration.
  * </li>
  * <li>
- * {@link com.mucommander.commons.conf.Configuration#setVariable(String,String) Setting}, which sets a variable's
+ * {@link com.mucommander.commons.conf.Configuration#setVariable(String, String) Setting}, which sets a variable's
  * value.
  * </li>
  * </ul>

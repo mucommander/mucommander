@@ -18,14 +18,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableColumnModelEvent;
-import javax.swing.event.TableColumnModelListener;
-
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
@@ -35,11 +27,18 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+import java.util.Map;
+
 /**
  * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by a specified criterion.
  * If the table is already sorted by this particular criterion when the action is performed, the sort order will be
  * reversed.
- *
+ * <p>
  * <p>This action is enabled only if the corresponding column is currently visible. This prevents this action from being
  * performed when the column is not visible, which is an unsupported operation</p>.
  *
@@ -47,10 +46,12 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public abstract class SortByAction extends MuAction implements ActivePanelListener, TableColumnModelListener {
 
-    /** FileTable column this action operates on */
+    /**
+     * FileTable column this action operates on
+     */
     protected Column column;
 
-    public SortByAction(MainFrame mainFrame, Map<String,Object> properties, Column column) {
+    public SortByAction(MainFrame mainFrame, Map<String, Object> properties, Column column) {
         super(mainFrame, properties);
 
         this.column = column;
@@ -98,13 +99,13 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
 
     public void columnAdded(TableColumnModelEvent event) {
         // Enable this action when the corresponding column has been made visible
-        if(event.getFromIndex()==column.ordinal())
+        if (event.getFromIndex() == column.ordinal())
             setEnabled(true);
     }
 
     public void columnRemoved(TableColumnModelEvent event) {
         // Disable this action when the corresponding column has been made invisible
-        if(event.getFromIndex()==column.ordinal())
+        if (event.getFromIndex() == column.ordinal())
             setEnabled(false);
     }
 
@@ -132,12 +133,20 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
             this.defaultKeyStroke = defaultKeyStroke;
         }
 
-        public String getId() { return column.getSortByColumnActionId(); }
+        public String getId() {
+            return column.getSortByColumnActionId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return defaultKeyStroke; }
+        public KeyStroke getDefaultKeyStroke() {
+            return defaultKeyStroke;
+        }
     }
 }

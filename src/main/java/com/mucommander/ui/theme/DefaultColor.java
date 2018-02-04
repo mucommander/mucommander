@@ -32,18 +32,21 @@ import java.util.Vector;
  * is changed, the corresponding {@link DefaultColor} instance will catch that event and notify the current theme of the
  * change.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public abstract class DefaultColor {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** List of colors linked to this default value. */
+    /**
+     * List of colors linked to this default value.
+     */
     private java.util.List<Integer> linkedColors;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of {@link DefaultColor}.
      */
@@ -52,16 +55,17 @@ public abstract class DefaultColor {
     }
 
 
-
     // - Event propagation ---------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Notifies the current theme of a default value change to all linked colors.
+     *
      * @param color new default color value.
      */
     protected void notifyChange(Color color) {
-        for(int i : linkedColors)
-            ThemeData.triggerColorEvent(i, color);    
+        for (int i : linkedColors)
+            ThemeData.triggerColorEvent(i, color);
     }
 
     /**
@@ -70,6 +74,7 @@ public abstract class DefaultColor {
      * If the default color's value were to change, the current theme will automatically be notified of the change and
      * ultimately propagate to all registered theme listeners if necessary.
      * </p>
+     *
      * @param colorId identifier of the color that uses this instance as a default value.
      */
     public void link(Integer colorId) {
@@ -77,13 +82,14 @@ public abstract class DefaultColor {
     }
 
 
-
     // - Abstract methods ----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the color this default value represents.
-     * @param  data contains all the current theme values.
-     * @return      the color this default value represents.
+     *
+     * @param data contains all the current theme values.
+     * @return the color this default value represents.
      */
     public abstract Color getColor(ThemeData data);
 }

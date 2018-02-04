@@ -18,20 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * If there is more than one window currently open, this action disposes the currently active MainFrame
@@ -43,41 +36,49 @@ import com.mucommander.ui.main.WindowManager;
  */
 public class CloseWindowAction extends MuAction {
 
-    public CloseWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CloseWindowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
         // Closing the last window is equivalent to quitting the application: perform QuitAction in that case
-        if(WindowManager.getMainFrames().size()==1)
+        if (WindowManager.getMainFrames().size() == 1)
             ActionManager.performAction(QuitAction.Descriptor.ACTION_ID, mainFrame);
-        // Simply dispose the MainFrame
+            // Simply dispose the MainFrame
         else
             mainFrame.dispose();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new CloseWindowAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new CloseWindowAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "CloseWindow";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "CloseWindow";
 
-		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.META_DOWN_MASK); }
+        public ActionCategory getCategory() {
+            return ActionCategory.WINDOW;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.META_DOWN_MASK);
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0);
+        }
     }
 }

@@ -24,18 +24,24 @@ import java.nio.charset.Charset;
  * BOM represents a Byte-Order Mark, a byte sequence that can be found at the beginning of a Unicode text stream
  * which indicates the encoding of the text that follows.
  *
- * @see BOMInputStream
  * @author Maxence Bernard
+ * @see BOMInputStream
  */
 public class BOM {
 
-    /** the byte sequence that identifies this BOM */
+    /**
+     * the byte sequence that identifies this BOM
+     */
     private byte[] sig;
 
-    /** the character encoding denoted by this BOM */
+    /**
+     * the character encoding denoted by this BOM
+     */
     private String encoding;
 
-    /** character encoding aliases that map onto this BOM */
+    /**
+     * character encoding aliases that map onto this BOM
+     */
     private String aliases[];
 
     /**
@@ -43,8 +49,8 @@ public class BOM {
      * character encoding.
      *
      * @param signature the byte sequence that identifies this BOM
-     * @param encoding the character encoding denoted by this BOM
-     * @param aliases character encoding aliases
+     * @param encoding  the character encoding denoted by this BOM
+     * @param aliases   character encoding aliases
      */
     BOM(byte signature[], String encoding, String[] aliases) {
         this.sig = signature;
@@ -87,11 +93,11 @@ public class BOM {
      */
     public boolean sigStartsWith(byte bytes[]) {
         int bytesLen = bytes.length;
-        if(bytesLen>sig.length)
+        if (bytesLen > sig.length)
             return false;
 
-        for(int i=0; i<bytesLen; i++) {
-            if(bytes[i]!= sig[i])
+        for (int i = 0; i < bytesLen; i++) {
+            if (bytes[i] != sig[i])
                 return false;
         }
 
@@ -105,7 +111,7 @@ public class BOM {
      * @return true if this BOM's signature matches the given byte sequence
      */
     public boolean sigEquals(byte bytes[]) {
-        return bytes.length==sig.length && sigStartsWith(bytes);
+        return bytes.length == sig.length && sigStartsWith(bytes);
     }
 
 
@@ -116,7 +122,7 @@ public class BOM {
     /**
      * Returns a {@link BOM} instance for the specified encoding, <code>null</code> if the encoding doesn't
      * have a corresponding BOM (non-Unicode encoding). The search is case-insensitive.
-     *
+     * <p>
      * <p>All UTF encoding aliases are supported, in a BOM-neutral way: a BOM is always returned, regardless of
      * whether the particular encoding requires a BOM to be used or not. For instance,
      * <code>UTF-16LE</code> and <code>UnicodeLittleUnmarked</code> will both return the {@link BOMConstants#UTF16_LE_BOM}
@@ -130,7 +136,7 @@ public class BOM {
      * have a corresponding BOM (non-Unicode encoding).
      */
     public static BOM getInstance(String encoding) {
-        if(!Charset.isSupported(encoding))
+        if (!Charset.isSupported(encoding))
             return null;
 
         Charset charset = Charset.forName(encoding);
@@ -139,8 +145,8 @@ public class BOM {
 
         String[] aliases;
 
-        for(int i=0; i<BOMConstants.SUPPORTED_BOMS.length; i++) {
-            if(BOMConstants.SUPPORTED_BOMS[i].getEncoding().equalsIgnoreCase(encoding))
+        for (int i = 0; i < BOMConstants.SUPPORTED_BOMS.length; i++) {
+            if (BOMConstants.SUPPORTED_BOMS[i].getEncoding().equalsIgnoreCase(encoding))
                 return BOMConstants.SUPPORTED_BOMS[i];
 
             aliases = BOMConstants.SUPPORTED_BOMS[i].getAliases();
@@ -165,7 +171,7 @@ public class BOM {
      * @return true if the specified Object is a BOM instance with the same signature as this instance
      */
     public boolean equals(Object o) {
-        return (o instanceof BOM) && ((BOM)o).sigEquals(sig);
+        return (o instanceof BOM) && ((BOM) o).sigEquals(sig);
     }
 
     /**
@@ -178,9 +184,9 @@ public class BOM {
 
         out = new StringBuilder(super.toString());
         out.append(", signature=");
-        for(int i=0; i < sig.length; i++) {
-            out.append(0xFF&sig[i]);
-            out.append((i==sig.length-1?"}":", "));
+        for (int i = 0; i < sig.length; i++) {
+            out.append(0xFF & sig[i]);
+            out.append((i == sig.length - 1 ? "}" : ", "));
         }
         out.append(", encoding=");
         out.append(encoding);

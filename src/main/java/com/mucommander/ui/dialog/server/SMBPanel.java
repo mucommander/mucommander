@@ -49,7 +49,7 @@ public class SMBPanel extends ServerPanel {
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";
 
-	
+
     SMBPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
         super(dialog, mainFrame);
 
@@ -83,7 +83,7 @@ public class SMBPanel extends ServerPanel {
         addRow(Translator.get("password"), passwordField, 0);
     }
 
-	
+
     private void updateValues() {
         lastServer = serverField.getText();
         lastShare = shareField.getText();
@@ -91,21 +91,21 @@ public class SMBPanel extends ServerPanel {
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
     }
-	
-	
+
+
     ////////////////////////////////
     // ServerPanel implementation //
     ////////////////////////////////
-	
+
     @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
-        FileURL url = FileURL.getFileURL(FileProtocols.SMB+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
+        FileURL url = FileURL.getFileURL(FileProtocols.SMB + "://" + lastServer + (lastShare.startsWith("/") ? "" : "/") + lastShare);
 
         // Insert the domain (if any) before the username, separated by a semicolon
         String userInfo = lastUsername;
-        if(!lastDomain.equals(""))
-            userInfo = lastDomain+";"+userInfo;
+        if (!lastDomain.equals(""))
+            userInfo = lastDomain + ";" + userInfo;
 
         url.setCredentials(new Credentials(userInfo, lastPassword));
 
@@ -116,6 +116,7 @@ public class SMBPanel extends ServerPanel {
     boolean usesCredentials() {
         return true;
     }
+
     @Override
     public void dialogValidated() {
         updateValues();

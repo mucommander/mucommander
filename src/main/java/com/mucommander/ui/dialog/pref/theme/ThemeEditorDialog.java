@@ -31,20 +31,22 @@ import java.awt.*;
 
 /**
  * Main dialog for the theme editor.
+ *
  * @author Nicolas Rinaudo
  */
 public class ThemeEditorDialog extends PreferencesDialog {
     // - Action listening -------------------------------------------------------
     // --------------------------------------------------------------------------
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(580,0);
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(620,500);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(580, 0);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(620, 500);
 
     private ThemeData data;
-    private Theme     theme;
-    private boolean   wasThemeModified;
+    private Theme theme;
+    private boolean wasThemeModified;
 
     /**
      * Creates a new theme editor dialog.
+     *
      * @param parent parent of the dialog.
      * @param theme  theme to edit.
      */
@@ -55,6 +57,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
 
     /**
      * Creates a new theme editor dialog.
+     *
      * @param parent parent of the dialog.
      * @param theme  theme to edit.
      */
@@ -63,11 +66,13 @@ public class ThemeEditorDialog extends PreferencesDialog {
         initUI(theme);
     }
 
-    private static String createTitle(Theme theme) {return Translator.get("theme_editor.title") + ": " + theme.getName();}
+    private static String createTitle(Theme theme) {
+        return Translator.get("theme_editor.title") + ": " + theme.getName();
+    }
 
     private void initUI(Theme theme) {
-        this.theme       = theme;
-        data             = theme.cloneData();
+        this.theme = theme;
+        data = theme.cloneData();
         wasThemeModified = false;
 
         addPreferencesPanel(new FolderPanePanel(this, data), false);
@@ -84,6 +89,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
 
     /**
      * Edits the theme specified at creation time and returns <code>true</code> if it was modified.
+     *
      * @return <code>true</code> if the theme was modified by the user, <code>false</code> otherwise.
      */
     public boolean editTheme() {
@@ -97,9 +103,9 @@ public class ThemeEditorDialog extends PreferencesDialog {
 
         // If the theme has been modified and is not the user theme, asks the user to confirm
         // whether it's ok to overwrite his user theme.
-        if(!theme.isIdentical(data) && !theme.canModify())
-            if(new QuestionDialog(this, Translator.get("warning"), Translator.get("theme_editor.theme_warning"),
-                                  this, new String[]{Translator.get("yes"), Translator.get("no")}, new int[]{0,1}, 0).getActionValue() != 0)
+        if (!theme.isIdentical(data) && !theme.canModify())
+            if (new QuestionDialog(this, Translator.get("warning"), Translator.get("theme_editor.theme_warning"),
+                    this, new String[]{Translator.get("yes"), Translator.get("no")}, new int[]{0, 1}, 0).getActionValue() != 0)
                 return false;
         return true;
     }
@@ -108,12 +114,12 @@ public class ThemeEditorDialog extends PreferencesDialog {
     public void commit() {
         super.commit();
 
-        if(!theme.isIdentical(data)) {
+        if (!theme.isIdentical(data)) {
             wasThemeModified = true;
 
             try {
                 // If the theme cannot be modified, overwrites the user theme with the new data.
-                if(!theme.canModify()) {
+                if (!theme.canModify()) {
                     boolean updateCurrentTheme;
 
                     updateCurrentTheme = ThemeManager.isCurrentTheme(theme);
@@ -123,7 +129,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
                     setTitle(createTitle(theme));
 
                     // If the old theme was the current one, switch to 'user theme'.
-                    if(updateCurrentTheme)
+                    if (updateCurrentTheme)
                         ThemeManager.setCurrentTheme(theme);
                 }
 
@@ -132,18 +138,17 @@ public class ThemeEditorDialog extends PreferencesDialog {
                     theme.importData(data);
                     ThemeManager.writeTheme(theme);
                 }
-            }
-            catch(Exception exception) {
+            } catch (Exception exception) {
                 try {
                     InformationDialog.showErrorDialog(this, Translator.get("write_error"), Translator.get("cannot_write_file", ThemeManager.getUserThemeFile().getAbsolutePath()));
+                } catch (Exception e) {
                 }
-                catch(Exception e) {}
             }
         }
     }
-    
+
     @Override
     public void componentChanged(PrefComponent component) {
-		setCommitButtonsEnabled(!theme.isIdentical(data));
-	}
+        setCommitButtonsEnabled(!theme.isIdentical(data));
+    }
 }

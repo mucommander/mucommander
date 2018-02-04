@@ -44,8 +44,8 @@ import java.util.Map;
  * @see CredentialsWriter
  */
 class CredentialsParser extends DefaultHandler implements CredentialsConstants {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsParser.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsParser.class);
+
     // Variables used for XML parsing
     private FileURL url;
     private Map<String, String> urlProperties;
@@ -53,10 +53,14 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     private String password;
     private StringBuilder characters;
 
-    /** muCommander version that was used to write the credentials file */
+    /**
+     * muCommander version that was used to write the credentials file
+     */
     private String version;
 
-    /** Contains the encryption method used to encrypt/decrypt passwords */
+    /**
+     * Contains the encryption method used to encrypt/decrypt passwords
+     */
     private String encryptionMethod;
 
 
@@ -75,11 +79,14 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
         in = null;
         characters = new StringBuilder();
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
+        try {
+            SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                }
             }
         }
     }
@@ -105,7 +112,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         characters.setLength(0);
 
-        if(qName.equals(ELEMENT_CREDENTIALS)) {
+        if (qName.equals(ELEMENT_CREDENTIALS)) {
             // Reset parsing variables
             url = null;
             urlProperties = null;
@@ -113,13 +120,13 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             password = null;
         }
         // Property element (properties will be set when credentials element ends
-        else if(qName.equals(ELEMENT_PROPERTY)) {
-            if(urlProperties==null)
+        else if (qName.equals(ELEMENT_PROPERTY)) {
+            if (urlProperties == null)
                 urlProperties = new Hashtable<String, String>();
             urlProperties.put(attributes.getValue(ATTRIBUTE_NAME), attributes.getValue(ATTRIBUTE_VALUE));
         }
         // Root element, the 'encryption' attribute specifies which encoding was used to encrypt passwords
-        else if(qName.equals(ELEMENT_ROOT)) {
+        else if (qName.equals(ELEMENT_ROOT)) {
             encryptionMethod = attributes.getValue("encryption");
             version = attributes.getValue(ATTRIBUTE_VERSION);
         }
@@ -127,37 +134,37 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if(qName.equals(ELEMENT_CREDENTIALS)) {
-            if(url ==null || login ==null || password ==null) {
-                LOGGER.info("Missing value, credentials ignored: url="+ url +" login="+ login);
+        if (qName.equals(ELEMENT_CREDENTIALS)) {
+            if (url == null || login == null || password == null) {
+                LOGGER.info("Missing value, credentials ignored: url=" + url + " login=" + login);
                 return;
             }
 
             // Copy properties into FileURL instance (if any)
-            if(urlProperties!=null) {
-                for(String key: urlProperties.keySet())
+            if (urlProperties != null) {
+                for (String key : urlProperties.keySet())
                     url.setProperty(key, urlProperties.get(key));
             }
 
             // Decrypt password
-            try {password = XORCipher.decryptXORBase64(password);}
-            catch(IOException e) {
-                LOGGER.info("Password could not be decrypted: "+ password +", credentials will be ignored");
+            try {
+                password = XORCipher.decryptXORBase64(password);
+            } catch (IOException e) {
+                LOGGER.info("Password could not be decrypted: " + password + ", credentials will be ignored");
                 return;
             }
 
             // Add credentials to persistent credentials list
             CredentialsManager.getPersistentCredentialMappings().add(new CredentialsMapping(new Credentials(login, password), url, true));
-        }
-        else if(qName.equals(ELEMENT_URL)) {
-            try {url = FileURL.getFileURL(characters.toString().trim());}
-            catch(MalformedURLException e) {
-                LOGGER.info("Malformed URL: "+characters+", location will be ignored");
+        } else if (qName.equals(ELEMENT_URL)) {
+            try {
+                url = FileURL.getFileURL(characters.toString().trim());
+            } catch (MalformedURLException e) {
+                LOGGER.info("Malformed URL: " + characters + ", location will be ignored");
             }
-        }
-        else if(qName.equals(ELEMENT_LOGIN))
+        } else if (qName.equals(ELEMENT_LOGIN))
             login = characters.toString().trim();
-        else if(qName.equals(ELEMENT_PASSWORD))
+        else if (qName.equals(ELEMENT_PASSWORD))
             password = characters.toString().trim();
     }
 

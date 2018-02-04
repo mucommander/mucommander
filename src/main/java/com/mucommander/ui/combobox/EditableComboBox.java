@@ -30,31 +30,39 @@ import java.util.WeakHashMap;
 
 /**
  * EditableComboBox is an editable combo box (really!) that can use a specified JTextField to be used as the editor.
- *
+ * <p>
  * <p>EditableComboBox also extends JComboBox to make it much easier to use, instead of having to work around its
  * numerous bugs and weird behavior (understatement). Registering a {@link EditableComboBoxListener} makes it
  * easy to know for sure when an item has been selected from the combo popup menu, or when the text field has been
  * validated ('Enter' key pressed) or cancelled ('Escape' key pressed). It is strongly recommanded to use this interface
  * instead of ActionListener / ItemListener, their already erratic behavior could be further aggravated by the tweakings
  * used in this class.
- *
+ * <p>
  * <p>The {@link #setComboSelectionUpdatesTextField(boolean)} method allows to automatically replace the text field's
  * contents when an item is selected from the associated combo box, replacing its value by the selected item's
  * string representation. This feature is disabled by default.
  *
- * @see EditableComboBoxListener
  * @author Maxence Bernard
+ * @see EditableComboBoxListener
  */
 public class EditableComboBox extends SaneComboBox {
-    /** Used to render the content of the combo box. */
+    /**
+     * Used to render the content of the combo box.
+     */
     private ComboBoxCellRenderer renderer;
-    /** The text field used as the combo box's editor */
+    /**
+     * The text field used as the combo box's editor
+     */
     private JTextField textField;
 
-    /** Contains all registered EditableComboBoxListener instances, stored as weak references */
+    /**
+     * Contains all registered EditableComboBoxListener instances, stored as weak references
+     */
     private WeakHashMap<EditableComboBoxListener, Object> listeners = new WeakHashMap<EditableComboBoxListener, Object>();
 
-    /** Specifies whether the text field's contents is updated when an item is selected in the associated combo box */
+    /**
+     * Specifies whether the text field's contents is updated when an item is selected in the associated combo box
+     */
     private boolean comboSelectionUpdatesTextField;
 
 
@@ -70,7 +78,7 @@ public class EditableComboBox extends SaneComboBox {
      * Creates a new editable combo box using the given text field as the editor.
      *
      * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
+     *                  will be created and used.
      */
     public EditableComboBox(JTextField textField) {
         init(textField);
@@ -79,8 +87,8 @@ public class EditableComboBox extends SaneComboBox {
     /**
      * Creates a new editable combo box using the given text field as the editor and ComboBoxModel.
      *
-     * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
+     * @param textField     the text field to be used as the combo box's editor. If null, a new JTextField instance
+     *                      will be created and used.
      * @param comboBoxModel the ComboBoxModel to use for this combo box
      */
     public EditableComboBox(JTextField textField, ComboBoxModel comboBoxModel) {
@@ -92,8 +100,8 @@ public class EditableComboBox extends SaneComboBox {
      * Creates a new editable combo box using the given text field as the editor and items to populate the initial items list.
      *
      * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
-     * @param items items used to populate the initial items list.
+     *                  will be created and used.
+     * @param items     items used to populate the initial items list.
      */
     public EditableComboBox(JTextField textField, Object[] items) {
         super(items);
@@ -104,8 +112,8 @@ public class EditableComboBox extends SaneComboBox {
      * Creates a new editable combo box using the given text field as the editor and items to populate the initial items list.
      *
      * @param textField the text field to be used as the combo box's editor. If null, a new JTextField instance
-     * will be created and used.
-     * @param items items used to populate the initial items list.
+     *                  will be created and used.
+     * @param items     items used to populate the initial items list.
      */
     public EditableComboBox(JTextField textField, Vector<Object> items) {
         super(items);
@@ -116,7 +124,9 @@ public class EditableComboBox extends SaneComboBox {
     /**
      * Returns the text field used as the combo box's editor.
      */
-    public JTextField getTextField() {return textField;}
+    public JTextField getTextField() {
+        return textField;
+    }
 
 
     /**
@@ -145,7 +155,7 @@ public class EditableComboBox extends SaneComboBox {
     private void init(JTextField textField) {
         setRenderer(renderer = new ComboBoxCellRenderer());
         // Create a new JTextField if no text field was specified
-        if(textField==null) {
+        if (textField == null) {
             this.textField = new JTextField();
         }
         // Use the specified text field
@@ -154,11 +164,11 @@ public class EditableComboBox extends SaneComboBox {
 
         // Use a custom editor that uses the text field
         setEditor(new BasicComboBoxEditor() {
-                @Override
-                public Component getEditorComponent() {
-                    return EditableComboBox.this.textField;
-                }
-            });
+            @Override
+            public Component getEditorComponent() {
+                return EditableComboBox.this.textField;
+            }
+        });
 
         // Make this combo box editable
         setEditable(true);
@@ -177,14 +187,13 @@ public class EditableComboBox extends SaneComboBox {
                 int keyCode = keyEvent.getKeyCode();
 
                 // Combo popup menu is visible
-                if(isPopupVisible()) {
-                    if(keyCode==KeyEvent.VK_ENTER) {
+                if (isPopupVisible()) {
+                    if (keyCode == KeyEvent.VK_ENTER) {
                         // Under Java 1.5 or lower, we need to explicitely hide the popup.
-                        if(JavaVersion.JAVA_1_5.isCurrentOrLower())
+                        if (JavaVersion.JAVA_1_5.isCurrentOrLower())
                             hidePopup();
                         // Note that since the event is not consumed, JComboBox will catch it and fire
-                    }
-                    else if(keyCode==KeyEvent.VK_ESCAPE) {
+                    } else if (keyCode == KeyEvent.VK_ESCAPE) {
                         // Explicitely hide popup menu, JComboBox does not seem do it automatically (at least under Mac OS X + Java 1.5 and Java 1.4)
                         hidePopup();
                         // Consume the event so that it is not propagated, since dialogs catch this event to close the window
@@ -193,13 +202,12 @@ public class EditableComboBox extends SaneComboBox {
                 }
                 // Combo popup menu is not visible, these events really belong to the text field
                 else {
-                    if(keyCode==KeyEvent.VK_ENTER) {
+                    if (keyCode == KeyEvent.VK_ENTER) {
                         // Notify listeners that the text field has been validated
                         fireComboFieldValidated();
                         // /!\ Consume the event so to prevent JComboBox from firing an ActionEvent (default JComboBox behavior)
                         keyEvent.consume();
-                    }
-                    else if(keyCode==KeyEvent.VK_ESCAPE) {
+                    } else if (keyCode == KeyEvent.VK_ESCAPE) {
                         // Notify listeners that the text field has been cancelled
                         fireComboFieldCancelled();
                     }
@@ -215,7 +223,7 @@ public class EditableComboBox extends SaneComboBox {
 
     /**
      * Adds the specified EditableComboBoxListener to the list of registered listeners.
-     *
+     * <p>
      * <p>Listeners are stored as weak references so {@link #removeEditableComboBoxListener(EditableComboBoxListener)}
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.
      *
@@ -239,14 +247,14 @@ public class EditableComboBox extends SaneComboBox {
 
     /**
      * Overrides {@link SaneComboBox#fireComboBoxSelectionChanged()} to set the text field's contents to the item that
-     * has been selected, if {@link #setComboSelectionUpdatesTextField(boolean)} has been enabled.  
+     * has been selected, if {@link #setComboSelectionUpdatesTextField(boolean)} has been enabled.
      */
     @Override
     protected void fireComboBoxSelectionChanged() {
-        if(comboSelectionUpdatesTextField) {
+        if (comboSelectionUpdatesTextField) {
             // Replace the text field's contents by the selected item's string representation,
             // only if this feature has been enabled
-            if(getSelectedIndex() != -1)
+            if (getSelectedIndex() != -1)
                 textField.setText(getSelectedItem().toString());
         }
 
@@ -257,13 +265,13 @@ public class EditableComboBox extends SaneComboBox {
     /**
      * Notifies all registered EditableComboBoxListener instances that the text field has been validated, that is
      * the 'Enter' key has been pressed in the text field, without the popup menu being visible.
-     *
+     * <p>
      * <p>Note: Unlike JComboBox's weird ActionEvent handling, this event is *not* fired when 'Enter' is pressed
      * in the combo popup menu.
      */
     protected void fireComboFieldValidated() {
         // Iterate on all listeners
-        for(EditableComboBoxListener listener: listeners.keySet())
+        for (EditableComboBoxListener listener : listeners.keySet())
             listener.textFieldValidated(this);
     }
 
@@ -271,12 +279,12 @@ public class EditableComboBox extends SaneComboBox {
     /**
      * Notifies all registered EditableComboBoxListener instances that the text field has been cancelled, that is
      * the 'Escape' key has been pressed in the text field, without the popup menu being visible.
-     *
+     * <p>
      * <p>Note: This event is *not* fired when 'Escape' is pressed in the combo popup menu.
      */
     protected void fireComboFieldCancelled() {
         // Iterate on all listeners
-        for(EditableComboBoxListener listener: listeners.keySet())
+        for (EditableComboBoxListener listener : listeners.keySet())
             listener.textFieldCancelled(this);
     }
 
@@ -285,8 +293,8 @@ public class EditableComboBox extends SaneComboBox {
     // -----------------------------------------------------------------------------------
     @Override
     public void setForeground(Color color) {
-        if(renderer == null)
-	    super.setForeground(color);
+        if (renderer == null)
+            super.setForeground(color);
         else {
             renderer.setForeground(color);
             textField.setForeground(color);
@@ -295,8 +303,8 @@ public class EditableComboBox extends SaneComboBox {
 
     @Override
     public void setBackground(Color color) {
-        if(renderer == null)
-	    super.setBackground(color);
+        if (renderer == null)
+            super.setBackground(color);
         else {
             renderer.setBackground(color);
             textField.setBackground(color);
@@ -304,23 +312,23 @@ public class EditableComboBox extends SaneComboBox {
     }
 
     public void setSelectionForeground(Color color) {
-        if(renderer != null) {
+        if (renderer != null) {
             renderer.setSelectionForeground(color);
             textField.setSelectedTextColor(color);
         }
     }
 
     public void setSelectionBackground(Color color) {
-        if(renderer != null) {
+        if (renderer != null) {
             renderer.setSelectionBackground(color);
-	    textField.setSelectionColor(color);
+            textField.setSelectionColor(color);
         }
     }
 
     @Override
     public void setFont(Font font) {
         super.setFont(font);
-        if(renderer != null) {
+        if (renderer != null) {
             renderer.setFont(font);
             textField.setFont(font);
         }

@@ -42,32 +42,32 @@ public class DurationFormat {
 
 
     public static String format(long durationMs) {
-        if(durationMs/1000>Integer.MAX_VALUE)
+        if (durationMs / 1000 > Integer.MAX_VALUE)
             return INFINITE;
 
-        int remainderSec = Math.round(((float)durationMs)/1000);
+        int remainderSec = Math.round(((float) durationMs) / 1000);
         String s = "";
 
         String keys[] = new String[]{YEARS_KEY, MONTHS_KEY, DAYS_KEY, HOURS_KEY, MINUTES_KEY};
         int seconds[] = new int[]{SECONDS_IN_YEAR, SECONDS_IN_MONTH, SECONDS_IN_DAY, SECONDS_IN_HOUR, SECONDS_IN_MINUTE};
 
-        for(int i=0; i<5; i++) {
-            int n = remainderSec/seconds[i];
-            if(n>0) {
-                if(!s.equals(""))
+        for (int i = 0; i < 5; i++) {
+            int n = remainderSec / seconds[i];
+            if (n > 0) {
+                if (!s.equals(""))
                     s += " ";
 
-                s += Translator.get(keys[i], ""+n);
-                remainderSec = remainderSec%seconds[i];
+                s += Translator.get(keys[i], "" + n);
+                remainderSec = remainderSec % seconds[i];
             }
         }
 
         // Don't add second part if equal to 0, unless this is the only part
-        if(remainderSec>0 || s.equals("")) {
-            if(remainderSec==0)
-                s = "<"+Translator.get(SECONDS_KEY, "1");
+        if (remainderSec > 0 || s.equals("")) {
+            if (remainderSec == 0)
+                s = "<" + Translator.get(SECONDS_KEY, "1");
             else
-                s += (s.equals("")?"":" ")+Translator.get(SECONDS_KEY, ""+remainderSec);
+                s += (s.equals("") ? "" : " ") + Translator.get(SECONDS_KEY, "" + remainderSec);
         }
 
         return s;
@@ -80,7 +80,7 @@ public class DurationFormat {
     public static String getInfiniteSymbol() {
         return INFINITE;
     }
-    
+
 
 //    public static void main(String args[]) {
 //        // 0s

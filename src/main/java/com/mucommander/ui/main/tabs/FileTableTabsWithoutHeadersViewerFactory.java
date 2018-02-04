@@ -25,23 +25,23 @@ import com.mucommander.ui.tabs.TabsViewer;
 import com.mucommander.ui.tabs.TabsViewerFactory;
 
 /**
-* Factory that creates viewers presenting tabs with no header
-* 
-* @author Arik Hadas
-*/
+ * Factory that creates viewers presenting tabs with no header
+ *
+ * @author Arik Hadas
+ */
 public class FileTableTabsWithoutHeadersViewerFactory implements TabsViewerFactory<FileTableTab> {
 
-	private FolderPanel folderPanel;
-	
-	public FileTableTabsWithoutHeadersViewerFactory(FolderPanel folderPanel) {
-		this.folderPanel = folderPanel;
-	}
+    private FolderPanel folderPanel;
 
-	/***********************************
-	 * TabsViewerFactory Implementation
-	 ***********************************/
+    public FileTableTabsWithoutHeadersViewerFactory(FolderPanel folderPanel) {
+        this.folderPanel = folderPanel;
+    }
 
-	public TabsViewer<FileTableTab> create(TabsCollection<FileTableTab> tabs) {
-		return new TabWithoutHeaderViewer<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
-	}
+    /***********************************
+     * TabsViewerFactory Implementation
+     ***********************************/
+
+    public TabsViewer<FileTableTab> create(TabsCollection<FileTableTab> tabs) {
+        return new TabWithoutHeaderViewer<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
+    }
 }

@@ -28,57 +28,56 @@ import java.awt.*;
 /**
  * A renderer for the directory tree. It renders model's items (which are
  * AbstractFiles), using file names. It also renders a correct icon for a folder.
- * 
+ *
  * @author Mariusz Jakubowski
- * 
  */
 public class FoldersTreeRenderer extends DefaultTreeCellRenderer {
 
     private JTree tree;
     private FilesTreeModel model;
-    
-	public FoldersTreeRenderer(JTree tree) {
+
+    public FoldersTreeRenderer(JTree tree) {
         super();
         this.tree = tree;
         this.model = (FilesTreeModel) tree.getModel();
     }
-    
+
     @Override
     public Color getBackgroundSelectionColor() {
-    	if (tree!=null && tree.hasFocus()) {
-            return ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED];    		
-    	} else {
-            return ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.SELECTED];    		
-    	}
+        if (tree != null && tree.hasFocus()) {
+            return ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED];
+        } else {
+            return ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.SELECTED];
+        }
     }
-    
+
     @Override
     public Color getBackgroundNonSelectionColor() {
-    	if (tree!=null && tree.hasFocus()) {
-    		return ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL];
-    	} else {
-    		return ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL];
-    	}
+        if (tree != null && tree.hasFocus()) {
+            return ThemeCache.backgroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL];
+        } else {
+            return ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL];
+        }
     }
-    
+
     @Override
     public Color getForeground() {
-    	if (tree!=null && tree.hasFocus()) {
-    		return selected ? ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED][ThemeCache.FOLDER] : 
-    			ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.FOLDER];
-    	} else {
-    		return selected ? ThemeCache.foregroundColors[ThemeCache.INACTIVE][ThemeCache.SELECTED][ThemeCache.FOLDER] : 
-    			ThemeCache.foregroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL][ThemeCache.FOLDER];
-    	}
+        if (tree != null && tree.hasFocus()) {
+            return selected ? ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.SELECTED][ThemeCache.FOLDER] :
+                    ThemeCache.foregroundColors[ThemeCache.ACTIVE][ThemeCache.NORMAL][ThemeCache.FOLDER];
+        } else {
+            return selected ? ThemeCache.foregroundColors[ThemeCache.INACTIVE][ThemeCache.SELECTED][ThemeCache.FOLDER] :
+                    ThemeCache.foregroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL][ThemeCache.FOLDER];
+        }
     }
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
-            boolean sel, boolean expanded, boolean leaf, int row,
-            boolean hasFocus) {
+                                                  boolean sel, boolean expanded, boolean leaf, int row,
+                                                  boolean hasFocus) {
         // get file name and create default component (JLabel) to display it
         AbstractFile file = (AbstractFile) value;
-        String name = file.isRoot()?file.getAbsolutePath():file.getName();
+        String name = file.isRoot() ? file.getAbsolutePath() : file.getName();
         super.getTreeCellRendererComponent(tree, name, sel, expanded, leaf,
                 row, hasFocus);
         setIcon(model.getCurrentIcon(file));

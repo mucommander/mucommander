@@ -32,7 +32,7 @@ import java.util.zip.ZipException;
  * Reimplementation of {@link java.util.zip.ZipOutputStream java.util.zip.ZipOutputStream} that handles the extended
  * functionality of this package, especially internal/external file attributes and extra fields with different layouts
  * for local file data and central directory entries.
- *
+ * <p>
  * <p>--------------------------------------------------------------------------------------------------------------<br>
  * <br>
  * This class is based off the <code>org.apache.tools.zip</code> package of the <i>Apache Ant</i> project. The Ant
@@ -43,64 +43,104 @@ import java.util.zip.ZipException;
  */
 public class ZipOutputStream extends OutputStream implements ZipConstants {
 
-    /** Current entry */
+    /**
+     * Current entry
+     */
     private ZipEntry entry;
 
-    /** Current ZipEntryOutputStream corresponding to the entry being written */
+    /**
+     * Current ZipEntryOutputStream corresponding to the entry being written
+     */
     private ZipEntryOutputStream zeos;
 
-    /** Additional info about current entry */
+    /**
+     * Additional info about current entry
+     */
     private ZipEntryInfo entryInfo;
 
-    /** The global zip file comment */
+    /**
+     * The global zip file comment
+     */
     private String comment = "";
 
-    /** Compression level for zip entries */
+    /**
+     * Compression level for zip entries
+     */
     private int level = DEFAULT_DEFLATER_COMPRESSION;
 
-    /** Compression method zip entries */
+    /**
+     * Compression method zip entries
+     */
     private int method = DEFLATED;
 
-    /** Deflater instance that is used to compress DEFLATED entries */
+    /**
+     * Deflater instance that is used to compress DEFLATED entries
+     */
     protected Deflater deflater = new Deflater(level, true);
 
-    /** Buffer used by Deflater to deflate data */
+    /**
+     * Buffer used by Deflater to deflate data
+     */
     protected byte[] deflaterBuf;
 
-    /** List of zip entries written so far */
+    /**
+     * List of zip entries written so far
+     */
     private Vector<ZipEntry> entries = new Vector<ZipEntry>();
 
-    /** Count the bytes written to out */
+    /**
+     * Count the bytes written to out
+     */
     private long written = 0;
 
-    /** The encoding to use for filenames and the file comment, UTF-8 by default */
+    /**
+     * The encoding to use for filenames and the file comment, UTF-8 by default
+     */
     private String encoding = UTF_8;
 
-    /** Holds byte buffer instance used to convert short and longs, avoids creating lots of small arrays */
+    /**
+     * Holds byte buffer instance used to convert short and longs, avoids creating lots of small arrays
+     */
     private ZipBuffer zipBuffer = new ZipBuffer();
 
-    /** 0 (zero) as ZipShort */
+    /**
+     * 0 (zero) as ZipShort
+     */
     private static final byte[] SHORT_0 = ZipShort.getBytes(0);
 
-    /** 0 (zero) as ZipLong */
+    /**
+     * 0 (zero) as ZipLong
+     */
     private static final byte[] LONG_0 = ZipLong.getBytes(0);
 
-    /** Three ZipLong zeros */
+    /**
+     * Three ZipLong zeros
+     */
     private static final byte[] LONG_TRIPLE_0 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    /** 8 as ZipShort */
+    /**
+     * 8 as ZipShort
+     */
     private static final byte[] SHORT_8 = ZipShort.getBytes(8);
 
-    /** 10 as ZipShort */
+    /**
+     * 10 as ZipShort
+     */
     private static final byte[] SHORT_10 = ZipShort.getBytes(10);
 
-    /** 20 as ZipShort */
+    /**
+     * 20 as ZipShort
+     */
     private static final byte[] SHORT_20 = ZipShort.getBytes(20);
 
-    /** 2048 as ZipShort */
+    /**
+     * 2048 as ZipShort
+     */
     private static final byte[] SHORT_2048 = ZipShort.getBytes(2048);
 
-    /** 2056 as ZipShort */
+    /**
+     * 2056 as ZipShort
+     */
     private static final byte[] SHORT_2056 = ZipShort.getBytes(2056);
 
 
@@ -142,7 +182,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
 
     /**
      * The encoding to use for filenames and the file comment.
-     *
+     * <p>
      * <p>For a list of possible values see <a
      * href="http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html">http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html</a>.
      * Defaults to the platform's default character encoding.</p>
@@ -170,7 +210,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @return true if the given encoding is either "UTF-8", "UTF8" or null
      */
     private static boolean isUTF8(String encoding) {
-        return encoding==null || encoding.equalsIgnoreCase("UTF-8") || encoding.equalsIgnoreCase("UTF8");
+        return encoding == null || encoding.equalsIgnoreCase("UTF-8") || encoding.equalsIgnoreCase("UTF8");
     }
 
     /**
@@ -184,8 +224,8 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         long cdOffset = written;
         int nbEntries = entries.size();
         ZipEntry ze;
-        for (int i=0; i <nbEntries; i++) {
-            ze =  entries.elementAt(i);
+        for (int i = 0; i < nbEntries; i++) {
+            ze = entries.elementAt(i);
             written += writeCentralFileHeader(ze, out, encoding, ze.getEntryInfo().headerOffset, !hasRandomAccess, zipBuffer);
         }
         long cdLength = written - cdOffset;
@@ -206,7 +246,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         finalizeEntryData(entry, zeos, out, !hasRandomAccess, zipBuffer);
         written += entry.getCompressedSize();
 
-        if(!hasRandomAccess)
+        if (!hasRandomAccess)
             written += writeDataDescriptor(entry, out, zipBuffer);
 
         entry = null;
@@ -219,30 +259,29 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Writes the size and CRC information of an entry. This method is to be called right after a file entry's data
      * has been written.
-     *
+     * <p>
      * <p>The size and CRC information is written to the given <code>OutputStream</code>, either as a data descriptor or
      * in the entry's local file header, and is set in the given {@link ZipEntry} instance.
      *
-     * @param entry the entry
-     * @param zeos the Zip entry's output stream
-     * @param out the
+     * @param entry             the entry
+     * @param zeos              the Zip entry's output stream
+     * @param out               the
      * @param useDataDescriptor if true, a data descriptor will be written to out. If false, size and CRC information
-     * will be written in the local file header (requires out to be a RandomAccessOutputStream).
-     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
+     *                          will be written in the local file header (requires out to be a RandomAccessOutputStream).
+     * @param zipBuffer         a ZipBuffer instance used to convert integer values to Zip variants
      * @throws IOException if an I/O error occurred
      */
     protected static void finalizeEntryData(ZipEntry entry, ZipEntryOutputStream zeos, OutputStream out, boolean useDataDescriptor, ZipBuffer zipBuffer) throws IOException {
         long crc = zeos.getCrc();
 
         if (entry.getMethod() == DEFLATED) {
-            ((DeflatedOutputStream)zeos).finishDeflate();
+            ((DeflatedOutputStream) zeos).finishDeflate();
 
             entry.setSize(adjustToLong(zeos.getTotalIn()));
             long compressedSize = adjustToLong(zeos.getTotalOut());
             entry.setCompressedSize(compressedSize);
             entry.setCrc(crc);
-        }
-        else {      // Method is STORED
+        } else {      // Method is STORED
             long size = zeos.getTotalOut();
 
             entry.setSize(size);
@@ -253,7 +292,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         // If random access output, write the local file header containing
         // the correct CRC and compressed/uncompressed sizes
         if (!useDataDescriptor) {
-            RandomAccessOutputStream raos = (RandomAccessOutputStream)out;
+            RandomAccessOutputStream raos = (RandomAccessOutputStream) out;
 
             long save = raos.getOffset();
 
@@ -292,13 +331,12 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
             entry.setTime(System.currentTimeMillis());
         }
 
-        if(entryMethod == DEFLATED) {
+        if (entryMethod == DEFLATED) {
             deflater.reset();
             deflater.setLevel(level);
 
             zeos = new DeflatedOutputStream(out, deflater, deflaterBuf);
-        }
-        else {
+        } else {
             zeos = new StoredOutputStream(out);
         }
 
@@ -318,7 +356,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
 
     /**
      * Sets the compression level for subsequent entries.
-     *
+     * <p>
      * <p>Default is Deflater.DEFAULT_COMPRESSION.</p>
      *
      * @param level the compression level.
@@ -326,16 +364,16 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      */
     public void setLevel(int level) {
         if (level < Deflater.DEFAULT_COMPRESSION
-            || level > Deflater.BEST_COMPRESSION) {
+                || level > Deflater.BEST_COMPRESSION) {
             throw new IllegalArgumentException(
-                "Invalid compression level: " + level);
+                    "Invalid compression level: " + level);
         }
         this.level = level;
     }
 
     /**
      * Sets the default compression method for subsequent entries.
-     *
+     * <p>
      * <p>Default is DEFLATED.</p>
      *
      * @param method an <code>int</code> from java.util.zip.ZipEntry
@@ -347,13 +385,13 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Writes the local file header entry.
      *
-     * @param ze the entry to write
-     * @param out the OutputStream to write the header to
-     * @param encoding the encoding to use for writing the entry's filename. If UTF-8 is used, the general purpose bit
-     * flag will be set accordingly.
+     * @param ze                the entry to write
+     * @param out               the OutputStream to write the header to
+     * @param encoding          the encoding to use for writing the entry's filename. If UTF-8 is used, the general purpose bit
+     *                          flag will be set accordingly.
      * @param useDataDescriptor indicates whether a data descriptor will follow the file entry's data. The general
-     * purpose bit flag will be set accordingly.
-     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
+     *                          purpose bit flag will be set accordingly.
+     * @param zipBuffer         a ZipBuffer instance used to convert integer values to Zip variants
      * @return the size (number of bytes) of the written local file header
      * @throws IOException if an I/O error occurred
      */
@@ -414,8 +452,8 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * given ZipEntry.
      * The length of the field is returned, it is always 16 bytes.
      *
-     * @param ze the entry for which to write the data descriptor
-     * @param out the OutputStream where to write the data descriptor to
+     * @param ze        the entry for which to write the data descriptor
+     * @param out       the OutputStream where to write the data descriptor to
      * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @return the number of bytes that were written, i.e. the size of the data descriptor (16 bytes)
      * @throws IOException if an I/O error occurred
@@ -433,8 +471,8 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * Writes central file header's 'Version made by' field, using the platform contained in the given ZipEntry.
      * The length of the field is returned, it is always 2 bytes.
      *
-     * @param ze the entry for which to write the 'Version made by' field
-     * @param out the OutputStream where to write the field
+     * @param ze        the entry for which to write the 'Version made by' field
+     * @param out       the OutputStream where to write the field
      * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @return the number of bytes that were written, i.e. the size of the 'Version made by' field (2 bytes)
      * @throws IOException if an I/O error occurred
@@ -448,14 +486,14 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Writes the central file header for the given entry.
      *
-     * @param ze the entry for which to write the central file header
-     * @param out the OutputStream to write the central file header to
-     * @param encoding the encoding to use for writing the filename and optional comment
+     * @param ze                    the entry for which to write the central file header
+     * @param out                   the OutputStream to write the central file header to
+     * @param encoding              the encoding to use for writing the filename and optional comment
      * @param localFileHeaderOffset the offset to the local file header start
-     * @param useDataDescriptor true if a data descriptor is used for the entry
-     * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
+     * @param useDataDescriptor     true if a data descriptor is used for the entry
+     * @param zipBuffer             a ZipBuffer instance used to convert integer values to Zip variants
+     * @return the number of bytes that were written, i.e. the size of the central file header
      * @throws IOException if an I/O error occurred
-     * @return the number of bytes that were written, i.e. the size of the central file header 
      */
     protected static long writeCentralFileHeader(ZipEntry ze, OutputStream out, String encoding, long localFileHeaderOffset, boolean useDataDescriptor, ZipBuffer zipBuffer) throws IOException {
         out.write(CFH_SIG);
@@ -542,8 +580,8 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Writes the 'version needed to extract' (2 bytes) and 'general purpose bit flag' (2 bytes) fields.
      *
-     * @param out the OutputStream to write the fields to
-     * @param encoding the encoding used for writing the filename and optional comment
+     * @param out               the OutputStream to write the fields to
+     * @param encoding          the encoding used for writing the filename and optional comment
      * @param useDataDescriptor true if a data descriptor is used for the entry
      * @return the number of bytes that were written, i.e. 4
      * @throws IOException if an I/O error occurred
@@ -560,19 +598,18 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
             out.write(SHORT_20);
 
             // General purpose bit flag
-            out.write(isUTF8?
-                SHORT_2056                  // Bit 3 | Bit 11 = 2056
-                :SHORT_8                    // Bit 3          = 8
+            out.write(isUTF8 ?
+                    SHORT_2056                  // Bit 3 | Bit 11 = 2056
+                    : SHORT_8                    // Bit 3          = 8
             );
-        }
-        else {
+        } else {
             // Version
             out.write(SHORT_10);
 
             // General purpose bit flag
-            out.write(isUTF8?
-                SHORT_2048                  // Bit 11 = 2048
-                :SHORT_0                    // No bit set
+            out.write(isUTF8 ?
+                    SHORT_2048                  // Bit 11 = 2048
+                    : SHORT_0                    // No bit set
             );
         }
 
@@ -583,12 +620,12 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Writes the end of the central directory record.
      *
-     * @param out the OutputStream to write the end of the central directory record to
+     * @param out       the OutputStream to write the end of the central directory record to
      * @param nbEntries number of entries the Zip file contains
-     * @param cdLength length (in bytes) of the central directory record
-     * @param cdOffset offset from the beginning of the Zip file to the start of the central directory record
-     * @param comment the optional Zip file comment
-     * @param encoding the encoding to use for writing the optional Zip comment
+     * @param cdLength  length (in bytes) of the central directory record
+     * @param cdOffset  offset from the beginning of the Zip file to the start of the central directory record
+     * @param comment   the optional Zip file comment
+     * @param encoding  the encoding to use for writing the optional Zip comment
      * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @throws IOException if an I/O error occurred
      */
@@ -618,7 +655,8 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Retrieve the bytes for the given String in the encoding set for
      * this Stream.
-     * @param name the string to get bytes from
+     *
+     * @param name     the string to get bytes from
      * @param encoding the encoding the string is encoded with
      * @return the bytes as a byte array
      * @throws ZipException on error
@@ -655,14 +693,14 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * compression method. If no entry is currently open, the bytes will be written as-is to the underlying
      * <code>OutputStream</code>.
      *
-     * @param b the byte array to write
+     * @param b      the byte array to write
      * @param offset the start position to write from
      * @param length the number of bytes to write
      * @throws IOException on error
      */
     @Override
     public void write(byte[] b, int offset, int length) throws IOException {
-        (zeos==null?out:zeos).write(b, offset, length);
+        (zeos == null ? out : zeos).write(b, offset, length);
     }
 
     /**
@@ -675,33 +713,34 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      */
     @Override
     public void write(byte[] b) throws IOException {
-        (zeos==null?out:zeos).write(b, 0, b.length);
+        (zeos == null ? out : zeos).write(b, 0, b.length);
     }
 
     /**
      * Writes a single byte to the current Zip entry opened with {@link #putNextEntry(ZipEntry)}, using the entry's
      * compression method. If no entry is currently open, the bytes will be written as-is to the underlying
      * <code>OutputStream</code>.
-     *
+     * <p>
      * <p>Delegates to the three arg method.</p>
+     *
      * @param b the byte to write
      * @throws IOException on error
      */
     @Override
     public void write(int b) throws IOException {
-        (zeos==null?out:zeos).write(b);
+        (zeos == null ? out : zeos).write(b);
     }
 
     /**
      * Closes this output stream and releases any system resources associated with the stream.
      *
-     * @exception IOException  if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
         finish();
 
-        if(deflaterBuf !=null) {         // Only if close() has not already been called already
+        if (deflaterBuf != null) {         // Only if close() has not already been called already
             BufferPool.releaseByteArray(deflaterBuf);
             deflaterBuf = null;
         }
@@ -712,7 +751,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /**
      * Flushes this output stream and forces any buffered output bytes to be written out to the stream.
      *
-     * @exception  IOException  if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {

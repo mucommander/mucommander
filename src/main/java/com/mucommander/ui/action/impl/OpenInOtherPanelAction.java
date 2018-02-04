@@ -18,21 +18,15 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * Opens browsable files in the inactive panel.
@@ -40,26 +34,28 @@ import com.mucommander.ui.main.table.FileTable;
  * This action is only enabled if the current selection is browsable as defined by
  * {@link com.mucommander.commons.file.AbstractFile#isBrowsable()}.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class OpenInOtherPanelAction extends SelectedFileAction {
     /**
      * Creates a new <code>OpenInOtherPanelAction</code> with the specified parameters.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public OpenInOtherPanelAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenInOtherPanelAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void activePanelChanged(FolderPanel folderPanel) {
         super.activePanelChanged(folderPanel);
-        
+
         if (mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked())
-        	setEnabled(false);
+            setEnabled(false);
     }
-    
+
     /**
      * This method is overridden to enable this action when the parent folder is selected.
      */
@@ -67,7 +63,7 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
     protected boolean getFileTableCondition(FileTable fileTable) {
         AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
 
-        return selectedFile!=null && selectedFile.isBrowsable();
+        return selectedFile != null && selectedFile.isBrowsable();
     }
 
     /**
@@ -78,34 +74,42 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
         AbstractFile file;
 
         // Retrieves the currently selected file, aborts if none (should not normally happen).
-        if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
+        if ((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
             return;
 
         // Opens the currently selected file in the inactive panel.
         mainFrame.getInactivePanel().tryChangeCurrentFolder(file);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new OpenInOtherPanelAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new OpenInOtherPanelAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenInOtherPanel";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "OpenInOtherPanel";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

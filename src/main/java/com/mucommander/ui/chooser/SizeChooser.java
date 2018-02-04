@@ -31,7 +31,7 @@ import java.util.WeakHashMap;
  * <code>SizeChooser</code> is a compound component made of a <code>JComboBox</code> and a <code>JSpinner</code> that
  * allows the user to enter a size in multiple of a selectable unit: byte, kilobyte, megabyte, ...
  * Each time the value changes, a <code>ChangeEvent</code> is fired to registered listeners.
- *
+ * <p>
  * <p>This component can also serve to enter a speed in byte/kilobyte/megabyte/... per second. This only affects the
  * units displayed, this component works in the exact same way otherwise.</p>
  *
@@ -39,22 +39,34 @@ import java.util.WeakHashMap;
  */
 public class SizeChooser extends JPanel {
 
-    /** Allows to enter a value in multiple of the current unit */
+    /**
+     * Allows to enter a value in multiple of the current unit
+     */
     private JSpinner valueSpinner;
 
-    /** Allows to select the size/speed unit */
+    /**
+     * Allows to select the size/speed unit
+     */
     private JComboBox unitComboBox;
 
-    /** Contains all registered listeners, stored as weak references */
+    /**
+     * Contains all registered listeners, stored as weak references
+     */
     private WeakHashMap<ChangeListener, ?> listeners = new WeakHashMap<ChangeListener, Object>();
 
-    /** Maximum value allowed by the spinner */
+    /**
+     * Maximum value allowed by the spinner
+     */
     private final static int MAX_SPINNER_VALUE = Integer.MAX_VALUE;
 
-    /** Value increase/decrease when clicking the spinner's up/down buttons */
+    /**
+     * Value increase/decrease when clicking the spinner's up/down buttons
+     */
     private final static int SPINNER_STEP = 100;
 
-    /** Maximum number of columns that the spinner's text field can have */
+    /**
+     * Maximum number of columns that the spinner's text field can have
+     */
     private final static int MAX_SPINNER_COLUMNS = 7;
 
 
@@ -78,16 +90,16 @@ public class SizeChooser extends JPanel {
         // If this maximum value is Integer.MAX_VALUE, the text field has 13 columns which makes it enormous.
         JComponent editor = valueSpinner.getEditor();
         if (editor instanceof JSpinner.DefaultEditor) {
-            JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
+            JTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
             int nbColumns = textField.getColumns();
-            if(nbColumns>MAX_SPINNER_COLUMNS )
-                textField.setColumns(MAX_SPINNER_COLUMNS );
+            if (nbColumns > MAX_SPINNER_COLUMNS)
+                textField.setColumns(MAX_SPINNER_COLUMNS);
         }
-        
+
         add(valueSpinner);
 
         unitComboBox = new JComboBox();
-        for(int i= SizeFormat.BYTE_UNIT; i<=SizeFormat.GIGABYTE_UNIT; i++)
+        for (int i = SizeFormat.BYTE_UNIT; i <= SizeFormat.GIGABYTE_UNIT; i++)
             unitComboBox.addItem(SizeFormat.getUnitString(i, speedUnits));
         unitComboBox.setSelectedIndex(SizeFormat.KILOBYTE_UNIT);
         unitComboBox.addItemListener(new ItemListener() {
@@ -105,13 +117,13 @@ public class SizeChooser extends JPanel {
      * @return the current value expressed in bytes
      */
     public long getValue() {
-        return SizeFormat.getUnitBytes(unitComboBox.getSelectedIndex())* (Integer) valueSpinner.getValue();
+        return SizeFormat.getUnitBytes(unitComboBox.getSelectedIndex()) * (Integer) valueSpinner.getValue();
     }
 
 
     /**
      * Adds the specified ChangedListener to the list of registered listeners.
-     *
+     * <p>
      * <p>Listeners are stored as weak references so {@link #remove}
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.
      *

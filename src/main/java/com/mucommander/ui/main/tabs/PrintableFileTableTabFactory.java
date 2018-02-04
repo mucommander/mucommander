@@ -24,71 +24,71 @@ import com.mucommander.ui.tabs.TabFactory;
 
 /**
  * Factory for creating {@link com.mucommander.ui.main.tabs.FileTableTab} for presentation in {@link com.mucommander.ui.main.quicklist.TabsQL}
- * 
+ *
  * @author Arik Hadas
  */
 public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, FileTableTab> {
 
-	public FileTableTab createTab(FileTableTab tab) {
-		return new PrintableFileTableTab(tab);
-	}
+    public FileTableTab createTab(FileTableTab tab) {
+        return new PrintableFileTableTab(tab);
+    }
 
-	/**
-	 * Implementation of the Decorator design pattern which is used to modify the way FileTableTab
-	 * is presented (by overriding its toString method) and the way it's compared to 
-	 * FileTableTabFactory.DefaultFileTableTab instances (by overriding its equals method)
-	 */
-	private class PrintableFileTableTab extends FileTableTab {
+    /**
+     * Implementation of the Decorator design pattern which is used to modify the way FileTableTab
+     * is presented (by overriding its toString method) and the way it's compared to
+     * FileTableTabFactory.DefaultFileTableTab instances (by overriding its equals method)
+     */
+    private class PrintableFileTableTab extends FileTableTab {
 
-		private FileTableTab tab;
-		
-		private PrintableFileTableTab(FileTableTab tab) {
-			this.tab = tab;
-		}
+        private FileTableTab tab;
 
-		@Override
-		public void setLocation(FileURL location) {
-			tab.setLocation(location);
-		}
+        private PrintableFileTableTab(FileTableTab tab) {
+            this.tab = tab;
+        }
 
-		@Override
-		public FileURL getLocation() {
-			return tab.getLocation();
-		}
+        @Override
+        public void setLocation(FileURL location) {
+            tab.setLocation(location);
+        }
 
-		@Override
-		public void setLocked(boolean locked) {
-			tab.setLocked(locked);
-		}
+        @Override
+        public FileURL getLocation() {
+            return tab.getLocation();
+        }
 
-		@Override
-		public boolean isLocked() {
-			return tab.isLocked();
-		}
+        @Override
+        public void setLocked(boolean locked) {
+            tab.setLocked(locked);
+        }
 
-		@Override
-		public void setTitle(String title) {
-			tab.setTitle(title);
-		}
+        @Override
+        public boolean isLocked() {
+            return tab.isLocked();
+        }
 
-		@Override
-		public String getTitle() {
-			return tab.getTitle();
-		}
+        @Override
+        public void setTitle(String title) {
+            tab.setTitle(title);
+        }
 
-		@Override
-		public LocalLocationHistory getLocationHistory() {
-			return tab.getLocationHistory();
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			return tab == obj;
-		}
-		
-		@Override
-		public String toString() {
-			return getDisplayableTitle();
-		}
-	}
+        @Override
+        public String getTitle() {
+            return tab.getTitle();
+        }
+
+        @Override
+        public LocalLocationHistory getLocationHistory() {
+            return tab.getLocationHistory();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return tab == obj;
+        }
+
+        @Override
+        public String toString() {
+            return getDisplayableTitle();
+        }
+    }
 }

@@ -18,9 +18,6 @@
 
 package com.mucommander;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
@@ -31,16 +28,21 @@ import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.ui.main.tree.TreeIOThreadManager;
 import com.mucommander.ui.theme.ThemeManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The run method of this thread is called when the program shuts down, either because
  * the user chose to quit the program or because the program was interrupted by a logoff.
+ *
  * @author Maxence Bernard
  */
 public class ShutdownHook extends Thread {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShutdownHook.class);
-	
-    /** Whether shutdown tasks have been performed already. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShutdownHook.class);
+
+    /**
+     * Whether shutdown tasks have been performed already.
+     */
     private static boolean shutdownTasksPerformed;
 
     /**
@@ -66,7 +68,7 @@ public class ShutdownHook extends Thread {
         // System.exit() will trigger ShutdownHook and perform shutdown tasks
         System.exit(0);
     }
-    
+
 
     /**
      * Called by the VM when the program shuts down, this method writes the configuration.
@@ -83,53 +85,86 @@ public class ShutdownHook extends Thread {
      */
     private synchronized static void performShutdownTasks() {
         // Return if shutdown tasks have already been performed
-        if(shutdownTasksPerformed)
+        if (shutdownTasksPerformed)
             return;
-        
+
         TreeIOThreadManager.getInstance().interrupt();
 
         // Save snapshot
-        try{MuConfigurations.saveSnapshot();}
-        catch(Exception e) {LOGGER.warn("Failed to save snapshot", e);}
-        
+        try {
+            MuConfigurations.saveSnapshot();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save snapshot", e);
+        }
+
         // Save preferences
-        try {MuConfigurations.savePreferences();}
-        catch(Exception e) {LOGGER.warn("Failed to save configuration", e);}
+        try {
+            MuConfigurations.savePreferences();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save configuration", e);
+        }
 
         // Save shell history
-        try {ShellHistoryManager.writeHistory();}
-        catch(Exception e) {LOGGER.warn("Failed to save shell history", e);}
+        try {
+            ShellHistoryManager.writeHistory();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save shell history", e);
+        }
 
         // Write credentials file to disk, only if changes were made
-        try {CredentialsManager.writeCredentials(false);}
-        catch(Exception e) {LOGGER.warn("Failed to save credentials", e);}
+        try {
+            CredentialsManager.writeCredentials(false);
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save credentials", e);
+        }
 
         // Write bookmarks file to disk, only if changes were made
-        try {BookmarkManager.writeBookmarks(false);}
-        catch(Exception e) {LOGGER.warn("Failed to save bookmarks", e);}
+        try {
+            BookmarkManager.writeBookmarks(false);
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save bookmarks", e);
+        }
 
         // Saves the current theme.
-        try {ThemeManager.saveCurrentTheme();}
-        catch(Exception e) {LOGGER.warn("Failed to save user theme", e);}
+        try {
+            ThemeManager.saveCurrentTheme();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save user theme", e);
+        }
 
         // Saves the file associations.
-        try {CommandManager.writeCommands();}
-        catch(Exception e) {LOGGER.warn("Failed to save commands", e);}
-        try {CommandManager.writeAssociations();}
-        catch(Exception e) {LOGGER.warn("Failed to save associations", e);}
-        
+        try {
+            CommandManager.writeCommands();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save commands", e);
+        }
+        try {
+            CommandManager.writeAssociations();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save associations", e);
+        }
+
         // Saves the action keymap.
-        try { ActionKeymapIO.saveActionKeymap(); }
-        catch(Exception e) {LOGGER.warn("Failed to save action keymap", e);}
-        
+        try {
+            ActionKeymapIO.saveActionKeymap();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save action keymap", e);
+        }
+
         // Saves the command bar.
-        try { CommandBarIO.saveCommandBar(); }
-        catch(Exception e) {LOGGER.warn("Failed to save command bar", e); }
-        
+        try {
+            CommandBarIO.saveCommandBar();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save command bar", e);
+        }
+
         // Saves the tool bar.
-        try { ToolBarIO.saveToolBar(); }
-        catch(Exception e) {LOGGER.warn("Failed to save toolbar", e); }
-        
+        try {
+            ToolBarIO.saveToolBar();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to save toolbar", e);
+        }
+
 
         // Shutdown tasks should only be performed once
         shutdownTasksPerformed = true;

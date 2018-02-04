@@ -27,26 +27,29 @@ import java.awt.*;
  * Care should be exercised when using this class, however: it doesn't check for infinite recursion, meaning it's
  * entirely possible to freeze muCommander by linking a font to itself as a default.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class LinkedDefaultFont extends DefaultFont implements ThemeListener {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Identifier of the current theme font to default to. */
+    /**
+     * Identifier of the current theme font to default to.
+     */
     private int id;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of {@link LinkedDefaultFont}.
+     *
      * @param id identifier of the current theme font to default to.
      */
     public LinkedDefaultFont(int id) {
         this.id = id;
     }
-
 
 
     // - DefaultFont implementation ------------------------------------------------------------------------------------
@@ -57,14 +60,13 @@ public class LinkedDefaultFont extends DefaultFont implements ThemeListener {
     }
 
 
-
     // - ThemeListener implementation ----------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public void colorChanged(ColorChangedEvent event) {
     }
 
     public void fontChanged(FontChangedEvent event) {
-        if(event.getFontId() == id)
+        if (event.getFontId() == id)
             notifyChange(event.getFont());
     }
 }

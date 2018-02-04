@@ -19,11 +19,11 @@
 package com.mucommander.utils;
 
 /**
- * This is a utility class that provides a way to pass method that would be called later 
- * 
+ * This is a utility class that provides a way to pass method that would be called later
+ *
  * @author Arik Hadas
  */
 public interface Callback {
 
-	void call();
+    void call();
 }

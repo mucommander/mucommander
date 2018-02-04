@@ -52,7 +52,7 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
     private JSpinner dateSpinner;
 
     private JCheckBox recurseDirCheckBox;
-    
+
     private JButton okButton;
     private JButton cancelButton;
 
@@ -62,12 +62,12 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ChangeDateAction.Descriptor.ACTION_ID)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ChangeDateAction.Descriptor.ACTION_ID) + " :"));
         mainPanel.addSpace(5);
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
-        AbstractFile destFile = files.size()==1?files.elementAt(0):files.getBaseFolder();
+        AbstractFile destFile = files.size() == 1 ? files.elementAt(0) : files.getBaseFolder();
         boolean canChangeDate = destFile.isFileOperationSupported(FileOperation.CHANGE_DATE);
 
         nowRadioButton = new JRadioButton(Translator.get("change_date_dialog.now"));
@@ -88,8 +88,8 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
         dateSpinner.setEnabled(false);
 
         mainPanel.add(new FluentPanel(new FlowLayout(FlowLayout.LEFT))
-                          .add(specificDateRadioButton)
-                          .add(dateSpinner));
+                .add(specificDateRadioButton)
+                .add(dateSpinner));
 
         mainPanel.addSpace(10);
         recurseDirCheckBox = new JCheckBox(Translator.get("recurse_directories"));
@@ -109,7 +109,7 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
 
         getContentPane().add(mainPanel, BorderLayout.NORTH);
 
-        if(!canChangeDate) {
+        if (!canChangeDate) {
             nowRadioButton.setEnabled(false);
             specificDateRadioButton.setEnabled(false);
             dateSpinner.setEnabled(false);
@@ -117,8 +117,8 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
             okButton.setEnabled(false);
         }
 
-        getRootPane().setDefaultButton(canChangeDate?okButton:cancelButton);
-        setInitialFocusComponent(canChangeDate?nowRadioButton:cancelButton);
+        getRootPane().setDefaultButton(canChangeDate ? okButton : cancelButton);
+        setInitialFocusComponent(canChangeDate ? nowRadioButton : cancelButton);
         setResizable(false);
     }
 
@@ -130,17 +130,16 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if(source==okButton) {
+        if (source == okButton) {
             dispose();
 
             // Starts copying files
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("progress_dialog.processing_files"));
             ChangeFileAttributesJob job = new ChangeFileAttributesJob(progressDialog, mainFrame, files,
-                nowRadioButton.isSelected()?System.currentTimeMillis():((SpinnerDateModel)dateSpinner.getModel()).getDate().getTime(),
-                recurseDirCheckBox.isSelected());
+                    nowRadioButton.isSelected() ? System.currentTimeMillis() : ((SpinnerDateModel) dateSpinner.getModel()).getDate().getTime(),
+                    recurseDirCheckBox.isSelected());
             progressDialog.start(job);
-        }
-        else if(source==cancelButton) {
+        } else if (source == cancelButton) {
             dispose();
         }
     }
@@ -153,7 +152,7 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
     // Enable/disables the date spinner component when the radio button selection has changed  
 
     public void itemStateChanged(ItemEvent e) {
-        if(e.getSource()==nowRadioButton) {
+        if (e.getSource() == nowRadioButton) {
             dateSpinner.setEnabled(!nowRadioButton.isSelected());
         }
     }

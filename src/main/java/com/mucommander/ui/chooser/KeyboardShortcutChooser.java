@@ -18,40 +18,27 @@
 
 package com.mucommander.ui.chooser;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.IOException;
-
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.text.Translator;
 import com.mucommander.ui.combobox.ComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.text.KeyStrokeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
 
 /**
  * @author Maxence Bernard
  */
 public class KeyboardShortcutChooser extends JPanel implements ItemListener, ComboBoxListener, FocusListener, KeyListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(KeyboardShortcutChooser.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeyboardShortcutChooser.class);
+
     private JTextField textField;
     private JCheckBox modifierCheckBoxes[];
     private SaneComboBox keyComboBox;
@@ -62,26 +49,26 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     private boolean updatingComboBox;
     private boolean updatingCheckBoxes;
 
-    private String noneString = "<"+Translator.get("none")+">";
+    private String noneString = "<" + Translator.get("none") + ">";
 
-    private final static int KEY_CHOICES[] = new int[] {
-        KeyEvent.VK_ESCAPE, KeyEvent.VK_TAB, KeyEvent.VK_DELETE, KeyEvent.VK_BACK_SPACE, KeyEvent.VK_ENTER,
-        KeyEvent.VK_BACK_QUOTE, KeyEvent.VK_MINUS, KeyEvent.VK_EQUALS, KeyEvent.VK_OPEN_BRACKET, KeyEvent.VK_CLOSE_BRACKET, KeyEvent.VK_BACK_SLASH, KeyEvent.VK_SEMICOLON, KeyEvent.VK_QUOTE, KeyEvent.VK_COMMA, KeyEvent.VK_PERIOD, KeyEvent.VK_SLASH,
-        KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-        KeyEvent.VK_PAGE_UP, KeyEvent.VK_PAGE_DOWN,
-        KeyEvent.VK_HOME, KeyEvent.VK_END, KeyEvent.VK_INSERT, KeyEvent.VK_PRINTSCREEN,
-        KeyEvent.VK_A, KeyEvent.VK_B, KeyEvent.VK_C, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_F, KeyEvent.VK_G, KeyEvent.VK_H, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, KeyEvent.VK_M, KeyEvent.VK_N, KeyEvent.VK_O, KeyEvent.VK_P, KeyEvent.VK_Q, KeyEvent.VK_R, KeyEvent.VK_S, KeyEvent.VK_T, KeyEvent.VK_U, KeyEvent.VK_V, KeyEvent.VK_W, KeyEvent.VK_X, KeyEvent.VK_Y, KeyEvent.VK_Z,
-        KeyEvent.VK_0, KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6, KeyEvent.VK_7, KeyEvent.VK_8, KeyEvent.VK_9,
-        KeyEvent.VK_F1, KeyEvent.VK_F2, KeyEvent.VK_F3, KeyEvent.VK_F4, KeyEvent.VK_F5, KeyEvent.VK_F6, KeyEvent.VK_F7, KeyEvent.VK_F8, KeyEvent.VK_F9, KeyEvent.VK_F10, KeyEvent.VK_F11, KeyEvent.VK_F12,
-        KeyEvent.VK_ADD, KeyEvent.VK_SUBTRACT, KeyEvent.VK_MULTIPLY, KeyEvent.VK_DIVIDE, KeyEvent.VK_NUM_LOCK,
-        KeyEvent.VK_NUMPAD0, KeyEvent.VK_NUMPAD1, KeyEvent.VK_NUMPAD2, KeyEvent.VK_NUMPAD3, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, KeyEvent.VK_NUMPAD7, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD9
+    private final static int KEY_CHOICES[] = new int[]{
+            KeyEvent.VK_ESCAPE, KeyEvent.VK_TAB, KeyEvent.VK_DELETE, KeyEvent.VK_BACK_SPACE, KeyEvent.VK_ENTER,
+            KeyEvent.VK_BACK_QUOTE, KeyEvent.VK_MINUS, KeyEvent.VK_EQUALS, KeyEvent.VK_OPEN_BRACKET, KeyEvent.VK_CLOSE_BRACKET, KeyEvent.VK_BACK_SLASH, KeyEvent.VK_SEMICOLON, KeyEvent.VK_QUOTE, KeyEvent.VK_COMMA, KeyEvent.VK_PERIOD, KeyEvent.VK_SLASH,
+            KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+            KeyEvent.VK_PAGE_UP, KeyEvent.VK_PAGE_DOWN,
+            KeyEvent.VK_HOME, KeyEvent.VK_END, KeyEvent.VK_INSERT, KeyEvent.VK_PRINTSCREEN,
+            KeyEvent.VK_A, KeyEvent.VK_B, KeyEvent.VK_C, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_F, KeyEvent.VK_G, KeyEvent.VK_H, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, KeyEvent.VK_M, KeyEvent.VK_N, KeyEvent.VK_O, KeyEvent.VK_P, KeyEvent.VK_Q, KeyEvent.VK_R, KeyEvent.VK_S, KeyEvent.VK_T, KeyEvent.VK_U, KeyEvent.VK_V, KeyEvent.VK_W, KeyEvent.VK_X, KeyEvent.VK_Y, KeyEvent.VK_Z,
+            KeyEvent.VK_0, KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3, KeyEvent.VK_4, KeyEvent.VK_5, KeyEvent.VK_6, KeyEvent.VK_7, KeyEvent.VK_8, KeyEvent.VK_9,
+            KeyEvent.VK_F1, KeyEvent.VK_F2, KeyEvent.VK_F3, KeyEvent.VK_F4, KeyEvent.VK_F5, KeyEvent.VK_F6, KeyEvent.VK_F7, KeyEvent.VK_F8, KeyEvent.VK_F9, KeyEvent.VK_F10, KeyEvent.VK_F11, KeyEvent.VK_F12,
+            KeyEvent.VK_ADD, KeyEvent.VK_SUBTRACT, KeyEvent.VK_MULTIPLY, KeyEvent.VK_DIVIDE, KeyEvent.VK_NUM_LOCK,
+            KeyEvent.VK_NUMPAD0, KeyEvent.VK_NUMPAD1, KeyEvent.VK_NUMPAD2, KeyEvent.VK_NUMPAD3, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, KeyEvent.VK_NUMPAD7, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD9
     };
 
     private final static int MODIFIER_TABLE[] = {
-        KeyEvent.SHIFT_MASK,
-        KeyEvent.CTRL_MASK,
-        KeyEvent.ALT_MASK,
-        KeyEvent.META_MASK
+            KeyEvent.SHIFT_MASK,
+            KeyEvent.CTRL_MASK,
+            KeyEvent.ALT_MASK,
+            KeyEvent.META_MASK
     };
 
     private final static Color FOCUSED_TEXT_FIELD_FOREGROUND = Color.BLACK;
@@ -109,13 +96,13 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
         textField.setDocument(new PlainDocument() {
             @Override
             public void insertString(int i, String string, AttributeSet attributeSet) throws BadLocationException {
-                if(updatingTextField)
+                if (updatingTextField)
                     super.insertString(i, string, attributeSet);
             }
 
             @Override
             public void remove(int i, int i1) throws BadLocationException {
-                if(updatingTextField)
+                if (updatingTextField)
                     super.remove(i, i1);
             }
         });
@@ -123,12 +110,12 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
         flowPanel.add(textField);
 
         modifierCheckBoxes = new JCheckBox[MODIFIER_TABLE.length];
-        for(int i=0; i< MODIFIER_TABLE.length; i++) {
+        for (int i = 0; i < MODIFIER_TABLE.length; i++) {
             modifierCheckBoxes[i] = new JCheckBox(KeyEvent.getKeyModifiersText(MODIFIER_TABLE[i]));
             flowPanel.add(modifierCheckBoxes[i]);
             modifierCheckBoxes[i].addItemListener(this);
         }
-        
+
 
         keyComboBox = new SaneComboBox();
         keyComboBox.addItem(new KeyChoice(0, noneString));
@@ -154,11 +141,11 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     }
 
     private void updateTextField() {
-        LOGGER.trace("currentKeyStroke="+currentKeyStroke+" keyCode="+ (currentKeyStroke==null?"null":""+currentKeyStroke.getKeyCode()));
+        LOGGER.trace("currentKeyStroke=" + currentKeyStroke + " keyCode=" + (currentKeyStroke == null ? "null" : "" + currentKeyStroke.getKeyCode()));
 
         updatingTextField = true;
 
-        if(currentKeyStroke==null || currentKeyStroke.getKeyCode()==0)
+        if (currentKeyStroke == null || currentKeyStroke.getKeyCode() == 0)
             textField.setText(noneString);
         else
             textField.setText(KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(currentKeyStroke));
@@ -168,15 +155,14 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
 
     private void updateKeyComboBox() {
         updatingComboBox = true;
-        int keyCode = currentKeyStroke==null?0:currentKeyStroke.getKeyCode();
+        int keyCode = currentKeyStroke == null ? 0 : currentKeyStroke.getKeyCode();
 
-        LOGGER.trace("keyCode="+ keyCode);
+        LOGGER.trace("keyCode=" + keyCode);
 
         int nbChoices = keyComboBox.getItemCount();
-        for(int i=1; i<nbChoices; i++) {
-            LOGGER.trace("i="+i+" value="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()+" label="+((KeyChoice)keyComboBox.getItemAt(i)).getKeyLabel());
-            if(((KeyChoice)keyComboBox.getItemAt(i)).getKeyValue()== keyCode)
-            {
+        for (int i = 1; i < nbChoices; i++) {
+            LOGGER.trace("i=" + i + " value=" + ((KeyChoice) keyComboBox.getItemAt(i)).getKeyValue() + " label=" + ((KeyChoice) keyComboBox.getItemAt(i)).getKeyLabel());
+            if (((KeyChoice) keyComboBox.getItemAt(i)).getKeyValue() == keyCode) {
                 keyComboBox.setSelectedIndex(i);
 
                 updatingComboBox = false;
@@ -189,12 +175,12 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     }
 
     private void updateCheckBoxes() {
-        int modifiers = currentKeyStroke==null?0:currentKeyStroke.getModifiers();
+        int modifiers = currentKeyStroke == null ? 0 : currentKeyStroke.getModifiers();
 
         updatingCheckBoxes = true;
 
-        for(int i=0; i< MODIFIER_TABLE.length; i++) {
-            modifierCheckBoxes[i].setSelected((modifiers&MODIFIER_TABLE[i])!=0);
+        for (int i = 0; i < MODIFIER_TABLE.length; i++) {
+            modifierCheckBoxes[i].setSelected((modifiers & MODIFIER_TABLE[i]) != 0);
         }
 
         updatingCheckBoxes = false;
@@ -203,14 +189,14 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     private void updateKeyStroke() {
         int modifiers = 0;
 
-        for(int i=0; i< MODIFIER_TABLE.length; i++) {
-            if(modifierCheckBoxes[i].isSelected())
+        for (int i = 0; i < MODIFIER_TABLE.length; i++) {
+            if (modifierCheckBoxes[i].isSelected())
                 modifiers |= MODIFIER_TABLE[i];
         }
 
         currentKeyStroke = KeyStroke.getKeyStroke(
-            ((KeyChoice)keyComboBox.getSelectedItem()).getKeyValue(),
-            modifiers
+                ((KeyChoice) keyComboBox.getSelectedItem()).getKeyValue(),
+                modifiers
         );
     }
 
@@ -220,7 +206,7 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     /////////////////////////////////
 
     public void itemStateChanged(ItemEvent itemEvent) {
-        if(updatingCheckBoxes)
+        if (updatingCheckBoxes)
             return;
 
         updateKeyStroke();
@@ -233,7 +219,7 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     /////////////////////////////////////
 
     public void comboBoxSelectionChanged(SaneComboBox source) {
-        if(updatingComboBox)
+        if (updatingComboBox)
             return;
 
         updateKeyStroke();
@@ -261,10 +247,10 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
     ////////////////////////////////
 
     public void keyPressed(KeyEvent keyEvent) {
-        LOGGER.trace("keyModifiers="+keyEvent.getModifiers()+" keyCode="+keyEvent.getKeyCode());
+        LOGGER.trace("keyModifiers=" + keyEvent.getModifiers() + " keyCode=" + keyEvent.getKeyCode());
 
         int keyCode = keyEvent.getKeyCode();
-        if(keyCode==KeyEvent.VK_SHIFT || keyCode==KeyEvent.VK_CONTROL || keyCode==KeyEvent.VK_ALT || keyCode==KeyEvent.VK_META)
+        if (keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_META)
             return;
 
         currentKeyStroke = KeyStroke.getKeyStrokeForEvent(keyEvent);
@@ -304,17 +290,16 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
         }
 
         public boolean equals(Object o) {
-            if(!(o instanceof KeyChoice))
+            if (!(o instanceof KeyChoice))
                 return false;
 
-            return ((KeyChoice)o).keyValue == keyValue;
+            return ((KeyChoice) o).keyValue == keyValue;
         }
 
         public String toString() {
             return keyLabel;
         }
     }
-
 
 
     public static void main(String args[]) throws IOException {

@@ -21,17 +21,16 @@ package com.mucommander.ui.main.tabs;
 import com.mucommander.ui.main.FolderPanel;
 
 /**
- * 
  * @author Arik Hadas
  */
 public class NotClosableFileTableTabHeaderFactory extends FileTableTabHeaderFactory {
 
-	public NotClosableFileTableTabHeaderFactory(FolderPanel folderPanel) {
-		super(folderPanel);
-	}
-	
-	@Override
-	public FileTableTabHeader create(FileTableTab tab) {
-		return new FileTableTabHeader(folderPanel, false, tab);
-	}
+    public NotClosableFileTableTabHeaderFactory(FolderPanel folderPanel) {
+        super(folderPanel);
+    }
+
+    @Override
+    public FileTableTabHeader create(FileTableTab tab) {
+        return new FileTableTabHeader(folderPanel, false, tab);
+    }
 }

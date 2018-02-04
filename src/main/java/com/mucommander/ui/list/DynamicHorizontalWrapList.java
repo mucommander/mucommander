@@ -31,47 +31,47 @@ import java.awt.*;
  *     7   8   9
  *     10..
  * </pre>
- *   
- * In which the number of items per-row is dynamically determined by the 
+ * <p>
+ * In which the number of items per-row is dynamically determined by the
  * width of the list and the given item-width parameter.
- *  
+ *
  * @author Arik Hadas
  */
 public class DynamicHorizontalWrapList<E> extends DynamicList<E> {
 
-	// The width of each item in the list
-	private int itemWidth;
-	// Saves the last width of the parent container to detect if there
-	// should be a change in the number of items per-row.
-	private int lastParentWidth;
-	
-	public DynamicHorizontalWrapList(AlteredVector<E> items, int itemWidth) {
-		this(items, itemWidth, 0);
-	}
-	
-	public DynamicHorizontalWrapList(AlteredVector<E> items, int itemWidth, int horizontalPadding) {
-		super(items);
-		
-		this.itemWidth = itemWidth + horizontalPadding;
-		setLayoutOrientation(JList.HORIZONTAL_WRAP);
-	}
+    // The width of each item in the list
+    private int itemWidth;
+    // Saves the last width of the parent container to detect if there
+    // should be a change in the number of items per-row.
+    private int lastParentWidth;
 
-	@Override
+    public DynamicHorizontalWrapList(AlteredVector<E> items, int itemWidth) {
+        this(items, itemWidth, 0);
+    }
+
+    public DynamicHorizontalWrapList(AlteredVector<E> items, int itemWidth, int horizontalPadding) {
+        super(items);
+
+        this.itemWidth = itemWidth + horizontalPadding;
+        setLayoutOrientation(JList.HORIZONTAL_WRAP);
+    }
+
+    @Override
     public void repaint() {
-		Container parent = getParent();
-		if (parent != null) {
-			Rectangle parentBounds = parent.getBounds();
-			int parentWidth = parentBounds.width;
+        Container parent = getParent();
+        if (parent != null) {
+            Rectangle parentBounds = parent.getBounds();
+            int parentWidth = parentBounds.width;
 
-			if (lastParentWidth != parentWidth) {
-				lastParentWidth = parentWidth;
+            if (lastParentWidth != parentWidth) {
+                lastParentWidth = parentWidth;
 
-				int itemsPerRow = parentWidth / itemWidth;
-				setFixedCellWidth(itemWidth + ((parentWidth - itemWidth * itemsPerRow)/ itemsPerRow));
-				setVisibleRowCount(getComponentCount() / itemsPerRow);
-			}
-		}
-		
-		super.repaint();
-	}
+                int itemsPerRow = parentWidth / itemWidth;
+                setFixedCellWidth(itemWidth + ((parentWidth - itemWidth * itemsPerRow) / itemsPerRow));
+                setVisibleRowCount(getComponentCount() / itemsPerRow);
+            }
+        }
+
+        super.repaint();
+    }
 }

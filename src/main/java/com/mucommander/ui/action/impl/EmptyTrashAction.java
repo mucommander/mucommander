@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.Map;
 
 /**
  * Empties the system trash. This action is enabled only if the current platform has an
@@ -41,11 +35,11 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class EmptyTrashAction extends MuAction {
 
-    public EmptyTrashAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public EmptyTrashAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         AbstractTrash trash = DesktopManager.getTrash();
-        setEnabled(trash!=null && trash.canEmpty());
+        setEnabled(trash != null && trash.canEmpty());
     }
 
     @Override
@@ -53,27 +47,35 @@ public class EmptyTrashAction extends MuAction {
         DesktopManager.getTrash().empty();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new EmptyTrashAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new EmptyTrashAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "EmptyTrash";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "EmptyTrash";
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

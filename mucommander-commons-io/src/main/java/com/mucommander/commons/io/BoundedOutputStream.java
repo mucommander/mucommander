@@ -39,7 +39,7 @@ public class BoundedOutputStream extends FilteredOutputStream implements Bounded
      * <code>allowedBytes</code> to be written to it. If <code>allowedBytes</code> is equal to <code>-1</code>, this
      * stream is not bounded and acts as a normal stream.
      *
-     * @param out the stream to be bounded
+     * @param out          the stream to be bounded
      * @param allowedBytes the total number of bytes that are allowed to written, <code>-1</code> for no limit
      */
     public BoundedOutputStream(OutputStream out, long allowedBytes) {
@@ -62,7 +62,7 @@ public class BoundedOutputStream extends FilteredOutputStream implements Bounded
     }
 
     public synchronized long getRemainingBytes() {
-        return allowedBytes<=-1?Long.MAX_VALUE:allowedBytes-totalWritten;
+        return allowedBytes <= -1 ? Long.MAX_VALUE : allowedBytes - totalWritten;
     }
 
 
@@ -72,7 +72,7 @@ public class BoundedOutputStream extends FilteredOutputStream implements Bounded
 
     @Override
     public synchronized void write(int b) throws IOException {
-        if(getRemainingBytes()==0)
+        if (getRemainingBytes() == 0)
             throw new StreamOutOfBoundException(allowedBytes);
 
         out.write(b);
@@ -86,8 +86,8 @@ public class BoundedOutputStream extends FilteredOutputStream implements Bounded
 
     @Override
     public synchronized void write(byte[] b, int off, int len) throws IOException {
-        int canWrite = (int)Math.min(getRemainingBytes(), len);
-        if(canWrite==0)
+        int canWrite = (int) Math.min(getRemainingBytes(), len);
+        if (canWrite == 0)
             throw new StreamOutOfBoundException(allowedBytes);
 
         out.write(b, off, canWrite);

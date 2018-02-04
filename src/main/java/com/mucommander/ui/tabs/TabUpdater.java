@@ -20,10 +20,10 @@ package com.mucommander.ui.tabs;
 
 /**
  * This interface declare objects that are used to update properties of Tabs in a generic way
- * 
+ *
  * @author Arik Hadas
  */
 public interface TabUpdater<T> {
 
-	void update(T tab);
+    void update(T tab);
 }

@@ -18,27 +18,22 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * This action opens the currently selected file or folder with native file associations.
@@ -47,7 +42,7 @@ import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
  */
 public class OpenNativelyAction extends MuAction {
 
-    public OpenNativelyAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenNativelyAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -55,49 +50,55 @@ public class OpenNativelyAction extends MuAction {
     public void performAction() {
         AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true);
 
-        if(selectedFile==null)
+        if (selectedFile == null)
             return;
 
         // Copy file to a temporary local file and execute it with native file associations if
         // file is not on a local filesystem or file is an archive entry
-        if(!FileProtocols.FILE.equals(selectedFile.getURL().getScheme()) || selectedFile.hasAncestor(AbstractArchiveEntryFile.class)) {
+        if (!FileProtocols.FILE.equals(selectedFile.getURL().getScheme()) || selectedFile.hasAncestor(AbstractArchiveEntryFile.class)) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
             TempExecJob job = new TempExecJob(progressDialog, mainFrame, selectedFile);
             progressDialog.start(job);
-        }
-        else {
+        } else {
             // Tries to execute file with native file associations
             try {
-            	DesktopManager.open(selectedFile);
-            	RecentExecutedFilesQL.addFile(selectedFile);
-        	}
-            catch(IOException e) {
+                DesktopManager.open(selectedFile);
+                RecentExecutedFilesQL.addFile(selectedFile);
+            } catch (IOException e) {
                 InformationDialog.showErrorDialog(mainFrame);
             }
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new OpenNativelyAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new OpenNativelyAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenNatively";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "OpenNatively";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.SHIFT_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.SHIFT_DOWN_MASK);
+        }
     }
 }
