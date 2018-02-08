@@ -52,17 +52,17 @@ import java.util.Hashtable;
  */
 public class ToolBar extends JToolBar implements ConfigurationListener, MouseListener, ToolBarAttributesListener {
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     /**
      * Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected
      */
-    private RolloverButtonAdapter rolloverButtonAdapter;
+    private final RolloverButtonAdapter rolloverButtonAdapter;
 
     /**
      * Dimension of button separators
      */
-    private final static Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
+    private static final Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
 
     /**
      * Whether to use the new JButton decorations introduced in Mac OS X 10.5 (Leopard)
@@ -207,6 +207,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     /**
      * Listens to certain configuration variables.
      */
+    @Override
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
@@ -214,11 +215,10 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         if (var.equals(MuPreferences.TOOLBAR_ICON_SCALE)) {
             scaleFactor = event.getFloatValue();
             Component components[] = getComponents();
-            int nbComponents = components.length;
 
-            for (int i = 0; i < nbComponents; i++) {
-                if (components[i] instanceof JButton) {
-                    setButtonIcon((JButton) components[i]);
+            for (Component component : components) {
+                if (component instanceof JButton) {
+                    setButtonIcon((JButton) component);
                 }
             }
         }
@@ -229,6 +229,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     // MouseListener methods //
     ///////////////////////////
 
+    @Override
     public void mouseClicked(MouseEvent e) {
         Object source = e.getSource();
 
@@ -244,22 +245,28 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         }
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
         Object source = e.getSource();
         if (source instanceof JButton)
             ((JButton) source).setBorderPainted(true);
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
         Object source = e.getSource();
         if (source instanceof JButton)
             ((JButton) source).setBorderPainted(false);
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
+
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
+
     }
 
 
@@ -267,6 +274,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     // ToolBarAttributesListener methods //
     ///////////////////////////////////////
 
+    @Override
     public void toolBarActionsChanged() {
         removeAll();
         addButtons(ToolBarAttributes.getActions());
@@ -290,17 +298,18 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             FileURL history[] = action instanceof GoBackAction ?
                     mainFrame.getActivePanel().getFolderHistory().getBackFolders()
                     : mainFrame.getActivePanel().getFolderHistory().getForwardFolders();
-            int historyLen = history.length;
 
             // If no back/forward folder, do not display popup menu
             if (history.length == 0)
                 return null;
 
             JPopupMenu popupMenu = new JPopupMenu();
-            for (int i = 0; i < historyLen; i++)
-                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), history[i]));
+            for (FileURL aHistory : history) {
+                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable<>(), aHistory));
+            }
 
             return popupMenu;
         }
     }
+
 }

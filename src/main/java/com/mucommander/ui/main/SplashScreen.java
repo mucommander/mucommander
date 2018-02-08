@@ -25,7 +25,6 @@ import com.mucommander.ui.icon.IconManager;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  * Splash screen that gets displayed on muCommander startup.
  * <p>
@@ -64,7 +63,6 @@ public class SplashScreen extends JWindow {
     /**
      * Style of the font used to display text on this splash screen
      */
-//    private final static int FONT_STYLE = Font.PLAIN;
     private final static int FONT_STYLE = Font.BOLD;
     /**
      * Size of the font used to display text on this splash screen
@@ -95,7 +93,6 @@ public class SplashScreen extends JWindow {
      */
     private final static int VERSION_MARGIN_Y = 3;
 
-
     /**
      * Creates and displays a new SplashScreen, with the given version string and initial loading message.
      *
@@ -119,7 +116,8 @@ public class SplashScreen extends JWindow {
         mediaTracker.addImage(imageIcon.getImage(), 0);
         try {
             mediaTracker.waitForID(0);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
+
         }
 
         setContentPane(new JLabel(imageIcon));
@@ -137,7 +135,6 @@ public class SplashScreen extends JWindow {
         setVisible(true);
     }
 
-
     /**
      * Repaints this SplashScreen to display the new given loading message, replacing the previous one.
      *
@@ -147,7 +144,6 @@ public class SplashScreen extends JWindow {
         this.loadingMessage = msg;
         repaint();
     }
-
 
     /**
      * Overridden paint method.
@@ -182,4 +178,5 @@ public class SplashScreen extends JWindow {
         g.setColor(TEXT_COLOR);
         g.drawString(version, textX, textY);
     }
+
 }
