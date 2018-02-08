@@ -41,12 +41,12 @@ import java.awt.*;
  */
 class TrashPopupButton extends PopupButton {
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     /**
      * Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected
      */
-    private RolloverButtonAdapter rolloverButtonAdapter;
+    private final RolloverButtonAdapter rolloverButtonAdapter;
 
     TrashPopupButton(MainFrame mainFrame) {
         this.mainFrame = mainFrame;

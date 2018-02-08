@@ -58,3 +58,7 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+# JRebel
+rebel.xml
+rebel-remote.xml

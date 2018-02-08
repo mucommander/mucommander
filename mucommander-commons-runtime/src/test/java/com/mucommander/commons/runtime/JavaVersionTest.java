@@ -32,6 +32,7 @@ public class JavaVersionTest {
      */
     @Test
     public void testOrder() {
+        assert JavaVersion.JAVA_1_8.compareTo(JavaVersion.JAVA_1_8) > 0;
         assert JavaVersion.JAVA_1_7.compareTo(JavaVersion.JAVA_1_6) > 0;
         assert JavaVersion.JAVA_1_6.compareTo(JavaVersion.JAVA_1_5) > 0;
         assert JavaVersion.JAVA_1_5.compareTo(JavaVersion.JAVA_1_4) > 0;
@@ -54,10 +55,10 @@ public class JavaVersionTest {
         assert JavaVersion.JAVA_1_0.isCurrentHigher();
         assert JavaVersion.JAVA_1_0.isCurrentOrHigher();
 
-        if (JavaVersion.getCurrent().compareTo(JavaVersion.JAVA_1_7) < 0) {
-            assert !JavaVersion.JAVA_1_7.isCurrent();
-            assert JavaVersion.JAVA_1_7.isCurrentLower();
-            assert JavaVersion.JAVA_1_7.isCurrentOrLower();
+        if (JavaVersion.getCurrent().compareTo(JavaVersion.JAVA_1_8) < 0) {
+            assert !JavaVersion.JAVA_1_8.isCurrent();
+            assert JavaVersion.JAVA_1_8.isCurrentLower();
+            assert JavaVersion.JAVA_1_8.isCurrentOrLower();
         }
     }
 
@@ -74,6 +75,7 @@ public class JavaVersionTest {
         assert JavaVersion.parseSystemProperty("1.5") == JavaVersion.JAVA_1_5;
         assert JavaVersion.parseSystemProperty("1.6") == JavaVersion.JAVA_1_6;
         assert JavaVersion.parseSystemProperty("1.7") == JavaVersion.JAVA_1_7;
+        assert JavaVersion.parseSystemProperty("1.8") == JavaVersion.JAVA_1_8;
     }
 
 

@@ -4,3 +4,5 @@ build
 .project
 bin
 
+# IntelliJ
+/out/
