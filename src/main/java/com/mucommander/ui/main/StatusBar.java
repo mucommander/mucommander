@@ -72,6 +72,7 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class StatusBar extends JPanel implements Runnable, MouseListener, ActivePanelListener, TableSelectionListener, LocationListener, ComponentListener, ThemeListener {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StatusBar.class);
 
     private MainFrame mainFrame;
@@ -90,6 +91,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      * Label that displays info about current volume (free/total space)
      */
     private VolumeSpaceLabel volumeSpaceLabel;
+
+    /**
+     * Label that displays info about memory
+     */
+    private MemoryLabel memoryLabel;
 
     /**
      * Thread which auto updates volume info
@@ -128,6 +134,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     private static final int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
 
     /**
+     * SizeFormat's format used to display memory info in status bar
+     */
+    private static final int MEMORY_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
+
+    /**
      * Listens to configuration changes and updates static fields accordingly
      */
     private static final ConfigurationListener CONFIGURATION_ADAPTER;
@@ -139,15 +150,14 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     static {
         // Initialize the size column format based on the configuration
-        setSelectedFileSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE,
-                MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
+        setSelectedFileSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE, MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
 
         // Listens to configuration changes and updates static fields accordingly.
         // Note: a reference to the listener must be kept to prevent it from being garbage-collected.
         CONFIGURATION_ADAPTER = new ConfigurationListener() {
+            @Override
             public synchronized void configurationChanged(ConfigurationEvent event) {
                 String var = event.getVariable();
-
                 if (var.equals(MuPreferences.DISPLAY_COMPACT_FILE_SIZE))
                     setSelectedFileSizeFormat(event.getBooleanValue());
             }
@@ -190,6 +200,9 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         add(jobsButton);
         add(Box.createRigidArea(new Dimension(2, 0)));
 
+        memoryLabel = new MemoryLabel();
+        add(memoryLabel);
+
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
         if (DesktopManager.getTrash() != null) {
             final TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
@@ -224,6 +237,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         // Catch mouse events to pop up a menu on right-click
         selectedFilesLabel.addMouseListener(this);
         volumeSpaceLabel.addMouseListener(this);
+        memoryLabel.addMouseListener(this);
         addMouseListener(this);
 
         // Catch component events to be notified when this component is made visible
@@ -235,6 +249,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         selectedFilesLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
         volumeSpaceLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
         volumeSpaceLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
+        memoryLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
+        memoryLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
         ThemeManager.addCurrentThemeListener(this);
     }
 
@@ -248,6 +264,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         updateSelectedFilesInfo();
         updateVolumeInfo();
+        updateMemoryInfo();
     }
 
     /**
@@ -353,9 +370,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                         }
                     }
 
-// For testing the free space indicator 
-//volumeFree = (long)(volumeTotal * Math.random());
-
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
                     LOGGER.debug("Adding to cache");
@@ -363,6 +377,14 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 }
             }.start();
         }
+    }
+
+    /**
+     * Updates info about memory (used , total), displayed on the right-side of this status bar.
+     */
+    private void updateMemoryInfo() {
+        final Runtime runtime = Runtime.getRuntime();
+        memoryLabel.setMemory(runtime.maxMemory(), runtime.totalMemory(), runtime.freeMemory());
     }
 
     /**
@@ -454,8 +476,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             // - MainFrame isn't changing folders
             // - MainFrame is active and in the foreground
             // Volume info update will potentially hit the LRU cache and not actually update volume info
-            if (isVisible() && !mainFrame.getNoEventsMode() && mainFrame.isForegroundActive())
+            if (isVisible() && !mainFrame.getNoEventsMode() && mainFrame.isForegroundActive()) {
                 updateVolumeInfo();
+                updateMemoryInfo();
+            }
         }
         while (autoUpdateThread != null && mainFrame.isVisible());   // Stop when MainFrame is disposed
     }
@@ -524,28 +548,37 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Right clicking on the toolbar brings up a popup menu that allows the user to hide this status bar
         if (DesktopManager.isRightMouseButton(e)) {
-            //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.ToggleStatusBarAction.Descriptor.ACTION_ID, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());
             popupMenu.setVisible(true);
+            return;
+        }
+
+        if (DesktopManager.isLeftMouseButton(e) && memoryLabel.equals(e.getSource())) {
+            System.gc();
+            updateMemoryInfo();
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+
     }
 
     //////////////////////////////////////
@@ -560,14 +593,17 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     @Override
     public void componentHidden(ComponentEvent e) {
+
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
+
     }
 
     @Override
     public void componentResized(ComponentEvent e) {
+
     }
 
     @Override
@@ -575,6 +611,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         if (event.getFontId() == Theme.STATUS_BAR_FONT) {
             selectedFilesLabel.setFont(event.getFont());
             volumeSpaceLabel.setFont(event.getFont());
+            memoryLabel.setFont(event.getFont());
             repaint();
         }
     }
@@ -584,6 +621,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         if (event.getColorId() == Theme.STATUS_BAR_FOREGROUND_COLOR) {
             selectedFilesLabel.setForeground(event.getColor());
             volumeSpaceLabel.setForeground(event.getColor());
+            memoryLabel.setForeground(event.getColor());
             repaint();
         }
     }
@@ -591,28 +629,27 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     ///////////////////
     // Inner classes //
     ///////////////////
+
     /**
      * This label displays the amount of free and/or total space on a volume.
      */
     private static class VolumeSpaceLabel extends JLabel implements ThemeListener {
 
-        private long freeSpace;
-        private long totalSpace;
+        private long freeSpace = -1;
+        private long totalSpace = -1;
 
-        private Color backgroundColor;
-        private Color okColor;
-        private Color warningColor;
-        private Color criticalColor;
+        Color backgroundColor;
+        Color okColor;
+        Color warningColor;
+        Color criticalColor;
 
-        private final static float SPACE_WARNING_THRESHOLD = 0.1f;
-        private final static float SPACE_CRITICAL_THRESHOLD = 0.05f;
-
+        private static final float SPACE_WARNING_THRESHOLD = 0.1f;
+        private static final float SPACE_CRITICAL_THRESHOLD = 0.05f;
 
         private VolumeSpaceLabel() {
             super("");
             setHorizontalAlignment(CENTER);
             backgroundColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BACKGROUND_COLOR);
-            //            borderColor     = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER_COLOR);
             okColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_OK_COLOR);
             warningColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_WARNING_COLOR);
             criticalColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_CRITICAL_COLOR);
@@ -657,7 +694,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             repaint();
         }
 
-
         /**
          * Adds some empty space around the label.
          */
@@ -675,7 +711,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
          * @param percent distance between c1 and c2, comprised between 0 and 1.
          * @return an interpolated color value, located at percent between c1 and c2 in the RGB space.
          */
-        private Color interpolateColor(Color c1, Color c2, float percent) {
+        Color interpolateColor(Color c1, Color c2, float percent) {
             return new Color(
                     (int) (c1.getRed() + (c2.getRed() - c1.getRed()) * percent),
                     (int) (c1.getGreen() + (c2.getGreen() - c1.getGreen()) * percent),
@@ -716,47 +752,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             super.paint(g);
         }
 
-
-// Total/Free space reversed, doesn't look quite right
-
-//        @Override
-//        public void paint(Graphics g) {
-//            // If free or total space is not available, this label will just be painted as a normal JLabel
-//            if(freeSpace!=-1 && totalSpace!=-1) {
-//                int width = getWidth();
-//                int height = getHeight();
-//
-//                // Paint amount of free volume space if both free and total space are available
-//                float freeSpacePercentage = freeSpace/(float)totalSpace;
-//                float usedSpacePercentage = (totalSpace-freeSpace)/(float)totalSpace;
-//
-//                Color c;
-//                if(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD) {
-//                    c = criticalColor;
-//                }
-//                else if(freeSpacePercentage<=SPACE_WARNING_THRESHOLD) {
-//                    c = interpolateColor(warningColor, criticalColor, (SPACE_WARNING_THRESHOLD-freeSpacePercentage)/SPACE_WARNING_THRESHOLD);
-//                }
-//                else {
-//                    c = interpolateColor(okColor, warningColor, (1-freeSpacePercentage)/(1-SPACE_WARNING_THRESHOLD));
-//                }
-//
-//                g.setColor(c);
-//
-//                int usedSpaceWidth = Math.max(Math.round(usedSpacePercentage*(float)(width-2)), 1);
-//                g.fillRect(1, 1, usedSpaceWidth + 1, height - 2);
-//
-//                // Fill background
-//                g.setColor(backgroundColor);
-//                g.fillRect(usedSpaceWidth + 1, 1, width - usedSpaceWidth - 1, height - 2);
-//            }
-//
-//            super.paint(g);
-//        }
-
+        @Override
         public void fontChanged(FontChangedEvent event) {
+
         }
 
+        @Override
         public void colorChanged(ColorChangedEvent event) {
             switch (event.getColorId()) {
                 case Theme.STATUS_BAR_BACKGROUND_COLOR:
@@ -782,6 +783,66 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             }
             repaint();
         }
+
+    }
+
+    /**
+     * This label displays the amount of used and total heap size.
+     */
+    private static class MemoryLabel extends VolumeSpaceLabel {
+
+        private long maxMemory;
+        private long totalMemory;
+        private long usedMemory;
+
+        private static final float MEMORY_WARNING_THRESHOLD = 0.9f;
+        private static final float MEMORY_CRITICAL_THRESHOLD = 0.95f;
+
+        private void setMemory(long maxMemory, long totalMemory, long freeMemory) {
+            this.maxMemory = maxMemory;
+            this.totalMemory = totalMemory;
+            this.usedMemory = totalMemory - freeMemory;
+
+            // Set new label's text
+            String memoryInfo = SizeFormat.format(usedMemory, MEMORY_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(this.totalMemory, MEMORY_INFO_SIZE_FORMAT) + " (" + SizeFormat.format(this.maxMemory, MEMORY_INFO_SIZE_FORMAT) + ")";
+
+            memoryInfo = Translator.get("status_bar.memory_used", memoryInfo);
+            setText(memoryInfo);
+
+            // Set tooltip
+            setToolTipText("" + (int) (100 * usedMemory / (float) this.totalMemory) + "%");
+
+            repaint();
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            int width = getWidth();
+            int height = getHeight();
+
+            float usedMemoryPercentage = usedMemory / (float) totalMemory;
+
+            Color c;
+            if (usedMemoryPercentage >= MEMORY_CRITICAL_THRESHOLD) {
+                c = criticalColor;
+            } else if (usedMemoryPercentage >= MEMORY_WARNING_THRESHOLD) {
+                c = interpolateColor(warningColor, criticalColor, (usedMemoryPercentage - MEMORY_WARNING_THRESHOLD) / MEMORY_WARNING_THRESHOLD);
+            } else {
+                c = interpolateColor(okColor, warningColor, (1 - MEMORY_WARNING_THRESHOLD) / (1 - usedMemoryPercentage));
+            }
+
+            g.setColor(c);
+
+            int usedMemoryWidth = Math.max(Math.round(usedMemoryPercentage * (float) (width - 2)), 1);
+            g.fillRect(1, 1, usedMemoryWidth + 1, height - 2);
+
+            // Fill background
+            g.setColor(backgroundColor);
+            g.fillRect(usedMemoryWidth + 1, 1, width - usedMemoryWidth - 1, height - 2);
+
+            super.paint(g);
+        }
+
     }
 
 }
