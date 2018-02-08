@@ -1,5 +1,8 @@
 .gradle
 build
+.classpath
+.project
+bin
 
 # IntelliJ
 /out/

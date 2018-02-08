@@ -53,7 +53,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-
 /**
  * StatusBar is the component that sits at the bottom of each MainFrame, between the folder panels and command bar.
  * There is one and only one StatusBar per MainFrame, created by the associated MainFrame. It can be hidden,
@@ -195,7 +194,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         add(Box.createHorizontalGlue());
 
-        JobsPopupButton jobsButton = new JobsPopupButton();
+        final JobsPopupButton jobsButton = new JobsPopupButton();
         jobsButton.setPopupMenuLocation(SwingConstants.TOP);
 
         add(jobsButton);
@@ -206,7 +205,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
         if (DesktopManager.getTrash() != null) {
-            TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
+            final TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
             trashButton.setPopupMenuLocation(SwingConstants.TOP);
 
             add(trashButton);
@@ -221,10 +220,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
 
         // Catch location events to update status bar info when folder is changed
-        FolderPanel leftPanel = mainFrame.getLeftPanel();
+        final FolderPanel leftPanel = mainFrame.getLeftPanel();
         leftPanel.getLocationManager().addLocationListener(this);
 
-        FolderPanel rightPanel = mainFrame.getRightPanel();
+        final FolderPanel rightPanel = mainFrame.getRightPanel();
         rightPanel.getLocationManager().addLocationListener(this);
 
         // Catch table selection change events to update the selected files info when the selected files have changed on
@@ -271,8 +270,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /**
      * Updates info about currently selected files ((nb of selected files, combined size), displayed on the left-side of this status bar.
      */
-// Making this method synchronized creates a deadlock with FileTable
-//    public synchronized void updateSelectedFilesInfo() {
     public void updateSelectedFilesInfo() {
         // No need to waste precious cycles if status bar is not visible
         if (!isVisible())
@@ -373,9 +370,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                         }
                     }
 
-// For testing the free space indicator 
-//volumeFree = (long)(volumeTotal * Math.random());
-
                     volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
 
                     LOGGER.debug("Adding to cache");
@@ -474,6 +468,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             try {
                 Thread.sleep(AUTO_UPDATE_PERIOD);
             } catch (InterruptedException ignored) {
+
             }
 
             // Update volume info if:
@@ -492,7 +487,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     ////////////////////////////////////////
     // ActivePanelListener implementation //
     ////////////////////////////////////////
-
     @Override
     public void activePanelChanged(FolderPanel folderPanel) {
         updateStatusInfo();
@@ -501,7 +495,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     ///////////////////////////////////////////
     // TableSelectionListener implementation //
     ///////////////////////////////////////////
-
     @Override
     public void selectedFileChanged(FileTable source) {
         // No need to update if the originating FileTable is not the currently active one
@@ -519,7 +512,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /////////////////////////////////////
     // LocationListener implementation //
     /////////////////////////////////////
-
     @Override
     public void locationChanged(LocationEvent e) {
         dial.setAnimated(false);
@@ -548,7 +540,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     //////////////////////////////////
     // MouseListener implementation //
     //////////////////////////////////
-
     @Override
     public void mouseClicked(MouseEvent e) {
         // Discard mouse events while in 'no events mode'
@@ -561,9 +552,10 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.ToggleStatusBarAction.Descriptor.ACTION_ID, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());
             popupMenu.setVisible(true);
+            return;
         }
 
-        if (memoryLabel.equals(e.getSource())) {
+        if (DesktopManager.isLeftMouseButton(e) && memoryLabel.equals(e.getSource())) {
             System.gc();
             updateMemoryInfo();
         }
@@ -571,24 +563,27 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     @Override
     public void mouseReleased(MouseEvent e) {
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+
     }
 
     //////////////////////////////////////
     // ComponentListener implementation //
     //////////////////////////////////////
-
     @Override
     public void componentShown(ComponentEvent e) {
         // Invoked when the component has been made visible (apparently not called when just created)
@@ -598,14 +593,17 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     @Override
     public void componentHidden(ComponentEvent e) {
+
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
+
     }
 
     @Override
     public void componentResized(ComponentEvent e) {
+
     }
 
     @Override
@@ -645,8 +643,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         Color warningColor;
         Color criticalColor;
 
-        private final static float SPACE_WARNING_THRESHOLD = 0.1f;
-        private final static float SPACE_CRITICAL_THRESHOLD = 0.05f;
+        private static final float SPACE_WARNING_THRESHOLD = 0.1f;
+        private static final float SPACE_CRITICAL_THRESHOLD = 0.05f;
 
         private VolumeSpaceLabel() {
             super("");
@@ -754,43 +752,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             super.paint(g);
         }
 
-// Total/Free space reversed, doesn't look quite right
-
-//        @Override
-//        public void paint(Graphics g) {
-//            // If free or total space is not available, this label will just be painted as a normal JLabel
-//            if(freeSpace!=-1 && totalSpace!=-1) {
-//                int width = getWidth();
-//                int height = getHeight();
-//
-//                // Paint amount of free volume space if both free and total space are available
-//                float freeSpacePercentage = freeSpace/(float)totalSpace;
-//                float usedSpacePercentage = (totalSpace-freeSpace)/(float)totalSpace;
-//
-//                Color c;
-//                if(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD) {
-//                    c = criticalColor;
-//                }
-//                else if(freeSpacePercentage<=SPACE_WARNING_THRESHOLD) {
-//                    c = interpolateColor(warningColor, criticalColor, (SPACE_WARNING_THRESHOLD-freeSpacePercentage)/SPACE_WARNING_THRESHOLD);
-//                }
-//                else {
-//                    c = interpolateColor(okColor, warningColor, (1-freeSpacePercentage)/(1-SPACE_WARNING_THRESHOLD));
-//                }
-//
-//                g.setColor(c);
-//
-//                int usedSpaceWidth = Math.max(Math.round(usedSpacePercentage*(float)(width-2)), 1);
-//                g.fillRect(1, 1, usedSpaceWidth + 1, height - 2);
-//
-//                // Fill background
-//                g.setColor(backgroundColor);
-//                g.fillRect(usedSpaceWidth + 1, 1, width - usedSpaceWidth - 1, height - 2);
-//            }
-//
-//            super.paint(g);
-//        }
-
         @Override
         public void fontChanged(FontChangedEvent event) {
 
@@ -834,8 +795,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         private long totalMemory;
         private long usedMemory;
 
-        private final static float MEMORY_WARNING_THRESHOLD = 0.9f;
-        private final static float MEMORY_CRITICAL_THRESHOLD = 0.95f;
+        private static final float MEMORY_WARNING_THRESHOLD = 0.9f;
+        private static final float MEMORY_CRITICAL_THRESHOLD = 0.95f;
 
         private void setMemory(long maxMemory, long totalMemory, long freeMemory) {
             this.maxMemory = maxMemory;
@@ -859,7 +820,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             int width = getWidth();
             int height = getHeight();
 
-            // Paint amount of free volume space if both free and total space are available
             float usedMemoryPercentage = usedMemory / (float) totalMemory;
 
             Color c;
