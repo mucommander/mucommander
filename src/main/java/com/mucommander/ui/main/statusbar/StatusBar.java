@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.main;
+package com.mucommander.ui.main.statusbar;
 
 import com.mucommander.cache.FastLRUCache;
 import com.mucommander.cache.LRUCache;
@@ -32,12 +32,14 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.border.MutableLineBorder;
+import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.SpinningDial;
+import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
 import com.mucommander.ui.theme.*;
@@ -75,78 +77,25 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatusBar.class);
 
-    private MainFrame mainFrame;
-
-    /**
-     * Label that displays info about current selected file(s)
-     */
-    private JLabel selectedFilesLabel;
-
-    /**
-     * Icon used while loading is in progress.
-     */
-    private SpinningDial dial;
-
-    /**
-     * Label that displays info about current volume (free/total space)
-     */
-    private VolumeSpaceLabel volumeSpaceLabel;
-
-    /**
-     * Label that displays info about memory
-     */
-    private MemoryLabel memoryLabel;
-
-    /**
-     * Thread which auto updates volume info
-     */
-    private Thread autoUpdateThread;
-
-    /**
-     * Number of volume info strings that can be temporarily cached
-     */
-    private final static int VOLUME_INFO_CACHE_CAPACITY = 50;
-
-    /**
-     * Number of milliseconds before cached volume info strings expire
-     */
-    private final static int VOLUME_INFO_TIME_TO_LIVE = 60000;
-
-    /**
-     * Number of milliseconds between each volume info update by auto-update thread
-     */
-    private final static int AUTO_UPDATE_PERIOD = 6000;
-
-    /**
-     * Caches volume info strings (free/total space) for a while, since this information is expensive to retrieve
-     * (I/O bound). This map uses folders' volume path as its key.
-     */
-    private static LRUCache<String, Long[]> volumeInfoCache = new FastLRUCache<>(VOLUME_INFO_CACHE_CAPACITY);
-
-    /**
-     * Icon that is displayed when folder is changing
-     */
-    public static final String WAITING_ICON = "waiting.png";
-
-    /**
-     * SizeFormat's format used to display volume info in status bar
-     */
-    private static final int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
-
-    /**
-     * SizeFormat's format used to display memory info in status bar
-     */
-    private static final int MEMORY_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
-
     /**
      * Listens to configuration changes and updates static fields accordingly
      */
     private static final ConfigurationListener CONFIGURATION_ADAPTER;
 
     /**
-     * SizeFormat format used to create the selected file(s) size string
+     * Number of volume info strings that can be temporarily cached
      */
-    private static int selectedFileSizeFormat;
+    private static final int VOLUME_INFO_CACHE_CAPACITY = 50;
+
+    /**
+     * Number of milliseconds before cached volume info strings expire
+     */
+    private static final int VOLUME_INFO_TIME_TO_LIVE = 60000;
+
+    /**
+     * Number of milliseconds between each volume info update by auto-update thread
+     */
+    private static final int AUTO_UPDATE_PERIOD = 6000;
 
     static {
         // Initialize the size column format based on the configuration
@@ -166,18 +115,42 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     }
 
     /**
-     * Sets the SizeFormat format used to create the selected file(s) size string.
-     *
-     * @param compactSize true to use a compact size format, false for full size in bytes
+     * Caches volume info strings (free/total space) for a while, since this information is expensive to retrieve
+     * (I/O bound). This map uses folders' volume path as its key.
      */
-    private static void setSelectedFileSizeFormat(boolean compactSize) {
-        if (compactSize)
-            selectedFileSizeFormat = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.ROUND_TO_KB;
-        else
-            selectedFileSizeFormat = SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG;
+    private static LRUCache<String, Long[]> volumeInfoCache = new FastLRUCache<>(VOLUME_INFO_CACHE_CAPACITY);
 
-        selectedFileSizeFormat |= SizeFormat.INCLUDE_SPACE;
-    }
+    /**
+     * SizeFormat format used to create the selected file(s) size string
+     */
+    private static int selectedFileSizeFormat;
+
+    private final MainFrame mainFrame;
+
+    /**
+     * Label that displays info about current selected file(s)
+     */
+    private final JLabel selectedFilesLabel;
+
+    /**
+     * Icon used while loading is in progress.
+     */
+    private final SpinningDial dial;
+
+    /**
+     * Label that displays info about current volume (free/total space)
+     */
+    private final VolumeSpaceLabel volumeSpaceLabel;
+
+    /**
+     * Label that displays info about memory
+     */
+    private final MemoryLabel memoryLabel;
+
+    /**
+     * Thread which auto updates volume info
+     */
+    private Thread autoUpdateThread;
 
     /**
      * Creates a new StatusBar instance.
@@ -194,10 +167,17 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         add(Box.createHorizontalGlue());
 
-        final JobsPopupButton jobsButton = new JobsPopupButton();
-        jobsButton.setPopupMenuLocation(SwingConstants.TOP);
+        final RolloverButtonAdapter rolloverButtonAdapter = new RolloverButtonAdapter();
 
+        final JobsPopupButton jobsButton = new JobsPopupButton();
+        jobsButton.addMouseListener(rolloverButtonAdapter);
         add(jobsButton);
+        add(Box.createRigidArea(new Dimension(2, 0)));
+
+
+        final PerformanceMonitorButton performanceMonitorButton = new PerformanceMonitorButton(mainFrame);
+        performanceMonitorButton.addMouseListener(rolloverButtonAdapter);
+        add(performanceMonitorButton);
         add(Box.createRigidArea(new Dimension(2, 0)));
 
         memoryLabel = new MemoryLabel();
@@ -206,8 +186,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
         if (DesktopManager.getTrash() != null) {
             final TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
-            trashButton.setPopupMenuLocation(SwingConstants.TOP);
-
+            trashButton.addMouseListener(rolloverButtonAdapter);
             add(trashButton);
             add(Box.createRigidArea(new Dimension(2, 0)));
         }
@@ -252,6 +231,20 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         memoryLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
         memoryLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
         ThemeManager.addCurrentThemeListener(this);
+    }
+
+    /**
+     * Sets the SizeFormat format used to create the selected file(s) size string.
+     *
+     * @param compactSize true to use a compact size format, false for full size in bytes
+     */
+    private static void setSelectedFileSizeFormat(boolean compactSize) {
+        if (compactSize)
+            selectedFileSizeFormat = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.ROUND_TO_KB;
+        else
+            selectedFileSizeFormat = SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG;
+
+        selectedFileSizeFormat |= SizeFormat.INCLUDE_SPACE;
     }
 
     /**
@@ -624,225 +617,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             memoryLabel.setForeground(event.getColor());
             repaint();
         }
-    }
-
-    ///////////////////
-    // Inner classes //
-    ///////////////////
-
-    /**
-     * This label displays the amount of free and/or total space on a volume.
-     */
-    private static class VolumeSpaceLabel extends JLabel implements ThemeListener {
-
-        private long freeSpace = -1;
-        private long totalSpace = -1;
-
-        Color backgroundColor;
-        Color okColor;
-        Color warningColor;
-        Color criticalColor;
-
-        private static final float SPACE_WARNING_THRESHOLD = 0.1f;
-        private static final float SPACE_CRITICAL_THRESHOLD = 0.05f;
-
-        private VolumeSpaceLabel() {
-            super("");
-            setHorizontalAlignment(CENTER);
-            backgroundColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_BACKGROUND_COLOR);
-            okColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_OK_COLOR);
-            warningColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_WARNING_COLOR);
-            criticalColor = ThemeManager.getCurrentColor(Theme.STATUS_BAR_CRITICAL_COLOR);
-            setBorder(new MutableLineBorder(ThemeManager.getCurrentColor(Theme.STATUS_BAR_BORDER_COLOR)));
-            ThemeManager.addCurrentThemeListener(this);
-        }
-
-        /**
-         * Sets the new volume total and free space, and updates the label's text to show the new values and,
-         * only if both total and free space are available (different from -1), paint a graphical representation
-         * of the amount of free space available and set a tooltip showing the percentage of free space on the volume.
-         *
-         * @param totalSpace total volume space, -1 if not available
-         * @param freeSpace  free volume space, -1 if not available
-         */
-        private void setVolumeSpace(long totalSpace, long freeSpace) {
-            this.freeSpace = freeSpace;
-            this.totalSpace = totalSpace;
-
-            // Set new label's text
-            String volumeInfo;
-            if (freeSpace != -1) {
-                volumeInfo = SizeFormat.format(freeSpace, VOLUME_INFO_SIZE_FORMAT);
-                if (totalSpace != -1)
-                    volumeInfo += " / " + SizeFormat.format(totalSpace, VOLUME_INFO_SIZE_FORMAT);
-
-                volumeInfo = Translator.get("status_bar.volume_free", volumeInfo);
-            } else if (totalSpace != -1) {
-                volumeInfo = SizeFormat.format(totalSpace, VOLUME_INFO_SIZE_FORMAT);
-                volumeInfo = Translator.get("status_bar.volume_capacity", volumeInfo);
-            } else {
-                volumeInfo = "";
-            }
-            setText(volumeInfo);
-
-            // Set tooltip
-            if (freeSpace == -1 || totalSpace == -1)
-                setToolTipText(null);       // Removes any previous tooltip
-            else
-                setToolTipText("" + (int) (100 * freeSpace / (float) totalSpace) + "%");
-
-            repaint();
-        }
-
-        /**
-         * Adds some empty space around the label.
-         */
-        @Override
-        public Dimension getPreferredSize() {
-            Dimension d = super.getPreferredSize();
-            return new Dimension(d.width + 4, d.height + 2);
-        }
-
-        /**
-         * Returns an interpolated color value, located at percent between c1 and c2 in the RGB space.
-         *
-         * @param c1      first color
-         * @param c2      end color
-         * @param percent distance between c1 and c2, comprised between 0 and 1.
-         * @return an interpolated color value, located at percent between c1 and c2 in the RGB space.
-         */
-        Color interpolateColor(Color c1, Color c2, float percent) {
-            return new Color(
-                    (int) (c1.getRed() + (c2.getRed() - c1.getRed()) * percent),
-                    (int) (c1.getGreen() + (c2.getGreen() - c1.getGreen()) * percent),
-                    (int) (c1.getBlue() + (c2.getBlue() - c1.getBlue()) * percent)
-            );
-        }
-
-        @Override
-        public void paint(Graphics g) {
-
-            // If free or total space is not available, this label will just be painted as a normal JLabel
-            if (freeSpace != -1 && totalSpace != -1) {
-                int width = getWidth();
-                int height = getHeight();
-
-                // Paint amount of free volume space if both free and total space are available
-                float freeSpacePercentage = freeSpace / (float) totalSpace;
-
-                Color c;
-                if (freeSpacePercentage <= SPACE_CRITICAL_THRESHOLD) {
-                    c = criticalColor;
-                } else if (freeSpacePercentage <= SPACE_WARNING_THRESHOLD) {
-                    c = interpolateColor(warningColor, criticalColor, (SPACE_WARNING_THRESHOLD - freeSpacePercentage) / SPACE_WARNING_THRESHOLD);
-                } else {
-                    c = interpolateColor(okColor, warningColor, (1 - freeSpacePercentage) / (1 - SPACE_WARNING_THRESHOLD));
-                }
-
-                g.setColor(c);
-
-                int freeSpaceWidth = Math.max(Math.round(freeSpacePercentage * (float) (width - 2)), 1);
-                g.fillRect(1, 1, freeSpaceWidth + 1, height - 2);
-
-                // Fill background
-                g.setColor(backgroundColor);
-                g.fillRect(freeSpaceWidth + 1, 1, width - freeSpaceWidth - 1, height - 2);
-            }
-
-            super.paint(g);
-        }
-
-        @Override
-        public void fontChanged(FontChangedEvent event) {
-
-        }
-
-        @Override
-        public void colorChanged(ColorChangedEvent event) {
-            switch (event.getColorId()) {
-                case Theme.STATUS_BAR_BACKGROUND_COLOR:
-                    backgroundColor = event.getColor();
-                    break;
-                case Theme.STATUS_BAR_BORDER_COLOR:
-                    // Some (rather evil) look and feels will change borders outside of muCommander's control,
-                    // this check is necessary to ensure no exception is thrown.
-                    if (getBorder() instanceof MutableLineBorder)
-                        ((MutableLineBorder) getBorder()).setLineColor(event.getColor());
-                    break;
-                case Theme.STATUS_BAR_OK_COLOR:
-                    okColor = event.getColor();
-                    break;
-                case Theme.STATUS_BAR_WARNING_COLOR:
-                    warningColor = event.getColor();
-                    break;
-                case Theme.STATUS_BAR_CRITICAL_COLOR:
-                    criticalColor = event.getColor();
-                    break;
-                default:
-                    return;
-            }
-            repaint();
-        }
-
-    }
-
-    /**
-     * This label displays the amount of used and total heap size.
-     */
-    private static class MemoryLabel extends VolumeSpaceLabel {
-
-        private long maxMemory;
-        private long totalMemory;
-        private long usedMemory;
-
-        private static final float MEMORY_WARNING_THRESHOLD = 0.9f;
-        private static final float MEMORY_CRITICAL_THRESHOLD = 0.95f;
-
-        private void setMemory(long maxMemory, long totalMemory, long freeMemory) {
-            this.maxMemory = maxMemory;
-            this.totalMemory = totalMemory;
-            this.usedMemory = totalMemory - freeMemory;
-
-            // Set new label's text
-            String memoryInfo = SizeFormat.format(usedMemory, MEMORY_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(this.totalMemory, MEMORY_INFO_SIZE_FORMAT) + " (" + SizeFormat.format(this.maxMemory, MEMORY_INFO_SIZE_FORMAT) + ")";
-
-            memoryInfo = Translator.get("status_bar.memory_used", memoryInfo);
-            setText(memoryInfo);
-
-            // Set tooltip
-            setToolTipText("" + (int) (100 * usedMemory / (float) this.totalMemory) + "%");
-
-            repaint();
-        }
-
-        @Override
-        public void paint(Graphics g) {
-            int width = getWidth();
-            int height = getHeight();
-
-            float usedMemoryPercentage = usedMemory / (float) totalMemory;
-
-            Color c;
-            if (usedMemoryPercentage >= MEMORY_CRITICAL_THRESHOLD) {
-                c = criticalColor;
-            } else if (usedMemoryPercentage >= MEMORY_WARNING_THRESHOLD) {
-                c = interpolateColor(warningColor, criticalColor, (usedMemoryPercentage - MEMORY_WARNING_THRESHOLD) / MEMORY_WARNING_THRESHOLD);
-            } else {
-                c = interpolateColor(okColor, warningColor, (1 - MEMORY_WARNING_THRESHOLD) / (1 - usedMemoryPercentage));
-            }
-
-            g.setColor(c);
-
-            int usedMemoryWidth = Math.max(Math.round(usedMemoryPercentage * (float) (width - 2)), 1);
-            g.fillRect(1, 1, usedMemoryWidth + 1, height - 2);
-
-            // Fill background
-            g.setColor(backgroundColor);
-            g.fillRect(usedMemoryWidth + 1, 1, width - usedMemoryWidth - 1, height - 2);
-
-            super.paint(g);
-        }
-
     }
 
 }

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.ui.main;
+package com.mucommander.ui.main.statusbar;
 
 import com.mucommander.job.FileJob;
 import com.mucommander.job.JobListener;
@@ -38,23 +38,13 @@ import java.awt.*;
  */
 class JobsPopupButton extends PopupButton implements JobListener {
 
-    /**
-     * Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected
-     */
-    private RolloverButtonAdapter rolloverButtonAdapter;
-
     JobsPopupButton() {
         setContentAreaFilled(false);
         setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, "waiting.png"));
-
-        // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
-        // get garbage-collected
-        rolloverButtonAdapter = new RolloverButtonAdapter();
         RolloverButtonAdapter.setButtonDecoration(this);
-        addMouseListener(rolloverButtonAdapter);
-
         setVisible(false);
         JobsManager.getInstance().addJobListener(this);
+        setPopupMenuLocation(SwingConstants.TOP);
     }
 
     @Override
