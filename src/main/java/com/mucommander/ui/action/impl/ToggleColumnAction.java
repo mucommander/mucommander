@@ -53,7 +53,7 @@ public abstract class ToggleColumnAction extends MuAction {
     }
 
     protected void updateLabel() {
-        setLabel(Translator.get(isColumnVisible() ? "ToggleColumn.hide" : "ToggleColumn.show", column.getLabel()));
+        setLabel(Translator.get(isColumnVisible() ? Descriptor.ACTION_ID + ".hide" : Descriptor.ACTION_ID + ".show", column.getLabel()));
     }
 
     @Override
@@ -63,6 +63,7 @@ public abstract class ToggleColumnAction extends MuAction {
 
 
     public static abstract class Descriptor extends AbstractActionDescriptor {
+        public static final String ACTION_ID = "ToggleColumn";
 
         private Column column;
 
@@ -88,7 +89,7 @@ public abstract class ToggleColumnAction extends MuAction {
 
         @Override
         public String getLabel() {
-            return Translator.get("ToggleColumn.show", column.getLabel());
+            return Translator.get(Descriptor.ACTION_ID + ".show", column.getLabel());
         }
     }
 }

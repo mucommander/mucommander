@@ -18,33 +18,27 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
-import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.statusbar.StatusBar;
 
 import javax.swing.*;
 import java.util.Map;
 
 /**
- * This action shows/hides the current MainFrame's {@link StatusBar} depending on its
+ * This action shows/hides the current MainFrame's performance monitor dialog depending on its
  * current visible state: if it is visible, hides it, if not shows it.
  * <p>
  * <p>This action's label will be updated to reflect the current visible state.
  * <p>
- * <p>Each time this action is executed, the new current visible state is stored in the configuration so that
- * new MainFrame windows will use it to determine whether the StatusBar has to be made visible or not.
  *
- * @author Maxence Bernard
+ * @author Mikhail Tikhomirov
  */
-public class ToggleStatusBarAction extends MuAction {
+public class TogglePerformanceMonitorAction extends MuAction {
 
-    public ToggleStatusBarAction(MainFrame mainFrame, Map<String, Object> properties) {
+    public TogglePerformanceMonitorAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
-        updateLabel(MuConfigurations.getPreferences().getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
+        updateLabel(false);
     }
 
     private void updateLabel(boolean visible) {
@@ -53,15 +47,9 @@ public class ToggleStatusBarAction extends MuAction {
 
     @Override
     public void performAction() {
-        StatusBar statusBar = mainFrame.getStatusBar();
-        boolean visible = !statusBar.isVisible();
-        // Save the last status bar visible state in the configuration, this will become the default for new MainFrame windows.
-        MuConfigurations.getPreferences().setVariable(MuPreference.STATUS_BAR_VISIBLE, visible);
-        // Change the label to reflect the new status bar state
+        final boolean visible = !mainFrame.isPerformanceMonitorDialogVisible();
         updateLabel(visible);
-        // Show/hide the status bar
-        statusBar.setVisible(visible);
-        mainFrame.validate();
+        mainFrame.setPerformanceMonitorVisible(visible);
     }
 
     @Override
@@ -71,26 +59,31 @@ public class ToggleStatusBarAction extends MuAction {
 
     public static class Factory implements ActionFactory {
 
+        @Override
         public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
-            return new ToggleStatusBarAction(mainFrame, properties);
+            return new TogglePerformanceMonitorAction(mainFrame, properties);
         }
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "ToggleStatusBar";
+        public static final String ACTION_ID = "TogglePerformanceMonitor";
 
+        @Override
         public String getId() {
             return ACTION_ID;
         }
 
+        @Override
         public ActionCategory getCategory() {
             return ActionCategory.VIEW;
         }
 
+        @Override
         public KeyStroke getDefaultAltKeyStroke() {
             return null;
         }
 
+        @Override
         public KeyStroke getDefaultKeyStroke() {
             return null;
         }

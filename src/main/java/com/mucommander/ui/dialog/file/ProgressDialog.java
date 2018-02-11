@@ -33,7 +33,6 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.StatusBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +50,29 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class ProgressDialog extends FocusDialog implements ActionListener, ItemListener, ChangeListener, FileJobListener, JobListener {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ProgressDialog.class);
+    // Button icons
+    private static final String WAITING_ICON = "waiting.png";
+    private static final String RESUME_ICON = "resume.png";
+    private static final String PAUSE_ICON = "pause.png";
+    private static final String SKIP_ICON = "skip.png";
+    private static final String STOP_ICON = "stop.png";
+    private static final String HIDE_ICON = "hide.png";
+    private static final String CURRENT_SPEED_ICON = "speed.png";
+    // Dialog width is constrained to 410, height is not an issue (always the same)
+    private static final Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(410, 10000);
+    private static final Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(410, 0);
+    // Height allocated to the 'speed graph'
+    private static final int SPEED_GRAPH_HEIGHT = 80;
+
+    private static final Color GRAPH_OUTLINE_COLOR = new Color(70, 70, 70);
+    private static final Color GRAPH_FILL_COLOR = new Color(215, 215, 215);
+    private static final Color BPS_LIMIT_COLOR = new Color(204, 0, 0);
+    private static final int LINE_SPACING = 6;
+    private static final int NB_SAMPLES_MAX = 320;
+    private static final int STROKE_WIDTH = 1;
+    private static final Stroke LINE_STROKE = new BasicStroke(STROKE_WIDTH);
 
     private JLabel currentFileLabel;
     private JLabel totalTransferredLabel;
@@ -79,28 +100,10 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
     private boolean firstTimeActivated = true;
 
-    // Button icons
-    private final static String RESUME_ICON = "resume.png";
-    private final static String PAUSE_ICON = "pause.png";
-    private final static String SKIP_ICON = "skip.png";
-    private final static String STOP_ICON = "stop.png";
-    private final static String HIDE_ICON = "hide.png";
-    private final static String CURRENT_SPEED_ICON = "speed.png";
-
-    // Dialog width is constrained to 410, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(410, 10000);
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(410, 0);
-
-    /**
-     * Height allocated to the 'speed graph'
-     */
-    private final static int SPEED_GRAPH_HEIGHT = 80;
-
     static {
         // Disable JProgressBar animation which is a real CPU hog under Mac OS X
         UIManager.put("ProgressBar.repaintInterval", Integer.MAX_VALUE);
     }
-
 
     public ProgressDialog(MainFrame mainFrame, String title) {
         super(mainFrame, title, mainFrame);
@@ -111,7 +114,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         setResizable(false);
     }
-
 
     private void initUI() {
         Container contentPane = getContentPane();
@@ -144,7 +146,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         yPanel.addSpace(10);
         elapsedTimeLabel = new JLabel(Translator.get("progress_dialog.elapsed_time") + ": ");
-        elapsedTimeLabel.setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, StatusBar.WAITING_ICON));
+        elapsedTimeLabel.setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, WAITING_ICON));
         yPanel.add(elapsedTimeLabel);
 
         if (transferFileJob != null) {
@@ -224,7 +226,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         getRootPane().setDefaultButton(stopButton);
     }
 
-
     public void start(FileJob job) {
         this.job = job;
 
@@ -246,22 +247,12 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             showDialog();
     }
 
-
     /**
      * Stops repaint thread.
      */
     public void stop() {
         JobsManager.getInstance().removeJobListener(this);
     }
-
-
-//    /**
-//     * This method is called by the registered FileJob starts each time a new file is being processed.
-//     */
-//    public void notifyCurrentFileChanged() {
-//        // Update current file label
-//        currentFileLabel.setText(job.getStatusString());
-//    }
 
     private void updateThroughputLimit() {
         transferFileJob.setThroughputLimit(limitSpeedCheckBox.isSelected() ? speedChooser.getValue() : -1);
@@ -275,7 +266,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     ////////////////////////////////////
     // FileJobListener implementation //
     ////////////////////////////////////
-
     @Override
     public void jobStateChanged(FileJob source, FileJobState oldState, FileJobState newState) {
         LOGGER.debug("currentThread=" + Thread.currentThread() + " oldState=" + oldState + " newState=" + newState);
@@ -335,7 +325,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         }
     }
 
-
     // Refresh current file label in a separate thread, more frequently than other components to give a sense
     // of speed when small files are being transferred.
     // This 'pull' approach allows to throttle the number label updates which have a cost VS updating the label
@@ -377,8 +366,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     /////////////////////////////
     // JobProgress listener    //
     /////////////////////////////
-
-
     @Override
     public void jobProgress(FileJob source, boolean fullUpdate) {
         if (job.equals(source)) {
@@ -393,7 +380,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
-
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
@@ -419,7 +406,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     /////////////////////////////////
     // ItemListener implementation //
     /////////////////////////////////
-
+    @Override
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getSource();
         if (source == limitSpeedCheckBox) {
@@ -433,7 +420,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     ///////////////////////////////////
     // ChangeListener implementation //
     ///////////////////////////////////
-
+    @Override
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == speedChooser) {
             updateThroughputLimit();
@@ -444,7 +431,6 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
     ///////////////////////////////////////
     // Overridden WindowListener methods // 
     ///////////////////////////////////////
-
     @Override
     public void windowActivated(WindowEvent e) {
         // This method is called each time the dialog is activated
@@ -481,22 +467,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
      */
     private class SpeedGraph extends JPanel {
 
-        private final Color GRAPH_OUTLINE_COLOR = new Color(70, 70, 70);
-
-        private final Color GRAPH_FILL_COLOR = new Color(215, 215, 215);
-
-        private final Color BPS_LIMIT_COLOR = new Color(204, 0, 0);
-
-        private static final int LINE_SPACING = 6;
-
-        private static final int NB_SAMPLES_MAX = 320;
-
-        private static final int STROKE_WIDTH = 1;
-
-        private java.util.List<Long> samples = new Vector<Long>(NB_SAMPLES_MAX);
-
-        private Stroke lineStroke = new BasicStroke(STROKE_WIDTH);
-
+        private final java.util.List<Long> samples = new Vector<>(NB_SAMPLES_MAX);
 
         private SpeedGraph() {
         }
@@ -530,7 +501,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
             g.setColor(getBackground());
             g.fillRect(0, 0, width, height);
 
-            g2d.setStroke(lineStroke);
+            g2d.setStroke(LINE_STROKE);
 
             synchronized (samples) {     // Ensures that addSample() is not currently accessing the Vector
                 // Number of collected sample
@@ -567,7 +538,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                 Polygon p = new Polygon();
                 int sampleOffset = firstSample;
                 for (int l = 0; l < nbLines; l++) {
-                    p.addPoint(x, height - STROKE_WIDTH - (int) ((Long) samples.get(sampleOffset++) / yRatio));
+                    p.addPoint(x, height - STROKE_WIDTH - (int) (samples.get(sampleOffset++) / yRatio));
                     x += LINE_SPACING;
                 }
                 p.addPoint(x - LINE_SPACING, height - 1);
@@ -579,33 +550,16 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                 x = STROKE_WIDTH;
                 sampleOffset = firstSample;
                 for (int l = 0; l < nbLines - 1; l++) {
-                    g.drawLine(x, height - STROKE_WIDTH - (int) ((Long) samples.get(sampleOffset) / yRatio),
-                            (x += LINE_SPACING), height - STROKE_WIDTH - (int) ((Long) samples.get(++sampleOffset) / yRatio));
+                    g.drawLine(x, height - STROKE_WIDTH - (int) (samples.get(sampleOffset) / yRatio),
+                            (x += LINE_SPACING), height - STROKE_WIDTH - (int) (samples.get(++sampleOffset) / yRatio));
                 }
 
                 // Draw an horizontal line at the bottom of the graph
                 g.drawLine(0, height - 1,
                         width - 1, height - 1);
-
-                // Unsuccessful rendering test using curves
-                //            GeneralPath gp = new GeneralPath();
-                //            int x = STROKE_WIDTH;
-                //            gp.moveTo(x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset++)).longValue()/yRatio));
-                //            x += LINE_SPACING;
-                //            for(int l=1; l<nbLines-2; l+=2) {
-                //                gp.quadTo(
-                //                    x, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset)).longValue()/yRatio),
-                //                    x+LINE_SPACING, height-STROKE_WIDTH-(int)(((Long)samples.elementAt(sampleOffset+1)).longValue()/yRatio)
-                //                );
-                //
-                //                sampleOffset += 2;
-                //                x += 2*LINE_SPACING;
-                //
-                //                g2d.draw(gp);
-                //            }
             }
         }
-    }
 
+    }
 
 }

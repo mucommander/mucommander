@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.main;
+package com.mucommander.ui.main.statusbar;
 
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
@@ -26,6 +26,7 @@ import com.mucommander.ui.action.impl.OpenTrashAction;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,22 +44,12 @@ class TrashPopupButton extends PopupButton {
 
     private final MainFrame mainFrame;
 
-    /**
-     * Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected
-     */
-    private final RolloverButtonAdapter rolloverButtonAdapter;
-
     TrashPopupButton(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-
         setContentAreaFilled(false);
         setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, "trash.png"));
-
-        // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
-        // get garbage-collected
-        rolloverButtonAdapter = new RolloverButtonAdapter();
         RolloverButtonAdapter.setButtonDecoration(this);
-        addMouseListener(rolloverButtonAdapter);
+        setPopupMenuLocation(SwingConstants.TOP);
     }
 
     @Override
@@ -98,4 +89,5 @@ class TrashPopupButton extends PopupButton {
     public Insets getInsets() {
         return new Insets(2, 2, 2, 2);
     }
+
 }

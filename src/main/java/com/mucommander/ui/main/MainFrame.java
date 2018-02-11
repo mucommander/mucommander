@@ -41,6 +41,7 @@ import com.mucommander.ui.layout.ProportionalSplitPane;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.commandbar.CommandBar;
 import com.mucommander.ui.main.menu.MainMenuBar;
+import com.mucommander.ui.main.statusbar.StatusBar;
 import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableConfiguration;
@@ -53,6 +54,7 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Map;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -112,9 +114,58 @@ public class MainFrame extends JFrame implements LocationListener {
     private boolean singlePanel;
 
     /**
+     * PerformanceMonitorDialog instance
+     */
+    private PerformanceMonitorDialog performanceMonitorDialog;
+
+    /**
      * Contains all registered ActivePanelListener instances, stored as weak references
      */
-    private WeakHashMap<ActivePanelListener, ?> activePanelListeners = new WeakHashMap<ActivePanelListener, Object>();
+    private Map<ActivePanelListener, ?> activePanelListeners = new WeakHashMap<>();
+
+    public MainFrame(ConfFileTableTab leftTab, FileTableConfiguration leftTableConf,
+                     ConfFileTableTab rightTab, FileTableConfiguration rightTableConf) {
+        this(new ConfFileTableTab[]{leftTab}, 0, leftTableConf, new ConfFileTableTab[]{rightTab}, 0, rightTableConf);
+    }
+
+    /**
+     * Creates a new main frame set to the given initial folders.
+     */
+    public MainFrame(ConfFileTableTab[] leftTabs, int indexOfLeftSelectedTab, FileTableConfiguration leftTableConf,
+                     ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
+        init(new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf),
+                new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf));
+
+        for (boolean isLeft = true; ; isLeft = false) {
+            FileTable fileTable = isLeft ? leftTable : rightTable;
+            fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
+                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
+
+            FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
+            folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
+            folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(0, isLeft), false));
+
+            if (!isLeft)
+                break;
+        }
+    }
+
+    /**
+     * Copy constructor
+     */
+    public MainFrame(MainFrame mainFrame) {
+        FolderPanel leftFolderPanel = mainFrame.getLeftPanel();
+        FolderPanel rightFolderPanel = mainFrame.getRightPanel();
+        FileTable leftFileTable = leftFolderPanel.getFileTable();
+        FileTable rightFileTable = rightFolderPanel.getFileTable();
+
+        init(new FolderPanel(this, new ConfFileTableTab[]{new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())}, 0, leftFileTable.getConfiguration()),
+                new FolderPanel(this, new ConfFileTableTab[]{new ConfFileTableTab(rightFolderPanel.getCurrentFolder().getURL())}, 0, rightFileTable.getConfiguration()));
+
+        // TODO: Sorting should be part of the FileTable configuration
+        this.leftTable.sortBy(leftFileTable.getSortInfo());
+        this.rightTable.sortBy(rightFileTable.getSortInfo());
+    }
 
     /**
      * Sets the window icon, using the best method (Java 1.6's Window#setIconImages when available, Window#setIconImage
@@ -129,7 +180,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Use Java 1.6 's new Window#setIconImages(List<Image>) when available
         if (JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
-            java.util.List<Image> icons = new Vector<Image>();
+            java.util.List<Image> icons = new Vector<>();
 
             // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.
             icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_8.png").getImage());
@@ -234,7 +285,7 @@ public class MainFrame extends JFrame implements LocationListener {
         splitPane.setOneTouchExpandable(true);
 
         // Disable all the JSPlitPane accessibility shortcuts that are registered by default, as some of them
-        // conflict with default mucommander action shortcuts (e.g. F6 and F8) 
+        // conflict with default mucommander action shortcuts (e.g. F6 and F8)
         splitPane.disableAccessibilityShortcuts();
 
         // Split pane will be given any extra space
@@ -271,56 +322,6 @@ public class MainFrame extends JFrame implements LocationListener {
 
         // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their sub components.
         setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
-    }
-
-    public MainFrame(ConfFileTableTab leftTab, FileTableConfiguration leftTableConf,
-                     ConfFileTableTab rightTab, FileTableConfiguration rightTableConf) {
-        this(new ConfFileTableTab[]{leftTab}, 0, leftTableConf, new ConfFileTableTab[]{rightTab}, 0, rightTableConf);
-    }
-
-    /**
-     * Creates a new main frame set to the given initial folders.
-     *
-     * @param leftInitialFolders  the initial folders to display in the left panel's tabs
-     * @param rightInitialFolders the initial folders to display in the right panel's tabs
-     */
-    public MainFrame(ConfFileTableTab[] leftTabs, int indexOfLeftSelectedTab, FileTableConfiguration leftTableConf,
-                     ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
-    		/*AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders,
-    				 int indexOfLeftSelectedTab, int indexOfRightSelectedTab,
-    			     FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) { */
-        init(new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf),
-                new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf));
-
-        for (boolean isLeft = true; ; isLeft = false) {
-            FileTable fileTable = isLeft ? leftTable : rightTable;
-            fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
-                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
-
-            FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
-            folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
-            folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(0, isLeft), false));
-
-            if (!isLeft)
-                break;
-        }
-    }
-
-    /**
-     * Copy constructor
-     */
-    public MainFrame(MainFrame mainFrame) {
-        FolderPanel leftFolderPanel = mainFrame.getLeftPanel();
-        FolderPanel rightFolderPanel = mainFrame.getRightPanel();
-        FileTable leftFileTable = leftFolderPanel.getFileTable();
-        FileTable rightFileTable = rightFolderPanel.getFileTable();
-
-        init(new FolderPanel(this, new ConfFileTableTab[]{new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())}, 0, leftFileTable.getConfiguration()),
-                new FolderPanel(this, new ConfFileTableTab[]{new ConfFileTableTab(rightFolderPanel.getCurrentFolder().getURL())}, 0, rightFileTable.getConfiguration()));
-
-        // TODO: Sorting should be part of the FileTable configuration
-        this.leftTable.sortBy(leftFileTable.getSortInfo());
-        this.rightTable.sortBy(rightFileTable.getSortInfo());
     }
 
     /**
@@ -573,7 +574,7 @@ public class MainFrame extends JFrame implements LocationListener {
         leftTable.setColumnModel(rightTable.getColumnModel());
         rightTable.setColumnModel(model);
 
-        SortInfo sortInfo = (SortInfo) leftTable.getSortInfo().clone();
+        SortInfo sortInfo = leftTable.getSortInfo().clone();
 
         leftTable.sortBy(rightTable.getSortInfo());
         leftTable.updateColumnsVisibility();
@@ -636,12 +637,9 @@ public class MainFrame extends JFrame implements LocationListener {
     public boolean isAncestorOfActiveWindow() {
         if (isActive())
             return true;
-
         Window ownedWindows[] = getOwnedWindows();
-
-        int nbWindows = ownedWindows.length;
-        for (int i = 0; i < nbWindows; i++)
-            if (ownedWindows[i].isActive())
+        for (Window ownedWindow : ownedWindows)
+            if (ownedWindow.isActive())
                 return true;
 
         return false;
@@ -703,12 +701,40 @@ public class MainFrame extends JFrame implements LocationListener {
      *
      * @return new state for singlePanel boolean
      */
-
     public boolean toggleSinglePanel() {
         singlePanel = !singlePanel;
         return singlePanel;
     }
 
+    /**
+     * Shows or hides performance monitor dialog
+     *
+     * @param visible show dialog if true, hide if false
+     */
+    public void setPerformanceMonitorVisible(boolean visible) {
+        if (!((visible && isPerformanceMonitorDialogVisible()) || (!visible && !isPerformanceMonitorDialogVisible()))) {
+            if (visible) {
+                if (performanceMonitorDialog == null) {
+                    performanceMonitorDialog = new PerformanceMonitorDialog(this);
+                }
+                performanceMonitorDialog.showDialog();
+            } else {
+                if (performanceMonitorDialog == null) {
+                    return;
+                }
+                performanceMonitorDialog.setVisible(false);
+            }
+        }
+    }
+
+    /**
+     * Returns <code>true</code> if performance monitor dialog is visible
+     *
+     * @return <code>true</code> if performance monitor dialog is visible
+     */
+    public boolean isPerformanceMonitorDialogVisible() {
+        return (performanceMonitorDialog != null && performanceMonitorDialog.isVisible());
+    }
 
     ///////////////////////
     // Overridden methods //
