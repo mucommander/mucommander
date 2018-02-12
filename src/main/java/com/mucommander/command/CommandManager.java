@@ -42,6 +42,7 @@ import java.util.*;
  * @author Nicolas Rinaudo
  */
 public class CommandManager implements CommandBuilder {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandManager.class);
 
     // - Built-in commands -----------------------------------------------------
@@ -71,18 +72,16 @@ public class CommandManager implements CommandBuilder {
      */
     public static final String EDITOR_ALIAS = "edit";
 
-
     // - Self-open command -----------------------------------------------------
     // -------------------------------------------------------------------------
     /**
      * Alias of the 'run as executable' command.
      */
-    public static final String RUN_AS_EXECUTABLE_ALIAS = "execute";
+    private static final String RUN_AS_EXECUTABLE_ALIAS = "execute";
     /**
      * Command used to run a file as an executable.
      */
-    public static final Command RUN_AS_EXECUTABLE_COMMAND = new Command(RUN_AS_EXECUTABLE_ALIAS, "$f", CommandType.SYSTEM_COMMAND);
-
+    private static final Command RUN_AS_EXECUTABLE_COMMAND = new Command(RUN_AS_EXECUTABLE_ALIAS, "$f", CommandType.SYSTEM_COMMAND);
 
     // - Association definitions -----------------------------------------------
     // -------------------------------------------------------------------------
@@ -105,8 +104,7 @@ public class CommandManager implements CommandBuilder {
     /**
      * Default name of the association XML file.
      */
-    public static final String DEFAULT_ASSOCIATION_FILE_NAME = "associations.xml";
-
+    private static final String DEFAULT_ASSOCIATION_FILE_NAME = "associations.xml";
 
     // - Commands definition ---------------------------------------------------
     // -------------------------------------------------------------------------
@@ -125,23 +123,22 @@ public class CommandManager implements CommandBuilder {
     /**
      * Default name of the custom commands file.
      */
-    public static final String DEFAULT_COMMANDS_FILE_NAME = "commands.xml";
+    private static final String DEFAULT_COMMANDS_FILE_NAME = "commands.xml";
     /**
      * Default command used when no other command is found for a specific file type.
      */
     private static Command defaultCommand;
 
-
     // - Initialization --------------------------------------------------------
     // -------------------------------------------------------------------------
 
-    /**
+    /*
      * Initializes the command manager.
      */
     static {
-        systemAssociations = new Vector<CommandAssociation>();
-        associations = new Vector<CommandAssociation>();
-        commands = new Hashtable<String, Command>();
+        systemAssociations = new Vector<>();
+        associations = new Vector<>();
+        commands = new Hashtable<>();
         defaultCommand = null;
     }
 
@@ -150,7 +147,6 @@ public class CommandManager implements CommandBuilder {
      */
     private CommandManager() {
     }
-
 
     // - Command handling ------------------------------------------------------
     // -------------------------------------------------------------------------
@@ -243,7 +239,7 @@ public class CommandManager implements CommandBuilder {
      */
     public static Collection<Command> commands() {
         // Copy the registered commands to a new list
-        List<Command> list = new Vector<Command>(commands.values());
+        List<Command> list = new Vector<>(commands.values());
         // Sorts the list.
         Collections.sort(list);
 
@@ -267,7 +263,7 @@ public class CommandManager implements CommandBuilder {
         }
     }
 
-    private static void registerCommand(Command command, boolean mark) throws CommandException {
+    private static void registerCommand(Command command, boolean mark) {
         // Registers the command and marks command as having been modified.
         setDefaultCommand(command);
 
@@ -278,7 +274,7 @@ public class CommandManager implements CommandBuilder {
             wereCommandsModified = true;
     }
 
-    public static void registerDefaultCommand(Command command) throws CommandException {
+    public static void registerDefaultCommand(Command command) {
         registerCommand(command, false);
     }
 
@@ -286,12 +282,10 @@ public class CommandManager implements CommandBuilder {
      * Registers the specified command at the end of the command list.
      *
      * @param command command to register.
-     * @throws CommandException if a command with same alias has already been registered.
      */
-    public static void registerCommand(Command command) throws CommandException {
+    public static void registerCommand(Command command) {
         registerCommand(command, true);
     }
-
 
     // - Associations handling -------------------------------------------------
     // -------------------------------------------------------------------------
@@ -330,14 +324,14 @@ public class CommandManager implements CommandBuilder {
         systemAssociations.add(createAssociation(command, filter));
     }
 
-
     // - Command builder code --------------------------------------------------
     // -------------------------------------------------------------------------
 
     /**
      * This method is public as an implementation side effect and must not be called directly.
      */
-    public void addCommand(Command command) throws CommandException {
+    @Override
+    public void addCommand(Command command) {
         registerCommand(command, false);
     }
 
@@ -364,7 +358,6 @@ public class CommandManager implements CommandBuilder {
             builder.endBuilding();
         }
     }
-
 
     // - Associations building -------------------------------------------------
     // -------------------------------------------------------------------------
@@ -446,7 +439,6 @@ public class CommandManager implements CommandBuilder {
             builder.endBuilding();
         }
     }
-
 
     // - Associations reading/writing ------------------------------------------
     // -------------------------------------------------------------------------
@@ -607,7 +599,6 @@ public class CommandManager implements CommandBuilder {
             LOGGER.debug("Custom file associations not modified, skip saving.");
     }
 
-
     // - Commands reading/writing ----------------------------------------------
     // -------------------------------------------------------------------------
 
@@ -655,7 +646,6 @@ public class CommandManager implements CommandBuilder {
         else
             setCommandFile(file);
     }
-
 
     /**
      * Sets the path to the custom commands file.
@@ -774,12 +764,15 @@ public class CommandManager implements CommandBuilder {
     /**
      * This method is public as an implementation side effect and must not be called directly.
      */
+    @Override
     public void startBuilding() {
     }
 
     /**
      * This method is public as an implementation side effect and must not be called directly.
      */
+    @Override
     public void endBuilding() {
     }
+
 }

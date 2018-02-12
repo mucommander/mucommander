@@ -55,21 +55,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     private final MainFrame mainFrame;
 
     /**
-     * Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected
-     */
-    private final RolloverButtonAdapter rolloverButtonAdapter;
-
-    /**
      * Dimension of button separators
      */
     private static final Dimension SEPARATOR_DIMENSION = new Dimension(10, 16);
-
-    /**
-     * Whether to use the new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-     */
-    private final static boolean USE_MAC_OS_X_CLIENT_PROPERTIES =
-            OsFamily.MAC_OS_X.isCurrent() &&
-                    OsVersion.MAC_OS_X_10_5.isCurrentOrHigher();
 
     /**
      * Current icon scale value
@@ -77,7 +65,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
     private static float scaleFactor = Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.TOOLBAR_ICON_SCALE,
             MuPreferences.DEFAULT_TOOLBAR_ICON_SCALE));
-
 
     /**
      * Creates a new toolbar and attaches it to the given frame.
@@ -95,10 +82,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
 
         // Listen to configuration changes to reload toolbar buttons when icon size has changed
         MuConfigurations.addPreferencesListener(this);
-
-        // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
-        // get garbage-collected
-        rolloverButtonAdapter = new RolloverButtonAdapter();
 
         // Create buttons for each actions and add them to the toolbar
         addButtons(ToolBarAttributes.getActions());
@@ -119,7 +102,7 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             }
         }
 
-        if (USE_MAC_OS_X_CLIENT_PROPERTIES) {
+        if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
             int nbComponents = getComponentCount();
 
             // Set the 'segment position' required for the 'segmented capsule' style  
@@ -170,17 +153,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         // Sets the button icon, taking into account the icon scale factor
         setButtonIcon(button);
 
-        if (USE_MAC_OS_X_CLIENT_PROPERTIES) {
-            button.putClientProperty("JButton.buttonType", "segmentedTextured");
-            button.setRolloverEnabled(true);
-        }
-        // On other platforms, use a custom rollover effect
-        else {
-            // Init rollover
-            RolloverButtonAdapter.setButtonDecoration(button);
-            button.addMouseListener(rolloverButtonAdapter);
-        }
-
+        RolloverButtonAdapter.decorateButton(button);
+        button.setMargin(new Insets(0, 0, 0, 0));
+        button.putClientProperty("JButton.buttonType", "square");
         add(button);
     }
 
@@ -193,12 +168,11 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         // Note: the action's icon must not be changed and remain in its original, non-scaled size
         ImageIcon icon = IconManager.getScaledIcon((ImageIcon) button.getAction().getValue(Action.SMALL_ICON), scaleFactor);
 
-        if (!USE_MAC_OS_X_CLIENT_PROPERTIES)     // Add padding around the icon so the button feels less crowded
+        if (!(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher() && OsVersion.MAC_OS_X_10_12.isCurrentOrLower()))     // Add padding around the icon so the button feels less crowded
             icon = IconManager.getPaddedIcon(icon, new Insets(3, 4, 3, 4));
 
         button.setIcon(icon);
     }
-
 
     ///////////////////////////////////
     // ConfigurationListener methods //
@@ -223,7 +197,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             }
         }
     }
-
 
     ///////////////////////////
     // MouseListener methods //
@@ -268,7 +241,6 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
     public void mousePressed(MouseEvent e) {
 
     }
-
 
     ///////////////////////////////////////
     // ToolBarAttributesListener methods //

@@ -286,6 +286,16 @@ public class PerformanceMonitorDialog extends FocusDialog implements ActionListe
 
     }
 
+    private static class BorderPanel extends JPanel {
+
+        private BorderPanel(MemoryPanel panel) {
+            setLayout(new BorderLayout());
+            setBorder(BorderFactory.createEtchedBorder());
+            add(panel, BorderLayout.CENTER);
+        }
+
+    }
+
     /**
      * Logger
      */
@@ -312,6 +322,7 @@ public class PerformanceMonitorDialog extends FocusDialog implements ActionListe
         closeAction = ActionManager.getActionInstance(TogglePerformanceMonitorAction.Descriptor.ACTION_ID, mainFrame);
 
         Container contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout(5, 5));
         contentPane.add(createCpuPanel(), BorderLayout.NORTH);
         contentPane.add(createMemoryPanel(), BorderLayout.CENTER);
         contentPane.add(createOkButton(), BorderLayout.SOUTH);
@@ -324,13 +335,13 @@ public class PerformanceMonitorDialog extends FocusDialog implements ActionListe
     private Component createMemoryPanel() {
         final MemoryPanel memoryPanel = new MemoryPanel();
         memoryPanel.start();
-        return memoryPanel;
+        return new BorderPanel(memoryPanel);
     }
 
     private Component createCpuPanel() {
         final CpuPanel cpuPanel = new CpuPanel();
         cpuPanel.start();
-        return cpuPanel;
+        return new BorderPanel(cpuPanel);
     }
 
     private Component createOkButton() {

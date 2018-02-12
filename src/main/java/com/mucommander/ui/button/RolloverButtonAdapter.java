@@ -18,6 +18,9 @@
 
 package com.mucommander.ui.button;
 
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
+
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -30,7 +33,7 @@ import java.awt.event.MouseListener;
  * Such buttons are particularly effective for toolbars, where a large number of buttons are usually present.
  * <p>
  * <p>
- * To 'rollover-enable' a button, the {@link #setButtonDecoration(javax.swing.JButton)} method must first be called to
+ * To 'rollover-enable' a button, the {@link #decorateButton(javax.swing.JButton)} method must first be called to
  * set decoration properties. Then, the button must register an instance of <code>RolloverButtonAdapter</code> as a
  * mouse listener. Note that a single <code>RolloverButtonAdapter</code> instance can be registered with several buttons.
  * </p>
@@ -39,10 +42,13 @@ import java.awt.event.MouseListener;
  */
 public class RolloverButtonAdapter implements MouseListener {
 
+    private static final RolloverButtonAdapter ROLLOVER_BUTTON_ADAPTER = new RolloverButtonAdapter();
+
     /**
      * Creates a new RolloverButtonAdapter.
      */
-    public RolloverButtonAdapter() {
+    private RolloverButtonAdapter() {
+
     }
 
     /**
@@ -50,32 +56,41 @@ public class RolloverButtonAdapter implements MouseListener {
      *
      * @param button the button to 'rollover-enable'
      */
-    public static void setButtonDecoration(JButton button) {
-        // Set button decorations and rollover behavior
-        button.setRolloverEnabled(true);
+    public static void decorateButton(JButton button) {
         button.setFocusPainted(false);
         button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
+            button.putClientProperty("JButton.buttonType", "textured");
+        }
+        button.setRolloverEnabled(true);
+        button.addMouseListener(ROLLOVER_BUTTON_ADAPTER);
     }
-
 
     ///////////////////////////
     // MouseListener methods //
     ///////////////////////////
 
+    @Override
     public void mouseEntered(MouseEvent e) {
         ((JButton) e.getSource()).setBorderPainted(true);
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
         ((JButton) e.getSource()).setBorderPainted(false);
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
     }
+
 }

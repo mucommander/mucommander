@@ -40,13 +40,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
  * @author Arik Hadas, Maxence Bernard
  */
 public class LocationChanger {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationChanger.class);
 
     /**
@@ -93,21 +93,18 @@ public class LocationChanger {
         // Set cursor to hourglass/wait
         mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-        Thread setLocationThread = new Thread() {
-            @Override
-            public void run() {
-                AbstractFile folder = getWorkableLocation(folderURL);
-                try {
-                    locationManager.setCurrentFolder(folder, null, true);
-                } finally {
-                    mainFrame.setNoEventsMode(false);
-                    // Restore default cursor
-                    mainFrame.setCursor(Cursor.getDefaultCursor());
-                    // Notify callback that the folder has been set
-                    callback.call();
-                }
+        Thread setLocationThread = new Thread(() -> {
+            AbstractFile folder = getWorkableLocation(folderURL);
+            try {
+                locationManager.setCurrentFolder(folder, null, true);
+            } finally {
+                mainFrame.setNoEventsMode(false);
+                // Restore default cursor
+                mainFrame.setCursor(Cursor.getDefaultCursor());
+                // Notify callback that the folder has been set
+                callback.call();
             }
-        };
+        });
 
         if (EventQueue.isDispatchThread())
             setLocationThread.start();
@@ -149,7 +146,6 @@ public class LocationChanger {
      * @return the thread that performs the actual folder change, null if another folder change is already underway
      */
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, boolean changeLockedTab) {
-        /* TODO branch setBranchView(false); */
         return tryChangeCurrentFolder(folder, null, false, changeLockedTab);
     }
 
@@ -301,7 +297,7 @@ public class LocationChanger {
 
     /**
      * Refreshes the current folder's contents. If the folder is no longer available, the folder will be changed to a
-     * 'workable' folder (see {@link #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)}.
+     * 'workable' folder (see {@link #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean, boolean)}.
      * <p>
      * <p>This method spawns a separate thread that takes care of the actual folder change and returns it.
      * It does nothing and returns <code>null</code> if another folder change is already underway.</p>
@@ -311,7 +307,7 @@ public class LocationChanger {
      * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder),
      *                            can be null in which case FileTable rules will be used to select current file
      * @return the thread that performs the actual folder change, null if another folder change is already underway
-     * @see #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)
+     * @see #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean, boolean)
      */
     public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
         folderPanel.getFoldersTreePanel().refreshFolder(locationManager.getCurrentFolder());
@@ -329,10 +325,8 @@ public class LocationChanger {
      * @param folder          folder to be made current folder
      * @param fileToSelect    file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
-     * @throws IOException
-     * @throws UnsupportedFileOperationException
      */
-    private void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) throws UnsupportedFileOperationException, IOException {
+    private void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) {
         // Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
         // while FileTable#setCurrentFolder is being called. 
         lastFolderChangeTime = System.currentTimeMillis();
@@ -500,9 +494,6 @@ public class LocationChanger {
          */
         private final Object KILL_LOCK = new Object();
 
-        /* TODO branch private ArrayList childrenList; */
-
-
         public ChangeFolderThread(AbstractFile folder, boolean findWorkableFolder, boolean changeLockedTab) {
             // Ensure that we work on a raw file instance and not a cached one
             this.folder = (folder instanceof CachedFile) ? ((CachedFile) folder).getProxiedFile() : folder;
@@ -602,6 +593,7 @@ public class LocationChanger {
                     LOGGER.debug("Killing thread using #stop()");
 
                     killedByStop = true;
+                    //noinspection deprecation
                     super.stop();
                     // Execute #cleanup() as it would have been done by #run() had the thread not been stopped.
                     // Note that #run() may end pseudo-gracefully and catch the underlying Exception. In this case
@@ -613,7 +605,6 @@ public class LocationChanger {
             }
         }
 
-
         @Override
         public void start() {
             // Notify listeners that location is changing
@@ -621,7 +612,6 @@ public class LocationChanger {
 
             super.start();
         }
-
 
         @Override
         public void run() {
@@ -822,16 +812,6 @@ public class LocationChanger {
                         // File tested -> 50% complete
                         folderPanel.setProgressValue(50);
 
-						/* TODO branch 
-						AbstractFile children[] = new AbstractFile[0];
-						if (branchView) {
-							childrenList = new ArrayList();
-							readBranch(folder);
-							children = (AbstractFile[]) childrenList.toArray(children);
-						} else {
-							children = folder.ls(chainedFileFilter);                            
-						}*/
-
                         synchronized (KILL_LOCK) {
                             if (killed) {
                                 LOGGER.debug("this thread has been killed, returning");
@@ -972,29 +952,11 @@ public class LocationChanger {
         }
 
         // For debugging purposes
+        @Override
         public String toString() {
             return super.toString() + " folderURL=" + folderURL + " folder=" + folder;
         }
+
     }
 
-    /* TODO branch
-     *//**
-     * Reads all files in the current directory and all its subdirectories.
-     * @param parent
-     *//*
-	private void readBranch(AbstractFile parent) {
-		AbstractFile[] children;
-		try {
-			children = parent.ls(chainedFileFilter);
-			for (int i=0; i<children.length; i++) {
-				if (children[i].isDirectory()) {
-					readBranch(children[i]);
-				} else {
-					childrenList.add(children[i]);
-				}
-			}
-		} catch (IOException e) {
-			AppLogger.fine("Caught exception", e);
-		}
-	}*/
 }

@@ -39,12 +39,12 @@ import java.awt.*;
 class JobsPopupButton extends PopupButton implements JobListener {
 
     JobsPopupButton() {
-        setContentAreaFilled(false);
         setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, "waiting.png"));
-        RolloverButtonAdapter.setButtonDecoration(this);
         setVisible(false);
         JobsManager.getInstance().addJobListener(this);
         setPopupMenuLocation(SwingConstants.TOP);
+        RolloverButtonAdapter.decorateButton(this);
+        putClientProperty("JButton.buttonType", "square");
     }
 
     @Override

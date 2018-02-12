@@ -129,18 +129,21 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
     // KeyListener methods //
     /////////////////////////
 
+    @Override
     public void keyPressed(KeyEvent e) {
         // Display alternate actions when the modifier key is pressed
         if (e.getKeyCode() == modifier.getKeyCode())
             setAlternateActionsMode(true);
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         // Display regular actions when the modifier key is released
         if (e.getKeyCode() == modifier.getKeyCode())
             setAlternateActionsMode(false);
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
     }
 
@@ -148,6 +151,7 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
     // MouseListener methods //
     ///////////////////////////
 
+    @Override
     public void mouseClicked(MouseEvent e) {
         // Right clicking on the toolbar brings up a popup menu
         if (DesktopManager.isRightMouseButton(e)) {
@@ -163,23 +167,27 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
         }
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
-
 
     //////////////////////////////////////////
     // CommandBarAttributesListener methods //
     //////////////////////////////////////////
 
+    @Override
     public void commandBarAttributeChanged() {
         actionIds = CommandBarAttributes.getActions();
         alternateActionIds = CommandBarAttributes.getAlternateActions();
@@ -188,4 +196,5 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
         addButtons();
         doLayout();
     }
+
 }

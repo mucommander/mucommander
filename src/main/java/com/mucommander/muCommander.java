@@ -23,7 +23,6 @@ import com.beust.jcommander.Parameter;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.FileFactory;
@@ -67,6 +66,7 @@ import java.util.List;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class muCommander {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(muCommander.class);
 
     // - Class fields -----------------------------------------------------------
@@ -132,12 +132,10 @@ public class muCommander {
     @Parameter(description = "[folders]")
     private List<String> folders = new ArrayList<>();
 
-
     // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
     private muCommander() {
     }
-
 
     /**
      * This method can be called to wait until the application has been launched. The caller thread will be blocked
@@ -232,7 +230,6 @@ public class muCommander {
         LOGGER.trace(message);
     }
 
-
     // - Boot code --------------------------------------------------------------
     // --------------------------------------------------------------------------
 
@@ -244,13 +241,8 @@ public class muCommander {
      */
     private static void migrateCommand(String useName, String commandName, String alias) {
         String command;
-
         if (MuConfigurations.getPreferences().getBooleanVariable(useName) && (command = MuConfigurations.getPreferences().getVariable(commandName)) != null) {
-            try {
-                CommandManager.registerCommand(new Command(alias, command, CommandType.SYSTEM_COMMAND));
-            } catch (CommandException e) {
-                // Ignore this: the command didn't work in the first place, we might as well get rid of it.
-            }
+            CommandManager.registerCommand(new Command(alias, command, CommandType.SYSTEM_COMMAND));
             MuConfigurations.getPreferences().removeVariable(useName);
             MuConfigurations.getPreferences().removeVariable(commandName);
         }
@@ -266,14 +258,12 @@ public class muCommander {
         }
     }
 
-
     /**
      * Main method used to startup muCommander.
      *
      * @param args command line arguments.
-     * @throws IOException if an unrecoverable error occurred during startup
      */
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) {
         muCommander mu = new muCommander();
         JCommander jCommander = new JCommander(mu, args);
         if (mu.help) {
@@ -649,4 +639,5 @@ public class muCommander {
         // Register the application-specific 'bookmark' protocol.
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
     }
+
 }

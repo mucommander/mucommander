@@ -19,11 +19,9 @@
 package com.mucommander.desktop.kde;
 
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.desktop.DefaultDesktopAdapter;
-import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.desktop.TrashProvider;
 import org.slf4j.Logger;
@@ -33,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(KdeDesktopAdapter.class);
 
     /**
@@ -43,22 +42,18 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
     /**
      * Key to the double-click interval value in the KDE configuration
      */
-    private String DOUBLE_CLICK_CONFIG_KEY = "DoubleClickInterval";
+    private static final String DOUBLE_CLICK_CONFIG_KEY = "DoubleClickInterval";
 
     @Override
-    public void init(boolean install) throws DesktopInitialisationException {
+    public void init(boolean install) {
         // Initialises trash management.
         DesktopManager.setTrashProvider(getTrashProvider());
 
         // Registers KDE specific commands.
-        try {
-            String execCommand = getBaseCommand() + " exec $f";
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, getFileManagerName()));
-        } catch (CommandException e) {
-            throw new DesktopInitialisationException(e);
-        }
+        String execCommand = getBaseCommand() + " exec $f";
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, getFileManagerName()));
 
         // Multi-click interval retrieval
         try {
@@ -92,7 +87,6 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
         return multiClickInterval;
     }
 
-
     ////////////////////
     // Helper methods //
     ////////////////////
@@ -106,7 +100,6 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
     protected String getConfiguredEnvVariable(String name) {
         return System.getenv(name);
     }
-
 
     /////////////////////////////////
     // KDE version-specific values //
@@ -132,4 +125,5 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
      * @return an instance of {@link TrashProvider} giving access to the KDE trash.
      */
     protected abstract TrashProvider getTrashProvider();
+
 }

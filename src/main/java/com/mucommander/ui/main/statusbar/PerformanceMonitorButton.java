@@ -37,7 +37,8 @@ class PerformanceMonitorButton extends NonFocusableButton {
     PerformanceMonitorButton(MainFrame mainFrame) {
         super(ActionManager.getActionInstance(TogglePerformanceMonitorAction.Descriptor.ACTION_ID, mainFrame));
         setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, "chart_bar.png"));
-        RolloverButtonAdapter.setButtonDecoration(this);
+        RolloverButtonAdapter.decorateButton(this);
+        putClientProperty("JButton.buttonType", "square");
     }
 
     @Override

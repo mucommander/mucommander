@@ -48,7 +48,15 @@ import java.util.Vector;
  * @author Maxence Bernard
  */
 public class CheckVersionDialog extends QuestionDialog implements Runnable {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckVersionDialog.class);
+    /**
+     * Dialog's width has to be at least 240
+     */
+    private static final Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
+    private static final int OK_ACTION = 0;
+    private static final int GO_TO_WEBSITE_ACTION = 1;
+    private static final int INSTALL_AND_RESTART_ACTION = 2;
 
     /**
      * Parent MainFrame instance
@@ -60,16 +68,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
      * false if the update check was automatically triggered on startup
      */
     private boolean userInitiated;
-
-    /**
-     * Dialog's width has to be at least 240
-     */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
-
-    private final static int OK_ACTION = 0;
-    private final static int GO_TO_WEBSITE_ACTION = 1;
-    private final static int INSTALL_AND_RESTART_ACTION = 2;
-
 
     /**
      * Checks for updates and notifies the user of the outcome. The check itself is performed in a separate thread
@@ -88,10 +86,10 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         new Thread(this, "com.mucommander.ui.dialog.startup.CheckVersionDialog's Thread").start();
     }
 
-
     /**
      * Checks for updates and notifies the user of the outcome.
      */
+    @Override
     public void run() {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -158,8 +156,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         // Set title
         setTitle(title);
 
-        java.util.List<Integer> actionsV = new Vector<Integer>();
-        java.util.List<String> labelsV = new Vector<String>();
+        java.util.List<Integer> actionsV = new Vector<>();
+        java.util.List<String> labelsV = new Vector<>();
 
         // 'OK' choice
         actionsV.add(OK_ACTION);
@@ -171,11 +169,11 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             labelsV.add(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID));
         }
 
-//        // 'Install and restart' choice (if available)
-//        if(jarURL!=null) {
-//            actionsV.add(new Integer(INSTALL_AND_RESTART_ACTION));
-//            labelsV.add(Translator.get("version_dialog.install_and_restart"));
-//        }
+        // 'Install and restart' choice (if available)
+        if (jarURL != null) {
+            actionsV.add(INSTALL_AND_RESTART_ACTION);
+            labelsV.add(Translator.get("version_dialog.install_and_restart"));
+        }
 
         // Turn the vectors into arrays
         int nbChoices = actionsV.size();
@@ -216,4 +214,5 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         // Remember user preference
         MuConfigurations.getPreferences().setVariable(MuPreference.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
     }
+
 }

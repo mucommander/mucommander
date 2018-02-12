@@ -32,7 +32,6 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -167,16 +166,11 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         add(Box.createHorizontalGlue());
 
-        final RolloverButtonAdapter rolloverButtonAdapter = new RolloverButtonAdapter();
-
         final JobsPopupButton jobsButton = new JobsPopupButton();
-        jobsButton.addMouseListener(rolloverButtonAdapter);
         add(jobsButton);
         add(Box.createRigidArea(new Dimension(2, 0)));
 
-
         final PerformanceMonitorButton performanceMonitorButton = new PerformanceMonitorButton(mainFrame);
-        performanceMonitorButton.addMouseListener(rolloverButtonAdapter);
         add(performanceMonitorButton);
         add(Box.createRigidArea(new Dimension(2, 0)));
 
@@ -186,7 +180,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
         if (DesktopManager.getTrash() != null) {
             final TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
-            trashButton.addMouseListener(rolloverButtonAdapter);
             add(trashButton);
             add(Box.createRigidArea(new Dimension(2, 0)));
         }

@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
  * against each other.
  *
  * @author Maxence Bernard, Arik Hadas
- * @see OsVersions
  * @see OsFamily
  */
 public enum OsVersion implements ComparableRuntimeProperty {
@@ -152,7 +151,11 @@ public enum OsVersion implements ComparableRuntimeProperty {
     /**
      * Sierra
      */
-    MAC_OS_X_10_12("10.12");
+    MAC_OS_X_10_12("10.12"),
+    /**
+     * High Sierra
+     */
+    MAC_OS_X_10_13("10.13");
 
 
     /**
@@ -262,6 +265,9 @@ public enum OsVersion implements ComparableRuntimeProperty {
         }
         // Mac OS X versions
         if (osFamily == OsFamily.MAC_OS_X) {
+            if (osVersionProp.startsWith("10.13"))
+                return MAC_OS_X_10_13;
+
             if (osVersionProp.startsWith("10.12"))
                 return MAC_OS_X_10_12;
 
@@ -302,7 +308,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
                 return MAC_OS_X_10_0;
 
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_X_10_12;
+            return MAC_OS_X_10_13;
         }
 
         return OsVersion.UNKNOWN_VERSION;
@@ -321,18 +327,22 @@ public enum OsVersion implements ComparableRuntimeProperty {
     // ComparableRuntimeProperty implementation //
     //////////////////////////////////////////////
 
+    @Override
     public boolean isCurrentOrLower() {
         return currentValue.compareTo(this) <= 0;
     }
 
+    @Override
     public boolean isCurrentLower() {
         return currentValue.compareTo(this) < 0;
     }
 
+    @Override
     public boolean isCurrentOrHigher() {
         return currentValue.compareTo(this) >= 0;
     }
 
+    @Override
     public boolean isCurrentHigher() {
         return currentValue.compareTo(this) > 0;
     }
@@ -345,4 +355,5 @@ public enum OsVersion implements ComparableRuntimeProperty {
     public String toString() {
         return stringRepresentation;
     }
+
 }

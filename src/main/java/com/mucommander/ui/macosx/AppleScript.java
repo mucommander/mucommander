@@ -58,17 +58,18 @@ import java.io.UnsupportedEncodingException;
  * @author Maxence Bernard
  */
 public class AppleScript {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AppleScript.class);
 
     /**
      * The UTF-8 encoding
      */
-    public final static String UTF8 = "UTF-8";
+    public static final String UTF8 = "UTF-8";
 
     /**
      * The MacRoman encoding
      */
-    public final static String MACROMAN = "MacRoman";
+    private static final String MACROMAN = "MacRoman";
 
 
     /**
@@ -153,7 +154,7 @@ public class AppleScript {
         // - AppleScript 2.0+ (Mac OS X 10.5 and up) is fully Unicode-aware and expects a script in UTF-8 encoding.
         // - AppleScript 1.3- (Mac OS X 10.4 or lower) expects MacRoman encoding, not UTF-8.
         String encoding;
-        if (OsVersion.MAC_OS_X_10_5.isCurrentOrHigher())
+        if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher())
             encoding = UTF8;
         else
             encoding = MACROMAN;
@@ -180,6 +181,7 @@ public class AppleScript {
         // ProcessListener implementation //
         ////////////////////////////////////
 
+        @Override
         public void processOutput(byte[] buffer, int offset, int length) {
             try {
                 outputBuffer.append(new String(buffer, offset, length, outputEncoding));
@@ -188,9 +190,11 @@ public class AppleScript {
             }
         }
 
+        @Override
         public void processOutput(String s) {
         }
 
+        @Override
         public void processDied(int returnValue) {
             // Remove the trailing "\n" character that osascript returns.
             int len = outputBuffer.length();
@@ -199,61 +203,4 @@ public class AppleScript {
         }
     }
 
-
-    // The following commented method executes an AppleScript using the deprecated Cocoa-Java library.
-    // We're now using the 'osascript' command instead, but this method is kept for the record in case Apple one day
-    // decides to un-deprecate the Cocoa-Java library.
-
-//    /**
-//     * Executes the given AppleScript and returns the script's output if it was successfully executed, <code>null</code>
-//     * if the script couldn't be compiled or if an error occurred while executing it.
-//     * An empty string <code>""</code> is returned if the script doesn't output anything.
-//     *
-//     * @param appleScript the AppleScript to compile and execute
-//     * @return the script's output, null if an error occurred while compiling or executing the script
-//     */
-//    private static String executeAppleScript(String appleScript) {
-//        AppLogger.finer("Executing AppleScript "+appleScript);
-//
-//        int pool = -1;
-//
-//        try {
-//            // Quote from Apple Cocoa-Java doc:
-//            // An autorelease pool is used to manage Foundation’s autorelease mechanism for Objective-C objects.
-//            // NSAutoreleasePool provides Java applications access to autorelease pools. Typically it is not
-//            // necessary for Java applications to use NSAutoreleasePools since Java manages garbage collection.
-//            // However, some situations require an autorelease pool; for instance, if you start off a thread that
-//            // calls Cocoa, there won’t be a top-level pool.
-//            pool = NSAutoreleasePool.push();
-//
-//            NSMutableDictionary errorInfo = new NSMutableDictionary();
-//            NSAppleEventDescriptor eventDescriptor = new NSAppleScript(appleScript).execute(errorInfo);
-//            if(eventDescriptor==null) {
-//                AppLogger.fine("Caught AppleScript error: "+errorInfo.objectForKey(NSAppleScript.AppleScriptErrorMessage));
-//
-//                return null;
-//            }
-//
-//            String output = eventDescriptor.stringValue();  // Returns null if the script didn't output anything
-//            AppLogger.finer("AppleScript output="+output);
-//
-//            return output==null?"":output;
-//        }
-//        catch(Error e) {
-//            // Can happen if Cocoa-java is not in the classpath
-//            AppLogger.fine("Unexcepted error while executing AppleScript (cocoa-java not available?)", e);
-//
-//            return null;
-//        }
-//        catch(Exception e) {
-//            // Try block is not supposed to throw any exception, but this is low-level stuff so just to be safe
-//            AppLogger.fine("Unexcepted exception while executing AppleScript", e);
-//
-//            return null;
-//        }
-//        finally {
-//            if(pool!=-1)
-//                NSAutoreleasePool.pop(pool);
-//        }
-//    }
 }

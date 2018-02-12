@@ -54,8 +54,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.WeakHashMap;
-
 
 /**
  * This class is the main menu bar. It takes care of displaying menu and menu items and triggering
@@ -84,9 +84,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem toggleTreeItem;
     private JCheckBoxMenuItem toggleUseSinglePanel;
 
-    /* TODO branch private JCheckBoxMenuItem toggleBranchView; */
-
-
     // Go menu
     private JMenu goMenu;
     private int volumeOffset;
@@ -104,8 +101,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     /**
      * Maps window menu items onto weakly-referenced frames
      */
-    private WeakHashMap<JMenuItem, Frame> windowMenuFrames;
-
+    private Map<JMenuItem, Frame> windowMenuFrames;
 
     private final static String RECALL_WINDOW_ACTION_IDS[] = {
             com.mucommander.ui.action.impl.RecallWindow1Action.Descriptor.ACTION_ID,
@@ -119,7 +115,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             com.mucommander.ui.action.impl.RecallWindow9Action.Descriptor.ACTION_ID,
             com.mucommander.ui.action.impl.RecallWindow10Action.Descriptor.ACTION_ID
     };
-
 
     /**
      * Creates a new MenuBar for the given MainFrame.
@@ -211,7 +206,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         toggleShowHiddenFilesItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleHiddenFilesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         toggleTreeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleTreeAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         toggleUseSinglePanel = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleUseSinglePanelAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        /* TODO branch toggleBranchView = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleBranchViewAction.class, mainFrame), menuItemMnemonicHelper); */
 
         viewMenu.add(new JSeparator());
         ButtonGroup buttonGroup = new ButtonGroup();
@@ -280,7 +274,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         BonjourMenu bonjourMenu = new BonjourMenu() {
             @Override
             public MuAction getMenuItemAction(BonjourService bs) {
-                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable<String, Object>(), bs);
+                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable<>(), bs);
             }
         };
         char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
@@ -356,7 +350,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         if (DesktopManager.canBrowse()) {
             helpMenu.add(new JSeparator());
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToWebsiteAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-            // MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToForumsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ReportBugAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(DonateAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
 
@@ -373,11 +366,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         add(helpMenu);
     }
 
-
     ///////////////////////////
     // ActionListener method //
     ///////////////////////////
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         // Discard action events while in 'no events mode'
         if (mainFrame.getNoEventsMode())
@@ -387,11 +380,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         windowMenuFrames.get(e.getSource()).toFront();
     }
 
-
     //////////////////////////
     // MenuListener methods //
     //////////////////////////
 
+    @Override
     public void menuSelected(MenuEvent e) {
         Object source = e.getSource();
 
@@ -406,8 +399,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             toggleTreeItem.setSelected(activeTable.getFolderPanel().isTreeVisible());
             toggleToggleAutoSizeItem.setSelected(mainFrame.isAutoSizeColumnsEnabled());
             toggleUseSinglePanel.setSelected(mainFrame.isSinglePanel());
-
-            /* TODO branch toggleBranchView.setSelected(activeTable.getFolderPanel().isBranchView()); */
         } else if (source == columnsMenu) {
             // Update the selected and enabled state of each column menu item.
             FileTable activeTable = mainFrame.getActiveTable();
@@ -428,10 +419,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 goMenu.remove(volumeOffset);
 
             AbstractFile volumes[] = LocalFile.getVolumes();
-            int nbFolders = volumes.length;
 
-            for (int i = 0; i < nbFolders; i++)
-                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), volumes[i]));
+            for (AbstractFile volume : volumes) {
+                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<>(), volume));
+            }
         } else if (source == bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu
             // as bookmarks might have changed since menu was last selected
@@ -442,8 +433,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
             int nbBookmarks = bookmarks.size();
             if (nbBookmarks > 0) {
-                for (int i = 0; i < nbBookmarks; i++)
-                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmarks.get(i)), null);
+                for (Bookmark bookmark : bookmarks) {
+                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<>(), bookmark), null);
+                }
             } else {
                 // Show 'No bookmark' as a disabled menu item instead showing nothing
                 JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), null, null, null);
@@ -464,8 +456,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
             // This WeakHashMap maps menu items to frame instances. It has to be a weakly referenced hash map
             // and not a regular hash map, since it will not (and cannot) be emptied when the menu has been deselected
-            // and we really do not want this hash map to prevent the frames to be GCed 
-            windowMenuFrames = new WeakHashMap<JMenuItem, Frame>();
+            // and we really do not want this hash map to prevent the frames to be GCed
+            windowMenuFrames = new WeakHashMap<>();
 
             // Create a menu item for each of the MainFrame instances, that displays the MainFrame's path
             // and a keyboard accelerator to recall the frame (for the first 10 frames only).
@@ -484,7 +476,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 }
                 // Else use the generic RecallWindowAction
                 else {
-                    Hashtable<String, Object> actionProps = new Hashtable<String, Object>();
+                    Hashtable<String, Object> actionProps = new Hashtable<>();
                     // Specify the window number using the dedicated property
                     actionProps.put(RecallWindowAction.WINDOW_NUMBER_PROPERTY_KEY, "" + (i + 1));
                     recallWindowAction = ActionManager.getActionInstance(new ActionParameters(RecallWindowAction.Descriptor.ACTION_ID, actionProps), this.mainFrame);
@@ -548,12 +540,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
     }
 
+    @Override
     public void menuDeselected(MenuEvent e) {
     }
 
+    @Override
     public void menuCanceled(MenuEvent e) {
     }
-
 
     /**
      * Action that changes the current theme to the specified in the constructor.
@@ -562,11 +555,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         private Theme theme;
 
-        public ChangeCurrentThemeAction(Theme theme) {
+        ChangeCurrentThemeAction(Theme theme) {
             super(theme.getName());
             this.theme = theme;
         }
 
+        @Override
         public void actionPerformed(ActionEvent actionEvent) {
             try {
                 ThemeManager.setCurrentTheme(theme);
@@ -580,12 +574,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
      * Actions that edits the current theme.
      */
     private class EditCurrentThemeAction extends AbstractAction {
-        public EditCurrentThemeAction() {
+
+        EditCurrentThemeAction() {
             super(Translator.get("prefs_dialog.edit_current_theme"));
         }
 
+        @Override
         public void actionPerformed(ActionEvent actionEvent) {
             new ThemeEditorDialog(mainFrame, ThemeManager.getCurrentTheme()).editTheme();
         }
     }
+
 }

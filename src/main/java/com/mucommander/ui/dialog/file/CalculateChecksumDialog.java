@@ -67,7 +67,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
     /**
      * Default checksum algorithm (most commonly used)
      */
-    private final static String DEFAULT_ALGORITHM = "MD5";
+    private static final String DEFAULT_ALGORITHM = "MD5";
 
     /**
      * Last algorithm used, saved after validation of this dialog
@@ -77,14 +77,12 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
     /**
      * Dialog size constraints
      */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
-
+    private static final Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
 
     static {
         // Register additional MessageDigest implementations provided by the muCommander API
         MuProvider.registerProvider();
     }
-
 
     public CalculateChecksumDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, ActionProperties.getActionLabel(CalculateChecksumAction.Descriptor.ACTION_ID), files);
@@ -170,8 +168,6 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         mainPanel.add(fileDetailsPanel);
 
-//        mainPanel.add(new HelpButtonPanel(new HelpButton(mainFrame, "CalculateChecksum")));
-
         getContentPane().add(mainPanel);
 
         // Give initial keyboard focus to the 'Delete' button
@@ -223,11 +219,10 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         return algorithm.replace("-", "") + "SUMS";
     }
 
-
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
-
+    @Override
     public void actionPerformed(ActionEvent e) {
         // Start by disposing this dialog
         dispose();
@@ -275,11 +270,10 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         }
     }
 
-
     /////////////////////////////////
     // ItemListener implementation //
     /////////////////////////////////
-
+    @Override
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getSource();
 
@@ -291,4 +285,5 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
             specificLocationTextField.setText(getChecksumFilename(getSelectedMessageDigest().getAlgorithm()));
         }
     }
+
 }

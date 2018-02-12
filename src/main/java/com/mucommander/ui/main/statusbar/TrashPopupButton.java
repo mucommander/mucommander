@@ -46,10 +46,10 @@ class TrashPopupButton extends PopupButton {
 
     TrashPopupButton(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        setContentAreaFilled(false);
         setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, "trash.png"));
-        RolloverButtonAdapter.setButtonDecoration(this);
         setPopupMenuLocation(SwingConstants.TOP);
+        RolloverButtonAdapter.decorateButton(this);
+        putClientProperty("JButton.buttonType", "square");
     }
 
     @Override

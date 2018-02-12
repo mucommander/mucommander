@@ -39,6 +39,7 @@ import java.awt.event.MouseListener;
  * @author Maxence Bernard
  */
 public class ProportionalSplitPane extends JSplitPane implements ComponentListener, MouseListener {
+
     /**
      * Last known width of the window this split pane is attached to.
      */
@@ -58,7 +59,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
      * Window this split pane is attached to
      */
     private Window window;
-
 
     public ProportionalSplitPane(Window window) {
         super();
@@ -87,6 +87,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
 
     private void init(Window window, JComponent leftComponent, JComponent rightComponent) {
         this.window = window;
+        setContinuousLayout(true);
         window.addComponentListener(this);
 
         BasicSplitPaneDivider divider = getDividerComponent();
@@ -100,7 +101,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         if (rightComponent != null)
             rightComponent.setMinimumSize(nullDimension);
     }
-
 
     /**
      * Updates the divider component's location to keep the current proportional divider location.
@@ -116,7 +116,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         setDividerLocation(splitRatio);
     }
 
-
     /**
      * Sets the constant, proportional divider's location. The given float but be comprised between 0 and 1, 0 meaning
      * completely left (or top), 1 right completely (or bottom).
@@ -128,7 +127,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         updateDividerLocation();
     }
 
-
     /**
      * returns current pane split ratio.
      */
@@ -136,14 +134,12 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         return this.splitRatio;
     }
 
-
     /**
      * Returns the split pane divider component.
      */
     public BasicSplitPaneDivider getDividerComponent() {
         return ((BasicSplitPaneUI) getUI()).getDivider();
     }
-
 
     /**
      * Disables all the JSPlitPane accessibility shortcuts that are registered by default:
@@ -161,7 +157,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         inputMap.setParent(null);
     }
 
-
     ////////////////////////
     // Overridden methods //
     ////////////////////////
@@ -173,7 +168,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         updateDividerLocation();
     }
 
-
     //////////////////////////////////////
     // ComponentListener implementation //
     //////////////////////////////////////
@@ -182,6 +176,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
      * Sets the divider location when the ContentPane has been resized so that it stays at the
      * same proportional (not absolute) location.
      */
+    @Override
     public void componentResized(ComponentEvent e) {
         Object source = e.getSource();
 
@@ -195,6 +190,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         }
     }
 
+    @Override
     public void componentMoved(ComponentEvent e) {
         if (e.getSource() == getDividerComponent()) {
             // Ignore this event if the divider's location hasn't changed, or if the initial divider's location
@@ -219,6 +215,7 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         }
     }
 
+    @Override
     public void componentShown(ComponentEvent e) {
         // Called when the window is made visible
         if (e.getSource() == window) {
@@ -227,28 +224,34 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         }
     }
 
+    @Override
     public void componentHidden(ComponentEvent e) {
     }
-
 
     ///////////////////////////
     // MouseListener methods //
     ///////////////////////////
 
+    @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         if (DesktopManager.isLeftMouseButton(mouseEvent) && mouseEvent.getClickCount() == 2)
             setSplitRatio(0.5f);
     }
 
+    @Override
     public void mousePressed(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseExited(MouseEvent mouseEvent) {
     }
+
 }

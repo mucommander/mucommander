@@ -54,6 +54,7 @@ import java.util.regex.Pattern;
  */
 
 public class LocationTextField extends ProgressTextField implements LocationListener, FocusListener, ThemeListener {
+
     /**
      * FolderPanel this text field is displayed in
      */
@@ -110,6 +111,10 @@ public class LocationTextField extends ProgressTextField implements LocationList
         enableAutoCompletion();
 
         ThemeManager.addCurrentThemeListener(this);
+
+        getPreferredSize().height = getPreferredSize().height + 4;
+//        final int height = getPreferredSize().height + 1;
+//        setPreferredSize(g);
     }
 
     /**
@@ -163,11 +168,11 @@ public class LocationTextField extends ProgressTextField implements LocationList
         folderChangeInitiatedByLocationField = false;
     }
 
-
     //////////////////////////////
     // LocationListener methods //
     //////////////////////////////
 
+    @Override
     public void locationChanging(LocationEvent e) {
         // Change the location field's text to the folder being changed, only if the folder change was not initiated
         // by the location field (to preserve the path entered by the user while the folder is being changed) 
@@ -203,17 +208,20 @@ public class LocationTextField extends ProgressTextField implements LocationList
         setEnabled(false);
     }
 
+    @Override
     public void locationChanged(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path
         folderChangeCompleted(true);
     }
 
+    @Override
     public void locationCancelled(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path.
         // If the path was entered in the location field, keep the path to give the user a chance to correct it.
         folderChangeCompleted(false);
     }
 
+    @Override
     public void locationFailed(LocationEvent e) {
         // Re-enable component and change the location field's text to the new current folder's path.
         // If the path was entered in the location field, keep the path to give the user a chance to correct it.
@@ -223,7 +231,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
     /**
      * @return true if a malformed url was entered, false otherwise.
      */
-    public boolean textFieldValidated() {
+    private boolean textFieldValidated() {
         String location = getText();
 
         // Under Windows, trim the entered path for the following reason.
@@ -283,21 +291,22 @@ public class LocationTextField extends ProgressTextField implements LocationList
         return folderPanel.tryChangeCurrentFolder(location) == null;
     }
 
-    public void textFieldCancelled() {
+    private void textFieldCancelled() {
         setText(folderPanel.getCurrentFolder().getAbsolutePath());
         transferFocus();
     }
-
 
     ///////////////////////////
     // FocusListener methods //
     ///////////////////////////
 
+    @Override
     public void focusGained(FocusEvent e) {
         // Disable menu bar when this component has gained focus
         folderPanel.getMainFrame().getJMenuBar().setEnabled(false);
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
 //    	// If we are not in the middle of a folder change, and focus has been
 //    	// lost then ensure location field's text is set to the current directory.
@@ -308,13 +317,13 @@ public class LocationTextField extends ProgressTextField implements LocationList
         folderPanel.getMainFrame().getJMenuBar().setEnabled(true);
     }
 
-
     // - Theme listening -------------------------------------------------------------
     // -------------------------------------------------------------------------------
 
     /**
      * Receives theme color changes notifications.
      */
+    @Override
     public void colorChanged(ColorChangedEvent event) {
         switch (event.getColorId()) {
             case Theme.LOCATION_BAR_PROGRESS_COLOR:
@@ -343,8 +352,10 @@ public class LocationTextField extends ProgressTextField implements LocationList
     /**
      * Receives theme font changes notifications.
      */
+    @Override
     public void fontChanged(FontChangedEvent event) {
         if (event.getFontId() == Theme.LOCATION_BAR_FONT)
             setFont(event.getFont());
     }
+
 }

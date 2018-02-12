@@ -352,7 +352,6 @@ public class MainFrame extends JFrame implements LocationListener {
             listener.activePanelChanged(folderPanel);
     }
 
-
     /**
      * Returns <code>true</code> if 'no events mode' is currently enabled.
      *
@@ -379,7 +378,6 @@ public class MainFrame extends JFrame implements LocationListener {
 
         this.noEventsMode = enabled;
     }
-
 
     /**
      * Returns the {@link ToolBar} where shortcut buttons (go back, go forward, ...) are.
@@ -470,7 +468,6 @@ public class MainFrame extends JFrame implements LocationListener {
         }
     }
 
-
     /**
      * Returns the inactive table, i.e. the complement of {@link #getActiveTable()}.
      *
@@ -507,7 +504,6 @@ public class MainFrame extends JFrame implements LocationListener {
         return rightFolderPanel;
     }
 
-
     /**
      * Returns the ProportionalSplitPane component that splits the two panels.
      *
@@ -540,7 +536,6 @@ public class MainFrame extends JFrame implements LocationListener {
         // in JSplitPane which is anti-natural / confusing
         return splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT;
     }
-
 
     /**
      * Swaps the two FolderPanel instances: after a call to this method, the left FolderPanel will be the right one and
@@ -628,7 +623,6 @@ public class MainFrame extends JFrame implements LocationListener {
         rightFolderPanel.tryRefreshCurrentFolder();
     }
 
-
     /**
      * Returns <code>true</code> if this MainFrame is active, or is an ancestor of a Window that is currently active.
      *
@@ -685,7 +679,6 @@ public class MainFrame extends JFrame implements LocationListener {
             getRootPane().putClientProperty("Window.documentFile", javaIoFile);
         }
     }
-
 
     /**
      * Returns <code>true</code> if only one panel is show
@@ -750,7 +743,6 @@ public class MainFrame extends JFrame implements LocationListener {
         super.toFront();
     }
 
-
     ///////////////////
     // Inner classes //
     ///////////////////
@@ -813,17 +805,22 @@ public class MainFrame extends JFrame implements LocationListener {
      * LocationListener Implementation
      **********************************/
 
+    @Override
     public void locationChanged(LocationEvent e) {
         // Update window title to reflect the new current folder
         updateWindowTitle();
     }
 
+    @Override
     public void locationChanging(LocationEvent locationEvent) {
     }
 
+    @Override
     public void locationCancelled(LocationEvent locationEvent) {
     }
 
+    @Override
     public void locationFailed(LocationEvent locationEvent) {
     }
+
 }

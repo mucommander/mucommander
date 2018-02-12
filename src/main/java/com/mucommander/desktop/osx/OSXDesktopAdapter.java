@@ -19,13 +19,11 @@
 package com.mucommander.desktop.osx;
 
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.DefaultDesktopAdapter;
-import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 
 import java.awt.event.MouseEvent;
@@ -34,6 +32,7 @@ import java.awt.event.MouseEvent;
  * @author Nicolas Rinaudo
  */
 public class OSXDesktopAdapter extends DefaultDesktopAdapter {
+
     private static final String OPENER_COMMAND = "open $f";
     private static final String FINDER_COMMAND = "open -a Finder $f";
     private static final String FINDER_NAME = "Finder";
@@ -48,18 +47,14 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     @Override
-    public void init(boolean install) throws DesktopInitialisationException {
+    public void init(boolean install) {
         // Initialises trash management.
         DesktopManager.setTrashProvider(new OSXTrashProvider());
 
         // Registers OS X specific commands.
-        try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FINDER_COMMAND, CommandType.SYSTEM_COMMAND, FINDER_NAME));
-        } catch (CommandException e) {
-            throw new DesktopInitialisationException(e);
-        }
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FINDER_COMMAND, CommandType.SYSTEM_COMMAND, FINDER_NAME));
     }
 
     @Override
@@ -87,4 +82,5 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         // the isDirectory() test comes last as it is I/O bound
         return extension != null && extension.equalsIgnoreCase("app") && file.isDirectory();
     }
+
 }

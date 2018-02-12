@@ -19,7 +19,6 @@
 package com.mucommander.desktop.windows;
 
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.runtime.OsVersion;
@@ -29,8 +28,10 @@ import com.mucommander.desktop.DesktopInitialisationException;
  * @author Nicolas Rinaudo
  */
 public class Win9xDesktopAdapter extends WindowsDesktopAdapter {
+
     private static final String OPENER_COMMAND = "start \"$f\"";
 
+    @Override
     public String toString() {
         return "Windows 9x Desktop";
     }
@@ -43,17 +44,14 @@ public class Win9xDesktopAdapter extends WindowsDesktopAdapter {
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
         super.init(install);
-        try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
-        } catch (CommandException e) {
-            throw new DesktopInitialisationException(e);
-        }
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
     }
 
     @Override
     public String getDefaultShell() {
         return "command.com /c";
     }
+
 }

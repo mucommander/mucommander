@@ -40,12 +40,13 @@ import java.awt.event.MouseEvent;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class DefaultDesktopAdapter implements DesktopAdapter {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDesktopAdapter.class);
 
     /**
      * Default multi-click interval when the desktop property cannot be retrieved.
      */
-    public final static int DEFAULT_MULTICLICK_INTERVAL = 500;
+    private final static int DEFAULT_MULTICLICK_INTERVAL = 500;
 
     /**
      * Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called
@@ -66,6 +67,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
         }
     }
 
+    @Override
     public String toString() {
         return "Default Desktop";
     }
@@ -75,6 +77,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      *
      * @return <code>true</code>.
      */
+    @Override
     public boolean isAvailable() {
         return true;
     }
@@ -89,6 +92,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @param install <code>true</code> if this is the application's first boot, <code>false</code> otherwise.
      * @throws DesktopInitialisationException if any error occurs.
      */
+    @Override
     public void init(boolean install) throws DesktopInitialisationException {
     }
 
@@ -104,6 +108,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @see #isRightMouseButton(MouseEvent)
      * @see #isMiddleMouseButton(MouseEvent)
      */
+    @Override
     public boolean isLeftMouseButton(MouseEvent e) {
         return (e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0;
     }
@@ -120,6 +125,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @see #isRightMouseButton(MouseEvent)
      * @see #isLeftMouseButton(MouseEvent)
      */
+    @Override
     public boolean isRightMouseButton(MouseEvent e) {
         return (e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0;
     }
@@ -136,6 +142,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @see #isLeftMouseButton(MouseEvent)
      * @see #isMiddleMouseButton(MouseEvent)
      */
+    @Override
     public boolean isMiddleMouseButton(MouseEvent e) {
         return (e.getModifiers() & MouseEvent.BUTTON2_MASK) != 0;
     }
@@ -151,6 +158,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      * @see MouseEvent#getClickCount()
      * @see java.awt.Toolkit#getDesktopProperty(String)
      */
+    @Override
     public int getMultiClickInterval() {
         return multiClickInterval;
     }
@@ -160,6 +168,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      *
      * @return <code>/bin/sh -l -c"</code>.
      */
+    @Override
     public String getDefaultShell() {
         return "/bin/sh -l -c";
     }
@@ -169,7 +178,9 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      *
      * @return <code>false</code>, always.
      */
+    @Override
     public boolean isApplication(AbstractFile file) {
         return false;
     }
+
 }
