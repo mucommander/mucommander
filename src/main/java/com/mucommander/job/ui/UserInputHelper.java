@@ -18,30 +18,29 @@
 
 package com.mucommander.job.ui;
 
-import javax.swing.SwingUtilities;
-
+import com.mucommander.job.FileJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.job.FileJob;
+import javax.swing.*;
 
 /**
  * This class is used to show a dialog for user and get a response from
  * this dialog. It is used by {@link FileJob} class.
- * 
+ *
  * @author Mariusz Jakubowski
  */
 public class UserInputHelper {
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserInputHelper.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserInputHelper.class);
+
     private Object userInput;
     private DialogResult dialog;
 
     public UserInputHelper(FileJob job, DialogResult dialog) {
         this.dialog = dialog;
     }
-    
-    
+
+
     public Object getUserInput() {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {

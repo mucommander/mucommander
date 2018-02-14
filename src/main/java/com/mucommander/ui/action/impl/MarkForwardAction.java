@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public abstract class MarkForwardAction extends MuAction {
 
-    public MarkForwardAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkForwardAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -47,11 +47,11 @@ public abstract class MarkForwardAction extends MuAction {
         FileTable fileTable = mainFrame.getActiveTable();
 
         int currentRow = fileTable.getSelectedRow();
-        int lastRow = fileTable.getRowCount()-1;
-        int endRow = Math.min(lastRow, currentRow+getRowIncrement()-1);
+        int lastRow = fileTable.getRowCount() - 1;
+        int endRow = Math.min(lastRow, currentRow + getRowIncrement() - 1);
 
         fileTable.setRangeMarked(currentRow, endRow, !fileTable.getFileTableModel().isRowMarked(currentRow));
-        fileTable.selectRow(Math.min(lastRow, endRow+1));
+        fileTable.selectRow(Math.min(lastRow, endRow + 1));
     }
 
 

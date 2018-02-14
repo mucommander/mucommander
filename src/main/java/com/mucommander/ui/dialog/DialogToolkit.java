@@ -19,24 +19,13 @@
 
 package com.mucommander.ui.dialog;
 
-import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.HeadlessException;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
-
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.helper.ScreenServices;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 
 
 /**
@@ -49,64 +38,64 @@ public class DialogToolkit {
     public static boolean fitToMinDimension(Window window, Dimension minD) {
         return fitToDimension(window, minD, true);
     }
-	
+
     public static boolean fitToMaxDimension(Window window, Dimension maxD) {
         return fitToDimension(window, maxD, false);
     }
 
     public static boolean fitToScreen(Window window) {
         Rectangle screenBounds = ScreenServices.getFullScreenBounds(window);
-        return fitToMaxDimension(window, new Dimension((int)screenBounds.getWidth(), (int)screenBounds.getHeight()));
+        return fitToMaxDimension(window, new Dimension((int) screenBounds.getWidth(), (int) screenBounds.getHeight()));
     }
-	
+
     private static boolean fitToDimension(Window window, Dimension d, boolean min) {
-        int maxWidth = (int)d.getWidth();
-        int maxHeight = (int)d.getHeight();
+        int maxWidth = (int) d.getWidth();
+        int maxHeight = (int) d.getHeight();
         int windowWidth = window.getWidth();
         int windowHeight = window.getHeight();
         boolean changeSize = false;
-		
+
         // Minimum dimension
-        if(min) {
-            if(windowWidth<maxWidth) {
+        if (min) {
+            if (windowWidth < maxWidth) {
                 windowWidth = maxWidth;
                 changeSize = true;
             }
-				
-            if(windowHeight<maxHeight) {
+
+            if (windowHeight < maxHeight) {
                 windowHeight = maxHeight;
                 changeSize = true;
             }
         }
         // Maximum dimension
         else {
-            if(windowWidth>maxWidth) {
+            if (windowWidth > maxWidth) {
                 windowWidth = maxWidth;
                 changeSize = true;
             }
-				
-            if(windowHeight>maxHeight) {
+
+            if (windowHeight > maxHeight) {
                 windowHeight = maxHeight;
                 changeSize = true;
             }
         }
-		
+
         // Dimension needs to be changed
-        if(changeSize)
+        if (changeSize)
             window.setSize(windowWidth, windowHeight);
-		
+
         // Return true if dimension was changed 
         return changeSize;
     }
-	
-    
+
+
     /**
      * Sets the given component's (JFrame, JDialog...) location to be centered on screen.
      */
     public static void centerOnScreen(Component c) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        c.setLocation(screenSize.width/2 - c.getWidth()/2,
-                    screenSize.height/2 - c.getHeight()/2);
+        c.setLocation(screenSize.width / 2 - c.getWidth() / 2,
+                screenSize.height / 2 - c.getHeight() / 2);
     }
 
     /**
@@ -116,26 +105,27 @@ public class DialogToolkit {
      * This can be ensured through {@link #fitToScreen(Window)}. If this constraint is not respected,
      * behaviour is unpredictable.
      * </p>
+     *
      * @param c      component to center.
      * @param window window to center on.
      */
     public static void centerOnWindow(Component c, Window window) {
         Dimension screenSize;
-        int       x;
-        int       y;
-        int       buffer;
+        int x;
+        int y;
+        int buffer;
 
-        x          = Math.max(0, window.getX() + (window.getWidth() - c.getWidth()) / 2);
-        y          = Math.max(0, window.getY() + (window.getHeight() - c.getHeight()) / 2);
+        x = Math.max(0, window.getX() + (window.getWidth() - c.getWidth()) / 2);
+        y = Math.max(0, window.getY() + (window.getHeight() - c.getHeight()) / 2);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        if((buffer = screenSize.width - (c.getWidth() + x)) < 0)
+        if ((buffer = screenSize.width - (c.getWidth() + x)) < 0)
             x += buffer;
-        if((buffer = screenSize.height - (c.getHeight() + y)) < 0)
+        if ((buffer = screenSize.height - (c.getHeight() + y)) < 0)
             y += buffer;
         c.setLocation(x, y);
     }
-    
-	
+
+
     /**
      * Creates an OK/Cancel panel using the given buttons, and register the given listener for button actions.
      */
@@ -156,7 +146,7 @@ public class DialogToolkit {
      */
     public static JPanel createButtonPanel(JButton buttons[], JRootPane rootPane, ActionListener actionListener) {
         JPanel panel = new ButtonChoicePanel(buttons, 0, rootPane);
-        
+
         MnemonicHelper mnemonicHelper = new MnemonicHelper();
         for (JButton button : buttons) {
             button.setMnemonic(mnemonicHelper.getMnemonic(button.getText()));
@@ -172,15 +162,15 @@ public class DialogToolkit {
      * <code>Dialog</code>.
      *
      * @param parentComponent the <code>Component</code> to check for a
-     *		<code>Frame</code> or <code>Dialog</code>
+     *                        <code>Frame</code> or <code>Dialog</code>
      * @return the <code>Frame</code> or <code>Dialog</code> that
-     *		contains the component, or the default
-     *         	frame if the component is <code>null</code>,
-     *		or does not have a valid
-     *         	<code>Frame</code> or <code>Dialog</code> parent
-     * @exception HeadlessException if
-     *   <code>GraphicsEnvironment.isHeadless</code> returns
-     *   <code>true</code>
+     * contains the component, or the default
+     * frame if the component is <code>null</code>,
+     * or does not have a valid
+     * <code>Frame</code> or <code>Dialog</code> parent
+     * @throws HeadlessException if
+     *                           <code>GraphicsEnvironment.isHeadless</code> returns
+     *                           <code>true</code>
      * @see java.awt.GraphicsEnvironment#isHeadless
      */
     public static Window getWindowForComponent(Component parentComponent) throws HeadlessException {
@@ -188,7 +178,7 @@ public class DialogToolkit {
         if (parentComponent == null)
             return JOptionPane.getRootFrame();
         if (parentComponent instanceof Frame || parentComponent instanceof Dialog)
-            return (Window)parentComponent;
+            return (Window) parentComponent;
         return getWindowForComponent(parentComponent.getParent());
     }
 }

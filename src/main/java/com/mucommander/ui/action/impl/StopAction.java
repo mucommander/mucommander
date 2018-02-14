@@ -18,21 +18,16 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.core.LocationChanger.ChangeFolderThread;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action is invoked to stop a running location change.
@@ -41,7 +36,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class StopAction extends MuAction implements LocationListener {
 
-    public StopAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public StopAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // This action is initially disabled and enabled only during a folder change
@@ -60,14 +55,14 @@ public class StopAction extends MuAction implements LocationListener {
         FolderPanel folderPanel = mainFrame.getActivePanel();
         ChangeFolderThread changeFolderThread = folderPanel.getChangeFolderThread();
 
-        if(changeFolderThread!=null)
+        if (changeFolderThread != null)
             changeFolderThread.tryKill();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
 
     //////////////////////////////
@@ -89,23 +84,31 @@ public class StopAction extends MuAction implements LocationListener {
     public void locationFailed(LocationEvent e) {
         setEnabled(false);
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new StopAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new StopAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "Stop";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "Stop";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+        }
     }
 }

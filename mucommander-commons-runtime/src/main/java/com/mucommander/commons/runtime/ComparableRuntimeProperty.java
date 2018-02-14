@@ -22,7 +22,7 @@ package com.mucommander.commons.runtime;
  * Utility methods for comparing the current runtime's value of this property to this instance
  *
  * @author Arik Hadas, Maxence Bernard
-*/
+ */
 public interface ComparableRuntimeProperty {
 
     /**

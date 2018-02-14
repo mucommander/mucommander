@@ -18,24 +18,22 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Vector;
-
-import javax.swing.KeyStroke;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
+import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.io.backup.BackupInputStream;
+import com.mucommander.ui.action.ActionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import com.mucommander.RuntimeConstants;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.io.backup.BackupInputStream;
-import com.mucommander.ui.action.ActionManager;
+import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * This class parses the XML file describing the command bar's buttons and associated actions.
@@ -43,66 +41,77 @@ import com.mucommander.ui.action.ActionManager;
  * @author Maxence Bernard, Arik Hadas
  */
 class CommandBarReader extends CommandBarIO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarReader.class);
-	
-    /** Temporarily used for XML parsing */
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarReader.class);
+
+    /**
+     * Temporarily used for XML parsing
+     */
     private List<String> actionsIdsV;
-    /** Temporarily used for XML parsing */
+    /**
+     * Temporarily used for XML parsing
+     */
     private List<String> alternateActionsIdsV;
-    /** Temporarily used for XML parsing */
+    /**
+     * Temporarily used for XML parsing
+     */
     private KeyStroke modifier;
 
-    /** Parsed file */
+    /**
+     * Parsed file
+     */
     private AbstractFile file;
 
     /**
      * Starts parsing the XML description file.
-     * 
+     *
      * @throws SAXException
      * @throws IOException
      * @throws ParserConfigurationException
      */
     CommandBarReader(AbstractFile file) throws SAXException, IOException, ParserConfigurationException {
-    	this.file = file;
-    	
-    	InputStream in = null;
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
-        finally {
-            if(in!=null)
-                try { in.close(); }
-                catch(IOException e) {}
+        this.file = file;
+
+        InputStream in = null;
+        try {
+            SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);
+        } finally {
+            if (in != null)
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
         }
     }
 
     ////////////////////
     ///// getters //////
     ////////////////////
-    
+
     public String[] getActionsRead() {
-    	int nbActions = actionsIdsV.size();
-    	String[] actionIds = new String[nbActions];
+        int nbActions = actionsIdsV.size();
+        String[] actionIds = new String[nbActions];
         actionsIdsV.toArray(actionIds);
         return actionIds;
     }
-    
+
     public String[] getAlternateActionsRead() {
-    	int nbActions = alternateActionsIdsV.size();
-    	String[] alternateActionIds = new String[nbActions];
+        int nbActions = alternateActionsIdsV.size();
+        String[] alternateActionIds = new String[nbActions];
         alternateActionsIdsV.toArray(alternateActionIds);
         return alternateActionIds;
     }
-    
+
     public KeyStroke getModifierRead() {
-    	return modifier;
+        return modifier;
     }
-    
+
     ////////////////////////////
     // ContentHandler methods //
     ////////////////////////////
 
     @Override
     public void startDocument() {
-    	LOGGER.trace(file.getAbsolutePath()+" parsing started");
+        LOGGER.trace(file.getAbsolutePath() + " parsing started");
 
         actionsIdsV = new Vector<String>();
         alternateActionsIdsV = new Vector<String>();
@@ -111,60 +120,57 @@ class CommandBarReader extends CommandBarIO {
 
     @Override
     public void endDocument() {
-    	LOGGER.trace(file.getAbsolutePath()+" parsing finished");
+        LOGGER.trace(file.getAbsolutePath() + " parsing finished");
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if(qName.equals(BUTTON_ELEMENT)) {
-        	// Resolve action id
-        	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
-        	if (actionIdAttribute != null) {
-        		if (ActionManager.isActionExist(actionIdAttribute)) {
-        			actionsIdsV.add(actionIdAttribute);
+        if (qName.equals(BUTTON_ELEMENT)) {
+            // Resolve action id
+            String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
+            if (actionIdAttribute != null) {
+                if (ActionManager.isActionExist(actionIdAttribute)) {
+                    actionsIdsV.add(actionIdAttribute);
 
-        			// Resolve alternate action id (if any)
-        			actionIdAttribute = attributes.getValue(ALT_ACTION_ID_ATTRIBUTE);
-        			alternateActionsIdsV.add(ActionManager.isActionExist(actionIdAttribute) ? actionIdAttribute : null);
-        		}
-        	}
-        	else {
-        		// Resolve action class
-        		String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
-        		if (actionClassAttribute != null) {
-        			String actionId = ActionManager.extrapolateId(actionClassAttribute);
-        			if (ActionManager.isActionExist(actionId)) {
-        				actionsIdsV.add(actionId);
+                    // Resolve alternate action id (if any)
+                    actionIdAttribute = attributes.getValue(ALT_ACTION_ID_ATTRIBUTE);
+                    alternateActionsIdsV.add(ActionManager.isActionExist(actionIdAttribute) ? actionIdAttribute : null);
+                }
+            } else {
+                // Resolve action class
+                String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
+                if (actionClassAttribute != null) {
+                    String actionId = ActionManager.extrapolateId(actionClassAttribute);
+                    if (ActionManager.isActionExist(actionId)) {
+                        actionsIdsV.add(actionId);
 
-        				// Resolve alternate action class (if any)
-        				actionClassAttribute = attributes.getValue(ALT_ACTION_ATTRIBUTE);
-        				if(actionClassAttribute == null)
-        					alternateActionsIdsV.add(null);
-        				else {
-        					actionId = ActionManager.extrapolateId(actionClassAttribute);
-        					if (ActionManager.isActionExist(actionId))
-        						alternateActionsIdsV.add(actionId);
-        					else {
-        						LOGGER.warn("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
-        						alternateActionsIdsV.add(null);
-        					}
-        				}
-        			}
-        			else
-        				LOGGER.warn("Error in "+DEFAULT_COMMAND_BAR_FILE_NAME+": action id for " + actionClassAttribute + " not found");
-        		}
-        	}
-        }
-        else if(qName.equals(ROOT_ELEMENT)) {
-        	// Retrieve modifier key (shift by default)
-        	modifier = KeyStroke.getKeyStroke(attributes.getValue(MODIFIER_ATTRIBUTE));
-            
-        	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
+                        // Resolve alternate action class (if any)
+                        actionClassAttribute = attributes.getValue(ALT_ACTION_ATTRIBUTE);
+                        if (actionClassAttribute == null)
+                            alternateActionsIdsV.add(null);
+                        else {
+                            actionId = ActionManager.extrapolateId(actionClassAttribute);
+                            if (ActionManager.isActionExist(actionId))
+                                alternateActionsIdsV.add(actionId);
+                            else {
+                                LOGGER.warn("Error in " + DEFAULT_COMMAND_BAR_FILE_NAME + ": action id for " + actionClassAttribute + " not found");
+                                alternateActionsIdsV.add(null);
+                            }
+                        }
+                    } else
+                        LOGGER.warn("Error in " + DEFAULT_COMMAND_BAR_FILE_NAME + ": action id for " + actionClassAttribute + " not found");
+                }
+            }
+        } else if (qName.equals(ROOT_ELEMENT)) {
+            // Retrieve modifier key (shift by default)
+            modifier = KeyStroke.getKeyStroke(attributes.getValue(MODIFIER_ATTRIBUTE));
+
+            // Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
             String fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
-            
+
             // if the file's version is not up-to-date, update the file to the current version at quitting.
-    		if (!RuntimeConstants.VERSION.equals(fileVersion))
-    			setModified();
+            if (!RuntimeConstants.VERSION.equals(fileVersion))
+                setModified();
         }
     }
 }

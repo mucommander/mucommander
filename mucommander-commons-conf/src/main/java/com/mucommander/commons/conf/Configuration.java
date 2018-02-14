@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,7 +27,7 @@ import java.util.*;
  * <p>
  * A <code>Configuration</code> instance's main goal is to act as a configuration data repository.
  * Once created, it can be used to {@link #getVariable(String) retrieve}, {@link #removeVariable(String) delete}
- * and {@link #setVariable(String,String) set} configuration variables.
+ * and {@link #setVariable(String, String) set} configuration variables.
  * </p>
  * <p>
  * <h3>Naming conventions</h3>
@@ -89,16 +89,15 @@ public class Configuration {
     // - Class variables -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Used to get access to the configuration source's input and output streams. */
-    private ConfigurationSource                                source;
+    private ConfigurationSource source;
     /** Used to create objects that will read from the configuration source. */
-    private ConfigurationReaderFactory                         readerFactory;
+    private ConfigurationReaderFactory readerFactory;
     /** Used to create objects that will write to the configuration source. */
-    private ConfigurationWriterFactory                         writerFactory;
+    private ConfigurationWriterFactory writerFactory;
     /** Holds the content of the configuration file. */
-    private final ConfigurationSection                         root = new ConfigurationSection();
+    private final ConfigurationSection root = new ConfigurationSection();
     /** Contains all registered configuration LISTENERS, stored as weak references. */
     private final WeakHashMap<ConfigurationListener, ?> LISTENERS = new WeakHashMap<ConfigurationListener, Object>();
-
 
 
     // - Synchronisation locks -----------------------------------------------------------------------------------------
@@ -111,10 +110,9 @@ public class Configuration {
     private final Object writerLock = new Object();
 
 
-
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * Creates a new instance of <code>Configuration</code>.
      * <p>
@@ -168,16 +166,18 @@ public class Configuration {
     }
 
 
-
     // - Configuration source ------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Sets the source that will be used to read and write configuration information.
      * @param s new configuration source.
      * @see     #getSource()
      */
     public void setSource(ConfigurationSource s) {
-        synchronized(sourceLock) {source = s;}
+        synchronized (sourceLock) {
+            source = s;
+        }
     }
 
     /**
@@ -186,13 +186,15 @@ public class Configuration {
      * @see    #setSource(ConfigurationSource)
      */
     public ConfigurationSource getSource() {
-        synchronized(sourceLock) {return source;}
+        synchronized (sourceLock) {
+            return source;
+        }
     }
-
 
 
     // - Reader handling -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Sets the factory that will be used to create {@link ConfigurationReader reader} instances.
      * <p>
@@ -203,7 +205,9 @@ public class Configuration {
      * @see     #getReaderFactory()
      */
     public void setReaderFactory(ConfigurationReaderFactory f) {
-        synchronized(readerLock) {readerFactory = f;}
+        synchronized (readerLock) {
+            readerFactory = f;
+        }
     }
 
     /**
@@ -216,17 +220,17 @@ public class Configuration {
      * @see    #setReaderFactory(ConfigurationReaderFactory)
      */
     public ConfigurationReaderFactory getReaderFactory() {
-        synchronized(readerLock) {
-            if(readerFactory == null)
+        synchronized (readerLock) {
+            if (readerFactory == null)
                 return XmlConfigurationReader.FACTORY;
             return readerFactory;
         }
     }
 
 
-
     // - Writer handling -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Sets the factory that will be used to create writer instances.
      * <p>
@@ -237,7 +241,9 @@ public class Configuration {
      * @see     #getWriterFactory()
      */
     public void setWriterFactory(ConfigurationWriterFactory f) {
-        synchronized(writerLock) {writerFactory = f;}
+        synchronized (writerLock) {
+            writerFactory = f;
+        }
     }
 
     /**
@@ -250,17 +256,17 @@ public class Configuration {
      * @see    #setWriterFactory(ConfigurationWriterFactory)
      */
     public ConfigurationWriterFactory getWriterFactory() {
-        synchronized(writerLock) {
-            if(writerFactory == null)
+        synchronized (writerLock) {
+            if (writerFactory == null)
                 return XmlConfigurationWriter.FACTORY;
             return writerFactory;
         }
     }
 
 
-
     // - Configuration reading -----------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Loads configuration from the specified input stream, using the specified configuration reader.
      * @param  in                              where to read the configuration from.
@@ -291,7 +297,7 @@ public class Configuration {
      * @throws IOException                     if an I/O error occurs.
      * @see                                    #read()
      * @see                                    #read(ConfigurationReader)
-     * @see                                    #read(Reader,ConfigurationReader)
+     * @see                                    #read(Reader, ConfigurationReader)
      * @deprecated Application developers should use {@link #read(Reader)} instead. This method assumes the specified
      *             {@link InputStream} to be <code>UTF-8</code> encoded.
      */
@@ -314,7 +320,7 @@ public class Configuration {
      * @throws IOException                     if an I/O error occurs.
      * @see                                    #read()
      * @see                                    #read(ConfigurationReader)
-     * @see                                    #read(Reader,ConfigurationReader)
+     * @see                                    #read(Reader, ConfigurationReader)
      */
     public void read(Reader in) throws ConfigurationException, IOException {
         read(in, getReaderFactory().getReaderInstance());
@@ -334,24 +340,27 @@ public class Configuration {
      * @throws ConfigurationStructureException if the configuration data doesn't describe a valid configuration tree.
      * @see                                    #read(InputStream)
      * @see                                    #read()
-     * @see                                    #read(Reader,ConfigurationReader)
+     * @see                                    #read(Reader, ConfigurationReader)
      */
     public void read(ConfigurationReader reader) throws IOException, ConfigurationException {
-        Reader              in;     // Input stream on the configuration source.
+        Reader in;     // Input stream on the configuration source.
         ConfigurationSource source; // Configuration source.
 
         in = null;
 
         // Makes sure the configuration source has been properly set.
-        if((source = getSource()) == null)
+        if ((source = getSource()) == null)
             throw new SourceConfigurationException("Configuration source hasn't been set.");
 
         // Reads the configuration data.
-        try {read(in = source.getReader(), reader);}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
+        try {
+            read(in = source.getReader(), reader);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                }
             }
         }
     }
@@ -376,16 +385,16 @@ public class Configuration {
      * @see                                    #write()
      * @see                                    #read(InputStream)
      * @see                                    #read(ConfigurationReader)
-     * @see                                    #read(Reader,ConfigurationReader)
+     * @see                                    #read(Reader, ConfigurationReader)
      */
     public void read() throws ConfigurationException, IOException {
         read(getReaderFactory().getReaderInstance());
     }
 
 
-
     // - Configuration writing -----------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Writes the configuration to the specified {@link Writer}.
      * <p>
@@ -418,21 +427,23 @@ public class Configuration {
      * @see                                    #write()
      */
     public void write() throws IOException, ConfigurationException {
-        Writer              out;    // Where to write the configuration data.
+        Writer out;    // Where to write the configuration data.
         ConfigurationSource source; // Configuration source.
 
         out = null;
 
         // Makes sure the source has been set.
-        if((source = getSource()) == null)
+        if ((source = getSource()) == null)
             throw new SourceConfigurationException("No configuration source has been set");
 
         // Writes the configuration data.
-        try {write(out = source.getWriter());}
-        finally {
-            if(out != null) {
-                try {out.close();}
-                catch(Exception e) {
+        try {
+            write(out = source.getWriter());
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (Exception e) {
                     // Ignores errors here, nothing we can do about them.
                 }
             }
@@ -451,9 +462,9 @@ public class Configuration {
     }
 
 
-
     // - Configuration building ----------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Recursively explores the specified section and invokes the specified builder's callback methods.
      * @param  builder                object that will receive building events.
@@ -461,23 +472,23 @@ public class Configuration {
      * @throws ConfigurationException if any error occurs.
      */
     private synchronized void build(ConfigurationBuilder builder, ConfigurationSection root) throws ConfigurationException {
-        Iterator<String>     enumeration; // Enumeration on the section's variables, then subsections.
-        String               name;        // Name of the current variable, then section.
+        Iterator<String> enumeration; // Enumeration on the section's variables, then subsections.
+        String name;        // Name of the current variable, then section.
         ConfigurationSection section;     // Current section.
 
         // Explores the section's variables.
         enumeration = root.variableNames();
-        while(enumeration.hasNext())
+        while (enumeration.hasNext())
             builder.addVariable(name = enumeration.next(), root.getVariable(name));
 
         // Explores the section's subsections.
         enumeration = root.sectionNames();
-        while(enumeration.hasNext()) {
-            name    = enumeration.next();
+        while (enumeration.hasNext()) {
+            name = enumeration.next();
             section = root.getSection(name);
 
             // We only go through subsections if contain either variables or subsections of their own.
-            if(section.hasSections() || section.hasVariables()) {
+            if (section.hasSections() || section.hasVariables()) {
                 builder.startSection(name);
                 build(builder, section);
                 builder.endSection(name);
@@ -486,9 +497,9 @@ public class Configuration {
     }
 
 
-
     // - Variable setting ----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Moves the value of <code>fromVar</code> to <code>toVar</code>.
      * <p>
@@ -525,17 +536,17 @@ public class Configuration {
      * @return       <code>true</code> if this call resulted in a modification of the variable's value,
      *               <code>false</code> otherwise.
      * @see          #getVariable(String)
-     * @see          #getVariable(String,String)
+     * @see          #getVariable(String, String)
      */
     public synchronized boolean setVariable(String name, String value) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
-        String                buffer;   // Buffer for the variable's name trimmed of section information.
+        String buffer;   // Buffer for the variable's name trimmed of section information.
 
         // Moves to the parent section.
         buffer = moveToParent(explorer = new ConfigurationExplorer(root), name, true);
 
         // If the variable's value was actually modified, triggers an event.
-        if(explorer.getSection().setVariable(buffer, value)) {
+        if (explorer.getSection().setVariable(buffer, value)) {
             triggerEvent(new ConfigurationEvent(this, name, value));
             return true;
         }
@@ -558,7 +569,7 @@ public class Configuration {
      * @return       <code>true</code> if this call resulted in a modification of the variable's value,
      *               <code>false</code> otherwise.
      * @see          #getIntegerVariable(String)
-     * @see          #getVariable(String,int)
+     * @see          #getVariable(String, int)
      */
     public boolean setVariable(String name, int value) {
         return setVariable(name, ConfigurationSection.getValue(value));
@@ -580,8 +591,8 @@ public class Configuration {
      * @param  separator string used to separate each element of the list.
      * @return           <code>true</code> if this call resulted in a modification of the variable's value,
      *                   <code>false</code> otherwise.
-     * @see              #getListVariable(String,String)
-     * @see              #getVariable(String,List,String)
+     * @see              #getListVariable(String, String)
+     * @see              #getVariable(String, List, String)
      */
     public boolean setVariable(String name, List<String> value, String separator) {
         return setVariable(name, ConfigurationSection.getValue(value, separator));
@@ -603,9 +614,11 @@ public class Configuration {
      * @return       <code>true</code> if this call resulted in a modification of the variable's value,
      *               <code>false</code> otherwise.
      * @see          #getFloatVariable(String)
-     * @see          #getVariable(String,float)
+     * @see          #getVariable(String, float)
      */
-    public boolean setVariable(String name, float value) {return setVariable(name, ConfigurationSection.getValue(value));}
+    public boolean setVariable(String name, float value) {
+        return setVariable(name, ConfigurationSection.getValue(value));
+    }
 
     /**
      * Sets the value of the specified variable.
@@ -623,7 +636,7 @@ public class Configuration {
      * @return       <code>true</code> if this call resulted in a modification of the variable's value,
      *               <code>false</code> otherwise.
      * @see          #getBooleanVariable(String)
-     * @see          #getVariable(String,boolean)
+     * @see          #getVariable(String, boolean)
      */
     public boolean setVariable(String name, boolean value) {
         return setVariable(name, ConfigurationSection.getValue(value));
@@ -645,7 +658,7 @@ public class Configuration {
      * @return       <code>true</code> if this call resulted in a modification of the variable's value,
      *               <code>false</code> otherwise.
      * @see          #getLongVariable(String)
-     * @see          #getVariable(String,long)
+     * @see          #getVariable(String, long)
      */
     public boolean setVariable(String name, long value) {
         return setVariable(name, ConfigurationSection.getValue(value));
@@ -667,26 +680,28 @@ public class Configuration {
      * @return       <code>true</code> if this call resulted in a modification of the variable's value,
      *               <code>false</code> otherwise.
      * @see          #getDoubleVariable(String)
-     * @see          #getVariable(String,double)
+     * @see          #getVariable(String, double)
      */
-    public boolean setVariable(String name, double value) {return setVariable(name, ConfigurationSection.getValue(value));}
-
+    public boolean setVariable(String name, double value) {
+        return setVariable(name, ConfigurationSection.getValue(value));
+    }
 
 
     // - Variable retrieval --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the value of the specified variable.
      * @param  name fully qualified name of the variable whose value should be retrieved.
-     * @return      the variable's value if set, <code>null</code> otherwise.
-     * @see         #setVariable(String,String)
-     * @see         #getVariable(String,String)
+     * @return the variable's value if set, <code>null</code> otherwise.
+     * @see         #setVariable(String, String)
+     * @see         #getVariable(String, String)
      */
     public synchronized String getVariable(String name) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
 
         // If the variable's 'path' doesn't exist, return null.
-        if((name = moveToParent(explorer = new ConfigurationExplorer(root), name, false)) == null)
+        if ((name = moveToParent(explorer = new ConfigurationExplorer(root), name, false)) == null)
             return null;
         return explorer.getSection().getVariable(name);
     }
@@ -695,9 +710,9 @@ public class Configuration {
      * Returns the value of the specified variable as a {@link ValueList}.
      * @param  name      fully qualified name of the variable whose value should be retrieved.
      * @param  separator character used to split the variable's value into a list.
-     * @return           the variable's value if set, <code>null</code> otherwise.
-     * @see              #setVariable(String,List,String)
-     * @see              #getVariable(String,List,String)
+     * @return the variable's value if set, <code>null</code> otherwise.
+     * @see              #setVariable(String, List, String)
+     * @see              #getVariable(String, List, String)
      */
     public ValueList getListVariable(String name, String separator) {
         return ConfigurationSection.getListValue(getVariable(name), separator);
@@ -706,10 +721,10 @@ public class Configuration {
     /**
      * Returns the value of the specified variable as an integer.
      * @param                        name fully qualified name of the variable whose value should be retrieved.
-     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @return the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to an integer.
-     * @see                          #setVariable(String,int)
-     * @see                          #getVariable(String,int)
+     * @see                          #setVariable(String, int)
+     * @see                          #getVariable(String, int)
      */
     public int getIntegerVariable(String name) {
         return ConfigurationSection.getIntegerValue(getVariable(name));
@@ -718,10 +733,10 @@ public class Configuration {
     /**
      * Returns the value of the specified variable as a long.
      * @param                        name fully qualified name of the variable whose value should be retrieved.
-     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @return the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a long.
-     * @see                          #setVariable(String,long)
-     * @see                          #getVariable(String,long)
+     * @see                          #setVariable(String, long)
+     * @see                          #getVariable(String, long)
      */
     public long getLongVariable(String name) {
         return ConfigurationSection.getLongValue(getVariable(name));
@@ -730,10 +745,10 @@ public class Configuration {
     /**
      * Returns the value of the specified variable as a float.
      * @param                        name fully qualified name of the variable whose value should be retrieved.
-     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @return the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a float.
-     * @see                          #setVariable(String,float)
-     * @see                          #getVariable(String,float)
+     * @see                          #setVariable(String, float)
+     * @see                          #getVariable(String, float)
      */
     public float getFloatVariable(String name) {
         return ConfigurationSection.getFloatValue(getVariable(name));
@@ -742,10 +757,10 @@ public class Configuration {
     /**
      * Returns the value of the specified variable as a double.
      * @param                        name fully qualified name of the variable whose value should be retrieved.
-     * @return                       the variable's value if set, <code>0</code> otherwise.
+     * @return the variable's value if set, <code>0</code> otherwise.
      * @throws NumberFormatException if the variable's value cannot be cast to a double.
-     * @see                          #setVariable(String,double)
-     * @see                          #getVariable(String,double)
+     * @see                          #setVariable(String, double)
+     * @see                          #getVariable(String, double)
      */
     public double getDoubleVariable(String name) {
         return ConfigurationSection.getDoubleValue(getVariable(name));
@@ -755,8 +770,8 @@ public class Configuration {
      * Returns the value of the specified variable as a boolean.
      * @param  name fully qualified name of the variable whose value should be retrieved.
      * @return the variable's value if set, <code>false</code> otherwise.
-     * @see                          #setVariable(String,boolean)
-     * @see                          #getVariable(String,boolean)
+     * @see                          #setVariable(String, boolean)
+     * @see                          #getVariable(String, boolean)
      */
     public boolean getBooleanVariable(String name) {
         return ConfigurationSection.getBooleanValue(getVariable(name));
@@ -772,9 +787,9 @@ public class Configuration {
     }
 
 
-
     // - Variable removal ----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Prunes dead branches from the specified configuration tree.
      * @param explorer used to backtrack through the configuration tree.
@@ -784,14 +799,14 @@ public class Configuration {
         ConfigurationSection parent;
 
         // If we're at the root level, nothing to prune.
-        if(!explorer.hasSections())
+        if (!explorer.hasSections())
             return;
 
         current = explorer.popSection();
 
         // Look for branches to prune until we've either found a non-empty one
         // or reached the root of the three.
-        while(current.isEmpty() && current != root) {
+        while (current.isEmpty() && current != root) {
             // Gets the current section's parent and prune.
             parent = explorer.hasSections() ? explorer.popSection() : root;
             parent.removeSection(current);
@@ -806,18 +821,18 @@ public class Configuration {
      * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
-     * @return      the variable's old value, or <code>null</code> if it wasn't set.
+     * @return the variable's old value, or <code>null</code> if it wasn't set.
      */
     public synchronized String removeVariable(String name) {
         BufferedConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
-        String                        buffer;   // Buffer for the variable's name trimmed of section information.
+        String buffer;   // Buffer for the variable's name trimmed of section information.
 
         // If the variable's 'path' doesn't exist, return null.
-        if((buffer = moveToParent(explorer = new BufferedConfigurationExplorer(root), name, false)) == null)
+        if ((buffer = moveToParent(explorer = new BufferedConfigurationExplorer(root), name, false)) == null)
             return null;
 
         // If the variable was actually set, triggers an event.
-        if((buffer = explorer.getSection().removeVariable(buffer)) != null) {
+        if ((buffer = explorer.getSection().removeVariable(buffer)) != null) {
             prune(explorer);
             triggerEvent(new ConfigurationEvent(this, name, null));
         }
@@ -833,7 +848,7 @@ public class Configuration {
      * </p>
      * @param  name name of the variable to remove.
      * @param  separator character used to split the variable's value into a list.
-     * @return      the variable's old value, or <code>null</code> if it wasn't set.
+     * @return the variable's old value, or <code>null</code> if it wasn't set.
      */
     public ValueList removeListVariable(String name, String separator) {
         return ConfigurationSection.getListValue(removeVariable(name), separator);
@@ -846,7 +861,7 @@ public class Configuration {
      * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
-     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     * @return the variable's old value, or <code>0</code> if it wasn't set.
      */
     public int removeIntegerVariable(String name) {
         return ConfigurationSection.getIntegerValue(removeVariable(name));
@@ -859,7 +874,7 @@ public class Configuration {
      * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
-     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     * @return the variable's old value, or <code>0</code> if it wasn't set.
      */
     public long removeLongVariable(String name) {
         return ConfigurationSection.getLongValue(removeVariable(name));
@@ -872,7 +887,7 @@ public class Configuration {
      * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
-     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     * @return the variable's old value, or <code>0</code> if it wasn't set.
      */
     public float removeFloatVariable(String name) {
         return ConfigurationSection.getFloatValue(removeVariable(name));
@@ -885,7 +900,7 @@ public class Configuration {
      * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
-     * @return      the variable's old value, or <code>0</code> if it wasn't set.
+     * @return the variable's old value, or <code>0</code> if it wasn't set.
      */
     public double removeDoubleVariable(String name) {
         return ConfigurationSection.getDoubleValue(removeVariable(name));
@@ -898,7 +913,7 @@ public class Configuration {
      * all registered LISTENERS.
      * </p>
      * @param  name name of the variable to remove.
-     * @return      the variable's old value, or <code>false</code> if it wasn't set.
+     * @return the variable's old value, or <code>false</code> if it wasn't set.
      */
     public boolean removeBooleanVariable(String name) {
         return ConfigurationSection.getBooleanValue(removeVariable(name));
@@ -908,12 +923,13 @@ public class Configuration {
      * Remove all variables & sub-sections under the root section 
      */
     public void clear() {
-		root.clear();
-	}
+        root.clear();
+    }
 
 
     // - Advanced variable retrieval -----------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Retrieves the value of the specified variable.
      * <p>
@@ -923,21 +939,21 @@ public class Configuration {
      * </p>
      * @param  name         name of the variable to retrieve.
      * @param  defaultValue value to use if <code>name</code> is not set.
-     * @return              the specified variable's value.
-     * @see                 #setVariable(String,String)
+     * @return the specified variable's value.
+     * @see                 #setVariable(String, String)
      * @see                 #getVariable(String)
      */
     public synchronized String getVariable(String name, String defaultValue) {
         ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
-        String                value;    // Buffer for the variable's value.
-        String                buffer;   // Buffer for the variable's name trimmed of section information.
+        String value;    // Buffer for the variable's value.
+        String buffer;   // Buffer for the variable's name trimmed of section information.
 
         // Navigates to the parent section. We do not have to check for null values here,
         // as the section will be created if it doesn't exist.
         buffer = moveToParent(explorer = new ConfigurationExplorer(root), name, true);
 
         // If the variable isn't set, set it to defaultValue and triggers an event.
-        if((value = explorer.getSection().getVariable(buffer)) == null) {
+        if ((value = explorer.getSection().getVariable(buffer)) == null) {
             explorer.getSection().setVariable(buffer, defaultValue);
             triggerEvent(new ConfigurationEvent(this, name, defaultValue));
             return defaultValue;
@@ -955,14 +971,14 @@ public class Configuration {
      * @param  name         name of the variable to retrieve.
      * @param  defaultValue value to use if variable <code>name</code> is not set.
      * @param  separator    separator to use for <code>defaultValue</code> if variable <code>name</code> is not set.
-     * @return              the specified variable's value.
-     * @see                 #setVariable(String,List,String)
-     * @see                 #getListVariable(String,String)
+     * @return the specified variable's value.
+     * @see                 #setVariable(String, List, String)
+     * @see                 #getListVariable(String, String)
      */
     public ValueList getVariable(String name, List<String> defaultValue, String separator) {
         return ConfigurationSection.getListValue(getVariable(name,
-                                                             ConfigurationSection.getValue(defaultValue, separator)),
-                                                 separator);
+                ConfigurationSection.getValue(defaultValue, separator)),
+                separator);
     }
 
     /**
@@ -974,9 +990,9 @@ public class Configuration {
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
-     * @return                       the specified variable's value.
+     * @return the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to an integer.
-     * @see                          #setVariable(String,int)
+     * @see                          #setVariable(String, int)
      * @see                          #getIntegerVariable(String)
      */
     public int getVariable(String name, int defaultValue) {
@@ -992,9 +1008,9 @@ public class Configuration {
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
-     * @return                       the specified variable's value.
+     * @return the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a long.
-     * @see                          #setVariable(String,long)
+     * @see                          #setVariable(String, long)
      * @see                          #getLongVariable(String)
      */
     public long getVariable(String name, long defaultValue) {
@@ -1010,9 +1026,9 @@ public class Configuration {
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
-     * @return                       the specified variable's value.
+     * @return the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a float.
-     * @see                          #setVariable(String,float)
+     * @see                          #setVariable(String, float)
      * @see                          #getFloatVariable(String)
      */
     public float getVariable(String name, float defaultValue) {
@@ -1028,8 +1044,8 @@ public class Configuration {
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
-     * @return                       the specified variable's value.
-     * @see                          #setVariable(String,boolean)
+     * @return the specified variable's value.
+     * @see                          #setVariable(String, boolean)
      * @see                          #getBooleanVariable(String)
      */
     public boolean getVariable(String name, boolean defaultValue) {
@@ -1045,9 +1061,9 @@ public class Configuration {
      * </p>
      * @param  name                  name of the variable to retrieve.
      * @param  defaultValue          value to use if <code>name</code> is not set.
-     * @return                       the specified variable's value.
+     * @return the specified variable's value.
      * @throws NumberFormatException if the variable's value cannot be cast to a double.
-     * @see                          #setVariable(String,double)
+     * @see                          #setVariable(String, double)
      * @see                          #getDoubleVariable(String)
      */
     public double getVariable(String name, double defaultValue) {
@@ -1055,45 +1071,46 @@ public class Configuration {
     }
 
 
-
     // - Helper methods ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Navigates the specified explorer to the parent section of the specified variable.
      * @param  root where to start exploring from.
      * @param  name name of the variable to seek.
      * @param  create whether or not the path to the variable should be created if it doesn't exist.
-     * @return        the name of the variable trimmed of section information, <code>null</code> if not found.
+     * @return the name of the variable trimmed of section information, <code>null</code> if not found.
      */
     private String moveToParent(ConfigurationExplorer root, String name, boolean create) {
         StringTokenizer parser; // Used to parse the variable's path.
 
         // Goes through each element of the path.
         parser = new StringTokenizer(name, ".");
-        while(parser.hasMoreTokens()) {
+        while (parser.hasMoreTokens()) {
             // If we've reached the variable's name, return it.
             name = parser.nextToken();
-            if(!parser.hasMoreTokens())
+            if (!parser.hasMoreTokens())
                 return name;
 
             // If we've reached a dead-end, return null.
-            if(!root.moveTo(name, create))
+            if (!root.moveTo(name, create))
                 return null;
         }
         return name;
     }
 
 
-
     // - Configuration listening ---------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Adds the specified object to the list of registered configuration LISTENERS.
      * @param listener object to register as a configuration listener.
      * @see            #removeConfigurationListener(ConfigurationListener)
      */
     public void addConfigurationListener(ConfigurationListener listener) {
-        LISTENERS.put(listener, null);}
+        LISTENERS.put(listener, null);
+    }
 
     /**
      * Removes the specified object from the list of registered configuration LISTENERS.
@@ -1101,31 +1118,34 @@ public class Configuration {
      * @see            #addConfigurationListener(ConfigurationListener)
      */
     public void removeConfigurationListener(ConfigurationListener listener) {
-        LISTENERS.remove(listener);}
+        LISTENERS.remove(listener);
+    }
 
     /**
      * Passes the specified event to all registered configuration LISTENERS.
      * @param event event to propagate.
      */
     private void triggerEvent(ConfigurationEvent event) {
-        for(ConfigurationListener listener : LISTENERS.keySet())
+        for (ConfigurationListener listener : LISTENERS.keySet())
             listener.configurationChanged(event);
     }
 
 
-
     // - Misc. ---------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the configuration's root section.
      * @return the configuration's root section.
      */
-    ConfigurationSection getRoot() {return root;}
-
+    ConfigurationSection getRoot() {
+        return root;
+    }
 
 
     // - Loading -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Used to load configuration.
      * @author Nicolas Rinaudo
@@ -1136,29 +1156,31 @@ public class Configuration {
         /** Parents of {@link #currentSection}. */
         private Stack<ConfigurationSection> sections;
         /** Fully qualified names of {@link #currentSection}. */
-        private Stack<String>               sectionNames;
+        private Stack<String> sectionNames;
         /** Section that we're currently building. */
-        private ConfigurationSection        currentSection;
-
+        private ConfigurationSection currentSection;
 
 
         // - Initialisation --------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------
+
         /**
          * Creates a new configuration loader.
          * @param root where to create the configuration in.
          */
-        public ConfigurationLoader(ConfigurationSection root) {currentSection = root;}
-
+        public ConfigurationLoader(ConfigurationSection root) {
+            currentSection = root;
+        }
 
 
         // - Building --------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------
+
         /**
          * Initialises the configuration building.
          */
         public void startConfiguration() {
-            sections     = new Stack<ConfigurationSection>();
+            sections = new Stack<ConfigurationSection>();
             sectionNames = new Stack<String>();
         }
 
@@ -1168,9 +1190,9 @@ public class Configuration {
          */
         public void endConfiguration() throws ConfigurationException {
             // Makes sure currentSection is the root section.
-            if(!sections.empty())
+            if (!sections.empty())
                 throw new ConfigurationStructureException("Not all sections have been closed.");
-            sections     = null;
+            sections = null;
             sectionNames = null;
         }
 
@@ -1183,7 +1205,7 @@ public class Configuration {
 
             buffer = currentSection.addSection(name);
             sections.push(currentSection);
-            if(sectionNames.empty())
+            if (sectionNames.empty())
                 sectionNames.push(name + '.');
             else
                 sectionNames.push(sectionNames.peek() + name + '.');
@@ -1202,11 +1224,12 @@ public class Configuration {
             try {
                 buffer = sections.pop();
                 sectionNames.pop();
+            } catch (EmptyStackException e) {
+                throw new ConfigurationStructureException("Section " + name + " was already closed.");
             }
-            catch(EmptyStackException e) {throw new ConfigurationStructureException("Section " + name + " was already closed.");}
 
             // Makes sure we're closing the right section.
-            if(buffer.getSection(name) != currentSection)
+            if (buffer.getSection(name) != currentSection)
                 throw new ConfigurationStructureException("Section " + name + " is not the currently opened section.");
             currentSection = buffer;
         }
@@ -1218,8 +1241,8 @@ public class Configuration {
          */
         public void addVariable(String name, String value) {
             // If the variable's value was modified, trigger an event.
-            if(currentSection.setVariable(name, value)) {
-                if(sectionNames.empty())
+            if (currentSection.setVariable(name, value)) {
+                if (sectionNames.empty())
                     triggerEvent(new ConfigurationEvent(Configuration.this, name, value));
                 else
                     triggerEvent(new ConfigurationEvent(Configuration.this, sectionNames.peek() + name, value));

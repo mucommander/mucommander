@@ -37,7 +37,7 @@ import java.text.ParseException;
  */
 public class NFSPanel extends ServerPanel {
 
-    private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.NFS).getStandardPort(); 
+    private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.NFS).getStandardPort();
 
     private JTextField serverField;
     private JTextField shareField;
@@ -93,8 +93,8 @@ public class NFSPanel extends ServerPanel {
 
         lastPort = (Integer) portSpinner.getValue();
 
-        lastNfsVersion = (String)nfsVersionComboBox.getSelectedItem();
-        lastNfsProtocol = (String)nfsProtocolComboBox.getSelectedItem();
+        lastNfsVersion = (String) nfsVersionComboBox.getSelectedItem();
+        lastNfsProtocol = (String) nfsProtocolComboBox.getSelectedItem();
     }
 
 
@@ -106,7 +106,7 @@ public class NFSPanel extends ServerPanel {
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
 
-        FileURL url = FileURL.getFileURL(FileProtocols.NFS+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
+        FileURL url = FileURL.getFileURL(FileProtocols.NFS + "://" + lastServer + (lastShare.startsWith("/") ? "" : "/") + lastShare);
 
         // Set port
         url.setPort(lastPort);
@@ -129,8 +129,10 @@ public class NFSPanel extends ServerPanel {
     public void dialogValidated() {
         // Commits the current spinner value in case it was being edited and 'enter' was pressed
         // (the spinner value would otherwise not be committed)
-        try { portSpinner.commitEdit(); }
-        catch(ParseException e) { }
+        try {
+            portSpinner.commitEdit();
+        } catch (ParseException e) {
+        }
 
         updateValues();
     }

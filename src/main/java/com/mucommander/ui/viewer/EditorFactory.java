@@ -33,15 +33,17 @@ public interface EditorFactory {
      * The FileEditor may base its decision stricly upon the file's name and its extension or may wish to read some of
      * the file and compare it to a magic number.
      * </p>
-     * @param  file file for which a editor must be created.
+     *
+     * @param file file for which a editor must be created.
+     * @return <code>true</code> if this factory can create a file editor for the specified file.
      * @throws WarnUserException if the specified file can be edited after the warning message contained in the
-     * exception is displayed to the end user.
-     * @return      <code>true</code> if this factory can create a file editor for the specified file.
+     *                           exception is displayed to the end user.
      */
     boolean canEditFile(AbstractFile file) throws WarnUserException;
 
     /**
      * Returns a new instance of {@link FileEditor}.
+     *
      * @return a new instance of {@link FileEditor}.
      */
     FileEditor createFileEditor();

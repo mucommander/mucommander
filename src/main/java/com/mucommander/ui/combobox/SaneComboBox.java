@@ -28,7 +28,7 @@ import java.util.WeakHashMap;
  * SaneComboBox is a JComboBox which does not have the awful default JComboBox behavior of firing ActionEvents
  * when navigating with the arrow keys between choices of the popup menu.
  * This page describes the problem in details: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4199622
- *
+ * <p>
  * <p>Also when using {@link ComboBoxListener}, action events that are normally triggered by JComboBox
  * when the add/insert/remove item methods are called are filtered out, only actual selection changes performed
  * by the user are fired.
@@ -65,7 +65,7 @@ public class SaneComboBox extends JComboBox {
     private void init() {
         // Prevent up/down keys from firing ActionEvents
         // for Java 1.3
-        putClientProperty("JComboBox.lightweightKeyboardNavigation","Lightweight");
+        putClientProperty("JComboBox.lightweightKeyboardNavigation", "Lightweight");
 // Commented as it causes rendering issues under Mac OS X Leopard (does not render like a native combo box)
 //        // for Java 1.4 and up
 //        putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
@@ -75,7 +75,7 @@ public class SaneComboBox extends JComboBox {
         addActionListener(new AbstractAction() {
             public void actionPerformed(ActionEvent actionEvent) {
                 // Filter out action events triggered by the add/insert/remove item methods
-                if(!ignoreActionEvent)
+                if (!ignoreActionEvent)
                     fireComboBoxSelectionChanged();
             }
         });
@@ -88,7 +88,7 @@ public class SaneComboBox extends JComboBox {
 
     /**
      * Adds the specified ComboBoxListener to the list of registered listeners.
-     *
+     * <p>
      * <p>Listeners are stored as weak references so {@link #removeComboBoxListener(ComboBoxListener)}
      * doesn't need to be called for listeners to be garbage collected when they're not used anymore.
      *
@@ -110,13 +110,13 @@ public class SaneComboBox extends JComboBox {
     /**
      * Notifies all registered ComboBoxListener instances that an item has been selected from the
      * combo box popup menu. The item may have been selected either with the 'Enter' key, or by clicking on the item.
-     *
+     * <p>
      * <p>Unlike JComboBox ActionListener behavior, calls to the add/insert/remove item methods do *not* trigger
      * a selection event.
      */
     protected void fireComboBoxSelectionChanged() {
         // Iterate on all listeners
-        for(ComboBoxListener listener : listeners.keySet())
+        for (ComboBoxListener listener : listeners.keySet())
             listener.comboBoxSelectionChanged(this);
     }
 

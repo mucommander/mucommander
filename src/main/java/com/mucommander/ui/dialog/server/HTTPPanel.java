@@ -30,7 +30,7 @@ import java.net.MalformedURLException;
 
 
 /**
- * This ServerPanel helps initiate HTTP connections. 
+ * This ServerPanel helps initiate HTTP connections.
  *
  * @author Maxence Bernard
  */
@@ -45,7 +45,7 @@ public class HTTPPanel extends ServerPanel {
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";
 
-	
+
     HTTPPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
         super(dialog, mainFrame);
 
@@ -55,7 +55,7 @@ public class HTTPPanel extends ServerPanel {
         addTextFieldListeners(urlField, true);
         addRow(Translator.get("server_connect_dialog.http_url"), urlField, 20);
 
-         // HTTP Basic authentication fields
+        // HTTP Basic authentication fields
         addRow(new JLabel(Translator.get("http_connect.basic_authentication")), 10);
 
         // Username field
@@ -81,13 +81,13 @@ public class HTTPPanel extends ServerPanel {
     ////////////////////////////////
     // ServerPanel implementation //
     ////////////////////////////////
-	
+
     @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
-        
-        if(!(lastURL.toLowerCase().startsWith(FileProtocols.HTTP+"://") || lastURL.toLowerCase().startsWith(FileProtocols.HTTPS+"://")))
-            lastURL = FileProtocols.HTTP+"://"+lastURL;
+
+        if (!(lastURL.toLowerCase().startsWith(FileProtocols.HTTP + "://") || lastURL.toLowerCase().startsWith(FileProtocols.HTTPS + "://")))
+            lastURL = FileProtocols.HTTP + "://" + lastURL;
 
         FileURL fileURL = FileURL.getFileURL(lastURL);
 
@@ -95,7 +95,7 @@ public class HTTPPanel extends ServerPanel {
 
         return fileURL;
     }
-	
+
     @Override
     boolean usesCredentials() {
         return true;

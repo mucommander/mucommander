@@ -19,33 +19,30 @@
 package com.mucommander.desktop.xfce;
 
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.desktop.DefaultDesktopAdapter;
-import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
 
 /**
  * @author Arik Hadas
  */
 abstract class XfceDesktopAdapter extends DefaultDesktopAdapter {
-	private static final String FILE_MANAGER_NAME = "Thunar";
-    private static final String FILE_OPENER       = "exo-open $f";
-    private static final String EXE_OPENER        = "$f";
-    
-	@Override
-    public void init(boolean install) throws DesktopInitialisationException {
+
+    private static final String FILE_MANAGER_NAME = "Thunar";
+    private static final String FILE_OPENER = "exo-open $f";
+    private static final String EXE_OPENER = "$f";
+
+    @Override
+    public void init(boolean install) {
         // Initialises trash management.
         DesktopManager.setTrashProvider(new XfceTrashProvider());
 
         // Registers KDE specific commands.
-        try {
-        	CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER,  CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
-        }
-        catch(CommandException e) {throw new DesktopInitialisationException(e);}
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, FILE_OPENER, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, FILE_OPENER, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS, EXE_OPENER, CommandType.SYSTEM_COMMAND, null));
+        CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
     }
+
 }

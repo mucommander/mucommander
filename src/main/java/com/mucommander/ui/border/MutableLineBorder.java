@@ -23,51 +23,71 @@ import java.awt.*;
 
 /**
  * Implementation of <code>LineBorder</code> that allows applications to change the color after it's been instantiated.
+ *
  * @author Nicolas Rinaudo
  */
 public class MutableLineBorder extends LineBorder {
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a line border with the specified color and a thickness = 1.
+     *
      * @param color the color of the border.
      */
-    public MutableLineBorder(Color color) {super(color);}
+    public MutableLineBorder(Color color) {
+        super(color);
+    }
 
     /**
      * Creates a line border with the specified color and thickness.
+     *
      * @param color     the color of the border
      * @param thickness the thickness of the border
      */
-    public MutableLineBorder(Color color, int thickness) {super(color, thickness);}
+    public MutableLineBorder(Color color, int thickness) {
+        super(color, thickness);
+    }
 
     /**
      * Creates a line border with the specified color, thickness, and corner shape.
+     *
      * @param color          the color of the border
      * @param thickness      the thickness of the border
      * @param roundedCorners whether or not border corners should be round
      */
-    public MutableLineBorder(Color color, int thickness, boolean roundedCorners) {super(color, thickness, roundedCorners);}
-
+    public MutableLineBorder(Color color, int thickness, boolean roundedCorners) {
+        super(color, thickness, roundedCorners);
+    }
 
 
     // - Setters -------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Sets this border's color.
+     *
      * @param color the color of the border.
      */
-    public void setLineColor(Color color) {lineColor = color;}
+    public void setLineColor(Color color) {
+        lineColor = color;
+    }
 
     /**
      * Sets this border's corner shape.
+     *
      * @param roundedCorners whether or not border corners should be round
      */
-    public void setRoundedCorners(boolean roundedCorners) {this.roundedCorners = roundedCorners;}
+    public void setRoundedCorners(boolean roundedCorners) {
+        this.roundedCorners = roundedCorners;
+    }
 
     /**
      * Sets this border's thickness.
+     *
      * @param thickness the thickness of the border.
      */
-    public void setThickness(int thickness) {this.thickness = thickness;}
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
+    }
 }

@@ -32,8 +32,9 @@ package com.mucommander.commons.conf;
  * {@link DefaultConfigurationBuilder}. This can be used instead of <code>ConfigurationBuilder</code>
  * when only a subset of the possible events are of interest.
  * </p>
+ *
  * @author Nicolas Rinaudo
- * @see    DefaultConfigurationBuilder
+ * @see DefaultConfigurationBuilder
  */
 public interface ConfigurationBuilder {
     /**
@@ -41,6 +42,7 @@ public interface ConfigurationBuilder {
      * <p>
      * This method will only be invoked once, before any other method in this interface.
      * </p>
+     *
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     void startConfiguration() throws ConfigurationException;
@@ -51,6 +53,7 @@ public interface ConfigurationBuilder {
      * This method will be invoked at most once, and if it is, it will be the last one. If an
      * unrecoverable error happens, this method might never be called.
      * </p>
+     *
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     void endConfiguration() throws ConfigurationException;
@@ -63,7 +66,8 @@ public interface ConfigurationBuilder {
      * <code>startSection</code> event, even if the section is empty. All of the section's content will be
      * reported, in order, before the corresponding {@link #endSection(String) endSection} event.
      * </p>
-     * @param  name                   name of the new section.
+     *
+     * @param name name of the new section.
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     void startSection(String name) throws ConfigurationException;
@@ -75,7 +79,8 @@ public interface ConfigurationBuilder {
      * corresponding {@link #startSection(String) startSection} event for every <code>endSection</code>
      * event, even if the section is empty.
      * </p>
-     * @param  name                   name of the finished section.
+     *
+     * @param name name of the finished section.
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     void endSection(String name) throws ConfigurationException;
@@ -88,8 +93,9 @@ public interface ConfigurationBuilder {
      * event which hasn't yet been closed by an {@link #endSection(String) endSection} event. If there is
      * no such section, the variable belongs to the unnamed root section.
      * </p>
-     * @param  name                   name of the new variable.
-     * @param  value                  value of the new variable.
+     *
+     * @param name  name of the new variable.
+     * @param value value of the new variable.
      * @throws ConfigurationException any Configuration error, possibly wrapping another exception.
      */
     void addVariable(String name, String value) throws ConfigurationException;

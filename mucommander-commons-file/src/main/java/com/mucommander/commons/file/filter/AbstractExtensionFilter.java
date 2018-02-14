@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -61,7 +61,7 @@ public class AbstractExtensionFilter extends AbstractStringCriterionFilter {
         // If case isn't important, a simple String.endsWith is enough.
         if (isCaseSensitive()) {
             for (int i = 0; i < extensions.length; i++)
-                if(StringUtils.matches(value, extensions[i], len))
+                if (StringUtils.matches(value, extensions[i], len))
                     return true;
         }
 
@@ -70,7 +70,7 @@ public class AbstractExtensionFilter extends AbstractStringCriterionFilter {
         else {
             // Matches the value to each extension.
             for (int i = 0; i < extensions.length; i++)
-                if(StringUtils.matchesIgnoreCase(value, extensions[i], len))
+                if (StringUtils.matchesIgnoreCase(value, extensions[i], len))
                     return true;
         }
         return false;

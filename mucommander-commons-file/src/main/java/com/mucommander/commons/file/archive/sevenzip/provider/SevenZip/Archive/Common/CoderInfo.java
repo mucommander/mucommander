@@ -5,18 +5,17 @@ import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.ICompress
 import com.mucommander.commons.file.archive.sevenzip.provider.SevenZip.ICompressCoder2;
 
 
-
 public class CoderInfo {
     ICompressCoder Coder;
     ICompressCoder2 Coder2;
     int NumInStreams;
     int NumOutStreams;
-    
+
     LongVector InSizes = new LongVector();
     LongVector OutSizes = new LongVector();
     LongVector InSizePointers = new LongVector();
     LongVector OutSizePointers = new LongVector();
-    
+
     public CoderInfo(int numInStreams, int numOutStreams) {
         NumInStreams = numInStreams;
         NumOutStreams = numOutStreams;
@@ -25,16 +24,15 @@ public class CoderInfo {
         OutSizePointers.Reserve(NumOutStreams);
         OutSizePointers.Reserve(NumOutStreams);
     }
-    
+
     static public void SetSizes(
             LongVector srcSizes,
             LongVector sizes,
             LongVector sizePointers,
-            int numItems)
-    {
+            int numItems) {
         sizes.clear();
         sizePointers.clear();
-        for(int i = 0; i < numItems; i++) {
+        for (int i = 0; i < numItems; i++) {
             if (srcSizes == null || srcSizes.get(i) == -1)  // TBD null => -1
             {
                 sizes.add(new Long(0));
@@ -45,7 +43,7 @@ public class CoderInfo {
             }
         }
     }
-    
+
     public void SetCoderInfo(
             LongVector inSizes, //  const UInt64 **inSizes,
             LongVector outSizes) //const UInt64 **outSizes)

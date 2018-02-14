@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.Map;
 
 /**
  * This action toggles the 'auto-size columns' option on the currently active FileTable, which automatically resizes
@@ -40,7 +34,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ToggleAutoSizeAction extends MuAction {
 
-    public ToggleAutoSizeAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleAutoSizeAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -52,27 +46,35 @@ public class ToggleAutoSizeAction extends MuAction {
         MuConfigurations.getPreferences().setVariable(MuPreference.AUTO_SIZE_COLUMNS, enabled);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ToggleAutoSizeAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new ToggleAutoSizeAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ToggleAutoSize";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "ToggleAutoSize";
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

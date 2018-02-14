@@ -30,10 +30,12 @@ import java.io.IOException;
  */
 public class FilteredRandomOutputStream extends RandomAccessOutputStream {
 
-    /** The underlying RandomAccessOutputStream */
+    /**
+     * The underlying RandomAccessOutputStream
+     */
     protected RandomAccessOutputStream raos;
 
-    
+
     /**
      * Creates a new FilteredRandomOutputStream that delegates all method calls to the specified
      * <code>RandomAccessOutputStream</code>.
@@ -48,7 +50,7 @@ public class FilteredRandomOutputStream extends RandomAccessOutputStream {
     /////////////////////////////////////////////
     // RandomAccessOutputStream implementation //
     /////////////////////////////////////////////
-    
+
     @Override
     public void write(int b) throws IOException {
         raos.write(b);
@@ -90,8 +92,7 @@ public class FilteredRandomOutputStream extends RandomAccessOutputStream {
     public void close() throws IOException {
         try {
             flush();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             // Try closing the stream anyway
         }
 

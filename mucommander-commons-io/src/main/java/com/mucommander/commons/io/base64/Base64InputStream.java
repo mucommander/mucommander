@@ -26,30 +26,44 @@ import java.io.InputStream;
  * an underlying <code>InputStream</code>. The underlying data must be valid base64-encoded data with respect to
  * the character table in use. If not, an <code>IOException</code> will be thrown when illegal data is encountered.
  *
- * @see Base64Decoder
  * @author Maxence Bernard
+ * @see Base64Decoder
  */
 public class Base64InputStream extends InputStream {
 
-    /** Underlying stream data is read from */
+    /**
+     * Underlying stream data is read from
+     */
     private InputStream in;
 
-    /** The Base64 decoding table */
+    /**
+     * The Base64 decoding table
+     */
     private final int[] decodingTable;
 
-    /** The character used for padding */
+    /**
+     * The character used for padding
+     */
     private final byte paddingChar;
 
-    /** Decoded bytes available for reading */
+    /**
+     * Decoded bytes available for reading
+     */
     private int readBuffer[] = new int[3];
 
-    /** Index of the next byte available for reading in the buffer */
+    /**
+     * Index of the next byte available for reading in the buffer
+     */
     private int readOffset;
 
-    /** Number of bytes left for reading in the buffer */
+    /**
+     * Number of bytes left for reading in the buffer
+     */
     private int bytesLeft;
 
-    /** Buffer used temporarily for decoding */
+    /**
+     * Buffer used temporarily for decoding
+     */
     private int decodeBuffer[] = new int[4];
 
 
@@ -67,7 +81,7 @@ public class Base64InputStream extends InputStream {
      * Creates a new <code>Base64InputStream</code> that allows to decode data that has been Base64-encoded using the
      * given table, from the provided <code>InputStream</code>.
      *
-     * @param in underlying InputStream the Base64-encoded data is read from
+     * @param in    underlying InputStream the Base64-encoded data is read from
      * @param table the table to use for Base64 decoding
      */
     public Base64InputStream(InputStream in, Base64Table table) {
@@ -84,20 +98,20 @@ public class Base64InputStream extends InputStream {
     @Override
     public int read() throws IOException {
         // Read buffer empty: read and decode a new base64-encoded 4-byte group
-        if(bytesLeft==0) {
+        if (bytesLeft == 0) {
             int read;
             int nbRead = 0;
 
-            while(nbRead<4) {
+            while (nbRead < 4) {
                 read = in.read();
                 // EOF reached
-                if(read==-1) {
-                    if(nbRead%4 != 0) {
+                if (read == -1) {
+                    if (nbRead % 4 != 0) {
                         // Base64 encoded data must come in a multiple of 4 bytes, throw an IOException if the underlying stream ended prematurely
                         throw new IOException("InputStream did not end on a multiple of 4 bytes");
                     }
 
-                    if(nbRead==0)
+                    if (nbRead == 0)
                         return -1;
                     else    // nbRead==4
                         break;
@@ -107,7 +121,7 @@ public class Base64InputStream extends InputStream {
 
                 // Discard any character that's not a base64 character, without throwing an IOException.
                 // In particular, '\r' and '\n' characters that are usually found in email attachments are simply ignored.
-                if(decodeBuffer[nbRead]==-1 && read!=paddingChar) {
+                if (decodeBuffer[nbRead] == -1 && read != paddingChar) {
                     continue;
                 }
 
@@ -115,17 +129,17 @@ public class Base64InputStream extends InputStream {
             }
 
             // Decode byte 0
-            readBuffer[bytesLeft++] = ((decodeBuffer[0]<<2)&0xFC | ((decodeBuffer[1]>>4)&0x03));
+            readBuffer[bytesLeft++] = ((decodeBuffer[0] << 2) & 0xFC | ((decodeBuffer[1] >> 4) & 0x03));
 
             // Test if the character is not a padding character
-            if(decodeBuffer[2]!=-1) {
+            if (decodeBuffer[2] != -1) {
                 // Decode byte 1
-                readBuffer[bytesLeft++] = (decodeBuffer[1]<<4)&0xF0 | ((decodeBuffer[2]>>2)&0x0F);
+                readBuffer[bytesLeft++] = (decodeBuffer[1] << 4) & 0xF0 | ((decodeBuffer[2] >> 2) & 0x0F);
 
                 // Test if the character is a padding character
-                if(decodeBuffer[3]!=-1)
+                if (decodeBuffer[3] != -1)
                     // Decode byte 2
-                    readBuffer[bytesLeft++] = ((decodeBuffer[2]<<6)&0xC0) | (decodeBuffer[3]&0x3F);
+                    readBuffer[bytesLeft++] = ((decodeBuffer[2] << 6) & 0xC0) | (decodeBuffer[3] & 0x3F);
             }
 
             readOffset = 0;

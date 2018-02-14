@@ -40,9 +40,9 @@ public class BoundedReader extends FilterReader {
      * Equivalent to {@link #BoundedReader(java.io.Reader, long, java.io.IOException)} called with a
      * <code>null</code> <code>IOException</code>.
      *
-     * @param reader the reader to limit
+     * @param reader            the reader to limit
      * @param allowedCharacters the total number of characters this reader allows to be read or skipped, <code>-1</code>
-     * for no limitation
+     *                          for no limitation
      */
     public BoundedReader(Reader reader, long allowedCharacters) {
         this(reader, allowedCharacters, null);
@@ -58,11 +58,11 @@ public class BoundedReader extends FilterReader {
      * <code>IOException</code>.
      * </p>
      *
-     * @param reader the reader to bind
-     * @param allowedCharacters the total number of characters this reader allows to be read or skipped, <code>-1</code>
-     * for no limitation
+     * @param reader              the reader to bind
+     * @param allowedCharacters   the total number of characters this reader allows to be read or skipped, <code>-1</code>
+     *                            for no limitation
      * @param outOfBoundException the IOException to throw when an attempt to read or skip beyond <code>allowedBytes</code>
-     * is made, <code>null</code> to return -1 instead
+     *                            is made, <code>null</code> to return -1 instead
      * @see StreamOutOfBoundException
      */
     public BoundedReader(Reader reader, long allowedCharacters, IOException outOfBoundException) {
@@ -101,7 +101,7 @@ public class BoundedReader extends FilterReader {
      * reader is not bounded.
      */
     public synchronized long getRemainingCharacters() {
-        return allowedCharacters<=-1 ? Long.MAX_VALUE : allowedCharacters-totalRead;
+        return allowedCharacters <= -1 ? Long.MAX_VALUE : allowedCharacters - totalRead;
     }
 
 
@@ -111,16 +111,16 @@ public class BoundedReader extends FilterReader {
 
     @Override
     public synchronized int read(char[] cbuf, int off, int len) throws IOException {
-        int canRead = (int)Math.min(getRemainingCharacters(), len);
-        if(canRead==0) {
-            if(outOfBoundException==null)
+        int canRead = (int) Math.min(getRemainingCharacters(), len);
+        if (canRead == 0) {
+            if (outOfBoundException == null)
                 return -1;
 
             throw outOfBoundException;
         }
 
         int nbRead = in.read(cbuf, off, canRead);
-        if(nbRead>0)
+        if (nbRead > 0)
             totalRead += nbRead;
 
         return nbRead;
@@ -134,8 +134,8 @@ public class BoundedReader extends FilterReader {
 
     @Override
     public synchronized int read() throws IOException {
-        if(getRemainingCharacters()==0) {
-            if(outOfBoundException==null)
+        if (getRemainingCharacters() == 0) {
+            if (outOfBoundException == null)
                 return -1;
 
             throw outOfBoundException;
@@ -149,16 +149,16 @@ public class BoundedReader extends FilterReader {
 
     @Override
     public synchronized long skip(long n) throws IOException {
-        int canSkip = (int)Math.min(getRemainingCharacters(), n);
-        if(canSkip==0) {
-            if(outOfBoundException==null)
+        int canSkip = (int) Math.min(getRemainingCharacters(), n);
+        if (canSkip == 0) {
+            if (outOfBoundException == null)
                 return -1;
 
             throw outOfBoundException;
         }
 
         long nbSkipped = in.skip(canSkip);
-        if(nbSkipped>0)
+        if (nbSkipped > 0)
             totalRead += nbSkipped;
 
         return nbSkipped;

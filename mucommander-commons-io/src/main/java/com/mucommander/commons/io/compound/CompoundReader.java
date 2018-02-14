@@ -24,37 +24,45 @@ import java.io.Reader;
 /**
  * <code>CompoundReader</code> concatenates several readers into one. It can operate in two modes:
  * <dl>
- *   <dt>Merged</dt>
- *   <dd>the compound reader acts as a single, global reader, merging the contents of underlying readers. The
+ * <dt>Merged</dt>
+ * <dd>the compound reader acts as a single, global reader, merging the contents of underlying readers. The
  * compound reader can be read just like a regular <code>Reader</code> -- readers are advanced automatically as EOF
  * of individual readers are reached.</dd>
- *
- *   <dt>Unmerged</dt>
- *   <dd>the compound reader has be advanced manually. EOF are signaled individually for each underlying reader.
+ * <p>
+ * <dt>Unmerged</dt>
+ * <dd>the compound reader has be advanced manually. EOF are signaled individually for each underlying reader.
  * After EOF is reached, the current reader has to be advanced to the next one using {@link #advanceReader()}.</dd>
  * <dl>
- *
+ * <p>
  * <p>
  * This class is abstract, with a single method to implement: {@link #getNextReader()}.
  * See {@link IteratorCompoundReader} for an <code>Iterator</code>-backed implementation.
  * </p>
  *
+ * @author Maxence Bernard
  * @see IteratorCompoundReader
  * @see CompoundInputStream
- * @author Maxence Bernard
  */
 public abstract class CompoundReader extends Reader {
 
-    /** True if this CompoundReader operates in 'merged' mode */
+    /**
+     * True if this CompoundReader operates in 'merged' mode
+     */
     private boolean merged;
 
-    /** The Reader that's currently being processed */
+    /**
+     * The Reader that's currently being processed
+     */
     private Reader currentReader;
 
-    /** Used by {@link #read()} */
+    /**
+     * Used by {@link #read()}
+     */
     private char oneCharBuf[];
 
-    /** <code>true</code> if the global EOF has been reached */
+    /**
+     * <code>true</code> if the global EOF has been reached
+     */
     private boolean globalEOFReached;
 
 
@@ -62,7 +70,7 @@ public abstract class CompoundReader extends Reader {
      * Creates a new <code>CompoundReader</code> operating in the specified mode.
      *
      * @param merged <code>true</code> if the readers should be merged, acting as a single reader, or considered
-     * as separate readers that have to be {@link #advanceReader() advanced manually}.
+     *               as separate readers that have to be {@link #advanceReader() advanced manually}.
      */
     public CompoundReader(boolean merged) {
         this.merged = merged;
@@ -71,10 +79,10 @@ public abstract class CompoundReader extends Reader {
     /**
      * Returns:
      * <ul>
-     *   <li><code>true</code> if this reader acts as a single, global input reader, merging the contents of underlying
+     * <li><code>true</code> if this reader acts as a single, global input reader, merging the contents of underlying
      * readers. In this mode, the compound reader can be read just like a regular Reader -- readers are advanced
      * automatically as EOF of individual readers are reached.</li>
-     *   <li><code>false</code> if this reader has be advanced manually. In this mode, EOF are signaled individually
+     * <li><code>false</code> if this reader has be advanced manually. In this mode, EOF are signaled individually
      * for each underlying reader. After EOF has been reached, the current reader has to be advanced to the next one
      * using {@link #advanceReader()}.</li>
      * </ul>
@@ -102,7 +110,7 @@ public abstract class CompoundReader extends Reader {
      * @throws IOException if an error occurred while closing the current reader.
      */
     public void closeCurrentReader() throws IOException {
-        if(currentReader!=null)
+        if (currentReader != null)
             currentReader.close();
     }
 
@@ -116,19 +124,18 @@ public abstract class CompoundReader extends Reader {
      *
      * @return <code>true</code> if there was a next reader, <code>false</code> otherwise
      * @throws IOException if an error occurred while trying to advancing the current reader. This
-     * <code>CompoundReader</code> can't be used after that and must be closed.
+     *                     <code>CompoundReader</code> can't be used after that and must be closed.
      */
     public boolean advanceReader() throws IOException {
         // Return immediately (don't close the reader) if this method is global EOF has already been reached
-        if(globalEOFReached)
+        if (globalEOFReached)
             return false;
 
         // Close the current reader
-        if(currentReader !=null) {
+        if (currentReader != null) {
             try {
                 closeCurrentReader();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Fail silently
             }
         }
@@ -136,14 +143,13 @@ public abstract class CompoundReader extends Reader {
         // Try to advance the current Reader to the next
         try {
             currentReader = getNextReader();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             // Can't recover from this, this is the end of this stream
             globalEOFReached = true;
             throw e;
         }
 
-        if(currentReader==null) {
+        if (currentReader == null) {
             // Global EOF reached
             globalEOFReached = true;
             return false;
@@ -161,11 +167,11 @@ public abstract class CompoundReader extends Reader {
      * @throws IOException if an error occurred while trying to advancing the current reader.
      */
     private boolean checkReader() throws IOException {
-        if(globalEOFReached)
+        if (globalEOFReached)
             return true;
 
-        if(currentReader ==null)
-            if(!advanceReader())
+        if (currentReader == null)
+            if (!advanceReader())
                 return true;
 
         return false;
@@ -184,7 +190,7 @@ public abstract class CompoundReader extends Reader {
      * </p>
      *
      * @return the next <code>Reader</code>, <code>null</code> if there is none.
-     * @throws IOException if an error occurred while retrieving the next reader 
+     * @throws IOException if an error occurred while retrieving the next reader
      */
     public abstract Reader getNextReader() throws IOException;
 
@@ -198,12 +204,12 @@ public abstract class CompoundReader extends Reader {
      */
     @Override
     public int read() throws IOException {
-        if(oneCharBuf ==null)
+        if (oneCharBuf == null)
             oneCharBuf = new char[1];
 
         int ret = read(oneCharBuf, 0, 1);
 
-        return ret<=0?ret:oneCharBuf[0];
+        return ret <= 0 ? ret : oneCharBuf[0];
     }
 
     /**
@@ -218,22 +224,22 @@ public abstract class CompoundReader extends Reader {
      * Reads up to <code>len-off</code> characters and stores them in the specified buffer, starting at <code>off</code>.
      * Returns the number of characters that were actually read, or <code>-1</code> to signal:
      * <ul>
-     *   <li>if {@link #isMerged()} is enabled, the end of the compound reader as a whole</li>
-     *   <li>if {@link #isMerged ()} is disabled, the end of the current reader, which may or may not coincide
+     * <li>if {@link #isMerged()} is enabled, the end of the compound reader as a whole</li>
+     * <li>if {@link #isMerged ()} is disabled, the end of the current reader, which may or may not coincide
      * with the end of the reader as a whole.</li>
      * </ul>
      */
     @Override
     public int read(char[] c, int off, int len) throws IOException {
-        if(checkReader())
+        if (checkReader())
             return -1;
 
         int ret = currentReader.read(c, off, len);
 
-        if(ret==-1) {
+        if (ret == -1) {
             // read the next reader
-            if(merged) {
-                if(!advanceReader())
+            if (merged) {
+                if (!advanceReader())
                     return -1;      // Global EOF reached
 
                 // Recurse
@@ -250,22 +256,22 @@ public abstract class CompoundReader extends Reader {
      * Skips up to <code>n</code> characters and returns the number of characters that were actually skipped, or
      * <code>-1</code> to signal:
      * <ul>
-     *   <li>if {@link #isMerged()} is enabled, the end of the compound reader as a whole</li>
-     *   <li>if {@link #isMerged ()} is disabled, the end of the current reader, which may or may not coincide
+     * <li>if {@link #isMerged()} is enabled, the end of the compound reader as a whole</li>
+     * <li>if {@link #isMerged ()} is disabled, the end of the current reader, which may or may not coincide
      * with the end of the reader as a whole.</li>
      * </ul>
      */
     @Override
     public long skip(long n) throws IOException {
-        if(checkReader())
+        if (checkReader())
             return -1;
 
         long ret = currentReader.skip(n);
 
-        if(ret==-1) {
+        if (ret == -1) {
             // read the next reader
-            if(merged) {
-                if(!advanceReader())
+            if (merged) {
+                if (!advanceReader())
                     return -1;      // Global EOF reached
 
                 return currentReader.skip(n);
@@ -286,10 +292,9 @@ public abstract class CompoundReader extends Reader {
     @Override
     public void close() throws IOException {
         try {
-            if(currentReader!=null)
+            if (currentReader != null)
                 closeCurrentReader();
-        }
-        finally {
+        } finally {
             globalEOFReached = true;
         }
     }
@@ -307,7 +312,7 @@ public abstract class CompoundReader extends Reader {
      */
     @Override
     public void mark(int readlimit) throws IOException {
-        if(!checkReader())
+        if (!checkReader())
             currentReader.mark(readlimit);
     }
 
@@ -316,7 +321,7 @@ public abstract class CompoundReader extends Reader {
      */
     @Override
     public void reset() throws IOException {
-        if(!checkReader())
+        if (!checkReader())
             currentReader.reset();
     }
 
@@ -327,8 +332,7 @@ public abstract class CompoundReader extends Reader {
     public boolean markSupported() {
         try {
             return !checkReader() && currentReader.markSupported();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }

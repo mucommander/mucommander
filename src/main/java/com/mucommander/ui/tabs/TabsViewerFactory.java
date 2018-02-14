@@ -19,11 +19,11 @@
 package com.mucommander.ui.tabs;
 
 /**
-* Factory that creates tabs viewer.
-* 
-* @author Arik Hadas
-*/
+ * Factory that creates tabs viewer.
+ *
+ * @author Arik Hadas
+ */
 public interface TabsViewerFactory<T extends Tab> {
 
-	TabsViewer<T> create(TabsCollection<T> tabs);
+    TabsViewer<T> create(TabsCollection<T> tabs);
 }

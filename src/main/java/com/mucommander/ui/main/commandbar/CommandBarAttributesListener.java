@@ -20,11 +20,11 @@ package com.mucommander.ui.main.commandbar;
 
 /**
  * This is an interface that each class that should listen to CommandBar's attributes modifications need to implement.
- * 
+ *
  * @author Arik Hadas
  */
 public interface CommandBarAttributesListener {
-	/**
+    /**
      * This method is invoked when command-bar's actions\alternate actions\modifier have been modified.
      */
     public void commandBarAttributeChanged();

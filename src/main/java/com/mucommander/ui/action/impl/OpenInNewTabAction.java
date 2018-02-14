@@ -18,22 +18,17 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.net.MalformedURLException;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.net.MalformedURLException;
+import java.util.Map;
 
 /**
  * Opens browsable file in a new tab.
@@ -41,69 +36,78 @@ import com.mucommander.ui.main.table.FileTable;
  * This action is only enabled if the current selection is browsable as defined by
  * {@link com.mucommander.commons.file.AbstractFile#isBrowsable()}.
  * </p>
+ *
  * @author Arik Hadas
  */
 public class OpenInNewTabAction extends SelectedFileAction {
 
-	public OpenInNewTabAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenInNewTabAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-	
-	/**
+
+    /**
      * This method is overridden to enable this action when the parent folder is selected.
      */
     @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
         AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
 
-        return selectedFile!=null && selectedFile.isBrowsable();
+        return selectedFile != null && selectedFile.isBrowsable();
     }
-    
-	@Override
-	public void performAction() {
-		AbstractFile file = mainFrame.getActiveTable().getSelectedFile(true, true);
+
+    @Override
+    public void performAction() {
+        AbstractFile file = mainFrame.getActiveTable().getSelectedFile(true, true);
 
         // Retrieves the currently selected file, aborts if none (should not normally happen).
-        if(file == null || !file.isBrowsable())
+        if (file == null || !file.isBrowsable())
             return;
 
         FileURL fileURL = file.getURL();
 
         if (BookmarkManager.isBookmark(fileURL)) {
-        	String bookmarkLocation = BookmarkManager.getBookmark(file.getName()).getLocation();
-        	try {
-        		fileURL = FileURL.getFileURL(bookmarkLocation);
-        	} catch (MalformedURLException e) {
-        		LOGGER.error("Failed to resolve bookmark's location: " + bookmarkLocation);
-        		return;
-        	}
+            String bookmarkLocation = BookmarkManager.getBookmark(file.getName()).getLocation();
+            try {
+                fileURL = FileURL.getFileURL(bookmarkLocation);
+            } catch (MalformedURLException e) {
+                LOGGER.error("Failed to resolve bookmark's location: " + bookmarkLocation);
+                return;
+            }
         }
 
         // Opens the currently selected file in a new tab
         mainFrame.getActivePanel().getTabs().add(fileURL);
-	}
-
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
-
-	public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new OpenInNewTabAction(mainFrame, properties);
-		}
     }
-    
+
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
+
+    public static class Factory implements ActionFactory {
+
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new OpenInNewTabAction(mainFrame, properties);
+        }
+    }
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenInNewTab";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "OpenInNewTab";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

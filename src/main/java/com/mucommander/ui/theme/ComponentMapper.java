@@ -22,11 +22,13 @@ import javax.swing.*;
 
 /**
  * Used to provide instances of {@link JComponent} to {@link SystemDefaultColor} and {@link SystemDefaultFont}.
+ *
  * @author Nicolas Rinaudo
  */
 public abstract class ComponentMapper {
     /**
      * Returns a new instance of the {@link JComponent} this instance maps.
+     *
      * @return a new instance of the {@link JComponent} this instance maps.
      */
     public abstract JComponent getComponent();

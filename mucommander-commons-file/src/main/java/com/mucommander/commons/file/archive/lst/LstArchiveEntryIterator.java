@@ -1,28 +1,27 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.mucommander.commons.file.archive.lst;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,7 +66,7 @@ class LstArchiveEntryIterator implements ArchiveEntryIterator {
 
         // Read the base folder
         baseFolder = br.readLine();
-        if(baseFolder==null)
+        if (baseFolder == null)
             throw new IOException();
     }
 
@@ -79,7 +78,7 @@ class LstArchiveEntryIterator implements ArchiveEntryIterator {
      */
     ArchiveEntry getNextEntry() throws IOException {
         String line = br.readLine();
-        if(line==null)
+        if (line == null)
             return null;
 
         try {
@@ -87,24 +86,22 @@ class LstArchiveEntryIterator implements ArchiveEntryIterator {
 
             String name = st.nextToken().replace('\\', '/');
             long size = Long.parseLong(st.nextToken());
-            long date = lstDateFormat.parse((st.nextToken()+" "+st.nextToken())).getTime();
+            long date = lstDateFormat.parse((st.nextToken() + " " + st.nextToken())).getTime();
 
             String path;
             boolean isDirectory;
 
-            if(name.endsWith("/")) {
+            if (name.endsWith("/")) {
                 isDirectory = true;
                 currentDir = name;
                 path = currentDir;
-            }
-            else {
+            } else {
                 isDirectory = false;
-                path = currentDir+name;
+                path = currentDir + name;
             }
 
             return new LstArchiveEntry(path, isDirectory, date, size, baseFolder);
-        }
-        catch(Exception e) {    // Catches exceptions thrown by StringTokenizer and SimpleDateFormat
+        } catch (Exception e) {    // Catches exceptions thrown by StringTokenizer and SimpleDateFormat
             LOGGER.info("Exception caught while parsing LST file", e);
 
             throw new IOException();

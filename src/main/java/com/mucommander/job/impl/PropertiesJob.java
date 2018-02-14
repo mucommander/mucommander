@@ -35,17 +35,23 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 public class PropertiesJob extends FileJob {
-    
-    /** Number of folders encountered so far */
+
+    /**
+     * Number of folders encountered so far
+     */
     private int nbFolders;
 
-    /** Number of regular files (not folders) encountered so far */
+    /**
+     * Number of regular files (not folders) encountered so far
+     */
     private int nbFilesRecurse;
-	
-    /** Combined size of all files encountered so far */
+
+    /**
+     * Combined size of all files encountered so far
+     */
     private long totalBytes;
-	
-	
+
+
     public PropertiesJob(FileSet files, MainFrame mainFrame) {
         super(mainFrame, files);
         setAutoUnmark(false);
@@ -64,14 +70,14 @@ public class PropertiesJob extends FileJob {
     public int getNbFolders() {
         return nbFolders;
     }
- 
+
     /**
      * Returns the number of files (folders excluded) counted so far.
      */
     public int getNbFilesRecurse() {
         return nbFilesRecurse;
     }
- 
+
 
     ////////////////////////////
     // FileJob implementation //
@@ -93,13 +99,12 @@ public class PropertiesJob extends FileJob {
 
             try {
                 AbstractFile subFiles[] = file.ls();
-                for(int i=0; i<subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
+                for (int i = 0; i < subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
                     // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                     nextFile(subFiles[i]);
                     processFile(subFiles[i], null);
                 }
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Should we tell the user?
             }
         }
@@ -107,10 +112,10 @@ public class PropertiesJob extends FileJob {
         else {
             nbFilesRecurse++;
             long fileSize = file.getSize();
-            if(fileSize>0)		// Can be equal to -1 if size not available
+            if (fileSize > 0)        // Can be equal to -1 if size not available
                 totalBytes += fileSize;
         }
-	
+
         return true;
     }
 

@@ -21,7 +21,6 @@ package com.mucommander.ui.action.impl;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
@@ -37,10 +36,12 @@ import java.util.Map;
  */
 public abstract class ToggleColumnAction extends MuAction {
 
-    /** Index of the FileTable column this action operates on */
+    /**
+     * Index of the FileTable column this action operates on
+     */
     protected Column column;
 
-    public ToggleColumnAction(MainFrame mainFrame, Map<String,Object> properties, Column column) {
+    public ToggleColumnAction(MainFrame mainFrame, Map<String, Object> properties, Column column) {
         super(mainFrame, properties);
 
         this.column = column;
@@ -52,7 +53,7 @@ public abstract class ToggleColumnAction extends MuAction {
     }
 
     protected void updateLabel() {
-        setLabel(Translator.get(isColumnVisible()?"ToggleColumn.hide":"ToggleColumn.show", column.getLabel()));
+        setLabel(Translator.get(isColumnVisible() ? Descriptor.ACTION_ID + ".hide" : Descriptor.ACTION_ID + ".show", column.getLabel()));
     }
 
     @Override
@@ -62,20 +63,33 @@ public abstract class ToggleColumnAction extends MuAction {
 
 
     public static abstract class Descriptor extends AbstractActionDescriptor {
+        public static final String ACTION_ID = "ToggleColumn";
 
         private Column column;
 
-        public Descriptor(Column column) { this.column = column; }
+        public Descriptor(Column column) {
+            this.column = column;
+        }
 
-        public String getId() { return column.getToggleColumnActionId(); }
+        public String getId() {
+            return column.getToggleColumnActionId();
+        }
 
-        public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
 
-        public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
 
-        public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
 
         @Override
-        public String getLabel() { return Translator.get("ToggleColumn.show", column.getLabel()); }
+        public String getLabel() {
+            return Translator.get(Descriptor.ACTION_ID + ".show", column.getLabel());
+        }
     }
 }

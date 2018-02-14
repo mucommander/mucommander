@@ -18,21 +18,18 @@
 
 package com.mucommander.ui.quicklist;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.*;
 
 /**
- * 
  * @author Arik Hadas
  */
 public interface QuickListContainer {
-	
-	public Point calcQuickListPosition(Dimension dim);
-	
-	public Component containerComponent();
-	
-	public Component nextFocusableComponent();
-	
-	public int getWidth();
+
+    public Point calcQuickListPosition(Dimension dim);
+
+    public Component containerComponent();
+
+    public Component nextFocusableComponent();
+
+    public int getWidth();
 }

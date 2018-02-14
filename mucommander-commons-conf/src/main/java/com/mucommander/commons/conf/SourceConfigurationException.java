@@ -28,14 +28,18 @@ package com.mucommander.commons.conf;
  * Since <code>SourceConfigurationException</code> subclasses {@link ConfigurationException}, it
  * inherits his capacity to wrap other exceptions.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class SourceConfigurationException extends ConfigurationException {
     /**
      * Creates a new source configuration exception.
+     *
      * @param message the error message.
      */
-    public SourceConfigurationException(String message) {super(message);}
+    public SourceConfigurationException(String message) {
+        super(message);
+    }
 
     /**
      * Creates a new source configuration exception wrapping an existing exception.
@@ -43,17 +47,23 @@ public class SourceConfigurationException extends ConfigurationException {
      * The existing exception will be embedded in the new one, and its message will
      * become the default message for the <code>SourceConfigurationException</code>.
      * </p>
+     *
      * @param cause the exception to be wrapped in a <code>SourceConfigurationException</code>.
      */
-    public SourceConfigurationException(Throwable cause) {super(cause);}
+    public SourceConfigurationException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * Creates a new source configuration exception from an existing exception.
      * <p>
      * The existing exception will be embedded in the new one, but the new exception will have its own message.
      * </p>
+     *
      * @param message the detail message.
      * @param cause   the exception to be wrapped in a <code>SourceConfigurationException</code>.
      */
-    public SourceConfigurationException(String message, Throwable cause) {super(message, cause);}
+    public SourceConfigurationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

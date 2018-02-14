@@ -22,17 +22,28 @@ import java.awt.*;
 
 public class FontChangedEvent {
     private Theme source;
-    private int   fontId;
-    private Font  font;
+    private int fontId;
+    private Font font;
 
     FontChangedEvent(Theme source, int fontId, Font font) {
         this.source = source;
         this.fontId = fontId;
-        this.font   = font;
+        this.font = font;
     }
 
-    public boolean isDefaultFont() {return source == null;}
-    public Theme getSource() {return source;}
-    public int getFontId() {return fontId;}
-    public Font getFont() {return font;}
+    public boolean isDefaultFont() {
+        return source == null;
+    }
+
+    public Theme getSource() {
+        return source;
+    }
+
+    public int getFontId() {
+        return fontId;
+    }
+
+    public Font getFont() {
+        return font;
+    }
 }

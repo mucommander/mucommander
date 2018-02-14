@@ -18,94 +18,95 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AbstractFilenameFilter;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * Action that marks / unmarks all files with a specific extension.
  * <p>
  * Marking behaves as follows:
  * <ul>
- *   <li>
- *     If the current selection is marked, all files whose extension matches that of the current selection will
- *     be unmarked.
- *   </li>
- *   <li>
- *     If the current selection isn't marked, all files whose extension matches that of the current selection will
- *     be marked.
- *   </li>
+ * <li>
+ * If the current selection is marked, all files whose extension matches that of the current selection will
+ * be unmarked.
+ * </li>
+ * <li>
+ * If the current selection isn't marked, all files whose extension matches that of the current selection will
+ * be marked.
+ * </li>
  * </ul>
  * </p>
  * <p>
  * By default, this action will mark all files whose extension match that of the current selection in a case-insensitive fashion.
  * It can, however, be configured:
  * <ul>
- *   <li>
- *     If the <code>extension</code> property is set, its value prepended by a <code>.</code> is always going to be used regardless of the
- *     current selection.
- *   </li>
- *   <li>
- *     If the <code>case_sensitive</code> property is set to <code>true</code>, extension matching will be done in a case sensitive fashion.
- *   </li>
+ * <li>
+ * If the <code>extension</code> property is set, its value prepended by a <code>.</code> is always going to be used regardless of the
+ * current selection.
+ * </li>
+ * <li>
+ * If the <code>case_sensitive</code> property is set to <code>true</code>, extension matching will be done in a case sensitive fashion.
+ * </li>
  * </ul>
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class MarkExtensionAction extends MuAction {
     // - Property names ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    /** Key that controls which extension should be matched. */
-    public static final String EXTENSION_PROPERTY_KEY      = "extension";
-    /** Key that controls whether extension matching should be done in a case sensitive fashion (defaults to false). */
+    /**
+     * Key that controls which extension should be matched.
+     */
+    public static final String EXTENSION_PROPERTY_KEY = "extension";
+    /**
+     * Key that controls whether extension matching should be done in a case sensitive fashion (defaults to false).
+     */
     public static final String CASE_SENSITIVE_PROPERTY_KEY = "case_sensitive";
-
 
 
     // - Initialization ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a new <code>MarkExtensionAction</code> with the specified parameters.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public MarkExtensionAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkExtensionAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
 
-
     // - Properties retrieval ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Returns the extension that was configured in the action's properties.
+     *
      * @return the extension that was configured in the action's properties, <code>null</code> if none.
      */
     private String getExtension() {
         Object o;
 
         // If the key wasn't set, return null.
-        if((o = getValue(EXTENSION_PROPERTY_KEY)) == null)
+        if ((o = getValue(EXTENSION_PROPERTY_KEY)) == null)
             return null;
 
         // If the value is a string, return it.
-        if(o instanceof String)
-            return (String)o;
+        if (o instanceof String)
+            return (String) o;
 
         // Otherwise, return null.
         return null;
@@ -113,52 +114,56 @@ public class MarkExtensionAction extends MuAction {
 
     /**
      * Returns <code>true</code> if the action must compare string in a case-sensitive fashion.
+     *
      * @return <code>true</code> if the action must compare string in a case-sensitive fashion, <code>false</code> otherwise.
      */
     private boolean isCaseSensitive() {
         Object o;
 
         // If the action hasn't been configured, defaults to false.
-        if((o = getValue(CASE_SENSITIVE_PROPERTY_KEY)) == null)
+        if ((o = getValue(CASE_SENSITIVE_PROPERTY_KEY)) == null)
             return false;
 
         // Returns the configured value if it's a string, false otherwise.
-        if(o instanceof String)
+        if (o instanceof String)
             return o.equals("true");
         return false;
     }
 
 
-
     // - Action code ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
+
     /**
      * Creates a {@link com.mucommander.commons.file.filter.FilenameFilter} that should be applied to all current files.
      * <p>
      * If the action has been configured using the <code>file.extension</code> property, the returned filter
      * will match that extension. Otherwise, the currently selected file's extension will be used. If it doesn't
-     * have one, the returned filter will match all files such that 
+     * have one, the returned filter will match all files such that
      * <code>file.getExtension() == null</code>.
      * </p>
-     * @param  file currently selected file.
-     * @return      the filter that should be applied by this action.
+     *
+     * @param file currently selected file.
+     * @return the filter that should be applied by this action.
      */
     private FilenameFilter getFilter(AbstractFile file) {
-        String                  ext;
+        String ext;
         ExtensionFilenameFilter filter;
 
         // If no extension has been configured, analyse the current selection.
-        if((ext = getExtension()) == null) {
+        if ((ext = getExtension()) == null) {
 
             // If there is no current selection, abort.
-            if(file == null)
+            if (file == null)
                 return null;
 
             // If the current file doesn't have an extension, return a filename filter that
             // match null extensions.
-            if((ext = file.getExtension()) == null)
+            if ((ext = file.getExtension()) == null)
                 return new AbstractFilenameFilter() {
-                    public boolean accept(String name) {return AbstractFile.getExtension(name) == null;}
+                    public boolean accept(String name) {
+                        return AbstractFile.getExtension(name) == null;
+                    }
                 };
         }
 
@@ -176,23 +181,23 @@ public class MarkExtensionAction extends MuAction {
      */
     @Override
     public void performAction() {
-        FileTable      fileTable;
+        FileTable fileTable;
         FileTableModel tableModel;
         FilenameFilter filter;
-        int            rowCount;
-        boolean        mark;
+        int rowCount;
+        boolean mark;
 
         // Initialization. Aborts if there is no selected file.
-        fileTable  = mainFrame.getActiveTable();
-        if((filter = getFilter(fileTable.getSelectedFile(false, true))) == null)
+        fileTable = mainFrame.getActiveTable();
+        if ((filter = getFilter(fileTable.getSelectedFile(false, true))) == null)
             return;
         tableModel = fileTable.getFileTableModel();
-        rowCount   = tableModel.getRowCount();
-        mark       = !tableModel.isRowMarked(fileTable.getSelectedRow());
+        rowCount = tableModel.getRowCount();
+        mark = !tableModel.isRowMarked(fileTable.getSelectedRow());
 
         // Goes through all files in the active table, marking all that match 'filter'.
-        for(int i = tableModel.getFirstMarkableRow(); i < rowCount; i++)
-            if(filter.accept(tableModel.getCachedFileAtRow(i)))
+        for (int i = tableModel.getFirstMarkableRow(); i < rowCount; i++)
+            if (filter.accept(tableModel.getCachedFileAtRow(i)))
                 tableModel.setRowMarked(i, mark);
         fileTable.repaint();
 
@@ -200,27 +205,35 @@ public class MarkExtensionAction extends MuAction {
         fileTable.fireMarkedFilesChangedEvent();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
-			return new MarkExtensionAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new MarkExtensionAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MarkExtension";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "MarkExtension";
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.SHIFT_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.SHIFT_DOWN_MASK);
+        }
     }
 }

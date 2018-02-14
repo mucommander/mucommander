@@ -30,7 +30,7 @@ public interface EditableComboBoxListener extends ComboBoxListener {
     /**
      * This method is called when the text field has been validated, that is the 'Enter' key has been pressed
      * in the text field, without the popup menu being visible.
-     *
+     * <p>
      * <p>Note: Unlike JComboBox's weird ActionEvent handling, this method is *not* called when 'Enter' is pressed
      * in the combo popup menu.
      *
@@ -42,7 +42,7 @@ public interface EditableComboBoxListener extends ComboBoxListener {
     /**
      * Notifies all registered EditableComboBoxListener instances that the text field has been cancelled, that is
      * the 'Escape' key has been pressed in the text field, without the popup menu being visible.
-     *
+     * <p>
      * <p>Note: This method is *not* called when 'Escape' is pressed in the combo popup menu.
      *
      * @param source the EditableComboBox containing the JTextField on which the event was triggered

@@ -29,23 +29,25 @@ import java.awt.event.KeyEvent;
 
 /**
  * An abstract class to be subclassed by file viewer implementations.
- *
+ * <p>
  * <p><b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.</p>
  *
  * @author Maxence Bernard, Arik Hadas
  */
 public abstract class FileViewer extends FilePresenter implements ActionListener {
-	
-    
-	
-    /** Close menu item */
+
+
+    /**
+     * Close menu item
+     */
     private JMenuItem closeItem;
-    
+
     /**
      * Creates a new FileViewer.
      */
-    public FileViewer() {}
-	
+    public FileViewer() {
+    }
+
     /**
      * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and
      * not by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
@@ -61,18 +63,18 @@ public abstract class FileViewer extends FilePresenter implements ActionListener
         JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_viewer.file_menu"), menuMnemonicHelper, null);
         closeItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), this);
         fileMenu.add(closeItem);
-        
+
         menuBar.add(fileMenu);
 
         return menuBar;
     }
-    
+
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==closeItem)
+        if (e.getSource() == closeItem)
             getFrame().dispose();
     }
 }

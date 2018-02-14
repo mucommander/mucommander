@@ -39,31 +39,42 @@ import java.net.MalformedURLException;
  * @author Maxence Bernard
  */
 class BookmarkParser extends DefaultHandler implements BookmarkConstants {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BookmarkParser.class);
-	
-    /** Variable used for XML parsing */
+    private static final Logger LOGGER = LoggerFactory.getLogger(BookmarkParser.class);
+
+    /**
+     * Variable used for XML parsing
+     */
     private String bookmarkName;
-    /** Variable used for XML parsing */
+    /**
+     * Variable used for XML parsing
+     */
     private String bookmarkLocation;
-    /** Variable used for XML parsing */
+    /**
+     * Variable used for XML parsing
+     */
     private StringBuilder characters;
-    /** Receives bookmarks events. */
+    /**
+     * Receives bookmarks events.
+     */
     private BookmarkBuilder builder;
-    /** muCommander version that was used to write the bookmarks file */
+    /**
+     * muCommander version that was used to write the bookmarks file
+     */
     private String version;
 
 
     /**
      * Creates a new BookmarkParser instance.
      */
-    public BookmarkParser() {}
+    public BookmarkParser() {
+    }
 
     /**
      * Parses the given XML bookmarks file. Should only be called by BookmarkManager.
      */
     void parse(InputStream in, BookmarkBuilder builder) throws Exception {
         this.builder = builder;
-        characters   = new StringBuilder();
+        characters = new StringBuilder();
         SAXParserFactory.newInstance().newSAXParser().parse(in, this);
     }
 
@@ -86,21 +97,29 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
 
     @Override
     public void startDocument() throws SAXException {
-        try {builder.startBookmarks();}
-        catch(BookmarkException e) {throw new SAXException(e);}
+        try {
+            builder.startBookmarks();
+        } catch (BookmarkException e) {
+            throw new SAXException(e);
+        }
     }
 
     @Override
     public void endDocument() throws SAXException {
-        try {builder.endBookmarks();}
-        catch(BookmarkException e) {throw new SAXException(e);}
+        try {
+            builder.endBookmarks();
+        } catch (BookmarkException e) {
+            throw new SAXException(e);
+        }
     }
 
     /**
      * Method called when some PCDATA has been found in an XML node.
      */
     @Override
-    public void characters(char[] ch, int start, int length) {characters.append(ch, start, length);}
+    public void characters(char[] ch, int start, int length) {
+        characters.append(ch, start, length);
+    }
 
     /**
      * Notifies the parser that a new XML node has been found.
@@ -109,10 +128,9 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         characters.setLength(0);
 
-        if(qName.equals(ELEMENT_ROOT)) {
+        if (qName.equals(ELEMENT_ROOT)) {
             version = attributes.getValue(ATTRIBUTE_VERSION);
-        }
-        else if(qName.equals(ELEMENT_BOOKMARK)) {
+        } else if (qName.equals(ELEMENT_BOOKMARK)) {
             // Reset parsing variables
             bookmarkName = null;
             bookmarkLocation = null;
@@ -124,23 +142,24 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
      */
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if(qName.equals(ELEMENT_BOOKMARK)) {
-            if(bookmarkName == null || bookmarkLocation == null) {
+        if (qName.equals(ELEMENT_BOOKMARK)) {
+            if (bookmarkName == null || bookmarkLocation == null) {
                 LOGGER.info("Missing value, bookmark ignored: name=" + bookmarkName + " location=" + bookmarkLocation);
                 return;
             }
 
-            try {builder.addBookmark(bookmarkName, bookmarkLocation);}
-            catch(BookmarkException e) {throw new SAXException(e);}
-        }
-        else if(qName.equals(ELEMENT_NAME)) {
+            try {
+                builder.addBookmark(bookmarkName, bookmarkLocation);
+            } catch (BookmarkException e) {
+                throw new SAXException(e);
+            }
+        } else if (qName.equals(ELEMENT_NAME)) {
             bookmarkName = characters.toString().trim();
-        }
-        else if(qName.equals(ELEMENT_LOCATION)) {
+        } else if (qName.equals(ELEMENT_LOCATION)) {
             bookmarkLocation = characters.toString().trim();
         }
         // Note: url element has been deprecated in 0.8 beta3 but is still checked against for upward compatibility.
-        else if(qName.equals(ELEMENT_URL)) {
+        else if (qName.equals(ELEMENT_URL)) {
             // Until early 0.8 beta3 nightly builds, credentials were stored directly in the bookmark's url.
             // Now bookmark locations are free of credentials, these are stored in a dedicated credentials file where
             // the password is encrypted.
@@ -150,15 +169,13 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
 
                 // If the URL contains credentials, import them into CredentialsManager and remove credentials
                 // from the bookmark's location
-                if(credentials!=null) {
+                if (credentials != null) {
                     CredentialsManager.addCredentials(new CredentialsMapping(credentials, url, true));
                     bookmarkLocation = url.toString(false);
-                }
-                else {
+                } else {
                     bookmarkLocation = characters.toString().trim();
                 }
-            }
-            catch(MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 bookmarkLocation = characters.toString().trim();
             }
         }

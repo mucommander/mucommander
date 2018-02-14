@@ -26,18 +26,20 @@ import java.util.Random;
  * This stream allows random data generated with a {@link Random} instance to be read.
  * It can be instantiated in one of the three following ways:
  * <ul>
- *   <li>with a pseudo-unique seed, leading to different random data being generated from one instance of this class
+ * <li>with a pseudo-unique seed, leading to different random data being generated from one instance of this class
  * to the other.</li>
- *   <li>with a specified seed, leading to the same random data being generated from one instance of this class to
+ * <li>with a specified seed, leading to the same random data being generated from one instance of this class to
  * the other.</li>
- *   <li>with a specified {@link Random}.</li>
+ * <li>with a specified {@link Random}.</li>
  * </ul>
  *
  * @author Maxence Bernard
  */
 public class RandomGeneratorInputStream extends InputStream {
 
-    /** Random data generator. */
+    /**
+     * Random data generator.
+     */
     protected Random random;
 
 
@@ -76,9 +78,9 @@ public class RandomGeneratorInputStream extends InputStream {
 
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-        int end = off+len;
-        for(int i=off; i<end; i++)
-            b[i] = (byte)random.nextInt();
+        int end = off + len;
+        for (int i = off; i < end; i++)
+            b[i] = (byte) random.nextInt();
 
         return len;
     }

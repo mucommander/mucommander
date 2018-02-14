@@ -18,15 +18,6 @@
 
 package com.mucommander.desktop.gnome;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -37,10 +28,18 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * This class handles with GNOME Trash (deleting to trash, empty the trash, go to trash etc.)
- * 
+ * <p>
  * <p>
  * <b>Implementation notes:</b><br>
  * <br>
@@ -48,31 +47,41 @@ import com.mucommander.ui.main.WindowManager;
  * trash is simple directory ~/.Trash. So working with trash means working with this directory.
  * </p>
  *
- * @see GnomeTrashProvider
  * @author David Kovar (kowy), Maxence Bernard
+ * @see GnomeTrashProvider
  */
 public class GnomeTrash extends QueuedTrash {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeTrash.class);
-	
-    /** Open trash folder in Nautilus */ 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GnomeTrash.class);
+
+    /**
+     * Open trash folder in Nautilus
+     */
     private final static String REVEAL_TRASH_COMMAND = "nautilus trash:///";
-    
+
     /**
      * User trash folder, as defined by the freedesktop specification (see http://freedesktop.org/wiki/Specifications/trash-spec)
      * <code>null</code> if there is no usable trash folder.
      */
     private final static AbstractFile TRASH_FOLDER;
 
-    /** "info" subfolder of the user trash folder */
+    /**
+     * "info" subfolder of the user trash folder
+     */
     private final static AbstractFile TRASH_INFO_SUBFOLDER;
 
-    /** "files" subfolder of the user trash folder */
+    /**
+     * "files" subfolder of the user trash folder
+     */
     private final static AbstractFile TRASH_FILES_SUBFOLDER;
 
-    /** Volume on which the trash folder resides, used for checking whether a file can be moved to the trash or not */
+    /**
+     * Volume on which the trash folder resides, used for checking whether a file can be moved to the trash or not
+     */
     private final static AbstractFile TRASH_VOLUME;
 
-    /** Formats dates in trash info files */
+    /**
+     * Formats dates in trash info files
+     */
     private final static SimpleDateFormat INFO_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     /**
@@ -81,12 +90,11 @@ public class GnomeTrash extends QueuedTrash {
      */
     static {
         TRASH_FOLDER = getTrashFolder();
-        if(TRASH_FOLDER!=null) {
+        if (TRASH_FOLDER != null) {
             TRASH_INFO_SUBFOLDER = TRASH_FOLDER.getChildSilently("info");
             TRASH_FILES_SUBFOLDER = TRASH_FOLDER.getChildSilently("files");
             TRASH_VOLUME = TRASH_FOLDER.getVolume();
-        }
-        else {
+        } else {
             TRASH_INFO_SUBFOLDER = null;
             TRASH_FILES_SUBFOLDER = null;
             TRASH_VOLUME = null;
@@ -100,28 +108,26 @@ public class GnomeTrash extends QueuedTrash {
      *
      * @return the user Trash folder, <code>null</code> if no user trash folder could be found or created
      */
-     private static AbstractFile getTrashFolder() {
+    private static AbstractFile getTrashFolder() {
         AbstractFile userHome = LocalFile.getUserHome();
 
         AbstractFile primaryTrashDir = userHome.getChildSilently(".local/share/Trash/");   // new distro's trash path
         AbstractFile secondaryTrashDir;                                                    // standard path defined in specification
-        if(isTrashFolder(primaryTrashDir)) {
+        if (isTrashFolder(primaryTrashDir)) {
             return primaryTrashDir;
-        }
-        else if(isTrashFolder(secondaryTrashDir=userHome.getChildSilently("Trash/"))) {
+        } else if (isTrashFolder(secondaryTrashDir = userHome.getChildSilently("Trash/"))) {
             return secondaryTrashDir;
         }
 
         // No existing user trash was found: create the folder, only if it doesn't already exist.
-        if(!primaryTrashDir.exists()) {
+        if (!primaryTrashDir.exists()) {
             try {
                 primaryTrashDir.mkdirs();
                 primaryTrashDir.getChild("info").mkdir();
                 primaryTrashDir.getChild("files").mkdir();
 
                 return primaryTrashDir;
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Will return null
             }
         }
@@ -139,34 +145,33 @@ public class GnomeTrash extends QueuedTrash {
     private static boolean isTrashFolder(AbstractFile file) {
         try {
             return file.isDirectory() && file.getChild("info").isDirectory() && file.getChild("files").isDirectory();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }
 
     /**
      * <b>Implementation notes:</b> always returns <code>true</code>.
-     * 
+     *
      * @return True if trash can be emptied, otherwise false
      */
     @Override
     public boolean canEmpty() {
-        return TRASH_FOLDER!=null;
+        return TRASH_FOLDER != null;
     }
-            
+
     /**
      * Return trash files count
      * <p>
-     * We assume the count of items in trash equals the count of files in 
+     * We assume the count of items in trash equals the count of files in
      * <code>TRASH_PATH + "/info"</code> folder.
-     * 
+     *
      * @return Count of files in trash
      */
     @Override
     public int getItemCount() {
         // Abort if there is no usable trash folder
-        if(TRASH_FOLDER==null)
+        if (TRASH_FOLDER == null)
             return -1;
 
         try {
@@ -176,20 +181,20 @@ public class GnomeTrash extends QueuedTrash {
             return -1;
         }
     }
-    
+
     /**
      * Empty the trash
      * <p>
      * <b>Implementation notes:</b><br>
      * Simply free the <code>TRASH_PATH</code> directory
      * </p>
-     * 
+     *
      * @return True if everything went well
      */
     @Override
     public boolean empty() {
         // Abort if there is no usable trash folder
-        if(TRASH_FOLDER==null)
+        if (TRASH_FOLDER == null)
             return false;
 
         FileSet filesToDelete = new FileSet(TRASH_FOLDER);
@@ -200,7 +205,7 @@ public class GnomeTrash extends QueuedTrash {
             // delete spec files
             filesToDelete.addAll(TRASH_INFO_SUBFOLDER.ls());
         } catch (java.io.IOException ex) {
-        	LOGGER.debug("Failed to list files", ex);
+            LOGGER.debug("Failed to list files", ex);
             return false;
         }
 
@@ -211,13 +216,13 @@ public class GnomeTrash extends QueuedTrash {
             DeleteJob deleteJob = new DeleteJob(progressDialog, mainFrame, filesToDelete, false);
             progressDialog.start(deleteJob);
         }
-            
+
         return true;
     }
 
     @Override
     public boolean canOpen() {
-        return TRASH_FOLDER!=null;
+        return TRASH_FOLDER != null;
     }
 
     /**
@@ -227,17 +232,16 @@ public class GnomeTrash extends QueuedTrash {
     public void open() {
         try {
             ProcessRunner.execute(REVEAL_TRASH_COMMAND).waitFor();
-        }
-        catch(Exception e) {    // IOException, InterruptedException
-        	LOGGER.debug("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
+        } catch (Exception e) {    // IOException, InterruptedException
+            LOGGER.debug("Caught an exception running command \"" + REVEAL_TRASH_COMMAND + "\"", e);
         }
     }
 
     @Override
     public boolean isTrashFile(AbstractFile file) {
-        return TRASH_FOLDER!=null
-            && (file.getTopAncestor() instanceof LocalFile)
-            && TRASH_FOLDER.isParentOf(file);
+        return TRASH_FOLDER != null
+                && (file.getTopAncestor() instanceof LocalFile)
+                && TRASH_FOLDER.isParentOf(file);
     }
 
     /**
@@ -246,9 +250,9 @@ public class GnomeTrash extends QueuedTrash {
      */
     @Override
     public boolean canMoveToTrash(AbstractFile file) {
-        return TRASH_FOLDER!=null
-            && file.getTopAncestor() instanceof LocalFile
-            && file.getVolume().equals(TRASH_VOLUME);
+        return TRASH_FOLDER != null
+                && file.getTopAncestor() instanceof LocalFile
+                && file.getVolume().equals(TRASH_VOLUME);
     }
 
     /**
@@ -256,6 +260,7 @@ public class GnomeTrash extends QueuedTrash {
      * <p>
      * Try to copy a collection of files to the GNOME's Trash.
      * </p>
+     *
      * @param queuedFiles Collection of files to the trash
      * @return <code>true</code> if movement has been successful or <code>false</code> otherwise
      */
@@ -265,16 +270,16 @@ public class GnomeTrash extends QueuedTrash {
         String fileInfoContent;
         String trashFileName;
         boolean retVal = true;     // overall return value (if everything went OK or at least one file wasn't moved properly
-        
-        for(int i=0; i<nbFiles; i++) {
+
+        for (int i = 0; i < nbFiles; i++) {
             AbstractFile fileToDelete = queuedFiles.get(i);
             // generate content of info file and new filename
             try {
                 fileInfoContent = getFileInfoContent(fileToDelete);
                 trashFileName = getUniqueFilename(fileToDelete);
             } catch (IOException ex) {
-            	LOGGER.debug("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
-                
+                LOGGER.debug("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
+
                 // continue with other file (do not move file, because info file cannot be properly created
                 continue;
             }
@@ -292,18 +297,16 @@ public class GnomeTrash extends QueuedTrash {
 
                 // continue with other file (do not move file, because info file wasn't properly created)
                 continue;
-            }
-            finally {
-                if(infoWriter!=null) {
+            } finally {
+                if (infoWriter != null) {
                     try {
                         infoWriter.close();
-                    }
-                    catch(IOException e) {
+                    } catch (IOException e) {
                         // Not much else to do
                     }
                 }
             }
-            
+
             try {
                 // rename original file
                 fileToDelete.renameTo(TRASH_FILES_SUBFOLDER.getChild(trashFileName));
@@ -315,7 +318,7 @@ public class GnomeTrash extends QueuedTrash {
                 } catch (IOException ex1) {
                     // simply ignore
                 }
-                
+
                 retVal = false;
                 LOGGER.debug("Failed to move file to trash: " + trashFileName, ex);
             }
@@ -323,20 +326,21 @@ public class GnomeTrash extends QueuedTrash {
 
         return retVal;
     }
-    
+
     /**
      * Make a content of .trashinfo file
+     *
      * @param file File for which the content is built
      * @return Final content
      */
     private String getFileInfoContent(AbstractFile file) {
-        synchronized(INFO_DATE_FORMAT) {        // SimpleDateFormat is not thread safe
+        synchronized (INFO_DATE_FORMAT) {        // SimpleDateFormat is not thread safe
             return "[Trash Info]\n" +
                     "Path=" + file.getAbsolutePath() + "\n" +
                     "DeletionDate=" + INFO_DATE_FORMAT.format(new Date());
         }
     }
-    
+
     /**
      * It is possible to add several files with same name to the Trash. These files are distinguished
      * by _N appended to the name, where _N is rising int number. <br/>
@@ -356,12 +360,12 @@ public class GnomeTrash extends QueuedTrash {
         // find first empty filename in format filename_N.ext
         String filename;
         int count = 1;
-        while(true) {
+        while (true) {
             filename = rawName + "_" + count++;
-            if(extension!=null)
+            if (extension != null)
                 filename += "." + extension;
 
-            if(!TRASH_FILES_SUBFOLDER.getChild(filename).exists())
+            if (!TRASH_FILES_SUBFOLDER.getChild(filename).exists())
                 return filename;
         }
     }

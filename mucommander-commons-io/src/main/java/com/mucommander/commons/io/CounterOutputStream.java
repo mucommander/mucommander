@@ -23,24 +23,28 @@ import java.io.OutputStream;
 
 /**
  * An OutputStream that keeps track of the number of bytes that have been written to it.
- *
+ * <p>
  * <p>The actual number of bytes can be retrieved from the {@link ByteCounter} instance returned by {@link #getCounter()}.
  * The {@link #CounterOutputStream(OutputStream, ByteCounter)} constructor can be used to specify an existing
  * ByteCounter instance instead of creating a new one. The ByteCounter will always remain accessible, even
  * after this stream has been closed.
  *
- * @see ByteCounter
  * @author Maxence Bernard
+ * @see ByteCounter
  */
 public class CounterOutputStream extends OutputStream {
 
-    /** Underlying OutputStream */
+    /**
+     * Underlying OutputStream
+     */
     private final OutputStream out;
 
-    /** Byte counter */
+    /**
+     * Byte counter
+     */
     private final ByteCounter counter;
 
-    
+
     /**
      * Creates a new CounterOutputStream using the specified OutputStream. A new {@link ByteCounter} will be created.
      *
@@ -86,13 +90,13 @@ public class CounterOutputStream extends OutputStream {
         out.write(b);
         counter.add(b.length);
     }
-    
+
     @Override
     public void write(byte b[], int off, int len) throws IOException {
         out.write(b, off, len);
         counter.add(len);
     }
-    
+
     @Override
     public void flush() throws IOException {
         out.flush();

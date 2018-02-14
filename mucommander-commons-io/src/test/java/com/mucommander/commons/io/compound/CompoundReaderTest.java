@@ -33,18 +33,22 @@ import java.util.Vector;
  */
 public class CompoundReaderTest {
 
-    /** Test strings */
+    /**
+     * Test strings
+     */
     private final static String[] TEST_STRINGS = {
-        "",
-        "this",
-        "is",
-        "a",
-        "",
-        "test",
-        ""
+            "",
+            "this",
+            "is",
+            "a",
+            "",
+            "test",
+            ""
     };
 
-    /** Concatenation of the strings contained by {@link #TEST_STRINGS} */
+    /**
+     * Concatenation of the strings contained by {@link #TEST_STRINGS}
+     */
     private final static String TEST_FLATTENED_STRINGS;
 
     static {
@@ -73,12 +77,12 @@ public class CompoundReaderTest {
     private String copyReader(Reader reader) throws IOException {
         StringBuffer sb = new StringBuffer();
         int c;
-        while((c=reader.read())!=-1)
-            sb.append((char)c);
+        while ((c = reader.read()) != -1)
+            sb.append((char) c);
 
         return sb.toString();
     }
-    
+
     /**
      * Tests {@link CompoundReader} in merged mode.
      *
@@ -106,11 +110,11 @@ public class CompoundReaderTest {
 
         assert !reader.isMerged();
 
-        for(int i=0; i<TEST_STRINGS.length; i++) {
+        for (int i = 0; i < TEST_STRINGS.length; i++) {
             assert TEST_STRINGS[i].equals(copyReader(reader));
 
             // Try to advance to the next reader
-            assert(i!=TEST_STRINGS.length-1) ==  reader.advanceReader();
+            assert (i != TEST_STRINGS.length - 1) == reader.advanceReader();
         }
     }
 }

@@ -18,7 +18,10 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -31,28 +34,36 @@ import java.util.Map;
  */
 public class DonateAction extends OpenURLInBrowserAction {
 
-    public DonateAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public DonateAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.DONATION_URL);
     }
-    
+
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new DonateAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new DonateAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "Donate";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "Donate";
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.MISC;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

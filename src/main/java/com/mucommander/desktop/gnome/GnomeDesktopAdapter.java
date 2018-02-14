@@ -18,9 +18,6 @@
 
 package com.mucommander.desktop.gnome;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -30,24 +27,30 @@ import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.DesktopManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GnomeDesktopAdapter.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(GnomeDesktopAdapter.class);
+
     private static final String FILE_MANAGER_NAME = "Nautilus";
-    private static final String EXE_OPENER        = "$f";
+    private static final String EXE_OPENER = "$f";
 
-    protected static final String GVFS_OPEN  = "gvfs-open";
+    protected static final String GVFS_OPEN = "gvfs-open";
     protected static final String GNOME_OPEN = "gnome-open";
-    protected static final String XDG_OPEN   = "xdg-open";
+    protected static final String XDG_OPEN = "xdg-open";
 
-    /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
+    /**
+     * Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called
+     */
     private int multiClickInterval;
 
-    /** Key to the double-click interval value in the GNOME configuration */
+    /**
+     * Key to the double-click interval value in the GNOME configuration
+     */
     private String DOUBLE_CLICK_CONFIG_KEY = "/desktop/gnome/peripherals/mouse/double_click";
 
     @Override
@@ -62,9 +65,9 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
 
         String fileOpener = String.format("%s $f", getFileOpenerCommand());
         try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  fileOpener, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   fileOpener, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS, fileOpener, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS, fileOpener, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS, EXE_OPENER, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, fileOpener, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
 
             // Disabled actual permissions checking as this will break normal +x files.
@@ -82,17 +85,17 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
             // Multi-click interval retrieval
             try {
                 String value = GnomeConfig.getValue(DOUBLE_CLICK_CONFIG_KEY);
-                if(value==null)
+                if (value == null)
                     multiClickInterval = super.getMultiClickInterval();
-                
+
                 multiClickInterval = Integer.parseInt(value);
-            }
-            catch(Exception e) {
-            	LOGGER.debug("Error while retrieving double-click interval from gconftool", e);
+            } catch (Exception e) {
+                LOGGER.debug("Error while retrieving double-click interval from gconftool", e);
                 multiClickInterval = super.getMultiClickInterval();
             }
+        } catch (CommandException e) {
+            throw new DesktopInitialisationException(e);
         }
-        catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
 
     /**
@@ -106,6 +109,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
      * X Window's configuration, not in GNOME's. See <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5076635">
      * Java Bug 5076635</a> for more information.
      * </p>
+     *
      * @return the <code>/desktop/gnome/peripherals/mouse/double_click</code> GNOME configuration value.
      */
     @Override

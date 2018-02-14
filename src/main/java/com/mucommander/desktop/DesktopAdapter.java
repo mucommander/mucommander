@@ -28,8 +28,8 @@ import java.awt.event.MouseEvent;
  * <p>
  * There are two main steps to writing a desktop adapter:
  * <ul>
- *   <li>Desktop detection</li>
- *   <li>Desktop initialisation</li>
+ * <li>Desktop detection</li>
+ * <li>Desktop initialisation</li>
  * </ul>
  * </p>
  * <h3>Desktop detection</h3>
@@ -48,13 +48,16 @@ import java.awt.event.MouseEvent;
  * {@link com.mucommander.command.Command commands},
  * {@link com.mucommander.command.CommandManager#registerDefaultAssociation(String, FileFilter) associations}...<br>
  * </p>
+ *
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public interface DesktopAdapter {
     // - Detection / Initialisation --------------------------------------
     // -------------------------------------------------------------------
+
     /**
      * Checks whether or not the desktop is available on the current platform.
+     *
      * @return <code>true</code> if the desktop is available on the current platform, <code>false</code> otherwise.
      */
     public boolean isAvailable();
@@ -65,7 +68,7 @@ public interface DesktopAdapter {
      * This method is called when an instance of <code>DesktopAdapter</code> has been chosen as the
      * best fit for the current system.<br>
      * This gives the instance an opportunity to set itself up -
-     * default {@link com.mucommander.command.Command} and {@link com.mucommander.ui.action.MuAction} registration, 
+     * default {@link com.mucommander.command.Command} and {@link com.mucommander.ui.action.MuAction} registration,
      * trash management...
      * </p>
      * <p>
@@ -73,15 +76,16 @@ public interface DesktopAdapter {
      * application has been started. The desktop instance should use this opportunity to install platform
      * dependant things such as {@link com.mucommander.bookmark.Bookmark} or {@link com.mucommander.ui.action.ActionKeymap}.
      * </p>
-     * @param  install                        <code>true</code> if this is the application's first boot, <code>false</code> otherwise.
+     *
+     * @param install <code>true</code> if this is the application's first boot, <code>false</code> otherwise.
      * @throws DesktopInitialisationException if any error occurs.
      */
     public void init(boolean install) throws DesktopInitialisationException;
 
 
-
     // - Mouse management ------------------------------------------------
     // -------------------------------------------------------------------
+
     /**
      * Checks whether the specified <code>MouseEvent</code> is a left-click for this destop.
      * <p>
@@ -89,10 +93,11 @@ public interface DesktopAdapter {
      * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>
      * The goal of this method is to allow desktop to check for such non-standard behaviours.
      * </p>
-     * @param  e event to check.
-     * @return   <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
-     * @see      #isRightMouseButton(MouseEvent)
-     * @see      #isMiddleMouseButton(MouseEvent)
+     *
+     * @param e event to check.
+     * @return <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
+     * @see #isRightMouseButton(MouseEvent)
+     * @see #isMiddleMouseButton(MouseEvent)
      */
     public boolean isLeftMouseButton(MouseEvent e);
 
@@ -103,10 +108,11 @@ public interface DesktopAdapter {
      * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>
      * The goal of this method is to allow desktop to check for such non-standard behaviours.
      * </p>
-     * @param  e event to check.
-     * @return   <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
-     * @see      #isMiddleMouseButton(MouseEvent)
-     * @see      #isLeftMouseButton(MouseEvent)
+     *
+     * @param e event to check.
+     * @return <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
+     * @see #isMiddleMouseButton(MouseEvent)
+     * @see #isLeftMouseButton(MouseEvent)
      */
     public boolean isRightMouseButton(MouseEvent e);
 
@@ -117,10 +123,11 @@ public interface DesktopAdapter {
      * <i>CONTROL + LEFT CLICK</i> is a <i>RIGHT CLICK</i> under Mac OS X.<br>
      * The goal of this method is to allow desktop to check for such non-standard behaviours.
      * </p>
-     * @param  e event to check.
-     * @return   <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
-     * @see      #isRightMouseButton(MouseEvent)
-     * @see      #isLeftMouseButton(MouseEvent)
+     *
+     * @param e event to check.
+     * @return <code>true</code> if the specified event is a left-click for this desktop, <code>false</code> otherwise.
+     * @see #isRightMouseButton(MouseEvent)
+     * @see #isLeftMouseButton(MouseEvent)
      */
     public boolean isMiddleMouseButton(MouseEvent e);
 
@@ -128,6 +135,7 @@ public interface DesktopAdapter {
      * Returns the maximum interval in milliseconds between mouse clicks for them to be considered as 'multi-clicks'
      * (e.g. double-clicks). The returned value should reflects the desktop's multi-click (or double-click) interval,
      * which may or may not correspond to the one Java uses for double-clicks.
+     *
      * @return the maximum interval in milliseconds between mouse clicks for them to be considered as 'multi-clicks'.
      */
     public int getMultiClickInterval();
@@ -135,12 +143,14 @@ public interface DesktopAdapter {
 
     // - Misc. -----------------------------------------------------------
     // -------------------------------------------------------------------
+
     /**
      * Returns the command used to start shell processes.
      * <p>
      * The returned command must set the shell in its 'run script' mode.
      * For example, for bash, the returned command should be <code>/bin/bash -l -c"</code>.
      * </p>
+     *
      * @return the command used to start shell processes.
      */
     public String getDefaultShell();
@@ -148,7 +158,7 @@ public interface DesktopAdapter {
     /**
      * Returns <code>true</code> if the given file is an application file. What an application file actually is
      * is system-dependent and can take various forms.
-     * It can be a simple executable file, as in the case of Windows <code>.exe</code> files, or a directory 
+     * It can be a simple executable file, as in the case of Windows <code>.exe</code> files, or a directory
      * containing an executable and various meta-information files, like Mac OS X's <code>.app</code> files.
      *
      * @param file the file to test

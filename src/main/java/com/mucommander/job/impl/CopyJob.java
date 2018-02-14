@@ -19,11 +19,6 @@
 
 package com.mucommander.job.impl;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
@@ -36,6 +31,10 @@ import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 
 /**
@@ -44,39 +43,42 @@ import com.mucommander.ui.main.MainFrame;
  * @author Maxence Bernard
  */
 public class CopyJob extends AbstractCopyJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CopyJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CopyJob.class);
 
-    /** Destination file that is being copied, this value is updated every time #processFile() is called.
-     * The value can be used by subclasses that override processFile should they need to work on the destination file. */
+    /**
+     * Destination file that is being copied, this value is updated every time #processFile() is called.
+     * The value can be used by subclasses that override processFile should they need to work on the destination file.
+     */
     protected AbstractFile currentDestFile;
 
-    /** Operating mode : COPY_MODE or DOWNLOAD_MODE */
+    /**
+     * Operating mode : COPY_MODE or DOWNLOAD_MODE
+     */
     private TransferMode mode;
 
     public enum TransferMode {
         COPY,
         DOWNLOAD
     }
-	
-	
+
+
     /**
      * Creates a new CopyJob without starting it.
      *
-     * @param progressDialog dialog which shows this job's progress
-     * @param mainFrame mainFrame this job has been triggered by
-     * @param files files which are going to be copied
-     * @param destFolder destination folder where the files will be copied
-     * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
-     * @param mode mode in which CopyJob is to operate: {@link #COPY_MODE} or {@link #DOWNLOAD_MODE}.
+     * @param progressDialog   dialog which shows this job's progress
+     * @param mainFrame        mainFrame this job has been triggered by
+     * @param files            files which are going to be copied
+     * @param destFolder       destination folder where the files will be copied
+     * @param newName          the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
+     * @param mode             mode in which CopyJob is to operate: {@link #COPY_MODE} or {@link #DOWNLOAD_MODE}.
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
     public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, TransferMode mode, int fileExistsAction) {
         super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
         this.mode = mode;
-        this.errorDialogTitle = Translator.get(mode==TransferMode.DOWNLOAD?"download_dialog.error_title":"copy_dialog.error_title");
+        this.errorDialogTitle = Translator.get(mode == TransferMode.DOWNLOAD ? "download_dialog.error_title" : "copy_dialog.error_title");
     }
-
 
 
     ////////////////////////////////////
@@ -84,11 +86,10 @@ public class CopyJob extends AbstractCopyJob {
     ////////////////////////////////////
 
     /**
-     * Copies recursively the given file or folder. 
+     * Copies recursively the given file or folder.
      *
-     * @param file the file or folder to move
+     * @param file          the file or folder to move
      * @param recurseParams destination folder where the given file will be copied (null for top level files)
-     * 
      * @return <code>true</code> if the file has been copied.
      */
     @Override
@@ -96,15 +97,15 @@ public class CopyJob extends AbstractCopyJob {
         // Stop if interrupted
         if (getState() == FileJobState.INTERRUPTED)
             return false;
-		
+
         // Destination folder
-        AbstractFile destFolder = recurseParams==null ? baseDestFolder : (AbstractFile)recurseParams;
-		
+        AbstractFile destFolder = recurseParams == null ? baseDestFolder : (AbstractFile) recurseParams;
+
         // Is current file in base folder ?
-        boolean isFileInBaseFolder = files.indexOf(file)!=-1;
+        boolean isFileInBaseFolder = files.indexOf(file) != -1;
 
         // Determine filename in destination
-        String destFileName = isFileInBaseFolder && newName!=null ? newName : file.getName();
+        String destFileName = isFileInBaseFolder && newName != null ? newName : file.getName();
 
         // Create destination AbstractFile instance
         AbstractFile destFile = createDestinationFile(destFolder, destFileName);
@@ -117,7 +118,7 @@ public class CopyJob extends AbstractCopyJob {
         // is non-local (skip file and return)
         if (file.isSymlink() && (
                 !file.hasAncestor(LocalFile.class) ||
-                !destFile.hasAncestor(LocalFile.class))) {
+                        !destFile.hasAncestor(LocalFile.class))) {
             return true;
         }
 
@@ -137,23 +138,22 @@ public class CopyJob extends AbstractCopyJob {
                 do {
                     try {
                         destFile.mkdir();
-                    }
-                    catch(IOException e) {
+                    } catch (IOException e) {
                         // Unable to create folder
                         int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
                         // Retry loops
-                        if (ret==FileJobAction.RETRY)
+                        if (ret == FileJobAction.RETRY)
                             continue;
                         // Cancel or close dialog return false
                         return false;
                         // Skip continues
                     }
                     break;
-                } while(true);
+                } while (true);
             }
-			
+
             // and copy each file in this folder recursively
-            do {		// Loop for retry
+            do {        // Loop for retry
                 try {
                     // for each file in folder...
                     for (AbstractFile subFile : file.ls()) {
@@ -173,33 +173,30 @@ public class CopyJob extends AbstractCopyJob {
                     if (destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
                         try {
                             destFile.changeDate(file.getDate());
-                        }
-                        catch (IOException e) {
-                            LOGGER.debug("failed to change the date of "+destFile, e);
+                        } catch (IOException e) {
+                            LOGGER.debug("failed to change the date of " + destFile, e);
                             // Fail silently
                         }
                     }
 
                     return true;
-                }
-                catch(IOException e) {
+                } catch (IOException e) {
                     // file.ls() failed
                     int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
-                    if (ret==FileJobAction.RETRY)
+                    if (ret == FileJobAction.RETRY)
                         continue;
                     // Cancel, skip or close dialog returns false
                     return false;
                 }
-            } while(true);
+            } while (true);
         }
         // File is a regular file, copy it
-        else  {
+        else {
             // Copy the file
             return tryCopyFile(file, destFile, append, errorDialogTitle);
         }
     }
-
 
 
     // This job modifies baseDestFolder and its subfolders
@@ -219,26 +216,26 @@ public class CopyJob extends AbstractCopyJob {
 
         // If the destination files are located inside an archive, optimize the archive file
         AbstractArchiveFile archiveFile = baseDestFolder.getParentArchive();
-        if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable())
-            optimizeArchive((AbstractRWArchiveFile)archiveFile);
+        if (archiveFile != null && archiveFile.isArchive() && archiveFile.isWritable())
+            optimizeArchive((AbstractRWArchiveFile) archiveFile);
 
         // If this job corresponds to a 'local copy' of a single file and in the same directory,
         // select the copied file in the active table after this job has finished (and hasn't been cancelled)
-        if(files.size()==1 && newName!=null && baseDestFolder.equalsCanonical(files.elementAt(0).getParent())) {
+        if (files.size() == 1 && newName != null && baseDestFolder.equalsCanonical(files.elementAt(0).getParent())) {
             // Resolve new file instance now that it exists: some remote files do not immediately update file attributes
             // after creation, we need to get an instance that reflects the newly created file attributes
-            selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true)+newName));
+            selectFileWhenFinished(FileFactory.getFile(baseDestFolder.getAbsolutePath(true) + newName));
         }
     }
 
     @Override
     public String getStatusString() {
-        if(isCheckingIntegrity())
+        if (isCheckingIntegrity())
             return super.getStatusString();
-        
-        if(isOptimizingArchive)
+
+        if (isOptimizingArchive)
             return Translator.get("optimizing_archive", archiveToOptimize.getName());
 
-        return Translator.get(mode==TransferMode.DOWNLOAD?"download_dialog.downloading_file":"copy_dialog.copying_file", getCurrentFilename());
+        return Translator.get(mode == TransferMode.DOWNLOAD ? "download_dialog.downloading_file" : "copy_dialog.copying_file", getCurrentFilename());
     }
 }

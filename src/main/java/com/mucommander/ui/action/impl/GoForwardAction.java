@@ -18,18 +18,12 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.mucommander.ui.action.*;
+import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action recalls the next folder in the current FolderPanel's history.
@@ -38,7 +32,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class GoForwardAction extends ActiveTabAction {
 
-    public GoForwardAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoForwardAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,10 +42,10 @@ public class GoForwardAction extends ActiveTabAction {
         mainFrame.getActivePanel().getFolderHistory().goForward();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     /**
      * Enables or disables this action based on the history of the currently active FolderPanel: if there is a next
@@ -60,25 +54,33 @@ public class GoForwardAction extends ActiveTabAction {
     @Override
     protected void toggleEnabledState() {
         setEnabled(mainFrame.getActivePanel().getFolderHistory().hasForwardFolder() &&
-        		  !mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
+                !mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
     }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new GoForwardAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new GoForwardAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "GoForward";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "GoForward";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK);
+        }
     }
 }

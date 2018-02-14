@@ -24,14 +24,14 @@ import java.io.IOException;
 
 /**
  * This <code>FilesService</code> returns all the files in a given directory.
- * 
+ *
  * @author Arik Hadas
  */
 
 public class AllFilesService extends FilesService {
 
-	@Override
+    @Override
     protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
-		return directory.ls();
-	}	
+        return directory.ls();
+    }
 }

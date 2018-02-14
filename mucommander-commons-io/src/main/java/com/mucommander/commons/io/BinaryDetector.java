@@ -30,17 +30,19 @@ import java.io.InputStream;
  * This class provides methods to determine whether some data is binary data or text data.
  * As there is no formal characterization of what binary data really is, this method is an approximation at best
  * and should not be trusted for anything critical.
- *
+ * <p>
  * <p>The {@link #RECOMMENDED_BYTE_SIZE} field indicates how many bytes should be provided for the detector to be
  * confident enough.</p>
  *
- * @see com.mucommander.commons.io.EncodingDetector
  * @author Maxence Bernard
+ * @see com.mucommander.commons.io.EncodingDetector
  */
 public class BinaryDetector {
 
-    /** Provides an indication as to the number of bytes that should fed to the detector for it to have enough
-     * confidence. */
+    /**
+     * Provides an indication as to the number of bytes that should fed to the detector for it to have enough
+     * confidence.
+     */
     public final static int RECOMMENDED_BYTE_SIZE = 1024;
 
 
@@ -59,7 +61,7 @@ public class BinaryDetector {
      * be the beginning of a file.</br>
      * This method returns <code>true</code> if it thinks that the bytes correspond to binary data.
      *
-     * @param b the data to analyze
+     * @param b   the data to analyze
      * @param off specifies where to start reading the array
      * @param len specifies where to stop reading the array
      * @return true if BinaryDetector thinks that the specified data is binary
@@ -72,20 +74,19 @@ public class BinaryDetector {
             BOMInputStream bin = new BOMInputStream(new ByteArrayInputStream(b, off, len));
             BOM bom = bin.getBOM();
 
-            if(bom!=null) {
-                if(bom.equals(BOMConstants.UTF16_BE_BOM) || bom.equals(BOMConstants.UTF16_LE_BOM)
-                || bom.equals(BOMConstants.UTF32_BE_BOM) || bom.equals(BOMConstants.UTF32_LE_BOM)) {
+            if (bom != null) {
+                if (bom.equals(BOMConstants.UTF16_BE_BOM) || bom.equals(BOMConstants.UTF16_LE_BOM)
+                        || bom.equals(BOMConstants.UTF32_BE_BOM) || bom.equals(BOMConstants.UTF32_LE_BOM)) {
                     return false;
                 }
             }
             // No BOM, start looking for zeros
 
             int i;
-            while((i=bin.read())!=-1)
-                if(i==0x00)
+            while ((i = bin.read()) != -1)
+                if (i == 0x00)
                     return true;
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             // Can never happen in practice with a ByteArrayInputStream.
         }
 
@@ -95,7 +96,7 @@ public class BinaryDetector {
     /**
      * Tries and detect whether the given stream contains binary or text data.</br>
      * This method returns <code>true</code> if it thinks that the bytes correspond to binary data.
-     *
+     * <p>
      * <p>A maximum of {@link #RECOMMENDED_BYTE_SIZE} will be read from the <code>InputStream</code>. The
      * stream will not be closed and will not be repositionned after the bytes have been read. It is up to the calling
      * method to use the <code>InputStream#mark()</code> and <code>InputStream#reset()</code> methods (if supported)

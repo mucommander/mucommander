@@ -21,7 +21,7 @@ package com.mucommander.commons.file.archive.zip.provider;
 /**
  * Utility class that represents a four byte integer with conversion
  * rules for the big endian byte order of ZIP files.
- *
+ * <p>
  * <p>--------------------------------------------------------------------------------------------------------------<br>
  * <br>
  * This class is based off the <code>org.apache.tools.zip</code> package of the <i>Apache Ant</i> project. The Ant
@@ -36,6 +36,7 @@ public final class ZipLong implements Cloneable {
 
     /**
      * Create instance from a number.
+     *
      * @param value the long to store as a ZipLong
      */
     public ZipLong(long value) {
@@ -44,23 +45,26 @@ public final class ZipLong implements Cloneable {
 
     /**
      * Create instance from bytes.
+     *
      * @param bytes the bytes to store as a ZipLong
      */
-    public ZipLong (byte[] bytes) {
+    public ZipLong(byte[] bytes) {
         this(bytes, 0);
     }
 
     /**
      * Create instance from the four bytes starting at offset.
-     * @param bytes the bytes to store as a ZipLong
+     *
+     * @param bytes  the bytes to store as a ZipLong
      * @param offset the offset to start
      */
-    public ZipLong (byte[] bytes, int offset) {
+    public ZipLong(byte[] bytes, int offset) {
         value = ZipLong.getValue(bytes, offset);
     }
 
     /**
      * Get value as four bytes in big endian byte order.
+     *
      * @return value as four bytes in big endian order
      */
     public byte[] getBytes() {
@@ -69,6 +73,7 @@ public final class ZipLong implements Cloneable {
 
     /**
      * Get value as Java long.
+     *
      * @return value as a long
      */
     public long getValue() {
@@ -77,6 +82,7 @@ public final class ZipLong implements Cloneable {
 
     /**
      * Converts the given int value as four bytes in big endian byte order.
+     *
      * @param value the unsigned int value (stored as a long) to convert
      * @return the converted value as a byte array in big endian byte order
      */
@@ -87,7 +93,8 @@ public final class ZipLong implements Cloneable {
     /**
      * Converts the given int value as four bytes in big endian byte order. The specified byte array is used to store
      * the result, starting at offset 0. The returned byte array is the same as the given one.
-     * @param value the unsigned int value (stored as a long) to convert
+     *
+     * @param value  the unsigned int value (stored as a long) to convert
      * @param result the byte array in which to store the value in big endian byte order
      * @return the converted value as a byte array in big endian byte order
      */
@@ -98,22 +105,24 @@ public final class ZipLong implements Cloneable {
     /**
      * Converts the given int value as four bytes in big endian byte order. The specified byte array is used to store
      * the result, starting at the given offset. The returned byte array is the same as the given one.
-     * @param value the unsigned int value (stored as a long) to convert
+     *
+     * @param value  the unsigned int value (stored as a long) to convert
      * @param result the byte array in which to store the value in big endian byte order
-     * @param off offset at which to start writing the result in the array
+     * @param off    offset at which to start writing the result in the array
      * @return the converted value as a byte array in big endian byte order
      */
     public static byte[] getBytes(long value, byte[] result, int off) {
         result[off] = (byte) ((value & 0xFF));
         result[++off] = (byte) ((value & 0xFF00) >> 8);
         result[++off] = (byte) ((value & 0xFF0000) >> 16);
-        result[off+1] = (byte) ((value & 0xFF000000L) >> 24);
+        result[off + 1] = (byte) ((value & 0xFF000000L) >> 24);
         return result;
     }
 
     /**
      * Helper method to get the value as a Java long from four bytes starting at given array offset
-     * @param bytes the array of bytes
+     *
+     * @param bytes  the array of bytes
      * @param offset the offset to start
      * @return the correspondanding Java long value
      */
@@ -127,6 +136,7 @@ public final class ZipLong implements Cloneable {
 
     /**
      * Helper method to get the value as a Java long from a four-byte array
+     *
      * @param bytes the array of bytes
      * @return the correspondanding Java long value
      */
@@ -136,6 +146,7 @@ public final class ZipLong implements Cloneable {
 
     /**
      * Override to make two instances with same value equal.
+     *
      * @param o an object to compare
      * @return true if the objects are equal
      */
@@ -148,6 +159,7 @@ public final class ZipLong implements Cloneable {
 
     /**
      * Override to make two instances with same value equal.
+     *
      * @return the value stored in the ZipLong
      */
     public int hashCode() {

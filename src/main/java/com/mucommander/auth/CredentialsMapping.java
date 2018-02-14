@@ -26,28 +26,34 @@ import com.mucommander.commons.file.FileURL;
  * It also adds the notion of persistency, allowing to specify whether the credentials should be saved to disk when the
  * application quits and restored next time the application starts.
  *
- * @see CredentialsManager 
  * @author Maxence Bernard
+ * @see CredentialsManager
  */
 public final class CredentialsMapping {
 
-    /** User credentials */
+    /**
+     * User credentials
+     */
     private Credentials credentials;
 
-    /** The location credentials are associated with */
+    /**
+     * The location credentials are associated with
+     */
     private FileURL realm;
 
-    /** Should these credentials be saved to disk ? */
+    /**
+     * Should these credentials be saved to disk ?
+     */
     private boolean isPersistent;
 
-    
+
     /**
      * Creates a new CredentialsMapping instance that associates the specified credentials with the given location.
      *
-     * @param credentials user credentials
-     * @param realm the location to associate the credentials with
+     * @param credentials  user credentials
+     * @param realm        the location to associate the credentials with
      * @param isPersistent if true, indicates to CredentialsManager that the credentials should be saved when the
-     * application terminates.
+     *                     application terminates.
      */
     public CredentialsMapping(Credentials credentials, FileURL realm, boolean isPersistent) {
         this.credentials = credentials;
@@ -98,15 +104,15 @@ public final class CredentialsMapping {
      * @return true if both CredentialsMapping instances are equal
      */
     public boolean equals(Object o) {
-        if(!(o instanceof CredentialsMapping))  // Note: CredentialsMapping is final, no need to test classes
+        if (!(o instanceof CredentialsMapping))  // Note: CredentialsMapping is final, no need to test classes
             return false;
 
-        CredentialsMapping cm = (CredentialsMapping)o;
+        CredentialsMapping cm = (CredentialsMapping) o;
 
         return cm.credentials.equals(this.credentials, false) && cm.realm.equals(this.realm, false, true);
     }
 
     public String toString() {
-        return credentials.toString()+" "+realm.toString(false);
+        return credentials.toString() + " " + realm.toString(false);
     }
 }

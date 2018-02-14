@@ -24,7 +24,7 @@ import java.security.Security;
 /**
  * This custom <code>java.security.Provider</code> exposes muCommander's own <code>MessageDigest</code> implementations,
  * and the ones used aggregated from third party libraries.
- *
+ * <p>
  * <p>The {@link #registerProvider()} method should be called once to register this <code>Provider</code> with the
  * Java Cryptography Extension and advertise the additional <code>MessageDigest</code> implementations.</p>
  *
@@ -32,7 +32,9 @@ import java.security.Security;
  */
 public class MuProvider extends Provider {
 
-    /** True if an instance of this Provider has already been registered with java.security.Security */
+    /**
+     * True if an instance of this Provider has already been registered with java.security.Security
+     */
     private static boolean initialized;
 
     private MuProvider() {
@@ -47,14 +49,14 @@ public class MuProvider extends Provider {
      */
     public static void registerProvider() {
         // A Provider must be registered only once
-        if(initialized)
+        if (initialized)
             return;
 
         MuProvider provider = new MuProvider();
 
         // Add our own MessageDigest implementations
-        provider.put("MessageDigest."+Adler32MessageDigest.getAlgorithmName(), Adler32MessageDigest.class.getName());
-        provider.put("MessageDigest."+CRC32MessageDigest.getAlgorithmName(), CRC32MessageDigest.class.getName());
+        provider.put("MessageDigest." + Adler32MessageDigest.getAlgorithmName(), Adler32MessageDigest.class.getName());
+        provider.put("MessageDigest." + CRC32MessageDigest.getAlgorithmName(), CRC32MessageDigest.class.getName());
 
         // Register the provider with java.security.Security
         Security.addProvider(provider);

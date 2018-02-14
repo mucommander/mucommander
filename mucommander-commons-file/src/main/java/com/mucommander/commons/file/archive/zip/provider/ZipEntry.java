@@ -25,7 +25,7 @@ import java.util.zip.ZipException;
 /**
  * Extension that adds better handling of extra fields and provides
  * access to the internal and external file attributes.
- *
+ * <p>
  * <p>--------------------------------------------------------------------------------------------------------------<br>
  * <br>
  * This class is based off the <code>org.apache.tools.zip</code> package of the <i>Apache Ant</i> project. The Ant
@@ -36,68 +36,112 @@ import java.util.zip.ZipException;
  */
 public class ZipEntry implements Cloneable {
 
-    /** Name/path of this entry */
+    /**
+     * Name/path of this entry
+     */
     protected String name = null;
 
-    /** Uncompressed size of the entry data */
+    /**
+     * Uncompressed size of the entry data
+     */
     protected long size = -1;
 
-    /** Compressed size of the entry data */
+    /**
+     * Compressed size of the entry data
+     */
     protected long compressedSize = -1;
 
-    /** CRC-32 checksum of the uncompressed entry data */
+    /**
+     * CRC-32 checksum of the uncompressed entry data
+     */
     protected long crc = -1;
 
-    /** Data/time of this entry, in the DOS time format */
+    /**
+     * Data/time of this entry, in the DOS time format
+     */
     protected long dosTime = -1;
 
-    /** Data/time of this entry, in the Java time format */
+    /**
+     * Data/time of this entry, in the Java time format
+     */
     protected long javaTime = -1;
 
-    /** Compression method that was used for the entry data */
+    /**
+     * Compression method that was used for the entry data
+     */
     protected int method = -1;
 
-    /** An optional comment for this entry */
+    /**
+     * An optional comment for this entry
+     */
     protected String comment;
 
-    /** Platform, part of the 'version made by' central directory field */
+    /**
+     * Platform, part of the 'version made by' central directory field
+     */
     protected int platform = PLATFORM_FAT;
 
-    /** Internal attributes (2 bytes) */
+    /**
+     * Internal attributes (2 bytes)
+     */
     protected int internalAttributes = 0;
 
-    /** External attributes (4 bytes) */
+    /**
+     * External attributes (4 bytes)
+     */
     protected long externalAttributes = 0;
 
-    /** List of extra fields, as ZipEntraField instances */
+    /**
+     * List of extra fields, as ZipEntraField instances
+     */
     protected Vector<ZipExtraField> extraFields = null;
 
-    /** Contains info about how this entry is stored in the zip file */
+    /**
+     * Contains info about how this entry is stored in the zip file
+     */
     protected ZipEntryInfo entryInfo;
 
-    /** An instance of Calendar shared through all instances of this class and used for Java<->DOS time conversion */
+    /**
+     * An instance of Calendar shared through all instances of this class and used for Java<->DOS time conversion
+     */
     protected final static Calendar CALENDAR = Calendar.getInstance();
 
-    /** Smallest DOS time (Epoch 1980) */
+    /**
+     * Smallest DOS time (Epoch 1980)
+     */
     protected final static long MIN_DOS_TIME = 0x00002100L;
 
-    /** Value of the bit flag that denotes a Unix directory in the external attributes */
+    /**
+     * Value of the bit flag that denotes a Unix directory in the external attributes
+     */
     protected final static int UNIX_DIRECTORY_FLAG = 16384;
-    /** Value of the bit flag that denotes a Unix file in the external attributes */
+    /**
+     * Value of the bit flag that denotes a Unix file in the external attributes
+     */
     protected final static int UNIX_FILE_FLAG = 32768;
 
-    /** Value of the bit flag that denotes an MS-DOS directory in the external attributes */
+    /**
+     * Value of the bit flag that denotes an MS-DOS directory in the external attributes
+     */
     protected final static int MSDOS_DIRECTORY_FLAG = 0x10;
-    /** Value of the bit flag that denotes a read-only MS-DOS file in the external attributes */
+    /**
+     * Value of the bit flag that denotes a read-only MS-DOS file in the external attributes
+     */
     protected final static int MSDOS_READ_ONLY_FLAG = 1;
 
-    /** Value of the user write permission bit */
+    /**
+     * Value of the user write permission bit
+     */
     protected final static int USER_WRITE_PERMISSION_BIT = 128;
 
-    /** Value of the Unix platform used in the 'version made by' central directory field */
+    /**
+     * Value of the Unix platform used in the 'version made by' central directory field
+     */
     protected static final int PLATFORM_UNIX = 3;
-    /** Value of the MSDOS/OS-2 platform (FAT filesystem) used in the 'version made by' central directory field */
-    protected static final int PLATFORM_FAT  = 0;
+    /**
+     * Value of the MSDOS/OS-2 platform (FAT filesystem) used in the 'version made by' central directory field
+     */
+    protected static final int PLATFORM_FAT = 0;
 
 
     /**
@@ -182,14 +226,14 @@ public class ZipEntry implements Cloneable {
         boolean isDirectory = isDirectory();
 
         setExternalAttributes(
-              // Unix directory flag
-              ((isDirectory ? UNIX_DIRECTORY_FLAG : UNIX_FILE_FLAG) << 16)
-              // Unix file permissions
-              | (mode << 16)
-              // MS-DOS read-only attribute
-              | ((mode & USER_WRITE_PERMISSION_BIT) == 0 ? MSDOS_READ_ONLY_FLAG : 0)
-              // MS-DOS directory flag
-              | (isDirectory ? MSDOS_DIRECTORY_FLAG : 0));
+                // Unix directory flag
+                ((isDirectory ? UNIX_DIRECTORY_FLAG : UNIX_FILE_FLAG) << 16)
+                        // Unix file permissions
+                        | (mode << 16)
+                        // MS-DOS read-only attribute
+                        | ((mode & USER_WRITE_PERMISSION_BIT) == 0 ? MSDOS_READ_ONLY_FLAG : 0)
+                        // MS-DOS directory flag
+                        | (isDirectory ? MSDOS_DIRECTORY_FLAG : 0));
 
         platform = PLATFORM_UNIX;
     }
@@ -210,7 +254,7 @@ public class ZipEntry implements Cloneable {
      * @return <code>true</code> if this ZipEntry has Unix mode/permissions
      */
     public boolean hasUnixMode() {
-        return getPlatform()==PLATFORM_UNIX;
+        return getPlatform() == PLATFORM_UNIX;
     }
 
     /**
@@ -267,7 +311,7 @@ public class ZipEntry implements Cloneable {
             extraFields = new Vector<ZipExtraField>();
 
         ZipShort type = ze.getHeaderId();
-        for (int i=0, nbFields=extraFields.size(); i<nbFields; i++) {
+        for (int i = 0, nbFields = extraFields.size(); i < nbFields; i++) {
             if (extraFields.elementAt(i).getHeaderId().equals(type)) {
                 extraFields.setElementAt(ze, i);
                 return;
@@ -288,7 +332,7 @@ public class ZipEntry implements Cloneable {
         if (extraFields == null)
             return false;
 
-        for (int i=0, nbFields=extraFields.size(); i<nbFields; i++) {
+        for (int i = 0, nbFields = extraFields.size(); i < nbFields; i++) {
             if (extraFields.elementAt(i).getHeaderId().equals(type)) {
                 extraFields.removeElementAt(i);
                 return true;
@@ -380,10 +424,10 @@ public class ZipEntry implements Cloneable {
      * @throws IllegalArgumentException if the specified size is less than 0 or greater than 0xFFFFFFFF bytes
      */
     public void setSize(long size) {
-        if(!isValidUnsignedInt(size))
-	        throw new IllegalArgumentException("Invalid entry size");
+        if (!isValidUnsignedInt(size))
+            throw new IllegalArgumentException("Invalid entry size");
 
-	    this.size = size;
+        this.size = size;
     }
 
     /**
@@ -402,8 +446,8 @@ public class ZipEntry implements Cloneable {
      * @param csize the compressed size to set to
      */
     public void setCompressedSize(long csize) {
-        if(!isValidUnsignedInt(csize))
-	        throw new IllegalArgumentException("Invalid entry size");
+        if (!isValidUnsignedInt(csize))
+            throw new IllegalArgumentException("Invalid entry size");
 
         this.compressedSize = csize;
     }
@@ -424,7 +468,7 @@ public class ZipEntry implements Cloneable {
      * @throws IllegalArgumentException if the specified CRC-32 value is less than 0 or greater than 0xFFFFFFFF
      */
     public void setCrc(long crc) {
-        if(!isValidUnsignedInt(crc))
+        if (!isValidUnsignedInt(crc))
             throw new IllegalArgumentException("invalid entry crc-32");
 
         this.crc = crc;
@@ -448,7 +492,7 @@ public class ZipEntry implements Cloneable {
      */
     public void setTime(long javaTime) {
         this.javaTime = javaTime;
-        this.dosTime = javaTime==-1?-1:javaToDosTime(javaTime);
+        this.dosTime = javaTime == -1 ? -1 : javaToDosTime(javaTime);
     }
 
     /**
@@ -467,7 +511,7 @@ public class ZipEntry implements Cloneable {
      */
     protected void setDosTime(long dosTime) {
         this.dosTime = dosTime;
-        this.javaTime = dosTime==-1?-1:dosToJavaTime(dosTime);
+        this.javaTime = dosTime == -1 ? -1 : dosToJavaTime(dosTime);
     }
 
     /**
@@ -476,7 +520,7 @@ public class ZipEntry implements Cloneable {
      * @return the compression method of the entry, or <code>-1</code> if not specified
      */
     public int getMethod() {
-    	return method;
+        return method;
     }
 
     /**
@@ -498,7 +542,7 @@ public class ZipEntry implements Cloneable {
      * @return the comment string for the entry, or <code>null</code> if there is none
      */
     public String getComment() {
-    	return comment;
+        return comment;
     }
 
     /**
@@ -508,7 +552,7 @@ public class ZipEntry implements Cloneable {
      * @throws IllegalArgumentException if the length of the specified comment string is greater than 0xFFFF bytes
      */
     public void setComment(String comment) {
-        if (comment != null && comment.length() > 0xffff/3 && getUTF8Length(comment) > 0xffff)
+        if (comment != null && comment.length() > 0xffff / 3 && getUTF8Length(comment) > 0xffff)
             throw new IllegalArgumentException("invalid entry comment length");
 
         this.comment = comment;
@@ -521,14 +565,12 @@ public class ZipEntry implements Cloneable {
      * @throws IllegalArgumentException if the byte array cannot be parsed into extra fields
      */
     public void setExtra(byte[] extra) throws IllegalArgumentException {
-        if(extra==null || extra.length==0) {
+        if (extra == null || extra.length == 0) {
             extraFields = null;
-        }
-        else {
+        } else {
             try {
                 setExtraFields(ExtraFieldUtils.parse(extra));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new IllegalArgumentException(e.getMessage());
             }
         }
@@ -546,7 +588,7 @@ public class ZipEntry implements Cloneable {
      * @return time expressed as the number of milliseconds since the epoch
      */
     protected static long dosToJavaTime(long dosTime) {
-        synchronized(CALENDAR) {
+        synchronized (CALENDAR) {
             CALENDAR.set(Calendar.YEAR, (int) ((dosTime >> 25) & 0x7f) + 1980);
             CALENDAR.set(Calendar.MONTH, (int) ((dosTime >> 21) & 0x0f) - 1);
             CALENDAR.set(Calendar.DATE, (int) (dosTime >> 16) & 0x1f);
@@ -565,7 +607,7 @@ public class ZipEntry implements Cloneable {
      * @return time expressed in the convoluted DOS time format
      */
     protected static long javaToDosTime(long javaTime) {
-        synchronized(CALENDAR) {
+        synchronized (CALENDAR) {
             CALENDAR.setTimeInMillis(javaTime);
 
             int year = CALENDAR.get(Calendar.YEAR);
@@ -574,11 +616,11 @@ public class ZipEntry implements Cloneable {
             }
 
             return ((year - 1980) << 25)
-                |  ((CALENDAR.get(Calendar.MONTH)+1) << 21)
-                |  (CALENDAR.get(Calendar.DAY_OF_MONTH) << 16)
-                |  (CALENDAR.get(Calendar.HOUR_OF_DAY) << 11)
-                |  (CALENDAR.get(Calendar.MINUTE) << 5)
-                |  (CALENDAR.get(Calendar.SECOND) >> 1);
+                    | ((CALENDAR.get(Calendar.MONTH) + 1) << 21)
+                    | (CALENDAR.get(Calendar.DAY_OF_MONTH) << 16)
+                    | (CALENDAR.get(Calendar.HOUR_OF_DAY) << 11)
+                    | (CALENDAR.get(Calendar.MINUTE) << 5)
+                    | (CALENDAR.get(Calendar.SECOND) >> 1);
         }
     }
 
@@ -607,7 +649,7 @@ public class ZipEntry implements Cloneable {
      * @return <code>true</code> if the given long is a valid unsigned int value, i.e. comprised between 0 and 2^32-1
      */
     protected boolean isValidUnsignedInt(long l) {
-        return l>=0 && l<=0xFFFFFFFFL;
+        return l >= 0 && l <= 0xFFFFFFFFL;
     }
 
 
@@ -623,10 +665,10 @@ public class ZipEntry implements Cloneable {
      */
     @Override
     public Object clone() throws CloneNotSupportedException {
-        ZipEntry ze = (ZipEntry)super.clone();
+        ZipEntry ze = (ZipEntry) super.clone();
 
-        if(extraFields!=null)
-            ze.extraFields = (Vector<ZipExtraField>)extraFields.clone();
+        if (extraFields != null)
+            ze.extraFields = (Vector<ZipExtraField>) extraFields.clone();
 
         return ze;
     }

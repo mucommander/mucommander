@@ -18,18 +18,17 @@
 
 package com.mucommander.ui.dialog.debug;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.Layout;
-
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.utils.MuLogging;
 import com.mucommander.utils.MuLogging.LogLevel;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This <code>java.util.logging</code> <code>Handler</code> collects the last log messages that were published by
@@ -37,19 +36,25 @@ import com.mucommander.utils.MuLogging.LogLevel;
  * Log records are kept in memory as a sliding window. The number of log records is controlled by the
  * {@link MuPreferences#LOG_BUFFER_SIZE} configuration variable: the more records, the more memory is used.
  *
+ * @author Maxence Bernard, Arik Hadas
  * @see DebugConsoleDialog
  * @see MuPreferences#LOG_BUFFER_SIZE
- * @author Maxence Bernard, Arik Hadas
  */
 public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 
-    /** Maximum number of log records to keep in memory */
+    /**
+     * Maximum number of log records to keep in memory
+     */
     private int bufferSize;
 
-    /** Contains the last LogRecord instances. */
+    /**
+     * Contains the last LogRecord instances.
+     */
     private List<LogbackLoggingEvent> loggingEventsList;
-    
-    /** The layout of the logging event representation */
+
+    /**
+     * The layout of the logging event representation
+     */
     private Layout<ILoggingEvent> loggingEventLayout;
 
     /**
@@ -57,8 +62,8 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      * <code>java.util.logging</code> when it is configured and should never be called directly.
      */
     public DebugConsoleAppender(Layout<ILoggingEvent> loggingEventsLayout) {
-    	this.loggingEventLayout = loggingEventsLayout;
-    	
+        this.loggingEventLayout = loggingEventsLayout;
+
         bufferSize = MuConfigurations.getPreferences().getVariable(MuPreference.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
         loggingEventsList = new LinkedList<LogbackLoggingEvent>();
     }
@@ -69,10 +74,10 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      * @return the last records that were collected by this handler.
      */
     public synchronized LoggingEvent[] getLogRecords() {
-    	LogbackLoggingEvent[] records = new LogbackLoggingEvent[0];
-    	records = loggingEventsList.toArray(records);
+        LogbackLoggingEvent[] records = new LogbackLoggingEvent[0];
+        records = loggingEventsList.toArray(records);
 
-    	return records;
+        return records;
     }
 
 
@@ -82,11 +87,11 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 
     @Override
     protected void append(ILoggingEvent record) {
-		if(loggingEventsList.size()== bufferSize)
+        if (loggingEventsList.size() == bufferSize)
             loggingEventsList.remove(0);
 
         loggingEventsList.add(new LogbackLoggingEvent(record));
-	}
+    }
 
     /**
      * Wraps a {@link ILoggingEvent} and overrides {@link #toString()} to have it return a properly formatted string
@@ -96,11 +101,15 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      */
     public class LogbackLoggingEvent implements LoggingEvent {
 
-    	/** The logging event */
-    	private ILoggingEvent loggingEvent;
+        /**
+         * The logging event
+         */
+        private ILoggingEvent loggingEvent;
 
-    	/** The log level of the event in mucommander's terms */
-    	private LogLevel logLevel;
+        /**
+         * The log level of the event in mucommander's terms
+         */
+        private LogLevel logLevel;
 
         LogbackLoggingEvent(ILoggingEvent lr) {
             this.loggingEvent = lr;
@@ -108,27 +117,27 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 
         /**
          * Returns a properly formatted string representation of the {@link ILoggingEvent}.
-         * 
+         *
          * @return a properly formatted string representation of the {@link ILoggingEvent}.
          */
         @Override
         public String toString() {
-        	return loggingEventLayout.doLayout(loggingEvent);
+            return loggingEventLayout.doLayout(loggingEvent);
         }
-        
-        
+
+
         ///////////////////////////////////////
         /// LogRecordListItem Implementation //
         ///////////////////////////////////////
-        
+
         public boolean isLevelEqualOrHigherThan(LogLevel level) {
-        	return getLevel().compareTo(level) <= 0;
+            return getLevel().compareTo(level) <= 0;
         }
-        
+
         public LogLevel getLevel() {
-        	if (logLevel == null)
-        		logLevel = MuLogging.getLevel(loggingEvent);
-        	return logLevel;
+            if (logLevel == null)
+                logLevel = MuLogging.getLevel(loggingEvent);
+            return logLevel;
         }
     }
 }

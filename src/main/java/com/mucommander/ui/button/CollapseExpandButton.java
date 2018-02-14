@@ -28,26 +28,30 @@ import java.awt.event.KeyListener;
  * CollapseExpandButton provides a expand/collapse functionality to a component: clicking the button expands/collapses
  * the associated component making it visible/unvisible, and resizes the window that contains it so that it properly
  * fits.
- *
+ * <p>
  * <p>This button shows an down/right arrow icon to reflect the current expanded/collapsed state.</p>
  *
  * @author Maxence Bernard
  */
 public class CollapseExpandButton extends ArrowButton implements ActionListener, KeyListener {
 
-    /** The component to collapse/expand */
+    /**
+     * The component to collapse/expand
+     */
     private Component comp;
 
-    /** True if this button is in the 'expanded' state and the associated component is being displayed */
+    /**
+     * True if this button is in the 'expanded' state and the associated component is being displayed
+     */
     private boolean expandedState;
 
-    
+
     /**
      * Creates a new CollapseExpandButton that renders the specified component visible/invisible.
      *
-     * @param label the label to use for this button
+     * @param label     the label to use for this button
      * @param component the component that is to be expanded/collapsed
-     * @param expanded initial expanded/collapsed state
+     * @param expanded  initial expanded/collapsed state
      */
     public CollapseExpandButton(String label, Component component, boolean expanded) {
         this.comp = component;
@@ -86,26 +90,25 @@ public class CollapseExpandButton extends ArrowButton implements ActionListener,
      * If specified, the window which contains the expanded/collapsed component will be repacked so that the component
      * fits properly.
      *
-     * @param expanded the new expanded state: true for expanded, false for collapsed.
+     * @param expanded   the new expanded state: true for expanded, false for collapsed.
      * @param packWindow If true, the window which contains the expanded/collapsed component will be repacked so that
-     * the component fits properly.
+     *                   the component fits properly.
      */
     private void setExpandedState(boolean expanded, boolean packWindow) {
-        if(expanded) {
+        if (expanded) {
             setArrowDirection(DOWN_DIRECTION);
             comp.setVisible(true);
-        }
-        else {
+        } else {
             setArrowDirection(RIGHT_DIRECTION);
             comp.setVisible(false);
         }
 
         this.expandedState = expanded;
 
-        if(packWindow) {
+        if (packWindow) {
             Container tla = getTopLevelAncestor();
-            if(tla instanceof Window)
-                ((Window)tla).pack();
+            if (tla instanceof Window)
+                ((Window) tla).pack();
         }
     }
 
@@ -126,9 +129,9 @@ public class CollapseExpandButton extends ArrowButton implements ActionListener,
 
     public void keyPressed(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
-        if(keyCode==KeyEvent.VK_RIGHT && !expandedState)
+        if (keyCode == KeyEvent.VK_RIGHT && !expandedState)
             setExpandedState(true, true);
-        else if(keyCode==KeyEvent.VK_LEFT && expandedState)
+        else if (keyCode == KeyEvent.VK_LEFT && expandedState)
             setExpandedState(false, true);
     }
 

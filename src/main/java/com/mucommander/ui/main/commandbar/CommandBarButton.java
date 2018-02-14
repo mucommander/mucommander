@@ -18,9 +18,6 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import java.awt.Dimension;
-import java.awt.Insets;
-
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.runtime.OsFamily;
@@ -34,78 +31,82 @@ import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 
+import java.awt.*;
+
 /**
  * Button that located in command-bar.
  * Button in command-bar are associated with an MuAction and could have an alternative action,
  * i.e an action that would replace the regular button's action when a modifier key is pressed.
- * 
+ *
  * @author Arik Hadas
  */
 public class CommandBarButton extends NonFocusableButton implements ConfigurationListener {
 
-	/** ID of the button's action */
-	private String actionId;
-	
-	/** Current icon scale factor */
+    /**
+     * ID of the button's action
+     */
+    private String actionId;
+
+    /**
+     * Current icon scale factor
+     */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
     protected static float scaleFactor = Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.COMMAND_BAR_ICON_SCALE,
-                                                                        MuPreferences.DEFAULT_COMMAND_BAR_ICON_SCALE));
-	
+            MuPreferences.DEFAULT_COMMAND_BAR_ICON_SCALE));
+
     public static CommandBarButton create(String actionId, MainFrame mainFrame) {
-		return actionId == null ? null : new CommandBarButton(actionId, mainFrame);
-	}
-	
-	protected CommandBarButton(String actionId, MainFrame mainFrame) {
-		
-		// Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        return actionId == null ? null : new CommandBarButton(actionId, mainFrame);
+    }
+
+    protected CommandBarButton(String actionId, MainFrame mainFrame) {
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
+        if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
+        } else {
+            setMargin(new Insets(3, 4, 3, 4));
         }
-        else {
-            setMargin(new Insets(3,4,3,4));
-        }
-        
+
         this.actionId = actionId;
-        
+
         setButtonAction(actionId, mainFrame);
-        
+
         // For Mac OS X whose default minimum width for buttons is enormous
         setMinimumSize(new Dimension(40, (int) getPreferredSize().getHeight()));
-        
+
         // Listen to configuration changes to reload command bar buttons when icon size has changed
         MuConfigurations.addPreferencesListener(this);
-	}
-	
-	/**
+    }
+
+    /**
      * Sets the given button's action, custom label showing the accelerator and icon taking into account the scale factor.
      */
-	public void setButtonAction(String actionId, MainFrame mainFrame) {
-    	MuAction action = ActionManager.getActionInstance(actionId, mainFrame);
-    	
-    	setAction(action);
-    	
+    public void setButtonAction(String actionId, MainFrame mainFrame) {
+        MuAction action = ActionManager.getActionInstance(actionId, mainFrame);
+
+        setAction(action);
+
         // Append the action's shortcut to the button's label
         String label;
         label = action.getLabel();
-        if(action.getAcceleratorText() != null)
+        if (action.getAcceleratorText() != null)
             label += " [" + action.getAcceleratorText() + ']';
         setText(label);
 
         // Scale icon if scale factor is different from 1.0
-        if(scaleFactor!=1.0f)
+        if (scaleFactor != 1.0f)
             setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
     }
-	
+
     /**
      * Return the id of the button's action
-     * 
+     *
      * @return id of the button's action
      */
     public String getActionId() {
-    	return actionId;
+        return actionId;
     }
-    
+
     ///////////////////////////////////
     // ConfigurationListener methods //
     ///////////////////////////////////
@@ -113,6 +114,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
     /**
      * Listens to certain configuration variables.
      */
+    @Override
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
 
@@ -124,4 +126,5 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
             setIcon(IconManager.getScaledIcon(((MuAction) getAction()).getIcon(), scaleFactor));
         }
     }
+
 }

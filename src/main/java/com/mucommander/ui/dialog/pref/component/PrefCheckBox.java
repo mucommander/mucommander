@@ -29,16 +29,16 @@ import java.awt.event.ItemListener;
  */
 public abstract class PrefCheckBox extends JCheckBox implements PrefComponent {
 
-	public PrefCheckBox(String description) {
-		super(description);
-	}
-	
-	public void addDialogListener(final PreferencesDialog dialog) {
-		addItemListener(new ItemListener() {
+    public PrefCheckBox(String description) {
+        super(description);
+    }
 
-			public void itemStateChanged(ItemEvent e) {
-				dialog.componentChanged(PrefCheckBox.this);
-			}
-		});
-	}
+    public void addDialogListener(final PreferencesDialog dialog) {
+        addItemListener(new ItemListener() {
+
+            public void itemStateChanged(ItemEvent e) {
+                dialog.componentChanged(PrefCheckBox.this);
+            }
+        });
+    }
 }

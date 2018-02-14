@@ -30,13 +30,15 @@ import com.mucommander.desktop.DesktopManager;
 class WindowsDesktopAdapter extends DefaultDesktopAdapter {
     protected static final String EXPLORER_NAME = "Explorer";
 
-    public String toString() {return "Windows Desktop";}
+    public String toString() {
+        return "Windows Desktop";
+    }
 
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
         // The Windows trash requires access to the Shell32 DLL, register the provider only if the Shell32 DLL
         // is available on the current runtime environment.
-        if(WindowsTrashProvider.isAvailable())
+        if (WindowsTrashProvider.isAvailable())
             DesktopManager.setTrashProvider(new WindowsTrashProvider());
     }
 
@@ -58,6 +60,6 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
         String extension = file.getExtension();
 
         // the isDirectory() test comes last as it is I/O bound
-        return extension!=null && extension.equalsIgnoreCase("exe") && !file.isDirectory();
+        return extension != null && extension.equalsIgnoreCase("exe") && !file.isDirectory();
     }
 }

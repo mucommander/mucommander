@@ -1,21 +1,20 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 
 package com.mucommander.commons.file.util;
@@ -165,22 +164,21 @@ public class PathUtils {
         try {
             destURL = FileURL.getFileURL(destPath);
             // destPath is absolute
-        }
-        catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             // destPath is relative (or malformed)
 
             // Abort now if there is no base folder
-            if(baseFolder==null)
+            if (baseFolder == null)
                 return null;
 
             String separator = baseFolder.getSeparator();
 
             // Start by cloning the base folder's URL, including credentials and properties
             FileURL baseFolderURL = baseFolder.getURL();
-            destURL  = (FileURL)baseFolderURL.clone();
+            destURL = (FileURL) baseFolderURL.clone();
             String basePath = destURL.getPath();
-            if(!destPath.equals(""))
-                destURL.setPath(basePath + (basePath.endsWith(separator)?"":separator) + destPath);
+            if (!destPath.equals(""))
+                destURL.setPath(basePath + (basePath.endsWith(separator) ? "" : separator) + destPath);
 
             // At this point we have the proper URL, except that the path may contain '.', '..' or '~' tokens.
             // => parse the URL from scratch to have the SchemeParser canonize them.
@@ -190,34 +188,33 @@ public class PathUtils {
                 // such as '/' are properly parsed.
                 destURL.setCredentials(baseFolderURL.getCredentials());
                 destURL.importProperties(baseFolderURL);
-            }
-            catch(MalformedURLException e2) {
+            } catch (MalformedURLException e2) {
                 return null;
             }
         }
 
         // No point in going any further if the URL cannot be resolved into a file
         destFile = FileFactory.getFile(destURL);
-        if(destFile ==null) {
+        if (destFile == null) {
             LOGGER.info("could not resolve a file for {}", destURL);
             return null;
         }
 
         // Test if the destination file exists
         boolean destFileExists = destFile.exists();
-        if(destFileExists) {
+        if (destFileExists) {
             // Note: path to archives must end with a trailing separator character to refer to the archive as a folder,
             //  if they don't, they'll refer to the archive as a file.
-            if(destFile.isDirectory() || (destPath.endsWith(destFile.getSeparator()) && destFile.isBrowsable()))
+            if (destFile.isDirectory() || (destPath.endsWith(destFile.getSeparator()) && destFile.isBrowsable()))
                 return new ResolvedDestination(destFile, ResolvedDestination.EXISTING_FOLDER, destFile);
         }
 
         // Test if the destination's parent exists, if not the path is not a valid destination
         AbstractFile destParent = destFile.getParent();
-        if(destParent==null || !destParent.exists())
+        if (destParent == null || !destParent.exists())
             return null;
 
-        return new ResolvedDestination(destFile, destFileExists?ResolvedDestination.EXISTING_FILE:ResolvedDestination.NEW_FILE, destParent);
+        return new ResolvedDestination(destFile, destFileExists ? ResolvedDestination.EXISTING_FILE : ResolvedDestination.NEW_FILE, destParent);
     }
 
 
@@ -229,7 +226,7 @@ public class PathUtils {
      */
     public static String removeLeadingSeparator(String path) {
         char firstChar;
-        if(path.length()>0 && ((firstChar=path.charAt(0))=='/' || firstChar=='\\'))
+        if (path.length() > 0 && ((firstChar = path.charAt(0)) == '/' || firstChar == '\\'))
             return path.substring(1, path.length());
 
         return path;
@@ -243,7 +240,7 @@ public class PathUtils {
      * @return the modified path, free of any leading separator
      */
     public static String removeLeadingSeparator(String path, String separator) {
-        if(path.startsWith(separator))
+        if (path.startsWith(separator))
             return path.substring(separator.length(), path.length());
 
         return path;
@@ -258,8 +255,8 @@ public class PathUtils {
     public static String removeTrailingSeparator(String path) {
         char lastChar;
         int len = path.length();
-        if(len>0 && ((lastChar=path.charAt(len-1))=='/' || lastChar=='\\'))
-            return path.substring(0, len-1);
+        if (len > 0 && ((lastChar = path.charAt(len - 1)) == '/' || lastChar == '\\'))
+            return path.substring(0, len - 1);
 
         return path;
     }
@@ -272,8 +269,8 @@ public class PathUtils {
      * @return the modified path, free of any trailing separator
      */
     public static String removeTrailingSeparator(String path, String separator) {
-        if(path.endsWith(separator))
-            return path.substring(0, path.length()-separator.length());
+        if (path.endsWith(separator))
+            return path.substring(0, path.length() - separator.length());
 
         return path;
     }
@@ -296,13 +293,13 @@ public class PathUtils {
      * @return <code>true</code> if both paths are equal
      */
     public static boolean pathEquals(String path1, String path2, String separator) {
-        if(path1==null)
-            return path2==null;
+        if (path1 == null)
+            return path2 == null;
 
-        if(path2==null)
-            return path1==null;
-        
-        if(path1.equals(path2))
+        if (path2 == null)
+            return path1 == null;
+
+        if (path1.equals(path2))
             return true;
 
         int len1 = path1.length();
@@ -310,8 +307,8 @@ public class PathUtils {
         int separatorLen = separator.length();
 
         // If the difference between the 2 strings is just a trailing path separator, we consider the paths as equal
-        if(Math.abs(len1-len2)==separatorLen && (len1>len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
-            String diff = len1>len2 ? path1.substring(len1-separatorLen) : path2.substring(len2-separatorLen);
+        if (Math.abs(len1 - len2) == separatorLen && (len1 > len2 ? path1.startsWith(path2) : path2.startsWith(path1))) {
+            String diff = len1 > len2 ? path1.substring(len1 - separatorLen) : path2.substring(len2 - separatorLen);
             return separator.equals(diff);
         }
 
@@ -323,7 +320,7 @@ public class PathUtils {
      * {@link #pathEquals(String, String, String)} in that hashcodes are trailing separator-invariant:
      * <code>path1.equals(path2)</code> implies <code>path1Hashcode==path2Hashcode.hashCode()</code>, even if path1
      * ends with a separator and path2 does not or vice-versa.
-     * 
+     *
      * @param path the path for which to return a hashcode
      * @param separator separator of the given path
      * @return a trailing separator-insensitive hashcode
@@ -331,8 +328,8 @@ public class PathUtils {
     public static int getPathHashCode(String path, String separator) {
         // #equals(Object) is trailing separator insensitive, so the hashCode must be trailing separator invariant
         return path.endsWith(separator)
-                ?path.substring(0, path.length()-separator.length()).hashCode()
-                :path.hashCode();
+                ? path.substring(0, path.length() - separator.length()).hashCode()
+                : path.hashCode();
     }
 
 
@@ -359,16 +356,16 @@ public class PathUtils {
     public static String removeLeadingFragments(String path, String separator, int nbFragments) {
         path = removeLeadingSeparator(path, separator);
 
-        if(nbFragments==0)
+        if (nbFragments == 0)
             return path;
 
-        int pos=-1;
-        for(int i=0; i<nbFragments && (pos=path.indexOf(separator, pos+1))!=-1; i++);
+        int pos = -1;
+        for (int i = 0; i < nbFragments && (pos = path.indexOf(separator, pos + 1)) != -1; i++) ;
 
-        if(pos==-1 || pos==path.length()-1)
+        if (pos == -1 || pos == path.length() - 1)
             return "";
 
-        return path.substring(pos+1, path.length());
+        return path.substring(pos + 1, path.length());
     }
 
 
@@ -399,16 +396,16 @@ public class PathUtils {
      * @return the depth of the given path
      */
     public static int getDepth(String path, String separator) {
-        if(path.equals("") || path.equals(separator))
+        if (path.equals("") || path.equals(separator))
             return 0;
 
         int depth = 1;
-        int pos = path.startsWith(separator)?1:0;
+        int pos = path.startsWith(separator) ? 1 : 0;
 
-        while ((pos=path.indexOf(separator, pos+1))!=-1)
+        while ((pos = path.indexOf(separator, pos + 1)) != -1)
             depth++;
 
-        if(path.endsWith(separator))
+        if (path.endsWith(separator))
             depth--;
 
         return depth;

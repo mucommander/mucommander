@@ -19,19 +19,6 @@
 
 package com.mucommander.ui.dialog.server;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
-import java.text.ParseException;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
@@ -39,6 +26,13 @@ import com.mucommander.commons.file.protocol.sftp.SFTPFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.text.ParseException;
 
 
 /**
@@ -84,7 +78,7 @@ public class SFTPPanel extends ServerPanel {
         // Password field, initialized to ""
         passwordField = new JPasswordField();
         addTextFieldListeners(passwordField, false);
-        addRow(Translator.get("password")+"/"+Translator.get("server_connect_dialog.passphrase"), passwordField, 15);
+        addRow(Translator.get("password") + "/" + Translator.get("server_connect_dialog.passphrase"), passwordField, 15);
 
         // Key file field, initialized to last file
         JPanel privateKeyChooser = new JPanel(new BorderLayout());
@@ -96,18 +90,19 @@ public class SFTPPanel extends ServerPanel {
 
         JButton chooseFileButton = new JButton("...");
         // Mac OS X: small component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if (OsFamily.MAC_OS_X.isCurrent())
             chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
 
         chooseFileButton.addActionListener(new ActionListener() {
-                JFileChooser fc = new JFileChooser(System.getProperty("user.home") + System.getProperty("file.separator") + ".ssh");
-                public void actionPerformed(ActionEvent e) {
-                    int returnVal = fc.showOpenDialog(mainFrame);
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        privateKeyPathField.setText(fc.getSelectedFile().getAbsolutePath());
-                    }
-                }
-            }
+                                               JFileChooser fc = new JFileChooser(System.getProperty("user.home") + System.getProperty("file.separator") + ".ssh");
+
+                                               public void actionPerformed(ActionEvent e) {
+                                                   int returnVal = fc.showOpenDialog(mainFrame);
+                                                   if (returnVal == JFileChooser.APPROVE_OPTION) {
+                                                       privateKeyPathField.setText(fc.getSelectedFile().getAbsolutePath());
+                                                   }
+                                               }
+                                           }
         );
         privateKeyChooser.add(chooseFileButton, BorderLayout.EAST);
 
@@ -142,14 +137,14 @@ public class SFTPPanel extends ServerPanel {
     @Override
     FileURL getServerURL() throws MalformedURLException {
         updateValues();
-        if(!lastInitialDir.startsWith("/"))
-            lastInitialDir = "/"+lastInitialDir;
+        if (!lastInitialDir.startsWith("/"))
+            lastInitialDir = "/" + lastInitialDir;
 
-        FileURL url = FileURL.getFileURL(FileProtocols.SFTP+"://"+lastServer+lastInitialDir);
+        FileURL url = FileURL.getFileURL(FileProtocols.SFTP + "://" + lastServer + lastInitialDir);
 
         // Set credentials
         url.setCredentials(new Credentials(lastUsername, lastPassword));
-        if(!"".equals(lastKeyPath.trim()))
+        if (!"".equals(lastKeyPath.trim()))
             url.setProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME, lastKeyPath);
 
         // Set port
@@ -167,8 +162,10 @@ public class SFTPPanel extends ServerPanel {
     public void dialogValidated() {
         // Commits the current spinner value in case it was being edited and 'enter' was pressed
         // (the spinner value would otherwise not be committed)
-        try { portSpinner.commitEdit(); }
-        catch(ParseException e) { }
+        try {
+            portSpinner.commitEdit();
+        } catch (ParseException e) {
+        }
 
         updateValues();
     }

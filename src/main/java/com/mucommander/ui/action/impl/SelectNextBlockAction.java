@@ -18,19 +18,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action moves the current {@link FileTable}'s selection to the next 'block'.
@@ -39,11 +33,13 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class SelectNextBlockAction extends SelectForwardAction {
 
-    /** Number of file/rows a block represents */
+    /**
+     * Number of file/rows a block represents
+     */
     // TODO: make this value configurable
     private static final int BLOCK_SIZE = 5;
 
-    public SelectNextBlockAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectNextBlockAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -52,13 +48,13 @@ public class SelectNextBlockAction extends SelectForwardAction {
         return BLOCK_SIZE;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
-        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
             return new SelectNextBlockAction(mainFrame, properties);
         }
     }

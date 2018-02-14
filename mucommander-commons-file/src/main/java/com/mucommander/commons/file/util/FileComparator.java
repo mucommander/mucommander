@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -104,9 +104,9 @@ public class FileComparator implements Comparator<AbstractFile> {
      */
     private int getCharacterValue(int c) {
         // Note: max char value is 65535
-        if(Character.isLetter(c))
+        if (Character.isLetter(c))
             c += 131070;    // yields a value higher than any other symbol or digit
-        else if(Character.isDigit(c))
+        else if (Character.isDigit(c))
             c += 65535;     // yields a value higher than any other symbol
 
         // else we have a symbol
@@ -121,11 +121,11 @@ public class FileComparator implements Comparator<AbstractFile> {
      */
     private String removeLeadingZeros(String s) {
         int len = s.length();
-        int i=0;
-        while(i<len && s.charAt(i)=='0')
+        int i = 0;
+        while (i < len && s.charAt(i) == '0')
             i++;
 
-        if(i>0)
+        if (i > 0)
             return s.substring(i, len);
 
         return s;
@@ -145,14 +145,14 @@ public class FileComparator implements Comparator<AbstractFile> {
      */
     private int compareStrings(String s1, String s2, boolean ignoreCase, boolean nullProtection) {
         // Protect against null values, only if requested
-        if(nullProtection) {
-            if(s1==null && s2!=null)	    // s1 is null, s2 isn't
+        if (nullProtection) {
+            if (s1 == null && s2 != null)        // s1 is null, s2 isn't
                 return -1;
-            else if(s1!=null && s2==null)	// s2 is null, s1 isn't
+            else if (s1 != null && s2 == null)    // s2 is null, s1 isn't
                 return 1;
-            // At this point, either both strings are null, or none of them are
+                // At this point, either both strings are null, or none of them are
             else {
-                if (s1==null)		        // Both strings are null
+                if (s1 == null)                // Both strings are null
                     return 0;
                 // else: Both strings are not null, go on with the comparison
             }
@@ -163,29 +163,29 @@ public class FileComparator implements Comparator<AbstractFile> {
         //
         // This special order applies only if both strings contain a number and have the same prefix. Otherwise, the general order applies.
         Matcher m1 = FILENAME_WITH_NUMBER_PATTERN.matcher(s1);
-        if(m1.find()) {
+        if (m1.find()) {
             Matcher m2 = FILENAME_WITH_NUMBER_PATTERN.matcher(s2);
-            if(m2.find()) {
+            if (m2.find()) {
                 // So we got two filenames that both contain a number, check if they have the same prefix
                 int start1 = m1.start();
                 int start2 = m2.start();
 
                 // Note: compare prefixes only if start indexes match, faster that way
-                if(start1==start2 && (start1==0 || s1.substring(0, start1).equals(s2.substring(0, start2)))) {
+                if (start1 == start2 && (start1 == 0 || s1.substring(0, start1).equals(s2.substring(0, start2)))) {
                     String g1 = removeLeadingZeros(m1.group());
                     String g2 = removeLeadingZeros(m2.group());
 
                     int g1Len = g1.length();
                     int g2Len = g2.length();
 
-                    if(g1Len!=g2Len)
+                    if (g1Len != g2Len)
                         return g1Len - g2Len;
 
                     int c1, c2;
-                    for (int i=0; i<g1Len && i<g2Len; i++) {
+                    for (int i = 0; i < g1Len && i < g2Len; i++) {
                         c1 = g1.charAt(i);
                         c2 = g2.charAt(i);
-                        if(c1 != c2)
+                        if (c1 != c2)
                             return c1 - c2;
                     }
                 }
@@ -195,11 +195,11 @@ public class FileComparator implements Comparator<AbstractFile> {
         int n1 = s1.length();
         int n2 = s2.length();
 
-        for (int i=0; i<n1 && i<n2; i++) {
+        for (int i = 0; i < n1 && i < n2; i++) {
             int c1 = s1.charAt(i);
             int c2 = s2.charAt(i);
 
-            if(ignoreCase) {
+            if (ignoreCase) {
                 if (c1 != c2) {
                     c1 = Character.toUpperCase(c1);
                     c2 = Character.toUpperCase(c2);
@@ -211,12 +211,11 @@ public class FileComparator implements Comparator<AbstractFile> {
                         c2 = Character.toLowerCase(c2);
 
                         if (c1 != c2)
-                            return getCharacterValue(c1) -  getCharacterValue(c2);
+                            return getCharacterValue(c1) - getCharacterValue(c2);
                     }
                 }
-            }
-            else if (c1 != c2) {
-                return getCharacterValue(c1) -  getCharacterValue(c2);
+            } else if (c1 != c2) {
+                return getCharacterValue(c1) - getCharacterValue(c2);
             }
         }
 
@@ -227,49 +226,43 @@ public class FileComparator implements Comparator<AbstractFile> {
     ///////////////////////////////
     // Comparator implementation //
     ///////////////////////////////
-    
+
     public int compare(AbstractFile f1, AbstractFile f2) {
         long diff;
 
         boolean is1Directory = f1.isDirectory();
         boolean is2Directory = f2.isDirectory();
 
-        if(directoriesFirst) {
-            if(is1Directory && !is2Directory)
-                return -1;	// ascending has no effect on the result (a directory is always first) so let's return
-            else if(is2Directory && !is1Directory)
-                return 1;	// ascending has no effect on the result (a directory is always first) so let's return
+        if (directoriesFirst) {
+            if (is1Directory && !is2Directory)
+                return -1;    // ascending has no effect on the result (a directory is always first) so let's return
+            else if (is2Directory && !is1Directory)
+                return 1;    // ascending has no effect on the result (a directory is always first) so let's return
 
             // At this point, either both files are directories or none of them are
         }
 
-        if (criterion == SIZE_CRITERION)  {
+        if (criterion == SIZE_CRITERION) {
             // Consider that directories have a size of 0
-            long fileSize1 = is1Directory?0:f1.getSize();
-            long fileSize2 = is2Directory?0:f2.getSize();
+            long fileSize1 = is1Directory ? 0 : f1.getSize();
+            long fileSize2 = is2Directory ? 0 : f2.getSize();
 
             // Returns file1 size - file2 size, file size of -1 (unavailable) is considered as enormous (max long value)
-            diff = (fileSize1==-1?Long.MAX_VALUE:fileSize1)-(fileSize2==-1?Long.MAX_VALUE:fileSize2);
-        }
-        else if (criterion == DATE_CRITERION) {
-            diff = f1.getDate()-f2.getDate();
-        }
-        else if (criterion == PERMISSIONS_CRITERION) {
+            diff = (fileSize1 == -1 ? Long.MAX_VALUE : fileSize1) - (fileSize2 == -1 ? Long.MAX_VALUE : fileSize2);
+        } else if (criterion == DATE_CRITERION) {
+            diff = f1.getDate() - f2.getDate();
+        } else if (criterion == PERMISSIONS_CRITERION) {
             diff = f1.getPermissions().getIntValue() - f2.getPermissions().getIntValue();
-        }
-        else if (criterion == EXTENSION_CRITERION) {
+        } else if (criterion == EXTENSION_CRITERION) {
             diff = compareStrings(f1.getExtension(), f2.getExtension(), true, true);
-        }
-        else if (criterion == OWNER_CRITERION) {
+        } else if (criterion == OWNER_CRITERION) {
             diff = compareStrings(f1.getOwner(), f2.getOwner(), true, true);
-        }
-        else if (criterion == GROUP_CRITERION) {
+        } else if (criterion == GROUP_CRITERION) {
             diff = compareStrings(f1.getGroup(), f2.getGroup(), true, true);
-        }
-        else {      // criterion == NAME_CRITERION
+        } else {      // criterion == NAME_CRITERION
             diff = compareStrings(f1.getName(), f2.getName(), true, false);
 
-            if(diff==0) {
+            if (diff == 0) {
                 // This should never happen unless the current filesystem allows a directory to have
                 // several files with different case variations of the same name.
                 // AFAIK, no OS/filesystem allows this, but just to be safe.
@@ -279,20 +272,20 @@ public class FileComparator implements Comparator<AbstractFile> {
             }
         }
 
-        if(criterion!=NAME_CRITERION && diff==0)	// If both files have the same criterion's value, compare names
+        if (criterion != NAME_CRITERION && diff == 0)    // If both files have the same criterion's value, compare names
             diff = compareStrings(f1.getName(), f2.getName(), true, false);
 
         // Cast long value to int, without overflowing the int if the long value exceeds the min or max int value
         int intValue;
-        
-        if(diff>Integer.MAX_VALUE)
-            intValue = Integer.MAX_VALUE;   // 2147483647
-        else if(diff<Integer.MIN_VALUE+1)   // Need that +1 so that the int is not overflowed if ascending order is enabled (i.e. int is negated)
-            intValue = Integer.MIN_VALUE+1; // 2147483647
-        else
-            intValue = (int)diff;
 
-        return ascending?intValue:-intValue; // Note: ascending is used more often, more efficient to negate for descending
+        if (diff > Integer.MAX_VALUE)
+            intValue = Integer.MAX_VALUE;   // 2147483647
+        else if (diff < Integer.MIN_VALUE + 1)   // Need that +1 so that the int is not overflowed if ascending order is enabled (i.e. int is negated)
+            intValue = Integer.MIN_VALUE + 1; // 2147483647
+        else
+            intValue = (int) diff;
+
+        return ascending ? intValue : -intValue; // Note: ascending is used more often, more efficient to negate for descending
     }
 
 
@@ -300,10 +293,10 @@ public class FileComparator implements Comparator<AbstractFile> {
      * Returns true only if the given object is a FileComparator using the same criterion and ascending/descending order.
      */
     public boolean equals(Object o) {
-        if(! (o instanceof FileComparator))
+        if (!(o instanceof FileComparator))
             return false;
 
-        FileComparator fc = (FileComparator)o;
-        return criterion ==fc.criterion && ascending==fc.ascending;
+        FileComparator fc = (FileComparator) o;
+        return criterion == fc.criterion && ascending == fc.ascending;
     }
 }

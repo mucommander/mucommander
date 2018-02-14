@@ -25,8 +25,8 @@ import com.mucommander.ui.main.table.FileTable;
  * FileTable. Those classes need to be registered to receive those events, this can be done by calling
  * {@link com.mucommander.ui.main.table.FileTable#addTableSelectionListener(TableSelectionListener) FileTable.addTableSelectionListener()}.
  *
- * @see com.mucommander.ui.main.table.FileTable
  * @author Maxence Bernard
+ * @see com.mucommander.ui.main.table.FileTable
  */
 public interface TableSelectionListener {
 

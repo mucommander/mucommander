@@ -18,30 +18,31 @@
 
 package com.mucommander.shell;
 
-import java.io.OutputStream;
-import java.util.Iterator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.RuntimeConstants;
 import com.mucommander.xml.XmlAttributes;
 import com.mucommander.xml.XmlWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.OutputStream;
+import java.util.Iterator;
 
 /**
  * Used to save the content of the {@link com.mucommander.shell.ShellHistoryManager} to a file.
+ *
  * @author Nicolas Rinaudo
  */
 class ShellHistoryWriter implements ShellHistoryConstants {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShellHistoryWriter.class);
-	
-	/**
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShellHistoryWriter.class);
+
+    /**
      * Writes the content of the {@link com.mucommander.shell.ShellHistoryManager} to the specified output stream.
+     *
      * @param stream where to save the shell history.
      */
     public static void write(OutputStream stream) {
         Iterator<String> history; // Iterator on the shell history.
-        XmlWriter        out;     // Where to write the shell history to.
+        XmlWriter out;     // Where to write the shell history to.
 
         // Initialises writing.
         history = ShellHistoryManager.getHistoryIterator();
@@ -58,14 +59,13 @@ class ShellHistoryWriter implements ShellHistoryConstants {
             out.println();
 
             // Writes the content of the shell history.
-            while(history.hasNext()) {
+            while (history.hasNext()) {
                 out.startElement(COMMAND_ELEMENT);
                 out.writeCData(history.next());
                 out.endElement(COMMAND_ELEMENT);
             }
             out.endElement(ROOT_ELEMENT);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.debug("Failed to write shell history", e);
         }
     }

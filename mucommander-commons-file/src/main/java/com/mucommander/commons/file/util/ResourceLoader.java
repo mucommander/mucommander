@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,7 +23,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +102,7 @@ public class ResourceLoader {
      * @see #getRootPackageAsFile(Class)
      */
     public static URL getPackageResourceAsURL(Package ppackage, String name, ClassLoader classLoader, AbstractFile rootPackageFile) {
-        return ResourceLoader.getResourceAsURL(getRelativePackagePath(ppackage)+"/"+name, classLoader, rootPackageFile);
+        return ResourceLoader.getResourceAsURL(getRelativePackagePath(ppackage) + "/" + name, classLoader, rootPackageFile);
     }
 
     /**
@@ -141,12 +140,12 @@ public class ResourceLoader {
     public static URL getResourceAsURL(String path, ClassLoader classLoader, AbstractFile rootPackageFile) {
         path = removeLeadingSlash(path);
 
-        if(rootPackageFile==null)
+        if (rootPackageFile == null)
             return classLoader.getResource(path);
 
         String separator = rootPackageFile.getSeparator();
         String nativePath;
-        if(separator.equals("/"))
+        if (separator.equals("/"))
             nativePath = path;
         else
             nativePath = path.replace("/", separator);
@@ -156,22 +155,20 @@ public class ResourceLoader {
             // given root package file.
             Enumeration<URL> resourceEnum = classLoader.getResources(path);
             String rootPackagePath = rootPackageFile.getAbsolutePath();
-            String resourcePath = rootPackageFile.getAbsolutePath(true)+nativePath;
+            String resourcePath = rootPackageFile.getAbsolutePath(true) + nativePath;
             URL resourceURL;
-            while(resourceEnum.hasMoreElements()) {
+            while (resourceEnum.hasMoreElements()) {
                 resourceURL = resourceEnum.nextElement();
 
-                if("jar".equals(resourceURL.getProtocol())) {
-                    if(getJarFilePath(resourceURL).equals(rootPackagePath))
+                if ("jar".equals(resourceURL.getProtocol())) {
+                    if (getJarFilePath(resourceURL).equals(rootPackagePath))
                         return resourceURL;
-                }
-                else {
-                    if(normalizeUrlPath(getDecodedURLPath(resourceURL)).equals(resourcePath))
+                } else {
+                    if (normalizeUrlPath(getDecodedURLPath(resourceURL)).equals(resourcePath))
                         return resourceURL;
                 }
             }
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             LOGGER.info("Failed to lookup resource {}", path, e);
             return null;
         }
@@ -203,7 +200,7 @@ public class ResourceLoader {
      * @return an InputStream that allows to read the resource, or <code>null</code> if the resource couldn't be located
      */
     public static InputStream getPackageResourceAsStream(Package ppackage, String name, ClassLoader classLoader, AbstractFile rootPackageFile) {
-        return ResourceLoader.getResourceAsStream(getRelativePackagePath(ppackage)+"/"+name, classLoader, rootPackageFile);
+        return ResourceLoader.getResourceAsStream(getRelativePackagePath(ppackage) + "/" + name, classLoader, rootPackageFile);
     }
 
     /**
@@ -241,9 +238,8 @@ public class ResourceLoader {
     public static InputStream getResourceAsStream(String path, ClassLoader classLoader, AbstractFile rootPackageFile) {
         try {
             URL resourceURL = getResourceAsURL(path, classLoader, rootPackageFile);
-            return resourceURL==null?null:resourceURL.openStream();
-        }
-        catch(IOException e) {
+            return resourceURL == null ? null : resourceURL.openStream();
+        } catch (IOException e) {
             return null;
         }
     }
@@ -272,7 +268,7 @@ public class ResourceLoader {
      * @return an AbstractFile that represents the resource, or <code>null</code> if the resource couldn't be located
      */
     public static AbstractFile getPackageResourceAsFile(Package ppackage, String name, ClassLoader classLoader, AbstractFile rootPackageFile) {
-        return ResourceLoader.getResourceAsFile(getRelativePackagePath(ppackage)+"/"+name, classLoader, rootPackageFile);
+        return ResourceLoader.getResourceAsFile(getRelativePackagePath(ppackage) + "/" + name, classLoader, rootPackageFile);
     }
 
     /**
@@ -314,20 +310,19 @@ public class ResourceLoader {
      * @return an AbstractFile that represents the resource, or <code>null</code> if the resource couldn't be located
      */
     public static AbstractFile getResourceAsFile(String path, ClassLoader classLoader, AbstractFile rootPackageFile) {
-        if(classLoader==null)
+        if (classLoader == null)
             classLoader = getDefaultClassLoader();
 
         path = removeLeadingSlash(path);
 
         URL aClassURL = getResourceAsURL(path, classLoader, rootPackageFile);
-        if(aClassURL==null)
+        if (aClassURL == null)
             return null;        // no resource under that path
 
-        if("jar".equals(aClassURL.getProtocol())) {
+        if ("jar".equals(aClassURL.getProtocol())) {
             try {
-                return ((AbstractArchiveFile)FileFactory.getFile(getJarFilePath(aClassURL))).getArchiveEntryFile(path);
-            }
-            catch(Exception e) {
+                return ((AbstractArchiveFile) FileFactory.getFile(getJarFilePath(aClassURL))).getArchiveEntryFile(path);
+            } catch (Exception e) {
                 // Shouldn't normally happen, unless the JAR file is corrupt or cannot be parsed by the file API
                 return null;
             }
@@ -349,20 +344,20 @@ public class ResourceLoader {
      */
     public static AbstractFile getRootPackageAsFile(Class<?> aClass) {
         ClassLoader classLoader = aClass.getClassLoader();
-        if(classLoader==null)
+        if (classLoader == null)
             classLoader = getDefaultClassLoader();
 
         String aClassRelPath = getRelativeClassPath(aClass);
         URL aClassURL = getResourceAsURL(aClassRelPath, classLoader, null);
 
-        if(aClassURL==null)
+        if (aClassURL == null)
             return null;    // no resource under that path
 
-        if("jar".equals(aClassURL.getProtocol()))
+        if ("jar".equals(aClassURL.getProtocol()))
             return FileFactory.getFile(getJarFilePath(aClassURL));
 
         String aClassPath = getLocalFilePath(aClassURL);
-        return FileFactory.getFile(aClassPath.substring(0, aClassPath.length()-aClassRelPath.length()));
+        return FileFactory.getFile(aClassPath.substring(0, aClassPath.length() - aClassRelPath.length()));
     }
 
     /**
@@ -386,7 +381,7 @@ public class ResourceLoader {
      * @return a path to the given package
      */
     public static String getRelativeClassPath(Class<?> cclass) {
-        return cclass.getName().replace('.', '/')+".class";
+        return cclass.getName().replace('.', '/') + ".class";
     }
 
 
@@ -410,11 +405,11 @@ public class ResourceLoader {
         // http://www.mucommander.com/webstart/nightly/mucommander.jar!/com/mucommander/RuntimeConstants.class
 
         int pos = path.indexOf(".jar!");
-        if(pos==-1)
+        if (pos == -1)
             return path;
 
         // Strip out the part after ".jar" and normalize the path
-        return normalizeUrlPath(path.substring(0, pos+4));
+        return normalizeUrlPath(path.substring(0, pos + 4));
     }
 
     /**
@@ -452,20 +447,20 @@ public class ResourceLoader {
      */
     private static String normalizeUrlPath(String path) {
         // Don't touch http/https URLs
-        if(path.startsWith("http:") || path.startsWith("https:"))
+        if (path.startsWith("http:") || path.startsWith("https:"))
             return path;
 
         // Remove the leading "file:" (if any)
-        if(path.startsWith("file:"))
+        if (path.startsWith("file:"))
             path = path.substring(5, path.length());
 
         // Under platforms that use root drives (Windows and OS/2), strip out the leading '/'
-        if(LocalFile.hasRootDrives() && path.startsWith("/"))
+        if (LocalFile.hasRootDrives() && path.startsWith("/"))
             path = removeLeadingSlash(path);
 
         // Use the local file separator
         String separator = LocalFile.SEPARATOR;
-        if(!"/".equals(separator))
+        if (!"/".equals(separator))
             path = path.replace("/", separator);
 
         return path;
@@ -490,8 +485,7 @@ public class ResourceLoader {
             // using this value has been tested without luck under Mac OS X where the value equals "MacRoman" but
             // URL are actually encoded in UTF-8. The bottom line is that we blindly use UTF-8 to decode resource URLs.
             return URLDecoder.decode(url.getPath(), "UTF-8");
-        }
-        catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             // This should never happen, UTF-8 is necessarily supported by the Java runtime
             return null;
         }

@@ -23,41 +23,41 @@ import javax.swing.table.TableColumn;
 
 public class EditableHeaderTableColumn extends TableColumn {
 
-	protected TableCellEditor headerEditor;
+    protected TableCellEditor headerEditor;
 
-	protected boolean isHeaderEditable;
+    protected boolean isHeaderEditable;
 
-	public EditableHeaderTableColumn() {
-		isHeaderEditable = false;
-	}
+    public EditableHeaderTableColumn() {
+        isHeaderEditable = false;
+    }
 
-	public void setHeaderEditor(TableCellEditor headerEditor) {
-		this.headerEditor = headerEditor;
-	}
+    public void setHeaderEditor(TableCellEditor headerEditor) {
+        this.headerEditor = headerEditor;
+    }
 
-	public TableCellEditor getHeaderEditor() {
-		return headerEditor;
-	}
+    public TableCellEditor getHeaderEditor() {
+        return headerEditor;
+    }
 
-	public void setHeaderEditable(boolean isEditable) {
-		isHeaderEditable = isEditable;
-	}
+    public void setHeaderEditable(boolean isEditable) {
+        isHeaderEditable = isEditable;
+    }
 
-	public boolean isHeaderEditable() {
-		return headerEditor != null && isHeaderEditable;
-	}
+    public boolean isHeaderEditable() {
+        return headerEditor != null && isHeaderEditable;
+    }
 
-	public void copyValues(TableColumn base) {
-		modelIndex = base.getModelIndex();
-		identifier = base.getIdentifier();
-		width = base.getWidth();
-		minWidth = base.getMinWidth();
-		setPreferredWidth(base.getPreferredWidth());
-		maxWidth = base.getMaxWidth();
-		headerRenderer = base.getHeaderRenderer();
-		headerValue = base.getHeaderValue();
-		cellRenderer = base.getCellRenderer();
-		cellEditor = base.getCellEditor();
-		isResizable = base.getResizable();
-	}
+    public void copyValues(TableColumn base) {
+        modelIndex = base.getModelIndex();
+        identifier = base.getIdentifier();
+        width = base.getWidth();
+        minWidth = base.getMinWidth();
+        setPreferredWidth(base.getPreferredWidth());
+        maxWidth = base.getMaxWidth();
+        headerRenderer = base.getHeaderRenderer();
+        headerValue = base.getHeaderValue();
+        cellRenderer = base.getCellRenderer();
+        cellEditor = base.getCellEditor();
+        isResizable = base.getResizable();
+    }
 }

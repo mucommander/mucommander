@@ -31,21 +31,21 @@ import java.io.OutputStream;
  * In order to prevent system or muCommander failures to corrupt configuration files,
  * the BackupOutputStream implements the following algorithm:
  * <ul>
- *   <li>Write its content to a backup file instead of the requested file</li>
- *   <li>When close is called, copy the content of the backup file over the original file</li>
+ * <li>Write its content to a backup file instead of the requested file</li>
+ * <li>When close is called, copy the content of the backup file over the original file</li>
  * </ul>
  * This way, if a crash was to happen while configuration files are being saved, either of the
  * following will happen:
  * <ul>
- *   <li>
- *     The backup file is not properly saved, but the original configuration is left untouched.
- *     We have lost <i>some</i> information (modifications since last save) but not <i>all</i>.
- *   </li>
- *   <li>
- *     The original file is not properly saved, but the backup file is correct. This is easy to check,
- *     as the backup and original file should always have the same size. If they don't, then the backup
- *     file should be used rather than the original one.
- *   </li>
+ * <li>
+ * The backup file is not properly saved, but the original configuration is left untouched.
+ * We have lost <i>some</i> information (modifications since last save) but not <i>all</i>.
+ * </li>
+ * <li>
+ * The original file is not properly saved, but the backup file is correct. This is easy to check,
+ * as the backup and original file should always have the same size. If they don't, then the backup
+ * file should be used rather than the original one.
+ * </li>
  * </ul>
  * </p>
  * <p>
@@ -57,51 +57,70 @@ import java.io.OutputStream;
  * operation will not be performed when {@link #close()} is called. It's possible to force the backup operation by
  * using the {@link #close(boolean)} method.
  * </p>
- * @see    BackupInputStream
+ *
  * @author Nicolas Rinaudo
+ * @see BackupInputStream
  */
 public class BackupOutputStream extends OutputStream implements BackupConstants {
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
-    /** The underlying OutputStream */
+    /**
+     * The underlying OutputStream
+     */
     private OutputStream out;
-    /** Path of the original file. */
-    private AbstractFile     target;
-    /** Path to the backup file. */
-    private AbstractFile     backup;
-    /** Whether or not an error occured while writing to the backup file. */
-    private boolean          error;
-
+    /**
+     * Path of the original file.
+     */
+    private AbstractFile target;
+    /**
+     * Path to the backup file.
+     */
+    private AbstractFile backup;
+    /**
+     * Whether or not an error occured while writing to the backup file.
+     */
+    private boolean error;
 
 
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
-    /**
-     * Opens a backup output stream on the specified file.
-     * @param     file        file on which to open a backup output stream.
-     * @exception IOException thrown if any IO error occurs.
-     */
-    public BackupOutputStream(File file) throws IOException {this(FileFactory.getFile(file.getAbsolutePath()));}
 
     /**
      * Opens a backup output stream on the specified file.
-     * @param     file        file on which to open a backup output stream.
-     * @exception IOException thrown if any IO error occurs.
+     *
+     * @param file file on which to open a backup output stream.
+     * @throws IOException thrown if any IO error occurs.
      */
-    public BackupOutputStream(String file) throws IOException {this(FileFactory.getFile((new File(file)).getAbsolutePath()));}
+    public BackupOutputStream(File file) throws IOException {
+        this(FileFactory.getFile(file.getAbsolutePath()));
+    }
 
     /**
      * Opens a backup output stream on the specified file.
-     * @param     file        file on which to open a backup output stream.
-     * @exception IOException thrown if any IO error occurs.
+     *
+     * @param file file on which to open a backup output stream.
+     * @throws IOException thrown if any IO error occurs.
      */
-    public BackupOutputStream(AbstractFile file) throws IOException {this(file, FileFactory.getFile(file.getAbsolutePath() + BACKUP_SUFFIX));}
+    public BackupOutputStream(String file) throws IOException {
+        this(FileFactory.getFile((new File(file)).getAbsolutePath()));
+    }
+
+    /**
+     * Opens a backup output stream on the specified file.
+     *
+     * @param file file on which to open a backup output stream.
+     * @throws IOException thrown if any IO error occurs.
+     */
+    public BackupOutputStream(AbstractFile file) throws IOException {
+        this(file, FileFactory.getFile(file.getAbsolutePath() + BACKUP_SUFFIX));
+    }
 
     /**
      * Opens an output stream on the specified file using the specified backup file.
-     * @param     file        file on which to open the backup output stream.
-     * @param     save        file that will be used for backup.
-     * @exception IOException thrown if any IO error occurs.
+     *
+     * @param file file on which to open the backup output stream.
+     * @param save file that will be used for backup.
+     * @throws IOException thrown if any IO error occurs.
      */
     private BackupOutputStream(AbstractFile file, AbstractFile save) throws IOException {
         out = save.getOutputStream();
@@ -110,9 +129,9 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
     }
 
 
-
     // - Error catching ---------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Flushes this output stream and forces any buffered output bytes to be written out to the stream.
      * <p>
@@ -122,15 +141,17 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * If an error occurs at this point, the {@link #close()} method will not overwrite the target file. This can be
      * forced through the {@link #close(boolean)} method.
      * </p>
+     *
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {
-        if(error)
+        if (error)
             out.flush();
         else {
-            try {out.flush();}
-            catch(IOException e) {
+            try {
+                out.flush();
+            } catch (IOException e) {
                 error = true;
                 throw e;
             }
@@ -146,16 +167,18 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * If an error occurs at this point, the {@link #close()} method will not overwrite the target file. This can be
      * forced through the {@link #close(boolean)} method.
      * </p>
-     * @param  b           the data to be written.
+     *
+     * @param b the data to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(byte[] b) throws IOException {
-        if(error)
+        if (error)
             out.write(b);
         else {
-            try {out.write(b);}
-            catch(IOException e) {
+            try {
+                out.write(b);
+            } catch (IOException e) {
                 error = true;
                 throw e;
             }
@@ -171,18 +194,20 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * If an error occurs at this point, the {@link #close()} method will not overwrite the target file. This can be
      * forced through the {@link #close(boolean)} method.
      * </p>
-     * @param  b           the data to be written.
-     * @param  off         the start offset in the data.
-     * @param  len         the number of bytes to write.
+     *
+     * @param b   the data to be written.
+     * @param off the start offset in the data.
+     * @param len the number of bytes to write.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        if(error)
+        if (error)
             out.write(b, off, len);
         else {
-            try {out.write(b, off, len);}
-            catch(IOException e) {
+            try {
+                out.write(b, off, len);
+            } catch (IOException e) {
                 error = true;
                 throw e;
             }
@@ -198,16 +223,18 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * If an error occurs at this point, the {@link #close()} method will not overwrite the target file. This can be
      * forced through the {@link #close(boolean)} method.
      * </p>
-     * @param  b           the data to be written.
+     *
+     * @param b the data to be written.
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(int b) throws IOException {
-        if(error)
+        if (error)
             out.write(b);
         else {
-            try {out.write(b);}
-            catch(IOException e) {
+            try {
+                out.write(b);
+            } catch (IOException e) {
                 error = true;
                 throw e;
             }
@@ -215,16 +242,17 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
     }
 
 
-
     // - Backup -----------------------------------------------------------------
     // --------------------------------------------------------------------------
+
     /**
      * Overwrites the target file with the backup one.
-     * @exception IOException thrown if any IO related error occurs.
+     *
+     * @throws IOException thrown if any IO related error occurs.
      */
     private void backup() throws IOException {
         // Deletes the destination file (AbstractFile.copyTo now fails when the destination exists).
-        if(target.exists())
+        if (target.exists())
             target.delete();
 
         // We're not using backup.moveTo(target) because we want to make absolutely sure
@@ -236,10 +264,13 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
 
     /**
      * Finishes the backup operation.
-     * @exception IOException thrown if any IO related error occurs.
+     *
+     * @throws IOException thrown if any IO related error occurs.
      */
     @Override
-    public void close() throws IOException {close(!error);}
+    public void close() throws IOException {
+        close(!error);
+    }
 
     /**
      * Closes the output stream.
@@ -248,15 +279,16 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * while writing to the stream: if it did, we don't want to propagate to the target
      * file, and thus should prevent the backup operation from being performed.
      * </p>
-     * @param     backup      whether or not to overwrite the target file by the backup one.
-     * @exception IOException thrown if any IO related error occurs.
+     *
+     * @param backup whether or not to overwrite the target file by the backup one.
+     * @throws IOException thrown if any IO related error occurs.
      */
     public void close(boolean backup) throws IOException {
         // Closes the underlying output stream.
         out.flush();
         out.close();
 
-        if(backup)
+        if (backup)
             backup();
     }
 }

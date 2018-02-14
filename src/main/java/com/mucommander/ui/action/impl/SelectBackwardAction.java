@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public abstract class SelectBackwardAction extends MuAction {
 
-    public SelectBackwardAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectBackwardAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,7 +44,7 @@ public abstract class SelectBackwardAction extends MuAction {
     public void performAction() {
         FileTable activeTable = mainFrame.getActiveTable();
 
-        activeTable.selectRow(Math.max(activeTable.getSelectedRow()-getRowDecrement(), 0));
+        activeTable.selectRow(Math.max(activeTable.getSelectedRow() - getRowDecrement(), 0));
     }
 
 

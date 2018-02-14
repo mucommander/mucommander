@@ -31,13 +31,19 @@ import java.io.UnsupportedEncodingException;
  */
 public class BOMWriter extends OutputStreamWriter {
 
-    /** The underlying InputStream. */
+    /**
+     * The underlying InputStream.
+     */
     protected OutputStream out;
 
-    /** The BOM to write at the beginning of the stream, <code>null</code> for none. */
+    /**
+     * The BOM to write at the beginning of the stream, <code>null</code> for none.
+     */
     protected BOM bom;
 
-    /** True if the BOM has already been written if there was one */
+    /**
+     * True if the BOM has already been written if there was one
+     */
     protected boolean bomWriteChecked;
 
 
@@ -58,12 +64,12 @@ public class BOMWriter extends OutputStreamWriter {
      * encoding has a corresponding {@link BOM}, write at the beginning of the stream. If a Non-Unicode encoding
      * is passed, no BOM will be written to the stream and this <code>Writer</code> will act as a regular
      * {@link OutputStreamWriter}.
-     *
+     * <p>
      * <p>It is important to note that a BOM will always be written for Unicode encodings,
      * even if the particular encoding specifies that no BOM should be written (<code>UnicodeLittleUnmarked</code> for
      * instance). See {@link BOM#getInstance(String)} for more information about this.</p>
      *
-     * @param out the <code>OutputStream</code> to write the encoded data to
+     * @param out      the <code>OutputStream</code> to write the encoded data to
      * @param encoding character encoding to use for encoding characters.
      * @throws UnsupportedEncodingException if the specified encoding is not a character encoding supported by the Java runtime.
      * @see BOM#getInstance(String)
@@ -76,8 +82,8 @@ public class BOMWriter extends OutputStreamWriter {
      * Creates a new <code>BOMWriter</code> that will write the specified BOM at the beginning of the stream and
      * subsequently encode characters in the specified encoding.
      *
-     * @param out the <code>OutputStream</code> to write the encoded data to
-     * @param bom the byte-order mark to write at the beginning of the stream.
+     * @param out      the <code>OutputStream</code> to write the encoded data to
+     * @param bom      the byte-order mark to write at the beginning of the stream.
      * @param encoding character encoding to use for encoding characters.
      * @throws UnsupportedEncodingException if the specified encoding is not a character encoding supported by the Java runtime.
      */
@@ -94,8 +100,8 @@ public class BOMWriter extends OutputStreamWriter {
      * @throws IOException if an error occurred while writing the BOM
      */
     protected void checkWriteBOM() throws IOException {
-        if(!bomWriteChecked) {
-            if(bom!=null)
+        if (!bomWriteChecked) {
+            if (bom != null)
                 out.write(bom.getSignature());
 
             bomWriteChecked = true;

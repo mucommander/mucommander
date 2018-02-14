@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -61,7 +61,7 @@ import java.net.MalformedURLException;
  *
  * @author Maxence Bernard
  */
- public class SMBFile extends ProtocolFile {
+public class SMBFile extends ProtocolFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(SMBFile.class);
 
     private SmbFile file;
@@ -74,7 +74,7 @@ import java.net.MalformedURLException;
      *  be changed. */
     private final static PermissionBits CHANGEABLE_PERMISSIONS = new GroupedPermissionBits(128);   // -w------- (200 octal)
 
-    
+
     protected SMBFile(FileURL fileURL) throws IOException {
         this(fileURL, null);
     }
@@ -82,11 +82,11 @@ import java.net.MalformedURLException;
     protected SMBFile(FileURL fileURL, SmbFile smbFile) throws IOException {
         super(fileURL);
 
-        if(!fileURL.containsCredentials())
+        if (!fileURL.containsCredentials())
             throw new AuthException(fileURL, "Authentication required");
 
-        if(smbFile==null) {
-            while(true) {
+        if (smbFile == null) {
+            while (true) {
                 file = createSmbFile(fileURL);
 
                 // The following test comes at a cost, so it's only used by the public constructor, SmbFile instances
@@ -97,30 +97,28 @@ import java.net.MalformedURLException;
                     // SmbFile is a directory and if it doesn't contain a trailing slash, we create a new SmbFile with
                     // a trailing slash.
                     // SmbFile.isDirectory() will throw an SmbAuthException if access to the file requires different credentials.
-                    if(file.isDirectory() && !getURL().getPath().endsWith("/")) {
+                    if (file.isDirectory() && !getURL().getPath().endsWith("/")) {
                         // Add trailing slash and loop to create a new SmbFile
-                        fileURL.setPath(fileURL.getPath()+'/');
+                        fileURL.setPath(fileURL.getPath() + '/');
                         continue;
                     }
 
                     break;
-                }
-                catch(SmbException e) {
+                } catch (SmbException e) {
                     // SmbFile.isDirectory() threw an exception. We distinguish 2 types of SmbException:
                     // 1) SmbAuthException, caused by a credentials problem -> turn it into an AuthException and throw it
                     // 2) any other SmbException -> this may happen if access to the file was denied for example, this
                     //    shouldn't prevent this SMBFile from being created.
 
                     // 1) Create an AuthException out of the SmbAuthException and throw it
-                    if(e instanceof SmbAuthException)
+                    if (e instanceof SmbAuthException)
                         throw new AuthException(fileURL, e.getMessage());
 
                     // 2) Swallow the exception to let this SMBFile be created
                     break;
                 }
             }
-        }
-        else {                      // The private constructor was called directly
+        } else {                      // The private constructor was called directly
             file = smbFile;
         }
 
@@ -138,18 +136,17 @@ import java.net.MalformedURLException;
      */
     private static SmbFile createSmbFile(FileURL url) throws MalformedURLException {
         Credentials credentials = url.getCredentials();
-        if(credentials==null)
+        if (credentials == null)
             return new SmbFile(url.toString(false));
 
         // Extract the domain (if any) from the username
         String login = credentials.getLogin();
         String domain;
         int domainStart = login.indexOf(";");
-        if(domainStart!=-1) {
+        if (domainStart != -1) {
             domain = login.substring(0, domainStart);
-            login = login.substring(domainStart+1, login.length());
-        }
-        else {
+            login = login.substring(domainStart + 1, login.length());
+        } else {
             domain = null;
         }
 
@@ -174,20 +171,18 @@ import java.net.MalformedURLException;
             String path = file.getURL().getPath();
             boolean endsWithSeparator = path.endsWith("/");
 
-            if(directory) {
-                if(!endsWithSeparator) {
-                    fileURL.setPath(path+"/");
+            if (directory) {
+                if (!endsWithSeparator) {
+                    fileURL.setPath(path + "/");
                     file = createSmbFile(fileURL);
                 }
-            }
-            else {
-                if(endsWithSeparator) {
+            } else {
+                if (endsWithSeparator) {
                     fileURL.setPath(removeTrailingSeparator(path));
                     file = createSmbFile(fileURL);
                 }
             }
-        }
-        catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             // This should never happen. If some reason wicked reason it ever did, SmbFile would just not be changed.
         }
     }
@@ -200,7 +195,7 @@ import java.net.MalformedURLException;
      * @param period time period during which attributes values are cached, in milliseconds
      */
     public static void setAttributeCachingPeriod(long period) {
-        jcifs.Config.setProperty("jcifs.smb.client.attrExpirationPeriod", ""+period);
+        jcifs.Config.setProperty("jcifs.smb.client.attrExpirationPeriod", "" + period);
     }
 
 
@@ -212,8 +207,7 @@ import java.net.MalformedURLException;
     public long getDate() {
         try {
             return file.lastModified();
-        }
-        catch(SmbException e) {
+        } catch (SmbException e) {
             return 0;
         }
     }
@@ -227,17 +221,16 @@ import java.net.MalformedURLException;
     public long getSize() {
         try {
             return file.length();
-        }
-        catch(SmbException e) {
+        } catch (SmbException e) {
             return 0;
         }
     }
 
     @Override
     public AbstractFile getParent() {
-        if(!parentValSet) {
+        if (!parentValSet) {
             FileURL parentURL = fileURL.getParent();
-            if(parentURL!=null) {
+            if (parentURL != null) {
                 parent = FileFactory.getFile(parentURL);
                 // Note: parent may be null if it can't be resolved
             }
@@ -260,9 +253,8 @@ import java.net.MalformedURLException;
         // Unlike java.io.File, SmbFile.exists() can throw an SmbException
         try {
             return file.exists();
-        }
-        catch(IOException e) {
-            LOGGER.info("Exception caught while calling SmbFile#exists(): " +   e.getMessage());
+        } catch (IOException e) {
+            LOGGER.info("Exception caught while calling SmbFile#exists(): " + e.getMessage());
 
             return e instanceof SmbAuthException;
         }
@@ -280,10 +272,10 @@ import java.net.MalformedURLException;
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
-        if(access!=PermissionAccess.USER || permission!=PermissionType.WRITE)
+        if (access != PermissionAccess.USER || permission != PermissionType.WRITE)
             throw new IOException();
 
-        if(enabled)
+        if (enabled)
             file.setReadWrite();
         else
             file.setReadOnly();
@@ -325,8 +317,7 @@ import java.net.MalformedURLException;
     public boolean isDirectory() {
         try {
             return file.isDirectory();
-        }
-        catch(SmbException e) {
+        } catch (SmbException e) {
             return false;
         }
     }
@@ -360,7 +351,7 @@ import java.net.MalformedURLException;
     @Override
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException {
         // This needs to be checked explicitly (SmbRandomAccessFile can be created even if the file does not exist)
-        if(!exists())
+        if (!exists())
             throw new IOException();
 
 //        // Explicitly allow the file to be read/write/delete by another random access file while this one is open
@@ -405,13 +396,13 @@ import java.net.MalformedURLException;
         checkCopyRemotelyPrerequisites(destFile, false, false);
 
         // Reuse the destination SmbFile instance
-        SmbFile destSmbFile = ((SMBFile)destFile).file;
+        SmbFile destSmbFile = ((SMBFile) destFile).file;
 
         // Remotely copy the file
         file.copyTo(destSmbFile);
 
         // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
-        ((SMBFile)destFile).checkSmbFile(file.isDirectory());
+        ((SMBFile) destFile).checkSmbFile(file.isDirectory());
     }
 
     /**
@@ -431,10 +422,10 @@ import java.net.MalformedURLException;
         boolean isDirectory = file.isDirectory();
 
         // Rename the file
-        file.renameTo(((SMBFile)destFile).file);
+        file.renameTo(((SMBFile) destFile).file);
 
         // Ensure that the destination jcifs.smb.SmbFile's path is consistent with its new directory/non-directory state
-        ((SMBFile)destFile).checkSmbFile(isDirectory);
+        ((SMBFile) destFile).checkSmbFile(isDirectory);
     }
 
     @Override
@@ -470,9 +461,9 @@ import java.net.MalformedURLException;
     @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
         try {
-            SmbFile smbFiles[] = file.listFiles(filenameFilter==null?null:new SMBFilenameFilter(filenameFilter));
+            SmbFile smbFiles[] = file.listFiles(filenameFilter == null ? null : new SMBFilenameFilter(filenameFilter));
 
-            if(smbFiles==null)
+            if (smbFiles == null)
                 throw new IOException();
 
             // Count the number of files to exclude: excluded files are those that are not file share/ not browsable
@@ -480,26 +471,26 @@ import java.net.MalformedURLException;
             int nbSmbFiles = smbFiles.length;
             int nbSmbFilesToExclude = 0;
             int smbFileType;
-            for(int i=0; i<nbSmbFiles; i++) {
+            for (int i = 0; i < nbSmbFiles; i++) {
                 smbFileType = smbFiles[i].getType();
-                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
+                if (smbFileType == SmbFile.TYPE_PRINTER || smbFileType == SmbFile.TYPE_NAMED_PIPE || smbFileType == SmbFile.TYPE_COMM)
                     nbSmbFilesToExclude++;
             }
 
             // Create SMBFile by using SmbFile instance and sharing parent instance among children
-            AbstractFile children[] = new AbstractFile[nbSmbFiles-nbSmbFilesToExclude];
+            AbstractFile children[] = new AbstractFile[nbSmbFiles - nbSmbFilesToExclude];
             FileURL childURL;
             SmbFile smbFile;
             int currentIndex = 0;
 
-            for(int i=0; i<nbSmbFiles; i++) {
+            for (int i = 0; i < nbSmbFiles; i++) {
                 smbFile = smbFiles[i];
                 smbFileType = smbFile.getType();
-                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
+                if (smbFileType == SmbFile.TYPE_PRINTER || smbFileType == SmbFile.TYPE_NAMED_PIPE || smbFileType == SmbFile.TYPE_COMM)
                     continue;
 
                 // Note: properties and credentials are cloned for every children's url
-                childURL = (FileURL)fileURL.clone();
+                childURL = (FileURL) fileURL.clone();
                 childURL.setHost(smbFile.getServer());
                 childURL.setPath(smbFile.getURL().getPath());
 
@@ -508,8 +499,7 @@ import java.net.MalformedURLException;
             }
 
             return children;
-        }
-        catch(SmbAuthException e) {
+        } catch (SmbAuthException e) {
             throw new AuthException(fileURL, e.getMessage());
         }
     }
@@ -518,8 +508,7 @@ import java.net.MalformedURLException;
     public boolean isHidden() {
         try {
             return file.isHidden();
-        }
-        catch(SmbException e) {
+        } catch (SmbException e) {
             return false;
         }
     }
@@ -527,12 +516,12 @@ import java.net.MalformedURLException;
 
     @Override
     public boolean equalsCanonical(Object f) {
-        if(!(f instanceof SMBFile))
-            return super.equalsCanonical(f);		// could be equal to an AbstractArchiveFile
+        if (!(f instanceof SMBFile))
+            return super.equalsCanonical(f);        // could be equal to an AbstractArchiveFile
 
         // SmbFile's equals method is just perfect: compares canonical paths
         // and IP addresses
-        return file.equals(((SMBFile)f).file);
+        return file.equals(((SMBFile) f).file);
     }
 
 
@@ -628,7 +617,7 @@ import java.net.MalformedURLException;
 
             // jCIFS doesn't automatically position the offset to the end of the file when it is truncated.
             // We have to do it ourselves to honour this method's contract.   
-            if(getOffset()>newLength)
+            if (getOffset() > newLength)
                 raf.seek(newLength);
         }
     }
@@ -648,21 +637,21 @@ import java.net.MalformedURLException;
         }
 
         public boolean getBitValue(PermissionAccess access, PermissionType type) {
-            if(access!=PermissionAccess.USER)
+            if (access != PermissionAccess.USER)
                 return false;
 
             try {
-            	switch(type) {
-            	case READ:
-            		return file.canRead();
-            	case WRITE:
-            		return file.canWrite();
-            	default:
-            		return false;
-            	}
+                switch (type) {
+                    case READ:
+                        return file.canRead();
+                    case WRITE:
+                        return file.canWrite();
+                    default:
+                        return false;
+                }
             }
             // Unlike java.io.File, SmbFile#canRead() and SmbFile#canWrite() can throw an SmbException
-            catch(SmbException e) {
+            catch (SmbException e) {
                 return false;
             }
         }

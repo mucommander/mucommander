@@ -25,47 +25,59 @@ package com.mucommander.commons.io.bom;
  */
 public interface BOMConstants {
 
-    /** UTF-8 BOM: EF BB BF */
+    /**
+     * UTF-8 BOM: EF BB BF
+     */
     public final static BOM UTF8_BOM = new BOM(
-            new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF},
+            new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF},
             "UTF-8",
             new String[]{}
     );
 
-    /** UTF-16 Big Endian BOM: FE FF */
+    /**
+     * UTF-16 Big Endian BOM: FE FF
+     */
     public final static BOM UTF16_BE_BOM = new BOM(
-            new byte[]{(byte)0xFE, (byte)0xFF},
+            new byte[]{(byte) 0xFE, (byte) 0xFF},
             "UTF-16BE",
-            new String[]{"UTF-16", "x-UTF-16BE-BOM" ,"UnicodeBig", "UnicodeBigUnmarked"}
+            new String[]{"UTF-16", "x-UTF-16BE-BOM", "UnicodeBig", "UnicodeBigUnmarked"}
     );
 
-    /** UTF-16 Little Endian BOM: FF FE */
+    /**
+     * UTF-16 Little Endian BOM: FF FE
+     */
     public final static BOM UTF16_LE_BOM = new BOM(
-            new byte[]{(byte)0xFF, (byte)0xFE},
+            new byte[]{(byte) 0xFF, (byte) 0xFE},
             "UTF-16LE",
             new String[]{"x-UTF-16LE-BOM", "UnicodeLittle", "UnicodeLittleUnmarked"}
     );
 
-    /** UTF-32 Big Endian BOM: 00 00 FE FF. */
+    /**
+     * UTF-32 Big Endian BOM: 00 00 FE FF.
+     */
     public final static BOM UTF32_BE_BOM = new BOM(
-            new byte[]{(byte)0x00, (byte)0x00, (byte)0xFE, (byte)0xFF},
+            new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0xFE, (byte) 0xFF},
             "UTF-32BE",
             new String[]{"UTF-32", "x-UTF-32BE-BOM"}
     );
 
-    /** UTF-32 Little Endian BOM: FF FE 00 00 */
+    /**
+     * UTF-32 Little Endian BOM: FF FE 00 00
+     */
     public final static BOM UTF32_LE_BOM = new BOM(
-            new byte[]{(byte)0xFF, (byte)0xFE, (byte)0x00, (byte)0x00},
+            new byte[]{(byte) 0xFF, (byte) 0xFE, (byte) 0x00, (byte) 0x00},
             "UTF-32LE",
             new String[]{"x-UTF-32LE-BOM"}
     );
 
-    /** List of supported BOMs */
-    final static BOM SUPPORTED_BOMS[] = new BOM[] {
-        UTF8_BOM,
-        UTF16_BE_BOM,
-        UTF16_LE_BOM,
-        UTF32_BE_BOM,
-        UTF32_LE_BOM
+    /**
+     * List of supported BOMs
+     */
+    final static BOM SUPPORTED_BOMS[] = new BOM[]{
+            UTF8_BOM,
+            UTF16_BE_BOM,
+            UTF16_LE_BOM,
+            UTF32_BE_BOM,
+            UTF32_LE_BOM
     };
 }

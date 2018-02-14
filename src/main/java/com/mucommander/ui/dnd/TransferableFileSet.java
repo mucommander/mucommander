@@ -37,66 +37,83 @@ import java.util.Vector;
 /**
  * This class represents a Transferable file set and is used for Drag and Drop transfers initiated by muCommander
  * (dragged from a muCommander UI component).
- *
+ * <p>
  * <p>The actual file set data can be fetched using one of those 3 DataFlavors :
  * <ul>
- *   <li>FileSetDataFlavor (as returned by {@link #getFileSetDataFlavor()}): data returned as a {@link com.mucommander.commons.file.util.FileSet}.
+ * <li>FileSetDataFlavor (as returned by {@link #getFileSetDataFlavor()}): data returned as a {@link com.mucommander.commons.file.util.FileSet}.
  * This flavor is used for local file transfers (within the application) only. In particular, this DataFlavor cannot
  * be used to transfer data to the clipboard because the data (FileSet) cannot be serialized.
  * In this case, the {@link #setFileSetDataFlavorSupported(boolean)} method should be used to disable FileSet DataFlavor.
- *   </li>
- *   <li>DataFlavor.javaFileListFlavor : data returned as a java.util.Vector of <code>java.io.File</code> files.
+ * </li>
+ * <li>DataFlavor.javaFileListFlavor : data returned as a java.util.Vector of <code>java.io.File</code> files.
  * This flavor is used for file transfers to and from external applications.
- *   </li>
- *   <li>text/uri-list (RFC 2483): an alternative flavor supported by Gnome and KDE where the data is returned as
+ * </li>
+ * <li>text/uri-list (RFC 2483): an alternative flavor supported by Gnome and KDE where the data is returned as
  * a String containing file URIs separated by '\r\n'. This flavor is as of today the only one supported by GNOME and
  * KDE. See bug #45 and http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4899516 .
- *   </li>
- *   <li>DataFlavor.stringFlavor: data returned as a String containing files paths separated by \n characters.
+ * </li>
+ * <li>DataFlavor.stringFlavor: data returned as a String containing files paths separated by \n characters.
  * This other alternative flavor is used for file transfers to and from external applications that do not support
  * either of DataFlavor.javaFileListFlavor and text/uri-list but text only (plain text editors for example).
- *   </li>
+ * </li>
  * </ul>
  *
  * @author Maxence Bernard, Xavi Miró
  */
 public class TransferableFileSet implements Transferable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TransferableFileSet.class);
-	
-    /** Transferred FileSet */
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransferableFileSet.class);
+
+    /**
+     * Transferred FileSet
+     */
     private FileSet fileSet;
 
-    /** Is FileSet DataFlavor supported ? */
+    /**
+     * Is FileSet DataFlavor supported ?
+     */
     private boolean fileSetFlavorSupported = true;
 
-    /** Is DataFlavor.javaFileListFlavor supported ? */
+    /**
+     * Is DataFlavor.javaFileListFlavor supported ?
+     */
     private boolean javaFileListFlavorSupported = true;
 
-    /** Is DataFlavor.stringFlavor supported ? */
+    /**
+     * Is DataFlavor.stringFlavor supported ?
+     */
     private boolean stringFlavorSupported = true;
 
-    /** Is text/uri-list (RFC 2483) flavor supported ? */
+    /**
+     * Is text/uri-list (RFC 2483) flavor supported ?
+     */
     private boolean textUriFlavorSupported = true;
 
-    /** Does DataFlavor.stringFlavor transfer the files' full paths or filenames only ? */
+    /**
+     * Does DataFlavor.stringFlavor transfer the files' full paths or filenames only ?
+     */
     private boolean stringFlavourTransfersFilename = false;
 
-    /** Does DataFlavor.stringFlavor transfer the files' filenames with extension or without ? */
+    /**
+     * Does DataFlavor.stringFlavor transfer the files' filenames with extension or without ?
+     */
     private boolean stringFlavourTransfersFileBaseName = false;
-    
-	/** DataFlavor used for GNOME/KDE transfers */
+
+    /**
+     * DataFlavor used for GNOME/KDE transfers
+     */
     private static DataFlavor TEXT_URI_FLAVOR;
 
-    /** Custom FileSet DataFlavor used for local transfers */
+    /**
+     * Custom FileSet DataFlavor used for local transfers
+     */
     private static DataFlavor FILE_SET_DATA_FLAVOR;
 
     static {
         // Create a single custom DataFlavor instance that designates the FileSet class to transfer data
         try {
-            FILE_SET_DATA_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+";class="+FileSet.class.getName());
-	        TEXT_URI_FLAVOR =  new DataFlavor("text/uri-list;class="+String.class.getName());
-        }
-        catch(ClassNotFoundException e) {
+            FILE_SET_DATA_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + ";class=" + FileSet.class.getName());
+            TEXT_URI_FLAVOR = new DataFlavor("text/uri-list;class=" + String.class.getName());
+        } catch (ClassNotFoundException e) {
             // That should never happen
             LOGGER.debug("FileSet DataFlavor could not be instantiated", e);
         }
@@ -183,9 +200,9 @@ public class TransferableFileSet implements Transferable {
      *
      * @param b if <code>true</code>, DataFlavor.stringFlavor returns filenames without extension, full file name otherwise.
      */
-	public void setStringDataFlavourTransfersFileBaseName(boolean b) {
-		this.stringFlavourTransfersFileBaseName = b;
-	}
+    public void setStringDataFlavourTransfersFileBaseName(boolean b) {
+        this.stringFlavourTransfersFileBaseName = b;
+    }
 
     /**
      * Returns whether the files' base name (without file extension) should be returned when
@@ -196,8 +213,8 @@ public class TransferableFileSet implements Transferable {
      * {@link #getTransferData(java.awt.datatransfer.DataFlavor)} is called with <code>DataFlavor.stringFlavor</code>
      */
     public boolean getStringDataFlavourTransfersFileBaseName() {
-		return stringFlavourTransfersFileBaseName;
-	}
+        return stringFlavourTransfersFileBaseName;
+    }
 
     /**
      * Returns an instance of the custom FileSet DataFlavor used to transfer files locally.
@@ -212,7 +229,7 @@ public class TransferableFileSet implements Transferable {
     /**
      * Returns the files contained by the specified Transferable as a {@link com.mucommander.commons.file.util.FileSet},
      * or <code>null</code> if no file was present in the Transferable or if an error occurred.
-     *
+     * <p>
      * <p>3 types of dropped data flavors are supported and used in this order of priority:
      * <ul>
      * <li>FileSet: the local DataFlavor used when files are transferred from muCommander
@@ -231,24 +248,24 @@ public class TransferableFileSet implements Transferable {
 
         try {
             // FileSet DataFlavor
-            if(transferable.isDataFlavorSupported(FILE_SET_DATA_FLAVOR)) {
-                files = (FileSet)transferable.getTransferData(FILE_SET_DATA_FLAVOR);
+            if (transferable.isDataFlavorSupported(FILE_SET_DATA_FLAVOR)) {
+                files = (FileSet) transferable.getTransferData(FILE_SET_DATA_FLAVOR);
             }
             // File list DataFlavor
-            else if(transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                List<File> fileList = (List<File>)transferable.getTransferData(DataFlavor.javaFileListFlavor);
+            else if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                List<File> fileList = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
 
                 int nbFiles = fileList.size();
                 files = new FileSet();
-                for(int i=0; i<nbFiles; i++) {
+                for (int i = 0; i < nbFiles; i++) {
                     file = FileFactory.getFile(fileList.get(i).getAbsolutePath());
 
-                    if(file!=null)
+                    if (file != null)
                         files.add(file);
                 }
             }
             // Text plain DataFlavor: assume that lines designate file paths
-            else if(transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            else if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 BufferedReader br;
 
                 br = null;
@@ -258,14 +275,14 @@ public class TransferableFileSet implements Transferable {
                     // Read input line by line and try to create AbstractFile instances
                     String path;
                     files = new FileSet();
-                    while((path=br.readLine())!=null) {
+                    while ((path = br.readLine()) != null) {
                         // Try to create an AbstractFile instance, returned instance may be null
                         file = FileFactory.getFile(path);
 
                         // Safety precaution: if at least one line doesn't resolve as a file, stop reading
                         // and return null. This is to avoid any nasty effect that could arise if a random
                         // piece of text (let's say an email contents) was inadvertently pasted or dropped to muCommander.
-                        if(file==null)
+                        if (file == null)
                             return null;
 
                         files.add(file);
@@ -274,21 +291,21 @@ public class TransferableFileSet implements Transferable {
                 // Documentation is not explicit on whether DataFlavor streams need to be closed, we might as well
                 // do so just to be sure.
                 finally {
-                    if(br != null) {
-                        try {br.close();}
-                        catch(IOException e) {}
+                    if (br != null) {
+                        try {
+                            br.close();
+                        } catch (IOException e) {
+                        }
                     }
                 }
-            }
-            else {
+            } else {
                 return null;
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // Catch UnsupportedFlavorException, IOException
             LOGGER.debug("Caught exception while processing transferable", e);
 
-            return  null;
+            return null;
         }
 
         return files;
@@ -302,16 +319,16 @@ public class TransferableFileSet implements Transferable {
     public DataFlavor[] getTransferDataFlavors() {
         List<DataFlavor> supportedDataFlavorsV = new Vector<DataFlavor>();
 
-        if(fileSetFlavorSupported)
+        if (fileSetFlavorSupported)
             supportedDataFlavorsV.add(FILE_SET_DATA_FLAVOR);
 
-        if(javaFileListFlavorSupported)
+        if (javaFileListFlavorSupported)
             supportedDataFlavorsV.add(DataFlavor.javaFileListFlavor);
 
-        if(stringFlavorSupported)
+        if (stringFlavorSupported)
             supportedDataFlavorsV.add(DataFlavor.stringFlavor);
 
-        if(textUriFlavorSupported)
+        if (textUriFlavorSupported)
             supportedDataFlavorsV.add(TEXT_URI_FLAVOR);
 
         DataFlavor supportedDataFlavors[] = new DataFlavor[supportedDataFlavorsV.size()];
@@ -322,13 +339,13 @@ public class TransferableFileSet implements Transferable {
 
 
     public boolean isDataFlavorSupported(DataFlavor dataFlavor) {
-        if(dataFlavor.equals(FILE_SET_DATA_FLAVOR))
+        if (dataFlavor.equals(FILE_SET_DATA_FLAVOR))
             return fileSetFlavorSupported;
-        else if(dataFlavor.equals(DataFlavor.javaFileListFlavor))
+        else if (dataFlavor.equals(DataFlavor.javaFileListFlavor))
             return javaFileListFlavorSupported;
-        else if(dataFlavor.equals(DataFlavor.stringFlavor))
+        else if (dataFlavor.equals(DataFlavor.stringFlavor))
             return stringFlavorSupported;
-        else if(dataFlavor.equals(TEXT_URI_FLAVOR))
+        else if (dataFlavor.equals(TEXT_URI_FLAVOR))
             return textUriFlavorSupported;
 
         return false;
@@ -339,14 +356,14 @@ public class TransferableFileSet implements Transferable {
         int nbFiles = fileSet.size();
 
         // Return files stored in a FileSet instance (the one that was passed to the constructor)
-        if(dataFlavor.equals(FILE_SET_DATA_FLAVOR) && fileSetFlavorSupported) {
+        if (dataFlavor.equals(FILE_SET_DATA_FLAVOR) && fileSetFlavorSupported) {
             return fileSet;
         }
         // Return files stored in a java.util.Vector instance
-        else if(dataFlavor.equals(DataFlavor.javaFileListFlavor) && javaFileListFlavorSupported) {
+        else if (dataFlavor.equals(DataFlavor.javaFileListFlavor) && javaFileListFlavorSupported) {
             List<File> fileList = new Vector<File>(nbFiles);
 
-            for(int i=0; i<nbFiles; i++) {
+            for (int i = 0; i < nbFiles; i++) {
                 AbstractFile file = fileSet.elementAt(i);
                 fileList.add(new File(file.getAbsolutePath()));
             }
@@ -367,40 +384,40 @@ public class TransferableFileSet implements Transferable {
 //            return new ByteArrayInputStream(sb.toString().getBytes(charset));
 //        }
         // Return a String with file paths or names
-        else if(dataFlavor.equals(DataFlavor.stringFlavor) && stringFlavorSupported) {
+        else if (dataFlavor.equals(DataFlavor.stringFlavor) && stringFlavorSupported) {
             StringBuilder sb = new StringBuilder();
             AbstractFile file;
-            for(int i=0; i<nbFiles; i++) {
+            for (int i = 0; i < nbFiles; i++) {
                 file = fileSet.elementAt(i);
                 // Check if to return string with filenames
                 if (stringFlavourTransfersFilename) {
-                	// Append just base name or file name with extension
-                	sb.append(stringFlavourTransfersFileBaseName ? file.getBaseName() : file.getName());
+                    // Append just base name or file name with extension
+                    sb.append(stringFlavourTransfersFileBaseName ? file.getBaseName() : file.getName());
                 } else {
-                	sb.append(file.getAbsolutePath());
+                    sb.append(file.getAbsolutePath());
                 }
-                                	
-                if(i!=nbFiles-1)
+
+                if (i != nbFiles - 1)
                     sb.append('\n');
             }
 
             return sb.toString();
         }
         // Return a String with file URLs, as specified by RFC 2483
-        else if(dataFlavor.equals(TEXT_URI_FLAVOR) && textUriFlavorSupported) {
+        else if (dataFlavor.equals(TEXT_URI_FLAVOR) && textUriFlavorSupported) {
             StringBuilder sb = new StringBuilder();
             AbstractFile file;
-            for(int i=0; i<nbFiles; i++) {
+            for (int i = 0; i < nbFiles; i++) {
                 file = fileSet.elementAt(i);
                 String url = file.getURL().getScheme().equals(FileProtocols.FILE)
-                    // Use java.io.File.toURI() for local files (e.g. file:/mnt/music), this is the format expected by
-                    // Gnome/Nautilus.
-                    ?new File(file.getAbsolutePath()).toURI().toString()
-                    // Use standard URL format (e.g. smb://host/share/file) for other file types
-                    :file.getAbsolutePath();
+                        // Use java.io.File.toURI() for local files (e.g. file:/mnt/music), this is the format expected by
+                        // Gnome/Nautilus.
+                        ? new File(file.getAbsolutePath()).toURI().toString()
+                        // Use standard URL format (e.g. smb://host/share/file) for other file types
+                        : file.getAbsolutePath();
 
                 sb.append(url);
-                if(i!=nbFiles-1){
+                if (i != nbFiles - 1) {
                     sb.append("\r\n");
                 }
             }

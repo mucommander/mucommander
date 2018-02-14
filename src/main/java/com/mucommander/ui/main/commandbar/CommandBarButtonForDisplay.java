@@ -26,25 +26,27 @@ import java.awt.*;
 
 /**
  * CommandBarButton that used for display purpose only
- * 
+ *
  * @author Arik Hadas
  */
 public class CommandBarButtonForDisplay extends CommandBarButton {
-	
-	/** The preferred size of display button */
-	public static final Dimension PREFERRED_SIZE = new Dimension(130, 30);
-	
-	public static CommandBarButtonForDisplay create(String actionId) {
-		return actionId == null ? null : new CommandBarButtonForDisplay(actionId);
-	}
-	
-	private CommandBarButtonForDisplay(String actionId) {
-		super(actionId, null);
-		setEnabled(true);
-		setPreferredSize(PREFERRED_SIZE);
-	}
-	
-	@Override
+
+    /**
+     * The preferred size of display button
+     */
+    public static final Dimension PREFERRED_SIZE = new Dimension(130, 30);
+
+    public static CommandBarButtonForDisplay create(String actionId) {
+        return actionId == null ? null : new CommandBarButtonForDisplay(actionId);
+    }
+
+    private CommandBarButtonForDisplay(String actionId) {
+        super(actionId, null);
+        setEnabled(true);
+        setPreferredSize(PREFERRED_SIZE);
+    }
+
+    @Override
     public void setButtonAction(String actionId, MainFrame mainFrame) {
         // Use the action's label as the button's label
         String label = ActionProperties.getActionLabel(actionId);
@@ -53,8 +55,8 @@ public class CommandBarButtonForDisplay extends CommandBarButton {
         // Set the button's tooltip to the action's tooltip if it has one,
         // to the action's label otherwise (the label may be too long for being displayed fully)
         String tooltipText = ActionProperties.getActionTooltip(actionId);
-        setToolTipText(tooltipText==null?label:tooltipText);
+        setToolTipText(tooltipText == null ? label : tooltipText);
 
         setIcon(IconManager.getScaledIcon(ActionProperties.getActionIcon(actionId), scaleFactor));
-	}
+    }
 }

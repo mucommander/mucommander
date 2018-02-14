@@ -37,8 +37,7 @@ public class GuessedKde3DesktopAdapter extends Kde3DesktopAdapter {
         try {
             ProcessRunner.execute(BASE_COMMAND);
             return true;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }

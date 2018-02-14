@@ -59,24 +59,30 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
     private JTextField specificLocationTextField;
     private JButton okButton;
 
-    /** An instance of all MessageDigest implementations */
+    /**
+     * An instance of all MessageDigest implementations
+     */
     private MessageDigest[] messageDigests;
 
-    /** Default checksum algorithm (most commonly used) */
-    private final static String DEFAULT_ALGORITHM = "MD5";
+    /**
+     * Default checksum algorithm (most commonly used)
+     */
+    private static final String DEFAULT_ALGORITHM = "MD5";
 
-    /** Last algorithm used, saved after validation of this dialog */
+    /**
+     * Last algorithm used, saved after validation of this dialog
+     */
     private static String lastUsedAlgorithm = DEFAULT_ALGORITHM;
 
-    /** Dialog size constraints */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
-
+    /**
+     * Dialog size constraints
+     */
+    private static final Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
 
     static {
         // Register additional MessageDigest implementations provided by the muCommander API
         MuProvider.registerProvider();
     }
-
 
     public CalculateChecksumDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, ActionProperties.getActionLabel(CalculateChecksumAction.Descriptor.ACTION_ID), files);
@@ -87,17 +93,16 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         // Create a TreeSet with a custom Comparator
         SortedSet<MessageDigest> algorithmSortedSet = new TreeSet<MessageDigest>(new Comparator<MessageDigest>() {
-                    public int compare(MessageDigest md1, MessageDigest md2) {
-                        return md1.getAlgorithm().compareTo(md2.getAlgorithm());
-                    }
-                });
+            public int compare(MessageDigest md1, MessageDigest md2) {
+                return md1.getAlgorithm().compareTo(md2.getAlgorithm());
+            }
+        });
 
         // Add all MessageDigest to the TreeSet
-        for(String algo : Security.getAlgorithms("MessageDigest")) {
+        for (String algo : Security.getAlgorithms("MessageDigest")) {
             try {
                 algorithmSortedSet.add(MessageDigest.getInstance(algo));
-            }
-            catch(NoSuchAlgorithmException e) {
+            } catch (NoSuchAlgorithmException e) {
                 // Should never happen and if it ever does, the digest will simply be discarded
             }
         }
@@ -108,7 +113,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         // Add the sorted list of algorithms to a combo box to let the user choose one
         algorithmComboBox = new JComboBox();
-        for (MessageDigest messageDigest : messageDigests) 
+        for (MessageDigest messageDigest : messageDigests)
             algorithmComboBox.addItem(messageDigest.getAlgorithm());
 
         // Select the last used algorithm (if any), or the default algorithm
@@ -117,7 +122,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEADING, 0, 0);
         JPanel tempPanel = new JPanel(flowLayout);
-        tempPanel.add(new JLabel(Translator.get("calculate_checksum_dialog.checksum_algorithm")+" : "));
+        tempPanel.add(new JLabel(Translator.get("calculate_checksum_dialog.checksum_algorithm") + " : "));
         tempPanel.add(algorithmComboBox);
 
         mainPanel.add(tempPanel);
@@ -125,7 +130,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         // Create the components that allow to choose where the checksum file should be created
 
-        mainPanel.add(new JLabel(Translator.get("destination")+" :"));
+        mainPanel.add(new JLabel(Translator.get("destination") + " :"));
         mainPanel.addSpace(5);
 
         JRadioButton tempLocationRadioButton = new JRadioButton(Translator.get("calculate_checksum_dialog.temporary_file"), true);
@@ -135,7 +140,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         tempPanel = new JPanel(new BorderLayout());
         tempPanel.add(specificLocationRadioButton, BorderLayout.WEST);
         specificLocationRadioButton.addItemListener(this);
-        
+
         // Create a path field with auto-completion capabilities
         specificLocationTextField = new FilePathField(getChecksumFilename(lastUsedAlgorithm));
         specificLocationTextField.setEnabled(false);
@@ -163,8 +168,6 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         mainPanel.add(fileDetailsPanel);
 
-//        mainPanel.add(new HelpButtonPanel(new HelpButton(mainFrame, "CalculateChecksum")));
-        
         getContentPane().add(mainPanel);
 
         // Give initial keyboard focus to the 'Delete' button
@@ -207,25 +210,24 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         algorithm = algorithm.toUpperCase();
 
-        if(algorithm.equals("SHA"))
+        if (algorithm.equals("SHA"))
             return "SHA1SUMS";
 
-        if(algorithm.equals("CRC32"))
-            return (files.size()==1?files.elementAt(0):files.getBaseFolder()).getName()+".sfv";
+        if (algorithm.equals("CRC32"))
+            return (files.size() == 1 ? files.elementAt(0) : files.getBaseFolder()).getName() + ".sfv";
 
-        return algorithm.replace("-", "")+"SUMS";
+        return algorithm.replace("-", "") + "SUMS";
     }
-
 
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
-
+    @Override
     public void actionPerformed(ActionEvent e) {
         // Start by disposing this dialog
         dispose();
 
-        if(e.getSource()==okButton) {
+        if (e.getSource() == okButton) {
             try {
                 MessageDigest digest = getSelectedMessageDigest();
                 String algorithm = digest.getAlgorithm();
@@ -233,36 +235,34 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
                 // Resolve the destination checksum file
 
-                if(specificLocationRadioButton.isSelected()) {
+                if (specificLocationRadioButton.isSelected()) {
                     // User-defined checksum file
                     String enteredPath = specificLocationTextField.getText();
 
                     PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActivePanel().getCurrentFolder());
                     // The path entered doesn't correspond to any existing folder
-                    if (resolvedDest==null) {
+                    if (resolvedDest == null) {
                         showErrorDialog(Translator.get("invalid_path", enteredPath));
                         return;
                     }
 
-                    if(resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER)
+                    if (resolvedDest.getDestinationType() == PathUtils.ResolvedDestination.EXISTING_FOLDER)
                         checksumFile = resolvedDest.getDestinationFile().getDirectChild(getChecksumFilename(algorithm));
                     else
                         checksumFile = resolvedDest.getDestinationFile();
-                }
-                else {
+                } else {
                     // Temporary file
                     checksumFile = FileFactory.getTemporaryFile(getChecksumFilename(algorithm), true);
                 }
 
                 // Save the algorithm that was used for the next time this dialog is invoked
-                lastUsedAlgorithm = algorithm; 
+                lastUsedAlgorithm = algorithm;
 
                 // Start processing files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("properties_dialog.calculating"));
                 CalculateChecksumJob job = new CalculateChecksumJob(progressDialog, mainFrame, files, checksumFile, digest);
                 progressDialog.start(job);
-            }
-            catch(IOException ex) {
+            } catch (IOException ex) {
                 // Note: FileFactory.getTemporaryFile() should never throw an IOException
 
                 showErrorDialog(Translator.get("invalid_path", specificLocationTextField.getText()));
@@ -270,21 +270,20 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         }
     }
 
-
     /////////////////////////////////
     // ItemListener implementation //
     /////////////////////////////////
-
+    @Override
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getSource();
 
-        if(source==specificLocationRadioButton) {
+        if (source == specificLocationRadioButton) {
             // Enables/disables the text field when the corresponding radio button's selected state has changed.
             specificLocationTextField.setEnabled(specificLocationRadioButton.isSelected());
             specificLocationTextField.requestFocus();
-        }
-        else if(source==algorithmComboBox) {
+        } else if (source == algorithmComboBox) {
             specificLocationTextField.setText(getChecksumFilename(getSelectedMessageDigest().getAlgorithm()));
         }
     }
+
 }

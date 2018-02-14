@@ -19,52 +19,48 @@
 package com.mucommander.ui.quicklist.item;
 
 
-import java.awt.Component;
-import java.awt.Dimension;
-
-import javax.swing.Icon;
-import javax.swing.JList;
-
 import com.mucommander.ui.main.table.CellLabel;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
- * 
  * @author Arik Hadas
  */
 public abstract class QuickListDataListWithIcons<T> extends QuickListDataList<T> {
-	
-	public QuickListDataListWithIcons(Component nextFocusableComponent) {
-		super(nextFocusableComponent);
-	}
-	
-	public QuickListDataListWithIcons(T[] data) {
-		super(data);
-	}
-	
-	@Override
-	protected DataListItemRenderer getItemRenderer() {
-		return new DataListItemWithIconRenderer();
-	}
-	
-	//////////////////////
-	// Abstract methods //
-	//////////////////////
 
-	public abstract Icon getImageIconOfItem(final T item, final Dimension preferredSize);
+    public QuickListDataListWithIcons(Component nextFocusableComponent) {
+        super(nextFocusableComponent);
+    }
 
-	protected class DataListItemWithIconRenderer extends DataListItemRenderer {
-		
-		@Override
+    public QuickListDataListWithIcons(T[] data) {
+        super(data);
+    }
+
+    @Override
+    protected DataListItemRenderer getItemRenderer() {
+        return new DataListItemWithIconRenderer();
+    }
+
+    //////////////////////
+    // Abstract methods //
+    //////////////////////
+
+    public abstract Icon getImageIconOfItem(final T item, final Dimension preferredSize);
+
+    protected class DataListItemWithIconRenderer extends DataListItemRenderer {
+
+        @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-			// Let superclass deal with most of it...
-			CellLabel label = (CellLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            // Let superclass deal with most of it...
+            CellLabel label = (CellLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			// Add its icon
-			T item = getListItem(index);
-			Icon icon = getImageIconOfItem(item, this.getPreferredSize());
-			label.setIcon(icon);
+            // Add its icon
+            T item = getListItem(index);
+            Icon icon = getImageIconOfItem(item, this.getPreferredSize());
+            label.setIcon(icon);
 
-			return label;
-		}
-	}
+            return label;
+        }
+    }
 }

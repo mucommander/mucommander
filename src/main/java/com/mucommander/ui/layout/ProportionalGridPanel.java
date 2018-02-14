@@ -54,7 +54,7 @@ public class ProportionalGridPanel extends JPanel {
     public Component add(Component component) {
         add(component, gbc);
 
-        if(gbc.gridx<nbColumns-1)
+        if (gbc.gridx < nbColumns - 1)
             gbc.gridx++;
         else {
             gbc.gridy++;

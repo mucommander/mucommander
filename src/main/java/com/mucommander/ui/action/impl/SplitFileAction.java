@@ -18,23 +18,17 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.FileOperationFilter;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.file.SplitFileDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.util.Map;
 
 /**
  * This action invokes the split file dialog which allows to split the selected file into several parts.
@@ -44,12 +38,12 @@ import com.mucommander.ui.main.MainFrame;
 @InvokesDialog
 public class SplitFileAction extends SelectedFileAction {
 
-    public SplitFileAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SplitFileAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new AndFileFilter(
-            new AttributeFileFilter(FileAttribute.DIRECTORY, true),
-            new FileOperationFilter(FileOperation.READ_FILE)
+                new AttributeFileFilter(FileAttribute.DIRECTORY, true),
+                new FileOperationFilter(FileOperation.READ_FILE)
         ));
     }
 
@@ -61,27 +55,35 @@ public class SplitFileAction extends SelectedFileAction {
         ).showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new SplitFileAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new SplitFileAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "SplitFile";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "SplitFile";
 
-		public ActionCategory getCategory() { return null; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return null;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
     }
 }

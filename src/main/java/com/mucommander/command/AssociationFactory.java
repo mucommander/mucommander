@@ -29,28 +29,51 @@ import com.mucommander.commons.file.filter.RegexpFilenameFilter;
  */
 class AssociationFactory implements AssociationBuilder {
     private AndFileFilter filter;
-    private String        command;
+    private String command;
 
-    public void startBuilding() {}
-    public void endBuilding() {}
+    public void startBuilding() {
+    }
+
+    public void endBuilding() {
+    }
 
     public void startAssociation(String command) {
-        filter       = new AndFileFilter();
+        filter = new AndFileFilter();
         this.command = command;
     }
 
     public void endAssociation() throws CommandException {
         // Skip empty file filters as they will break the whole
         // association mechanism.
-        if(!filter.isEmpty())
+        if (!filter.isEmpty())
             CommandManager.registerAssociation(command, filter);
     }
 
-    public void setMask(String mask, boolean isCaseSensitive) {filter.addFileFilter(new RegexpFilenameFilter(mask, isCaseSensitive));}
-    public void setIsDir(boolean isDir) {filter.addFileFilter(new AttributeFileFilter(FileAttribute.DIRECTORY, isDir));}
-    public void setIsSymlink(boolean isSymlink) {filter.addFileFilter(new AttributeFileFilter(FileAttribute.SYMLINK, isSymlink));}
-    public void setIsHidden(boolean isHidden) {filter.addFileFilter(new AttributeFileFilter(FileAttribute.HIDDEN, isHidden));}
-    public void setIsReadable(boolean isReadable) {filter.addFileFilter(new PermissionsFileFilter(PermissionType.READ, isReadable));}
-    public void setIsWritable(boolean isWritable) {filter.addFileFilter(new PermissionsFileFilter(PermissionType.WRITE, isWritable));}
-    public void setIsExecutable(boolean isExecutable) {filter.addFileFilter(new PermissionsFileFilter(PermissionType.EXECUTE, isExecutable));}
+    public void setMask(String mask, boolean isCaseSensitive) {
+        filter.addFileFilter(new RegexpFilenameFilter(mask, isCaseSensitive));
+    }
+
+    public void setIsDir(boolean isDir) {
+        filter.addFileFilter(new AttributeFileFilter(FileAttribute.DIRECTORY, isDir));
+    }
+
+    public void setIsSymlink(boolean isSymlink) {
+        filter.addFileFilter(new AttributeFileFilter(FileAttribute.SYMLINK, isSymlink));
+    }
+
+    public void setIsHidden(boolean isHidden) {
+        filter.addFileFilter(new AttributeFileFilter(FileAttribute.HIDDEN, isHidden));
+    }
+
+    public void setIsReadable(boolean isReadable) {
+        filter.addFileFilter(new PermissionsFileFilter(PermissionType.READ, isReadable));
+    }
+
+    public void setIsWritable(boolean isWritable) {
+        filter.addFileFilter(new PermissionsFileFilter(PermissionType.WRITE, isWritable));
+    }
+
+    public void setIsExecutable(boolean isExecutable) {
+        filter.addFileFilter(new PermissionsFileFilter(PermissionType.EXECUTE, isExecutable));
+    }
 }

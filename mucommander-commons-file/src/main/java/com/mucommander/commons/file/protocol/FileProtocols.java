@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,39 +29,39 @@ import com.mucommander.commons.file.FileURL;
 public interface FileProtocols {
 
     /** Protocol for local or locally mounted files. */
-    String FILE      = "file";
+    String FILE = "file";
 
     /** Protocol for files served by an FTP server. */
-    String FTP       = "ftp";
+    String FTP = "ftp";
 
     /** Protocol for files served by a web server using HTTP. */
-    String HTTP      = "http";
+    String HTTP = "http";
 
     /** Protocol for files served by an HDFS (Hadoop distributed filesystem) cluster. */
-    String HDFS      = "hdfs";
+    String HDFS = "hdfs";
 
     /** Protocol for files served by a web server using HTTPS. */
-    String HTTPS     = "https";
+    String HTTPS = "https";
 
     /** Protocol for files served by an NFS server. */
-    String NFS       = "nfs";
+    String NFS = "nfs";
 
     /** Protocol for files served by an Amazon S3 (or protocol-compatible) server. */
-    String S3        = "s3";
+    String S3 = "s3";
 
     /** Protocol for files served by an SFTP server (not to be confused with FTPS or SCP). */
-    String SFTP      = "sftp";
+    String SFTP = "sftp";
 
     /** Protocol for files served by a SMB/CIFS server. */
-    String SMB       = "smb";
+    String SMB = "smb";
 
     /** Protocol for files served by a web server using Webdav/HTTP. */
-    String WEBDAV    = "webdav";
+    String WEBDAV = "webdav";
 
     /** Protocol for files served by a web server using Webdav/HTTPS. */
-    String WEBDAVS   = "webdavs";
-    
+    String WEBDAVS = "webdavs";
+
     /** Protocol for files served by a web server using vSphere. */
-    String VSPHERE   = "vsphere";
+    String VSPHERE = "vsphere";
 
 }

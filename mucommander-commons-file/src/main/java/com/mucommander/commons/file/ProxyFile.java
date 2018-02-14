@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,7 +19,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.io.FileTransferException;
@@ -221,7 +220,7 @@ public abstract class ProxyFile extends AbstractFile {
         return file.getUnderlyingFileObject();
     }
 
-    
+
     /////////////////////////////////////
     // Overridden AbstractFile methods //
     /////////////////////////////////////
@@ -233,10 +232,9 @@ public abstract class ProxyFile extends AbstractFile {
         // If the method corresponding to the file operation has been overridden by this class (a ProxyFile subclass),
         // check the presence of the UnsupportedFileOperation annotation in this class.
         try {
-            if(!thisClass.getMethod(opMethod.getName(), opMethod.getParameterTypes()).getDeclaringClass().equals(ProxyFile.class))
+            if (!thisClass.getMethod(opMethod.getName(), opMethod.getParameterTypes()).getDeclaringClass().equals(ProxyFile.class))
                 return AbstractFile.isFileOperationSupported(op, thisClass);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // Should never happen, unless AbstractFile method signatures have changed and FileOperation has not been updated
             LOGGER.warn("Exception caught, this should not have happened", e);
         }
@@ -267,9 +265,9 @@ public abstract class ProxyFile extends AbstractFile {
 
     @Override
     public String getBaseName() {
-    	return file.getBaseName();
+        return file.getBaseName();
     }
-    
+
     @Override
     public String getAbsolutePath() {
         return file.getAbsolutePath();

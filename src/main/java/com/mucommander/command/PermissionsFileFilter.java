@@ -26,6 +26,7 @@ import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * Filter on a file's permissions.
+ *
  * @author Nicolas Rinaudo
  */
 public class PermissionsFileFilter extends AbstractFileFilter {
@@ -34,16 +35,17 @@ public class PermissionsFileFilter extends AbstractFileFilter {
 
     /**
      * Creates a new <code>PermissionsFileFilter</code>.
+     *
      * @param permission permission that will be checked against as defined in {@link com.mucommander.commons.file.FilePermissions}.
      * @param filter     whether or not the specified permission flag must be set for a file to be accepted.
      */
     public PermissionsFileFilter(PermissionType permission, boolean filter) {
         this.permission = permission;
-        this.filter     = filter;
+        this.filter = filter;
     }
 
     public boolean accept(AbstractFile file) {
-        if(permission== PermissionType.EXECUTE && JavaVersion.JAVA_1_5.isCurrentOrLower())
+        if (permission == PermissionType.EXECUTE && JavaVersion.JAVA_1_5.isCurrentOrLower())
             return true;
 
         return filter ? file.getPermissions().getBitValue(PermissionAccess.USER, permission) : !file.getPermissions().getBitValue(PermissionAccess.USER, permission);
@@ -51,14 +53,20 @@ public class PermissionsFileFilter extends AbstractFileFilter {
 
     /**
      * Returns the permission that this filter will check.
+     *
      * @return the permission that this filter will check.
      */
-    public PermissionType getPermission() {return permission;}
+    public PermissionType getPermission() {
+        return permission;
+    }
 
     /**
      * Returns <code>true</code> if files must have the filter's permission flag set in order to be accepted.
+     *
      * @return <code>true</code> if files must have the filter's permission flag set in order to be accepted, <code>false</code> otherwise.
      */
-    public boolean getFilter() {return filter;}
+    public boolean getFilter() {
+        return filter;
+    }
 }
 

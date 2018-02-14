@@ -20,11 +20,11 @@ package com.mucommander.ui.main.toolbar;
 
 /**
  * This is an interface that each class that should listen to ToolBar's attributes modifications need to implement.
- * 
+ *
  * @author Arik Hadas
  */
 public interface ToolBarAttributesListener {
-	/**
+    /**
      * This method is invoked when toolbar's actions have been modified.
      */
     public void toolBarActionsChanged();

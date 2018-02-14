@@ -26,20 +26,24 @@ import java.util.Stack;
  * This behaves exactly as a {@link ConfigurationExplorer}, but keeps track of its own path. This is meant
  * for instances of {@link Configuration} to prune empty branches.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 class BufferedConfigurationExplorer extends ConfigurationExplorer {
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Sections that have been passed through. */
+    /**
+     * Sections that have been passed through.
+     */
     private final Stack<ConfigurationSection> sections;
-
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new explorer on the specified section.
+     *
      * @param root section from which to start exploring.
      */
     public BufferedConfigurationExplorer(ConfigurationSection root) {
@@ -48,34 +52,41 @@ class BufferedConfigurationExplorer extends ConfigurationExplorer {
     }
 
 
-
     // - History browsing ----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns <code>true</code> if there are more sections in the history.
+     *
      * @return <code>true</code> if there are more sections in the history.
      */
-    public boolean hasSections() {return !sections.empty();}
+    public boolean hasSections() {
+        return !sections.empty();
+    }
 
     /**
      * Returns the next section in history.
+     *
      * @return the next section in history.
      */
-    public ConfigurationSection popSection() {return sections.pop();}
-
+    public ConfigurationSection popSection() {
+        return sections.pop();
+    }
 
 
     // - Exploration methods -------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Move to the specified section.
-     * @param  name   name of the current section's subsection in which to move.
-     * @param  create if <code>true</code> and <code>name</code> doesn't exist, it will be created.
-     * @return        <code>true</code> if we could move to <code>name</code>, <code>false</code> otherwise.
+     *
+     * @param name   name of the current section's subsection in which to move.
+     * @param create if <code>true</code> and <code>name</code> doesn't exist, it will be created.
+     * @return <code>true</code> if we could move to <code>name</code>, <code>false</code> otherwise.
      */
     @Override
     public boolean moveTo(String name, boolean create) {
-        if(super.moveTo(name, create)) {
+        if (super.moveTo(name, create)) {
             sections.push(getSection());
             return true;
         }

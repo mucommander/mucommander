@@ -37,28 +37,28 @@ import java.awt.event.ActionListener;
  * Dialog invoked when the user wants to change a file name after a collision has been detected
  * while copying or moving files.
  *
- * @see CopyJob
  * @author Mariusz Jakubowski
+ * @see CopyJob
  */
 public class FileCollisionRenameDialog extends FocusDialog implements ActionListener, DialogResult {
-	
+
     private JTextField edtNewName;
 
     private JButton okButton;
 
-	private String newName;
+    private String newName;
 
     // Dialog size constraints
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
     // Dialog width should not exceed 360, height is not an issue (always the same)
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400, 10000);
 
 
     /**
      * Creates a new rename file dialog.
      *
-     * @param mainFrame the parent MainFrame 
-     * @param file the file to rename.
+     * @param mainFrame the parent MainFrame
+     * @param file      the file to rename.
      */
     public FileCollisionRenameDialog(MainFrame mainFrame, AbstractFile file) {
         super(mainFrame, Translator.get("rename"), mainFrame);
@@ -73,10 +73,10 @@ public class FileCollisionRenameDialog extends FocusDialog implements ActionList
         // Sets the initial selection.
         AbstractCopyDialog.selectDestinationFilename(file, file.getName(), 0).feedToPathField(edtNewName);
         mainPanel.add(edtNewName);
-   
+
         mainPanel.addSpace(10);
         contentPane.add(mainPanel, BorderLayout.NORTH);
-        
+
         okButton = new JButton(Translator.get("rename"));
         JButton cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
@@ -92,13 +92,13 @@ public class FileCollisionRenameDialog extends FocusDialog implements ActionList
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
-	
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-		
+
         // OK Button
-        if(source == okButton || source == edtNewName) {
-        	newName = edtNewName.getText();
+        if (source == okButton || source == edtNewName) {
+            newName = edtNewName.getText();
         } else {
             newName = null;
         }
@@ -109,5 +109,5 @@ public class FileCollisionRenameDialog extends FocusDialog implements ActionList
         showDialog();
         return newName;
     }
-    
+
 }

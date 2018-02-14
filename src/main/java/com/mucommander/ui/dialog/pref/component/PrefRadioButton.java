@@ -29,16 +29,16 @@ import java.awt.event.ItemListener;
  */
 public abstract class PrefRadioButton extends JRadioButton implements PrefComponent {
 
-	public PrefRadioButton(String description) {
-		super(description);
-	}
-	
-	public void addDialogListener(final PreferencesDialog dialog) {
-		addItemListener(new ItemListener() {
+    public PrefRadioButton(String description) {
+        super(description);
+    }
 
-			public void itemStateChanged(ItemEvent e) {
-				dialog.componentChanged(PrefRadioButton.this);
-			}
-		});		
-	}
+    public void addDialogListener(final PreferencesDialog dialog) {
+        addItemListener(new ItemListener() {
+
+            public void itemStateChanged(ItemEvent e) {
+                dialog.componentChanged(PrefRadioButton.this);
+            }
+        });
+    }
 }

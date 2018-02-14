@@ -28,14 +28,14 @@ import java.awt.*;
  * dialog is about to perform.<br>
  * It is made of 3 components:
  * <ul>
- *  <li>A 'main' label which provides a brief description of the action to be performed.
+ * <li>A 'main' label which provides a brief description of the action to be performed.
  * By default, this label uses the standard label's font size and a bold style.
- *  <li>A 'caption' label which is displayed under the main label and provides additional information about the action
+ * <li>A 'caption' label which is displayed under the main label and provides additional information about the action
  * to be performed. This label uses a smaller font size and plain style.
- *  <li>An optional icon displayed to the left of labels. InformationPane makes it easy to use one of the standard
+ * <li>An optional icon displayed to the left of labels. InformationPane makes it easy to use one of the standard
  * <code>JOptionPane</code> icons: error, information, warning, question.
  * </ul>
- *
+ * <p>
  * <p>Here is a textual representation of the layout, all components are vertically aligned to the top:
  * <pre>
  *
@@ -43,7 +43,7 @@ import java.awt.*;
  * | [ICON] | Main label    |
  * |        | Caption label |
  * |________|_______________|
- * 
+ *
  * </pre>
  * </p>
  *
@@ -51,20 +51,34 @@ import java.awt.*;
  */
 public class InformationPane extends JPanel {
 
-    /** Label used to display the icon, can be null if no icon is used */
+    /**
+     * Label used to display the icon, can be null if no icon is used
+     */
     private JLabel iconLabel;
-    /** Label used to display the main message */
+    /**
+     * Label used to display the main message
+     */
     private MultiLineLabel mainLabel;
-    /** Label used to display the caption message */
+    /**
+     * Label used to display the caption message
+     */
     private MultiLineLabel captionLabel;
 
-    /** Designates the 'error' predefined icon */
+    /**
+     * Designates the 'error' predefined icon
+     */
     public final static int ERROR_ICON = 1;
-    /** Designates the 'information' predefined icon */
+    /**
+     * Designates the 'information' predefined icon
+     */
     public final static int INFORMATION_ICON = 2;
-    /** DesignateS the 'warning' predefined icon */
+    /**
+     * DesignateS the 'warning' predefined icon
+     */
     public final static int WARNING_ICON = 3;
-    /** Designates the 'question' predefined icon */
+    /**
+     * Designates the 'question' predefined icon
+     */
     public final static int QUESTION_ICON = 4;
 
     /**
@@ -78,7 +92,7 @@ public class InformationPane extends JPanel {
      * Creates a new InformationPane using the given main and caption messages and no icon. The font style for the main
      * label is set to <code>Font.BOLD</code>.
      *
-     * @param mainMessage the message to display in the main label
+     * @param mainMessage    the message to display in the main label
      * @param captionMessage the message to display in the caption label
      */
     public InformationPane(String mainMessage, String captionMessage) {
@@ -89,10 +103,10 @@ public class InformationPane extends JPanel {
      * Creates a new InformationPane using the given main message, caption message, main label font style and
      * predefined icon.
      *
-     * @param mainMessage the message to display in the main label
-     * @param captionMessage the message to display in the caption label
+     * @param mainMessage          the message to display in the main label
+     * @param captionMessage       the message to display in the caption label
      * @param mainMessageFontStyle the font style to use in the main label
-     * @param predefinedIconId an id designating the predefined icon to display, see constant fields for allowed values
+     * @param predefinedIconId     an id designating the predefined icon to display, see constant fields for allowed values
      */
     public InformationPane(String mainMessage, String captionMessage, int mainMessageFontStyle, int predefinedIconId) {
         this(mainMessage, captionMessage, mainMessageFontStyle, getPredefinedIcon(predefinedIconId));
@@ -101,21 +115,21 @@ public class InformationPane extends JPanel {
     /**
      * Creates a new InformationPane using the given main message, caption message, main label font style and icon.
      *
-     * @param mainMessage the message to display in the main label
-     * @param captionMessage the message to display in the caption label
+     * @param mainMessage          the message to display in the main label
+     * @param captionMessage       the message to display in the caption label
      * @param mainMessageFontStyle the font style to use in the main label
-     * @param icon an icon to display, null for no icon
+     * @param icon                 an icon to display, null for no icon
      */
     public InformationPane(String mainMessage, String captionMessage, int mainMessageFontStyle, Icon icon) {
         super(new BorderLayout());
 
-        if(icon!=null)
+        if (icon != null)
             setIcon(icon);
 
         YBoxPanel yPanel = new YBoxPanel(5);
 
         mainLabel = new MultiLineLabel(mainMessage);
-        if(mainMessageFontStyle!=Font.PLAIN)
+        if (mainMessageFontStyle != Font.PLAIN)
             setMainLabelFontStyle(mainMessageFontStyle);
         yPanel.add(mainLabel);
 
@@ -123,7 +137,7 @@ public class InformationPane extends JPanel {
 
         captionLabel = new MultiLineLabel(captionMessage);
         Font labelFont = mainLabel.getFont();
-        captionLabel.setFont(labelFont.deriveFont(Font.PLAIN, labelFont.getSize()-2));
+        captionLabel.setFont(labelFont.deriveFont(Font.PLAIN, labelFont.getSize() - 2));
         yPanel.add(captionLabel);
 
         add(yPanel, BorderLayout.CENTER);
@@ -133,12 +147,12 @@ public class InformationPane extends JPanel {
      * Returns an <code>Icon</code> instance corresponding to the given predefined icon id.
      *
      * @param predefinedIconId an id designating a predefined icon, see constant fields for allowed values
-     * @return an Icon instance corresponding to the given predefined icon id 
+     * @return an Icon instance corresponding to the given predefined icon id
      */
     public static Icon getPredefinedIcon(int predefinedIconId) {
         String optionPaneIcon;
 
-        switch(predefinedIconId) {
+        switch (predefinedIconId) {
             case ERROR_ICON:
                 optionPaneIcon = "errorIcon";
                 break;
@@ -159,7 +173,7 @@ public class InformationPane extends JPanel {
                 return null;
         }
 
-        return UIManager.getIcon("OptionPane."+optionPaneIcon);
+        return UIManager.getIcon("OptionPane." + optionPaneIcon);
     }
 
     /**
@@ -187,14 +201,13 @@ public class InformationPane extends JPanel {
      * @param icon the new icon to display, null for no icon
      */
     public void setIcon(Icon icon) {
-        if(icon==null) {
-            if(iconLabel!=null) {
+        if (icon == null) {
+            if (iconLabel != null) {
                 remove(iconLabel);
                 iconLabel = null;
             }
-        }
-        else {
-            if(iconLabel==null) {
+        } else {
+            if (iconLabel == null) {
                 iconLabel = new JLabel(" ");
                 add(iconLabel, BorderLayout.WEST);
             }

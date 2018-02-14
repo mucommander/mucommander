@@ -24,37 +24,45 @@ import java.io.InputStream;
 /**
  * <code>CompoundInputStream</code> concatenates several input streams into one. It can operate in two modes:
  * <dl>
- *   <dt>Merged</dt>
- *   <dd>the compound stream acts as a single, global input stream, merging the contents of underlying streams. The
+ * <dt>Merged</dt>
+ * <dd>the compound stream acts as a single, global input stream, merging the contents of underlying streams. The
  * compound stream can be read just like a regular <code>InputStream</code> -- streams are advanced automatically as EOF
  * of individual streams are reached.</dd>
- *
- *   <dt>Unmerged</dt>
- *   <dd>the compound stream has be advanced manually. EOF are signaled individually for each underlying stream.
+ * <p>
+ * <dt>Unmerged</dt>
+ * <dd>the compound stream has be advanced manually. EOF are signaled individually for each underlying stream.
  * After EOF is reached, the current stream has to be advanced to the next one using {@link #advanceInputStream()}.</dd>
  * </dl>
- *
+ * <p>
  * <p>
  * This class is abstract, with a single method to implement: {@link #getNextInputStream()}.
  * See {@link IteratorCompoundInputStream} for an <code>Iterator</code>-backed implementation.
  * </p>
  *
+ * @author Maxence Bernard
  * @see IteratorCompoundInputStream
  * @see CompoundReader
- * @author Maxence Bernard
  */
 public abstract class CompoundInputStream extends InputStream {
 
-    /** True if this CompoundInputStream operates in 'merged' mode */
+    /**
+     * True if this CompoundInputStream operates in 'merged' mode
+     */
     private boolean merged;
 
-    /** The InputStream that's currently being processed */
+    /**
+     * The InputStream that's currently being processed
+     */
     private InputStream currentIn;
 
-    /** Used by {@link #read()} */
+    /**
+     * Used by {@link #read()}
+     */
     private byte oneByteBuf[];
 
-    /** <code>true</code> if the global EOF has been reached */
+    /**
+     * <code>true</code> if the global EOF has been reached
+     */
     private boolean globalEOFReached;
 
 
@@ -62,7 +70,7 @@ public abstract class CompoundInputStream extends InputStream {
      * Creates a new <code>CompoundInputStream</code> operating in the specified mode.
      *
      * @param merged <code>true</code> if the streams should be merged, acting as a single stream, or considered
-     * as separate streams that have to be {@link #advanceInputStream() advanced manually}.
+     *               as separate streams that have to be {@link #advanceInputStream() advanced manually}.
      */
     public CompoundInputStream(boolean merged) {
         this.merged = merged;
@@ -71,10 +79,10 @@ public abstract class CompoundInputStream extends InputStream {
     /**
      * Returns:
      * <ul>
-     *   <li><code>true</code> if this stream acts as a single, global input stream, merging the contents of underlying
+     * <li><code>true</code> if this stream acts as a single, global input stream, merging the contents of underlying
      * streams. In this mode, the compound stream can be read just like a regular InputStream -- streams are advanced
      * automatically as EOF of individual streams are reached.</li>
-     *   <li><code>false</code> if this stream has be advanced manually. In this mode, EOF are signaled individually
+     * <li><code>false</code> if this stream has be advanced manually. In this mode, EOF are signaled individually
      * for each underlying stream. After EOF has been reached, the current stream has to be advanced to the next one
      * using {@link #advanceInputStream()}.</li>
      * </ul>
@@ -102,7 +110,7 @@ public abstract class CompoundInputStream extends InputStream {
      * @throws IOException if an error occurred while closing the current input stream.
      */
     public void closeCurrentInputStream() throws IOException {
-        if(currentIn!=null)
+        if (currentIn != null)
             currentIn.close();
     }
 
@@ -116,19 +124,18 @@ public abstract class CompoundInputStream extends InputStream {
      *
      * @return <code>true</code> if there was a next stream, <code>false</code> otherwise
      * @throws IOException if an error occurred while trying to advancing the current stream. This
-     * <code>CompoundInputStream</code> can't be used after that and must be closed.
+     *                     <code>CompoundInputStream</code> can't be used after that and must be closed.
      */
     public boolean advanceInputStream() throws IOException {
         // Return immediately (don't close the stream) if this method is global EOF has already been reached
-        if(globalEOFReached)
+        if (globalEOFReached)
             return false;
 
         // Close the current stream
-        if(currentIn!=null) {
+        if (currentIn != null) {
             try {
                 closeCurrentInputStream();
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 // Fail silently
             }
         }
@@ -136,14 +143,13 @@ public abstract class CompoundInputStream extends InputStream {
         // Try to advance the current InputStream to the next
         try {
             currentIn = getNextInputStream();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             // Can't recover from this, this is the end of this stream
             globalEOFReached = true;
             throw e;
         }
 
-        if(currentIn==null) {
+        if (currentIn == null) {
             // Global EOF reached
             globalEOFReached = true;
             return false;
@@ -161,11 +167,11 @@ public abstract class CompoundInputStream extends InputStream {
      * @throws IOException if an error occurred while trying to advancing the current stream.
      */
     private boolean checkStream() throws IOException {
-        if(globalEOFReached)
+        if (globalEOFReached)
             return true;
 
-        if(currentIn==null)
-            if(!advanceInputStream())
+        if (currentIn == null)
+            if (!advanceInputStream())
                 return true;
 
         return false;
@@ -184,7 +190,7 @@ public abstract class CompoundInputStream extends InputStream {
      * </p>
      *
      * @return the next <code>InputStream</code>, <code>null</code> if there is none.
-     * @throws IOException if an error occurred while retrieving the next input stream 
+     * @throws IOException if an error occurred while retrieving the next input stream
      */
     public abstract InputStream getNextInputStream() throws IOException;
 
@@ -198,12 +204,12 @@ public abstract class CompoundInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if(oneByteBuf==null)
+        if (oneByteBuf == null)
             oneByteBuf = new byte[1];
 
         int ret = read(oneByteBuf, 0, 1);
 
-        return ret<=0?ret:oneByteBuf[0];
+        return ret <= 0 ? ret : oneByteBuf[0];
     }
 
     /**
@@ -218,22 +224,22 @@ public abstract class CompoundInputStream extends InputStream {
      * Reads up to <code>len-off</code> bytes and stores them in the specified byte buffer, starting at <code>off</code>.
      * Returns the number of bytes that were actually read, or <code>-1</code> to signal:
      * <ul>
-     *   <li>if {@link #isMerged()} is <code>true</code>, the end of the compound stream as a whole</li>
-     *   <li>if {@link #isMerged ()} is <code>false</code>, the end of the current stream, which may or may not coincide
+     * <li>if {@link #isMerged()} is <code>true</code>, the end of the compound stream as a whole</li>
+     * <li>if {@link #isMerged ()} is <code>false</code>, the end of the current stream, which may or may not coincide
      * with the end of the stream as a whole.</li>
      * </ul>
      */
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-        if(checkStream())
+        if (checkStream())
             return -1;
 
         int ret = currentIn.read(b, off, len);
 
-        if(ret==-1) {
+        if (ret == -1) {
             // read the next stream
-            if(merged) {
-                if(!advanceInputStream())
+            if (merged) {
+                if (!advanceInputStream())
                     return -1;      // Global EOF reached
 
                 // Recurse
@@ -250,22 +256,22 @@ public abstract class CompoundInputStream extends InputStream {
      * Skips up to <code>n</code> bytes and returns the number of bytes that were actually skipped, or <code>-1</code>
      * to signal:
      * <ul>
-     *   <li>if {@link #isMerged()} is enabled, the end of the compound stream as a whole</li>
-     *   <li>if {@link #isMerged ()} is disabled, the end of the current stream, which may or may not coincide
+     * <li>if {@link #isMerged()} is enabled, the end of the compound stream as a whole</li>
+     * <li>if {@link #isMerged ()} is disabled, the end of the current stream, which may or may not coincide
      * with the end of the stream as a whole.</li>
      * </ul>
      */
     @Override
     public long skip(long n) throws IOException {
-        if(checkStream())
+        if (checkStream())
             return -1;
 
         long ret = currentIn.skip(n);
 
-        if(ret==-1) {
+        if (ret == -1) {
             // read the next stream
-            if(merged) {
-                if(!advanceInputStream())
+            if (merged) {
+                if (!advanceInputStream())
                     return -1;      // Global EOF reac  hed
 
                 return currentIn.skip(n);
@@ -281,15 +287,14 @@ public abstract class CompoundInputStream extends InputStream {
      * Closes the current <code>InputStream</code> and this <code>CompoundInputStream</code> a whole.
      * The current stream can no longer be advanced after this method has been called.
      *
-     * @throws IOException if the current stream could not be closed.  
+     * @throws IOException if the current stream could not be closed.
      */
     @Override
     public void close() throws IOException {
         try {
-            if(currentIn!=null)
+            if (currentIn != null)
                 closeCurrentInputStream();
-        }
-        finally {
+        } finally {
             globalEOFReached = true;
         }
     }
@@ -299,7 +304,7 @@ public abstract class CompoundInputStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
-        if(checkStream())
+        if (checkStream())
             return 0;
 
         return currentIn.available();
@@ -311,10 +316,9 @@ public abstract class CompoundInputStream extends InputStream {
     @Override
     public void mark(int readlimit) {
         try {
-            if(!checkStream())
+            if (!checkStream())
                 currentIn.mark(readlimit);
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             // Can't throw an IOException here unfortunately, fail silently
         }
     }
@@ -324,7 +328,7 @@ public abstract class CompoundInputStream extends InputStream {
      */
     @Override
     public void reset() throws IOException {
-        if(!checkStream())
+        if (!checkStream())
             currentIn.reset();
     }
 
@@ -335,8 +339,7 @@ public abstract class CompoundInputStream extends InputStream {
     public boolean markSupported() {
         try {
             return !checkStream() && currentIn.markSupported();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }

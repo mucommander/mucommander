@@ -30,29 +30,35 @@ import java.io.OutputStream;
  * <code>CommandWriter</code> is a {@link CommandBuilder} that will send
  * all build messages it receives into an XML stream (as defined in {@link CommandsXmlConstants}).
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Where to write the custom command associations to. */
+    /**
+     * Where to write the custom command associations to.
+     */
     private XmlWriter out;
-
 
 
     // - Initialisation ------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Builds a new writer that will send data to the specified output stream.
-     * @param  stream      where to write the XML data.
+     *
+     * @param stream where to write the XML data.
      * @throws IOException if an IO error occurs.
      */
-    public CommandWriter(OutputStream stream) throws IOException {out = new XmlWriter(stream);}
-
+    public CommandWriter(OutputStream stream) throws IOException {
+        out = new XmlWriter(stream);
+    }
 
 
     // - Builder methods ------------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Opens the root XML element.
      */
@@ -60,21 +66,26 @@ public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
         try {
             out.startElement(ELEMENT_ROOT);
             out.println();
+        } catch (IOException e) {
+            throw new CommandException(e);
         }
-        catch(IOException e) {throw new CommandException(e);}
     }
 
     /**
      * Closes the root XML element.
      */
     public void endBuilding() throws CommandException {
-        try {out.endElement(ELEMENT_ROOT);}
-        catch(IOException e) {throw new CommandException(e);}
+        try {
+            out.endElement(ELEMENT_ROOT);
+        } catch (IOException e) {
+            throw new CommandException(e);
+        }
     }
 
     /**
      * Writes the specified command's XML description.
-     * @param  command          command that should be written.
+     *
+     * @param command command that should be written.
      * @throws CommandException if an error occurs.
      */
     public void addCommand(Command command) throws CommandException {
@@ -85,12 +96,15 @@ public class CommandWriter implements CommandsXmlConstants, CommandBuilder {
         attributes.add(ATTRIBUTE_ALIAS, command.getAlias());
         attributes.add(ATTRIBUTE_VALUE, command.getCommand());
         if (command.getType().toString() != null)
-        	attributes.add(ATTRIBUTE_TYPE, command.getType().toString());
-        if(command.isDisplayNameSet())
+            attributes.add(ATTRIBUTE_TYPE, command.getType().toString());
+        if (command.isDisplayNameSet())
             attributes.add(ATTRIBUTE_DISPLAY, command.getDisplayName());
 
         // Writes the XML description.
-        try {out.writeStandAloneElement(ELEMENT_COMMAND, attributes);}
-        catch(IOException e) {throw new CommandException(e);}
+        try {
+            out.writeStandAloneElement(ELEMENT_COMMAND, attributes);
+        } catch (IOException e) {
+            throw new CommandException(e);
+        }
     }
 }

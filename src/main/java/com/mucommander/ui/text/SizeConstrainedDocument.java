@@ -28,7 +28,9 @@ package com.mucommander.ui.text;
  */
 public class SizeConstrainedDocument extends javax.swing.text.PlainDocument {
 
-    /** Maximum number of characters allowed */
+    /**
+     * Maximum number of characters allowed
+     */
     private int maxLen = -1;
 
     /**

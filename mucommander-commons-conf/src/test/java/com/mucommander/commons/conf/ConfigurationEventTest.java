@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,22 +31,21 @@ public class ConfigurationEventTest {
     // - Test constants ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Name of the test variable. */
-    private static final String         VARIABLE_NAME = "variable";
+    private static final String VARIABLE_NAME = "variable";
     /** Test string value. */
-    private static final String         STRING_VALUE  = "value";
+    private static final String STRING_VALUE = "value";
     /** Test list value. */
-    private static final Vector<String> LIST_VALUE    = new Vector<String>();
+    private static final Vector<String> LIST_VALUE = new Vector<String>();
     /** Test integer value. */
-    private static final int            INTEGER_VALUE = 10;
+    private static final int INTEGER_VALUE = 10;
     /** Test long value. */
-    private static final long           LONG_VALUE    = 15;
+    private static final long LONG_VALUE = 15;
     /** Test float value. */
-    private static final float          FLOAT_VALUE   = (float)10.5;
+    private static final float FLOAT_VALUE = (float) 10.5;
     /** Test double value. */
-    private static final double         DOUBLE_VALUE  = 15.5;
+    private static final double DOUBLE_VALUE = 15.5;
     /** Test boolean value. */
-    private static final boolean        BOOLEAN_VALUE = true;
-
+    private static final boolean BOOLEAN_VALUE = true;
 
 
     // - Instance fields -----------------------------------------------------------------------------------------------
@@ -55,11 +54,10 @@ public class ConfigurationEventTest {
     private Configuration conf;
 
 
-
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             LIST_VALUE.add(Integer.toString(i));
     }
 
@@ -72,9 +70,9 @@ public class ConfigurationEventTest {
     }
 
 
-
     // - Type specific tests -------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Tests string events.
      */
@@ -188,9 +186,9 @@ public class ConfigurationEventTest {
     }
 
 
-
     // - Misc. tests ---------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Tests event creation.
      */

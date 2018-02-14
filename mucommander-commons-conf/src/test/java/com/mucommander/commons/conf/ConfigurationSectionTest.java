@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,6 +30,7 @@ import java.util.*;
 public class ConfigurationSectionTest {
     // - removeVariable tests -------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Provides test cases for {@link #testRemoveVariable(String)}.
      * @return test cases for {@link #testRemoveVariable(String)}.
@@ -40,9 +41,9 @@ public class ConfigurationSectionTest {
 
         data = new ArrayList<Object[]>();
 
-        data.add(new Object[] {"value"});
-        data.add(new Object[] {""});
-        data.add(new Object[] {null});
+        data.add(new Object[]{"value"});
+        data.add(new Object[]{""});
+        data.add(new Object[]{null});
 
         return data.iterator();
     }
@@ -64,9 +65,9 @@ public class ConfigurationSectionTest {
     }
 
 
-
     // - setVariable tests ---------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Provides test cases for {@link #testSetVariable(String, String, boolean)}.
      * @return test cases for {@link #testSetVariable(String, String, boolean)}.
@@ -77,11 +78,11 @@ public class ConfigurationSectionTest {
 
         data = new ArrayList<Object[]>();
 
-        data.add(new Object[] {"value", "other", true});
-        data.add(new Object[] {"value", "value", false});
+        data.add(new Object[]{"value", "other", true});
+        data.add(new Object[]{"value", "value", false});
 
-        data.add(new Object[] {"value", null, true});
-        data.add(new Object[] {"value", "",   true});
+        data.add(new Object[]{"value", null, true});
+        data.add(new Object[]{"value", "", true});
 
         return data.iterator();
     }
@@ -93,10 +94,10 @@ public class ConfigurationSectionTest {
      * @param value   expected variable value.
      */
     private void assertVariable(ConfigurationSection section, String var, String value) {
-        if(value == null || value.isEmpty())
-            assert section.getVariable(var) == null: "Expected null but found " + section.getVariable(var);
+        if (value == null || value.isEmpty())
+            assert section.getVariable(var) == null : "Expected null but found " + section.getVariable(var);
         else {
-            assert section.getVariable(var).equals(value): "Expected " + value + " but found " + section.getVariable(var);
+            assert section.getVariable(var).equals(value) : "Expected " + value + " but found " + section.getVariable(var);
         }
     }
 
@@ -121,9 +122,9 @@ public class ConfigurationSectionTest {
     }
 
 
-
     // - variableNames test --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Utility method for {@link #testVariableNames()}.
      * @param section section to explore.
@@ -131,7 +132,7 @@ public class ConfigurationSectionTest {
      */
     private void assertVariableNames(ConfigurationSection section, int count) {
         // No expected variables, make sure that the section reflects that.
-        if(count == 0) {
+        if (count == 0) {
             assert !section.hasVariables();
             assert section.isEmpty();
             assert !section.variableNames().hasNext();
@@ -141,19 +142,19 @@ public class ConfigurationSectionTest {
         // We have to go through a set here: the order in which we'll iterate over the variable names is unreliable.
         else {
             Iterator<String> names;
-            Set<String>      expectedNames;
+            Set<String> expectedNames;
 
             assert section.hasVariables();
             assert !section.isEmpty();
 
             // Populates a set will all the expected variable names.
             expectedNames = new HashSet<String>(count);
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
                 expectedNames.add("var" + i);
 
             // Makes sure that we can remove all of the section's variables, and that none remains afterward.
             names = section.variableNames();
-            while(names.hasNext())
+            while (names.hasNext())
                 assert expectedNames.remove(names.next());
             assert expectedNames.isEmpty();
         }
@@ -169,7 +170,7 @@ public class ConfigurationSectionTest {
         section = new ConfigurationSection();
 
         // Create 10 variables.
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
             section.setVariable("var" + i, "value");
 
         assertVariableNames(section, 10);
@@ -184,7 +185,7 @@ public class ConfigurationSectionTest {
         assertVariableNames(section, 7);
 
 
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             section.removeVariable("var" + i);
         assertVariableNames(section, 0);
     }
@@ -192,6 +193,7 @@ public class ConfigurationSectionTest {
 
     // - Helper tests --------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Tests the list value helpers.
      */
@@ -209,7 +211,7 @@ public class ConfigurationSectionTest {
      */
     @Test
     public void testLongs() {
-        for(long i = 0; i < 10; i++) {
+        for (long i = 0; i < 10; i++) {
             assert ConfigurationSection.getLongValue(Long.toString(i)) == i;
             assert ConfigurationSection.getValue(i).equals(Long.toString(i));
         }
@@ -222,20 +224,20 @@ public class ConfigurationSectionTest {
      */
     @Test
     public void testIntegers() {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             assert ConfigurationSection.getIntegerValue(Integer.toString(i)) == i;
             assert ConfigurationSection.getValue(i).equals(Integer.toString(i));
         }
 
         assert ConfigurationSection.getIntegerValue(null) == 0;
     }
-    
+
     /**
      * Tests the double value helpers.
      */
     @Test
     public void testDoubles() {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             assert ConfigurationSection.getDoubleValue(i + ".5") == (i + 0.5d);
             assert ConfigurationSection.getValue((i + 0.5d)).equals(i + ".5");
         }
@@ -248,7 +250,7 @@ public class ConfigurationSectionTest {
      */
     @Test
     public void testFloats() {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             assert ConfigurationSection.getFloatValue(i + ".5") == (i + 0.5f);
             assert ConfigurationSection.getValue((i + 0.5f)).equals(i + ".5");
         }
@@ -273,9 +275,9 @@ public class ConfigurationSectionTest {
     }
 
 
-
     // - Section test --------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Tests various section related method.
      */
@@ -315,7 +317,7 @@ public class ConfigurationSectionTest {
      */
     private void assertSectionNames(ConfigurationSection section, int count) {
         // No expected variables, make sure that the section reflects that.
-        if(count == 0) {
+        if (count == 0) {
             assert !section.hasSections();
             assert section.isEmpty();
             assert !section.sectionNames().hasNext();
@@ -325,19 +327,19 @@ public class ConfigurationSectionTest {
         // We have to go through a set here: the order in which we'll iterate over the variable names is unreliable.
         else {
             Iterator<String> names;
-            Set<String>      expectedNames;
+            Set<String> expectedNames;
 
             assert section.hasSections();
             assert !section.isEmpty();
 
             // Populates a set will all the expected variable names.
             expectedNames = new HashSet<String>(count);
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
                 expectedNames.add("sect" + i);
 
             // Makes sure that we can remove all of the section's sub-sections, and that none remains afterward.
             names = section.sectionNames();
-            while(names.hasNext())
+            while (names.hasNext())
                 assert expectedNames.remove(names.next());
             assert expectedNames.isEmpty();
         }
@@ -352,7 +354,7 @@ public class ConfigurationSectionTest {
 
         // Create 10 variables.
         buffer = null;
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
             buffer = section.addSection("sect" + i);
         assertSectionNames(section, 10);
 
@@ -364,7 +366,7 @@ public class ConfigurationSectionTest {
         assert section.removeSection("sect8") != null;
         assertSectionNames(section, 8);
 
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
             assert section.removeSection("sect" + i) != null;
         assertSectionNames(section, 0);
     }

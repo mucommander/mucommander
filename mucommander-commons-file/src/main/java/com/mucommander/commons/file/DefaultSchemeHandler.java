@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,7 +43,7 @@ public class DefaultSchemeHandler implements SchemeHandler {
 
     /**
      * Creates a DefaultSchemeHandler with default values that suit schemes in which the scheme name is not included
-	 * in the URL (local and unc locations):
+     * in the URL (local and unc locations):
      * <ul>
      *  <li>the parser is a DefaultSchemeParser instance created with the no-arg constructor</li>
      *  <li>the scheme's standard port is <code>-1</code></li>
@@ -125,23 +125,23 @@ public class DefaultSchemeHandler implements SchemeHandler {
 
     /**
      * Returns a URL with the same scheme, host and port (if any) as the specified URL, and a path set to 
-	 * <code>"/"</code> or <code>"\"</code> depending on the URL format.
+     * <code>"/"</code> or <code>"\"</code> depending on the URL format.
      * The login, password, query and fragment parts of the returned URL are always <code>null</code>.
      * For example, when called with <code>http://www.mucommander.com:8080/path/to/file?query&param=value</code>,
      * this method returns <code>http://www.mucommander.com:8080/</code>.
-     * 
+     *
      * @param location the location for which to return the authentication realm
      * @return the authentication realm of the specified location
      */
     public FileURL getRealm(FileURL location) {
         // Start by cloning the given URL and then modify the parts that need it
-        FileURL realm = (FileURL)location.clone();
+        FileURL realm = (FileURL) location.clone();
 
         realm.setPath(location.getPathSeparator());
         realm.setCredentials(null);
         realm.setQuery(null);
         // Todo
-             // realm.setFragment(null)
+        // realm.setFragment(null)
 
         return realm;
     }

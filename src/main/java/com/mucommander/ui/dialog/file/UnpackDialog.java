@@ -40,18 +40,18 @@ public class UnpackDialog extends TransferDestinationDialog {
      * Creates and displays a new UnpackDialog.
      *
      * @param mainFrame the main frame this dialog is attached to
-     * @param files the set of files to unpack
+     * @param files     the set of files to unpack
      */
     public UnpackDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
-        	  ActionProperties.getActionLabel(UnpackAction.Descriptor.ACTION_ID),
-              Translator.get("unpack_dialog.destination"),
-              Translator.get("unpack"),
-              Translator.get("unpack_dialog.error_title"),
-              true);
+                ActionProperties.getActionLabel(UnpackAction.Descriptor.ACTION_ID),
+                Translator.get("unpack_dialog.destination"),
+                Translator.get("unpack"),
+                Translator.get("unpack_dialog.error_title"),
+                true);
     }
 
-    
+
     //////////////////////////////////////////////
     // TransferDestinationDialog implementation //
     //////////////////////////////////////////////
@@ -64,7 +64,7 @@ public class UnpackDialog extends TransferDestinationDialog {
     @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
         int destinationType = resolvedDest.getDestinationType();
-        if(destinationType==PathUtils.ResolvedDestination.EXISTING_FILE) {
+        if (destinationType == PathUtils.ResolvedDestination.EXISTING_FILE) {
             showErrorDialog(Translator.get("invalid_path", resolvedDest.getDestinationFile().getAbsolutePath()));
             return null;
         }
@@ -73,7 +73,7 @@ public class UnpackDialog extends TransferDestinationDialog {
                 progressDialog,
                 mainFrame,
                 files,
-                destinationType==PathUtils.ResolvedDestination.NEW_FILE?resolvedDest.getDestinationFile():resolvedDest.getDestinationFolder(),
+                destinationType == PathUtils.ResolvedDestination.NEW_FILE ? resolvedDest.getDestinationFile() : resolvedDest.getDestinationFolder(),
                 defaultFileExistsAction);
     }
 

@@ -24,14 +24,14 @@ import java.io.IOException;
  * This <code>IOException</code> can be used when attempting to read from a {@link BoundedInputStream} or
  * {@link BoundedReader} beyond the byte or character limit set.
  *
+ * @author Maxence Bernard
  * @see com.mucommander.commons.io.BoundedInputStream
  * @see com.mucommander.commons.io.BoundedOutputStream
  * @see com.mucommander.commons.io.BoundedReader
- * @author Maxence Bernard
  */
 public class StreamOutOfBoundException extends IOException {
-    
+
     public StreamOutOfBoundException(long limit) {
-        super("Attempt to read out of bounds, limit="+limit);
+        super("Attempt to read out of bounds, limit=" + limit);
     }
 }

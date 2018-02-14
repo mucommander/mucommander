@@ -36,10 +36,10 @@ public class ArrowButton extends JButton {
     public final static int RIGHT_DIRECTION = 3;
 
     private final static String ICONS[] = {
-        "arrow_up.png",
-        "arrow_down.png",
-        "arrow_left.png",
-        "arrow_right.png"
+            "arrow_up.png",
+            "arrow_down.png",
+            "arrow_left.png",
+            "arrow_right.png"
     };
 
 
@@ -70,7 +70,7 @@ public class ArrowButton extends JButton {
      * Changes the direction of the arrow icon to the specified one.
      *
      * @param direction can have one of the following values: {@link #UP_DIRECTION}, {@link #DOWN_DIRECTION},
-     * {@link #LEFT_DIRECTION} or {@link #RIGHT_DIRECTION}
+     *                  {@link #LEFT_DIRECTION} or {@link #RIGHT_DIRECTION}
      */
     public void setArrowDirection(int direction) {
         setIcon(IconManager.getIcon(IconManager.COMMON_ICON_SET, ICONS[direction]));

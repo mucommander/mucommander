@@ -18,8 +18,6 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import javax.swing.Icon;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.text.Translator;
@@ -29,33 +27,35 @@ import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
+import javax.swing.*;
+
 /**
  * This quick list shows roots of partitions.
- * 
+ *
  * @author Arik Hadas
  */
 public class RootFoldersQL extends QuickListWithIcons<AbstractFile> {
-	
-	private FolderPanel folderPanel;
-	
-	public RootFoldersQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowRootFoldersQLAction.Descriptor.ACTION_ID), Translator.get("roots_quick_list.empty_message"));
-		
-		this.folderPanel = folderPanel;
-	}
-	
-	@Override
-	protected Icon itemToIcon(AbstractFile item) {
-		return FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(item):null;
-	}
 
-	@Override
-	protected AbstractFile[] getData() {
-		return LocalFile.getVolumes();
-	}
+    private FolderPanel folderPanel;
 
-	@Override
-	protected void acceptListItem(AbstractFile item) {
-		folderPanel.tryChangeCurrentFolder(item);
-	}
+    public RootFoldersQL(FolderPanel folderPanel) {
+        super(folderPanel, ActionProperties.getActionLabel(ShowRootFoldersQLAction.Descriptor.ACTION_ID), Translator.get("roots_quick_list.empty_message"));
+
+        this.folderPanel = folderPanel;
+    }
+
+    @Override
+    protected Icon itemToIcon(AbstractFile item) {
+        return FileIcons.hasProperSystemIcons() ? FileIcons.getSystemFileIcon(item) : null;
+    }
+
+    @Override
+    protected AbstractFile[] getData() {
+        return LocalFile.getVolumes();
+    }
+
+    @Override
+    protected void acceptListItem(AbstractFile item) {
+        folderPanel.tryChangeCurrentFolder(item);
+    }
 }

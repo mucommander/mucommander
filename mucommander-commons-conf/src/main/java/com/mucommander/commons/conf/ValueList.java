@@ -33,13 +33,16 @@ import java.util.StringTokenizer;
  * {@link Configuration} and {@link ConfigurationEvent}. These have been extended to iterators through the
  * {@link #valueIterator()} method.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public class ValueList extends ArrayList<String> {
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new <code>ValueList</code> initialised with the specified data.
+     *
      * @param data      data contained by the list.
      * @param separator string used to separate <code>data</code> in tokens.
      */
@@ -47,18 +50,19 @@ public class ValueList extends ArrayList<String> {
         StringTokenizer tokenizer;
 
         tokenizer = new StringTokenizer(data, separator);
-        while(tokenizer.hasMoreTokens())
+        while (tokenizer.hasMoreTokens())
             add(tokenizer.nextToken());
     }
 
 
-
     // - Value casting -------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns the value found at the specified index of the list as a string.
-     * @param  index index of the value to retrieve.
-     * @return       the value found at the specified index of the list as a string.
+     *
+     * @param index index of the value to retrieve.
+     * @return the value found at the specified index of the list as a string.
      */
     public String valueAt(int index) {
         return get(index);
@@ -66,8 +70,9 @@ public class ValueList extends ArrayList<String> {
 
     /**
      * Returns the value found at the specified index of the list as an integer.
-     * @param  index                 index of the value to retrieve.
-     * @return                       the value found at the specified index of the list as an integer.
+     *
+     * @param index index of the value to retrieve.
+     * @return the value found at the specified index of the list as an integer.
      * @throws NumberFormatException if the value cannot be cast to an integer.
      */
     public int integerValueAt(int index) {
@@ -76,8 +81,9 @@ public class ValueList extends ArrayList<String> {
 
     /**
      * Returns the value found at the specified index of the list as a float.
-     * @param  index                 index of the value to retrieve.
-     * @return                       the value found at the specified index of the list as a float.
+     *
+     * @param index index of the value to retrieve.
+     * @return the value found at the specified index of the list as a float.
      * @throws NumberFormatException if the value cannot be cast to a float.
      */
     public float floatValueAt(int index) {
@@ -86,8 +92,9 @@ public class ValueList extends ArrayList<String> {
 
     /**
      * Returns the value found at the specified index of the list as a double.
-     * @param  index                 index of the value to retrieve.
-     * @return                       the value found at the specified index of the list as a double.
+     *
+     * @param index index of the value to retrieve.
+     * @return the value found at the specified index of the list as a double.
      * @throws NumberFormatException if the value cannot be cast to a double.
      */
     public double doubleValueAt(int index) {
@@ -96,8 +103,9 @@ public class ValueList extends ArrayList<String> {
 
     /**
      * Returns the value found at the specified index of the list as a long.
-     * @param  index                 index of the value to retrieve.
-     * @return                       the value found at the specified index of the list as a long.
+     *
+     * @param index index of the value to retrieve.
+     * @return the value found at the specified index of the list as a long.
      * @throws NumberFormatException if the value cannot be cast to a long.
      */
     public long longValueAt(int index) {
@@ -106,8 +114,9 @@ public class ValueList extends ArrayList<String> {
 
     /**
      * Returns the value found at the specified index of the list as a boolean.
-     * @param  index index of the value to retrieve.
-     * @return       the value found at the specified index of the list as a boolean.
+     *
+     * @param index index of the value to retrieve.
+     * @return the value found at the specified index of the list as a boolean.
      */
     public boolean booleanValueAt(int index) {
         return ConfigurationSection.getBooleanValue(valueAt(index));
@@ -115,9 +124,10 @@ public class ValueList extends ArrayList<String> {
 
     /**
      * Returns the value found at the specified index of the list as a {@link ValueList}.
-     * @param  index     index of the value to retrieve.
-     * @param  separator string used to split the value into tokens.
-     * @return           the value found at the specified index of the list as a {@link ValueList}.
+     *
+     * @param index     index of the value to retrieve.
+     * @param separator string used to split the value into tokens.
+     * @return the value found at the specified index of the list as a {@link ValueList}.
      */
     public ValueList listValueAt(int index, String separator) {
         return ConfigurationSection.getListValue(valueAt(index), separator);
@@ -125,6 +135,7 @@ public class ValueList extends ArrayList<String> {
 
     /**
      * Returns a {@link ValueIterator} on the list.
+     *
      * @return a {@link ValueIterator} on the list.
      */
     public ValueIterator valueIterator() {
@@ -132,28 +143,29 @@ public class ValueList extends ArrayList<String> {
     }
 
 
-
     // - Helper methods ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns a string representation of the specified list.
-     * @param  data      values to represent as a string.
-     * @param  separator string used to separate one element from the other.
-     * @return           a string representation of the specified list.
+     *
+     * @param data      values to represent as a string.
+     * @param separator string used to separate one element from the other.
+     * @return a string representation of the specified list.
      */
     public static String toString(List<?> data, String separator) {
         StringBuilder buffer;
-        Iterator<?>   values;
+        Iterator<?> values;
 
         buffer = new StringBuilder();
         values = data.iterator();
 
         // Deals with the first value separately.
-        if(values.hasNext())
+        if (values.hasNext())
             buffer.append(values.next().toString());
 
         // All subsequent values will be concatenated after a separator.
-        while(values.hasNext()) {
+        while (values.hasNext()) {
             buffer.append(separator);
             buffer.append(values.next().toString());
         }

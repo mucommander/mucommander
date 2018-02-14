@@ -47,7 +47,7 @@ import java.awt.event.ActionListener;
 
 /**
  * This dialog contains a list of all bookmarks and allows the user to edit, remove, duplicate, go to and reorder them.
- *
+ * <p>
  * <p>If the contents of this list is modified, bookmarks will be saved to disk when this dialog is disposed.</p>
  *
  * @author Maxence Bernard
@@ -74,11 +74,10 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
     private boolean ignoreDocumentListenerEvents;
 
     // Dialog's size has to be at least 400x300
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(440,330);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(440, 330);
 
     // Dialog's size has to be at most 600x400
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(600,400);
-
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(600, 400);
 
 
     public EditBookmarksDialog(MainFrame mainFrame) {
@@ -107,12 +106,12 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         // Add bookmark name field
         this.nameField = new JTextField();
         nameField.getDocument().addDocumentListener(this);
-        compPanel.addRow(Translator.get("name")+":", nameField, 5);
+        compPanel.addRow(Translator.get("name") + ":", nameField, 5);
 
         // Create a path field with auto-completion capabilities
         this.locationField = new FilePathField();
         locationField.getDocument().addDocumentListener(this);
-        compPanel.addRow(Translator.get("location")+":", locationField, 10);
+        compPanel.addRow(Translator.get("location") + ":", locationField, 10);
 
         YBoxPanel yPanel = new YBoxPanel(10);
         yPanel.add(compPanel);
@@ -169,17 +168,17 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
         // table will receive initial focus
         setInitialFocusComponent(bookmarkList);
-		
+
         // Selects OK when enter is pressed
         getRootPane().setDefaultButton(closeButton);
 
         // Packs dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		
+
         // Call dispose() on close and write bookmarks file
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        
+
         showDialog();
     }
 
@@ -194,10 +193,10 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
         boolean componentsEnabled = false;
 
-        if(!bookmarkList.isSelectionEmpty() && bookmarks.size()>0) {
+        if (!bookmarkList.isSelectionEmpty() && bookmarks.size() > 0) {
             componentsEnabled = true;
 
-            Bookmark b = (Bookmark)bookmarkList.getSelectedValue();
+            Bookmark b = (Bookmark) bookmarkList.getSelectedValue();
             nameValue = b.getName();
             locationValue = b.getLocation();
         }
@@ -226,30 +225,32 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
      * @param sourceDocument the javax.swing.text.Document of the JTextField that was modified
      */
     private void modifyBookmark(Document sourceDocument) {
-        if(ignoreDocumentListenerEvents || bookmarks.size()==0)
+        if (ignoreDocumentListenerEvents || bookmarks.size() == 0)
             return;
 
         int selectedIndex = bookmarkList.getSelectedIndex();
 
         // Make sure that the selected index is not out of bounds
-        if(!bookmarkList.isIndexValid(selectedIndex))
+        if (!bookmarkList.isIndexValid(selectedIndex))
             return;
 
         Bookmark selectedBookmark = bookmarks.elementAt(selectedIndex);
 
-        if(currentBookmarkSave==null) {
+        if (currentBookmarkSave == null) {
             // Create a clone of the current bookmark in order to cancel any modifications made to it if the dialog
             // is cancelled.
-            try { currentBookmarkSave = (Bookmark)selectedBookmark.clone(); }
-            catch(CloneNotSupportedException ex) {}
+            try {
+                currentBookmarkSave = (Bookmark) selectedBookmark.clone();
+            } catch (CloneNotSupportedException ex) {
+            }
 
             this.currentListIndex = selectedIndex;
         }
 
         // Update name
-        if(sourceDocument==nameField.getDocument()) {
+        if (sourceDocument == nameField.getDocument()) {
             String name = nameField.getText();
-            if(name.trim().equals(""))
+            if (name.trim().equals(""))
                 name = getFreeNameVariation(Translator.get("untitled"));
 
             selectedBookmark.setName(name);
@@ -269,24 +270,23 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
      */
     private String getFreeNameVariation(String name) {
 
-        if(!containsName(name))
+        if (!containsName(name))
             return name;
 
         int len = name.length();
         char c;
         int num = 2;
-        if(len>4 && name.charAt(len-1)==')'
-                    && (c=name.charAt(len-2))>='0' && c<='9'
-                    && name.charAt(len-3)=='('
-                    && name.charAt(len-4)==' ')
-        {
-            num = (c-'0')+1;
-            name = name.substring(0, len-4);
+        if (len > 4 && name.charAt(len - 1) == ')'
+                && (c = name.charAt(len - 2)) >= '0' && c <= '9'
+                && name.charAt(len - 3) == '('
+                && name.charAt(len - 4) == ' ') {
+            num = (c - '0') + 1;
+            name = name.substring(0, len - 4);
         }
 
 
         String newName;
-        while(containsName(newName=(name+" ("+num+++")")));
+        while (containsName(newName = (name + " (" + num++ + ")"))) ;
 
         return newName;
     }
@@ -297,14 +297,13 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
      */
     private boolean containsName(String name) {
         int nbBookmarks = bookmarks.size();
-        for(int i=0; i<nbBookmarks; i++) {
-            if(bookmarks.elementAt(i).getName().equals(name))
+        for (int i = 0; i < nbBookmarks; i++) {
+            if (bookmarks.elementAt(i).getName().equals(name))
                 return true;
         }
 
         return false;
     }
-
 
 
     /**
@@ -315,7 +314,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         super.dispose();
 
         // Rollback current bookmark's modifications if the dialog was cancelled
-        if(currentBookmarkSave!=null) {
+        if (currentBookmarkSave != null) {
             bookmarks.setElementAt(currentBookmarkSave, currentListIndex);
             currentBookmarkSave = null;
         }
@@ -324,56 +323,58 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         BookmarkManager.setFireEvents(true);
 
         // Write bookmarks file to disk, only if changes were made to bookmarks
-        try {BookmarkManager.writeBookmarks(false);}
+        try {
+            BookmarkManager.writeBookmarks(false);
+        }
         // We should probably pop an error here.
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
     }
 
-	
+
     ///////////////////////////
     // ActionListener method //
     ///////////////////////////
-	
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-		
+
         // Dispose the dialog (bookmarks save is performed in dispose())
-        if (source== closeButton)  {
+        if (source == closeButton) {
             // Do not rollback current bookmark's modifications on dispose()
             currentBookmarkSave = null;
 
             dispose();
         }
         // Create a new empty bookmark / duplicate the currently selected bookmark
-        else if (source==newButton || source==duplicateButton) {
+        else if (source == newButton || source == duplicateButton) {
             Bookmark newBookmark;
-            if(source==newButton) {
+            if (source == newButton) {
                 newBookmark = new Bookmark(getFreeNameVariation(Translator.get("untitled")), "");
-            }
-            else {      // Duplicate button
+            } else {      // Duplicate button
                 try {
-                    Bookmark currentBookmark = (Bookmark)bookmarkList.getSelectedValue();
-                    newBookmark = (Bookmark)currentBookmark.clone();
+                    Bookmark currentBookmark = (Bookmark) bookmarkList.getSelectedValue();
+                    newBookmark = (Bookmark) currentBookmark.clone();
                     newBookmark.setName(getFreeNameVariation(currentBookmark.getName()));
+                } catch (CloneNotSupportedException ex) {
+                    return;
                 }
-                catch(CloneNotSupportedException ex) { return; }
             }
 
             bookmarks.add(newBookmark);
 
-            int newBookmarkIndex = bookmarks.size()-1;
+            int newBookmarkIndex = bookmarks.size() - 1;
             bookmarkList.selectAndScroll(newBookmarkIndex);
 
             updateComponents();
 
             nameField.selectAll();
             nameField.requestFocus();
-        }
-        else if(source==goToButton) {
+        } else if (source == goToButton) {
             // Dispose dialog first
             dispose();
             // Change active panel's folder
-            mainFrame.getActivePanel().tryChangeCurrentFolder(((Bookmark)bookmarkList.getSelectedValue()).getLocation());
+            mainFrame.getActivePanel().tryChangeCurrentFolder(((Bookmark) bookmarkList.getSelectedValue()).getLocation());
         }
     }
 
@@ -381,9 +382,9 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
     ///////////////////////////////////
     // ListSelectionListener methods //
     ///////////////////////////////////
-	
+
     public void valueChanged(ListSelectionEvent e) {
-        if(e.getValueIsAdjusting())
+        if (e.getValueIsAdjusting())
             return;
 
         // Reset current bookmark's save

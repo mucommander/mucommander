@@ -22,25 +22,29 @@ import java.awt.*;
 
 /**
  * {@link DefaultFont} implementation that maps to a fixed value.
+ *
  * @author Nicolas Rinaudo
  */
 public class FixedDefaultFont extends DefaultFont {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Font to default to. */
+    /**
+     * Font to default to.
+     */
     private Font font;
 
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of {@link FixedDefaultFont}.
+     *
      * @param font font to default to.
      */
     public FixedDefaultFont(Font font) {
         this.font = font;
     }
-
 
 
     // - DefaultFont implementation ------------------------------------------------------------------------------------

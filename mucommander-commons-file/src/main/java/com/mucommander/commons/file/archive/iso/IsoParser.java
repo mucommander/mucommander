@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -48,6 +48,7 @@ import java.util.Vector;
  */
 class IsoParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(IsoParser.class);
+
     public static Vector<IsoArchiveEntry> getEntries(byte[] buffer, RandomAccessInputStream rais, int sectSize, long sector_offset, long shiftOffset) throws Exception {
         Vector<IsoArchiveEntry> entries = new Vector<IsoArchiveEntry>();
 
@@ -130,13 +131,11 @@ class IsoParser {
 
             }
             */
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.info("Exception caught while parsing iso, throwing IOException", e);
 
             throw new IOException();
-        }
-        finally {
+        } finally {
             // Release the buffer
             BufferPool.releaseByteArray(buffer);
         }

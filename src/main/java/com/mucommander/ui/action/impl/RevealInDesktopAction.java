@@ -19,24 +19,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 
 /**
@@ -47,7 +41,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class RevealInDesktopAction extends ParentFolderAction {
 
-    public RevealInDesktopAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public RevealInDesktopAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         setEnabled(DesktopManager.canOpenInFileManager());
@@ -57,8 +51,8 @@ public class RevealInDesktopAction extends ParentFolderAction {
     protected void toggleEnabledState() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         setEnabled(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)
-               && !currentFolder.isArchive()
-               && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class)
+                && !currentFolder.isArchive()
+                && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class)
         );
     }
 
@@ -66,38 +60,45 @@ public class RevealInDesktopAction extends ParentFolderAction {
     public void performAction() {
         try {
             DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             InformationDialog.showErrorDialog(mainFrame);
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new RevealInDesktopAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new RevealInDesktopAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "RevealInDesktop";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "RevealInDesktop";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
+        }
 
         @Override
         public String getLabel() {
-            return Translator.get(ActionProperties.getActionLabelKey(RevealInDesktopAction.Descriptor.ACTION_ID), DesktopManager.canOpenInFileManager()?DesktopManager.getFileManagerName():Translator.get("file_manager"));
+            return Translator.get(ActionProperties.getActionLabelKey(RevealInDesktopAction.Descriptor.ACTION_ID), DesktopManager.canOpenInFileManager() ? DesktopManager.getFileManagerName() : Translator.get("file_manager"));
         }
     }
 }

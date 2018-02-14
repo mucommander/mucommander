@@ -1,21 +1,20 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 
 package com.mucommander.commons.file.archive;
@@ -96,13 +95,13 @@ public class ArchiveEntry extends SimpleFileAttributes {
         String path = getPath();
         int len = path.length();
         // Remove trailing '/' if any
-        if(path.charAt(len-1)=='/')
+        if (path.charAt(len - 1) == '/')
             path = path.substring(0, --len);
 
         int lastSlash = path.lastIndexOf('/');
-        return lastSlash==-1?
-          path:
-          path.substring(lastSlash+1, len);
+        return lastSlash == -1 ?
+                path :
+                path.substring(lastSlash + 1, len);
     }
 
     /**
@@ -140,8 +139,8 @@ public class ArchiveEntry extends SimpleFileAttributes {
     @Override
     public FilePermissions getPermissions() {
         FilePermissions permissions = super.getPermissions();
-        if(permissions==null)
-            return isDirectory()?FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS:FilePermissions.DEFAULT_FILE_PERMISSIONS;
+        if (permissions == null)
+            return isDirectory() ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS : FilePermissions.DEFAULT_FILE_PERMISSIONS;
 
         return permissions;
     }
@@ -168,10 +167,10 @@ public class ArchiveEntry extends SimpleFileAttributes {
      * @see PathUtils#pathEquals(String, String, String)
      */
     public boolean equals(Object o) {
-        if(!(o instanceof ArchiveEntry))
+        if (!(o instanceof ArchiveEntry))
             return false;
 
-        return PathUtils.pathEquals(getPath(), ((ArchiveEntry)o).getPath(), "/");
+        return PathUtils.pathEquals(getPath(), ((ArchiveEntry) o).getPath(), "/");
     }
 
     /**
@@ -179,15 +178,15 @@ public class ArchiveEntry extends SimpleFileAttributes {
      * so that <code>url1.equals(url2)</code> implies <code>url1.hashCode()==url2.hashCode()</code>.
      */
     public int hashCode() {
-        if(hashCode!=0)         // Return any previously computed hashCode. Note that setPath invalidates the hashCode.
+        if (hashCode != 0)         // Return any previously computed hashCode. Note that setPath invalidates the hashCode.
             return hashCode;
 
         String path = getPath();
 
         // #equals(Object) is trailing separator insensitive, so the hashCode must be trailing separator invariant
         hashCode = path.endsWith("/")
-                ?path.substring(0, path.length()-1).hashCode()
-                :path.hashCode();
+                ? path.substring(0, path.length() - 1).hashCode()
+                : path.hashCode();
 
         return hashCode;
     }

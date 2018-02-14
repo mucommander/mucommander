@@ -23,18 +23,18 @@ import com.mucommander.ui.main.MainFrame;
 import java.util.Map;
 
 /**
- *  Each MuAction's factory should implement this interface.
+ * Each MuAction's factory should implement this interface.
  *
  * @author Arik Hadas
  */
 public interface ActionFactory {
-	
-	/**
-	 * This is an initiation method that returns an instance of MuAction subclass.
-	 * 
-	 * @param mainFrame - MainFrame.
-	 * @param properties - a hashtable of arguments for the action. 
-	 * @return an instance of MuAction subclass.
-	 */
-	MuAction createAction(MainFrame mainFrame, Map<String,Object> properties);
+
+    /**
+     * This is an initiation method that returns an instance of MuAction subclass.
+     *
+     * @param mainFrame  - MainFrame.
+     * @param properties - a hashtable of arguments for the action.
+     * @return an instance of MuAction subclass.
+     */
+    MuAction createAction(MainFrame mainFrame, Map<String, Object> properties);
 }

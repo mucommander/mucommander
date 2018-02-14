@@ -24,31 +24,34 @@ import java.util.Map;
  * A descriptor class for {@link MuAction} instances. An ActionParameters is the combination of a MuAction
  * class (a class extending MuAction and following its conventions) and a set of properties used for instantiation.
  * Thus, it not only identifies an action class but also the way it is instantiated.
- *
+ * <p>
  * <p>Two ActionParameters instances are equal only if:
  * <ul>
- *  <li>they refer to the same action ID
- *  <li>both sets of initialization properties are equal, i.e. they contain the same key/value pairs (deep equality)
+ * <li>they refer to the same action ID
+ * <li>both sets of initialization properties are equal, i.e. they contain the same key/value pairs (deep equality)
  * </ul>
  * This means that two ActionParameters instances referring to the same MuAction ID but with a different set of
  * initialization properties will not be equal.
- *
+ * <p>
  * <p>This class is used by ActionManager to instance MuAction and allow several instances to live in memory only if
  * they have different initialization properties, which translated into action speak means a different appearance
  * and/or behavior.
  *
+ * @author Maxence Bernard
  * @see ActionManager
  * @see MuAction
- *
- * @author Maxence Bernard
  */
 public class ActionParameters {
 
-    /** Action ID */
+    /**
+     * Action ID
+     */
     private String actionId;
 
-    /** Initialization properties, null if there are no initialization properties */
-    private Map<String,Object> properties;
+    /**
+     * Initialization properties, null if there are no initialization properties
+     */
+    private Map<String, Object> properties;
 
 
     /**
@@ -66,10 +69,10 @@ public class ActionParameters {
      * initialization properties. The <code>properties</code> parameter may be <code>null</code> if the action class is
      * to be instantiated without any initialization properties.
      *
-     * @param actionId a MuAction id
+     * @param actionId       a MuAction id
      * @param initProperties a Hashtable containing the properties that will be used to instantiate the specified MuAction class
      */
-    public ActionParameters(String actionId, Map<String,Object> initProperties) {
+    public ActionParameters(String actionId, Map<String, Object> initProperties) {
         this.actionId = actionId;
         this.properties = initProperties;
     }
@@ -90,7 +93,7 @@ public class ActionParameters {
      * @return the list of properties that are to be used to instantiate the MuAction class, or <code>null</code> if
      * there are none
      */
-    public Map<String,Object> getInitProperties() {
+    public Map<String, Object> getInitProperties() {
         return properties;
     }
 
@@ -101,14 +104,14 @@ public class ActionParameters {
      * set of initialization properties.
      */
     public boolean equals(Object o) {
-        if(!(o instanceof ActionParameters))
+        if (!(o instanceof ActionParameters))
             return false;
 
-        ActionParameters ad = (ActionParameters)o;
+        ActionParameters ad = (ActionParameters) o;
 
         return actionId.equals(ad.actionId)
-            && (((properties==null || properties.isEmpty()) && (ad.properties==null || ad.properties.isEmpty()))
-                || (properties!=null && ad.properties!=null && properties.equals(ad.properties)));
+                && (((properties == null || properties.isEmpty()) && (ad.properties == null || ad.properties.isEmpty()))
+                || (properties != null && ad.properties != null && properties.equals(ad.properties)));
     }
 
 
@@ -116,13 +119,13 @@ public class ActionParameters {
      * Returns a hash code value for this ActionParameters, making this class suitable for use as a key in a Hashtable.
      */
     public int hashCode() {
-        return actionId.hashCode() + 27*(properties==null?0:properties.hashCode());
+        return actionId.hashCode() + 27 * (properties == null ? 0 : properties.hashCode());
     }
 
     /**
-     * Returns a String representation of this ActionParameters. 
+     * Returns a String representation of this ActionParameters.
      */
     public String toString() {
-        return super.toString()+" class="+actionId+" properties="+properties;
+        return super.toString() + " class=" + actionId + " properties=" + properties;
     }
 }

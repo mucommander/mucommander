@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * SelectedFileAction is an abstract action that operates on the currently active FileTable,
  * and that is enabled only when a file other than the parent folder file '..' is selected.
- *
+ * <p>
  * <p>Optionally, a FileFilter can be specified using {@link #setSelectedFileFilter(com.mucommander.commons.file.filter.FileFilter) setSelectedFileFilter}
  * to further restrict the enabled condition to files that match the filter.</p>
  *
@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public abstract class SelectedFileAction extends FileAction {
 
-    public SelectedFileAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectedFileAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -62,9 +62,9 @@ public abstract class SelectedFileAction extends FileAction {
     @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
         AbstractFile selectedFile = fileTable.getSelectedFile(false, true);
-        boolean enable = selectedFile!=null;
+        boolean enable = selectedFile != null;
 
-        if(enable && filter!=null)
+        if (enable && filter != null)
             enable = filter.match(selectedFile);
 
         return enable;

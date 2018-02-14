@@ -17,7 +17,7 @@ import java.util.Vector;
 /**
  * <code>DefaultOverlayable</code> is the default implementation of <code>Overlayable</code> using JPanel as the base
  * component.
- *
+ * <p>
  * This file that is based on the one provided by JIDE Software as part of JIDE Common Layer
  * has been modified to include all its dependencies so it can be used as a standalone resource.
  * This change was done by Arik Hadas, 12/12/2016.
@@ -176,8 +176,7 @@ public class DefaultOverlayable extends JPanel implements SwingConstants, Compon
         Integer location = _overlayLocations.get(component);
         if (location != null) {
             return location;
-        }
-        else {
+        } else {
             return -1;
         }
     }
@@ -235,8 +234,7 @@ public class DefaultOverlayable extends JPanel implements SwingConstants, Compon
         if (index == -1) {
             _overlayComponents.add(component);
             add(component, getComponentCount() - 1); // add it before the the actual component
-        }
-        else {
+        } else {
             _overlayComponents.add(index, component);
             add(component, index);
         }

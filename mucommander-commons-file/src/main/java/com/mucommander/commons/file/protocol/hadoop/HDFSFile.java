@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -48,7 +48,7 @@ public class HDFSFile extends HadoopFile {
 
     /** Default file permissions */
     private final static FilePermissions DEFAULT_PERMISSIONS = new SimpleFilePermissions(
-       FsPermission.getDefault().applyUMask(FsPermission.getUMask(DEFAULT_CONFIGURATION)).toShort() & PermissionBits.FULL_PERMISSION_INT
+            FsPermission.getDefault().applyUMask(FsPermission.getUMask(DEFAULT_CONFIGURATION)).toShort() & PermissionBits.FULL_PERMISSION_INT
     );
 
 
@@ -57,8 +57,7 @@ public class HDFSFile extends HadoopFile {
             UnixUserGroupInformation ugi = UnixUserGroupInformation.login(DEFAULT_CONFIGURATION);
             DEFAULT_USERNAME = ugi.getUserName();
             // Do not use default groups, as these are pretty much useless
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // Should never happen but default to a reasonable value if it does
             DEFAULT_USERNAME = System.getProperty("user.name");
         }
@@ -86,7 +85,7 @@ public class HDFSFile extends HadoopFile {
     private static String getUsername(FileURL url) {
         Credentials credentials = url.getCredentials();
         String username;
-        if(credentials==null||(username=credentials.getLogin()).equals(""))
+        if (credentials == null || (username = credentials.getLogin()).equals(""))
             username = getDefaultUsername();
 
         return username;

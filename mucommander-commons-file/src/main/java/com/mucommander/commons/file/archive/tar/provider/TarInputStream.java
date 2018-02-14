@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,7 +35,7 @@ import java.io.InputStream;
  * <p>This class is based off the <code>org.apache.tools.tar</code> package of the <i>Apache Ant</i> project. The Ant
  * code has been modified under the terms of the Apache License which you can find in the bundled muCommander license
  * file. It was forked at version 1.7.1 of Ant.</p>
- * 
+ *
  * @author Apache Ant, Maxence Bernard
  */
 public class TarInputStream extends InputStream {
@@ -68,7 +68,7 @@ public class TarInputStream extends InputStream {
      * @param is the input stream providing the actual TAR data
      * @throws IOException if an error ocurred while initializing the stream
      */
-    public TarInputStream(InputStream is) throws IOException  {
+    public TarInputStream(InputStream is) throws IOException {
         this(is, TarBuffer.DEFAULT_BLKSIZE, TarBuffer.DEFAULT_RCDSIZE, 0);
     }
 
@@ -106,9 +106,9 @@ public class TarInputStream extends InputStream {
         this.debug = false;
         this.hasHitEOF = false;
 
-        if(entryOffset>0) {
-            if((entryOffset%recordSize)!=0)
-                throw new IllegalArgumentException("entryOffset ("+entryOffset+") is not a multiple of recordSize ("+recordSize+")");
+        if (entryOffset > 0) {
+            if ((entryOffset % recordSize) != 0)
+                throw new IllegalArgumentException("entryOffset (" + entryOffset + ") is not a multiple of recordSize (" + recordSize + ")");
 
             skipBytes(entryOffset);
         }
@@ -134,8 +134,7 @@ public class TarInputStream extends InputStream {
         if (!closed) {
             try {
                 buffer.close();
-            }
-            finally {
+            } finally {
                 BufferPool.releaseByteArray(recordBuf);
                 BufferPool.releaseByteArray(nameBuf);
                 BufferPool.releaseByteArray(oneBuf);
@@ -212,7 +211,7 @@ public class TarInputStream extends InputStream {
         boolean ret = buffer.readRecord(recordBuf);
 
         recordBufPos = 0;
-        recordBufLeft = ret?recordBuf.length:0;
+        recordBufLeft = ret ? recordBuf.length : 0;
 
         return ret;
     }
@@ -281,8 +280,8 @@ public class TarInputStream extends InputStream {
 
             // Offset of the current entry from the start of the archive,
             // allows to reposition the stream at the start of the entry
-            currEntry.setOffset(buffer.getCurrentBlockNum()*buffer.getBlockSize()
-                               + buffer.getCurrentRecordNum()*buffer.getRecordSize());
+            currEntry.setOffset(buffer.getCurrentBlockNum() * buffer.getBlockSize()
+                    + buffer.getCurrentRecordNum() * buffer.getRecordSize());
 
             if (debug) {
                 System.err.println("TarInputStream: SET CURRENTRY '"
@@ -315,7 +314,7 @@ public class TarInputStream extends InputStream {
             }
             // remove trailing null terminator
             if (longName.length() > 0
-                && longName.charAt(longName.length() - 1) == 0) {
+                    && longName.charAt(longName.length() - 1) == 0) {
                 longName.deleteCharAt(longName.length() - 1);
             }
             currEntry.setName(longName.toString());
@@ -337,7 +336,6 @@ public class TarInputStream extends InputStream {
         int num = read(oneBuf, 0, 1);
         return num == -1 ? -1 : ((int) oneBuf[0]) & BYTE_MASK;
     }
-
 
 
     /**
@@ -371,7 +369,7 @@ public class TarInputStream extends InputStream {
         while (numToRead > 0) {
             // If there is no more data left to read from the current record buffer,
             // read a new record  
-            if(recordBufLeft<=0) {
+            if (recordBufLeft <= 0) {
                 if (!readRecord()) {
                     // Unexpected EOF!
                     throw new EOFException("unexpected EOF with " + numToRead + " bytes unread");
@@ -436,10 +434,10 @@ public class TarInputStream extends InputStream {
 
         while (numToSkip > 0) {
             // If the record buffer has some data left, empty it
-            if(recordBufLeft>0) {
+            if (recordBufLeft > 0) {
                 int sz = (numToSkip > recordBufLeft)
                         ? recordBufLeft
-                        : (int)numToSkip;
+                        : (int) numToSkip;
 
                 recordBufPos += sz;
                 recordBufLeft -= sz;
@@ -449,7 +447,7 @@ public class TarInputStream extends InputStream {
                 entryOffset += sz;
             }
             // Skip a whole block if there are enough bytes left to skip, and if we are at the end of the current block
-            else if(numToSkip>=blockSize && buffer.getCurrentRecordNum()==buffer.getRecordsPerBlock()-1) {
+            else if (numToSkip >= blockSize && buffer.getCurrentRecordNum() == buffer.getRecordsPerBlock() - 1) {
                 if (!buffer.skipBlock()) {
                     // Unexpected EOF!
                     throw new EOFException("unexpected EOF with " + numToSkip + " bytes unskipped");
@@ -460,7 +458,7 @@ public class TarInputStream extends InputStream {
                 entryOffset += blockSize;
             }
             // Skip a whole record if there are enough bytes left to skip
-            else if(numToSkip>=recordSize) {
+            else if (numToSkip >= recordSize) {
                 if (!buffer.skipRecord()) {
                     // Unexpected EOF!
                     throw new EOFException("unexpected EOF with " + numToSkip + " bytes unskipped");

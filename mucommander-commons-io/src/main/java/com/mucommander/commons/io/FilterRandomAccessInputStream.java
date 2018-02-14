@@ -25,12 +25,14 @@ import java.io.IOException;
  * to an existing <code>RandomAccessInputStream</code> instance. It allows to override selected methods and
  * filter the underlying <code>RandomAccessInputStream</code>.
  *
- * @see java.io.FilterInputStream
  * @author Maxence Bernard
+ * @see java.io.FilterInputStream
  */
 public class FilterRandomAccessInputStream extends RandomAccessInputStream {
 
-    /** The RandomAccessInputStream instance to proxy */
+    /**
+     * The RandomAccessInputStream instance to proxy
+     */
     protected RandomAccessInputStream rais;
 
     public FilterRandomAccessInputStream(RandomAccessInputStream rais) {

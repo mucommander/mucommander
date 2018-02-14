@@ -18,24 +18,18 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * Marks/unmarks files in the active FileTable, from the currently selected row to the last row (inclusive).
  * The last row will also become the currently selected row.
- *
+ * <p>
  * <p>The currently selected row's marked state determines whether the rows will be marked or unmarked : if the selected
  * row is marked, the rows will be unmarked and vice-versa.
  *
@@ -43,7 +37,7 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class MarkToLastRowAction extends MarkForwardAction {
 
-    public MarkToLastRowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkToLastRowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -51,29 +45,37 @@ public class MarkToLastRowAction extends MarkForwardAction {
     protected int getRowIncrement() {
         FileTable activeTable = mainFrame.getActiveTable();
 
-        return activeTable.getRowCount()-activeTable.getSelectedRow();
+        return activeTable.getRowCount() - activeTable.getSelectedRow();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new MarkToLastRowAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new MarkToLastRowAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MarkToLastRow";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "MarkToLastRow";
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_END, KeyEvent.SHIFT_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_END, KeyEvent.SHIFT_DOWN_MASK);
+        }
     }
 }

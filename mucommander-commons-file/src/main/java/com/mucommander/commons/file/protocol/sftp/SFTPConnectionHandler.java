@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,20 +19,14 @@
 
 package com.mucommander.commons.file.protocol.sftp;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
-import com.jcraft.jsch.UIKeyboardInteractive;
-import com.jcraft.jsch.UserInfo;
+import com.jcraft.jsch.*;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.connection.ConnectionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * Handles connections to SFTP servers.
@@ -68,7 +62,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
             final Credentials credentials = getCredentials();
 
             // Throw an AuthException if no auth information, required for SSH
-            if(credentials ==null)
+            if (credentials == null)
                 throwAuthException("Login and password required");  // Todo: localize this entry
 
             LOGGER.trace("creating SshClient");
@@ -77,7 +71,7 @@ class SFTPConnectionHandler extends ConnectionHandler {
 
             // Override default port (22) if a custom port was specified in the URL
             int port = realm.getPort();
-            if(port==-1)
+            if (port == -1)
                 port = 22;
 
             String privateKeyPath = realm.getProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME);
@@ -89,47 +83,47 @@ class SFTPConnectionHandler extends ConnectionHandler {
             session = jsch.getSession(credentials.getLogin(), realm.getHost(), port);
             session.setUserInfo(new PasswordAuthentication());
 
-            session.connect(5*1000);
+            session.connect(5 * 1000);
             // Init SFTP connections
             channelSftp = (ChannelSftp) session.openChannel("sftp");
-            channelSftp.connect(5*1000);
+            channelSftp.connect(5 * 1000);
             LOGGER.info("authentication complete");
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             LOGGER.info("IOException thrown while starting connection", e);
 
             // Disconnect if something went wrong
-            if(session!=null && session.isConnected())
-            	session.disconnect();;
+            if (session != null && session.isConnected())
+                session.disconnect();
+            ;
 
             session = null;
             channelSftp = null;
 
             // Re-throw exception
             throw e;
-		} catch (JSchException e) {
-			LOGGER.info("Caught exception while authenticating: {}", e.getMessage());
-			LOGGER.debug("Exception:", e);
+        } catch (JSchException e) {
+            LOGGER.info("Caught exception while authenticating: {}", e.getMessage());
+            LOGGER.debug("Exception:", e);
             throwAuthException(e.getMessage());
-		}
+        }
     }
 
 
     @Override
     public synchronized boolean isConnected() {
-        return session!=null && session.isConnected()
-            && channelSftp!=null && !channelSftp.isClosed();
+        return session != null && session.isConnected()
+                && channelSftp != null && !channelSftp.isClosed();
     }
 
 
     @Override
     public synchronized void closeConnection() {
-        if(channelSftp!=null) {
+        if (channelSftp != null) {
             channelSftp.quit();
         }
 
-        if(session!=null)
-        	session.disconnect();
+        if (session != null)
+            session.disconnect();
     }
 
 
@@ -141,43 +135,43 @@ class SFTPConnectionHandler extends ConnectionHandler {
 
     private class PasswordAuthentication implements UserInfo, UIKeyboardInteractive {
 
-    	@Override
-		public void showMessage(String message) {
-		}
-		
-		@Override
-		public boolean promptYesNo(String message) {
-			return true;
-		}
-		
-		@Override
-		public boolean promptPassword(String message) {
-			return true;
-		}
-		
-		@Override
-		public boolean promptPassphrase(String message) {
-			return true;
-		}
-		
-		@Override
-		public String getPassword() {
-			return credentials.getPassword();
-		}
-		
-		@Override
-		public String getPassphrase() {
-			return credentials.getPassword();
-		}
+        @Override
+        public void showMessage(String message) {
+        }
+
+        @Override
+        public boolean promptYesNo(String message) {
+            return true;
+        }
+
+        @Override
+        public boolean promptPassword(String message) {
+            return true;
+        }
+
+        @Override
+        public boolean promptPassphrase(String message) {
+            return true;
+        }
+
+        @Override
+        public String getPassword() {
+            return credentials.getPassword();
+        }
+
+        @Override
+        public String getPassphrase() {
+            return credentials.getPassword();
+        }
 
         @Override
         public String[] promptKeyboardInteractive(String destination,
-                String name,
-                String instruction,
-                String[] prompt,
-                boolean[] echo) {
+                                                  String name,
+                                                  String instruction,
+                                                  String[] prompt,
+                                                  boolean[] echo) {
             String[] result = new String[prompt.length];
-            for (int i=0; i<echo.length; i++)
+            for (int i = 0; i < echo.length; i++)
                 result[i] = echo[i] ? credentials.getLogin() : credentials.getPassword();
             return result;
         }

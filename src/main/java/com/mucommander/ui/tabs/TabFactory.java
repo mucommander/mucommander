@@ -19,21 +19,20 @@
 package com.mucommander.ui.tabs;
 
 /**
- * interface for factory of {@link com.mucommander.ui.tabs.Tab} 
- * 
- * @author Arik Hadas
+ * interface for factory of {@link com.mucommander.ui.tabs.Tab}
  *
  * @param <T> kind-of Tab
  * @param <K> parameter for initiating the new tab
+ * @author Arik Hadas
  */
 public interface TabFactory<T extends Tab, K> {
 
-	/**
-	 * This method returns new {@link com.mucommander.ui.tabs.Tab} based on the given parameter
-	 * 
-	 * @param k a parameter that the new tab is based on
-	 * @return instance of subclass of {@link com.mucommander.ui.tabs.Tab}
-	 */
-	T createTab(K k);
+    /**
+     * This method returns new {@link com.mucommander.ui.tabs.Tab} based on the given parameter
+     *
+     * @param k a parameter that the new tab is based on
+     * @return instance of subclass of {@link com.mucommander.ui.tabs.Tab}
+     */
+    T createTab(K k);
 
 }

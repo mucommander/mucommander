@@ -18,11 +18,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -31,22 +26,28 @@ import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
+
 /**
  * User configurable variant of {@link InternalEditAction}.
+ *
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class EditAction extends InternalEditAction {
     // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance of <code>EditAction</code>.
+     *
      * @param mainFrame  frame to which the action is attached.
      * @param properties action's properties.
      */
-    public EditAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public EditAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-
 
 
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
@@ -57,24 +58,31 @@ public class EditAction extends InternalEditAction {
     }
 
 
-
     // - Factory -------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new EditAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new EditAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "Edit";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "Edit";
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0);
+        }
     }
 }

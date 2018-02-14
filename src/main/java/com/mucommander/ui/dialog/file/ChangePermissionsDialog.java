@@ -18,25 +18,6 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
@@ -50,10 +31,22 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.SizeConstrainedDocument;
 
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 /**
  * This dialog allows the user to change the permissions of the currently selected/marked file(s). The permissions can be
  * selected either by clicking individual read/write/executable checkboxes for each of the user/group/other accesses,
- * or by entering an octal permission value. 
+ * or by entering an octal permission value.
  *
  * @author Maxence Bernard
  */
@@ -66,9 +59,13 @@ public class ChangePermissionsDialog extends JobDialog
 
     private JCheckBox recurseDirCheckBox;
 
-    /** If true, ItemEvent events should be ignored */
+    /**
+     * If true, ItemEvent events should be ignored
+     */
     private boolean ignoreItemEvent;
-    /** If true, DocumentEvent events should be ignored */
+    /**
+     * If true, DocumentEvent events should be ignored
+     */
     private boolean ignoreDocumentEvent;
 
     private JButton okButton;
@@ -80,7 +77,7 @@ public class ChangePermissionsDialog extends JobDialog
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ChangePermissionsAction.Descriptor.ACTION_ID)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ChangePermissionsAction.Descriptor.ACTION_ID) + " :"));
         mainPanel.addSpace(10);
 
         JPanel gridPanel = new JPanel(new GridLayout(4, 4));
@@ -89,7 +86,7 @@ public class ChangePermissionsDialog extends JobDialog
 
         AbstractFile firstFile = files.elementAt(0);
         int permSetMask = firstFile.getChangeablePermissions().getIntValue();
-        boolean canSetPermission = permSetMask!=0;
+        boolean canSetPermission = permSetMask != 0;
         int defaultPerms = firstFile.getPermissions().getIntValue();
 
         gridPanel.add(new JLabel());
@@ -97,15 +94,15 @@ public class ChangePermissionsDialog extends JobDialog
         gridPanel.add(new JLabel(Translator.get("permissions.write")));
         gridPanel.add(new JLabel(Translator.get("permissions.executable")));
 
-        for(PermissionAccess a : PermissionAccess.reverseValues()) {
-            gridPanel.add(new JLabel(Translator.get(a==PermissionAccess.USER ?"permissions.user":a==PermissionAccess.GROUP?"permissions.group":"permissions.other")));
+        for (PermissionAccess a : PermissionAccess.reverseValues()) {
+            gridPanel.add(new JLabel(Translator.get(a == PermissionAccess.USER ? "permissions.user" : a == PermissionAccess.GROUP ? "permissions.group" : "permissions.other")));
 
-            for(PermissionType p : PermissionType.reverseValues()) {
+            for (PermissionType p : PermissionType.reverseValues()) {
                 permCheckBox = new JCheckBox();
-                permCheckBox.setSelected((defaultPerms & (p.toInt()<<a.toInt()*3))!=0);
+                permCheckBox.setSelected((defaultPerms & (p.toInt() << a.toInt() * 3)) != 0);
 
                 // Enable the checkbox only if the permission can be set in the destination
-                if((permSetMask & (p.toInt()<<a.toInt()*3))==0)
+                if ((permSetMask & (p.toInt() << a.toInt() * 3)) == 0)
                     permCheckBox.setEnabled(false);
                 else
                     permCheckBox.addItemListener(this);
@@ -124,9 +121,9 @@ public class ChangePermissionsDialog extends JobDialog
             public void insertString(int offset, String str, AttributeSet attributeSet) throws BadLocationException {
                 int strLen = str.length();
                 char c;
-                for(int i=0; i<strLen; i++) {
+                for (int i = 0; i < strLen; i++) {
                     c = str.charAt(i);
-                    if(c<'0' || c>'7')
+                    if (c < '0' || c > '7')
                         return;
                 }
 
@@ -137,7 +134,7 @@ public class ChangePermissionsDialog extends JobDialog
         // Initializes the field's value
         updateOctalPermTextField();
 
-        if(canSetPermission) {
+        if (canSetPermission) {
             doc.addDocumentListener(this);
         }
         // Disable text field if no permission bit can be set
@@ -155,7 +152,7 @@ public class ChangePermissionsDialog extends JobDialog
 
         recurseDirCheckBox = new JCheckBox(Translator.get("recurse_directories"));
         // Disable check box if no permission bit can be set
-        recurseDirCheckBox.setEnabled(canSetPermission && (files.size()>1 || files.elementAt(0).isDirectory()));
+        recurseDirCheckBox.setEnabled(canSetPermission && (files.size() > 1 || files.elementAt(0).isDirectory()));
         mainPanel.add(recurseDirCheckBox);
 
         // Create file details button and OK/cancel buttons and lay them out a single row
@@ -170,12 +167,12 @@ public class ChangePermissionsDialog extends JobDialog
 
         getContentPane().add(mainPanel, BorderLayout.NORTH);
 
-        if(!canSetPermission) {
+        if (!canSetPermission) {
             // Disable OK button if no permission bit can be set
             okButton.setEnabled(false);
         }
 
-        getRootPane().setDefaultButton(canSetPermission?okButton:cancelButton);
+        getRootPane().setDefaultButton(canSetPermission ? okButton : cancelButton);
         setResizable(false);
     }
 
@@ -187,12 +184,12 @@ public class ChangePermissionsDialog extends JobDialog
         JCheckBox permCheckBox;
         int perms = 0;
 
-        for(PermissionAccess a : PermissionAccess.reverseValues()) {
-            for(PermissionType p : PermissionType.reverseValues()) {
+        for (PermissionAccess a : PermissionAccess.reverseValues()) {
+            for (PermissionType p : PermissionType.reverseValues()) {
                 permCheckBox = permCheckBoxes[a.toInt()][p.toInt()];
 
-                if(permCheckBox.isSelected())
-                    perms |= (p.toInt()<<a.toInt()*3);
+                if (permCheckBox.isSelected())
+                    perms |= (p.toInt() << a.toInt() * 3);
             }
         }
 
@@ -206,8 +203,8 @@ public class ChangePermissionsDialog extends JobDialog
     private void updateOctalPermTextField() {
         String octalStr = Integer.toOctalString(getPermInt());
         int len = octalStr.length();
-        for(int i=len; i<3; i++)
-            octalStr = "0"+octalStr;
+        for (int i = len; i < 3; i++)
+            octalStr = "0" + octalStr;
 
         octalPermTextField.setText(octalStr);
     }
@@ -220,14 +217,14 @@ public class ChangePermissionsDialog extends JobDialog
         JCheckBox permCheckBox;
         String octalStr = octalPermTextField.getText();
 
-        int perms = octalStr.equals("")?0:Integer.parseInt(octalStr, 8);
+        int perms = octalStr.equals("") ? 0 : Integer.parseInt(octalStr, 8);
 
-        for(PermissionAccess a : PermissionAccess.reverseValues()) {
-            for(PermissionType p : PermissionType.reverseValues()) {
+        for (PermissionAccess a : PermissionAccess.reverseValues()) {
+            for (PermissionType p : PermissionType.reverseValues()) {
                 permCheckBox = permCheckBoxes[a.toInt()][p.toInt()];
 
 //                if(permCheckBox.isEnabled())
-                permCheckBox.setSelected((perms & (p.toInt()<<a.toInt()*3))!=0);
+                permCheckBox.setSelected((perms & (p.toInt() << a.toInt() * 3)) != 0);
             }
         }
 
@@ -241,15 +238,14 @@ public class ChangePermissionsDialog extends JobDialog
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if(source==okButton) {
+        if (source == okButton) {
             dispose();
 
             // Starts copying files
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("progress_dialog.processing_files"));
             ChangeFileAttributesJob job = new ChangeFileAttributesJob(progressDialog, mainFrame, files, getPermInt(), recurseDirCheckBox.isSelected());
             progressDialog.start(job);
-        }
-        else if(source==cancelButton) {
+        } else if (source == cancelButton) {
             dispose();
         }
     }
@@ -262,7 +258,7 @@ public class ChangePermissionsDialog extends JobDialog
     // Update the octal permission text field whenever one of the permission checkboxes' value has changed
 
     public void itemStateChanged(ItemEvent e) {
-        if(ignoreItemEvent)
+        if (ignoreItemEvent)
             return;
 
         ignoreDocumentEvent = true;
@@ -278,7 +274,7 @@ public class ChangePermissionsDialog extends JobDialog
     // Update the permission checkboxes' values whenever the octal permission text field has changed
 
     public void changedUpdate(DocumentEvent e) {
-        if(ignoreDocumentEvent)
+        if (ignoreDocumentEvent)
             return;
 
         ignoreItemEvent = true;
@@ -287,7 +283,7 @@ public class ChangePermissionsDialog extends JobDialog
     }
 
     public void insertUpdate(DocumentEvent e) {
-        if(ignoreDocumentEvent)
+        if (ignoreDocumentEvent)
             return;
 
         ignoreItemEvent = true;
@@ -296,7 +292,7 @@ public class ChangePermissionsDialog extends JobDialog
     }
 
     public void removeUpdate(DocumentEvent e) {
-        if(ignoreDocumentEvent)
+        if (ignoreDocumentEvent)
             return;
 
         ignoreItemEvent = true;

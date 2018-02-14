@@ -21,16 +21,15 @@ package com.mucommander.ui.main.tabs;
 import com.mucommander.ui.main.FolderPanel;
 
 /**
- * 
  * @author Arik Hadas
  */
 public abstract class FileTableTabHeaderFactory {
 
-	protected FolderPanel folderPanel;
-	
-	protected FileTableTabHeaderFactory(FolderPanel folderPanel) {
-		this.folderPanel = folderPanel;
-	}
-	
-	public abstract FileTableTabHeader create(FileTableTab tab);
+    protected FolderPanel folderPanel;
+
+    protected FileTableTabHeaderFactory(FolderPanel folderPanel) {
+        this.folderPanel = folderPanel;
+    }
+
+    public abstract FileTableTabHeader create(FileTableTab tab);
 }

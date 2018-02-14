@@ -25,11 +25,13 @@ package com.mucommander.commons.conf;
  * its {@link Configuration#addConfigurationListener(ConfigurationListener) addConfigurationListener} method to be
  * notified of configuration changes.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 public interface ConfigurationListener {
     /**
      * Invoked when the configuration changes.
+     *
      * @param event describes the configuration modification.
      */
     void configurationChanged(ConfigurationEvent event);

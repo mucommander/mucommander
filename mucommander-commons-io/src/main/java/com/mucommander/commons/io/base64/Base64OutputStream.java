@@ -26,8 +26,8 @@ import java.io.OutputStream;
  * This <code>OuputStream</code> encodes supplied data to Base64 encoding and writes it to the underlying
  * <code>OutputStream</code>.
  *
- * @see Base64Encoder
  * @author Maxence Bernard, with the exception of the algorithm description which was found on the Web.
+ * @see Base64Encoder
  */
 public class Base64OutputStream extends OutputStream {
     /*
@@ -95,25 +95,39 @@ public class Base64OutputStream extends OutputStream {
 
     */
 
-    /** Underlying OutputStream encoded data is sent to */
+    /**
+     * Underlying OutputStream encoded data is sent to
+     */
     private OutputStream out;
 
-    /** The Base64 encoding table */
+    /**
+     * The Base64 encoding table
+     */
     private final byte[] encodingTable;
 
-    /** The character used for padding */
+    /**
+     * The character used for padding
+     */
     private final byte paddingChar;
 
-    /** Array used to accumulate the first 2 bytes of a 3-byte group */
+    /**
+     * Array used to accumulate the first 2 bytes of a 3-byte group
+     */
     private byte byteAcc[] = new byte[2];
-	
-    /** Number of bytes accumulated to form a 3-byte group */
+
+    /**
+     * Number of bytes accumulated to form a 3-byte group
+     */
     private int nbBytesWaiting;
 
-    /** Specifies whether line breaks should be inserted after 80 chars */
+    /**
+     * Specifies whether line breaks should be inserted after 80 chars
+     */
     private boolean insertLineBreaks;
 
-    /** Current line length (to insert line return character after 80 chars)*/
+    /**
+     * Current line length (to insert line return character after 80 chars)
+     */
     private int lineLength;
 
 
@@ -121,7 +135,7 @@ public class Base64OutputStream extends OutputStream {
      * Equivalent to calling {@link #Base64OutputStream(java.io.OutputStream, boolean, Base64Table)} with
      * a {@link Base64Table#STANDARD_TABLE} table.
      *
-     * @param out the underlying OutputStream to write the base64-encoded data to
+     * @param out              the underlying OutputStream to write the base64-encoded data to
      * @param insertLineBreaks if <code>true</code>, line breaks will be inserted after every 80 characters written
      */
     public Base64OutputStream(OutputStream out, boolean insertLineBreaks) {
@@ -132,9 +146,9 @@ public class Base64OutputStream extends OutputStream {
      * Creates a new <code>Base64OutputStream</code> using the underlying OutputStream and table to write the
      * base64-encoded data.
      *
-     * @param out the underlying OutputStream to write the base64-encoded data to
+     * @param out              the underlying OutputStream to write the base64-encoded data to
      * @param insertLineBreaks if <code>true</code>, line breaks will be inserted after every 80 characters written
-     * @param table the table to use to encode data
+     * @param table            the table to use to encode data
      */
     public Base64OutputStream(OutputStream out, boolean insertLineBreaks, Base64Table table) {
         this.out = out;
@@ -151,22 +165,22 @@ public class Base64OutputStream extends OutputStream {
      */
     public void writePadding() throws IOException {
         // No padding needed
-        if(nbBytesWaiting==0)
+        if (nbBytesWaiting == 0)
             return;
 
         // 1 padding character
-        if (nbBytesWaiting==2) {
+        if (nbBytesWaiting == 2) {
             // 2 bytes left
-            out.write(encodingTable[(byte)((byteAcc[0] & 0xFC) >> 2)]);
-            out.write(encodingTable[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
-            out.write(encodingTable[(byte)((byteAcc[1] & 0x0F) << 2)]);
+            out.write(encodingTable[(byte) ((byteAcc[0] & 0xFC) >> 2)]);
+            out.write(encodingTable[(byte) (((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
+            out.write(encodingTable[(byte) ((byteAcc[1] & 0x0F) << 2)]);
             out.write(paddingChar);
         }
         // 2 padding characters
-        else if (nbBytesWaiting==1) {
+        else if (nbBytesWaiting == 1) {
             // 1 byte left
-            out.write(encodingTable[(byte)((byteAcc[0] & 0xFC) >> 2)]);
-            out.write(encodingTable[(byte)((byteAcc[0] & 0x03) << 4)]);
+            out.write(encodingTable[(byte) ((byteAcc[0] & 0xFC) >> 2)]);
+            out.write(encodingTable[(byte) ((byteAcc[0] & 0x03) << 4)]);
             out.write(paddingChar);
             out.write(paddingChar);
         }
@@ -183,12 +197,12 @@ public class Base64OutputStream extends OutputStream {
     @Override
     public void write(int i) throws IOException {
         // We have a 3-byte group
-        if(nbBytesWaiting==2) {
+        if (nbBytesWaiting == 2) {
             // Write 3 bytes as 4 base64 characters
-            out.write(encodingTable[(byte)((byteAcc[0] & 0xFC) >> 2)]);
-            out.write(encodingTable[(byte)(((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
-            out.write(encodingTable[(byte)(((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
-            out.write(encodingTable[(byte)(i & 0x3F)]);
+            out.write(encodingTable[(byte) ((byteAcc[0] & 0xFC) >> 2)]);
+            out.write(encodingTable[(byte) (((byteAcc[0] & 0x03) << 4) | ((byteAcc[1] & 0xF0) >> 4))]);
+            out.write(encodingTable[(byte) (((byteAcc[1] & 0x0F) << 2) | ((i & 0xC0) >> 6))]);
+            out.write(encodingTable[(byte) (i & 0x3F)]);
 
             nbBytesWaiting = 0;
 
@@ -201,7 +215,7 @@ public class Base64OutputStream extends OutputStream {
         }
         // Waiting for more bytes...
         else {
-            byteAcc[nbBytesWaiting++] = (byte)i;
+            byteAcc[nbBytesWaiting++] = (byte) i;
         }
     }
 

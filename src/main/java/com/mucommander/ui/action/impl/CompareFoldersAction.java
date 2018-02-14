@@ -18,20 +18,15 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
 /**
  * This action compares the content of the 2 MainFrame's file tables and marks the files that are different.
@@ -40,7 +35,7 @@ import com.mucommander.ui.main.table.FileTableModel;
  */
 public class CompareFoldersAction extends MuAction {
 
-    public CompareFoldersAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CompareFoldersAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -57,37 +52,37 @@ public class CompareFoldersAction extends MuAction {
         int fileIndex;
         String tempFileName;
         AbstractFile tempFile;
-        for(int i=0; i<nbFilesLeft; i++) {
+        for (int i = 0; i < nbFilesLeft; i++) {
             tempFile = leftTableModel.getFileAt(i);
-            if(tempFile.isDirectory())
+            if (tempFile.isDirectory())
                 continue;
 
             tempFileName = tempFile.getName();
             fileIndex = -1;
-            for(int j=0; j<nbFilesRight; j++)
+            for (int j = 0; j < nbFilesRight; j++)
                 if (rightTableModel.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex==-1 || rightTableModel.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
+            if (fileIndex == -1 || rightTableModel.getFileAt(fileIndex).getDate() < tempFile.getDate()) {
                 leftTableModel.setFileMarked(tempFile, true);
                 leftTable.repaint();
             }
         }
 
-        for(int i=0; i<nbFilesRight; i++) {
+        for (int i = 0; i < nbFilesRight; i++) {
             tempFile = rightTableModel.getFileAt(i);
-            if(tempFile.isDirectory())
+            if (tempFile.isDirectory())
                 continue;
 
             tempFileName = tempFile.getName();
             fileIndex = -1;
-            for(int j=0; j<nbFilesLeft; j++)
+            for (int j = 0; j < nbFilesLeft; j++)
                 if (leftTableModel.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex==-1 || leftTableModel.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
+            if (fileIndex == -1 || leftTableModel.getFileAt(fileIndex).getDate() < tempFile.getDate()) {
                 rightTableModel.setFileMarked(tempFile, true);
                 rightTable.repaint();
             }
@@ -98,27 +93,35 @@ public class CompareFoldersAction extends MuAction {
         rightTable.fireMarkedFilesChangedEvent();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new CompareFoldersAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new CompareFoldersAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "CompareFolders";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "CompareFolders";
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK);
+        }
     }
 }

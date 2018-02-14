@@ -25,100 +25,108 @@ import com.mucommander.ui.tabs.TabFactory;
 
 /**
  * Factory for creating regular {@link com.mucommander.ui.main.tabs.FileTableTab} presenting the given location
- * 
+ *
  * @author Arik Hadas
  */
 public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, FileURL> {
 
-	private FolderPanel folderPanel;
-	
-	public DefaultFileTableTabFactory(FolderPanel folderPanel) {
-		this.folderPanel = folderPanel;
-	}
+    private FolderPanel folderPanel;
 
-	public FileTableTab createTab(FileURL location) {
-		if (location == null)
-			throw new RuntimeException("Invalid location");
+    public DefaultFileTableTabFactory(FolderPanel folderPanel) {
+        this.folderPanel = folderPanel;
+    }
 
-		return new DefaultFileTableTab(location, folderPanel);
-	}
+    public FileTableTab createTab(FileURL location) {
+        if (location == null)
+            throw new RuntimeException("Invalid location");
 
-	class DefaultFileTableTab extends FileTableTab {
-		
-		/** The location presented in this tab */
-		private FileURL location;
+        return new DefaultFileTableTab(location, folderPanel);
+    }
 
-		/** Flag that indicates whether the tab is locked or not */
-		private boolean locked;
+    class DefaultFileTableTab extends FileTableTab {
 
-		/** Title that is assigned for the tab */
-		private String title;
-		
-		/** History of accessed location within the tab */
-		private LocalLocationHistory locationHistory;
+        /**
+         * The location presented in this tab
+         */
+        private FileURL location;
 
-		/**
-		 * Private constructor
-		 * 
-		 * @param location - the location that would be presented in the tab
-		 */
-		private DefaultFileTableTab(FileURL location, FolderPanel folderPanel) {
-			this.location = location;
-			this.locked = false;
-			locationHistory = new LocalLocationHistory(folderPanel);
-		}
+        /**
+         * Flag that indicates whether the tab is locked or not
+         */
+        private boolean locked;
 
-		@Override
-		public void setLocation(FileURL location) {
-			this.location = location;
-			
-			// add location to the history (See LocalLocationHistory to see how it handles the first location it gets)
-			locationHistory.tryToAddToHistory(location);
-		}
+        /**
+         * Title that is assigned for the tab
+         */
+        private String title;
 
-		@Override
-		public FileURL getLocation() {
-			return location;
-		}
+        /**
+         * History of accessed location within the tab
+         */
+        private LocalLocationHistory locationHistory;
 
-		@Override
-		public void setLocked(boolean locked) {
-			this.locked = locked;
-		}
+        /**
+         * Private constructor
+         *
+         * @param location - the location that would be presented in the tab
+         */
+        private DefaultFileTableTab(FileURL location, FolderPanel folderPanel) {
+            this.location = location;
+            this.locked = false;
+            locationHistory = new LocalLocationHistory(folderPanel);
+        }
 
-		@Override
-		public boolean isLocked() {
-			 return locked;
-		}
+        @Override
+        public void setLocation(FileURL location) {
+            this.location = location;
 
-		@Override
-		public void setTitle(String title) {
-			this.title = title;
-		}
+            // add location to the history (See LocalLocationHistory to see how it handles the first location it gets)
+            locationHistory.tryToAddToHistory(location);
+        }
 
-		@Override
-		public String getTitle() {
-			return title;
-		}
+        @Override
+        public FileURL getLocation() {
+            return location;
+        }
 
-		@Override
-		public LocalLocationHistory getLocationHistory() {
-			return locationHistory;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof FileTableTab) {
-				FileTableTab other = (FileTableTab) obj;
-				return location.equals(other.getLocation()) &&
-					   locked == other.isLocked();
-			}
-			return false;
-		}
+        @Override
+        public void setLocked(boolean locked) {
+            this.locked = locked;
+        }
 
-		@Override
-		public int hashCode() {
-			return location.hashCode();
-		}
-	}
+        @Override
+        public boolean isLocked() {
+            return locked;
+        }
+
+        @Override
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Override
+        public LocalLocationHistory getLocationHistory() {
+            return locationHistory;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof FileTableTab) {
+                FileTableTab other = (FileTableTab) obj;
+                return location.equals(other.getLocation()) &&
+                        locked == other.isLocked();
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return location.hashCode();
+        }
+    }
 }

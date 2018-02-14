@@ -41,34 +41,32 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * Dialog used to set parameters for renaming multiple files.
- * 
+ *
  * @author Mariusz Jakubowski
  */
 public class BatchRenameDialog extends FocusDialog implements ActionListener, DocumentListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BatchRenameDialog.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(BatchRenameDialog.class);
+
     private static final int CASE_UNCHANGED = 0;
     private static final int CASE_LOWER = 1;
     private static final int CASE_UPPER = 2;
     private static final int CASE_FIRST_UPPER = 3;
     private static final int CASE_WORD_UPPER = 4;
-    
+
     private static final int COL_ORIG_NAME = 0;
     private static final int COL_CHANGED_NAME = 1;
-    private static final int COL_CHANGE_BLOCK = 2;    
+    private static final int COL_CHANGE_BLOCK = 2;
 
     private MainFrame mainFrame;
     private JTextField edtFileNameMask;
@@ -90,38 +88,48 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     private JLabel lblDuplicates;
     private TableColumn colBlock;
 
-    
-    /** files to rename */
+
+    /**
+     * files to rename
+     */
     private FileSet files;
 
-    /** a map of old file names used to check for name conflicts */
+    /**
+     * a map of old file names used to check for name conflicts
+     */
     private HashMap<String, AbstractFile> oldNames = new HashMap<String, AbstractFile>();
 
-    /** a list of generated names */
+    /**
+     * a list of generated names
+     */
     private List<String> newNames = new ArrayList<String>();
 
-    /** a list of flags to block file rename */
+    /**
+     * a list of flags to block file rename
+     */
     private List<Boolean> blockNames = new ArrayList<Boolean>();
-    
-    /** a list of parsed tokens */
-    private List<AbstractToken> tokens = new ArrayList<AbstractToken>();
 
+    /**
+     * a list of parsed tokens
+     */
+    private List<AbstractToken> tokens = new ArrayList<AbstractToken>();
 
 
     /**
      * Creates a new batch-rename dialog.
+     *
      * @param mainFrame the main frame
-     * @param files a list of files to rename
+     * @param files     a list of files to rename
      */
     public BatchRenameDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, ActionProperties.getActionLabel(BatchRenameAction.Descriptor.ACTION_ID), null);
         this.mainFrame = mainFrame;
         this.files = files;
-        for (AbstractFile f : files) {        	
+        for (AbstractFile f : files) {
             this.blockNames.add(Boolean.FALSE);
             this.newNames.add("");
-        	oldNames.put(PathUtils.removeTrailingSeparator(f.getAbsolutePath()), f);			
-		}
+            oldNames.put(PathUtils.removeTrailingSeparator(f.getAbsolutePath()), f);
+        }
         initialize();
         generateNewNames();
     }
@@ -167,13 +175,13 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
             tableModel = new RenameTableModel();
             tblNames = new JTable(tableModel);
             // add del key for remove action
-            tblNames.getActionMap().put("del", getActRemove());            
+            tblNames.getActionMap().put("del", getActRemove());
             tblNames.getInputMap().put((KeyStroke) getActRemove().getValue(Action.ACCELERATOR_KEY), "del");
             // add tab key
             tblNames.getActionMap().put("tab", new AbstractAction() {
-                    public void actionPerformed(ActionEvent e) {
-                        tblNames.transferFocus();
-                    }
+                public void actionPerformed(ActionEvent e) {
+                    tblNames.transferFocus();
+                }
             });
             tblNames.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0, false), "tab");
             // add shift tab key
@@ -182,18 +190,18 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
                     tblNames.transferFocusBackward();
                 }
             });
-            tblNames.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 
+            tblNames.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
                     InputEvent.SHIFT_DOWN_MASK, false), "shift tab");
             // 
             tblNames.getColumnModel().getColumn(COL_CHANGED_NAME).setCellEditor(new
-                     DefaultCellEditor(new JTextField()));
-            colBlock = tblNames.getColumnModel().getColumn(COL_CHANGE_BLOCK); 
+                    DefaultCellEditor(new JTextField()));
+            colBlock = tblNames.getColumnModel().getColumn(COL_CHANGE_BLOCK);
             colBlock.setMaxWidth(60);
             tblNames.removeColumn(colBlock);
         }
         return tblNames;
     }
-    
+
     public Action getActRemove() {
         if (actRemove == null) {
             actRemove = new AbstractAction() {
@@ -255,19 +263,19 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
         // add controls
         XBoxPanel pnlTop = new XBoxPanel();
-        
+
         YBoxPanel pnl1 = new YBoxPanel();
         pnl1.setBorder(BorderFactory.createTitledBorder(
                 Translator.get("batch_rename_dialog.mask")));
         pnl1.add(edtFileNameMask);
-        
+
         JPanel pnl1Btns = new JPanel(new GridLayout(3, 2));
 
         btnName = new JButton("[N] - " + Translator.get("name"));
         btnName.addActionListener(this);
         btnName.setHorizontalAlignment(SwingConstants.LEFT);
         pnl1Btns.add(btnName);
-        
+
         btnExtension = new JButton("[E] - " + Translator.get("extension"));
         btnExtension.addActionListener(this);
         btnExtension.setHorizontalAlignment(SwingConstants.LEFT);
@@ -277,7 +285,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         btnNameRange.addActionListener(this);
         btnNameRange.setHorizontalAlignment(SwingConstants.LEFT);
         pnl1Btns.add(btnNameRange);
-        
+
         btnCounter = new JButton("[C] - " + Translator.get("batch_rename_dialog.counter"));
         btnCounter.addActionListener(this);
         btnCounter.setHorizontalAlignment(SwingConstants.LEFT);
@@ -286,7 +294,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         pnl1.add(pnl1Btns);
         pnl1.add(new JPanel());
         pnlTop.add(pnl1);
-        
+
         XAlignedComponentPanel pnl2 = new XAlignedComponentPanel(5);
         pnl2.setBorder(BorderFactory.createTitledBorder(Translator
                 .get("batch_rename_dialog.search_replace")));
@@ -314,21 +322,22 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
     /**
      * Creates a label with help.
+     *
      * @return a label with help
-     */     
+     */
     private String getPatternHelp() {
         return "<html>" +
-            "[N] - the whole name<br>" +
-            "[N2,3] - 3 characters starting from the 2nd character of the name<br>" +
-            "[N2-5] - characters 2 to 5<br>" +
-            "[N2-] - all characters starting from the 2nd character<br>" +
-            "[N-3,2] - two characters starting at 3rd character from the end of the name<br>" +
-            "[N2--2] - characters from the 2nd to the 2nd-last character<br>" +
-            "[C] - inserts a counter<br>" +
-            "[C10,2,3] - inserts a counter starting at 10, steps by 2, uses 3 digits<br>" +
-            "[YMD] - inserts a year, month and day when the file was last modified";       // TODO add to dictionary
+                "[N] - the whole name<br>" +
+                "[N2,3] - 3 characters starting from the 2nd character of the name<br>" +
+                "[N2-5] - characters 2 to 5<br>" +
+                "[N2-] - all characters starting from the 2nd character<br>" +
+                "[N-3,2] - two characters starting at 3rd character from the end of the name<br>" +
+                "[N2--2] - characters from the 2nd to the 2nd-last character<br>" +
+                "[C] - inserts a counter<br>" +
+                "[C10,2,3] - inserts a counter starting at 10, steps by 2, uses 3 digits<br>" +
+                "[YMD] - inserts a year, month and day when the file was last modified";       // TODO add to dictionary
     }
-    
+
 
     /**
      * Removes selected files from a list of files to rename.
@@ -345,15 +354,15 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
             dispose();
         }
     }
-    
+
     /**
-     * Checks if there are duplicates in new file names. 
+     * Checks if there are duplicates in new file names.
      */
     private void checkForDuplicates() {
         boolean duplicates = false;
         boolean oldNamesConflict = false;
         Set<String> names = new HashSet<String>();
-        for (int i=0; i<newNames.size(); i++) {
+        for (int i = 0; i < newNames.size(); i++) {
             String newName = newNames.get(i);
             AbstractFile file = files.get(i);
             AbstractFile parent = file.getParent();
@@ -365,25 +374,25 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
                 break;
             }
             AbstractFile oldFile = oldNames.get(newName);
-            if (oldFile!=null && oldFile!=file) {
-            	oldNamesConflict = true;
-            	break;
+            if (oldFile != null && oldFile != file) {
+                oldNamesConflict = true;
+                break;
             }
             names.add(newName);
-        }            
+        }
         if (duplicates) {
-        	lblDuplicates.setText(Translator.get("batch_rename_dialog.duplicate_names"));
+            lblDuplicates.setText(Translator.get("batch_rename_dialog.duplicate_names"));
         }
         if (oldNamesConflict) {
-        	lblDuplicates.setText(Translator.get("batch_rename_dialog.names_conflict"));
+            lblDuplicates.setText(Translator.get("batch_rename_dialog.names_conflict"));
         }
         lblDuplicates.setVisible(duplicates || oldNamesConflict);
         btnRename.setEnabled(!duplicates && !oldNamesConflict);
     }
-    
+
     /**
      * Generate a new name for a file.
-     * 
+     *
      * @param file a file to change name to
      * @return the new file name
      */
@@ -407,7 +416,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
         return newName;
     }
-    
+
     /**
      * Generates new names for all files.
      */
@@ -421,10 +430,10 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
             }
         }
         checkForDuplicates();
-        tableModel.fireTableChanged(new TableModelEvent(tableModel, 0, 
+        tableModel.fireTableChanged(new TableModelEvent(tableModel, 0,
                 newNames.size(), 1, TableModelEvent.UPDATE));
     }
-    
+
     /**
      * Parses a pattern for a filename and it's extension and stores it in a
      * list. A pattern is a combination of file and extension masks that a user
@@ -434,9 +443,9 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
      * not in brackets is copied to a new name. This metod analyzes a pattern
      * and stores token handlers responsible for substituting these placeholders
      * for actual parts of a new file name.
-     * 
-     * @see AbstractToken
+     *
      * @param pattern a pattern for changing a file name and it's extension
+     * @see AbstractToken
      */
     private void compilePattern(String pattern) {
         tokens.clear();
@@ -453,37 +462,37 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
                     c = strToken.charAt(0);
                     AbstractToken t;
                     switch (c) {
-                    case 'N':
-                        t = new NameToken(strToken);
-                        break;
-                    case 'E':
-                        t = new ExtToken(strToken);
-                        break;
-                    case 'C':
-                        int start = StringUtils.parseIntDef(edtCounterStart
-                                .getText(), 0);
-                        int step = StringUtils.parseIntDef(edtCounterStep
-                                .getText(), 0);
-                        int digits = cbCounterDigits.getSelectedIndex() + 1;
-                        t = new CounterToken(strToken, start, step, digits);
-                        break;
-                    case 'P':
-                        t = new ParentDirToken(strToken);
-                        break;
-                    case 'Y':
-                    case 'M':
-                    case 'D':
-                    case 'h':
-                    case 'm':
-                    case 's':
-                        t = new DateToken(strToken);
-                        break;
-                    case '[':
-                        t = new CopyChar("[");
-                        break;
-                    default:
-                        t = new CopyChar("[" + strToken + "]");
-                        break;
+                        case 'N':
+                            t = new NameToken(strToken);
+                            break;
+                        case 'E':
+                            t = new ExtToken(strToken);
+                            break;
+                        case 'C':
+                            int start = StringUtils.parseIntDef(edtCounterStart
+                                    .getText(), 0);
+                            int step = StringUtils.parseIntDef(edtCounterStep
+                                    .getText(), 0);
+                            int digits = cbCounterDigits.getSelectedIndex() + 1;
+                            t = new CounterToken(strToken, start, step, digits);
+                            break;
+                        case 'P':
+                            t = new ParentDirToken(strToken);
+                            break;
+                        case 'Y':
+                        case 'M':
+                        case 'D':
+                        case 'h':
+                        case 'm':
+                        case 's':
+                            t = new DateToken(strToken);
+                            break;
+                        case '[':
+                            t = new CopyChar("[");
+                            break;
+                        default:
+                            t = new CopyChar("[" + strToken + "]");
+                            break;
                     }
                     t.parse();
                     tokens.add(t);
@@ -497,6 +506,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
     /**
      * Changes case of a file name.
+     *
      * @param oldName a name of file to change case
      * @param newCase a type of change
      * @return the name with changed case
@@ -504,56 +514,58 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     private String changeCase(String oldName, int newCase) {
         String newName = "";
         switch (newCase) {
-        case CASE_UNCHANGED:
-            newName = oldName;
-            break;
-        case CASE_LOWER:
-            newName = oldName.toLowerCase();
-            break;
-        case CASE_UPPER:
-            newName = oldName.toUpperCase();
-            break;
-        case CASE_FIRST_UPPER:
-            newName = oldName.substring(0, 1).toUpperCase()
-                    + oldName.substring(1).toLowerCase();
-            break;
-        case CASE_WORD_UPPER:
-            boolean afterSpace = true;
-            StringBuilder newNameCase = new StringBuilder();
-            for (int i = 0; i < oldName.length(); i++) {
-                if (oldName.charAt(i) == ' ') {
-                    newNameCase.append(' ');
-                    afterSpace = true;
-                } else {
-                    if (afterSpace) {
-                        newNameCase.append(Character.toUpperCase(oldName
-                                .charAt(i)));
-                        afterSpace = false;
+            case CASE_UNCHANGED:
+                newName = oldName;
+                break;
+            case CASE_LOWER:
+                newName = oldName.toLowerCase();
+                break;
+            case CASE_UPPER:
+                newName = oldName.toUpperCase();
+                break;
+            case CASE_FIRST_UPPER:
+                newName = oldName.substring(0, 1).toUpperCase()
+                        + oldName.substring(1).toLowerCase();
+                break;
+            case CASE_WORD_UPPER:
+                boolean afterSpace = true;
+                StringBuilder newNameCase = new StringBuilder();
+                for (int i = 0; i < oldName.length(); i++) {
+                    if (oldName.charAt(i) == ' ') {
+                        newNameCase.append(' ');
+                        afterSpace = true;
                     } else {
-                        newNameCase.append(oldName.charAt(i));
+                        if (afterSpace) {
+                            newNameCase.append(Character.toUpperCase(oldName
+                                    .charAt(i)));
+                            afterSpace = false;
+                        } else {
+                            newNameCase.append(oldName.charAt(i));
+                        }
                     }
                 }
-            }
-            newName = newNameCase.toString();
-            break;
+                newName = newNameCase.toString();
+                break;
         }
         return newName;
     }
 
     /**
      * Applies a compiled pattern to a file name and it's extension.
+     *
      * @param file a file
      * @return the new file name after applying a pattern
      */
     private String applyPattern(AbstractFile file) {
         StringBuilder filename = new StringBuilder();
-        for (AbstractToken token: tokens)
+        for (AbstractToken token : tokens)
             filename.append(token.apply(file));
         return filename.toString();
     }
-    
+
     /**
      * Counts or removes unchanged files from change set.
+     *
      * @param countOnly if true only counts files that are changing.
      * @return number of changed files
      */
@@ -562,7 +574,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         Iterator<AbstractFile> fi = files.iterator();
         Iterator<String> ni = newNames.iterator();
         int changed = 0;
-        while (fi.hasNext()) {        
+        while (fi.hasNext()) {
             AbstractFile file = fi.next();
             String nn = ni.next();
             if (file.getName().equals(nn)) {
@@ -591,24 +603,25 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
             progressDialog.start(job);
         }
     }
-    
+
     /**
      * Inserts pattern into pattern edit field.
+     *
      * @param pattern a text to insert
      */
     private void insertPattern(String pattern) {
         int pos = edtFileNameMask.getSelectionStart();
         try {
-        	int selLen = edtFileNameMask.getSelectionEnd() - edtFileNameMask.getSelectionStart();
-        	if (selLen > 0) {
-        		edtFileNameMask.getDocument().remove(edtFileNameMask.getSelectionStart(), selLen);
-        	}
+            int selLen = edtFileNameMask.getSelectionEnd() - edtFileNameMask.getSelectionStart();
+            if (selLen > 0) {
+                edtFileNameMask.getDocument().remove(edtFileNameMask.getSelectionStart(), selLen);
+            }
             edtFileNameMask.getDocument().insertString(pos, pattern, null);
         } catch (BadLocationException e) {
-        	LOGGER.debug("Caught exception", e);
+            LOGGER.debug("Caught exception", e);
         }
     }
-    
+
 
     // /////////////////////////////////
     // ActionListener implementation //
@@ -662,12 +675,12 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     public void removeUpdate(DocumentEvent e) {
         generateNewNames();
     }
-    
+
 
     /**
      * Table model with old and new file names.
+     *
      * @author Mariusz Jakubowski
-     * 
      */
     private class RenameTableModel extends AbstractTableModel {
 
@@ -682,59 +695,59 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         public Object getValueAt(int rowIndex, int columnIndex) {
             AbstractFile f = files.get(rowIndex);
             switch (columnIndex) {
-            case COL_ORIG_NAME:
-                return f.getName();
-            case COL_CHANGED_NAME:
-                return newNames.get(rowIndex);
-            case COL_CHANGE_BLOCK:
-                return blockNames.get(rowIndex);
+                case COL_ORIG_NAME:
+                    return f.getName();
+                case COL_CHANGED_NAME:
+                    return newNames.get(rowIndex);
+                case COL_CHANGE_BLOCK:
+                    return blockNames.get(rowIndex);
             }
             return null;
         }
-        
+
         /**
          * Sets the value in the cell at columnIndex and rowIndex to aValue.
-         * Called when a user manually entered a new file name or blocked 
+         * Called when a user manually entered a new file name or blocked
          * a name from a rename pattern.
          */
         @Override
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
             switch (columnIndex) {
-            case COL_CHANGED_NAME:
-                if (!newNames.get(rowIndex).equals(value)) {
-                    newNames.set(rowIndex, (String)value);
-                    if (Boolean.FALSE.equals(blockNames.get(rowIndex))) {
-                        blockNames.set(rowIndex, Boolean.TRUE);
-                        if (tblNames.getColumnCount() == 2) {
-                            tblNames.addColumn(colBlock);
+                case COL_CHANGED_NAME:
+                    if (!newNames.get(rowIndex).equals(value)) {
+                        newNames.set(rowIndex, (String) value);
+                        if (Boolean.FALSE.equals(blockNames.get(rowIndex))) {
+                            blockNames.set(rowIndex, Boolean.TRUE);
+                            if (tblNames.getColumnCount() == 2) {
+                                tblNames.addColumn(colBlock);
+                            }
+                            fireTableCellUpdated(rowIndex, COL_CHANGE_BLOCK);
                         }
-                        fireTableCellUpdated(rowIndex, COL_CHANGE_BLOCK);
+                        checkForDuplicates();
+                    }
+                    break;
+                case COL_CHANGE_BLOCK:
+                    blockNames.set(rowIndex, (Boolean) value);
+                    if (Boolean.FALSE.equals(value)) {
+                        AbstractFile file = files.get(rowIndex);
+                        String newName = generateNewName(file);
+                        newNames.set(rowIndex, newName);
+                        fireTableCellUpdated(rowIndex, COL_CHANGED_NAME);
                     }
                     checkForDuplicates();
-                }
-                break;
-            case COL_CHANGE_BLOCK:
-                blockNames.set(rowIndex, (Boolean)value);
-                if (Boolean.FALSE.equals(value)) {
-                    AbstractFile file = files.get(rowIndex);
-                    String newName = generateNewName(file);
-                    newNames.set(rowIndex, newName);
-                    fireTableCellUpdated(rowIndex, COL_CHANGED_NAME);
-                }
-                checkForDuplicates();
-                break;
+                    break;
             }
         }
 
         @Override
         public String getColumnName(int column) {
             switch (column) {
-            case COL_ORIG_NAME:
-                return Translator.get("batch_rename_dialog.old_name");
-            case COL_CHANGED_NAME:
-                return Translator.get("batch_rename_dialog.new_name");
-            case COL_CHANGE_BLOCK:
-                return Translator.get("batch_rename_dialog.block_name");
+                case COL_ORIG_NAME:
+                    return Translator.get("batch_rename_dialog.old_name");
+                case COL_CHANGED_NAME:
+                    return Translator.get("batch_rename_dialog.new_name");
+                case COL_CHANGE_BLOCK:
+                    return Translator.get("batch_rename_dialog.block_name");
             }
             return "";
         }
@@ -750,28 +763,32 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return columnIndex != COL_ORIG_NAME; 
+            return columnIndex != COL_ORIG_NAME;
         }
-        
-        
+
 
     }
 
 
     /**
      * Base class for handling tokens.
-     * 
+     *
      * @author Mariusz Jakubowski
-     * 
      */
     private abstract static class AbstractToken {
-        /** a string with a token */
+        /**
+         * a string with a token
+         */
         protected String token;
 
-        /** a current position in the token */
+        /**
+         * a current position in the token
+         */
         protected int pos = 1;
 
-        /** a length of the token */
+        /**
+         * a length of the token
+         */
         protected int len;
 
         public AbstractToken(String token) {
@@ -786,7 +803,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
         /**
          * Applies this token to a file.
-         * 
+         *
          * @param file a file
          * @return a part of filename after applying this token
          */
@@ -794,7 +811,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
         /**
          * Gets one char from this token.
-         * 
+         *
          * @return the next character in the token
          */
         public char getChar() {
@@ -807,9 +824,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         /**
          * Trys to get an integer from this token string. Advances the current
          * position in the token string.
-         * 
-         * @param def
-         *            a default value if an integer cannot be parsed
+         *
+         * @param def a default value if an integer cannot be parsed
          * @return the integer from this token string or the default value
          */
         public int getInt(int def) {
@@ -832,9 +848,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     /**
      * Token handler that copies a character from a source string to a
      * destination. This is used for all characters without brackets.
-     * 
+     *
      * @author Mariusz Jakubowski
-     * 
      */
     static class CopyChar extends AbstractToken {
 
@@ -865,9 +880,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
      * <li>[N2--2] - characters from the 2nd to the 2nd-last character
      * <li>[N-5-10] - characters from 5th from end to 10th from beginning of a name
      * </ul>
-     * 
+     *
      * @author Mariusz Jakubowski
-     * 
      */
     static class NameToken extends AbstractToken {
         private int startIndex;
@@ -883,11 +897,11 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
             startIndex = getInt(0);
             char sep = getChar();
             switch (sep) {
-            case '-':
-                endIndex = getInt(999); // default - to the end
-                break;
-            case ',':
-                charCount = getInt(0);
+                case '-':
+                    endIndex = getInt(999); // default - to the end
+                    break;
+                case ',':
+                    charCount = getInt(0);
             }
         }
 
@@ -908,9 +922,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
         /**
          * Extracts a part of a name.
-         * 
-         * @param name
-         *            a string from which extract a part
+         *
+         * @param name a string from which extract a part
          * @return the part of the name
          */
         protected String extractNamePart(String name) {
@@ -936,7 +949,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
                         name = name.substring(currentStartIndex - 1, Math.min(
                                 currentEndIndex, targetLen));
                     } catch (Exception e) {
-                    	LOGGER.info("currentStartIndex="+currentStartIndex+", currentEndIndex="+currentEndIndex, e);
+                        LOGGER.info("currentStartIndex=" + currentStartIndex + ", currentEndIndex=" + currentEndIndex, e);
                     }
                 } else {
                     name = "";
@@ -951,7 +964,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     /**
      * Token handler that parses a file extension. [E] - an extension of a file,
      * this token can also be used with parameters like in [N...]
-     * 
+     *
      * @author Mariusz Jakubowski
      */
     static class ExtToken extends NameToken {
@@ -987,9 +1000,9 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
      * <li>[C10,-2] - inserts counter starting at 10, step by -2
      * <li>[C10,2,3] - inserts counter starting at 10, step by 2, use 3 digits to display
      * <li>[C10,,3] - inserts counter starting at 10, step by as defined on the dialog, use 3 digits to display
-     * </ul> 
-     * @author Mariusz Jakubowski
+     * </ul>
      *
+     * @author Mariusz Jakubowski
      */
     static class CounterToken extends AbstractToken {
         private int start;
@@ -1032,6 +1045,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     /**
      * Token handler that inserts a directory information.
      * [P] - inserts a name of the parent directory.
+     *
      * @author Mariusz Jakubowski
      */
     static class ParentDirToken extends NameToken {
@@ -1059,10 +1073,10 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
      * <li>[h] - inserts hours in 24-hour format (2 digits)
      * <li>[m] - inserts minutes (2 digits)
      * <li>[s] - inserts seconds
-     * <li>[YMD] - inserts file last modified year, month and day 
+     * <li>[YMD] - inserts file last modified year, month and day
      * </ul>
-     * @author Mariusz Jakubowski
      *
+     * @author Mariusz Jakubowski
      */
     static class DateToken extends AbstractToken {
         private NumberFormat year;
@@ -1085,24 +1099,24 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < len; i++) {
                 switch (token.charAt(i)) {
-                case 'Y':
-                    result.append(year.format(c.get(Calendar.YEAR)));
-                    break;
-                case 'M':
-                    result.append(digits2.format(c.get(Calendar.MONTH)));
-                    break;
-                case 'D':
-                    result.append(digits2.format(c.get(Calendar.DAY_OF_MONTH)));
-                    break;
-                case 'h':
-                    result.append(digits2.format(c.get(Calendar.HOUR_OF_DAY)));
-                    break;
-                case 'm':
-                    result.append(digits2.format(c.get(Calendar.MINUTE)));
-                    break;
-                case 's':
-                    result.append(digits2.format(c.get(Calendar.SECOND)));
-                    break;
+                    case 'Y':
+                        result.append(year.format(c.get(Calendar.YEAR)));
+                        break;
+                    case 'M':
+                        result.append(digits2.format(c.get(Calendar.MONTH)));
+                        break;
+                    case 'D':
+                        result.append(digits2.format(c.get(Calendar.DAY_OF_MONTH)));
+                        break;
+                    case 'h':
+                        result.append(digits2.format(c.get(Calendar.HOUR_OF_DAY)));
+                        break;
+                    case 'm':
+                        result.append(digits2.format(c.get(Calendar.MINUTE)));
+                        break;
+                    case 's':
+                        result.append(digits2.format(c.get(Calendar.SECOND)));
+                        break;
                 }
             }
             return result.toString();
@@ -1113,6 +1127,6 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         }
 
     }
-    
+
 
 }

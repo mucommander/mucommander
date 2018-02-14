@@ -18,11 +18,6 @@
 
 package com.mucommander.job.impl;
 
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
@@ -31,28 +26,34 @@ import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * This job copies a file or a set of files to a temporary folder, makes the temporary file(s) read-only and
  * executes each of them with native file associations. The temporary files are deleted when the JVM terminates.
- *
+ * <p>
  * <p>It is important to understand that when this job operates on a set of files, a process is started for each file
  * to execute, so this operation should require confirmation by the user before being attempted.</p>
  *
  * @author Maxence Bernard
  */
 public class TempExecJob extends TempCopyJob {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TempExecJob.class);
-	
-    /** Files to execute */
+    private static final Logger LOGGER = LoggerFactory.getLogger(TempExecJob.class);
+
+    /**
+     * Files to execute
+     */
     private FileSet filesToExecute;
 
     /**
      * Creates a new <code>TempExecJob</code> that operates on a single file.
      *
      * @param progressDialog the ProgressDialog that monitors this job
-     * @param mainFrame the MainFrame this job is attached to
-     * @param fileToExecute the file to copy to a temporary location and execute
+     * @param mainFrame      the MainFrame this job is attached to
+     * @param fileToExecute  the file to copy to a temporary location and execute
      */
     public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToExecute) {
         this(progressDialog, mainFrame, new FileSet(fileToExecute.getParent(), fileToExecute));
@@ -63,7 +64,7 @@ public class TempExecJob extends TempCopyJob {
      * all files.
      *
      * @param progressDialog the ProgressDialog that monitors this job
-     * @param mainFrame the MainFrame this job is attached to
+     * @param mainFrame      the MainFrame this job is attached to
      * @param filesToExecute the set of files to copy to a temporary location and execute
      */
     public TempExecJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToExecute) {
@@ -79,21 +80,20 @@ public class TempExecJob extends TempCopyJob {
 
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
-        if(!super.processFile(file, recurseParams))
+        if (!super.processFile(file, recurseParams))
             return false;
 
         // TODO: temporary files seem to remain after the JVM quits under Mac OS X, even if the files permissions are unchanged
 
         // Execute the file, only if it is one of the top-level files
-        if(filesToExecute.indexOf(file)!=-1) {
-            if(!currentDestFile.isDirectory()) {        // Do not change directories' permissions
+        if (filesToExecute.indexOf(file) != -1) {
+            if (!currentDestFile.isDirectory()) {        // Do not change directories' permissions
                 try {
                     // Make the temporary file read only
-                    if(currentDestFile.getChangeablePermissions().getBitValue(PermissionAccess.USER, PermissionType.WRITE))
+                    if (currentDestFile.getChangeablePermissions().getBitValue(PermissionAccess.USER, PermissionType.WRITE))
                         currentDestFile.changePermission(PermissionAccess.USER, PermissionType.WRITE, false);
-                }
-                catch(IOException e) {
-                    LOGGER.debug("Caught exeception while changing permissions of "+currentDestFile, e);
+                } catch (IOException e) {
+                    LOGGER.debug("Caught exeception while changing permissions of " + currentDestFile, e);
                     return false;
                 }
             }
@@ -102,9 +102,8 @@ public class TempExecJob extends TempCopyJob {
             try {
                 DesktopManager.open(currentDestFile);
                 RecentExecutedFilesQL.addFile(file);
-            }
-            catch(Exception e) {
-                LOGGER.debug("Caught exeception while opening "+currentDestFile, e);
+            } catch (Exception e) {
+                LOGGER.debug("Caught exeception while opening " + currentDestFile, e);
                 return false;
             }
         }

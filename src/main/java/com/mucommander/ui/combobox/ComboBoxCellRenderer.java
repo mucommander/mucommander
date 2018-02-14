@@ -29,7 +29,7 @@ public class ComboBoxCellRenderer implements ListCellRenderer {
     private Color backgroundColor;
     private Color selectedTextColor;
     private Color selectedBackgroundColor;
-    private Font  font;
+    private Font font;
     private JLabel label;
 
     public ComboBoxCellRenderer() {
@@ -37,37 +37,50 @@ public class ComboBoxCellRenderer implements ListCellRenderer {
         label.setOpaque(true);
     }
 
-    public void setForeground(Color color) {textColor = color;}
-    public void setBackground(Color color) {backgroundColor = color;}
-    public void setSelectionForeground(Color color) {selectedTextColor = color;}
-    public void setSelectionBackground(Color color) {selectedBackgroundColor = color;}
-    public void setFont(Font f) {font = f;}
+    public void setForeground(Color color) {
+        textColor = color;
+    }
+
+    public void setBackground(Color color) {
+        backgroundColor = color;
+    }
+
+    public void setSelectionForeground(Color color) {
+        selectedTextColor = color;
+    }
+
+    public void setSelectionBackground(Color color) {
+        selectedBackgroundColor = color;
+    }
+
+    public void setFont(Font f) {
+        font = f;
+    }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean hasFocus) {
-        if(value!=null)
+        if (value != null)
             label.setText(value.toString());
 
-        if(font == null)
+        if (font == null)
             label.setFont(list.getFont());
         else
             label.setFont(font);
 
-        if(isSelected) {
-            if(selectedBackgroundColor == null)
+        if (isSelected) {
+            if (selectedBackgroundColor == null)
                 label.setBackground(list.getSelectionBackground());
             else
                 label.setBackground(selectedBackgroundColor);
-            if(selectedTextColor == null)
+            if (selectedTextColor == null)
                 label.setForeground(list.getSelectionForeground());
             else
                 label.setForeground(selectedTextColor);
-        }
-        else {
-            if(backgroundColor == null)
+        } else {
+            if (backgroundColor == null)
                 label.setBackground(list.getBackground());
             else
                 label.setBackground(backgroundColor);
-            if(textColor == null)
+            if (textColor == null)
                 label.setForeground(list.getForeground());
             else
                 label.setForeground(textColor);

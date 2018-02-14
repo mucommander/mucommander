@@ -18,29 +18,12 @@
 
 package com.mucommander.ui.dialog.file;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.OSXFileUtils;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobState;
 import com.mucommander.job.impl.PropertiesJob;
 import com.mucommander.text.SizeFormat;
@@ -58,6 +41,13 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FileLabel;
 import com.mucommander.ui.text.MultiLineLabel;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
 /**
  * This dialog shows properties of a file or a group of files : number of files, file kind,
  * combined size and location.
@@ -68,43 +58,46 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     private PropertiesJob job;
     private Thread repaintThread;
     private SpinningDial dial;
-	
+
     private JLabel counterLabel;
     private JLabel sizeLabel;
 
     private JButton okCancelButton;
 
     // Dialog width is constrained to 320, height is not an issue (always the same)
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(450,10000);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 0);
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(450, 10000);
 
-    /** How often should progress information be refreshed (in ms) */
+    /**
+     * How often should progress information be refreshed (in ms)
+     */
     private final static int REFRESH_RATE = 500;
 
-    /** Dimension of the large file icon displayed on left side of the dialog */
+    /**
+     * Dimension of the large file icon displayed on left side of the dialog
+     */
     private final static Dimension ICON_DIMENSION = new Dimension(64, 64);
 
-	
+
     public PropertiesDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame,
-              files.size() > 1 ? ActionProperties.getActionLabel(ShowFilePropertiesAction.Descriptor.ACTION_ID) :
-              Translator.get("properties_dialog.file_properties", files.elementAt(0).getName()), mainFrame);
+                files.size() > 1 ? ActionProperties.getActionLabel(ShowFilePropertiesAction.Descriptor.ACTION_ID) :
+                        Translator.get("properties_dialog.file_properties", files.elementAt(0).getName()), mainFrame);
 
         this.job = new PropertiesJob(files, mainFrame);
-		
+
         Container contentPane = getContentPane();
 
         JPanel fileDetailsPanel = new JPanel(new BorderLayout());
 
         Icon icon;
-        boolean isSingleFile = files.size()==1;
-        AbstractFile singleFile = isSingleFile?files.elementAt(0):null;
-        if(isSingleFile) {
+        boolean isSingleFile = files.size() == 1;
+        AbstractFile singleFile = isSingleFile ? files.elementAt(0) : null;
+        if (isSingleFile) {
             icon = FileIcons.getFileIcon(singleFile, ICON_DIMENSION);
-        }
-        else {
+        } else {
             ImageIcon imageIcon = IconManager.getIcon(IconManager.COMMON_ICON_SET, "many_files.png");
-            icon = IconManager.getScaledIcon(imageIcon, (float)ICON_DIMENSION.getWidth()/imageIcon.getIconWidth());
+            icon = IconManager.getScaledIcon(imageIcon, (float) ICON_DIMENSION.getWidth() / imageIcon.getIconWidth());
         }
 
         JLabel iconLabel = new JLabel(icon);
@@ -117,22 +110,22 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
         // Contents (set later)
         counterLabel = new JLabel("");
-        labelPanel.addRow(Translator.get("properties_dialog.contents")+":", counterLabel, 6);
+        labelPanel.addRow(Translator.get("properties_dialog.contents") + ":", counterLabel, 6);
 
         // Location (set here)
-        labelPanel.addRow(Translator.get("location")+":", new FileLabel(files.getBaseFolder(), true), 6);
+        labelPanel.addRow(Translator.get("location") + ":", new FileLabel(files.getBaseFolder(), true), 6);
 
         // Combined size (set later)
         JPanel sizePanel;
         sizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         sizePanel.add(sizeLabel = new JLabel(""));
         sizePanel.add(new JLabel(dial = new SpinningDial()));
-        labelPanel.addRow(Translator.get("size")+":", sizePanel, 6);
+        labelPanel.addRow(Translator.get("size") + ":", sizePanel, 6);
 
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()
-        && isSingleFile && singleFile.hasAncestor(LocalFile.class)) {
+        if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()
+                && isSingleFile && singleFile.hasAncestor(LocalFile.class)) {
             String comment = OSXFileUtils.getSpotlightComment(singleFile);
-            JLabel commentLabel = new JLabel(Translator.get("comment")+":");
+            JLabel commentLabel = new JLabel(Translator.get("comment") + ":");
             commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);
             commentLabel.setVerticalAlignment(SwingConstants.TOP);
 
@@ -151,11 +144,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         contentPane.add(DialogToolkit.createOKPanel(okCancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         // OK button will receive initial focus
-        setInitialFocusComponent(okCancelButton);		
-		
+        setInitialFocusComponent(okCancelButton);
+
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);
-		
+
         start();
     }
 
@@ -164,12 +157,12 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         int nbFiles = job.getNbFilesRecurse();
         int nbFolders = job.getNbFolders();
         counterLabel.setText(
-                             (nbFiles>0?Translator.get("nb_files", ""+nbFiles):"")
-                             +(nbFiles>0&&nbFolders>0?", ":"")
-                             +(nbFolders>0?Translator.get("nb_folders", ""+nbFolders):"")
-                             );
-        sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE| SizeFormat.ROUND_TO_KB) +
-			  " (" + SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE) + ")");
+                (nbFiles > 0 ? Translator.get("nb_files", "" + nbFiles) : "")
+                        + (nbFiles > 0 && nbFolders > 0 ? ", " : "")
+                        + (nbFolders > 0 ? Translator.get("nb_folders", "" + nbFolders) : "")
+        );
+        sizeLabel.setText(SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB) +
+                " (" + SizeFormat.format(job.getTotalBytes(), SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE) + ")");
 
         counterLabel.repaint(REFRESH_RATE);
         sizeLabel.repaint(REFRESH_RATE);
@@ -178,23 +171,25 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
     public void start() {
         job.start();
-		
+
         repaintThread = new Thread(this, "com.mucommander.ui.dialog.file.PropertiesDialog's Thread");
         repaintThread.start();
     }
 
-	
+
     //////////////////////
     // Runnable methods //
     //////////////////////
 
     public void run() {
         dial.setAnimated(true);
-        while(repaintThread!=null && job.getState() != FileJobState.FINISHED) {
+        while (repaintThread != null && job.getState() != FileJobState.FINISHED) {
             updateLabels();
-			
-            try { Thread.sleep(REFRESH_RATE); }
-            catch(InterruptedException e) {}
+
+            try {
+                Thread.sleep(REFRESH_RATE);
+            } catch (InterruptedException e) {
+            }
         }
 
         // Updates button labels and stops spinning dial.
@@ -209,7 +204,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     ////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource()==okCancelButton)
+        if (e.getSource() == okCancelButton)
             dispose();
     }
 
@@ -221,7 +216,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     @Override
     public void windowClosed(WindowEvent e) {
         super.windowClosed(e);
-		
+
         // Stop threads
         job.interrupt();
         repaintThread = null;

@@ -18,19 +18,14 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.net.URL;
-import java.util.Map;
-
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.action.AbstractActionDescriptor;
-import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.*;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import javax.swing.*;
+import java.net.URL;
+import java.util.Map;
 
 /**
  * This action opens a URL in the system's default browser. This action is enabled only if the OS/Window manager
@@ -40,10 +35,12 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class OpenURLInBrowserAction extends MuAction {
 
-    /** Key to the URL property */
+    /**
+     * Key to the URL property
+     */
     public final static String URL_PROPERTY_KEY = "url";
 
-    public OpenURLInBrowserAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenURLInBrowserAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Enable this action only if the current platform is capable of opening URLs in the default browser.
@@ -54,40 +51,49 @@ public class OpenURLInBrowserAction extends MuAction {
     public void performAction() {
         Object url = getValue(URL_PROPERTY_KEY);
 
-        if(url!=null && (url instanceof String)) {
+        if (url != null && (url instanceof String)) {
             try {
-                DesktopManager.browse(new URL((String)url));
-            }
-            catch(Exception e) {
+                DesktopManager.browse(new URL((String) url));
+            } catch (Exception e) {
                 InformationDialog.showErrorDialog(mainFrame);
             }
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Factory implements ActionFactory {
 
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new OpenURLInBrowserAction(mainFrame, properties);
-		}
+        public MuAction createAction(MainFrame mainFrame, Map<String, Object> properties) {
+            return new OpenURLInBrowserAction(mainFrame, properties);
+        }
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenURLInBrowser";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "OpenURLInBrowser";
 
-		public ActionCategory getCategory() { return null; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
-		
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return null;
+        }
+
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return null;
+        }
 
         @Override
-        public boolean isParameterized() { return true; }
+        public boolean isParameterized() {
+            return true;
+        }
     }
 }

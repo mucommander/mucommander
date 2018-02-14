@@ -1,17 +1,17 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
  * Copyright (C) 2002-2016 Maxence Bernard
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -94,8 +94,7 @@ public class S3Bucket extends S3File {
     public void delete() throws IOException {
         try {
             service.deleteBucket(bucketName);
-        }
-        catch(S3ServiceException e) {
+        } catch (S3ServiceException e) {
             throw getIOException(e);
         }
     }
@@ -104,8 +103,7 @@ public class S3Bucket extends S3File {
     public void mkdir() throws IOException {
         try {
             service.createBucket(bucketName);
-        }
-        catch(S3ServiceException e) {
+        } catch (S3ServiceException e) {
             throw getIOException(e);
         }
     }
@@ -198,18 +196,16 @@ public class S3Bucket extends S3File {
                 // Note: unlike getObjectDetails, getBucket returns null when the bucket does not exist
                 // (that is because the corresponding request is a GET on the root resource, not a HEAD on the bucket).
                 bucket = service.getBucket(bucketName);
-            }
-            catch(S3ServiceException ex) {
+            } catch (S3ServiceException ex) {
                 e = ex;
                 bucket = null;
             }
 
-            if(bucket!=null) {
+            if (bucket != null) {
                 // Bucket exists
                 setExists(true);
                 setAttributes(bucket);
-            }
-            else {
+            } else {
                 // Bucket doesn't exist on the server, or could not be retrieved
                 setExists(false);
 
@@ -218,7 +214,7 @@ public class S3Bucket extends S3File {
                 setPermissions(FilePermissions.EMPTY_FILE_PERMISSIONS);
                 setOwner(null);
 
-                if(e!=null)
+                if (e != null)
                     handleAuthException(e, fileURL);
             }
         }
@@ -232,8 +228,7 @@ public class S3Bucket extends S3File {
         public void updateAttributes() {
             try {
                 fetchAttributes();
-            }
-            catch(Exception e) {        // AuthException
+            } catch (Exception e) {        // AuthException
                 LOGGER.info("Failed to update attributes", e);
             }
         }

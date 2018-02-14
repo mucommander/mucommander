@@ -38,10 +38,10 @@ public class BOMTest implements BOMConstants {
     @Test
     public void testBOMComparisons() {
         // Tests BOM#sigStartsWith method
-        assert UTF8_BOM.sigStartsWith(new byte[]{(byte)0xEF, (byte)0xBB});
-        assert UTF8_BOM.sigStartsWith(new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF});
-        assert !UTF8_BOM.sigStartsWith(new byte[]{(byte)0xAA});
-        assert !UTF8_BOM.sigStartsWith(new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF, (byte)0xAA});
+        assert UTF8_BOM.sigStartsWith(new byte[]{(byte) 0xEF, (byte) 0xBB});
+        assert UTF8_BOM.sigStartsWith(new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF});
+        assert !UTF8_BOM.sigStartsWith(new byte[]{(byte) 0xAA});
+        assert !UTF8_BOM.sigStartsWith(new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF, (byte) 0xAA});
 
         // Tests BOM#sigEquals method
         assert UTF8_BOM.sigEquals(UTF8_BOM.getSignature());
@@ -70,14 +70,14 @@ public class BOMTest implements BOMConstants {
         }
 
         // UTF-8 BOM, plus one byte after
-        b = new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF, (byte)0x27};
+        b = new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF, (byte) 0x27};
         bomIn = getBOMInputStream(b);
         assert UTF8_BOM.equals(bomIn.getBOM());
-        assertStreamEquals(new byte[]{(byte)0x27}, bomIn);
+        assertStreamEquals(new byte[]{(byte) 0x27}, bomIn);
         assertEOF(bomIn);
 
         // Not a known BOM
-        b = new byte[]{(byte)0xEF, (byte)0xBB, (byte)0x27};
+        b = new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0x27};
         bomIn = getBOMInputStream(b);
         assert bomIn.getBOM() == null;
         assertStreamEquals(b, bomIn);
@@ -154,7 +154,7 @@ public class BOMTest implements BOMConstants {
     }
 
     private void assertEOF(InputStream in) throws IOException {
-        assert-1 == in.read();
+        assert -1 == in.read();
         // Again
         assert -1 == in.read();
     }

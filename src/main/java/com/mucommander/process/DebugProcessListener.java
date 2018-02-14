@@ -27,22 +27,26 @@ import org.slf4j.LoggerFactory;
  * In debug mode, instances of this listener will automatically be registered to non-monitored processes.
  * Its only goal is to output information about the process' state.
  * </p>
+ *
  * @author Nicolas Rinaudo
  */
 class DebugProcessListener implements ProcessListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DebugProcessListener.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(DebugProcessListener.class);
+
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
-    /** Command that this listener is monitoring. */
+    /**
+     * Command that this listener is monitoring.
+     */
     private String command;
-
 
 
     // - Initialisastion -----------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Creates a new process listener monitoring the specified command.
+     *
      * @param tokens tokens that compose the command that is being ran.
      */
     public DebugProcessListener(String[] tokens) {
@@ -59,11 +63,12 @@ class DebugProcessListener implements ProcessListener {
     }
 
 
-
     // - Process monitoring --------------------------------------------------
     // -----------------------------------------------------------------------
+
     /**
      * Prints out information about the way the process died.
+     *
      * @param returnValue process' return value.
      */
     public void processDied(int returnValue) {
