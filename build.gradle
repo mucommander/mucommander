@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath files('libs/mucommander-gradle-macappbundle-2.1.6.jar', 'libs/proguard.jar')
+        classpath files('libs/mucommander-gradle-macappbundle-2.1.6.jar', 'libs/proguard-6.0.3.jar')
     }
 }
 
@@ -95,6 +95,7 @@ task proguard(type: proguard.gradle.ProGuardTask) {
     injars file('tmp.jar')
     outjars shadowJar.archivePath
 }
+proguard.enabled = !JavaVersion.current().isJava9Compatible()
 
 shadowJar.doLast {
     file(shadowJar.archivePath).renameTo('tmp.jar')
