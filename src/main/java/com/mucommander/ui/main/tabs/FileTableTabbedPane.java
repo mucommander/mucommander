@@ -78,12 +78,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 					if (DesktopManager.isRightMouseButton(e)) {
 						// Open the popup menu only after all swing events are finished, to ensure that when the popup menu is shown
 						// and asks for the currently selected tab in the active panel, it'll get the right one
-						SwingUtilities.invokeLater(new Runnable() {
-
-							public void run() {
-								new FileTableTabPopupMenu(FileTableTabbedPane.this.mainFrame).show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y);	
-							}
-						});
+						SwingUtilities.invokeLater(() -> new FileTableTabPopupMenu(FileTableTabbedPane.this.mainFrame).show(FileTableTabbedPane.this, clickedPoint.x, clickedPoint.y));
 					}
 
 					if (DesktopManager.isMiddleMouseButton(e)) {
@@ -161,11 +156,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
 		setToolTipTextAt(index, locationText);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				validate();
-			}
-		});
+		SwingUtilities.invokeLater(() -> validate());
 	}
 
 	//////////////////////////////////

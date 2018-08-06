@@ -310,20 +310,17 @@ public class TextLineNumbersPanel extends JPanel implements CaretListener, Docum
 	private void documentChanged() {
 		//  Preferred size of the component has not been updated at the time
 		//  the DocumentEvent is fired
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			public void run() {
-        		int preferredHeight = component.getPreferredSize().height;
+	    SwingUtilities.invokeLater(() -> {
+	        int preferredHeight = component.getPreferredSize().height;
 
-				//  Document change has caused a change in the number of lines.
-				//  Repaint to reflect the new line numbers
-        		if (lastHeight != preferredHeight) {
-        			setPreferredWidth();
-        			repaint();
-        			lastHeight = preferredHeight;
-        		}
-			}
-		});
+	        //  Document change has caused a change in the number of lines.
+	        //  Repaint to reflect the new line numbers
+	        if (lastHeight != preferredHeight) {
+	            setPreferredWidth();
+	            repaint();
+	            lastHeight = preferredHeight;
+	        }
+	    });
 	}
 	
 	//////////////////////////////////

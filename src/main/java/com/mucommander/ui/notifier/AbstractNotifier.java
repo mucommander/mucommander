@@ -111,20 +111,15 @@ public abstract class AbstractNotifier {
      * @param description the description of the notification to display
      */
     public void displayBackgroundNotification(final NotificationType notificationType, final String title, final String description) {
-        SwingUtilities.invokeLater(
-            new Thread() {
-                @Override
-                public void run() {
-                    if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
-                    	LOGGER.debug("Ignoring notification, application is in foreground");
-                        return;
-                    }
-
-                    if(!displayNotification(notificationType, title, description))
-                    	LOGGER.debug("Notification failed to be displayed");
-                }
+        SwingUtilities.invokeLater(() -> {
+            if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
+                LOGGER.debug("Ignoring notification, application is in foreground");
+                return;
             }
-        );
+
+            if(!displayNotification(notificationType, title, description))
+                LOGGER.debug("Notification failed to be displayed");
+        });
     }
 
 

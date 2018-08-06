@@ -423,25 +423,20 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
                     iconCache.put(volumes[i], icon);
                 }
 
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        if (useExtendedDriveNames) {
-                            item.setText(extendedNameFinal);
-                        }
-                        if (icon!=null) {
-                            item.setIcon(icon);
-                        }
+                SwingUtilities.invokeLater(() -> {
+                    if (useExtendedDriveNames) {
+                        item.setText(extendedNameFinal);
+                    }
+                    if (icon!=null) {
+                        item.setIcon(icon);
                     }
                 });
-                
             }
 
             // Re-calculate the popup menu's dimensions
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    popupMenu.invalidate();
-                    popupMenu.pack();
-                }
+            SwingUtilities.invokeLater(() -> {
+                popupMenu.invalidate();
+                popupMenu.pack();
             });
         }
         

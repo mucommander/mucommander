@@ -74,14 +74,12 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
     public void setRoot(AbstractFile newRoot) {
         final CachedDirectory cachedRoot = new CachedDirectory(newRoot, cache);
         cachedRoot.setCachedIcon(FileIcons.getFileIcon(newRoot));
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                root = cachedRoot.getProxiedFile();
-                cache.clear();
-                cache.put(root, cachedRoot);
-                TreePath path = new TreePath(root);
-                fireTreeStructureChanged(this, path);
-            }
+        SwingUtilities.invokeLater(() -> {
+            root = cachedRoot.getProxiedFile();
+            cache.clear();
+            cache.put(root, cachedRoot);
+            TreePath path = new TreePath(root);
+            fireTreeStructureChanged(this, path);
         });
     }
     

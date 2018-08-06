@@ -131,7 +131,7 @@ public class LicenseDialog extends FocusDialog implements ActionListener {
         getRootPane().setDefaultButton(okButton);
 
         // Makes sure the scroll pane is initialises on its first line.
-        SwingUtilities.invokeLater(new Runnable() {public void run() {licensePanel.getViewport().setViewPosition(new Point(0,0));}});
+        SwingUtilities.invokeLater(() -> licensePanel.getViewport().setViewPosition(new Point(0,0)));
         pack();
     }
 

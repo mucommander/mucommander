@@ -149,16 +149,13 @@ public abstract class PopupButton extends NonFocusableButton {
         // Popup up the menu underneath under this button. This has to be executed by the event thread, otherwise some
         // weird repaint issue will arise under Windows at least (Note: this method can be executed by a thread other
         // than the event thread).
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(() -> {
                 Dimension popupMenuSize = popupMenu.getPreferredSize();
 
                 popupMenu.show(PopupButton.this,
                 		popupMenuLocation==RIGHT?getWidth():popupMenuLocation==LEFT?-(int)popupMenuSize.getWidth():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getWidth()-(int)popupMenuSize.getWidth():0,
                         popupMenuLocation==BOTTOM?getHeight():popupMenuLocation==TOP?-(int)popupMenuSize.getHeight():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getHeight():0
                 );
-
-            }
         });
 
         // Leave the button selected (shows that button has focus) while the popup menu is visible

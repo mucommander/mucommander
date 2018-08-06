@@ -240,16 +240,14 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             model.setRoot(currentRoot);
         }
         // refresh selection on tree
-        SwingUtilities.invokeLater(new Runnable() {
-           public void run() {
-               try {
-                   TreePath path = new TreePath(model.getPathToRoot(selectedFolder));
-                   tree.expandPath(path);
-                   tree.setSelectionPath(path);
-                   tree.scrollPathToVisible(path);
-               } catch (Exception e) {
-                   LOGGER.debug("Caught exception", e);
-               }
+        SwingUtilities.invokeLater(() -> {
+            try {
+                TreePath path = new TreePath(model.getPathToRoot(selectedFolder));
+                tree.expandPath(path);
+                tree.setSelectionPath(path);
+                tree.scrollPathToVisible(path);
+            } catch (Exception e) {
+                LOGGER.debug("Caught exception", e);
             }
         });
     }

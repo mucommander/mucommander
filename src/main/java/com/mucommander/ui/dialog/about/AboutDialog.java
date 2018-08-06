@@ -108,11 +108,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
         setResizable(false);
 
         // Makes sure the scroll pane is properly initialized.
-        SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    textPanel.getViewport().setViewPosition(new Point(0,0));
-                }
-            });
+        SwingUtilities.invokeLater(() -> textPanel.getViewport().setViewPosition(new Point(0,0)));
 
         pack();
 

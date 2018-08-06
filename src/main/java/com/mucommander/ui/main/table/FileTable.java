@@ -1191,11 +1191,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 // At this point JViewport is not yet aware of the new FileTable dimensions, calling setViewPosition
                 // would not work. Instead, SwingUtilities.invokeLater is used to delay the call after all pending
                 // UI events (including JViewport revalidation) have been processed.
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                    	scrollpaneWrapper.getViewport().setViewPosition(new java.awt.Point(0, Math.max(0, cellRect.y-scrollpaneWrapper.getHeight()/2-getRowHeight()/2)));
-                    }
-                });
+                SwingUtilities.invokeLater(() -> scrollpaneWrapper.getViewport().setViewPosition(
+                        new java.awt.Point(0, Math.max(0, cellRect.y-scrollpaneWrapper.getHeight()/2-getRowHeight()/2))));
             }
         }
     }

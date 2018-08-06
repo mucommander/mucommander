@@ -131,11 +131,7 @@ public class CachedDirectory extends ProxyFile {
              * Set cache to new value. This is invoked in swing thread
              * so event listeners are called from right thread. 
              */
-            SwingUtilities.invokeAndWait(new Runnable() {
-                public void run() {
-                    setLsCache(children2, file.getDate());
-                }
-            });
+            SwingUtilities.invokeAndWait(() -> setLsCache(children2, file.getDate()));
         } catch (Exception e) {
             LOGGER.debug("Caught exception", e);
         }

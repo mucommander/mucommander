@@ -162,11 +162,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
         loggingEventsList.setModel(listModel);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                loggingEventsList.ensureIndexIsVisible(records.length-1);
-            }
-        });
+        SwingUtilities.invokeLater(() -> loggingEventsList.ensureIndexIsVisible(records.length-1));
     }
     
     /**

@@ -89,14 +89,12 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
             setPickerCursor(Color.WHITE);
 
             // These are invoked after all pending events are processed
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    // Listen to all mouse events on the window that contains this button 
-                    toolkit.addAWTEventListener(ColorPicker.this, AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_EVENT_MASK);
+            SwingUtilities.invokeLater(() -> {
+                // Listen to all mouse events on the window that contains this button 
+                toolkit.addAWTEventListener(ColorPicker.this, AWTEvent.MOUSE_MOTION_EVENT_MASK|AWTEvent.MOUSE_EVENT_MASK);
 
-                    // Leave this button selected until a color is picked or this button is pressed again (to cancel) 
-                    setSelected(true);
-                }
+                // Leave this button selected until a color is picked or this button is pressed again (to cancel) 
+                setSelected(true);
             });
         }
         else {
