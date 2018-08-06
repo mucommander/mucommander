@@ -302,13 +302,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
         folderPanel.getMainFrame().getJMenuBar().setEnabled(false);
 
         // (upon focus) have text selected, so as to save the user the need to manually do so
-        final LocationTextField THIS = this;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                THIS.selectAll();
-            }
-        });
+        SwingUtilities.invokeLater(() -> LocationTextField.this.selectAll());
     }
 
     @Override
