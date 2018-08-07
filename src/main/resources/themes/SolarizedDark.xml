@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+    <file_table>
+        <normal>
+            <background color="002b36"/>
+            <inactive_background color="002b36"/>
+        </normal>
+        <selected>
+            <background color="073642"/>
+            <inactive_background color="073642"/>
+        </selected>
+        <alternate>
+            <background color="002b36"/>
+            <inactive_background color="002b36"/>
+        </alternate>
+        <unmatched>
+        </unmatched>
+        <hidden>
+            <normal>
+                <foreground color="586e75"/>
+                <inactive_foreground color="586e75"/>
+            </normal>
+            <selected>
+            </selected>
+        </hidden>
+        <folder>
+            <normal>
+                <inactive_foreground color="b58900"/>
+                <foreground color="b58900"/>
+            </normal>
+            <selected>
+            </selected>
+        </folder>
+        <archive>
+            <normal>
+                <inactive_foreground color="839496"/>
+                <foreground color="839496"/>
+            </normal>
+            <selected>
+            </selected>
+        </archive>
+        <symlink>
+            <normal>
+                <inactive_foreground color="839496"/>
+                <foreground color="839496"/>
+            </normal>
+            <selected>
+                <foreground color="fefefe"/>
+            </selected>
+        </symlink>
+        <marked>
+            <normal>
+                <inactive_foreground color="2aa198"/>
+                <foreground color="2aa198"/>
+            </normal>
+            <selected>
+            </selected>
+        </marked>
+        <file>
+            <normal>
+                <inactive_foreground color="839496"/>
+                <foreground color="839496"/>
+            </normal>
+            <selected>
+                <foreground color="fefefe"/>
+            </selected>
+        </file>
+    </file_table>
+    <shell>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </shell>
+    <shell_history>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </shell_history>
+    <editor>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </editor>
+    <location_bar>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </location_bar>
+    <status_bar>
+    </status_bar>
+    <quick_list>
+        <header>
+        </header>
+        <item>
+            <normal>
+            </normal>
+            <selected>
+            </selected>
+        </item>
+    </quick_list>
+</theme>

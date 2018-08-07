@@ -69,12 +69,13 @@ public class ThemeManager {
     private static final String       CUSTOM_THEME_FOLDER              = "themes";
     /** List of all registered theme change listeners. */
     private static final WeakHashMap<ThemeListener, Object>  listeners = new WeakHashMap<ThemeListener, Object>();
- /** List of all predefined theme names. */
+    /** List of all predefined theme names. */
     private static final String[]     PREDEFINED_THEME_NAMES = {
         "ClassicCommander",
         "Native",
         "RetroCommander",
-        "Striped"
+        "Striped",
+        "SolarizedDark"
     };
 
 
