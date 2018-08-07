@@ -36,6 +36,9 @@ New features:
 
 Improvements:
 - The last setting of single panel view for each window is now restored on startup.
+- Add solarized dark theme.
+- Enable compilation with Java 9 and Java 10.
+- Select the whole text within the location text-field when the latter gains focus.
 
 Localization:
 
