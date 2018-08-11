@@ -58,7 +58,7 @@ import com.mucommander.text.Translator;
  */
 public class ThemeManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ThemeManager.class);
-	
+
     // - Class variables -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Path to the user defined theme file. */
@@ -75,7 +75,8 @@ public class ThemeManager {
         "Native",
         "RetroCommander",
         "Striped",
-        "SolarizedDark"
+        "SolarizedDark",
+        "SolarizedLight"
     };
 
 
@@ -652,7 +653,7 @@ public class ThemeManager {
             name = name + ' ';
 
         i = 1;
-        do {buffer = name + '(' + (++i) + ')';}            
+        do {buffer = name + '(' + (++i) + ')';}
         while(!isNameAvailable(buffer, names.iterator()));
 
         return buffer;

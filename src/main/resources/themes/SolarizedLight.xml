@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+    <file_table>
+        <normal>
+            <background color="fdf6e3"/>
+            <inactive_background color="fdf6e3"/>
+        </normal>
+        <selected>
+            <background color="eee8d5"/>
+            <inactive_background color="eee8d5"/>
+        </selected>
+        <alternate>
+            <background color="fdf6e3"/>
+            <inactive_background color="fdf6e3"/>
+        </alternate>
+        <unmatched>
+        </unmatched>
+        <hidden>
+            <normal>
+                <foreground color="586e75"/>
+                <inactive_foreground color="586e75"/>
+            </normal>
+            <selected>
+                <foreground color="586e75"/>
+                <inactive_foreground color="586e75"/>
+            </selected>
+        </hidden>
+        <folder>
+            <normal>
+                <inactive_foreground color="b58900"/>
+                <foreground color="b58900"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="586e75"/>
+                <foreground color="586e75"/>
+            </selected>
+        </folder>
+        <archive>
+            <normal>
+                <inactive_foreground color="657b83"/>
+                <foreground color="657b83"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="586e75"/>
+                <foreground color="586e75"/>
+            </selected>
+        </archive>
+        <symlink>
+            <normal>
+                <inactive_foreground color="657b83"/>
+                <foreground color="657b83"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="586e75"/>
+                <foreground color="586e75"/>
+            </selected>
+        </symlink>
+        <marked>
+            <normal>
+                <inactive_foreground color="2aa198"/>
+                <foreground color="2aa198"/>
+            </normal>
+            <selected>
+            </selected>
+        </marked>
+        <executable>
+            <normal>
+            </normal>
+            <selected>
+            </selected>
+        </executable>
+        <file>
+            <normal>
+                <inactive_foreground color="657b83"/>
+                <foreground color="657b83"/>
+            </normal>
+            <selected>
+                <inactive_foreground color="586e75"/>
+                <foreground color="586e75"/>
+            </selected>
+        </file>
+    </file_table>
+    <file_groups>
+        <group1>
+        </group1>
+        <group2>
+        </group2>
+        <group3>
+        </group3>
+        <group4>
+        </group4>
+        <group5>
+        </group5>
+        <group6>
+        </group6>
+        <group7>
+        </group7>
+        <group8>
+        </group8>
+        <group9>
+        </group9>
+        <group10>
+        </group10>
+    </file_groups>
+    <shell>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </shell>
+    <shell_history>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </shell_history>
+    <terminal>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </terminal>
+    <editor>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+        <current>
+        </current>
+    </editor>
+    <hex_viewer>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </hex_viewer>
+    <location_bar>
+        <normal>
+        </normal>
+        <selected>
+        </selected>
+    </location_bar>
+    <status_bar>
+    </status_bar>
+    <quick_list>
+        <header>
+        </header>
+        <item>
+            <normal>
+            </normal>
+            <selected>
+            </selected>
+        </item>
+    </quick_list>
+</theme>
