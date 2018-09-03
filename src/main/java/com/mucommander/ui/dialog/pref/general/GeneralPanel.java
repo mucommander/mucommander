@@ -131,7 +131,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         Locale currentLang = Locale.forLanguageTag(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
         languageComboBox = new PrefComboBox<Locale>() {
 			public boolean hasChanged() {
-				return !languages.get(getSelectedIndex()).equals(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
+				return !languages.get(getSelectedIndex()).toLanguageTag().equals(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
 			}
         };
 
