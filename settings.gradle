@@ -1,3 +1,4 @@
+include 'mucommander-core'
 include 'mucommander-commons-file'
 include 'mucommander-commons-conf'
 include 'mucommander-commons-collections'

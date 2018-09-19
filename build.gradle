@@ -1,3 +1,22 @@
+plugins {
+    id "com.athaydes.osgi-run" version "1.6.0"
+    id "java"
+}
+
+repositories.jcenter()
+
+dependencies {
+    osgiRuntime project('mucommander-core')
+}
+
+allprojects {
+    group = 'org.mucommander'
+    version = '0.9.4'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+/*
 buildscript {
     dependencies {
         classpath files('libs/mucommander-gradle-macappbundle-2.1.6.jar', 'libs/proguard-6.0.3.jar')
@@ -311,4 +330,5 @@ task(afterEclipseImport).doLast {
     f.append('encoding//src/main/resources/dictionary_zh_CN.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
 }
+*/
 

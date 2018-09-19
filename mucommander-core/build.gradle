@@ -1,0 +1,54 @@
+plugins {
+    id 'java-library'
+    id 'osgi'
+}
+
+repositories.jcenter()
+
+dependencies {
+    compile project(':mucommander-commons-file')
+    compile project(':mucommander-commons-conf')
+    compile project(':mucommander-commons-collections')
+
+    compile 'org.jmdns:jmdns:3.5.1'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'ch.qos.logback:logback-core:1.2.3'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compile 'com.beust:jcommander:1.66'
+    compile 'org.osgi:org.osgi.core:6.0.0'
+    compileOnly files('libs/java-extension.jar')
+
+    testCompile 'org.testng:testng:6.11'
+    testCompile 'junit:junit:4.12'
+}
+
+jar{
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+       manifest { // the manifest of the default jar is of type OsgiManifest
+           name = 'muCommander-core'
+           instruction 'Private-Package',
+                   'org.mycomp.package1'
+           instruction 'Bundle-Vendor', 'muCommander'
+           instruction 'Bundle-Description', 'Platform2: Metrics 2 Measures Framework'
+           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
+           instruction 'Import-Package', 'org.osgi.framework', 'com.mucommander.commons.file', 'javax.swing', 'com.mucommander.commons.file.protocol', 'org.slf4j', 'org.xml.sax', 'org.xml.sax.helpers', 'javax.xml.parsers'
+           instruction 'Bundle-Activator', 'com.mucommander.muCommander'
+       }
+}
+
+/*
+jar {
+    manifest {
+        attributes("Main-Class": 'com.mucommander.muCommander',
+                   "Specification-Title": "muCommander",
+                   "Specification-Vendor": "Arik Hadas",
+                   "Specification-Version": version,
+                   "Implementation-Title": "muCommander",
+                   "Implementation-Vendor": "Arik Hadas",
+                   "Implementation-Version": revision.substring(0, 7),
+                   "Build-Date": new Date().format('yyyyMMdd'),
+                   "Build-URL": "http://www.mucommander.com/version/nightly.xml")
+    }
+}
+*/
+
