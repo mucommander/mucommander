@@ -103,7 +103,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 //        addTab(FileProtocols.FTP, new FTPPanel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.HDFS, new HDFSPanel(this, mainFrame), selectPanelClass);
         addTab(FileProtocols.HTTP, new HTTPPanel(this, mainFrame), selectPanelClass);
-        addTab(FileProtocols.NFS, new NFSPanel(this, mainFrame), selectPanelClass);
+//        addTab(FileProtocols.NFS, new NFSPanel(this, mainFrame), selectPanelClass);
         addTab(FileProtocols.S3, new S3Panel(this, mainFrame), selectPanelClass);
         addTab(FileProtocols.SFTP, new SFTPPanel(this, mainFrame), selectPanelClass);
         addTab(FileProtocols.SMB, new SMBPanel(this, mainFrame), selectPanelClass);
