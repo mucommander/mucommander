@@ -119,7 +119,7 @@ public class FileFactory {
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
         registerProtocol(FileProtocols.FILE, new LocalProtocolProvider());
-        registerProtocol(FileProtocols.SMB, new com.mucommander.commons.file.protocol.smb.SMBProtocolProvider());
+//        registerProtocol(FileProtocols.SMB, new com.mucommander.commons.file.protocol.smb.SMBProtocolProvider());
 //        registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.commons.file.protocol.http.HTTPProtocolProvider());
 //        registerProtocol(FileProtocols.HTTPS, protocolProvider);
 //        registerProtocol(FileProtocols.FTP, new com.mucommander.commons.file.protocol.ftp.FTPProtocolProvider());
