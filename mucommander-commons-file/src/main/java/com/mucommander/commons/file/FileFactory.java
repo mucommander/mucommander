@@ -122,7 +122,7 @@ public class FileFactory {
         registerProtocol(FileProtocols.SMB, new com.mucommander.commons.file.protocol.smb.SMBProtocolProvider());
         registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.commons.file.protocol.http.HTTPProtocolProvider());
         registerProtocol(FileProtocols.HTTPS, protocolProvider);
-        registerProtocol(FileProtocols.FTP, new com.mucommander.commons.file.protocol.ftp.FTPProtocolProvider());
+//        registerProtocol(FileProtocols.FTP, new com.mucommander.commons.file.protocol.ftp.FTPProtocolProvider());
         registerProtocol(FileProtocols.NFS, new com.mucommander.commons.file.protocol.nfs.NFSProtocolProvider());
         registerProtocol(FileProtocols.SFTP, new com.mucommander.commons.file.protocol.sftp.SFTPProtocolProvider());
         if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {

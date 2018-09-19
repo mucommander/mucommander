@@ -16,31 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-package com.mucommander.ui.dialog.server;
-
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
-import com.mucommander.commons.file.protocol.ftp.FTPFile;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.DialogOwner;
-import com.mucommander.ui.encoding.EncodingListener;
-import com.mucommander.ui.encoding.EncodingSelectBox;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
-import java.text.ParseException;
-
-
 /**
  * This ServerPanel helps initiate FTP connections.
  *
  * @author Maxence Bernard
  */
+/*
 public class FTPPanel extends ServerPanel implements ActionListener, EncodingListener {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.FTP).getStandardPort();
@@ -66,7 +47,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     private String lastPassword = "";
 
     /** Passive mode is enabled by default because of firewall restrictions */
-    private static boolean passiveMode = true;
+/*    private static boolean passiveMode = true;
     private static boolean anonymousUser;
 
 
@@ -224,3 +205,4 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         lastEncoding = newEncoding;
     }
 }
+*/

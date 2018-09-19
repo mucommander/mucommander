@@ -69,7 +69,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
-    private static Class<? extends ServerPanel> lastPanelClass = FTPPanel.class;
+//    private static Class<? extends ServerPanel> lastPanelClass = FTPPanel.class;
 
 
     /**
@@ -78,7 +78,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
      * @param folderPanel the panel on which to change the current folder
      */
     public ServerConnectDialog(FolderPanel folderPanel) {
-        this(folderPanel, lastPanelClass);
+//        this(folderPanel, lastPanelClass);
+    	this(folderPanel, null);
     }
 	
 		
@@ -92,14 +93,14 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     public ServerConnectDialog(FolderPanel folderPanel, Class<? extends ServerPanel> selectPanelClass) {
         super(folderPanel.getMainFrame(), ActionProperties.getActionLabel(ConnectToServerAction.Descriptor.ACTION_ID), folderPanel.getMainFrame());
         this.folderPanel = folderPanel;
-        lastPanelClass = selectPanelClass;
+//        lastPanelClass = selectPanelClass;
 
         MainFrame mainFrame = folderPanel.getMainFrame();
         Container contentPane = getContentPane();
 		
         this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-        addTab(FileProtocols.FTP, new FTPPanel(this, mainFrame), selectPanelClass);
+//        addTab(FileProtocols.FTP, new FTPPanel(this, mainFrame), selectPanelClass);
         addTab(FileProtocols.HDFS, new HDFSPanel(this, mainFrame), selectPanelClass);
         addTab(FileProtocols.HTTP, new HTTPPanel(this, mainFrame), selectPanelClass);
         addTab(FileProtocols.NFS, new NFSPanel(this, mainFrame), selectPanelClass);
@@ -218,7 +219,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 	
     public void stateChanged(ChangeEvent e) {
         currentServerPanel = getCurrentServerPanel();
-        lastPanelClass = currentServerPanel.getClass();
+//        lastPanelClass = currentServerPanel.getClass();
 
         // Enables 'save credentials' checkbox only if server panel/protocol uses credentials
         saveCredentialsCheckBox.setEnabled(currentServerPanel.usesCredentials());

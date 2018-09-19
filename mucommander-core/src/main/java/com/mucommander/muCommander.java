@@ -39,7 +39,6 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
-import com.mucommander.commons.file.protocol.ftp.FTPProtocolProvider;
 import com.mucommander.commons.file.protocol.smb.SMBProtocolProvider;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
@@ -566,7 +565,7 @@ public class muCommander implements BundleActivator {
 
         // Use the FTP configuration option that controls whether to force the display of hidden files, or leave it for
         // the servers to decide whether to show them.
-        FTPProtocolProvider.setForceHiddenFilesListing(MuConfigurations.getPreferences().getVariable(MuPreference.LIST_HIDDEN_FILES, MuPreferences.DEFAULT_LIST_HIDDEN_FILES));        
+//        FTPProtocolProvider.setForceHiddenFilesListing(MuConfigurations.getPreferences().getVariable(MuPreference.LIST_HIDDEN_FILES, MuPreferences.DEFAULT_LIST_HIDDEN_FILES));        
         
         // Use CredentialsManager for file URL authentication
         FileFactory.setDefaultAuthenticator(CredentialsManager.getAuthenticator());
