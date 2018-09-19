@@ -16,26 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.dialog.server;
-
-import java.net.MalformedURLException;
-
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
-import com.mucommander.commons.file.protocol.vsphere.VSphereFile;
-import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.main.MainFrame;
-
 /**
  * This ServerPanel helps initiate VSpherePanel connections.
  * 
  * @author Yuval Kohavi <yuval@intigua.com> 
  */
+/*
 public class VSpherePanel extends ServerPanel {
 
 	private static final String IP_UUID_INSTANCE_UUID = "IP\\UUID\\Instance UUID";
@@ -139,3 +125,4 @@ public class VSpherePanel extends ServerPanel {
 		updateValues();
 	}
 }
+*/
