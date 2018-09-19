@@ -22,6 +22,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     compile project(':mucommander-commons-file')
+    compile 'commons-net:commons-net:3.6'
     testCompile 'org.testng:testng:6.11'
 }
 
