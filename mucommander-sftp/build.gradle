@@ -21,6 +21,7 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     compile project(':mucommander-commons-file')
+    compile 'com.jcraft:jsch:0.1.53'
     testCompile 'org.testng:testng:6.11'
 }
 
