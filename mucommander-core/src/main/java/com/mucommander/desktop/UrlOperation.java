@@ -18,9 +18,6 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.protocol.http.HTTPFile;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -142,8 +139,8 @@ public abstract class UrlOperation implements DesktopOperation {
             return (URL)target[0];
 
         // Deals with instances of HTTPFile.
-        if(target[0] instanceof HTTPFile)
-            return (URL)((AbstractFile)target[0]).getUnderlyingFileObject();
+//        if(target[0] instanceof HTTPFile)
+//            return (URL)((AbstractFile)target[0]).getUnderlyingFileObject();
 
         // Deals with instances of String.
         if(target[0] instanceof String) {
