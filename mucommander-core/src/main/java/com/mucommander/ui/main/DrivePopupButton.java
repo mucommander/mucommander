@@ -62,7 +62,6 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.dialog.server.HTTPPanel;
-import com.mucommander.ui.dialog.server.SFTPPanel;
 import com.mucommander.ui.dialog.server.SMBPanel;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
@@ -72,9 +71,6 @@ import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
-
-//import FTPPanel;
-
 
 /**
  * <code>DrivePopupButton</code> is a button which, when clicked, pops up a menu with a list of volumes items that be used
@@ -377,7 +373,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // Add 'connect to server' shortcuts
         setMnemonic(popupMenu.add(new ServerConnectAction("SMB...", SMBPanel.class)), mnemonicHelper);
 //        setMnemonic(popupMenu.add(new ServerConnectAction("FTP...", FTPPanel.class)), mnemonicHelper);
-        setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", SFTPPanel.class)), mnemonicHelper);
+//        setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", SFTPPanel.class)), mnemonicHelper);
         setMnemonic(popupMenu.add(new ServerConnectAction("HTTP...", HTTPPanel.class)), mnemonicHelper);
 //        setMnemonic(popupMenu.add(new ServerConnectAction("NFS...", NFSPanel.class)), mnemonicHelper);
 
