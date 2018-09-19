@@ -142,7 +142,7 @@ public class FileFactory {
         registerArchiveFormat(new com.mucommander.commons.file.archive.iso.IsoFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.archive.ar.ArFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.archive.lst.LstFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.archive.rar.RarFormatProvider());
+//        registerArchiveFormat(new com.mucommander.commons.file.archive.rar.RarFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.archive.sevenzip.SevenZipFormatProvider());
 
         // Set the default FileIconProvider instance

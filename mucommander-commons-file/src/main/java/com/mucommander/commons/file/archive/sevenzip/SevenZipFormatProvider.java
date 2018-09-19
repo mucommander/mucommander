@@ -21,7 +21,6 @@ package com.mucommander.commons.file.archive.sevenzip;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveFormatProvider;
-import com.mucommander.commons.file.archive.rar.RarArchiveFile;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 
@@ -30,7 +29,6 @@ import java.io.IOException;
 /**
  * This class is the provider for the '7z' archive format implemented by {@link RarArchiveFile}.
  *
- * @see com.mucommander.commons.file.archive.rar.RarArchiveFile
  * @author Arik Hadas
  */
 public class SevenZipFormatProvider implements ArchiveFormatProvider {
