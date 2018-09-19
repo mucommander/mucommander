@@ -14,7 +14,6 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'com.github.junrar:junrar:0.7'
     compile 'commons-collections:commons-collections:3.2.2'
-	compile 'com.jcraft:jsch:0.1.53'
 	compile 'org.apache.ant:ant:1.10.5'
 
     testCompile 'org.testng:testng:6.11'
