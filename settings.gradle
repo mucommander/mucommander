@@ -15,5 +15,6 @@ include 'mucommander-s3'
 include 'mucommander-sftp'
 include 'mucommander-smb'
 include 'mucommander-vsphere'
+include 'mucommander-rar'
 
 rootProject.name = 'mucommander'
