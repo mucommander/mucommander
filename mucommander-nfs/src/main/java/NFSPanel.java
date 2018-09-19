@@ -16,25 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-package com.mucommander.ui.dialog.server;
-
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
-import com.mucommander.commons.file.protocol.nfs.NFSFile;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.net.MalformedURLException;
-import java.text.ParseException;
-
-
 /**
  * This ServerPanel helps initiate NFS connections.
  *
  * @author Maxence Bernard
  */
+/*
 public class NFSPanel extends ServerPanel {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.NFS).getStandardPort(); 
@@ -135,3 +122,4 @@ public class NFSPanel extends ServerPanel {
         updateValues();
     }
 }
+*/
