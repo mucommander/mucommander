@@ -22,6 +22,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     compile project(':mucommander-commons-file')
     testCompile 'org.testng:testng:6.11'
+    compile files('libs/yanfs.jar')
 }
 
 // In this section you declare where to find the dependencies of your project
