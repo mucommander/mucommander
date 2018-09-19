@@ -127,7 +127,7 @@ public class FileFactory {
         registerProtocol(FileProtocols.SFTP, new com.mucommander.commons.file.protocol.sftp.SFTPProtocolProvider());
         if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
             // Hadoop requires Java 1.6
-            registerProtocol(FileProtocols.HDFS, new com.mucommander.commons.file.protocol.hadoop.HDFSProtocolProvider());
+//            registerProtocol(FileProtocols.HDFS, new com.mucommander.commons.file.protocol.hadoop.HDFSProtocolProvider());
 //            registerProtocol(FileProtocols.S3, new com.mucommander.commons.file.impl.hadoop.S3ProtocolProvider());
         }
         registerProtocol(FileProtocols.S3, new com.mucommander.commons.file.protocol.s3.S3ProtocolProvider());
