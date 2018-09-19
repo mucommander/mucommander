@@ -16,36 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-package com.mucommander.ui.dialog.server;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
-import java.text.ParseException;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-
-import com.mucommander.commons.file.Credentials;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
-import com.mucommander.commons.file.protocol.sftp.SFTPFile;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.main.MainFrame;
-
-
 /**
  * This ServerPanel helps initiate SFTP connections.
  *
  * @author Maxence Bernard, Vassil Dichev
  */
+/*
 public class SFTPPanel extends ServerPanel {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.SFTP).getStandardPort();
@@ -173,3 +149,4 @@ public class SFTPPanel extends ServerPanel {
         updateValues();
     }
 }
+*/
