@@ -20,7 +20,4 @@ dependencies {
 
     testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
-
-    // -- Dependencies awaiting cleanup --
-    compile files('libs/vim25.jar')
 }
