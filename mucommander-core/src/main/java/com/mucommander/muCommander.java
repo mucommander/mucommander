@@ -24,6 +24,8 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +68,7 @@ import com.mucommander.utils.MuLogging;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class muCommander {
+public class muCommander implements BundleActivator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(muCommander.class);
 	
     // - Class fields -----------------------------------------------------------
@@ -127,7 +129,7 @@ public class muCommander {
 
     // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
-    private muCommander() {}
+    public muCommander() {}
 
 
     /**
@@ -572,4 +574,16 @@ public class muCommander {
         // Register the application-specific 'bookmark' protocol.
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
     }
+
+
+	@Override
+	public void start(BundleContext context) throws Exception {
+		muCommander mu = new muCommander();
+		mu.run();
+	}
+
+
+	@Override
+	public void stop(BundleContext context) throws Exception {
+	}
 }
