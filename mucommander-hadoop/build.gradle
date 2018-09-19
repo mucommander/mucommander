@@ -21,6 +21,7 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     compile project(':mucommander-commons-file')
+    compile 'org.apache.hadoop:hadoop-core:0.20.2'
     testCompile 'org.testng:testng:6.11'
 }
 
