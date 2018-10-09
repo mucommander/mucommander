@@ -54,7 +54,7 @@ import java.util.Enumeration;
 public class ResourceLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceLoader.class);
 
-    /** the default ClassLoader that is used by methods without a ClassLoader argument */
+    /** The default ClassLoader that is used by methods without a ClassLoader argument */
     private static ClassLoader defaultClassLoader = ResourceLoader.class.getClassLoader();
 
     /**
@@ -77,6 +77,14 @@ public class ResourceLoader {
         return defaultClassLoader;
     }
 
+    /**
+     * Overrides the default <code>ClassLoader</code> used by this class.
+     *
+     * @param defaultClassLoader the default <code>ClassLoader</code> that is used by methods without a <code>ClassLoader</code> argument
+     */
+    public static void setDefaultClassLoader(ClassLoader defaultClassLoader) {
+        ResourceLoader.defaultClassLoader = defaultClassLoader;
+    }
 
     /**
      * This method is similar to {@link #getResourceAsURL(String)} except that it looks for a resource with a given
