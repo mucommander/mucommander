@@ -268,7 +268,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      *
      * @param lnfName name of the new LooknFeel to use
      */
-    private static void setLookAndFeel(String lnfName) {
+    private void setLookAndFeel(String lnfName) {
         try {
             ClassLoader oldLoader;
             Thread      currentThread;
@@ -285,8 +285,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // Restores the contextual ClassLoader.
             currentThread.setContextClassLoader(oldLoader);
 
-            for(int i=0; i<instance.mainFrames.size(); i++)
-                SwingUtilities.updateComponentTreeUI(instance.mainFrames.get(i));
+            for(int i=0; i<mainFrames.size(); i++)
+                SwingUtilities.updateComponentTreeUI(mainFrames.get(i));
         }
         catch(Throwable e) {
             LOGGER.debug("Exception caught", e);
