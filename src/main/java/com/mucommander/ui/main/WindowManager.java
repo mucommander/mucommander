@@ -285,8 +285,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             // Restores the contextual ClassLoader.
             currentThread.setContextClassLoader(oldLoader);
 
-            for(int i=0; i<mainFrames.size(); i++)
-                SwingUtilities.updateComponentTreeUI(mainFrames.get(i));
+            mainFrames.forEach(SwingUtilities::updateComponentTreeUI);
         }
         catch(Throwable e) {
             LOGGER.debug("Exception caught", e);
