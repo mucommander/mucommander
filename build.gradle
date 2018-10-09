@@ -42,7 +42,7 @@ dependencies {
     compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'ch.qos.logback:logback-classic:1.2.3'
     compile 'com.beust:jcommander:1.66'
-    compile files('libs/java-extension.jar')
+    compileOnly files('libs/java-extension.jar')
 
     testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
