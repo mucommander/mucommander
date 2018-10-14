@@ -161,6 +161,10 @@ public class Translator {
 	}
 
 	public static void init() {
+		// used in order to force static initialization
+	}
+
+	static {
 		Locale locale = match(loadLocale());
 		final Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
 		ResourceBundle resourceBundle= ResourceBundle.getBundle("dictionary", locale, utf8ResourceBundleControl);
