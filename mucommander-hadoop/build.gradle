@@ -23,6 +23,8 @@ dependencies {
     compile project(':mucommander-commons-file')
     compile 'org.apache.hadoop:hadoop-core:0.20.2'
     testCompile 'org.testng:testng:6.11'
+    testCompile project(':mucommander-commons-file')
+    testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
 // In this section you declare where to find the dependencies of your project

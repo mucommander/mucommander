@@ -20,6 +20,10 @@ dependencies {
 
     testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
+    testCompile project(':mucommander-commons-file')
+    testCompile project(':mucommander-commons-conf')
+    testCompile project(':mucommander-commons-collections')
+    testCompile project(':mucommander-commons-io')
 }
 
 jar{
