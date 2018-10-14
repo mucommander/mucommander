@@ -22,6 +22,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     compile project(':mucommander-commons-file')
     testCompile 'org.testng:testng:6.11'
+    testCompile project(':mucommander-commons-file')
+    testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
 // In this section you declare where to find the dependencies of your project

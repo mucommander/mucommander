@@ -23,6 +23,8 @@ dependencies {
     compile project(':mucommander-commons-file')
     testCompile 'org.testng:testng:6.11'
     compile files('libs/yanfs.jar')
+    testCompile project(':mucommander-commons-file')
+    testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
 // In this section you declare where to find the dependencies of your project
