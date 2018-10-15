@@ -50,6 +50,9 @@ It is recommended that whenever you get unclear compilation error and before sub
 ./gradlew clean run
 ```    
 
+**How to Debug**  
+Debugging is a bit more tricky due to the use of an OSGI container. One way of doing that is by extending the launcher script (either run.bat or run.sh, depending on your operating system) with, e.g., `-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044`, and then debug the application from an IDE as a remote application on host `localhost` and port `1044`.
+
 **Packaging**  
 The different distributions of muCommander are based on a shadow-jar, standalone jar that contains all the required dependencies and filter their unneeded parts. The creation of the shadow-jar is done by the following command:  
 ```
