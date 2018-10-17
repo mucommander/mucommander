@@ -583,5 +583,7 @@ public class muCommander implements BundleActivator {
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		// stop the system bundle
+		context.getBundle(0).stop();
 	}
 }
