@@ -26,33 +26,23 @@ dependencies {
     testCompile project(':mucommander-commons-io')
 }
 
-jar{
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-       manifest { // the manifest of the default jar is of type OsgiManifest
-           name = 'muCommander-core'
-           instruction 'Private-Package',
-                   'org.mycomp.package1'
-           instruction 'Bundle-Vendor', 'muCommander'
-           instruction 'Bundle-Description', 'Platform2: Metrics 2 Measures Framework'
-           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package', 'org.osgi.framework', 'com.mucommander.commons.file', 'javax.swing', 'com.mucommander.commons.file.protocol', 'org.slf4j', 'org.xml.sax', 'org.xml.sax.helpers', 'javax.xml.parsers'
-           instruction 'Bundle-Activator', 'com.mucommander.muCommander'
-       }
-}
-
-/*
 jar {
-    manifest {
-        attributes("Main-Class": 'com.mucommander.muCommander',
-                   "Specification-Title": "muCommander",
-                   "Specification-Vendor": "Arik Hadas",
-                   "Specification-Version": version,
-                   "Implementation-Title": "muCommander",
-                   "Implementation-Vendor": "Arik Hadas",
-                   "Implementation-Version": revision.substring(0, 7),
-                   "Build-Date": new Date().format('yyyyMMdd'),
-                   "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-    }
+   manifest {
+       attributes("Specification-Title": "muCommander",
+                  "Specification-Vendor": "Arik Hadas",
+                  "Specification-Version": version,
+                  "Implementation-Title": "muCommander",
+                  "Implementation-Vendor": "Arik Hadas",
+                  "Implementation-Version": revision.substring(0, 7),
+                  "Build-Date": new Date().format('yyyyMMdd'),
+                  "Build-URL": "http://www.mucommander.com/version/nightly.xml")
+       name = 'muCommander-core'
+       instruction 'Private-Package',
+               'org.mycomp.package1'
+       instruction 'Bundle-Vendor', 'muCommander'
+       instruction 'Bundle-Description', 'Platform2: Metrics 2 Measures Framework'
+       instruction 'Bundle-DocURL', 'http://www.mucommander.com'
+       instruction 'Import-Package', 'org.osgi.framework', 'com.mucommander.commons.file', 'javax.swing', 'com.mucommander.commons.file.protocol', 'org.slf4j', 'org.xml.sax', 'org.xml.sax.helpers', 'javax.xml.parsers'
+       instruction 'Bundle-Activator', 'com.mucommander.muCommander'
+   }
 }
-*/
-
