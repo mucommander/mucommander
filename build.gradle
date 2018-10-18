@@ -7,6 +7,16 @@ repositories.jcenter()
 
 dependencies {
     osgiRuntime project('mucommander-core')
+    osgiRuntime project('mucommander-commons-collections')
+    osgiRuntime project('mucommander-commons-conf')
+    osgiRuntime project('mucommander-commons-file')
+    osgiRuntime project('mucommander-commons-io')
+    osgiRuntime project('mucommander-commons-runtime')
+}
+
+runOsgi {
+    configSettings = 'felix'
+    config += [ 'org.osgi.framework.system.packages.extra': 'sun.security.action,com.apple.eawt', 'felix.log.level': 1 ]
 }
 
 allprojects {
