@@ -39,6 +39,7 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
+import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -369,6 +370,9 @@ public class muCommander implements BundleActivator {
             // ------------------------------------------------------------
             MuLogging.configureLogging();
 
+            // - Set the bundle's class loader as the default one
+            // ------------------------------------------------------------
+            ResourceLoader.setDefaultClassLoader(this.getClass().getClassLoader());
 
             // - MAC OS X specific init -----------------------------------
             // ------------------------------------------------------------
