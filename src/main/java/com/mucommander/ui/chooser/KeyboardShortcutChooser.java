@@ -314,20 +314,4 @@ public class KeyboardShortcutChooser extends JPanel implements ItemListener, Com
             return keyLabel;
         }
     }
-
-
-
-    public static void main(String args[]) throws IOException {
-        Translator.init();
-
-        JFrame frame = new JFrame();
-
-        frame.getContentPane().add(new KeyboardShortcutChooser());
-
-        frame.pack();
-//        Dimension d = frame.getSize();
-//        frame.setSize(new Dimension(d.width+200, d.height));
-        frame.setVisible(true);
-    }
-
 }
