@@ -56,13 +56,6 @@ public class ShutdownHook extends Thread {
      */
     public static void initiateShutdown() {
         LOGGER.info("shutting down");
-
-//            // No need to call System.exit() under Java 1.4, application will naturally exit
-//            // when no there is no more window showing and no non-daemon thread still running.
-//            // However, natural application death will not trigger ShutdownHook so we need to explicitly
-//            // perform shutdown tasks.
-//            performShutdownTasks();
-
         // System.exit() will trigger ShutdownHook and perform shutdown tasks
         System.exit(0);
     }
