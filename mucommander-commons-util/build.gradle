@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'osgi'
 }
 
 repositories.jcenter()
@@ -8,4 +9,24 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
 
     testCompile 'org.testng:testng:6.11'
+}
+
+jar {
+       manifest {
+           attributes("Specification-Title": "muCommander",
+                      "Specification-Vendor": "Arik Hadas",
+                      "Specification-Version": version,
+                      "Implementation-Title": "muCommander",
+                      "Implementation-Vendor": "Arik Hadas",
+                      "Implementation-Version": revision.substring(0, 7),
+                      "Build-Date": new Date().format('yyyyMMdd'),
+                      "Build-URL": "http://www.mucommander.com/version/nightly.xml")
+           instruction 'Bundle-Vendor', 'muCommander'
+           instruction 'Bundle-Description', 'Library with utility tools'
+           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
+           instruction 'Import-Package',
+            'org.osgi.framework',
+            'org.slf4j'
+           instruction 'Export-Package', 'com.mucommander.commons.util'
+       }
 }
