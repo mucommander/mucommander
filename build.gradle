@@ -1,6 +1,7 @@
 plugins {
-    id "com.athaydes.osgi-run" version "1.6.0"
-    id "java"
+    id 'com.athaydes.osgi-run' version '1.6.0'
+    id 'java'
+    id 'org.ajoberstar.grgit' version '1.3.2'
 }
 
 repositories.jcenter()
@@ -26,31 +27,6 @@ allprojects {
     targetCompatibility = 1.8
 }
 
-/*
-buildscript {
-    dependencies {
-        classpath files('libs/mucommander-gradle-macappbundle-2.1.6.jar', 'libs/proguard-6.0.3.jar')
-    }
-}
-
-plugins {
-    id 'application'
-    id 'org.ajoberstar.grgit' version '1.3.2'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-    id 'edu.sc.seis.macAppBundle' version '2.3.0'
-    id 'edu.sc.seis.launch4j' version '2.4.4'
-    id 'nebula.ospackage' version '5.1.0'
-}
-
-mainClassName = 'com.mucommander.muCommander'
-
-allprojects {
-    group = 'org.mucommander'
-    version = '0.9.4'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
-
 ext {
     // Open the Git repository in the current directory.
     git = org.ajoberstar.grgit.Grgit.open(file('.'))
@@ -63,22 +39,11 @@ test {
     useTestNG()
 }
 
-repositories.jcenter()
-
-dependencies {
-    compile project('mucommander-commons-file')
-    compile project('mucommander-commons-conf')
-    compile project('mucommander-commons-collections')
-
-    compile 'org.jmdns:jmdns:3.5.1'
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'ch.qos.logback:logback-core:1.2.3'
-    compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile 'com.beust:jcommander:1.66'
-    compileOnly files('libs/java-extension.jar')
-
-    testCompile 'org.testng:testng:6.11'
-    testCompile 'junit:junit:4.12'
+/*
+plugins {
+    id 'edu.sc.seis.macAppBundle' version '2.1.6'
+    id 'edu.sc.seis.launch4j' version '2.4.4'
+    id 'nebula.ospackage' version '3.5.0'
 }
 
 jar {
@@ -307,6 +272,7 @@ buildRpm {
         into '/usr/share/applications'
     }
 }
+*/
 
 task(afterEclipseImport).doLast {
     File f = file('.settings/org.eclipse.core.resources.prefs')
@@ -340,5 +306,4 @@ task(afterEclipseImport).doLast {
     f.append('encoding//src/main/resources/dictionary_zh_CN.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
 }
-*/
 
