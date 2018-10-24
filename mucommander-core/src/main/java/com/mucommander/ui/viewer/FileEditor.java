@@ -34,7 +34,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;
@@ -82,7 +82,7 @@ public abstract class FileEditor extends FilePresenter implements ActionListener
         JFileChooser fileChooser = new JFileChooser();
 		AbstractFile currentFile = getCurrentFile();
         // Sets selected file in JFileChooser to current file
-        if(currentFile.getURL().getScheme().equals(FileProtocols.FILE))
+        if(currentFile.getURL().getScheme().equals(LocalFile.SCHEMA))
             fileChooser.setSelectedFile(new java.io.File(currentFile.getAbsolutePath()));
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
         int ret = fileChooser.showSaveDialog(getFrame());

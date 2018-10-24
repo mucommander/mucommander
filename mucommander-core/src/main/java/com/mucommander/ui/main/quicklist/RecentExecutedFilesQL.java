@@ -24,7 +24,6 @@ import java.util.LinkedList;
 import javax.swing.Icon;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
@@ -58,7 +57,7 @@ public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
     protected void acceptListItem(AbstractFile item) {
 		MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
-		if(item.getURL().getScheme().equals(FileProtocols.FILE) && (item.hasAncestor(LocalFile.class))) {
+		if(item.getURL().getScheme().equals(LocalFile.SCHEMA) && (item.hasAncestor(LocalFile.class))) {
             try { DesktopManager.open(item); }
             catch(IOException e) {}
         }

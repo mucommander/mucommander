@@ -39,8 +39,8 @@ import javax.swing.table.TableColumnModel;
 
 import com.apple.eawt.FullScreenUtilities;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
@@ -51,7 +51,6 @@ import com.mucommander.conf.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.CloseWindowAction;
-import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import com.mucommander.ui.button.ToolbarMoreButton;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
@@ -664,7 +663,7 @@ public class MainFrame extends JFrame implements LocationListener {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getFolderPanel().getCurrentFolder();
             Object javaIoFile;
-            if(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)) {
+            if(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA)) {
                 // If the current folder is an archive entry, display the archive file, this is the closest we can get
                 // with a java.io.File
                 if(currentFolder.hasAncestor(AbstractArchiveEntryFile.class))

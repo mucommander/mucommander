@@ -18,13 +18,6 @@
 
 package com.mucommander.ui.dnd;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.protocol.FileProtocols;
-import com.mucommander.commons.file.util.FileSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -33,6 +26,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.file.util.FileSet;
 
 /**
  * This class represents a Transferable file set and is used for Drag and Drop transfers initiated by muCommander
@@ -392,7 +393,7 @@ public class TransferableFileSet implements Transferable {
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
                 file = fileSet.elementAt(i);
-                String url = file.getURL().getScheme().equals(FileProtocols.FILE)
+                String url = file.getURL().getScheme().equals(LocalFile.SCHEMA)
                     // Use java.io.File.toURI() for local files (e.g. file:/mnt/music), this is the format expected by
                     // Gnome/Nautilus.
                     ?new File(file.getAbsolutePath()).toURI().toString()

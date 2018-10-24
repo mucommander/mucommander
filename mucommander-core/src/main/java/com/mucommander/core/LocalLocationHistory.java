@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.ui.main.FolderPanel;
 
@@ -80,7 +79,7 @@ public class LocalLocationHistory {
 		//  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
 		// Java from triggering that dreaded 'Drive not ready' popup.
 		LOGGER.trace("folder="+folderURL);
-		if(folderURL.getScheme().equals(FileProtocols.FILE)) {
+		if(folderURL.getScheme().equals(LocalFile.SCHEMA)) {
 			AbstractFile folder = FileFactory.getFile(folderURL);
 			if (folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
 				this.lastRecallableFolder = folder.getAbsolutePath();

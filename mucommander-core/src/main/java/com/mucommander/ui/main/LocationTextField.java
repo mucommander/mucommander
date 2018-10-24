@@ -30,7 +30,6 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.local.UNCFile;
 import com.mucommander.commons.file.util.PathUtils;
@@ -174,7 +173,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
             FileURL folderURL = e.getFolderURL();
 
             String locationText;
-            if(folderURL.getScheme().equals(FileProtocols.FILE)) {
+            if(folderURL.getScheme().equals(LocalFile.SCHEMA)) {
                 // Do not display the URL's scheme & host for local files
                 if (FileURL.LOCALHOST.equals(folderURL.getHost())) {
                     locationText = folderURL.getPath();

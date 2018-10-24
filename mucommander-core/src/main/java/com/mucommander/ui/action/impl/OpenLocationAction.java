@@ -24,7 +24,7 @@ import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.impl.BatchRenameAction.Descriptor;
 import com.mucommander.ui.main.FolderPanel;
@@ -48,7 +48,7 @@ public class OpenLocationAction extends ActiveTabAction {
      * (with credentials stripped out) as label.
      */
     public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, FileURL url) {
-        this(mainFrame, properties, url, url.getScheme().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
+        this(mainFrame, properties, url, url.getScheme().equals(LocalFile.SCHEMA)?url.getPath():url.toString(false));
     }
 
     /**
@@ -59,7 +59,7 @@ public class OpenLocationAction extends ActiveTabAction {
 
         this.url = url;
         setLabel(label);
-        setToolTipText(url.getScheme().equals(FileProtocols.FILE)?url.getPath():url.toString(false));
+        setToolTipText(url.getScheme().equals(LocalFile.SCHEMA)?url.getPath():url.toString(false));
     }
 
 

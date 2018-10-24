@@ -30,7 +30,6 @@ import javax.swing.KeyStroke;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -134,7 +133,7 @@ public class OpenAction extends MuAction {
         }
 
         // Opens local files using their native associations.
-        else if(resolvedFile.getURL().getScheme().equals(FileProtocols.FILE) && (resolvedFile.hasAncestor(LocalFile.class))) {
+        else if(resolvedFile.getURL().getScheme().equals(LocalFile.SCHEMA) && (resolvedFile.hasAncestor(LocalFile.class))) {
             try {
             	DesktopManager.open(resolvedFile);
             	RecentExecutedFilesQL.addFile(resolvedFile);

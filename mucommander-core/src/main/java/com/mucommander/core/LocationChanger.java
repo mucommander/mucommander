@@ -135,7 +135,7 @@ public class LocationChanger {
 		if (folder == null)
 			folder = new NullableFile(folderURL);
 		
-		return FileProtocols.FILE.equals(folderURL.getScheme()) ?
+		return LocalFile.SCHEMA.equals(folderURL.getScheme()) ?
 				getWorkableFolder(folder) : folder;
 	}
 

@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 
 /**
@@ -265,7 +264,7 @@ public class CachedFile extends ProxyFile {
 
     @Override
     public boolean isDirectory() {
-        if(!isDirectorySet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
+        if(!isDirectorySet && getFileAttributesAvailable && LocalFile.SCHEMA.equals(file.getURL().getScheme()))
             getFileAttributes(file);
         // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 
@@ -289,7 +288,7 @@ public class CachedFile extends ProxyFile {
 
     @Override
     public boolean isHidden() {
-        if(!isHiddenSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
+        if(!isHiddenSet && getFileAttributesAvailable && LocalFile.SCHEMA.equals(file.getURL().getScheme()))
             getFileAttributes(file);
         // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 
@@ -363,7 +362,7 @@ public class CachedFile extends ProxyFile {
 
     @Override
     public boolean exists() {
-        if(!existsSet && getFileAttributesAvailable && FileProtocols.FILE.equals(file.getURL().getScheme()))
+        if(!existsSet && getFileAttributesAvailable && LocalFile.SCHEMA.equals(file.getURL().getScheme()))
             getFileAttributes(file);
         // Note: getFileAttributes() might fail to retrieve file attributes, so we need to test isDirectorySet again
 

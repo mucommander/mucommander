@@ -118,7 +118,7 @@ public class FileFactory {
     static {
         // Register built-in file protocols.
         ProtocolProvider protocolProvider;
-        registerProtocol(FileProtocols.FILE, new LocalProtocolProvider());
+        registerProtocol(LocalFile.SCHEMA, new LocalProtocolProvider());
 //        registerProtocol(FileProtocols.SMB, new com.mucommander.commons.file.protocol.smb.SMBProtocolProvider());
 //        registerProtocol(FileProtocols.HTTP, protocolProvider = new com.mucommander.commons.file.protocol.http.HTTPProtocolProvider());
 //        registerProtocol(FileProtocols.HTTPS, protocolProvider);
@@ -175,9 +175,6 @@ public class FileFactory {
      * After this call, the various {@link #getFile(String) getFile} methods will be able to resolve files using the
      * specified protocol.
      * </p>
-     * <p>
-     * Built-in file protocols are listed in {@link FileProtocols}.
-     * </p>
      *
      * @param  protocol identifier of the protocol to register.
      * @param  provider object used to create instances of files using the specified protocol.
@@ -191,7 +188,7 @@ public class FileFactory {
 
         // Special case for local file provider.
         // Note that the local file provider is also added to the provider hashtable.
-        if(protocol.equals(FileProtocols.FILE))
+        if(protocol.equals(LocalFile.SCHEMA))
             localFileProvider = provider;
 
         return protocolProviders.put(protocol, provider);
@@ -210,7 +207,7 @@ public class FileFactory {
         FILE_POOL_MAP.remove(protocol);
 
         // Special case for local file provider
-        if(protocol.equals(FileProtocols.FILE))
+        if(protocol.equals(LocalFile.SCHEMA))
             localFileProvider = null;
 
         return protocolProviders.remove(protocol);
@@ -452,7 +449,7 @@ public class FileFactory {
 
         String filePath = fileURL.getPath();
         // For local paths under Windows (e.g. "/C:\temp"), remove the leading '/' character
-        if(OsFamily.WINDOWS.isCurrent() && FileProtocols.FILE.equals(protocol))
+        if(OsFamily.WINDOWS.isCurrent() && LocalFile.SCHEMA.equals(protocol))
             filePath = PathUtils.removeLeadingSeparator(filePath, "/");
 
         String pathSeparator = fileURL.getPathSeparator();
@@ -542,7 +539,7 @@ public class FileFactory {
 
         // Special case for local files to avoid provider hashtable lookup and other unnecessary checks
         // (for performance reasons)
-        if(scheme.equals(FileProtocols.FILE)) {
+        if(scheme.equals(LocalFile.SCHEMA)) {
             if(localFileProvider == null)
                 throw new IOException("Unknown file protocol: " + scheme);
 
