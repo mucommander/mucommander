@@ -14,7 +14,8 @@ dependencies {
     compile 'net.java.dev.jna:jna-platform:4.4.0'
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'commons-collections:commons-collections:3.2.2'
-	compile 'org.apache.ant:ant:1.10.5'
+    compile 'org.apache.ant:ant:1.10.5'
+    compile 'org.osgi:org.osgi.core:6.0.0'
 
     testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
@@ -43,6 +44,7 @@ jar {
             'org.apache.commons.collections.map',
             'org.apache.tools.bzip2',
             'org.osgi.framework',
+            'org.osgi.util.tracker',
             'org.slf4j',
             'org.xml.sax',
             'org.xml.sax.helpers',
@@ -53,11 +55,14 @@ jar {
            instruction 'Export-Package',
             'com.mucommander.commons.file',
             'com.mucommander.commons.file.archive',
+            'com.mucommander.commons.file.connection',
             'com.mucommander.commons.file.filter',
             'com.mucommander.commons.file.icon',
             'com.mucommander.commons.file.icon.impl',
+            'com.mucommander.commons.file.osgi',
             'com.mucommander.commons.file.protocol',
             'com.mucommander.commons.file.protocol.local',
             'com.mucommander.commons.file.util'
+            instruction 'Bundle-Activator', 'com.mucommander.commons.file.osgi.Activator'
        }
 }
