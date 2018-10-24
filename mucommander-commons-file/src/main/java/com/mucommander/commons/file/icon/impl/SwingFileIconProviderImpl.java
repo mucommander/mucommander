@@ -19,26 +19,30 @@
 
 package com.mucommander.commons.file.icon.impl;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.PrintStream;
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileSystemView;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.icon.CacheableFileIconProvider;
 import com.mucommander.commons.file.icon.CachedFileIconProvider;
 import com.mucommander.commons.file.icon.IconCache;
 import com.mucommander.commons.file.icon.LocalFileIconProvider;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.SilenceableOutputStream;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.PrintStream;
-import java.net.URL;
 
 /**
  * Package-protected class which provides the {@link com.mucommander.commons.file.icon.LocalFileIconProvider} and
@@ -193,7 +197,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
 
     public Icon lookupCache(AbstractFile file, Dimension preferredResolution) {
         // Under Mac OS X, return the icon of /Network for the root of remote (non-local) locations. 
-        if(OsFamily.MAC_OS_X.isCurrent() && !FileProtocols.FILE.equals(file.getURL().getScheme()) && file.isRoot())
+        if(OsFamily.MAC_OS_X.isCurrent() && !LocalFile.SCHEMA.equals(file.getURL().getScheme()) && file.isRoot())
             return getSwingIcon(new java.io.File("/Network"));
 
         // Look for an existing icon instance for the file's extension

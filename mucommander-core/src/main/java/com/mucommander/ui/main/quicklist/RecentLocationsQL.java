@@ -25,7 +25,6 @@ import javax.swing.Icon;
 
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.text.Translator;
@@ -82,7 +81,7 @@ public class RecentLocationsQL extends QuickListWithIcons<RecentLocationsQL.Rece
 
         @Override
         public String toString() {
-            if (!FileProtocols.FILE.equals(url.getScheme()))
+            if (!LocalFile.SCHEMA.equals(url.getScheme()))
                 return url.toString();
 
             String path = url.getPath();

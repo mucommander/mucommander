@@ -19,14 +19,14 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.commons.file.protocol.FileProtocols;
-import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.commons.runtime.OsFamily;
+import java.net.MalformedURLException;
+import java.net.URLDecoder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.MalformedURLException;
-import java.net.URLDecoder;
+import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * This class provides a default {@link SchemeParser} implementation. Certain scheme-specific features of the parser
@@ -117,11 +117,11 @@ public class DefaultSchemeParser implements SchemeParser {
      * @param fileURL the FileURL instance in which to set the different parsed parts
      */
     private void handleLocalFilePath(String url, FileURL fileURL) {
-        SchemeHandler handler = FileURL.getRegisteredHandler(FileProtocols.FILE);
+        SchemeHandler handler = FileURL.getRegisteredHandler(LocalFile.SCHEMA);
         SchemeParser parser = handler.getParser();
 
         fileURL.setHandler(handler);
-        fileURL.setScheme(FileProtocols.FILE);
+        fileURL.setScheme(LocalFile.SCHEMA);
         fileURL.setHost(FileURL.LOCALHOST);
         fileURL.setPath((parser instanceof DefaultSchemeParser?((DefaultSchemeParser)parser).getPathCanonizer():pathCanonizer).canonize(url));
     }
@@ -191,17 +191,17 @@ public class DefaultSchemeParser implements SchemeParser {
                 else if(url.startsWith("\\\\") && urlLen>2) {
                     if(OsFamily.WINDOWS.isCurrent()) {
                         pos = url.indexOf('\\', 2);
-                        url = FileProtocols.FILE+"://"+ 
+                        url = LocalFile.SCHEMA+"://"+ 
                 				(pos==-1?url.substring(2):url.substring(2, pos)+"/"+(pos==urlLen-1?"":url.substring(pos+1)));
 
                         // Update scheme delimiter position
-                        schemeDelimPos = FileProtocols.FILE.length();
+                        schemeDelimPos = LocalFile.SCHEMA.length();
                     }
                     else {
-                        url = FileProtocols.SMB+"://"+url.substring(2).replace('\\', '/');
+                        url = LocalFile.SCHEMA+"://"+url.substring(2).replace('\\', '/');
 
                         // Update scheme delimiter position
-                        schemeDelimPos = FileProtocols.SMB.length();
+                        schemeDelimPos = LocalFile.SCHEMA.length();
                     }
 
                     // Update URL's length

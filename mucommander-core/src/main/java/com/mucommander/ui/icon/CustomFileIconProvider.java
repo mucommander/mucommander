@@ -30,7 +30,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.FileIconProvider;
-import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 
 /**
  * This {@link com.mucommander.commons.file.icon.FileIconProvider} returns icons from the
@@ -190,7 +190,7 @@ public class CustomFileIconProvider implements FileIconProvider {
         	icon = IconManager.getIcon(IconManager.FILE_ICON_SET, DISCONNECTED_ICON_NAME);
         }
         // Special icon for the root of remote (non-local) locations
-        else if(!FileProtocols.FILE.equals(file.getURL().getScheme()) && file.isRoot()) {
+        else if(!LocalFile.SCHEMA.equals(file.getURL().getScheme()) && file.isRoot()) {
             icon = IconManager.getIcon(IconManager.FILE_ICON_SET, NETWORK_ICON_NAME);
         }
         // If file is a directory, use folder icon. One exception is made for 'app' extension under MAC OS

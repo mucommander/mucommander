@@ -178,7 +178,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         String protocol = currentURL.getScheme();
         switch (protocol) {
         // Local file, use volume's name
-        case FileProtocols.FILE:
+        case LocalFile.SCHEMA:
         	String newLabel = null;
         	// Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
         	// display 'SMB' which is the underlying protocol

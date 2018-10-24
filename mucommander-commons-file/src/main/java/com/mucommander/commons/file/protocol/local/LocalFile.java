@@ -74,7 +74,7 @@ import com.sun.jna.ptr.LongByReference;
  * Note that despite the class' name, LocalFile instances may indifferently be residing on a local hard drive,
  * or on a remote server mounted locally by the operating system.
  *
- * <p>The associated {@link FileURL} scheme is {@link FileProtocols#FILE}. The host part should be {@link FileURL#LOCALHOST},
+ * <p>The associated {@link FileURL} scheme is {@link #SCHEMA}. The host part should be {@link FileURL#LOCALHOST},
  * except for Windows UNC URLs (see below). Native path separators ('/' or '\\' depending on the OS) can be used
  * in the path part.
  *
@@ -123,6 +123,9 @@ public class LocalFile extends ProtocolFile {
     /** True if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
      * of having single a root folder '/' */
     public final static boolean USES_ROOT_DRIVES = IS_WINDOWS || OsFamily.OS_2.isCurrent();
+
+    /** The corresponding schema part of these files in {@link FileURL} */
+    public final static String SCHEMA = "file";
 
     /** Pattern matching Windows-like drives' root, e.g. C:\ */
     final static Pattern DRIVE_ROOT_PATTERN = Pattern.compile("^[a-zA-Z]{1}[:]{1}[\\\\]{1}");
