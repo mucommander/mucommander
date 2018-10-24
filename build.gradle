@@ -13,6 +13,8 @@ dependencies {
     osgiRuntime project('mucommander-commons-file')
     osgiRuntime project('mucommander-commons-io')
     osgiRuntime project('mucommander-commons-runtime')
+
+    osgiRuntime project('mucommander-sftp')
 }
 
 runOsgi {
