@@ -62,6 +62,7 @@ Known issues:
   http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7077696
 - Unpacking files from 7z archive files can be slow.
 - Need to enable NTLM authentication manually in order to authenticate to Samba >= 4.5. This is done by adding 'ntlm auth = yes' to smb.conf.
+- Version 5.0 of RAR is not supported. Such archives would appear empty.
 
 License
 -------
