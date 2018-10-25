@@ -30,7 +30,6 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.util.CircularByteBuffer;
 
 /**
- * 
  * @author Arik Hadas
  */
 public class RarFile {
@@ -50,16 +49,10 @@ public class RarFile {
     }
     
     public InputStream getEntryInputStream(String path) throws IOException, RarException {
-//    	final FileHeader header = archive.getgetFileHeader(path);
-    	FileHeader header1 = null;
-    	for (FileHeader h : archive.getFileHeaders()) {
-    		if (h.getFileNameString().equals(path)) {
-    			header1 = h;
-    			break;
-    		}
-    	}
-
-    	final FileHeader header = header1;
+        final FileHeader header = archive.getFileHeaders().stream()
+                .filter(h -> h.getFileNameString().equals(path))
+                .findFirst()
+                .orElse(null);
 
     	// If the file that is going to be extracted is divided and continued in another archive 
         // part - don't extract it and throw corresponding exception to raise an error. 
@@ -81,7 +74,6 @@ public class RarFile {
     		    		try {
 							cbb.getOutputStream().close();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
     		    	}
