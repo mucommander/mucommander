@@ -15,31 +15,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.mucommander.commons.file.osgi;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 
 /**
  * @author Arik Hadas
  */
-public class Activator implements BundleActivator {
+public interface FileFormatService {
 
-    FileProtocolServiceTracker protocolstracker;
-    FileFormatServiceTracker formatsTracker;
-
-    @Override
-    public void start(BundleContext context) throws Exception {
-        protocolstracker = new FileProtocolServiceTracker(context);
-        protocolstracker.open();
-        formatsTracker = new FileFormatServiceTracker(context);
-        formatsTracker.open();
-    }
-
-    @Override
-    public void stop(BundleContext context) throws Exception {
-        protocolstracker.close();
-        formatsTracker.close();
-    }
-
+    ArchiveFormatProvider getProvider();
 }
