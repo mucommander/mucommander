@@ -15,6 +15,7 @@ dependencies {
     osgiRuntime project('mucommander-commons-runtime')
 
     osgiRuntime project('mucommander-sftp')
+    osgiRuntime project('mucommander-rar')
 }
 
 runOsgi {
