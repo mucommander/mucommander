@@ -17,19 +17,17 @@
  */
 package com.mucommander.commons.file.archive.rar;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
-import com.mucommander.commons.util.CircularByteBuffer;
 
 import com.github.junrar.Archive;
 import com.github.junrar.exception.RarException;
 import com.github.junrar.exception.RarException.RarExceptionType;
 import com.github.junrar.rarfile.FileHeader;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.util.CircularByteBuffer;
 
 /**
  * 
@@ -42,12 +40,8 @@ public class RarFile {
     
 
     public RarFile(AbstractFile file) throws IOException, UnsupportedFileOperationException, RarException {
-    	InputStream fileIn = file.getInputStream();
-        try {
-            archive = new Archive(new File(file.getPath()));
-        }
-        finally {
-            fileIn.close();
+        try (InputStream fileIn = file.getInputStream()) {
+            archive = new Archive(fileIn);
         }
     }
 
