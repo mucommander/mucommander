@@ -30,6 +30,10 @@ ext {
     revision = git.head().id
 }
 
+test {
+    useTestNG()
+}
+
 repositories.jcenter()
 
 dependencies {
