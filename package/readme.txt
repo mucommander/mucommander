@@ -43,7 +43,8 @@ Improvements:
 Localization:
 
 Bug fixes:
-- If custom folders are set, they are always loaded now on startup.
+- If custom folders are set, they are always loaded on startup now.
+- On batch rename, month value is now 1-based rather than 0-based.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
