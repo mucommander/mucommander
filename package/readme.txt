@@ -43,6 +43,8 @@ Improvements:
 Localization:
 
 Bug fixes:
+- The application no longer crashes when listing directories with special system files (e.g., pagefile.sys) on Windows.
+- Files can move to trash on Windows.
 - If custom folders are set, they are always loaded on startup now.
 - On batch rename, month value is now 1-based rather than 0-based.
 
