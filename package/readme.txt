@@ -141,6 +141,8 @@ Contributors:
 - Alejandro Scandroli
 - Alexander Yerenkow
 - Johann Schmitz
+- Thomas Uebel
+- Tomer Gabel
 
 Translators: 
 - Frank Berger and Tony Klüver (German)
