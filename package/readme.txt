@@ -33,10 +33,10 @@ What's new since v0.9.2 ?
 -----------------------
 
 New features:
+- Add dark and light solarized themes.
 
 Improvements:
 - The last setting of single panel view for each window is now restored on startup.
-- Add dark and light solarized themes.
 - Enable compilation with Java 9 and Java 10.
 - Select the whole text within the location text-field when the latter gains focus.
 
@@ -45,8 +45,8 @@ Localization:
 Bug fixes:
 - The application no longer crashes when listing directories with special system files (e.g., pagefile.sys) on Windows.
 - Files can move to trash on Windows.
-- If custom folders are set, they are always loaded on startup now.
-- On batch rename, month value is now 1-based rather than 0-based.
+- If custom folders are set, they are always loaded on startup.
+- The month value used during batch rename is now 1-based rather than 0-based.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
