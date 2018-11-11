@@ -1089,7 +1089,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
                     result.append(year.format(c.get(Calendar.YEAR)));
                     break;
                 case 'M':
-                    result.append(digits2.format(c.get(Calendar.MONTH)));
+                    result.append(digits2.format(c.get(Calendar.MONTH) + 1));
                     break;
                 case 'D':
                     result.append(digits2.format(c.get(Calendar.DAY_OF_MONTH)));

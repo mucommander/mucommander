@@ -199,7 +199,7 @@ public class BatchRenameTest {
     public void testDate() {
         DateToken full = new DateToken("YMDhms");
         full.parse();
-        assert "20080210130537".equals(full.apply(abcdef));
+        assert "20080310130537".equals(full.apply(abcdef));
     }
 
     @Test
