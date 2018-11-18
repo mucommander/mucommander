@@ -44,7 +44,7 @@ public class UserInputHelper {
     
     public Object getUserInput() {
         try {
-            SwingUtilities.invokeAndWait(() -> dialog.getUserInput());
+            SwingUtilities.invokeAndWait(() -> userInput = dialog.getUserInput());
         } catch (Exception e) {
             LOGGER.debug("Caught exception", e);
         }
