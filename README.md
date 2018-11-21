@@ -8,7 +8,7 @@
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/mucommander/Lobby)
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.  
-It runs on any operating system with Java support (Mac OS X, Windows, Linux, *BSD, Solaris...).
+It runs on any operating system with Java support (macOS, Windows, Linux, *BSD, Solaris...).
 
 Official website: http://www.mucommander.com  
 Copyright (C) 2002-2016 Maxence Bernard.
