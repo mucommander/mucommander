@@ -47,6 +47,7 @@ Bug fixes:
 - Files can move to trash on Windows.
 - If custom folders are set, they are always loaded on startup.
 - The month value used during batch rename is now 1-based rather than 0-based.
+- Fixed an issue that limited the number of files that can be copied from an SFTP server.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
