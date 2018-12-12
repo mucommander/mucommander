@@ -100,7 +100,7 @@ public class EditorRegistrar {
                 }
             }
             catch(WarnUserException e) {
-                QuestionDialog dialog = new QuestionDialog((Frame)null, Translator.get("warning"), Translator.get(e.getMessage()), null,
+                QuestionDialog dialog = new QuestionDialog((Frame)null, Translator.get("warning"), Translator.get(e.getMessage()), frame.getMainFrame(),
                                                            new String[] {Translator.get("file_editor.open_anyway"), Translator.get("cancel")},
                                                            new int[]  {0, 1},
                                                            0);
