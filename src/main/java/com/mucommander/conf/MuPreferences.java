@@ -339,7 +339,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Used do determine whether discovery of Bonjour services should be activated or not. */
 	public static final String  ENABLE_BONJOUR_DISCOVERY          = BONJOUR_SECTION + '.' + "discovery_enabled";
 	/** Default Bonjour discovery activation used on startup. */
-	public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = OsFamily.MAC_OS_X.isCurrent() ? false : true;
+	public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = false;
 
 
 

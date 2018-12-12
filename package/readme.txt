@@ -39,6 +39,7 @@ Improvements:
 - The last setting of single panel view for each window is now restored on startup.
 - Enable compilation with Java 9 and Java 10.
 - Select the whole text within the location text-field when the latter gains focus.
+- Bonjour service discovery is now disabled by default on all operating systems.
 
 Localization:
 
