@@ -1,0 +1,3 @@
+[submodule "jre"]
+	path = jre 
+	url = git@github.com:mucommander/JRE.git
