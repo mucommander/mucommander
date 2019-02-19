@@ -19,11 +19,32 @@
 
 package com.mucommander.ui.dialog.server;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ConnectToServerAction;
@@ -36,16 +57,6 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Vector;
-
 
 /**
  * Dialog that assists the user in connecting to a filesystem. It contains tabs and associated panels for each of the
@@ -55,6 +66,7 @@ import java.util.Vector;
  */
 public class ServerConnectDialog extends FocusDialog implements ActionListener, ChangeListener {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerConnectDialog.class);
     private FolderPanel folderPanel;
 	
     private JButton cancelButton;
@@ -69,8 +81,17 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
-//    private static Class<? extends ServerPanel> lastPanelClass = FTPPanel.class;
+    private static Class<? extends ServerPanel> lastPanelClass = HTTPPanel.class; //TODO: change back to FTPPanel
 
+    private static Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
+
+    public static void register(String schema, ProtocolPanelProvider panelProvider) {
+        schemaToPanelProvider.put(schema, panelProvider);
+    }
+
+    public static void unregister(String schema) {
+        schemaToPanelProvider.remove(schema);
+    }
 
     /**
      * Creates a new <code>ServerConnectDialog</code> that changes the current folder on the specified {@link FolderPanel}.
@@ -78,8 +99,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
      * @param folderPanel the panel on which to change the current folder
      */
     public ServerConnectDialog(FolderPanel folderPanel) {
-//        this(folderPanel, lastPanelClass);
-    	this(folderPanel, null);
+        this(folderPanel, lastPanelClass);
     }
 	
 		
@@ -93,7 +113,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     public ServerConnectDialog(FolderPanel folderPanel, Class<? extends ServerPanel> selectPanelClass) {
         super(folderPanel.getMainFrame(), ActionProperties.getActionLabel(ConnectToServerAction.Descriptor.ACTION_ID), folderPanel.getMainFrame());
         this.folderPanel = folderPanel;
-//        lastPanelClass = selectPanelClass;
+        lastPanelClass = selectPanelClass;
 
         MainFrame mainFrame = folderPanel.getMainFrame();
         Container contentPane = getContentPane();
@@ -102,12 +122,12 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 
 //        addTab(FileProtocols.FTP, new FTPPanel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.HDFS, new HDFSPanel(this, mainFrame), selectPanelClass);
-        addTab(FileProtocols.HTTP, new HTTPPanel(this, mainFrame), selectPanelClass);
+//        addTab(FileProtocols.HTTP, new HTTPPanel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.NFS, new NFSPanel(this, mainFrame), selectPanelClass);
-        addTab(FileProtocols.S3, new S3Panel(this, mainFrame), selectPanelClass);
-//        addTab(FileProtocols.SFTP, new SFTPPanel(this, mainFrame), selectPanelClass);
-        addTab(FileProtocols.SMB, new SMBPanel(this, mainFrame), selectPanelClass);
+//        addTab(FileProtocols.S3, new S3Panel(this, mainFrame), selectPanelClass);
+//        addTab(FileProtocols.SMB, new SMBPanel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.VSPHERE, new VSpherePanel(this, mainFrame), selectPanelClass);
+        schemaToPanelProvider.values().forEach(provider -> addTab(provider.getSchema(), provider.get(this,  mainFrame), null));
 
         currentServerPanel = getCurrentServerPanel();
 
@@ -152,8 +172,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
         northPanel.add(serverPanel, BorderLayout.NORTH);
         tabbedPane.addTab(protocol.toUpperCase(), northPanel);
 
-        if(selectPanelClass.equals(serverPanel.getClass()))
-            tabbedPane.setSelectedComponent(northPanel);
+//        if(selectPanelClass.equals(serverPanel.getClass()))
+//            tabbedPane.setSelectedComponent(northPanel);
 
         serverPanels.add(serverPanel);
     }
@@ -219,7 +239,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
 	
     public void stateChanged(ChangeEvent e) {
         currentServerPanel = getCurrentServerPanel();
-//        lastPanelClass = currentServerPanel.getClass();
+        lastPanelClass = currentServerPanel.getClass();
 
         // Enables 'save credentials' checkbox only if server panel/protocol uses credentials
         saveCredentialsCheckBox.setEnabled(currentServerPanel.usesCredentials());

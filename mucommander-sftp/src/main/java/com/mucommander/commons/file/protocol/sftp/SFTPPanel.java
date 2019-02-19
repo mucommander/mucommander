@@ -21,7 +21,31 @@
  *
  * @author Maxence Bernard, Vassil Dichev
  */
-/*
+
+package com.mucommander.commons.file.protocol.sftp;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.text.ParseException;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.ui.main.MainFrame;
+
 public class SFTPPanel extends ServerPanel {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.SFTP).getStandardPort();
@@ -116,7 +140,7 @@ public class SFTPPanel extends ServerPanel {
     ////////////////////////////////
 
     @Override
-    FileURL getServerURL() throws MalformedURLException {
+    public FileURL getServerURL() throws MalformedURLException {
         updateValues();
         if(!lastInitialDir.startsWith("/"))
             lastInitialDir = "/"+lastInitialDir;
@@ -135,7 +159,7 @@ public class SFTPPanel extends ServerPanel {
     }
 
     @Override
-    boolean usesCredentials() {
+    public boolean usesCredentials() {
         return true;
     }
 
@@ -149,4 +173,4 @@ public class SFTPPanel extends ServerPanel {
         updateValues();
     }
 }
-*/
+

@@ -19,14 +19,17 @@
 
 package com.mucommander.ui.dialog.server;
 
+import java.net.MalformedURLException;
+
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.net.MalformedURLException;
 
 
 /**
@@ -83,7 +86,7 @@ public class HTTPPanel extends ServerPanel {
     ////////////////////////////////
 	
     @Override
-    FileURL getServerURL() throws MalformedURLException {
+    public FileURL getServerURL() throws MalformedURLException {
         updateValues();
         
         if(!(lastURL.toLowerCase().startsWith(FileProtocols.HTTP+"://") || lastURL.toLowerCase().startsWith(FileProtocols.HTTPS+"://")))
@@ -97,7 +100,7 @@ public class HTTPPanel extends ServerPanel {
     }
 	
     @Override
-    boolean usesCredentials() {
+    public boolean usesCredentials() {
         return true;
     }
 

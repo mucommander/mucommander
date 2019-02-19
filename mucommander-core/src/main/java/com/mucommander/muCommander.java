@@ -56,6 +56,7 @@ import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.frame.CommandLineMainFrameBuilder;
 import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
+import com.mucommander.ui.main.osgi.ProtocolPanelProviderTracker;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
 
@@ -577,9 +578,12 @@ public class muCommander implements BundleActivator {
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
     }
 
+    ProtocolPanelProviderTracker protocolPanelTracker;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
+		protocolPanelTracker = new ProtocolPanelProviderTracker(context);
+		protocolPanelTracker.open();
 		muCommander mu = new muCommander();
 		mu.run();
 	}
@@ -587,6 +591,7 @@ public class muCommander implements BundleActivator {
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		protocolPanelTracker.close();
 		// stop the system bundle
 		context.getBundle(0).stop();
 	}

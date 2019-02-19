@@ -27,6 +27,10 @@ import com.mucommander.commons.file.DefaultSchemeParser;
 import com.mucommander.commons.file.SchemeHandler;
 import com.mucommander.commons.file.osgi.FileProtocolService;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
+import com.mucommander.ui.dialog.server.ProtocolPanelProvider;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * @author Arik Hadas
@@ -34,6 +38,7 @@ import com.mucommander.commons.file.protocol.ProtocolProvider;
 public class Activator implements BundleActivator {
 
 	private ServiceRegistration serviceRegistration;
+	private ServiceRegistration uiServiceRegistration;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -53,12 +58,25 @@ public class Activator implements BundleActivator {
 				return new DefaultSchemeHandler(new DefaultSchemeParser(), 22, "/", AuthenticationType.AUTHENTICATION_REQUIRED, null);
 			}
 		};
+		ProtocolPanelProvider panelProvider = new ProtocolPanelProvider() {
+			@Override
+			public String getSchema() {
+				return "sftp";
+			}
+
+			@Override
+			public ServerPanel get(ServerConnectDialog dialog, MainFrame mainFrame) {
+				return new SFTPPanel(dialog, mainFrame);
+			}
+		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
+		uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		serviceRegistration.unregister();
+		uiServiceRegistration.unregister();
 	}
 
 }

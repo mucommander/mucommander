@@ -99,7 +99,7 @@ public class S3Panel extends ServerPanel {
     ////////////////////////////////
 
     @Override
-    FileURL getServerURL() throws MalformedURLException {
+    public FileURL getServerURL() throws MalformedURLException {
         updateValues();
         if(!lastInitialDir.startsWith("/"))
             lastInitialDir = "/"+lastInitialDir;
@@ -116,7 +116,7 @@ public class S3Panel extends ServerPanel {
     }
 
     @Override
-    boolean usesCredentials() {
+    public boolean usesCredentials() {
         return true;
     }
 

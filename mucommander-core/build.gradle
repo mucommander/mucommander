@@ -74,12 +74,18 @@ jar {
         'javax.swing.tree',
         'javax.xml.parsers',
         'org.osgi.framework',
+        'org.osgi.util.tracker',
         'org.slf4j',
         'org.xml.sax',
         'org.xml.sax.helpers'
        instruction 'DynamicImport-Package',
         'com.apple.eawt',
         'sun.security.action'
+       instruction 'Export-Package',
+        'com.mucommander.text',
+        'com.mucommander.ui.dialog.server',
+        'com.mucommander.ui.main',
+        'com.mucommander.ui.main.osgi'
        instruction 'Bundle-Activator', 'com.mucommander.muCommander'
    }
 }

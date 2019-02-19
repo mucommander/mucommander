@@ -112,19 +112,19 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
      * @return the current server URL represented by this panel, <code>null</code> if it is not available
      * @throws MalformedURLException if an exception was thrown while creating the FileURL instance
      */
-    abstract FileURL getServerURL() throws MalformedURLException;
+    public abstract FileURL getServerURL() throws MalformedURLException;
 
     /**
      * Returns <code>true</code> if this panel allows the user to specify credentials for the file protocol.
      *
      * @return <code>true</code> if this panel allows the user to specify credentials for the file protocol
      */
-    abstract boolean usesCredentials();
+    public abstract boolean usesCredentials();
 
     /**
      * This method is called by {@link ServerConnectDialog} when the dialog has been validated by the user
      * ('OK' button or 'Enter' key pressed). This is where component values should be saved for when a
      * new instance of the panel is created.
      */
-    abstract void dialogValidated();
+    public abstract void dialogValidated();
 }
