@@ -20,6 +20,8 @@ package com.mucommander.commons.file.osgi;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
@@ -28,9 +30,10 @@ import com.mucommander.commons.file.FileURL;
  * @author Arik Hadas
  */
 public class FileProtocolServiceTracker extends ServiceTracker<FileProtocolService, FileProtocolService> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileProtocolServiceTracker.class);
 
     public FileProtocolServiceTracker(BundleContext context) {
-        super(context, FileProtocolService.class,null);
+        super(context, FileProtocolService.class, null);
     }
 
     @Override
@@ -38,6 +41,7 @@ public class FileProtocolServiceTracker extends ServiceTracker<FileProtocolServi
         FileProtocolService service = super.addingService(reference);
         FileFactory.registerProtocol(service.getSchema(), service.getProtocolProvider());
         FileURL.registerHandler(service.getSchema(), service.getSchemeHandler());
+        LOGGER.info("FileProtocolService is registered: " + service);
         return service;
     }
 
@@ -46,5 +50,6 @@ public class FileProtocolServiceTracker extends ServiceTracker<FileProtocolServi
         FileFactory.unregisterProtocol(service.getSchema());
         FileURL.unregisterHandler(service.getSchema());
         super.removedService(reference, service);
+        LOGGER.info("FileProtocolService is unregistered: " + service);
     }
 }
