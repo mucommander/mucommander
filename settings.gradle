@@ -26,5 +26,6 @@ include 'mucommander-iso'
 include 'mucommander-lst'
 include 'mucommander-archiver'
 include 'mucommander-registry'
+include 'mucommander-ovirt'
 
 rootProject.name = 'mucommander'

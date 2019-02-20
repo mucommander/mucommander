@@ -780,7 +780,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @return an AbstractFile representing the requested child file, never null
      * @throws IOException if the child file could not be instantiated
      */
-    public final AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
+    public AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
         FileURL childURL = (FileURL)getURL().clone();
         childURL.setPath(addTrailingSeparator(childURL.getPath())+ relativePath);
 
