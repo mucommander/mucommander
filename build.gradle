@@ -33,6 +33,7 @@ dependencies {
 //    osgiRuntime project('mucommander-hadoop')
 //    osgiRuntime project('mucommander-s3')
     osgiRuntime project('mucommander-registry')
+    osgiRuntime project('mucommander-ovirt')
 }
 
 runOsgi {
