@@ -158,7 +158,6 @@ public class PathUtils {
      * describes the kind of destination that was resolved
      */
     public static ResolvedDestination resolveDestination(String destPath, AbstractFile baseFolder) {
-        AbstractFile destFile;
         FileURL destURL;
 
         // Try to resolve the path as a URL
@@ -197,7 +196,7 @@ public class PathUtils {
         }
 
         // No point in going any further if the URL cannot be resolved into a file
-        destFile = FileFactory.getFile(destURL);
+        AbstractFile destFile = FileFactory.getFile(destURL);
         if(destFile ==null) {
             LOGGER.info("could not resolve a file for {}", destURL);
             return null;
@@ -243,10 +242,9 @@ public class PathUtils {
      * @return the modified path, free of any leading separator
      */
     public static String removeLeadingSeparator(String path, String separator) {
-        if(path.startsWith(separator))
-            return path.substring(separator.length(), path.length());
-
-        return path;
+        return path.startsWith(separator) ?
+                path.substring(separator.length(), path.length())
+                : path;
     }
 
     /**
