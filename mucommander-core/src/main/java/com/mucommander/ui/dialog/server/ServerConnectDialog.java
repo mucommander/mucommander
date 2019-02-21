@@ -81,7 +81,7 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
-    private static Class<? extends ServerPanel> lastPanelClass = HTTPPanel.class; //TODO: change back to FTPPanel
+    private static Class<? extends ServerPanel> lastPanelClass = ServerPanel.class; //TODO: change back to FTPPanel
 
     private static Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
 

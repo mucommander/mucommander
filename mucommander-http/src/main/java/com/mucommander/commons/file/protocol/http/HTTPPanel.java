@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.dialog.server;
+package com.mucommander.commons.file.protocol.http;
 
 import java.net.MalformedURLException;
 
@@ -29,6 +29,8 @@ import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerPanel;
 import com.mucommander.ui.main.MainFrame;
 
 
