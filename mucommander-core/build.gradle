@@ -83,7 +83,9 @@ jar {
         'sun.security.action'
        instruction 'Export-Package',
         'com.mucommander.text',
+        'com.mucommander.ui.dialog',
         'com.mucommander.ui.dialog.server',
+        'com.mucommander.ui.encoding',
         'com.mucommander.ui.main',
         'com.mucommander.ui.main.osgi'
        instruction 'Bundle-Activator', 'com.mucommander.muCommander'

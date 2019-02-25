@@ -15,13 +15,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.mucommander.commons.file.protocol.ftp;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.text.ParseException;
+
+import javax.swing.JCheckBox;
+import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogOwner;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.ui.encoding.EncodingListener;
+import com.mucommander.ui.encoding.EncodingSelectBox;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate FTP connections.
  *
  * @author Maxence Bernard
  */
-/*
 public class FTPPanel extends ServerPanel implements ActionListener, EncodingListener {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.FTP).getStandardPort();
@@ -47,7 +68,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     private String lastPassword = "";
 
     /** Passive mode is enabled by default because of firewall restrictions */
-/*    private static boolean passiveMode = true;
+    private static boolean passiveMode = true;
     private static boolean anonymousUser;
 
 
@@ -124,7 +145,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     ////////////////////////////////
 	
     @Override
-    FileURL getServerURL() throws MalformedURLException {
+    public FileURL getServerURL() throws MalformedURLException {
         updateValues();
         if(!lastInitialDir.startsWith("/"))
             lastInitialDir = "/"+lastInitialDir;
@@ -153,7 +174,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     }
 
     @Override
-    boolean usesCredentials() {
+    public boolean usesCredentials() {
         return true;
     }
 
@@ -205,4 +226,3 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
         lastEncoding = newEncoding;
     }
 }
-*/
