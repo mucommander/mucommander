@@ -20,6 +20,7 @@ dependencies {
     osgiRuntime project('mucommander-http')
     osgiRuntime project('mucommander-nfs')
     osgiRuntime project('mucommander-smb')
+    osgiRuntime project('mucommander-vsphere')
 }
 
 runOsgi {
