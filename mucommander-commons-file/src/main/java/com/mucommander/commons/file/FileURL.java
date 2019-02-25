@@ -189,7 +189,7 @@ public class FileURL implements Cloneable {
      *
      * @param handler the handler to have this FileURL use
      */
-    private FileURL(SchemeHandler handler) {
+    public FileURL(SchemeHandler handler) {
         this.handler = handler;
     }
 
