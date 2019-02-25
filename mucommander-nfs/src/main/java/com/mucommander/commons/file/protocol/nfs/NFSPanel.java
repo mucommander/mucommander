@@ -15,13 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.mucommander.commons.file.protocol.nfs;
+
+import java.net.MalformedURLException;
+import java.text.ParseException;
+
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate NFS connections.
  *
  * @author Maxence Bernard
  */
-/*
 public class NFSPanel extends ServerPanel {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.NFS).getStandardPort(); 
@@ -90,7 +104,7 @@ public class NFSPanel extends ServerPanel {
     ////////////////////////////////
 
     @Override
-    FileURL getServerURL() throws MalformedURLException {
+    public FileURL getServerURL() throws MalformedURLException {
         updateValues();
 
         FileURL url = FileURL.getFileURL(FileProtocols.NFS+"://"+lastServer+(lastShare.startsWith("/")?"":"/")+lastShare);
@@ -108,7 +122,7 @@ public class NFSPanel extends ServerPanel {
     }
 
     @Override
-    boolean usesCredentials() {
+    public boolean usesCredentials() {
         return false;
     }
 
@@ -122,4 +136,3 @@ public class NFSPanel extends ServerPanel {
         updateValues();
     }
 }
-*/
