@@ -27,7 +27,6 @@ import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import com.mucommander.commons.file.archive.ar.ArFormatProvider;
 import com.mucommander.commons.file.archive.bzip2.Bzip2FormatProvider;
 import com.mucommander.commons.file.archive.gzip.GzipFormatProvider;
 import com.mucommander.commons.file.archive.iso.IsoFormatProvider;
@@ -63,7 +62,7 @@ public class OpenAsMenu extends JMenu {
      */
     private synchronized void populate() {
         List<String> extensions = new ArrayList<>();
-        extensions.addAll(Arrays.asList(ArFormatProvider.EXTENSIONS));
+//        extensions.addAll(Arrays.asList(ArFormatProvider.EXTENSIONS));
         extensions.addAll(Arrays.asList(Bzip2FormatProvider.EXTENSIONS));
         extensions.addAll(Arrays.asList(GzipFormatProvider.EXTENSIONS));
         extensions.addAll(Arrays.asList(IsoFormatProvider.EXTENSIONS));
