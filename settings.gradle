@@ -17,5 +17,6 @@ include 'mucommander-smb'
 include 'mucommander-vsphere'
 include 'mucommander-rar'
 include 'mucommander-ar'
+include 'mucommander-sevenzip'
 
 rootProject.name = 'mucommander'

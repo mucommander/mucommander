@@ -22,6 +22,7 @@ dependencies {
     osgiRuntime project('mucommander-smb')
     osgiRuntime project('mucommander-vsphere')
     osgiRuntime project('mucommander-ar')
+    osgiRuntime project('mucommander-sevenzip')
 }
 
 runOsgi {

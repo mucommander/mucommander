@@ -31,7 +31,6 @@ import com.mucommander.commons.file.archive.bzip2.Bzip2FormatProvider;
 import com.mucommander.commons.file.archive.gzip.GzipFormatProvider;
 import com.mucommander.commons.file.archive.iso.IsoFormatProvider;
 import com.mucommander.commons.file.archive.lst.LstFormatProvider;
-import com.mucommander.commons.file.archive.sevenzip.SevenZipFormatProvider;
 import com.mucommander.commons.file.archive.tar.TarFormatProvider;
 import com.mucommander.commons.file.archive.zip.ZipFormatProvider;
 import com.mucommander.text.Translator;
@@ -68,7 +67,7 @@ public class OpenAsMenu extends JMenu {
         extensions.addAll(Arrays.asList(IsoFormatProvider.EXTENSIONS));
         extensions.addAll(Arrays.asList(LstFormatProvider.EXTENSIONS));
 //        extensions.addAll(Arrays.asList(RarFormatProvider.EXTENSIONS));
-        extensions.addAll(Arrays.asList(SevenZipFormatProvider.EXTENSIONS));
+//        extensions.addAll(Arrays.asList(SevenZipFormatProvider.EXTENSIONS));
         extensions.addAll(Arrays.asList(TarFormatProvider.EXTENSIONS));
         extensions.addAll(Arrays.asList(ZipFormatProvider.EXTENSIONS));
         Collections.sort(extensions);
