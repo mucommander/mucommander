@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
@@ -310,8 +311,8 @@ public class FileFactory {
      *
      * @return an iterator on all known archive formats.
      */
-    public static Iterator<ArchiveFormatProvider> archiveFormats() {
-        return archiveFormatProvidersV.iterator();
+    public static List<ArchiveFormatProvider> archiveFormats() {
+        return archiveFormatProvidersV;
     }
 
 

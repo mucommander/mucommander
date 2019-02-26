@@ -24,6 +24,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.FilenameFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * This interface allows {@link FileFactory} to instantiate {@link AbstractArchiveFile} implementations and associate
@@ -55,4 +56,6 @@ public interface ArchiveFormatProvider {
      * @return the <code>FilenameFilter</code> that matches filenames to be associated with this archive format
      */
     FilenameFilter getFilenameFilter();
+
+    List<String> getExtensions();
 }

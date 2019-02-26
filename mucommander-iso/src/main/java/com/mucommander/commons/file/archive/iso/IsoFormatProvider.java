@@ -26,6 +26,8 @@ import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class is the provider for the 'Iso' and 'Nrg' archive formats implemented by {@link IsoArchiveFile}.
@@ -47,4 +49,9 @@ public class IsoFormatProvider implements ArchiveFormatProvider {
     public FilenameFilter getFilenameFilter() {
         return new ExtensionFilenameFilter(EXTENSIONS);
     }
+
+    @Override
+	public List<String> getExtensions() {
+		return Arrays.asList(EXTENSIONS);
+	}
 }
