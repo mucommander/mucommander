@@ -19,7 +19,6 @@
 package com.mucommander.ui.main.menu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import com.mucommander.commons.file.archive.lst.LstFormatProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
@@ -60,7 +58,7 @@ public class OpenAsMenu extends JMenu {
 //        extensions.addAll(Arrays.asList(Bzip2FormatProvider.EXTENSIONS));
 //        extensions.addAll(Arrays.asList(GzipFormatProvider.EXTENSIONS));
 //        extensions.addAll(Arrays.asList(IsoFormatProvider.EXTENSIONS));
-        extensions.addAll(Arrays.asList(LstFormatProvider.EXTENSIONS));
+//        extensions.addAll(Arrays.asList(LstFormatProvider.EXTENSIONS));
 //        extensions.addAll(Arrays.asList(RarFormatProvider.EXTENSIONS));
 //        extensions.addAll(Arrays.asList(SevenZipFormatProvider.EXTENSIONS));
 //        extensions.addAll(Arrays.asList(TarFormatProvider.EXTENSIONS));

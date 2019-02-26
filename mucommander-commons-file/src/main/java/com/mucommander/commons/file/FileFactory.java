@@ -101,7 +101,7 @@ public class FileFactory {
     private static Vector<ArchiveFormatProvider> archiveFormatProvidersV = new Vector<ArchiveFormatProvider>();
 
     /** Array of registered FileProtocolMapping instances, for quicker access */
-    private static ArchiveFormatProvider[] archiveFormatProviders;
+    private static ArchiveFormatProvider[] archiveFormatProviders = new ArchiveFormatProvider[0];
 
     /** Contains a FilePool instance for each registered scheme */
     private static final HashMap<String, FilePool> FILE_POOL_MAP = new HashMap<String, FilePool>();
@@ -141,7 +141,7 @@ public class FileFactory {
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.bzip2.Bzip2FormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.iso.IsoFormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.ar.ArFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.archive.lst.LstFormatProvider());
+//        registerArchiveFormat(new com.mucommander.commons.file.archive.lst.LstFormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.rar.RarFormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.sevenzip.SevenZipFormatProvider());
 

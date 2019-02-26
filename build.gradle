@@ -28,6 +28,7 @@ dependencies {
     osgiRuntime project('mucommander-bzip2')
     osgiRuntime project('mucommander-gzip')
     osgiRuntime project('mucommander-iso')
+    osgiRuntime project('mucommander-lst')
 }
 
 runOsgi {
