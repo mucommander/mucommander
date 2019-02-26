@@ -32,7 +32,6 @@ import com.mucommander.commons.file.archive.gzip.GzipFormatProvider;
 import com.mucommander.commons.file.archive.iso.IsoFormatProvider;
 import com.mucommander.commons.file.archive.lst.LstFormatProvider;
 import com.mucommander.commons.file.archive.tar.TarFormatProvider;
-import com.mucommander.commons.file.archive.zip.ZipFormatProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
@@ -69,7 +68,7 @@ public class OpenAsMenu extends JMenu {
 //        extensions.addAll(Arrays.asList(RarFormatProvider.EXTENSIONS));
 //        extensions.addAll(Arrays.asList(SevenZipFormatProvider.EXTENSIONS));
         extensions.addAll(Arrays.asList(TarFormatProvider.EXTENSIONS));
-        extensions.addAll(Arrays.asList(ZipFormatProvider.EXTENSIONS));
+//        extensions.addAll(Arrays.asList(ZipFormatProvider.EXTENSIONS));
         Collections.sort(extensions);
         for (String extension : extensions) {
             Action action = ActionManager.getActionInstance(new ActionParameters(OpenAsAction.Descriptor.ACTION_ID, Collections.singletonMap("extension", extension)), mainFrame);

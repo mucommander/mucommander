@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.file.archiver;
+package com.mucommander.commons.file.archive.zip;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.SimpleFilePermissions;
 import com.mucommander.commons.file.archive.zip.provider.ZipEntry;
 import com.mucommander.commons.file.archive.zip.provider.ZipOutputStream;
-
-import java.io.IOException;
-import java.io.OutputStream;
-//import java.util.zip.ZipEntry;
-//import java.util.zip.ZipOutputStream;
+import com.mucommander.commons.file.archiver.Archiver;
 
 
 /**

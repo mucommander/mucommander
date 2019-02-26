@@ -18,18 +18,19 @@
 
 package com.mucommander.commons.file.archiver;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
+
+import org.apache.tools.bzip2.CBZip2OutputStream;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.io.BufferedRandomOutputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import org.apache.tools.bzip2.CBZip2OutputStream;
-
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.zip.GZIPOutputStream;
 
 
 /**
@@ -126,7 +127,7 @@ public abstract class Archiver {
      *
      * @param out the OutputStream this Archiver will write to
      */
-    Archiver(OutputStream out) {
+    public Archiver(OutputStream out) {
         this.out = out;
     }
 
@@ -271,7 +272,8 @@ public abstract class Archiver {
 
         switch(format) {
             case ZIP_FORMAT:
-                archiver = new ZipArchiver(out);
+//                archiver = new ZipArchiver(out);
+                archiver = null;
                 break;
             case GZ_FORMAT:
                 archiver = new SingleFileArchiver(new GZIPOutputStream(out));
