@@ -282,13 +282,16 @@ public abstract class Archiver {
                 archiver = new SingleFileArchiver(createBzip2OutputStream(out));
                 break;
             case TAR_FORMAT:
-                archiver = new TarArchiver(out);
+//                archiver = new TarArchiver(out);
+                archiver = null;
                 break;
             case TAR_GZ_FORMAT:
-                archiver = new TarArchiver(new GZIPOutputStream(out));
+//                archiver = new TarArchiver(new GZIPOutputStream(out));
+                archiver = null;
                 break;
             case TAR_BZ2_FORMAT:
-                archiver = new TarArchiver(createBzip2OutputStream(out));
+//                archiver = new TarArchiver(createBzip2OutputStream(out));
+                archiver = null;
                 break;
 
             default:

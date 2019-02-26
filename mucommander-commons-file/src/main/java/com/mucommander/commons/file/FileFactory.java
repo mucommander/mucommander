@@ -136,7 +136,7 @@ public class FileFactory {
         // Register built-in archive file formats, order for TarArchiveFile and GzipArchiveFile/Bzip2ArchiveFile is important:
         // TarArchiveFile must match 'tar.gz'/'tar.bz2' files before GzipArchiveFile/Bzip2ArchiveFile does.
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.zip.ZipFormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.archive.tar.TarFormatProvider());
+//        registerArchiveFormat(new com.mucommander.commons.file.archive.tar.TarFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.archive.gzip.GzipFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.archive.bzip2.Bzip2FormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.archive.iso.IsoFormatProvider());

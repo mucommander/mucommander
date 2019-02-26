@@ -16,13 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.file.archiver;
+package com.mucommander.commons.file.archive.tar;
 
 import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.SimpleFilePermissions;
 import com.mucommander.commons.file.archive.tar.provider.TarEntry;
 import com.mucommander.commons.file.archive.tar.provider.TarOutputStream;
+import com.mucommander.commons.file.archiver.Archiver;
 
 import java.io.IOException;
 import java.io.OutputStream;
