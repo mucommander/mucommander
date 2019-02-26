@@ -139,7 +139,7 @@ public class FileFactory {
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.tar.TarFormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.gzip.GzipFormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.bzip2.Bzip2FormatProvider());
-        registerArchiveFormat(new com.mucommander.commons.file.archive.iso.IsoFormatProvider());
+//        registerArchiveFormat(new com.mucommander.commons.file.archive.iso.IsoFormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.ar.ArFormatProvider());
         registerArchiveFormat(new com.mucommander.commons.file.archive.lst.LstFormatProvider());
 //        registerArchiveFormat(new com.mucommander.commons.file.archive.rar.RarFormatProvider());
