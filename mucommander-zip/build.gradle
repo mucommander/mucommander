@@ -19,6 +19,8 @@ dependencies {
     compile project(':mucommander-commons-file')
 
     testCompile 'org.testng:testng:6.11'
+    testCompile project(':mucommander-commons-file')
+    testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
 jar {
