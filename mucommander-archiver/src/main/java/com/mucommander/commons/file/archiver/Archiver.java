@@ -33,6 +33,7 @@ import com.mucommander.commons.io.BufferedRandomOutputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
 
+
 /**
  * Archiver is an abstract class that represents a generic file archiver and abstracts the underlying
  * compression method and specifics of the format.
@@ -272,8 +273,7 @@ public abstract class Archiver {
 
         switch(format) {
             case ZIP_FORMAT:
-//                archiver = new ZipArchiver(out);
-                archiver = null;
+                archiver = new ZipArchiver(out);
                 break;
             case GZ_FORMAT:
                 archiver = new SingleFileArchiver(new GZIPOutputStream(out));
@@ -282,16 +282,13 @@ public abstract class Archiver {
                 archiver = new SingleFileArchiver(createBzip2OutputStream(out));
                 break;
             case TAR_FORMAT:
-//                archiver = new TarArchiver(out);
-                archiver = null;
+                archiver = new TarArchiver(out);
                 break;
             case TAR_GZ_FORMAT:
-//                archiver = new TarArchiver(new GZIPOutputStream(out));
-                archiver = null;
+                archiver = new TarArchiver(new GZIPOutputStream(out));
                 break;
             case TAR_BZ2_FORMAT:
-//                archiver = new TarArchiver(createBzip2OutputStream(out));
-                archiver = null;
+                archiver = new TarArchiver(createBzip2OutputStream(out));
                 break;
 
             default:

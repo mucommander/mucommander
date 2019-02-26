@@ -16,37 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.commons.file.archive.tar;
-
-import com.mucommander.commons.file.FileAttributes;
-import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.SimpleFilePermissions;
-import com.mucommander.commons.file.archive.tar.provider.TarEntry;
-import com.mucommander.commons.file.archive.tar.provider.TarOutputStream;
-import com.mucommander.commons.file.archiver.Archiver;
+package com.mucommander.commons.file.archiver;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.mucommander.commons.file.FileAttributes;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.SimpleFilePermissions;
+import com.mucommander.commons.file.archive.zip.provider.ZipEntry;
+import com.mucommander.commons.file.archive.zip.provider.ZipOutputStream;
+
 
 /**
- * Archiver implementation using the Tar archive format.
+ * Archiver implementation using the Zip archive format.
  *
  * @author Maxence Bernard
  */
-class TarArchiver extends Archiver {
+class ZipArchiver extends Archiver {
 
-    private TarOutputStream tos;
+    private ZipOutputStream zos;
     private boolean firstEntry = true;
 
-    protected TarArchiver(OutputStream outputStream) {
+
+
+    protected ZipArchiver(OutputStream outputStream) {
         super(outputStream);
 
-        this.tos = new TarOutputStream(outputStream);
-        // Specifies how to handle files which filename is > 100 chars (default is to fail!)
-        this.tos.setLongFileMode(TarOutputStream.LONGFILE_GNU);
+        this.zos = new ZipOutputStream(outputStream);
     }
 
+
+    /**
+     * Overrides Archiver's no-op setComment method as Zip supports archive comment.
+     */
+    @Override
+    public void setComment(String comment) {
+        zos.setComment(comment);
+    } 
+	
 
     /////////////////////////////
     // Archiver implementation //
@@ -56,40 +64,35 @@ class TarArchiver extends Archiver {
     public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
-            tos.closeEntry();
+            zos.closeEntry();
 
         boolean isDirectory = attributes.isDirectory();
 		
-        // Create the entry
-        TarEntry entry = new TarEntry(normalizePath(entryPath, isDirectory));
-        // Use provided file's size (required by TarOutputStream) and date
+        // Create the entry and use the provided file's date
+        ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
+        // Use provided file's size and date
         long size = attributes.getSize();
-        if(!isDirectory && size>=0)		// Do not set size if file is directory or file size is unknown!
+        if(!isDirectory && size>=0) 	// Do not set size if file is directory or file size is unknown!
             entry.setSize(size);
 
-        // Set the entry's date and permissions
-        entry.setModTime(attributes.getDate());
-        entry.setMode(SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory
+        entry.setTime(attributes.getDate());
+        entry.setUnixMode(SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory
                     ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                     : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
         // Add the entry
-        tos.putNextEntry(entry);
+        zos.putNextEntry(entry);
 
         if(firstEntry)
             firstEntry = false;
-	
+		
         // Return the OutputStream that allows to write to the entry, only if it isn't a directory 
-        return isDirectory?null:tos;
+        return isDirectory?null:zos;
     }
 
 
     @Override
     public void close() throws IOException {
-        // Close current entry
-        if(!firstEntry)
-            tos.closeEntry();
-		
-        tos.close();
+        zos.close();
     }
 }

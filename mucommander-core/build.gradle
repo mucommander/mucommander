@@ -10,6 +10,7 @@ dependencies {
     compileOnly project(':mucommander-commons-conf')
     compileOnly project(':mucommander-commons-collections')
     compileOnly project(':mucommander-commons-io')
+    compileOnly project(':mucommander-archiver')
 
     compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'ch.qos.logback:logback-classic:1.2.3'
@@ -51,6 +52,7 @@ jar {
         'com.mucommander.commons.conf',
         'com.mucommander.commons.file',
         'com.mucommander.commons.file.archive',
+        'com.mucommander.commons.file.archiver',
         'com.mucommander.commons.file.filter',
         'com.mucommander.commons.file.icon',
         'com.mucommander.commons.file.icon.impl',

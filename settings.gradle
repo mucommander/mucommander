@@ -24,5 +24,6 @@ include 'mucommander-bzip2'
 include 'mucommander-gzip'
 include 'mucommander-iso'
 include 'mucommander-lst'
+include 'mucommander-archiver'
 
 rootProject.name = 'mucommander'
