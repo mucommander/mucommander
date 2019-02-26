@@ -21,5 +21,6 @@ include 'mucommander-sevenzip'
 include 'mucommander-zip'
 include 'mucommander-tar'
 include 'mucommander-bzip2'
+include 'mucommander-gzip'
 
 rootProject.name = 'mucommander'

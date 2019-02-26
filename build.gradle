@@ -26,6 +26,7 @@ dependencies {
     osgiRuntime project('mucommander-zip')
     osgiRuntime project('mucommander-tar')
     osgiRuntime project('mucommander-bzip2')
+    osgiRuntime project('mucommander-gzip')
 }
 
 runOsgi {
