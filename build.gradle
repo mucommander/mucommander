@@ -30,6 +30,7 @@ dependencies {
     osgiRuntime project('mucommander-iso')
     osgiRuntime project('mucommander-lst')
     osgiRuntime project('mucommander-archiver')
+//    osgiRuntime project('mucommander-hadoop')
 }
 
 runOsgi {

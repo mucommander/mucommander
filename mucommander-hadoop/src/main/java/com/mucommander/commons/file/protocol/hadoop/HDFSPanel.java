@@ -15,13 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.mucommander.commons.file.protocol.hadoop;
+
+import java.net.MalformedURLException;
+import java.text.ParseException;
+
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate HDFS connections.
  *
  * @author Maxence Bernard
  */
-/*
 public class HDFSPanel extends ServerPanel {
 
     private JTextField serverField;
@@ -84,7 +98,7 @@ public class HDFSPanel extends ServerPanel {
     ////////////////////////////////
 
     @Override
-    FileURL getServerURL() throws MalformedURLException {
+    public FileURL getServerURL() throws MalformedURLException {
         updateValues();
         if(!lastInitialDir.startsWith("/"))
             lastInitialDir = "/"+lastInitialDir;
@@ -102,7 +116,7 @@ public class HDFSPanel extends ServerPanel {
     }
 
     @Override
-    boolean usesCredentials() {
+    public boolean usesCredentials() {
         return true;
     }
 
@@ -116,4 +130,3 @@ public class HDFSPanel extends ServerPanel {
         updateValues();
     }
 }
-*/
