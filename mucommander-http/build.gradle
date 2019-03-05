@@ -51,7 +51,7 @@ jar {
             'javax.swing',
             'org.osgi.framework',
             'org.slf4j'
-           instruction 'Export-Package', 'com.mucommander.commons.protocol.http'
+           instruction 'Export-Package', 'com.mucommander.commons.file.protocol.http'
            instruction 'Bundle-Activator', 'com.mucommander.commons.file.protocol.http.Activator'
        }
 }
