@@ -39,6 +39,7 @@ jar {
             'com.mucommander.commons.file.archive',
             'com.mucommander.commons.file.filter',
             'com.mucommander.commons.file.osgi',
+            'com.mucommander.commons.io',
             'com.mucommander.commons.util',
             'org.osgi.framework',
             'org.slf4j'
