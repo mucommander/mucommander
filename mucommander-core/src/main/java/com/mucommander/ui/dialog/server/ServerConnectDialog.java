@@ -193,7 +193,6 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
         return serverPanels.get(tabbedPane.getSelectedIndex());
     }
 	
-	
     ////////////////////////////
     // ActionListener methods //
     ////////////////////////////

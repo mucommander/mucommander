@@ -29,6 +29,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.net.MalformedURLException;
 
 
@@ -98,6 +100,10 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
                 }
             });
         }
+    }
+
+    protected void addComboBoxListeners(JComboBox comboBox) {
+        comboBox.addItemListener(e -> dialog.updateURLLabel());
     }
 
 

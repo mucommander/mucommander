@@ -89,7 +89,8 @@ jar {
         'com.mucommander.ui.dialog.server',
         'com.mucommander.ui.encoding',
         'com.mucommander.ui.main',
-        'com.mucommander.ui.main.osgi'
+        'com.mucommander.ui.main.osgi',
+        'com.mucommander.process'
        instruction 'Bundle-Activator', 'com.mucommander.muCommander'
    }
 }

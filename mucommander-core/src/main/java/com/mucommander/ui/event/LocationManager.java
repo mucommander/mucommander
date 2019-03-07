@@ -52,6 +52,8 @@ public class LocationManager {
 
 	private FolderChangeMonitor folderChangeMonitor;
 
+	private static boolean firstRun = true;
+
     /**
      * Creates a new LocationManager that manages location events listeners and broadcasts for the specified FolderPanel.
      *
@@ -75,9 +77,13 @@ public class LocationManager {
     	AbstractFile[] children;
 		try {
 			children = folder.ls(configurableFolderFilter);
-		} catch (Exception e) {
+            firstRun = false;
+        } catch (Exception e) {
 			LOGGER.debug("Couldn't ls children of " + folder.getAbsolutePath() + ", error: " + e.getMessage());
 			children = new AbstractFile[0];
+            if (!firstRun) {
+                throw new RuntimeException(e.getMessage());
+            }
 		}
 
     	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
