@@ -118,6 +118,7 @@ public class SMBPanel extends ServerPanel {
     public boolean usesCredentials() {
         return true;
     }
+
     @Override
     public void dialogValidated() {
         updateValues();

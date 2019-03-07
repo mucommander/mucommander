@@ -34,9 +34,9 @@ jar {
            instruction 'Bundle-Vendor', 'muCommander'
            instruction 'Bundle-Description', 'Library with file tools'
            instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package',
+           instruction 'Import-Package', 
             'com.mucommander.commons.conf',
-            'com.mucommander.commons.file',
+            'com.mucommander.commons.file', 
             'com.mucommander.commons.file.protocol',
             'com.mucommander.commons.io',
             'com.mucommander.commons.runtime',
