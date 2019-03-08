@@ -52,6 +52,7 @@ public class LocationManager {
 
 	private FolderChangeMonitor folderChangeMonitor;
 
+	// TODO: replace this with a proper solution
 	private static boolean firstRun = true;
 
     /**
@@ -75,16 +76,16 @@ public class LocationManager {
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) {
     	LOGGER.trace("calling ls()");
     	AbstractFile[] children;
-		try {
-			children = folder.ls(configurableFolderFilter);
-            firstRun = false;
-        } catch (Exception e) {
-			LOGGER.debug("Couldn't ls children of " + folder.getAbsolutePath() + ", error: " + e.getMessage());
-			children = new AbstractFile[0];
-            if (!firstRun) {
-                throw new RuntimeException(e.getMessage());
-            }
-		}
+    	try {
+    	    children = folder.ls(configurableFolderFilter);
+    	    firstRun = false;
+    	} catch (Exception e) {
+    	    LOGGER.debug("Couldn't ls children of " + folder.getAbsolutePath() + ", error: " + e.getMessage());
+    	    children = new AbstractFile[0];
+    	    if (!firstRun) {
+    	        throw new RuntimeException(e.getMessage());
+    	    }
+    	}
 
     	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
 

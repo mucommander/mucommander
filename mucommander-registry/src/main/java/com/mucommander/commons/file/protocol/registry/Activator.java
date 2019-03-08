@@ -112,6 +112,7 @@ public class Activator implements BundleActivator {
 		ProtocolPanelProvider panelProvider = new ProtocolPanelProvider() {
 			@Override
 			public String getSchema() {
+				// TODO: better naming to reflect this refers to container images registry
 				return "registry";
 			}
 

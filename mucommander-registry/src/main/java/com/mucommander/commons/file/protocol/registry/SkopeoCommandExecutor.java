@@ -86,7 +86,7 @@ public class SkopeoCommandExecutor {
                 "skopeo",
                 "--insecure-policy",
                 "--override-os",
-                "linux",
+                "linux", // TODO: make this configurable
                 command
         ));
         tokens.addAll(Arrays.asList(args));
