@@ -33,6 +33,7 @@ What's new since v0.9.3 ?
 -----------------------
 
 New features:
+- Basic support for browsing and downloading container images from a remote registry, contributed by Daniel Erez.
 
 Improvements:
 
