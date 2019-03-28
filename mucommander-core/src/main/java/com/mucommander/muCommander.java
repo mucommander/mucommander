@@ -24,8 +24,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +54,6 @@ import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.frame.CommandLineMainFrameBuilder;
 import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
-import com.mucommander.ui.main.osgi.ProtocolPanelProviderTracker;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
 
@@ -68,7 +65,7 @@ import com.mucommander.utils.MuLogging;
  * </p>
  * @author Maxence Bernard, Nicolas Rinaudo
  */
-public class muCommander implements BundleActivator {
+public class muCommander {
 	private static final Logger LOGGER = LoggerFactory.getLogger(muCommander.class);
 	
     // - Class fields -----------------------------------------------------------
@@ -277,7 +274,7 @@ public class muCommander implements BundleActivator {
             mu.run();
     }
 
-    private void run() {
+    void run() {
         try {
             // Associations handling.
             if (assoc != null) {
@@ -577,22 +574,4 @@ public class muCommander implements BundleActivator {
         // Register the application-specific 'bookmark' protocol.
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
     }
-
-    ProtocolPanelProviderTracker protocolPanelTracker;
-
-	@Override
-	public void start(BundleContext context) throws Exception {
-		protocolPanelTracker = new ProtocolPanelProviderTracker(context);
-		protocolPanelTracker.open();
-		muCommander mu = new muCommander();
-		mu.run();
-	}
-
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		protocolPanelTracker.close();
-		// stop the system bundle
-		context.getBundle(0).stop();
-	}
 }

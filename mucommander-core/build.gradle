@@ -91,6 +91,6 @@ jar {
         'com.mucommander.ui.main',
         'com.mucommander.ui.main.osgi',
         'com.mucommander.process'
-       instruction 'Bundle-Activator', 'com.mucommander.muCommander'
+       instruction 'Bundle-Activator', 'com.mucommander.Activator'
    }
 }
