@@ -50,17 +50,6 @@ public class ShutdownHook extends Thread {
         super(ShutdownHook.class.getName());
     }
 
-
-    /**
-     * Shuts down muCommander.
-     */
-    public static void initiateShutdown() {
-        LOGGER.info("shutting down");
-        // System.exit() will trigger ShutdownHook and perform shutdown tasks
-        System.exit(0);
-    }
-    
-
     /**
      * Called by the VM when the program shuts down, this method writes the configuration.
      */
@@ -69,15 +58,15 @@ public class ShutdownHook extends Thread {
         performShutdownTasks();
     }
 
-
     /**
      * Performs tasks before shut down, such as writing the configuration file. This method can only
      * be called once, any further call will be ignored (no-op).
+     * @return true if shutdown tasks were executed, false otherwise (shutdown tasks are executed only once).
      */
-    private synchronized static void performShutdownTasks() {
+    synchronized static boolean performShutdownTasks() {
         // Return if shutdown tasks have already been performed
-        if(shutdownTasksPerformed)
-            return;
+        if (shutdownTasksPerformed)
+            return false;
         
         TreeIOThreadManager.getInstance().interrupt();
 
@@ -125,6 +114,6 @@ public class ShutdownHook extends Thread {
         
 
         // Shutdown tasks should only be performed once
-        shutdownTasksPerformed = true;
+        return shutdownTasksPerformed = true;
     }
 }

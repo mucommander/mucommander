@@ -33,7 +33,7 @@ import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.ShutdownHook;
+import com.mucommander.muCommander;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.conf.MuConfigurations;
@@ -225,7 +225,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // Important note: we cannot rely on windowClosed() triggering the shutdown sequence as
         // Quit under OS X shuts down the app as soon as this method returns and as a result, 
         // windowClosed() events are never dispatched to the MainFrames
-        ShutdownHook.initiateShutdown();
+        muCommander.initiateShutdown();
     }
 	
     /**
@@ -379,7 +379,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         }
 
         // No more window showing, initiate shutdown sequence
-        ShutdownHook.initiateShutdown();
+        muCommander.initiateShutdown();
     }
 
     public void windowIconified(WindowEvent e) {

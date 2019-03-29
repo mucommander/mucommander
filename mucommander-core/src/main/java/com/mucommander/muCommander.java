@@ -77,6 +77,8 @@ public class muCommander {
     private static boolean isLaunching = true;
     /** Launch lock. */
     private static final Object LAUNCH_LOCK = new Object();
+    /** OSGi BundleActivator */
+    private static Activator activator;
 
     /** Whether or not to display verbose error messages. */
     @Parameter(names={"-S", "--silent"}, description="Do not print verbose error messages")
@@ -274,7 +276,7 @@ public class muCommander {
             mu.run();
     }
 
-    void run() {
+    private void run() {
         try {
             // Associations handling.
             if (assoc != null) {
@@ -412,9 +414,6 @@ public class muCommander {
 
             boolean showSetup;
             showSetup = MuConfigurations.getPreferences().getVariable(MuPreference.THEME_TYPE) == null;
-
-            // Traps VM shutdown
-            Runtime.getRuntime().addShutdownHook(new ShutdownHook());
 
             // Configure filesystems
             configureFilesystems();
@@ -573,5 +572,26 @@ public class muCommander {
 
         // Register the application-specific 'bookmark' protocol.
         FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
+    }
+
+    /**
+     * Starts muCommander. 
+     */
+    public static void run(Activator activator) {
+        muCommander.activator = activator;
+        new muCommander().run();
+    }
+
+    /**
+     * Shuts down muCommander.
+     */
+    public static void initiateShutdown() {
+        LOGGER.info("shutting down");
+        try {
+            activator.stopAll();
+        } catch (Exception e) {
+            // should never happen
+            LOGGER.error("failed to shut down", e);
+        }
     }
 }
