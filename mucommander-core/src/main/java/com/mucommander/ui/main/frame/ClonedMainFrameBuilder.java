@@ -24,6 +24,8 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.util.Collection;
+import java.util.Collections;
 
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
@@ -44,7 +46,7 @@ public class ClonedMainFrameBuilder extends MainFrameBuilder {
     }
 
 	@Override
-	public MainFrame[] build() {
+	public Collection<MainFrame> build() {
 		MainFrame currentMainFrame = WindowManager.getCurrentMainFrame();
 		
 		MainFrame mainFrame = new MainFrame(currentMainFrame);
@@ -72,7 +74,7 @@ public class ClonedMainFrameBuilder extends MainFrameBuilder {
         
         mainFrame.setBounds(new Rectangle(x, y, width, height));
         
-		return new MainFrame[] { mainFrame };
+		return Collections.singleton(mainFrame);
 	}
 	
 	// - Screen handling --------------------------------------------------------

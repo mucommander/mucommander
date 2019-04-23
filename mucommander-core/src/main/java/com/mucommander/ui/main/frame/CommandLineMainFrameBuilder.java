@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.frame;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,8 +56,8 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
 	}
 
 	@Override
-	public MainFrame[] build() {
-		return mainFrames.toArray(new MainFrame[0]);
+	public Collection<MainFrame> build() {
+		return mainFrames;
 	}
 	
 	/**

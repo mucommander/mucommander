@@ -341,8 +341,7 @@ public class MainFrame extends JFrame implements LocationListener {
      * @param folderPanel the new active panel
      */
     private void fireActivePanelChanged(FolderPanel folderPanel) {
-        for(ActivePanelListener listener : activePanelListeners.keySet())
-            listener.activePanelChanged(folderPanel);
+        activePanelListeners.keySet().forEach(listener -> listener.activePanelChanged(folderPanel));
     }
 
 
@@ -450,8 +449,7 @@ public class MainFrame extends JFrame implements LocationListener {
      * @param table the currently active FileTable
      */
     void setActiveTable(FileTable table) {
-        boolean activeTableChanged = activeTable !=table;
-
+        boolean activeTableChanged = activeTable != table;
         if(activeTableChanged) {
             this.activeTable = table;
 
@@ -591,7 +589,7 @@ public class MainFrame extends JFrame implements LocationListener {
      * Makes both folders the same, choosing the one which is currently active. 
      */
     public void setSameFolder() {
-        (activeTable == leftTable ? rightTable : leftTable).getFolderPanel().tryChangeCurrentFolder(activeTable.getFolderPanel().getCurrentFolder());
+        getInactiveTable().getFolderPanel().tryChangeCurrentFolder(activeTable.getFolderPanel().getCurrentFolder());
     }
 
     /**
@@ -614,7 +612,7 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Forces a refrehs of the frame's folder panel.
+     * Forces a refresh of the frame's folder panel.
      */
     public void tryRefreshCurrentFolders() {
         leftFolderPanel.tryRefreshCurrentFolder();

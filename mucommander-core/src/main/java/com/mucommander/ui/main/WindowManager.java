@@ -21,7 +21,7 @@ package com.mucommander.ui.main;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
@@ -163,25 +163,22 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return the newly created MainFrame.
      */
     public static synchronized void createNewMainFrame(MainFrameBuilder mainFrameBuilder) {
-        MainFrame[] newMainFrames = mainFrameBuilder.build();
+        Collection<MainFrame> newMainFrames = mainFrameBuilder.build();
 
         // To catch user window closing actions
-        for (MainFrame frame : newMainFrames)
-        	frame.addWindowListener(instance);
+        newMainFrames.forEach(frame -> frame.addWindowListener(instance));
 
         // Adds the new MainFrame to the vector
-        instance.mainFrames.addAll(Arrays.asList(newMainFrames));
+        instance.mainFrames.addAll(newMainFrames);
 
         // Set new window's title. Window titles show window number only if there is more than one window.
         // So if a second window was just created, we update first window's title so that it shows window number (#1).
-        for (MainFrame frame : instance.mainFrames)
-        	frame.updateWindowTitle();
+        instance.mainFrames.forEach(frame -> frame.updateWindowTitle());
 
         // Make frames visible
-        for (MainFrame frame : newMainFrames)
-        	frame.setVisible(true);
+        newMainFrames.forEach(frame -> frame.setVisible(true));
 
-        if (instance.mainFrames.size() > 0) {
+        if (!instance.mainFrames.isEmpty()) {
         	int previouslySelectedMainFrame = mainFrameBuilder.getSelectedFrame();
         	instance.mainFrames.get(previouslySelectedMainFrame).toFront();
         }

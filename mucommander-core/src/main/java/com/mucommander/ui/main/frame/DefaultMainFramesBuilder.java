@@ -22,9 +22,11 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,8 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.MuSnapshot;
+import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.tabs.ConfFileTableTab;
@@ -55,7 +59,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 	}
 
 	@Override
-	public MainFrame[] build() {
+	public Collection<MainFrame> build() {
 		int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
 
 		// if there is no window saved in the snapshot file or custom folders are set, open one window with default settings
@@ -77,12 +81,12 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
 	        mainFrame.setBounds(new Rectangle(x, y, width, height));
 
-	        return new MainFrame[] {mainFrame};
+	        return Collections.singleton(mainFrame);
 		}
 		else {
-			MainFrame[] mainFrames = new MainFrame[nbFrames];
-			for (int i=0; i<mainFrames.length; ++i)
-				mainFrames[i] = createMainFrame(i);
+			List<MainFrame> mainFrames = new ArrayList<>();
+			for (int i=0; i<nbFrames; ++i)
+				mainFrames.add(createMainFrame(i));
 
 			return mainFrames;
 		}

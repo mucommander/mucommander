@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.frame;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ import com.mucommander.ui.main.table.FileTableConfiguration;
 public abstract class MainFrameBuilder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MainFrameBuilder.class);
 
-	public abstract MainFrame[] build();
+	public abstract Collection<MainFrame> build();
 	
 	public int getSelectedFrame() { return 0; }
 	
