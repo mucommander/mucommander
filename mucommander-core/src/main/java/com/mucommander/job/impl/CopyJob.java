@@ -107,7 +107,7 @@ public class CopyJob extends AbstractCopyJob {
         String destFileName = isFileInBaseFolder && newName!=null ? newName : file.getName();
 
         // Create destination AbstractFile instance
-        AbstractFile destFile = createDestinationFile(destFolder, destFileName);
+        AbstractFile destFile = createDestinationFile(file, destFolder, destFileName);
         if (destFile == null)
             return false;
 

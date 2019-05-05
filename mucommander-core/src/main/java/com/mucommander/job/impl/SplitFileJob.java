@@ -162,7 +162,7 @@ public class SplitFileJob extends AbstractCopyJob {
             return false;
         
         // Create destination AbstractFile instance
-        AbstractFile destFile = createDestinationFile(baseDestFolder, file.getName());
+        AbstractFile destFile = createDestinationFile(file, baseDestFolder, file.getName());
         if (destFile == null)
             return false;
 

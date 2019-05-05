@@ -86,13 +86,10 @@ public abstract class AbstractCopyJob extends TransferFileJob {
      * @param destFileName a destination file name
      * @return the destination file or null if it cannot be created
      */
-    protected AbstractFile createDestinationFile(AbstractFile destFolder,
-            String destFileName) {
-        AbstractFile destFile;
+    protected AbstractFile createDestinationFile(AbstractFile file, AbstractFile destFolder, String destFileName) {
         do {    // Loop for retry
             try {
-                destFile = destFolder.getDirectChild(destFileName);
-                break;
+                return destFolder.getDirectChild(destFileName);
             }
             catch(IOException e) {
                 // Destination file couldn't be instantiated
@@ -106,7 +103,6 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                 // Skip continues
             }
         } while(true);
-        return destFile;
     }
     
     /**
@@ -187,7 +183,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                     String destFileName = (String) waitForUserResponseObject(dlg);
                     setPaused(false);
                     if (destFileName != null) {
-                        destFile = createDestinationFile(destFolder, destFileName);
+                        destFile = createDestinationFile(file, destFolder, destFileName);
                     } else {
                         // turn on FileCollisionDialog, so we don't loop indefinitely
                         defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;

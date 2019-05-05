@@ -93,15 +93,10 @@ public class MoveJob extends AbstractCopyJob {
         boolean isFileInBaseFolder = files.indexOf(file)!=-1;
 
         // Determine filename in destination
-        String originalName = file.getName();
-        String destFileName;
-        if(isFileInBaseFolder && newName!=null)
-            destFileName = newName;
-       	else
-            destFileName = originalName;
+        String destFileName = isFileInBaseFolder && newName!=null ? newName : file.getName();
 		
         // Create destination AbstractFile instance
-        AbstractFile destFile = createDestinationFile(destFolder, destFileName);
+        AbstractFile destFile = createDestinationFile(file, destFolder, destFileName);
         if (destFile == null)
             return false;
 
