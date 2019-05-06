@@ -38,8 +38,8 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration serviceRegistration;
-	private ServiceRegistration uiServiceRegistration;
+	private ServiceRegistration<FileProtocolService> serviceRegistration;
+	private ServiceRegistration<ProtocolPanelProvider> uiServiceRegistration;
 
 	@Override
 	public void start(BundleContext context) throws Exception {

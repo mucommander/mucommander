@@ -37,11 +37,11 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration serviceRegistrationDocker;
-	private ServiceRegistration serviceRegistrationOCI;
-	private ServiceRegistration serviceRegistrationDir;
-	private ServiceRegistration serviceRegistrationRegistry;
-	private ServiceRegistration uiServiceRegistration;
+	private ServiceRegistration<FileProtocolService> serviceRegistrationDocker;
+	private ServiceRegistration<FileProtocolService> serviceRegistrationOCI;
+	private ServiceRegistration<FileProtocolService> serviceRegistrationDir;
+	private ServiceRegistration<FileProtocolService> serviceRegistrationRegistry;
+	private ServiceRegistration<ProtocolPanelProvider> uiServiceRegistration;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
