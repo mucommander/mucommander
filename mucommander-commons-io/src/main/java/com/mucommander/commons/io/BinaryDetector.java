@@ -65,11 +65,10 @@ public class BinaryDetector {
      * @return true if BinaryDetector thinks that the specified data is binary
      */
     public static boolean guessBinary(byte b[], int off, int len) {
-        try {
             // Returns true if any of the bytes are the NUL character. The NUL character is usually not found in a text
             // file, except for UTF-16 and UTF-32 streams.
             // So first, we try and look for a BOM (byte-order mark) to see if the stream is UTF-16 or UTF-32 encoded.
-            BOMInputStream bin = new BOMInputStream(new ByteArrayInputStream(b, off, len));
+        try (BOMInputStream bin = new BOMInputStream(new ByteArrayInputStream(b, off, len))) {
             BOM bom = bin.getBOM();
 
             if(bom!=null) {

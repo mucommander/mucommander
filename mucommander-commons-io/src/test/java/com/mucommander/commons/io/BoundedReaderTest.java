@@ -141,30 +141,31 @@ public class BoundedReaderTest {
      */
     @Test
     public void testUnboundedReader() throws IOException {
-        BoundedReader br = new BoundedReader(new CharArrayReader(TEST_CHARACTERS), -1);
-        assert 0 == br.getReadCounter();
-        assert Long.MAX_VALUE == br.getRemainingCharacters();
-        assert -1 == br.getAllowedCharacters();
-
-        assert br.read()!=-1;
-        assert 1 == br.getReadCounter();
-        assert Long.MAX_VALUE == br.getRemainingCharacters();
-        assert -1 == br.getAllowedCharacters();
-
-        assert br.read(new char[1])!=-1;
-        assert 2 == br.getReadCounter();
-        assert Long.MAX_VALUE == br.getRemainingCharacters();
-        assert -1 == br.getAllowedCharacters();
-
-        assert br.read(new char[1], 0, 1)!=-1;
-        assert 3 == br.getReadCounter();
-        assert Long.MAX_VALUE == br.getRemainingCharacters();
-        assert -1 == br.getAllowedCharacters();
-
-        long totalRead = 0;
-        while(br.read()!=-1)
-            totalRead ++;
-
-        assert 8 == totalRead;
+        try (BoundedReader br = new BoundedReader(new CharArrayReader(TEST_CHARACTERS), -1)) {
+	        assert 0 == br.getReadCounter();
+	        assert Long.MAX_VALUE == br.getRemainingCharacters();
+	        assert -1 == br.getAllowedCharacters();
+	
+	        assert br.read()!=-1;
+	        assert 1 == br.getReadCounter();
+	        assert Long.MAX_VALUE == br.getRemainingCharacters();
+	        assert -1 == br.getAllowedCharacters();
+	
+	        assert br.read(new char[1])!=-1;
+	        assert 2 == br.getReadCounter();
+	        assert Long.MAX_VALUE == br.getRemainingCharacters();
+	        assert -1 == br.getAllowedCharacters();
+	
+	        assert br.read(new char[1], 0, 1)!=-1;
+	        assert 3 == br.getReadCounter();
+	        assert Long.MAX_VALUE == br.getRemainingCharacters();
+	        assert -1 == br.getAllowedCharacters();
+	
+	        long totalRead = 0;
+	        while(br.read()!=-1)
+	            totalRead ++;
+	
+	        assert 8 == totalRead;
+	    }
     }
 }
