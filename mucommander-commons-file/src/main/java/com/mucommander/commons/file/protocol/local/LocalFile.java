@@ -54,7 +54,6 @@ import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.file.util.Kernel32;
 import com.mucommander.commons.file.util.Kernel32API;

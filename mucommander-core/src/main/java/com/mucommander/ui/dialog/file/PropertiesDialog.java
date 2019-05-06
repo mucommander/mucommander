@@ -40,7 +40,6 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.OSXFileUtils;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobState;
 import com.mucommander.job.impl.PropertiesJob;
 import com.mucommander.text.SizeFormat;

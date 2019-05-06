@@ -19,7 +19,6 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.io.FileTransferException;
