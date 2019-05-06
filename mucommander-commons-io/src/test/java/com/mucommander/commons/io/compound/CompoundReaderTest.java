@@ -86,13 +86,14 @@ public class CompoundReaderTest {
      */
     @Test
     public void testMerged() throws IOException {
-        CompoundReader reader = new IteratorCompoundReader(getTestReaderIterator(), true);
+        try (CompoundReader reader = new IteratorCompoundReader(getTestReaderIterator(), true)) {
 
-        assert reader.isMerged();
+	        assert reader.isMerged();
 
-        assert TEST_FLATTENED_STRINGS.equals(copyReader(reader));
+	        assert TEST_FLATTENED_STRINGS.equals(copyReader(reader));
 
-        assert !reader.advanceReader();
+	        assert !reader.advanceReader();
+        }
     }
 
     /**
@@ -102,15 +103,16 @@ public class CompoundReaderTest {
      */
     @Test
     public void testUnmerged() throws IOException {
-        CompoundReader reader = new IteratorCompoundReader(getTestReaderIterator(), false);
+        try (CompoundReader reader = new IteratorCompoundReader(getTestReaderIterator(), false)) {
 
-        assert !reader.isMerged();
+        	assert !reader.isMerged();
 
-        for(int i=0; i<TEST_STRINGS.length; i++) {
-            assert TEST_STRINGS[i].equals(copyReader(reader));
+	        for(int i=0; i<TEST_STRINGS.length; i++) {
+	            assert TEST_STRINGS[i].equals(copyReader(reader));
 
-            // Try to advance to the next reader
-            assert(i!=TEST_STRINGS.length-1) ==  reader.advanceReader();
+	            // Try to advance to the next reader
+	            assert(i!=TEST_STRINGS.length-1) ==  reader.advanceReader();
+	        }
         }
     }
 }

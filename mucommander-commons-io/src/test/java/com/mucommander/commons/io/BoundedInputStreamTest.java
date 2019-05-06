@@ -145,30 +145,31 @@ public class BoundedInputStreamTest {
      */
     @Test
     public void testUnboundedStream() throws IOException {
-        BoundedInputStream bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), -1, false);
-        assert 0 == bin.getProcessedBytes();
-        assert Long.MAX_VALUE == bin.getRemainingBytes();
-        assert -1 == bin.getAllowedBytes();
-
-        assert bin.read()!=-1;
-        assert 1 == bin.getProcessedBytes();
-        assert Long.MAX_VALUE == bin.getRemainingBytes();
-        assert -1 == bin.getAllowedBytes();
-
-        assert bin.read(new byte[1])!=-1;
-        assert 2 == bin.getProcessedBytes();
-        assert Long.MAX_VALUE == bin.getRemainingBytes();
-        assert -1 == bin.getAllowedBytes();
-
-        assert bin.read(new byte[1], 0, 1)!=-1;
-        assert 3 == bin.getProcessedBytes();
-        assert Long.MAX_VALUE == bin.getRemainingBytes();
-        assert -1 == bin.getAllowedBytes();
-
-        long totalRead = 0;
-        while(bin.read()!=-1)
-            totalRead ++;
-
-        assert 8 == totalRead;
+        try (BoundedInputStream bin = new BoundedInputStream(new ByteArrayInputStream(TEST_BYTES), -1, false)) {
+	        assert 0 == bin.getProcessedBytes();
+	        assert Long.MAX_VALUE == bin.getRemainingBytes();
+	        assert -1 == bin.getAllowedBytes();
+	
+	        assert bin.read()!=-1;
+	        assert 1 == bin.getProcessedBytes();
+	        assert Long.MAX_VALUE == bin.getRemainingBytes();
+	        assert -1 == bin.getAllowedBytes();
+	
+	        assert bin.read(new byte[1])!=-1;
+	        assert 2 == bin.getProcessedBytes();
+	        assert Long.MAX_VALUE == bin.getRemainingBytes();
+	        assert -1 == bin.getAllowedBytes();
+	
+	        assert bin.read(new byte[1], 0, 1)!=-1;
+	        assert 3 == bin.getProcessedBytes();
+	        assert Long.MAX_VALUE == bin.getRemainingBytes();
+	        assert -1 == bin.getAllowedBytes();
+	
+	        long totalRead = 0;
+	        while(bin.read()!=-1)
+	            totalRead ++;
+	
+	        assert 8 == totalRead;
+        };
     }
 }
