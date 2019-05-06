@@ -22,7 +22,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.mucommander.commons.file.AuthenticationType;
-import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.DefaultSchemeHandler;
 import com.mucommander.commons.file.DefaultSchemeParser;
 import com.mucommander.commons.file.SchemeHandler;

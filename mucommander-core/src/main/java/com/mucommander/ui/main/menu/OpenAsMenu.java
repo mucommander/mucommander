@@ -18,11 +18,8 @@
 
 package com.mucommander.ui.main.menu;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;

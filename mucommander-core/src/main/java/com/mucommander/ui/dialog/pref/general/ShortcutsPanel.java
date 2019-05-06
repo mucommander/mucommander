@@ -20,7 +20,6 @@ package com.mucommander.ui.dialog.pref.general;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;

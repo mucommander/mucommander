@@ -20,9 +20,6 @@ package com.mucommander.commons.file.archive.ar;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 import com.mucommander.commons.file.osgi.FileFormatService;
 
