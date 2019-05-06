@@ -85,7 +85,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Look and feel fields ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Combo box containing the list of available look&feels. */
-    private PrefComboBox              lookAndFeelComboBox;
+    private PrefComboBox<String>              lookAndFeelComboBox;
     /** All available look&feels. */
     private UIManager.LookAndFeelInfo lookAndFeels[];
     /** 'Use brushed metal look' checkbox */
@@ -104,11 +104,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Icon size fields ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Displays the list of available sizes for toolbar icons. */
-    private PrefComboBox        toolbarIconsSizeComboBox;
+    private PrefComboBox<String>        toolbarIconsSizeComboBox;
     /** Displays the list of available sizes for command bar icons. */
-    private PrefComboBox        commandBarIconsSizeComboBox;
+    private PrefComboBox<String>        commandBarIconsSizeComboBox;
     /** Displays the list of available sizes for file icons. */
-    private PrefComboBox        fileIconsSizeComboBox;
+    private PrefComboBox<String>        fileIconsSizeComboBox;
     /** All icon sizes label. */
     private final static String ICON_SIZES[]                = {"100%", "125%", "150%", "175%", "200%", "300%"};
     /** All icon sizes scale factors. */
@@ -128,7 +128,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Theme fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Lists all available themes. */
-    private PrefComboBox themeComboBox;
+    private PrefComboBox<Theme> themeComboBox;
     /** Triggers the theme editor. */
     private JButton      editThemeButton;
     /** Triggers the theme duplication dialog. */
@@ -153,7 +153,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Misc. fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** System icon combobox. */
-    private PrefComboBox 	       useSystemFileIconsComboBox;
+    private PrefComboBox<String> 	       useSystemFileIconsComboBox;
     /** Identifier of 'yes' actions in question dialogs. */
     private final static int       YES_ACTION = 0;
     /** Identifier of 'no' actions in question dialogs. */
@@ -485,8 +485,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * @param defaultValue the default value for the icon scale factor if the configuration variable has no value
      * @return a combo box that allows to choose a size for a certain type of icon
      */
-    private PrefComboBox createIconSizeCombo(final MuPreference preference, float defaultValue) {
-    	PrefComboBox iconSizeCombo = new PrefComboBox() {
+    private PrefComboBox<String> createIconSizeCombo(final MuPreference preference, float defaultValue) {
+    	PrefComboBox<String> iconSizeCombo = new PrefComboBox() {
 			public boolean hasChanged() {
 				return !String.valueOf(ICON_SCALE_FACTORS[getSelectedIndex()]).equals(
 						MuConfigurations.getPreferences().getVariable(preference));

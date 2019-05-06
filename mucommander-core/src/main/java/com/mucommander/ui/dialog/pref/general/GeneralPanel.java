@@ -71,7 +71,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
 
     // Date/time format
     private PrefRadioButton time12RadioButton;
-    private PrefComboBox dateFormatComboBox;
+    private PrefComboBox<String> dateFormatComboBox;
     private PrefTextField dateSeparatorField;
     private PrefCheckBox showSecondsCheckBox;
     private PrefCheckBox showCenturyCheckBox;
