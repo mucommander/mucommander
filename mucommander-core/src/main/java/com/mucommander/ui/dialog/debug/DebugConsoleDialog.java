@@ -149,7 +149,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      * Refreshes the JList with the log records contained by {@link DebugConsoleAppender}.
      */
     private void refreshLogRecords() {
-    	DefaultListModel listModel = new DefaultListModel();
+    	DefaultListModel<LoggingEvent> listModel = new DefaultListModel<>();
         DebugConsoleAppender handler = MuLogging.getDebugConsoleAppender();
 
         final LoggingEvent[] records = handler.getLogRecords();
