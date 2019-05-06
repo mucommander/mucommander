@@ -133,7 +133,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 		panel.setBorder(BorderFactory.createEmptyBorder());
 		panel.add(new JLabel(Translator.get("shortcuts_panel" + ".show") + ":"));
 		
-		final JComboBox combo = new JComboBox();
+		final JComboBox<ActionCategory> combo = new JComboBox<>();
 		combo.addItem(ActionCategory.ALL);
 	    for(ActionCategory category : ActionProperties.getActionCategory())
 	      combo.addItem(category);

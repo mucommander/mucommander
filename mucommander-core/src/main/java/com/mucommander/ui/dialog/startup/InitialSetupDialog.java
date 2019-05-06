@@ -50,9 +50,9 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
     /** All available look and feels. */
     private UIManager.LookAndFeelInfo lfInfo[];
     /** Used to select a startup theme. */
-    private JComboBox themeComboBox;
+    private JComboBox<Theme> themeComboBox;
     /** Used to select a look and feel. */
-    private JComboBox lfComboBox;
+    private JComboBox<String> lfComboBox;
     /** Used to validate the user's choice. */
     private JButton   okButton;
 
@@ -83,7 +83,7 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
 	themePanel.add(tempPanel);
 
 	// Adds the theme combo box.
-        themeComboBox = new JComboBox();
+        themeComboBox = new JComboBox<>();
         themes        = ThemeManager.availableThemes();
 	index         = 0;
 	selectedIndex = 0;
@@ -125,7 +125,7 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
 	lfPanel.add(tempPanel);
 
 	// Initialises the l&f combo box.
-	lfComboBox    = new JComboBox();
+	lfComboBox    = new JComboBox<>();
 	lfInfo        = UIManager.getInstalledLookAndFeels();
         currentLf     = UIManager.getLookAndFeel().getName();
 	selectedIndex = -1;

@@ -54,7 +54,7 @@ import java.util.TreeSet;
  */
 public class CalculateChecksumDialog extends JobDialog implements ActionListener, ItemListener {
 
-    private JComboBox algorithmComboBox;
+    private JComboBox<String> algorithmComboBox;
     private JRadioButton specificLocationRadioButton;
     private JTextField specificLocationTextField;
     private JButton okButton;
@@ -107,7 +107,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         algorithmSortedSet.toArray(messageDigests);
 
         // Add the sorted list of algorithms to a combo box to let the user choose one
-        algorithmComboBox = new JComboBox();
+        algorithmComboBox = new JComboBox<>();
         for (MessageDigest messageDigest : messageDigests) 
             algorithmComboBox.addItem(messageDigest.getAlgorithm());
 

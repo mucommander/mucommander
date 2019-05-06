@@ -75,7 +75,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     private FilePathField pathField;
     private SpinningDial spinningDial;
 
-    private JComboBox fileExistsActionComboBox;
+    private JComboBox<String> fileExistsActionComboBox;
     private JCheckBox skipErrorsCheckBox;
     private JCheckBox verifyIntegrityCheckBox;
     private JCheckBox runInBackgroundCheckBox;
@@ -136,7 +136,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         if(enableTransferOptions) {
             // Combo box that allows the user to choose the default action when a file already exists in destination
             mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
-            fileExistsActionComboBox = new JComboBox();
+            fileExistsActionComboBox = new JComboBox<>();
             fileExistsActionComboBox.addItem(Translator.get("ask"));
             int nbChoices = DEFAULT_ACTIONS_TEXT.length;
             for(int i=0; i<nbChoices; i++)

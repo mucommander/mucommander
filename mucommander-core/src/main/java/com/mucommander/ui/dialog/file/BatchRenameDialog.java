@@ -79,8 +79,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     private JTextField edtReplaceWith;
     private JTextField edtCounterStart;
     private JTextField edtCounterStep;
-    private JComboBox cbCounterDigits;
-    private JComboBox cbCase;
+    private JComboBox<String> cbCounterDigits;
+    private JComboBox<String> cbCase;
     private RenameTableModel tableModel;
     private AbstractAction actRemove;
     private JButton btnName;
@@ -233,7 +233,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         ulcase.add(Translator.get("batch_rename_dialog.upper_case"));
         ulcase.add(Translator.get("batch_rename_dialog.first_upper"));
         ulcase.add(Translator.get("batch_rename_dialog.word"));
-        cbCase = new JComboBox(ulcase);
+        cbCase = new JComboBox<>(ulcase);
         cbCase.addActionListener(this);
 
         // counter
@@ -250,7 +250,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         for (int i = 1; i <= 5; i++) {
             digits.add(zeros.substring(0, i - 1) + "1");
         }
-        cbCounterDigits = new JComboBox(digits);
+        cbCounterDigits = new JComboBox<>(digits);
         cbCounterDigits.addActionListener(this);
 
         // add controls
