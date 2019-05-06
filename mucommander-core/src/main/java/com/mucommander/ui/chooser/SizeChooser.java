@@ -43,7 +43,7 @@ public class SizeChooser extends JPanel {
     private JSpinner valueSpinner;
 
     /** Allows to select the size/speed unit */
-    private JComboBox unitComboBox;
+    private JComboBox<String> unitComboBox;
 
     /** Contains all registered listeners, stored as weak references */
     private WeakHashMap<ChangeListener, ?> listeners = new WeakHashMap<ChangeListener, Object>();
@@ -86,7 +86,7 @@ public class SizeChooser extends JPanel {
         
         add(valueSpinner);
 
-        unitComboBox = new JComboBox();
+        unitComboBox = new JComboBox<>();
         for(int i= SizeFormat.BYTE_UNIT; i<=SizeFormat.GIGABYTE_UNIT; i++)
             unitComboBox.addItem(SizeFormat.getUnitString(i, speedUnits));
         unitComboBox.setSelectedIndex(SizeFormat.KILOBYTE_UNIT);

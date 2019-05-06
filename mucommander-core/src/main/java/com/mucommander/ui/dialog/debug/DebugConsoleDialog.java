@@ -66,7 +66,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     private JList loggingEventsList;
 
     /** Allows the log level to be changed */
-    private JComboBox levelComboBox;
+    private JComboBox<LogLevel> levelComboBox;
 
     /** Closes the debug console when pressed */
     private JButton closeButton;
@@ -132,7 +132,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
         comboPanel.add(new JLabel(Translator.get("debug_console_dialog.level")+":"));
         LogLevel logLevel = MuLogging.getLogLevel();
 
-        levelComboBox = new JComboBox();
+        levelComboBox = new JComboBox<>();
         for(LogLevel level:LogLevel.values())
             levelComboBox.addItem(level);
         		

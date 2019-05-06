@@ -43,8 +43,8 @@ public class NFSPanel extends ServerPanel {
     private JTextField serverField;
     private JTextField shareField;
     private JSpinner portSpinner;
-    private JComboBox nfsVersionComboBox;
-    private JComboBox nfsProtocolComboBox;
+    private JComboBox<String> nfsVersionComboBox;
+    private JComboBox<String> nfsProtocolComboBox;
 
     private static String lastServer = "";
     private static String lastShare = "";
@@ -72,14 +72,14 @@ public class NFSPanel extends ServerPanel {
         addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
 
         // NFS version, initialized to last value (default is NFSFile's default)
-        nfsVersionComboBox = new JComboBox();
+        nfsVersionComboBox = new JComboBox<>();
         nfsVersionComboBox.addItem(NFSFile.NFS_VERSION_2);
         nfsVersionComboBox.addItem(NFSFile.NFS_VERSION_3);
         nfsVersionComboBox.setSelectedItem(lastNfsVersion);
         addRow(Translator.get("server_connect_dialog.nfs_version"), nfsVersionComboBox, 5);
 
         // NFS protocol, initialized to last value (default is NFSFile's default)
-        nfsProtocolComboBox = new JComboBox();
+        nfsProtocolComboBox = new JComboBox<>();
         nfsProtocolComboBox.addItem(NFSFile.NFS_PROTOCOL_AUTO);
         nfsProtocolComboBox.addItem(NFSFile.NFS_PROTOCOL_TCP);
         nfsProtocolComboBox.addItem(NFSFile.NFS_PROTOCOL_UDP);

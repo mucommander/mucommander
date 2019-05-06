@@ -73,7 +73,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
     /** Add to or remove from selection ? */	 
     private boolean addToSelection;
 
-    private JComboBox comparisonComboBox;
+    private JComboBox<String> comparisonComboBox;
     private JTextField selectionField;
 
     private JCheckBox caseSensitiveCheckBox;
@@ -133,7 +133,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
 
         JPanel tempPanel = new JPanel();
         tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.X_AXIS));
-        comparisonComboBox = new JComboBox();
+        comparisonComboBox = new JComboBox<>();
         comparisonComboBox.addItem(Translator.get("file_selection_dialog.contains"));
         comparisonComboBox.addItem(Translator.get("file_selection_dialog.starts_with"));
         comparisonComboBox.addItem(Translator.get("file_selection_dialog.ends_with"));
