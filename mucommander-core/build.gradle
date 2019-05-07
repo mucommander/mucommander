@@ -82,6 +82,7 @@ jar {
         'org.xml.sax.helpers'
        instruction 'DynamicImport-Package',
         'com.apple.eawt',
+        'com.apple.eio',
         'sun.security.action'
        instruction 'Export-Package',
         'com.mucommander.text',

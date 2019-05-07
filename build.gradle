@@ -37,7 +37,7 @@ dependencies {
 
 runOsgi {
     configSettings = 'felix'
-    config += [ 'org.osgi.framework.system.packages.extra': 'sun.security.action,com.apple.eawt', 'felix.log.level': 1 ]
+    config += [ 'org.osgi.framework.system.packages.extra': 'sun.security.action,com.apple.eawt,com.apple.eio', 'felix.log.level': 1 ]
 }
 
 allprojects {
