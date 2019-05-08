@@ -60,6 +60,7 @@ jar {
         'com.mucommander.commons.file.protocol.local',
         'com.mucommander.commons.file.util',
         'com.mucommander.commons.io',
+        'com.mucommander.commons.io.base64',
         'com.mucommander.commons.io.bom',
         'com.mucommander.commons.io.security',
         'com.mucommander.commons.util',
