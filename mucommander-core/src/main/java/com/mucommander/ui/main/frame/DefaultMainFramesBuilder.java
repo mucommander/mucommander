@@ -60,36 +60,47 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
 	@Override
 	public Collection<MainFrame> build() {
-		int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
+	    int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
+	    // if last configuration is requested and exists in the snapshot file, restore it
+	    if (nbFrames > 0 && MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_LAST)) {
+	        List<MainFrame> mainFrames = new ArrayList<>();
+	        for (int i=0; i<nbFrames; ++i)
+	            mainFrames.add(createMainFrame(i));
+	        return mainFrames;
+	    }
+	    else {
+	        MainFrame mainFrame = new MainFrame(
+	                new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
+	                getFileTableConfiguration(FolderPanelType.LEFT, -1),
+	                new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
+	                getFileTableConfiguration(FolderPanelType.RIGHT, -1));
 
-		// if there is no window saved in the snapshot file or custom folders are set, open one window with default settings
-		if (nbFrames == 0 || MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM)) {
-			MainFrame mainFrame = new MainFrame(
-					new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
-					getFileTableConfiguration(FolderPanelType.LEFT, -1),
-					new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
-					getFileTableConfiguration(FolderPanelType.RIGHT, -1));
-			
-			Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-	        // Full screen bounds are not reliable enough, in particular under Linux+Gnome
-	        // so we simply make the initial window 4/5 of screen's size, and center it.
-	        // This should fit under any window manager / platform
-	        int x      = screenSize.width / 10;
-	        int y      = screenSize.height / 10;
-	        int width  = (int)(screenSize.width * 0.8);
-	        int height = (int)(screenSize.height * 0.8);
+	        // if there is no window saved in the snapshot file, use default settings
+	        if (nbFrames == 0) {
+	            Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
+	            // Full screen bounds are not reliable enough, in particular under Linux+Gnome
+	            // so we simply make the initial window 4/5 of screen's size, and center it.
+	            // This should fit under any window manager / platform
+	            int x      = screenSize.width / 10;
+	            int y      = screenSize.height / 10;
+	            int width  = (int)(screenSize.width * 0.8);
+	            int height = (int)(screenSize.height * 0.8);
 
-	        mainFrame.setBounds(new Rectangle(x, y, width, height));
+	            mainFrame.setBounds(new Rectangle(x, y, width, height));
+	        }
+	        // otherwise, use the settings of the selected window
+	        else {
+	            int index = getSelectedFrame();
+	            int x      = snapshot.getIntegerVariable(MuSnapshot.getX(index));
+	            int y      = snapshot.getIntegerVariable(MuSnapshot.getY(index));
+	            int width  = snapshot.getIntegerVariable(MuSnapshot.getWidth(index));
+	            int height = snapshot.getIntegerVariable(MuSnapshot.getHeight(index));
+
+	            mainFrame.setBounds(new Rectangle(x, y, width, height));
+	        }
 
 	        return Collections.singleton(mainFrame);
-		}
-		else {
-			List<MainFrame> mainFrames = new ArrayList<>();
-			for (int i=0; i<nbFrames; ++i)
-				mainFrames.add(createMainFrame(i));
-
-			return mainFrames;
-		}
+	    }
 	}
 
 	private MainFrame createMainFrame(int index) {

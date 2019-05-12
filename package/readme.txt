@@ -36,6 +36,7 @@ New features:
 - Basic support for browsing and downloading container images from a remote registry, contributed by Daniel Erez.
 
 Improvements:
+- When custom folders are set, the displayed window is set with the properties of the previously selected window on startup.
 
 Localization:
 
