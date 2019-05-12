@@ -804,6 +804,27 @@ public abstract class AbstractFile implements FileAttributes {
      * @throws IOException in any of the cases listed above
      */
     public final AbstractFile getDirectChild(String filename) throws IOException {
+        return getDirectChild(filename, null);
+    }
+
+    /**
+     * Returns a direct child of this file, whose path is the concatenation of this file's path and the given filename.
+     * An <code>IOException</code> will be thrown in any of the following cases:
+     * <ul>
+     *  <li>if the filename contains one or several path separator (the file would not be a direct child)</li>
+     *  <li>if the child file could not be instantiated</li>
+     * </ul>
+     * This method never returns <<code>null</code>.
+     *
+     * <p>Although {@link #getChild} can be used to retrieve a direct child file, this method should be favored because
+     * it allows to use this file instance as the parent of the returned child file.</p>
+     *
+     * @param filename the name of the child file to be created
+     * @param template the file that properties of the new file should be taken from, may be null
+     * @return an AbstractFile representing the requested direct child file, never null
+     * @throws IOException in any of the cases listed above
+     */
+    public final AbstractFile getDirectChild(String filename, AbstractFile template) throws IOException {
         if(filename.indexOf(getSeparator())!=-1)
             throw new IOException();
 

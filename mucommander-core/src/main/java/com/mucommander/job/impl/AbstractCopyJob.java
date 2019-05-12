@@ -89,7 +89,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
     protected AbstractFile createDestinationFile(AbstractFile file, AbstractFile destFolder, String destFileName) {
         do {    // Loop for retry
             try {
-                return destFolder.getDirectChild(destFileName);
+                return destFolder.getDirectChild(destFileName, file);
             }
             catch(IOException e) {
                 // Destination file couldn't be instantiated
