@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -640,7 +641,7 @@ public class HTTPFile extends ProtocolFile {
 
                             // TODO: resolve file here instead of in the constructor, and multiplex requests just like a browser
 
-                            children.add(FileFactory.getFile(childFileURL, null, childURL, childURL.toString()));
+                            children.add(FileFactory.getFile(childFileURL, null, Collections.singletonMap("url", childURL)));
                             childrenURL.add(link);
                         }
                         catch(IOException e) {

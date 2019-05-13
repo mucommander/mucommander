@@ -19,12 +19,13 @@
 
 package com.mucommander.commons.file.protocol.local;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.commons.runtime.OsFamily;
-
-import java.io.IOException;
 
 /**
  * This class is the provider for the local filesystem implemented by {@link com.mucommander.commons.file.protocol.local.LocalFile}
@@ -39,10 +40,10 @@ public class LocalProtocolProvider implements ProtocolProvider {
 	/** Are we running Windows ? */
     private final static boolean IS_WINDOWS =  OsFamily.WINDOWS.isCurrent();
 	
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return isUncFile(url)?
-        	 (instantiationParams.length==0?new UNCFile(url):new UNCFile(url ,(java.io.File)instantiationParams[0]))
-        	:(instantiationParams.length==0?new LocalFile(url):new LocalFile(url, (java.io.File)instantiationParams[0]));
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+        return isUncFile(url)
+                ?(instantiationParams.isEmpty()?new UNCFile(url):new UNCFile(url ,(java.io.File)instantiationParams.get("createdFile")))
+                :(instantiationParams.isEmpty()?new LocalFile(url):new LocalFile(url, (java.io.File)instantiationParams.get("createdFile")));
     }
 	
 	/**

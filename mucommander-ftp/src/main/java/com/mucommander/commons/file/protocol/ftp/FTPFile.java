@@ -40,6 +40,7 @@ import java.io.*;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 
 
@@ -374,7 +375,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
                 try {
-                    parent = FileFactory.getFile(parentFileURL, null, createFTPFile(parentFileURL.getFilename(), true));
+                    parent = FileFactory.getFile(parentFileURL, null, Collections.singletonMap("parentFtpFile", createFTPFile(parentFileURL.getFilename(), true)));
                 }
                 catch(IOException e) {
                     // No parent, that's all
@@ -591,7 +592,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             if(childName.equals(".") || childName.equals(".."))
                 continue;
 
-            child = FileFactory.getFile(childURL, this, files[i]);
+            child = FileFactory.getFile(childURL, this, Collections.singletonMap("parentFtpFile", files[i]));
             children[fileCount++] = child;
         }
 

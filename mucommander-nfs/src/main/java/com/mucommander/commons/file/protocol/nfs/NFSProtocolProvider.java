@@ -19,11 +19,12 @@
 
 package com.mucommander.commons.file.protocol.nfs;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-
-import java.io.IOException;
 
 /**
  * This class is the provider for the NFS filesystem implemented by {@link com.mucommander.commons.file.protocol.nfs.NFSFile}.
@@ -33,7 +34,7 @@ import java.io.IOException;
  */
 public class NFSProtocolProvider implements ProtocolProvider {
 
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
         return new NFSFile(url);
     }
 }

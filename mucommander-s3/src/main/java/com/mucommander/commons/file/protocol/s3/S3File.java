@@ -19,18 +19,33 @@
 
 package com.mucommander.commons.file.protocol.s3;
 
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.protocol.ProtocolFile;
-import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.runtime.JavaVersion;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jets3t.service.Constants;
 import org.jets3t.service.S3ObjectsChunk;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Date;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.FileAttributes;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.PermissionAccess;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.protocol.ProtocolFile;
+import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * Super class of {@link S3Root}, {@link S3Bucket} and {@link S3Object}.
@@ -98,7 +113,10 @@ public abstract class S3File extends ProtocolFile {
                 childURL = (FileURL)fileURL.clone();
                 childURL.setPath(bucketName + "/" + objectKey);
 
-                children[i] = FileFactory.getFile(childURL, parent, service, object);
+                Map<String, Object> parameters = new HashMap<>();
+                parameters.put("service", service);
+                parameters.put("object", object);
+                children[i] = FileFactory.getFile(childURL, parent, parameters);
                 i++;
             }
 
@@ -111,7 +129,10 @@ public abstract class S3File extends ProtocolFile {
                 // Common prefixes are not objects per se, and therefore do not have a date, content-length nor owner.
                 directoryObject.setLastModifiedDate(new Date(System.currentTimeMillis()));
                 directoryObject.setContentLength(0);
-                children[i] = FileFactory.getFile(childURL, parent, service, directoryObject);
+                Map<String, Object> parameters = new HashMap<>();
+                parameters.put("service", service);
+                parameters.put("object", directoryObject);
+                children[i] = FileFactory.getFile(childURL, parent, parameters);
                 i++;
             }
 
@@ -150,7 +171,7 @@ public abstract class S3File extends ProtocolFile {
             FileURL parentFileURL = this.fileURL.getParent();
             if(parentFileURL!=null) {
                 try {
-                    parent = FileFactory.getFile(parentFileURL, null, service);
+                    parent = FileFactory.getFile(parentFileURL, null, Collections.singletonMap("service", service));
                 }
                 catch(IOException e) {
                     // No parent

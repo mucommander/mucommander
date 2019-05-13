@@ -19,14 +19,15 @@
 
 package com.mucommander.commons.file.protocol.hadoop;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.protocol.ProtocolProvider;
+import java.io.IOException;
+import java.util.Map;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 
-import java.io.IOException;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.ProtocolProvider;
 
 /**
  * A file protocol provider for the Amazon S3 protocol, provided by the Hadoop virtual filesystem.
@@ -39,9 +40,9 @@ import java.io.IOException;
  */
 public class S3ProtocolProvider implements ProtocolProvider {
 
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return instantiationParams.length==0
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+        return instantiationParams.isEmpty()
             ?new S3File(url)
-            :new S3File(url, (FileSystem)instantiationParams[0], (FileStatus)instantiationParams[1]);
+            :new S3File(url, (FileSystem)instantiationParams.get("file-system"), (FileStatus)instantiationParams.get("file-status"));
     }
 }

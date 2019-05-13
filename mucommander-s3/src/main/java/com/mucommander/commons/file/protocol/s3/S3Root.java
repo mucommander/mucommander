@@ -19,14 +19,26 @@
 
 package com.mucommander.commons.file.protocol.s3;
 
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.io.RandomAccessInputStream;
-import org.jets3t.service.S3Service;
-import org.jets3t.service.S3ServiceException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jets3t.service.S3Service;
+import org.jets3t.service.S3ServiceException;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileAttributes;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.SimpleFileAttributes;
+import com.mucommander.commons.file.SimpleFilePermissions;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.io.RandomAccessInputStream;
 
 /**
  * <code>S3Root</code> represents the Amazon S3 root resource, also known as 'service'.
@@ -91,7 +103,10 @@ public class S3Root extends S3File {
                 bucketURL = (FileURL)fileURL.clone();
                 bucketURL.setPath("/"+buckets[i].getName());
 
-                bucketFiles[i] = FileFactory.getFile(bucketURL, null, service, buckets[i]);
+                Map<String, Object> parameters = new HashMap<>();
+                parameters.put("service", service);
+                parameters.put("bucket", buckets[i]);
+                bucketFiles[i] = FileFactory.getFile(bucketURL, null, parameters);
             }
 
             return bucketFiles;

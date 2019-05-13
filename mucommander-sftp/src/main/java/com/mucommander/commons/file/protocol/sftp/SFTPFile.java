@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -453,7 +454,7 @@ public class SFTPFile extends ProtocolFile {
             childURL = (FileURL) fileURL.clone();
             childURL.setPath(parentPath + filename);
 
-            children[fileCount++] = FileFactory.getFile(childURL, this, new SFTPFileAttributes(childURL, file.getAttrs()));
+            children[fileCount++] = FileFactory.getFile(childURL, this, Collections.singletonMap("attributes", new SFTPFileAttributes(childURL, file.getAttrs())));
         }
 
         // Create new array of the exact file count

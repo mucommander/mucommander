@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.util.Collections;
 
 
 /**
@@ -504,7 +505,7 @@ import java.net.MalformedURLException;
                 childURL.setPath(smbFile.getURL().getPath());
 
                 // Use SMBFile private constructor to recycle the SmbFile instance
-                children[currentIndex++] = FileFactory.getFile(childURL, this, smbFile);
+                children[currentIndex++] = FileFactory.getFile(childURL, this, Collections.singletonMap("parentSmbFile", smbFile));
             }
 
             return children;

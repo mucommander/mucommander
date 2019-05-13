@@ -19,13 +19,14 @@
 
 package com.mucommander.commons.file.protocol.smb;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 
 import jcifs.smb.SmbFile;
-
-import java.io.IOException;
 
 /**
  * This class is the provider for the SMB filesystem implemented by {@link com.mucommander.commons.file.protocol.smb.SMBFile}.
@@ -108,9 +109,9 @@ public class SMBProtocolProvider implements ProtocolProvider {
     // ProtocolProvider implementation //
     /////////////////////////////////////
 
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return instantiationParams.length==0
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+        return instantiationParams.isEmpty()
             ?new SMBFile(url)
-            :new SMBFile(url, (SmbFile)instantiationParams[0]);
+            :new SMBFile(url, (SmbFile)instantiationParams.get("parent"));
     }
 }

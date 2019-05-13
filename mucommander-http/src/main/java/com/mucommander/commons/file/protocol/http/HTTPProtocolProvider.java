@@ -32,6 +32,7 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 
 /**
  * This class is the provider for the HTTP/HTTPS filesystem implemented by {@link com.mucommander.commons.file.protocol.http.HTTPFile}.
@@ -96,9 +97,9 @@ public class HTTPProtocolProvider implements ProtocolProvider {
        HttpsURLConnection.setDefaultHostnameVerifier(permissiveHostnameVerifier);
     }
     
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return instantiationParams.length==0
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+        return instantiationParams.isEmpty()
             ?new HTTPFile(url)
-            :new HTTPFile(url, (URL)instantiationParams[0]);
+            :new HTTPFile(url, (URL)instantiationParams.get("url"));
     }
 }

@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
@@ -501,7 +502,7 @@ public class UNCFile extends ProtocolFile {
 
             // Retrieves an AbstractFile (LocalFile or AbstractArchiveFile) instance that's potentially already in
             // the cache, reuse this file as the file's parent, and the already-created java.io.File instance.
-            children[i] = FileFactory.getFile(childURL, this, file);
+            children[i] = FileFactory.getFile(childURL, this, Collections.singletonMap("createdFile", file));
         }
 
         return children;

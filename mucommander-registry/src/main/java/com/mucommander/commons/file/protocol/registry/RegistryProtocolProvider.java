@@ -19,6 +19,7 @@
 package com.mucommander.commons.file.protocol.registry;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
@@ -31,7 +32,7 @@ import com.mucommander.commons.file.protocol.ProtocolProvider;
  */
 public class RegistryProtocolProvider implements ProtocolProvider {
 	@Override
-	public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
+	public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
 		return new RegistryImage(url);
 	}
 

@@ -18,11 +18,12 @@
 
 package com.mucommander.commons.file.protocol.vsphere;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-
-import java.io.IOException;
 
 /**
  * This class is the provider for the VSphere filesystem implemented by
@@ -37,8 +38,7 @@ public class VSphereProtocolProvider implements ProtocolProvider {
 	// ProtocolProvider Implementation //
 	// ///////////////////////////////////
 
-	public AbstractFile getFile(FileURL url, Object... instantiationParams)
-			throws IOException {
+	public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
 		return new VSphereFile(url);
 	}
 }

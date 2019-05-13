@@ -40,7 +40,7 @@ package com.mucommander.commons.file;
  *
  * @see FileURL#getAuthenticationType()
  * @see FileFactory#setDefaultAuthenticator(Authenticator)
- * @see FileFactory#getFile(FileURL, AbstractFile, Authenticator, Object...)
+ * @see FileFactory#getFile(FileURL, AbstractFile, Authenticator, java.util.Map)
  * @author Maxence Bernard
  */
 public interface Authenticator {

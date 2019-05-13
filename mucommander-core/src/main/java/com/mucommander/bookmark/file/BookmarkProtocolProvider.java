@@ -18,14 +18,15 @@
 
 package com.mucommander.bookmark.file;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-
-import java.io.IOException;
 
 /**
  * This class is the provider for the bookmark filesystem implemented by {@link com.mucommander.bookmark.file.BookmarkFile}.
@@ -38,7 +39,7 @@ public class BookmarkProtocolProvider implements ProtocolProvider {
     /** Protocol for the virtual bookmarks file system. */
     public static final String BOOKMARK = "bookmark";
 
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
         // If the URL contains a path but no host, it's illegal.
         // If it contains neither host nor path, we're browsing bookmarks://
         if(url.getHost() == null) {

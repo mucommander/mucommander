@@ -19,8 +19,9 @@
 
 package com.mucommander.commons.file.protocol.s3;
 
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.protocol.ProtocolProvider;
+import java.io.IOException;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.jets3t.service.Jets3tProperties;
 import org.jets3t.service.S3Service;
@@ -28,8 +29,11 @@ import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.security.AWSCredentials;
 
-import java.io.IOException;
-import java.util.StringTokenizer;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.ProtocolProvider;
 
 /**
  * A file protocol provider for the Amazon S3 protocol.
@@ -37,7 +41,7 @@ import java.util.StringTokenizer;
  * @author Maxence Bernard
  */
 public class S3ProtocolProvider implements ProtocolProvider {
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
         Credentials credentials = url.getCredentials();
         if(credentials==null || credentials.getLogin().equals("") || credentials.getPassword().equals(""))
             throw new AuthException(url);
@@ -45,7 +49,7 @@ public class S3ProtocolProvider implements ProtocolProvider {
         S3Service service;
         String bucketName;
 
-        if(instantiationParams.length==0) {
+        if(instantiationParams.isEmpty()) {
             try {
                 service = new RestS3Service(new AWSCredentials(credentials.getLogin(), credentials.getPassword()));
                 Jets3tProperties props = new Jets3tProperties();
@@ -56,7 +60,7 @@ public class S3ProtocolProvider implements ProtocolProvider {
             }
         }
         else {
-            service = (S3Service)instantiationParams[0];
+            service = (S3Service)instantiationParams.get("service");
         }
 
         String path = url.getPath();
@@ -70,16 +74,18 @@ public class S3ProtocolProvider implements ProtocolProvider {
         bucketName = st.nextToken();
 
         // Object resource
-        if(st.hasMoreTokens()) {
-            if(instantiationParams.length==2)
-                return new S3Object(url, service, bucketName, (org.jets3t.service.model.S3Object)instantiationParams[1]);
+        if (st.hasMoreTokens()) {
+            org.jets3t.service.model.S3Object obj = (org.jets3t.service.model.S3Object) instantiationParams.get("object");
+            if (obj != null)
+                return new S3Object(url, service, bucketName, obj);
 
             return new S3Object(url, service, bucketName);
         }
 
         // Bucket resource
-        if(instantiationParams.length==2)
-            return new S3Bucket(url, service, (org.jets3t.service.model.S3Bucket)instantiationParams[1]);
+        org.jets3t.service.model.S3Bucket bucket = (org.jets3t.service.model.S3Bucket) instantiationParams.get("bucket");
+        if (bucket != null)
+            return new S3Bucket(url, service, bucket);
 
         return new S3Bucket(url, service, bucketName);
     }

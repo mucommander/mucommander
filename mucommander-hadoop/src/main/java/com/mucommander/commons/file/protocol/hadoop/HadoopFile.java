@@ -19,19 +19,42 @@
 
 package com.mucommander.commons.file.protocol.hadoop;
 
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.protocol.ProtocolFile;
-import com.mucommander.commons.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.*;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.PathFilter;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.PermissionAccess;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.SimpleFilePermissions;
+import com.mucommander.commons.file.SyncedFileAttributes;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.filter.FilenameFilter;
+import com.mucommander.commons.file.protocol.ProtocolFile;
+import com.mucommander.commons.io.ByteCounter;
+import com.mucommander.commons.io.ByteUtils;
+import com.mucommander.commons.io.CounterOutputStream;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 
 /**
  * This abstact class provides access to the Hadoop virtual filesystem, which, like the muCommander file API, provides a
@@ -387,7 +410,10 @@ public abstract class HadoopFile extends ProtocolFile {
             childURL = (FileURL)fileURL.clone();
             childURL.setPath(parentPath + childStatus.getPath().getName());
 
-            children[i] = FileFactory.getFile(childURL, this, fs, childStatus);
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("file-system", fs);
+            parameters.put("file-status", childStatus);
+            children[i] = FileFactory.getFile(childURL, this, parameters);
         }
 
         return children;

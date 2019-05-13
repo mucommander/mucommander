@@ -20,10 +20,12 @@
 package com.mucommander.commons.file;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
@@ -404,15 +406,29 @@ public class FileFactory {
     }
 
     /**
-     * Shorthand for {@link #getFile(FileURL, AbstractFile, Authenticator, Object...)} called with the
-     * {@link #getDefaultAuthenticator() default authenticator}.
+     * Shorthand for {@link #getFile(FileURL, AbstractFile, Authenticator, Map)} called with the
+     * {@link #getDefaultAuthenticator() default authenticator} and no instantiation parameters.
      *
      * @param fileURL the file URL representing the file to be created
      * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
      * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
      * @throws java.io.IOException if something went wrong during file creation.
      */
-    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Object... instantiationParams) throws IOException {
+    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent) throws IOException {
+        return getFile(fileURL, parent, defaultAuthenticator, Collections.emptyMap());
+    }
+
+    /**
+     * Shorthand for {@link #getFile(FileURL, AbstractFile, Authenticator, Map)} called with the
+     * {@link #getDefaultAuthenticator() default authenticator}.
+     *
+     * @param fileURL the file URL representing the file to be created
+     * @param parent the parent AbstractFile to use as the created file's parent, can be <code>null</code>
+     * @param instantiationParams parameters used to instantiate the file
+     * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
+     * @throws java.io.IOException if something went wrong during file creation.
+     */
+    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Map<String, Object> instantiationParams) throws IOException {
         return getFile(fileURL, parent, defaultAuthenticator, instantiationParams);
     }
 
@@ -431,7 +447,7 @@ public class FileFactory {
      * @return an instance of {@link AbstractFile} for the given {@link FileURL}.
      * @throws java.io.IOException if something went wrong during file creation.
      */
-    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Authenticator authenticator, Object... instantiationParams) throws IOException {
+    public static AbstractFile getFile(FileURL fileURL, AbstractFile parent, Authenticator authenticator, Map<String, Object> instantiationParams) throws IOException {
         String protocol = fileURL.getScheme();
         if(!isRegisteredProtocol(protocol))
             throw new IOException("Unsupported file protocol: "+protocol);
@@ -440,7 +456,7 @@ public class FileFactory {
         // If there are instantiationParams (the file was created by the AbstractFile implementation directly, that is
         // by ls()), any existing file in the pool must be replaced with a new, more up-to-date one.
         FilePool filePool = FILE_POOL_MAP.get(fileURL.getScheme().toLowerCase());
-        if(instantiationParams.length==0) {
+        if(instantiationParams.isEmpty()) {
             // Note: FileURL#equals(Object) and #hashCode() take into account credentials and properties and are
             // trailing slash insensitive (e.g. '/root' and '/root/' URLS are one and the same)
             AbstractFile file = filePool.get(fileURL);
@@ -535,7 +551,7 @@ public class FileFactory {
         return currentFile;
     }
 
-    private static AbstractFile createRawFile(FileURL fileURL, Authenticator authenticator, Object... instantiationParams) throws IOException {
+    private static AbstractFile createRawFile(FileURL fileURL, Authenticator authenticator, Map<String, Object> instantiationParams) throws IOException {
         String scheme = fileURL.getScheme().toLowerCase();
 
         // Special case for local files to avoid provider hashtable lookup and other unnecessary checks

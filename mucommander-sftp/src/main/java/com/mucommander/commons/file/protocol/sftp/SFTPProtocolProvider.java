@@ -19,11 +19,12 @@
 
 package com.mucommander.commons.file.protocol.sftp;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-
-import java.io.IOException;
 
 /**
  * This class is the provider for the FTP filesystem implemented by {@link com.mucommander.commons.file.protocol.ftp.FTPFile}.
@@ -33,9 +34,9 @@ import java.io.IOException;
  */
 public class SFTPProtocolProvider implements ProtocolProvider {
 
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return instantiationParams.length==0
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+        return instantiationParams.isEmpty()
             ?new SFTPFile(url)
-            :new SFTPFile(url, (SFTPFile.SFTPFileAttributes)instantiationParams[0]);
+            :new SFTPFile(url, (SFTPFile.SFTPFileAttributes)instantiationParams.get("attributes"));
     }
 }

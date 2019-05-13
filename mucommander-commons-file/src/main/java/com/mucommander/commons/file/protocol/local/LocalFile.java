@@ -32,6 +32,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -1018,7 +1019,7 @@ public class LocalFile extends ProtocolFile {
 
             // Retrieves an AbstractFile (LocalFile or AbstractArchiveFile) instance that's potentially already in
             // the cache, reuse this file as the file's parent, and the already-created java.io.File instance.
-            children[i] = FileFactory.getFile(childURL, this, files[i]);
+            children[i] = FileFactory.getFile(childURL, this, Collections.singletonMap("createdFile", files[i]));
         }
 
         return children;

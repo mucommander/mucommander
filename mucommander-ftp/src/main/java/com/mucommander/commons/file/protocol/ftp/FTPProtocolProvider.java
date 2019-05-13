@@ -19,11 +19,12 @@
 
 package com.mucommander.commons.file.protocol.ftp;
 
+import java.io.IOException;
+import java.util.Map;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-
-import java.io.IOException;
 
 /**
  * This class is the provider for the FTP filesystem implemented by {@link com.mucommander.commons.file.protocol.ftp.FTPFile}.
@@ -72,9 +73,9 @@ public class FTPProtocolProvider implements ProtocolProvider {
     // ProtocolProvider Implementation //
     /////////////////////////////////////
 
-    public AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException {
-        return instantiationParams.length==0
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+        return instantiationParams.isEmpty()
             ?new FTPFile(url)
-            :new FTPFile(url, (org.apache.commons.net.ftp.FTPFile)instantiationParams[0]);
+            :new FTPFile(url, (org.apache.commons.net.ftp.FTPFile)instantiationParams.get("parentFtpFile"));
     }
 }

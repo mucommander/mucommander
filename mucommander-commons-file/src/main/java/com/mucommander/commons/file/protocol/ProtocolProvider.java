@@ -20,6 +20,7 @@
 package com.mucommander.commons.file.protocol;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -46,5 +47,5 @@ public interface ProtocolProvider {
      * @return a new instance of <code>AbstractFile</code> that matches the specified URL.
      * @throws IOException if an error occurs.
      */
-    AbstractFile getFile(FileURL url, Object... instantiationParams) throws IOException;
+    AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException;
 }
