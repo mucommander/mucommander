@@ -488,15 +488,13 @@ public class UNCFile extends ProtocolFile {
 
         int nbFiles = files.length;
         AbstractFile children[] = new AbstractFile[nbFiles];
-        FileURL childURL;
-        File file;
 
         for(int i=0; i<nbFiles; i++) {
-            file = files[i];
+            File file = files[i];
 
             // Clone the FileURL of this file and set the child's path, this is more efficient than creating a new
             // FileURL instance from scratch.
-            childURL = (FileURL)fileURL.clone();
+            FileURL childURL = (FileURL)fileURL.clone();
 
             childURL.setPath(addTrailingSeparator(fileURL.getPath())+file.getName());
 

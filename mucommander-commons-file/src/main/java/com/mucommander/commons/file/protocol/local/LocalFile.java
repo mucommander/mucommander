@@ -500,11 +500,9 @@ public class LocalFile extends ProtocolFile {
         // Warning : No file operation should be performed on the resolved folders as under Win32, this would cause a
         // dialog to appear for removable drives such as A:\ if no disk is present.
         File fileRoots[] = File.listRoots();
-
-        int nbFolders = fileRoots.length;
-        for(int i=0; i<nbFolders; i++)
+        for (File fileRoot : fileRoots)
             try {
-                v.add(FileFactory.getFile(fileRoots[i].getAbsolutePath(), true));
+                v.add(FileFactory.getFile(fileRoot.getAbsolutePath(), true));
             }
             catch(IOException e) {}
     }
@@ -578,10 +576,8 @@ public class LocalFile extends ProtocolFile {
         // Adds subfolders
         try {
             AbstractFile volumesFiles[] = volumesFolder.ls();
-            int nbFiles = volumesFiles.length;
-            AbstractFile folder;
-            for(int i=0; i<nbFiles; i++)
-                if((folder=volumesFiles[i]).isDirectory()) {
+            for (AbstractFile folder : volumesFiles)
+                if(folder.isDirectory()) {
                     // The primary hard drive (the one corresponding to '/') is listed under Volumes and should be
                     // returned as the first volume
                     if(folder.getCanonicalPath().equals("/"))
@@ -1008,12 +1004,11 @@ public class LocalFile extends ProtocolFile {
 
         int nbFiles = files.length;
         AbstractFile children[] = new AbstractFile[nbFiles];
-        FileURL childURL;
 
         for(int i=0; i<nbFiles; i++) {
             // Clone the FileURL of this file and set the child's path, this is more efficient than creating a new
             // FileURL instance from scratch.
-            childURL = (FileURL)fileURL.clone();
+            FileURL childURL = (FileURL)fileURL.clone();
 
 			childURL.setPath(absPath+SEPARATOR+files[i].getName());
 
@@ -1080,30 +1075,26 @@ public class LocalFile extends ProtocolFile {
         // Looks for the volume that best matches this file, i.e. the volume that is the deepest parent of this file.
         // If this file is itself a volume, return it.
         int bestDepth = -1;
-        int bestMatch = -1;
-        int depth;
-        AbstractFile volume;
-        String volumePath;
+        AbstractFile bestMatch = null;
         String thisPath = getAbsolutePath(true);
 
-        for(int i=0; i<volumes.length; i++) {
-            volume = volumes[i];
-            volumePath = volume.getAbsolutePath(true);
+        for (AbstractFile volume : volumes) {
+            String volumePath = volume.getAbsolutePath(true);
 
             if(thisPath.equals(volumePath)) {
                 return this;
             }
             else if(thisPath.startsWith(volumePath)) {
-                depth = PathUtils.getDepth(volumePath, volume.getSeparator());
+                int depth = PathUtils.getDepth(volumePath, volume.getSeparator());
                 if(depth>bestDepth) {
                     bestDepth = depth;
-                    bestMatch = i;
+                    bestMatch = volume;
                 }
             }
         }
 
-        if(bestMatch!=-1)
-            return volumes[bestMatch];
+        if (bestMatch != null)
+            return bestMatch;
 
         // If no volume matched this file (shouldn't normally happen), return the root folder
         return getRoot();
