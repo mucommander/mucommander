@@ -38,25 +38,42 @@ import com.mucommander.ui.main.MainFrame;
 public class Activator implements BundleActivator {
 
 	private ServiceRegistration<FileProtocolService> serviceRegistration;
+	private ServiceRegistration<FileProtocolService> service2Registration;
 	private ServiceRegistration<ProtocolPanelProvider> uiServiceRegistration;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		FileProtocolService service = new FileProtocolService() {
-			@Override
-			public String getSchema() {
-				return "http";
-			}
+		    @Override
+		    public String getSchema() {
+		        return "http";
+		    }
 
-			@Override
-			public ProtocolProvider getProtocolProvider() {
-				return new HTTPProtocolProvider();
-			}
+		    @Override
+		    public ProtocolProvider getProtocolProvider() {
+		        return new HTTPProtocolProvider();
+		    }
 
-			@Override
-			public SchemeHandler getSchemeHandler() {
-				return new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationType.AUTHENTICATION_OPTIONAL, null);
-			}
+		    @Override
+		    public SchemeHandler getSchemeHandler() {
+		        return new DefaultSchemeHandler(new DefaultSchemeParser(true), 80, "/", AuthenticationType.AUTHENTICATION_OPTIONAL, null);
+		    }
+		};
+		FileProtocolService service2 = new FileProtocolService() {
+		    @Override
+		    public String getSchema() {
+		        return "https";
+		    }
+
+		    @Override
+		    public ProtocolProvider getProtocolProvider() {
+		        return new HTTPProtocolProvider();
+		    }
+
+		    @Override
+		    public SchemeHandler getSchemeHandler() {
+		        return new DefaultSchemeHandler(new DefaultSchemeParser(true), 443, "/", AuthenticationType.AUTHENTICATION_OPTIONAL, null);
+		    }
 		};
 		ProtocolPanelProvider panelProvider = new ProtocolPanelProvider() {
 			@Override
@@ -70,12 +87,14 @@ public class Activator implements BundleActivator {
 			}
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
+		service2Registration = context.registerService(FileProtocolService.class, service2, null);
 		uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		serviceRegistration.unregister();
+		service2Registration.unregister();
 		uiServiceRegistration.unregister();
 	}
 
