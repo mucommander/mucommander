@@ -765,6 +765,22 @@ public abstract class AbstractFile implements FileAttributes {
      * @throws IOException if the child file could not be instantiated
      */
     public final AbstractFile getChild(String relativePath) throws IOException {
+        return getChild(relativePath, null);
+    }
+
+    /**
+     * Returns a child of this file, whose path is the concatenation of this file's path and the given relative path.
+     * Although this method does not enforce it, the specified path should be relative, i.e. should not start with
+     * a separator.<br/>
+     * An <code>IOException</code> may be thrown if the child file could not be instantiated but the returned file
+     * instance should never be <code>null</code>.
+     *
+     * @param relativePath the child's path, relative to this file's path
+     * @param template the file that properties of the new file should be taken from, may be null
+     * @return an AbstractFile representing the requested child file, never null
+     * @throws IOException if the child file could not be instantiated
+     */
+    public final AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
         FileURL childURL = (FileURL)getURL().clone();
         childURL.setPath(addTrailingSeparator(childURL.getPath())+ relativePath);
 
