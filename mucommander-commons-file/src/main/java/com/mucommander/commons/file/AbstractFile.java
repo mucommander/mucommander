@@ -844,7 +844,7 @@ public abstract class AbstractFile implements FileAttributes {
         if(filename.indexOf(getSeparator())!=-1)
             throw new IOException();
 
-        AbstractFile childFile = getChild(filename);
+        AbstractFile childFile = getChild(filename, template);
 
         // Use this file as the child's parent, it avoids creating a new AbstractFile instance when getParent() is called
         childFile.setParent(this);
