@@ -31,6 +31,7 @@ import javax.net.ssl.HttpsURLConnection;
 import org.ovirt.engine.sdk4.internal.containers.DiskContainer;
 import org.ovirt.engine.sdk4.types.DataCenter;
 import org.ovirt.engine.sdk4.types.Disk;
+import org.ovirt.engine.sdk4.types.DiskContentType;
 import org.ovirt.engine.sdk4.types.DiskStatus;
 import org.ovirt.engine.sdk4.types.ImageTransfer;
 import org.ovirt.engine.sdk4.types.ImageTransferDirection;
@@ -237,5 +238,10 @@ public class OvirtDisk extends OvirtFile {
                 }
             };
         }
+    }
+
+    @Override
+    public boolean isHidden() {
+        return disk != null && disk.contentType() == DiskContentType.OVF_STORE;
     }
 }

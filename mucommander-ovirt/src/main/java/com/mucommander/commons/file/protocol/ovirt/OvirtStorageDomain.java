@@ -26,9 +26,6 @@ import org.ovirt.engine.sdk4.internal.containers.DiskContainer;
 import org.ovirt.engine.sdk4.types.DataCenter;
 import org.ovirt.engine.sdk4.types.Disk;
 import org.ovirt.engine.sdk4.types.StorageDomain;
-import org.ovirt.engine.sdk4.types.StorageDomainType;
-import org.ovirt.engine.sdk4.types.StorageFormat;
-import org.ovirt.engine.sdk4.types.StorageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
