@@ -244,4 +244,16 @@ public class OvirtDisk extends OvirtFile {
     public boolean isHidden() {
         return disk != null && disk.contentType() == DiskContentType.OVF_STORE;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o==null || !(o instanceof OvirtDisk))
+            return false;
+        return disk != null && disk.id().equals(((OvirtDisk)o).disk.id());
+    }
+
+    @Override
+    public int hashCode() {
+        return disk != null ? disk.id().hashCode() : 0;
+    }
 }
