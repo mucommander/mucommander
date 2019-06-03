@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.muCommander;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -30,7 +31,6 @@ import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.shutdown.QuitDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
 
 /**
  * This action pops up the Quit confirmation dialog (if it hasn't been disabled) and if quit has been confirmed,
@@ -47,7 +47,7 @@ public class QuitAction extends MuAction {
     @Override
     public void performAction() {
         if(QuitDialog.confirmQuit())
-            WindowManager.quit();
+            muCommander.initiateShutdown();
     }
 
 	@Override

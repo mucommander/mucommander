@@ -185,47 +185,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     }
 
     /**
-     * Disposes all opened windows, ending with the one that is currently active if there is one, 
-     * or the last one which was activated.	
-     */
-    public static synchronized void quit() {
-        // Dispose all MainFrames, ending with the currently active one.
-        int nbFrames = instance.mainFrames.size();
-        if(nbFrames>0) {            // If an uncaught exception occurred in the startup sequence, there is no MainFrame to dispose
-            // Retrieve current MainFrame's index
-            int currentMainFrameIndex = getCurrentWindowIndex();
-            
-            // Dispose all MainFrames but the current one
-            for(int i=0; i<nbFrames; i++) {
-                if(i!=currentMainFrameIndex)
-                	instance.mainFrames.get(i).dispose();
-            }
-
-            // Dispose current MainFrame last so that its attributes (last folders, window position...) are saved last
-            // in the preferences
-            instance.mainFrames.get(currentMainFrameIndex).dispose();
-        }
-
-        // Dispose all other frames (viewers, editors...)
-        Frame frames[] = Frame.getFrames();
-        nbFrames = frames.length;
-        Frame frame;
-        for(int i=0; i<nbFrames; i++) {
-            frame = frames[i];
-            if(frame.isShowing()) {
-                LOGGER.debug("disposing frame#"+i);
-                frame.dispose();
-            }
-        }
-
-        // Initiate shutdown sequence.
-        // Important note: we cannot rely on windowClosed() triggering the shutdown sequence as
-        // Quit under OS X shuts down the app as soon as this method returns and as a result, 
-        // windowClosed() events are never dispatched to the MainFrames
-        muCommander.initiateShutdown();
-    }
-	
-    /**
      * Returns the index of the currently selected window
      * @return index of currently selected window
      */

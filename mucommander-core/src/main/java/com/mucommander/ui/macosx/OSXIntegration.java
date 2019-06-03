@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.macosx;
 
+import com.mucommander.muCommander;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.conf.MuConfigurations;
@@ -104,7 +105,7 @@ public class OSXIntegration {
             return false;
 
         // We got a green -> quit!
-        WindowManager.quit();
+        muCommander.initiateShutdown();
                 
         return true;
     }

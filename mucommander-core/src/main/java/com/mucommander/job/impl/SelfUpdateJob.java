@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.muCommander;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -39,7 +40,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
 
 /**
  * This job self-updates the muCommmander with a new JAR file that is fetched from a specified remote file.
@@ -250,7 +250,7 @@ public class SelfUpdateJob extends CopyJob {
             // Todo: we might want to do something about this
         }
         finally {
-            WindowManager.quit();
+            muCommander.initiateShutdown();
         }
     }
 

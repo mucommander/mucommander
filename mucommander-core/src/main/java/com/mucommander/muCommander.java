@@ -551,7 +551,7 @@ public class muCommander {
             InformationDialog.showErrorDialog(null, null, Translator.get("startup_error"), null, t);
 
             // Quit the application
-            WindowManager.quit();
+            muCommander.initiateShutdown();
         }
     }
 
