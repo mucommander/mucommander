@@ -247,7 +247,7 @@ public class FileTableModel extends AbstractTableModel {
             cellValuesCache[0][Column.NAME.ordinal()-1] = "..";
             cellValuesCache[0][Column.SIZE.ordinal()-1] = DIRECTORY_SIZE_STRING;
             currentFolderDateSnapshot = currentFolder.getDate();
-            cellValuesCache[0][Column.DATE.ordinal()-1] =	CustomDateFormat.format(new Date(currentFolderDateSnapshot));
+            cellValuesCache[0][Column.DATE.ordinal()-1] = CustomDateFormat.format(new Date(currentFolderDateSnapshot));
             // Don't display parent's permissions as they can have a different format from the folder contents
             // (e.g. for archives) and this looks weird
             cellValuesCache[0][Column.PERMISSIONS.ordinal()-1] = "";
@@ -255,11 +255,9 @@ public class FileTableModel extends AbstractTableModel {
             cellValuesCache[0][Column.GROUP.ordinal()-1] = "";
         }
 		
-        AbstractFile file;
         int fileIndex = 0;
-
         for(int i=parent==null?0:1; i<len; i++) {
-            file = getCachedFileAtRow(i);
+            AbstractFile file = getCachedFileAtRow(i);
             int cellIndex = fileArrayIndex[fileIndex]+(parent==null?0:1);
             cellValuesCache[cellIndex][Column.NAME.ordinal()-1] = file.getName();
             cellValuesCache[cellIndex][Column.SIZE.ordinal()-1] = file.isDirectory()?DIRECTORY_SIZE_STRING:SizeFormat.format(file.getSize(), sizeFormat);

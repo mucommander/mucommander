@@ -73,10 +73,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * Installs all custom look and feels.
      */
     private static void installCustomLookAndFeels() {
-        List<String> plafs;         // All available custom look and feels.
+        // All available custom look and feels.
+        List<String> plafs = MuConfigurations.getPreferences().getListVariable(MuPreference.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR);
 
         // Tries to retrieve the custom look and feels list.
-        if((plafs = MuConfigurations.getPreferences().getListVariable(MuPreference.CUSTOM_LOOK_AND_FEELS, MuPreferences.CUSTOM_LOOK_AND_FEELS_SEPARATOR)) == null)
+        if(plafs == null)
             return;
 
         // Goes through the list and install every custom look and feel we could find.

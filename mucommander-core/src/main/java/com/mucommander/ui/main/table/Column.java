@@ -18,11 +18,12 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.commons.file.util.FileComparator;
-import com.mucommander.text.Translator;
-
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.mucommander.commons.file.util.FileComparator;
+import com.mucommander.text.Translator;
 
 /**
  * Enumerates and describes the different columns used in the {@link FileTable}.
@@ -39,10 +40,8 @@ public enum Column {
     OWNER(true, false, FileComparator.OWNER_CRITERION, "ToggleOwnerColumn", "SortByOwner"),
     GROUP(true, false, FileComparator.GROUP_CRITERION, "ToggleGroupColumn", "SortByGroup");
 
-    private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<Integer,Column>(){{
-      for (Column column : Column.values()) {
-        put(column.ordinal(), column);
-      }
+    private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<Integer, Column>(){{
+        Arrays.stream(Column.values()).forEach(column -> put(column.ordinal(), column));
     }};
 
     /** Standard minimum column width */
