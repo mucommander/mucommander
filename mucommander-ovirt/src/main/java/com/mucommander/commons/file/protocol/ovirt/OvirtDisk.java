@@ -66,12 +66,13 @@ public class OvirtDisk extends OvirtFile {
 
     private void init() throws IOException {
         try (OvirtConnHandler connHandler = getConnHandler()) {
-            String diskName = fileURL.getFilename();
+            // this would need to change when/if we'll enable exploring the disk structure
+            String diskId = fileURL.getProperty("id");
             String sdName = fileURL.getParent().getFilename();
             String dcName = fileURL.getParent().getParent().getFilename();
             DataCenter dc = Utils.getDataCenter(connHandler, dcName);
             StorageDomain sd = Utils.getStorageDomain(connHandler, dc.id(), sdName);
-            disk = Utils.getDisk(connHandler, sd.id(), diskName);
+            disk = Utils.getDisk(connHandler, sd.id(), diskId);
         }
     }
 

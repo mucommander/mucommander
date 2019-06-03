@@ -69,6 +69,12 @@ public class Utils {
         return url;
     }
 
+    public static FileURL getChildUrl(OvirtFile parent, Disk disk) {
+        FileURL url = getChildUrl(parent, (Identified) disk);
+        url.setProperty("id", disk.id());
+        return url;
+    }
+
     public static DiskContainer toDiskProperties(AbstractFile file) throws UnsupportedFileOperationException, IOException {
         DiskContainer properties = new DiskContainer();
         properties.format(isQcow(file) ? DiskFormat.COW : DiskFormat.RAW);
@@ -174,7 +180,7 @@ public class Utils {
         return disk;
     }
 
-    public static Disk getDisk(OvirtConnHandler connHandler, String sdId, String diskName) throws IOException {
+    public static Disk getDisk(OvirtConnHandler connHandler, String sdId, String diskId) throws IOException {
         return connHandler
                 .getConnection()
                 .systemService()
@@ -184,7 +190,7 @@ public class Utils {
                 .disks()
                 .stream()
                 .filter(d -> d.storageDomains().iterator().next().id().equals(sdId))
-                .filter(d -> d.name().equals(diskName))
+                .filter(d -> d.id().equals(diskId))
                 .findAny()
                 .orElse(null);
     }
