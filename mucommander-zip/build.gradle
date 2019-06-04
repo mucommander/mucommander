@@ -45,7 +45,9 @@ jar {
             'com.mucommander.commons.util',
             'org.osgi.framework',
             'org.slf4j'
-           instruction 'Export-Package', 'com.mucommander.commons.file.archive.zip'
+           instruction 'Export-Package',
+            'com.mucommander.commons.file.archive.zip',
+            'com.mucommander.commons.file.archive.zip.provider'
            instruction 'Bundle-Activator', 'com.mucommander.commons.file.archive.zip.Activator'
        }
 }

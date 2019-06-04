@@ -37,8 +37,13 @@ jar {
            instruction 'Bundle-Description', 'Library with configuration tools'
            instruction 'Bundle-DocURL', 'http://www.mucommander.com'
            instruction 'Import-Package',
+            'org.apache.tools.bzip2',
+            'com.mucommander.commons.file',
             'com.mucommander.commons.file.archive.tar',
+            'com.mucommander.commons.file.archive.tar.provider',
             'com.mucommander.commons.file.archive.zip',
+            'com.mucommander.commons.file.archive.zip.provider',
+            'com.mucommander.commons.io',
             'org.osgi.framework',
             'org.slf4j'
            instruction 'Export-Package', 'com.mucommander.commons.file.archiver'

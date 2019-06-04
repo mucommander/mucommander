@@ -39,11 +39,14 @@ jar {
             'com.mucommander.commons.file.archive',
             'com.mucommander.commons.file.filter',
             'com.mucommander.commons.file.osgi',
+            'com.mucommander.commons.io',
             'com.mucommander.commons.util',
             'org.apache.tools.bzip2',
             'org.osgi.framework',
             'org.slf4j'
-           instruction 'Export-Package', 'com.mucommander.commons.file.archive.tar'
+           instruction 'Export-Package',
+            'com.mucommander.commons.file.archive.tar',
+            'com.mucommander.commons.file.archive.tar.provider'
            instruction 'Bundle-Activator', 'com.mucommander.commons.file.archive.tar.Activator'
        }
 }
