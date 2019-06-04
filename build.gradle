@@ -2,7 +2,10 @@ plugins {
     id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
     id 'org.ajoberstar.grgit' version '1.3.2'
+    id 'nebula.ospackage' version '6.2.1'
 }
+
+
 
 repositories.jcenter()
 
@@ -58,6 +61,58 @@ ext {
 
 test {
     useTestNG()
+}
+
+buildRpm {
+    postInstall file('package/unix/postinst')
+    postUninstall file('package/unix/postrm')
+
+    maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
+    summary = 'a lightweight, cross-platform file manager'
+    suggests('sun-java6-jre')
+    recommends('java-virtual-machine')
+    recommends('java2-runtime')
+    os = LINUX
+
+    from ("$buildDir/osgi") {
+        include 'run.sh'
+        rename 'run.sh','mucommander.sh'
+        fileMode 0755
+    }
+
+    from ('package') { include 'license.txt', 'readme.txt' }
+//    from ('package/unix/mucommander.sh') {
+//        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
+//                                       ARGS: ''])
+//    }
+    into '/usr/share/mucommander'
+
+    from ("$buildDir/osgi/bundle") {
+        include '*.jar'
+        into '/usr/share/mucommander/bundle'
+    }
+
+    from ("$buildDir/osgi/conf") {
+        include '*'
+        into '/usr/share/mucommander/conf'
+    }
+
+    from ("$buildDir/osgi/system-libs") {
+        include '*'
+        into '/usr/share/mucommander/system-libs'
+    }
+    from ('mucommander-core/src/main/resources/images/mucommander/icon128_24.png') {
+        rename '.*', 'mucommander.png'
+        addParentDirs = false
+        into '/usr/share/pixmaps'
+    }
+    from ('package/unix') {
+        include 'mucommander.desktop'
+        addParentDirs = false
+        into '/usr/share/applications'
+    }
+
+    directory( '/usr/share/mucommander/felix-cache' ,0775);
 }
 
 /*
@@ -259,41 +314,8 @@ buildDeb {
         into '/usr/share/applications'
     }
 }
-
-buildRpm {
-    postInstall file('package/unix/postinst')
-    postUninstall file('package/unix/postrm')
-
-    maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
-    summary = 'a lightweight, cross-platform file manager'
-    suggests('sun-java6-jre')
-    recommends('java-virtual-machine')
-    recommends('java2-runtime')
-    os = LINUX
-
-    from ("$buildDir/libs") {
-        include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
-    }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
-        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
-    }
-    into '/usr/share/mucommander'
-
-    from ('src/main/resources/images/mucommander/icon128_24.png') {
-        rename '.*', 'mucommander.png'
-        addParentDirs = false
-        into '/usr/share/pixmaps'
-    }
-    from ('package/unix') {
-        include 'mucommander.desktop'
-        addParentDirs = false
-        into '/usr/share/applications'
-    }
-}
 */
+
 
 task(afterEclipseImport).doLast {
     File f = file('.settings/org.eclipse.core.resources.prefs')
