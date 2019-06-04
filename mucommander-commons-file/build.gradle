@@ -37,6 +37,7 @@ jar {
            instruction 'Import-Package',
             'com.mucommander.commons.conf',
             'com.mucommander.commons.file',
+            'com.mucommander.commons.file.connection',
             'com.mucommander.commons.file.protocol',
             'com.mucommander.commons.io',
             'com.mucommander.commons.runtime',
