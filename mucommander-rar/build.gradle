@@ -18,7 +18,7 @@ configurations {
 
 dependencies {
     compile project(':mucommander-commons-file')
-    compile 'org.osgi:org.osgi.core:6.0.0'
+    compile 'org.osgi:osgi.core:7.0.0'
 
     // TODO: set this dependency properly
     compileOnly 'com.github.junrar:junrar:3.0.0'
