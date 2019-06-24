@@ -17,7 +17,7 @@ dependencies {
     compile 'org.jmdns:jmdns:3.5.1'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'com.beust:jcommander:1.66'
-    compile 'org.osgi:org.osgi.core:6.0.0'
+    compile 'org.osgi:osgi.core:7.0.0'
 
     compileOnly files('libs/java-extension.jar')
 

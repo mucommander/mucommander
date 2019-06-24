@@ -17,7 +17,7 @@ dependencies {
     compile project(':mucommander-commons-util')
     compile project(':mucommander-core')
     compile 'org.ovirt.engine.api:sdk:4.2.1'
-    compile 'org.osgi:org.osgi.core:6.0.0'
+    compile 'org.osgi:osgi.core:7.0.0'
 
     testCompile 'org.testng:testng:6.11'
     testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
