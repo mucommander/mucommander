@@ -1,9 +1,11 @@
 plugins {
-    id 'java-library'
-    id 'osgi'
+    id 'biz.aQute.bnd.builder'
 }
 
-repositories.jcenter()
+repositories {
+    jcenter()
+//    maven { url "http://mvnrepository.com/artifact" }
+}
 
 dependencies {
     compile project(':mucommander-commons-io')
@@ -14,7 +16,7 @@ dependencies {
     compile 'net.java.dev.jna:jna-platform:4.4.0'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'commons-collections:commons-collections:3.2.2'
-    compile 'org.apache.ant:ant:1.10.5'
+    compile 'org.apache.ant:ant:1.10.6'
     compile 'org.osgi:osgi.core:7.0.0'
 
     testCompile 'org.testng:testng:6.11'
@@ -22,48 +24,28 @@ dependencies {
 }
 
 jar {
-       manifest {
-           attributes("Specification-Title": "muCommander",
-                      "Specification-Vendor": "Arik Hadas",
-                      "Specification-Version": version,
-                      "Implementation-Title": "muCommander",
-                      "Implementation-Vendor": "Arik Hadas",
-                      "Implementation-Version": revision.substring(0, 7),
-                      "Build-Date": new Date().format('yyyyMMdd'),
-                      "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-           instruction 'Bundle-Vendor', 'muCommander'
-           instruction 'Bundle-Description', 'Library with file tools'
-           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package',
-            'com.mucommander.commons.conf',
-            'com.mucommander.commons.file',
-            'com.mucommander.commons.file.connection',
-            'com.mucommander.commons.file.protocol',
-            'com.mucommander.commons.io',
-            'com.mucommander.commons.runtime',
-            'com.mucommander.commons.util',
-            'org.apache.commons.collections.map',
-            'org.apache.tools.bzip2',
-            'org.osgi.framework',
-            'org.osgi.util.tracker',
-            'org.slf4j',
-            'org.xml.sax',
-            'org.xml.sax.helpers',
-            'javax.swing',
-            'javax.swing.filechooser',
-            'javax.swing.tree',
-            'javax.xml.parsers'
-           instruction 'Export-Package',
-            'com.mucommander.commons.file',
-            'com.mucommander.commons.file.archive',
-            'com.mucommander.commons.file.connection',
-            'com.mucommander.commons.file.filter',
-            'com.mucommander.commons.file.icon',
-            'com.mucommander.commons.file.icon.impl',
-            'com.mucommander.commons.file.osgi',
-            'com.mucommander.commons.file.protocol',
-            'com.mucommander.commons.file.protocol.local',
-            'com.mucommander.commons.file.util'
-            instruction 'Bundle-Activator', 'com.mucommander.commons.file.osgi.Activator'
-       }
+    bnd ('Bundle-Name': 'muCommander-commons-file',
+         'Bundle-Vendor': 'muCommander',
+         'Bundle-Description': 'Component with file-level utilities',
+         'Bundle-DocURL': 'https://www.mucommander.com',
+         'Bundle-Activator': 'com.mucommander.commons.file.osgi.Activator',
+         'Export-Package':
+            'com.mucommander.commons.file,' +
+            'com.mucommander.commons.file.archive,' +
+            'com.mucommander.commons.file.connection,' +
+            'com.mucommander.commons.file.filter,' +
+            'com.mucommander.commons.file.icon,' +
+            'com.mucommander.commons.file.icon.impl,' +
+            'com.mucommander.commons.file.osgi,' +
+            'com.mucommander.commons.file.protocol,' +
+            'com.mucommander.commons.file.protocol.local,' +
+            'com.mucommander.commons.file.util',
+         'Specification-Title': "muCommander",
+         'Specification-Vendor': "Arik Hadas",
+         'Specification-Version': version,
+         'Implementation-Title': "muCommander",
+         'Implementation-Vendor': "Arik Hadas",
+         'Implementation-Version': revision.substring(0, 7),
+         'Build-Date': new Date().format('yyyyMMdd'),
+         'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }

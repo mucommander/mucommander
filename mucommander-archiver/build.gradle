@@ -8,8 +8,7 @@
 
 // Apply the java-library plugin to add support for Java Library
 plugins {
-   id 'java-library'
-   id 'osgi'
+   id 'biz.aQute.bnd.builder'
 }
 
 // In this section you declare where to find the dependencies of your project
@@ -24,29 +23,18 @@ dependencies {
 }
 
 jar {
-       manifest {
-           attributes("Specification-Title": "muCommander",
-                      "Specification-Vendor": "Arik Hadas",
-                      "Specification-Version": version,
-                      "Implementation-Title": "muCommander",
-                      "Implementation-Vendor": "Arik Hadas",
-                      "Implementation-Version": revision.substring(0, 7),
-                      "Build-Date": new Date().format('yyyyMMdd'),
-                      "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-           instruction 'Bundle-Vendor', 'muCommander'
-           instruction 'Bundle-Description', 'Library with configuration tools'
-           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package',
-            'org.apache.tools.bzip2',
-            'com.mucommander.commons.file',
-            'com.mucommander.commons.file.archive.tar',
-            'com.mucommander.commons.file.archive.tar.provider',
-            'com.mucommander.commons.file.archive.zip',
-            'com.mucommander.commons.file.archive.zip.provider',
-            'com.mucommander.commons.io',
-            'org.osgi.framework',
-            'org.slf4j'
-           instruction 'Export-Package', 'com.mucommander.commons.file.archiver'
-       }
+   bnd ('Bundle-Name': 'muCommander-archiver',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Export-Package': 'com.mucommander.commons.file.archiver',
+        'Specification-Title': 'muCommander',
+        'Specification-Vendor': 'Arik Hadas',
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }
 
