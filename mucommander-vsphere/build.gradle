@@ -7,15 +7,15 @@
  */
 
 plugins {
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-    id 'osgi'
+    id 'biz.aQute.bnd.builder'
 }
 
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
     compile 'javax.xml.ws:jaxws-api:2.2.12'
+
+    runtime 'javax.jws:javax.jws-api:1.1'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -27,36 +27,18 @@ dependencies {
 repositories.jcenter()
 
 jar {
-       manifest {
-           attributes("Specification-Title": "muCommander",
-                      "Specification-Vendor": "Arik Hadas",
-                      "Specification-Version": version,
-                      "Implementation-Title": "muCommander",
-                      "Implementation-Vendor": "Arik Hadas",
-                      "Implementation-Version": revision.substring(0, 7),
-                      "Build-Date": new Date().format('yyyyMMdd'),
-                      "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-           instruction 'Bundle-Vendor', 'muCommander'
-           instruction 'Bundle-Description', 'Library with configuration tools'
-           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package',
-            'com.mucommander.commons.io',
-            'com.mucommander.commons.file',
-            'com.mucommander.commons.file.connection',
-            'com.mucommander.commons.file.osgi',
-            'com.mucommander.commons.file.protocol',
-            'com.mucommander.commons.file.util',
-            'com.mucommander.commons.runtime',
-            'com.mucommander.text',
-            'com.mucommander.ui.dialog.server',
-            'com.mucommander.ui.main',
-            'com.vmware.vim25',
-            'javax.swing',
-            'javax.xml.soap',
-            'javax.xml.ws.soap',
-            'org.osgi.framework',
-            'org.slf4j'
-           instruction 'Export-Package', 'com.mucommander.commons.protocol.vsphere'
-           instruction 'Bundle-Activator', 'com.mucommander.commons.file.protocol.vsphere.Activator'
-       }
+   bnd ('Bundle-Name': 'muCommander-vSphere',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Export-Package': 'com.mucommander.commons.protocol.vsphere',
+        'Bundle-Activator': 'com.mucommander.commons.file.protocol.vsphere.Activator',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }

@@ -1,7 +1,8 @@
 plugins {
-    id 'java-library'
-    id 'osgi'
+    id 'biz.aQute.bnd.builder'
 }
+
+apply plugin: 'java'
 
 repositories.jcenter()
 
@@ -30,70 +31,25 @@ dependencies {
 }
 
 jar {
-   manifest {
-       attributes("Specification-Title": "muCommander",
-                  "Specification-Vendor": "Arik Hadas",
-                  "Specification-Version": version,
-                  "Implementation-Title": "muCommander",
-                  "Implementation-Vendor": "Arik Hadas",
-                  "Implementation-Version": revision.substring(0, 7),
-                  "Build-Date": new Date().format('yyyyMMdd'),
-                  "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-       name = 'muCommander-core'
-       instruction 'Bundle-Vendor', 'muCommander'
-       instruction 'Bundle-Description', 'The core part of muCommander'
-       instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-       instruction 'Import-Package',
-        'ch.qos.logback.classic',
-        'ch.qos.logback.classic.spi',
-        'ch.qos.logback.core',
-        'ch.qos.logback.core.encoder',
-        'com.mucommander.commons.collections',
-        'com.mucommander.commons.conf',
-        'com.mucommander.commons.file',
-        'com.mucommander.commons.file.archive',
-        'com.mucommander.commons.file.archiver',
-        'com.mucommander.commons.file.connection',
-        'com.mucommander.commons.file.filter',
-        'com.mucommander.commons.file.icon',
-        'com.mucommander.commons.file.icon.impl',
-        'com.mucommander.commons.file.protocol',
-        'com.mucommander.commons.file.protocol.local',
-        'com.mucommander.commons.file.util',
-        'com.mucommander.commons.io',
-        'com.mucommander.commons.io.base64',
-        'com.mucommander.commons.io.bom',
-        'com.mucommander.commons.io.security',
-        'com.mucommander.commons.util',
-        'com.mucommander.commons.runtime',
-        'javax.jmdns',
-        'javax.swing',
-        'javax.swing.border',
-        'javax.swing.event',
-        'javax.swing.filechooser',
-        'javax.swing.plaf',
-        'javax.swing.plaf.basic',
-        'javax.swing.table',
-        'javax.swing.text',
-        'javax.swing.tree',
-        'javax.xml.parsers',
-        'org.osgi.framework',
-        'org.osgi.util.tracker',
-        'org.slf4j',
-        'org.xml.sax',
-        'org.xml.sax.helpers'
-       instruction 'DynamicImport-Package',
-        'com.apple.eawt',
-        'com.apple.eio',
-        'sun.security.action'
-       instruction 'Export-Package',
-        'com.mucommander.text',
-        'com.mucommander.ui.dialog',
-        'com.mucommander.ui.dialog.server',
-        'com.mucommander.ui.encoding',
-        'com.mucommander.ui.main',
-        'com.mucommander.ui.main.osgi',
-        'com.mucommander.process'
-       instruction 'Bundle-Activator', 'com.mucommander.Activator'
-   }
+   bnd ('Bundle-Name': 'muCommander-core',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'The core part of muCommander',
+        'Bundle-DocURL': 'https://www.mucommander.com',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-URL': "http://www.mucommander.com/version/nightly.xml",
+        'Import-Package': 'com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
+        'Export-Package':
+            'com.mucommander.process,' +
+            'com.mucommander.text,' +
+            'com.mucommander.ui.dialog,' +
+            'com.mucommander.ui.dialog.server,' +
+            'com.mucommander.ui.encoding,' +
+            'com.mucommander.ui.main',
+        'Bundle-Activator': 'com.mucommander.Activator')
 }

@@ -1,3 +1,12 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0'
+  }
+}
+
 plugins {
     id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
@@ -7,7 +16,10 @@ plugins {
 
 compileJava.options.encoding = 'UTF-8'
 
-repositories.jcenter()
+repositories {
+    jcenter()
+    mavenCentral()
+}
 
 dependencies {
     osgiRuntime project('mucommander-core')
@@ -42,7 +54,34 @@ dependencies {
 
 runOsgi {
     configSettings = 'felix'
-    config += [ 'org.osgi.framework.system.packages.extra': 'sun.security.action,com.apple.eawt,com.apple.eio', 'felix.log.level': 1 ]
+    osgiMain = 'org.apache.felix:org.apache.felix.main:6.0.3'
+    config += [
+        'org.osgi.framework.system.packages.extra':
+            'sun.net.www,' +
+            'sun.misc,' +
+            'com.sun.tools.javac,' +
+            'sun.plugin.protocol,' + //optional
+            'com.sun.java.browser.net,' + //optional
+            'javax.annotation,' +
+            'weblogic,' +
+            'sun.tools.native2ascii,' +
+            'sun.rmi.rmic,' +
+            'org.tukaani,' +
+            'org.tukaani.xz,' +
+            'org.apache.harmony.luni.util,' +
+            'org.apache.env,' +
+            'kaffe.util,' +
+            'javax.mail.internet,' +
+            'javax.activation,' +
+            'gnu.classpath,' +
+            'gnu.gcj,' +
+            'com.sun.tools.javah,' +
+            'com.sun.tools.javah.oldjavah,' +
+            'sun.tools.javac,' +
+            'sun.security.action,' +
+            'com.apple.eawt,' +
+            'com.apple.eio',
+        'felix.log.level': 1 ]
 }
 
 allprojects {

@@ -7,19 +7,17 @@
  */
 
 plugins {
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-    id 'osgi'
+    id 'biz.aQute.bnd.builder'
 }
 
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
     compile 'net.java.dev.jets3t:jets3t:0.9.4'
-    compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
-    compile group: 'javax.xml', name: 'jaxrpc-api', version: '1.1'
-    compile group: 'apache-bsf', name: 'bsf', version: '2.4.0'
-    compile group: 'javax.jms', name: 'jms', version: '1.1'
+    compile 'commons-logging:commons-logging:1.2'
+    compile 'javax.xml:jaxrpc-api:1.1'
+    compile 'javax.jms:jms:1.1'
+    compile 'org.glassfish:javax.xml.soap:10.0-b28'
     compile files('libs/mail.osgi-1.4.jar')
 
     testCompile 'org.testng:testng:6.11'
@@ -31,39 +29,18 @@ repositories.jcenter()
 repositories.mavenCentral()
 
 jar {
-       manifest {
-           attributes("Specification-Title": "muCommander",
-                      "Specification-Vendor": "Arik Hadas",
-                      "Specification-Version": version,
-                      "Implementation-Title": "muCommander",
-                      "Implementation-Vendor": "Arik Hadas",
-                      "Implementation-Version": revision.substring(0, 7),
-                      "Build-Date": new Date().format('yyyyMMdd'),
-                      "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-           instruction 'Bundle-Vendor', 'muCommander'
-           instruction 'Bundle-Description', 'Library with configuration tools'
-           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package',
-            'com.mucommander.commons.io',
-            'com.mucommander.commons.file',
-            'com.mucommander.commons.file.connection',
-            'com.mucommander.commons.file.osgi',
-            'com.mucommander.commons.file.protocol',
-            'com.mucommander.commons.runtime',
-            'com.mucommander.text',
-            'com.mucommander.ui.dialog.server',
-            'com.mucommander.ui.main',
-            'javax.swing',
-            'javax.xml.rpc',
-            'org.jets3t.service.impl.rest.httpclient',
-            'org.jets3t.service',
-            'org.jets3t.service.model',
-            'org.jets3t.service.security',
-            'org.osgi.framework',
-            'org.slf4j'
-           instruction 'DynamicImport-Package',
-            'com.sun.java.browser.net'
-           instruction 'Export-Package', 'com.mucommander.commons.protocol.s3'
-           instruction 'Bundle-Activator', 'com.mucommander.commons.file.protocol.s3.Activator'
-       }
+   bnd ('Bundle-Name': 'muCommander-s3',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Export-Package': 'com.mucommander.commons.protocol.s3',
+        'Bundle-Activator': 'com.mucommander.commons.file.protocol.s3.Activator',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }

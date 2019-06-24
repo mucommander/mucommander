@@ -7,9 +7,7 @@
  */
 
 plugins {
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-    id 'osgi'
+    id 'biz.aQute.bnd.builder'
 }
 
 configurations {
@@ -19,10 +17,8 @@ configurations {
 dependencies {
     compile project(':mucommander-commons-file')
     compile 'org.osgi:osgi.core:7.0.0'
-
-    // TODO: set this dependency properly
-    compileOnly 'com.github.junrar:junrar:3.0.0'
-    library 'com.github.junrar:junrar:3.0.0'
+    compile 'org.apache.commons:commons-vfs2:2.3'
+    compile 'com.github.junrar:junrar:4.0.0'
 
     testCompile 'org.testng:testng:6.11'
 }
@@ -31,30 +27,19 @@ dependencies {
 repositories.jcenter()
 
 jar {
-    from { configurations.library.collect { it.isDirectory() ? it : zipTree(it) } }
-       manifest {
-           attributes("Specification-Title": "muCommander",
-                      "Specification-Vendor": "Arik Hadas",
-                      "Specification-Version": version,
-                      "Implementation-Title": "muCommander",
-                      "Implementation-Vendor": "Arik Hadas",
-                      "Implementation-Version": revision.substring(0, 7),
-                      "Build-Date": new Date().format('yyyyMMdd'),
-                      "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-           instruction 'Bundle-Vendor', 'muCommander'
-           instruction 'Bundle-Description', 'Library with configuration tools'
-           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package',
-            //'com.github.junrar',
-            //'com.github.junrar.exception',
-            'com.mucommander.commons.file',
-            'com.mucommander.commons.file.archive',
-            'com.mucommander.commons.file.filter',
-            'com.mucommander.commons.file.osgi',
-            'com.mucommander.commons.util',
-            'org.osgi.framework',
-            'org.slf4j'
-           instruction 'Export-Package', 'com.mucommander.commons.file.archive.rar'
-           instruction 'Bundle-Activator', 'com.mucommander.commons.file.archive.rar.Activator'
-       }
+   from { configurations.library.collect { it.isDirectory() ? it : zipTree(it) } }
+   bnd ('Bundle-Name': 'muCommander-rar',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Export-Package': 'com.mucommander.commons.file.archive.rar',
+        'Bundle-Activator': 'com.mucommander.commons.file.archive.rar.Activator',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }

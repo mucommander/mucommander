@@ -7,9 +7,7 @@
  */
 
 plugins {
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
-    id 'osgi'
+    id 'biz.aQute.bnd.builder'
 }
 
 dependencies {
@@ -27,33 +25,18 @@ dependencies {
 repositories.jcenter()
 
 jar {
-       manifest {
-           attributes("Specification-Title": "muCommander",
-                      "Specification-Vendor": "Arik Hadas",
-                      "Specification-Version": version,
-                      "Implementation-Title": "muCommander",
-                      "Implementation-Vendor": "Arik Hadas",
-                      "Implementation-Version": revision.substring(0, 7),
-                      "Build-Date": new Date().format('yyyyMMdd'),
-                      "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-           instruction 'Bundle-Vendor', 'muCommander'
-           instruction 'Bundle-Description', 'Library with configuration tools'
-           instruction 'Bundle-DocURL', 'http://www.mucommander.com'
-           instruction 'Import-Package',
-            'com.jcraft.jsch',
-            'com.mucommander.commons.io',
-            'com.mucommander.commons.file',
-            'com.mucommander.commons.file.connection',
-            'com.mucommander.commons.file.osgi',
-            'com.mucommander.commons.file.protocol',
-            'com.mucommander.commons.runtime',
-            'com.mucommander.text',
-            'com.mucommander.ui.dialog.server',
-            'com.mucommander.ui.main',
-            'javax.swing',
-            'org.osgi.framework',
-            'org.slf4j'
-           instruction 'Export-Package', 'com.mucommander.commons.protocol.sftp'
-           instruction 'Bundle-Activator', 'com.mucommander.commons.file.protocol.sftp.Activator'
-       }
+   bnd ('Bundle-Name': 'muCommander-sftp',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Export-Package': 'com.mucommander.commons.protocol.sftp',
+        'Bundle-Activator': 'com.mucommander.commons.file.protocol.sftp.Activator',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }

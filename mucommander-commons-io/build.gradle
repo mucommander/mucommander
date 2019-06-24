@@ -1,6 +1,5 @@
 plugins {
-    id 'java-library'
-    id 'osgi'
+    id 'biz.aQute.bnd.builder'
 }
 
 repositories.jcenter()
@@ -13,25 +12,16 @@ dependencies {
 }
 
 jar {
-    manifest {
-        attributes("Specification-Title": "muCommander",
-                   "Specification-Vendor": "Arik Hadas",
-                   "Specification-Version": version,
-                   "Implementation-Title": "muCommander",
-                   "Implementation-Vendor": "Arik Hadas",
-                   "Implementation-Version": revision.substring(0, 7),
-                   "Build-Date": new Date().format('yyyyMMdd'),
-                   "Build-URL": "http://www.mucommander.com/version/nightly.xml")
-        instruction 'Bundle-Vendor', 'muCommander'
-        instruction 'Bundle-Description', 'Library with I/O tools'
-        instruction 'Import-Package',
-         'com.ibm.icu.text',
-         'org.osgi.framework',
-         'org.slf4j'
-        instruction 'Export-Package',
-         'com.mucommander.commons.io',
-         'com.mucommander.commons.io.base64',
-         'com.mucommander.commons.io.bom',
-         'com.mucommander.commons.io.security'
-       }
+    bnd ('Bundle-Name': 'muCommander-commons-io',
+         'Bundle-Vendor': 'muCommander',
+         'Bundle-Description': 'Library with I/O tools',
+         'Export-Package': 'com.mucommander.commons.io, com.mucommander.commons.io.base64, com.mucommander.commons.io.bom, com.mucommander.commons.io.security',
+         'Specification-Title': "muCommander",
+         'Specification-Vendor': "Arik Hadas",
+         'Specification-Version': version,
+         'Implementation-Title': "muCommander",
+         'Implementation-Vendor': "Arik Hadas",
+         'Implementation-Version': revision.substring(0, 7),
+         'Build-Date': new Date().format('yyyyMMdd'),
+         'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }
