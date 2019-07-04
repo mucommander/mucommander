@@ -27,9 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jets3t.service.Constants;
-import org.jets3t.service.S3ObjectsChunk;
 import org.jets3t.service.S3Service;
-import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.ServiceException;
+import org.jets3t.service.StorageObjectsChunk;
+import org.jets3t.service.model.StorageObject;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AuthException;
@@ -65,11 +66,11 @@ public abstract class S3File extends ProtocolFile {
         this.service = service;
     }
     
-    protected IOException getIOException(S3ServiceException e) throws IOException {
+    protected IOException getIOException(ServiceException e) throws IOException {
         return getIOException(e, fileURL);
     }
 
-    protected static IOException getIOException(S3ServiceException e, FileURL fileURL) throws IOException {
+    protected static IOException getIOException(ServiceException e, FileURL fileURL) throws IOException {
         handleAuthException(e, fileURL);
 
         Throwable cause = e.getCause();
@@ -82,7 +83,7 @@ public abstract class S3File extends ProtocolFile {
         return new IOException(e.getMessage());
     }
 
-    protected static void handleAuthException(S3ServiceException e, FileURL fileURL) throws AuthException {
+    protected static void handleAuthException(ServiceException e, FileURL fileURL) throws AuthException {
         int code = e.getResponseCode();
         if(code==401 || code==403)
             throw new AuthException(fileURL);
@@ -90,8 +91,8 @@ public abstract class S3File extends ProtocolFile {
     
     protected AbstractFile[] listObjects(String bucketName, String prefix, S3File parent) throws IOException {
         try {
-            S3ObjectsChunk chunk = service.listObjectsChunked(bucketName, prefix, "/", Constants.DEFAULT_OBJECT_LIST_CHUNK_SIZE, null, true);
-            org.jets3t.service.model.S3Object objects[] = chunk.getObjects();
+        	StorageObjectsChunk chunk = service.listObjectsChunked(bucketName, prefix, "/", Constants.DEFAULT_OBJECT_LIST_CHUNK_SIZE, null, true);
+            StorageObject objects[] = chunk.getObjects();
             String[] commonPrefixes = chunk.getCommonPrefixes();
 
             if(objects.length==0 && !prefix.equals("")) {
@@ -104,7 +105,7 @@ public abstract class S3File extends ProtocolFile {
             int i=0;
             String objectKey;
 
-            for(org.jets3t.service.model.S3Object object : objects) {
+            for(StorageObject object : objects) {
                 // Discard the object corresponding to the prefix itself
                 objectKey = object.getKey();
                 if(objectKey.equals(prefix))
@@ -148,7 +149,7 @@ public abstract class S3File extends ProtocolFile {
 
             return children;
         }
-        catch(S3ServiceException e) {
+        catch(ServiceException e) {
             throw getIOException(e);
         }
     }

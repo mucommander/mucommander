@@ -19,16 +19,27 @@
 
 package com.mucommander.commons.file.protocol.s3;
 
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.io.RandomAccessInputStream;
-import org.jets3t.service.S3Service;
-import org.jets3t.service.S3ServiceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import org.jets3t.service.S3Service;
+import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.FileAttributes;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.SimpleFilePermissions;
+import com.mucommander.commons.file.SyncedFileAttributes;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.io.RandomAccessInputStream;
 
 /**
  * <code>S3Bucket</code> represents an Amazon S3 bucket.
@@ -95,7 +106,7 @@ public class S3Bucket extends S3File {
         try {
             service.deleteBucket(bucketName);
         }
-        catch(S3ServiceException e) {
+        catch(ServiceException e) {
             throw getIOException(e);
         }
     }

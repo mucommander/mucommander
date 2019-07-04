@@ -34,7 +34,7 @@ dependencies {
     osgiRuntime project('mucommander-lst')
     osgiRuntime project('mucommander-archiver')
 //    osgiRuntime project('mucommander-hadoop')
-//    osgiRuntime project('mucommander-s3')
+    osgiRuntime project('mucommander-s3')
     osgiRuntime project('mucommander-registry')
     osgiRuntime project('mucommander-ovirt')
     osgiRuntime project('mucommander-libguestfs') // Note that this is a work-in-progress

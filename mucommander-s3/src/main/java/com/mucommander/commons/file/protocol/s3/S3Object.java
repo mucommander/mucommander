@@ -19,21 +19,34 @@
 
 package com.mucommander.commons.file.protocol.s3;
 
-import com.mucommander.commons.file.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.jets3t.service.S3Service;
+import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.ServiceException;
+import org.jets3t.service.model.StorageObject;
+import org.jets3t.service.model.StorageOwner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.FileAttributes;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.SimpleFilePermissions;
+import com.mucommander.commons.file.SyncedFileAttributes;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.StreamUtils;
-import org.jets3t.service.S3Service;
-import org.jets3t.service.S3ServiceException;
-import org.jets3t.service.model.S3Owner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * <code>S3Object</code> represents an Amazon S3 object.
@@ -178,7 +191,7 @@ public class S3Object extends S3File {
             atts.setDirectory(false);
             atts.setSize(0);
         }
-        catch(S3ServiceException e) {
+        catch(ServiceException e) {
             throw getIOException(e);
         }
     }
@@ -217,7 +230,7 @@ public class S3Object extends S3File {
             destObjectFile.atts.setAttributes(destObject);
             destObjectFile.atts.setExists(true);
         }
-        catch(S3ServiceException e) {
+        catch(ServiceException e) {
             throw getIOException(e);
         }
     }
@@ -234,7 +247,7 @@ public class S3Object extends S3File {
             // add unnecessary billing overhead since it reads the object chunk by chunk, each in a separate GET request.
             return service.getObject(bucketName, getObjectKey(false), null, null, null, null, offset==0?null:offset, null).getDataInputStream();
         }
-        catch(S3ServiceException e) {
+        catch(ServiceException e) {
             throw getIOException(e);
         }
     }
@@ -453,7 +466,7 @@ public class S3Object extends S3File {
                         .getDataInputStream();
                     this.offset = offset;
                 }
-                catch(S3ServiceException e) {
+                catch(ServiceException e) {
                     throw getIOException(e);
                 }
             }
@@ -608,23 +621,23 @@ public class S3Object extends S3File {
             updateExpirationDate(); // declare the attributes as 'fresh'
         }
 
-        private void setAttributes(org.jets3t.service.model.S3Object object) {
+        private void setAttributes(StorageObject object) {
             setDirectory(object.getKey().endsWith("/"));
             setSize(object.getContentLength());
             setDate(object.getLastModifiedDate().getTime());
             setPermissions(DEFAULT_PERMISSIONS);
             // Note: owner is null for common prefix objects
-            S3Owner owner = object.getOwner();
+            StorageOwner owner = object.getOwner();
             setOwner(owner==null?null:owner.getDisplayName());
         }
 
         private void fetchAttributes() throws AuthException {
             try {
-                setAttributes(service.getObjectDetails(bucketName, getObjectKey(), null, null, null, null));
+                setAttributes(service.getObjectDetails(bucketName, getObjectKey()));
                 // Object does not exist on the server
                 setExists(true);
             }
-            catch(S3ServiceException e) {
+            catch(ServiceException e) {
                 // Object does not exist on the server, or could not be retrieved
                 setExists(false);
 

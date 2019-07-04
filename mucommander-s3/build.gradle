@@ -15,20 +15,20 @@ plugins {
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
-    compile 'net.java.dev.jets3t:jets3t:0.7.1'
+    compile 'net.java.dev.jets3t:jets3t:0.9.4'
     compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
-    compile group: 'com.jamesmurty.utils', name: 'java-xmlbuilder', version: '1.2'
     compile group: 'javax.xml', name: 'jaxrpc-api', version: '1.1'
-    compile group: 'org.apache.axis', name: 'axis', version: '1.4'
-    compile group: 'wsdl4j', name: 'wsdl4j', version: '1.6.3'
+    compile group: 'apache-bsf', name: 'bsf', version: '2.4.0'
+    compile group: 'javax.jms', name: 'jms', version: '1.1'
+    compile files('libs/mail.osgi-1.4.jar')
 
     testCompile 'org.testng:testng:6.11'
     testCompile project(':mucommander-commons-file')
     testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
-// In this section you declare where to find the dependencies of your project
 repositories.jcenter()
+repositories.mavenCentral()
 
 jar {
        manifest {
@@ -55,8 +55,8 @@ jar {
             'com.mucommander.ui.main',
             'javax.swing',
             'javax.xml.rpc',
+            'org.jets3t.service.impl.rest.httpclient',
             'org.jets3t.service',
-            'org.jets3t.service.impl',
             'org.jets3t.service.model',
             'org.jets3t.service.security',
             'org.osgi.framework',
