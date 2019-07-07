@@ -13,7 +13,7 @@ plugins {
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
-    compile 'com.jcraft:jsch:0.1.53'
+    compile 'com.jcraft:jsch:0.1.55'
     compile 'com.jcraft:jzlib:1.1.3'
     compile 'org.osgi:osgi.core:7.0.0'
 
