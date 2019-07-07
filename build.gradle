@@ -55,6 +55,7 @@ dependencies {
 runOsgi {
     configSettings = 'felix'
     osgiMain = 'org.apache.felix:org.apache.felix.main:6.0.3'
+    javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
     config += [
         'org.osgi.framework.system.packages.extra':
             'sun.net.www,' +
