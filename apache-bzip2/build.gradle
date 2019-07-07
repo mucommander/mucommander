@@ -6,7 +6,6 @@
  * user guide available at https://docs.gradle.org/3.5/userguide/java_library_plugin.html
  */
 
-// Apply the java-library plugin to add support for Java Library
 plugins {
    id 'biz.aQute.bnd.builder'
 }
@@ -14,21 +13,13 @@ plugins {
 // In this section you declare where to find the dependencies of your project
 repositories.jcenter()
 
-dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':apache-bzip2')
-
-    testCompile 'org.testng:testng:6.11'
-}
-
 jar {
-   bnd ('Bundle-Name': 'muCommander-tar',
+   bnd ('Bundle-Name': 'muCommander-apache-bzip2',
         'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-Description': 'The org.apache.tools.bzip2 part of ant',
         'Bundle-DocURL': 'http://www.mucommander.com',
-        'Export-Package':
-            'com.mucommander.commons.file.archive.tar,' +
-            'com.mucommander.commons.file.archive.tar.provider',
+        'Export-Package': 'org.apache.tools.bzip2',
+        'Import-Package': '*',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
         'Specification-Version': version,
@@ -36,7 +27,6 @@ jar {
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-URL': "http://www.mucommander.com/version/nightly.xml",
-        'Bundle-Activator': 'com.mucommander.commons.file.archive.tar.Activator')
+        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
 }
 

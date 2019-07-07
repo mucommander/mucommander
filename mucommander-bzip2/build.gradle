@@ -16,6 +16,7 @@ repositories.jcenter()
 
 dependencies {
     compile project(':mucommander-commons-file')
+    compile project(':apache-bzip2')
 
     testCompile 'org.testng:testng:6.11'
 }

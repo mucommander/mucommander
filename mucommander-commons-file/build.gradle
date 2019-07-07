@@ -16,7 +16,6 @@ dependencies {
     compile 'net.java.dev.jna:jna-platform:4.4.0'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'commons-collections:commons-collections:3.2.2'
-    compile 'org.apache.ant:ant:1.10.6'
     compile 'org.osgi:osgi.core:7.0.0'
 
     testCompile 'org.testng:testng:6.11'
