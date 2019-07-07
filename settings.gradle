@@ -29,4 +29,6 @@ include 'mucommander-registry'
 include 'mucommander-ovirt'
 include 'mucommander-libguestfs'
 
+include 'apache-bzip2'
+
 rootProject.name = 'mucommander'

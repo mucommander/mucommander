@@ -28,6 +28,7 @@ dependencies {
     osgiRuntime project('mucommander-commons-file')
     osgiRuntime project('mucommander-commons-io')
     osgiRuntime project('mucommander-commons-runtime')
+    osgiRuntime project('apache-bzip2')
 
     osgiRuntime project('mucommander-ftp')
     osgiRuntime project('mucommander-sftp')
@@ -60,25 +61,10 @@ runOsgi {
         'org.osgi.framework.system.packages.extra':
             'sun.net.www,' +
             'sun.misc,' +
-            'com.sun.tools.javac,' +
             'sun.plugin.protocol,' + //optional
             'com.sun.java.browser.net,' + //optional
             'javax.annotation,' +
-            'weblogic,' +
-            'sun.tools.native2ascii,' +
-            'sun.rmi.rmic,' +
-            'org.tukaani,' +
-            'org.tukaani.xz,' +
-            'org.apache.harmony.luni.util,' +
-            'org.apache.env,' +
-            'kaffe.util,' +
-            'javax.mail.internet,' +
             'javax.activation,' +
-            'gnu.classpath,' +
-            'gnu.gcj,' +
-            'com.sun.tools.javah,' +
-            'com.sun.tools.javah.oldjavah,' +
-            'sun.tools.javac,' +
             'sun.security.action,' +
             'com.apple.eawt,' +
             'com.apple.eio',
