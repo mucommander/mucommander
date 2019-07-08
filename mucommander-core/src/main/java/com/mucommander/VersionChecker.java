@@ -133,21 +133,16 @@ public class VersionChecker extends DefaultHandler {
      */
     public static VersionChecker getInstance() throws Exception {
         VersionChecker instance;
-        InputStream    in;     // Input stream on the remote XML file.
 
         LOGGER.debug("Opening connection to " + RuntimeConstants.VERSION_URL);
 
         // Parses the remote XML file using UTF-8 encoding.
-        in = FileFactory.getFile(RuntimeConstants.VERSION_URL).getInputStream();
-        try {
+        try (InputStream in = FileFactory.getFile(RuntimeConstants.VERSION_URL).getInputStream()) {
             SAXParserFactory.newInstance().newSAXParser().parse(in, instance = new VersionChecker());
         }
         catch(Exception e) {
             LOGGER.debug("Failed to read version XML file at "+RuntimeConstants.VERSION_URL, e);
             throw e;
-        }
-        finally {
-            in.close();
         }
 
         // Makes sure we retrieved the information we were looking for.
