@@ -15,7 +15,11 @@ jar {
     bnd ('Bundle-Name': 'muCommander-commons-io',
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'Library with I/O tools',
-         'Export-Package': 'com.mucommander.commons.io, com.mucommander.commons.io.base64, com.mucommander.commons.io.bom, com.mucommander.commons.io.security',
+         'Export-Package':
+                'com.mucommander.commons.io,' +
+                'com.mucommander.commons.io.base64,' +
+                'com.mucommander.commons.io.bom,' +
+                'com.mucommander.commons.io.security',
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",
          'Specification-Version': version,
