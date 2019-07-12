@@ -26,7 +26,7 @@ jar {
    bnd ('Bundle-Name': 'muCommander-zip',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Library with configuration tools',
-        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package':
             'com.mucommander.commons.file.archive.zip,' +
             'com.mucommander.commons.file.archive.zip.provider',
@@ -37,7 +37,7 @@ jar {
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-URL': "http://www.mucommander.com/version/nightly.xml",
+        'Build-URL': "https://www.mucommander.com/version/nightly.xml",
         'Bundle-Activator': 'com.mucommander.commons.file.archive.zip.Activator')
 }
 

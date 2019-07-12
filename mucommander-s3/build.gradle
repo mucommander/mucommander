@@ -32,7 +32,7 @@ jar {
    bnd ('Bundle-Name': 'muCommander-s3',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Library with configuration tools',
-        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package': 'com.mucommander.commons.protocol.s3',
         'Bundle-Activator': 'com.mucommander.commons.file.protocol.s3.Activator',
         'Specification-Title': "muCommander",
@@ -42,5 +42,5 @@ jar {
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
+        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
 }

@@ -26,7 +26,7 @@ jar {
    bnd ('Bundle-Name': 'muCommander-http',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Plugin for HTTP protocol',
-        'Bundle-DocURL': 'http://www.mucommander.com',
+        'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package': 'com.mucommander.commons.file.protocol.http',
         'Bundle-Activator': 'com.mucommander.commons.file.protocol.http.Activator',
         'Specification-Title': "muCommander",
@@ -36,5 +36,5 @@ jar {
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-URL': "http://www.mucommander.com/version/nightly.xml")
+        'Build-URL': "https://www.mucommander.com/version/nightly.xml")
 }
