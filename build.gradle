@@ -79,7 +79,7 @@ allprojects {
 }
 
 ext {
-    // Open the Git repository in the current directory.
+    // Open the Git repository in the project's root directory.
     git = grgit.open(dir: project.rootDir)
 
     // Get commit id of HEAD.
