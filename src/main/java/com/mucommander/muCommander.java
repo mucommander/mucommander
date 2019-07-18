@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +69,7 @@ import com.mucommander.utils.MuLogging;
  */
 public class muCommander {
 	private static final Logger LOGGER = LoggerFactory.getLogger(muCommander.class);
-	
+
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     private SplashScreen  splashScreen;
@@ -259,7 +260,7 @@ public class muCommander {
     /**
      * Main method used to startup muCommander.
      * @param args command line arguments.
-     * @throws IOException if an unrecoverable error occurred during startup 
+     * @throws IOException if an unrecoverable error occurred during startup
      */
     public static void main(String args[]) throws IOException {
         muCommander mu = new muCommander();
@@ -358,7 +359,7 @@ public class muCommander {
             // were stored as preferences so when loading such preferences they could overload snapshot properties
             try {MuConfigurations.loadSnapshot();}
             catch(Exception e) {printFileError("Could not load snapshot", e, fatalWarnings);}
-            
+
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
             // to use the metal look, we need to know about it right about now.
             try {MuConfigurations.loadPreferences();}
@@ -416,7 +417,7 @@ public class muCommander {
 
             // Configure filesystems
             configureFilesystems();
-            
+
             // Initializes the desktop.
             try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
             catch(Exception e) {printError("Could not initialize desktop", e, true);}
@@ -505,12 +506,11 @@ public class muCommander {
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
-            WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
-
-            // If no initial path was specified, start a default main window.
-            if(WindowManager.getCurrentMainFrame() == null)
+            if (CollectionUtils.isNotEmpty(folders)) {
+                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+            } else {
                 WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
-
+            }
             // Done launching, wake up threads waiting for the application being launched.
             // Important: this must be done before disposing the splash screen, as this would otherwise create a deadlock
             // if the AWT event thread were waiting in #waitUntilLaunched .
@@ -545,7 +545,7 @@ public class muCommander {
                 splashScreen.dispose();
 
             LOGGER.error("Startup failed", t);
-            
+
             // Display an error dialog with a proper message and error details
             InformationDialog.showErrorDialog(null, null, Translator.get("startup_error"), null, t);
 
@@ -564,8 +564,8 @@ public class muCommander {
 
         // Use the FTP configuration option that controls whether to force the display of hidden files, or leave it for
         // the servers to decide whether to show them.
-        FTPProtocolProvider.setForceHiddenFilesListing(MuConfigurations.getPreferences().getVariable(MuPreference.LIST_HIDDEN_FILES, MuPreferences.DEFAULT_LIST_HIDDEN_FILES));        
-        
+        FTPProtocolProvider.setForceHiddenFilesListing(MuConfigurations.getPreferences().getVariable(MuPreference.LIST_HIDDEN_FILES, MuPreferences.DEFAULT_LIST_HIDDEN_FILES));
+
         // Use CredentialsManager for file URL authentication
         FileFactory.setDefaultAuthenticator(CredentialsManager.getAuthenticator());
 
