@@ -69,24 +69,15 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 	        return mainFrames;
 	    }
 	    else {
-	        MainFrame mainFrame = new MainFrame(
-	                new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
-	                getFileTableConfiguration(FolderPanelType.LEFT, -1),
-	                new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
-	                getFileTableConfiguration(FolderPanelType.RIGHT, -1));
-
+			MainFrame mainFrame = new MainFrame(
+					new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
+					getFileTableConfiguration(FolderPanelType.LEFT, -1),
+					new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
+					getFileTableConfiguration(FolderPanelType.RIGHT, -1));
+			
 	        // if there is no window saved in the snapshot file, use default settings
 	        if (nbFrames == 0) {
-	            Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-	            // Full screen bounds are not reliable enough, in particular under Linux+Gnome
-	            // so we simply make the initial window 4/5 of screen's size, and center it.
-	            // This should fit under any window manager / platform
-	            int x      = screenSize.width / 10;
-	            int y      = screenSize.height / 10;
-	            int width  = (int)(screenSize.width * 0.8);
-	            int height = (int)(screenSize.height * 0.8);
-
-	            mainFrame.setBounds(new Rectangle(x, y, width, height));
+                mainFrame.setBounds(getDefaultSize());
 	        }
 	        // otherwise, use the settings of the selected window
 	        else {
@@ -103,7 +94,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 	    }
 	}
 
-	private MainFrame createMainFrame(int index) {
+    private MainFrame createMainFrame(int index) {
 		int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
 		ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
 		for (int i=0; i<nbTabsInLeftPanel; ++i)

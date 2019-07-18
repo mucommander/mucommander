@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.frame;
 
 import java.util.Collection;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -172,7 +173,20 @@ public abstract class MainFrameBuilder {
 
         return conf;
     }
-    
+
+    protected Rectangle getDefaultSize() {
+        Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
+        // Full screen bounds are not reliable enough, in particular under Linux+Gnome
+        // so we simply make the initial window 4/5 of screen's size, and center it.
+        // This should fit under any window manager / platform
+        int x      = screenSize.width / 10;
+        int y      = screenSize.height / 10;
+        int width  = (int)(screenSize.width * 0.8);
+        int height = (int)(screenSize.height * 0.8);
+
+        return new Rectangle(x, y, width, height);
+    }
+
     protected AbstractFile getHomeFolder() {
     	return FileFactory.getFile(System.getProperty("user.home"));
     }
