@@ -65,19 +65,10 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 					getFileTableConfiguration(FolderPanelType.LEFT, -1),
 					new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
 					getFileTableConfiguration(FolderPanelType.RIGHT, -1));
-			
-			Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-	        // Full screen bounds are not reliable enough, in particular under Linux+Gnome
-	        // so we simply make the initial window 4/5 of screen's size, and center it.
-	        // This should fit under any window manager / platform
-	        int x      = screenSize.width / 10;
-	        int y      = screenSize.height / 10;
-	        int width  = (int)(screenSize.width * 0.8);
-	        int height = (int)(screenSize.height * 0.8);
 
-	        mainFrame.setBounds(new Rectangle(x, y, width, height));
+            mainFrame.setBounds(getDefaultSize());
 
-	        return new MainFrame[] {mainFrame};
+            return new MainFrame[] {mainFrame};
 		}
 		else {
 			MainFrame[] mainFrames = new MainFrame[nbFrames];
@@ -88,7 +79,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 		}
 	}
 
-	private MainFrame createMainFrame(int index) {
+    private MainFrame createMainFrame(int index) {
 		int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
 		ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
 		for (int i=0; i<nbTabsInLeftPanel; ++i)
