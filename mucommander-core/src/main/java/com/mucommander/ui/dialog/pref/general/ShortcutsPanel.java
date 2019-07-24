@@ -18,21 +18,40 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * 'Shortcuts' preferences panel.
@@ -50,7 +69,7 @@ public class ShortcutsPanel extends PreferencesPanel {
     public ShortcutsPanel(PreferencesDialog parent) {
         super(parent, Translator.get("shortcuts_panel" + ".title"));
         initUI();
-        setPreferredSize(new Dimension(0,0));
+        setPreferredSize(new Dimension(0, 0));
 
         shortcutsTable.addDialogListener(parent);
     }
@@ -85,8 +104,8 @@ public class ShortcutsPanel extends PreferencesPanel {
      * Returns a panel that contains the shortcuts editor table.
      */
     private JPanel createCenterPanel() {
-        JPanel panel = new JPanel(new GridLayout(1,0));
-        shortcutsTable.setPreferredColumnWidths(new double[] {0.6, 0.2, 0.2});
+        JPanel panel = new JPanel(new GridLayout(1, 0));
+        shortcutsTable.setPreferredColumnWidths(new double[]{0.6, 0.2, 0.2});
         panel.add(new JScrollPane(shortcutsTable));
         return panel;
     }
@@ -110,7 +129,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 
     private JPanel createButtonsPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 
         RemoveButton removeButton = new RemoveButton();
 
@@ -128,34 +147,109 @@ public class ShortcutsPanel extends PreferencesPanel {
         return panel;
     }
 
+    class DeferredDocumentListener implements DocumentListener {
+
+        private final Timer timer;
+
+        public DeferredDocumentListener(int timeOut, ActionListener listener, boolean repeats) {
+            timer = new Timer(timeOut, listener);
+            timer.setRepeats(repeats);
+        }
+
+        public void start() {
+            timer.start();
+        }
+
+        public void stop() {
+            timer.stop();
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            timer.restart();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            timer.restart();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            timer.restart();
+        }
+
+    }
+
     private JPanel createFilteringPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createEmptyBorder());
-        panel.add(new JLabel(Translator.get("shortcuts_panel" + ".show") + ":"));
+
+        final JTextField filterField = new JTextField();
+        filterField.setColumns(10);
 
         final JComboBox<ActionCategory> combo = new JComboBox<>();
         combo.addItem(ActionCategory.ALL);
-        for(ActionCategory category : ActionProperties.getActionCategory())
+        for (ActionCategory category : ActionProperties.getActionCategory())
             combo.addItem(category);
 
-        combo.addActionListener(new ActionListener() {
 
+        final ActionListener filterActionListener = new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
+
+
+                String f = filterField.getText().toLowerCase().trim();
+                String[] words = f.split("\\s+");
+
                 shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
                     @Override
-                    public boolean accept(String actionId) {
-                        return selectedActionCategory.contains(actionId);
+                    public boolean accept(String actionId, String rowAsText) {
+                        if (selectedActionCategory != null && !selectedActionCategory.contains(actionId)) {
+                            return false;
+                        }
+                        if (words.length == 0) {
+                            return true;
+                        }
+                        for (String word : words) {
+                            if (!rowAsText.contains(word)) {
+                                return false;
+                            }
+                        }
+                        return true;
                     }
                 });
                 tooltipBar.showDefaultMessage();
+                if (e.getSource() == filterField) {
+                    filterField.requestFocus();
+                }
+            }
+        };
+
+
+        combo.addActionListener(filterActionListener);
+        combo.setSelectedIndex(0);
+
+        DeferredDocumentListener debounceListener = new DeferredDocumentListener(250, filterActionListener, true);
+        filterField.getDocument().addDocumentListener(debounceListener);
+        filterField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                debounceListener.start();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                debounceListener.stop();
             }
         });
 
-        combo.setSelectedIndex(0);
+        panel.add(new JLabel(Translator.get("shortcuts_panel" + ".filter") + ":"));
+        panel.add(filterField);
 
+        panel.add(new JLabel(Translator.get("shortcuts_panel" + ".show") + ":"));
         panel.add(combo);
-
         return panel;
     }
 
@@ -214,7 +308,8 @@ public class ShortcutsPanel extends PreferencesPanel {
             public void run() {
                 try {
                     Thread.sleep(MESSAGE_SHOWING_TIME);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
 
                 if (!stopped)
                     showActionTooltip(lastActionTooltipShown);
