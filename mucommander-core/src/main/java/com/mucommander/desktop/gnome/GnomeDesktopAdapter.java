@@ -43,6 +43,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
     protected static final String GVFS_OPEN  = "gvfs-open";
     protected static final String GNOME_OPEN = "gnome-open";
     protected static final String XDG_OPEN   = "xdg-open";
+    protected static final String CMD_OPENER_COMMAND = "gnome-terminal --working-directory $f";
 
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
     private int multiClickInterval;
@@ -66,6 +67,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   fileOpener, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, fileOpener, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
 
             // Disabled actual permissions checking as this will break normal +x files.
             // With this, a +x PDF file will not be opened.

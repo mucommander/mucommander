@@ -82,6 +82,20 @@ public class DesktopManager {
      */
     public static final String OPEN = "open";
 
+    public static final String OPEN_COMMAND_PROMPT  = "openCmd";
+
+
+    public static void openCommandPrompt(File file) throws IOException, UnsupportedOperationException {
+        executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
+    }
+
+    public static void openCommandPrompt(String file) throws IOException, UnsupportedOperationException {
+        executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
+    }
+
+    public static void openCommandPrompt(AbstractFile file) throws IOException, UnsupportedOperationException {
+        executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
+    }
 
 
     // - Operation priority ----------------------------------------------
@@ -145,6 +159,7 @@ public class DesktopManager {
         // ---------------------------------------------------------------
         desktops = new Vector<DesktopAdapter>();
 
+
         // The default desktop adapter must be registered first, as we only want to use
         // it if nothing else worked.
         registerAdapter(new DefaultDesktopAdapter());
@@ -191,6 +206,7 @@ public class DesktopManager {
         // The only FALLBACK operation we have at the time of writing is for OPEN,
         // where we can try to run the file as if it was an executable.
         innerRegisterOperation(OPEN, FALLBACK_OPERATION,  new CommandOpen(true));
+        innerRegisterOperation(OPEN_COMMAND_PROMPT, SYSTEM_OPERATION, new CommandOpenCommandPrompt());
     }
 
     /**

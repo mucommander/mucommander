@@ -31,6 +31,7 @@ import com.mucommander.desktop.DesktopInitialisationException;
  */
 public class WinNtDesktopAdapter extends WindowsDesktopAdapter {
     private static final String FILE_OPENER_COMMAND = "cmd /c start \"\" \"$f\"";
+    private static final String CMD_OPENER_COMMAND = "cmd /k \"cd /d $f\"";
     private static final String EXE_OPENER_COMMAND  = "cmd /c $f";
     private static final String EXE_REGEXP          = ".*\\.exe";
 
@@ -47,6 +48,7 @@ public class WinNtDesktopAdapter extends WindowsDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
             CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER_COMMAND,  CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
 
             CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, new RegexpFilenameFilter(EXE_REGEXP, false));
         }
