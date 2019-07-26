@@ -37,6 +37,8 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     private static final String OPENER_COMMAND = "open $f";
     private static final String FINDER_COMMAND = "open -a Finder $f";
     private static final String FINDER_NAME    = "Finder";
+    // HINT: will work almost for every directory BUT NOT for /tmp on MacOS
+    private static final String CMD_OPENER_COMMAND = "open -a Terminal $f";
 
     public String toString() {return "MAC OS X Desktop";}
 
@@ -53,6 +55,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FINDER_COMMAND, CommandType.SYSTEM_COMMAND, FINDER_NAME));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }

@@ -35,7 +35,8 @@ import com.mucommander.desktop.TrashProvider;
  */
 abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KdeDesktopAdapter.class);
-	
+    protected static final String CMD_OPENER_COMMAND = "konsole --workdir $f";
+
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
     private int multiClickInterval;
 
@@ -53,6 +54,8 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  execCommand, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   execCommand, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, execCommand, CommandType.SYSTEM_COMMAND, getFileManagerName()));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
 

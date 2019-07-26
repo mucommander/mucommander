@@ -64,7 +64,8 @@ public class CommandManager implements CommandBuilder {
     public static final String VIEWER_ALIAS                = "view";
     /** Alias for the default text editor. */ 
     public static final String EDITOR_ALIAS                = "edit";
-
+    /** Alias for the default command prompt. */
+    public final static String CMD_OPENER_ALIAS            = "openCmd";
 
 
     // - Self-open command -----------------------------------------------------
