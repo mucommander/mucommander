@@ -47,80 +47,80 @@ import com.mucommander.ui.main.tabs.ConfFileTableTab;
  * @author Arik Hadas
  */
 public class DefaultMainFramesBuilder extends MainFrameBuilder {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMainFramesBuilder.class);
-	
-	private Configuration snapshot = MuConfigurations.getSnapshot();
-	
-	public DefaultMainFramesBuilder() { }
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMainFramesBuilder.class);
 
-	@Override
-	public int getSelectedFrame() {
-		return Math.max(snapshot.getIntegerVariable(MuSnapshot.getSelectedWindow()), 0);
-	}
+    private Configuration snapshot = MuConfigurations.getSnapshot();
 
-	@Override
-	public Collection<MainFrame> build() {
-	    int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
-	    // if last configuration is requested and exists in the snapshot file, restore it
-	    if (nbFrames > 0 && MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_LAST)) {
-	        List<MainFrame> mainFrames = new ArrayList<>();
-	        for (int i=0; i<nbFrames; ++i)
-	            mainFrames.add(createMainFrame(i));
-	        return mainFrames;
-	    }
-	    else {
-			MainFrame mainFrame = new MainFrame(
-					new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
-					getFileTableConfiguration(FolderPanelType.LEFT, -1),
-					new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
-					getFileTableConfiguration(FolderPanelType.RIGHT, -1));
-			
-	        // if there is no window saved in the snapshot file, use default settings
-	        if (nbFrames == 0) {
+    public DefaultMainFramesBuilder() { }
+
+    @Override
+    public int getSelectedFrame() {
+        return Math.max(snapshot.getIntegerVariable(MuSnapshot.getSelectedWindow()), 0);
+    }
+
+    @Override
+    public Collection<MainFrame> build() {
+        int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
+        // if last configuration is requested and exists in the snapshot file, restore it
+        if (nbFrames > 0 && MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_LAST)) {
+            List<MainFrame> mainFrames = new ArrayList<>();
+            for (int i=0; i<nbFrames; ++i)
+                mainFrames.add(createMainFrame(i));
+            return mainFrames;
+        }
+        else {
+            MainFrame mainFrame = new MainFrame(
+                    new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
+                    getFileTableConfiguration(FolderPanelType.LEFT, -1),
+                    new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
+                    getFileTableConfiguration(FolderPanelType.RIGHT, -1));
+
+            // if there is no window saved in the snapshot file, use default settings
+            if (nbFrames == 0) {
                 mainFrame.setBounds(getDefaultSize());
-	        }
-	        // otherwise, use the settings of the selected window
-	        else {
-	            int index = getSelectedFrame();
-	            int x      = snapshot.getIntegerVariable(MuSnapshot.getX(index));
-	            int y      = snapshot.getIntegerVariable(MuSnapshot.getY(index));
-	            int width  = snapshot.getIntegerVariable(MuSnapshot.getWidth(index));
-	            int height = snapshot.getIntegerVariable(MuSnapshot.getHeight(index));
+            }
+            // otherwise, use the settings of the selected window
+            else {
+                int index = getSelectedFrame();
+                int x      = snapshot.getIntegerVariable(MuSnapshot.getX(index));
+                int y      = snapshot.getIntegerVariable(MuSnapshot.getY(index));
+                int width  = snapshot.getIntegerVariable(MuSnapshot.getWidth(index));
+                int height = snapshot.getIntegerVariable(MuSnapshot.getHeight(index));
 
-	            mainFrame.setBounds(new Rectangle(x, y, width, height));
-	        }
+                mainFrame.setBounds(new Rectangle(x, y, width, height));
+            }
 
-	        return Collections.singleton(mainFrame);
-	    }
-	}
+            return Collections.singleton(mainFrame);
+        }
+    }
 
     private MainFrame createMainFrame(int index) {
-		int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
-		ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
-		for (int i=0; i<nbTabsInLeftPanel; ++i)
-			leftTabs[i] = new ConfFileTableTab(
-									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
-									restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))),
-									snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, true, i)));
-		
-		int nbTabsInRightPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, false));
-		ConfFileTableTab[] rightTabs = new ConfFileTableTab[nbTabsInRightPanel];
-		for (int i=0; i<nbTabsInRightPanel; ++i)
-			rightTabs[i] = new ConfFileTableTab(
-									snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
-									restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
-									snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
-		
-		MainFrame mainFrame = new MainFrame(
-				leftTabs,
-				getInitialSelectedTab(FolderPanelType.LEFT, index),
-				getFileTableConfiguration(FolderPanelType.LEFT, index),
-				rightTabs,
-				getInitialSelectedTab(FolderPanelType.RIGHT, index),
-				getFileTableConfiguration(FolderPanelType.RIGHT, index));
-		
-		// Retrieve last saved window bounds
-		Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
+        int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
+        ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
+        for (int i=0; i<nbTabsInLeftPanel; ++i)
+            leftTabs[i] = new ConfFileTableTab(
+                    snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
+                    restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))),
+                    snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, true, i)));
+
+        int nbTabsInRightPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, false));
+        ConfFileTableTab[] rightTabs = new ConfFileTableTab[nbTabsInRightPanel];
+        for (int i=0; i<nbTabsInRightPanel; ++i)
+            rightTabs[i] = new ConfFileTableTab(
+                    snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
+                    restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
+                    snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
+
+        MainFrame mainFrame = new MainFrame(
+                leftTabs,
+                getInitialSelectedTab(FolderPanelType.LEFT, index),
+                getFileTableConfiguration(FolderPanelType.LEFT, index),
+                rightTabs,
+                getInitialSelectedTab(FolderPanelType.RIGHT, index),
+                getFileTableConfiguration(FolderPanelType.RIGHT, index));
+
+        // Retrieve last saved window bounds
+        Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
         int x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getX(index));
         int y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getY(index));
         int width  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getWidth(index));
@@ -133,8 +133,8 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         // If no previous location was saved, or if the resolution has changed,
         // reset the window's dimensions to their default values.
         if(x == -1 || y == -1 || width == -1 || height == -1 ||
-           screenSize.width != lastScreenWidth ||  screenSize.height != lastScreenHeight
-           || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
+                screenSize.width != lastScreenWidth ||  screenSize.height != lastScreenHeight
+                || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
 
             // Full screen bounds are not reliable enough, in particular under Linux+Gnome
             // so we simply make the initial window 4/5 of screen's size, and center it.
@@ -153,22 +153,22 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         }
 
         return mainFrame;
-	}
-	
-    private int getInitialSelectedTab(FolderPanelType folderPanelType, int window) {
-    	// Checks which kind of initial path we're dealing with.
-    	boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
-    	
-    	return isCustom ? 
-    		0 :
-    		MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
     }
-    
+
+    private int getInitialSelectedTab(FolderPanelType folderPanelType, int window) {
+        // Checks which kind of initial path we're dealing with.
+        boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
+
+        return isCustom ? 
+                0 :
+                    MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
+    }
+
     private FileURL restoreFileURL(String url) {
-    	try {
-			return FileURL.getFileURL(url);
-		} catch (MalformedURLException e) {
-			return getHomeFolder().getURL();
-		}
+        try {
+            return FileURL.getFileURL(url);
+        } catch (MalformedURLException e) {
+            return getHomeFolder().getURL();
+        }
     }
 }
