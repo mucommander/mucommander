@@ -73,6 +73,12 @@ runOsgi {
             'com.apple.eawt,' +
             'com.apple.eio',
         'felix.log.level': 1 ]
+    wrapInstructions {
+        manifest("httpclient.*") {
+            // enable httpclient to instantiate factories that reside in jets3t
+            instruction 'DynamicImport-Package', 'org.jets3t.service.utils', '*'
+        }
+    }
 }
 
 allprojects {
