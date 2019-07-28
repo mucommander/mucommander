@@ -87,11 +87,8 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * @see           #extractTarget(Object[])
      */
     public boolean canExecute(Object[] target) {
-        AbstractFile file;
-
-        if((file = extractTarget(target)) != null)
-            return canExecute(file);
-        return false;
+        AbstractFile file = extractTarget(target);
+        return file != null ? canExecute(file) : false;
     }
 
     /**
@@ -107,10 +104,9 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * @see                                  #extractTarget(Object[])
      */
     public void execute(Object[] target) throws IOException, UnsupportedOperationException {
-        AbstractFile file;
-
         // Makes sure we received the right kind of parameters.
-        if((file = extractTarget(target)) == null)
+        AbstractFile file = extractTarget(target);
+        if(file == null)
             throw new UnsupportedOperationException();
 
         // Execute the operation.
