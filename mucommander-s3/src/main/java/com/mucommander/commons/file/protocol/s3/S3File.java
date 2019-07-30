@@ -60,6 +60,8 @@ public abstract class S3File extends ProtocolFile {
     protected AbstractFile parent;
     protected boolean parentSet;
 
+    public static String STORAGE_TYPE = "storageType";
+
     protected S3File(FileURL url, S3Service service) {
         super(url);
 

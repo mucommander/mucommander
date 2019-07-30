@@ -28,6 +28,8 @@ import org.jets3t.service.S3Service;
 import org.jets3t.service.ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.security.AWSCredentials;
+import org.jets3t.service.security.GSCredentials;
+import org.jets3t.service.security.ProviderCredentials;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AuthException;
@@ -52,7 +54,7 @@ public class S3ProtocolProvider implements ProtocolProvider {
         if(instantiationParams.isEmpty()) {
             Jets3tProperties props = new Jets3tProperties();
             props.setProperty("s3service.s3-endpoint", url.getHost());
-            service = new RestS3Service(new AWSCredentials(credentials.getLogin(), credentials.getPassword()), null, null, props);
+            service = new RestS3Service(getProviderCredentials(url), null, null, props);
         }
         else {
             service = (S3Service)instantiationParams.get("service");
@@ -83,5 +85,15 @@ public class S3ProtocolProvider implements ProtocolProvider {
             return new S3Bucket(url, service, bucket);
 
         return new S3Bucket(url, service, bucketName);
+    }
+
+    private ProviderCredentials getProviderCredentials(FileURL url) {
+        Credentials credentials = url.getCredentials();
+        switch(url.getProperty(S3File.STORAGE_TYPE)) {
+        case "GS":
+            return new GSCredentials(credentials.getLogin(), credentials.getPassword());
+        default:
+            return new AWSCredentials(credentials.getLogin(), credentials.getPassword());
+        }
     }
 }
