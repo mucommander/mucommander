@@ -90,14 +90,6 @@ public class S3Panel extends ServerPanel {
         storageType.setSelectedItem(lastStorageType);
         addRow("Storage Type", storageType, 5);
 
-        dnsBuckets = new JCheckBox();
-        dnsBuckets.setSelected(!lastDisableDnsBuckets);
-        addRow("DNS Buckets", dnsBuckets, 5);
-
-        secureHttp = new JCheckBox();
-        secureHttp.setSelected(lastSecureHttp);
-        addRow("Secure HTTP", secureHttp, 15);
-
         // Initial directory field, initialized to "/"
         initialDirField = new JTextField(lastInitialDir);
         initialDirField.selectAll();
@@ -107,6 +99,12 @@ public class S3Panel extends ServerPanel {
         // Port field, initialized to last port
         portSpinner = createPortSpinner(lastPort);
         addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
+
+        dnsBuckets = new JCheckBox("DNS Buckets", !lastDisableDnsBuckets);
+        addRow("", dnsBuckets, 5);
+
+        secureHttp = new JCheckBox("Secure HTTP", lastSecureHttp);
+        addRow("", secureHttp, 15);
     }
 
 
