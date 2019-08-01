@@ -25,7 +25,6 @@ import java.util.StringTokenizer;
 
 import org.jets3t.service.Jets3tProperties;
 import org.jets3t.service.S3Service;
-import org.jets3t.service.ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.security.AWSCredentials;
 import org.jets3t.service.security.GSCredentials;
@@ -54,6 +53,10 @@ public class S3ProtocolProvider implements ProtocolProvider {
         if(instantiationParams.isEmpty()) {
             Jets3tProperties props = new Jets3tProperties();
             props.setProperty("s3service.s3-endpoint", url.getHost());
+            boolean secure = Boolean.parseBoolean(url.getProperty(S3File.SECUTRE_HTTP));
+            props.setProperty(secure ? "s3service.s3-endpoint-https-port" : "s3service.s3-endpoint-http-port", String.valueOf(url.getPort()));
+            props.setProperty("s3service.https-only", String.valueOf(secure));
+            props.setProperty("s3service.disable-dns-buckets", url.getProperty(S3File.DISABLE_DNS_BUCKETS));
             service = new RestS3Service(getProviderCredentials(url), null, null, props);
         }
         else {
