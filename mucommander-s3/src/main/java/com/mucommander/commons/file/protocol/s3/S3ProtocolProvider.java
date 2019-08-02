@@ -54,7 +54,8 @@ public class S3ProtocolProvider implements ProtocolProvider {
             Jets3tProperties props = new Jets3tProperties();
             props.setProperty("s3service.s3-endpoint", url.getHost());
             boolean secure = Boolean.parseBoolean(url.getProperty(S3File.SECUTRE_HTTP));
-            props.setProperty(secure ? "s3service.s3-endpoint-https-port" : "s3service.s3-endpoint-http-port", String.valueOf(url.getPort()));
+            if (url.getPort() > 0)
+                props.setProperty(secure ? "s3service.s3-endpoint-https-port" : "s3service.s3-endpoint-http-port", String.valueOf(url.getPort()));
             props.setProperty("s3service.https-only", String.valueOf(secure));
             props.setProperty("s3service.disable-dns-buckets", url.getProperty(S3File.DISABLE_DNS_BUCKETS));
             service = new RestS3Service(getProviderCredentials(url), null, null, props);
