@@ -50,6 +50,7 @@ public class S3Panel extends ServerPanel {
     private JTextField initialDirField;
     private JSpinner portSpinner;
     private JComboBox<String> storageType;
+    private JTextField locationField;
     private JCheckBox dnsBuckets;
     private JCheckBox secureHttp;
 
@@ -62,7 +63,7 @@ public class S3Panel extends ServerPanel {
     private static String lastStorageType = "AWS";
     private static boolean lastDisableDnsBuckets = true;
     private static boolean lastSecureHttp = true;
-
+    private static String lastLocation = "US";
 
     S3Panel(ServerConnectDialog dialog, final MainFrame mainFrame) {
         super(dialog, mainFrame);
@@ -98,7 +99,12 @@ public class S3Panel extends ServerPanel {
 
         // Port field, initialized to last port
         portSpinner = createPortSpinner(lastPort);
-        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 15);
+        addRow(Translator.get("server_connect_dialog.port"), portSpinner, 5);
+
+        // Username field, initialized to last username
+        locationField = new JTextField(lastLocation);
+        addTextFieldListeners(locationField, false);
+        addRow("Buckets Location", locationField, 15);
 
         dnsBuckets = new JCheckBox("DNS Buckets", !lastDisableDnsBuckets);
         addRow("", dnsBuckets, 5);
@@ -117,6 +123,7 @@ public class S3Panel extends ServerPanel {
         lastStorageType = (String) storageType.getSelectedItem();
         lastDisableDnsBuckets = !dnsBuckets.isSelected();
         lastSecureHttp = secureHttp.isSelected();
+        lastLocation = locationField.getText();
     }
 
 
@@ -141,6 +148,7 @@ public class S3Panel extends ServerPanel {
         url.setProperty(S3File.STORAGE_TYPE, lastStorageType);
         url.setProperty(S3File.DISABLE_DNS_BUCKETS, String.valueOf(lastDisableDnsBuckets));
         url.setProperty(S3File.SECUTRE_HTTP, String.valueOf(lastSecureHttp));
+        url.setProperty(S3File.DEFAULT_BUCKET_LOCATION, lastLocation);
 
         return url;
     }

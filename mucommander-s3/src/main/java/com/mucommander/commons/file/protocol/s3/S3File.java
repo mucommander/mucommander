@@ -63,6 +63,7 @@ public abstract class S3File extends ProtocolFile {
     public static String STORAGE_TYPE = "storageType";
     public static String DISABLE_DNS_BUCKETS = "dnsBuckets";
     public static String SECUTRE_HTTP = "secureHttp";
+    public static String DEFAULT_BUCKET_LOCATION = "defaultBucketLocation";
 
     protected S3File(FileURL url, S3Service service) {
         super(url);
