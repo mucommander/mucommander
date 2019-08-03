@@ -89,7 +89,7 @@ public class S3Panel extends ServerPanel {
 
         storageType = new JComboBox<>(new String[] {"AWS", "GS"});
         storageType.setSelectedItem(lastStorageType);
-        addRow("Storage Type", storageType, 5);
+        addRow(Translator.get("server_connect_dialog.storage_type"), storageType, 5);
 
         // Initial directory field, initialized to "/"
         initialDirField = new JTextField(lastInitialDir);
@@ -104,12 +104,12 @@ public class S3Panel extends ServerPanel {
         // Username field, initialized to last username
         locationField = new JTextField(lastLocation);
         addTextFieldListeners(locationField, false);
-        addRow("Buckets Location", locationField, 15);
+        addRow(Translator.get("server_connect_dialog.buckets_location"), locationField, 15);
 
-        dnsBuckets = new JCheckBox("DNS Buckets", !lastDisableDnsBuckets);
+        dnsBuckets = new JCheckBox(Translator.get("server_connect_dialog.dns_buckets"), !lastDisableDnsBuckets);
         addRow("", dnsBuckets, 5);
 
-        secureHttp = new JCheckBox("Secure HTTP", lastSecureHttp);
+        secureHttp = new JCheckBox(Translator.get("server_connect_dialog.secure_http"), lastSecureHttp);
         addRow("", secureHttp, 15);
     }
 
