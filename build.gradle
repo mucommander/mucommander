@@ -159,9 +159,8 @@ buildDeb {
 
     maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
     summary = 'a lightweight, cross-platform file manager'
-    suggests('sun-java6-jre')
+    suggests('openjdk-8-jre')
     recommends('java-virtual-machine')
-    recommends('java2-runtime')
 
     from ('package') { include 'license.txt', 'readme.txt' }
     from ('package/unix/mucommander.sh')
