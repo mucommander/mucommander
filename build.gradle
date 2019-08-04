@@ -179,7 +179,7 @@ buildDeb {
         include '*'
         into '/usr/share/mucommander/system-libs'
     }
-    from ('src/main/resources/images/mucommander') {
+    from ('mucommander-core/src/main/resources/images/mucommander') {
         include 'icon128_24.png'
         into '/usr/share/pixmaps/'
         rename '.*', 'mucommander.png'
