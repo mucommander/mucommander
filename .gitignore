@@ -5,6 +5,7 @@ reports
 dist
 bin
 .settings
+DEBIAN
 
 # Generated Files
 *.class
