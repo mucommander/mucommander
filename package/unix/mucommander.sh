@@ -1,20 +1,25 @@
-#! /bin/sh
+#!/bin/sh
 
 # muCommander startup arguments
 MUCOMMANDER_ARGS="@ARGS@"
 JAVA_ARGS="@JAVA_ARGS@"
 
-# Locates the java executable.
-if [ "$JAVA_HOME" != "" ] ; then
-    JAVA=$JAVA_HOME/bin/java
+# if JAVA_HOME exists, use it
+if [ -x "$JAVA_HOME/bin/java" ]
+then
+  JAVA="$JAVA_HOME/bin/java"
 else
+  if [ -x "$JAVA_HOME/jre/bin/java" ]
+  then
+    JAVA="$JAVA_HOME/jre/bin/java"
+  else
     JAVACMD=`which java 2> /dev/null `
     if [ -z "$JAVACMD" ] ; then
-        echo "Error: cannot find java VM."
-        exit 1
-    else
-        JAVA=java
+      echo "Error: cannot find java VM."
+      exit 1
     fi
+    JAVA="java"
+  fi
 fi
 
 # Resolve the path to the mucommander.jar located in the same directory as this script
