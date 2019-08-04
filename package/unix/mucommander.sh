@@ -22,24 +22,17 @@ else
   fi
 fi
 
-# Resolve the path to the mucommander.jar located in the same directory as this script
+# Resolve the path to the installation directory where this script is located in
 if [ -h $0 ]
 then
-    # This script has been invoked from a symlink, resolve the link's target (i.e. the path to this script)
-    MUCOMMANDER_SH=`ls -l "$0"`
-    MUCOMMANDER_SH=${MUCOMMANDER_SH#*-> }
+  # This script has been invoked from a symlink, resolve the link's target (i.e. the path to this script)
+  BASE_FOLDER=`ls -l "$0"`
+  BASE_FOLDER=${BASE_FOLDER#*-> }
 else
-    MUCOMMANDER_SH=$0
+  BASE_FOLDER=$0
 fi
 
-CURRENT_DIR=`dirname "$MUCOMMANDER_SH"`
-MUCOMMANDER_JAR=$CURRENT_DIR/mucommander.jar
-
-if [ ! -f $MUCOMMANDER_JAR ]
-then
-    echo "Error: cannot find file mucommander.jar in directory $CURRENT_DIR"
-    exit 1
-fi
+cd `dirname "$BASE_FOLDER"`
 
 # Starts mucommander.
 $JAVA $JAVA_ARGS -DGNOME_DESKTOP_SESSION_ID=$GNOME_DESKTOP_SESSION_ID -DKDE_FULL_SESSION=$KDE_FULL_SESSION -DKDE_SESSION_VERSION=$KDE_SESSION_VERSION -jar $MUCOMMANDER_JAR $MUCOMMANDER_ARGS $@
