@@ -106,9 +106,7 @@ buildRpm {
 
     maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
     summary = 'a lightweight, cross-platform file manager'
-    suggests('sun-java6-jre')
-    recommends('java-virtual-machine')
-    recommends('java2-runtime')
+    suggests('java-1.8.0-openjdk')
     os = LINUX
 
     from ('package') { include 'license.txt', 'readme.txt' }
