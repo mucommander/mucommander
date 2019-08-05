@@ -136,7 +136,7 @@ buildRpm {
         into '/usr/share/applications'
     }
 
-    directory( '/usr/share/mucommander/felix-cache' ,0775);
+    directory( '/usr/share/mucommander/felix-cache' ,0775)
 }
 
 // Debian packaging
