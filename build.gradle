@@ -111,29 +111,18 @@ buildRpm {
     recommends('java2-runtime')
     os = LINUX
 
-    from ("$buildDir/osgi") {
-        include 'run.sh'
-        rename 'run.sh','mucommander.sh'
-        fileMode 0755
-    }
-
     from ('package') { include 'license.txt', 'readme.txt' }
-//    from ('package/unix/mucommander.sh') {
-//        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-//                                       ARGS: ''])
-//    }
+    from ('package/unix/mucommander.sh')
     into '/usr/share/mucommander'
 
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
         into '/usr/share/mucommander/bundle'
     }
-
     from ("$buildDir/osgi/conf") {
         include '*'
         into '/usr/share/mucommander/conf'
     }
-
     from ("$buildDir/osgi/system-libs") {
         include '*'
         into '/usr/share/mucommander/system-libs'
