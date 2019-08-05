@@ -22,9 +22,13 @@ package com.mucommander.commons.file;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <code>ClassLoader</code> implementation capable of loading classes from instances of {@link AbstractFile}.
@@ -37,7 +41,7 @@ public class AbstractFileClassLoader extends ClassLoader {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** All abstract files in which to look for classes and resources. */
-    private Vector<AbstractFile> files;
+    private Set<AbstractFile> files;
 
 
 
@@ -49,7 +53,7 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     public AbstractFileClassLoader(ClassLoader parent) {
         super(parent);
-        files = new Vector<AbstractFile>();
+        files = new HashSet<>();
     }
 
     /**
@@ -74,9 +78,7 @@ public class AbstractFileClassLoader extends ClassLoader {
         if(!file.isBrowsable())
             throw new IllegalArgumentException();
 
-        // Only adds the file if it's not already there.
-        if(!contains(file))
-            files.add(file);
+        files.add(file);
     }
 
     /**
@@ -102,14 +104,12 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @return      an {@link AbstractFile} instance describing the requested resource if found, <code>null</code> otherwise.
      */
     private AbstractFile findResourceAsFile(String name) {
-        Iterator<AbstractFile> iterator; // Iterator on all classpath elements.
-        AbstractFile file;     // Current file.
-
-        iterator = files.iterator();
+        Iterator<AbstractFile>  iterator = files.iterator(); // Iterator on all classpath elements.
         while(iterator.hasNext()) {
             try {
+                AbstractFile file = iterator.next().getChild(name);
                 // If the requested resource could be found, returns it.
-                if((file = iterator.next().getChild(name)).exists())
+                if (file.exists())
                     return file;
             }
             // Treats error as a simple 'resource not found' case and keeps looking for
@@ -128,16 +128,15 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     @Override
     public InputStream getResourceAsStream(String name) {
-        AbstractFile file; // File representing the resource.
-        InputStream  in;   // Input stream on the resource.
-
         // Tries the parent first, to respect the delegation model.
-        if((in = getParent().getResourceAsStream(name)) != null)
+        InputStream in = getParent().getResourceAsStream(name);   // Input stream on the resource.
+        if (in != null)
             return in;
 
         // Tries to locate the resource in the extended classpath if it wasn't found
         // in the parent.
-        if((file = findResourceAsFile(name)) != null) {
+        AbstractFile file = findResourceAsFile(name);
+        if (file != null) {
             try {return file.getInputStream();}
             catch(Exception e) {}
         }
@@ -153,10 +152,9 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     @Override
     protected URL findResource(String name) {
-        AbstractFile file; // Path to the requested resource.
-
         // Tries to find the resource.
-        if((file = findResourceAsFile(name)) == null)
+        AbstractFile file = findResourceAsFile(name);
+        if((file) == null)
             return null;
 
         // Tries to retrieve an URL on the resource.
@@ -171,23 +169,19 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     @Override
     protected Enumeration<URL> findResources(String name) {
-        Iterator<AbstractFile> iterator;   // Iterator on all available JAR files.
-        AbstractFile           file;       // AbstractFile describing each match.
-        Vector<URL>            resources;  // All resources that match 'name'.
-
-        // Initialisation.
-        iterator  = files.iterator();
-        resources = new Vector<URL>();
+        Iterator<AbstractFile> iterator  = files.iterator(); // Iterator on all available JAR files.
+        List<URL> resources = new ArrayList<URL>();
 
         // Goes through all files in the classpath to find the resource.
         while(iterator.hasNext()) {
             try {
-                if((file = iterator.next().getChild(name)).exists())
+                AbstractFile file = iterator.next().getChild(name);
+                if (file.exists())
                     resources.add(file.getJavaNetURL());
             }
             catch(IOException e) {}
         }
-        return resources.elements();
+        return Collections.enumeration(resources);
     }
 
     /**
@@ -197,10 +191,9 @@ public class AbstractFileClassLoader extends ClassLoader {
      */
     @Override
     protected String findLibrary(String name) {
-        AbstractFile file; // Path of the requested library.
-
         // Tries to find the requested library.
-        if((file = findResourceAsFile(name)) == null)
+        AbstractFile file = findResourceAsFile(name); // Path of the requested library.
+        if (file == null)
             return null;
 
         // Retrieves its absolute path.
@@ -219,30 +212,15 @@ public class AbstractFileClassLoader extends ClassLoader {
      * @throws IOException if an error occurs.
      */
     private Class<?> loadClass(String name, AbstractFile file) throws IOException {
-        byte[]      buffer; // Buffer for the class' bytecode.
-        int         offset; // Current offset in buffer.
-        InputStream in;     // Stream on the class' bytecode.
-
-        // Initialisation.
-        buffer = new byte[(int)file.getSize()];
-        offset = 0;
-        in     = null;
-
-        try {
-            // Loads the content of file in buffer.
-            in = file.getInputStream();
+        byte[] buffer = new byte[(int)file.getSize()]; // Buffer for the class' bytecode.
+        try (InputStream in = file.getInputStream()) {
+            int offset = 0; // Current offset in buffer.
             while(offset != buffer.length)
                 offset += in.read(buffer, offset, buffer.length - offset);
 
             // Loads the class.
             return defineClass(name, buffer, 0, buffer.length);
         }
-
-        // Frees resources.
-        finally {
-            if(in != null)
-                in.close();
-        }                
     }
 
     /**

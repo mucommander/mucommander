@@ -18,15 +18,15 @@
 
 package com.mucommander.extension;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
 import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AbstractFileClassLoader;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.StringTokenizer;
 
 /**
  * Manages muCommander's extensions.
@@ -83,11 +83,11 @@ public class ExtensionManager {
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
     static {
-        ClassLoader temp;
+        ClassLoader temp = ClassLoader.getSystemClassLoader();
 
         // Initialises the extension class loader.
         // If the system classloader is an instance of AbstractFileClassLoader, use it.
-        if((temp = ClassLoader.getSystemClassLoader()) instanceof AbstractFileClassLoader)
+        if(temp instanceof AbstractFileClassLoader)
             loader = (AbstractFileClassLoader)temp;
 
         // Otherwise, use a new instance of AbstractFileClassLoader.
