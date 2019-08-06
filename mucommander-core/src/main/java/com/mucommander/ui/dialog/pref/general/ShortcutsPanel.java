@@ -69,7 +69,7 @@ public class ShortcutsPanel extends PreferencesPanel {
     public ShortcutsPanel(PreferencesDialog parent) {
         super(parent, Translator.get("shortcuts_panel" + ".title"));
         initUI();
-        setPreferredSize(new Dimension(0, 0));
+        setPreferredSize(new Dimension(0,0));
 
         shortcutsTable.addDialogListener(parent);
     }
@@ -104,8 +104,8 @@ public class ShortcutsPanel extends PreferencesPanel {
      * Returns a panel that contains the shortcuts editor table.
      */
     private JPanel createCenterPanel() {
-        JPanel panel = new JPanel(new GridLayout(1, 0));
-        shortcutsTable.setPreferredColumnWidths(new double[]{0.6, 0.2, 0.2});
+        JPanel panel = new JPanel(new GridLayout(1,0));
+        shortcutsTable.setPreferredColumnWidths(new double[] {0.6, 0.2, 0.2});
         panel.add(new JScrollPane(shortcutsTable));
         return panel;
     }
@@ -129,7 +129,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 
     private JPanel createButtonsPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
 
         RemoveButton removeButton = new RemoveButton();
 
@@ -151,9 +151,9 @@ public class ShortcutsPanel extends PreferencesPanel {
 
         private final Timer timer;
 
-        public DeferredDocumentListener(int timeOut, ActionListener listener, boolean repeats) {
+        public DeferredDocumentListener(int timeOut, ActionListener listener) {
             timer = new Timer(timeOut, listener);
-            timer.setRepeats(repeats);
+            timer.setRepeats(false);
         }
 
         public void start() {
@@ -190,7 +190,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 
         final JComboBox<ActionCategory> combo = new JComboBox<>();
         combo.addItem(ActionCategory.ALL);
-        for (ActionCategory category : ActionProperties.getActionCategory())
+        for(ActionCategory category : ActionProperties.getActionCategory())
             combo.addItem(category);
 
 
@@ -231,7 +231,7 @@ public class ShortcutsPanel extends PreferencesPanel {
         combo.addActionListener(filterActionListener);
         combo.setSelectedIndex(0);
 
-        DeferredDocumentListener debounceListener = new DeferredDocumentListener(250, filterActionListener, true);
+        DeferredDocumentListener debounceListener = new DeferredDocumentListener(250, filterActionListener);
         filterField.getDocument().addDocumentListener(debounceListener);
         filterField.addFocusListener(new FocusListener() {
             @Override
@@ -250,6 +250,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 
         panel.add(new JLabel(Translator.get("shortcuts_panel" + ".show") + ":"));
         panel.add(combo);
+
         return panel;
     }
 
@@ -308,8 +309,7 @@ public class ShortcutsPanel extends PreferencesPanel {
             public void run() {
                 try {
                     Thread.sleep(MESSAGE_SHOWING_TIME);
-                } catch (InterruptedException e) {
-                }
+                } catch (InterruptedException e) {}
 
                 if (!stopped)
                     showActionTooltip(lastActionTooltipShown);
