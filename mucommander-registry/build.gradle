@@ -14,7 +14,7 @@ dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-commons-util')
     compile project(':mucommander-core')
-    compile project(':mucommander-tar')
+    compile project(':mucommander-format-tar')
     compile 'org.ovirt.engine.api:sdk:4.2.1'
     compile 'org.osgi:osgi.core:7.0.0'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'

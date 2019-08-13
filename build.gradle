@@ -32,25 +32,25 @@ dependencies {
 
     osgiRuntime project('mucommander-ftp')
     osgiRuntime project('mucommander-sftp')
-    osgiRuntime project('mucommander-rar')
+    osgiRuntime project('mucommander-format-rar')
     osgiRuntime project('mucommander-http')
     osgiRuntime project('mucommander-nfs')
     osgiRuntime project('mucommander-smb')
     osgiRuntime project('mucommander-vsphere')
-    osgiRuntime project('mucommander-ar')
-    osgiRuntime project('mucommander-sevenzip')
-    osgiRuntime project('mucommander-zip')
-    osgiRuntime project('mucommander-tar')
-    osgiRuntime project('mucommander-bzip2')
-    osgiRuntime project('mucommander-gzip')
-    osgiRuntime project('mucommander-iso')
-    osgiRuntime project('mucommander-lst')
+    osgiRuntime project('mucommander-format-ar')
+    osgiRuntime project('mucommander-format-sevenzip')
+    osgiRuntime project('mucommander-format-zip')
+    osgiRuntime project('mucommander-format-tar')
+    osgiRuntime project('mucommander-format-bzip2')
+    osgiRuntime project('mucommander-format-gzip')
+    osgiRuntime project('mucommander-format-iso')
+    osgiRuntime project('mucommander-format-lst')
     osgiRuntime project('mucommander-archiver')
 //    osgiRuntime project('mucommander-hadoop')
     osgiRuntime project('mucommander-s3')
     osgiRuntime project('mucommander-registry')
     osgiRuntime project('mucommander-ovirt')
-    osgiRuntime project('mucommander-libguestfs') // Note that this is a work-in-progress
+    osgiRuntime project('mucommander-format-libguestfs') // Note that this is a work-in-progress
 }
 
 runOsgi {
