@@ -476,9 +476,7 @@ public class muCommander {
             printStartupMessage("Loading icons...");
             // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why we do this now
             SwingFileIconProvider.forceInit();
-            // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-            FileIcons.setScaleFactor(Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.TABLE_ICON_SCALE,
-                                                                                              MuPreferences.DEFAULT_TABLE_ICON_SCALE)));
+            setFileIconsScaleFactor();
             setSystemIconsPolicy();
 
             // Register actions
@@ -568,6 +566,12 @@ public class muCommander {
             }
         }
         FileIcons.setSystemIconsPolicy(policy);
+    }
+
+    private static void setFileIconsScaleFactor() {
+        float conf = MuConfigurations.getPreferences().getVariable(MuPreference.TABLE_ICON_SCALE, MuPreferences.DEFAULT_TABLE_ICON_SCALE);
+        // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
+        FileIcons.setScaleFactor(Math.max(1.0f, conf));
     }
 
     private static void configureFilesystems() {
