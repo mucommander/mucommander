@@ -18,13 +18,13 @@
 
 package com.mucommander.bookmark;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.collections.VectorChangeListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.conf.PlatformManager;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 

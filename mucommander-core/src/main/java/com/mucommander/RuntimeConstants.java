@@ -44,9 +44,6 @@ public class RuntimeConstants {
     public static final String THEMES_PATH     = "/themes";
     /** Path to the muCommander license file. */
     public static final String LICENSE         = "/license.txt";
-    /** Default muCommander theme. */
-    public static final String DEFAULT_THEME   = "Native";
-
 
 
     // - URLs ----------------------------------------------------------------------------------------------------------

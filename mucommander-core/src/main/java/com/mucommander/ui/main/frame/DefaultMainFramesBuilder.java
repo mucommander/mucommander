@@ -35,7 +35,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.conf.MuSnapshot;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
@@ -49,7 +49,7 @@ import com.mucommander.ui.main.tabs.ConfFileTableTab;
 public class DefaultMainFramesBuilder extends MainFrameBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMainFramesBuilder.class);
 
-    private Configuration snapshot = MuConfigurations.getSnapshot();
+    private Configuration snapshot = MuSnapshot.getSnapshot();
 
     public DefaultMainFramesBuilder() { }
 
@@ -121,14 +121,14 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
         // Retrieve last saved window bounds
         Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-        int x      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getX(index));
-        int y      = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getY(index));
-        int width  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getWidth(index));
-        int height = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getHeight(index));
+        int x      = MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getX(index));
+        int y      = MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getY(index));
+        int width  = MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getWidth(index));
+        int height = MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getHeight(index));
 
         // Retrieves the last known size of the screen.
-        int lastScreenWidth  = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_WIDTH);
-        int lastScreenHeight = MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_HEIGHT);
+        int lastScreenWidth  = MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_WIDTH);
+        int lastScreenHeight = MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.SCREEN_HEIGHT);
 
         // If no previous location was saved, or if the resolution has changed,
         // reset the window's dimensions to their default values.
@@ -148,7 +148,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         mainFrame.setBounds(new Rectangle(x, y, width, height));
 
         // Retrieve the Frame's SinglePanelView toggle state...
-        if (MuConfigurations.getSnapshot().getBooleanVariable(MuSnapshot.getSinglePanelViewToggleState(index))) {
+        if (MuSnapshot.getSnapshot().getBooleanVariable(MuSnapshot.getSinglePanelViewToggleState(index))) {
             ActionManager.performAction(ToggleUseSinglePanelAction.Descriptor.ACTION_ID, mainFrame);
         }
 
@@ -161,7 +161,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
         return isCustom ? 
                 0 :
-                    MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
+                    MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
     }
 
     private FileURL restoreFileURL(String url) {

@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -329,7 +328,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Name of the current theme. */
 	public static final String THEME_NAME                         = THEME_SECTION + '.' + "path";
 	/** Default current theme name. */
-	public static final String DEFAULT_THEME_NAME                 = RuntimeConstants.DEFAULT_THEME;
+	public static final String DEFAULT_THEME_NAME                 = "Native";
 
 
 
@@ -419,24 +418,22 @@ public class MuPreferences implements MuPreferencesAPI {
 	 * @throws ConfigurationException if a CONFIGURATION related error occurs.
 	 */
 	void write() throws IOException, ConfigurationException {
-		if(configurationVersion != null && !configurationVersion.equals(RuntimeConstants.VERSION)) {
-		    // Clear the configuration before saving to drop preferences which are unused anymore
-		    Configuration conf = new Configuration(
-		            MuPreferencesFile.getPreferencesFile(),
-		            () -> new XmlConfigurationReader(),
-		            out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
+	    // Clear the configuration before saving to drop preferences which are unused anymore
+	    Configuration conf = new Configuration(
+	            MuPreferencesFile.getPreferencesFile(),
+	            () -> new XmlConfigurationReader(),
+	            out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
 
-			for (MuPreference preference : MuPreference.values())
-				conf.setVariable(preference.toString(), configuration.getVariable(preference.toString()));
-			
-			// Remove preferences which are not relevant if we're not using MAC
-			if (!OsFamily.MAC_OS_X.isCurrent()) {
-				conf.removeVariable(USE_BRUSHED_METAL);
-				conf.removeVariable(USE_SCREEN_MENU_BAR);
-			}
+	    for (MuPreference preference : MuPreference.values())
+	        conf.setVariable(preference.toString(), configuration.getVariable(preference.toString()));
 
-			configuration = conf;
-		}
+	    // Remove preferences which are not relevant if we're not using MAC
+	    if (!OsFamily.MAC_OS_X.isCurrent()) {
+	        conf.removeVariable(USE_BRUSHED_METAL);
+	        conf.removeVariable(USE_SCREEN_MENU_BAR);
+	    }
+
+	    configuration = conf;
 
 		configuration.write();
 	}

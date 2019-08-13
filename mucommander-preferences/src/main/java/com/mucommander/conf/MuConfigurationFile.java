@@ -18,15 +18,20 @@
 
 package com.mucommander.conf;
 
-import com.mucommander.PlatformManager;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
+
 import com.mucommander.commons.conf.ConfigurationSource;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
-
-import java.io.*;
-import java.nio.charset.Charset;
 
 /**
  * This abstract package-protected class represents configuration file of muCommander as configuration source 

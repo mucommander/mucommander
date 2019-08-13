@@ -28,12 +28,12 @@ import java.util.WeakHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.PlatformManager;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 
@@ -225,7 +225,7 @@ public class ShellHistoryManager {
      * <p>
      * This method's return value can be modified through {@link #setHistoryFile(String)}.
      * If this wasn't called, the default path will be used: {@link #DEFAULT_HISTORY_FILE_NAME}
-     * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
+     * in the {@link com.mucommander.conf.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
      * @return             the path to the shell history file.
      * @throws IOException if an error occurred while locating the default shell history file.

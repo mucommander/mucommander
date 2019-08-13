@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander;
+package com.mucommander.conf;
 
 import java.io.File;
 import java.io.IOException;

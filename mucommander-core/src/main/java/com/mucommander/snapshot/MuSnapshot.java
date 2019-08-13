@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.conf;
+package com.mucommander.snapshot;
 
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -36,6 +36,7 @@ import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.XmlConfigurationReader;
 import com.mucommander.commons.conf.XmlConfigurationWriter;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.conf.MuSnapshotFile;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -55,6 +56,8 @@ import com.mucommander.ui.viewer.text.TextViewer;
  */
 public class MuSnapshot {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MuSnapshot.class);
+
+	private static final MuSnapshot instance = new MuSnapshot();
 	
 	// - Last screen variables -----------------------------------------------
     // -----------------------------------------------------------------------
@@ -688,18 +691,18 @@ public class MuSnapshot {
     	// Loop on columns
 		for(Column c : Column.values()) {
 			if(c!=Column.NAME) {       // Skip the special name column (always enabled, width automatically calculated)
-				MuConfigurations.getSnapshot().setVariable(
+				MuSnapshot.getSnapshot().setVariable(
 						MuSnapshot.getShowColumnVariable(index, c, isLeft),
 						table.isColumnEnabled(c)
 						);
 
-				MuConfigurations.getSnapshot().setVariable(
+				MuSnapshot.getSnapshot().setVariable(
 						MuSnapshot.getColumnWidthVariable(index, c, isLeft),
 						table.getColumnWidth(c)
 						);
 			}
 
-			MuConfigurations.getSnapshot().setVariable(
+			MuSnapshot.getSnapshot().setVariable(
 					MuSnapshot.getColumnPositionVariable(index, c, isLeft),
 					table.getColumnPosition(c)
 					);
@@ -725,5 +728,17 @@ public class MuSnapshot {
 
         // Save single panel view toggle state
         configuration.setVariable(getSinglePanelViewToggleState(index), currentMainFrame.isSinglePanel());
+    }
+
+    public static Configuration getSnapshot() {
+        return instance.getConfiguration();
+    }
+
+    public static void loadSnapshot() throws IOException, ConfigurationException {
+        instance.read();
+    }
+
+    public static void saveSnapshot() throws IOException, ConfigurationException {
+        instance.write();
     }
 }

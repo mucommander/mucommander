@@ -48,7 +48,7 @@ import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.conf.MuSnapshot;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.CloseWindowAction;
@@ -209,7 +209,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
         splitPane = new ProportionalSplitPane(this,
-        		MuConfigurations.getSnapshot().getVariable(MuSnapshot.getSplitOrientation(0), MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
+                MuSnapshot.getSnapshot().getVariable(MuSnapshot.getSplitOrientation(0), MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
                                               	JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
                                               false,
                                               MainFrame.this.leftFolderPanel,
@@ -288,12 +288,12 @@ public class MainFrame extends JFrame implements LocationListener {
 
         for (boolean isLeft = true; ; isLeft=false) {
         	FileTable fileTable = isLeft ? leftTable : rightTable;
-        	fileTable.sortBy(Column.valueOf(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
-                    !MuConfigurations.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
+        	fileTable.sortBy(Column.valueOf(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
+                    !MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
         	
         	FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
-        	folderPanel.setTreeWidth(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
-        	folderPanel.setTreeVisible(MuConfigurations.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(0, isLeft), false));
+        	folderPanel.setTreeWidth(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
+        	folderPanel.setTreeVisible(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(0, isLeft), false));
         	
         	if (!isLeft)
         		break;
