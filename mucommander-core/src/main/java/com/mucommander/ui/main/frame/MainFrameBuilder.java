@@ -34,7 +34,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.MuPreferencesAPI;
-import com.mucommander.conf.MuSnapshot;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
@@ -67,7 +67,7 @@ public abstract class MainFrameBuilder {
         String[]      folderPaths; // Paths to the initial folders.
 
         // Snapshot configuration
-        Configuration snapshot = MuConfigurations.getSnapshot();
+        Configuration snapshot = MuSnapshot.getSnapshot();
         // Preferences configuration
         MuPreferencesAPI preferences = MuConfigurations.getPreferences();
 
@@ -154,18 +154,18 @@ public abstract class MainFrameBuilder {
             if(c!=Column.NAME) {       // Skip the special name column (always visible, width automatically calculated)
                 // Sets the column's initial visibility.
                 conf.setEnabled(c,
-                        MuConfigurations.getSnapshot().getVariable(
+                        MuSnapshot.getSnapshot().getVariable(
                                 MuSnapshot.getShowColumnVariable(window, c, folderPanelType == FolderPanelType.LEFT),
                                 c.showByDefault()
                                 )
                         );
 
                 // Sets the column's initial width.
-                conf.setWidth(c, MuConfigurations.getSnapshot().getIntegerVariable(MuSnapshot.getColumnWidthVariable(window, c, folderPanelType == FolderPanelType.LEFT)));
+                conf.setWidth(c, MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getColumnWidthVariable(window, c, folderPanelType == FolderPanelType.LEFT)));
             }
 
             // Sets the column's initial order
-            conf.setPosition(c, MuConfigurations.getSnapshot().getVariable(
+            conf.setPosition(c, MuSnapshot.getSnapshot().getVariable(
                     MuSnapshot.getColumnPositionVariable(window, c, folderPanelType == FolderPanelType.LEFT),
                     c.ordinal())
                     );

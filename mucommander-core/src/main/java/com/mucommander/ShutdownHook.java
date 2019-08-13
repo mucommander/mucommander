@@ -26,6 +26,7 @@ import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
@@ -71,7 +72,7 @@ public class ShutdownHook extends Thread {
         TreeIOThreadManager.getInstance().interrupt();
 
         // Save snapshot
-        try{MuConfigurations.saveSnapshot();}
+        try{MuSnapshot.saveSnapshot();}
         catch(Exception e) {LOGGER.warn("Failed to save snapshot", e);}
         
         // Save preferences

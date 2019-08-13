@@ -21,7 +21,6 @@ package com.mucommander.conf;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
 
@@ -35,9 +34,7 @@ public class MuConfigurations {
 
 	/** Static configurations of muCommander */
 	private static final MuPreferences preferences = new MuPreferences();
-	/** Dynamic configurations of muCommander */
-	private static final MuSnapshot snapshot = new MuSnapshot();
-	
+
 	/////////////////////////
 	// API for preferences //
 	/////////////////////////
@@ -70,19 +67,4 @@ public class MuConfigurations {
     	preferences.removeConfigurationListener(listener);
     }
 
-    //////////////////////
-    // API for snapshot //
-    //////////////////////
-    
-    public static Configuration getSnapshot() {
-    	return snapshot.getConfiguration();
-    }
-    
-    public static void loadSnapshot() throws IOException, ConfigurationException {
-    	snapshot.read();
-    }
-    
-    public static void saveSnapshot() throws IOException, ConfigurationException {
-    	snapshot.write();
-    }
 }

@@ -22,11 +22,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AbstractFileClassLoader;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
+import com.mucommander.conf.PlatformManager;
 
 /**
  * Manages muCommander's extensions.

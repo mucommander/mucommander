@@ -43,9 +43,11 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.PlatformManager;
 import com.mucommander.conf.SystemIconsPolicy;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.shell.ShellHistoryManager;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -361,7 +363,7 @@ public class muCommander {
 
             // Load snapshot data before loading configuration as until version 0.9 the snapshot properties
             // were stored as preferences so when loading such preferences they could overload snapshot properties
-            try {MuConfigurations.loadSnapshot();}
+            try {MuSnapshot.loadSnapshot();}
             catch(Exception e) {printFileError("Could not load snapshot", e, fatalWarnings);}
 
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're

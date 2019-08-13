@@ -33,13 +33,13 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.ChainedFileFilter;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.RegexpFilenameFilter;
+import com.mucommander.conf.PlatformManager;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 
@@ -413,7 +413,7 @@ public class CommandManager implements CommandBuilder {
      * <p>
      * This method's return value can be modified through {@link #setAssociationFile(String)}.
      * If this wasn't called, the default path will be used: {@link #DEFAULT_ASSOCIATION_FILE_NAME}
-     * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
+     * in the {@link com.mucommander.conf.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
      * @return the path to the custom associations XML file.
      * @see    #setAssociationFile(String)
@@ -563,7 +563,7 @@ public class CommandManager implements CommandBuilder {
      * <p>
      * This method's return value can be modified through {@link #setCommandFile(String)}.
      * If this wasn't called, the default path will be used: {@link #DEFAULT_COMMANDS_FILE_NAME}
-     * in the {@link com.mucommander.PlatformManager#getPreferencesFolder() preferences} folder.
+     * in the {@link com.mucommander.conf.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
      * @return the path to the custom commands XML file.
      * @see    #setCommandFile(String)

@@ -31,7 +31,7 @@ import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuSnapshot;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.main.FolderPanel;
@@ -62,7 +62,7 @@ public class GlobalLocationHistory extends LocationAdapter {
 	 * Private Constructor
 	 */
 	private GlobalLocationHistory() {
-		Configuration snapshot = MuConfigurations.getSnapshot();
+		Configuration snapshot = MuSnapshot.getSnapshot();
 
 		// Restore the global history from last run
 		int nbLocations = snapshot.getIntegerVariable(MuSnapshot.getRecentLocationsCountVariable());

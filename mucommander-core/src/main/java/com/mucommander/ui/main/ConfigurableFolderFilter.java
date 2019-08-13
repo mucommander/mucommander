@@ -23,10 +23,10 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
-import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 
 /**

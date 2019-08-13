@@ -26,9 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.mucommander.PlatformManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.conf.PlatformManager;
 
 /**
  * 

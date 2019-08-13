@@ -29,6 +29,7 @@ dependencies {
     osgiRuntime project('mucommander-commons-io')
     osgiRuntime project('mucommander-commons-runtime')
     osgiRuntime project('apache-bzip2')
+    osgiRuntime project('mucommander-preferences')
 
     osgiRuntime project('mucommander-protocol-ftp')
     osgiRuntime project('mucommander-protocol-sftp')
