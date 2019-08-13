@@ -30,13 +30,13 @@ dependencies {
     osgiRuntime project('mucommander-commons-runtime')
     osgiRuntime project('apache-bzip2')
 
-    osgiRuntime project('mucommander-ftp')
-    osgiRuntime project('mucommander-sftp')
+    osgiRuntime project('mucommander-protocol-ftp')
+    osgiRuntime project('mucommander-protocol-sftp')
     osgiRuntime project('mucommander-format-rar')
-    osgiRuntime project('mucommander-http')
-    osgiRuntime project('mucommander-nfs')
-    osgiRuntime project('mucommander-smb')
-    osgiRuntime project('mucommander-vsphere')
+    osgiRuntime project('mucommander-protocol-http')
+    osgiRuntime project('mucommander-protocol-nfs')
+    osgiRuntime project('mucommander-protocol-smb')
+    osgiRuntime project('mucommander-protocol-vsphere')
     osgiRuntime project('mucommander-format-ar')
     osgiRuntime project('mucommander-format-sevenzip')
     osgiRuntime project('mucommander-format-zip')
@@ -47,9 +47,9 @@ dependencies {
     osgiRuntime project('mucommander-format-lst')
     osgiRuntime project('mucommander-archiver')
 //    osgiRuntime project('mucommander-hadoop')
-    osgiRuntime project('mucommander-s3')
-    osgiRuntime project('mucommander-registry')
-    osgiRuntime project('mucommander-ovirt')
+    osgiRuntime project('mucommander-protocol-s3')
+    osgiRuntime project('mucommander-protocol-registry')
+    osgiRuntime project('mucommander-protocol-ovirt')
     osgiRuntime project('mucommander-format-libguestfs') // Note that this is a work-in-progress
 }
 
