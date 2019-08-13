@@ -13,6 +13,7 @@ plugins {
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
+    compile project(':mucommander-translator')
     compile 'javax.xml.ws:jaxws-api:2.2.12'
 
     runtime 'javax.jws:javax.jws-api:1.1'

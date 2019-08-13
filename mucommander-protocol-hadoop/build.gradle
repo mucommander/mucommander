@@ -13,6 +13,7 @@ plugins {
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
+    compile project(':mucommander-translator')
     compile 'org.apache.hadoop:hadoop-core:0.20.2'
     compile 'org.osgi:osgi.core:7.0.0'
     compile 'commons-logging:commons-logging:1.2'

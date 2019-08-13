@@ -17,6 +17,7 @@ configurations {
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
+    compile project(':mucommander-translator')
 
     compileOnly files('libs/yanfs.jar')
     library files('libs/yanfs.jar')

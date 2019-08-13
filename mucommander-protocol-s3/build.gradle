@@ -13,6 +13,7 @@ plugins {
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
+    compile project(':mucommander-translator')
     compile 'net.java.dev.jets3t:jets3t:0.9.4'
     compile 'commons-logging:commons-logging:1.2'
     compile 'javax.xml:jaxrpc-api:1.1'
