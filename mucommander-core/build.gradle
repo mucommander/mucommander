@@ -13,6 +13,7 @@ dependencies {
     compileOnly project(':mucommander-commons-io')
     compileOnly project(':mucommander-archiver')
     compileOnly project(':mucommander-preferences')
+    compileOnly project(':mucommander-translator')
 
     compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'ch.qos.logback:logback-classic:1.2.3'

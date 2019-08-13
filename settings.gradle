@@ -6,6 +6,7 @@ include 'mucommander-commons-io'
 include 'mucommander-commons-runtime'
 include 'mucommander-commons-util'
 include 'mucommander-preferences'
+include 'mucommander-translator'
 
 include 'mucommander-archiver'
 include 'mucommander-format-ar'

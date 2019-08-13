@@ -13,6 +13,7 @@ plugins {
 dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-core')
+    compile project(':mucommander-translator')
     compile 'jcifs:jcifs:1.3.17'
 
     // Use JUnit test framework
