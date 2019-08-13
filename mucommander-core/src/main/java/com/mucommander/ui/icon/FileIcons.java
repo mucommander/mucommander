@@ -119,13 +119,17 @@ public class FileIcons {
      * @see #getSystemIconsPolicy()
      */
     public static Icon getFileIcon(AbstractFile file, Dimension iconDimension) {
-        boolean systemIcon = false;
-
-        if(USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy))
+        boolean systemIcon;
+        switch(systemIconsPolicy) {
+        case USE_SYSTEM_ICONS_ALWAYS:
             systemIcon = true;
-
-        if(USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy))
+            break;
+        case USE_SYSTEM_ICONS_APPLICATIONS:
             systemIcon = com.mucommander.desktop.DesktopManager.isApplication(file);
+            break;
+        default:
+            systemIcon = false;
+        }
 
         if(systemIcon) {
             Icon icon = getSystemFileIcon(file, iconDimension);
