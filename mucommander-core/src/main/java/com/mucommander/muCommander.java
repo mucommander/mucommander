@@ -43,6 +43,7 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.SystemIconsPolicy;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
@@ -50,6 +51,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.dialog.startup.InitialSetupDialog;
+import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
@@ -475,9 +477,9 @@ public class muCommander {
             // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why we do this now
             SwingFileIconProvider.forceInit();
             // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
-            com.mucommander.ui.icon.FileIcons.setScaleFactor(Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.TABLE_ICON_SCALE,
+            FileIcons.setScaleFactor(Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.TABLE_ICON_SCALE,
                                                                                               MuPreferences.DEFAULT_TABLE_ICON_SCALE)));
-            com.mucommander.ui.icon.FileIcons.setSystemIconsPolicy(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SYSTEM_FILE_ICONS, MuPreferences.DEFAULT_USE_SYSTEM_FILE_ICONS));
+            setSystemIconsPolicy();
 
             // Register actions
             printStartupMessage("Registering actions...");
@@ -554,6 +556,18 @@ public class muCommander {
             // Quit the application
             muCommander.initiateShutdown();
         }
+    }
+
+    private static void setSystemIconsPolicy() {
+        String conf = MuConfigurations.getPreferences().getVariable(MuPreference.USE_SYSTEM_FILE_ICONS, MuPreferences.DEFAULT_USE_SYSTEM_FILE_ICONS);
+        SystemIconsPolicy policy = SystemIconsPolicy.APPLICATIONS_ONLY;
+        for (SystemIconsPolicy value : SystemIconsPolicy.values()) {
+            if (value.toString().equals(conf)) {
+                policy = value;
+                break;
+            }
+        }
+        FileIcons.setSystemIconsPolicy(policy);
     }
 
     private static void configureFilesystems() {

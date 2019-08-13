@@ -53,6 +53,7 @@ import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.conf.SystemIconsPolicy;
 import com.mucommander.extension.ClassFinder;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.extension.LookAndFeelFilter;
@@ -153,7 +154,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // - Misc. fields --------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** System icon combobox. */
-    private PrefComboBox<String> 	       useSystemFileIconsComboBox;
+    private PrefComboBox<String>   useSystemFileIconsComboBox;
     /** Identifier of 'yes' actions in question dialogs. */
     private final static int       YES_ACTION = 0;
     /** Identifier of 'no' actions in question dialogs. */
@@ -448,27 +449,35 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private JPanel createSystemIconsPanel() {
         /* 'Use system file icons' combo box */
-        this.useSystemFileIconsComboBox = new PrefComboBox() {
+        this.useSystemFileIconsComboBox = new PrefComboBox<String>() {
 			public boolean hasChanged() {
-				String systemIconsPolicy;
+				SystemIconsPolicy systemIconsPolicy;
 				switch(useSystemFileIconsComboBox.getSelectedIndex()) {
 				case 0:
-					systemIconsPolicy = FileIcons.USE_SYSTEM_ICONS_NEVER;
+					systemIconsPolicy = SystemIconsPolicy.NEVER;
 					break;
 				case 1:
-					systemIconsPolicy = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
+					systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
 					break;
 				default:
-					systemIconsPolicy = FileIcons.USE_SYSTEM_ICONS_ALWAYS;
+					systemIconsPolicy = SystemIconsPolicy.ALWAYS;
 				}
-				return !systemIconsPolicy.equals(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SYSTEM_FILE_ICONS, systemIconsPolicy));
+				return !systemIconsPolicy.toString().equals(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SYSTEM_FILE_ICONS, systemIconsPolicy.toString()));
 			}
         };
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.never"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.applications"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.always"));
-        String systemIconsPolicy = FileIcons.getSystemIconsPolicy();
-        useSystemFileIconsComboBox.setSelectedIndex(FileIcons.USE_SYSTEM_ICONS_ALWAYS.equals(systemIconsPolicy)?2:FileIcons.USE_SYSTEM_ICONS_APPLICATIONS.equals(systemIconsPolicy)?1:0);
+        switch (FileIcons.getSystemIconsPolicy()) {
+        case ALWAYS:
+            useSystemFileIconsComboBox.setSelectedIndex(2);
+            break;
+        case APPLICATIONS_ONLY:
+            useSystemFileIconsComboBox.setSelectedIndex(1);
+            break;
+        case NEVER:
+            useSystemFileIconsComboBox.setSelectedIndex(0);
+        }
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.use_system_file_icons")));
@@ -546,10 +555,20 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         }
 
         // Set system icons policy
-        int comboIndex = useSystemFileIconsComboBox.getSelectedIndex();
-        String systemIconsPolicy = comboIndex==0?FileIcons.USE_SYSTEM_ICONS_NEVER:comboIndex==1?FileIcons.USE_SYSTEM_ICONS_APPLICATIONS:FileIcons.USE_SYSTEM_ICONS_ALWAYS;
+        SystemIconsPolicy systemIconsPolicy;
+        switch (useSystemFileIconsComboBox.getSelectedIndex()) {
+        case 0:
+            systemIconsPolicy = SystemIconsPolicy.NEVER;
+            break;
+        case 1:
+            systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
+            break;
+        case 2:
+        default:
+            systemIconsPolicy = SystemIconsPolicy.ALWAYS;
+        }
         FileIcons.setSystemIconsPolicy(systemIconsPolicy);
-        MuConfigurations.getPreferences().setVariable(MuPreference.USE_SYSTEM_FILE_ICONS, systemIconsPolicy);
+        MuConfigurations.getPreferences().setVariable(MuPreference.USE_SYSTEM_FILE_ICONS, systemIconsPolicy.toString());
     }
 
 

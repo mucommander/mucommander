@@ -29,7 +29,6 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.conf.ValueList;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.ui.icon.FileIcons;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API which is used to save 'static' configurations.
@@ -223,7 +222,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Controls if and when system file icons should be used instead of custom file icons. */
 	public static final String  USE_SYSTEM_FILE_ICONS              = FILE_TABLE_SECTION + '.' + "use_system_file_icons";
 	/** Default system file icons policy. */
-	public static final String  DEFAULT_USE_SYSTEM_FILE_ICONS      = FileIcons.USE_SYSTEM_ICONS_APPLICATIONS;
+	public static final String  DEFAULT_USE_SYSTEM_FILE_ICONS      = SystemIconsPolicy.APPLICATIONS_ONLY.toString();
 	/** Controls whether folders are displayed first in the FileTable or mixed with regular files. */
 	public static final String  SHOW_FOLDERS_FIRST                 = FILE_TABLE_SECTION + '.' + "show_folders_first";
 	/** Default value for 'Show folders first' option. */

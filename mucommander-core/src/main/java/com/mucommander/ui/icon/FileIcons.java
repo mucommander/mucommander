@@ -28,6 +28,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.FileIconProvider;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.conf.SystemIconsPolicy;
 
 /**
  * <code>FileIcons</code> provides several methods to retrieve file icons for a given file:
@@ -52,16 +53,6 @@ import com.mucommander.commons.runtime.OsFamily;
  */
 public class FileIcons {
 
-    /** Never use system file icons */
-    public final static String USE_SYSTEM_ICONS_NEVER = "never";
-    /** Use system file icons only for applications */
-    public final static String USE_SYSTEM_ICONS_APPLICATIONS = "applications";
-    /** Always use system file icons */
-    public final static String USE_SYSTEM_ICONS_ALWAYS = "always";
-
-    /** Default policy for system icons */
-    public final static String DEFAULT_SYSTEM_ICONS_POLICY = USE_SYSTEM_ICONS_APPLICATIONS;
-
     /** Default icon scale factor (no rescaling) */
     public final static float DEFAULT_SCALE_FACTOR = 1.0f;
 
@@ -69,7 +60,7 @@ public class FileIcons {
     private final static int BASE_ICON_DIMENSION = 16;
 
     /** Controls if and when system file icons should be used instead of custom icons */
-    private static String systemIconsPolicy = DEFAULT_SYSTEM_ICONS_POLICY;
+    private static SystemIconsPolicy systemIconsPolicy;
 
     /** Current icon scale factor */
     private static float scaleFactor = DEFAULT_SCALE_FACTOR;
@@ -119,19 +110,7 @@ public class FileIcons {
      * @see #getSystemIconsPolicy()
      */
     public static Icon getFileIcon(AbstractFile file, Dimension iconDimension) {
-        boolean systemIcon;
-        switch(systemIconsPolicy) {
-        case USE_SYSTEM_ICONS_ALWAYS:
-            systemIcon = true;
-            break;
-        case USE_SYSTEM_ICONS_APPLICATIONS:
-            systemIcon = com.mucommander.desktop.DesktopManager.isApplication(file);
-            break;
-        default:
-            systemIcon = false;
-        }
-
-        if(systemIcon) {
+        if (shouldUseSystemIconFor(file)) {
             Icon icon = getSystemFileIcon(file, iconDimension);
             if(icon!=null)
                 return icon;
@@ -141,6 +120,17 @@ public class FileIcons {
         return getCustomFileIcon(file, iconDimension);
     }
 
+    private static boolean shouldUseSystemIconFor(AbstractFile file) {
+        switch(systemIconsPolicy) {
+        case ALWAYS:
+            return true;
+        case APPLICATIONS_ONLY:
+            return com.mucommander.desktop.DesktopManager.isApplication(file);
+        case NEVER:
+        default:
+            return false;
+        }
+    }
 
     /**
      * Shorthand for {@link #getCustomFileIcon(com.mucommander.commons.file.AbstractFile, java.awt.Dimension)} called with the
@@ -295,7 +285,7 @@ public class FileIcons {
      *
      * @return the current system icons policy
      */
-    public static String getSystemIconsPolicy() {
+    public static SystemIconsPolicy getSystemIconsPolicy() {
         return systemIconsPolicy;
     }
 
@@ -306,7 +296,7 @@ public class FileIcons {
      *
      * @param policy the new system icons policy to use
      */
-    public static void setSystemIconsPolicy(String policy) {
+    public static void setSystemIconsPolicy(SystemIconsPolicy policy) {
         systemIconsPolicy = policy;
     }
 
