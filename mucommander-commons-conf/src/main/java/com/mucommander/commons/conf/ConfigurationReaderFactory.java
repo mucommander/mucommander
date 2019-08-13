@@ -32,11 +32,12 @@ package com.mucommander.commons.conf;
  * @author Nicolas Rinaudo
  * @see    ConfigurationReader
  */
-public interface ConfigurationReaderFactory<T extends ConfigurationReader> {
+@FunctionalInterface
+public interface ConfigurationReaderFactory {
     /**
      * Creates an instance of {@link ConfigurationReader}.
      * @return                              an instance of {@link ConfigurationReader}.
      * @throws ReaderConfigurationException if the factory wasn't properly configured.
      */
-    T getReaderInstance() throws ReaderConfigurationException;
+    ConfigurationReader getReaderInstance() throws ReaderConfigurationException;
 }

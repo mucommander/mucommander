@@ -27,6 +27,8 @@ import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.conf.ValueList;
+import com.mucommander.commons.conf.XmlConfigurationReader;
+import com.mucommander.commons.conf.XmlConfigurationWriter;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 
@@ -378,8 +380,10 @@ public class MuPreferences implements MuPreferencesAPI {
 	 * Prevents instantiation of this class from outside of this package.
 	 */
 	MuPreferences() {
-		configuration = new Configuration(MuPreferencesFile.getPreferencesFile(), new VersionedXmlConfigurationReaderFactory(),
-				new VersionedXmlConfigurationWriterFactory(ROOT_ELEMENT));
+		configuration = new Configuration(
+		        MuPreferencesFile.getPreferencesFile(),
+		        () -> new XmlConfigurationReader(),
+		        out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
 	}
 
 	// - Configuration reading / writing -------------------------------------
@@ -390,27 +394,23 @@ public class MuPreferences implements MuPreferencesAPI {
 	 * @throws ConfigurationException if a CONFIGURATION related error occurs.
 	 */
 	void read() throws IOException, ConfigurationException {
-		VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
-		configuration.read(reader);
+	    XmlConfigurationReader reader = new XmlConfigurationReader();
+	    configuration.read(reader);
 
-		// Ensure backward compatibility
-		configurationVersion = reader.getVersion();
-		if(configurationVersion == null || !configurationVersion.equals(RuntimeConstants.VERSION)) {
-			// Rename preferences that have changed (from v0.8.5)
-			configuration.renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
-			configuration.renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
-			configuration.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
-			configuration.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
-			configuration.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
-		}
+	    // Ensure backward compatibility
+	    configuration.renameVariable("show_hidden_files", SHOW_HIDDEN_FILES);
+	    configuration.renameVariable("auto_size_columns", AUTO_SIZE_COLUMNS);
+	    configuration.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
+	    configuration.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
+	    configuration.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
 
-		// Initializes MAC OS X specific values
-		if(OsFamily.MAC_OS_X.isCurrent()) {
-			if(configuration.getVariable(SHELL_ENCODING) == null) {
-				configuration.setVariable(SHELL_ENCODING, "UTF-8");
-				configuration.setVariable(AUTODETECT_SHELL_ENCODING, false);
-			}
-		}
+	    // Initializes MAC OS X specific values
+	    if(OsFamily.MAC_OS_X.isCurrent()) {
+	        if(configuration.getVariable(SHELL_ENCODING) == null) {
+	            configuration.setVariable(SHELL_ENCODING, "UTF-8");
+	            configuration.setVariable(AUTODETECT_SHELL_ENCODING, false);
+	        }
+	    }
 	}
 
 	/**
@@ -420,9 +420,11 @@ public class MuPreferences implements MuPreferencesAPI {
 	 */
 	void write() throws IOException, ConfigurationException {
 		if(configurationVersion != null && !configurationVersion.equals(RuntimeConstants.VERSION)) {
-			// Clear the configuration before saving to drop preferences which are unused anymore
-			Configuration conf = new Configuration(MuPreferencesFile.getPreferencesFile(), new VersionedXmlConfigurationReaderFactory(),
-					new VersionedXmlConfigurationWriterFactory(ROOT_ELEMENT));
+		    // Clear the configuration before saving to drop preferences which are unused anymore
+		    Configuration conf = new Configuration(
+		            MuPreferencesFile.getPreferencesFile(),
+		            () -> new XmlConfigurationReader(),
+		            out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
 
 			for (MuPreference preference : MuPreference.values())
 				conf.setVariable(preference.toString(), configuration.getVariable(preference.toString()));

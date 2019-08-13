@@ -33,35 +33,8 @@ import java.io.Writer;
  * </p>
  * @author Nicolas Rinaudo
  */
-public abstract class ConfigurationWriterFactory<T extends ConfigurationBuilder> {
-	
-	/** The name of the root element of the XML file */
-	private String rootElementName;
-	
-	/**
-	 * Constructor
-	 * For backward compatibility using root element "prefs" it not mentioned otherwise
-	 */
-	public ConfigurationWriterFactory() {
-		this("prefs");
-	}
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param rootElementName the name of the root element in the XML file
-	 */
-	public ConfigurationWriterFactory(String rootElementName) {
-		this.rootElementName = rootElementName;
-	}
-	
-	/**
-	 * Returns the name of the root element of the XML file
-	 * @return the name of the root element of the XML file
-	 */
-	protected String getRootElementName() {
-		return rootElementName;
-	}
+@FunctionalInterface
+public interface ConfigurationWriterFactory {
 	
     /**
      * Creates an instance of {@link ConfigurationBuilder}.
@@ -72,5 +45,5 @@ public abstract class ConfigurationWriterFactory<T extends ConfigurationBuilder>
      * @return                              an instance of {@link ConfigurationBuilder}.
      * @throws WriterConfigurationException if the factory wasn't properly configured.
      */
-    public abstract T getWriterInstance(Writer out) throws WriterConfigurationException;
+    ConfigurationBuilder getWriterInstance(Writer out) throws WriterConfigurationException;
 }

@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
+import com.mucommander.commons.conf.XmlConfigurationReader;
+import com.mucommander.commons.conf.XmlConfigurationWriter;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
@@ -549,8 +551,10 @@ public class MuSnapshot {
      * Prevents instantiation of this class from outside of this package.
      */
     MuSnapshot() {
-    	configuration = new Configuration(MuSnapshotFile.getSnapshotFile(), new VersionedXmlConfigurationReaderFactory(),
-    			new VersionedXmlConfigurationWriterFactory(ROOT_ELEMENT));
+        configuration = new Configuration(
+                MuSnapshotFile.getSnapshotFile(),
+                () -> new XmlConfigurationReader(),
+                out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
 		
 		try {
 			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -578,7 +582,7 @@ public class MuSnapshot {
      * @throws ConfigurationException if a CONFIGURATION related error occurs.
      */
     void read() throws IOException, ConfigurationException {
-        VersionedXmlConfigurationReader reader = new VersionedXmlConfigurationReader();
+        XmlConfigurationReader reader = new XmlConfigurationReader();
         configuration.read(reader);
     }
 

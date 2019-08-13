@@ -72,7 +72,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     // - Class fields --------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Factory used to create {@link XmlConfigurationReader} instances. */
-    public static final ConfigurationReaderFactory<XmlConfigurationReader> FACTORY;
+    public static final ConfigurationReaderFactory FACTORY;
 
 
 
@@ -96,11 +96,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
-        FACTORY = new ConfigurationReaderFactory<XmlConfigurationReader>() {
-            public XmlConfigurationReader getReaderInstance() throws ReaderConfigurationException {
-                return new XmlConfigurationReader();
-            }
-        };
+        FACTORY = () -> new XmlConfigurationReader();
     }
 
     /**

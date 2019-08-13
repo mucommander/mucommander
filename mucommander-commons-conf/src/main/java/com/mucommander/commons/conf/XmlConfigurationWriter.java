@@ -41,7 +41,7 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     // - Class constants -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Factory used to create instances of {@link XmlConfigurationWriter}. */
-    public static final ConfigurationWriterFactory<XmlConfigurationWriter> FACTORY;
+    public static final ConfigurationWriterFactory FACTORY;
 
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -56,18 +56,14 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
     // - Initialization ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
-        FACTORY = new ConfigurationWriterFactory<XmlConfigurationWriter>() {
-            public XmlConfigurationWriter getWriterInstance(Writer out) {
-                return new XmlConfigurationWriter(out, getRootElementName());
-            }
-        };
+        FACTORY = out -> new XmlConfigurationWriter(out, "prefs");
     }
 
     /**
      * Creates a new instance of XML configuration writer.
      * @param out where to write the configuration data.
      */
-    protected XmlConfigurationWriter(Writer out, String rootElementName) {
+    public XmlConfigurationWriter(Writer out, String rootElementName) {
     	this.rootElementName = rootElementName;
         this.out = createHandler(out);
     }
