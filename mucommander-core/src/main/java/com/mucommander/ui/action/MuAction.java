@@ -391,6 +391,10 @@ public abstract class MuAction extends AbstractAction {
         }
     }
 
+    @Override
+    public String toString() {
+        return getLabel();
+    }
 
     //////////////////////
     // Abstract methods //

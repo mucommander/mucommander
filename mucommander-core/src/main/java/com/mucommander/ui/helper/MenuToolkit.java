@@ -22,13 +22,12 @@ package com.mucommander.ui.helper;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuListener;
-
-import com.mucommander.ui.action.MuAction;
 
 
 /**
@@ -125,8 +124,7 @@ public class MenuToolkit {
     }
 
     /**
-     * Does things that should be done to all menu items created from
-     * <code>MuAction</code>s.
+     * Does things that should be done to all menu items created from <code>MuAction</code>s.
      * <ol>
      * <li>If the provided action has an icon, it would by default get displayed in the menu item.
      *     Since icons have nothing to do in menus, let's make sure the menu item has no icon.</li>
@@ -145,21 +143,21 @@ public class MenuToolkit {
             item.setAccelerator(null);
     }
 
-    public static JMenuItem addMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper) {
+    public static JMenuItem addMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper) {
         return addMenuItem(menu, action, mnemonicHelper, false);
     }
 
 
-    public static JCheckBoxMenuItem addCheckBoxMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper) {
+    public static JCheckBoxMenuItem addCheckBoxMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper) {
         return (JCheckBoxMenuItem)addMenuItem(menu, action, mnemonicHelper, true);
     }
 
 
-    private static JMenuItem addMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper, boolean createCheckBoxMenuItem) {
+    private static JMenuItem addMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper, boolean createCheckBoxMenuItem) {
         JMenuItem menuItem = createCheckBoxMenuItem?new JCheckBoxMenuItem(action):new JMenuItem(action);
 
         if(mnemonicHelper!=null) {
-            char mnemonic = mnemonicHelper.getMnemonic(action.getLabel());
+            char mnemonic = mnemonicHelper.getMnemonic(action.toString());
             if(mnemonic!=0)
                 menuItem.setMnemonic(mnemonic);
         }
