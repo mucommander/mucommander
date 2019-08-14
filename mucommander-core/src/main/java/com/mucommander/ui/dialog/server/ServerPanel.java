@@ -45,15 +45,15 @@ import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
  */
 public abstract class ServerPanel extends XAlignedComponentPanel {
 
-    protected ServerConnectDialog dialog;
+    protected ServerPanelListener listener;
     protected JFrame mainFrame;
 	
 	
-    protected ServerPanel(ServerConnectDialog dialog, JFrame mainFrame) {
+    protected ServerPanel(ServerPanelListener listener, JFrame mainFrame) {
         // Add a 10-pixel gap label and text component
         super(10);
 		
-        this.dialog = dialog;
+        this.listener = listener;
         this.mainFrame = mainFrame;
     }
 	
@@ -78,7 +78,7 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
         // Any changes made to the spinner will update the URL label
         spinner.addChangeListener(new ChangeListener(){
             public void stateChanged(ChangeEvent e) {
-                dialog.updateURLLabel();
+                listener.updateURLLabel();
             }
         });
 
@@ -86,26 +86,26 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
     }
 	
     protected void addTextFieldListeners(JTextField textField, boolean updateLabel) {
-        textField.addActionListener(dialog);
+        textField.addActionListener(listener);
         if(updateLabel) {
             textField.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
-                    dialog.updateURLLabel();
+                    listener.updateURLLabel();
                 }
 
                 public void insertUpdate(DocumentEvent e) {
-                    dialog.updateURLLabel();
+                    listener.updateURLLabel();
                 }
 
                 public void removeUpdate(DocumentEvent e) {
-                    dialog.updateURLLabel();
+                    listener.updateURLLabel();
                 }
             });
         }
     }
 
     protected void addComboBoxListeners(JComboBox comboBox) {
-        comboBox.addItemListener(e -> dialog.updateURLLabel());
+        comboBox.addItemListener(e -> listener.updateURLLabel());
     }
 
 

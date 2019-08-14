@@ -64,7 +64,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class ServerConnectDialog extends FocusDialog implements ActionListener, ChangeListener {
+public class ServerConnectDialog extends FocusDialog implements ServerPanelListener, ChangeListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerConnectDialog.class);
     private FolderPanel folderPanel;
@@ -179,7 +179,8 @@ public class ServerConnectDialog extends FocusDialog implements ActionListener, 
     }
 
 
-    protected void updateURLLabel() {
+    @Override
+    public void updateURLLabel() {
         try {
             FileURL url = currentServerPanel.getServerURL();
             urlLabel.setText(url==null?" ":url.toString(false));
