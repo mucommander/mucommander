@@ -20,6 +20,7 @@ package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
@@ -29,7 +30,6 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.DeleteAction;
 import com.mucommander.ui.action.impl.PermanentDeleteAction;
-import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.main.MainFrame;
 

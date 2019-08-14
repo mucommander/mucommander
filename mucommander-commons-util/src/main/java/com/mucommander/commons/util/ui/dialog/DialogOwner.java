@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.dialog;
+package com.mucommander.commons.util.ui.dialog;
 
 import java.awt.Dialog;
 import java.awt.Frame;

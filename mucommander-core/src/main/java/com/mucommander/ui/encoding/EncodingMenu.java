@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.encoding;
 
+import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.DialogOwner;
 
 import javax.swing.*;
 import java.awt.*;

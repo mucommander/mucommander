@@ -19,7 +19,7 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.commons.file.util.ResourceLoader;
-import com.mucommander.ui.dialog.DialogToolkit;
+import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;

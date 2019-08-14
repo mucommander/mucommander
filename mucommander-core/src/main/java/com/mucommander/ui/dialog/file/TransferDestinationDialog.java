@@ -41,10 +41,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;

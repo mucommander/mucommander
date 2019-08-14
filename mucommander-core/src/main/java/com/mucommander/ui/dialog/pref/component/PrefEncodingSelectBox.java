@@ -18,7 +18,7 @@
 
 package com.mucommander.ui.dialog.pref.component;
 
-import com.mucommander.ui.dialog.DialogOwner;
+import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingSelectBox;

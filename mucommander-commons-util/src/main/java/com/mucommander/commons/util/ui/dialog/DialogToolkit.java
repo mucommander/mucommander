@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.dialog;
+package com.mucommander.commons.util.ui.dialog;
 
 import java.awt.Component;
 import java.awt.Dialog;

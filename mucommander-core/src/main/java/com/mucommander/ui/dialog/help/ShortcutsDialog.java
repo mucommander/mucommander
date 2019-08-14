@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.dialog.help;
 
+import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionCategory;
@@ -26,7 +27,6 @@ import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowKeyboardShortcutsAction;
-import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.KeyStrokeUtils;
