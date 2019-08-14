@@ -26,11 +26,11 @@ import javax.swing.JMenuItem;
 
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.archive.ArchiveFormatProvider;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.impl.OpenAsAction;
-import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.main.MainFrame;
 
 /**

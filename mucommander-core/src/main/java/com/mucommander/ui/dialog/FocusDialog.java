@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.ui.helper.FocusRequester;
+import com.mucommander.commons.util.ui.helper.FocusRequester;
 
 
 /**

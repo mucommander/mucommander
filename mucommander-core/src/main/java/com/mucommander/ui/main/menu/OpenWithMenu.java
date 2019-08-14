@@ -25,9 +25,9 @@ import javax.swing.JMenuItem;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.main.MainFrame;
 
 

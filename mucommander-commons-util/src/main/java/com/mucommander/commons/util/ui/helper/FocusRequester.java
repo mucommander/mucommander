@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.helper;
+package com.mucommander.commons.util.ui.helper;
 
 import java.awt.Component;
 

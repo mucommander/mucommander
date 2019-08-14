@@ -22,12 +22,12 @@ import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionPool;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
 import com.mucommander.ui.dialog.FocusDialog;
-import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;

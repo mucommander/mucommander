@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.viewer;
 
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

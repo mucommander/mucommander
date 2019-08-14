@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.helper;
+package com.mucommander.commons.util.ui.helper;
 
 import java.awt.Dimension;
 import java.awt.Frame;

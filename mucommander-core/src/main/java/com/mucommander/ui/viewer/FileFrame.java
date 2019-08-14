@@ -14,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.InformationDialog;
-import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.main.MainFrame;
 

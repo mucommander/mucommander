@@ -36,13 +36,13 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
 
 
 /**

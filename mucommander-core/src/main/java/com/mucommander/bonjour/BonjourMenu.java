@@ -18,9 +18,9 @@
 
 package com.mucommander.bonjour;
 
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;

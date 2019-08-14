@@ -24,6 +24,7 @@ import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.util.StringUtils;
+import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
@@ -32,7 +33,6 @@ import com.mucommander.ui.combobox.EditableComboBoxListener;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
-import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.main.MainFrame;
 

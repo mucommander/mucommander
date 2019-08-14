@@ -39,6 +39,8 @@ import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.EncodingDetector;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.bom.BOMInputStream;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuSnapshot;
 import com.mucommander.text.Translator;
@@ -46,8 +48,6 @@ import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.viewer.FileFrame;
 import com.mucommander.ui.viewer.FileViewer;
 

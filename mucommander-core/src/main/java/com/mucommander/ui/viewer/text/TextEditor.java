@@ -39,13 +39,13 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.io.bom.BOMWriter;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogOwner;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
-import com.mucommander.ui.helper.MenuToolkit;
-import com.mucommander.ui.helper.MnemonicHelper;
 import com.mucommander.ui.viewer.FileEditor;
 import com.mucommander.ui.viewer.FileFrame;
 

@@ -22,8 +22,8 @@ import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.helper.MenuToolkit;
 import com.mucommander.ui.main.MainFrame;
 
 /**

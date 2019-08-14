@@ -26,12 +26,12 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 
+import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.helper.FocusRequester;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
