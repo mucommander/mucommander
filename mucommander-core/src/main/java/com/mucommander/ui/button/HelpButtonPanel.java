@@ -18,8 +18,9 @@
 
 package com.mucommander.ui.button;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
 
 /**
  * A simple panel that lays out a {@link HelpButton}, aligning to the right.

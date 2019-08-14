@@ -58,11 +58,11 @@ public class MenuToolkit {
 
         if(menuListener!=null)
             menu.addMenuListener(menuListener);
-		
+
         return menu;
     }
-	
-	
+
+
     /**
      * Creates a new JMenuItem and adds it to the given JMenu.
      *
@@ -137,12 +137,12 @@ public class MenuToolkit {
      * @param item menu item to take care of.
      */
     public static void configureActionMenuItem(JMenuItem item) {
-    	item.setIcon(null);
+        item.setIcon(null);
 
-    	KeyStroke stroke = item.getAccelerator();
-    	if (stroke != null && stroke.getModifiers() == 0 &&
-    			(stroke.getKeyCode() == KeyEvent.VK_ENTER || stroke.getKeyCode() == KeyEvent.VK_SPACE || stroke.getKeyCode() == KeyEvent.VK_ESCAPE))
-    		item.setAccelerator(null);
+        KeyStroke stroke = item.getAccelerator();
+        if (stroke != null && stroke.getModifiers() == 0 &&
+                (stroke.getKeyCode() == KeyEvent.VK_ENTER || stroke.getKeyCode() == KeyEvent.VK_SPACE || stroke.getKeyCode() == KeyEvent.VK_ESCAPE))
+            item.setAccelerator(null);
     }
 
     public static JMenuItem addMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper) {
@@ -153,7 +153,7 @@ public class MenuToolkit {
     public static JCheckBoxMenuItem addCheckBoxMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper) {
         return (JCheckBoxMenuItem)addMenuItem(menu, action, mnemonicHelper, true);
     }
-    
+
 
     private static JMenuItem addMenuItem(JMenu menu, MuAction action, MnemonicHelper mnemonicHelper, boolean createCheckBoxMenuItem) {
         JMenuItem menuItem = createCheckBoxMenuItem?new JCheckBoxMenuItem(action):new JMenuItem(action);

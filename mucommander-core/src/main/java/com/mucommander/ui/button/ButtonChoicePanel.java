@@ -19,14 +19,18 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.ui.helper.MnemonicHelper;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 
 
 /**
@@ -49,7 +53,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
 
     /** Provided JButton instances */
     private JButton buttons[];
-	
+
     /** RootPane associated with this ButtonChoicePanel */
     private JRootPane rootPane;
 
@@ -60,7 +64,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
 
     /** Current button, i.e. the one that currently has focus */
     private int currentButton;
-	
+
     /**
      * Creates a new ButtonChoicePanel and lays out the given buttons on a grid
      * according to the provided number of colums.
@@ -130,7 +134,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
     /////////////////////////
 
     public void keyPressed(KeyEvent e) {
-    	int keyCode = e.getKeyCode();
+        int keyCode = e.getKeyCode();
 
         int oldCurrentButton = currentButton;
         int nbButtons = buttons.length;

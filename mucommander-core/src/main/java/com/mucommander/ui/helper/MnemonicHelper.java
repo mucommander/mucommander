@@ -19,9 +19,10 @@
 
 package com.mucommander.ui.helper;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Vector;
+
+import javax.swing.JButton;
 
 
 /**
@@ -37,16 +38,16 @@ public class MnemonicHelper {
 
     /** Current list of previously assigned mnemonics */
     private List<Character> takenMnemonics;
-	
-	
+
+
     /**
      * Creates a new blank MnemonicHelper.
      */
     public MnemonicHelper() {
         takenMnemonics = new Vector<Character>();
     }
-	
-	
+
+
     /**
      * Finds and returns first character in the given string that's not already as a mnemonic.
      *
@@ -61,7 +62,7 @@ public class MnemonicHelper {
         // Returns 0 in case of null string
         if(text==null || text.length()==0)
             return 0;
-		
+
         // Find first letter available for mnemonic (keyboard shortcut)
         int mnemonicPos = 0;
         char mnemonic;

@@ -32,7 +32,7 @@ import java.awt.Window;
  */
 public class ScreenServices {
 
-	/**
+    /**
      * Computes the screen's insets for the specified window and returns them.
      * <p>
      * While this might seem strange, screen insets can change from one window
@@ -46,8 +46,8 @@ public class ScreenServices {
     public static Insets getScreenInsets(Window window) {
         return Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
     }
-	
-	
+
+
     /**
      * Checks whether the specified frame can be moved to the specified coordinates and still
      * be fully visible.
@@ -69,10 +69,10 @@ public class ScreenServices {
         screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
 
         return (x < 0 || (x >= screenInsets.left && x < screenSize.width - screenInsets.right))
-            && (y < 0 || (y >= screenInsets.top && y < screenSize.height - screenInsets.bottom));
+                && (y < 0 || (y >= screenInsets.top && y < screenSize.height - screenInsets.bottom));
     }
-	
-	
+
+
     /**
      * Returns the maximum dimensions for a full-screen window.
      *

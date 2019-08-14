@@ -18,7 +18,9 @@
 
 package com.mucommander.ui.dialog;
 
-import java.awt.*;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 
 /**
  * This class wraps a dialog owner, which can either be a {@link Frame} or a {@link Dialog}.

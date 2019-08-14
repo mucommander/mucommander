@@ -18,9 +18,10 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.ui.icon.IconManager;
+import javax.swing.Action;
+import javax.swing.JButton;
 
-import javax.swing.*;
+import com.mucommander.ui.icon.IconManager;
 
 /**
  * ArrowButton is a button displaying an arrow icon pointing to a specified direction (up/down/left/right).
@@ -36,10 +37,10 @@ public class ArrowButton extends JButton {
     public final static int RIGHT_DIRECTION = 3;
 
     private final static String ICONS[] = {
-        "arrow_up.png",
-        "arrow_down.png",
-        "arrow_left.png",
-        "arrow_right.png"
+            "arrow_up.png",
+            "arrow_down.png",
+            "arrow_left.png",
+            "arrow_right.png"
     };
 
 

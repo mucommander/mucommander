@@ -19,15 +19,22 @@
 
 package com.mucommander.ui.dialog;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.layout.InformationPane;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 /**

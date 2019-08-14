@@ -18,7 +18,9 @@
 
 package com.mucommander.ui.button;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -41,7 +43,7 @@ public class CollapseExpandButton extends ArrowButton implements ActionListener,
     /** True if this button is in the 'expanded' state and the associated component is being displayed */
     private boolean expandedState;
 
-    
+
     /**
      * Creates a new CollapseExpandButton that renders the specified component visible/invisible.
      *

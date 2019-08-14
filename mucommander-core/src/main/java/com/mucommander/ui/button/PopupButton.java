@@ -18,16 +18,19 @@
 
 package com.mucommander.ui.button;
 
-import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.action.impl.MuteProxyAction;
-
-import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.Action;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+
+import com.mucommander.desktop.DesktopManager;
+import com.mucommander.ui.action.impl.MuteProxyAction;
 
 /**
  * PopupButton is a compound component that combines a JButton with a JPopupMenu.
@@ -57,7 +60,7 @@ public abstract class PopupButton extends NonFocusableButton {
 
     /** Controls the number of milliseconds to hold down the mouse button on the button to display the popup menu */
     private final static int POPUP_DELAY = 300;
-    
+
     /** 
      * Box-orientation constant used to specify the buttom-left oriented side of a box.
      */
@@ -150,12 +153,12 @@ public abstract class PopupButton extends NonFocusableButton {
         // weird repaint issue will arise under Windows at least (Note: this method can be executed by a thread other
         // than the event thread).
         SwingUtilities.invokeLater(() -> {
-                Dimension popupMenuSize = popupMenu.getPreferredSize();
+            Dimension popupMenuSize = popupMenu.getPreferredSize();
 
-                popupMenu.show(PopupButton.this,
-                		popupMenuLocation==RIGHT?getWidth():popupMenuLocation==LEFT?-(int)popupMenuSize.getWidth():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getWidth()-(int)popupMenuSize.getWidth():0,
-                        popupMenuLocation==BOTTOM?getHeight():popupMenuLocation==TOP?-(int)popupMenuSize.getHeight():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getHeight():0
-                );
+            popupMenu.show(PopupButton.this,
+                    popupMenuLocation==RIGHT?getWidth():popupMenuLocation==LEFT?-(int)popupMenuSize.getWidth():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getWidth()-(int)popupMenuSize.getWidth():0,
+                            popupMenuLocation==BOTTOM?getHeight():popupMenuLocation==TOP?-(int)popupMenuSize.getHeight():popupMenuLocation==BUTTOM_LEFT_ORIENTED?getHeight():0
+                    );
         });
 
         // Leave the button selected (shows that button has focus) while the popup menu is visible
@@ -201,14 +204,14 @@ public abstract class PopupButton extends NonFocusableButton {
                 return;
 
             if (DesktopManager.isRightMouseButton(mouseEvent)) {
-            	popupMenu();
+                popupMenu();
             }
             else {
-            	pressedTime = System.currentTimeMillis();
+                pressedTime = System.currentTimeMillis();
 
-            	// Spawn a thread to check if mouse is still pressed in POPUP_DELAY ms. If that is the case, popup menu
-            	// will be displayed.
-            	new Thread(this).start();
+                // Spawn a thread to check if mouse is still pressed in POPUP_DELAY ms. If that is the case, popup menu
+                // will be displayed.
+                new Thread(this).start();
             }
         }
 
@@ -244,15 +247,15 @@ public abstract class PopupButton extends NonFocusableButton {
         /////////////////////////////
 
         public void run() {
-                try { Thread.sleep(POPUP_DELAY); }
-                catch(InterruptedException e) {}
+            try { Thread.sleep(POPUP_DELAY); }
+            catch(InterruptedException e) {}
 
-                synchronized(this) {
-                    // Popup menu if a popup menu is not already being displayed and if mouse is still pressed
-                    if(!isPopupMenuVisible() && pressedTime!=0 && System.currentTimeMillis()-pressedTime>=POPUP_DELAY) {
-                        popupMenu();
-                    }
+            synchronized(this) {
+                // Popup menu if a popup menu is not already being displayed and if mouse is still pressed
+                if(!isPopupMenuVisible() && pressedTime!=0 && System.currentTimeMillis()-pressedTime>=POPUP_DELAY) {
+                    popupMenu();
                 }
+            }
         }
     }
 }

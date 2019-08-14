@@ -35,19 +35,19 @@ import org.slf4j.LoggerFactory;
  * @author Maxence Bernard
  */
 public class FocusRequester implements Runnable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FocusRequester.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(FocusRequester.class);
+
     /** The component on which to request focus */
     private Component c;
 
     /** If true, focus will be requested using Component#requestFocusInWindow() instead of Component#requestFocus() */
     private boolean requestFocusInWindow;
-	
+
     private FocusRequester(Component c, boolean requestFocusInWindow) {
         this.c = c;
         this.requestFocusInWindow = requestFocusInWindow;
     }
-	
+
     /**
      * Requests focus on the given component using {@link java.awt.Component#requestFocus()}, after all currently queued
      * Swing events have been processed.
@@ -61,10 +61,10 @@ public class FocusRequester implements Runnable {
     public static synchronized void requestFocus(Component c) {
         if(c==null) {
             LOGGER.debug(">>>>>>>>>>>>>>>>>> Component is null, returning!");
-            
+
             return;
         }
-        
+
         SwingUtilities.invokeLater(new FocusRequester(c, false));
     }
 
@@ -92,7 +92,7 @@ public class FocusRequester implements Runnable {
     /////////////////////////////
     // Runnable implementation //
     /////////////////////////////
-    
+
     public void run() {
         // Request focus on the component
         if(requestFocusInWindow)

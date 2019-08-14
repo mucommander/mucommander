@@ -18,9 +18,10 @@
 
 package com.mucommander.ui.button;
 
-import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
 
 /**
  * This class allows to add a rollover effect to a <code>JButton</code>. Rollover-enabled buttons have no borders

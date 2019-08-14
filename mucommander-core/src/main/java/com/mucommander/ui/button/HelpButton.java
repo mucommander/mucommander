@@ -98,7 +98,7 @@ public class HelpButton extends JButton {
     public String getHelpTopic() {
         return (String)getAction().getValue(GoToDocumentationAction.TOPIC_PROPERTY_KEY);
     }
-    
+
     /**
      * Sets the help topic this button will open when clicked, <code>null</code> to open the base documentation URL.
      *

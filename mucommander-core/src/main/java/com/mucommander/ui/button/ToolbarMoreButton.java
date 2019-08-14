@@ -79,107 +79,107 @@ import com.mucommander.ui.icon.IconManager;
  */
 public class ToolbarMoreButton extends JToggleButton implements ActionListener {
 
-  private static JToolBar moreToolbar;
-  JToolBar toolbar;
+    private static JToolBar moreToolbar;
+    JToolBar toolbar;
 
-  protected ToolbarMoreButton(final JToolBar toolbar) {
-    super(IconManager.getIcon(IconManager.COMMON_ICON_SET, "more.png"));
-    this.toolbar = toolbar;
-    addActionListener(this);
-    setFocusPainted(false);
+    protected ToolbarMoreButton(final JToolBar toolbar) {
+        super(IconManager.getIcon(IconManager.COMMON_ICON_SET, "more.png"));
+        this.toolbar = toolbar;
+        addActionListener(this);
+        setFocusPainted(false);
 
-    setMargin(new Insets(0, 0, 0, 0));
-    setContentAreaFilled(false);
-    setBorderPainted(false);
-    // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-    if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
-      putClientProperty("JComponent.sizeVariant", "small");
-      putClientProperty("JButton.buttonType", "textured");
-    }
-
-    // paint border only when necessary
-    addMouseListener(new MouseAdapter() {
-
-      @Override
-      public void mouseExited(MouseEvent e) {
+        setMargin(new Insets(0, 0, 0, 0));
+        setContentAreaFilled(false);
         setBorderPainted(false);
-      }
-
-      @Override
-      public void mouseEntered(MouseEvent e) {
-        setBorderPainted(true);
-      }
-    });
-
-    // hide & seek
-    toolbar.addComponentListener(new ComponentAdapter() {
-
-      @Override
-      public void componentResized(ComponentEvent e) {
-        int nbToolbarComponents = toolbar.getComponentCount();
-
-        final boolean aFlag = nbToolbarComponents>0 && !isVisible(toolbar.getComponent(nbToolbarComponents-1), null);
-        setVisible(aFlag);
-        moreToolbar.setVisible(aFlag);
-      }
-    });
-  }
-
-    // check visibility
-  // partially visible is treated as not visible
-  private boolean isVisible(Component comp, Rectangle rect) {
-    if (rect == null) {
-      rect = toolbar.getVisibleRect();
-    }
-    return comp.getLocation().x + comp.getWidth() <= rect.getWidth();
-  }
-
-  public void actionPerformed(ActionEvent e) {
-    Component[] comp = toolbar.getComponents();
-    Rectangle visibleRect = toolbar.getVisibleRect();
-    for (int i = 0; i < comp.length; i++) {
-      if (!isVisible(comp[i], visibleRect)) {
-        JPopupMenu popup = new JPopupMenu();
-        for (; i < comp.length; i++) {
-          if (comp[i] instanceof AbstractButton) {
-            AbstractButton button = (AbstractButton) comp[i];
-            if (button.getAction() != null) {
-              popup.add(button.getAction());
-            }
-          } else if (comp[i] instanceof JSeparator) {
-            popup.addSeparator();
-          }
+        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
+        if (OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
+            putClientProperty("JComponent.sizeVariant", "small");
+            putClientProperty("JButton.buttonType", "textured");
         }
 
-        // on popup close make more-button unselected
-        popup.addPopupMenuListener(new PopupMenuListener() {
+        // paint border only when necessary
+        addMouseListener(new MouseAdapter() {
 
-          public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-            setSelected(false);
-          }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setBorderPainted(false);
+            }
 
-          public void popupMenuCanceled(PopupMenuEvent e) {
-          }
-
-          public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-          }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setBorderPainted(true);
+            }
         });
-        popup.show(this, 0, getHeight());
-      }
+
+        // hide & seek
+        toolbar.addComponentListener(new ComponentAdapter() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int nbToolbarComponents = toolbar.getComponentCount();
+
+                final boolean aFlag = nbToolbarComponents>0 && !isVisible(toolbar.getComponent(nbToolbarComponents-1), null);
+                setVisible(aFlag);
+                moreToolbar.setVisible(aFlag);
+            }
+        });
     }
-  }
 
-  public static JPanel wrapToolBar(JToolBar toolbar) {
-    moreToolbar = new JToolBar();
-    moreToolbar.setRollover(true);
-    moreToolbar.setFloatable(false);
-    moreToolbar.add(new ToolbarMoreButton(toolbar));
-    moreToolbar.setBorderPainted(false);
+    // check visibility
+    // partially visible is treated as not visible
+    private boolean isVisible(Component comp, Rectangle rect) {
+        if (rect == null) {
+            rect = toolbar.getVisibleRect();
+        }
+        return comp.getLocation().x + comp.getWidth() <= rect.getWidth();
+    }
 
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.add(toolbar, BorderLayout.CENTER);
-    panel.add(moreToolbar, BorderLayout.EAST);
+    public void actionPerformed(ActionEvent e) {
+        Component[] comp = toolbar.getComponents();
+        Rectangle visibleRect = toolbar.getVisibleRect();
+        for (int i = 0; i < comp.length; i++) {
+            if (!isVisible(comp[i], visibleRect)) {
+                JPopupMenu popup = new JPopupMenu();
+                for (; i < comp.length; i++) {
+                    if (comp[i] instanceof AbstractButton) {
+                        AbstractButton button = (AbstractButton) comp[i];
+                        if (button.getAction() != null) {
+                            popup.add(button.getAction());
+                        }
+                    } else if (comp[i] instanceof JSeparator) {
+                        popup.addSeparator();
+                    }
+                }
 
-    return panel;
-  }
+                // on popup close make more-button unselected
+                popup.addPopupMenuListener(new PopupMenuListener() {
+
+                    public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                        setSelected(false);
+                    }
+
+                    public void popupMenuCanceled(PopupMenuEvent e) {
+                    }
+
+                    public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                    }
+                });
+                popup.show(this, 0, getHeight());
+            }
+        }
+    }
+
+    public static JPanel wrapToolBar(JToolBar toolbar) {
+        moreToolbar = new JToolBar();
+        moreToolbar.setRollover(true);
+        moreToolbar.setFloatable(false);
+        moreToolbar.add(new ToolbarMoreButton(toolbar));
+        moreToolbar.setBorderPainted(false);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(toolbar, BorderLayout.CENTER);
+        panel.add(moreToolbar, BorderLayout.EAST);
+
+        return panel;
+    }
 }

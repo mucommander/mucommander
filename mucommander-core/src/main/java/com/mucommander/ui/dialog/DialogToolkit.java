@@ -49,7 +49,7 @@ public class DialogToolkit {
     public static boolean fitToMinDimension(Window window, Dimension minD) {
         return fitToDimension(window, minD, true);
     }
-	
+
     public static boolean fitToMaxDimension(Window window, Dimension maxD) {
         return fitToDimension(window, maxD, false);
     }
@@ -58,21 +58,21 @@ public class DialogToolkit {
         Rectangle screenBounds = ScreenServices.getFullScreenBounds(window);
         return fitToMaxDimension(window, new Dimension((int)screenBounds.getWidth(), (int)screenBounds.getHeight()));
     }
-	
+
     private static boolean fitToDimension(Window window, Dimension d, boolean min) {
         int maxWidth = (int)d.getWidth();
         int maxHeight = (int)d.getHeight();
         int windowWidth = window.getWidth();
         int windowHeight = window.getHeight();
         boolean changeSize = false;
-		
+
         // Minimum dimension
         if(min) {
             if(windowWidth<maxWidth) {
                 windowWidth = maxWidth;
                 changeSize = true;
             }
-				
+
             if(windowHeight<maxHeight) {
                 windowHeight = maxHeight;
                 changeSize = true;
@@ -84,29 +84,29 @@ public class DialogToolkit {
                 windowWidth = maxWidth;
                 changeSize = true;
             }
-				
+
             if(windowHeight>maxHeight) {
                 windowHeight = maxHeight;
                 changeSize = true;
             }
         }
-		
+
         // Dimension needs to be changed
         if(changeSize)
             window.setSize(windowWidth, windowHeight);
-		
+
         // Return true if dimension was changed 
         return changeSize;
     }
-	
-    
+
+
     /**
      * Sets the given component's (JFrame, JDialog...) location to be centered on screen.
      */
     public static void centerOnScreen(Component c) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         c.setLocation(screenSize.width/2 - c.getWidth()/2,
-                    screenSize.height/2 - c.getHeight()/2);
+                screenSize.height/2 - c.getHeight()/2);
     }
 
     /**
@@ -134,8 +134,8 @@ public class DialogToolkit {
             y += buffer;
         c.setLocation(x, y);
     }
-    
-	
+
+
     /**
      * Creates an OK/Cancel panel using the given buttons, and register the given listener for button actions.
      */
@@ -156,7 +156,7 @@ public class DialogToolkit {
      */
     public static JPanel createButtonPanel(JButton buttons[], JRootPane rootPane, ActionListener actionListener) {
         JPanel panel = new ButtonChoicePanel(buttons, 0, rootPane);
-        
+
         MnemonicHelper mnemonicHelper = new MnemonicHelper();
         for (JButton button : buttons) {
             button.setMnemonic(mnemonicHelper.getMnemonic(button.getText()));
