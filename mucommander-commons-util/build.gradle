@@ -15,14 +15,7 @@ jar {
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'Other utilities',
          'Bundle-DocURL': 'https://www.mucommander.com',
-         'Export-Package':
-             'com.mucommander.commons.util,' +
-             'com.mucommander.commons.util.ui.button,' +
-             'com.mucommander.commons.util.ui.combobox,' +
-             'com.mucommander.commons.util.ui.dialog,' +
-             'com.mucommander.commons.util.ui.helper,' +
-             'com.mucommander.commons.util.ui.layout,' +
-             'com.mucommander.commons.util.ui.text',
+         'Export-Package': "*",
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",
          'Specification-Version': version,
