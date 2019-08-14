@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.text;
 
+import javax.swing.JTextField;
+import javax.swing.text.Document;
+
 import com.mucommander.ui.autocomplete.BasicAutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;
 import com.mucommander.ui.autocomplete.TextFieldCompletion;
-
-import javax.swing.*;
-import javax.swing.text.Document;
 
 /**
  * <code>FilePathField</code> is a text field that is made to receive a file path. It provides auto-completion

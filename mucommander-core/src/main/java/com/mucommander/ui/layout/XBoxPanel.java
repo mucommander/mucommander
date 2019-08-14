@@ -19,8 +19,14 @@
 
 package com.mucommander.ui.layout;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 
 /**
@@ -32,15 +38,15 @@ public class XBoxPanel extends JPanel {
 
     /** Custom insets, can be null if custom insets haven't been specified with {@link #setInsets(Insets)} */
     private Insets insets;
-	
-	
+
+
     /**
      * Creates a new JPanel with a vertical BoxLayout (BoxLayout.X_AXIS).
      */
     public XBoxPanel() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
     }
-	
+
 
     /**
      * Creates a new JPanel with a vertical BoxLayout (BoxLayout.X_AXIS) and
@@ -51,7 +57,7 @@ public class XBoxPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(nbPixels, 0)));
     }
 
-	
+
     /**
      * Aligns the given component on the left and adds it to this panel.
      */
@@ -69,15 +75,15 @@ public class XBoxPanel extends JPanel {
     public void addSpace(int nbPixels) {
         add(Box.createRigidArea(new Dimension(nbPixels, 0)));
     }
-	
-	
+
+
     /**
      * Sets this panel's insets.
      */
     public void setInsets(Insets insets) {
         this.insets = insets;
     }
-	
+
     /**
      * Returns this panel's insets.
      */

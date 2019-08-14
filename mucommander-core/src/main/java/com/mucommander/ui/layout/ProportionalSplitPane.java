@@ -18,16 +18,20 @@
 
 package com.mucommander.ui.layout;
 
-import com.mucommander.desktop.DesktopManager;
-
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicSplitPaneDivider;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JSplitPane;
+import javax.swing.plaf.basic.BasicSplitPaneDivider;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+
+import com.mucommander.desktop.DesktopManager;
 
 /**
  * ProportionalSplitPane is a JSplitPane that is able to maintain the divider's location constant proportionally when

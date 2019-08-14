@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.text;
 
+import javax.swing.text.PlainDocument;
 
 /**
  * Document that can be used with <code>java.swing.JTextField</code> and <code>javax.swing.JTextArea</code> to limit
@@ -26,7 +27,7 @@ package com.mucommander.ui.text;
  *
  * @author Maxence Bernard
  */
-public class SizeConstrainedDocument extends javax.swing.text.PlainDocument {
+public class SizeConstrainedDocument extends PlainDocument {
 
     /** Maximum number of characters allowed */
     private int maxLen = -1;

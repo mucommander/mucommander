@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.text;
 
+import javax.swing.JLabel;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.icon.FileIcons;
-
-import javax.swing.*;
 
 /**
  * A simple JLabel that displays information about a file:

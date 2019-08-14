@@ -35,20 +35,20 @@ import javax.swing.JPanel;
  */
 public class FluentPanel extends JPanel {
 
-	public FluentPanel(LayoutManager layoutManager) {
-		super(layoutManager);
-	}
-	
-	@Override
-	public FluentPanel add(Component comp) {
-		super.add(comp);
+    public FluentPanel(LayoutManager layoutManager) {
+        super(layoutManager);
+    }
 
-		return this;
-	}
+    @Override
+    public FluentPanel add(Component comp) {
+        super.add(comp);
 
-	public FluentPanel add(Component comp, String constraints) {
-		super.add(comp, constraints);
-		
-		return this;
-	}
+        return this;
+    }
+
+    public FluentPanel add(Component comp, String constraints) {
+        super.add(comp, constraints);
+
+        return this;
+    }
 }

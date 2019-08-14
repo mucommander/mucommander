@@ -18,8 +18,12 @@
 
 package com.mucommander.ui.layout;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JPanel;
 
 /**
  * @author Maxence Bernard
@@ -38,13 +42,13 @@ public class ProportionalGridPanel extends JPanel {
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 3, 2, 3);
 
-//        gbc.gridwidth = 1;
-//        gbc.gridheight = 1;
-//        gbc.ipadx = 0;
-//        gbc.ipady = 0;
-//        gbc.weightx = 0;
-//        gbc.weighty = 0;
-//        gbc.fill = GridBagConstraints.NONE;
+        //        gbc.gridwidth = 1;
+        //        gbc.gridheight = 1;
+        //        gbc.ipadx = 0;
+        //        gbc.ipady = 0;
+        //        gbc.weightx = 0;
+        //        gbc.weighty = 0;
+        //        gbc.fill = GridBagConstraints.NONE;
 
         gbc.anchor = GridBagConstraints.WEST;
     }

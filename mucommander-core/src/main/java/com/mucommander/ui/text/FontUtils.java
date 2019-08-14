@@ -18,8 +18,9 @@
 
 package com.mucommander.ui.text;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Font;
+
+import javax.swing.JComponent;
 
 /**
  * This class contains a set of helper methods that allow to easily change the font of a <code>JComponent</code>

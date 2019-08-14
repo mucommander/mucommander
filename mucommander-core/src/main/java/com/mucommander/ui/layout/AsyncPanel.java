@@ -18,14 +18,21 @@
 
 package com.mucommander.ui.layout;
 
-import com.mucommander.text.Translator;
-import com.mucommander.ui.icon.SpinningDial;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Window;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import java.awt.*;
+
+import com.mucommander.text.Translator;
+import com.mucommander.ui.icon.SpinningDial;
 
 /**
  * <code>AsyncPanel</code> is a <code>JPanel</code> aimed at components that potentially take a long time to

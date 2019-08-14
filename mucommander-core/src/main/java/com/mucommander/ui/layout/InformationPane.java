@@ -18,10 +18,15 @@
 
 package com.mucommander.ui.layout;
 
-import com.mucommander.ui.text.MultiLineLabel;
+import java.awt.BorderLayout;
+import java.awt.Font;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+
+import com.mucommander.ui.text.MultiLineLabel;
 
 /**
  * InformationPane is a panel which is suitable for use in dialogs, to give information about the action that the
@@ -139,24 +144,24 @@ public class InformationPane extends JPanel {
         String optionPaneIcon;
 
         switch(predefinedIconId) {
-            case ERROR_ICON:
-                optionPaneIcon = "errorIcon";
-                break;
+        case ERROR_ICON:
+            optionPaneIcon = "errorIcon";
+            break;
 
-            case INFORMATION_ICON:
-                optionPaneIcon = "informationIcon";
-                break;
+        case INFORMATION_ICON:
+            optionPaneIcon = "informationIcon";
+            break;
 
-            case WARNING_ICON:
-                optionPaneIcon = "warningIcon";
-                break;
+        case WARNING_ICON:
+            optionPaneIcon = "warningIcon";
+            break;
 
-            case QUESTION_ICON:
-                optionPaneIcon = "questionIcon";
-                break;
+        case QUESTION_ICON:
+            optionPaneIcon = "questionIcon";
+            break;
 
-            default:
-                return null;
+        default:
+            return null;
         }
 
         return UIManager.getIcon("OptionPane."+optionPaneIcon);

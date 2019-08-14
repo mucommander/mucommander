@@ -18,10 +18,15 @@
 
 package com.mucommander.ui.text;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
 /**
  * MultiLineLabel is a line-wrapping label that spawns the text over multiple lines as necessary. Unlike what its name

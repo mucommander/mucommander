@@ -19,9 +19,14 @@
 
 package com.mucommander.ui.layout;
 
-import javax.swing.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
-import java.awt.*;
 
 
 /**
@@ -80,7 +85,7 @@ public class XAlignedComponentPanel extends JPanel {
 
         // Number of pixels between labels and components
         this.xSpace = xSpace;
-		
+
         // Init gridbag constraints.
         this.c = new GridBagConstraints();
         this.c.anchor = GridBagConstraints.EAST;
@@ -114,13 +119,13 @@ public class XAlignedComponentPanel extends JPanel {
     public void addRow(JComponent label, JComponent component, int ySpaceAfter) {
         if(firstComponent ==null)
             firstComponent = component;
-		
+
         // Prepare grid bag constraints for label
         c.gridwidth = GridBagConstraints.RELATIVE;
         c.fill = GridBagConstraints.NONE;
         c.weightx = 0.0;
         c.insets = new Insets(0, 0, ySpaceAfter, xSpace);
-		
+
         add(label, c);
 
         // Prepare grid bag constraints for component
@@ -145,12 +150,12 @@ public class XAlignedComponentPanel extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
         c.insets = new Insets(0, 0, ySpaceAfter, 0);
-	
+
         add(component, c);
     }
-	
-	
-	
+
+
+
     /**
      * Overrides JPanel#requestFocus() method to request focus on the first component
      * and select its contents if it is an instance of JTextComponent.

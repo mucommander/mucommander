@@ -19,8 +19,14 @@
 
 package com.mucommander.ui.layout;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 
 /**
@@ -32,15 +38,15 @@ public class YBoxPanel extends JPanel {
 
     /** Custom insets, can be null if custom insets haven't been specified with {@link #setInsets(Insets)} */
     private Insets insets;
-	
-	
+
+
     /**
      * Creates a new JPanel with a vertical BoxLayout (BoxLayout.Y_AXIS).
      */
     public YBoxPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
-	
+
 
     /**
      * Creates a new JPanel with a vertical BoxLayout (BoxLayout.Y_AXIS) and
@@ -51,7 +57,7 @@ public class YBoxPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(0, nbVertSpace)));
     }
 
-	
+
     /**
      * Aligns the given component on the left and adds it to this panel.
      */
@@ -63,15 +69,15 @@ public class YBoxPanel extends JPanel {
         return super.add(comp);
     }
 
-	
+
     /**
      * Adds a vertical separation of the given size to this panel.
      */
     public void addSpace(int nbVertSpace) {
         add(Box.createRigidArea(new Dimension(0, nbVertSpace)));
     }
-	
-	
+
+
     /**
      * Adds the given component to this panel, inserting the specified amount of horizontal
      * space before the component.
@@ -91,7 +97,7 @@ public class YBoxPanel extends JPanel {
     public void setInsets(Insets insets) {
         this.insets = insets;
     }
-	
+
     /**
      * Returns this panel's insets.
      */
