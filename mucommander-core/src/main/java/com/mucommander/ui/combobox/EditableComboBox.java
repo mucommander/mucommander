@@ -30,8 +30,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 
-import com.mucommander.commons.runtime.JavaVersion;
-
 /**
  * EditableComboBox is an editable combo box (really!) that can use a specified JTextField to be used as the editor.
  *
@@ -183,9 +181,6 @@ public class EditableComboBox extends SaneComboBox {
                 // Combo popup menu is visible
                 if(isPopupVisible()) {
                     if(keyCode==KeyEvent.VK_ENTER) {
-                        // Under Java 1.5 or lower, we need to explicitely hide the popup.
-                        if(JavaVersion.JAVA_1_5.isCurrentOrLower())
-                            hidePopup();
                         // Note that since the event is not consumed, JComboBox will catch it and fire
                     }
                     else if(keyCode==KeyEvent.VK_ESCAPE) {
