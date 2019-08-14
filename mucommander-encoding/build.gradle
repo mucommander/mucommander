@@ -3,36 +3,31 @@
  *
  * This generated file contains a sample Java Library project to get you started.
  * For more details take a look at the Java Libraries chapter in the Gradle
- * user guide available at https://docs.gradle.org/4.8/userguide/java_library_plugin.html
+ * User Manual available at https://docs.gradle.org/5.4.1/userguide/java_library_plugin.html
  */
 
 plugins {
     id 'biz.aQute.bnd.builder'
 }
 
-dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-core')
-    compile project(':mucommander-encoding')
-    compile project(':mucommander-translator')
-    compile 'commons-net:commons-net:3.6'
-
-    testImplementation 'junit:junit:4.12'
-
-    testCompile 'org.testng:testng:6.11'
-    testCompile project(':mucommander-commons-file')
-    testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
-}
-
 repositories.jcenter()
 
+dependencies {
+    compile project(":mucommander-commons-util")
+    compile project(":mucommander-preferences")
+    compile project(":mucommander-translator")
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
+
 jar {
-   bnd ('Bundle-Name': 'muCommander-ftp',
+   bnd ('Bundle-Name': 'muCommander-encoding',
         'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-Description': 'Encoding related code',
         'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.protocol.ftp',
-        'Bundle-Activator': 'com.mucommander.commons.file.protocol.ftp.Activator',
+        'Export-Package': 'com.mucommander.ui.encoding',
+        'Import-Package': '*',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
         'Specification-Version': version,
