@@ -31,12 +31,12 @@ import com.mucommander.commons.runtime.OsFamily;
  */
 public class KeyStrokeUtils {
 
-	private final static String SHIFT_MODIFIER_STRING = KeyEvent.getKeyModifiersText(KeyEvent.SHIFT_MASK);
-    private final static String CTRL_MODIFIER_STRING  = KeyEvent.getKeyModifiersText(KeyEvent.CTRL_MASK);
-    private final static String ALT_MODIFIER_STRING   = KeyEvent.getKeyModifiersText(KeyEvent.ALT_MASK);
-    private final static String META_MODIFIER_STRING  = KeyEvent.getKeyModifiersText(KeyEvent.META_MASK);
-    
-	
+    private final static String SHIFT_MODIFIER_STRING = KeyEvent.getModifiersExText(KeyEvent.SHIFT_DOWN_MASK);
+    private final static String CTRL_MODIFIER_STRING  = KeyEvent.getModifiersExText(KeyEvent.CTRL_DOWN_MASK);
+    private final static String ALT_MODIFIER_STRING   = KeyEvent.getModifiersExText(KeyEvent.ALT_DOWN_MASK);
+    private final static String META_MODIFIER_STRING  = KeyEvent.getModifiersExText(KeyEvent.META_DOWN_MASK);
+
+
     /**
      * Returns a String representation for the given KeyStroke for display, in the following format:<br>
      * <code>modifier+modifier+...+key</code>
@@ -47,11 +47,11 @@ public class KeyStrokeUtils {
      * @param ks the KeyStroke for which to return a String representation
      * @return a String representation of the given KeyStroke for display, in the <code>[modifier]+[modifier]+...+key</code> format
      */
-	public static String getKeyStrokeRepresentation(KeyStroke ks) {
-		return ks.toString().replaceFirst("(released )|(pressed )|(typed )", "");
-	}
-	
-	/**
+    public static String getKeyStrokeRepresentation(KeyStroke ks) {
+        return ks.toString().replaceFirst("(released )|(pressed )|(typed )", "");
+    }
+
+    /**
      * Returns a String representation for the given KeyStroke <bold>for display</bold>, in the following format:<br>
      * <code>modifier+modifier+...+key</code>
      *
@@ -62,9 +62,9 @@ public class KeyStrokeUtils {
      * @return a String representation of the given KeyStroke <bold>for display</bold>, in the <code>[modifier]+[modifier]+...+key</code> format
      */
     public static String getKeyStrokeDisplayableRepresentation(KeyStroke ks) {
-    	if (ks == null)
-    		return null;
-    	
+        if (ks == null)
+            return null;
+
         int modifiers = ks.getModifiers();
         String keyText = KeyEvent.getKeyText(ks.getKeyCode());
 
@@ -91,24 +91,24 @@ public class KeyStrokeUtils {
     public static String getModifiersDisplayableRepresentation(int modifiers) {
         String modifiersString = "";
 
-        if((modifiers&KeyEvent.SHIFT_MASK)!=0)
+        if((modifiers&KeyEvent.SHIFT_DOWN_MASK)!=0)
             modifiersString += SHIFT_MODIFIER_STRING;
 
-        if((modifiers&KeyEvent.CTRL_MASK)!=0)
+        if((modifiers&KeyEvent.CTRL_DOWN_MASK)!=0)
             modifiersString += (modifiersString.equals("")?"":"+")+CTRL_MODIFIER_STRING;
 
         if(OsFamily.MAC_OS_X.isCurrent()) {
-            if((modifiers&KeyEvent.ALT_MASK)!=0)
+            if((modifiers&KeyEvent.ALT_DOWN_MASK)!=0)
                 modifiersString += (modifiersString.equals("")?"":"+")+ALT_MODIFIER_STRING;
 
-            if((modifiers&KeyEvent.META_MASK)!=0)
+            if((modifiers&KeyEvent.META_DOWN_MASK)!=0)
                 modifiersString += (modifiersString.equals("")?"":"+")+META_MODIFIER_STRING;
         }
         else {
-            if((modifiers&KeyEvent.META_MASK)!=0)
+            if((modifiers&KeyEvent.META_DOWN_MASK)!=0)
                 modifiersString += (modifiersString.equals("")?"":"+")+META_MODIFIER_STRING;
 
-            if((modifiers&KeyEvent.ALT_MASK)!=0)
+            if((modifiers&KeyEvent.ALT_DOWN_MASK)!=0)
                 modifiersString += (modifiersString.equals("")?"":"+")+ALT_MODIFIER_STRING;
         }
 
