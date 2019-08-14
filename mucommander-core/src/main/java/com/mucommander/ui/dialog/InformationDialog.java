@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.dialog;
 
+import com.mucommander.commons.util.ui.text.FontUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.CollapseExpandButton;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.layout.YBoxPanel;
-import com.mucommander.ui.text.FontUtils;
 
 import javax.swing.*;
 import java.awt.*;

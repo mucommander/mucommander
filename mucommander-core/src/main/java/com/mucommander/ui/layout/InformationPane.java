@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import com.mucommander.ui.text.MultiLineLabel;
+import com.mucommander.commons.util.ui.text.MultiLineLabel;
 
 /**
  * InformationPane is a panel which is suitable for use in dialogs, to give information about the action that the

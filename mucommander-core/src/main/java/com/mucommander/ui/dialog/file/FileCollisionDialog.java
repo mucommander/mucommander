@@ -20,6 +20,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.ui.text.FontUtils;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
@@ -31,7 +32,6 @@ import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationType;
 import com.mucommander.ui.text.FileLabel;
-import com.mucommander.ui.text.FontUtils;
 
 import javax.swing.*;
 import java.awt.*;

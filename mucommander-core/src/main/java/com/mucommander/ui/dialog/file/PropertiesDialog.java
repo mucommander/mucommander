@@ -40,6 +40,7 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.OSXFileUtils;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.commons.util.ui.text.MultiLineLabel;
 import com.mucommander.job.FileJobState;
 import com.mucommander.job.impl.PropertiesJob;
 import com.mucommander.text.SizeFormat;
@@ -55,7 +56,6 @@ import com.mucommander.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FileLabel;
-import com.mucommander.ui.text.MultiLineLabel;
 
 /**
  * This dialog shows properties of a file or a group of files : number of files, file kind,

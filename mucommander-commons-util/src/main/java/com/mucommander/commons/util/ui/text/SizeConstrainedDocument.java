@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.text;
+package com.mucommander.commons.util.ui.text;
 
 import javax.swing.text.PlainDocument;
 

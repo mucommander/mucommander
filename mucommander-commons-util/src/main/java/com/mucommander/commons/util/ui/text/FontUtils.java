@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.text;
+package com.mucommander.commons.util.ui.text;
 
 import java.awt.Font;
 

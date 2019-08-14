@@ -41,6 +41,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.util.ui.text.SizeConstrainedDocument;
 import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -48,7 +49,6 @@ import com.mucommander.ui.action.impl.ChangePermissionsAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.SizeConstrainedDocument;
 
 /**
  * This dialog allows the user to change the permissions of the currently selected/marked file(s). The permissions can be
