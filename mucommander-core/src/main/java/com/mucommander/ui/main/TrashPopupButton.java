@@ -18,13 +18,13 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.commons.util.ui.button.RolloverButtonAdapter;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.EmptyTrashAction;
 import com.mucommander.ui.action.impl.OpenTrashAction;
 import com.mucommander.ui.button.PopupButton;
-import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
 
 import javax.swing.*;

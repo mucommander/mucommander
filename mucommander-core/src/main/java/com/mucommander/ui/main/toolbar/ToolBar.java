@@ -36,6 +36,7 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.commons.util.ui.button.RolloverButtonAdapter;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -48,7 +49,6 @@ import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.action.impl.ToggleToolBarAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.button.PopupButton;
-import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 

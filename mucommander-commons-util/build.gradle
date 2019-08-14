@@ -17,6 +17,7 @@ jar {
          'Bundle-DocURL': 'https://www.mucommander.com',
          'Export-Package':
              'com.mucommander.commons.util,' +
+             'com.mucommander.commons.util.ui.button,' +
              'com.mucommander.commons.util.ui.helper,' +
              'com.mucommander.commons.util.ui.layout,' +
              'com.mucommander.commons.util.ui.text',

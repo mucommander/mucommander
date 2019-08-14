@@ -34,9 +34,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 
+import com.mucommander.commons.util.ui.button.ButtonChoicePanel;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.commons.util.ui.helper.ScreenServices;
-import com.mucommander.ui.button.ButtonChoicePanel;
 
 
 /**

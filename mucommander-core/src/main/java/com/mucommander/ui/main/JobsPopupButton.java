@@ -22,11 +22,11 @@ import java.awt.Insets;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import com.mucommander.commons.util.ui.button.RolloverButtonAdapter;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.JobListener;
 import com.mucommander.job.JobsManager;
 import com.mucommander.ui.button.PopupButton;
-import com.mucommander.ui.button.RolloverButtonAdapter;
 import com.mucommander.ui.icon.IconManager;
 
 /**

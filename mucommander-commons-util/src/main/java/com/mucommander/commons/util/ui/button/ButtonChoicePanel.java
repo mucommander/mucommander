@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.button;
+package com.mucommander.commons.util.ui.button;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;

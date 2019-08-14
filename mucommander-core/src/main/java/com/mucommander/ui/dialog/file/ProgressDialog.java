@@ -48,6 +48,7 @@ import javax.swing.event.ChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.util.ui.button.ButtonChoicePanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -62,7 +63,6 @@ import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.button.CollapseExpandButton;
 import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.FocusDialog;

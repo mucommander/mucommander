@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.button;
+package com.mucommander.commons.util.ui.button;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
