@@ -32,13 +32,13 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archiver.Archiver;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.impl.ArchiveJob;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.PackAction;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 

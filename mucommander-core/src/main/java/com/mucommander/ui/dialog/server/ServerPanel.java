@@ -20,7 +20,7 @@
 package com.mucommander.ui.dialog.server;
 
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;

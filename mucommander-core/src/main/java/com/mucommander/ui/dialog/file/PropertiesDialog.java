@@ -40,6 +40,8 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.OSXFileUtils;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.text.MultiLineLabel;
 import com.mucommander.job.FileJobState;
 import com.mucommander.job.impl.PropertiesJob;
@@ -52,8 +54,6 @@ import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FileLabel;
 

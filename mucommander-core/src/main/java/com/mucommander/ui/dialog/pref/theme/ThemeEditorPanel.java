@@ -18,12 +18,12 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
-import com.mucommander.ui.layout.ProportionalGridPanel;
 import com.mucommander.ui.theme.ThemeData;
 
 import javax.swing.*;

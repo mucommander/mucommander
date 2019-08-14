@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
 
-package com.mucommander.ui.layout;
+package com.mucommander.commons.util.ui.layout;
 
 import java.awt.Component;
 import java.awt.Container;

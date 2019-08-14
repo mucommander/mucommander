@@ -32,11 +32,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 

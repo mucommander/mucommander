@@ -19,7 +19,21 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Font;
+import java.awt.Frame;
+import java.util.Date;
+import java.util.Vector;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JSeparator;
+
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.text.FontUtils;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.CustomDateFormat;
@@ -27,16 +41,9 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.InformationPane;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
 import com.mucommander.ui.notifier.NotificationType;
 import com.mucommander.ui.text.FileLabel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Date;
-import java.util.Vector;
 
 
 /**

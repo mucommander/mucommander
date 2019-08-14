@@ -36,6 +36,8 @@ import javax.swing.JTextField;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.job.impl.SendMailJob;
@@ -45,8 +47,6 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.EmailAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.pref.general.GeneralPreferencesDialog;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
 /**

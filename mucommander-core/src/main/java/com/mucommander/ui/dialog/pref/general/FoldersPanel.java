@@ -42,6 +42,9 @@ import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.ui.layout.SpringUtilities;
+import com.mucommander.commons.util.ui.layout.XBoxPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -51,9 +54,6 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
 import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
-import com.mucommander.ui.layout.SpringUtilities;
-import com.mucommander.ui.layout.XBoxPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.WindowManager;
 
 

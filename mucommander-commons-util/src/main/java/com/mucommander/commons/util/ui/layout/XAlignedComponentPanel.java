@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.layout;
+package com.mucommander.commons.util.ui.layout;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

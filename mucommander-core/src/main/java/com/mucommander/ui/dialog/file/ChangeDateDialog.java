@@ -21,14 +21,14 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.util.ui.layout.FluentPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ChangeDateAction;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.layout.FluentPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;

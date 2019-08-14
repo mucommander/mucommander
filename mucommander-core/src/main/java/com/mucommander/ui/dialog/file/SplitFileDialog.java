@@ -21,6 +21,8 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.job.impl.SplitFileJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -30,8 +32,6 @@ import com.mucommander.ui.combobox.ComboBoxListener;
 import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.dialog.DialogToolkit;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.layout.XBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 

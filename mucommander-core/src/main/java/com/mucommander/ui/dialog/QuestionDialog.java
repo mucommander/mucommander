@@ -19,10 +19,10 @@
 
 package com.mucommander.ui.dialog;
 
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.layout.InformationPane;
-import com.mucommander.ui.layout.YBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

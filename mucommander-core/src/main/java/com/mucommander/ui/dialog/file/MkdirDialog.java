@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.job.impl.MkdirJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -46,7 +47,6 @@ import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.dialog.InformationDialog;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 

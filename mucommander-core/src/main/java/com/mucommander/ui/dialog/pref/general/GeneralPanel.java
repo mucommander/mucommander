@@ -43,6 +43,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.text.PlainDocument;
 
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -55,7 +56,6 @@ import com.mucommander.ui.dialog.pref.component.PrefComboBox;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
 import com.mucommander.ui.dialog.pref.component.PrefTextField;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.layout.YBoxPanel;
 
 
 /**

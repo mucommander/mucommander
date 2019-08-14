@@ -18,11 +18,11 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.ButtonChoicePanel;
 import com.mucommander.ui.dialog.FocusDialog;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

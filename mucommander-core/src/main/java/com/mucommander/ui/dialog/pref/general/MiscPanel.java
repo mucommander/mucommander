@@ -30,6 +30,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import com.mucommander.bonjour.BonjourDirectory;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -43,8 +45,6 @@ import com.mucommander.ui.dialog.pref.component.PrefEncodingSelectBox;
 import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
 import com.mucommander.ui.dialog.pref.component.PrefTextField;
-import com.mucommander.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.notifier.AbstractNotifier;
 
 /**

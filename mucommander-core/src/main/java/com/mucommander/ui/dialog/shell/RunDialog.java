@@ -41,6 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.util.ui.layout.XBoxPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;
@@ -51,8 +53,6 @@ import com.mucommander.ui.action.impl.RunCommandAction;
 import com.mucommander.ui.dialog.DialogToolkit;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.SpinningDial;
-import com.mucommander.ui.layout.XBoxPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;

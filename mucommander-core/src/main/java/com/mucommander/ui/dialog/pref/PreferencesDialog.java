@@ -19,11 +19,11 @@
 
 package com.mucommander.ui.dialog.pref;
 
+import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.layout.XBoxPanel;
 
 import javax.swing.*;
 import java.awt.*;

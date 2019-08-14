@@ -18,18 +18,31 @@
 
 package com.mucommander.ui.dialog;
 
-import com.mucommander.commons.util.ui.text.FontUtils;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.button.CollapseExpandButton;
-import com.mucommander.ui.layout.InformationPane;
-import com.mucommander.ui.layout.YBoxPanel;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.commons.util.ui.text.FontUtils;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.button.CollapseExpandButton;
+import com.mucommander.ui.layout.InformationPane;
 
 /**
  * This class provides static methods to display 'information' dialogs of different kinds:

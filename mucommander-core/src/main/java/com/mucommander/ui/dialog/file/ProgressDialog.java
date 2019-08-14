@@ -48,6 +48,7 @@ import javax.swing.event.ChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -66,7 +67,6 @@ import com.mucommander.ui.button.CollapseExpandButton;
 import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
 

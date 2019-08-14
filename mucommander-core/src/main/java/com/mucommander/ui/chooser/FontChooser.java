@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.chooser;
 
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.layout.YBoxPanel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

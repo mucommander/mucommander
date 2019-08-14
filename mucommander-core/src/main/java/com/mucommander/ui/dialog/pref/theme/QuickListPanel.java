@@ -34,14 +34,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.layout.ProportionalGridPanel;
-import com.mucommander.ui.layout.YBoxPanel;
 import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.quicklist.item.QuickListDataList;
 import com.mucommander.ui.quicklist.item.QuickListDataListWithIcons;

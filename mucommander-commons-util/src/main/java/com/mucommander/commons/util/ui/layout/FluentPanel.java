@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.layout;
+package com.mucommander.commons.util.ui.layout;
 
 import java.awt.Component;
 import java.awt.LayoutManager;
