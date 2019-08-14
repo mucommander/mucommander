@@ -9,6 +9,7 @@ include 'mucommander-encoding'
 include 'mucommander-preferences'
 include 'mucommander-process'
 include 'mucommander-translator'
+include 'mucommander-protocol-api'
 
 include 'mucommander-archiver'
 include 'mucommander-format-ar'

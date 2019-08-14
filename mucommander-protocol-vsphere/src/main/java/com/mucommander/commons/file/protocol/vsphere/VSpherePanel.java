@@ -27,9 +27,9 @@ import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 /**
  * This ServerPanel helps initiate VSpherePanel connections.
@@ -57,8 +57,8 @@ public class VSpherePanel extends ServerPanel {
 	private static String lastUsername = "";
 	private static String lastGuestUsername = "";
 
-	VSpherePanel(ServerConnectDialog dialog, JFrame mainFrame) {
-		super(dialog, mainFrame);
+	VSpherePanel(ServerPanelListener listener, JFrame mainFrame) {
+		super(listener, mainFrame);
 
 		// Server field
 		vsphereField = new JTextField(lastVsphere);

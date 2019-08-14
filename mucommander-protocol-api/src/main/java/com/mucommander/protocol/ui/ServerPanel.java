@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.dialog.server;
+package com.mucommander.protocol.ui;
 
 import java.awt.Insets;
 import java.net.MalformedURLException;

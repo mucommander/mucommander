@@ -16,10 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.dialog.server;
+package com.mucommander.protocol.ui;
 
-import java.awt.event.ActionListener;
+import javax.swing.JFrame;
 
-public interface ServerPanelListener extends ActionListener {
-    void updateURLLabel();
+public interface ProtocolPanelProvider {
+
+	String getSchema();
+	ServerPanel get(ServerPanelListener listener, JFrame mainFrame);
 }

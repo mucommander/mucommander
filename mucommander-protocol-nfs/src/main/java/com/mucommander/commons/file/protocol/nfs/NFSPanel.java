@@ -27,9 +27,9 @@ import javax.swing.JTextField;
 
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 /**
  * This ServerPanel helps initiate NFS connections.
@@ -52,8 +52,8 @@ public class NFSPanel extends ServerPanel {
     private static String lastNfsVersion = NFSFile.DEFAULT_NFS_VERSION;
     private static String lastNfsProtocol = NFSFile.DEFAULT_NFS_PROTOCOL;
 
-    NFSPanel(ServerConnectDialog dialog, JFrame mainFrame) {
-        super(dialog, mainFrame);
+    NFSPanel(ServerPanelListener listener, JFrame mainFrame) {
+        super(listener, mainFrame);
 
         // Server field, initialized to last value
         serverField = new JTextField(lastServer);

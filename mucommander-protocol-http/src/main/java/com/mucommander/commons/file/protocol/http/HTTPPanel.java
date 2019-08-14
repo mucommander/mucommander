@@ -29,9 +29,9 @@ import javax.swing.JTextField;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 
 /**
@@ -51,8 +51,8 @@ public class HTTPPanel extends ServerPanel {
     private String lastPassword = "";
 
 	
-    HTTPPanel(ServerConnectDialog dialog, JFrame mainFrame) {
-        super(dialog, mainFrame);
+    HTTPPanel(ServerPanelListener listener, JFrame mainFrame) {
+        super(listener, mainFrame);
 
         // Webserver (URL) field
         urlField = new JTextField(lastURL);

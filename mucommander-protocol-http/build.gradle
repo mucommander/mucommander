@@ -12,7 +12,7 @@ plugins {
 
 dependencies {
     compile project(':mucommander-commons-file')
-    compile project(':mucommander-core')
+    compile project(':mucommander-protocol-api')
     compile project(':mucommander-translator')
     compile 'org.osgi:osgi.core:7.0.0'
 

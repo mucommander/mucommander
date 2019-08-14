@@ -23,7 +23,6 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
@@ -50,6 +49,9 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.protocol.ui.ProtocolPanelProvider;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ConnectToServerAction;
@@ -127,7 +129,7 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
 //        addTab(FileProtocols.S3, new S3Panel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.SMB, new SMBPanel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.VSPHERE, new VSpherePanel(this, mainFrame), selectPanelClass);
-        schemaToPanelProvider.values().forEach(provider -> addTab(provider.getSchema(), provider.get(this,  mainFrame), null));
+        schemaToPanelProvider.values().forEach(provider -> addTab(provider.getSchema(), provider.get(this, mainFrame), null));
 
         currentServerPanel = getCurrentServerPanel();
 

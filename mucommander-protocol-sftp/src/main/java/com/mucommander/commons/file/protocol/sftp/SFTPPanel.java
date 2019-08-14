@@ -42,9 +42,9 @@ import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 public class SFTPPanel extends ServerPanel {
 
@@ -66,8 +66,8 @@ public class SFTPPanel extends ServerPanel {
     private static int lastPort = STANDARD_PORT;
 
 
-    SFTPPanel(ServerConnectDialog dialog, JFrame mainFrame) {
-        super(dialog, mainFrame);
+    SFTPPanel(ServerPanelListener listener, JFrame mainFrame) {
+        super(listener, mainFrame);
 
         // Server field, initialized to last server entered
         serverField = new JTextField(lastServer);

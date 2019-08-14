@@ -29,9 +29,9 @@ import javax.swing.JTextField;
 
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 /**
  * This ServerPanel helps initiate a connection to a registry image.
@@ -46,8 +46,8 @@ public class RegistryPanel extends ServerPanel {
 	private JPasswordField passwordField;
 	private JComboBox<String> typeComboBox;
 
-	RegistryPanel(ServerConnectDialog dialog, JFrame mainFrame, boolean isSkopeoAvailable) {
-		super(dialog, mainFrame);
+	RegistryPanel(ServerPanelListener listener, JFrame mainFrame, boolean isSkopeoAvailable) {
+		super(listener, mainFrame);
 
 		serverField = new JTextField();
 		addTextFieldListeners(serverField, true);

@@ -30,9 +30,9 @@ import com.mucommander.commons.file.DefaultSchemeParser;
 import com.mucommander.commons.file.SchemeHandler;
 import com.mucommander.commons.file.osgi.FileProtocolService;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-import com.mucommander.ui.dialog.server.ProtocolPanelProvider;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.protocol.ui.ProtocolPanelProvider;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 
 /**
  * @author Arik Hadas
@@ -67,8 +67,8 @@ public class Activator implements BundleActivator {
 			}
 
 			@Override
-			public ServerPanel get(ServerConnectDialog dialog, JFrame mainFrame) {
-				return new FTPPanel(dialog, mainFrame);
+			public ServerPanel get(ServerPanelListener listener, JFrame mainFrame) {
+				return new FTPPanel(listener, mainFrame);
 			}
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);

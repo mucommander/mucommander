@@ -29,9 +29,9 @@ import com.mucommander.commons.file.DefaultSchemeParser;
 import com.mucommander.commons.file.SchemeHandler;
 import com.mucommander.commons.file.osgi.FileProtocolService;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-import com.mucommander.ui.dialog.server.ProtocolPanelProvider;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
+import com.mucommander.protocol.ui.ProtocolPanelProvider;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 
 /**
  * @author Daniel Erez
@@ -118,9 +118,9 @@ public class Activator implements BundleActivator {
 			}
 
 			@Override
-			public ServerPanel get(ServerConnectDialog dialog, JFrame mainFrame) {
+			public ServerPanel get(ServerPanelListener listener, JFrame mainFrame) {
 				boolean isSkopeoAvailable = SkopeoCommandExecutor.checkSkopeo();
-				return new RegistryPanel(dialog, mainFrame, isSkopeoAvailable);
+				return new RegistryPanel(listener, mainFrame, isSkopeoAvailable);
 			}
 		};
 		serviceRegistrationDocker = context.registerService(FileProtocolService.class, serviceDocker, null);

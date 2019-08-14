@@ -32,9 +32,9 @@ import javax.swing.JTextField;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 
 /**
@@ -65,8 +65,8 @@ public class S3Panel extends ServerPanel {
     private static boolean lastSecureHttp = true;
     private static String lastLocation = "US";
 
-    S3Panel(ServerConnectDialog dialog, JFrame mainFrame) {
-        super(dialog, mainFrame);
+    S3Panel(ServerPanelListener listener, JFrame mainFrame) {
+        super(listener, mainFrame);
 
         // Server field, initialized to last server entered (s3.amazonaws.com by default)
         serverField = new JTextField(lastServer);

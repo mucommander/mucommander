@@ -6,7 +6,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.ui.dialog.server.ProtocolPanelProvider;
+import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 
 public class ProtocolPanelProviderTracker extends ServiceTracker<ProtocolPanelProvider, ProtocolPanelProvider> {
