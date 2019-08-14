@@ -30,8 +30,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.ui.combobox.SaneComboBox;
 import com.mucommander.commons.util.ui.dialog.DialogOwner;
-import com.mucommander.ui.combobox.SaneComboBox;
 
 /**
  * This compound component lets the user choose a character encoding among a list of {@link EncodingPreferences#getPreferredEncodings()

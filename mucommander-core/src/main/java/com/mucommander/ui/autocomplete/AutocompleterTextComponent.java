@@ -18,11 +18,12 @@
 
 package com.mucommander.ui.autocomplete;
 
-import com.mucommander.ui.combobox.EditableComboBox;
-
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+
+import com.mucommander.commons.util.ui.combobox.EditableComboBox;
+
 import java.awt.*;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;

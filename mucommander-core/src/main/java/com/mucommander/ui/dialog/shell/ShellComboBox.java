@@ -18,13 +18,13 @@
 
 package com.mucommander.ui.dialog.shell;
 
+import com.mucommander.commons.util.ui.combobox.EditableComboBox;
+import com.mucommander.commons.util.ui.combobox.EditableComboBoxListener;
+import com.mucommander.commons.util.ui.combobox.SaneComboBox;
 import com.mucommander.shell.ShellHistoryListener;
 import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.ui.autocomplete.CompleterFactory;
 import com.mucommander.ui.combobox.AutocompletedEditableCombobox;
-import com.mucommander.ui.combobox.EditableComboBox;
-import com.mucommander.ui.combobox.EditableComboBoxListener;
-import com.mucommander.ui.combobox.SaneComboBox;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 

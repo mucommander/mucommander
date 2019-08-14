@@ -19,12 +19,12 @@
 package com.mucommander.ui.dialog.pref.theme;
 
 import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.util.ui.combobox.EditableComboBox;
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
-import com.mucommander.ui.combobox.EditableComboBox;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.theme.ThemeData;
 

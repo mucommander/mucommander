@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.combobox;
+package com.mucommander.commons.util.ui.combobox;
 
 import java.awt.Color;
 import java.awt.Component;

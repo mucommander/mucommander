@@ -24,6 +24,7 @@ import java.util.Vector;
 import javax.swing.ComboBoxModel;
 import javax.swing.JTextField;
 
+import com.mucommander.commons.util.ui.combobox.EditableComboBox;
 import com.mucommander.ui.autocomplete.EditableComboboxCompletion;
 import com.mucommander.ui.autocomplete.TypicalAutocompleterEditableCombobox;
 import com.mucommander.ui.autocomplete.completers.Completer;
