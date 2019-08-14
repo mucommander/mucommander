@@ -16,10 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.border;
+package com.mucommander.commons.util.ui.border;
+
+import java.awt.Color;
 
 import javax.swing.border.LineBorder;
-import java.awt.*;
 
 /**
  * Implementation of <code>LineBorder</code> that allows applications to change the color after it's been instantiated.

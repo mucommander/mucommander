@@ -31,8 +31,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.ui.border.MutableLineBorder;
 import com.mucommander.desktop.DesktopManager;
-import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.dnd.FileDropTargetListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;

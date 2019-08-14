@@ -18,8 +18,8 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import com.mucommander.commons.util.ui.border.MutableLineBorder;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.border.MutableLineBorder;
 import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.icon.CustomFileIconProvider;
 import com.mucommander.ui.icon.FileIcons;
