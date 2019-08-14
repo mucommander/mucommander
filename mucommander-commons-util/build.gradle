@@ -15,7 +15,7 @@ jar {
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'Other utilities',
          'Bundle-DocURL': 'https://www.mucommander.com',
-         'Export-Package': "*",
+         'Export-Package': "com.mucommander.*",
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",
          'Specification-Version': version,
