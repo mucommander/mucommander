@@ -32,9 +32,9 @@ import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.util.ui.dialog.DialogOwner;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingSelectBox;
 
@@ -72,8 +72,8 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     private static boolean anonymousUser;
 
 
-    FTPPanel(final ServerConnectDialog dialog, JFrame mainFrame) {
-        super(dialog, mainFrame);
+    FTPPanel(ServerPanelListener listener, JFrame mainFrame) {
+        super(listener, mainFrame);
 
         // Server field, initialized to last server entered
         serverField = new JTextField(lastServer);

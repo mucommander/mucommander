@@ -28,9 +28,9 @@ import javax.swing.JTextField;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 
 /**
@@ -54,8 +54,8 @@ public class SMBPanel extends ServerPanel {
     private String lastPassword = "";
 
 	
-    SMBPanel(ServerConnectDialog dialog, JFrame mainFrame) {
-        super(dialog, mainFrame);
+    SMBPanel(ServerPanelListener listener, JFrame mainFrame) {
+        super(listener, mainFrame);
 
         // Server field
         serverField = new JTextField(lastServer);

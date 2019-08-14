@@ -28,9 +28,9 @@ import javax.swing.JTextField;
 
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.server.ServerConnectDialog;
-import com.mucommander.ui.dialog.server.ServerPanel;
 
 /**
  * This ServerPanel helps initiate oVirt connections.
@@ -48,8 +48,8 @@ public class OvirtPanel extends ServerPanel {
 	private static boolean useProxy;
 	private static int lastPort = OvirtConnHandler.STANDARD_PORT;
 
-	protected OvirtPanel(ServerConnectDialog dialog, JFrame mainFrame) {
-		super(dialog, mainFrame);
+	protected OvirtPanel(ServerPanelListener listener, JFrame mainFrame) {
+		super(listener, mainFrame);
 
 		serverField = new JTextField();
 		addTextFieldListeners(serverField, true);
