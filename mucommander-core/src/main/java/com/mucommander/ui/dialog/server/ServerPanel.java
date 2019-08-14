@@ -19,17 +19,21 @@
 
 package com.mucommander.ui.dialog.server;
 
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
-import com.mucommander.ui.main.MainFrame;
+import java.awt.Insets;
+import java.net.MalformedURLException;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.net.MalformedURLException;
+
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 
 
 /**
@@ -42,10 +46,10 @@ import java.net.MalformedURLException;
 public abstract class ServerPanel extends XAlignedComponentPanel {
 
     protected ServerConnectDialog dialog;
-    protected MainFrame mainFrame;
+    protected JFrame mainFrame;
 	
 	
-    protected ServerPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+    protected ServerPanel(ServerConnectDialog dialog, JFrame mainFrame) {
         // Add a 10-pixel gap label and text component
         super(10);
 		

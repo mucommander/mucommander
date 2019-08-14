@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.dialog.server;
 
-import com.mucommander.ui.main.MainFrame;
+import javax.swing.JFrame;
 
 public interface ProtocolPanelProvider {
 
 	String getSchema();
-	ServerPanel get(ServerConnectDialog dialog, final MainFrame mainFrame);
+	ServerPanel get(ServerConnectDialog dialog, JFrame mainFrame);
 }

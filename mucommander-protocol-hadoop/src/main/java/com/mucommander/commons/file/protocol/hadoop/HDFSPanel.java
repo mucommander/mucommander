@@ -20,6 +20,7 @@ package com.mucommander.commons.file.protocol.hadoop;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 
+import javax.swing.JFrame;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
@@ -29,7 +30,6 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate HDFS connections.
@@ -51,7 +51,7 @@ public class HDFSPanel extends ServerPanel {
     private static int lastPort = FileURL.getRegisteredHandler(FileProtocols.HDFS).getStandardPort();
 
 
-    HDFSPanel(ServerConnectDialog dialog, final MainFrame mainFrame) {
+    HDFSPanel(ServerConnectDialog dialog, JFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field, initialized to last server entered

@@ -18,17 +18,20 @@
 
 package com.mucommander.commons.file.protocol.registry;
 
-import java.awt.*;
+import java.awt.Color;
 import java.net.MalformedURLException;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate a connection to a registry image.
@@ -43,7 +46,7 @@ public class RegistryPanel extends ServerPanel {
 	private JPasswordField passwordField;
 	private JComboBox<String> typeComboBox;
 
-	RegistryPanel(ServerConnectDialog dialog, MainFrame mainFrame, boolean isSkopeoAvailable) {
+	RegistryPanel(ServerConnectDialog dialog, JFrame mainFrame, boolean isSkopeoAvailable) {
 		super(dialog, mainFrame);
 
 		serverField = new JTextField();

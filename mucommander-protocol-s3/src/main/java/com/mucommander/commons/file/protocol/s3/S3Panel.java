@@ -24,6 +24,7 @@ import java.text.ParseException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -34,7 +35,6 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 
 /**
@@ -65,7 +65,7 @@ public class S3Panel extends ServerPanel {
     private static boolean lastSecureHttp = true;
     private static String lastLocation = "US";
 
-    S3Panel(ServerConnectDialog dialog, final MainFrame mainFrame) {
+    S3Panel(ServerConnectDialog dialog, JFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field, initialized to last server entered (s3.amazonaws.com by default)

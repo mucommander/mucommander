@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
@@ -29,7 +30,6 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate NFS connections.
@@ -52,7 +52,7 @@ public class NFSPanel extends ServerPanel {
     private static String lastNfsVersion = NFSFile.DEFAULT_NFS_VERSION;
     private static String lastNfsProtocol = NFSFile.DEFAULT_NFS_PROTOCOL;
 
-    NFSPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+    NFSPanel(ServerConnectDialog dialog, JFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field, initialized to last value

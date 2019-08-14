@@ -21,6 +21,7 @@ package com.mucommander.commons.file.protocol.ovirt;
 import java.net.MalformedURLException;
 
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -30,7 +31,6 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate oVirt connections.
@@ -48,7 +48,7 @@ public class OvirtPanel extends ServerPanel {
 	private static boolean useProxy;
 	private static int lastPort = OvirtConnHandler.STANDARD_PORT;
 
-	protected OvirtPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+	protected OvirtPanel(ServerConnectDialog dialog, JFrame mainFrame) {
 		super(dialog, mainFrame);
 
 		serverField = new JTextField();

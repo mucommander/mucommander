@@ -17,6 +17,8 @@
  */
 package com.mucommander.commons.file.protocol.http;
 
+import javax.swing.JFrame;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -30,7 +32,6 @@ import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.ui.dialog.server.ProtocolPanelProvider;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * @author Arik Hadas
@@ -82,7 +83,7 @@ public class Activator implements BundleActivator {
 			}
 
 			@Override
-			public ServerPanel get(ServerConnectDialog dialog, MainFrame mainFrame) {
+			public ServerPanel get(ServerConnectDialog dialog, JFrame mainFrame) {
 				return new HTTPPanel(dialog, mainFrame);
 			}
 		};

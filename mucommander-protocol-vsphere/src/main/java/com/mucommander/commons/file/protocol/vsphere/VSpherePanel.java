@@ -19,6 +19,7 @@ package com.mucommander.commons.file.protocol.vsphere;
 
 import java.net.MalformedURLException;
 
+import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -29,7 +30,6 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate VSpherePanel connections.
@@ -57,7 +57,7 @@ public class VSpherePanel extends ServerPanel {
 	private static String lastUsername = "";
 	private static String lastGuestUsername = "";
 
-	VSpherePanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+	VSpherePanel(ServerConnectDialog dialog, JFrame mainFrame) {
 		super(dialog, mainFrame);
 
 		// Server field

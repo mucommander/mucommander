@@ -19,16 +19,18 @@
 
 package com.mucommander.commons.file.protocol.smb;
 
+import java.net.MalformedURLException;
+
+import javax.swing.JFrame;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.net.MalformedURLException;
 
 
 /**
@@ -52,7 +54,7 @@ public class SMBPanel extends ServerPanel {
     private String lastPassword = "";
 
 	
-    SMBPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+    SMBPanel(ServerConnectDialog dialog, JFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field

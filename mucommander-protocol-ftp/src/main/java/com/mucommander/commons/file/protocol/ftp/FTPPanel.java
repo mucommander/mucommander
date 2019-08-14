@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -36,7 +37,6 @@ import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingSelectBox;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This ServerPanel helps initiate FTP connections.
@@ -72,7 +72,7 @@ public class FTPPanel extends ServerPanel implements ActionListener, EncodingLis
     private static boolean anonymousUser;
 
 
-    FTPPanel(final ServerConnectDialog dialog, MainFrame mainFrame) {
+    FTPPanel(final ServerConnectDialog dialog, JFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field, initialized to last server entered

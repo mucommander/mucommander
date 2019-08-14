@@ -21,6 +21,7 @@ package com.mucommander.commons.file.protocol.http;
 
 import java.net.MalformedURLException;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -31,7 +32,6 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 
 /**
@@ -51,7 +51,7 @@ public class HTTPPanel extends ServerPanel {
     private String lastPassword = "";
 
 	
-    HTTPPanel(ServerConnectDialog dialog, MainFrame mainFrame) {
+    HTTPPanel(ServerConnectDialog dialog, JFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Webserver (URL) field

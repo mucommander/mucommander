@@ -32,6 +32,7 @@ import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
@@ -44,7 +45,6 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
 import com.mucommander.ui.dialog.server.ServerPanel;
-import com.mucommander.ui.main.MainFrame;
 
 public class SFTPPanel extends ServerPanel {
 
@@ -66,7 +66,7 @@ public class SFTPPanel extends ServerPanel {
     private static int lastPort = STANDARD_PORT;
 
 
-    SFTPPanel(ServerConnectDialog dialog, final MainFrame mainFrame) {
+    SFTPPanel(ServerConnectDialog dialog, JFrame mainFrame) {
         super(dialog, mainFrame);
 
         // Server field, initialized to last server entered
