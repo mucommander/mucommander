@@ -18,15 +18,19 @@
 
 package com.mucommander.ui.combobox;
 
-import com.mucommander.commons.runtime.JavaVersion;
-
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 import java.util.WeakHashMap;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.JTextField;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
+
+import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * EditableComboBox is an editable combo box (really!) that can use a specified JTextField to be used as the editor.
@@ -154,11 +158,11 @@ public class EditableComboBox extends SaneComboBox {
 
         // Use a custom editor that uses the text field
         setEditor(new BasicComboBoxEditor() {
-                @Override
-                public Component getEditorComponent() {
-                    return EditableComboBox.this.textField;
-                }
-            });
+            @Override
+            public Component getEditorComponent() {
+                return EditableComboBox.this.textField;
+            }
+        });
 
         // Make this combo box editable
         setEditable(true);
@@ -286,7 +290,7 @@ public class EditableComboBox extends SaneComboBox {
     @Override
     public void setForeground(Color color) {
         if(renderer == null)
-	    super.setForeground(color);
+            super.setForeground(color);
         else {
             renderer.setForeground(color);
             textField.setForeground(color);
@@ -296,7 +300,7 @@ public class EditableComboBox extends SaneComboBox {
     @Override
     public void setBackground(Color color) {
         if(renderer == null)
-	    super.setBackground(color);
+            super.setBackground(color);
         else {
             renderer.setBackground(color);
             textField.setBackground(color);
@@ -313,7 +317,7 @@ public class EditableComboBox extends SaneComboBox {
     public void setSelectionBackground(Color color) {
         if(renderer != null) {
             renderer.setSelectionBackground(color);
-	    textField.setSelectionColor(color);
+            textField.setSelectionColor(color);
         }
     }
 

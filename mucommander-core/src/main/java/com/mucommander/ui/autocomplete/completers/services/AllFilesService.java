@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
-import com.mucommander.commons.file.AbstractFile;
-
 import java.io.IOException;
+
+import com.mucommander.commons.file.AbstractFile;
 
 /**
  * This <code>FilesService</code> returns all the files in a given directory.
@@ -30,8 +30,8 @@ import java.io.IOException;
 
 public class AllFilesService extends FilesService {
 
-	@Override
+    @Override
     protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
-		return directory.ls();
-	}	
+        return directory.ls();
+    }	
 }

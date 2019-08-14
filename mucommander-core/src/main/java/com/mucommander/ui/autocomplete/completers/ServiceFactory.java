@@ -34,24 +34,24 @@ import com.mucommander.ui.autocomplete.completers.services.VolumesService;
  */
 
 public class ServiceFactory {
-	
-	public static CompletionService getAllFilesService() {
-		return new AllFilesService();
-	}
-	
-	public static CompletionService getBrowsableFilesService() {
-		return new FilteredFilesService(new AttributeFileFilter(FileAttribute.BROWSABLE));
-	}
-	
-	public static CompletionService getVolumesService() {
-		return new VolumesService();
-	}
-	
-	public static CompletionService getBookmarksService() {
-		return new BookmarksService();
-	}
-	
-	public static CompletionService getSystemVariablesService() {
-		return new SystemVariablesService();
-	}
+
+    public static CompletionService getAllFilesService() {
+        return new AllFilesService();
+    }
+
+    public static CompletionService getBrowsableFilesService() {
+        return new FilteredFilesService(new AttributeFileFilter(FileAttribute.BROWSABLE));
+    }
+
+    public static CompletionService getVolumesService() {
+        return new VolumesService();
+    }
+
+    public static CompletionService getBookmarksService() {
+        return new BookmarksService();
+    }
+
+    public static CompletionService getSystemVariablesService() {
+        return new SystemVariablesService();
+    }
 }

@@ -18,35 +18,35 @@
 
 package com.mucommander.ui.autocomplete.completers;
 
-import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
-
 import java.util.Vector;
+
+import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 
 /**
  * FileCompleter is a Completer based on root folders and file paths. 
  * 
  * @author Arik Hadas, based on the code of Santhosh Kumar: http://www.jroller.com/santhosh/entry/file_path_autocompletion
  */
- 
+
 public class PathCompleter extends Completer { 
-    
-	public PathCompleter(){  
-		registerService(ServiceFactory.getVolumesService());
-		registerService(ServiceFactory.getAllFilesService());
+
+    public PathCompleter(){  
+        registerService(ServiceFactory.getVolumesService());
+        registerService(ServiceFactory.getAllFilesService());
     }
- 
-	@Override
+
+    @Override
     protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
-    	return getPossibleCompletionsFromServices(component.getText());
+        return getPossibleCompletionsFromServices(component.getText());
     } 
- 
+
     @Override
     public void updateTextComponent(final String selected, AutocompleterTextComponent comp){
         if(selected==null) 
             return;
-                                 
+
         String location = tryToCompleteFromServices(selected);        
         if (comp.isEnabled() && location != null)
-        	comp.setText(location);
+            comp.setText(location);
     }
 }

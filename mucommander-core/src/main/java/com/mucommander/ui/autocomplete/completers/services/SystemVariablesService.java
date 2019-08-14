@@ -30,30 +30,30 @@ import java.util.Vector;
  */
 
 public class SystemVariablesService implements CompletionService {
-	private String[] cachedKeyNames;
-	
-	public SystemVariablesService() {
-		Set<String> keys = System.getenv().keySet();
-		int nbKeys = keys.size();
-		cachedKeyNames = new String[nbKeys];
-		Iterator<String> iter = keys.iterator();
-		for (int i=0; i<nbKeys; i++)
-			cachedKeyNames[i] = "$" + iter.next();
-		Arrays.sort(cachedKeyNames, String.CASE_INSENSITIVE_ORDER);		
-	}
+    private String[] cachedKeyNames;
 
-	public Vector<String> getPossibleCompletions(String path) {
-		return PrefixFilter.createPrefixFilter(path).filter(cachedKeyNames);
-	}
+    public SystemVariablesService() {
+        Set<String> keys = System.getenv().keySet();
+        int nbKeys = keys.size();
+        cachedKeyNames = new String[nbKeys];
+        Iterator<String> iter = keys.iterator();
+        for (int i=0; i<nbKeys; i++)
+            cachedKeyNames[i] = "$" + iter.next();
+        Arrays.sort(cachedKeyNames, String.CASE_INSENSITIVE_ORDER);		
+    }
 
-	public String complete(String selectedCompletion) {
-		String result = null;
-		int nbKeyNames = cachedKeyNames.length;
-		for (int i=0; i<nbKeyNames; i++)
-			if (cachedKeyNames[i].equalsIgnoreCase(selectedCompletion)) {
-				result = cachedKeyNames[i];
-				break;
-			}
-		return result;
-	}
+    public Vector<String> getPossibleCompletions(String path) {
+        return PrefixFilter.createPrefixFilter(path).filter(cachedKeyNames);
+    }
+
+    public String complete(String selectedCompletion) {
+        String result = null;
+        int nbKeyNames = cachedKeyNames.length;
+        for (int i=0; i<nbKeyNames; i++)
+            if (cachedKeyNames[i].equalsIgnoreCase(selectedCompletion)) {
+                result = cachedKeyNames[i];
+                break;
+            }
+        return result;
+    }
 }

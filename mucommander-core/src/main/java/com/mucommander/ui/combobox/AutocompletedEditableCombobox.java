@@ -18,14 +18,16 @@
 
 package com.mucommander.ui.combobox;
 
+import java.awt.event.KeyEvent;
+import java.util.Vector;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.JTextField;
+
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.ui.autocomplete.EditableComboboxCompletion;
 import com.mucommander.ui.autocomplete.TypicalAutocompleterEditableCombobox;
 import com.mucommander.ui.autocomplete.completers.Completer;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.util.Vector;
 
 /**
  * <code>AutocompletedEditableCombobox</code> is an editable combo-box that provides
@@ -35,7 +37,7 @@ import java.util.Vector;
  */
 public class AutocompletedEditableCombobox extends EditableComboBox {
 
-	/**
+    /**
      * Creates a new editable combo box and a JTextField to be used as the editor.
      * Has the same effect as calling {@link EditableComboBox#EditableComboBox(javax.swing.JTextField)} with a null value.
      */
@@ -90,52 +92,52 @@ public class AutocompletedEditableCombobox extends EditableComboBox {
         super(textField, items);
         enableAutoCompletion(completer);
     }
-    
+
     private void enableAutoCompletion(Completer completer) {
-    	new EditableComboboxCompletion(new TypicalAutocompleterEditableCombobox(this), completer);
+        new EditableComboboxCompletion(new TypicalAutocompleterEditableCombobox(this), completer);
     }
-	
+
     /**
      * The desired behavior of this editable combo-box when enter key is pressed.
      * 
      * @param keyEvent - the KeyEvent that occurred. 
      */
-	public void respondToEnterKeyPressing(KeyEvent keyEvent) {
-		// Combo popup menu is visible
-		if(isPopupVisible()) {
-			// Under Java 1.5 or lower, we need to explicitly hide the popup.
-			if(JavaVersion.JAVA_1_5.isCurrentOrLower())
-				hidePopup();
-			
-			// Note that since the event is not consumed, JComboBox will catch it and fire
-		}
-		// Combo popup menu is not visible, these events really belong to the text field
-		else {
-			// Notify listeners that the text field has been validated
-			fireComboFieldValidated();
-            
+    public void respondToEnterKeyPressing(KeyEvent keyEvent) {
+        // Combo popup menu is visible
+        if(isPopupVisible()) {
+            // Under Java 1.5 or lower, we need to explicitly hide the popup.
+            if(JavaVersion.JAVA_1_5.isCurrentOrLower())
+                hidePopup();
+
+            // Note that since the event is not consumed, JComboBox will catch it and fire
+        }
+        // Combo popup menu is not visible, these events really belong to the text field
+        else {
+            // Notify listeners that the text field has been validated
+            fireComboFieldValidated();
+
             // /!\ Consume the event so to prevent JComboBox from firing an ActionEvent (default JComboBox behavior)
             keyEvent.consume();
-		}		
-	}
+        }
+    }
 
-	/**
+    /**
      * The desired behavior of this editable combo-box when escape key is pressed.
      * 
      * @param keyEvent - the KeyEvent that occurred. 
      */
-	public void respondToEscapeKeyPressing(KeyEvent keyEvent) {
-		// Combo popup menu is visible
-		if(isPopupVisible()) {
-			 // Explicitely hide popup menu, JComboBox does not seem do it automatically (at least under Mac OS X + Java 1.5 and Java 1.4)
+    public void respondToEscapeKeyPressing(KeyEvent keyEvent) {
+        // Combo popup menu is visible
+        if(isPopupVisible()) {
+            // Explicitely hide popup menu, JComboBox does not seem do it automatically (at least under Mac OS X + Java 1.5 and Java 1.4)
             hidePopup();
             // Consume the event so that it is not propagated, since dialogs catch this event to close the window
             keyEvent.consume();
-		}
-		// Combo popup menu is not visible, these events really belong to the text field
-        else {
-        	// Notify listeners that the text field has been cancelled
-        	fireComboFieldCancelled();
         }
-	}
+        // Combo popup menu is not visible, these events really belong to the text field
+        else {
+            // Notify listeners that the text field has been cancelled
+            fireComboFieldCancelled();
+        }
+    }
 }

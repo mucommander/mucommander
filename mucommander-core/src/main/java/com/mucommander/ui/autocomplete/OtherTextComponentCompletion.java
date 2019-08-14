@@ -38,138 +38,138 @@ import com.mucommander.ui.autocomplete.completers.Completer;
  */
 
 public class OtherTextComponentCompletion extends CompletionType {	
-	private static final Logger LOGGER = LoggerFactory.getLogger(OtherTextComponentCompletion.class);
-	
-	private class ShowingThreadImp extends ShowingThread {
-    	public ShowingThreadImp(int delay) {
-    		super(delay);
-    	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(OtherTextComponentCompletion.class);
 
-		@Override
+    private class ShowingThreadImp extends ShowingThread {
+        public ShowingThreadImp(int delay) {
+            super(delay);
+        }
+
+        @Override
         void showAutocompletionPopup() {
-	        if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
-					         
-	            list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
-	            
-	            int x; 
-	            try{	                
-	                x = autocompletedtextComp.modelToView().x;
-	            } catch(BadLocationException e){ 
-	                // this should never happen!!! 
+            if (autocompletedtextComp.isShowing() && autocompletedtextComp.isEnabled() && updateListData(list)){
+
+                list.setVisibleRowCount(Math.min(list.getModel().getSize() ,VISIBLE_ROW_COUNT));
+
+                int x; 
+                try{	                
+                    x = autocompletedtextComp.modelToView().x;
+                } catch(BadLocationException e){ 
+                    // this should never happen!!! 
                     LOGGER.debug("Caught exception", e);
-	                return;
-	            }
-	            if (autocompletedtextComp.hasFocus()) {	            	
-	            	if (!isStopped) {	            		
-	            		list.ensureIndexIsVisible(0);
-	            		synchronized(popup) {
-		            		popup.show(autocompletedtextComp.getTextComponent(), x, autocompletedtextComp.getHeight());
-		            		
-		            		// probably because of swing's bug, sometimes the popup window looks
-		            		// as a gray rectangle - repainting solves it.
-		            		popup.repaint();
-	            		}
-	            		autocompletedtextComp.getDocument().addDocumentListener(documentListener);
-	            	}
-	            }	            
-	        }
-		}
+                    return;
+                }
+                if (autocompletedtextComp.hasFocus()) {	            	
+                    if (!isStopped) {	            		
+                        list.ensureIndexIsVisible(0);
+                        synchronized(popup) {
+                            popup.show(autocompletedtextComp.getTextComponent(), x, autocompletedtextComp.getHeight());
+
+                            // probably because of swing's bug, sometimes the popup window looks
+                            // as a gray rectangle - repainting solves it.
+                            popup.repaint();
+                        }
+                        autocompletedtextComp.getDocument().addDocumentListener(documentListener);
+                    }
+                }	            
+            }
+        }
     }
-	
-	public OtherTextComponentCompletion(AutocompleterTextComponent comp, Completer completer){
-    	super(comp, completer);        
-    	
+
+    public OtherTextComponentCompletion(AutocompleterTextComponent comp, Completer completer){
+        super(comp, completer);        
+
         autocompletedtextComp.addKeyListener(new KeyAdapter() {
-        	@Override
+            @Override
             public void keyPressed(KeyEvent keyEvent) {
                 switch(keyEvent.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
-                	boolean itemSelected = isItemSelectedAtPopupList();
-                	
+                    boolean itemSelected = isItemSelectedAtPopupList();
+
                     // Notify listeners that the text field has been validated
-                	if (itemSelected) {
-                		hideAutocompletionPopup();
-                		acceptListItem((String)list.getSelectedValue());
-                		keyEvent.consume();
-                	}
-                	else
-                		autocompletedtextComp.OnEnterPressed(keyEvent);
-                	break;
+                    if (itemSelected) {
+                        hideAutocompletionPopup();
+                        acceptListItem((String)list.getSelectedValue());
+                        keyEvent.consume();
+                    }
+                    else
+                        autocompletedtextComp.OnEnterPressed(keyEvent);
+                    break;
                 case KeyEvent.VK_ESCAPE:
-                	if (isPopupListShowing()) {
-                		if (autocompletedtextComp.isEnabled())
-                			hideAutocompletionPopup();
-                		keyEvent.consume();
-                	}
-                	else
-                		autocompletedtextComp.OnEscPressed(keyEvent);
-                	break;
+                    if (isPopupListShowing()) {
+                        if (autocompletedtextComp.isEnabled())
+                            hideAutocompletionPopup();
+                        keyEvent.consume();
+                    }
+                    else
+                        autocompletedtextComp.OnEscPressed(keyEvent);
+                    break;
                 case KeyEvent.VK_UP:
-                	if(autocompletedtextComp.isEnabled() && popup.isVisible()) {
-                		selectPreviousPossibleValue();
-                		keyEvent.consume();
-                	}
-                	break;
+                    if(autocompletedtextComp.isEnabled() && popup.isVisible()) {
+                        selectPreviousPossibleValue();
+                        keyEvent.consume();
+                    }
+                    break;
                 case KeyEvent.VK_DOWN:
-                	if(autocompletedtextComp.isEnabled()){ 
+                    if(autocompletedtextComp.isEnabled()){ 
                         if(popup.isVisible()) {
                             selectNextPossibleValue();
                             keyEvent.consume();
                         }
                     }
-                	break;
+                    break;
                 case KeyEvent.VK_SPACE:
-                	if (keyEvent.isControlDown()) {
-                		if (!popup.isVisible()) {
-                    		autocompletedtextComp.moveCarentToEndOfText();
-                    		createNewShowingThread(0);
-                    	}
-                	}
-                	break;
+                    if (keyEvent.isControlDown()) {
+                        if (!popup.isVisible()) {
+                            autocompletedtextComp.moveCarentToEndOfText();
+                            createNewShowingThread(0);
+                        }
+                    }
+                    break;
                 case KeyEvent.VK_PAGE_DOWN:
-                	if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
-                		selectNextPage();
-                		keyEvent.consume();
-                	}
-                	break;
+                    if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
+                        selectNextPage();
+                        keyEvent.consume();
+                    }
+                    break;
                 case KeyEvent.VK_PAGE_UP:
-                	if(autocompletedtextComp.isEnabled() && isItemSelectedAtPopupList()) {
-                		selectPreviousPage();
-                		keyEvent.consume();
-                	}
-                	break;
+                    if(autocompletedtextComp.isEnabled() && isItemSelectedAtPopupList()) {
+                        selectPreviousPage();
+                        keyEvent.consume();
+                    }
+                    break;
                 case KeyEvent.VK_HOME:
-                	if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
-                		selectFirstValue();
-                		keyEvent.consume();
-                	}
-                	break;
+                    if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
+                        selectFirstValue();
+                        keyEvent.consume();
+                    }
+                    break;
                 case KeyEvent.VK_END:
-                	if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
-                		selectLastValue();
-                		keyEvent.consume();
-                	}
-                	break;
+                    if(autocompletedtextComp.isEnabled() && isPopupListShowing()) {
+                        selectLastValue();
+                        keyEvent.consume();
+                    }
+                    break;
                 case KeyEvent.VK_LEFT:
-                	hideAutocompletionPopup();
-                	break;
-            	default:
+                    hideAutocompletionPopup();
+                    break;
+                default:
                 }
-        	}
+            }
         });
     }
-	
-	@Override
+
+    @Override
     protected void hideAutocompletionPopup() {
-		synchronized (popup) {
-			if (popup.isVisible())
-        		popup.setVisible(false);
-			autocompletedtextComp.getDocument().removeDocumentListener(documentListener);
-		}
-	}
-	
-	@Override
+        synchronized (popup) {
+            if (popup.isVisible())
+                popup.setVisible(false);
+            autocompletedtextComp.getDocument().removeDocumentListener(documentListener);
+        }
+    }
+
+    @Override
     protected void startNewShowingThread(int delay) {
-    	(showingThread = new ShowingThreadImp(delay)).start();
+        (showingThread = new ShowingThreadImp(delay)).start();
     }
 }

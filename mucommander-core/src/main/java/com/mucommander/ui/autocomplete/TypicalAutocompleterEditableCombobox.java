@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.autocomplete;
 
-import com.mucommander.ui.combobox.AutocompletedEditableCombobox;
-
 import java.awt.event.KeyEvent;
+
+import com.mucommander.ui.combobox.AutocompletedEditableCombobox;
 
 /**
  * This <code>AutocompleterTextComponent</code> implements {@link #OnEnterPressed(java.awt.event.KeyEvent)}
@@ -30,20 +30,20 @@ import java.awt.event.KeyEvent;
  */
 
 public class TypicalAutocompleterEditableCombobox extends AutocompleterTextComponent {
-	protected AutocompletedEditableCombobox editableCombobox;
-	
-	public TypicalAutocompleterEditableCombobox(AutocompletedEditableCombobox editableCombobox) {
-		super(editableCombobox);		
-		this.editableCombobox = editableCombobox;		
-	}
+    protected AutocompletedEditableCombobox editableCombobox;
 
-	@Override
+    public TypicalAutocompleterEditableCombobox(AutocompletedEditableCombobox editableCombobox) {
+        super(editableCombobox);		
+        this.editableCombobox = editableCombobox;		
+    }
+
+    @Override
     public void OnEnterPressed(KeyEvent keyEvent) {
-		editableCombobox.respondToEnterKeyPressing(keyEvent);
-	}
+        editableCombobox.respondToEnterKeyPressing(keyEvent);
+    }
 
-	@Override
+    @Override
     public void OnEscPressed(KeyEvent keyEvent) {
-		editableCombobox.respondToEscapeKeyPressing(keyEvent);
-	}
+        editableCombobox.respondToEscapeKeyPressing(keyEvent);
+    }
 }

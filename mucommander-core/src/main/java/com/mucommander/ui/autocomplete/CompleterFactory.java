@@ -29,16 +29,16 @@ import com.mucommander.ui.autocomplete.completers.PathCompleter;
  * @author Arik Hadas
  */
 public class CompleterFactory {
-	
-	public static Completer getComboboxOptionsCompleter() {
-		return new ComboboxOptionsCompleter();
-	}
-	
-	public static Completer getPathCompleter() {
-		return new PathCompleter();
-	}
-	
-	public static Completer getLocationCompleter() {
-		return new LocationCompleter();
-	}
+
+    public static Completer getComboboxOptionsCompleter() {
+        return new ComboboxOptionsCompleter();
+    }
+
+    public static Completer getPathCompleter() {
+        return new PathCompleter();
+    }
+
+    public static Completer getLocationCompleter() {
+        return new LocationCompleter();
+    }
 }

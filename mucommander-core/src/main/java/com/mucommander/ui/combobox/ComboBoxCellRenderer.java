@@ -18,8 +18,13 @@
 
 package com.mucommander.ui.combobox;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
  * @author Nicolas Rinaudo

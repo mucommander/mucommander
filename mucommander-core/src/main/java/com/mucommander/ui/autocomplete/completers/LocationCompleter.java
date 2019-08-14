@@ -18,9 +18,9 @@
 
 package com.mucommander.ui.autocomplete.completers;
 
-import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
-
 import java.util.Vector;
+
+import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 
 /**
  * LocationCompleter is a Completer based on locations, meaning root folders, 
@@ -30,26 +30,26 @@ import java.util.Vector;
  */
 
 public class LocationCompleter extends Completer {
-	
-	public LocationCompleter(){ 
+
+    public LocationCompleter(){ 
         registerService(ServiceFactory.getVolumesService());
         registerService(ServiceFactory.getBrowsableFilesService());
         registerService(ServiceFactory.getBookmarksService());
         registerService(ServiceFactory.getSystemVariablesService());
     }
 
-	@Override
+    @Override
     protected Vector<String> getUpdatedSuggestions(AutocompleterTextComponent component) {
-    	return getPossibleCompletionsFromServices(component.getText());
+        return getPossibleCompletionsFromServices(component.getText());
     }
- 
+
     @Override
     public void updateTextComponent(final String selected, AutocompleterTextComponent comp){
         if(selected==null) 
             return;
-        
+
         String location = tryToCompleteFromServices(selected);        
         if (comp.isEnabled() && location != null)
-        	comp.setText(location);
+            comp.setText(location);
     }
 }

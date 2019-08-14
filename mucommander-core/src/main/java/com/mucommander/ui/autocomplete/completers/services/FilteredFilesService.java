@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.autocomplete.completers.services;
 
+import java.io.IOException;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.FileFilter;
-
-import java.io.IOException;
 
 /**
  * This <code>FilesService</code> returns filtered files in a given directory,
@@ -31,14 +31,14 @@ import java.io.IOException;
  */
 
 public class FilteredFilesService extends FilesService {
-	private FileFilter fileFilter;
-	
-	public FilteredFilesService(FileFilter fileFilter) {
-		this.fileFilter = fileFilter;
-	}
+    private FileFilter fileFilter;
 
-	@Override
+    public FilteredFilesService(FileFilter fileFilter) {
+        this.fileFilter = fileFilter;
+    }
+
+    @Override
     protected AbstractFile[] getFiles(AbstractFile directory) throws IOException {
-		return fileFilter.filter(directory.ls());
-	}
+        return fileFilter.filter(directory.ls());
+    }
 }

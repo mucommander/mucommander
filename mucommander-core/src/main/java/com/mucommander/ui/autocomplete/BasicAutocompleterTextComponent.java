@@ -18,8 +18,9 @@
 
 package com.mucommander.ui.autocomplete;
 
-import javax.swing.text.JTextComponent;
 import java.awt.event.KeyEvent;
+
+import javax.swing.text.JTextComponent;
 
 /**
  * This <code>AutocompleterTextComponent</code> implements {@link #OnEnterPressed(java.awt.event.KeyEvent)}
