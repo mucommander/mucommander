@@ -38,9 +38,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.FocusDialog;
 
 /**
  * This dialog allows the list of preferred character encodings to be modified by the end user. Each of the supported

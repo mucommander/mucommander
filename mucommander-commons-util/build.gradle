@@ -5,6 +5,7 @@ plugins {
 repositories.jcenter()
 
 dependencies {
+    compile project(":mucommander-commons-runtime")
     compile 'org.slf4j:slf4j-api:1.7.26'
 
     testCompile 'org.testng:testng:6.11'

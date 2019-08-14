@@ -28,11 +28,11 @@ import com.mucommander.commons.util.ui.combobox.EditableComboBox;
 import com.mucommander.commons.util.ui.combobox.EditableComboBoxListener;
 import com.mucommander.commons.util.ui.combobox.SaneComboBox;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.main.MainFrame;
 

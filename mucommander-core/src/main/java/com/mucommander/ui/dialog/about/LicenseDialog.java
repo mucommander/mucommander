@@ -19,8 +19,8 @@
 package com.mucommander.ui.dialog.about;
 
 import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 import org.slf4j.Logger;

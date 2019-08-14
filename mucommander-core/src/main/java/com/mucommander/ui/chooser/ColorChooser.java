@@ -18,10 +18,10 @@
 
 package com.mucommander.ui.chooser;
 
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.FocusDialog;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

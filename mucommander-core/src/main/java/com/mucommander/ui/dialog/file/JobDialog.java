@@ -19,9 +19,9 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.CollapseExpandButton;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.list.FileList;

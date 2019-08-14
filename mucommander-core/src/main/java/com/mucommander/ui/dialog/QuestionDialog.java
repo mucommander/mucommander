@@ -32,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import com.mucommander.commons.util.ui.button.ButtonChoicePanel;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.ui.layout.InformationPane;

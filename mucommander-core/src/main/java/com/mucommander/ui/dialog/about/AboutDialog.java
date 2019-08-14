@@ -45,13 +45,13 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.FluentPanel;
 import com.mucommander.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.GoToWebsiteAction;
 import com.mucommander.ui.action.impl.ShowAboutAction;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;

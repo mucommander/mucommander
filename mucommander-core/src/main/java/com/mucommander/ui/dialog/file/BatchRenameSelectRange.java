@@ -19,8 +19,8 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.FocusDialog;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;

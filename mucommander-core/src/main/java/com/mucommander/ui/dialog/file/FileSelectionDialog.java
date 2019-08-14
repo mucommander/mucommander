@@ -41,6 +41,7 @@ import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.file.filter.ContainsFilenameFilter;
 import com.mucommander.commons.file.filter.EndsWithFilenameFilter;
@@ -50,7 +51,6 @@ import com.mucommander.commons.file.filter.PassThroughFileFilter;
 import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.commons.file.filter.StartsWithFilenameFilter;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.FocusDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
