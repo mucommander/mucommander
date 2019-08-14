@@ -18,14 +18,21 @@
 
 package com.mucommander.ui.encoding;
 
-import com.mucommander.commons.util.ui.dialog.DialogOwner;
-import com.mucommander.text.Translator;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.WeakHashMap;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+
+import com.mucommander.commons.util.ui.dialog.DialogOwner;
+import com.mucommander.text.Translator;
 
 /**
  * This menu lets the user choose a character encoding among a list of {@link EncodingPreferences#getPreferredEncodings()
