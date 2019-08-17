@@ -24,6 +24,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -58,13 +59,16 @@ public class Translator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Translator.class);
 
 	/** List of all available languages in the dictionary file */
-	private static List<Locale> availableLanguages = new ArrayList<Locale>();
+	private static List<Locale> availableLanguages = new ArrayList<>();
 
 	/** Current language */
 	private static Locale language;
 
 	private static ResourceBundle dictionaryBundle;
 	private static ResourceBundle languagesBundle;
+
+	private static List<String> languageTags = Arrays.asList(
+	        "ar","be","ca","cs","da","de","en","en-GB","es","fr","hu","ja","ko","nb","nl","pl","pt-BR","ro","ru","sk","sl","sv","tr","uk","zh-CN","zh-TW");
 
 	/**
 	 * Prevents instance creation.
@@ -73,37 +77,7 @@ public class Translator {
 	}
 
 	static {
-		registerLocale(Locale.forLanguageTag("ar"));
-		registerLocale(Locale.forLanguageTag("be"));
-		registerLocale(Locale.forLanguageTag("ca"));
-		registerLocale(Locale.forLanguageTag("cs"));
-		registerLocale(Locale.forLanguageTag("da"));
-		registerLocale(Locale.forLanguageTag("de"));
-		registerLocale(Locale.forLanguageTag("en"));
-		registerLocale(Locale.forLanguageTag("en-GB"));
-		registerLocale(Locale.forLanguageTag("es"));
-		registerLocale(Locale.forLanguageTag("fr"));
-		registerLocale(Locale.forLanguageTag("hu"));
-		registerLocale(Locale.forLanguageTag("it"));
-		registerLocale(Locale.forLanguageTag("ja"));
-		registerLocale(Locale.forLanguageTag("ko"));
-		registerLocale(Locale.forLanguageTag("nb"));
-		registerLocale(Locale.forLanguageTag("nl"));
-		registerLocale(Locale.forLanguageTag("pl"));
-		registerLocale(Locale.forLanguageTag("pt-BR"));
-		registerLocale(Locale.forLanguageTag("ro"));
-		registerLocale(Locale.forLanguageTag("ru"));
-		registerLocale(Locale.forLanguageTag("sk"));
-		registerLocale(Locale.forLanguageTag("sl"));
-		registerLocale(Locale.forLanguageTag("sv"));
-		registerLocale(Locale.forLanguageTag("tr"));
-		registerLocale(Locale.forLanguageTag("uk"));
-		registerLocale(Locale.forLanguageTag("zh-CN"));
-		registerLocale(Locale.forLanguageTag("zh-TW"));
-	}
-
-	public static void registerLocale(Locale locale) {
-		availableLanguages.add(locale);
+		languageTags.forEach(tag -> availableLanguages.add(Locale.forLanguageTag(tag)));
 	}
 
 	private static Locale loadLocale() {
