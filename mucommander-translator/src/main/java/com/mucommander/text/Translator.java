@@ -61,9 +61,6 @@ public class Translator {
 	/** List of all available languages in the dictionary file */
 	private static List<Locale> availableLanguages = new ArrayList<>();
 
-	/** Current language */
-	private static Locale language;
-
 	private static ResourceBundle dictionaryBundle;
 	private static ResourceBundle languagesBundle;
 
@@ -144,21 +141,13 @@ public class Translator {
 		ResourceBundle resourceBundle= ResourceBundle.getBundle("dictionary", locale, utf8ResourceBundleControl);
 		dictionaryBundle = new Translator.ResolveVariableResourceBundle(resourceBundle);
 
+		String languageTag = locale.toLanguageTag();
 		// Set preferred language in configuration file
-		MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, locale.toLanguageTag());
+		MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, languageTag);
 
-		LOGGER.debug("Current language has been set to "+Translator.language);
+		LOGGER.debug("Current language has been set to "+languageTag);
 
 		languagesBundle = ResourceBundle.getBundle("languages", utf8ResourceBundleControl);
-	}
-
-	/**
-	 * Returns the current language as a language code ("EN", "FR", "pt_BR", ...).
-	 *
-	 * @return lang a language code
-	 */
-	public static String getLanguage() {
-		return language.getLanguage();
 	}
 
 	/**
