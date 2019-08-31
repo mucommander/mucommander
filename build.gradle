@@ -76,6 +76,7 @@ runOsgi {
             'sun.security.action,' +
             'com.apple.eawt,' +
             'com.apple.eio',
+        'org.osgi.framework.storage.clean': 'onFirstInit',
         'felix.log.level': 1 ]
     wrapInstructions {
         manifest("httpclient.*") {
