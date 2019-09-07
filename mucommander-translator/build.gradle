@@ -40,3 +40,7 @@ jar {
          'Build-Date': new Date().format('yyyyMMdd'),
          'Build-Url': "https://www.mucommander.com/version/nightly.xml")
 }
+
+test {
+    useJUnit()
+}
