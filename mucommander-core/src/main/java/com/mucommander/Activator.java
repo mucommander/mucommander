@@ -23,6 +23,7 @@ import org.osgi.framework.BundleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.text.TranslationTracker;
 import com.mucommander.ui.main.osgi.ProtocolPanelProviderTracker;
 
 /**
@@ -37,6 +38,7 @@ public class Activator implements BundleActivator {
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
     private ProtocolPanelProviderTracker protocolPanelTracker;
+    private TranslationTracker translationTracker;
 
     /** Registered shutdown-hook */
     private ShutdownHook shutdownHook;
@@ -49,6 +51,9 @@ public class Activator implements BundleActivator {
         this.context = context;
         protocolPanelTracker = new ProtocolPanelProviderTracker(context);
         protocolPanelTracker.open();
+        translationTracker = new TranslationTracker(context);
+        translationTracker.open();
+
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
         muCommander.run(this);
@@ -58,6 +63,7 @@ public class Activator implements BundleActivator {
     public void stop(BundleContext context) throws Exception {
         LOGGER.debug("stopping");
         protocolPanelTracker.close();
+        translationTracker.close();
         // if the activator performs the shutdown tasks, no need for the shutdown-hook
         if (ShutdownHook.performShutdownTasks())
             Runtime.getRuntime().removeShutdownHook(shutdownHook);

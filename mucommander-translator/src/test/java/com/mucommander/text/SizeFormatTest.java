@@ -44,8 +44,8 @@ public class SizeFormatTest {
 
     static {
         // SizeFormat uses localized strings
-        try { Translator.init(); }
-        catch(Exception e) { throw new RuntimeException(e); }
+//        try { Translator.init(); }
+//        catch(Exception e) { throw new RuntimeException(e); }
     }
 
     /**
