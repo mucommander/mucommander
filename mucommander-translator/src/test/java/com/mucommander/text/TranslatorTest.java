@@ -17,6 +17,9 @@
  */
 package com.mucommander.text;
 
+import java.util.Collections;
+import java.util.Locale;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -32,7 +35,8 @@ public class TranslatorTest {
      */
     @BeforeClass
     public static void init() {
-        Translator.init();
+        Locale locale = Activator.loadLocale();
+        Translator.init(Activator.getDictionaryBundle(locale), Activator.getLanguageBundle(locale), Collections.emptyList());
     }
 
     /**

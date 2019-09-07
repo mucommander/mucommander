@@ -27,6 +27,7 @@ dependencies {
 jar {
     bnd ('Bundle-Name': 'muCommander-translator',
          'Bundle-Vendor': 'muCommander',
+         'Bundle-Activator': 'com.mucommander.text.Activator',
          'Bundle-Description': 'translations',
          'Bundle-DocURL': 'https://www.mucommander.com',
          'Export-Package': 'com.mucommander.text',

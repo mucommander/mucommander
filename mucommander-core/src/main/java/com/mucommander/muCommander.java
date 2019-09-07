@@ -428,11 +428,6 @@ public class muCommander {
             try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
             catch(Exception e) {printError("Could not initialize desktop", e, true);}
 
-            // Loads dictionary
-            printStartupMessage("Loading dictionary...");
-            try {com.mucommander.text.Translator.init();}
-            catch(Exception e) {printError("Could not load dictionary", e, true);}
-
             // Loads custom commands
             printStartupMessage("Loading file associations...");
             try {com.mucommander.command.CommandManager.loadCommands();}
