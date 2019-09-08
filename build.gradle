@@ -14,6 +14,13 @@ plugins {
     id 'nebula.ospackage' version '6.2.1'
 }
 
+allprojects {
+    group = 'org.mucommander'
+    version = '0.9.4'
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
+
 compileJava.options.encoding = 'UTF-8'
 
 repositories {
@@ -57,6 +64,11 @@ dependencies {
     osgiRuntime project('mucommander-format-libguestfs') // Note that this is a work-in-progress
 }
 
+createBundlesDir.doLast {
+   ant.move file: "${buildDir}/osgi/bundle/${project('mucommander-core').jar.archiveName}",
+            todir: "${buildDir}/osgi/app"
+}
+
 runOsgi {
     if (System.getenv('DEBUG')) {
         javaArgs = '-Djava.library.path=/usr/local/lib -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005'
@@ -77,6 +89,8 @@ runOsgi {
             'com.apple.eawt,' +
             'com.apple.eio',
         'org.osgi.framework.storage.clean': 'onFirstInit',
+        'felix.auto.start.2': "file:${buildDir}/osgi/app/${project('mucommander-core').name}-${version}.jar",
+        'org.osgi.framework.startlevel.beginning': 2,
         'felix.log.level': 1 ]
     wrapInstructions {
         manifest("httpclient.*") {
@@ -84,13 +98,6 @@ runOsgi {
             instruction 'DynamicImport-Package', 'org.jets3t.service.utils', '*'
         }
     }
-}
-
-allprojects {
-    group = 'org.mucommander'
-    version = '0.9.4'
-    sourceCompatibility = 11
-    targetCompatibility = 11
 }
 
 ext {
