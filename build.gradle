@@ -100,6 +100,10 @@ runOsgi {
     }
 }
 
+task run() {
+    dependsOn 'runOsgi'
+}
+
 ext {
     // Open the Git repository in the project's root directory.
     git = grgit.open(dir: project.rootDir)
