@@ -70,10 +70,10 @@ createBundlesDir.doLast {
 }
 
 runOsgi {
-    if (System.getenv('DEBUG')) {
-        javaArgs = '-Djava.library.path=/usr/local/lib -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005'
-    } else {
-        javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
+    javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
+    def port = System.getenv('DEBUG')
+    if (port) {
+        javaArgs += ' -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=' + port
     }
     configSettings = 'felix'
     osgiMain = 'org.apache.felix:org.apache.felix.main:6.0.3'
