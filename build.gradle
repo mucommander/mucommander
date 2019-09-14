@@ -19,6 +19,9 @@ allprojects {
     version = '0.9.4'
     sourceCompatibility = 11
     targetCompatibility = 11
+    configurations {
+        compileOnly.extendsFrom comprise
+    }
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -221,10 +224,6 @@ jar {
 shadowJar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    exclude 'com/ibm/icu/impl/**'
-    exclude 'com/ibm/icu/lang/**'
-    exclude 'com/ibm/icu/math/**'
-    exclude 'com/ibm/icu/util/**'
     exclude 'javax/el/**'
     exclude 'javax/servlet/**'
     exclude 'com/sun/jna/darwin/**'

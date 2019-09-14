@@ -6,15 +6,23 @@ repositories.jcenter()
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.26'
-    compile 'com.ibm.icu:icu4j:59.2'
+    comprise 'com.ibm.icu:icu4j:59.2'
 
     testCompile 'org.testng:testng:6.11'
 }
 
 jar {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        include 'com/ibm/icu/text/**'
+    } }
+
     bnd ('Bundle-Name': 'muCommander-commons-io',
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'Library with I/O tools',
+         'Import-Package':
+                '!com.ibm.icu.*,' +
+                '!com.mucommander.commons.io.bom,' +
+                ' *',
          'Export-Package':
                 'com.mucommander.commons.io,' +
                 'com.mucommander.commons.io.base64,' +
