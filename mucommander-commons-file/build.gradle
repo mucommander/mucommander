@@ -2,10 +2,7 @@ plugins {
     id 'biz.aQute.bnd.builder'
 }
 
-repositories {
-    jcenter()
-//    maven { url "http://mvnrepository.com/artifact" }
-}
+repositories.jcenter()
 
 dependencies {
     compile project(':mucommander-commons-io')
