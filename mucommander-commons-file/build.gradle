@@ -9,8 +9,8 @@ dependencies {
     compile project(':mucommander-commons-runtime')
     compile project(':mucommander-commons-util')
 
-    compile 'net.java.dev.jna:jna:4.4.0'
-    compile 'net.java.dev.jna:jna-platform:4.4.0'
+    comprise 'net.java.dev.jna:jna:4.4.0'
+    comprise 'net.java.dev.jna:jna-platform:4.4.0'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'commons-collections:commons-collections:3.2.2'
     compile 'org.osgi:osgi.core:7.0.0'
@@ -20,6 +20,23 @@ dependencies {
 }
 
 jar {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'com/sun/jna/darwin/**'
+        exclude 'com/sun/jna/freebsd-x86/**'
+        exclude 'com/sun/jna/freebsd-x86-64/**'
+        exclude 'com/sun/jna/linux-arm/**'
+        exclude 'com/sun/jna/linux-x86/**'
+        exclude 'com/sun/jna/linux-x86-64/**'
+        exclude 'com/sun/jna/openbsd-x86/**'
+        exclude 'com/sun/jna/openbsd-x86-64/**'
+        exclude 'com/sun/jna/sunos-sparc/**'
+        exclude 'com/sun/jna/sunos-sparcv9/**'
+        exclude 'com/sun/jna/sunos-x86/**'
+        exclude 'com/sun/jna/sunos-x86-64/**'
+        exclude 'com/sun/jna/w32ce-arm/**'
+        exclude 'META-INF/**'
+    } }
+
     bnd ('Bundle-Name': 'muCommander-commons-file',
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'Component with file-level utilities',
@@ -35,7 +52,8 @@ jar {
             'com.mucommander.commons.file.osgi,' +
             'com.mucommander.commons.file.protocol,' +
             'com.mucommander.commons.file.protocol.local,' +
-            'com.mucommander.commons.file.util',
+            'com.mucommander.commons.file.util,' +
+            'com.sun.jna.platform.win32',
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",
          'Specification-Version': version,
@@ -45,3 +63,4 @@ jar {
          'Build-Date': new Date().format('yyyyMMdd'),
          'Build-Url': "https://www.mucommander.com/version/nightly.xml")
 }
+
