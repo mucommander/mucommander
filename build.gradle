@@ -97,6 +97,9 @@ runOsgi {
             // enable httpclient to instantiate factories that reside in jets3t
             instruction 'DynamicImport-Package', 'org.jets3t.service.utils', '*'
         }
+        manifest("sdk-.*") {
+            instruction 'Bundle-Name', 'ovirt-sdk'
+        }
     }
 }
 
