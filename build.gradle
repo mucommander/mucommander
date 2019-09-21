@@ -11,7 +11,7 @@ plugins {
     id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
     id 'org.ajoberstar.grgit' version '3.1.1'
-    id 'nebula.ospackage' version '6.2.1'
+    id 'nebula.ospackage' version '7.1.0'
 }
 
 allprojects {
