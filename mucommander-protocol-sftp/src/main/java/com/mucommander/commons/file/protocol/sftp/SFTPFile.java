@@ -761,14 +761,15 @@ public class SFTPFile extends ProtocolFile {
                 // File doesn't exist on the server
                 if (e.id == ChannelSftp.SSH_FX_NO_SUCH_FILE)
                     setExists(false);
+                else
+                    LOGGER.error("failed to get attributes of " + url.getPath(), e);
 
             } catch(IOException e) {
                 // Rethrow AuthException
-                if(e instanceof AuthException)
+                if (e instanceof AuthException)
                     throw (AuthException)e;
-
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                else
+                    LOGGER.error("failed to get attributes of " + url.getPath(), e);
             }
             finally {
                 // Release the lock on the ConnectionHandler
