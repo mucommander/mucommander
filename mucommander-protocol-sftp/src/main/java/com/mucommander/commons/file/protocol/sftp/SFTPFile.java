@@ -246,7 +246,6 @@ public class SFTPFile extends ProtocolFile {
     @Override
     public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
         SFTPConnectionHandler connHandler = null;
-        SftpATTRS attributes = null;
         try {
             // Retrieve a ConnectionHandler and lock it
             connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
@@ -254,12 +253,7 @@ public class SFTPFile extends ProtocolFile {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            // Retrieve an SftpFile instance for write, will throw an IOException if the file does not exist or cannot
-            // be written.
-            // /!\ SftpFile instance must be closed afterwards to release its file handle
-            attributes = connHandler.channelSftp.lstat(absPath);
-            attributes.setACMODTIME(attributes.getATime(), (int)(lastModified/1000));
-            connHandler.channelSftp.setStat(absPath, attributes);
+            connHandler.channelSftp.setMtime(absPath, (int)(lastModified/1000));
             // Update local attribute copy
             fileAttributes.setDate(lastModified);
         } catch (SftpException e) {
