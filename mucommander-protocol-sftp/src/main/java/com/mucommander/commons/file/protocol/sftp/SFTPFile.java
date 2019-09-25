@@ -257,7 +257,7 @@ public class SFTPFile extends ProtocolFile {
             // Update local attribute copy
             fileAttributes.setDate(lastModified);
         } catch (SftpException e) {
-            e.printStackTrace();
+            LOGGER.error("failed to change the modification date of " + absPath, e);
         }
         finally {
             // Release the lock on the ConnectionHandler
