@@ -757,15 +757,16 @@ public class SFTPFile extends ProtocolFile {
                 // very often, but still.
                 setAttributes(connHandler.channelSftp.lstat(url.getPath()));
                 setExists(true);
-            }
-            catch(IOException e) {
+            } catch(SftpException e) {
                 // File doesn't exist on the server
-                setExists(false);
+                if (e.id == ChannelSftp.SSH_FX_NO_SUCH_FILE)
+                    setExists(false);
 
+            } catch(IOException e) {
                 // Rethrow AuthException
                 if(e instanceof AuthException)
                     throw (AuthException)e;
-            } catch (SftpException e) {
+
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
