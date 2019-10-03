@@ -29,6 +29,8 @@ subprojects {
 }
 
 compileJava.options.encoding = 'UTF-8'
+compileJava.sourceCompatibility = 8
+compileJava.targetCompatibility = 8
 
 repositories {
     jcenter()
@@ -36,6 +38,8 @@ repositories {
 }
 
 dependencies {
+    compile 'org.apache.felix:org.apache.felix.main:6.0.3'
+
     osgiRuntime project('mucommander-core')
     osgiRuntime project('mucommander-commons-collections')
     osgiRuntime project('mucommander-commons-conf')
