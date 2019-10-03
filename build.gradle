@@ -148,30 +148,36 @@ test {
     useTestNG()
 }
 
+import org.apache.tools.ant.filters.ReplaceTokens
+
 buildRpm {
+    dependsOn createOsgiRuntime
+
     postInstall file('package/unix/postinst')
     postUninstall file('package/unix/postrm')
 
     maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
     summary = 'a lightweight, cross-platform file manager'
-    suggests('java-1.8.0-openjdk')
+    suggests('java-11-openjdk')
     os = LINUX
 
     from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh')
+    from ('package/unix/mucommander.sh') {
+        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
+    }
     into '/usr/share/mucommander'
 
+    from ("$buildDir/osgi/") {
+        include '*.jar'
+        into '/usr/share/mucommander'
+    }
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
         into '/usr/share/mucommander/bundle'
     }
-    from ("$buildDir/osgi/conf") {
-        include '*'
-        into '/usr/share/mucommander/conf'
-    }
-    from ("$buildDir/osgi/system-libs") {
-        include '*'
-        into '/usr/share/mucommander/system-libs'
+    from ("$buildDir/osgi/app") {
+        include '*.jar'
+        into '/usr/share/mucommander/app'
     }
     from ('mucommander-core/src/main/resources/images/mucommander/icon128_24.png') {
         rename '.*', 'mucommander.png'
@@ -184,7 +190,7 @@ buildRpm {
         into '/usr/share/applications'
     }
 
-    directory( '/usr/share/mucommander/felix-cache' ,0775)
+    directory('/usr/share/mucommander/felix-cache', 0775)
 }
 
 // Debian packaging
@@ -230,7 +236,6 @@ buildDeb {
 plugins {
     id 'edu.sc.seis.macAppBundle' version '2.1.6'
     id 'edu.sc.seis.launch4j' version '2.4.4'
-    id 'nebula.ospackage' version '3.5.0'
 }
 
 macAppBundle {
@@ -274,8 +279,6 @@ launch4j {
     cmdLine = '-p %HOMEPATH%/.mucommander'
     opt = '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader'
 }
-
-import org.apache.tools.ant.filters.ReplaceTokens
 
 // Windows installer
 task nsis(dependsOn: createExe) {

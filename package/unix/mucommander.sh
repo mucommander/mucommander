@@ -35,4 +35,4 @@ fi
 cd `dirname "$BASE_FOLDER"`
 
 # Starts mucommander.
-$JAVA -DGNOME_DESKTOP_SESSION_ID=$GNOME_DESKTOP_SESSION_ID -DKDE_FULL_SESSION=$KDE_FULL_SESSION -DKDE_SESSION_VERSION=$KDE_SESSION_VERSION -Djava.library.path=/usr/local//lib -cp system-libs/org.apache.felix.main-6.0.3.jar org.apache.felix.main.Main $@
+$JAVA -DGNOME_DESKTOP_SESSION_ID=$GNOME_DESKTOP_SESSION_ID -DKDE_FULL_SESSION=$KDE_FULL_SESSION -DKDE_SESSION_VERSION=$KDE_SESSION_VERSION -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander $@
