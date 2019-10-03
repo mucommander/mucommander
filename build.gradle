@@ -13,6 +13,7 @@ plugins {
     id 'org.ajoberstar.grgit' version '3.1.1'
     id 'nebula.ospackage' version '7.4.2'
     id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'edu.sc.seis.macAppBundle' version '2.3.0'
 }
 
 allprojects {
@@ -239,15 +240,21 @@ buildDeb {
     directory('/usr/share/mucommander/felix-cache', 0775)
 }
 
-/*
-plugins {
-    id 'edu.sc.seis.macAppBundle' version '2.1.6'
-    id 'edu.sc.seis.launch4j' version '2.4.4'
+copyToResourcesJava {
+    dependsOn createOsgiRuntime
+    doLast {
+        copy{
+            from "build/osgi"
+            include 'app/**'
+            include 'bundle/**'
+            into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
+        }
+    }
 }
 
 macAppBundle {
     appName = "muCommander"
-    mainClassName = "com.mucommander.muCommander"
+    mainClassName = "com.mucommander.main.muCommander"
     appStyle = "Oracle"
     bundleJRE = true
     jreHome = "jre/Contents/Home"
@@ -265,11 +272,20 @@ macAppBundle {
     appFolderX = 225
     appFolderY = 350
 
-    javaProperties.put("java.system.class.loader", "com.mucommander.commons.file.AbstractFileClassLoader")
+    runtimeConfigurationName = 'shadow'
+    jarTask = 'shadowJar'
+
+    //javaProperties.put("java.system.class.loader", "com.mucommander.commons.file.AbstractFileClassLoader")
     javaProperties.put("com.apple.smallTabs", "true")
     javaProperties.put("com.apple.hwaccel", "true")
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     javaProperties.put("file.encoding", "UTF-8")
+}
+
+/*
+plugins {
+    id 'edu.sc.seis.macAppBundle' version '2.1.6'
+    id 'edu.sc.seis.launch4j' version '2.4.4'
 }
 
 launch4j {
