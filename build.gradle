@@ -197,29 +197,34 @@ buildRpm {
 
 // Debian packaging
 buildDeb {
+    dependsOn createOsgiRuntime
+    release = project.ext.release
+
     postInstall file('package/unix/postinst')
     postUninstall file('package/unix/postrm')
 
     maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
     summary = 'a lightweight, cross-platform file manager'
-    suggests('openjdk-8-jre')
+    suggests('openjdk-11-jre')
     recommends('java-virtual-machine')
 
     from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh')
+    from ('package/unix/mucommander.sh') {
+        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
+    }
     into '/usr/share/mucommander'
 
+    from ("$buildDir/osgi/") {
+        include '*.jar'
+        into '/usr/share/mucommander'
+    }
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
         into '/usr/share/mucommander/bundle'
     }
-    from ("$buildDir/osgi/conf") {
-        include '*'
-        into '/usr/share/mucommander/conf'
-    }
-    from ("$buildDir/osgi/system-libs") {
-        include '*'
-        into '/usr/share/mucommander/system-libs'
+    from ("$buildDir/osgi/app") {
+        include '*.jar'
+        into '/usr/share/mucommander/app'
     }
     from ('mucommander-core/src/main/resources/images/mucommander') {
         include 'icon128_24.png'
@@ -231,7 +236,7 @@ buildDeb {
         into '/usr/share/applications'
     }
 
-    directory( '/usr/share/mucommander/felix-cache' ,0775)
+    directory('/usr/share/mucommander/felix-cache', 0775)
 }
 
 /*
