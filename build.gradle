@@ -14,6 +14,7 @@ plugins {
     id 'nebula.ospackage' version '7.4.2'
     id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'edu.sc.seis.macAppBundle' version '2.3.0'
+    id 'edu.sc.seis.launch4j' version '2.4.6'
 }
 
 allprojects {
@@ -282,27 +283,20 @@ macAppBundle {
     javaProperties.put("file.encoding", "UTF-8")
 }
 
-/*
-plugins {
-    id 'edu.sc.seis.macAppBundle' version '2.1.6'
-    id 'edu.sc.seis.launch4j' version '2.4.4'
-}
-
 launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
+    mainClassName = "com.mucommander.main.muCommander"
     copyConfigurable = project.tasks.shadowJar.outputs.files
-    if (project.hasProperty('dontWrapJar')) {
-        dontWrapJar = true
-        jar = 'mucommander.jar'
-    }
-    else {
-        jar = shadowJar.archivePath
-    }
-    outfile = project.tasks.jar.archiveName.replace('jar', 'exe')
-    cmdLine = '-p %HOMEPATH%/.mucommander'
-    opt = '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader'
+    bundledJre64Bit = true
+    bundledJrePath = "jre"
+    jar = "${project.tasks.shadowJar.archiveName}"
+    outfile = jar.replace('jar', 'exe')
+    dontWrapJar = true
+    classpath = ['.']
+    headerType = "gui"
 }
 
+/*
 // Windows installer
 task nsis(dependsOn: createExe) {
     copy {
@@ -347,7 +341,6 @@ task portable(type: Tar) {
     extension = 'tar.gz'
     compression = Compression.GZIP
 }
-
 */
 
 // Unix packaging
