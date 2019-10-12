@@ -24,6 +24,10 @@ allprojects {
     }
 }
 
+subprojects {
+    apply plugin: 'biz.aQute.bnd.builder'
+}
+
 compileJava.options.encoding = 'UTF-8'
 
 repositories {
