@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.viewer.text;
+package com.mucommander.viewer.text;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.io.BinaryDetector;
-import com.mucommander.text.Translator;
 import com.mucommander.ui.viewer.*;
+import com.mucommander.viewer.WarnUserException;
+import com.mucommander.text.Translator;
 
 import java.io.IOException;
 import java.io.InputStream;

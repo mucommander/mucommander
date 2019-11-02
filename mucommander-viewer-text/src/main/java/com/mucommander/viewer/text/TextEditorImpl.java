@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.viewer.text;
+package com.mucommander.viewer.text;
 
 import java.awt.Font;
 import java.awt.Insets;

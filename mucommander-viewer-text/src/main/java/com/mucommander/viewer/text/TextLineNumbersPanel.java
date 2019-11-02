@@ -1,4 +1,4 @@
-package com.mucommander.ui.viewer.text;
+package com.mucommander.viewer.text;
 
 import java.awt.Color;
 import java.awt.Dimension;

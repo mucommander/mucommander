@@ -45,7 +45,7 @@ import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.tabs.FileTableTab;
 import com.mucommander.ui.main.tabs.FileTableTabs;
-import com.mucommander.ui.viewer.text.TextViewer;
+import java.util.ArrayList;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API which is used to save 'dynamic' configurations.
@@ -58,6 +58,8 @@ public class MuSnapshot {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MuSnapshot.class);
 
 	private static final MuSnapshot instance = new MuSnapshot();
+        
+        private final List<SnapshotHandler> handlers = new ArrayList<>();
 	
 	// - Last screen variables -----------------------------------------------
     // -----------------------------------------------------------------------
@@ -68,22 +70,8 @@ public class MuSnapshot {
     /** Last known screen height. */
     public static final String  SCREEN_HEIGHT                      = SCREEN_SECTION + "." + "height";
 
-    // - Text file presenter (viewer/editor) variables -----------------------
- 	// -----------------------------------------------------------------------
- 	/** Section describing information about features used by the last file presenter instance. */
- 	private static final String  FILE_PRESENTER_SECTION            = "file_presenter";
- 	/** Section describing information specific to text file presenter. */
- 	private static final String TEXT_FILE_PRESENTER_SECTION        = FILE_PRESENTER_SECTION + "." + "text";
- 	/** Whether or not to wrap long lines. */
- 	public static final String  TEXT_FILE_PRESENTER_LINE_WRAP      = TEXT_FILE_PRESENTER_SECTION + "." + "line_wrap";
- 	/** Default wrap value. */
- 	public static final boolean DEFAULT_LINE_WRAP                  = false;
- 	/** Whether or not to show line numbers. */
- 	public static final String  TEXT_FILE_PRESENTER_LINE_NUMBERS   = TEXT_FILE_PRESENTER_SECTION + "." + "line_numbers";
- 	/** Default line numbers value. */
- 	public static final boolean DEFAULT_LINE_NUMBERS               = true;
-    /** Last known file presenter full screen mode. */
-    public static final String  TEXT_FILE_PRESENTER_FULL_SCREEN    = TEXT_FILE_PRESENTER_SECTION + "." + "full_screen";
+    /** Section describing information about features used by the last file presenter instance. */
+    public static final String  FILE_PRESENTER_SECTION            = "file_presenter";
 
     // - Location history ---- -----------------------------------------------
     // -----------------------------------------------------------------------
@@ -587,6 +575,10 @@ public class MuSnapshot {
     void read() throws IOException, ConfigurationException {
         XmlConfigurationReader reader = new XmlConfigurationReader();
         configuration.read(reader);
+    
+        for (SnapshotHandler handler : handlers) {
+            handler.read(configuration);
+        }
     }
 
     /**
@@ -620,15 +612,11 @@ public class MuSnapshot {
     	
     	setGlobalHistory();
 
-    	setTextPresenterProperties();
+        for (SnapshotHandler handler : handlers) {
+            handler.write(configuration);
+        }
 
         configuration.write();
-    }
-
-    private void setTextPresenterProperties() {
-    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN, TextViewer.isFullScreen());
-    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_LINE_WRAP, TextViewer.isLineWrap());
-    	configuration.setVariable(MuSnapshot.TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewer.isLineNumbers());
     }
 
     private void setFrameAttributes(MainFrame mainFrame, int index) {
@@ -728,6 +716,14 @@ public class MuSnapshot {
 
         // Save single panel view toggle state
         configuration.setVariable(getSinglePanelViewToggleState(index), currentMainFrame.isSinglePanel());
+    }
+    
+    public static void registerHandler(SnapshotHandler handler) {
+        instance.handlers.add(handler);
+    }
+    
+    public static void unregisterHandler(SnapshotHandler handler) {
+        instance.handlers.remove(handler);
     }
 
     public static Configuration getSnapshot() {

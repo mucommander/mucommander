@@ -1,0 +1,24 @@
+dependencies {
+    compile project(':mucommander-commons-file')
+    compile project(':mucommander-commons-util')
+
+    testCompile 'org.testng:testng:6.11'
+}
+
+repositories.jcenter()
+
+jar {
+   bnd ('Bundle-Name': 'muCommander-viewer-api',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library for viewer/editor API',
+        'Bundle-DocURL': 'https://www.mucommander.com',
+        'Export-Package': 'com.mucommander.viewer',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+}

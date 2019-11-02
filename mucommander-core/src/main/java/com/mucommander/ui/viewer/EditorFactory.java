@@ -19,6 +19,7 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.viewer.WarnUserException;
 
 /**
  * A common interface for instantiating {@link FileEditor} implementations, and finding out if a editor is capable

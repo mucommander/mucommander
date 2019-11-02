@@ -10,6 +10,7 @@ include 'mucommander-preferences'
 include 'mucommander-process'
 include 'mucommander-translator'
 include 'mucommander-protocol-api'
+include 'mucommander-viewer-api'
 
 include 'mucommander-archiver'
 include 'mucommander-format-ar'
@@ -32,6 +33,9 @@ include 'mucommander-protocol-s3'
 include 'mucommander-protocol-sftp'
 include 'mucommander-protocol-smb'
 include 'mucommander-protocol-vsphere'
+include 'mucommander-viewer-text'
+include 'mucommander-viewer-image'
+include 'mucommander-viewer-binary'
 
 include 'apache-bzip2'
 

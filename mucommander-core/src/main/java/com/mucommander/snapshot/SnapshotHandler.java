@@ -16,18 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.viewer;
+package com.mucommander.snapshot;
+
+import com.mucommander.commons.conf.Configuration;
 
 /**
- * This exception is thrown by {@link com.mucommander.ui.viewer.ViewerFactory} and
- * {@link com.mucommander.ui.viewer.EditorFactory} when the user should be warned about something before going ahead
- * with viewing/editing a file. {@link #getMessage()} contains the message to display to the user.
+ * Snapshot support for modules.
  *
- * @author Maxence Bernard
+ * @author hajdam
  */
-public class WarnUserException extends Exception {
-
-    public WarnUserException(String localizedMessage) {
-        super(localizedMessage);
-    }
+public interface SnapshotHandler {
+    
+    /**
+     * Performs loading/reading of snapshot preferences.
+     * 
+     * @param configuration configuration
+     */
+    void read(Configuration configuration);
+    
+    /**
+     * Performs storing/writing of snapshot preferences.
+     * 
+     * @param configuration configuration
+     */
+    void write(Configuration configuration);
 }

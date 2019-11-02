@@ -1,0 +1,32 @@
+dependencies {
+    compile project(':mucommander-core')
+    compile project(':mucommander-viewer-api')
+    compile project(':mucommander-preferences')
+    compile project(':mucommander-translator')
+    compile project(':mucommander-commons-file')
+    compile project(':mucommander-commons-util')
+
+    compile 'org.exbin.deltahex:deltahex-swing:0.1.2'
+    compile 'org.exbin.deltahex:deltahex-swing:0.1.2'
+
+    testCompile 'org.testng:testng:6.11'
+}
+
+repositories.jcenter()
+
+jar {
+   bnd ('Bundle-Name': 'muCommander-viewer-binary',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library for hexadecimal viewer/editor',
+        'Bundle-DocURL': 'https://www.mucommander.com',
+        'Export-Package': 'com.mucommander.viewer.binary',
+        'Bundle-Activator': 'com.mucommander.viewer.binary.Activator',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Miroslav Hajda",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Miroslav Hajda",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+}
