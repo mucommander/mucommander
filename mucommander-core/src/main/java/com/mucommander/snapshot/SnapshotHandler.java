@@ -23,7 +23,7 @@ import com.mucommander.commons.conf.Configuration;
 /**
  * Snapshot support for modules.
  *
- * @author hajdam
+ * @author Miroslav Hajda
  */
 public interface SnapshotHandler {
     

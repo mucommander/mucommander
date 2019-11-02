@@ -59,13 +59,12 @@ import org.exbin.utils.binary_data.ByteArrayEditableData;
  * @author Miroslav Hajda
  */
 class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapper {
-    
+
     private Frame frame;
 
     /**
      * Menu bar
      */
-    // Menus //
     // Menus //
     private JMenu editMenu;
     private JMenu viewMenu;
@@ -83,9 +82,6 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
     private javax.swing.JRadioButtonMenuItem lowerCaseRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem upperCaseRadioButtonMenuItem;
 
-//    private Action copyEditAction;
-//    private Action selectAllAction;
-
     private BinaryViewerImpl binaryViewerImpl;
 
     public BinaryViewer() {
@@ -93,35 +89,32 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
 
         setComponentToPresent(binaryViewerImpl);
 
-        // Create Go menu
-        MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
-
         initMenuBars();
     }
-    
+
     private void initMenuBars() {
-    	editMenu = new JMenu(Translator.get("text_viewer.edit"));
-    	MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+        editMenu = new JMenu(Translator.get("text_viewer.edit"));
+        MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
-    	copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
+        copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
         copyItem.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    binaryViewerImpl.copy();
-                }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                binaryViewerImpl.copy();
+            }
         });
 
-    	selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
+        selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
         selectAllItem.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    binaryViewerImpl.selectAll();
-                }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                binaryViewerImpl.selectAll();
+            }
         });
 
-    	// View menu
-    	viewMenu = new JMenu(Translator.get("text_viewer.view"));
-        
+        // View menu
+        viewMenu = new JMenu(Translator.get("text_viewer.view"));
+
         codeTypeMenu = new JMenu("Code Type");
 
         codeTypeButtonGroup = new ButtonGroup();

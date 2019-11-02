@@ -1,7 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This file is part of muCommander, http://www.mucommander.com
+ * Copyright (C) 2002-2018 Maxence Bernard
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.mucommander.viewer.text;
 
@@ -10,8 +22,9 @@ import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
 import com.mucommander.snapshot.SnapshotHandler;
 
 /**
+ * Snapshot preferences for text editor.
  *
- * @author hajdam
+ * @author Miroslav Hajda
  */
 public final class TextViewerSnapshot implements SnapshotHandler {
 
@@ -47,8 +60,8 @@ public final class TextViewerSnapshot implements SnapshotHandler {
 
     @Override
     public void write(Configuration configuration) {
-    	configuration.setVariable(TEXT_FILE_PRESENTER_FULL_SCREEN, TextViewer.isFullScreen());
-    	configuration.setVariable(TEXT_FILE_PRESENTER_LINE_WRAP, TextViewer.isLineWrap());
-    	configuration.setVariable(TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewer.isLineNumbers());
+        configuration.setVariable(TEXT_FILE_PRESENTER_FULL_SCREEN, TextViewer.isFullScreen());
+        configuration.setVariable(TEXT_FILE_PRESENTER_LINE_WRAP, TextViewer.isLineWrap());
+        configuration.setVariable(TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewer.isLineNumbers());
     }
 }

@@ -22,7 +22,7 @@ import java.io.IOException;
 import javax.swing.JComponent;
 
 /**
- * Interface for File editor.
+ * Interface for file editor.
  *
  * @author Miroslav Hajda
  */

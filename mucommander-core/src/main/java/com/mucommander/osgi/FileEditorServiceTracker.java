@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Registration tracker for file editor service.
  *
- * @author hajdam
+ * @author Miroslav Hajda
  */
 public class FileEditorServiceTracker extends ServiceTracker<FileEditorService, FileEditorService> {
 

@@ -23,7 +23,7 @@ import java.io.IOException;
 import javax.swing.JComponent;
 
 /**
- * Interface for File viewer.
+ * Interface for file viewer.
  * 
  * TODO: Currently doesn't replace FileViewer, but is intended to do so with
  * possible support for tabbing in file viewer dialog in the future.
