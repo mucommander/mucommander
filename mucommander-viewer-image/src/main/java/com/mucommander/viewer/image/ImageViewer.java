@@ -17,7 +17,7 @@
  */
 
 
-package com.mucommander.ui.viewer.image;
+package com.mucommander.viewer.image;
 
 import java.awt.Color;
 import java.awt.Cursor;

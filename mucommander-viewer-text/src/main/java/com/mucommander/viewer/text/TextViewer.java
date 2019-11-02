@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.viewer.text;
+package com.mucommander.viewer.text;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -42,7 +42,6 @@ import com.mucommander.commons.io.bom.BOMInputStream;
 import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
-import com.mucommander.conf.MuConfigurations;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -62,11 +61,11 @@ public class TextViewer extends FileViewer implements EncodingListener {
 
 	private TextEditorImpl textEditorImpl;
 
-	private static boolean fullScreen = MuSnapshot.getSnapshot().getBooleanVariable(MuSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN);
+	private static boolean fullScreen = MuSnapshot.getSnapshot().getBooleanVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN);
 
-	private static boolean lineWrap = MuSnapshot.getSnapshot().getVariable(MuSnapshot.TEXT_FILE_PRESENTER_LINE_WRAP, MuSnapshot.DEFAULT_LINE_WRAP);
+	private static boolean lineWrap = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_WRAP, TextViewerSnapshot.DEFAULT_LINE_WRAP);
 
-	private static boolean lineNumbers = MuSnapshot.getSnapshot().getVariable(MuSnapshot.TEXT_FILE_PRESENTER_LINE_NUMBERS, MuSnapshot.DEFAULT_LINE_NUMBERS);
+	private static boolean lineNumbers = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewerSnapshot.DEFAULT_LINE_NUMBERS);
 
     /** Menu items */
     // Menus //

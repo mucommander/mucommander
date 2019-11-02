@@ -31,6 +31,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.viewer.WarnUserException;
 
 /**
  * EditorRegistrar maintains a list of registered file editors and provides methods to dynamically register file editors
@@ -42,10 +43,6 @@ public class EditorRegistrar {
 	
     /** List of registered file editors */ 
     private final static java.util.List<EditorFactory> editorFactories = new Vector<EditorFactory>();
-
-    static {
-        registerFileEditor(new com.mucommander.ui.viewer.text.TextFactory());
-    }
 
     /**
      * Registers a FileEditor.

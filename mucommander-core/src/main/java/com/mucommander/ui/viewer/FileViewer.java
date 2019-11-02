@@ -36,8 +36,6 @@ import java.awt.event.KeyEvent;
  */
 public abstract class FileViewer extends FilePresenter implements ActionListener {
 	
-    
-	
     /** Close menu item */
     private JMenuItem closeItem;
     

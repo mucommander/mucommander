@@ -18,18 +18,22 @@
 
 package com.mucommander.ui.viewer;
 
-import java.awt.Frame;
+import com.mucommander.viewer.WarnUserException;
 import java.awt.Image;
-import java.util.Vector;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.osgi.FileViewerService;
+import com.mucommander.osgi.FileViewerServiceTracker;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+import com.mucommander.viewer.FileViewerWrapper;
+import java.awt.Frame;
+import java.util.List;
 
 /**
  * ViewerRegistrar maintains a list of registered file viewers and provides methods to dynamically register file viewers
@@ -38,25 +42,6 @@ import com.mucommander.ui.main.WindowManager;
  * @author Maxence Bernard, Arik Hadas
  */
 public class ViewerRegistrar {
-	
-    /** List of registered file viewers */ 
-    private final static java.util.List<ViewerFactory> viewerFactories = new Vector<ViewerFactory>();
-
-    static {
-        registerFileViewer(new com.mucommander.ui.viewer.image.ImageFactory());
-        // The TextFactory must be the last FileViewer to be registered (otherwise it would open other factories file types)
-        registerFileViewer(new com.mucommander.ui.viewer.text.TextFactory());
-    }
-    
-    
-    /**
-     * Registers a FileViewer.
-     * @param factory file viewer factory to register.
-     */
-    public static void registerFileViewer(ViewerFactory factory) {
-        viewerFactories.add(factory);
-    }
-        
 	
     /**
      * Creates and returns a ViewerFrame to start viewing the given file. The ViewerFrame will be monitored
@@ -95,14 +80,17 @@ public class ViewerRegistrar {
      */
     public static FileViewer createFileViewer(AbstractFile file, ViewerFrame frame) throws UserCancelledException {
     	FileViewer viewer = null;
-        for(ViewerFactory factory : viewerFactories) {
+        
+        List<FileViewerService> viewerServices = FileViewerServiceTracker.getViewerServices();
+        
+        for (FileViewerService service : viewerServices) {
             try {
-                if(factory.canViewFile(file)) {
-                    viewer = factory.createFileViewer();
+                if (service.canViewFile(file)) {
+                    viewer = (FileViewer) ((FileViewerWrapper) service.createFileViewer()).getViewerComponent();
                     break;
                 }
             }
-            catch(WarnUserException e) {
+            catch (WarnUserException e) {
             	// TODO: question the user how does he want to open the file (as image, text..)
                 // Todo: display a proper warning dialog with the appropriate icon
             	
@@ -116,7 +104,7 @@ public class ViewerRegistrar {
                     throw new UserCancelledException();
 
                 // User confirmed the operation
-                viewer = factory.createFileViewer();
+                viewer = (FileViewer) ((FileViewerWrapper) service.createFileViewer()).getViewerComponent();
             }
         }
 

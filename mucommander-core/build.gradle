@@ -13,6 +13,7 @@ dependencies {
     compileOnly project(':mucommander-process')
     compileOnly project(':mucommander-translator')
     compileOnly project(':mucommander-protocol-api')
+    compileOnly project(':mucommander-viewer-api')
 
     compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'ch.qos.logback:logback-classic:1.2.3'
@@ -48,9 +49,13 @@ jar {
         'Export-Package':
             'com.mucommander.process,' +
             'com.mucommander.text,' +
+            'com.mucommander.osgi,' +
             'com.mucommander.ui.dialog,' +
             'com.mucommander.ui.dialog.server,' +
             'com.mucommander.ui.encoding,' +
+            'com.mucommander.ui.theme,' +
+            'com.mucommander.snapshot,' +
+            'com.mucommander.ui.viewer,' +
             'com.mucommander.ui.main',
         'Bundle-Activator': 'com.mucommander.Activator')
 }

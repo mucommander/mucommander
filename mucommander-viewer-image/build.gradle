@@ -1,0 +1,27 @@
+dependencies {
+    compile project(':mucommander-core')
+    compile project(':mucommander-commons-file')
+    compile project(':mucommander-viewer-api')
+    compile project(':mucommander-translator')
+
+    testCompile 'org.testng:testng:6.11'
+}
+
+repositories.jcenter()
+
+jar {
+   bnd ('Bundle-Name': 'muCommander-viewer-image',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library for hexadecimal viewer/editor',
+        'Bundle-DocURL': 'https://www.mucommander.com',
+        'Export-Package': 'com.mucommander.viewer.image',
+        'Bundle-Activator': 'com.mucommander.viewer.image.Activator',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+}

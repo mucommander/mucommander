@@ -17,6 +17,8 @@
  */
 package com.mucommander;
 
+import com.mucommander.osgi.FileEditorServiceTracker;
+import com.mucommander.osgi.FileViewerServiceTracker;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -39,6 +41,8 @@ public class Activator implements BundleActivator {
 
     private ProtocolPanelProviderTracker protocolPanelTracker;
     private TranslationTracker translationTracker;
+    private FileViewerServiceTracker viewersTracker;
+    private FileEditorServiceTracker editorsTracker;
 
     /** Registered shutdown-hook */
     private ShutdownHook shutdownHook;
@@ -53,6 +57,10 @@ public class Activator implements BundleActivator {
         protocolPanelTracker.open();
         translationTracker = new TranslationTracker(context);
         translationTracker.open();
+        viewersTracker = new FileViewerServiceTracker(context);
+        viewersTracker.open();
+        editorsTracker = new FileEditorServiceTracker(context);
+        editorsTracker.open();
 
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
@@ -64,6 +72,8 @@ public class Activator implements BundleActivator {
         LOGGER.debug("stopping");
         protocolPanelTracker.close();
         translationTracker.close();
+        viewersTracker.close();
+        editorsTracker.close();
         // if the activator performs the shutdown tasks, no need for the shutdown-hook
         if (ShutdownHook.performShutdownTasks())
             Runtime.getRuntime().removeShutdownHook(shutdownHook);
