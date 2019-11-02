@@ -105,6 +105,7 @@ public class TextViewer extends FileViewer implements EncodingListener {
 
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
     	getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
+                @Override
     		public void actionPerformed(ActionEvent e){
     			setFullScreen(!frame.isFullScreen());
     			frame.setFullScreen(isFullScreen());
@@ -289,6 +290,7 @@ public class TextViewer extends FileViewer implements EncodingListener {
     // EncodingListener implementation //
     /////////////////////////////////////
 
+    @Override
     public void encodingChanged(Object source, String oldEncoding, String newEncoding) {
     	try {
     		// Reload the file using the new encoding

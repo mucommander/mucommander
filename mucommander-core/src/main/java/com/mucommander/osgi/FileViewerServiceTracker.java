@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Registration tracker for file viewer service.
  *
- * @author hajdam
+ * @author Miroslav Hajda
  */
 public class FileViewerServiceTracker extends ServiceTracker<FileViewerService, FileViewerService> {
 
