@@ -21,11 +21,11 @@ package com.mucommander.snapshot;
 import com.mucommander.commons.conf.Configuration;
 
 /**
- * Snapshot support for modules.
+ * Configuration snapshoting support for modules.
  *
  * @author Miroslav Hajda
  */
-public interface SnapshotHandler {
+public interface MuSnapshotable {
     
     /**
      * Performs loading/reading of snapshot preferences.

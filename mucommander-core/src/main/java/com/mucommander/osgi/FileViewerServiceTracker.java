@@ -56,16 +56,16 @@ public class FileViewerServiceTracker extends ServiceTracker<FileViewerService, 
     }
 
     private static void addViewerService(FileViewerService service) {
-        int index = 0;
-        int orderPriority = service.getOrderPriority();
-        while (index < SERVICES.size() && orderPriority < SERVICES.get(index).getOrderPriority())
-        {
-            index++;
-        }
-        SERVICES.add(index, service);
+        SERVICES.add(service);
+        SERVICES.sort(FileViewerServiceTracker::compareServices);
     }
-            
+
     public static List<FileViewerService> getViewerServices() {
         return SERVICES;
+    }
+
+    private static int compareServices(FileViewerService service1, FileViewerService service2) {
+        return service1.getOrderPriority() == service2.getOrderPriority() ? 0
+                : service1.getOrderPriority() > service2.getOrderPriority() ? 1 : -1;
     }
 }

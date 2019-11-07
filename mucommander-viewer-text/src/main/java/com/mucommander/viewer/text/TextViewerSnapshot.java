@@ -19,14 +19,14 @@ package com.mucommander.viewer.text;
 
 import com.mucommander.commons.conf.Configuration;
 import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
-import com.mucommander.snapshot.SnapshotHandler;
+import com.mucommander.snapshot.MuSnapshotable;
 
 /**
  * Snapshot preferences for text editor.
  *
  * @author Miroslav Hajda
  */
-public final class TextViewerSnapshot implements SnapshotHandler {
+public final class TextViewerSnapshot implements MuSnapshotable {
 
     /**
      * Section describing information specific to text file presenter.
@@ -55,7 +55,6 @@ public final class TextViewerSnapshot implements SnapshotHandler {
 
     @Override
     public void read(Configuration configuration) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

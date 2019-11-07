@@ -59,7 +59,7 @@ public class MuSnapshot {
 
 	private static final MuSnapshot instance = new MuSnapshot();
         
-        private final List<SnapshotHandler> handlers = new ArrayList<>();
+    private final List<MuSnapshotable> snapshotables = new ArrayList<>();
 	
 	// - Last screen variables -----------------------------------------------
     // -----------------------------------------------------------------------
@@ -576,7 +576,7 @@ public class MuSnapshot {
         XmlConfigurationReader reader = new XmlConfigurationReader();
         configuration.read(reader);
     
-        for (SnapshotHandler handler : handlers) {
+        for (MuSnapshotable handler : snapshotables) {
             handler.read(configuration);
         }
     }
@@ -612,7 +612,7 @@ public class MuSnapshot {
     	
     	setGlobalHistory();
 
-        for (SnapshotHandler handler : handlers) {
+        for (MuSnapshotable handler : snapshotables) {
             handler.write(configuration);
         }
 
@@ -718,12 +718,12 @@ public class MuSnapshot {
         configuration.setVariable(getSinglePanelViewToggleState(index), currentMainFrame.isSinglePanel());
     }
     
-    public static void registerHandler(SnapshotHandler handler) {
-        instance.handlers.add(handler);
+    public static void registerHandler(MuSnapshotable snapshotable) {
+        instance.snapshotables.add(snapshotable);
     }
     
-    public static void unregisterHandler(SnapshotHandler handler) {
-        instance.handlers.remove(handler);
+    public static void unregisterHandler(MuSnapshotable snapshotable) {
+        instance.snapshotables.remove(snapshotable);
     }
 
     public static Configuration getSnapshot() {
