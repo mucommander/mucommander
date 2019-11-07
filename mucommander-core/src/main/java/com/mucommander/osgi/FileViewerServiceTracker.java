@@ -66,6 +66,6 @@ public class FileViewerServiceTracker extends ServiceTracker<FileViewerService, 
 
     private static int compareServices(FileViewerService service1, FileViewerService service2) {
         return service1.getOrderPriority() == service2.getOrderPriority() ? 0
-                : service1.getOrderPriority() > service2.getOrderPriority() ? 1 : -1;
+                : service1.getOrderPriority() < service2.getOrderPriority() ? 1 : -1;
     }
 }
