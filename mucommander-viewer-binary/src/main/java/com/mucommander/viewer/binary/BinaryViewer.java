@@ -96,10 +96,14 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
         copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
-        copyItem.addActionListener(binaryViewerImpl::copy);
+        copyItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.copy();
+        });
 
         selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
-        selectAllItem.addActionListener(binaryViewerImpl::selectAll);
+        selectAllItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.selectAll();
+        });
 
         // View menu
         viewMenu = new JMenu(Translator.get("text_viewer.view"));
