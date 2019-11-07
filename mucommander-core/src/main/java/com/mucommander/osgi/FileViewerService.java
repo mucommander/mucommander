@@ -63,9 +63,9 @@ public interface FileViewerService {
     boolean canViewFile(AbstractFile file) throws WarnUserException;
 
     /**
-     * Returns a new instance of {@link FileViewer2}.
+     * Returns a new instance of {@link FileViewerWrapper}.
      *
-     * @return a new instance of {@link FileViewer2}.
+     * @return a new instance of {@link FileViewerWrapper}.
      */
     FileViewerWrapper createFileViewer();
 }

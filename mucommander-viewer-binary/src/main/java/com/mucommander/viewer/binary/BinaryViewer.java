@@ -19,8 +19,6 @@ package com.mucommander.viewer.binary;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 import javax.swing.JMenu;
@@ -41,6 +39,7 @@ import com.mucommander.ui.viewer.FileViewer;
 import com.mucommander.viewer.FileViewerWrapper;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,20 +96,10 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
 
         copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null, this);
-        copyItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                binaryViewerImpl.copy();
-            }
-        });
+        copyItem.addActionListener(binaryViewerImpl::copy);
 
         selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null, this);
-        selectAllItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                binaryViewerImpl.selectAll();
-            }
-        });
+        selectAllItem.addActionListener(binaryViewerImpl::selectAll);
 
         // View menu
         viewMenu = new JMenu(Translator.get("text_viewer.view"));
@@ -121,33 +110,24 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
         binaryCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeTypeButtonGroup.add(binaryCodeTypeRadioButtonMenuItem);
         binaryCodeTypeRadioButtonMenuItem.setText("Binary");
-        binaryCodeTypeRadioButtonMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binaryViewerImpl.setCodeType(CodeType.BINARY);
-            }
+        binaryCodeTypeRadioButtonMenuItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.setCodeType(CodeType.BINARY);
         });
         codeTypeMenu.add(binaryCodeTypeRadioButtonMenuItem);
 
         octalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeTypeButtonGroup.add(octalCodeTypeRadioButtonMenuItem);
         octalCodeTypeRadioButtonMenuItem.setText("Octal");
-        octalCodeTypeRadioButtonMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binaryViewerImpl.setCodeType(CodeType.OCTAL);
-            }
+        octalCodeTypeRadioButtonMenuItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.setCodeType(CodeType.OCTAL);
         });
         codeTypeMenu.add(octalCodeTypeRadioButtonMenuItem);
 
         decimalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeTypeButtonGroup.add(decimalCodeTypeRadioButtonMenuItem);
         decimalCodeTypeRadioButtonMenuItem.setText("Decimal");
-        decimalCodeTypeRadioButtonMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binaryViewerImpl.setCodeType(CodeType.DECIMAL);
-            }
+        decimalCodeTypeRadioButtonMenuItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.setCodeType(CodeType.DECIMAL);
         });
         codeTypeMenu.add(decimalCodeTypeRadioButtonMenuItem);
 
@@ -155,11 +135,8 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
         codeTypeButtonGroup.add(hexadecimalCodeTypeRadioButtonMenuItem);
         hexadecimalCodeTypeRadioButtonMenuItem.setSelected(true);
         hexadecimalCodeTypeRadioButtonMenuItem.setText("Hexadecimal");
-        hexadecimalCodeTypeRadioButtonMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binaryViewerImpl.setCodeType(CodeType.HEXADECIMAL);
-            }
+        hexadecimalCodeTypeRadioButtonMenuItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.setCodeType(CodeType.HEXADECIMAL);
         });
         codeTypeMenu.add(hexadecimalCodeTypeRadioButtonMenuItem);
         viewMenu.add(codeTypeMenu);
@@ -171,22 +148,16 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
         hexCharacterCaseButtonGroup.add(upperCaseRadioButtonMenuItem);
         upperCaseRadioButtonMenuItem.setSelected(true);
         upperCaseRadioButtonMenuItem.setText("Upper Case");
-        upperCaseRadioButtonMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binaryViewerImpl.setHexCharactersCase(HexCharactersCase.UPPER);
-            }
+        upperCaseRadioButtonMenuItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.setHexCharactersCase(HexCharactersCase.UPPER);
         });
         hexCharacterCaseMenu.add(upperCaseRadioButtonMenuItem);
 
         lowerCaseRadioButtonMenuItem = new JRadioButtonMenuItem();
         hexCharacterCaseButtonGroup.add(lowerCaseRadioButtonMenuItem);
         lowerCaseRadioButtonMenuItem.setText("Lower Case");
-        lowerCaseRadioButtonMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binaryViewerImpl.setHexCharactersCase(HexCharactersCase.LOWER);
-            }
+        lowerCaseRadioButtonMenuItem.addActionListener((ActionEvent evt) -> {
+            binaryViewerImpl.setHexCharactersCase(HexCharactersCase.LOWER);
         });
         hexCharacterCaseMenu.add(lowerCaseRadioButtonMenuItem);
         viewMenu.add(hexCharacterCaseMenu);
@@ -218,31 +189,9 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
         frame.setCursor(Cursor.getDefaultCursor());
     }
 
-    private void updateFrame() {
-        FileFrame frame = getFrame();
-
-        // Revalidate, pack and repaint should be called in this order
-        frame.setTitle(this.getTitle());
-        binaryViewerImpl.revalidate();
-        frame.pack();
-        frame.getContentPane().repaint();
-    }
-
     @Override
     public void show(AbstractFile file) throws IOException {
         loadFile(file);
-    }
-
-    @Override
-    public String getTitle() {
-        return super.getTitle();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-
-        super.actionPerformed(e);
     }
 
     /**
@@ -269,11 +218,6 @@ class BinaryViewer extends FileViewer implements ActionListener, FileViewerWrapp
             super.setBackground(backgroundColor);
             ThemeManager.addCurrentThemeListener(this);
             setEditationAllowed(EditationAllowed.READ_ONLY);
-        }
-
-        @Override
-        public void paint(Graphics g) {
-            super.paint(g);
         }
 
         @Override
