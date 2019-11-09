@@ -18,6 +18,7 @@
 package com.mucommander.osgi;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -57,15 +58,10 @@ public class FileViewerServiceTracker extends ServiceTracker<FileViewerService, 
 
     private static void addViewerService(FileViewerService service) {
         SERVICES.add(service);
-        SERVICES.sort(FileViewerServiceTracker::compareServices);
+        SERVICES.sort(Comparator.comparing(FileViewerService::getOrderPriority).reversed());
     }
 
     public static List<FileViewerService> getViewerServices() {
         return SERVICES;
-    }
-
-    private static int compareServices(FileViewerService service1, FileViewerService service2) {
-        return service1.getOrderPriority() == service2.getOrderPriority() ? 0
-                : service1.getOrderPriority() < service2.getOrderPriority() ? 1 : -1;
     }
 }
