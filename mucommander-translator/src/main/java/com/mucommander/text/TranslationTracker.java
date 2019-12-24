@@ -19,7 +19,7 @@ public class TranslationTracker extends ServiceTracker<TranslationService, Trans
     public TranslationService addingService(ServiceReference<TranslationService> reference) {
         service = super.addingService(reference);
         Translator.init(service.getDictionaryBundle(), service.getLanguagesBundle(), service.getAvailableLanguages());
-        LOGGER.info("TranslationServce is registered: " + service);
+        LOGGER.info("TranslationService is registered: " + service);
         return service;
     }
 
