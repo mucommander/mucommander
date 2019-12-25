@@ -112,8 +112,7 @@ public class GrowlNotifier extends AbstractNotifier {
                 return (isEnabled = true);
 
             // Test if Growl is currently running and abort if it is not
-            StringBuilder outputBuffer = new StringBuilder();
-            if(!(AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && outputBuffer.toString().equals("true"))) {
+            if(!isGrowlRunning()) {
             	LOGGER.debug("Growl is not running, aborting");
 
                 return false;
@@ -144,6 +143,11 @@ public class GrowlNotifier extends AbstractNotifier {
         else {
             return (isEnabled = false);
         }
+    }
+
+    public static boolean isGrowlRunning() {
+        StringBuilder outputBuffer = new StringBuilder();
+        return AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && outputBuffer.toString().equals("true");
     }
 
     @Override

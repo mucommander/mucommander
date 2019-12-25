@@ -25,7 +25,6 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.main.WindowManager;
 
@@ -40,8 +39,8 @@ import com.mucommander.ui.main.WindowManager;
  * The notifier instance returnd by {@link #getNotifier()} is platform-dependent. At this time, two notifier
  * implementations are available:
  * <ul>
- *  <li>{@link GrowlNotifier}: for Mac OS X, requires Growl to be installed
- *  <li>{@link SystemTrayNotifier}: for Java 1.6 and up, using the java.awt.SystemTray API
+ *  <li>{@link GrowlNotifier}: for macOS that is installed with Growl
+ *  <li>{@link SystemTrayNotifier}: otherwise, using the java.awt.SystemTray API
  * </ul>
  * </p>
  *
@@ -55,9 +54,9 @@ public abstract class AbstractNotifier {
 
     static {
         // Finds and creates a suitable AbstractNotifier instance for the platform, if there is one
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if (OsFamily.MAC_OS_X.isCurrent() && GrowlNotifier.isGrowlRunning()) {
             notifier = new GrowlNotifier();
-        else if(JavaVersion.JAVA_1_6.isCurrentOrHigher() && SystemTray.isSupported())
+        } else if (SystemTray.isSupported())
             notifier = new SystemTrayNotifier();
     }
 

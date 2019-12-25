@@ -40,6 +40,7 @@ New features:
 
 Improvements:
 - Restructure the application as OSGi modules.
+- Enable system notifications on macOS also when Growl is not installed, using the java.awt.SystemTray API.
 - Various improvements for S3 support.
 - Add textual filtering to the shotrcuts dialog.
 - Upgrade various dependencies.
