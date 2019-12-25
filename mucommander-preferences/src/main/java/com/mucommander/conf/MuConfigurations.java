@@ -34,54 +34,54 @@ import com.mucommander.commons.conf.ConfigurationListener;
  * @author Arik Hadas
  */
 public class MuConfigurations {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MuConfigurations.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MuConfigurations.class);
 
-	/** Static configurations of muCommander */
-	private static final MuPreferences preferences = new MuPreferences();
+    /** Static configurations of muCommander */
+    private static final MuPreferences preferences = new MuPreferences();
 
-	private static Exception error;
+    private static Exception error;
 
-	/////////////////////////
-	// API for preferences //
-	/////////////////////////
-	
-	public static MuPreferencesAPI getPreferences() {
-		return preferences;
-	}
+    /////////////////////////
+    // API for preferences //
+    /////////////////////////
 
-	public static void check() throws Exception {
-	    if (error != null) {
-	        throw error;
-	    }
-	}
-	
-	static void loadPreferences() {
-	    try {
-	        preferences.read();
-	    } catch (Exception e) {
-	        LOGGER.error("failed to load preferences", e);
-	        error = e;
-	    }
-	}
-	
-	public static void savePreferences() throws IOException, ConfigurationException {
-		preferences.write();
-	}
-	
-	public static void setPreferencesFile(String path) throws FileNotFoundException {
-		preferences.setConfigurationFile(path);
-	}
-	
-	public static boolean isPreferencesFileExists() throws IOException {
-		return preferences.isFileExists();
-	}
-	
+    public static MuPreferencesAPI getPreferences() {
+        return preferences;
+    }
+
+    public static void check() throws Exception {
+        if (error != null) {
+            throw error;
+        }
+    }
+
+    static void loadPreferences() {
+        try {
+            preferences.read();
+        } catch (Exception e) {
+            LOGGER.error("failed to load preferences", e);
+            error = e;
+        }
+    }
+
+    public static void savePreferences() throws IOException, ConfigurationException {
+        preferences.write();
+    }
+
+    public static void setPreferencesFile(String path) throws FileNotFoundException {
+        preferences.setConfigurationFile(path);
+    }
+
+    public static boolean isPreferencesFileExists() throws IOException {
+        return preferences.isFileExists();
+    }
+
     public static void addPreferencesListener(ConfigurationListener listener) {
-    	preferences.addConfigurationListener(listener);
+        preferences.addConfigurationListener(listener);
     }
 
     public static void removePreferencesListener(ConfigurationListener listener) {
-    	preferences.removeConfigurationListener(listener);
+        preferences.removeConfigurationListener(listener);
     }
 
 }

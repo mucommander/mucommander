@@ -39,8 +39,8 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Maxence Bernard
  */
 public class ShutdownHook extends Thread {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShutdownHook.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShutdownHook.class);
+
     /** Whether shutdown tasks have been performed already. */
     private static boolean shutdownTasksPerformed;
 
@@ -68,13 +68,13 @@ public class ShutdownHook extends Thread {
         // Return if shutdown tasks have already been performed
         if (shutdownTasksPerformed)
             return false;
-        
+
         TreeIOThreadManager.getInstance().interrupt();
 
         // Save snapshot
         try{MuSnapshot.saveSnapshot();}
         catch(Exception e) {LOGGER.warn("Failed to save snapshot", e);}
-        
+
         // Save preferences
         try {MuConfigurations.savePreferences();}
         catch(Exception e) {LOGGER.warn("Failed to save configuration", e);}
@@ -100,19 +100,19 @@ public class ShutdownHook extends Thread {
         catch(Exception e) {LOGGER.warn("Failed to save commands", e);}
         try {CommandManager.writeAssociations();}
         catch(Exception e) {LOGGER.warn("Failed to save associations", e);}
-        
+
         // Saves the action keymap.
         try { ActionKeymapIO.saveActionKeymap(); }
         catch(Exception e) {LOGGER.warn("Failed to save action keymap", e);}
-        
+
         // Saves the command bar.
         try { CommandBarIO.saveCommandBar(); }
         catch(Exception e) {LOGGER.warn("Failed to save command bar", e); }
-        
+
         // Saves the tool bar.
         try { ToolBarIO.saveToolBar(); }
         catch(Exception e) {LOGGER.warn("Failed to save toolbar", e); }
-        
+
 
         // Shutdown tasks should only be performed once
         return shutdownTasksPerformed = true;
