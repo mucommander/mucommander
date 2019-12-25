@@ -21,6 +21,9 @@ package com.mucommander.conf;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
 
@@ -31,9 +34,12 @@ import com.mucommander.commons.conf.ConfigurationListener;
  * @author Arik Hadas
  */
 public class MuConfigurations {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MuConfigurations.class);
 
 	/** Static configurations of muCommander */
 	private static final MuPreferences preferences = new MuPreferences();
+
+	private static Exception error;
 
 	/////////////////////////
 	// API for preferences //
@@ -42,9 +48,20 @@ public class MuConfigurations {
 	public static MuPreferencesAPI getPreferences() {
 		return preferences;
 	}
+
+	public static void check() throws Exception {
+	    if (error != null) {
+	        throw error;
+	    }
+	}
 	
-	public static void loadPreferences() throws IOException, ConfigurationException {
-		preferences.read();
+	static void loadPreferences() {
+	    try {
+	        preferences.read();
+	    } catch (Exception e) {
+	        LOGGER.error("failed to load preferences", e);
+	        error = e;
+	    }
 	}
 	
 	public static void savePreferences() throws IOException, ConfigurationException {

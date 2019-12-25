@@ -368,7 +368,7 @@ public class muCommander {
 
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
             // to use the metal look, we need to know about it right about now.
-            try {MuConfigurations.loadPreferences();}
+            try {MuConfigurations.check();}
             catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
 
 
