@@ -242,7 +242,8 @@ public class muCommander
                         "javax.activation," +
                         "sun.security.action," +
                         "com.apple.eawt," +
-                        "com.apple.eio"
+                        "com.apple.eio," +
+                        "com.apple.laf"
         );
 
         configProps.computeIfAbsent(AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY, key -> new File(codeParentFolder, "bundle").getAbsolutePath());
