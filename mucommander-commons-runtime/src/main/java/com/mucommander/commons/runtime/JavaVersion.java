@@ -47,7 +47,18 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     /** Java 1.7.x */
     JAVA_1_7("1.7"),
     /** Java 1.8.x */
-    JAVA_1_8("1.8");
+    JAVA_1_8("1.8"),
+    /** Java 9.x */
+    JAVA_9("9"),
+    /** Java 10.x */
+    JAVA_10("10"),
+    /** Java 11.x */
+    JAVA_11("11"),
+    /** Java 12.x */
+    JAVA_12("12"),
+    /** Java 13.x */
+    JAVA_13("13"),
+    ;
 
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JavaVersion.class);
@@ -109,48 +120,69 @@ public enum JavaVersion implements ComparableRuntimeProperty {
         return System.getProperty("java.version");
     }
 
-    /**
-     * Returns a <code>JavaVersion</code> instance corresponding to the specified system property's value.
-     *
-     * @param javaVersionProp the value of the "java.version" system property
-     * @return a JavaVersion instance corresponding to the specified system property's value
-     */
-    static JavaVersion parseSystemProperty(String javaVersionProp) {
-        // Java version property should never be null or empty, but better be safe than sorry ...
-        if (javaVersionProp==null || (javaVersionProp=javaVersionProp.trim()).equals(""))
-            // Assume java 1.6 (first supported Java version)
-            return JavaVersion.JAVA_1_6;
-        // Java 1.8
-        if (javaVersionProp.startsWith("1.8"))
-            return JavaVersion.JAVA_1_8;
-        // Java 1.7
-        if (javaVersionProp.startsWith("1.7"))
-            return JavaVersion.JAVA_1_7;
-        // Java 1.6
-        if (javaVersionProp.startsWith("1.6"))
-            return JavaVersion.JAVA_1_6;
-        // Java 1.5
-        if (javaVersionProp.startsWith("1.5"))
-            return JavaVersion.JAVA_1_5;
-        // Java 1.4
-        if (javaVersionProp.startsWith("1.4"))
-            return JavaVersion.JAVA_1_4;
-        // Java 1.3
-        if (javaVersionProp.startsWith("1.3"))
-            return JavaVersion.JAVA_1_3;
-        // Java 1.2
-        if (javaVersionProp.startsWith("1.2"))
-            return JavaVersion.JAVA_1_2;
-        // Java 1.1
-        if (javaVersionProp.startsWith("1.1"))
-            return JavaVersion.JAVA_1_1;
-        // Java 1.0
-        if (javaVersionProp.startsWith("1.0"))
-            return JavaVersion.JAVA_1_0;
+	/**
+	 * Returns a <code>JavaVersion</code> instance corresponding to the
+	 * specified system property's value.
+	 *
+	 * @param javaVersionProp
+	 *            the value of the "java.version" system property
+	 * @return a JavaVersion instance corresponding to the specified system
+	 *         property's value
+	 */
+	static JavaVersion parseSystemProperty(String javaVersionProp) {
+		// Java version property should never be null or empty, but better be
+		// safe than sorry ...
+		if (javaVersionProp == null
+				|| (javaVersionProp = javaVersionProp.trim()).equals(""))
+			// Assume java 1.8 (first supported Java version)
+			return JavaVersion.JAVA_1_8;
+		// Java 13
+		if (javaVersionProp.startsWith("13"))
+			return JavaVersion.JAVA_13;
+		// Java 12
+		if (javaVersionProp.startsWith("12"))
+			return JavaVersion.JAVA_12;
+		// Java 11
+		if (javaVersionProp.startsWith("11"))
+			return JavaVersion.JAVA_11;
+		// Java 10
+		if (javaVersionProp.startsWith("10"))
+			return JavaVersion.JAVA_10;
+		// Java 9
+		if (javaVersionProp.startsWith("9"))
+			return JavaVersion.JAVA_9;
+		// Java 1.8
+		if (javaVersionProp.startsWith("1.8"))
+			return JavaVersion.JAVA_1_8;
+		// Java 1.7
+		if (javaVersionProp.startsWith("1.7"))
+			return JavaVersion.JAVA_1_7;
+		// Java 1.6
+		if (javaVersionProp.startsWith("1.6"))
+			return JavaVersion.JAVA_1_6;
+		// Java 1.5
+		if (javaVersionProp.startsWith("1.5"))
+			return JavaVersion.JAVA_1_5;
+		// Java 1.4
+		if (javaVersionProp.startsWith("1.4"))
+			return JavaVersion.JAVA_1_4;
+		// Java 1.3
+		if (javaVersionProp.startsWith("1.3"))
+			return JavaVersion.JAVA_1_3;
+		// Java 1.2
+		if (javaVersionProp.startsWith("1.2"))
+			return JavaVersion.JAVA_1_2;
+		// Java 1.1
+		if (javaVersionProp.startsWith("1.1"))
+			return JavaVersion.JAVA_1_1;
+		// Java 1.0
+		if (javaVersionProp.startsWith("1.0"))
+			return JavaVersion.JAVA_1_0;
 
-        // Newer version we don't know of yet, assume latest supported Java version
-        return JavaVersion.JAVA_1_8;
-    }
+		// Newer version we don't know of yet, assume latest supported Java
+		// version
+		return JavaVersion.JAVA_11;
+	}
 
     /**
      * Returns <code>true</code> if this instance is the same instance as the one returned by {@link #getCurrent()}.
