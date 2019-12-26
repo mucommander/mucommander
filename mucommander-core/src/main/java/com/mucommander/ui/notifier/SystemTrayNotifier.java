@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.ui.action.AWTActionProxy;
-import com.mucommander.ui.action.ActionManager;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.BringAllToFrontAction;
 import com.mucommander.ui.action.impl.NewWindowAction;
@@ -89,9 +89,8 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
      * is set to the value returned by {@link MuAction#getLabel()}.
      */
     private void addMenuItem(Menu menu, String muActionId) {
-        MuAction action = ActionManager.getActionInstance(muActionId, WindowManager.getCurrentMainFrame());
-        MenuItem menuItem = new MenuItem(action.getLabel());
-        menuItem.addActionListener(new AWTActionProxy(action));
+        MenuItem menuItem = new MenuItem(ActionProperties.getActionLabel(muActionId));
+        menuItem.addActionListener(new AWTActionProxy(muActionId));
         menu.add(menuItem);
     }
 

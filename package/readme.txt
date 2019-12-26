@@ -49,7 +49,8 @@ Localization:
 - French translation is updated.
 
 Bug fixes:
-- The application now starts with the window size and location it had last time also when custom initial folders are set.
+- The application now starts with the window size and location it had last time also in case custom initial folders are set.
+- Actions can be triggered from the system tray.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This

@@ -19,6 +19,9 @@
 package com.mucommander.ui.action;
 
 import javax.swing.*;
+
+import com.mucommander.ui.main.WindowManager;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -39,7 +42,7 @@ import java.awt.event.ActionListener;
 public class AWTActionProxy implements ActionListener {
 
     /** Proxied Action */
-    private Action proxiedAction;
+    private String proxiedActionId;
 
     /**
      * Creates a new AWTActionProxy instance that will transfer ActionEvents caught by {@link #actionPerformed(java.awt.event.ActionEvent)}
@@ -47,22 +50,15 @@ public class AWTActionProxy implements ActionListener {
      *
      * @param action the Action instance to transfer the ActionEvents to.
      */
-    public AWTActionProxy(Action action) {
-        this.proxiedAction = action;
-    }
-
-    /**
-     * Returns the <code>Action</code> instance to which the ActionEvents received by {@link #actionPerformed(java.awt.event.ActionEvent)}
-     * are transferred. 
-     */
-    public Action getProxiedAction() {
-        return proxiedAction;
+    public AWTActionProxy(String actionId) {
+        this.proxiedActionId = actionId;
     }
 
     /**
      * Forwards the specified ActionEvent to the proxied Action.
      */
     public void actionPerformed(ActionEvent actionEvent) {
+        MuAction proxiedAction = ActionManager.getActionInstance(proxiedActionId, WindowManager.getCurrentMainFrame());
         proxiedAction.actionPerformed(actionEvent);
     }
 }
