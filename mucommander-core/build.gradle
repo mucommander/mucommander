@@ -22,7 +22,8 @@ dependencies {
     compile 'com.beust:jcommander:1.72'
     compile 'org.osgi:osgi.core:7.0.0'
 
-    compileOnly files('libs/java-extension.jar')
+    // the java.desktop module that contains macOS-specific extensions
+    compileOnly files('libs/java.desktop.jar')
 
     testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
