@@ -94,7 +94,7 @@ public class TransferableFileSet implements Transferable {
     static {
         // Create a single custom DataFlavor instance that designates the FileSet class to transfer data
         try {
-            FILE_SET_DATA_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+";class="+FileSet.class.getName());
+            FILE_SET_DATA_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+";class="+FileSet.class.getName(), "FileSet", TransferableFileSet.class.getClassLoader());
 	        TEXT_URI_FLAVOR =  new DataFlavor("text/uri-list;class="+String.class.getName());
         }
         catch(ClassNotFoundException e) {
