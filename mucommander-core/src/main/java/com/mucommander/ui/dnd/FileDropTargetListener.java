@@ -158,29 +158,18 @@ public class FileDropTargetListener implements DropTargetListener {
     private boolean acceptOrRejectDragEvent(DropTargetDragEvent event) {
         this.currentDropAction = event.getDropAction();
 
-        this.dragAccepted = event.isDataFlavorSupported(TransferableFileSet.getFileSetDataFlavor())
-                || event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
-                || event.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor());
+        this.dragAccepted = isDragAccepted(event);
 
         if(dragAccepted && DnDContext.isDragInitiatedByMucommander()) {
-            FolderPanel dragInitiator = DnDContext.getDragInitiator();
+            // Change the default drop action to DnDConstants.ACTION_COPY instead of DnDConstants.ACTION_MOVE,
+            // if the move extended modifiers are not currently down.
+            int dragModifiers = DnDContext.getDragGestureModifiersEx();
 
-            if(dragInitiator==folderPanel || dragInitiator.getCurrentFolder().equalsCanonical(folderPanel.getCurrentFolder())) {
-                // Refuse drag if the drag was initiated by the same FolderPanel, or if its current folder is the same
-                // as this one
-                this.dragAccepted = false;
-            }
-            else {
-                // Change the default drop action to DnDConstants.ACTION_COPY instead of DnDConstants.ACTION_MOVE,
-                // if the move extended modifiers are not currently down.
-                int dragModifiers = DnDContext.getDragGestureModifiersEx();
-
-                if(currentDropAction==DnDConstants.ACTION_MOVE
-                        && (dragModifiers&MOVE_ACTION_MODIFIERS_EX)==0
-                        && (event.getSourceActions()&DnDConstants.ACTION_COPY)!=0) {
-                    LOGGER.debug("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
-                    currentDropAction = DnDConstants.ACTION_COPY;
-                }
+            if(currentDropAction==DnDConstants.ACTION_MOVE
+                    && (dragModifiers&MOVE_ACTION_MODIFIERS_EX)==0
+                    && (event.getSourceActions()&DnDConstants.ACTION_COPY)!=0) {
+                LOGGER.debug("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
+                currentDropAction = DnDConstants.ACTION_COPY;
             }
         }
 
@@ -203,6 +192,25 @@ public class FileDropTargetListener implements DropTargetListener {
         return dragAccepted;
     }
 
+    private boolean isDragAccepted(DropTargetDragEvent event) {
+        boolean dataFlavorSupported = event.isDataFlavorSupported(TransferableFileSet.getFileSetDataFlavor())
+                || event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
+                || event.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor());
+
+        if (!dataFlavorSupported)
+            return false;
+
+        // Refuse drag if the drag was initiated by the same FolderPanel, or if its current folder is the same
+        // as this one
+        if (DnDContext.isDragInitiatedByMucommander() && isPointToTargetFolder(DnDContext.getDragInitiator()))
+            return false;
+
+        return true;
+    }
+
+    private boolean isPointToTargetFolder(FolderPanel dragInitiator) {
+        return dragInitiator==folderPanel || dragInitiator.getCurrentFolder().equalsCanonical(folderPanel.getCurrentFolder());
+    }
 
     ////////////////////////////////////
     // FileDropTargetListener methods //
