@@ -156,21 +156,10 @@ public class FileDropTargetListener implements DropTargetListener {
      * @return <code>true</code> if the event was accepted, false otherwise
      */
     private boolean acceptOrRejectDragEvent(DropTargetDragEvent event) {
-        this.currentDropAction = event.getDropAction();
-
         this.dragAccepted = isDragAccepted(event);
 
-        if(dragAccepted && DnDContext.isDragInitiatedByMucommander()) {
-            // Change the default drop action to DnDConstants.ACTION_COPY instead of DnDConstants.ACTION_MOVE,
-            // if the move extended modifiers are not currently down.
-            int dragModifiers = DnDContext.getDragGestureModifiersEx();
-
-            if(currentDropAction==DnDConstants.ACTION_MOVE
-                    && (dragModifiers&MOVE_ACTION_MODIFIERS_EX)==0
-                    && (event.getSourceActions()&DnDConstants.ACTION_COPY)!=0) {
-                LOGGER.debug("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
-                currentDropAction = DnDConstants.ACTION_COPY;
-            }
+        if (dragAccepted) {
+            this.currentDropAction = determineDropAction(event);
         }
 
         LOGGER.trace("dragAccepted="+dragAccepted+" dropAction="+currentDropAction);
@@ -190,6 +179,23 @@ public class FileDropTargetListener implements DropTargetListener {
         folderPanel.setCursor(getDragActionCursor(currentDropAction, dragAccepted));
 
         return dragAccepted;
+    }
+
+    private int determineDropAction(DropTargetDragEvent event) {
+        int dropAction = event.getDropAction();
+        if (DnDContext.isDragInitiatedByMucommander()) {
+            // Change the default drop action to DnDConstants.ACTION_COPY instead of DnDConstants.ACTION_MOVE,
+            // if the move extended modifiers are not currently down.
+            int dragModifiers = DnDContext.getDragGestureModifiersEx();
+
+            if(dropAction==DnDConstants.ACTION_MOVE
+                    && (dragModifiers & MOVE_ACTION_MODIFIERS_EX) == 0
+                    && (event.getSourceActions() & DnDConstants.ACTION_COPY) != 0) {
+                LOGGER.debug("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
+                dropAction = DnDConstants.ACTION_COPY;
+            }
+        }
+        return dropAction;
     }
 
     private boolean isDragAccepted(DropTargetDragEvent event) {
