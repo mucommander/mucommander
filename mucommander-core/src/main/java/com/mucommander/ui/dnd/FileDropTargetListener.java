@@ -174,10 +174,10 @@ public class FileDropTargetListener implements DropTargetListener {
             event.rejectDrag();
         }
 
-        LOGGER.trace("cursor=" + getDragActionCursor(currentDropAction, dragAccepted));
-
         // Change the mouse cursor on this FolderPanel and child components
-        folderPanel.setCursor(getDragActionCursor(currentDropAction, dragAccepted));
+        Cursor newCursor = getDragActionCursor(currentDropAction, dragAccepted);
+        LOGGER.trace("cursor=" + newCursor);
+        folderPanel.setCursor(newCursor);
 
         return dragAccepted;
     }
