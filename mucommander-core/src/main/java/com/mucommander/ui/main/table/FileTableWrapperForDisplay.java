@@ -98,8 +98,8 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
         
      // Enable drop support to copy/move/change current folder when files are dropped on the FileTable
         FileDropTargetListener dropTargetListener = new FileDropTargetListener(fileTable.getFolderPanel(), false);
-        fileTable.setDropTarget(new DropTarget(fileTable, dropTargetListener));
-        setDropTarget(new DropTarget(this, dropTargetListener));
+        new DropTarget(fileTable, dropTargetListener);
+        new DropTarget(this, dropTargetListener);
         
      // Listens to theme events
         ThemeManager.addCurrentThemeListener(this);

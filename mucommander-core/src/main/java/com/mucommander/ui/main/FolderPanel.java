@@ -210,8 +210,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
         // Allow the location field to change the current directory when a file/folder is dropped on it
         FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, true);
-        locationTextField.setDropTarget(new DropTarget(locationTextField, dropTargetListener));
-        driveButton.setDropTarget(new DropTarget(driveButton, dropTargetListener));
+        new DropTarget(locationTextField, dropTargetListener);
+        new DropTarget(driveButton, dropTargetListener);
     }
 
 
