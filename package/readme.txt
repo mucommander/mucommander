@@ -51,6 +51,7 @@ Localization:
 Bug fixes:
 - The application now starts with the window size and location it had last time also in case custom initial folders are set.
 - Actions can be triggered from the system tray.
+- Popup menu is displayed also for the parent folder row.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
