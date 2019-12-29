@@ -44,6 +44,7 @@ Improvements:
 - Various improvements for S3 support.
 - Add textual filtering to the shotrcuts dialog.
 - Upgrade various dependencies.
+- Default drag and drop action that was initiated from outside of the application to 'COPY' rather than to 'MOVE'.
 
 Localization:
 - French translation is updated.
