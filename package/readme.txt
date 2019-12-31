@@ -22,8 +22,8 @@ Copyright (C) 2002-2018 Maxence Bernard.
 Requirements
 ------------
 
-A Java Runtime Environment (JRE) 1.8 or later is required to run muCommander.
-Java 1.8 is recommended, you can download it at http://java.com.
+A Java Runtime Environment (JRE) 11 or later is required to run muCommander.
+Java 11 is recommended, you can download it at https://www.oracle.com/technetwork/java/javase/downloads/.
 
 If you're having problems launching muCommander, make sure the JAVA_HOME environment variable points to the directory
 where your Java runtime is installed.
@@ -40,6 +40,7 @@ New features:
 
 Improvements:
 - Restructure the application as OSGi modules.
+- Support for newer versions of Java. Java 11 is now the recommened version.
 - Enable system notifications on macOS also when Growl is not installed, using the java.awt.SystemTray API.
 - Various improvements for S3 support.
 - Add textual filtering to the shotrcuts dialog.

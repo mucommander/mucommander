@@ -28,7 +28,7 @@ If you want to get involved in muCommander or have any question or issue to disc
 
 ### Prerequisites
 
-  - Java Development Kit (JDK) 1.8 or later  
+  - Java Development Kit (JDK) 11 or later  
   - Git
 
 
