@@ -233,14 +233,6 @@ plugins {
     id 'nebula.ospackage' version '3.5.0'
 }
 
-task proguard(type: proguard.gradle.ProGuardTask) {
-    configuration 'package/proguard.txt'
-
-    injars file('tmp.jar')
-    outjars shadowJar.archivePath
-}
-proguard.enabled = !JavaVersion.current().isJava9Compatible()
-
 macAppBundle {
     appName = "muCommander"
     mainClassName = "com.mucommander.muCommander"

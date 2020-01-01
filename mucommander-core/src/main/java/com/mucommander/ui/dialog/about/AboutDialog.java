@@ -236,7 +236,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertDetailedUrl(doc,    "Launch4j",            "GPL",                                  "http://launch4j.sourceforge.net");
             insertDetailedUrl(doc,    "NSIS",                "zlib/libpng license",                  "http://nsis.sourceforge.net");
             insertDetailedUrl(doc,    "p7zip",               "LGPL",                                 "http://p7zip.sourceforge.net");
-            insertDetailedUrl(doc,    "ProGuard",            "GPL",                                  "http://proguard.sourceforge.net");
+//            insertDetailedUrl(doc,    "ProGuard",            "GPL",                                  "http://proguard.sourceforge.net");
             insertLineBreak(doc);
             insertLineBreak(doc);
 
