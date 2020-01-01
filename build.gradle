@@ -18,6 +18,7 @@ plugins {
 allprojects {
     group = 'org.mucommander'
     version = '0.9.4'
+    ext.release = '1'
     configurations {
         compileOnly.extendsFrom comprise
     }
@@ -152,6 +153,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 buildRpm {
     dependsOn createOsgiRuntime
+    release = project.ext.release
 
     postInstall file('package/unix/postinst')
     postUninstall file('package/unix/postrm')
