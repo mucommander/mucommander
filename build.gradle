@@ -233,16 +233,6 @@ plugins {
     id 'nebula.ospackage' version '3.5.0'
 }
 
-shadowJar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    exclude 'javax/el/**'
-    exclude 'javax/servlet/**'
-    exclude 'org/eclipse/**'
-    exclude 'jdtCompilerAdapter.jar'
-    exclude 'LICENSE*'
-}
-
 task proguard(type: proguard.gradle.ProGuardTask) {
     configuration 'package/proguard.txt'
 
@@ -250,12 +240,6 @@ task proguard(type: proguard.gradle.ProGuardTask) {
     outjars shadowJar.archivePath
 }
 proguard.enabled = !JavaVersion.current().isJava9Compatible()
-
-shadowJar.doLast {
-    file(shadowJar.archivePath).renameTo('tmp.jar')
-    proguard.execute()
-    file('tmp.jar').delete()
-}
 
 macAppBundle {
     appName = "muCommander"
