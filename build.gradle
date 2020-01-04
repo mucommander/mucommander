@@ -311,22 +311,6 @@ task nsis(dependsOn: createExe) {
     }
 }
 
-// Unix packaging
-task tgz(dependsOn: shadowJar, type: Tar) {
-    from ("$buildDir/libs") {
-        include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
-    }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
-        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
-    }
-    into "muCommander-$version"
-    extension = 'tar.gz'
-    compression = Compression.GZIP
-}
-
 // Portable packaging
 task portable(type: Tar) {
     from ("$buildDir/libs") {
@@ -350,6 +334,29 @@ task portable(type: Tar) {
 
 */
 
+// Unix packaging
+task tgz(dependsOn: shadowJar, type: Tar) {
+    from ("$buildDir/osgi") {
+        include '*.jar'
+    }
+    from ('package') { include 'license.txt', 'readme.txt' }
+    from ('package/unix/mucommander.sh') {
+        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
+    }
+    into "."
+
+    from ("$buildDir/osgi/bundle") {
+        include '*.jar'
+        into 'bundle'
+    }
+    from ("$buildDir/osgi/app") {
+        include '*.jar'
+        into 'app'
+    }
+
+    extension = 'tar.gz'
+    compression = Compression.GZIP
+}
 
 task(afterEclipseImport).doLast {
     File f = file('.settings/org.eclipse.core.resources.prefs')
