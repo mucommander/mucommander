@@ -257,7 +257,7 @@ macAppBundle {
     mainClassName = "com.mucommander.main.muCommander"
     appStyle = "Oracle"
     bundleJRE = true
-    jreHome = "jre/Contents/Home"
+    jreHome = "jre/macOS/Contents/Home"
     bundleIdentifier = "com.mucommander.muCommander"
     jvmVersion = "1.6+"
     icon = "package/osx/icon.icns"
