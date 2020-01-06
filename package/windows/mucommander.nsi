@@ -76,6 +76,13 @@ Section "muCommander @MU_VERSION@ (required)"
   File /oname=muCommander.exe @MU_EXE@
   File /oname=readme.txt @MU_README@
   File /oname=license.txt @MU_LICENSE@
+  File @MU_JAR@
+  File /r "app"
+  File /r "bundle"
+  File /r "jre"
+  ; Create writable directory for felix-cache
+  CreateDirectory "$INSTDIR\felix-cache"
+  AccessControl::GrantOnFile "$INSTDIR\felix-cache" "(BU)" "GenericRead + GenericWrite"
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\muCommander "Install_Dir" "$INSTDIR"
   ; Write the uninstall keys for Windows
@@ -110,7 +117,7 @@ Section "Uninstall"
   DeleteRegKey HKLM SOFTWARE\muCommander
   ; remove files
   Delete $INSTDIR\muCommander.exe
-  Delete $INSTDIR\mucommander.jar
+  Delete $INSTDIR\@MU_JAR@
   Delete $INSTDIR\muCommander.lnk
   Delete $INSTDIR\readme.txt
   Delete $INSTDIR\license.txt
@@ -122,6 +129,10 @@ Section "Uninstall"
   Delete "$DESKTOP\muCommander.lnk"
   ; remove directories used.
   RMDir "$SMPROGRAMS\muCommander"
+  RMDir /r "$INSTDIR\app"
+  RMDir /r "$INSTDIR\bundle"
+  RMDir /r "$INSTDIR\felix-cache"
+  RMDir /r "$INSTDIR\jre"
   RMDir "$INSTDIR"
 SectionEnd
 
