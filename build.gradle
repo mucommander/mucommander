@@ -296,11 +296,18 @@ launch4j {
     headerType = "gui"
 }
 
-/*
 // Windows installer
 task nsis(dependsOn: createExe) {
     copy {
-        from("$buildDir/launch4j/" + launch4j.outfile)
+        from("$buildDir/launch4j/") {
+            include launch4j.outfile
+        }
+        from('jre/win') {
+            into "jre"
+        }
+        from("$buildDir/osgi/") {
+            include '*.jar'
+        }
         from('package/windows') {
             include 'mucommander.ico'
         }
@@ -310,17 +317,26 @@ task nsis(dependsOn: createExe) {
                                            MU_ICON: 'mucommander.ico',
                                            MU_LICENSE: 'license.txt',
                                            MU_README: 'readme.txt',
-                                           MU_OUT: 'mucommander-setup.exe',
-                                           MU_EXE: launch4j.outfile])
+                                           MU_OUT: 'mucommander-'+project.version+'-setup.exe',
+                                           MU_EXE: launch4j.outfile,
+                                           MU_JAR: project.tasks.shadowJar.archiveName])
         }
         from ('package') {
-	    include 'license.txt',
-	    'readme.txt'
-	}
+            include 'license.txt', 'readme.txt'
+        }
+        from("$buildDir/osgi/app") {
+            include '*.jar'
+            into "app"
+        }
+        from("$buildDir/osgi/bundle") {
+            include '*.jar'
+            into "bundle"
+        }
         into "$buildDir/tmp/nsis"
     }
 }
 
+/*
 // Portable packaging
 task portable(type: Tar) {
     from ("$buildDir/libs") {

@@ -379,13 +379,14 @@ if (ex.getCause() != null)
                 }
                 else if (tok.equals(" "))
                 {
-                    if (tokStarted)
+                    tokBuf.append(tok);
+                    /*if (tokStarted)
                     {
                         retVal = tokBuf.toString();
                         tokStarted=false;
                         tokBuf = new StringBuffer(10);
                         exit = true;
-                    }
+                    }*/
                 }
                 else
                 {
