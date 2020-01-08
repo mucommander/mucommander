@@ -289,6 +289,8 @@ launch4j {
     copyConfigurable = project.tasks.shadowJar.outputs.files
     bundledJre64Bit = true
     bundledJrePath = "jre"
+    bundledJreAsFallback = true
+    jreMinVersion = "11.0"
     jar = "${project.tasks.shadowJar.archiveName}"
     outfile = jar.replace('jar', 'exe')
     dontWrapJar = true
