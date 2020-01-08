@@ -95,6 +95,7 @@ Section "muCommander @MU_VERSION@ (required)"
   ; Create Start Menu directory and shortcuts
   CreateDirectory "$SMPROGRAMS\muCommander"
   CreateShortCut "$SMPROGRAMS\muCommander\muCommander.lnk" "$INSTDIR\muCommander.exe" "" "" 0 SW_SHOWMINIMIZED
+  ApplicationID::Set "$SMPROGRAMS\muCommander\muCommander.lnk" "muCommander"
   CreateShortCut "$SMPROGRAMS\muCommander\Read Me.lnk" "$INSTDIR\readme.txt" "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\License.lnk" "$INSTDIR\license.txt" "" "" 0
   CreateShortCut "$SMPROGRAMS\muCommander\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "" 0 
@@ -103,11 +104,13 @@ SectionEnd
 ; Quick launch shortcut (optional section)
 Section "Quick Launch shortcut"
   CreateShortCut "$QUICKLAUNCH\muCommander.lnk" "$INSTDIR\muCommander.exe" "" "" 0 SW_SHOWMINIMIZED
+  ApplicationID::Set "$QUICKLAUNCH\muCommander.lnk" "muCommander"
 SectionEnd
 
 ; Desktop shortcut (optional section)
 Section "Desktop shortcut"
   CreateShortCut "$DESKTOP\muCommander.lnk" "$INSTDIR\muCommander.exe" "" "" 0 SW_SHOWMINIMIZED
+  ApplicationID::Set "$DESKTOP\muCommander.lnk" "muCommander"
 SectionEnd
 
 ; Special uninstall section.

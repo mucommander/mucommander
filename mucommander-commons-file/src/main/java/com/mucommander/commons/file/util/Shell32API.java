@@ -20,8 +20,10 @@
 package com.mucommander.commons.file.util;
 
 import com.mucommander.commons.runtime.JavaVersion;
+import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.WString;
 
 import java.util.Arrays;
 import java.util.List;
@@ -223,4 +225,16 @@ public interface Shell32API extends W32API {
      * @return Returns S_OK (0) if successful, or a COM-defined error value otherwise.
      */
     int SHQueryRecycleBin(String pszRootPath, SHQUERYRBINFO pSHQueryRBInfo);
+
+    /**
+     * Specifies a unique application-defined Application User Model ID (AppUserModelID) that identifies the
+     * current process to the taskbar. This identifier allows an application to group its associated processes
+     * and windows under a single taskbar button.
+     *
+     * @param appID
+     *            The AppUserModelID to assign to the current process.
+     * @return If this function succeeds, it returns S_OK. Otherwise, it returns an HRESULT error code.
+     * @see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd378422(v=vs.85).aspx">MSDN</a>
+     */
+    NativeLong SetCurrentProcessExplicitAppUserModelID(WString appID);
 }

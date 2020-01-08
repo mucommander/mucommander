@@ -19,8 +19,12 @@
 
 package com.mucommander.commons.file.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.runtime.OsFamily;
 import com.sun.jna.Native;
+import com.sun.jna.WString;
 
 /**
  * This class provides access to a static instance of the {@link com.mucommander.commons.file.util.Shell32API} interface,
@@ -33,6 +37,7 @@ import com.sun.jna.Native;
  * @author Maxence Bernard
  */
 public class Shell32 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Shell32.class);
 
     /** An instance of the Shell32 DLL */
     private static Shell32API INSTANCE;
@@ -45,6 +50,9 @@ public class Shell32 {
             catch(Throwable e) {
                 // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported by JNA.
                 INSTANCE = null;
+            }
+            if (INSTANCE != null) {
+                setCurrentProcessExplicitAppUserModelID();
             }
         }
     }
@@ -68,5 +76,18 @@ public class Shell32 {
      */
     public static Shell32API getInstance() {
         return INSTANCE;
+    }
+
+    /**
+     * We need to set Application ID to be able to pin the application to the
+     * taskbar on Windows 7+. Note that the same identifier ("muCommander")
+     * is set on the shortcuts that are produced by the Windows installer.
+     */
+    private static void setCurrentProcessExplicitAppUserModelID() {
+        try {
+            INSTANCE.SetCurrentProcessExplicitAppUserModelID(new WString("muCommander"));
+        } catch(Throwable e) {
+            LOGGER.info("Failed to set Application ID", e);
+        }
     }
 }
