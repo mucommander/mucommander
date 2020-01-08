@@ -46,6 +46,7 @@ Improvements:
 - Add textual filtering to the shotrcuts dialog.
 - Upgrade various dependencies.
 - Default drag and drop action that was initiated from outside of the application to 'COPY' rather than to 'MOVE'.
+- Enable pinning to taskbar on Windows 7+.
 
 Localization:
 - French translation is updated.
