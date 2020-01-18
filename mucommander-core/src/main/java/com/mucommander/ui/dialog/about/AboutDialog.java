@@ -294,19 +294,13 @@ public class AboutDialog extends FocusDialog implements ActionListener {
                   .add(new JLabel(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png")),
                 	   BorderLayout.NORTH)
                   .add(new FluentPanel(new FlowLayout(FlowLayout.CENTER)).add(createAppString()),
-  				       BorderLayout.CENTER)
-  				  .add(new FluentPanel(new FlowLayout(FlowLayout.CENTER)).add(createCopyright()),
-  				       BorderLayout.SOUTH),
+  				       BorderLayout.CENTER),
               BorderLayout.NORTH)
 		 .add(new FluentPanel(new BorderLayout())
                   .add(createHomeComponent(), BorderLayout.NORTH)
                   .add(createLicenseButton(), BorderLayout.CENTER)
                   .add(createOkButton(), BorderLayout.SOUTH),
 		      BorderLayout.SOUTH);
-	}
-
-	private JLabel createCopyright() {
-		return new JLabel("©" + RuntimeConstants.COPYRIGHT+ " Maxence Bernard");
 	}
 
 	private JLabel createAppString() {
