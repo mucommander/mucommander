@@ -131,40 +131,6 @@ public class AboutDialog extends FocusDialog implements ActionListener {
         setStyles(doc);
         text.setEditable(false);
         try {
-            // Powered by.
-            insertTitle(doc,         "Powered by");
-
-            // External Libraries.
-            insertHeader(doc,         "Libraries");
-            insertDetailedUrl(doc,    "Ant",                 "Apache License",                       "http://ant.apache.org");
-            insertDetailedUrl(doc,    "Apache Commons",      "Apache License",                       "http://commons.apache.org");
-            insertDetailedUrl(doc,    "Apache Hadoop",       "Apache License",                       "http://hadoop.apache.org");
-            insertDetailedUrl(doc,    "Furbelow",            "LGPL",                                 "http://sourceforge.net/projects/furbelow");
-            insertDetailedUrl(doc,    "ICU4J",               "ICU License",                          "http://www.icu-project.org");
-            insertDetailedUrl(doc,    "JSCH",                "BSD",                                  "http://www.jcraft.com/jsch/");
-            insertDetailedUrl(doc,    "J7Zip",               "LGPL",                                 "http://sourceforge.net/projects/p7zip/");
-            insertDetailedUrl(doc,    "jCIFS",               "LGPL",                                 "http://jcifs.samba.org");
-            insertDetailedUrl(doc,    "JetS3t",              "Apache License",                       "http://jets3t.s3.amazonaws.com/index.html");
-            insertDetailedUrl(doc,    "JmDNS",               "LGPL",                                 "http://jmdns.sourceforge.net");
-            insertDetailedUrl(doc,    "JNA",                 "LGPL",                                 "http://jna.dev.java.net");
-            insertDetailedUrl(doc,    "JUnRar",              "Freeware",                             "http://sourceforge.net/projects/java-unrar");
-            insertDetailedUrl(doc,    "Yanfs",               "BSD",                                  "http://yanfs.dev.java.net");
-            insertDetailedUrl(doc,    "JCommander",          "Apache License",                       "http://jcommander.org");
-            insertDetailedUrl(doc,    "Mark James' icons",   "Creative Commons Attribution License", "http://famfamfam.com");
-            insertLineBreak(doc);
-
-            // External tools.
-            insertHeader(doc,         "Tools");
-            insertDetailedUrl(doc,    "Ant",                 "Apache Software License",              "http://ant.apache.org");
-            insertDetailedUrl(doc,    "AntDoclet",           "GPL",                                  "http://antdoclet.neuroning.com/");
-            insertDetailedUrl(doc,    "jdeb",                "Apache Software License",              "http://vafer.org/projects/jdeb/");
-            insertDetailedUrl(doc,    "Launch4j",            "GPL",                                  "http://launch4j.sourceforge.net");
-            insertDetailedUrl(doc,    "NSIS",                "zlib/libpng license",                  "http://nsis.sourceforge.net");
-            insertDetailedUrl(doc,    "p7zip",               "LGPL",                                 "http://p7zip.sourceforge.net");
-//            insertDetailedUrl(doc,    "ProGuard",            "GPL",                                  "http://proguard.sourceforge.net");
-            insertLineBreak(doc);
-            insertLineBreak(doc);
-
             // Version information
             insertTitle(doc,         "Version information");
 
@@ -196,6 +162,41 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertNormalString(doc,   "Language: " + locale.getLanguage());
             insertNormalString(doc,   "Country: " + locale.getCountry());
             insertNormalString(doc,   "Encoding: " + System.getProperty("file.encoding"));
+
+            insertLineBreak(doc);
+            insertLineBreak(doc);
+
+            // Powered by.
+            insertTitle(doc,         "Powered by");
+
+            // External Libraries.
+            insertHeader(doc,         "Libraries");
+            insertDetailedUrl(doc,    "Ant",                 "Apache License",                       "http://ant.apache.org");
+            insertDetailedUrl(doc,    "Apache Commons",      "Apache License",                       "http://commons.apache.org");
+            insertDetailedUrl(doc,    "Apache Hadoop",       "Apache License",                       "http://hadoop.apache.org");
+            insertDetailedUrl(doc,    "Furbelow",            "LGPL",                                 "http://sourceforge.net/projects/furbelow");
+            insertDetailedUrl(doc,    "ICU4J",               "ICU License",                          "http://www.icu-project.org");
+            insertDetailedUrl(doc,    "JSCH",                "BSD",                                  "http://www.jcraft.com/jsch/");
+            insertDetailedUrl(doc,    "J7Zip",               "LGPL",                                 "http://sourceforge.net/projects/p7zip/");
+            insertDetailedUrl(doc,    "jCIFS",               "LGPL",                                 "http://jcifs.samba.org");
+            insertDetailedUrl(doc,    "JetS3t",              "Apache License",                       "http://jets3t.s3.amazonaws.com/index.html");
+            insertDetailedUrl(doc,    "JmDNS",               "LGPL",                                 "http://jmdns.sourceforge.net");
+            insertDetailedUrl(doc,    "JNA",                 "LGPL",                                 "http://jna.dev.java.net");
+            insertDetailedUrl(doc,    "JUnRar",              "Freeware",                             "http://sourceforge.net/projects/java-unrar");
+            insertDetailedUrl(doc,    "Yanfs",               "BSD",                                  "http://yanfs.dev.java.net");
+            insertDetailedUrl(doc,    "JCommander",          "Apache License",                       "http://jcommander.org");
+            insertDetailedUrl(doc,    "Mark James' icons",   "Creative Commons Attribution License", "http://famfamfam.com");
+            insertLineBreak(doc);
+
+            // External tools.
+            insertHeader(doc,         "Tools");
+            insertDetailedUrl(doc,    "Ant",                 "Apache Software License",              "http://ant.apache.org");
+            insertDetailedUrl(doc,    "AntDoclet",           "GPL",                                  "http://antdoclet.neuroning.com/");
+            insertDetailedUrl(doc,    "jdeb",                "Apache Software License",              "http://vafer.org/projects/jdeb/");
+            insertDetailedUrl(doc,    "Launch4j",            "GPL",                                  "http://launch4j.sourceforge.net");
+            insertDetailedUrl(doc,    "NSIS",                "zlib/libpng license",                  "http://nsis.sourceforge.net");
+            insertDetailedUrl(doc,    "p7zip",               "LGPL",                                 "http://p7zip.sourceforge.net");
+//            insertDetailedUrl(doc,    "ProGuard",            "GPL",                                  "http://proguard.sourceforge.net");
         }
         catch(Exception e) {}
 
