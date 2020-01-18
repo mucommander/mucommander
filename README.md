@@ -11,7 +11,6 @@ muCommander is a lightweight, cross-platform file manager with a dual-pane inter
 It runs on any operating system with Java support (macOS, Windows, Linux, *BSD, Solaris...).
 
 Official website: http://www.mucommander.com  
-Copyright (C) 2002-2018 Maxence Bernard.
 
 ## Contribution
 
