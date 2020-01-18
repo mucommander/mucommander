@@ -16,7 +16,6 @@ Please visit the muCommander project page on GitHub (https://github.com/mucomman
 suggest features, report a bug or browse documentation. Your feedback is always welcome!
 
 Official website: http://www.mucommander.com
-Copyright (C) 2002-2018 Maxence Bernard.
 
 
 Requirements
