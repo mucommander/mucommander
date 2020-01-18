@@ -19,7 +19,6 @@ package com.mucommander;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Calendar;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -74,8 +73,6 @@ public class RuntimeConstants {
     public  static final String VERSION;
     /** Date at which the build was generated (<code>YYYYMMDD</code>). */
     public  static final String BUILD_DATE;
-    /** Copyright information (<code>YYYY-YYYY</code>). */
-    public  static final String COPYRIGHT;
     /** String describing the software (<code>muCommander vMAJOR.MINOR.DEV</code>). */
     public  static final String APP_STRING;
     /** String describing the muCommander build number. */
@@ -116,7 +113,6 @@ public class RuntimeConstants {
         // No MANIFEST.MF found, use default values.
         if(attributes == null) {
             VERSION = "?";
-            COPYRIGHT    = "2002-" + Calendar.getInstance().get(Calendar.YEAR);
             // We use a date that we are sure is later than the latest version to trigger the version checker.
             // After all, the JAR appears to be corrupt and should be upgraded.
             BUILD_DATE = DEFAULT_RELEASE_DATE;
@@ -130,9 +126,6 @@ public class RuntimeConstants {
             BUILD_DATE = getAttribute(attributes, "Build-Date");
             VERSION_URL  = getAttribute(attributes, "Build-URL");
             BUILD_NUMBER = getAttribute(attributes, "Implementation-Version");
-            // Protection against corrupt manifest files.
-            COPYRIGHT    = BUILD_DATE.length() > 4 ? BUILD_DATE.substring(0, 4) : DEFAULT_RELEASE_DATE;
-
         }
         APP_STRING = "muCommander v" + VERSION;
     }
