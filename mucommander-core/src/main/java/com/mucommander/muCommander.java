@@ -160,9 +160,6 @@ public class muCommander {
      */
     private static void printVersion() {
         System.out.println(RuntimeConstants.APP_STRING);
-        System.out.print("Copyright (C) ");
-        System.out.print(RuntimeConstants.COPYRIGHT);
-        System.out.println(" Arik Hadas");
         System.out.println("This is free software, distributed under the terms of the GNU General Public License.");
     }
 
