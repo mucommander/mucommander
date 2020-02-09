@@ -43,14 +43,13 @@ import org.osgi.framework.launch.FrameworkFactory;
 import com.beust.jcommander.JCommander;
 
 /**
+ * muCommander launcher.
  * <p>
- * This class is the default way to instantiate and execute the framework. It is not
- * intended to be the only way to instantiate and execute the framework; rather, it is
- * one example of how to do so. When embedding the framework in a host application,
- * this class can serve as a simple guide of how to do so. It may even be
- * worthwhile to reuse some of its property handling capabilities.
+ * This class is used to start muCommander. It will analyse command line
+ * arguments and initialize the OSGi framework.
  * </p>
-**/
+ * @author Arik Hadas
+ */
 public class muCommander 
 {
     /**
