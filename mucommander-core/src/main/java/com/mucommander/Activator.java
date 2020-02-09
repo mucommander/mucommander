@@ -98,4 +98,8 @@ public class Activator implements BundleActivator {
 
         return Arrays.asList(folders.split(","));
     }
+
+    public boolean silent() {
+        return Boolean.parseBoolean(context.getProperty("mucommander.silent"));
+    }
 }
