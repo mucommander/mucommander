@@ -20,15 +20,11 @@ package com.mucommander;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
@@ -84,51 +80,6 @@ public class muCommander {
     /** OSGi BundleActivator */
     private static Activator activator;
 
-    /** Whether or not to display verbose error messages. */
-    @Parameter(names={"-S", "--silent"}, description="Do not print verbose error messages")
-    private boolean silent;
-    @Parameter(names={"-v", "--version"}, description="Print the version and exit", help=true)
-    private boolean version;
-    @Parameter(names={"-h", "--help"}, description="Print the help text and exit", help=true)
-    private boolean help;
-    // Allows users to tweak how file associations are loaded / saved.
-    @Parameter(names={"-a", "--assoc"}, description="Load associations from FILE.")
-    private String assoc;
-    // Allows users to tweak how bookmarks are loaded / saved.
-    @Parameter(names={"-b", "--bookmarks"}, description="Load bookmarks from FILE.")
-    private String bookmark;
-    // Allows users to tweak how configuration is loaded / saved.
-    @Parameter(names={"-c", "--configuration"}, description="Load configuration from FILE")
-    private String configuration;
-    // Allows users to tweak how command bar configuration is loaded / saved.
-    @Parameter(names={"-C", "--commandbar"}, description="Load command bar from FILE.")
-    private String commandbar;
-    // Allows users to change the extensions folder.
-    @Parameter(names={"-e", "--extensions"}, description="Load extensions from FOLDER.")
-    private String extensions;
-    // Allows users to tweak how custom commands are loaded / saved.
-    @Parameter(names={"-f", "--commands"}, description="Load custom commands from FILE.")
-    private String commands;
-    @Parameter(names={"-w", "--fail-on-warnings"}, description="Quits when a warning is encountered during")
-    private boolean fatalWarnings;
-    // Allows users to tweak how keymaps are loaded.
-    @Parameter(names={"-k", "--keymap"}, description="Load keymap from FILE")
-    private String keymap;
-    // Allows users to change the preferences folder.
-    @Parameter(names={"-p", "--preferences"}, description="Store configuration files in FOLDER")
-    private String preferences;
-    // Allows users to tweak how shell history is loaded / saved.
-    @Parameter(names={"-s", "--shell-history"}, description="Load shell history from FILE")
-    private String shellHistory;
-    // Allows users to tweak how toolbar configuration are loaded.
-    @Parameter(names={"-t", "--toolbar"}, description="Load toolbar from FILE")
-    private String toolbar;
-    // Allows users to tweak how credentials are loaded.
-    @Parameter(names={"-u", "--credentials"}, description="Load credentials from FILE")
-    private String credentials;
-    @Parameter(description="[folders]")
-    private List<String> folders = new ArrayList<>();
-
 
     // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
@@ -183,7 +134,7 @@ public class muCommander {
         if(quit)
             error.append("Warning: ");
         error.append(msg);
-        if(!silent && (exception != null)) {
+        if (/* !silent && */(exception != null)) {
             error.append(": ");
             error.append(exception.getMessage());
         }
@@ -258,28 +209,9 @@ public class muCommander {
     }
 
 
-    /**
-     * Main method used to startup muCommander.
-     * @param args command line arguments.
-     * @throws IOException if an unrecoverable error occurred during startup
-     */
-    public static void main(String args[]) throws IOException {
-        muCommander mu = new muCommander();
-        JCommander jCommander = new JCommander(mu);
-        jCommander.parse(args);
-        if (mu.help) {
-            jCommander.setProgramName(muCommander.class.getSimpleName());
-            jCommander.usage();
-        }
-        else if (mu.version) {
-            printVersion();
-        }
-        else
-            mu.run();
-    }
-
     private void run() {
         try {
+            /*
             // Associations handling.
             if (assoc != null) {
                 try {com.mucommander.command.CommandManager.setAssociationFile(assoc);}
@@ -345,6 +277,7 @@ public class muCommander {
                 try {ExtensionManager.setExtensionsFolder(extensions);}
                 catch(Exception e) {printError("Could not set extensions folder", e, fatalWarnings);}
             }
+            */
 
             // - Configuration init ---------------------------------------
             // ------------------------------------------------------------
@@ -360,12 +293,12 @@ public class muCommander {
             // Load snapshot data before loading configuration as until version 0.9 the snapshot properties
             // were stored as preferences so when loading such preferences they could overload snapshot properties
             try {MuSnapshot.loadSnapshot();}
-            catch(Exception e) {printFileError("Could not load snapshot", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load snapshot", e, /*fatalWarnings*/false);}
 
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
             // to use the metal look, we need to know about it right about now.
             try {MuConfigurations.check();}
-            catch(Exception e) {printFileError("Could not load configuration", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load configuration", e, /*fatalWarnings*/false);}
 
 
             // - Logging configuration ------------------------------------
@@ -428,7 +361,7 @@ public class muCommander {
             printStartupMessage("Loading file associations...");
             try {com.mucommander.command.CommandManager.loadCommands();}
             catch(Exception e) {
-                printFileError("Could not load custom commands", e, fatalWarnings);
+                printFileError("Could not load custom commands", e, /*fatalWarnings*/false);
             }
 
             // Migrates the custom editor and custom viewer if necessary.
@@ -443,23 +376,23 @@ public class muCommander {
 
             try {com.mucommander.command.CommandManager.loadAssociations();}
             catch(Exception e) {
-                printFileError("Could not load custom associations", e, fatalWarnings);
+                printFileError("Could not load custom associations", e, /*fatalWarnings*/false);
             }
 
             // Loads bookmarks
             printStartupMessage("Loading bookmarks...");
             try {com.mucommander.bookmark.BookmarkManager.loadBookmarks();}
-            catch(Exception e) {printFileError("Could not load bookmarks", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load bookmarks", e, /*fatalWarnings*/false);}
 
             // Loads credentials
             printStartupMessage("Loading credentials...");
             try {com.mucommander.auth.CredentialsManager.loadCredentials();}
-            catch(Exception e) {printFileError("Could not load credentials", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load credentials", e, /*fatalWarnings*/false);}
 
             // Loads shell history
             printStartupMessage("Loading shell history...");
             try {ShellHistoryManager.loadHistory();}
-            catch(Exception e) {printFileError("Could not load shell history", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load shell history", e, /*fatalWarnings*/false);}
 
             // Inits CustomDateFormat to make sure that its ConfigurationListener is added
             // before FileTable, so CustomDateFormat gets notified of date format changes first
@@ -479,17 +412,17 @@ public class muCommander {
             // Loads the ActionKeymap file
             printStartupMessage("Loading actions shortcuts...");
             try {com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();}
-            catch(Exception e) {printFileError("Could not load actions shortcuts", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load actions shortcuts", e, /*fatalWarnings*/false);}
 
             // Loads the ToolBar's description file
             printStartupMessage("Loading toolbar description...");
             try {ToolBarIO.loadDescriptionFile();}
-            catch(Exception e) {printFileError("Could not load toolbar description", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load toolbar description", e, /*fatalWarnings*/false);}
 
             // Loads the CommandBar's description file
             printStartupMessage("Loading command bar description...");
             try {CommandBarIO.loadCommandBar();}
-            catch(Exception e) {printFileError("Could not load commandbar description", e, fatalWarnings);}
+            catch(Exception e) {printFileError("Could not load commandbar description", e, /*fatalWarnings*/false);}
 
             // Loads the themes.
             printStartupMessage("Loading theme...");
@@ -501,11 +434,11 @@ public class muCommander {
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
-            if (CollectionUtils.isNotEmpty(folders)) {
-                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
-            } else {
+//            if (CollectionUtils.isNotEmpty(folders)) {
+//                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+//            } else {
                 WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
-            }
+//            }
             // Done launching, wake up threads waiting for the application being launched.
             // Important: this must be done before disposing the splash screen, as this would otherwise create a deadlock
             // if the AWT event thread were waiting in #waitUntilLaunched .

@@ -39,6 +39,8 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 
+import com.beust.jcommander.JCommander;
+
 /**
  * <p>
  * This class is the default way to instantiate and execute the framework. It is not
@@ -208,6 +210,21 @@ public class muCommander
     **/
     public static void main(String[] args) throws Exception
     {
+        Configuration configuration = new Configuration();
+        JCommander jCommander = new JCommander(configuration);
+        jCommander.parse(args);
+
+        if (configuration.help) {
+            jCommander.setProgramName(muCommander.class.getSimpleName());
+            jCommander.usage();
+            return;
+        }
+
+        if (configuration.version) {
+//            printVersion();
+//            return;
+        }
+
         Path codeLocation = Paths.get(muCommander.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         if (codeLocation == null) {
         	System.err.println("Failed to retrieve code location");
