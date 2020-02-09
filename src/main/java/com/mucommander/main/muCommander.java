@@ -18,6 +18,7 @@
  */
 package com.mucommander.main;
 
+import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -223,6 +224,12 @@ public class muCommander
         if (configuration.version) {
 //            printVersion();
 //            return;
+        }
+
+        // Ensure that a graphics environment is available
+        if (GraphicsEnvironment.isHeadless()) {
+            System.err.println("Error: no graphical environment detected.");
+            return;
         }
 
         Path codeLocation = Paths.get(muCommander.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -598,4 +605,5 @@ public class muCommander
             }
         }
     }
+
 }

@@ -199,16 +199,6 @@ public class muCommander {
         }
     }
 
-    /**
-     * Checks whether a graphics environment is available and exit with an error otherwise.
-     */
-    private static void checkHeadless() {
-        if(GraphicsEnvironment.isHeadless()) {
-            System.err.println("Error: no graphical environment detected.");
-            System.exit(1);
-        }
-    }
-
 
     private void run() {
         try {
@@ -291,9 +281,6 @@ public class muCommander {
 
             // - Configuration init ---------------------------------------
             // ------------------------------------------------------------
-
-            // Ensure that a graphics environment is available, exit otherwise.
-            checkHeadless();
 
             // Attempts to guess whether this is the first time muCommander is booted or not.
             boolean isFirstBoot;
