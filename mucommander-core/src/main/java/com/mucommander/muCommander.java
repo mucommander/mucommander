@@ -135,7 +135,7 @@ public class muCommander {
         if(quit)
             error.append("Warning: ");
         error.append(msg);
-        if (/* !silent && */(exception != null)) {
+        if (!activator.silent() && (exception != null)) {
             error.append(": ");
             error.append(exception.getMessage());
         }
