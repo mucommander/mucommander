@@ -67,7 +67,7 @@ public class Activator implements BundleActivator {
 
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
-        muCommander.run(this);
+        Application.run(this);
     }
 
     @Override

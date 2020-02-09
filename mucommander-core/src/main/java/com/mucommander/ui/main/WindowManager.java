@@ -32,7 +32,7 @@ import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.muCommander;
+import com.mucommander.Application;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.conf.MuConfigurations;
@@ -335,7 +335,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         }
 
         // No more window showing, initiate shutdown sequence
-        muCommander.initiateShutdown();
+        Application.initiateShutdown();
     }
 
     public void windowIconified(WindowEvent e) {

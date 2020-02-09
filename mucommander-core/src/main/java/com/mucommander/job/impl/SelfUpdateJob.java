@@ -22,7 +22,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.muCommander;
+import com.mucommander.Application;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -249,7 +249,7 @@ public class SelfUpdateJob extends CopyJob {
             // Todo: we might want to do something about this
         }
         finally {
-            muCommander.initiateShutdown();
+            Application.initiateShutdown();
         }
     }
 

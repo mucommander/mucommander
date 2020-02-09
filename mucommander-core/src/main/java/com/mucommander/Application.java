@@ -59,15 +59,12 @@ import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
 
 /**
- * muCommander launcher.
- * <p>
- * This class is used to start muCommander. It will analyse command line
- * arguments, initialize the whole software and start the main window.
- * </p>
- * @author Maxence Bernard, Nicolas Rinaudo
+ * The graphical application.
+ *
+ * @author Maxence Bernard, Nicolas Rinaudo, Arik Hadas
  */
-public class muCommander {
-    private static final Logger LOGGER = LoggerFactory.getLogger(muCommander.class);
+public class Application {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
@@ -84,7 +81,7 @@ public class muCommander {
 
     // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
-    public muCommander() {}
+    public Application() {}
 
 
     /**
@@ -476,7 +473,7 @@ public class muCommander {
             InformationDialog.showErrorDialog(null, null, Translator.get("startup_error"), null, t);
 
             // Quit the application
-            muCommander.initiateShutdown();
+            Application.initiateShutdown();
         }
     }
 
@@ -521,8 +518,8 @@ public class muCommander {
      * Starts muCommander.
      */
     public static void run(Activator activator) {
-        muCommander.activator = activator;
-        new muCommander().run();
+        Application.activator = activator;
+        new Application().run();
     }
 
     /**

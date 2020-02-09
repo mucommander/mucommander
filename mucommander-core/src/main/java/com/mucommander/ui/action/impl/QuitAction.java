@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.muCommander;
+import com.mucommander.Application;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -46,7 +46,7 @@ public class QuitAction extends MuAction {
     @Override
     public void performAction() {
         if(QuitDialog.confirmQuit())
-            muCommander.initiateShutdown();
+            Application.initiateShutdown();
     }
 
 	@Override

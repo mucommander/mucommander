@@ -22,7 +22,7 @@ import java.awt.desktop.OpenFilesEvent;
 import java.awt.desktop.QuitEvent;
 import java.awt.desktop.QuitResponse;
 
-import com.mucommander.muCommander;
+import com.mucommander.Application;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.ui.main.FolderPanel;
@@ -55,7 +55,7 @@ class EAWTHandler {
         // application is launched with a file to open, for instance when drag-n-dropping a file to the Dock icon
         // when muCommander is not started yet. In this case, this method is called while Launcher is still busy
         // launching the application (no mainframe exists yet).
-        muCommander.waitUntilLaunched();
+        Application.waitUntilLaunched();
 
         AbstractFile file = FileFactory.getFile(e.getFiles().get(0).getAbsolutePath());
         FolderPanel activePanel = WindowManager.getCurrentMainFrame().getActivePanel();
