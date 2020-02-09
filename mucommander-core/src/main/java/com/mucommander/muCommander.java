@@ -212,73 +212,82 @@ public class muCommander {
 
     private void run() {
         try {
-            /*
             // Associations handling.
+            String assoc = activator.assoc();
             if (assoc != null) {
                 try {com.mucommander.command.CommandManager.setAssociationFile(assoc);}
-                catch(Exception e) {printError("Could not set association files", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set association files", e, activator.fatalWarnings());}
             }
 
             // Custom commands handling.
+            String commands = activator.commands();
             if (commands != null) {
                 try {com.mucommander.command.CommandManager.setCommandFile(commands);}
-                catch(Exception e) {printError("Could not set commands file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set commands file", e, activator.fatalWarnings());}
             }
 
             // Bookmarks handling.
+            String bookmark = activator.bookmark();
             if (bookmark != null) {
                 try {com.mucommander.bookmark.BookmarkManager.setBookmarksFile(bookmark);}
-                catch(Exception e) {printError("Could not set bookmarks file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set bookmarks file", e, activator.fatalWarnings());}
             }
 
             // Configuration handling.
+            String configuration = activator.configuration();
             if (configuration != null) {
                 try {MuConfigurations.setPreferencesFile(configuration);}
-                catch(Exception e) {printError("Could not set configuration file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set configuration file", e, activator.fatalWarnings());}
             }
 
             // Shell history.
+            String shellHistory = activator.shellHistory();
             if (shellHistory != null) {
                 try {ShellHistoryManager.setHistoryFile(shellHistory);}
-                catch(Exception e) {printError("Could not set shell history file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set shell history file", e, activator.fatalWarnings());}
             }
 
             // Keymap file.
+            String keymap = activator.keymap();
             if (keymap != null) {
                 try {com.mucommander.ui.action.ActionKeymapIO.setActionsFile(keymap);}
-                catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set keymap file", e, activator.fatalWarnings());}
             }
 
             // Toolbar file.
+            String toolbar = activator.toolbar();
             if (toolbar != null) {
                 try {ToolBarIO.setDescriptionFile(toolbar);}
-                catch(Exception e) {printError("Could not set keymap file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set keymap file", e, activator.fatalWarnings());}
             }
 
             // Commandbar file.
+            String commandbar = activator.commandbar();
             if (commandbar != null) {
                 try {CommandBarIO.setDescriptionFile(commandbar);}
-                catch(Exception e) {printError("Could not set commandbar description file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set commandbar description file", e, activator.fatalWarnings());}
             }
 
             // Credentials file.
+            String credentials = activator.credentials();
             if (credentials != null) {
                 try {com.mucommander.auth.CredentialsManager.setCredentialsFile(credentials);}
-                catch(Exception e) {printError("Could not set credentials file", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set credentials file", e, activator.fatalWarnings());}
             }
 
             // Preference folder.
+            String preferences = activator.preferences();
             if (preferences != null) {
                 try {PlatformManager.setPreferencesFolder(preferences);}
-                catch(Exception e) {printError("Could not set preferences folder", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set preferences folder", e, activator.fatalWarnings());}
             }
 
             // Extensions folder.
+            String extensions = activator.extensions();
             if (extensions != null) {
                 try {ExtensionManager.setExtensionsFolder(extensions);}
-                catch(Exception e) {printError("Could not set extensions folder", e, fatalWarnings);}
+                catch(Exception e) {printError("Could not set extensions folder", e, activator.fatalWarnings());}
             }
-            */
 
             // - Configuration init ---------------------------------------
             // ------------------------------------------------------------

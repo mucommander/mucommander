@@ -106,4 +106,48 @@ public class Activator implements BundleActivator {
     public boolean fatalWarnings() {
         return Boolean.parseBoolean(context.getProperty("mucommander.fatalWarnings"));
     }
+
+    public String assoc() {
+        return context.getProperty("mucommander.assoc");
+    }
+
+    public String bookmark() {
+        return context.getProperty("mucommander.bookmark");
+    }
+
+    public String configuration() {
+        return context.getProperty("mucommander.configuration");
+    }
+
+    public String commandbar() {
+        return context.getProperty("mucommander.commandbar");
+    }
+
+    public String extensions() {
+        return context.getProperty("mucommander.extensions");
+    }
+
+    public String commands() {
+        return context.getProperty("mucommander.commands");
+    }
+
+    public String keymap() {
+        return context.getProperty("mucommander.keymap");
+    }
+
+    public String preferences() {
+        return context.getProperty("mucommander.preferences");
+    }
+
+    public String shellHistory() {
+        return context.getProperty("mucommander.shellHistory");
+    }
+
+    public String toolbar() {
+        return context.getProperty("mucommander.toolbar");
+    }
+
+    public String credentials() {
+        return context.getProperty("mucommander.credentials");
+    }
 }
