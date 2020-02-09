@@ -294,12 +294,12 @@ public class muCommander {
             // Load snapshot data before loading configuration as until version 0.9 the snapshot properties
             // were stored as preferences so when loading such preferences they could overload snapshot properties
             try {MuSnapshot.loadSnapshot();}
-            catch(Exception e) {printFileError("Could not load snapshot", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load snapshot", e, activator.fatalWarnings());}
 
             // Configuration needs to be loaded before any sort of GUI creation is performed : under Mac OS X, if we're
             // to use the metal look, we need to know about it right about now.
             try {MuConfigurations.check();}
-            catch(Exception e) {printFileError("Could not load configuration", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load configuration", e, activator.fatalWarnings());}
 
 
             // - Logging configuration ------------------------------------
@@ -362,7 +362,7 @@ public class muCommander {
             printStartupMessage("Loading file associations...");
             try {com.mucommander.command.CommandManager.loadCommands();}
             catch(Exception e) {
-                printFileError("Could not load custom commands", e, /*fatalWarnings*/false);
+                printFileError("Could not load custom commands", e, activator.fatalWarnings());
             }
 
             // Migrates the custom editor and custom viewer if necessary.
@@ -377,23 +377,23 @@ public class muCommander {
 
             try {com.mucommander.command.CommandManager.loadAssociations();}
             catch(Exception e) {
-                printFileError("Could not load custom associations", e, /*fatalWarnings*/false);
+                printFileError("Could not load custom associations", e, activator.fatalWarnings());
             }
 
             // Loads bookmarks
             printStartupMessage("Loading bookmarks...");
             try {com.mucommander.bookmark.BookmarkManager.loadBookmarks();}
-            catch(Exception e) {printFileError("Could not load bookmarks", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load bookmarks", e, activator.fatalWarnings());}
 
             // Loads credentials
             printStartupMessage("Loading credentials...");
             try {com.mucommander.auth.CredentialsManager.loadCredentials();}
-            catch(Exception e) {printFileError("Could not load credentials", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load credentials", e, activator.fatalWarnings());}
 
             // Loads shell history
             printStartupMessage("Loading shell history...");
             try {ShellHistoryManager.loadHistory();}
-            catch(Exception e) {printFileError("Could not load shell history", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load shell history", e, activator.fatalWarnings());}
 
             // Inits CustomDateFormat to make sure that its ConfigurationListener is added
             // before FileTable, so CustomDateFormat gets notified of date format changes first
@@ -413,17 +413,17 @@ public class muCommander {
             // Loads the ActionKeymap file
             printStartupMessage("Loading actions shortcuts...");
             try {com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();}
-            catch(Exception e) {printFileError("Could not load actions shortcuts", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load actions shortcuts", e, activator.fatalWarnings());}
 
             // Loads the ToolBar's description file
             printStartupMessage("Loading toolbar description...");
             try {ToolBarIO.loadDescriptionFile();}
-            catch(Exception e) {printFileError("Could not load toolbar description", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load toolbar description", e, activator.fatalWarnings());}
 
             // Loads the CommandBar's description file
             printStartupMessage("Loading command bar description...");
             try {CommandBarIO.loadCommandBar();}
-            catch(Exception e) {printFileError("Could not load commandbar description", e, /*fatalWarnings*/false);}
+            catch(Exception e) {printFileError("Could not load commandbar description", e, activator.fatalWarnings());}
 
             // Loads the themes.
             printStartupMessage("Loading theme...");

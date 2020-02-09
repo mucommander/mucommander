@@ -102,4 +102,8 @@ public class Activator implements BundleActivator {
     public boolean silent() {
         return Boolean.parseBoolean(context.getProperty("mucommander.silent"));
     }
+
+    public boolean fatalWarnings() {
+        return Boolean.parseBoolean(context.getProperty("mucommander.fatalWarnings"));
+    }
 }
