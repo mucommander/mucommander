@@ -1,7 +1,10 @@
 package com.mucommander.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.beust.jcommander.Parameter;
 
@@ -52,4 +55,22 @@ public class Configuration {
     @Parameter(description="[folders]")
     public List<String> folders = new ArrayList<>();
 
+    public Map<String, String> serialize() {
+        Map<String, String> map = new HashMap<>();
+        map.put("mucommander.silent", Boolean.toString(silent));
+        map.put("mucommander.assoc", assoc);
+        map.put("mucommander.bookmark", bookmark);
+        map.put("mucommander.configuration", configuration);
+        map.put("mucommander.commandbar", commandbar);
+        map.put("mucommander.extensions", extensions);
+        map.put("mucommander.commands", commands);
+        map.put("mucommander.fatalWarnings", Boolean.toString(fatalWarnings));
+        map.put("mucommander.keymap", keymap);
+        map.put("mucommander.preferences", preferences);
+        map.put("mucommander.shellHistory", shellHistory);
+        map.put("mucommander.toolbar", toolbar);
+        map.put("mucommander.credentials", credentials);
+        map.put("mucommander.folders", folders.stream().collect(Collectors.joining(",")));
+        return map;
+    }
 }

@@ -16,14 +16,18 @@
  */
 package com.mucommander;
 
-import com.mucommander.osgi.FileEditorServiceTracker;
-import com.mucommander.osgi.FileViewerServiceTracker;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.osgi.FileEditorServiceTracker;
+import com.mucommander.osgi.FileViewerServiceTracker;
 import com.mucommander.text.TranslationTracker;
 import com.mucommander.ui.main.osgi.ProtocolPanelProviderTracker;
 
@@ -84,5 +88,14 @@ public class Activator implements BundleActivator {
     public void stopAll() throws BundleException {
         // stop the system bundle
         context.getBundle(0).stop();
+    }
+
+    public List<String> getInitialFolders() {
+        String folders = context.getProperty("mucommander.folders");
+        if (folders == null || folders.length() == 0) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(folders.split(","));
     }
 }

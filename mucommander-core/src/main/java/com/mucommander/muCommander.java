@@ -20,6 +20,7 @@ package com.mucommander;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -434,11 +435,12 @@ public class muCommander {
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
-//            if (CollectionUtils.isNotEmpty(folders)) {
-//                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
-//            } else {
+            List<String> folders = activator.getInitialFolders();
+            if (CollectionUtils.isNotEmpty(folders)) {
+                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+            } else {
                 WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
-//            }
+            }
             // Done launching, wake up threads waiting for the application being launched.
             // Important: this must be done before disposing the splash screen, as this would otherwise create a deadlock
             // if the AWT event thread were waiting in #waitUntilLaunched .
