@@ -380,28 +380,32 @@ task nsisUnBundled(type: Copy, dependsOn: [createUnBundledExe, createBundlesDir]
     into "$buildDir/tmp/nsis-unbundled"
 }
 
-/*
 // Portable packaging
-task portable(type: Tar) {
-    from ("$buildDir/libs") {
-        include '*.jar'
-        rename '(.*?)-.*.jar','$1.jar'
-    }
+task portable(dependsOn: [createUnBundledExe, createBundlesDir], type: Tar) {
     from ("$buildDir/launch4j") {
-        include '*.exe'
-        rename '(.*?)-.*.exe','$1.exe'
+        include 'mucommander.exe'
+    }
+    from ("$buildDir/osgi") {
+        include '*.jar'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
     from ('package/unix/mucommander.sh') {
-        filter(ReplaceTokens, tokens: [JAVA_ARGS: '-Djava.system.class.loader=com.mucommander.commons.file.AbstractFileClassLoader',
-                                       ARGS: ''])
+        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
     into "muCommander-$version"
+    from ("$buildDir/osgi/bundle") {
+        include '*.jar'
+        into 'bundle'
+    }
+    from ("$buildDir/osgi/app") {
+        include '*.jar'
+        into 'app'
+    }
+
     classifier = 'portable'
     extension = 'tar.gz'
     compression = Compression.GZIP
 }
-*/
 
 // Unix packaging
 task tgz(dependsOn: shadowJar, type: Tar) {
