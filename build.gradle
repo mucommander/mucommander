@@ -148,6 +148,8 @@ jar {
     }
 }
 
+jar.enabled = false
+
 test {
     useTestNG()
 }
@@ -288,19 +290,27 @@ launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
     mainClassName = "com.mucommander.main.muCommander"
     copyConfigurable = project.tasks.shadowJar.outputs.files
-    bundledJre64Bit = true
-    bundledJrePath = "jre"
     jar = "${project.tasks.shadowJar.archiveName}"
-    outfile = jar.replace('jar', 'exe')
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"
 }
 
-// Windows installer
-task nsis(type: Copy, dependsOn: [createExe, , createOsgiRuntime]) {
+task createBundledExe(type: edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
+    bundledJre64Bit = true
+    bundledJrePath = "jre"
+    outfile = "mucommander.exe"
+}
+
+task createUnBundledExe(type: edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
+    bundledJre64Bit = false
+    outfile = "mucommander.exe"
+}
+
+// Windows installer - bundled with JRE
+task nsisBundled(type: Copy, dependsOn: [createBundledExe, createBundlesDir]) {
     from("$buildDir/launch4j/") {
-        include launch4j.outfile
+        include 'mucommander.exe'
     }
     from('jre/win') {
         into "jre"
@@ -312,13 +322,13 @@ task nsis(type: Copy, dependsOn: [createExe, , createOsgiRuntime]) {
         include 'mucommander.ico'
     }
     from('package/windows') {
-        include 'mucommander.nsi'
+        include 'mucommander-bundled.nsi'
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
                                        MU_ICON: 'mucommander.ico',
                                        MU_LICENSE: 'license.txt',
                                        MU_README: 'readme.txt',
                                        MU_OUT: 'mucommander-'+project.version+'-setup.exe',
-                                       MU_EXE: launch4j.outfile,
+                                       MU_EXE: 'mucommander.exe',
                                        MU_JAR: project.tasks.shadowJar.archiveName])
     }
     from ('package') {
@@ -332,7 +342,42 @@ task nsis(type: Copy, dependsOn: [createExe, , createOsgiRuntime]) {
         include '*.jar'
         into "bundle"
     }
-    into "$buildDir/tmp/nsis"
+    into "$buildDir/tmp/nsis-bundled"
+}
+
+// Windows installer
+task nsisUnBundled(type: Copy, dependsOn: [createUnBundledExe, createBundlesDir]) {
+    from("$buildDir/launch4j/") {
+        include 'mucommander.exe'
+    }
+    from("$buildDir/osgi/") {
+        include '*.jar'
+    }
+    from('package/windows') {
+        include 'mucommander.ico'
+    }
+    from('package/windows') {
+        include 'mucommander-unbundled.nsi'
+        filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
+                                       MU_ICON: 'mucommander.ico',
+                                       MU_LICENSE: 'license.txt',
+                                       MU_README: 'readme.txt',
+                                       MU_OUT: 'mucommander-'+project.version+'-setup-unbundled.exe',
+                                       MU_EXE: 'mucommander.exe',
+                                       MU_JAR: project.tasks.shadowJar.archiveName])
+    }
+    from ('package') {
+        include 'license.txt', 'readme.txt'
+    }
+    from("$buildDir/osgi/app") {
+        include '*.jar'
+        into "app"
+    }
+    from("$buildDir/osgi/bundle") {
+        include '*.jar'
+        into "bundle"
+    }
+    into "$buildDir/tmp/nsis-unbundled"
 }
 
 /*
