@@ -298,43 +298,41 @@ launch4j {
 }
 
 // Windows installer
-task nsis(dependsOn: createExe) {
-    copy {
-        from("$buildDir/launch4j/") {
-            include launch4j.outfile
-        }
-        from('jre/win') {
-            into "jre"
-        }
-        from("$buildDir/osgi/") {
-            include '*.jar'
-        }
-        from('package/windows') {
-            include 'mucommander.ico'
-        }
-        from('package/windows') {
-            include 'mucommander.nsi'
-            filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
-                                           MU_ICON: 'mucommander.ico',
-                                           MU_LICENSE: 'license.txt',
-                                           MU_README: 'readme.txt',
-                                           MU_OUT: 'mucommander-'+project.version+'-setup.exe',
-                                           MU_EXE: launch4j.outfile,
-                                           MU_JAR: project.tasks.shadowJar.archiveName])
-        }
-        from ('package') {
-            include 'license.txt', 'readme.txt'
-        }
-        from("$buildDir/osgi/app") {
-            include '*.jar'
-            into "app"
-        }
-        from("$buildDir/osgi/bundle") {
-            include '*.jar'
-            into "bundle"
-        }
-        into "$buildDir/tmp/nsis"
+task nsis(type: Copy, dependsOn: createExe) {
+    from("$buildDir/launch4j/") {
+        include launch4j.outfile
     }
+    from('jre/win') {
+        into "jre"
+    }
+    from("$buildDir/osgi/") {
+        include '*.jar'
+    }
+    from('package/windows') {
+        include 'mucommander.ico'
+    }
+    from('package/windows') {
+        include 'mucommander.nsi'
+        filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
+                                       MU_ICON: 'mucommander.ico',
+                                       MU_LICENSE: 'license.txt',
+                                       MU_README: 'readme.txt',
+                                       MU_OUT: 'mucommander-'+project.version+'-setup.exe',
+                                       MU_EXE: launch4j.outfile,
+                                       MU_JAR: project.tasks.shadowJar.archiveName])
+    }
+    from ('package') {
+        include 'license.txt', 'readme.txt'
+    }
+    from("$buildDir/osgi/app") {
+        include '*.jar'
+        into "app"
+    }
+    from("$buildDir/osgi/bundle") {
+        include '*.jar'
+        into "bundle"
+    }
+    into "$buildDir/tmp/nsis"
 }
 
 /*
