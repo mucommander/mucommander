@@ -298,7 +298,7 @@ launch4j {
 }
 
 // Windows installer
-task nsis(type: Copy, dependsOn: createExe) {
+task nsis(type: Copy, dependsOn: [createExe, , createOsgiRuntime]) {
     from("$buildDir/launch4j/") {
         include launch4j.outfile
     }
