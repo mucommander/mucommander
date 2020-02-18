@@ -46,6 +46,7 @@ Improvements:
 - Upgrade various dependencies.
 - Default drag and drop action that was initiated from outside of the application to 'COPY' rather than to 'MOVE'.
 - Enable pinning to taskbar on Windows 7+.
+- Assign default keyboard shortcut for edit credentials dialog: ALT+CTRL+K.
 
 Localization:
 - French translation is updated.

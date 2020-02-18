@@ -17,6 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
@@ -69,6 +70,6 @@ public class EditCredentialsAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.ALT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK); }
     }
 }
