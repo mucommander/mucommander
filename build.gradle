@@ -157,7 +157,7 @@ test {
 import org.apache.tools.ant.filters.ReplaceTokens
 
 buildRpm {
-    dependsOn createOsgiRuntime
+    dependsOn createBundlesDir
     release = project.ext.release
 
     postInstall file('package/unix/postinst')
@@ -202,7 +202,7 @@ buildRpm {
 
 // Debian packaging
 buildDeb {
-    dependsOn createOsgiRuntime
+    dependsOn createBundlesDir
     release = project.ext.release
 
     postInstall file('package/unix/postinst')
@@ -245,7 +245,7 @@ buildDeb {
 }
 
 copyToResourcesJava {
-    dependsOn createOsgiRuntime
+    dependsOn createBundlesDir
     doLast {
         copy{
             from "build/osgi"
