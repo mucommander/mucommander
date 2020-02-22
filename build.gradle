@@ -263,6 +263,30 @@ macAppBundle {
     appIconY = 75
     appFolderX = 225
     appFolderY = 350
+    backgroundScript = """
+    tell application "Finder"
+      tell disk "\${VOL_NAME}"
+           open
+           set current view of container window to icon view
+           set toolbar visible of container window to false
+           set statusbar visible of container window to false
+           set the bounds of container window to { 0, 0, \${IMAGE_WIDTH}, \${IMAGE_HEIGHT} }
+           set the position of the container window to {400, 100}
+           set viewOptions to the icon view options of container window
+           set arrangement of viewOptions to not arranged
+           set icon size of viewOptions to 72
+           set background picture of viewOptions to file ".background:\${DMG_BACKGROUND_IMG}"
+           set position of item "\${APP_NAME}.app" of container window to { \${APPICONX}, \${APPICONY} }
+           set position of item "Applications" of container window to { \${APPFOLDERX}, \${APPFOLDERY} }
+           set position of item "license.txt" of container window to { 75, 75 }
+           set position of item "readme.txt" of container window to { 375, 75 }
+           close
+           open
+           update without registering applications
+           delay 2
+      end tell
+    end tell
+    """
 
     runtimeConfigurationName = 'shadow'
     jarTask = 'shadowJar'
@@ -283,6 +307,15 @@ copyToResourcesJava.doLast {
         into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
     }
 }
+
+task copyInfoToAppOutputDir(type: Copy) {
+    from "package"
+    include "license.txt"
+    include "readme.txt"
+    into "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/"
+}
+
+createDmg.dependsOn copyInfoToAppOutputDir
 
 launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
