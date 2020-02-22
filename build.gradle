@@ -294,16 +294,12 @@ launch4j {
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"
+    outfile = "mucommander.exe"
 }
 
 task createBundledExe(type: edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
     bundledJre64Bit = true
     bundledJrePath = "jre"
-    outfile = "mucommander.exe"
-}
-
-task createUnBundledExe(type: edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
-    bundledJre64Bit = false
     outfile = "mucommander.exe"
 }
 
@@ -346,7 +342,7 @@ task nsisBundled(type: Copy, dependsOn: [createBundledExe, createBundlesDir]) {
 }
 
 // Windows installer
-task nsisUnBundled(type: Copy, dependsOn: [createUnBundledExe, createBundlesDir]) {
+task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
     from("$buildDir/launch4j/") {
         include 'mucommander.exe'
     }
@@ -357,12 +353,12 @@ task nsisUnBundled(type: Copy, dependsOn: [createUnBundledExe, createBundlesDir]
         include 'mucommander.ico'
     }
     from('package/windows') {
-        include 'mucommander-unbundled.nsi'
+        include 'mucommander.nsi'
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
                                        MU_ICON: 'mucommander.ico',
                                        MU_LICENSE: 'license.txt',
                                        MU_README: 'readme.txt',
-                                       MU_OUT: 'mucommander-'+project.version+'-setup-unbundled.exe',
+                                       MU_OUT: 'mucommander-'+project.version+'-setup.exe',
                                        MU_EXE: 'mucommander.exe',
                                        MU_JAR: project.tasks.shadowJar.archiveName])
     }
@@ -377,11 +373,11 @@ task nsisUnBundled(type: Copy, dependsOn: [createUnBundledExe, createBundlesDir]
         include '*.jar'
         into "bundle"
     }
-    into "$buildDir/tmp/nsis-unbundled"
+    into "$buildDir/tmp/nsis"
 }
 
 // Portable packaging
-task portable(dependsOn: [createUnBundledExe, createBundlesDir], type: Tar) {
+task portable(dependsOn: [createExe, createBundlesDir], type: Tar) {
     from ("$buildDir/launch4j") {
         include 'mucommander.exe'
     }
