@@ -244,18 +244,6 @@ buildDeb {
     directory('/usr/share/mucommander/felix-cache', 0775)
 }
 
-copyToResourcesJava {
-    dependsOn createBundlesDir
-    doLast {
-        copy{
-            from "build/osgi"
-            include 'app/**'
-            include 'bundle/**'
-            into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
-        }
-    }
-}
-
 macAppBundle {
     appName = "muCommander"
     mainClassName = "com.mucommander.main.muCommander"
@@ -284,6 +272,16 @@ macAppBundle {
     javaProperties.put("com.apple.hwaccel", "true")
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     javaProperties.put("file.encoding", "UTF-8")
+}
+
+copyToResourcesJava.dependsOn createBundlesDir
+copyToResourcesJava.doLast {
+    copy {
+        from "build/osgi"
+        include 'app/**'
+        include 'bundle/**'
+        into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
+    }
 }
 
 launch4j {
