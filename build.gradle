@@ -125,6 +125,8 @@ ext {
     git = grgit.open(dir: project.rootDir)
     // Get commit id of HEAD.
     revision = git.head().id
+    // Whether or not to bundle the JRE in order to create a 'standalone' executable
+    bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
 }
 
 shadowJar {
@@ -321,51 +323,9 @@ launch4j {
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"
-    outfile = "mucommander.exe"
-}
-
-task createBundledExe(type: edu.sc.seis.launch4j.tasks.Launch4jLibraryTask) {
-    bundledJre64Bit = true
+    bundledJre64Bit = project.ext.bundleJRE
     bundledJrePath = "jre"
     outfile = "mucommander.exe"
-}
-
-// Windows installer - bundled with JRE
-task nsisBundled(type: Copy, dependsOn: [createBundledExe, createBundlesDir]) {
-    from("$buildDir/launch4j/") {
-        include 'mucommander.exe'
-    }
-    from('jre/win') {
-        into "jre"
-    }
-    from("$buildDir/osgi/") {
-        include '*.jar'
-    }
-    from('package/windows') {
-        include 'mucommander.ico'
-    }
-    from('package/windows') {
-        include 'mucommander-bundled.nsi'
-        filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
-                                       MU_ICON: 'mucommander.ico',
-                                       MU_LICENSE: 'license.txt',
-                                       MU_README: 'readme.txt',
-                                       MU_OUT: 'mucommander-'+project.version+'-setup.exe',
-                                       MU_EXE: 'mucommander.exe',
-                                       MU_JAR: project.tasks.shadowJar.archiveName])
-    }
-    from ('package') {
-        include 'license.txt', 'readme.txt'
-    }
-    from("$buildDir/osgi/app") {
-        include '*.jar'
-        into "app"
-    }
-    from("$buildDir/osgi/bundle") {
-        include '*.jar'
-        into "bundle"
-    }
-    into "$buildDir/tmp/nsis-bundled"
 }
 
 // Windows installer
@@ -373,6 +333,11 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
     from("$buildDir/launch4j/") {
         include 'mucommander.exe'
     }
+    if (project.ext.bundleJRE) {
+        from('jre/win') {
+            into "jre"
+        }
+    }
     from("$buildDir/osgi/") {
         include '*.jar'
     }
@@ -380,7 +345,7 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
         include 'mucommander.ico'
     }
     from('package/windows') {
-        include 'mucommander.nsi'
+        include project.ext.bundleJRE ? 'mucommander-bundled.nsi' : 'mucommander.nsi'
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
                                        MU_ICON: 'mucommander.ico',
                                        MU_LICENSE: 'license.txt',
