@@ -118,14 +118,11 @@ runOsgi {
     }
 }
 
-task run() {
-    dependsOn 'runOsgi'
-}
+task run(dependsOn: 'runOsgi')
 
 ext {
     // Open the Git repository in the project's root directory.
     git = grgit.open(dir: project.rootDir)
-
     // Get commit id of HEAD.
     revision = git.head().id
 }
@@ -314,7 +311,6 @@ task copyInfoToAppOutputDir(type: Copy) {
     include "readme.txt"
     into "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/"
 }
-
 createDmg.dependsOn copyInfoToAppOutputDir
 
 launch4j {
