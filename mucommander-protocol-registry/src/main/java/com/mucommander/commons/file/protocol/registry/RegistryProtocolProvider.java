@@ -35,5 +35,4 @@ public class RegistryProtocolProvider implements ProtocolProvider {
 	public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
 		return new RegistryImage(url);
 	}
-
 }

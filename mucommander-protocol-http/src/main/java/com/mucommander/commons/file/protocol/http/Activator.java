@@ -85,6 +85,11 @@ public class Activator implements BundleActivator {
 			public ServerPanel get(ServerPanelListener listener, JFrame mainFrame) {
 				return new HTTPPanel(listener, mainFrame);
 			}
+
+		    @Override
+		    public int priority() {
+		        return 6000;
+		    }
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
 		service2Registration = context.registerService(FileProtocolService.class, service2, null);
