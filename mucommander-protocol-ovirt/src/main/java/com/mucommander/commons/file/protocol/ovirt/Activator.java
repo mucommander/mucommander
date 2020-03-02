@@ -68,6 +68,12 @@ public class Activator implements BundleActivator {
 			public ServerPanel get(ServerPanelListener listener, JFrame mainFrame) {
 				return new OvirtPanel(listener, mainFrame);
 			}
+
+
+		    @Override
+		    public int priority() {
+		        return 7000;
+		    }
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
 		uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);

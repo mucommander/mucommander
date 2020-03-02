@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -128,7 +129,7 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
 //        addTab(FileProtocols.S3, new S3Panel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.SMB, new SMBPanel(this, mainFrame), selectPanelClass);
 //        addTab(FileProtocols.VSPHERE, new VSpherePanel(this, mainFrame), selectPanelClass);
-        schemaToPanelProvider.values().forEach(provider -> addTab(provider.getSchema(), provider.get(this, mainFrame), null));
+        schemaToPanelProvider.values().stream().sorted(Comparator.comparing(ProtocolPanelProvider::priority)).forEach(this::addTab);
 
         currentServerPanel = getCurrentServerPanel();
 
@@ -165,7 +166,11 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
     }
 
 
-    public void addTab(String protocol, ServerPanel serverPanel, Class<? extends ServerPanel> selectPanelClass) {
+    private void addTab(ProtocolPanelProvider provider) {
+        addTab(provider.getSchema(), provider.get(this, folderPanel.getMainFrame()), null);
+    }
+
+    private void addTab(String protocol, ServerPanel serverPanel, Class<? extends ServerPanel> selectPanelClass) {
         if(!FileFactory.isRegisteredProtocol(protocol))
             return;
 

@@ -23,4 +23,5 @@ public interface ProtocolPanelProvider {
 
 	String getSchema();
 	ServerPanel get(ServerPanelListener listener, JFrame mainFrame);
+	int priority();
 }

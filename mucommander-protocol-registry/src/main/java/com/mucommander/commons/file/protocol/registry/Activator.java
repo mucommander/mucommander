@@ -122,6 +122,12 @@ public class Activator implements BundleActivator {
 				boolean isSkopeoAvailable = SkopeoCommandExecutor.checkSkopeo();
 				return new RegistryPanel(listener, mainFrame, isSkopeoAvailable);
 			}
+
+
+		    @Override
+		    public int priority() {
+		        return 8000;
+		    }
 		};
 		serviceRegistrationDocker = context.registerService(FileProtocolService.class, serviceDocker, null);
 		serviceRegistrationOCI = context.registerService(FileProtocolService.class, serviceOCI, null);

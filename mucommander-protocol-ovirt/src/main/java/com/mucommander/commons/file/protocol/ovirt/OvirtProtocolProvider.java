@@ -49,5 +49,4 @@ public class OvirtProtocolProvider implements ProtocolProvider {
             return new OvirtDisk(url, null);
         }
     }
-
 }
