@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v0.9.4
+muCommander v0.9.5
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,33 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.9.3 ?
+What's new since v0.9.4 ?
 -----------------------
 
 New features:
-- Uploading and downloading of virtual disk images to/from oVirt data centers.
-- Browsing common virtual disk image formats (vmdk, qcow and qcow2) as writable archives, based on Libguestfs.
-- Introduce a binary viewer.
-- Basic browsing and downloading of container images from a remote registry.
+- 
 
 Improvements:
-- Restructure the application as OSGi modules.
-- Support newer versions of Java. Java 11 is now the recommened version.
-- Enable system notifications on macOS also when Growl is not installed, using the java.awt.SystemTray API.
-- Various improvements for S3 support.
-- Add textual filtering to the shotrcuts dialog.
-- Upgrade various dependencies.
-- Default drag and drop action that was initiated from outside of the application to 'COPY' rather than to 'MOVE'.
-- Enable pinning to taskbar on Windows 7+.
-- Assign default keyboard shortcut for edit credentials dialog: ALT+CTRL+K.
+- 
 
 Localization:
-- French translation is updated.
+- 
 
 Bug fixes:
-- The application starts with the window size and location it had last time also in case custom initial folders are set.
-- Actions can be triggered from the system tray.
-- Popup menu is displayed also for the parent folder row.
+- 
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
