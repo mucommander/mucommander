@@ -32,14 +32,14 @@ What's new since v0.9.3 ?
 -----------------------
 
 New features:
-- Enable uploading and downloading virtual disk images to/from oVirt data centers.
-- Virtual disk images are now supported as writtable archive files, based on Libguestfs.
-- Add a binary viewer.
-- Basic support for browsing and downloading container images from a remote registry.
+- Uploading and downloading of virtual disk images to/from oVirt data centers.
+- Browsing common virtual disk image formats (vmdk, qcow and qcow2) as writable archives, based on Libguestfs.
+- Introduce a binary viewer.
+- Basic browsing and downloading of container images from a remote registry.
 
 Improvements:
 - Restructure the application as OSGi modules.
-- Support for newer versions of Java. Java 11 is now the recommened version.
+- Support newer versions of Java. Java 11 is now the recommened version.
 - Enable system notifications on macOS also when Growl is not installed, using the java.awt.SystemTray API.
 - Various improvements for S3 support.
 - Add textual filtering to the shotrcuts dialog.
@@ -52,7 +52,7 @@ Localization:
 - French translation is updated.
 
 Bug fixes:
-- The application now starts with the window size and location it had last time also in case custom initial folders are set.
+- The application starts with the window size and location it had last time also in case custom initial folders are set.
 - Actions can be triggered from the system tray.
 - Popup menu is displayed also for the parent folder row.
 
