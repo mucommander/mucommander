@@ -379,6 +379,10 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Tar) {
         include '*.jar'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
+    from ('package/unix') {
+        include 'felix-cache'
+        dirMode 0777
+    }
     from ('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
@@ -403,6 +407,10 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         include '*.jar'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
+    from ('package/unix') {
+        include 'felix-cache'
+        dirMode 0777
+    }
     from ('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
