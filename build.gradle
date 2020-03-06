@@ -396,7 +396,7 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Tar) {
 }
 
 // Unix packaging
-task tgz(dependsOn: shadowJar, type: Tar) {
+task tgz(dependsOn: createBundlesDir, type: Tar) {
     from ("$buildDir/osgi") {
         include '*.jar'
     }
