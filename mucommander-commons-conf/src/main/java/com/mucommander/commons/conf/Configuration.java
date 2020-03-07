@@ -506,7 +506,9 @@ public class Configuration {
      * @param toVar   fully qualified name of the variable that will receive <code>fromVar</code>'s value.
      */
     public void renameVariable(String fromVar, String toVar) {
-        setVariable(toVar, removeVariable(fromVar));
+        String val = removeVariable(fromVar);
+        if (val != null)
+            setVariable(toVar, val);
     }
 
     /**
