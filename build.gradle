@@ -245,6 +245,7 @@ buildDeb {
 
 macAppBundle {
     appName = "muCommander"
+    dmgName = 'mucommander-'+project.version+'-'+project.ext.release
     mainClassName = "com.mucommander.main.muCommander"
     appStyle = "Oracle"
     bundleJRE = true
@@ -352,7 +353,7 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
                                        MU_ICON: 'mucommander.ico',
                                        MU_LICENSE: 'license.txt',
                                        MU_README: 'readme.txt',
-                                       MU_OUT: 'mucommander-'+project.version+'-setup.exe',
+                                       MU_OUT: 'mucommander-'+project.version+'-'+project.ext.release+'-setup.exe',
                                        MU_EXE: 'mucommander.exe',
                                        MU_JAR: project.tasks.shadowJar.archiveName])
     }
@@ -399,6 +400,7 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Tar) {
     classifier = 'portable'
     extension = 'tar.gz'
     compression = Compression.GZIP
+    version = project.version+'-'+project.ext.release
 }
 
 // Unix packaging
@@ -427,6 +429,7 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
 
     extension = 'tar.gz'
     compression = Compression.GZIP
+    version = project.version+'-'+project.ext.release
 }
 
 task(afterEclipseImport).doLast {
