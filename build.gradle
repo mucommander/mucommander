@@ -155,8 +155,7 @@ test {
 
 import org.apache.tools.ant.filters.ReplaceTokens
 
-buildRpm {
-    dependsOn createBundlesDir
+ospackage {
     release = project.ext.release
 
     postInstall file('package/unix/postinst')
@@ -164,8 +163,6 @@ buildRpm {
 
     maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
     summary = 'a lightweight, cross-platform file manager'
-    suggests('java-11-openjdk')
-    os = LINUX
 
     from ('package') { include 'license.txt', 'readme.txt' }
     from ('package/unix/mucommander.sh') {
@@ -199,48 +196,18 @@ buildRpm {
     directory('/usr/share/mucommander/felix-cache')
 }
 
+// RPM packaging
+buildRpm {
+    dependsOn createBundlesDir
+    suggests('java-11-openjdk')
+    os = LINUX
+}
+
 // Debian packaging
 buildDeb {
     dependsOn createBundlesDir
-    release = project.ext.release
-
-    postInstall file('package/unix/postinst')
-    postUninstall file('package/unix/postrm')
-
-    maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
-    summary = 'a lightweight, cross-platform file manager'
     suggests('openjdk-11-jre')
     recommends('java-virtual-machine')
-
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
-        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
-    }
-    into '/usr/share/mucommander'
-
-    from ("$buildDir/osgi/") {
-        include '*.jar'
-        into '/usr/share/mucommander'
-    }
-    from ("$buildDir/osgi/bundle") {
-        include '*.jar'
-        into '/usr/share/mucommander/bundle'
-    }
-    from ("$buildDir/osgi/app") {
-        include '*.jar'
-        into '/usr/share/mucommander/app'
-    }
-    from ('mucommander-core/src/main/resources/images/mucommander') {
-        include 'icon128_24.png'
-        into '/usr/share/pixmaps/'
-        rename '.*', 'mucommander.png'
-    }
-    from ('package/unix') {
-        include 'mucommander.desktop'
-        into '/usr/share/applications'
-    }
-
-    directory('/usr/share/mucommander/felix-cache')
 }
 
 macAppBundle {
