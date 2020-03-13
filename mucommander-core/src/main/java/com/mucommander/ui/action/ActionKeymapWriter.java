@@ -29,10 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.util.xml.XmlAttributes;
+import com.mucommander.commons.util.xml.XmlWriter;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.ui.text.KeyStrokeUtils;
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
 
 /**
  * This class is responsible for writing the actions.

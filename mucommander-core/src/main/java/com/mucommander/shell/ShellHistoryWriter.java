@@ -24,8 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.RuntimeConstants;
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
+import com.mucommander.commons.util.xml.XmlAttributes;
+import com.mucommander.commons.util.xml.XmlWriter;
 
 /**
  * Used to save the content of the {@link com.mucommander.shell.ShellHistoryManager} to a file.

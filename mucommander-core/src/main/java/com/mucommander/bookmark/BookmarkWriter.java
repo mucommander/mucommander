@@ -18,8 +18,8 @@
 package com.mucommander.bookmark;
 
 import com.mucommander.RuntimeConstants;
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
+import com.mucommander.commons.util.xml.XmlAttributes;
+import com.mucommander.commons.util.xml.XmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
