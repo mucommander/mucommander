@@ -25,11 +25,11 @@ import java.util.Map;
 /**
  * Container for XML attributes.
  * <p>
- * This class is meant for use with {@link com.mucommander.xml.XmlWriter}.
- * It's used to hold a list of XML attributes that will be passed to one of
- * the {@link com.mucommander.xml.XmlWriter#startElement(String,XmlAttributes) element opening}
- * methods.
+ * This class is meant for use with {@link com.mucommander.xml.XmlWriter}. It's used to hold a list of XML attributes
+ * that will be passed to one of the {@link com.mucommander.xml.XmlWriter#startElement(String,XmlAttributes) element
+ * opening} methods.
  * </p>
+ * 
  * @author Nicolas Rinaudo, Arik Hadas
  */
 public class XmlAttributes {
@@ -39,7 +39,6 @@ public class XmlAttributes {
     private Map<String, String> attributes;
     /** Contains the XML attribute names in the order they were added */
     private LinkedList<String> names;
-    
 
     // - Initialization --------------------------------------------------
     // -------------------------------------------------------------------
@@ -47,18 +46,18 @@ public class XmlAttributes {
      * Builds a new, empty XmlAttributes instance.
      */
     public XmlAttributes() {
-    	attributes = new Hashtable<String, String>();
-    	names = new LinkedList<String>();
+        attributes = new Hashtable<String, String>();
+        names = new LinkedList<String>();
     }
-
 
     // - Content handling ------------------------------------------------
     // -------------------------------------------------------------------
     /**
      * Returns the value associated with the specified attribute name.
-     * @param name name of the attribute whose value should be retrieved.
-     * @return the value associated with the specified attribute name if found,
-     *         <code>null</code> otherwise.
+     * 
+     * @param name
+     *            name of the attribute whose value should be retrieved.
+     * @return the value associated with the specified attribute name if found, <code>null</code> otherwise.
      */
     public String getValue(String name) {
         return attributes.get(name);
@@ -68,20 +67,26 @@ public class XmlAttributes {
      * Clears the list of all previously defined attributes.
      */
     public void clear() {
-        names.clear(); attributes.clear();
+        names.clear();
+        attributes.clear();
     }
 
     /**
      * Adds the specified attribute to this container.
-     * @param name  name of the attribute to whose value should be set.
-     * @param value value to which the attribute should be set.
+     * 
+     * @param name
+     *            name of the attribute to whose value should be set.
+     * @param value
+     *            value to which the attribute should be set.
      */
     public void add(String name, String value) {
-        names.add(name); attributes.put(name, value);
+        names.add(name);
+        attributes.put(name, value);
     }
 
     /**
      * Returns an iterator on the attributes contained by this instance.
+     * 
      * @return an iterator on the attributes contained by this instance.
      */
     public Iterator<String> names() {
