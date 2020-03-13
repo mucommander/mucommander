@@ -17,11 +17,11 @@
 
 package com.mucommander.command;
 
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
-
 import java.io.IOException;
 import java.io.OutputStream;
+
+import com.mucommander.commons.util.xml.XmlAttributes;
+import com.mucommander.commons.util.xml.XmlWriter;
 
 /**
  * Class used to write custom commands XML files.

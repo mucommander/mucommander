@@ -22,6 +22,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.mucommander.commons.util.xml.XmlAttributes;
+import com.mucommander.commons.util.xml.XmlWriter;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

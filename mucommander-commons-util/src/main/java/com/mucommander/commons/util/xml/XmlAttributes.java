@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.xml;
+package com.mucommander.commons.util.xml;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -25,8 +25,8 @@ import java.util.Map;
 /**
  * Container for XML attributes.
  * <p>
- * This class is meant for use with {@link com.mucommander.xml.XmlWriter}. It's used to hold a list of XML attributes
- * that will be passed to one of the {@link com.mucommander.xml.XmlWriter#startElement(String,XmlAttributes) element
+ * This class is meant for use with {@link com.mucommander.commons.util.xml.XmlWriter}. It's used to hold a list of XML attributes
+ * that will be passed to one of the {@link com.mucommander.commons.util.xml.XmlWriter#startElement(String,XmlAttributes) element
  * opening} methods.
  * </p>
  * 

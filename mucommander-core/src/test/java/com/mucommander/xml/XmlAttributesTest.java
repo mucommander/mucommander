@@ -20,6 +20,8 @@ package com.mucommander.xml;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.mucommander.commons.util.xml.XmlAttributes;
+
 import java.util.Iterator;
 
 /**

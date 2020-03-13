@@ -21,8 +21,8 @@ import com.mucommander.RuntimeConstants;
 import com.mucommander.bookmark.XORCipher;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.xml.XmlAttributes;
-import com.mucommander.xml.XmlWriter;
+import com.mucommander.commons.util.xml.XmlAttributes;
+import com.mucommander.commons.util.xml.XmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
