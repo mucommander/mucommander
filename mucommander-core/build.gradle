@@ -8,6 +8,7 @@ dependencies {
     compileOnly project(':mucommander-commons-collections')
     compileOnly project(':mucommander-commons-io')
     compileOnly project(':mucommander-archiver')
+    compileOnly project(':mucommander-command')
     compileOnly project(':mucommander-encoding')
     compileOnly project(':mucommander-preferences')
     compileOnly project(':mucommander-process')
