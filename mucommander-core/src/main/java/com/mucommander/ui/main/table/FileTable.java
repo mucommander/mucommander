@@ -64,7 +64,7 @@ import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.MoveJob;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.Translator;

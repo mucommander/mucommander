@@ -27,14 +27,16 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.WindowManager;
 
 /**
  * This class is responsible for deleting a set of files. This job can operate in two modes, depending on the boolean
@@ -94,11 +96,17 @@ public class DeleteJob extends FileJob {
      */
     private void deleteFile(AbstractFile file) throws IOException {
         if(moveToTrash)
-            trash.moveToTrash(file);
+            trash.moveToTrash(file, this::showErrorToMoveToTrash);
         else
             file.delete();
     }
 
+    /**
+     * Invokes an error dialog saying that move to trash has failed.
+     */
+    private void showErrorToMoveToTrash() {
+        InformationDialog.showErrorDialog(WindowManager.getCurrentMainFrame(), Translator.get("delete_dialog.move_to_trash.option"), Translator.get("delete_dialog.move_to_trash.failed"));
+    }
 
     ////////////////////////////
     // FileJob implementation //

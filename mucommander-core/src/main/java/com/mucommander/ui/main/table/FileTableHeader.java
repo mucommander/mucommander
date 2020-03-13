@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.ToggleAutoSizeAction;
 import com.mucommander.ui.main.MainFrame;

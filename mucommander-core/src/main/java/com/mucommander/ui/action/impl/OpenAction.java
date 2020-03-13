@@ -33,7 +33,7 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;

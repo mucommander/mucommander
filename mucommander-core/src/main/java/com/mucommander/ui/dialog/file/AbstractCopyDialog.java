@@ -20,7 +20,7 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.ui.main.MainFrame;
 
 /**

@@ -30,7 +30,7 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessListenerList;

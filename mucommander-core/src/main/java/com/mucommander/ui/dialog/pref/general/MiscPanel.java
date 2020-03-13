@@ -35,7 +35,8 @@ import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
@@ -44,7 +45,7 @@ import com.mucommander.ui.dialog.pref.component.PrefEncodingSelectBox;
 import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
 import com.mucommander.ui.dialog.pref.component.PrefTextField;
-import com.mucommander.ui.notifier.AbstractNotifier;
+import com.mucommander.ui.notifier.NotifierProvider;
 
 /**
  * 'Misc' preferences panel.
@@ -183,8 +184,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         northPanel.add(quitConfirmationCheckBox);
 
         // 'Enable system notifications' option, displayed only if current platform supports system notifications
-        if(AbstractNotifier.isAvailable()) {
-            systemNotificationsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_system_notifications")+" ("+AbstractNotifier.getNotifier().getPrettyName()+")") {
+        if(NotifierProvider.isAvailable()) {
+            systemNotificationsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_system_notifications")+" ("+NotifierProvider.getNotifier().getPrettyName()+")") {
 				public boolean hasChanged() {
 					return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
                             								MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS);
@@ -261,7 +262,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         if(systemNotificationsCheckBox!=null) {
             enabled = systemNotificationsCheckBox.isSelected();
             MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS, enabled);
-            AbstractNotifier.getNotifier().setEnabled(enabled);
+            NotifierProvider.getNotifier().setEnabled(enabled);
         }
 
         enabled = bonjourDiscoveryCheckBox.isSelected();

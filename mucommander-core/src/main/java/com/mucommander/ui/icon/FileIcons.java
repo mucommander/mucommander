@@ -124,7 +124,7 @@ public class FileIcons {
         case ALWAYS:
             return true;
         case APPLICATIONS_ONLY:
-            return com.mucommander.desktop.DesktopManager.isApplication(file);
+            return com.mucommander.core.desktop.DesktopManager.isApplication(file);
         case NEVER:
         default:
             return false;

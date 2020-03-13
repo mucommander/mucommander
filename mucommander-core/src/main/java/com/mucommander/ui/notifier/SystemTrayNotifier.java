@@ -34,6 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.runtime.JavaVersion;
+import com.mucommander.os.notifier.AbstractNotifier;
+import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.ui.action.AWTActionProxy;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;

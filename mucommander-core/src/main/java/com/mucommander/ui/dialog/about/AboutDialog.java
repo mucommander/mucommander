@@ -46,7 +46,7 @@ import javax.swing.text.StyledDocument;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.FluentPanel;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.GoToWebsiteAction;

@@ -32,7 +32,7 @@ import com.mucommander.commons.file.archiver.Archiver;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.ArchiveJob;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;

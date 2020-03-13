@@ -303,24 +303,6 @@ public class Application {
             // ------------------------------------------------------------
             ResourceLoader.setDefaultClassLoader(this.getClass().getClassLoader());
 
-            // - MAC OS X specific init -----------------------------------
-            // ------------------------------------------------------------
-            // If muCommander is running under Mac OS X (how lucky!), add some glue for the main menu bar and other OS X
-            // specifics.
-            if(OsFamily.MAC_OS_X.isCurrent()) {
-                // Use reflection to create an OSXIntegration instance so that ClassLoader
-                // doesn't throw an NoClassDefFoundException under platforms other than Mac OS X
-                try {
-                    Class<?> osxIntegrationClass = Class.forName("com.mucommander.ui.macosx.OSXIntegration");
-                    Constructor<?> constructor   = osxIntegrationClass.getConstructor(new Class[]{});
-                    constructor.newInstance();
-                }
-                catch(Exception e) {
-                    LOGGER.debug("Exception thrown while initializing Mac OS X integration", e);
-                }
-            }
-
-
             // - muCommander boot -----------------------------------------
             // ------------------------------------------------------------
             // Adds all extensions to the classpath.
@@ -348,7 +330,7 @@ public class Application {
             configureFilesystems();
 
             // Initializes the desktop.
-            try {com.mucommander.desktop.DesktopManager.init(isFirstBoot);}
+            try {com.mucommander.core.desktop.DesktopManager.init(isFirstBoot);}
             catch(Exception e) {printError("Could not initialize desktop", e, true);}
 
             // Loads custom commands
@@ -446,8 +428,8 @@ public class Application {
             // a MainFrame instance
             if(MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS, MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
                 printStartupMessage("Enabling system notifications...");
-                if(com.mucommander.ui.notifier.AbstractNotifier.isAvailable())
-                    com.mucommander.ui.notifier.AbstractNotifier.getNotifier().setEnabled(true);
+                if(com.mucommander.ui.notifier.NotifierProvider.isAvailable())
+                    com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
             }
 
             // Dispose splash screen.

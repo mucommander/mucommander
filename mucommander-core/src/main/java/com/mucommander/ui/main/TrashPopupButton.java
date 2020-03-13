@@ -18,8 +18,8 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.commons.util.ui.button.RolloverButtonAdapter;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
-import com.mucommander.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.EmptyTrashAction;
 import com.mucommander.ui.action.impl.OpenTrashAction;
@@ -31,7 +31,7 @@ import java.awt.*;
 
 /**
  * TrashPopupButton is a button that allows to interact with the current platform's trash, as returned by
- * {@link com.mucommander.desktop.DesktopManager#getTrash()}.
+ * {@link com.mucommander.core.desktop.DesktopManager#getTrash()}.
  * When the button is clicked, a popup menu is displayed, allowing to perform a choice of actions such as opening
  * the trash or emptying it.
  * Note that this button will only be functional if a trash is available on the current platform.

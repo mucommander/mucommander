@@ -35,13 +35,14 @@ import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.text.FontUtils;
 import com.mucommander.job.FileCollisionChecker;
+import com.mucommander.os.notifier.AbstractNotifier;
+import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.InformationPane;
-import com.mucommander.ui.notifier.AbstractNotifier;
-import com.mucommander.ui.notifier.NotificationType;
+import com.mucommander.ui.notifier.NotifierProvider;
 import com.mucommander.ui.text.FileLabel;
 
 
@@ -212,8 +213,8 @@ public class FileCollisionDialog extends QuestionDialog {
         }
 
         // Send a system notification if a notifier is available and enabled
-        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationType.JOB_ERROR, getTitle(), desc);
+        if(NotifierProvider.isAvailable() && NotifierProvider.getNotifier().isEnabled())
+            NotifierProvider.displayBackgroundNotification(NotificationType.JOB_ERROR, getTitle(), desc);
     }
 
 

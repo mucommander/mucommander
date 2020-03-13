@@ -30,7 +30,7 @@ import javax.swing.JSplitPane;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 
 /**
  * ProportionalSplitPane is a JSplitPane that is able to maintain the divider's location constant proportionally when
