@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import com.mucommander.desktop.DesktopManager;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
 

@@ -29,11 +29,9 @@ import java.security.NoSuchAlgorithmException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.apple.eio.FileManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.ByteCounter;
 import com.mucommander.commons.io.ChecksumInputStream;
@@ -42,7 +40,7 @@ import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.ThroughputLimitInputStream;
 import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
@@ -195,7 +193,7 @@ public abstract class TransferFileJob extends FileJob {
         tryCopyFilePermissions(sourceFile, destFile);
 
         // Under Mac OS X only, preserving the file type and creator
-        tryCopyFileTypeAndCreator(sourceFile, destFile);
+        DesktopManager.postCopy(sourceFile, destFile);
 
         // This block is executed only if integrity check has been enabled (disabled by default)
         if(integrityCheckEnabled) {
@@ -236,23 +234,6 @@ public abstract class TransferFileJob extends FileJob {
             // Compare both checksums and throw an exception if they don't match
             if(!sourceChecksum.equals(destinationChecksum)) {
                 throw new FileTransferException(FileTransferError.CHECKSUM_MISMATCH);
-            }
-        }
-    }
-
-
-    private void tryCopyFileTypeAndCreator(AbstractFile sourceFile, AbstractFile destFile) {
-        if (OsFamily.MAC_OS_X.isCurrent()
-            && sourceFile.hasAncestor(LocalFile.class)
-            && destFile.hasAncestor(LocalFile.class)) {
-
-            String sourcePath = sourceFile.getAbsolutePath();
-            try {
-                FileManager.setFileTypeAndCreator(destFile.getAbsolutePath(), FileManager.getFileType(sourcePath), FileManager.getFileCreator(sourcePath));
-            }
-            catch(IOException e) {
-                // Swallow the exception and do not interrupt the transfer
-                LOGGER.debug("Error while setting Mac OS X file type and creator on destination", e);
             }
         }
     }
@@ -313,7 +294,7 @@ public abstract class TransferFileJob extends FileJob {
         tryCopyFilePermissions(sourceFile, destFile);
 
         // Under Mac OS X only, preserving the file type and creator
-        tryCopyFileTypeAndCreator(sourceFile, destFile);
+        DesktopManager.postCopy(sourceFile, destFile);
 
         return true;
     }

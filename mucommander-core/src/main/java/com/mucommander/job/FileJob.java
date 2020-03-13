@@ -28,14 +28,15 @@ import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.job.ui.UserInputHelper;
+import com.mucommander.os.notifier.AbstractNotifier;
+import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
-import com.mucommander.ui.notifier.AbstractNotifier;
-import com.mucommander.ui.notifier.NotificationType;
+import com.mucommander.ui.notifier.NotifierProvider;
 
 
 
@@ -509,8 +510,8 @@ public abstract class FileJob implements Runnable {
         LOGGER.debug("called");
 
         // Send a system notification if a notifier is available and enabled
-        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationType.JOB_COMPLETED,
+        if(NotifierProvider.isAvailable() && NotifierProvider.getNotifier().isEnabled())
+            NotifierProvider.displayBackgroundNotification(NotificationType.JOB_COMPLETED,
                     getProgressDialog()==null?"":getProgressDialog().getTitle(),
                     Translator.get("progress_dialog.job_finished"));
     }
@@ -579,8 +580,8 @@ public abstract class FileJob implements Runnable {
         }
 
         // Send a system notification if a notifier is available and enabled
-        if(AbstractNotifier.isAvailable() && AbstractNotifier.getNotifier().isEnabled())
-            AbstractNotifier.getNotifier().displayBackgroundNotification(NotificationType.JOB_ERROR, title, message);
+        if(NotifierProvider.isAvailable() && NotifierProvider.getNotifier().isEnabled())
+            NotifierProvider.displayBackgroundNotification(NotificationType.JOB_ERROR, title, message);
 
         QuestionDialog dialog;
         if(getProgressDialog()==null)

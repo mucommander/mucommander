@@ -14,6 +14,7 @@ dependencies {
     compileOnly project(':mucommander-process')
     compileOnly project(':mucommander-translator')
     compileOnly project(':mucommander-protocol-api')
+    compileOnly project(':mucommander-os-api')
     compileOnly project(':mucommander-viewer-api')
 
     compile 'ch.qos.logback:logback-core:1.2.3'
@@ -21,9 +22,6 @@ dependencies {
     compile 'org.jmdns:jmdns:3.5.5'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'org.osgi:osgi.core:7.0.0'
-
-    // the java.desktop module that contains macOS-specific extensions
-    compileOnly files('libs/java.desktop.jar')
 
     testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
@@ -48,10 +46,14 @@ jar {
         'Build-Url': "https://www.mucommander.com/version/nightly.xml",
         'Import-Package': 'com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
         'Export-Package':
+            'com.mucommander.core.desktop,' +
+            'com.mucommander.job,' +
+            'com.mucommander.job.impl,' +
             'com.mucommander.process,' +
             'com.mucommander.text,' +
             'com.mucommander.osgi,' +
             'com.mucommander.ui.dialog,' +
+            'com.mucommander.ui.dialog.file,' +
             'com.mucommander.ui.dialog.server,' +
             'com.mucommander.ui.encoding,' +
             'com.mucommander.ui.theme,' +

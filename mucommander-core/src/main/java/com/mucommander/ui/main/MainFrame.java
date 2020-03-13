@@ -36,7 +36,6 @@ import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 import javax.swing.table.TableColumnModel;
 
-import com.apple.eawt.FullScreenUtilities;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
@@ -47,6 +46,7 @@ import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
@@ -156,10 +156,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Set the window icon
         setWindowIcon();
 
-        if (OsFamily.MAC_OS_X.isCurrent()) {
-        	// Lion Fullscreen support
-        	FullScreenUtilities.setWindowCanFullScreen(this, true);
-        }
+        DesktopManager.customizeMainFrame(this);
 
         // Enable window resize
         setResizable(true);
