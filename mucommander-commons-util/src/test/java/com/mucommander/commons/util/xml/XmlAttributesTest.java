@@ -15,14 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.xml;
+package com.mucommander.commons.util.xml;
+
+import java.util.Iterator;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import com.mucommander.commons.util.xml.XmlAttributes;
-
-import java.util.Iterator;
 
 /**
  * Runs test on the {@link XmlAttributes} class.
