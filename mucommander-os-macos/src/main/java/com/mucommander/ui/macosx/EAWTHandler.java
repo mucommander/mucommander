@@ -18,7 +18,9 @@
 package com.mucommander.ui.macosx;
 
 import java.awt.Desktop;
+import java.awt.desktop.AboutEvent;
 import java.awt.desktop.OpenFilesEvent;
+import java.awt.desktop.PreferencesEvent;
 import java.awt.desktop.QuitEvent;
 import java.awt.desktop.QuitResponse;
 
@@ -33,20 +35,28 @@ class EAWTHandler {
 
     public EAWTHandler() {
         Desktop desktop = Desktop.getDesktop();
-        desktop.setAboutHandler(e -> CoreServiceTracker.getCoreService().showAbout());
-        desktop.setPreferencesHandler(e -> CoreServiceTracker.getCoreService().showPreferences());
+        desktop.setAboutHandler(this::showAbout);
+        desktop.setPreferencesHandler(this::showPreferences);
         desktop.setQuitHandler(this::handleQuitRequestWith);
         desktop.setOpenFileHandler(this::openFiles);
     }
 
-    public void handleQuitRequestWith(final QuitEvent e, final QuitResponse response) {
+    private void showAbout(AboutEvent e) {
+        CoreServiceTracker.getCoreService().showAbout();
+    }
+
+    private void showPreferences(PreferencesEvent e) {
+        CoreServiceTracker.getCoreService().showPreferences();
+    }
+
+    private void handleQuitRequestWith(final QuitEvent e, final QuitResponse response) {
         if (CoreServiceTracker.getCoreService().doQuit())
             response.performQuit();
         else
             response.cancelQuit();
     }
 
-    public void openFiles(final OpenFilesEvent e) {
+    private void openFiles(final OpenFilesEvent e) {
         CoreServiceTracker.getCoreService().openFile(e.getFiles().get(0).getAbsolutePath());
     }
 }
