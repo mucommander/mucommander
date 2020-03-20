@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.osx;
+package com.mucommander.desktop.macos;
 
 import java.awt.Window;
 import java.awt.event.MouseEvent;
@@ -40,8 +40,8 @@ import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.TrashProvider;
 import com.mucommander.os.notifier.AbstractNotifier;
-import com.mucommander.ui.macosx.OSXIntegration;
-import com.mucommander.ui.macosx.TabbedPaneUICustomizer;
+import com.mucommander.ui.macos.OSXIntegration;
+import com.mucommander.ui.macos.TabbedPaneUICustomizer;
 import com.mucommander.ui.notifier.GrowlNotifier;
 
 /**

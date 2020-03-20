@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.macosx;
+package com.mucommander.ui.macos;
 
 import java.awt.Desktop;
 import java.awt.desktop.AboutEvent;
@@ -24,7 +24,7 @@ import java.awt.desktop.PreferencesEvent;
 import java.awt.desktop.QuitEvent;
 import java.awt.desktop.QuitResponse;
 
-import com.mucommander.desktop.osx.CoreServiceTracker;
+import com.mucommander.desktop.macos.CoreServiceTracker;
 
 /**
  * This class registers the About, Preferences and Quit handlers.

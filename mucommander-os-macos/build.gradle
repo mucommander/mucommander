@@ -35,7 +35,7 @@ jar {
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'macOS specifics',
          'Bundle-DocURL': 'https://www.mucommander.com',
-         'Bundle-Activator': 'com.mucommander.desktop.osx.Activator',
+         'Bundle-Activator': 'com.mucommander.desktop.macos.Activator',
          'Export-Package': 'com.mucommander.ui.process',
          'Import-Package': '*',
          'Specification-Title': "muCommander",

@@ -1,4 +1,4 @@
-package com.mucommander.ui.macosx;
+package com.mucommander.ui.macos;
 
 import java.awt.Graphics;
 import java.awt.Insets;
