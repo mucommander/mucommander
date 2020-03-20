@@ -34,7 +34,7 @@ public class Activator implements BundleActivator  {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        CoreServiceTracker coreServiceTracker = new CoreServiceTracker(context);
+        coreServiceTracker = new CoreServiceTracker(context);
         coreServiceTracker.open();
 
         OperatingSystemService service = new OperatingSystemService() {
