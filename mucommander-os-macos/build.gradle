@@ -13,6 +13,8 @@ plugins {
 
 repositories.jcenter()
 
+compileJava.options.compilerArgs += ['--release', '11']
+
 dependencies {
     compile project(":mucommander-core")
     compile project(":mucommander-os-api")
