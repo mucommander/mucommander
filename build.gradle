@@ -134,9 +134,7 @@ ext {
     bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
 }
 
-shadowJar {
-    classifier = null
-}
+shadowJar.classifier = null
 
 jar {
     manifest {
@@ -154,9 +152,7 @@ jar {
 
 jar.enabled = false
 
-test {
-    useTestNG()
-}
+test.useTestNG()
 
 import org.apache.tools.ant.filters.ReplaceTokens
 
