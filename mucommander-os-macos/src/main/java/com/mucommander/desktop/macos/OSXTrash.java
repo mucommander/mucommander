@@ -15,13 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.osx;
+package com.mucommander.desktop.macos;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.QueuedTrash;
-import com.mucommander.ui.macosx.AppleScript;
+import com.mucommander.ui.macos.AppleScript;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ import java.util.List;
  *        more efficient to group files and execute only one AppleScript.</li>
  *   </ul>
  *   <br/>
- *   This class uses {@link com.mucommander.ui.macosx.AppleScript} to interact with the trash.
+ *   This class uses {@link com.mucommander.ui.macos.AppleScript} to interact with the trash.
  * </p>
  *
  * @see OSXTrashProvider

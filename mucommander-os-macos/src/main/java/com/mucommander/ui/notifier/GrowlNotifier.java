@@ -27,7 +27,7 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.macosx.AppleScript;
+import com.mucommander.ui.macos.AppleScript;
 
 /**
  * GrowlNotifier implements a notifier that uses the Growl notification system.

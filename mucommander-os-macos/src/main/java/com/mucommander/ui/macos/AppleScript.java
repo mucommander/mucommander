@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.ui.macosx;
+package com.mucommander.ui.macos;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.desktop.osx;
+package com.mucommander.desktop.macos;
 
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.TrashProvider;
