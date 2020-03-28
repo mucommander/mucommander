@@ -20,9 +20,14 @@ package com.mucommander.desktop.macos;
 import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +41,14 @@ import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.commons.util.Pair;
+import com.mucommander.commons.util.ui.text.MultiLineLabel;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.TrashProvider;
 import com.mucommander.os.notifier.AbstractNotifier;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.macos.OSXIntegration;
 import com.mucommander.ui.macos.TabbedPaneUICustomizer;
 import com.mucommander.ui.notifier.GrowlNotifier;
@@ -132,5 +141,17 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     public void customizeMainFrame(Window window) {
         FullScreenUtilities.setWindowCanFullScreen(window, true);
+    }
+
+    @Override
+    public List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) {
+        if (OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()) {
+            String comment = OSXFileUtils.getSpotlightComment(file);
+            JLabel commentLabel = new JLabel(Translator.get("comment")+":");
+            commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);
+            commentLabel.setVerticalAlignment(SwingConstants.TOP);
+            return Collections.singletonList(new Pair<>(commentLabel, new MultiLineLabel(comment)));
+        }
+        return Collections.emptyList();
     }
 }

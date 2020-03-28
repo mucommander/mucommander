@@ -24,26 +24,25 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.file.util.OSXFileUtils;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.commons.util.Pair;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
-import com.mucommander.commons.util.ui.text.MultiLineLabel;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.FileJobState;
 import com.mucommander.job.impl.PropertiesJob;
 import com.mucommander.text.SizeFormat;
@@ -127,14 +126,9 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
         sizePanel.add(new JLabel(dial = new SpinningDial()));
         labelPanel.addRow(Translator.get("size")+":", sizePanel, 6);
 
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()
-        && isSingleFile && singleFile.hasAncestor(LocalFile.class)) {
-            String comment = OSXFileUtils.getSpotlightComment(singleFile);
-            JLabel commentLabel = new JLabel(Translator.get("comment")+":");
-            commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);
-            commentLabel.setVerticalAlignment(SwingConstants.TOP);
-
-            labelPanel.addRow(commentLabel, new MultiLineLabel(comment), 6);
+        if (isSingleFile && singleFile.hasAncestor(LocalFile.class)) {
+            List<Pair<JLabel, JComponent>> infos = DesktopManager.getExtendedFileProperties(singleFile);
+            infos.forEach(info -> labelPanel.addRow(info.first, info.second, 6));
         }
 
         updateLabels();
