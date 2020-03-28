@@ -21,7 +21,9 @@ dependencies {
     compile project(":mucommander-os-api")
     compile project(":mucommander-process")
     compile project(":mucommander-translator")
+
     compile 'org.slf4j:slf4j-api:1.7.26'
+    compile 'com.googlecode.plist:dd-plist:1.23'
 
     // the java.desktop module that contains macOS-specific extensions
     compileOnly files('libs/java.desktop.jar')

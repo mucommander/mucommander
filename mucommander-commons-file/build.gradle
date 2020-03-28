@@ -17,7 +17,6 @@ dependencies {
 
 jar {
     from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
-        exclude 'com/sun/jna/darwin/**'
         exclude 'com/sun/jna/freebsd-x86/**'
         exclude 'com/sun/jna/freebsd-x86-64/**'
         exclude 'com/sun/jna/linux-arm/**'
@@ -49,6 +48,8 @@ jar {
             'com.mucommander.commons.file.protocol,' +
             'com.mucommander.commons.file.protocol.local,' +
             'com.mucommander.commons.file.util,' +
+            'com.sun.jna,' +
+            'com.sun.jna.platform.mac,' +
             'com.sun.jna.platform.win32',
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",

@@ -18,19 +18,17 @@
 
 package com.mucommander.desktop.macos;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.UnsupportedEncodingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dd.plist.BinaryPropertyListParser;
+import com.dd.plist.NSString;
+import com.dd.plist.PropertyListFormatException;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
+import com.sun.jna.platform.mac.XAttrUtils;
 
 /**
  * This class contains methods for file operations that are specific to Mac OS X.
@@ -39,9 +37,6 @@ import com.mucommander.commons.runtime.OsVersion;
  */
 public class OSXFileUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(OSXFileUtils.class);
-
-    /** Pattern matching the Spotlight comment in the output of the 'mdls' command */
-    private final static Pattern MDLS_COMMENT_PATTERN = Pattern.compile("\".*\"$");
 
     /**
      * Returns the Spotlight/Finder comment of the given file. The specified file must be a LocalFile,
@@ -64,43 +59,17 @@ public class OSXFileUtils {
         if(!OsVersion.MAC_OS_X_10_4.isCurrentOrHigher())
             return null;
 
-        InputStream pin = null;
+        byte[] bytes = XAttrUtils.read(file.getAbsolutePath(), XAttrUtils.COMMENT);
+        if (bytes == null)
+            return null;
+
+        NSString comment;
         try {
-            Process process = Runtime.getRuntime().exec(new String[]{"mdls", "-name", "kMDItemFinderComment", file.getAbsolutePath()});
-            process.waitFor();
-
-            if(process.exitValue()!=0)
-                return null;
-
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            pin = process.getInputStream();
-            StreamUtils.copyStream(pin, bout);
-
-            // Sample output when there is a comment:
-            // kMDItemFinderComment = "This is a spotlight comment"
-            //
-            // Sample output when there is no comment:
-            // kMDItemFinderComment = (null)
-            String output = new String(bout.toByteArray());
-            Matcher matcher = MDLS_COMMENT_PATTERN.matcher(output);
-
-            if(matcher.find()) {
-                // Strip off the quotes surrounding the comment
-                String group = matcher.group();
-                return group.substring(1, group.length()-1);
-            }
-
+            comment = (NSString) BinaryPropertyListParser.parse(bytes);
+        } catch (UnsupportedEncodingException | PropertyListFormatException e) {
+            LOGGER.error("failed to read comment of: " + file.getAbsolutePath());
             return null;
         }
-        catch(Exception e) {
-            LOGGER.info("Caught exception", e);
-
-            return null;
-        }
-        finally {
-            if(pin!=null)
-                try { pin.close(); }
-                catch(IOException e) {}
-        }
+        return comment.getContent();
     }
 }
