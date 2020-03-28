@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.function.Consumer;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.JavaVersion;
+import com.mucommander.commons.util.Pair;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopAdapter;
@@ -588,5 +591,9 @@ public class DesktopManager {
 
     public static void customizeMainFrame(Window window) {
         desktop.customizeMainFrame(window);
+    }
+
+    public static List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) {
+        return desktop.getExtendedFileProperties(file);
     }
 }

@@ -19,12 +19,17 @@ package com.mucommander.desktop;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.util.Pair;
 import com.mucommander.os.notifier.AbstractNotifier;
 
 import java.awt.Window;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 /**
@@ -165,4 +170,5 @@ public interface DesktopAdapter {
     default Consumer<JTabbedPane> getTabbedPaneCustomizer() { return null; }
     default void postCopy(AbstractFile source, AbstractFile target) {}
     default void customizeMainFrame(Window window) {}
+    default List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) { return Collections.emptyList(); }
 }

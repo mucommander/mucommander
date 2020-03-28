@@ -16,7 +16,7 @@
  */
 
 
-package com.mucommander.commons.file.util;
+package com.mucommander.desktop.macos;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class OSXFileUtils {
      * @return the Spotlight/Finder comment of the specified file
      */
     public static String getSpotlightComment(AbstractFile file) {
-        if(!(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()))
+        if(!OsVersion.MAC_OS_X_10_4.isCurrentOrHigher())
             return null;
 
         InputStream pin = null;
