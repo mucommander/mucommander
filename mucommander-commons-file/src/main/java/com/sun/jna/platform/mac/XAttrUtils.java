@@ -3,15 +3,20 @@ package com.sun.jna.platform.mac;
 import com.sun.jna.Memory;
 
 public class XAttrUtils {
+    public static final String COMMENT = "com.apple.metadata:kMDItemFinderComment";
+
     public static byte[] read(String path, String name) {
         long bufferLength = XAttr.INSTANCE.getxattr(path, name, null, 0, 0, 0);
+        if (bufferLength <= 0)
+            return null;
+
         Memory valueBuffer = new Memory(bufferLength);
         valueBuffer.clear();
         long valueLength = XAttr.INSTANCE.getxattr(path, name, valueBuffer, bufferLength, 0, 0);
 
-        if (valueLength < 0) {
+        if (valueLength < 0)
             return null;
-        }
+
         return valueBuffer.getByteArray(0, (int)valueLength);
     }
 
