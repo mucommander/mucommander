@@ -35,7 +35,7 @@ New features:
 - 
 
 Improvements:
-- 
+- Copying local files on macOS also copies their (Spotlight) comment.
 
 Localization:
 - 
