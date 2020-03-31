@@ -34,6 +34,9 @@ import org.slf4j.LoggerFactory;
 
 import com.apple.eawt.FullScreenUtilities;
 import com.apple.eio.FileManager;
+import com.dd.plist.BinaryPropertyListParser;
+import com.dd.plist.NSString;
+import com.dd.plist.PropertyListFormatException;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -49,9 +52,11 @@ import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.TrashProvider;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.macos.AppleScript;
 import com.mucommander.ui.macos.OSXIntegration;
 import com.mucommander.ui.macos.TabbedPaneUICustomizer;
 import com.mucommander.ui.notifier.GrowlNotifier;
+import com.sun.jna.platform.mac.XAttrUtils;
 
 /**
  * @author Nicolas Rinaudo, Arik Hadas
@@ -64,6 +69,9 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     private static final String FINDER_NAME    = "Finder";
     // HINT: will work almost for every directory BUT NOT for /tmp on MacOS
     private static final String CMD_OPENER_COMMAND = "open -a Terminal $f";
+
+    /** The key of the comment attribute in file metadata */
+    public static final String COMMENT_PROPERTY_NAME = "com.apple.metadata:kMDItemFinderComment";
 
     public String toString() {return "MAC OS X Desktop";}
 
@@ -129,14 +137,42 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     public void postCopy(AbstractFile sourceFile, AbstractFile destFile) {
         if (sourceFile.hasAncestor(LocalFile.class) && destFile.hasAncestor(LocalFile.class)) {
             String sourcePath = sourceFile.getAbsolutePath();
-            try {
-                FileManager.setFileTypeAndCreator(destFile.getAbsolutePath(), FileManager.getFileType(sourcePath), FileManager.getFileCreator(sourcePath));
-            }
-            catch(IOException e) {
-                // Swallow the exception and do not interrupt the transfer
-                LOGGER.debug("Error while setting Mac OS X file type and creator on destination", e);
-            }
+            String destPath = destFile.getAbsolutePath();
+            copyFileTypeAndCreator(sourcePath, destPath);
+            copyFileComment(sourcePath, destPath);
         }
+    }
+
+    private void copyFileTypeAndCreator(String sourcePath, String destPath) {
+        try {
+            FileManager.setFileTypeAndCreator(destPath, FileManager.getFileType(sourcePath), FileManager.getFileCreator(sourcePath));
+        } catch(IOException e) {
+            // Swallow the exception and do not interrupt the transfer
+            LOGGER.debug("Error while setting macOS file type and creator on destination", e);
+        }
+    }
+
+    private void copyFileComment(String sourcePath, String destPath) {
+        byte[] bytes = XAttrUtils.read(sourcePath, COMMENT_PROPERTY_NAME);
+        if (bytes == null)
+            return;
+
+        String comment = null;
+        try {
+            NSString value = (NSString) BinaryPropertyListParser.parse(bytes);
+            if (value != null)
+                comment = value.getContent();
+        } catch (IOException | PropertyListFormatException e) {
+            // Swallow the exception and do not interrupt the transfer
+            LOGGER.debug("Error while parsing macOS file comment of source", e);
+        }
+        if (comment != null && !"".equals(comment = comment.trim()) && !setFileComment(destPath, comment))
+            LOGGER.error("Error while copying macOS file comment to %s", destPath);
+    }
+
+    private boolean setFileComment(String path, String comment) {
+        String script = String.format(OSXFileUtils.SET_COMMENT_APPLESCRIPT, path, comment);
+        return AppleScript.execute(script, null);
     }
 
     public void customizeMainFrame(Window window) {

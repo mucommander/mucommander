@@ -38,6 +38,9 @@ import com.sun.jna.platform.mac.XAttrUtils;
 public class OSXFileUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(OSXFileUtils.class);
 
+    /** AppleScript that sets file comment */
+    public static final String SET_COMMENT_APPLESCRIPT = "tell application \"Finder\" to set comment of file {posix file \"%s\"} to \"%s\"";
+
     /**
      * Returns the Spotlight/Finder comment of the given file. The specified file must be a LocalFile,
      * or have a LocalFile as an ancestor.
