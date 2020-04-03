@@ -41,7 +41,7 @@ Localization:
 - 
 
 Bug fixes:
-- 
+- The license is presented in the license dialog.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
