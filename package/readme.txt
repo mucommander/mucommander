@@ -42,6 +42,7 @@ Localization:
 
 Bug fixes:
 - The license is presented in the license dialog.
+- Added back missing quote characters in various dialogs (e.g., doesnt -> doesn't)
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
