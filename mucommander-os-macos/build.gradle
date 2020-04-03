@@ -11,6 +11,8 @@ plugins {
     id 'biz.aQute.bnd.builder'
 }
 
+test.useTestNG()
+
 repositories.jcenter()
 
 compileJava.options.compilerArgs += ['--release', '11']
@@ -30,7 +32,6 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'org.testng:testng:6.11'
-    testImplementation 'junit:junit:4.12'
 }
 
 jar {
