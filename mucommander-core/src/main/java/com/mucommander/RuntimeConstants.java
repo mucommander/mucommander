@@ -36,8 +36,6 @@ public class RuntimeConstants {
 	
     // - Constant paths ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Path to the muCommander dictionary. */
-    public static final String DICTIONARY_FILE = "/dictionary.txt";
     /** Path to the themes directory. */
     public static final String THEMES_PATH     = "/themes";
     /** Path to the muCommander license file. */
