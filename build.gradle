@@ -32,6 +32,7 @@ subprojects {
 }
 
 compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
 compileJava.options.compilerArgs += ['--release', '8']
 
 repositories {
