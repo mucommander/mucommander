@@ -72,6 +72,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     /** The key of the comment attribute in file metadata */
     public static final String COMMENT_PROPERTY_NAME = "com.apple.metadata:kMDItemFinderComment";
+    public static final String TAGS_PROPERTY_NAME = "com.apple.metadata:_kMDItemUserTags";
 
     public String toString() {return "MAC OS X Desktop";}
 
@@ -138,9 +139,16 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         if (sourceFile.hasAncestor(LocalFile.class) && destFile.hasAncestor(LocalFile.class)) {
             String sourcePath = sourceFile.getAbsolutePath();
             String destPath = destFile.getAbsolutePath();
+            copyFileUserTags(sourcePath, destPath);
             copyFileTypeAndCreator(sourcePath, destPath);
             copyFileComment(sourcePath, destPath);
         }
+    }
+
+    private void copyFileUserTags(String sourcePath, String destPath) {
+        byte[] bytes = XAttrUtils.read(sourcePath, TAGS_PROPERTY_NAME);
+        if (bytes != null)
+            XAttrUtils.write(destPath, TAGS_PROPERTY_NAME, bytes);
     }
 
     private void copyFileTypeAndCreator(String sourcePath, String destPath) {
