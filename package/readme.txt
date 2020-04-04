@@ -36,6 +36,7 @@ New features:
 
 Improvements:
 - Copying local files on macOS also copies their (Spotlight) comment.
+- Exclude OSGi-cli from packaging, avoiding the creation of .osgiaas_cli_history file on shutdown.
 
 Localization:
 - 
