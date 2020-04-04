@@ -178,6 +178,8 @@ ospackage {
     }
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
+        exclude 'osgiaas*'
+        exclude 'jline*'
         into '/usr/share/mucommander/bundle'
     }
     from ("$buildDir/osgi/app") {
@@ -273,6 +275,8 @@ copyToResourcesJava.doLast {
         from "build/osgi"
         include 'app/**'
         include 'bundle/**'
+        exclude 'bundle/osgiaas*'
+        exclude 'bundle/jline*'
         into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
     }
 }
@@ -335,6 +339,8 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
     }
     from("$buildDir/osgi/bundle") {
         include '*.jar'
+        exclude 'osgiaas*'
+        exclude 'jline*'
         into "bundle"
     }
     into "$buildDir/tmp/nsis"
@@ -359,6 +365,8 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Tar) {
     into "muCommander-$version"
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
+        exclude 'osgiaas*'
+        exclude 'jline*'
         into 'bundle'
     }
     from ("$buildDir/osgi/app") {
@@ -389,6 +397,8 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
 
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
+        exclude 'osgiaas*'
+        exclude 'jline*'
         into 'bundle'
     }
     from ("$buildDir/osgi/app") {
