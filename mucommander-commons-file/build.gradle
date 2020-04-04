@@ -5,8 +5,8 @@ dependencies {
     compile project(':mucommander-commons-runtime')
     compile project(':mucommander-commons-util')
 
-    comprise 'net.java.dev.jna:jna:4.4.0'
-    comprise 'net.java.dev.jna:jna-platform:4.4.0'
+    comprise 'net.java.dev.jna:jna:5.5.0'
+    comprise 'net.java.dev.jna:jna-platform:5.5.0'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'commons-collections:commons-collections:3.2.2'
     compile 'org.osgi:osgi.core:7.0.0'
