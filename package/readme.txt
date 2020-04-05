@@ -35,7 +35,7 @@ New features:
 - 
 
 Improvements:
-- Copying local files on macOS also copies their (Spotlight) comment and user tags.
+- Copy file's (Spotlight) comment and user tags when copying local files on macOS.
 - Exclude OSGi-cli from packaging, avoiding the creation of .osgiaas_cli_history file on shutdown.
 
 Localization:
