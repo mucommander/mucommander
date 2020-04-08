@@ -52,7 +52,16 @@ public class DefaultSchemeHandler implements SchemeHandler {
      * </ul>
      */
     public DefaultSchemeHandler() {
-        this(new DefaultSchemeParser(), -1, System.getProperty("file.separator"), AuthenticationType.NO_AUTHENTICATION, null);
+        this(new DefaultSchemeParser());
+    }
+
+    /**
+     * Creates a DefaultSchemeHandler with the given SchemeParser and the other default values
+     * that are used with the no-args constructor.
+     * See {@link DefaultSchemeHandler#DefaultSchemeHandler()}
+     */
+    public DefaultSchemeHandler(SchemeParser schemeParser) {
+        this(schemeParser, -1, System.getProperty("file.separator"), AuthenticationType.NO_AUTHENTICATION, null);
     }
 
     /**

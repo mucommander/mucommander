@@ -79,6 +79,9 @@ public class CustomFileIconProvider implements FileIconProvider {
     /** Icon for bookmarks */
     public final static String BOOKMARKS_ICON_NAME = "folder_bookmarks.png";
 
+    /** Icon for find results */
+    public final static String FIND_RESULT_ICON_NAME = "folder_find.png";
+
     /** File icon <-> extensions association map. For information about specific file extensions, refer to:
      * <ul>
      *  <li><a href="http://en.wikipedia.org/wiki/File_format">http://en.wikipedia.org/wiki/File_format</a></li>

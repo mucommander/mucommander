@@ -61,6 +61,7 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
@@ -232,6 +233,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         	setText(currentFolderName.isEmpty() ? Translator.get("bookmarks_menu") : currentFolderName);
         	setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARKS_ICON_NAME));
         	break;
+
+        case SearchProtocolProvider.SEARCH:
+            setText("Find");
+            setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FIND_RESULT_ICON_NAME));
+            break;
 
         default:
         	// Remote file, use the protocol's name
