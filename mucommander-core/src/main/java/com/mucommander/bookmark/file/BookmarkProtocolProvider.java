@@ -40,32 +40,30 @@ public class BookmarkProtocolProvider implements ProtocolProvider {
 
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
         // If the URL contains a path but no host, it's illegal.
-        // If it contains neither host nor path, we're browsing bookmarks://
-        if(url.getHost() == null) {
+        // If it contains neither host nor path, we're browsing bookmark://
+        if (url.getHost() == null) {
             if(url.getPath().equals("/"))
                 return new BookmarkRoot(url);
-            throw new IOException();
+            throw new IOException("illegal bookmark: " + url);
         }
 
         // If the URL contains a host, look it up in the bookmark list and use that
         // as the root of the returned path.
-        else {
-            Bookmark bookmark;
-            // If the bookmark doesn't exist, but a path is specified, throws an exception.
-            // Otherwise, returns the requested bookmark.
-            if((bookmark = BookmarkManager.getBookmark(url.getHost())) == null) {
-                if(!url.getPath().equals("/"))
-                    throw new IOException();
-                return new BookmarkFile(new Bookmark(url.getHost(), url.getPath()));
-            }
-
-            // If the bookmark exists, and a path is specified, creates a new path
-            // from the bookmark's location and the specified path.
-            if(!url.getPath().equals("/"))
-                return FileFactory.getFile(bookmark.getLocation() + url.getPath());
-
-            // Otherwise, creates a new bookmark file.
-            return new BookmarkFile(bookmark);
+        Bookmark bookmark = BookmarkManager.getBookmark(url.getHost());
+        // If the bookmark doesn't exist, but a path is specified, throws an exception.
+        // Otherwise, returns the requested bookmark.
+        if (bookmark == null) {
+            if (!url.getPath().equals("/"))
+                throw new IOException("illegal bookmark: " + url);
+            return new BookmarkFile(new Bookmark(url.getHost(), url.getPath()));
         }
+
+        // If the bookmark exists, and a path is specified, creates a new path
+        // from the bookmark's location and the specified path.
+        if (!url.getPath().equals("/"))
+            return FileFactory.getFile(bookmark.getLocation() + url.getPath());
+
+        // Otherwise, creates a new bookmark file.
+        return new BookmarkFile(bookmark);
     }
 }
