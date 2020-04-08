@@ -74,6 +74,7 @@ import com.mucommander.ui.action.impl.EditBookmarksAction;
 import com.mucommander.ui.action.impl.EditCredentialsAction;
 import com.mucommander.ui.action.impl.EmailAction;
 import com.mucommander.ui.action.impl.ExploreBookmarksAction;
+import com.mucommander.ui.action.impl.FindAction;
 import com.mucommander.ui.action.impl.GoBackAction;
 import com.mucommander.ui.action.impl.GoForwardAction;
 import com.mucommander.ui.action.impl.GoToDocumentationAction;
@@ -236,6 +237,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RevealInDesktopAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(FindAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RunCommandAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(PackAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(UnpackAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);

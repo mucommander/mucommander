@@ -32,8 +32,8 @@ public class SearchUtils {
         default:
             fileURL.setScheme(SearchProtocolProvider.SEARCH);
             fileURL.setHost(file.getAbsolutePath(false));
-        case SearchProtocolProvider.SEARCH:
             fileURL.setPath(null);
+        case SearchProtocolProvider.SEARCH:
             fileURL.setQuery(null);
         }
         return fileURL;

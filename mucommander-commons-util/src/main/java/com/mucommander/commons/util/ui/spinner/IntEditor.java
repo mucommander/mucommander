@@ -22,6 +22,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.NumberEditor;
 import javax.swing.JTextField;
@@ -36,10 +37,14 @@ import javax.swing.text.NumberFormatter;
 public class IntEditor extends JSpinner.DefaultEditor {
 
     public IntEditor(JSpinner spinner, String decimalFormatPattern) {
-        this(spinner, new DecimalFormat(decimalFormatPattern));
+        this(spinner, decimalFormatPattern, null);
     }
 
-    private IntEditor(JSpinner spinner, DecimalFormat format) {
+    public IntEditor(JSpinner spinner, String decimalFormatPattern, String defaultStr) {
+        this(spinner, new DecimalFormat(decimalFormatPattern), defaultStr);
+    }
+
+    private IntEditor(JSpinner spinner, DecimalFormat format, String defaultStr) {
         super(spinner);
         if (!(spinner.getModel() instanceof SpinnerNumberModel)) {
             throw new IllegalArgumentException(
@@ -47,8 +52,25 @@ public class IntEditor extends JSpinner.DefaultEditor {
         }
 
         SpinnerNumberModel model = (SpinnerNumberModel)spinner.getModel();
-        NumberFormatter formatter = new NumberEditorFormatter(model,
-                                                              format);
+        NumberFormatter formatter;
+        if (defaultStr == null)
+            formatter = new NumberEditorFormatter(model, format);
+        else {
+            formatter = new NumberEditorFormatter(model, format) {
+                @Override
+                public Object stringToValue(String text) throws ParseException {
+                    if (text == null || text.equals(defaultStr))
+                        return 0;
+                    return super.stringToValue(text);
+                }
+                @Override
+                public String valueToString(Object value) throws ParseException {
+                    if (value == null || ((Number) value).intValue() == 0)
+                        return defaultStr;
+                    return super.valueToString(value);
+                }
+            };
+        }
         DefaultFormatterFactory factory = new DefaultFormatterFactory(
                                               formatter);
         JFormattedTextField ftf = getTextField();

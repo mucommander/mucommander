@@ -25,6 +25,7 @@ import com.mucommander.ui.action.impl.ConnectToServerAction;
 import com.mucommander.ui.action.impl.EditBookmarksAction;
 import com.mucommander.ui.action.impl.EditCredentialsAction;
 import com.mucommander.ui.action.impl.EmailAction;
+import com.mucommander.ui.action.impl.FindAction;
 import com.mucommander.ui.action.impl.GoBackAction;
 import com.mucommander.ui.action.impl.GoForwardAction;
 import com.mucommander.ui.action.impl.GoToHomeAction;
@@ -80,6 +81,8 @@ public class ToolBarAttributes {
             null,
             PackAction.Descriptor.ACTION_ID,
             UnpackAction.Descriptor.ACTION_ID,
+            null,
+            FindAction.Descriptor.ACTION_ID,
             null,
             AddBookmarkAction.Descriptor.ACTION_ID,
             EditBookmarksAction.Descriptor.ACTION_ID,
