@@ -17,23 +17,37 @@
 
 package com.mucommander.bookmark.file;
 
-import com.mucommander.bookmark.Bookmark;
-import com.mucommander.bookmark.BookmarkListener;
-import com.mucommander.bookmark.BookmarkManager;
-import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.protocol.ProtocolFile;
-import com.mucommander.commons.io.RandomAccessInputStream;
-import com.mucommander.commons.io.RandomAccessOutputStream;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.bookmark.Bookmark;
+import com.mucommander.bookmark.BookmarkListener;
+import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.PermissionAccess;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.protocol.ProtocolFile;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
 
 /**
  * Represents the root of the <code>bookmarks://</code> file system.
  * @author Nicolas Rinaudo
  */
 class BookmarkRoot extends ProtocolFile implements BookmarkListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BookmarkRoot.class);
+
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Time at which the bookmarks were last modified. */
@@ -56,17 +70,23 @@ class BookmarkRoot extends ProtocolFile implements BookmarkListener {
     // -------------------------------------------------------------------------
     @Override
     public AbstractFile[] ls() throws IOException {
-        AbstractFile[] files;
-        Object[]       buffer;
-
         // Retrieves all available bookmarks.
-        buffer = BookmarkManager.getBookmarks().toArray();
-        files  = new AbstractFile[buffer.length];
+        Collection<Bookmark> bookmarks = BookmarkManager.getBookmarks();
+        try {
+            // Creates the associated instances of BookmarkFile
+            return bookmarks.stream().map(this::toFile).toArray(AbstractFile[]::new);
+        } catch(Exception e) {
+            throw new IOException(e);
+        }
+    }
 
-        // Creates the associated instances of BookmarkFile
-        for(int i = 0; i < files.length; i++)
-            files[i] = new BookmarkFile((Bookmark)buffer[i]);
-        return files;
+    private BookmarkFile toFile(Bookmark bookmark) {
+        try {
+            return new BookmarkFile(bookmark);
+        } catch (IOException e) {
+            LOGGER.error("failed to create BookmarkFile", e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
