@@ -17,13 +17,15 @@
 package com.mucommander.search.file;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.search.SearchBuilder;
@@ -43,11 +45,28 @@ public class SearchProtocolProvider implements ProtocolProvider {
         SearchFile file = new SearchFile(url);
         String host = url.getHost();
         String path = url.getPath().substring(1);
-        AbstractFile f = FileFactory.getFile(host);
-        SearchJob job = SearchBuilder.newSearch(f).name(path).build();
+        Map<String, String> properties = parseSearchProperties(url.getQuery());
+        SearchJob job = SearchBuilder.newSearch()
+                .what(path)
+                .where(host)
+                .searchArchives(properties)
+                .searchHidden(properties)
+                .searchSubfolders(properties)
+                .searchDepth(properties)
+                .matchCaseInsensitive(properties)
+                .matchRegex(properties)
+                .build();
         job.setSearchFile(file);
         file.setSearchJob(job);
         new Thread(() -> job.search()).start();
         return file;
+    }
+
+    private Map<String, String> parseSearchProperties(String str) {
+        if (str == null)
+            return Collections.emptyMap();
+        return Arrays.stream(str.split("&"))
+                .map(s -> s.split("="))
+                .collect(Collectors.toMap(p -> p[0], p -> p[1]));
     }
 }
