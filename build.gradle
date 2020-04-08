@@ -42,7 +42,7 @@ repositories {
 
 dependencies {
     compile 'org.apache.felix:org.apache.felix.main:6.0.3'
-    compile 'com.beust:jcommander:1.72'
+    compile 'com.beust:jcommander:1.78'
 
     osgiRuntime project('mucommander-core')
     osgiRuntime project('mucommander-command')
