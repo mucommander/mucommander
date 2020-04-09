@@ -73,8 +73,11 @@ public class CustomFileIconProvider implements FileIconProvider {
     /** Icon for not accessible files (used for quick-lists) **/
     public final static String NOT_ACCESSIBLE_FILE = "not_accessible.png";
 
-    /** Icon for bookmarks */
+    /** Icon for a bookmark */
     public final static String BOOKMARK_ICON_NAME = "bookmark.png";
+
+    /** Icon for bookmarks */
+    public final static String BOOKMARKS_ICON_NAME = "folder_bookmarks.png";
 
     /** File icon <-> extensions association map. For information about specific file extensions, refer to:
      * <ul>

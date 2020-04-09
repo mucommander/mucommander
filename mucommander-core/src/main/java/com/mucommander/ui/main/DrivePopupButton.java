@@ -225,7 +225,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         case BookmarkProtocolProvider.BOOKMARK:
         	String currentFolderName = currentFolder.getName();
         	setText(currentFolderName.isEmpty() ? Translator.get("bookmarks_menu") : currentFolderName);
-        	setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARK_ICON_NAME));
+        	setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARKS_ICON_NAME));
         	break;
 
         default:
