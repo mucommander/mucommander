@@ -45,6 +45,9 @@ public class LocationManager {
     /** Current location presented in the FolderPanel */
     private AbstractFile currentFolder;
 
+    /** Current folder's modification date */
+    private long currentFolderDate;
+
     /** Filters out unwanted files when listing folder contents */
 	private ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
 
@@ -72,7 +75,8 @@ public class LocationManager {
      * @param folder the {@link AbstractFile} that is going to be presented in the {@link FolderPanel}
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) {
-    	LOGGER.trace("calling ls()");
+        LOGGER.trace("calling ls()");
+        currentFolderDate = folder.getDate();
     	AbstractFile[] children;
     	try {
     	    children = folder.ls(configurableFolderFilter);
@@ -104,6 +108,19 @@ public class LocationManager {
      */
     public AbstractFile getCurrentFolder() {
     	return currentFolder;
+    }
+
+    /**
+     * Return the modification date of {@link LocationManager#currentFolder}
+     * as it appeared right before listing its children.
+     * Note that it may return the modification date prior to the lasts
+     * listing in case the file as been modified after calling {@link AbstractFile#getDate()}
+     * and before calling {@link AbstractFile#ls()}.
+     *
+     * @return the modification date of the currently presented folder.
+     */
+    public long getCurrentFolderDate() {
+        return currentFolderDate;
     }
 
     public FolderChangeMonitor getFolderChangeMonitor() {

@@ -61,9 +61,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     /** True when the current folder is currently being changed */
     private boolean folderChanging;
 
-    /** Current folder's date */
-    private long currentFolderDate;
-
     /** Number of milliseconds to wait before next folder check */
     private long waitBeforeCheckTime;
 	
@@ -136,9 +133,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Listen to folder changes to know when a folder is being / has been changed
         folderPanel.getLocationManager().addLocationListener(this);
 
-        AbstractFile currentFolder = folderPanel.getCurrentFolder();
-        this.currentFolderDate = currentFolder.getDate();
-
         // Folder contents is up-to-date let's wait before checking it for changes
         this.lastCheckTimestamp = System.currentTimeMillis();
         this.waitBeforeCheckTime = waitAfterRefresh;
@@ -204,12 +198,8 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     /**
      * Forces this monitor to update current folder information. This method should be called when a folder has been
      * manually refreshed, so that this monitor doesn't detect changes and try to refresh the table again.
-     *
-     * @param folder the new current folder
      */
-    private void updateFolderInfo(AbstractFile folder) {
-        this.currentFolderDate = folder.getDate();
-
+    private void updateFolderInfo() {
         // Reset time average
         totalCheckTime = 0;
         nbSamples = 0;
@@ -257,7 +247,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         totalCheckTime += System.currentTimeMillis()-timeStamp;
         nbSamples++;
 
-        if (date == currentFolderDate)
+        if (date == folderPanel.getLocationManager().getCurrentFolderDate())
             return false;
 
         LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
@@ -274,7 +264,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 
     public void locationChanged(LocationEvent locationEvent) {
         // Update new current folder info
-        updateFolderInfo(locationEvent.getFolderPanel().getCurrentFolder());
+        updateFolderInfo();
 
         folderChanging = false;
     }
