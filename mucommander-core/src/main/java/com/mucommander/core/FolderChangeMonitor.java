@@ -58,9 +58,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     /** Folder panel we are monitoring */
     private FolderPanel folderPanel;
 
-    /** Current file table's folder */
-    private AbstractFile currentFolder;
-
     /** True when the current folder is currently being changed */
     private boolean folderChanging;
 
@@ -139,7 +136,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Listen to folder changes to know when a folder is being / has been changed
         folderPanel.getLocationManager().addLocationListener(this);
 
-        this.currentFolder = folderPanel.getCurrentFolder();
+        AbstractFile currentFolder = folderPanel.getCurrentFolder();
         this.currentFolderDate = currentFolder.getDate();
 
         // Folder contents is up-to-date let's wait before checking it for changes
@@ -178,7 +175,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
                 // - MainFrame is in the foreground
                 // - current folder is not being changed
                 if (monitor.folderPanel.getMainFrame().isForegroundActive() && !monitor.folderChanging) {
-                    if (disableAutoRefreshFilter.match(monitor.currentFolder)) {
+                    if (disableAutoRefreshFilter.match(monitor.folderPanel.getCurrentFolder())) {
                         monitor.lastCheckTimestamp = System.currentTimeMillis();
                         monitor.waitBeforeCheckTime = checkPeriod;
                         continue;
@@ -211,8 +208,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * @param folder the new current folder
      */
     private void updateFolderInfo(AbstractFile folder) {
-        this.currentFolder = folder;
-        this.currentFolderDate = currentFolder.getDate();
+        this.currentFolderDate = folder.getDate();
 
         // Reset time average
         totalCheckTime = 0;
@@ -242,7 +238,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     }
 
     private boolean mayFolderChangeByFileJob() {
-        return JobsManager.getInstance().mayFolderChangeByExistingJob(currentFolder);
+        return JobsManager.getInstance().mayFolderChangeByExistingJob(folderPanel.getCurrentFolder());
     }
 
     /**
@@ -255,6 +251,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         long timeStamp = System.currentTimeMillis();
 
         // Check folder's date
+        AbstractFile currentFolder = folderPanel.getCurrentFolder();
         long date = currentFolder.getDate();
 
         totalCheckTime += System.currentTimeMillis()-timeStamp;
