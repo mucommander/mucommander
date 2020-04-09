@@ -334,7 +334,7 @@ public class BookmarkFile extends ProtocolFile {
     public OutputStream getOutputStream() throws IOException {return new BookmarkOutputStream();}
 
 
-// - Unused methods --------------------------------------------------------
+    // - Unused methods --------------------------------------------------------
     // -------------------------------------------------------------------------
     // The following methods are not used by BookmarkFile. They will throw an exception or
     // return an 'operation non supported' / default value.

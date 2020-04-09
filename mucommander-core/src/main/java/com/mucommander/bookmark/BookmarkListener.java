@@ -31,6 +31,6 @@ public interface BookmarkListener {
     /**
      * This method is invoked when a bookmark has been added, removed or modified.
      */
-    public void bookmarksChanged();
+    void bookmarksChanged();
 
 }
