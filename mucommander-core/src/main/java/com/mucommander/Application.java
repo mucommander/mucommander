@@ -17,9 +17,7 @@
 
 package com.mucommander;
 
-import java.awt.GraphicsEnvironment;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -27,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.auth.CredentialsManager;
-import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
@@ -35,7 +32,6 @@ import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.icon.impl.SwingFileIconProvider;
 import com.mucommander.commons.file.util.ResourceLoader;
-import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -491,9 +487,6 @@ public class Application {
 
         // Use CredentialsManager for file URL authentication
         FileFactory.setDefaultAuthenticator(CredentialsManager.getAuthenticator());
-
-        // Register the application-specific 'bookmark' protocol.
-        FileFactory.registerProtocol(BookmarkProtocolProvider.BOOKMARK, new com.mucommander.bookmark.file.BookmarkProtocolProvider());
     }
 
     /**

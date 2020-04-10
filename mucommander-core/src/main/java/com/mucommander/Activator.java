@@ -27,8 +27,13 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.bookmark.file.BookmarkProtocolProvider;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.DefaultSchemeHandler;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.SchemeHandler;
+import com.mucommander.commons.file.osgi.FileProtocolService;
+import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.os.api.CoreService;
 import com.mucommander.osgi.FileEditorServiceTracker;
 import com.mucommander.osgi.FileViewerServiceTracker;
@@ -60,6 +65,7 @@ public class Activator implements BundleActivator {
     private OperatingSystemServiceTracker osTracker;
 
     private ServiceRegistration<CoreService> coreRegistration;
+    private ServiceRegistration<FileProtocolService> bookmarksRegistration;
 
     /** Registered shutdown-hook */
     private ShutdownHook shutdownHook;
@@ -135,6 +141,10 @@ public class Activator implements BundleActivator {
         };
         coreRegistration = context.registerService(CoreService.class, service, null);
 
+        // Register the application-specific 'bookmark' protocol.
+        FileProtocolService bookmarksService = createBookmarkProtocolService();
+        bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
+
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
         Application.run(this);
@@ -149,6 +159,7 @@ public class Activator implements BundleActivator {
         editorsTracker.close();
         osTracker.close();
         coreRegistration.unregister();
+        bookmarksRegistration.unregister();
         // if the activator performs the shutdown tasks, no need for the shutdown-hook
         if (ShutdownHook.performShutdownTasks())
             Runtime.getRuntime().removeShutdownHook(shutdownHook);
@@ -221,5 +232,25 @@ public class Activator implements BundleActivator {
 
     public String credentials() {
         return context.getProperty("mucommander.credentials");
+    }
+
+    private FileProtocolService createBookmarkProtocolService() {
+        return new FileProtocolService() {
+
+            @Override
+            public SchemeHandler getSchemeHandler() {
+                return new DefaultSchemeHandler();
+            }
+
+            @Override
+            public String getSchema() {
+                return BookmarkProtocolProvider.BOOKMARK;
+            }
+
+            @Override
+            public ProtocolProvider getProtocolProvider() {
+                return new BookmarkProtocolProvider();
+            }
+        };
     }
 }
