@@ -33,6 +33,7 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.local.UNCFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;
 import com.mucommander.ui.autocomplete.TextFieldCompletion;
@@ -299,8 +300,12 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // Disable menu bar when this component has gained focus
         folderPanel.getMainFrame().getJMenuBar().setEnabled(false);
 
-        // (upon focus) have text selected, so as to save the user the need to manually do so
-        SwingUtilities.invokeLater(() -> selectAll());
+        String text = getText();
+        if (text.startsWith(String.format("%s://", SearchProtocolProvider.SEARCH)))
+            SwingUtilities.invokeLater(() -> setCaretPosition(text.length()));
+        else
+            // (upon focus) have text selected, so as to save the user the need to manually do so
+            SwingUtilities.invokeLater(() -> selectAll());
     }
 
     @Override
