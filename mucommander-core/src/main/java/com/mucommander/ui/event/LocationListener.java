@@ -37,7 +37,7 @@ public interface LocationListener {
      *
      * @param locationEvent describes the location change event
      */
-    public void locationChanging(LocationEvent locationEvent);
+    default void locationChanging(LocationEvent locationEvent) {}
 
 
     /**
@@ -45,7 +45,7 @@ public interface LocationListener {
      *
      * @param locationEvent describes the location change event
      */
-    public void locationChanged(LocationEvent locationEvent);
+    default void locationChanged(LocationEvent locationEvent) {}
 
 
     /**
@@ -53,7 +53,7 @@ public interface LocationListener {
      *
      * @param locationEvent describes the location change event
      */
-    public void locationCancelled(LocationEvent locationEvent);
+    default void locationCancelled(LocationEvent locationEvent) {}
 
 
     /**
@@ -62,6 +62,6 @@ public interface LocationListener {
      *
      * @param locationEvent describes the location change event
      */
-    public void locationFailed(LocationEvent locationEvent);
+    default void locationFailed(LocationEvent locationEvent) {}
 
 }

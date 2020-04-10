@@ -29,10 +29,9 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.conf.MuConfigurations;
 import com.mucommander.snapshot.MuSnapshot;
-import com.mucommander.ui.event.LocationAdapter;
 import com.mucommander.ui.event.LocationEvent;
+import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -45,7 +44,7 @@ import com.mucommander.ui.main.MainFrame;
  * 
  * @author Arik Hadas
  */
-public class GlobalLocationHistory extends LocationAdapter {
+public class GlobalLocationHistory implements LocationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalLocationHistory.class);
 	
 	/** Singleton instance */
