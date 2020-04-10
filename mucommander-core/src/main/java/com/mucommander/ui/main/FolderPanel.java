@@ -322,15 +322,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
 
     /**
-     * Allows the user to easily change the current folder and type a new one: requests focus 
-     * on the location field and selects the folder string.
-     */
-    public void changeCurrentLocation() {
-    	locationTextField.selectAll();
-    	locationTextField.requestFocus();
-    }
-	
-    /**
      * Returns the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it.
      *
      * @return the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it
