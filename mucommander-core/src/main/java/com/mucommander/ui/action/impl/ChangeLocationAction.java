@@ -53,7 +53,7 @@ public class ChangeLocationAction extends ActiveTabAction {
     
     @Override
     public void performAction() {
-        mainFrame.getActivePanel().changeCurrentLocation();
+        mainFrame.getActivePanel().getLocationTextField().requestFocus();
     }
 
 	@Override
