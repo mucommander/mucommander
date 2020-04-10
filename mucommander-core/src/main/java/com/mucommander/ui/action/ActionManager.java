@@ -154,6 +154,7 @@ public class ActionManager {
     	registerAction(new PopupLeftDriveButtonAction.Descriptor(),         new PopupLeftDriveButtonAction.Factory());
     	registerAction(new PopupRightDriveButtonAction.Descriptor(),        new PopupRightDriveButtonAction.Factory());
     	registerAction(new PreviousTabAction.Descriptor(),					new PreviousTabAction.Factory());
+        registerAction(new QuickFindAction.Descriptor(),                    new QuickFindAction.Factory());
     	registerAction(new QuitAction.Descriptor(),              			new QuitAction.Factory());
     	registerAction(new RecallNextWindowAction.Descriptor(),             new RecallNextWindowAction.Factory());
     	registerAction(new RecallPreviousWindowAction.Descriptor(),         new RecallPreviousWindowAction.Factory());
