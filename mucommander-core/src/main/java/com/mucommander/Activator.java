@@ -87,59 +87,8 @@ public class Activator implements BundleActivator {
         osTracker = new OperatingSystemServiceTracker(context);
         osTracker.open();
 
-        CoreService service = new CoreService() {
-
-            @Override
-            public void showAbout() {
-                MainFrame mainFrame = WindowManager.getCurrentMainFrame();
-
-                // Do nothing (return) when in 'no events mode'
-                if(mainFrame.getNoEventsMode())
-                    return;
-
-                new AboutDialog(mainFrame).showDialog();
-            }
-
-            @Override
-            public void showPreferences() {
-                MainFrame mainFrame = WindowManager.getCurrentMainFrame();
-
-                // Do nothing (return) when in 'no events mode'
-                if(mainFrame.getNoEventsMode())
-                    return;
-
-                ActionManager.performAction(com.mucommander.ui.action.impl.ShowPreferencesAction.Descriptor.ACTION_ID, mainFrame);
-            }
-
-            @Override
-            public boolean doQuit() {
-                // Ask the user for confirmation and abort if user refused to quit.
-                if(!QuitDialog.confirmQuit())
-                    return false;
-
-                // We got a green -> quit!
-                Application.initiateShutdown();
-
-                return true;
-            }
-
-            @Override
-            public void openFile(String path) {
-                // Wait until the application has been launched. This step is required to properly handle the case where the
-                // application is launched with a file to open, for instance when drag-n-dropping a file to the Dock icon
-                // when muCommander is not started yet. In this case, this method is called while Launcher is still busy
-                // launching the application (no mainframe exists yet).
-                Application.waitUntilLaunched();
-
-                AbstractFile file = FileFactory.getFile(path);
-                FolderPanel activePanel = WindowManager.getCurrentMainFrame().getActivePanel();
-                if (file.isBrowsable())
-                    activePanel.tryChangeCurrentFolder(file);
-                else
-                    activePanel.tryChangeCurrentFolder(file.getParent(), file, false);
-            }
-        };
-        coreRegistration = context.registerService(CoreService.class, service, null);
+        CoreService coreService = createCoreService();
+        coreRegistration = context.registerService(CoreService.class, coreService, null);
 
         // Register the application-specific 'bookmark' protocol.
         FileProtocolService bookmarksService = createBookmarkProtocolService();
@@ -232,6 +181,61 @@ public class Activator implements BundleActivator {
 
     public String credentials() {
         return context.getProperty("mucommander.credentials");
+    }
+
+    private CoreService createCoreService() {
+        return new CoreService() {
+
+            @Override
+            public void showAbout() {
+                MainFrame mainFrame = WindowManager.getCurrentMainFrame();
+
+                // Do nothing (return) when in 'no events mode'
+                if(mainFrame.getNoEventsMode())
+                    return;
+
+                new AboutDialog(mainFrame).showDialog();
+            }
+
+            @Override
+            public void showPreferences() {
+                MainFrame mainFrame = WindowManager.getCurrentMainFrame();
+
+                // Do nothing (return) when in 'no events mode'
+                if(mainFrame.getNoEventsMode())
+                    return;
+
+                ActionManager.performAction(com.mucommander.ui.action.impl.ShowPreferencesAction.Descriptor.ACTION_ID, mainFrame);
+            }
+
+            @Override
+            public boolean doQuit() {
+                // Ask the user for confirmation and abort if user refused to quit.
+                if(!QuitDialog.confirmQuit())
+                    return false;
+
+                // We got a green -> quit!
+                Application.initiateShutdown();
+
+                return true;
+            }
+
+            @Override
+            public void openFile(String path) {
+                // Wait until the application has been launched. This step is required to properly handle the case where the
+                // application is launched with a file to open, for instance when drag-n-dropping a file to the Dock icon
+                // when muCommander is not started yet. In this case, this method is called while Launcher is still busy
+                // launching the application (no mainframe exists yet).
+                Application.waitUntilLaunched();
+
+                AbstractFile file = FileFactory.getFile(path);
+                FolderPanel activePanel = WindowManager.getCurrentMainFrame().getActivePanel();
+                if (file.isBrowsable())
+                    activePanel.tryChangeCurrentFolder(file);
+                else
+                    activePanel.tryChangeCurrentFolder(file.getParent(), file, false);
+            }
+        };
     }
 
     private FileProtocolService createBookmarkProtocolService() {
