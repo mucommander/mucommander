@@ -81,6 +81,7 @@ dependencies {
 
     osgiRuntime project('mucommander-viewer-text')
     osgiRuntime project('mucommander-viewer-image')
+    osgiRuntime project('mucommander-viewer-pdf')
     osgiRuntime project('mucommander-viewer-binary')
 
     osgiRuntime project('mucommander-os-api')
