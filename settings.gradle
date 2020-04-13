@@ -41,6 +41,7 @@ include 'mucommander-protocol-smb'
 include 'mucommander-protocol-vsphere'
 include 'mucommander-viewer-text'
 include 'mucommander-viewer-image'
+include 'mucommander-viewer-pdf'
 include 'mucommander-viewer-binary'
 
 include 'apache-bzip2'

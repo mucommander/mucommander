@@ -266,6 +266,9 @@ public class muCommander
                         "sun.security.action," +
                         "com.apple.eawt," +
                         "com.apple.eio," +
+                        "com.sun.image.codec.jpeg," +
+                        "sun.awt.image," +
+                        "sun.awt.image.codec," +
                         "com.apple.laf"
         );
 

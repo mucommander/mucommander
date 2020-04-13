@@ -32,7 +32,7 @@ What's new since v0.9.4 ?
 -----------------------
 
 New features:
-- 
+- Added a PDF viewer.
 
 Improvements:
 - Copy file's (Spotlight) comment and user tags when copying local files on macOS.
@@ -115,6 +115,9 @@ muCommander uses the following great third party works :
 
 - the JCommander library released under the Apache License.
  JCommander can be found at http://jcommander.org .
+
+- the ICEpdf library released under the Apache License.
+ ICEpdf can be found at http://www.icesoft.com/icepdf .
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .
