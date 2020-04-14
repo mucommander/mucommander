@@ -347,7 +347,7 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
 }
 
 // Portable packaging
-task portable(dependsOn: [createExe, createBundlesDir], type: Tar) {
+task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     from ("$buildDir/launch4j") {
         include 'mucommander.exe'
     }
@@ -375,8 +375,6 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Tar) {
     }
 
     classifier = 'portable'
-    extension = 'tar.gz'
-    compression = Compression.GZIP
     version = project.version+'-'+project.ext.release
 }
 
