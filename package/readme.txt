@@ -38,6 +38,7 @@ Improvements:
 - Copy file's (Spotlight) comment and user tags when copying local files on macOS.
 - Exclude OSGi-cli from packaging, avoiding the creation of .osgiaas_cli_history file on shutdown.
 - Added a new icon for the virtual bookmarks file system (bookmark://).
+- Package the 'portable' version packaged as zip archive rather than "tarball".
 
 Localization:
 - 
