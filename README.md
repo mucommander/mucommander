@@ -3,7 +3,6 @@
 [![Version](http://img.shields.io/badge/version-0.9.5-blue.svg?style=flat)](https://github.com/mucommander/mucommander/releases)
 [![License](http://img.shields.io/badge/License-GPL-blue.svg)](http://www.gnu.org/copyleft/gpl.html)
 [![Build Status](https://travis-ci.org/mucommander/mucommander.svg)](https://travis-ci.org/mucommander/mucommander)
-[![Dependency Status](https://www.versioneye.com/user/projects/545fe410868332aa70000093/badge.svg?style=flat)](https://www.versioneye.com/user/projects/545fe410868332aa70000093)
 [![Coverity Scan](https://scan.coverity.com/projects/3642/badge.svg)](https://scan.coverity.com/projects/3642)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/mucommander/Lobby)
 
