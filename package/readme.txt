@@ -35,6 +35,7 @@ New features:
 - Added a PDF viewer.
 
 Improvements:
+- The 'Move to trash' operation does not require changes to privacy protection on macOS anymore.
 - Copy file's (Spotlight) comment and user tags when copying local files on macOS.
 - Exclude OSGi-cli from packaging, avoiding the creation of .osgiaas_cli_history file on shutdown.
 - Added a new icon for the virtual bookmarks file system (bookmark://).
