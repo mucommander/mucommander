@@ -24,6 +24,7 @@ dependencies {
     compile project(":mucommander-process")
     compile project(":mucommander-translator")
 
+    comprise 'net.java.dev.jna:jna-platform:5.5.0'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'com.googlecode.plist:dd-plist:1.23'
 
@@ -35,13 +36,27 @@ dependencies {
 }
 
 jar {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'com/sun/jna/aix*/**'
+        exclude 'com/sun/jna/freebsd*/**'
+        exclude 'com/sun/jna/linux*/**'
+        exclude 'com/sun/jna/openbsd*/**'
+        exclude 'com/sun/jna/sunos*/**'
+        exclude 'com/sun/jna/win*/**'
+        exclude 'META-INF/**'
+        exclude 'com/sun/jna/platform/linux/**'
+        exclude 'com/sun/jna/platform/unix/**'
+        exclude 'com/sun/jna/platform/win32/**'
+        exclude 'com/sun/jna/platform/wince/**'
+    } }
+
     bnd ('Bundle-Name': 'muCommander-os-macos',
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'macOS specifics',
          'Bundle-DocURL': 'https://www.mucommander.com',
          'Bundle-Activator': 'com.mucommander.desktop.macos.Activator',
          'Export-Package': 'com.mucommander.ui.process',
-         'Import-Package': '*',
+         'Import-Package': '!com.sun.jna.*,*',
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",
          'Specification-Version': version,
