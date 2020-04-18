@@ -44,8 +44,6 @@ import com.mucommander.cache.LRUCache;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.util.ui.border.MutableLineBorder;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -322,16 +320,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             new Thread("StatusBar.updateVolumeInfo") {
                 @Override
                 public void run() {
-                    // Free space on current volume, -1 if this information is not available 
-                    long volumeFree;
-                    // Total space on current volume, -1 if this information is not available 
-                    long volumeTotal;
-
-                    try { volumeFree = currentFolder.getFreeSpace(); }
-                    catch(IOException e) { volumeFree = -1; }
-
-                    try { volumeTotal = currentFolder.getTotalSpace(); }
-                    catch(IOException e) { volumeTotal = -1; }
+                    long volumeFree = getFreeSpace();
+                    long volumeTotal = getTotalSpace();
 
 // For testing the free space indicator 
 //volumeFree = (long)(volumeTotal * Math.random());
@@ -340,6 +330,22 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
                     LOGGER.debug("Adding to cache");
                     volumeInfoCache.add(volumePath, new Long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
+                }
+
+                /**
+                 * @return Free space on current volume, -1 if this information is not available
+                 */
+                private long getFreeSpace() {
+                    try { return currentFolder.getFreeSpace(); }
+                    catch(IOException e) { return -1; }
+                }
+
+                /**
+                 * @return Total space on current volume, -1 if this information is not available
+                 */
+                private long getTotalSpace() {
+                    try { return currentFolder.getTotalSpace(); }
+                    catch(IOException e) { return -1; }
                 }
             }.start();
         }
