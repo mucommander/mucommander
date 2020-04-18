@@ -65,7 +65,6 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
-import com.sun.jna.ptr.LongByReference;
 
 
 /**
@@ -229,180 +228,6 @@ public class LocalFile extends ProtocolFile {
         return FileFactory.getFile(userHomePath);
     }
 
-    /**
-     * Returns the total and free space on the volume where this file resides.
-     *
-     * <p>Using this method to retrieve both free space and volume space is more efficient than calling
-     * {@link #getFreeSpace()} and {@link #getTotalSpace()} separately -- the underlying method retrieving both
-     * attributes at the same time.</p>
-     *
-     * @return a {totalSpace, freeSpace} long array, both values can be null if the information could not be retrieved
-     * @throws IOException if an I/O error occurred
-     */
-    public long[] getVolumeInfo() throws IOException {
-        // Under Java 1.6 and up, use the (new) java.io.File methods
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
-            return new long[] {
-                getTotalSpace(),
-                getFreeSpace()
-            };
-        }
-
-        // Under Java 1.5 or lower, use native methods
-        return getNativeVolumeInfo();
-    }
-
-    /**
-     * Uses platform dependent functions to retrieve the total and free space on the volume where this file resides.
-     *
-     * @return a {totalSpace, freeSpace} long array, both values can be <code>null</code> if the information could not
-     * be retrieved.
-     * @throws IOException if an I/O error occurred
-     */
-    protected long[] getNativeVolumeInfo() throws IOException {
-        BufferedReader br = null;
-        String absPath = getAbsolutePath();
-        long dfInfo[] = new long[]{-1, -1};
-
-        try {
-            // OS is Windows
-            if(IS_WINDOWS) {
-                // Use the Kernel32 DLL if it is available
-                if(Kernel32.isAvailable()) {
-                    // Retrieves the total and free space information using the GetDiskFreeSpaceEx function of the
-                    // Kernel32 API.
-                    LongByReference totalSpaceLBR = new LongByReference();
-                    LongByReference freeSpaceLBR = new LongByReference();
-
-                    if(Kernel32.getInstance().GetDiskFreeSpaceEx(absPath, null, totalSpaceLBR, freeSpaceLBR)) {
-                        dfInfo[0] = totalSpaceLBR.getValue();
-                        dfInfo[1] = freeSpaceLBR.getValue();
-                    }
-                    else {
-                        LOGGER.warn("Call to GetDiskFreeSpaceEx failed, absPath={}", absPath);
-                    }
-                }
-                // Otherwise, parse the output of 'dir "filePath"' command to retrieve free space information, if
-                // running Window NT or higher.
-                // Note: no command invocation under Windows 95/98/Me, because it causes a shell window to
-                // appear briefly every time this method is called (See ticket #63).
-                else if(OsVersion.WINDOWS_NT.isCurrentOrHigher()) {
-                    // 'dir' command returns free space on the last line
-                    Process process = Runtime.getRuntime().exec(
-                            (OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT)>=0 ? "cmd /c" : "command.com /c")
-                            + " dir \""+absPath+"\"");
-
-                    // Check that the process was correctly started
-                    if(process!=null) {
-                        br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        String line;
-                        String lastLine = null;
-                        // Retrieves last line of dir
-                        while((line=br.readLine())!=null) {
-                            if(!line.trim().equals(""))
-                                lastLine = line;
-                        }
-
-                        // Last dir line may look like something this (might vary depending on system's language, below in French):
-                        // 6 Rep(s)  14 767 521 792 octets libres
-                        if(lastLine!=null) {
-                            StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
-                            // Discard first token
-                            st.nextToken();
-
-                            // Concatenates as many contiguous groups of numbers
-                            String token;
-                            String freeSpace = "";
-                            while(st.hasMoreTokens()) {
-                                token = st.nextToken();
-                                char c = token.charAt(0);
-                                if(c>='0' && c<='9')
-                                    freeSpace += token;
-                                else if(!freeSpace.equals(""))
-                                    break;
-                            }
-
-                            dfInfo[1] = Long.parseLong(freeSpace);
-                        }
-                    }
-                }
-            }
-            else if(OsFamily.getCurrent().isUnixBased()) {
-                // Parses the output of 'df -P -k "filePath"' command on UNIX-based systems to retrieve free and total space information
-
-                // 'df -P -k' returns totals in block of 1K = 1024 bytes, -P uses the POSIX output format, ensures that line won't break
-                Process process = Runtime.getRuntime().exec(new String[]{"df", "-P", "-k", absPath}, null, file);
-
-                // Check that the process was correctly started
-                if(process!=null) {
-                    br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    // Discard the first line ("Filesystem   1K-blocks     Used    Avail Capacity  Mounted on");
-                    br.readLine();
-                    String line = br.readLine();
-
-                    // Sample lines:
-                    // /dev/disk0s2            116538416 109846712  6179704    95%    /
-                    // automount -fstab [202]          0         0        0   100%    /automount/Servers
-                    // /dev/disk2s2                 2520      1548      972    61%    /Volumes/muCommander 0.8
-
-                    // We're interested in the '1K-blocks' and 'Avail' fields (only).
-                    // The 'Filesystem' and 'Mounted On' fields can contain spaces (e.g. 'automount -fstab [202]' and
-                    // '/Volumes/muCommander 0.8' resp.) and therefore be made of several tokens. A stable way to
-                    // determine the position of the fields we're interested in is to look for the last token that
-                    // starts with a '/' character which should necessarily correspond to the first token of the
-                    // 'Mounted on' field. The '1K-blocks' and 'Avail' fields are 4 and 2 tokens away from it
-                    // respectively.
-
-                    // Start by tokenizing the whole line
-                    Vector<String> tokenV = new Vector<String>();
-                    if(line!=null) {
-                        StringTokenizer st = new StringTokenizer(line);
-                        while(st.hasMoreTokens())
-                            tokenV.add(st.nextToken());
-                    }
-
-                    int nbTokens = tokenV.size();
-                    if(nbTokens<6) {
-                        // This shouldn't normally happen
-                        LOGGER.warn("Failed to parse output of df -k {} line={}", absPath, line);
-                        return dfInfo;
-                    }
-
-                    // Find the last token starting with '/'
-                    int pos = nbTokens-1;
-                    while(!tokenV.elementAt(pos).startsWith("/")) {
-                        if(pos==0) {
-                            // This shouldn't normally happen
-                            LOGGER.warn("Failed to parse output of df -k {} line={}", absPath, line);
-                            return dfInfo;
-                        }
-
-                        --pos;
-                    }
-
-                    // '1-blocks' field (total space)
-                    dfInfo[0] = Long.parseLong(tokenV.elementAt(pos-4)) * 1024;
-                    // 'Avail' field (free space)
-                    dfInfo[1] = Long.parseLong(tokenV.elementAt(pos-2)) * 1024;
-                }
-
-//                // Retrieves the total and free space information using the POSIX statvfs function
-//                POSIX.STATVFSSTRUCT struct = new POSIX.STATVFSSTRUCT();
-//                if(POSIX.INSTANCE.statvfs(absPath, struct)==0) {
-//                    dfInfo[0] = struct.f_blocks * (long)struct.f_frsize;
-//                    dfInfo[1] = struct.f_bfree * (long)struct.f_frsize;
-//                }
-            }
-        }
-        finally {
-            if(br!=null)
-                try { br.close(); } catch(IOException e) {}
-        }
-
-        return dfInfo;
-    }
-
-	
     /**
      * Attemps to detect if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...).
      * This method produces accurate results only under Windows.
@@ -908,18 +733,12 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public long getFreeSpace() throws IOException {
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
-            return file.getUsableSpace();
-
-        return getVolumeInfo()[1];
+        return file.getUsableSpace();
     }
 	
     @Override
     public long getTotalSpace() throws IOException {
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
-            return file.getTotalSpace();
-
-        return getVolumeInfo()[0];
+        return file.getTotalSpace();
     }	
 
     // Unsupported file operations

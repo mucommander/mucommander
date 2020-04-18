@@ -1,17 +1,14 @@
 package com.mucommander.commons.file.protocol.local;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.Collections;
-import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +38,6 @@ import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsVersion;
-import com.sun.jna.ptr.LongByReference;
 
 /**
  * TODO: update this documentation and LocalFile documentation
@@ -395,18 +391,12 @@ public class UNCFile extends ProtocolFile {
 
     @Override
     public long getFreeSpace() throws IOException {
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
-            return file.getUsableSpace();
-
-        return getVolumeInfo()[1];
+        return file.getUsableSpace();
     }
 	
     @Override
     public long getTotalSpace() throws IOException {
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
-            return file.getTotalSpace();
-
-        return getVolumeInfo()[0];
+        return file.getTotalSpace();
     }	
 
     // Unsupported file operations
@@ -570,111 +560,6 @@ public class UNCFile extends ProtocolFile {
 
         // If no volume matched this file (shouldn't normally happen), return the root folder
         return getRoot();
-    }
-
-    
-    /**
-     * Returns the total and free space on the volume where this file resides.
-     *
-     * <p>Using this method to retrieve both free space and volume space is more efficient than calling
-     * {@link #getFreeSpace()} and {@link #getTotalSpace()} separately -- the underlying method retrieving both
-     * attributes at the same time.</p>
-     *
-     * @return a {totalSpace, freeSpace} long array, both values can be null if the information could not be retrieved
-     * @throws IOException if an I/O error occurred
-     */
-    public long[] getVolumeInfo() throws IOException {
-        // Under Java 1.6 and up, use the (new) java.io.File methods
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
-            return new long[] {
-                getTotalSpace(),
-                getFreeSpace()
-            };
-        }
-
-        // Under Java 1.5 or lower, use native methods
-        return getNativeVolumeInfo();
-    }
-
-    /**
-     * Uses platform dependent functions to retrieve the total and free space on the volume where this file resides.
-     *
-     * @return a {totalSpace, freeSpace} long array, both values can be <code>null</code> if the information could not
-     * be retrieved.
-     * @throws IOException if an I/O error occurred
-     */
-    protected long[] getNativeVolumeInfo() throws IOException {
-        BufferedReader br = null;
-        String absPath = getAbsolutePath();
-        long dfInfo[] = new long[]{-1, -1};
-
-        try {
-                // Use the Kernel32 DLL if it is available
-                if(Kernel32.isAvailable()) {
-                    // Retrieves the total and free space information using the GetDiskFreeSpaceEx function of the
-                    // Kernel32 API.
-                    LongByReference totalSpaceLBR = new LongByReference();
-                    LongByReference freeSpaceLBR = new LongByReference();
-
-                    if(Kernel32.getInstance().GetDiskFreeSpaceEx(absPath, null, totalSpaceLBR, freeSpaceLBR)) {
-                        dfInfo[0] = totalSpaceLBR.getValue();
-                        dfInfo[1] = freeSpaceLBR.getValue();
-                    }
-                    else {
-                        LOGGER.warn("Call to GetDiskFreeSpaceEx failed, absPath={}", absPath);
-                    }
-                }
-                // Otherwise, parse the output of 'dir "filePath"' command to retrieve free space information, if
-                // running Window NT or higher.
-                // Note: no command invocation under Windows 95/98/Me, because it causes a shell window to
-                // appear briefly every time this method is called (See ticket #63).
-                else if(OsVersion.WINDOWS_NT.isCurrentOrHigher()) {
-                    // 'dir' command returns free space on the last line
-                    Process process = Runtime.getRuntime().exec(
-                            (OsVersion.getCurrent().compareTo(OsVersion.WINDOWS_NT)>=0 ? "cmd /c" : "command.com /c")
-                            + " dir \""+absPath+"\"");
-
-                    // Check that the process was correctly started
-                    if(process!=null) {
-                        br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        String line;
-                        String lastLine = null;
-                        // Retrieves last line of dir
-                        while((line=br.readLine())!=null) {
-                            if(!line.trim().equals(""))
-                                lastLine = line;
-                        }
-
-                        // Last dir line may look like something this (might vary depending on system's language, below in French):
-                        // 6 Rep(s)  14 767 521 792 octets libres
-                        if(lastLine!=null) {
-                            StringTokenizer st = new StringTokenizer(lastLine, " \t\n\r\f,.");
-                            // Discard first token
-                            st.nextToken();
-
-                            // Concatenates as many contiguous groups of numbers
-                            String token;
-                            String freeSpace = "";
-                            while(st.hasMoreTokens()) {
-                                token = st.nextToken();
-                                char c = token.charAt(0);
-                                if(c>='0' && c<='9')
-                                    freeSpace += token;
-                                else if(!freeSpace.equals(""))
-                                    break;
-                            }
-
-                            dfInfo[1] = Long.parseLong(freeSpace);
-                        }
-                    }
-                }
-        }
-        finally {
-            if(br!=null)
-                try { br.close(); } catch(IOException e) {}
-        }
-
-        return dfInfo;
     }
 
     ///////////////////

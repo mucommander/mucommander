@@ -124,22 +124,6 @@ public class LocalFileTest extends AbstractFileTest {
     }
 
     /**
-     * Asserts that {@link com.mucommander.commons.file.protocol.local.LocalFile#getVolumeInfo()} returns the same values as
-     * {@link com.mucommander.commons.file.protocol.local.LocalFile#getTotalSpace()}
-     * and {@link com.mucommander.commons.file.protocol.local.LocalFile#getFreeSpace()}.
-     *
-     * @throws IOException should not happen
-     */
-    @Test
-    public void testVolumeInfo() throws IOException {
-        long volumeInfo[] = ((LocalFile)tempFile).getVolumeInfo();
-
-        assert volumeInfo != null;
-        assert volumeInfo[0] == tempFile.getTotalSpace();
-        assert volumeInfo[1] == tempFile.getFreeSpace();
-    }
-
-    /**
      * Tests the volumes returned by {@link LocalFile#getVolumes()} by calling {@link #testVolume(AbstractFile)} for
      * each of them.
      *
