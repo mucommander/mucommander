@@ -99,10 +99,4 @@ The creation of a TGZ file for Linux/Unix (produced in build/distributions):
 
 More packaging options are described in [our wiki](https://github.com/mucommander/mucommander/wiki/Packaging).
 
-## License
-
-
-muCommander is released under the terms of the GNU General Public License.  
-Please refer to the [license.txt file](https://github.com/mucommander/mucommander/blob/master/package/license.txt) bundled with muCommander.
-
 
