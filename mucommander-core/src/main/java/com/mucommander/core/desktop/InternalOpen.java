@@ -17,12 +17,12 @@
 
 package com.mucommander.core.desktop;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.desktop.LocalFileOperation;
-
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.desktop.LocalFileOperation;
 
 /**
  * @author Nicolas Rinaudo
