@@ -17,7 +17,7 @@
 
 package com.mucommander.core.desktop;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
