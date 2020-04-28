@@ -33,6 +33,7 @@ import javax.swing.event.DocumentListener;
 
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.spinner.IntEditor;
 
 
 /**
@@ -70,16 +71,10 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(value, minValue, maxValue, step));
 
         // Left-aligns the text within the text field, and use a simple decimal format with no thousand separator
-        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "#####");
-        editor.getTextField().setHorizontalAlignment(JTextField.LEADING);
-        spinner.setEditor(editor);
+        spinner.setEditor(new IntEditor(spinner, "#####"));
 
         // Any changes made to the spinner will update the URL label
-        spinner.addChangeListener(new ChangeListener(){
-            public void stateChanged(ChangeEvent e) {
-                listener.updateURLLabel();
-            }
-        });
+        spinner.addChangeListener(e -> listener.updateURLLabel());
 
         return spinner;
     }
