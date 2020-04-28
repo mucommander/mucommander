@@ -26,10 +26,10 @@ public interface ShellHistoryListener {
      * Notifies the listener that a new element has been added to the history.
      * @param command command that was added to the history.
      */
-    public void historyChanged(String command);
+    void historyChanged(String command);
 
     /**
      * Notifies the listeners that the history has been cleared.
      */
-    public void historyCleared();
+    void historyCleared();
 }
