@@ -32,7 +32,7 @@ class InternalBrowse extends UrlOperation {
     // -----------------------------------------------------------------------
     /** Underlying desktop instance. */
     private Desktop desktop;
-    private boolean initialized = false;
+    private boolean initialized;
 
 
 

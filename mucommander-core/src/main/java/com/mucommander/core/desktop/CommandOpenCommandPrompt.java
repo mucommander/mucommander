@@ -15,11 +15,11 @@ class CommandOpenCommandPrompt extends LocalFileOperation {
 
     @Override
     public void execute(AbstractFile file) throws IOException {
-        Command command;
-        if ((command = CommandManager.getCommandForAlias(CommandManager.CMD_OPENER_ALIAS)) == null)
+        Command command = CommandManager.getCommandForAlias(CommandManager.CMD_OPENER_ALIAS);
+        if (command == null)
             throw new UnsupportedOperationException();
 
-        if(!file.isDirectory()) {
+        if (!file.isDirectory()) {
             file = file.getParent();
         }
         ProcessRunner.execute(command.getTokens(file), file);
@@ -27,10 +27,7 @@ class CommandOpenCommandPrompt extends LocalFileOperation {
 
     @Override
     public String getName() {
-        Command command;
-
-        if ((command = CommandManager.getCommandForAlias(CommandManager.CMD_OPENER_ALIAS)) != null)
-            return command.getDisplayName();
-        return null;
+        Command command = CommandManager.getCommandForAlias(CommandManager.CMD_OPENER_ALIAS);
+        return command != null ? command.getDisplayName() : null;
     }
 }

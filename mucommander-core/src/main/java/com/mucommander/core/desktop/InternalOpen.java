@@ -32,7 +32,7 @@ class InternalOpen extends LocalFileOperation {
     // -----------------------------------------------------------------------
     /** Underlying desktop instance. */
     private Desktop desktop;
-    private boolean initialized = false;
+    private boolean initialized;
 
 
 
