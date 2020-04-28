@@ -34,17 +34,17 @@ class CommandBrowse extends UrlOperation {
     // - Desktop operation implementation --------------------------------
     // -------------------------------------------------------------------
     @Override
-    public boolean isAvailable() {return CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS) != null;}
+    public boolean isAvailable() {
+        return CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS) != null;
+    }
 
     @Override
     public void execute(URL url) throws IOException {
-        Command      command;
-        AbstractFile target;
-
-        if((command = CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS)) == null)
+        Command command = CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS);
+        if (command == null)
             throw new UnsupportedOperationException();
 
-        target = FileFactory.getFile(url.toString());
+        AbstractFile target = FileFactory.getFile(url.toString());
         ProcessRunner.execute(command.getTokens(target), target);
     }
 
