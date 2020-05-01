@@ -284,7 +284,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             filesInfo = Translator.get("status_bar.selected_files", ""+nbSelectedFiles, ""+fileCount);
 			
             if(nbMarkedFiles>0)
-                filesInfo += " - "+ SizeFormat.format(markedTotalSize, selectedFileSizeFormat);
+                filesInfo += " - " + SizeFormat.format(markedTotalSize, selectedFileSizeFormat);
 	
             if(selectedFile!=null)
                 filesInfo += " - "+selectedFile.getName();

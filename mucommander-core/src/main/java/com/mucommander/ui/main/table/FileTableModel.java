@@ -324,12 +324,11 @@ public class FileTableModel extends AbstractTableModel {
     public synchronized AbstractFile getFileAtRow(int rowIndex) {
         AbstractFile file = getCachedFileAtRow(rowIndex);
 	
-        if(file==null)
+        if (file==null)
             return null;
-        else if(file instanceof CachedFile)
+        if (file instanceof CachedFile)
             return ((CachedFile)file).getProxiedFile();
-        else
-            return file;
+        return file;
     }
 	
     /**
