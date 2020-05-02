@@ -18,6 +18,7 @@
 package com.mucommander.ui.main.table;
 
 import java.util.Date;
+import java.util.function.Function;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -26,9 +27,11 @@ import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 
@@ -253,12 +256,13 @@ public class FileTableModel extends AbstractTableModel {
             cellValuesCache[0][Column.OWNER.ordinal()-1] = "";
             cellValuesCache[0][Column.GROUP.ordinal()-1] = "";
         }
-		
+
+        Function<AbstractFile, String> nameFunc = getNameFunc();
         int fileIndex = 0;
         for(int i=parent==null?0:1; i<len; i++) {
             AbstractFile file = getCachedFileAtRow(i);
             int cellIndex = fileArrayIndex[fileIndex]+(parent==null?0:1);
-            cellValuesCache[cellIndex][Column.NAME.ordinal()-1] = file.getName();
+            cellValuesCache[cellIndex][Column.NAME.ordinal()-1] = nameFunc.apply(file);
             cellValuesCache[cellIndex][Column.SIZE.ordinal()-1] = file.isDirectory()?DIRECTORY_SIZE_STRING:SizeFormat.format(file.getSize(), sizeFormat);
             cellValuesCache[cellIndex][Column.DATE.ordinal()-1] = CustomDateFormat.format(new Date(file.getDate()));
             cellValuesCache[cellIndex][Column.PERMISSIONS.ordinal()-1] = file.getPermissionsString();
@@ -268,8 +272,23 @@ public class FileTableModel extends AbstractTableModel {
             fileIndex++;
         }
     }
-	
-	
+
+    private Function<AbstractFile, String> getNameFunc() {
+        switch (currentFolder.getURL().getScheme()) {
+        case SearchProtocolProvider.SEARCH:
+            String base = currentFolder.getURL().getHost();
+            int beginIndex = base.length() + 1; // + path separator
+            return file -> {
+                String path = file.getAbsolutePath().substring(beginIndex);
+                if (file.isDirectory())
+                    path = PathUtils.removeTrailingSeparator(path);
+                return path;
+            };
+        default:
+            return AbstractFile::getName;
+        }
+    }
+
     /**
      * Returns a CachedFile instance of the file located at the given row index.
      * This method can return the parent folder file ('..') if a parent exists and rowIndex is 0.
