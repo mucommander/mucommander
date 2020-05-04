@@ -1,3 +1,4 @@
 #! /bin/sh
 ln -s /usr/share/mucommander/mucommander.sh /usr/bin/mucommander
+mkdir -p /usr/share/mucommander/felix-cache
 chmod 777 /usr/share/mucommander/felix-cache
