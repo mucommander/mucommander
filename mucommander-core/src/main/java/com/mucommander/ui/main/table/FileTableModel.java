@@ -27,7 +27,6 @@ import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -273,7 +272,7 @@ public class FileTableModel extends AbstractTableModel {
         }
     }
 
-    private Function<AbstractFile, String> getNameFunc() {
+    public Function<AbstractFile, String> getNameFunc() {
         switch (currentFolder.getURL().getScheme()) {
         case SearchProtocolProvider.SEARCH:
             String base = currentFolder.getURL().getHost();
@@ -606,8 +605,11 @@ public class FileTableModel extends AbstractTableModel {
     // Sort methods //
     //////////////////
 
-    private static FileComparator getFileComparator(SortInfo sortInfo) {
-        return new FileComparator(sortInfo.getCriterion().getFileComparatorCriterion(), sortInfo.getAscendingOrder(), sortInfo.getFoldersFirst());
+    private FileComparator getFileComparator(SortInfo sortInfo) {
+        return new FileComparator(sortInfo.getCriterion().getFileComparatorCriterion(),
+                sortInfo.getAscendingOrder(),
+                sortInfo.getFoldersFirst(),
+                getNameFunc());
     }
 
 
