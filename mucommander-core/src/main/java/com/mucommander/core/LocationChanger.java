@@ -40,6 +40,8 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.search.file.SearchFile;
+import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -840,6 +842,11 @@ public class LocationChanger {
 						folderPanel.setProgressValue(75);
 
 						LOGGER.trace("calling setCurrentFolder");
+
+						if (SearchProtocolProvider.SEARCH.equals(folderURL.getScheme())) {
+						    SearchFile searchFile = (SearchFile) folder;
+						    searchFile.startSearch();
+						}
 
 						// Change the file table's current folder and select the specified file (if any)
 						setCurrentFolder(folder, fileToSelect, changeLockedTab);

@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.search.file.SearchFile;
+import com.mucommander.search.file.SearchListener;
 
 /**
  * This job executes a file search.
@@ -42,7 +42,7 @@ public class SearchJob {
     private Predicate<AbstractFile> fileMatcher;
     private Predicate<AbstractFile> lsFilter;
     private List<AbstractFile> findings;
-    private SearchFile searchFile;
+    private SearchListener listener;
     private int depth;
 
     SearchJob() {
@@ -101,7 +101,7 @@ public class SearchJob {
                 .collect(Collectors.toList());
         if (!passed.isEmpty()) {
             findings.addAll(passed);
-            searchFile.searchChanged();
+            listener.searchChanged();
         }
     }
 
@@ -109,7 +109,7 @@ public class SearchJob {
         return findings;
     }
 
-    public void setSearchFile(SearchFile searchFile) {
-        this.searchFile = searchFile;
+    public void setListener(SearchListener listener) {
+        this.listener = listener;
     }
 }

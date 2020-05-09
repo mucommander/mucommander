@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.search.file.SearchListener;
 
 /**
  * Builder of SearchJobs
@@ -40,6 +41,7 @@ public class SearchBuilder {
 
     private AbstractFile entrypoint;
     private String searchStr;
+    private SearchListener listener;
     private boolean matchCaseInsensitive;
     private boolean matchRegex;
     private boolean searchArchives;
@@ -54,6 +56,11 @@ public class SearchBuilder {
 
     public static SearchBuilder newSearch() {
         return new SearchBuilder();
+    }
+
+    public SearchBuilder listener(SearchListener listener) {
+        this.listener = listener;
+        return this;
     }
 
     public SearchBuilder what(String searchStr) {
@@ -124,6 +131,7 @@ public class SearchBuilder {
 
     public SearchJob build() {
         SearchJob job = new SearchJob();
+        job.setListener(listener);
         job.setEntrypoint(entrypoint);
         job.setDepth(searchDepth);
         

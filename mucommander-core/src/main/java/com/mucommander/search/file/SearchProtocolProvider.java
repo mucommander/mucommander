@@ -28,8 +28,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
-import com.mucommander.search.SearchBuilder;
-import com.mucommander.search.SearchJob;
 
 /**
  * @author Arik Hadas
@@ -42,24 +40,8 @@ public class SearchProtocolProvider implements ProtocolProvider {
 
     @Override
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
-        SearchFile file = new SearchFile(url);
-        String host = url.getHost();
-        String path = url.getPath().substring(1);
         Map<String, String> properties = parseSearchProperties(url.getQuery());
-        SearchJob job = SearchBuilder.newSearch()
-                .what(path)
-                .where(host)
-                .searchArchives(properties)
-                .searchHidden(properties)
-                .searchSubfolders(properties)
-                .searchDepth(properties)
-                .matchCaseInsensitive(properties)
-                .matchRegex(properties)
-                .build();
-        job.setSearchFile(file);
-        file.setSearchJob(job);
-        new Thread(() -> job.search()).start();
-        return file;
+        return new SearchFile(url, properties);
     }
 
     private Map<String, String> parseSearchProperties(String str) {
