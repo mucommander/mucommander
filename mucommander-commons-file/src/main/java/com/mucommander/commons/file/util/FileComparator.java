@@ -21,6 +21,7 @@ package com.mucommander.commons.file.util;
 import com.mucommander.commons.file.AbstractFile;
 
 import java.util.Comparator;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,6 +72,8 @@ public class FileComparator implements Comparator<AbstractFile> {
     /** Matches filenames that contain a number, like "01 - Do the Joy.mp3" */
     private final static Pattern FILENAME_WITH_NUMBER_PATTERN = Pattern.compile("\\d+");
 
+    /** Returns the content within the name column of a given file */
+    private Function<AbstractFile, String> nameFunc;
 
     /**
      * Creates a new FileComparator using the specified comparison criterion, order (ascending or descending) and
@@ -80,10 +83,11 @@ public class FileComparator implements Comparator<AbstractFile> {
      * @param ascending if true, ascending order will be used, descending order otherwise
      * @param directoriesFirst specifies whether directories should precede files or be handled as regular files
      */
-    public FileComparator(int criterion, boolean ascending, boolean directoriesFirst) {
+    public FileComparator(int criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc) {
         this.criterion = criterion;
         this.ascending = ascending;
         this.directoriesFirst = directoriesFirst;
+        this.nameFunc = nameFunc;
     }
 
 
@@ -266,7 +270,9 @@ public class FileComparator implements Comparator<AbstractFile> {
             diff = compareStrings(f1.getGroup(), f2.getGroup(), true, true);
         }
         else {      // criterion == NAME_CRITERION
-            diff = compareStrings(f1.getName(), f2.getName(), true, false);
+            String f1Name = nameFunc.apply(f1);
+            String f2Name = nameFunc.apply(f2);
+            diff = compareStrings(f1Name, f2Name, true, false);
 
             if(diff==0) {
                 // This should never happen unless the current filesystem allows a directory to have
@@ -274,12 +280,12 @@ public class FileComparator implements Comparator<AbstractFile> {
                 // AFAIK, no OS/filesystem allows this, but just to be safe.
 
                 // Case-sensitive name comparison
-                diff = compareStrings(f1.getName(), f2.getName(), false, false);
+                diff = compareStrings(f1Name, f2Name, false, false);
             }
         }
 
         if(criterion!=NAME_CRITERION && diff==0)	// If both files have the same criterion's value, compare names
-            diff = compareStrings(f1.getName(), f2.getName(), true, false);
+            diff = compareStrings(nameFunc.apply(f1), nameFunc.apply(f2), true, false);
 
         // Cast long value to int, without overflowing the int if the long value exceeds the min or max int value
         int intValue;

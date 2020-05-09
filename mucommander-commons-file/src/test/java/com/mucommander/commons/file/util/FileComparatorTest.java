@@ -55,7 +55,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareNameDir() {
-        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, true, true));
+        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, true, true, AbstractFile::getName));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert A.equals(files[2]);
@@ -64,7 +64,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareNameDirDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, false, true));
+        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, false, true, AbstractFile::getName));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -73,7 +73,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareName() {
-        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, true, false));
+        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, true, false, AbstractFile::getName));
         assert A.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -82,7 +82,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareNameDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, false, false));
+        Arrays.sort(files, new FileComparator(FileComparator.NAME_CRITERION, false, false, AbstractFile::getName));
         assert D.equals(files[0]);
         assert C.equals(files[1]);
         assert B.equals(files[2]);
@@ -91,7 +91,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSizeDir() {
-        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, true, true));
+        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, true, true, AbstractFile::getName));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert C.equals(files[2]);
@@ -100,7 +100,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSize() {
-        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, true, false));
+        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, true, false, AbstractFile::getName));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert C.equals(files[2]);
@@ -109,7 +109,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSizeDirDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, false, true));
+        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, false, true, AbstractFile::getName));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert A.equals(files[2]);
@@ -118,7 +118,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSizeDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, false, false));
+        Arrays.sort(files, new FileComparator(FileComparator.SIZE_CRITERION, false, false, AbstractFile::getName));
         assert A.equals(files[0]);
         assert C.equals(files[1]);
         assert D.equals(files[2]);
@@ -127,7 +127,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDateDir() {
-        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, true, true));
+        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, true, true, AbstractFile::getName));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert A.equals(files[2]);
@@ -136,7 +136,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDate() {
-        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, true, false));
+        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, true, false, AbstractFile::getName));
         assert A.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -145,7 +145,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDateDirDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, false, true));
+        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, false, true, AbstractFile::getName));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -154,7 +154,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDateDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, false, false));
+        Arrays.sort(files, new FileComparator(FileComparator.DATE_CRITERION, false, false, AbstractFile::getName));
         assert D.equals(files[0]);
         assert C.equals(files[1]);
         assert B.equals(files[2]);
@@ -163,7 +163,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExtDir() {
-        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, true, true));
+        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, true, true, AbstractFile::getName));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert A.equals(files[2]);
@@ -172,7 +172,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExt() {
-        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, true, false));
+        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, true, false, AbstractFile::getName));
         assert A.equals(files[0]);
         assert B.equals(files[1]);
         assert D.equals(files[2]);
@@ -181,7 +181,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExtDirDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, false, true));
+        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, false, true, AbstractFile::getName));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -190,7 +190,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExtDesc() {
-        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, false, false));
+        Arrays.sort(files, new FileComparator(FileComparator.EXTENSION_CRITERION, false, false, AbstractFile::getName));
         assert C.equals(files[0]);
         assert D.equals(files[1]);
         assert B.equals(files[2]);

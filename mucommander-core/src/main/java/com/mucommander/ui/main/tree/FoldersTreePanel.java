@@ -109,7 +109,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             new ConfigurableFolderFilter()
         );
 
-        FileComparator sort = new FileComparator(FileComparator.NAME_CRITERION, true, true);
+        FileComparator sort = new FileComparator(FileComparator.NAME_CRITERION, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc());
         model = new FilesTreeModel(treeFileFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
