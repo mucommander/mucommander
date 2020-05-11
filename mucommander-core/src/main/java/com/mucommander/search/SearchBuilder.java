@@ -24,7 +24,9 @@ import java.util.regex.Pattern;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.search.file.SearchListener;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * Builder of SearchJobs
@@ -48,6 +50,7 @@ public class SearchBuilder {
     private boolean searchHidden;
     private boolean searchSubfolders;
     private int searchDepth;
+    private MainFrame mainFrame;
 
     private SearchBuilder() {
         searchSubfolders = true;
@@ -56,6 +59,11 @@ public class SearchBuilder {
 
     public static SearchBuilder newSearch() {
         return new SearchBuilder();
+    }
+
+    public SearchBuilder mainFrame(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        return this;
     }
 
     public SearchBuilder listener(SearchListener listener) {
@@ -130,9 +138,8 @@ public class SearchBuilder {
     }
 
     public SearchJob build() {
-        SearchJob job = new SearchJob();
+        SearchJob job = new SearchJob(mainFrame, new FileSet(entrypoint, entrypoint));
         job.setListener(listener);
-        job.setEntrypoint(entrypoint);
         job.setDepth(searchDepth);
         
         Predicate<AbstractFile> fileMatcher = createFilenamePredicate();

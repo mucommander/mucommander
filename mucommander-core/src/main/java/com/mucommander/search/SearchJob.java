@@ -28,41 +28,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.job.FileJob;
 import com.mucommander.search.file.SearchListener;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This job executes a file search.
  *
  * @author Arik Hadas
  */
-public class SearchJob {
+public class SearchJob extends FileJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchJob.class);
 
-    private AbstractFile entrypoint;
     private Predicate<AbstractFile> fileMatcher;
     private Predicate<AbstractFile> lsFilter;
     private List<AbstractFile> findings;
     private SearchListener listener;
     private int depth;
 
-    SearchJob() {
+    public SearchJob(MainFrame mainFrame, FileSet files) {
+        super(mainFrame, files);
         findings = new CopyOnWriteArrayList<>();
-    }
-
-    void setEntrypoint(AbstractFile entrypoint) {
-        this.entrypoint = entrypoint;
     }
 
     void setDepth(int depth) {
         this.depth = depth;
-    }
-
-    public void search() {
-        LOGGER.info("start searching {}", entrypoint);
-        List<AbstractFile> files = Collections.singletonList(entrypoint);
-        for (int i=0; i<depth && !files.isEmpty(); i++) {
-            files = search(files);
-        }
     }
 
     public void setFileMatcher(Predicate<AbstractFile> fileMatcher) {
@@ -111,5 +102,20 @@ public class SearchJob {
 
     public void setListener(SearchListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    protected boolean hasFolderChanged(AbstractFile folder) {
+        return false;
+    }
+
+    @Override
+    protected boolean processFile(AbstractFile file, Object recurseParams) {
+        LOGGER.info("start searching {}", file);
+        List<AbstractFile> files = Collections.singletonList(file);
+        for (int i=0; i<depth && !files.isEmpty(); i++) {
+            files = search(files);
+        }
+        return true;
     }
 }

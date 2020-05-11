@@ -845,7 +845,7 @@ public class LocationChanger {
 
 						if (SearchProtocolProvider.SEARCH.equals(folderURL.getScheme())) {
 						    SearchFile searchFile = (SearchFile) folder;
-						    searchFile.startSearch();
+						    searchFile.startSearch(mainFrame);
 						}
 
 						// Change the file table's current folder and select the specified file (if any)
