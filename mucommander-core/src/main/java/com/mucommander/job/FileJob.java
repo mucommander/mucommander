@@ -208,7 +208,7 @@ public abstract class FileJob implements Runnable {
      */
     public void start() {
         // Return if job has already been started
-        if(getState() != FileJobState.NOT_STARTED)
+        if (getState() != FileJobState.NOT_STARTED)
             return;
 
         setState(FileJobState.RUNNING);
@@ -815,7 +815,7 @@ public abstract class FileJob implements Runnable {
      * @param file the file or folder to process
      * @param recurseParams array of parameters which can be used when calling this method recursively, contains <code>null</code> when called by {@link #run()}
      *
-     * @return <code>true</code> if the operation was sucessful
+     * @return <code>true</code> if the operation was successful
      */
     protected abstract boolean processFile(AbstractFile file, Object recurseParams);
 

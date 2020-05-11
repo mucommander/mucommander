@@ -19,7 +19,6 @@ package com.mucommander.search.file;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -39,6 +38,7 @@ import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.search.SearchBuilder;
 import com.mucommander.search.SearchJob;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * @author Arik Hadas
@@ -50,12 +50,11 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     /** Time at which the search results were last modified. */
     private long lastModified;
     private Map<String, String> properties;
-    private SearchJobThread search;
+    private SearchJob search;
 
     protected SearchFile(FileURL url, Map<String, String> properties) throws IOException {
         super(url);
         this.properties = properties;
-        initSearch();
     }
 
     @Override
@@ -141,56 +140,30 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     @Override
     public Object getUnderlyingFileObject() {return null;}
 
-    private void initSearch() throws IOException {
-        lastModified = System.currentTimeMillis();
-        search = new SearchJobThread();
-    }
-
-    public void startSearch() throws IOException {
-        if (search == null)
-            initSearch();
-        if (search.getState() == Thread.State.NEW)
-            search.start();
+    public void startSearch(MainFrame mainFrame) throws IOException {
+        if (search == null) {
+            lastModified = System.currentTimeMillis();
+            search = createSearchJob(mainFrame);
+        }
+        search.start();
     }
 
     public void stopSearch() {
         // TODO
     }
 
-    private class SearchJobThread extends Thread {
-        private SearchJob searchJob;
-        private boolean obsolete;
-
-        private SearchJobThread() throws IOException {
-            searchJob = createSearchJob();
-        }
-
-        private SearchJob createSearchJob() throws IOException {
-            return SearchBuilder.newSearch()
-                    .listener(SearchFile.this)
-                    .what(getURL().getPath().substring(1))
-                    .where(getURL().getHost())
-                    .searchArchives(properties)
-                    .searchHidden(properties)
-                    .searchSubfolders(properties)
-                    .searchDepth(properties)
-                    .matchCaseInsensitive(properties)
-                    .matchRegex(properties)
-                    .build();
-        }
-
-        private List<AbstractFile> getFindings() {
-            return searchJob.getFindings();
-        }
-
-        @Override
-        public void run() {
-            searchJob.search();
-            obsolete = true;
-        }
-
-        public boolean isObsolete() {
-            return obsolete;
-        }
+    private SearchJob createSearchJob(MainFrame mainFrame) throws IOException {
+        return SearchBuilder.newSearch()
+                .listener(SearchFile.this)
+                .mainFrame(mainFrame)
+                .what(getURL().getPath().substring(1))
+                .where(getURL().getHost())
+                .searchArchives(properties)
+                .searchHidden(properties)
+                .searchSubfolders(properties)
+                .searchDepth(properties)
+                .matchCaseInsensitive(properties)
+                .matchRegex(properties)
+                .build();
     }
 }
