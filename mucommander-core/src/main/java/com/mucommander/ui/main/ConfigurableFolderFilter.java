@@ -17,15 +17,17 @@
 
 package com.mucommander.ui.main;
 
+import java.util.function.Consumer;
+
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
+import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 
 /**
@@ -75,29 +77,24 @@ public class ConfigurableFolderFilter extends AndFileFilter implements Configura
      * Adds or removes filters based on configuration changes.
      */
     public void configurationChanged(ConfigurationEvent event) {
-        String var = event.getVariable();
-
+        FileFilter fileFilter = null;
+        switch(event.getVariable()) {
         // Show or hide hidden files
-        if (var.equals(MuPreferences.SHOW_HIDDEN_FILES)) {
-            if(event.getBooleanValue())
-                removeFileFilter(hiddenFileFilter);
-            else
-                addFileFilter(hiddenFileFilter);
+        case MuPreferences.SHOW_HIDDEN_FILES:
+            fileFilter = hiddenFileFilter;
+            break;
+            // Show or hide .DS_Store files (macOS option)
+        case MuPreferences.SHOW_DS_STORE_FILES:
+            fileFilter = dsFileFilter;
+            break;
+            // Show or hide system folders (macOS option)
+        case MuPreferences.SHOW_SYSTEM_FOLDERS:
+            fileFilter = systemFileFilter;
+            break;
         }
-        // Show or hide .DS_Store files (Mac OS X option)
-        else if (var.equals(MuPreferences.SHOW_DS_STORE_FILES)) {
-            if(event.getBooleanValue())
-                removeFileFilter(dsFileFilter);
-            else
-                addFileFilter(dsFileFilter);
+        if (fileFilter != null) {
+            Consumer<FileFilter> func = event.getBooleanValue() ? this::removeFileFilter : this::addFileFilter;
+            func.accept(fileFilter);
         }
-        // Show or hide system folders (Mac OS X option)
-        else if (var.equals(MuPreferences.SHOW_SYSTEM_FOLDERS)) {
-            if(event.getBooleanValue())
-                removeFileFilter(systemFileFilter);
-            else
-                addFileFilter(systemFileFilter);
-        }
-
     }
 }
