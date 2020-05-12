@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.OsFamily;
 
 /**
@@ -88,6 +89,8 @@ public enum MacOsSystemFolder {
 	 * @return true if the given file is a system file on macOS, otherwise false.
 	 */
 	public static boolean isSystemFile(AbstractFile file) {
-	    return paths.contains(file.getAbsolutePath());
+	    String path = file.getAbsolutePath();
+	    path = PathUtils.removeTrailingSeparator(path);
+	    return paths.contains(path);
 	}
 }
