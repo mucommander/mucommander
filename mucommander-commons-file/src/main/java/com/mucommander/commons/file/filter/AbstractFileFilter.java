@@ -17,10 +17,10 @@
 
 package com.mucommander.commons.file.filter;
 
+import java.util.stream.Stream;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-
-import java.util.Vector;
 
 
 /**
@@ -76,18 +76,9 @@ public abstract class AbstractFileFilter implements FileFilter {
     }
 
     public AbstractFile[] filter(AbstractFile files[]) {
-        Vector<AbstractFile> filteredFilesV = new Vector<AbstractFile>();
-        int nbFiles = files.length;
-        AbstractFile file;
-        for(int i=0; i<nbFiles; i++) {
-            file = files[i];
-            if(match(file))
-                filteredFilesV.add(file);
-        }
-
-        AbstractFile filteredFiles[] = new AbstractFile[filteredFilesV.size()];
-        filteredFilesV.toArray(filteredFiles);
-        return filteredFiles;
+        return Stream.of(files)
+                .filter(this::match)
+                .toArray(AbstractFile[]::new);
     }
 
     public void filter(FileSet files) {
