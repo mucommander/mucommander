@@ -176,12 +176,12 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     }
 
     /**
-     * Notifies all panels that changes are about to be commited.
+     * Notifies all panels that changes are about to be committed.
      * <p>
      * This gives preference panels a chance to display warning or errors before changes are
      * committed.
      * </p>
-     * @return <code>true</code> if all preference panels are ok with commiting the changes, <code>false</code> otherwise.
+     * @return <code>true</code> if all preference panels are ok with committing the changes, <code>false</code> otherwise.
      */
     public boolean checkCommit() {
         // Ask pref panels to commit changes

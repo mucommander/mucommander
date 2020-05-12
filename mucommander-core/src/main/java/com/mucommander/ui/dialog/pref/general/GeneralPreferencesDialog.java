@@ -122,20 +122,6 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     // - Misc. ------------------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
-     * Commits the changes and writes the configuration file if necessary.
-     */
-    @Override
-    public void commit() {
-        super.commit();
-        try {
-            MuConfigurations.savePreferences();
-        }
-        catch(Exception e) {
-            InformationDialog.showErrorDialog(this);
-        }
-    }
-
-    /**
      * Releases the singleton.
      */
     @Override
