@@ -17,9 +17,9 @@
 
 package com.mucommander.ui.main.table;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.text.Translator;
@@ -40,7 +40,7 @@ public enum Column {
     GROUP(true, false, FileComparator.GROUP_CRITERION, "ToggleGroupColumn", "SortByGroup");
 
     private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<Integer, Column>(){{
-        Arrays.stream(Column.values()).forEach(column -> put(column.ordinal(), column));
+        Stream.of(Column.values()).forEach(column -> put(column.ordinal(), column));
     }};
 
     /** Standard minimum column width */
