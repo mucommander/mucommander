@@ -40,6 +40,7 @@ Improvements:
 - Exclude OSGi-cli from packaging, avoiding the creation of .osgiaas_cli_history file on shutdown.
 - Added a new icon for the virtual bookmarks file system (bookmark://).
 - Package the 'portable' version packaged as zip archive rather than "tarball".
+- Accelerate system files filtering on macOS.
 
 Localization:
 - 

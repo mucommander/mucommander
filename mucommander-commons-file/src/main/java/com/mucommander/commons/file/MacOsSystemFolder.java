@@ -16,6 +16,11 @@
  */
 package com.mucommander.commons.file;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * Top-level Mac OS X system folders hidden by Finder. For more info about those files:
@@ -65,15 +70,24 @@ public enum MacOsSystemFolder {
 
     /** file path */
 	String path;
+	/** Set of the paths declared above */
+	static Set<String> paths;
+
+	static {
+	    if (OsFamily.MAC_OS_X.isCurrent())
+	        paths = Stream.of(values()).map(f -> f.path).collect(Collectors.toSet());
+	}
 
 	MacOsSystemFolder(String path) {
 		this.path = path;
 	}
 
+	/**
+	 * Check if the given file is a system file on macOS.
+	 * @param file the file to check
+	 * @return true if the given file is a system file on macOS, otherwise false.
+	 */
 	public static boolean isSystemFile(AbstractFile file) {
-		for (MacOsSystemFolder folder : values())
-			if (folder.path.equals(file.getAbsolutePath()))
-				return true;
-		return false;
+	    return paths.contains(file.getAbsolutePath());
 	}
 }
