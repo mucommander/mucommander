@@ -170,7 +170,7 @@ public class LocationChanger {
 			// changes the changeFolderThread field to null when finished, and it may do so before this method has
 			// returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
-			ChangeFolderThread thread = new ChangeFolderThread(folder,
+			ChangeFolderThread thread = new BrowseLocationThread(folder,
 			        findWorkableFolder,
 			        changeLockedTab,
 			        mainFrame,
@@ -267,7 +267,7 @@ public class LocationChanger {
 			// changes the changeFolderThread field to null when finished, and it may do so before this method has
 			// returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
-			ChangeFolderThread thread = new ChangeFolderThread(folderURL,
+			ChangeFolderThread thread = new BrowseLocationThread(folderURL,
 			        credentialsMapping,
 			        changeLockedTab,
 			        mainFrame,
