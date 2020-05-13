@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.core.LocationChanger.ChangeFolderThread;
+import com.mucommander.core.ChangeFolderThread;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
