@@ -79,20 +79,24 @@ public class Activator implements BundleActivator {
         // Register the application-specific 'bookmark' protocol.
         FileProtocolService bookmarksService = createBookmarkProtocolService();
         bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
+        // Listen to protocol panel services
         protocolPanelTracker = new ProtocolPanelProviderTracker(context);
         protocolPanelTracker.open();
+        // Listen to translation service
         translationTracker = new TranslationTracker(context);
         translationTracker.open();
+        // Listen to file viewer services
         viewersTracker = new FileViewerServiceTracker(context);
         viewersTracker.open();
+        // Listen to file editor services
         editorsTracker = new FileEditorServiceTracker(context);
         editorsTracker.open();
+        // Listen to operating system services
         osTracker = new OperatingSystemServiceTracker(context);
         osTracker.open();
-
+        // Register core functionality service
         CoreService coreService = createCoreService();
         coreRegistration = context.registerService(CoreService.class, coreService, null);
-
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
         Application.run(this);
