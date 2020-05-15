@@ -70,6 +70,7 @@ public class SearchJob extends FileJob {
                 .map(this::search)
                 .flatMap(stream -> stream)
                 .collect(Collectors.toList());
+        // TODO: remove the listener when done
     }
 
     private Stream<AbstractFile> search(AbstractFile file) {
