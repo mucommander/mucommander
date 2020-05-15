@@ -160,6 +160,15 @@ public class SearchFile extends ProtocolFile implements SearchListener {
         // TODO
     }
 
+    public void retriggerSearch(MainFrame mainFrame) {
+        if (isSearchCompleted())
+            try {
+                startSearch(mainFrame);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+
     private SearchJob createSearchJob(MainFrame mainFrame) throws IOException {
         return SearchBuilder.newSearch()
                 .listener(SearchFile.this)
