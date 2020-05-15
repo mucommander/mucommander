@@ -36,6 +36,7 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.job.FileJobState;
 import com.mucommander.search.SearchBuilder;
 import com.mucommander.search.SearchJob;
 import com.mucommander.ui.main.MainFrame;
@@ -45,7 +46,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class SearchFile extends ProtocolFile implements SearchListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFile.class);
-    private static AbstractFile[] resultType = new AbstractFile[0];
+    private static final AbstractFile[] EMPTY_RESULTS = new AbstractFile[0];
 
     /** Time at which the search results were last modified. */
     private long lastModified;
@@ -59,7 +60,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
 
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
-        return search.getFindings().toArray(resultType);
+        return search != null ? search.getFindings().toArray(EMPTY_RESULTS) : EMPTY_RESULTS;
     }
 
     @Override
@@ -140,11 +141,18 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     @Override
     public Object getUnderlyingFileObject() {return null;}
 
+    public boolean isSearchStarted() {
+        // lastModified == 0 -> there was no search yet
+        return lastModified != 0;
+    }
+
+    public boolean isSearchCompleted() {
+        return search.getState() == FileJobState.FINISHED ||
+                search.getState() == FileJobState.INTERRUPTED;
+    }
     public void startSearch(MainFrame mainFrame) throws IOException {
-        if (search == null) {
-            lastModified = System.currentTimeMillis();
-            search = createSearchJob(mainFrame);
-        }
+        lastModified = System.currentTimeMillis();
+        search = createSearchJob(mainFrame);
         search.start();
     }
 

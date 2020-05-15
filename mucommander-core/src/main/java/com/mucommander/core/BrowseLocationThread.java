@@ -36,8 +36,6 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.search.file.SearchFile;
-import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -78,7 +76,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
     private MainFrame mainFrame;
     private FolderPanel folderPanel;
     private LocationManager locationManager;
-    LocationChanger locationChanger;
+    private LocationChanger locationChanger;
 
     private GlobalLocationHistory globalHistory = GlobalLocationHistory.Instance();
 
@@ -453,11 +451,6 @@ public class BrowseLocationThread extends ChangeFolderThread {
                     folderPanel.setProgressValue(75);
 
                     LOGGER.trace("calling setCurrentFolder");
-
-                    if (SearchProtocolProvider.SEARCH.equals(folderURL.getScheme())) {
-                        SearchFile searchFile = (SearchFile) folder;
-                        searchFile.startSearch(mainFrame);
-                    }
 
                     // Change the file table's current folder and select the specified file (if any)
                     locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab);
