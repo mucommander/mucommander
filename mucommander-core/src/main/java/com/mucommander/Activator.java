@@ -76,6 +76,9 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         LOGGER.debug("starting");
         this.context = context;
+        // Register the application-specific 'bookmark' protocol.
+        FileProtocolService bookmarksService = createBookmarkProtocolService();
+        bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
         protocolPanelTracker = new ProtocolPanelProviderTracker(context);
         protocolPanelTracker.open();
         translationTracker = new TranslationTracker(context);
@@ -89,10 +92,6 @@ public class Activator implements BundleActivator {
 
         CoreService coreService = createCoreService();
         coreRegistration = context.registerService(CoreService.class, coreService, null);
-
-        // Register the application-specific 'bookmark' protocol.
-        FileProtocolService bookmarksService = createBookmarkProtocolService();
-        bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
 
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
