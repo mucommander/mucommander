@@ -68,7 +68,6 @@ import com.mucommander.ui.main.tree.FoldersTreePanel;
 import com.mucommander.ui.quicklist.QuickList;
 import com.mucommander.ui.quicklist.QuickListContainer;
 import com.mucommander.ui.tabs.ActiveTabListener;
-import com.mucommander.utils.Callback;
 
 /**
  * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
@@ -324,8 +323,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     	locationTextField.setProgressValue(value);
     }
 
-    public void tryChangeCurrentFolderInternal(FileURL folderURL, Callback callback) {
-    	locationChanger.tryChangeCurrentFolderInternal(folderURL, callback);
+    public void tryChangeCurrentFolderInternal(FileURL folderURL, Runnable runnable) {
+        locationChanger.tryChangeCurrentFolderInternal(folderURL, runnable);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {

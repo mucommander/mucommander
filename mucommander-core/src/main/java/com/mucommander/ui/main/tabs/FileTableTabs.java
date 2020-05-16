@@ -26,7 +26,6 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.HideableTabbedPane;
 import com.mucommander.ui.tabs.TabFactory;
 import com.mucommander.ui.tabs.TabUpdater;
-import com.mucommander.utils.Callback;
 
 /**
 * HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
@@ -69,12 +68,8 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 
 	@Override
 	protected void show(final int tabIndex) {
-		folderPanel.tryChangeCurrentFolderInternal(getTab(tabIndex).getLocation(), new Callback() {
-			public void call() {
-				fireActiveTabChanged();
-			}
-		});
-	};
+	    folderPanel.tryChangeCurrentFolderInternal(getTab(tabIndex).getLocation(), () -> fireActiveTabChanged());
+	}
 
 	/**
 	 * Return the currently selected tab
