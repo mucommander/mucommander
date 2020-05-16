@@ -85,7 +85,8 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
     @Override
     public boolean tryKill() {
-        return false;
+        ((SearchFile) folder).stopSearch();
+        return true;
     }
 
     @Override
@@ -98,6 +99,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
             if (!searchFile.isSearchStarted()) {
                 searchFile.startSearch(mainFrame);
+                locationManager.fireLocationChanging(folderURL);
                 // started started -> 15% complete
                 folderPanel.setProgressValue(15);    
             }
@@ -107,7 +109,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
             LOGGER.trace("calling setCurrentFolder");
 
             // Change the file table's current folder and select the specified file (if any)
-            locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab);
+            locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, searchDone);
 
             // folder set -> 95% complete
             folderPanel.setProgressValue(searchDone ? 95 : 50);

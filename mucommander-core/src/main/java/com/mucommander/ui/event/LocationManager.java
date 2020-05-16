@@ -77,6 +77,10 @@ public class LocationManager {
      * @param folder the {@link AbstractFile} that is going to be presented in the {@link FolderPanel}
      */
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) {
+        setCurrentFolder(folder, fileToSelect, changeLockedTab, true);
+    }
+
+    public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fire) {
         LOGGER.trace("calling ls()");
         currentFolderDate = folder.getDate();
     	AbstractFile[] children = emptyAbstractFilesArray;
@@ -94,8 +98,9 @@ public class LocationManager {
 
     	this.currentFolder = folder;
 
-    	// Notify listeners that the location has changed
-    	fireLocationChanged(folder.getURL());
+    	if (fire)
+    	    // Notify listeners that the location has changed
+    	    fireLocationChanged(folder.getURL());
 
     	// After the initial folder is set, initialize the monitoring thread
     	if (folderChangeMonitor == null)

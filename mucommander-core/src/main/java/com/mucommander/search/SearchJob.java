@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJob;
+import com.mucommander.job.FileJobState;
 import com.mucommander.search.file.SearchListener;
 import com.mucommander.ui.main.MainFrame;
 
@@ -70,7 +71,6 @@ public class SearchJob extends FileJob {
                 .map(this::search)
                 .flatMap(stream -> stream)
                 .collect(Collectors.toList());
-        // TODO: remove the listener when done
     }
 
     private Stream<AbstractFile> search(AbstractFile file) {
@@ -81,7 +81,8 @@ public class SearchJob extends FileJob {
             LOGGER.debug("failed to list: " + file, e);
             return Stream.empty();
         }
-        examine(children);
+        if (getState() != FileJobState.INTERRUPTED)
+            examine(children);
         return Stream.of(children);
     }
 
@@ -114,9 +115,11 @@ public class SearchJob extends FileJob {
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         LOGGER.info("start searching {}", file);
         List<AbstractFile> files = Collections.singletonList(file);
-        for (int i=0; i<depth && !files.isEmpty(); i++) {
+        for (int i=0; getState() != FileJobState.INTERRUPTED && i<depth && !files.isEmpty(); i++) {
             files = search(files);
         }
+        LOGGER.info("completed searching {}", file);
+        listener = null;
         return true;
     }
 }
