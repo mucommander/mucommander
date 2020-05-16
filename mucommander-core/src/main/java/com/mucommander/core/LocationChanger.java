@@ -96,26 +96,23 @@ public class LocationChanger {
 		// Set cursor to hourglass/wait
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
-    	Thread setLocationThread = new Thread() {
-    		@Override
-    		public void run() {
-    			AbstractFile folder = getWorkableLocation(folderURL);
-    			try {
-    				locationManager.setCurrentFolder(folder, null, true);
-    			} finally {
-    				mainFrame.setNoEventsMode(false);
-    				// Restore default cursor
-					mainFrame.setCursor(Cursor.getDefaultCursor());
-					// Execute the given runnable
-					runnable.run();
-    	    	}
-    		}
-    	};
+		Runnable locationSetter = () -> {
+		    AbstractFile folder = getWorkableLocation(folderURL);
+		    try {
+		        locationManager.setCurrentFolder(folder, null, true);
+		    } finally {
+		        mainFrame.setNoEventsMode(false);
+		        // Restore default cursor
+		        mainFrame.setCursor(Cursor.getDefaultCursor());
+		        // Execute the given runnable
+		        runnable.run();
+		    }
+		};
 
-    	if (EventQueue.isDispatchThread())
-    		setLocationThread.start();
-    	else
-    		setLocationThread.run();
+		if (EventQueue.isDispatchThread())
+		    new Thread(locationSetter).start();
+		else
+		    locationSetter.run();
 	}
 
 	/**
