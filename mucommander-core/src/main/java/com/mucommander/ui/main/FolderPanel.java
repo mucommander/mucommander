@@ -43,7 +43,6 @@ import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.core.FolderChangeMonitor;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.core.LocationChanger;
 import com.mucommander.core.LocationChanger.ChangeFolderThread;
@@ -321,15 +320,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         return locationManager;
     }
 
-    /**
-     * Returns the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it.
-     *
-     * @return the FolderChangeMonitor which monitors changes in the current folder and automatically refreshes it
-     */
-    public FolderChangeMonitor getFolderChangeMonitor() {
-        return locationManager.getFolderChangeMonitor();
-    }
-    
     public void setProgressValue(int value) {
     	locationTextField.setProgressValue(value);
     }

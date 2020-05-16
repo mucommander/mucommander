@@ -124,10 +124,6 @@ public class LocationManager {
         return currentFolderDate;
     }
 
-    public FolderChangeMonitor getFolderChangeMonitor() {
-        return folderChangeMonitor;
-    }
-
     /**
      * Registers a LocationListener to receive notifications whenever the current folder of the associated FolderPanel
      * has or is being changed.
