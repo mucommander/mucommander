@@ -94,9 +94,12 @@ public class GlobalLocationHistory implements LocationListener {
 	}
 	
 	/**
-	 * Returns true if the global history contains the given FileURL
+	 * Checks if the given file presents in the global history.
+	 *
+	 * @param folderURL the URL to check
+	 * @return true if a file that matches the given URL exists in the global history, false otherwise.
 	 */
-	public boolean historyContains(FileURL folderURL) {
+	public boolean contains(FileURL folderURL) {
 		return history.contains(folderURL);
 	}
 	
@@ -112,7 +115,7 @@ public class GlobalLocationHistory implements LocationListener {
 		boolean alreadyExists = history.remove(file);
 		
 		// ensure that we won't cross the maximum number of saved locations
-		if (!alreadyExists && MAX_CAPACITY == history.size())
+		if (!alreadyExists && history.size() == MAX_CAPACITY)
 			history.remove(history.iterator().next());
 		
 		// add the location as last one in the history

@@ -718,7 +718,7 @@ public class LocationChanger {
 								// The dialog is also not displayed if the file corresponds to the currently selected file,
 								// which is a weak (and not so accurate) way to know if the folder change is the result
 								// of the OpenAction (enter pressed on the file). This works well enough in practice.
-								if(!globalHistory.historyContains(folderURL) && !file.equals(folderPanel.getFileTable().getSelectedFile())) {
+								if(!globalHistory.contains(folderURL) && !file.equals(folderPanel.getFileTable().getSelectedFile())) {
 									// Restore default cursor
 									mainFrame.setCursor(Cursor.getDefaultCursor());
 
