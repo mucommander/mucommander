@@ -453,7 +453,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
                     LOGGER.trace("calling setCurrentFolder");
 
                     // Change the file table's current folder and select the specified file (if any)
-                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab);
+                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, true);
 
                     // folder set -> 95% complete
                     folderPanel.setProgressValue(95);

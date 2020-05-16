@@ -79,7 +79,7 @@ public class LocationChanger {
 		Runnable locationSetter = () -> {
 		    AbstractFile folder = getWorkableLocation(folderURL);
 		    try {
-		        locationManager.setCurrentFolder(folder, null, true);
+		        locationManager.setCurrentFolder(folder, null, true, true);
 		    } finally {
 		        mainFrame.setNoEventsMode(false);
 		        // Restore default cursor
@@ -329,12 +329,12 @@ public class LocationChanger {
 	 * @throws IOException 
 	 * @throws UnsupportedFileOperationException 
      */
-    void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab) throws UnsupportedFileOperationException, IOException {
+    void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fire) throws UnsupportedFileOperationException, IOException {
     	// Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
         // while FileTable#setCurrentFolder is being called. 
         lastFolderChangeTime = System.currentTimeMillis();
         
-    	locationManager.setCurrentFolder(folder, fileToSelect, changeLockedTab);
+    	locationManager.setCurrentFolder(folder, fileToSelect, changeLockedTab, fire);
     }
 
     /**

@@ -162,7 +162,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     }
 
     public void stopSearch() {
-        // TODO
+        search.interrupt();
     }
 
     public void retriggerSearch(MainFrame mainFrame) {
