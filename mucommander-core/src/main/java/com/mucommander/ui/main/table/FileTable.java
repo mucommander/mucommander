@@ -487,17 +487,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Shorthand for {@link #setCurrentFolder(AbstractFile, AbstractFile[], AbstractFile)} called with no specific file
-     * to select (default selection).
-     *
-     * @param folder the new current folder
-     * @param children children of the specified folder
-     */
-    public void setCurrentFolder(AbstractFile folder, AbstractFile[] children) {
-        setCurrentFolder(folder, children, null);
-    }
-
-    /**
      * Changes the current folder to the specified one and refreshes the table to reflect the folder's contents.
      * The current file selection is also updated, with the following behavior:
      * <ul>
