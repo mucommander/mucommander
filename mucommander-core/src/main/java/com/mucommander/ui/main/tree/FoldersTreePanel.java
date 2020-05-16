@@ -326,20 +326,10 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
     // - LocationListener code -------------------------------------------------
     // -------------------------------------------------------------------------
 
-    public void locationCancelled(LocationEvent locationEvent) {
-    }
-
     public void locationChanged(LocationEvent locationEvent) {
         updateSelectedFolder();
     }
 
-    public void locationChanging(LocationEvent locationEvent) {
-    }
-
-    public void locationFailed(LocationEvent locationEvent) {
-    }
-
-    
     // - FocusListener code ----------------------------------------------------
     // -------------------------------------------------------------------------
     

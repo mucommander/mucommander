@@ -782,10 +782,4 @@ public class MainFrame extends JFrame implements LocationListener {
         // Update window title to reflect the new current folder
         updateWindowTitle();
     }
-    
-	public void locationChanging(LocationEvent locationEvent) { }
-
-	public void locationCancelled(LocationEvent locationEvent) { }
-
-	public void locationFailed(LocationEvent locationEvent) { }
 }
