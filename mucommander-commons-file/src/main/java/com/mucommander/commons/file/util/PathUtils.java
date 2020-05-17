@@ -228,7 +228,7 @@ public class PathUtils {
     public static String removeLeadingSeparator(String path) {
         char firstChar;
         if(path.length()>0 && ((firstChar=path.charAt(0))=='/' || firstChar=='\\'))
-            return path.substring(1, path.length());
+            return path.substring(1);
 
         return path;
     }
@@ -241,9 +241,7 @@ public class PathUtils {
      * @return the modified path, free of any leading separator
      */
     public static String removeLeadingSeparator(String path, String separator) {
-        return path.startsWith(separator) ?
-                path.substring(separator.length(), path.length())
-                : path;
+        return path.startsWith(separator) ? path.substring(separator.length()) : path;
     }
 
     /**
@@ -365,7 +363,7 @@ public class PathUtils {
         if(pos==-1 || pos==path.length()-1)
             return "";
 
-        return path.substring(pos+1, path.length());
+        return path.substring(pos+1);
     }
 
 
