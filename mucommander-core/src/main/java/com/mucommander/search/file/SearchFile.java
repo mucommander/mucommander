@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileURL;
@@ -52,10 +53,14 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     private long lastModified;
     private Map<String, String> properties;
     private SearchJob search;
+    private String searchStr;
+    private AbstractFile searchPlace;
 
     protected SearchFile(FileURL url, Map<String, String> properties) throws IOException {
         super(url);
         this.properties = properties;
+        searchStr = url.getPath().substring(1);
+        searchPlace = FileFactory.getFile(url.getHost());
     }
 
     @Override
@@ -150,7 +155,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
         return search.getState() == FileJobState.FINISHED ||
                 search.getState() == FileJobState.INTERRUPTED;
     }
-    public void startSearch(MainFrame mainFrame) throws IOException {
+    public void startSearch(MainFrame mainFrame) {
         lastModified = System.currentTimeMillis();
         search = createSearchJob(mainFrame);
         search.start();
@@ -162,19 +167,15 @@ public class SearchFile extends ProtocolFile implements SearchListener {
 
     public void retriggerSearch(MainFrame mainFrame) {
         if (isSearchCompleted())
-            try {
-                startSearch(mainFrame);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            startSearch(mainFrame);
     }
 
-    private SearchJob createSearchJob(MainFrame mainFrame) throws IOException {
+    private SearchJob createSearchJob(MainFrame mainFrame) {
         return SearchBuilder.newSearch()
                 .listener(SearchFile.this)
                 .mainFrame(mainFrame)
-                .what(getURL().getPath().substring(1))
-                .where(getURL().getHost())
+                .what(searchStr)
+                .where(searchPlace)
                 .searchArchives(properties)
                 .searchHidden(properties)
                 .searchSubfolders(properties)

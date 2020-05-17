@@ -76,9 +76,8 @@ public class SearchBuilder {
         return this;
     }
 
-    public SearchBuilder where(String path) throws IOException {
-        entrypoint = FileFactory.getFile(path);
-        // f == null -> IOException
+    public SearchBuilder where(AbstractFile entrypoint) {
+        this.entrypoint = entrypoint;
         return this;
     }
 
