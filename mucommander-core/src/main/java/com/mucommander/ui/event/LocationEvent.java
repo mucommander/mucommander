@@ -19,7 +19,6 @@
 package com.mucommander.ui.event;
 
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.ui.main.FolderPanel;
 
 
 /**
@@ -30,9 +29,6 @@ import com.mucommander.ui.main.FolderPanel;
  */
 public class LocationEvent {
 
-    /** FolderPanel where location has or is being changed */
-    private FolderPanel folderPanel;
-
     /** URL of the folder that has or is being changed */
     private FileURL folderURL;
 
@@ -42,16 +38,8 @@ public class LocationEvent {
      * @param folderPanel FolderPanel where location has or is being changed.
      * @param folderURL url of the folder that has or is being changed
      */
-    public LocationEvent(FolderPanel folderPanel, FileURL folderURL) {
-        this.folderPanel = folderPanel;
+    public LocationEvent(FileURL folderURL) {
         this.folderURL = folderURL;
-    }
-
-    /**
-     * Returns the FolderPanel instance where location has or is being changed.
-     */
-    public FolderPanel getFolderPanel() {
-        return folderPanel;
     }
 
     /**

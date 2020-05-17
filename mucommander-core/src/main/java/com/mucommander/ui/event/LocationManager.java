@@ -157,7 +157,7 @@ public class LocationManager {
      * @param folderURL url of the new current folder in the associated FolderPanel
      */
     private synchronized void fireLocationChanged(FileURL folderURL) {
-        LocationEvent event = new LocationEvent(folderPanel, folderURL);
+        LocationEvent event = new LocationEvent(folderURL);
         listeners().forEach(listener -> listener.locationChanged(event));
     }
 
@@ -167,7 +167,7 @@ public class LocationManager {
      * @param folderURL url of the folder that will become the new location if the folder change is successful
      */
     public synchronized void fireLocationChanging(FileURL folderURL) {
-        LocationEvent event = new LocationEvent(folderPanel, folderURL);
+        LocationEvent event = new LocationEvent(folderURL);
         listeners().forEach(listener -> listener.locationChanging(event));
     }
 
@@ -178,7 +178,7 @@ public class LocationManager {
      * @param folderURL url of the folder for which a failed attempt was made to make it the current folder
      */
     public synchronized void fireLocationCancelled(FileURL folderURL) {
-        LocationEvent event = new LocationEvent(folderPanel, folderURL);
+        LocationEvent event = new LocationEvent(folderURL);
         listeners().forEach(listener -> listener.locationCancelled(event));
     }
 
@@ -189,7 +189,7 @@ public class LocationManager {
      * @param folderURL url of the folder for which a failed attempt was made to make it the current folder
      */
     public synchronized void fireLocationFailed(FileURL folderURL) {
-        LocationEvent event = new LocationEvent(folderPanel, folderURL);
+        LocationEvent event = new LocationEvent(folderURL);
         listeners().forEach(listener -> listener.locationFailed(event));
     }
 }
