@@ -19,11 +19,12 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.impl.CopyJob;
-import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.job.impl.CopyJob.TransferMode;
+import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
@@ -66,7 +67,7 @@ public class DownloadDialog extends TransferDestinationDialog {
                 mainFrame,
                 files,
                 resolvedDest.getDestinationFolder(),
-                resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
                 TransferMode.DOWNLOAD,
                 defaultFileExistsAction);
     }

@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.impl.TransferFileJob;
@@ -62,8 +63,8 @@ public class UnpackDialog extends TransferDestinationDialog {
 
     @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
-        int destinationType = resolvedDest.getDestinationType();
-        if(destinationType==PathUtils.ResolvedDestination.EXISTING_FILE) {
+        DestinationType destinationType = resolvedDest.getDestinationType();
+        if(destinationType==DestinationType.EXISTING_FILE) {
             showErrorDialog(Translator.get("invalid_path", resolvedDest.getDestinationFile().getAbsolutePath()));
             return null;
         }
@@ -72,7 +73,7 @@ public class UnpackDialog extends TransferDestinationDialog {
                 progressDialog,
                 mainFrame,
                 files,
-                destinationType==PathUtils.ResolvedDestination.NEW_FILE?resolvedDest.getDestinationFile():resolvedDest.getDestinationFolder(),
+                destinationType==DestinationType.NEW_FILE?resolvedDest.getDestinationFile():resolvedDest.getDestinationFolder(),
                 defaultFileExistsAction);
     }
 

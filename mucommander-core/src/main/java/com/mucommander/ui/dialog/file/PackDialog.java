@@ -29,6 +29,7 @@ import javax.swing.JTextArea;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archiver.Archiver;
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
@@ -157,8 +158,8 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         if(resolvedDest==null)
             return false;
 
-        int destType = resolvedDest.getDestinationType();
-        return destType==PathUtils.ResolvedDestination.NEW_FILE || destType==PathUtils.ResolvedDestination.EXISTING_FILE;
+        DestinationType destType = resolvedDest.getDestinationType();
+        return destType==DestinationType.NEW_FILE || destType==DestinationType.EXISTING_FILE;
     }
 
 

@@ -19,6 +19,7 @@
 
 package com.mucommander.ui.dialog.file;
 
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.impl.MoveJob;
@@ -58,7 +59,7 @@ public class MoveDialog extends AbstractCopyDialog {
                 mainFrame,
                 files,
                 resolvedDest.getDestinationFolder(),
-                resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
                 defaultFileExistsAction,
                 false);
     }

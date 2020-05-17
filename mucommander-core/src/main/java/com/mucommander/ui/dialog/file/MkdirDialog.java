@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
@@ -151,8 +152,8 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         }
 
         // Checks if the directory already exists and reports the error if that's the case
-        int destinationType = resolvedDest.getDestinationType();
-        if(destinationType==PathUtils.ResolvedDestination.EXISTING_FOLDER) {
+        DestinationType destinationType = resolvedDest.getDestinationType();
+        if(destinationType==DestinationType.EXISTING_FOLDER) {
             InformationDialog.showErrorDialog(mainFrame, Translator.get("directory_already_exists", enteredPath));
             return;
         }

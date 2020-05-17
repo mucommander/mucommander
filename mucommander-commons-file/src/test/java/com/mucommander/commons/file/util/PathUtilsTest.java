@@ -61,11 +61,11 @@ public class PathUtilsTest {
         AbstractFile existingArchive = baseFolder.getDirectChild(existingArchiveFilename);
         existingArchive.mkfile();
 
-        int expectedType;
+        DestinationType expectedType;
 
         // Test a bunch of destination paths that denote an existing folder
 
-        expectedType = PathUtils.ResolvedDestination.EXISTING_FOLDER;
+        expectedType = DestinationType.EXISTING_FOLDER;
 
         // Absolute paths
         assertResult(PathUtils.resolveDestination(baseFolder.getURL().toString(true), baseRoot), baseFolder, expectedType);
@@ -84,7 +84,7 @@ public class PathUtilsTest {
 
         // Test a bunch of destination paths that denote an existing regular file
 
-        expectedType = PathUtils.ResolvedDestination.EXISTING_FILE;
+        expectedType = DestinationType.EXISTING_FILE;
 
         // Absolute paths
         assertResult(PathUtils.resolveDestination(existingFile.getURL().toString(true), baseRoot), existingFile, expectedType);
@@ -98,7 +98,7 @@ public class PathUtilsTest {
 
         // Test a bunch of destination paths that denote a new/non-existing regular file
 
-        expectedType = PathUtils.ResolvedDestination.NEW_FILE;
+        expectedType = DestinationType.NEW_FILE;
 
         // Absolute paths
         assertResult(PathUtils.resolveDestination(nonExistentFile.getURL().toString(true), baseRoot), nonExistentFile, expectedType);
@@ -128,9 +128,9 @@ public class PathUtilsTest {
      * @param expectedDestinationFile the expected destination file
      * @param expectedDestinationType the expected destination type
      */
-    private void assertResult(PathUtils.ResolvedDestination resolvedDestination, AbstractFile expectedDestinationFile, int expectedDestinationType) {
+    private void assertResult(PathUtils.ResolvedDestination resolvedDestination, AbstractFile expectedDestinationFile, DestinationType expectedDestinationType) {
         AbstractFile file = resolvedDestination.getDestinationFile();
-        int type = resolvedDestination.getDestinationType();
+        DestinationType type = resolvedDestination.getDestinationType();
         AbstractFile folder = resolvedDestination.getDestinationFolder();
 
         assert file != null;
@@ -139,7 +139,7 @@ public class PathUtilsTest {
         assert expectedDestinationFile.equals(file);
         assert expectedDestinationType == type;
 
-        if(type==PathUtils.ResolvedDestination.EXISTING_FOLDER)
+        if(type==DestinationType.EXISTING_FOLDER)
             assert file.equals(folder);
         else
             assert file.getParent().equals(folder);
