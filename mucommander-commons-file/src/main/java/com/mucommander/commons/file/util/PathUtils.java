@@ -50,16 +50,8 @@ public class PathUtils {
          * other types */
         private AbstractFile folder;
 
-        /** The destination type, see constant values */
-        private int type;
-
-        /** Designates a folder, either a directory or archive, that exists on the filesystem. */
-        public final static int EXISTING_FOLDER = 0;
-        /** Designates a regular file that exists on the filesystem. The file may be a browsable archive but that was
-         * refered to as a regular file, i.e. without a trailing separator character in the path. */
-        public final static int EXISTING_FILE = 1;
-        /** Designates a new file that doesn't exist on the filesystem. The file's parent however does always exist. */
-        public final static int NEW_FILE = 2;
+        /** The destination type, see {@link DestinationType} */
+        private DestinationType type;
 
         /**
          * Creates a new <code>ResolvedDestination</code> with the specified destination file and type.
@@ -68,7 +60,7 @@ public class PathUtils {
          * @param destinationType the destination type
          * @param destinationFolder the destination folder
          */
-        private ResolvedDestination(AbstractFile destinationFile, int destinationType, AbstractFile destinationFolder) {
+        private ResolvedDestination(AbstractFile destinationFile, DestinationType destinationType, AbstractFile destinationFolder) {
             this.file = destinationFile;
             this.type = destinationType;
             this.folder = destinationFolder;
@@ -118,7 +110,7 @@ public class PathUtils {
          *
          * @return the type of destination that was resolved
          */
-        public int getDestinationType() {
+        public DestinationType getDestinationType() {
             return type;
         }
     }
@@ -207,7 +199,7 @@ public class PathUtils {
             // Note: path to archives must end with a trailing separator character to refer to the archive as a folder,
             //  if they don't, they'll refer to the archive as a file.
             if(destFile.isDirectory() || (destPath.endsWith(destFile.getSeparator()) && destFile.isBrowsable()))
-                return new ResolvedDestination(destFile, ResolvedDestination.EXISTING_FOLDER, destFile);
+                return new ResolvedDestination(destFile, DestinationType.EXISTING_FOLDER, destFile);
         }
 
         // Test if the destination's parent exists, if not the path is not a valid destination
@@ -215,7 +207,7 @@ public class PathUtils {
         if(destParent==null || !destParent.exists())
             return null;
 
-        return new ResolvedDestination(destFile, destFileExists?ResolvedDestination.EXISTING_FILE:ResolvedDestination.NEW_FILE, destParent);
+        return new ResolvedDestination(destFile, destFileExists?DestinationType.EXISTING_FILE:DestinationType.NEW_FILE, destParent);
     }
 
 

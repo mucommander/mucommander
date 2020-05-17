@@ -38,6 +38,7 @@ import javax.swing.event.DocumentListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
@@ -258,7 +259,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @return <code>true</code> if the given resolved destination is valid
      */
 	protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
-        return (resolvedDest!=null && (files.size()==1 || resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER));
+        return (resolvedDest!=null && (files.size()==1 || resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER));
 	}
 
     /**

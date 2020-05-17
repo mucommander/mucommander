@@ -17,7 +17,27 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.ui.combobox.ComboBoxListener;
@@ -33,17 +53,6 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.SplitFileAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
  * Dialog used to split a file into several parts.
@@ -199,8 +208,8 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
         PathUtils.ResolvedDestination resolvedDest = 
         	PathUtils.resolveDestination(destPath, mainFrame.getActivePanel().getCurrentFolder());
         // The path entered doesn't correspond to any existing folder
-        if (resolvedDest==null || (files.size()>1 && 
-        		resolvedDest.getDestinationType()!=PathUtils.ResolvedDestination.EXISTING_FOLDER)) {
+        if (resolvedDest==null || (files.size()>1 &&
+                resolvedDest.getDestinationType()!=DestinationType.EXISTING_FOLDER)) {
             showErrorDialog(Translator.get("invalid_path", destPath), Translator.get("split_file_dialog.error_title"));
             return;
         }

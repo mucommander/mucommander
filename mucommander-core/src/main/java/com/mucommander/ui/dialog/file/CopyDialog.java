@@ -25,12 +25,13 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
+import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.job.impl.CopyJob;
+import com.mucommander.job.impl.CopyJob.TransferMode;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.job.impl.UnpackJob;
-import com.mucommander.job.impl.CopyJob.TransferMode;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CopyAction;
@@ -70,7 +71,7 @@ public class CopyDialog extends AbstractCopyDialog {
         AbstractFile baseFolder = files.getBaseFolder();
         AbstractArchiveFile parentArchiveFile = baseFolder.getParentArchive();
         TransferFileJob job;
-        String newName = resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName();
+        String newName = resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName();
 
         // If the source files are located inside an archive, use UnpackJob instead of CopyJob to unpack archives in
         // their natural order (more efficient)

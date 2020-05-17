@@ -17,22 +17,9 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.commons.util.ui.dialog.DialogToolkit;
-import com.mucommander.commons.util.ui.layout.YBoxPanel;
-import com.mucommander.job.impl.CalculateChecksumJob;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.CalculateChecksumAction;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.FilePathField;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -44,6 +31,29 @@ import java.security.Security;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.util.DestinationType;
+import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.io.security.MuProvider;
+import com.mucommander.commons.util.ui.dialog.DialogToolkit;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.job.impl.CalculateChecksumJob;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.impl.CalculateChecksumAction;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.text.FilePathField;
 
 /**
  * This dialog prepares a {@link com.mucommander.job.impl.CalculateChecksumJob} and lets the user choose a checksum
@@ -243,7 +253,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
                         return;
                     }
 
-                    if(resolvedDest.getDestinationType()==PathUtils.ResolvedDestination.EXISTING_FOLDER)
+                    if(resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER)
                         checksumFile = resolvedDest.getDestinationFile().getDirectChild(getChecksumFilename(algorithm));
                     else
                         checksumFile = resolvedDest.getDestinationFile();
