@@ -87,12 +87,12 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
 
     private static Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
 
-    public static void register(String schema, ProtocolPanelProvider panelProvider) {
-        schemaToPanelProvider.put(schema, panelProvider);
+    public static void register(ProtocolPanelProvider panelProvider) {
+        schemaToPanelProvider.put(panelProvider.getSchema(), panelProvider);
     }
 
-    public static void unregister(String schema) {
-        schemaToPanelProvider.remove(schema);
+    public static void unregister(ProtocolPanelProvider panelProvider) {
+        schemaToPanelProvider.remove(panelProvider.getSchema());
     }
 
     /**
