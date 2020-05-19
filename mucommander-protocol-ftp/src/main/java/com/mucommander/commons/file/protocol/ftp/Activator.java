@@ -74,6 +74,11 @@ public class Activator implements BundleActivator {
 		    public int priority() {
 		        return 5000;
 		    }
+
+		    @Override
+		    public Class<? extends ServerPanel> getPanelClass() {
+		        return FTPPanel.class;
+		    }
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
 		uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);

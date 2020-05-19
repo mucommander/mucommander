@@ -95,6 +95,11 @@ public class Activator implements BundleActivator {
 		    public int priority() {
 		        return 4000;
 		    }
+
+		    @Override
+		    public Class<? extends ServerPanel> getPanelClass() {
+		        return SMBPanel.class;
+		    }
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
 		uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);

@@ -74,6 +74,11 @@ public class Activator implements BundleActivator {
 		    public int priority() {
 		        return 2000;
 		    }
+
+		    @Override
+		    public Class<? extends ServerPanel> getPanelClass() {
+		        return NFSPanel.class;
+		    }
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
 		uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);

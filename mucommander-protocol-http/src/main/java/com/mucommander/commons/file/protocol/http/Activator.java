@@ -90,6 +90,11 @@ public class Activator implements BundleActivator {
 		    public int priority() {
 		        return 6000;
 		    }
+
+		    @Override
+		    public Class<? extends ServerPanel> getPanelClass() {
+		        return HTTPPanel.class;
+		    }
 		};
 		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
 		service2Registration = context.registerService(FileProtocolService.class, service2, null);

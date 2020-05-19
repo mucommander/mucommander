@@ -83,7 +83,7 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
-    private static Class<? extends ServerPanel> lastPanelClass = ServerPanel.class; //TODO: change back to FTPPanel
+    private static Class<? extends ServerPanel> lastPanelClass;
 
     private static Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
 
@@ -122,13 +122,6 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
 		
         this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
-//        addTab(FileProtocols.FTP, new FTPPanel(this, mainFrame), selectPanelClass);
-//        addTab(FileProtocols.HDFS, new HDFSPanel(this, mainFrame), selectPanelClass);
-//        addTab(FileProtocols.HTTP, new HTTPPanel(this, mainFrame), selectPanelClass);
-//        addTab(FileProtocols.NFS, new NFSPanel(this, mainFrame), selectPanelClass);
-//        addTab(FileProtocols.S3, new S3Panel(this, mainFrame), selectPanelClass);
-//        addTab(FileProtocols.SMB, new SMBPanel(this, mainFrame), selectPanelClass);
-//        addTab(FileProtocols.VSPHERE, new VSpherePanel(this, mainFrame), selectPanelClass);
         schemaToPanelProvider.values().stream().sorted(Comparator.comparing(ProtocolPanelProvider::priority)).forEach(this::addTab);
 
         currentServerPanel = getCurrentServerPanel();
@@ -165,12 +158,11 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
     }
 
-
     private void addTab(ProtocolPanelProvider provider) {
-        addTab(provider.getSchema(), provider.get(this, folderPanel.getMainFrame()), null);
+        addTab(provider.getSchema(), provider.get(this, folderPanel.getMainFrame()));
     }
 
-    private void addTab(String protocol, ServerPanel serverPanel, Class<? extends ServerPanel> selectPanelClass) {
+    private void addTab(String protocol, ServerPanel serverPanel) {
         if(!FileFactory.isRegisteredProtocol(protocol))
             return;
 
@@ -178,8 +170,8 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
         northPanel.add(serverPanel, BorderLayout.NORTH);
         tabbedPane.addTab(protocol.toUpperCase(), northPanel);
 
-//        if(selectPanelClass.equals(serverPanel.getClass()))
-//            tabbedPane.setSelectedComponent(northPanel);
+        if (serverPanel.getClass().equals(lastPanelClass))
+            tabbedPane.setSelectedComponent(northPanel);
 
         serverPanels.add(serverPanel);
     }
