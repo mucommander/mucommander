@@ -19,9 +19,20 @@ package com.mucommander.protocol.ui;
 
 import javax.swing.JFrame;
 
+/**
+ * Provider of connectivity panel for a file protocol.
+ * @author Arik Hadas
+ */
 public interface ProtocolPanelProvider {
 
 	String getSchema();
 	ServerPanel get(ServerPanelListener listener, JFrame mainFrame);
 	int priority();
+	/**
+	 * This method should return the {@link Class} of the panel only when
+	 * a shortcut for the panel should appear in the drive popup buttons.
+	 * @return the {@link Class} of the panel in case a shortcut should
+	 * appear in the drive popup button, null otherwise.
+	 */
+	default Class<? extends ServerPanel> getPanelClass() { return null; }
 }

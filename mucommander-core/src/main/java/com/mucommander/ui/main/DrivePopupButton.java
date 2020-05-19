@@ -21,6 +21,8 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.regex.PatternSyntaxException;
@@ -57,6 +59,7 @@ import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
@@ -98,6 +101,8 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      * is not defined. */
     private static PathFilter volumeFilter;
 
+    /** ProtocolPanelProviders that we should make shortcuts for */
+    private static Map<String, ProtocolPanelProvider> schemaToPanelProvider  = new HashMap<>();
 
     static {
         if(OsFamily.WINDOWS.isCurrent()) {
@@ -368,15 +373,43 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts
-//        setMnemonic(popupMenu.add(new ServerConnectAction("SMB...", SMBPanel.class)), mnemonicHelper);
-//        setMnemonic(popupMenu.add(new ServerConnectAction("FTP...", FTPPanel.class)), mnemonicHelper);
-//        setMnemonic(popupMenu.add(new ServerConnectAction("SFTP...", SFTPPanel.class)), mnemonicHelper);
-//        setMnemonic(popupMenu.add(new ServerConnectAction("HTTP...", HTTPPanel.class)), mnemonicHelper);
-//        setMnemonic(popupMenu.add(new ServerConnectAction("NFS...", NFSPanel.class)), mnemonicHelper);
+        schemaToPanelProvider.values().stream()
+        .sorted(Comparator.comparing(ProtocolPanelProvider::priority))
+        .map(this::toServerConnectAction)
+        .map(popupMenu::add)
+        .forEach(menuItem -> setMnemonic(menuItem, mnemonicHelper));
 
         return popupMenu;
     }
-    
+
+    /**
+     * Registers an instance of {@link ProtocolPanelProvider} to the drive popup buttons,
+     * this will add shortcut to the relevant 'connect to server' dialog.
+     * @param protocolPanelProvider the {@link ProtocolPanelProvider} to register.
+     */
+    public static void register(ProtocolPanelProvider protocolPanelProvider) {
+        schemaToPanelProvider.put(protocolPanelProvider.getSchema(), protocolPanelProvider);
+    }
+
+    /**
+     * Unregisters an instance of {@link ProtocolPanelProvider}.
+     * @see {@link #register(ProtocolPanelProvider)}}
+     * @param protocolPanelProvider an instance of {@link ProtocolPanelProvider} to unregister.
+     */
+    public static void unregister(ProtocolPanelProvider protocolPanelProvider) {
+        schemaToPanelProvider.remove(protocolPanelProvider.getSchema());
+    }
+
+    /**
+     * Converts an instance of {@link ProtocolPanelProvider} to an instance of {@link ServerConnectAction}.
+     * @param service an instance of {@link ProtocolPanelProvider} to convert.
+     * @return an instance of of {@link ProtocolPanelProvider} that corresponds to the given instance of {@link ServerConnectAction}.
+     */
+    private ServerConnectAction toServerConnectAction(ProtocolPanelProvider service) {
+        String label = service.getSchema().toUpperCase() + "...";
+        return new ServerConnectAction(label, service.getPanelClass());
+    }
+
     /**
      *  Calls to getExtendedDriveName(String) are very slow, so they are performed in a separate thread so as
      *  to not lock the main even thread. The popup menu gets first displayed with the short drive names, and

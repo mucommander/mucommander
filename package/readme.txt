@@ -50,6 +50,7 @@ Bug fixes:
 - Added back missing quote characters in various dialogs (e.g., doesnt -> doesn't).
 - The up-to-date perferences are reflected in the file tables on every change.
 - System files are filtered out when the 'Show system files' preference is deselected on macOS.
+- Shortcuts to dialogs of popular file protocols (e.g., SFTP, SMB) are back in the drive popup buttons.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This

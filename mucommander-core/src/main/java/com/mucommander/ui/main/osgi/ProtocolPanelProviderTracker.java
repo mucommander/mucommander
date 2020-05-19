@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.ui.dialog.server.ServerConnectDialog;
+import com.mucommander.ui.main.DrivePopupButton;
 
 public class ProtocolPanelProviderTracker extends ServiceTracker<ProtocolPanelProvider, ProtocolPanelProvider> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProtocolPanelProviderTracker.class);
@@ -19,15 +20,18 @@ public class ProtocolPanelProviderTracker extends ServiceTracker<ProtocolPanelPr
 
     @Override
     public ProtocolPanelProvider addingService(ServiceReference<ProtocolPanelProvider> reference) {
-    	ProtocolPanelProvider service = super.addingService(reference);
-    	ServerConnectDialog.register(service.getSchema(), service);
-    	LOGGER.info("ProtocolPanelProvider is registered: " + service);
+        ProtocolPanelProvider service = super.addingService(reference);
+        ServerConnectDialog.register(service.getSchema(), service);
+        if (service.getPanelClass() != null)
+            DrivePopupButton.register(service);
+        LOGGER.info("ProtocolPanelProvider is registered: " + service);
         return service;
     }
 
     @Override
     public void removedService(ServiceReference<ProtocolPanelProvider> reference, ProtocolPanelProvider service) {
-    	ServerConnectDialog.unregister(service.getSchema());
+        ServerConnectDialog.unregister(service.getSchema());
+        DrivePopupButton.unregister(service);
         super.removedService(reference, service);
         LOGGER.info("ProtocolPanelProvider is unregistered: " + service);
     }
