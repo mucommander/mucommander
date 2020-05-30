@@ -19,6 +19,7 @@ package com.mucommander.search.file;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.EnumSet;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -48,6 +49,7 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchFile extends ProtocolFile implements SearchListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFile.class);
     private static final AbstractFile[] EMPTY_RESULTS = new AbstractFile[0];
+    private static final EnumSet<FileJobState> COMPLETED_SEARCH_STATUSES = EnumSet.of(FileJobState.FINISHED, FileJobState.INTERRUPTED);
 
     /** Time at which the search results were last modified. */
     private long lastModified;
@@ -146,14 +148,8 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     @Override
     public Object getUnderlyingFileObject() {return null;}
 
-    public boolean isSearchStarted() {
-        // lastModified == 0 -> there was no search yet
-        return lastModified != 0;
-    }
-
     public boolean isSearchCompleted() {
-        return search.getState() == FileJobState.FINISHED ||
-                search.getState() == FileJobState.INTERRUPTED;
+        return COMPLETED_SEARCH_STATUSES.contains(search.getState());
     }
     public void startSearch(MainFrame mainFrame) {
         lastModified = System.currentTimeMillis();
@@ -162,17 +158,13 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     }
 
     public void stopSearch() {
-        search.interrupt();
-    }
-
-    public void retriggerSearch(MainFrame mainFrame) {
-        if (isSearchCompleted())
-            startSearch(mainFrame);
+        if (search != null)
+            search.interrupt();
     }
 
     private SearchJob createSearchJob(MainFrame mainFrame) {
         return SearchBuilder.newSearch()
-                .listener(SearchFile.this)
+                .listener(this)
                 .mainFrame(mainFrame)
                 .what(searchStr)
                 .where(searchPlace)

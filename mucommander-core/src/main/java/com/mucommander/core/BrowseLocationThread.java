@@ -56,7 +56,7 @@ import com.mucommander.ui.main.MainFrame;
  * @author Maxence Bernard
  */
 public class BrowseLocationThread extends ChangeFolderThread {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFolderThread.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BrowseLocationThread.class);
 
     private final static int CANCEL_ACTION = 0;
     private final static int BROWSE_ACTION = 1;
@@ -69,41 +69,24 @@ public class BrowseLocationThread extends ChangeFolderThread {
     private AbstractFile folder;
     private boolean findWorkableFolder;
     private boolean changeLockedTab;
-    private FileURL folderURL;
     private AbstractFile fileToSelect;
     private CredentialsMapping credentialsMapping;
 
     private MainFrame mainFrame;
     private FolderPanel folderPanel;
-    private LocationManager locationManager;
     private LocationChanger locationChanger;
 
     private GlobalLocationHistory globalHistory = GlobalLocationHistory.Instance();
 
-    /** True if this thread has been interrupted by the user using #tryKill */
-    private boolean killed;
-    /** True if an attempt to kill this thread using Thread#interrupt() has already been made */
-    private boolean killedByInterrupt;
-    /** True if an attempt to kill this thread using Thread#stop() has already been made */
-    private boolean killedByStop;
-    /** True if it is unsafe to kill this thread */
-    private boolean doNotKill;
-
     private boolean disposed;
-
-    /** Lock object used to ensure consistency and thread safeness when killing the thread */
-    private final Object KILL_LOCK = new Object();
 
     public BrowseLocationThread(AbstractFile folder, boolean findWorkableFolder, boolean changeLockedTab,
             MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
-        this(mainFrame, folderPanel, locationManager, locationChanger);
+        this(folder.getURL(), mainFrame, folderPanel, locationManager, locationChanger);
         // Ensure that we work on a raw file instance and not a cached one
         this.folder = (folder instanceof CachedFile)?((CachedFile)folder).getProxiedFile():folder;
-        this.folderURL = folder.getURL();
         this.findWorkableFolder = findWorkableFolder;
         this.changeLockedTab = changeLockedTab;
-
-        setPriority(Thread.MAX_PRIORITY);
     }
 
     /**
@@ -114,19 +97,17 @@ public class BrowseLocationThread extends ChangeFolderThread {
      */
     public BrowseLocationThread(FileURL folderURL, CredentialsMapping credentialsMapping, boolean changeLockedTab,
             MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
-        this(mainFrame, folderPanel, locationManager, locationChanger);
-        this.folderURL = folderURL;
+        this(folderURL, mainFrame, folderPanel, locationManager, locationChanger);
         this.changeLockedTab = changeLockedTab;
         this.credentialsMapping = credentialsMapping;
-
-        setPriority(Thread.MAX_PRIORITY);
     }
 
-    private BrowseLocationThread(MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
+    private BrowseLocationThread(FileURL folderURL, MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
+        super(locationManager, folderURL);
         this.mainFrame = mainFrame;
         this.folderPanel = folderPanel;
-        this.locationManager = locationManager;
         this.locationChanger = locationChanger;
+        setPriority(Thread.MAX_PRIORITY);
     }
 
     /**
@@ -153,78 +134,6 @@ public class BrowseLocationThread extends ChangeFolderThread {
                 || file.getURL().getScheme().equals(FileProtocols.HTTP))
                 && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false));
     }
-
-    /**
-     * Attempts to stop this thread and returns <code>true</code> if an attempt was made.
-     * An attempt to stop this thread will be made using one of the methods detailed hereunder, only if
-     * it is still safe to do so: if the thread is too far into the process of changing the current folder,
-     * this method will have no effect and return <code>false</code>.
-     *
-     * <p>The first time this method is called, {@link #interrupt()} is called, giving the thread a chance to stop
-     * gracefully should it be waiting for a thread or blocked in an interruptible operation such as an
-     * InterruptibleChannel. This may have no immediate effect if the thread is blocked in a non-interruptible
-     * operation. This thread will however be marked as 'killed' which will sooner or later cause {@link #run()}
-     * to stop the thread by simply returning.</p> 
-     *
-     * <p>The second time this method is called, the deprecated (and unsafe) {@link #stop()} method is called,
-     * forcing the thread to abort.</p>
-     *
-     * <p>Any subsequent calls to this method will have no effect and return <code>false</code>.</p>
-     *
-     * @return true if an attempt was made to stop this thread.
-     */
-    public boolean tryKill() {
-        synchronized(KILL_LOCK) {
-            if(killedByStop) {
-                LOGGER.debug("Thread already killed by #interrupt() and #stop(), there's nothing we can do, returning");
-                return false;
-            }
-
-            if(doNotKill) {
-                LOGGER.debug("Can't kill thread now, it's too late, returning");
-                return false;
-            }
-
-            // This field needs to be set before actually killing the thread, #run() relies on it
-            killed = true;
-
-            // Call Thread#interrupt() the first time this method is called to give the thread a chance to stop
-            // gracefully if it is waiting in Thread#sleep() or Thread#wait() or Thread#join() or in an
-            // interruptible operation such as java.nio.channel.InterruptibleChannel. If this is the case,
-            // InterruptedException or ClosedByInterruptException will be thrown and thus need to be catched by
-            // #run().
-            if(!killedByInterrupt) {
-                LOGGER.debug("Killing thread using #interrupt()");
-
-                // This field needs to be set before actually interrupting the thread, #run() relies on it
-                killedByInterrupt = true;
-                interrupt();
-            }
-            // Call Thread#stop() the first time this method is called
-            else {
-                LOGGER.debug("Killing thread using #stop()");
-
-                killedByStop = true;
-                super.stop();
-                // Execute #cleanup() as it would have been done by #run() had the thread not been stopped.
-                // Note that #run() may end pseudo-gracefully and catch the underlying Exception. In this case
-                // it will also call #cleanup() but the (2nd) call to #cleanup() will be ignored.
-                cleanup(false);
-            }
-
-            return true;
-        }
-    }
-
-
-    @Override
-    public void start() {
-        // Notify listeners that location is changing
-        locationManager.fireLocationChanging(folder==null?folderURL:folder.getURL());
-
-        super.start();
-    }
-
 
     @Override
     public void run() {
@@ -538,7 +447,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
         }
     }
 
-    public void cleanup(boolean folderChangedSuccessfully) {
+    protected void cleanup(boolean folderChangedSuccessfully) {
         // Ensures that this method is called only once
         synchronized(KILL_LOCK) {
             if(disposed) {
@@ -575,11 +484,6 @@ public class BrowseLocationThread extends ChangeFolderThread {
             else
                 locationManager.fireLocationFailed(failedURL);
         }
-    }
-
-    // For debugging purposes
-    public String toString() {
-        return super.toString()+" folderURL="+folderURL+" folder="+folder;
     }
 
     private void showFailedToReadFolderDialog() {
