@@ -17,11 +17,12 @@
 
 package com.mucommander.core;
 
+import java.awt.Cursor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.search.file.SearchFile;
@@ -35,47 +36,21 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchUpdaterThread extends ChangeFolderThread {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFolderThread.class);
 
-    private AbstractFile folder;
-    private boolean findWorkableFolder;
+    private SearchFile folder;
     private boolean changeLockedTab;
-    private FileURL folderURL;
     private AbstractFile fileToSelect;
     private MainFrame mainFrame;
     private FolderPanel folderPanel;
-    private LocationManager locationManager;
     private LocationChanger locationChanger;
 
-    public SearchUpdaterThread(AbstractFile folder, boolean findWorkableFolder, boolean changeLockedTab,
-            MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
-        this(mainFrame, folderPanel, locationManager, locationChanger);
-        // Ensure that we work on a raw file instance and not a cached one
-        this.folder = (folder instanceof CachedFile)?((CachedFile)folder).getProxiedFile():folder;
-        this.folderURL = folder.getURL();
-        this.findWorkableFolder = findWorkableFolder;
-        this.changeLockedTab = changeLockedTab;
-
-        setPriority(Thread.MAX_PRIORITY);
-    }
-
-    /**
-     * 
-     * @param folderURL
-     * @param changeLockedTab
-     */
     public SearchUpdaterThread(FileURL folderURL, boolean changeLockedTab,
             MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
-        this(mainFrame, folderPanel, locationManager, locationChanger);
-        this.folderURL = folderURL;
-        this.changeLockedTab = changeLockedTab;
-
-        setPriority(Thread.MAX_PRIORITY);
-    }
-
-    private SearchUpdaterThread(MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
+        super(locationManager, folderURL);
         this.mainFrame = mainFrame;
         this.folderPanel = folderPanel;
-        this.locationManager = locationManager;
         this.locationChanger = locationChanger;
+        this.changeLockedTab = changeLockedTab;
+        setPriority(Thread.MAX_PRIORITY);
     }
 
     @Override
@@ -84,73 +59,107 @@ public class SearchUpdaterThread extends ChangeFolderThread {
     }
 
     @Override
-    public boolean tryKill() {
-        ((SearchFile) folder).stopSearch();
-        return true;
-    }
-
-    @Override
     public void run() {
+        LOGGER.debug("starting search updater...");
+
+        // Show some progress in the progress bar to give hope
+        folderPanel.setProgressValue(10);
+
         try {
-            folder = FileFactory.getFile(folderURL, true);
+            folder = (SearchFile) FileFactory.getFile(folderURL, true);
 
-            SearchFile searchFile = (SearchFile) folder;
-//            if (locationManager.getCurrentFolderDate() == 0)
+            // Set cursor to hourglass/wait
+            mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-            if (!searchFile.isSearchStarted()) {
-                searchFile.startSearch(mainFrame);
-                locationManager.fireLocationChanging(folderURL);
-                // started started -> 15% complete
-                folderPanel.setProgressValue(15);    
-            }
+            // Render all actions inactive while changing folder
+            mainFrame.setNoEventsMode(true);
 
-            boolean searchDone = searchFile.isSearchCompleted();
+            folder.startSearch(mainFrame);
 
-            LOGGER.trace("calling setCurrentFolder");
+            // started started -> 15% complete
+            folderPanel.setProgressValue(20);
+
+            long date = folder.getDate();
 
             // Change the file table's current folder and select the specified file (if any)
-            locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, searchDone);
+            locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, false);
+
+            folderPanel.setProgressValue(50);
+
+            do {
+                sleep(1000);
+
+                long currentDate = folder.getDate();
+                if (currentDate != date) {
+                    date = currentDate;
+                    LOGGER.trace("calling setCurrentFolder");
+
+                    // Change the file table's current folder and select the specified file (if any)
+                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, false);
+                }
+            } while(!folder.isSearchCompleted());
+
+            synchronized(KILL_LOCK) {
+                if(killed) {
+                    LOGGER.debug("this thread has been killed, stopping");
+                    throw new RuntimeException("killed");
+                }
+                // From now on, thread cannot be killed (would comprise table integrity)
+                doNotKill = true;
+            }
+
+            // 
+            folderPanel.setProgressValue(80);
+
+            locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, true);
 
             // folder set -> 95% complete
-            folderPanel.setProgressValue(searchDone ? 95 : 50);
+            folderPanel.setProgressValue(95);
 
-            locationChanger.cleanChangeFolderThread();
-
-            if (searchDone)
-                cleanup();
+            synchronized(KILL_LOCK) {
+                // Clean things up
+                cleanup(true);
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
             LOGGER.debug("Caught exception", e);
-/*
-            if(killed) {
-                // If #tryKill() called #interrupt(), the exception we just caught was most likely
-                // thrown as a result of the thread being interrupted.
-                //
-                // The exception can be a java.lang.InterruptedException (Thread throws those),
-                // a java.nio.channels.ClosedByInterruptException (InterruptibleChannel throws those)
-                // or any other exception thrown by some code that swallowed the original exception
-                // and threw a new one.
 
-                LOGGER.debug("Thread was interrupted, ignoring exception");
-                break;
+            if (killed) {
+                LOGGER.debug("stopping search");
+                folder.stopSearch();
             }
 
-            // Restore default cursor
-            mainFrame.setCursor(Cursor.getDefaultCursor());
-
-            // Stop looping!
-            break; */
+            synchronized(KILL_LOCK) {
+                // Clean things up
+                cleanup(false);
+            }
         }
     }
 
-    public void cleanup() {
-     // Clear the interrupted flag in case this thread has been killed using #interrupt().
+    protected void cleanup(boolean folderChangedSuccessfully) {
+        // Clear the interrupted flag in case this thread has been killed using #interrupt().
         // Not doing this could cause some of the code called by this method to be interrupted (because this thread
         // is interrupted) and throw an exception
         interrupted();
 
         // Reset location field's progress bar
         folderPanel.setProgressValue(0);
+
+        // Restore normal mouse cursor
+        mainFrame.setCursor(Cursor.getDefaultCursor());
+
+        locationChanger.cleanChangeFolderThread();
+
+        // Make all actions active again
+        mainFrame.setNoEventsMode(false);
+
+        if (!folderChangedSuccessfully) {
+            // Notifies listeners that location change has been cancelled by the user or has failed
+            if(killed)
+                locationManager.fireLocationCancelled(folderURL);
+            else
+                locationManager.fireLocationFailed(folderURL);
+        }
     }
 }

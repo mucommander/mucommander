@@ -48,6 +48,8 @@ public class SearchJob extends FileJob {
     private SearchListener listener;
     private int depth;
 
+    private static final SearchListener nullListener = () -> {};
+
     public SearchJob(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files);
         findings = new CopyOnWriteArrayList<>();
@@ -100,6 +102,12 @@ public class SearchJob extends FileJob {
 
     public List<AbstractFile> getFindings() {
         return findings;
+    }
+
+    @Override
+    public void interrupt() {
+        setListener(nullListener);
+        super.interrupt();
     }
 
     public void setListener(SearchListener listener) {

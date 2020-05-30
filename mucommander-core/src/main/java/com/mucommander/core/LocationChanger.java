@@ -32,6 +32,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.search.file.SearchFile;
 import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -171,15 +172,22 @@ public class LocationChanger {
 			// changes the changeFolderThread field to null when finished, and it may do so before this method has
 			// returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
-			ChangeFolderThread thread = !folder.getURL().getScheme().equals(SearchProtocolProvider.SEARCH) ?
-			        new BrowseLocationThread(folder,
-			                findWorkableFolder,
-			                changeLockedTab,
-			                mainFrame,
-			                folderPanel,
-			                locationManager,
-			                this)
-			        : new SearchUpdaterThread(folder, findWorkableFolder, changeLockedTab, mainFrame, folderPanel, locationManager, this);
+			FileURL folderURL = folder.getURL();
+			ChangeFolderThread thread;
+			switch(folderURL.getScheme()) {
+			case SearchProtocolProvider.SEARCH:
+			    ((SearchFile) folder).stopSearch();
+			    thread = new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
+			    break;
+			default:
+			    thread = new BrowseLocationThread(folder,
+			            findWorkableFolder,
+			            changeLockedTab,
+			            mainFrame,
+			            folderPanel,
+			            locationManager,
+			            this);
+			}
 
 			if(selectThisFileAfter!=null)
 				thread.selectThisFileAfter(selectThisFileAfter);

@@ -22,9 +22,6 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.search.file.SearchFile;
-import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -45,9 +42,6 @@ public class RefreshAction extends MuAction {
 
     @Override
     public void performAction() {
-        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        if (currentFolder.getURL().getScheme().equals(SearchProtocolProvider.SEARCH))
-            ((SearchFile) currentFolder).retriggerSearch(mainFrame);
         // Refresh current folder in a separate thread
         mainFrame.getActivePanel().tryRefreshCurrentFolder();
     }
