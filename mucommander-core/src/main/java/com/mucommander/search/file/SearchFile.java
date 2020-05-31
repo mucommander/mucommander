@@ -90,7 +90,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     @Override
     public void setParent(AbstractFile parent) {}
     @Override
-    public boolean exists() { return true; }
+    public boolean exists() { return lastModified != 0; }
     @Override
     public FilePermissions getPermissions() { return null; }
     @Override
