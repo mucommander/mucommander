@@ -106,12 +106,12 @@ public class SearchJob extends FileJob {
 
     @Override
     public void interrupt() {
-        setListener(nullListener);
+        setListener(null);
         super.interrupt();
     }
 
     public void setListener(SearchListener listener) {
-        this.listener = listener;
+        this.listener = listener != null ? listener : nullListener;
     }
 
     @Override

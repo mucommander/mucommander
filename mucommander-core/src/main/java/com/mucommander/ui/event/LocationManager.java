@@ -161,7 +161,7 @@ public class LocationManager {
      *
      * @param folderURL url of the new current folder in the associated FolderPanel
      */
-    private synchronized void fireLocationChanged(FileURL folderURL) {
+    public synchronized void fireLocationChanged(FileURL folderURL) {
         LocationEvent event = new LocationEvent(folderURL);
         listeners().forEach(listener -> listener.locationChanged(event));
     }

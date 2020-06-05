@@ -26,6 +26,8 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.search.file.SearchFile;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -43,6 +45,9 @@ public class SearchUpdaterThread extends ChangeFolderThread {
     private FolderPanel folderPanel;
     private LocationChanger locationChanger;
 
+    private final static int CONTINUE_ACTION = 0;
+    private final static int STOP_ACTION = 1;
+
     public SearchUpdaterThread(FileURL folderURL, boolean changeLockedTab,
             MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
         super(locationManager, folderURL);
@@ -50,7 +55,6 @@ public class SearchUpdaterThread extends ChangeFolderThread {
         this.folderPanel = folderPanel;
         this.locationChanger = locationChanger;
         this.changeLockedTab = changeLockedTab;
-        setPriority(Thread.MAX_PRIORITY);
     }
 
     @Override
@@ -74,44 +78,80 @@ public class SearchUpdaterThread extends ChangeFolderThread {
             // Render all actions inactive while changing folder
             mainFrame.setNoEventsMode(true);
 
+            // Initiate the search thread
             folder.startSearch(mainFrame);
 
-            // started started -> 15% complete
-            folderPanel.setProgressValue(20);
-
+            // Retrieve the  of the search results
             long date = folder.getDate();
 
-            // Change the file table's current folder and select the specified file (if any)
+            // Update the file table, most likely with empty result set
             locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, false);
 
+            // Search started, advance progress
             folderPanel.setProgressValue(50);
 
-            do {
-                sleep(1000);
+            while(true) {
+                try {
+                    sleep(1000);
+                } catch(InterruptedException e) {
+                    LOGGER.debug("stopping search");
+                    folder.stopSearch();
+                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, true);
+                    throw e;
+                }
 
+                boolean searchCompleted = folder.isSearchCompleted();
                 long currentDate = folder.getDate();
-                if (currentDate != date) {
+                boolean dateChanged = currentDate != date;
+                if (searchCompleted) {
+                    synchronized(KILL_LOCK) {
+                        if(killed) {
+                            LOGGER.debug("this thread has been killed, stopping");
+                            throw new RuntimeException("killed");
+                        }
+                        // From now on, thread cannot be killed (would comprise table integrity)
+                        doNotKill = true;
+                    }
+
+                    folderPanel.setProgressValue(dateChanged ? 75 : 90);
+                }
+
+                if (dateChanged) {
                     date = currentDate;
+
                     LOGGER.trace("calling setCurrentFolder");
-
                     // Change the file table's current folder and select the specified file (if any)
-                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, false);
-                }
-            } while(!folder.isSearchCompleted());
+                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, searchCompleted);
 
-            synchronized(KILL_LOCK) {
-                if(killed) {
-                    LOGGER.debug("this thread has been killed, stopping");
-                    throw new RuntimeException("killed");
+                    if (searchCompleted)
+                        break;
+
+                    if (folder.isPausedToDueMaxResults()) {
+                        // Restore default cursor
+                        mainFrame.setCursor(Cursor.getDefaultCursor());
+
+                        // Download or browse file ?
+                        int ret = showSearchExceededMaxResults();
+
+                        if (ret==-1 || ret==STOP_ACTION) {
+                            folderPanel.getLocationManager().fireLocationChanged(folder.getURL());
+                            break;
+                        }
+
+                        // Set cursor to hourglass/wait
+                        mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        // continue the paused search
+                        folder.continueSearch();
+                    }
+
+                    continue;
                 }
-                // From now on, thread cannot be killed (would comprise table integrity)
-                doNotKill = true;
+
+                if (searchCompleted) {
+                    folderPanel.getLocationManager().fireLocationChanged(folder.getURL());
+                    break;
+                }
             }
-
-            // 
-            folderPanel.setProgressValue(80);
-
-            locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, true);
 
             // folder set -> 95% complete
             folderPanel.setProgressValue(95);
@@ -122,12 +162,10 @@ public class SearchUpdaterThread extends ChangeFolderThread {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
             LOGGER.debug("Caught exception", e);
 
             if (killed) {
-                LOGGER.debug("stopping search");
-                folder.stopSearch();
+                
             }
 
             synchronized(KILL_LOCK) {
@@ -135,6 +173,16 @@ public class SearchUpdaterThread extends ChangeFolderThread {
                 cleanup(false);
             }
         }
+    }
+
+    private int showSearchExceededMaxResults() {
+        return new QuestionDialog(mainFrame,
+                Translator.get("warning"),
+                Translator.get("search.exceeds_max_results", String.valueOf(SearchFile.MAX_RESULTS)),
+                mainFrame,
+                new String[] {Translator.get("yes"), Translator.get("no")},
+                new int[] {STOP_ACTION, CONTINUE_ACTION},
+                0).getActionValue();
     }
 
     protected void cleanup(boolean folderChangedSuccessfully) {

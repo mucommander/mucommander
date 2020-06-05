@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFile.class);
     private static final AbstractFile[] EMPTY_RESULTS = new AbstractFile[0];
     private static final EnumSet<FileJobState> COMPLETED_SEARCH_STATUSES = EnumSet.of(FileJobState.FINISHED, FileJobState.INTERRUPTED);
+    public static final int MAX_RESULTS = 10 * 1000;
 
     /** Time at which the search results were last modified. */
     private long lastModified;
@@ -57,6 +59,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     private SearchJob search;
     private String searchStr;
     private AbstractFile searchPlace;
+    private Boolean pausedToDueMaxResults;
 
     protected SearchFile(FileURL url, Map<String, String> properties) throws IOException {
         super(url);
@@ -67,7 +70,15 @@ public class SearchFile extends ProtocolFile implements SearchListener {
 
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
-        return search != null ? search.getFindings().toArray(EMPTY_RESULTS) : EMPTY_RESULTS;
+        if (search == null) {
+            return EMPTY_RESULTS;
+        }
+        List<AbstractFile> results = search.getFindings();
+        if (pausedToDueMaxResults == null && results.size() > MAX_RESULTS) {
+            search.setListener(null);
+            pausedToDueMaxResults = true;
+        }
+        return results.toArray(EMPTY_RESULTS);
     }
 
     @Override
@@ -153,6 +164,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     }
     public void startSearch(MainFrame mainFrame) {
         lastModified = System.currentTimeMillis();
+        pausedToDueMaxResults = null;
         search = createSearchJob(mainFrame);
         search.start();
     }
@@ -160,6 +172,15 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     public void stopSearch() {
         if (search != null)
             search.interrupt();
+    }
+
+    public boolean isPausedToDueMaxResults () {
+        return Boolean.TRUE.equals(pausedToDueMaxResults);
+    }
+
+    public void continueSearch() {
+        search.setListener(this);
+        pausedToDueMaxResults = false;
     }
 
     private SearchJob createSearchJob(MainFrame mainFrame) {
