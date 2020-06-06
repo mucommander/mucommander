@@ -80,7 +80,7 @@ public class LocationChanger {
 		Runnable locationSetter = () -> {
 		    AbstractFile folder = getWorkableLocation(folderURL);
 		    try {
-		        locationManager.setCurrentFolder(folder, null, true, true);
+		        locationManager.setCurrentFolder(folder, null, true);
 		    } finally {
 		        mainFrame.setNoEventsMode(false);
 		        // Restore default cursor
@@ -278,15 +278,15 @@ public class LocationChanger {
 			// changes the changeFolderThread field to null when finished, and it may do so before this method has
 			// returned (I've seen this happening). Relying solely on the changeFolderThread field could thus cause
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
-			ChangeFolderThread thread = !folderURL.getScheme().equals(SearchProtocolProvider.SCHEMA) ?
-			        new BrowseLocationThread(folderURL,
-			                credentialsMapping,
-			                changeLockedTab,
-			                mainFrame,
-			                folderPanel,
-			                locationManager,
-			                this)
-			        : new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
+			ChangeFolderThread thread;
+			switch (folderURL.getScheme()) {
+			case SearchProtocolProvider.SCHEMA:
+			    thread = new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
+			    break;
+			default:
+			    thread = new BrowseLocationThread(folderURL, credentialsMapping, changeLockedTab, mainFrame, folderPanel,
+			            locationManager, this);
+			}
 			thread.start();
 
 			changeFolderThread = thread;
