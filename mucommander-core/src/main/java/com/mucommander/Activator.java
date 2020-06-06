@@ -272,7 +272,7 @@ public class Activator implements BundleActivator {
         return new FileProtocolService() {
             @Override
             public String getSchema() {
-                return SearchProtocolProvider.SEARCH;
+                return SearchProtocolProvider.SCHEMA;
             }
 
             @Override

@@ -35,8 +35,8 @@ import com.mucommander.commons.file.protocol.ProtocolProvider;
 public class SearchProtocolProvider implements ProtocolProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchProtocolProvider.class);
 
-    /** Protocol for the virtual search file system. */
-    public static final String SEARCH = "find";
+    /** The corresponding schema part of virtual search files in {@link FileURL} */
+    public static final String SCHEMA = "find";
 
     @Override
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {

@@ -30,10 +30,10 @@ public class SearchUtils {
         FileURL fileURL = (FileURL) file.getURL().clone();
         switch(fileURL.getScheme()) {
         default:
-            fileURL.setScheme(SearchProtocolProvider.SEARCH);
+            fileURL.setScheme(SearchProtocolProvider.SCHEMA);
             fileURL.setHost(file.getAbsolutePath(false));
             fileURL.setPath(null);
-        case SearchProtocolProvider.SEARCH:
+        case SearchProtocolProvider.SCHEMA:
             fileURL.setQuery(null);
         }
         return fileURL;

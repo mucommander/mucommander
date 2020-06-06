@@ -275,7 +275,7 @@ public class FileTableModel extends AbstractTableModel {
 
     public Function<AbstractFile, String> getNameFunc() {
         switch (currentFolder.getURL().getScheme()) {
-        case SearchProtocolProvider.SEARCH:
+        case SearchProtocolProvider.SCHEMA:
             String base = currentFolder.getURL().getHost();
             int beginIndex = base.length() + 1; // + path separator
             return file -> {

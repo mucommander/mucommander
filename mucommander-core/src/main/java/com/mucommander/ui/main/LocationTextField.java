@@ -301,7 +301,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
         folderPanel.getMainFrame().getJMenuBar().setEnabled(false);
 
         String text = getText();
-        if (text.startsWith(String.format("%s://", SearchProtocolProvider.SEARCH)))
+        if (text.startsWith(String.format("%s://", SearchProtocolProvider.SCHEMA)))
             SwingUtilities.invokeLater(() -> setCaretPosition(text.length()));
         else
             // (upon focus) have text selected, so as to save the user the need to manually do so

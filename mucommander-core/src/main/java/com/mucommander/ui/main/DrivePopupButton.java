@@ -234,7 +234,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         	setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARKS_ICON_NAME));
         	break;
 
-        case SearchProtocolProvider.SEARCH:
+        case SearchProtocolProvider.SCHEMA:
             setText("Find");
             setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FIND_RESULT_ICON_NAME));
             break;
