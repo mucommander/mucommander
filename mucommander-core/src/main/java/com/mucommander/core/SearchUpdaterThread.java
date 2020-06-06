@@ -18,6 +18,7 @@
 package com.mucommander.core;
 
 import java.awt.Cursor;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +39,13 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchUpdaterThread extends ChangeFolderThread {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFolderThread.class);
 
-    private SearchFile folder;
+    private SearchFile search;
     private boolean changeLockedTab;
-    private AbstractFile fileToSelect;
     private MainFrame mainFrame;
     private FolderPanel folderPanel;
     private LocationChanger locationChanger;
+
+    private boolean stoppedDueToMaxResults;
 
     private final static int CONTINUE_ACTION = 0;
     private final static int STOP_ACTION = 1;
@@ -65,68 +67,78 @@ public class SearchUpdaterThread extends ChangeFolderThread {
     @Override
     public void run() {
         LOGGER.debug("starting search updater...");
+        boolean searchEndedSuccessfully = false;
 
         // Show some progress in the progress bar to give hope
         folderPanel.setProgressValue(10);
 
         try {
-            folder = (SearchFile) FileFactory.getFile(folderURL, true);
-
             // Set cursor to hourglass/wait
             mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
             // Render all actions inactive while changing folder
             mainFrame.setNoEventsMode(true);
 
-            // Initiate the search thread
-            folder.startSearch(mainFrame);
+            search = (SearchFile) FileFactory.getFile(folderURL, true);
 
-            // Retrieve the  of the search results
-            long date = folder.getDate();
+            // Initiate the search thread
+            search.start(mainFrame);
+
+            // Retrieve the timestamp of the latest search results
+            long date = search.getDate();
 
             // Update the file table, most likely with empty result set
-            locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, false);
+            locationChanger.setCurrentFolder(search, null, changeLockedTab, false);
 
             // Search started, advance progress
             folderPanel.setProgressValue(50);
 
             while(true) {
-                try {
-                    sleep(1000);
-                } catch(InterruptedException e) {
-                    LOGGER.debug("stopping search");
-                    folder.stopSearch();
-                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, true);
-                    throw e;
-                }
+                if (killed)
+                    throw new InterruptedException("search-updater thread stopped");
 
-                boolean searchCompleted = folder.isSearchCompleted();
-                long currentDate = folder.getDate();
-                boolean dateChanged = currentDate != date;
+                sleep(1000);
+
+                boolean searchCompleted = search.isSearchCompleted();
+                // Retrieve the timestamp of the latest search results
+                long currentDate = search.getDate();
+                boolean searchResultsChanged = currentDate != date;
+
                 if (searchCompleted) {
                     synchronized(KILL_LOCK) {
-                        if(killed) {
-                            LOGGER.debug("this thread has been killed, stopping");
-                            throw new RuntimeException("killed");
-                        }
-                        // From now on, thread cannot be killed (would comprise table integrity)
+                        if (killed)
+                            throw new InterruptedException("search-updater thread stopped");
+
                         doNotKill = true;
                     }
 
-                    folderPanel.setProgressValue(dateChanged ? 75 : 90);
+                    if (searchResultsChanged) {
+                        folderPanel.setProgressValue(75);
+
+                        LOGGER.trace("calling setCurrentFolder");
+                        locationChanger.setCurrentFolder(search, null, changeLockedTab, true);
+                    } else {
+                        folderPanel.setProgressValue(90);
+
+                        folderPanel.getLocationManager().fireLocationChanged(search.getURL());
+                    }
+
+                    // folder set -> 95% complete
+                    folderPanel.setProgressValue(95);
+
+                    searchEndedSuccessfully = true;
+
+                    break;
                 }
 
-                if (dateChanged) {
+                if (searchResultsChanged) {
                     date = currentDate;
 
                     LOGGER.trace("calling setCurrentFolder");
                     // Change the file table's current folder and select the specified file (if any)
-                    locationChanger.setCurrentFolder(folder, fileToSelect, changeLockedTab, searchCompleted);
+                    locationChanger.setCurrentFolder(search, null, changeLockedTab, false);
 
-                    if (searchCompleted)
-                        break;
-
-                    if (folder.isPausedToDueMaxResults()) {
+                    if (search.isPausedToDueMaxResults()) {
                         // Restore default cursor
                         mainFrame.setCursor(Cursor.getDefaultCursor());
 
@@ -134,44 +146,35 @@ public class SearchUpdaterThread extends ChangeFolderThread {
                         int ret = showSearchExceededMaxResults();
 
                         if (ret==-1 || ret==STOP_ACTION) {
-                            folderPanel.getLocationManager().fireLocationChanged(folder.getURL());
+                            stoppedDueToMaxResults = true;
+                            folderPanel.getLocationManager().fireLocationChanged(search.getURL());
                             break;
                         }
 
                         // Set cursor to hourglass/wait
                         mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                         // continue the paused search
-                        folder.continueSearch();
+                        search.continueSearch();
                     }
-
-                    continue;
                 }
-
-                if (searchCompleted) {
-                    folderPanel.getLocationManager().fireLocationChanged(folder.getURL());
-                    break;
-                }
-            }
-
-            // folder set -> 95% complete
-            folderPanel.setProgressValue(95);
-
-            synchronized(KILL_LOCK) {
-                // Clean things up
-                cleanup(true);
             }
         }
         catch(Exception e) {
             LOGGER.debug("Caught exception", e);
 
-            if (killed) {
-                
-            }
+            if (search != null) {
+                search.stop();
 
-            synchronized(KILL_LOCK) {
-                // Clean things up
-                cleanup(false);
+                if (killed) {
+                    try { locationChanger.setCurrentFolder(search, null, changeLockedTab, false); }
+                    catch (IOException e2) { LOGGER.debug("failed to set current folder"); }
+                }
             }
+        }
+
+        synchronized(KILL_LOCK) {
+            // Clean things up
+            cleanup(searchEndedSuccessfully);
         }
     }
 
@@ -204,7 +207,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
         if (!folderChangedSuccessfully) {
             // Notifies listeners that location change has been cancelled by the user or has failed
-            if(killed)
+            if (killed || stoppedDueToMaxResults)
                 locationManager.fireLocationCancelled(folderURL);
             else
                 locationManager.fireLocationFailed(folderURL);

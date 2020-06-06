@@ -162,14 +162,22 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     public boolean isSearchCompleted() {
         return COMPLETED_SEARCH_STATUSES.contains(search.getState());
     }
-    public void startSearch(MainFrame mainFrame) {
+
+    /**
+     * Starts a search thread.
+     * @param mainFrame the MainFrame the search is initiated from
+     */
+    public void start(MainFrame mainFrame) {
         lastModified = System.currentTimeMillis();
         pausedToDueMaxResults = null;
         search = createSearchJob(mainFrame);
         search.start();
     }
 
-    public void stopSearch() {
+    /**
+     * Stops the current search thread, if exists.
+     */
+    public void stop() {
         if (search != null)
             search.interrupt();
     }
