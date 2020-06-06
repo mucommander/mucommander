@@ -17,14 +17,12 @@
 
 package com.mucommander.ui.main.quicklist;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.swing.Icon;
 
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.util.CollectionUtils;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -56,14 +54,12 @@ public class RecentLocationsQL extends QuickListWithIcons<RecentLocationsQL.Rece
 
     @Override
     public RecentLocation[] getData() {
-        List<RecentLocation> list = new LinkedList<RecentLocation>();
-        for (FileURL url : GlobalLocationHistory.Instance().getHistory()) {
-            // Don't include the currently presented location in the list
-            if (!url.equals(folderPanel.getCurrentFolder().getURL()))
-                list.add(0, new RecentLocation(url));
-        }
-
-        return list.toArray(new RecentLocation[0]);
+        return GlobalLocationHistory.Instance().getHistory().stream()
+                // Don't include the currently presented location in the list
+                .filter(url -> !folderPanel.getCurrentFolder().getURL().equals(url))
+                .map(RecentLocation::new)
+                .collect(CollectionUtils.reverse())
+                .toArray(RecentLocation[]::new);
     }
 
     @Override
@@ -80,14 +76,15 @@ public class RecentLocationsQL extends QuickListWithIcons<RecentLocationsQL.Rece
 
         @Override
         public String toString() {
-            if (!LocalFile.SCHEMA.equals(url.getScheme()))
+            switch(url.getScheme()) {
+            case LocalFile.SCHEMA:
+                String path = url.getPath();
+                if (LocalFile.USES_ROOT_DRIVES && !path.isEmpty())
+                    path = path.substring(1);
+                return path;
+            default:
                 return url.toString();
-
-            String path = url.getPath();
-            if (LocalFile.USES_ROOT_DRIVES && !path.isEmpty())
-                path = path.substring(1);
-
-            return path;
+            }
         }
 
         @Override
