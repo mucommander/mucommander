@@ -32,6 +32,8 @@ What's new since v0.9.4 ?
 -----------------------
 
 New features:
+- New file-search functionality.
+  Default shortcuts are Control+F (opens find dialog) and Shift+Control+F (no dialog).
 - Added a PDF viewer.
 
 Improvements:
