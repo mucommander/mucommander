@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 
@@ -40,8 +41,15 @@ public class SearchProtocolProvider implements ProtocolProvider {
 
     @Override
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
-        Map<String, String> properties = parseSearchProperties(url.getQuery());
-        return new SearchFile(url, properties);
+        AbstractFile searchPlace = FileFactory.getFile(url.getHost());
+        if (!searchPlace.exists()) {
+            LOGGER.debug("search place doesn't exist {}", searchPlace);
+            throw new IOException("search place doesn't exist");
+        }
+        return new SearchFile(url)
+                .setProperties(parseSearchProperties(url.getQuery()))
+                .setSearchStr(url.getPath().substring(1))
+                .setSearchPlace(searchPlace);
     }
 
     private Map<String, String> parseSearchProperties(String str) {

@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileURL;
@@ -61,11 +60,23 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     private AbstractFile searchPlace;
     private Boolean pausedToDueMaxResults;
 
-    protected SearchFile(FileURL url, Map<String, String> properties) throws IOException {
+    protected SearchFile(FileURL url) {
         super(url);
+    }
+
+    public SearchFile setSearchStr(String searchStr) {
+        this.searchStr = searchStr;
+        return this;
+    }
+
+    public SearchFile setSearchPlace(AbstractFile searchPlace) {
+        this.searchPlace = searchPlace;
+        return this;
+    }
+
+    public SearchFile setProperties(Map<String, String> properties) {
         this.properties = properties;
-        searchStr = url.getPath().substring(1);
-        searchPlace = FileFactory.getFile(url.getHost());
+        return this;
     }
 
     @Override

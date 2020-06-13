@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.search.file.SearchFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -88,7 +89,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
             long date = search.getDate();
 
             // Update the file table, most likely with empty result set
-            locationChanger.setCurrentFolder(search, null, changeLockedTab, false);
+            setCurrentFolder(false);
 
             // Search started, advance progress
             folderPanel.setProgressValue(50);
@@ -108,18 +109,14 @@ public class SearchUpdaterThread extends ChangeFolderThread {
                     synchronized(KILL_LOCK) {
                         if (killed)
                             throw new InterruptedException("search-updater thread stopped");
-
                         doNotKill = true;
                     }
 
                     if (searchResultsChanged) {
                         folderPanel.setProgressValue(75);
-
-                        LOGGER.trace("calling setCurrentFolder");
-                        locationChanger.setCurrentFolder(search, null, changeLockedTab, true);
+                        setCurrentFolder(true);
                     } else {
                         folderPanel.setProgressValue(90);
-
                         folderPanel.getLocationManager().fireLocationChanged(search.getURL());
                     }
 
@@ -134,9 +131,8 @@ public class SearchUpdaterThread extends ChangeFolderThread {
                 if (searchResultsChanged) {
                     date = currentDate;
 
-                    LOGGER.trace("calling setCurrentFolder");
                     // Change the file table's current folder and select the specified file (if any)
-                    locationChanger.setCurrentFolder(search, null, changeLockedTab, false);
+                    setCurrentFolder(false);
 
                     if (search.isPausedToDueMaxResults()) {
                         // Restore default cursor
@@ -162,19 +158,31 @@ public class SearchUpdaterThread extends ChangeFolderThread {
         catch(Exception e) {
             LOGGER.debug("Caught exception", e);
 
-            if (search != null) {
+            if (search == null) {
+                locationChanger.showFolderDoesNotExistDialog();
+            } else {
                 search.stop();
-
-                if (killed) {
-                    try { locationChanger.setCurrentFolder(search, null, changeLockedTab, false); }
-                    catch (IOException e2) { LOGGER.debug("failed to set current folder"); }
-                }
+                if (killed)
+                    setCurrentFolderDismissException(false);
             }
         }
 
         synchronized(KILL_LOCK) {
             // Clean things up
             cleanup(searchEndedSuccessfully);
+        }
+    }
+
+    private void setCurrentFolder(boolean fireLocationChanged) throws UnsupportedFileOperationException, IOException {
+        LOGGER.trace("calling setCurrentFolder");
+        locationChanger.setCurrentFolder(search, null, changeLockedTab, fireLocationChanged);
+    }
+
+    private void setCurrentFolderDismissException(boolean fireLocationChanged) {
+        try {
+            setCurrentFolder(fireLocationChanged);
+        } catch (IOException e) {
+            LOGGER.debug("failed to set current folder", e);
         }
     }
 
