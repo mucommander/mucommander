@@ -353,6 +353,9 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
         include '*.jar'
         exclude 'osgiaas*'
         exclude 'jline*'
+        exclude 'mucommander-os-linux*'
+        exclude 'mucommander-os-macos*'
+        exclude 'mucommander-os-openvms*'
         into "bundle"
     }
     into "$buildDir/tmp/nsis"
