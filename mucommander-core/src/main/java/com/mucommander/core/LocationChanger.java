@@ -334,15 +334,16 @@ public class LocationChanger {
      * @param folder folder to be made current folder
      * @param fileToSelect file to be selected after the folder has been refreshed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
      * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
+     * @param fireLocationChanged whether or not to fire even upon folder change
 	 * @throws IOException 
 	 * @throws UnsupportedFileOperationException 
      */
-    void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fire) throws UnsupportedFileOperationException, IOException {
+    void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fireLocationChanged) throws UnsupportedFileOperationException, IOException {
     	// Update the timestamp right before the folder is set in case FolderChangeMonitor checks the timestamp
         // while FileTable#setCurrentFolder is being called. 
         lastFolderChangeTime = System.currentTimeMillis();
         
-    	locationManager.setCurrentFolder(folder, fileToSelect, changeLockedTab, fire);
+        locationManager.setCurrentFolder(folder, fileToSelect, changeLockedTab, fireLocationChanged);
     }
 
     /**
