@@ -279,6 +279,9 @@ copyToResourcesJava.doLast {
         include 'bundle/**'
         exclude 'bundle/osgiaas*'
         exclude 'bundle/jline*'
+        exclude 'bundle/mucommander-os-linux*'
+        exclude 'bundle/mucommander-os-openvms*'
+        exclude 'bundle/mucommander-os-win*'
         into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
     }
 }
