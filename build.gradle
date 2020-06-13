@@ -181,6 +181,9 @@ ospackage {
         include '*.jar'
         exclude 'osgiaas*'
         exclude 'jline*'
+        exclude 'mucommander-os-macos*'
+        exclude 'mucommander-os-openvms*'
+        exclude 'mucommander-os-win*'
         into '/usr/share/mucommander/bundle'
     }
     from ("$buildDir/osgi/app") {
