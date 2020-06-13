@@ -18,6 +18,7 @@
 package com.mucommander.search.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -26,11 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -73,7 +76,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
     public static final String UNLIMITED_DEPTH = Translator.get("search_dialog.unlimited_depth");
 
- // Dialog's width has to be at least 320
+    // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(500,0); 
 
     // Dialog's width has to be at most 400
@@ -98,7 +101,28 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         compPanel.addRow(Translator.get("search_dialog.search_for"), searchForField, 10);
 
         searchInField = new JTextField(searchURL.getHost());
-        searchInField.getDocument().addDocumentListener(this);
+        Border border = searchInField.getBorder();
+        searchInField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                cleanError();
+                SearchDialog.this.removeUpdate(e);
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                cleanError();
+                SearchDialog.this.insertUpdate(e);
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                cleanError();
+                SearchDialog.this.changedUpdate(e);
+            }
+            private void cleanError() {
+                searchInField.setBorder(border);
+                searchInField.setToolTipText(null);
+            }
+        });
         compPanel.addRow(Translator.get("search_dialog.search_path"), searchInField, 10);
 
         searchSubfolders = new JCheckBox(Translator.get("search_dialog.search_subfolders"), true);
@@ -141,8 +165,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     }
 
     /**
-     * Checks if bookmark name is empty (or white space), and enable/disable 'Add' button
-     * accordingly, in order to prevent user from adding a bookmark with an empty name.
+     * Checks if search string or search location is empty (or white space), and enable/disable 'Add'
+     * button accordingly, in order to prevent user from triggering a search with empty parameters.
      */
     private void checkInputs() {
         if (searchForField.getText().trim().isEmpty() || searchInField.getText().trim().isEmpty()) {
@@ -168,8 +192,10 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         // otherwise, searchButton was pressed
         String searchIn = searchInField.getText();
         AbstractFile file = FileFactory.getFile(searchIn);
-        if (file == null) {
-            // TODO
+        if (file == null || !file.exists()) {
+            searchInField.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+            searchInField.setToolTipText(Translator.get("folder_does_not_exist"));
+            return;
         }
         FileURL fileURL = SearchUtils.toSearchURL(file);
         fileURL.setPath(searchForField.getText());
