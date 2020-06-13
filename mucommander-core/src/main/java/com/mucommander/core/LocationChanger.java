@@ -176,7 +176,10 @@ public class LocationChanger {
 			ChangeFolderThread thread;
 			switch(folderURL.getScheme()) {
 			case SearchProtocolProvider.SCHEMA:
-			    ((SearchFile) folder).stop();
+			    if (folder instanceof SearchFile)
+			        ((SearchFile) folder).stop();
+			    else
+			        folder = FileFactory.getFile(folderURL);
 			    thread = new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
 			    break;
 			default:
