@@ -43,6 +43,7 @@ Improvements:
 - Added a new icon for the virtual bookmarks file system (bookmark://).
 - Package the 'portable' version packaged as zip archive rather than "tarball".
 - Accelerate system files filtering on macOS.
+- The non-bundled version for Windows looks for a JRE also in JAVA_HOME.
 
 Localization:
 - 
