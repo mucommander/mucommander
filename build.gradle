@@ -298,6 +298,7 @@ launch4j {
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"
+    jreMinVersion = "1.8"
     if (project.ext.bundleJRE) {
         bundledJre64Bit = project.ext.bundleJRE
         bundledJrePath = "jre"
