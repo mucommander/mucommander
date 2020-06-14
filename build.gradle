@@ -302,6 +302,9 @@ launch4j {
     if (project.ext.bundleJRE) {
         bundledJre64Bit = true
         bundledJrePath = "jre"
+    } else {
+        bundledJrePath = '%JAVA_HOME%'
+        bundledJreAsFallback = true
     }
     outfile = "mucommander.exe"
 }
