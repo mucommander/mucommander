@@ -61,11 +61,10 @@ Known issues:
 - Some translations may not be up-to-date.
 - Mac OS X: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
   up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
-- Executable permissions on local files are not properly preserved when running a unix-based OS with Java 1.5.
 - SMB support may not work properly on non multi-language JRE.
 - 'Copy files to clipboard' not working with some applications (files are not pasted).
 - Mac OS X: some keyboard shortcuts may conflict with global system shortcuts.
-- Authentication issues when using several sets of credentials (login/password) for the same server (see ticket #76).
+- Authentication issues when using several sets of credentials (login/password) for the same server.
 - Untrusted HTTPS connections are allowed without a warning.
 - Windows Vista/7: "java.net.SocketException: Permission denied: recv failed" error can appear when trying to access FTP
   sites. This seems to be a Windows firewall problem, with a possible workaround:
