@@ -28,7 +28,20 @@ public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
 
     @Override
     public boolean isAvailable() {
-        String var = System.getenv("GNOME_DESKTOP_SESSION_ID");
+        String var = System.getenv("DESKTOP_SESSION");
+        if ("gnome".equalsIgnoreCase(var))
+            return true;
+
+        var = System.getenv("XDG_CURRENT_DESKTOP");
+        if (var != null) {
+            var = var.toLowerCase();
+            if (var.contains("gnome"))
+                return true;
+            if (var.contains("unity"))
+                return true;
+        }
+
+        var = System.getenv("GNOME_DESKTOP_SESSION_ID");
         return var != null && !var.trim().isEmpty();
     }
 
