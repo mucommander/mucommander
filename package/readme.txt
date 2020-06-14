@@ -38,8 +38,8 @@ New features:
 
 Improvements:
 - The 'Move to trash' operation does not require changes to privacy protection on macOS anymore.
-- Copy file's (Spotlight) comment and user tags when copying local files on macOS.
-- Exclude OSGi-cli from packaging, avoiding the creation of .osgiaas_cli_history file on shutdown.
+- Preserve file's (Spotlight) comment and user tags when copying local files on macOS.
+- Exclude OSGi-cli from packaging to avoid the creation of .osgiaas_cli_history file on shutdown.
 - Added a new icon for the virtual bookmarks file system (bookmark://).
 - Package the 'portable' version packaged as zip archive rather than "tarball".
 - Accelerate system files filtering on macOS.
