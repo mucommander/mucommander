@@ -23,15 +23,13 @@ import com.mucommander.process.ProcessRunner;
  * @author Nicolas Rinaudo
  */
 public class ConfiguredGnomeDesktopAdapter extends GnomeDesktopAdapter {
-    private static final String ENV_VAR = "GNOME_DESKTOP_SESSION_ID";
 
     public String toString() {return "Gnome Desktop";}
 
     @Override
     public boolean isAvailable() {
-        String var = System.getenv(ENV_VAR);
-
-        return var != null && !var.trim().equals("");
+        String var = System.getenv("GNOME_DESKTOP_SESSION_ID");
+        return var != null && !var.trim().isEmpty();
     }
 
     @Override
