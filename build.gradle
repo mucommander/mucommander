@@ -187,14 +187,15 @@ ospackage {
         include '*.jar'
         into '/usr/share/mucommander/app'
     }
-    from ('mucommander-core/src/main/resources/images/mucommander/icon128_24.png') {
-        rename '.*', 'mucommander.png'
-        addParentDirs = false
+    from ('mucommander-core/src/main/resources/images/mucommander') {
+        include 'icon128_24.png'
+        rename 'icon128_24.png', 'mucommander.png'
+        addParentDirs false
         into '/usr/share/pixmaps'
     }
     from ('package/unix') {
         include 'mucommander.desktop'
-        addParentDirs = false
+        addParentDirs false
         into '/usr/share/applications'
     }
 
