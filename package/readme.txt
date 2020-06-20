@@ -44,7 +44,7 @@ Improvements:
 - Package the 'portable' version packaged as zip archive rather than "tarball".
 - Accelerate system files filtering on macOS.
 - The non-bundled version for Windows looks for a JRE also in JAVA_HOME.
-- New versions of the GNOME desktop environment in which GNOME_DESKTOP_SESSION_ID is not set are now detected.
+- Detect new versions of the GNOME desktop environment in which GNOME_DESKTOP_SESSION_ID is not set.
 
 Localization:
 - 
