@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v0.9.5
+muCommander v0.9.6
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,33 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.9.4 ?
+What's new since v0.9.5 ?
 -----------------------
 
 New features:
-- New file-search functionality.
-  Default shortcuts are Control+F (opens find dialog) and Shift+Control+F (no dialog).
-- Added a PDF viewer.
+-
 
 Improvements:
-- The 'Move to trash' operation does not require changes to privacy protection on macOS anymore.
-- Preserve file's (Spotlight) comment and user tags when copying local files on macOS.
-- Exclude OSGi-cli from packaging to avoid the creation of .osgiaas_cli_history file on shutdown.
-- Added a new icon for the virtual bookmarks file system (bookmark://).
-- Package the 'portable' version packaged as zip archive rather than "tarball".
-- Accelerate system files filtering on macOS.
-- The non-bundled version for Windows looks for a JRE also in JAVA_HOME.
-- Detect new versions of the GNOME desktop environment in which GNOME_DESKTOP_SESSION_ID is not set.
+-
 
 Localization:
-- 
+-
 
 Bug fixes:
-- The license is presented in the license dialog.
-- Added back missing quote characters in various dialogs (e.g., doesnt -> doesn't).
-- The up-to-date perferences are reflected in the file tables on every change.
-- System files are filtered out when the 'Show system files' preference is deselected on macOS.
-- Shortcuts to dialogs of popular file protocols (e.g., SFTP, SMB) are back in the drive popup buttons.
+-
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
