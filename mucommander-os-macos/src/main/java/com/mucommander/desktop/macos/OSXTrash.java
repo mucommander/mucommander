@@ -229,14 +229,10 @@ public class OSXTrash extends QueuedTrash {
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
         // script (AppleScript 2.0 / Mac OS X 10.5 or higher).
         if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {
-            int nbFiles = queuedFiles.size();
-            appleScript = "tell application \"Finder\" to move {";
-            for(int i=0; i<nbFiles; i++) {
-                appleScript += "posix file \""+queuedFiles.get(i).getAbsolutePath()+"\"";
-                if(i<nbFiles-1)
-                    appleScript += ", ";
-            }
-            appleScript += "} to the trash";
+            appleScript = queuedFiles.stream()
+                    .map(AbstractFile::getAbsolutePath)
+                    .map(path -> String.format("posix file \"%s\"", path))
+                    .collect(Collectors.joining(", ", "tell application \"Finder\" to move {", "} to the trash"));
 
             return AppleScript.execute(appleScript, null);
         }
