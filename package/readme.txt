@@ -41,7 +41,7 @@ Localization:
 -
 
 Bug fixes:
--
+- Moving files on SMB shares to trash moves them to SAMBA trash on macOS.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
