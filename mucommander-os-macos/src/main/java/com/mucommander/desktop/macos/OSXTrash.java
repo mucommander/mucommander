@@ -188,6 +188,7 @@ public class OSXTrash extends QueuedTrash {
             // Otherwise, try JNA and fallback to Finder if it fails
             if (moveToTrashJna(queuedFiles))
                 return true;
+            LOGGER.info("failed to move files to trash using JNA, trying Apple script");
             return moveToTrashAppleScript(queuedFiles);
         }
     }
