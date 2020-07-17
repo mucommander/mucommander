@@ -69,6 +69,14 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox matchRegex;
     private JSpinner depth;
 
+    // Store last values, initialized to the default values
+    private static boolean lastSearchSubfolders = true;
+    private static boolean lastSearchArchives = false;
+    private static boolean lastSearchHidden = false;
+    private static boolean lastMatchCase = true;
+    private static boolean lastMatchRegex = false;
+    private static int lastDepth = 0;
+
     private JButton searchButton;
     private JButton cancelButton;
 
@@ -125,25 +133,26 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         });
         compPanel.addRow(Translator.get("search_dialog.search_path"), searchInField, 10);
 
-        searchSubfolders = new JCheckBox(Translator.get("search_dialog.search_subfolders"), true);
+        searchSubfolders = new JCheckBox(Translator.get("search_dialog.search_subfolders"), lastSearchSubfolders);
         compPanel.addRow("", searchSubfolders, 10);
 
-        searchArchives = new JCheckBox(Translator.get("search_dialog.search_archives"));
+        searchArchives = new JCheckBox(Translator.get("search_dialog.search_archives"), lastSearchArchives);
         compPanel.addRow("", searchArchives, 10);
 
-        searchHidden = new JCheckBox(Translator.get("search_dialog.search_hidden_files"));
+        searchHidden = new JCheckBox(Translator.get("search_dialog.search_hidden_files"), lastSearchHidden);
         compPanel.addRow("", searchHidden, 10);
 
-        matchCase = new JCheckBox(Translator.get("search_dialog.case_sensitive"), true);
+        matchCase = new JCheckBox(Translator.get("search_dialog.case_sensitive"), lastMatchCase);
         compPanel.addRow("", matchCase, 10);
 
-        matchRegex = new JCheckBox(Translator.get("search_dialog.matches_regexp"));
+        matchRegex = new JCheckBox(Translator.get("search_dialog.matches_regexp"), lastMatchRegex);
         compPanel.addRow("", matchRegex, 10);
 
         depth = new JSpinner();
         IntEditor editor = new IntEditor(depth, "#####", UNLIMITED_DEPTH);
         depth.setEditor(editor);
         depth.setModel(new SpinnerNumberModel(0, 0, null, 1));
+        depth.setValue(lastDepth);
         compPanel.addRow(Translator.get("search_dialog.search_depth"), depth, 10);
 
         searchButton = new JButton(Translator.get("Find.label"));
@@ -190,6 +199,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             return;
         }
         // otherwise, searchButton was pressed
+        updateValues();
         String searchIn = searchInField.getText();
         AbstractFile file = FileFactory.getFile(searchIn);
         if (file == null || !file.exists()) {
@@ -206,6 +216,15 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         mainFrame.getActivePanel().tryChangeCurrentFolder(fileURL);
     }
 
+    private void updateValues() {
+        lastSearchSubfolders = searchSubfolders.isSelected();
+        lastSearchArchives = searchArchives.isSelected();
+        lastSearchHidden = searchHidden.isSelected();
+        lastMatchCase = matchCase.isSelected();
+        lastMatchRegex = matchRegex.isSelected();
+        lastDepth = ((Number) this.depth.getValue()).intValue();
+    }
+
     /**
      * Return the properties of the search in the form of a query string
      * (yes, that of URLs) that includes only the properties that are
@@ -214,19 +233,18 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
      */
     private String getSearchQuery() {
         List<Pair<String, String>> properties = new ArrayList<>();
-        if (!searchSubfolders.isSelected())
+        if (!lastSearchSubfolders)
             properties.add(new Pair<>(SearchBuilder.SEARCH_SUBFOLDERS, Boolean.FALSE.toString()));
-        if (searchArchives.isSelected())
+        if (lastSearchArchives)
             properties.add(new Pair<>(SearchBuilder.SEARCH_ARCHIVES, Boolean.TRUE.toString()));
-        if (searchHidden.isSelected())
+        if (lastSearchHidden)
             properties.add(new Pair<>(SearchBuilder.SEARCH_HIDDEN, Boolean.TRUE.toString()));
-        if (!matchCase.isSelected())
+        if (!lastMatchCase)
             properties.add(new Pair<>(SearchBuilder.MATCH_CASEINSENSITIVE, Boolean.TRUE.toString()));
-        if (matchRegex.isSelected())
+        if (lastMatchRegex)
             properties.add(new Pair<>(SearchBuilder.MATCH_REGEX, Boolean.TRUE.toString()));
-        int depth = ((Number) this.depth.getValue()).intValue();
-        if (depth > 0)
-            properties.add(new Pair<>(SearchBuilder.SEARCH_DEPTH, String.valueOf(depth)));
+        if (lastDepth > 0)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_DEPTH, String.valueOf(lastDepth)));
         return properties.stream()
                 .map(pair -> pair.first + "=" + pair.second)
                 .collect(Collectors.joining("&"));

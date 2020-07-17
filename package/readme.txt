@@ -35,7 +35,7 @@ New features:
 -
 
 Improvements:
--
+- File-search dialog is loaded with the previously selected search options instead of the default search options.
 
 Localization:
 -
