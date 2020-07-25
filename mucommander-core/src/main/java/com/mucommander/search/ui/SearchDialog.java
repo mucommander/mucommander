@@ -60,7 +60,7 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 public class SearchDialog extends FocusDialog implements ActionListener, DocumentListener {
-    private JTextField searchForField;
+    private JTextField searchFilesField;
     private JTextField searchInField;
     private JCheckBox searchSubfolders;
     private JCheckBox searchArchives;
@@ -104,9 +104,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
 
         String searchFor = PathUtils.removeLeadingSeparator(searchURL.getPath());
-        searchForField = new JTextField(searchFor);
-        searchForField.getDocument().addDocumentListener(this);
-        compPanel.addRow(Translator.get("search_dialog.search_for"), searchForField, 10);
+        searchFilesField = new JTextField(searchFor);
+        searchFilesField.getDocument().addDocumentListener(this);
+        compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 10);
 
         searchInField = new JTextField(searchURL.getHost());
         Border border = searchInField.getBorder();
@@ -163,7 +163,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         mainPanel.add(compPanel);
         contentPane.add(mainPanel, BorderLayout.NORTH);
 
-        setInitialFocusComponent(searchForField);
+        setInitialFocusComponent(searchFilesField);
 
         // Packs dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -178,7 +178,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
      * button accordingly, in order to prevent user from triggering a search with empty parameters.
      */
     private void checkInputs() {
-        if (searchForField.getText().trim().isEmpty() || searchInField.getText().trim().isEmpty()) {
+        if (searchFilesField.getText().trim().isEmpty() || searchInField.getText().trim().isEmpty()) {
             if (searchButton.isEnabled())
                 searchButton.setEnabled(false);
         } else {
@@ -208,7 +208,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             return;
         }
         FileURL fileURL = SearchUtils.toSearchURL(file);
-        fileURL.setPath(searchForField.getText());
+        fileURL.setPath(searchFilesField.getText());
         String searchQuery = getSearchQuery();
         if (!searchQuery.isEmpty())
             fileURL.setQuery(searchQuery);
