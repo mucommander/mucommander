@@ -108,6 +108,12 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         searchFilesField.getDocument().addDocumentListener(this);
         compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 10);
 
+        matchCase = new JCheckBox(Translator.get("search_dialog.case_sensitive"), lastMatchCase);
+        compPanel.addRow("", matchCase, 10);
+
+        matchRegex = new JCheckBox(Translator.get("search_dialog.matches_regexp"), lastMatchRegex);
+        compPanel.addRow("", matchRegex, 10);
+
         searchInField = new JTextField(searchURL.getHost());
         Border border = searchInField.getBorder();
         searchInField.getDocument().addDocumentListener(new DocumentListener() {
@@ -141,12 +147,6 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
         searchHidden = new JCheckBox(Translator.get("search_dialog.search_hidden_files"), lastSearchHidden);
         compPanel.addRow("", searchHidden, 10);
-
-        matchCase = new JCheckBox(Translator.get("search_dialog.case_sensitive"), lastMatchCase);
-        compPanel.addRow("", matchCase, 10);
-
-        matchRegex = new JCheckBox(Translator.get("search_dialog.matches_regexp"), lastMatchRegex);
-        compPanel.addRow("", matchRegex, 10);
 
         depth = new JSpinner();
         IntEditor editor = new IntEditor(depth, "#####", UNLIMITED_DEPTH);
