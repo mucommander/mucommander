@@ -38,4 +38,33 @@ public class SearchUtils {
         }
         return fileURL;
     }
+
+    public static String wildcardToRegex(String wildcard){
+        boolean convert = false;
+        StringBuffer s = new StringBuffer(wildcard.length());
+        for (int i = 0, is = wildcard.length(); i < is; i++) {
+            char c = wildcard.charAt(i);
+            switch(c) {
+                case '*':
+                    convert = true;
+                    s.append(".*");
+                    break;
+                case '?':
+                    convert = true;
+                    s.append(".");
+                    break;
+                    // escape special regexp-characters
+                case '(': case ')': case '[': case ']': case '$':
+                case '^': case '.': case '{': case '}': case '|':
+                case '\\':
+                    s.append("\\");
+                    s.append(c);
+                    break;
+                default:
+                    s.append(c);
+                    break;
+            }
+        }
+        return convert ? s.toString() : wildcard;
+    }
 }

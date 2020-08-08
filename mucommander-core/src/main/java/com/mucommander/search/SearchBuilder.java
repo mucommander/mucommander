@@ -17,13 +17,11 @@
 
 package com.mucommander.search;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.search.file.SearchListener;
 import com.mucommander.ui.main.MainFrame;
@@ -151,6 +149,14 @@ public class SearchBuilder {
     }
 
     private Predicate<AbstractFile> createFilenamePredicate() {
+        if (!matchRegex) {
+            String regex = SearchUtils.wildcardToRegex(searchStr);
+            if (!searchStr.equals(regex)) {
+                searchStr = regex;
+                matchRegex = true;
+            }
+        }
+
         if (matchRegex) {
             int flags = matchCaseInsensitive ? Pattern.CASE_INSENSITIVE : 0;
             Pattern pattern = Pattern.compile(searchStr, flags);

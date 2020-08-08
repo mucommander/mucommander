@@ -27,9 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -68,6 +70,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox matchCase;
     private JCheckBox matchRegex;
     private JSpinner depth;
+    private JLabel wildcards;
 
     // Store last values, initialized to the default values
     private static boolean lastSearchSubfolders = true;
@@ -84,10 +87,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
     public static final String UNLIMITED_DEPTH = Translator.get("search_dialog.unlimited_depth");
 
-    // Dialog's width has to be at least 320
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(500,0); 
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(550,0);
 
-    // Dialog's width has to be at most 400
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(800,10000);
 
     public SearchDialog(MainFrame mainFrame) {
@@ -106,12 +107,19 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         String searchFor = PathUtils.removeLeadingSeparator(searchURL.getPath());
         searchFilesField = new JTextField(searchFor);
         searchFilesField.getDocument().addDocumentListener(this);
-        compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 10);
+        compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 5);
+
+        wildcards = new JLabel(!lastMatchRegex ? Translator.get("search_dialog.wildcards") : " ");
+        compPanel.addRow("", wildcards, 10);
 
         matchCase = new JCheckBox(Translator.get("search_dialog.case_sensitive"), lastMatchCase);
         compPanel.addRow("", matchCase, 10);
 
         matchRegex = new JCheckBox(Translator.get("search_dialog.matches_regexp"), lastMatchRegex);
+        matchRegex.addChangeListener(e -> {
+            AbstractButton b = (AbstractButton) e.getSource();
+            wildcards.setText(!b.isSelected() ? Translator.get("search_dialog.wildcards") : " ");
+        });
         compPanel.addRow("", matchRegex, 10);
 
         searchInField = new JTextField(searchURL.getHost());
