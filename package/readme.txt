@@ -37,6 +37,7 @@ New features:
 Improvements:
 - File-search dialog is loaded with the previously selected search options instead of the default search options.
 - The wildcard characters '*' and '?' can be used within filenames in file-search.
+- Revert the bundled JRE on macOS to version 11.0.4 that appear to be more stable than 11.0.7.
 
 Localization:
 -
