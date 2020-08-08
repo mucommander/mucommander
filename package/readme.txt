@@ -36,6 +36,7 @@ New features:
 
 Improvements:
 - File-search dialog is loaded with the previously selected search options instead of the default search options.
+- The wildcard characters '*' and '?' can be used within filenames in file-search.
 
 Localization:
 -
