@@ -71,6 +71,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox matchRegex;
     private JSpinner depth;
     private JLabel wildcards;
+    private JTextField searchTextField;
+    private JCheckBox textCase;
+    private JCheckBox textRegex;
 
     // Store last values, initialized to the default values
     private static boolean lastSearchSubfolders = true;
@@ -79,6 +82,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static boolean lastMatchCase = true;
     private static boolean lastMatchRegex = false;
     private static int lastDepth = 0;
+    private static String lastText = "";
+    private static boolean lastTextCase = true;
+    private static boolean lastTextRegex = false;
 
     private JButton searchButton;
     private JButton cancelButton;
@@ -101,8 +107,10 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel(5);
 
-        // Text fields panel
-        XAlignedComponentPanel compPanel = new XAlignedComponentPanel();
+        YBoxPanel fileSearchPanel = new YBoxPanel(10);
+        fileSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("File search")));
+
+        XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
 
         String searchFor = PathUtils.removeLeadingSeparator(searchURL.getPath());
         searchFilesField = new JTextField(searchFor);
@@ -163,12 +171,31 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         depth.setValue(lastDepth);
         compPanel.addRow(Translator.get("search_dialog.search_depth"), depth, 10);
 
+        fileSearchPanel.add(compPanel);
+        mainPanel.add(fileSearchPanel);
+        mainPanel.addSpace(10);
+
+        YBoxPanel textSearchPanel = new YBoxPanel(10);
+        textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Text search (Optional)")));
+        compPanel = new XAlignedComponentPanel(5);
+
+        searchTextField = new JTextField(lastText);
+        compPanel.addRow(Translator.get("search_dialog.search_text"), searchTextField, 10);
+
+        textCase = new JCheckBox(Translator.get("search_dialog.text_case_sensitive"), lastTextCase);
+        compPanel.addRow("", textCase, 10);
+
+        textRegex = new JCheckBox(Translator.get("search_dialog.text_matches_regexp"), lastTextRegex);
+        compPanel.addRow("", textRegex, 10);
+
         searchButton = new JButton(Translator.get("Find.label"));
         searchButton.setEnabled(false);
         cancelButton = new JButton(Translator.get("cancel"));
         contentPane.add(DialogToolkit.createOKCancelPanel(searchButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
-        mainPanel.add(compPanel);
+        textSearchPanel.add(compPanel);
+        mainPanel.add(textSearchPanel);
+
         contentPane.add(mainPanel, BorderLayout.NORTH);
 
         setInitialFocusComponent(searchFilesField);
@@ -231,6 +258,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         lastMatchCase = matchCase.isSelected();
         lastMatchRegex = matchRegex.isSelected();
         lastDepth = ((Number) this.depth.getValue()).intValue();
+        lastText = searchTextField.getText();
+        lastTextCase = textCase.isSelected();
+        lastTextRegex = textRegex.isSelected();
     }
 
     /**
@@ -253,6 +283,13 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             properties.add(new Pair<>(SearchBuilder.MATCH_REGEX, Boolean.TRUE.toString()));
         if (lastDepth > 0)
             properties.add(new Pair<>(SearchBuilder.SEARCH_DEPTH, String.valueOf(lastDepth)));
+        if (!lastText.isEmpty()) {
+            properties.add(new Pair<>(SearchBuilder.SEARCH_TEXT, lastText));
+            if (!lastTextCase)
+                properties.add(new Pair<>(SearchBuilder.TEXT_CASEINSENSITIVE, Boolean.TRUE.toString()));
+            if (lastTextRegex)
+                properties.add(new Pair<>(SearchBuilder.TEXT_MATCH_REGEX, Boolean.TRUE.toString()));
+        }
         return properties.stream()
                 .map(pair -> pair.first + "=" + pair.second)
                 .collect(Collectors.joining("&"));

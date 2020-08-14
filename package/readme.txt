@@ -32,7 +32,7 @@ What's new since v0.9.5 ?
 -----------------------
 
 New features:
--
+- Enhance file searching with the ability to specify text that the files should contain (similar to 'grep').
 
 Improvements:
 - File-search dialog is loaded with the previously selected search options instead of the default search options.
@@ -117,6 +117,9 @@ muCommander uses the following great third party works :
 
 - the ICEpdf library released under the Apache License.
  ICEpdf can be found at http://www.icesoft.com/icepdf .
+
+- the Unix4j library released under the MIT License.
+ Unix4j can be found at http://unix4j.org/.
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .

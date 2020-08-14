@@ -17,9 +17,17 @@
 
 package com.mucommander.search;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.unix4j.Unix4j;
+import org.unix4j.unix.Grep;
+import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
+import org.unix4j.unix.grep.GrepOptions;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -31,6 +39,7 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 public class SearchBuilder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchBuilder.class);
 
     public static final String SEARCH_ARCHIVES = "archives";
     public static final String SEARCH_HIDDEN = "hidden";
@@ -38,6 +47,9 @@ public class SearchBuilder {
     public static final String SEARCH_DEPTH = "depth";
     public static final String MATCH_CASEINSENSITIVE = "caseinsensitive";
     public static final String MATCH_REGEX = "regex";
+    public static final String SEARCH_TEXT = "text";
+    public static final String TEXT_CASEINSENSITIVE = "text-caseinsensitive";
+    public static final String TEXT_MATCH_REGEX= "text-regex";
 
     private AbstractFile entrypoint;
     private String searchStr;
@@ -49,6 +61,9 @@ public class SearchBuilder {
     private boolean searchSubfolders;
     private int searchDepth;
     private MainFrame mainFrame;
+    private String searchText;
+    private boolean textCaseInsensitive;
+    private boolean textMatchRegex;
 
     private SearchBuilder() {
         searchSubfolders = true;
@@ -134,18 +149,36 @@ public class SearchBuilder {
         return this;
     }
 
+    public SearchBuilder searchText(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_TEXT);
+        if (value != null) {
+            searchText = value;
+            textCaseInsensitive = Boolean.parseBoolean(properties.get(SearchBuilder.TEXT_CASEINSENSITIVE));
+            textMatchRegex = Boolean.parseBoolean(properties.get(SearchBuilder.TEXT_MATCH_REGEX));
+        }
+        return this;
+    }
+
     public SearchJob build() {
         SearchJob job = new SearchJob(mainFrame, new FileSet(entrypoint, entrypoint));
         job.setListener(listener);
         job.setDepth(searchDepth);
         
-        Predicate<AbstractFile> fileMatcher = createFilenamePredicate();
+        Predicate<AbstractFile> fileMatcher = createFilePredicate();
         job.setFileMatcher(fileMatcher);
 
         Predicate<AbstractFile> lsFilter = createListFilter();
         job.setListFilter(lsFilter);
 
         return job;
+    }
+
+    private Predicate<AbstractFile> createFilePredicate() {
+        Predicate<AbstractFile> predicate = createFilenamePredicate();
+        if (searchText != null) {
+            predicate = predicate.and(createFileContentPredicate());
+        }
+        return predicate;
     }
 
     private Predicate<AbstractFile> createFilenamePredicate() {
@@ -166,6 +199,23 @@ public class SearchBuilder {
         return matchCaseInsensitive ?
                 file -> file.getName().equalsIgnoreCase(searchStr)
                 : file -> file.getName().equals(searchStr);
+    }
+
+    private Predicate<AbstractFile> createFileContentPredicate() {
+        GrepOptionSet_Fcilnvx grepOptions = Grep.Options.l;
+        if (textCaseInsensitive)
+            grepOptions = grepOptions.i;
+        if (!textMatchRegex)
+            grepOptions = grepOptions.F;
+        final GrepOptions options = grepOptions;
+        return file -> {
+            try {
+                return !file.isDirectory() && !Unix4j.from(file.getInputStream()).grep(options, searchText).toStringResult().isEmpty();
+            } catch (IOException e) {
+                LOGGER.debug("failed to search content of " + file.getAbsolutePath(), e);
+                return false;
+            }
+        };
     }
 
     private Predicate<AbstractFile> createListFilter() {

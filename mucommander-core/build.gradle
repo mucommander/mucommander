@@ -22,6 +22,7 @@ dependencies {
     compile 'org.jmdns:jmdns:3.5.5'
     compile 'org.slf4j:slf4j-api:1.7.26'
     compile 'org.osgi:osgi.core:7.0.0'
+    comprise 'org.unix4j:unix4j-command:0.5'
 
     testCompile 'org.testng:testng:6.11'
     testCompile 'junit:junit:4.12'
@@ -32,6 +33,11 @@ dependencies {
 }
 
 jar {
+   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        include 'org/unix4j/**'
+        exclude 'codegen/**'
+        exclude 'META-INF/**'
+   } }
    bnd ('Bundle-Name': 'muCommander-core',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'The core part of muCommander',

@@ -214,6 +214,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
                 .searchDepth(properties)
                 .matchCaseInsensitive(properties)
                 .matchRegex(properties)
+                .searchText(properties)
                 .build();
     }
 }
