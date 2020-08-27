@@ -169,7 +169,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         depth.setEditor(editor);
         depth.setModel(new SpinnerNumberModel(0, 0, null, 1));
         depth.setValue(lastDepth);
-        compPanel.addRow(Translator.get("search_dialog.search_depth"), depth, 10);
+        compPanel.addRow(Translator.get("search_dialog.search_depth"), depth, 5);
 
         fileSearchPanel.add(compPanel);
         mainPanel.add(fileSearchPanel);
@@ -186,17 +186,19 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         compPanel.addRow("", textCase, 10);
 
         textRegex = new JCheckBox(Translator.get("search_dialog.text_matches_regexp"), lastTextRegex);
-        compPanel.addRow("", textRegex, 10);
+        compPanel.addRow("", textRegex, 5);
 
         searchButton = new JButton(Translator.get("Find.label"));
         searchButton.setEnabled(false);
         cancelButton = new JButton(Translator.get("cancel"));
-        contentPane.add(DialogToolkit.createOKCancelPanel(searchButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         textSearchPanel.add(compPanel);
         mainPanel.add(textSearchPanel);
+        mainPanel.addSpace(10);
 
-        contentPane.add(mainPanel, BorderLayout.NORTH);
+        contentPane.add(mainPanel, BorderLayout.CENTER);
+
+        contentPane.add(DialogToolkit.createOKCancelPanel(searchButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
 
         setInitialFocusComponent(searchFilesField);
 
