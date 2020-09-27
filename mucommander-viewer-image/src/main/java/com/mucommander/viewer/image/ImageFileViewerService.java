@@ -65,6 +65,8 @@ public class ImageFileViewerService implements FileViewerService {
     @Override
     public FileViewerWrapper createFileViewer() {
         final ImageViewer viewer = new ImageViewer();
+        viewer.setImageFileViewerService(this);
+
         return new FileViewerWrapper() {
             @Override
             public void open(AbstractFile file) throws IOException {

@@ -65,6 +65,7 @@ jar {
             'com.mucommander.ui.theme,' +
             'com.mucommander.snapshot,' +
             'com.mucommander.ui.viewer,' +
-            'com.mucommander.ui.main',
+            'com.mucommander.ui.main,' +
+            'com.mucommander.ui.main.table',
         'Bundle-Activator': 'com.mucommander.Activator')
 }
