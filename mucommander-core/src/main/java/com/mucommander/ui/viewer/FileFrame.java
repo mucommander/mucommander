@@ -49,7 +49,7 @@ public abstract class FileFrame extends JFrame {
         initContentPane(file);
     }
 
-    MainFrame getMainFrame() {
+    public MainFrame getMainFrame() {
         return mainFrame;
     }
 
