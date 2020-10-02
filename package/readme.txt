@@ -40,7 +40,7 @@ Improvements:
 - Revert the bundled JRE on macOS to version 11.0.4 that appear to be more stable than 11.0.7.
 
 Localization:
--
+- Korean translation updated.
 
 Bug fixes:
 - Moving files on SMB shares to trash moves them to SAMBA trash on macOS.
