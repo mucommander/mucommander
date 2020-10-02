@@ -64,8 +64,7 @@ public class ImageFileViewerService implements FileViewerService {
 
     @Override
     public FileViewerWrapper createFileViewer() {
-        final ImageViewer viewer = new ImageViewer();
-        viewer.setImageFileViewerService(this);
+        final ImageViewer viewer = new ImageViewer(this);
 
         return new FileViewerWrapper() {
             @Override
