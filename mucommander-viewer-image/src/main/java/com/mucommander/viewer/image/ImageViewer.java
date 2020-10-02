@@ -31,6 +31,7 @@ import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Function;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -78,7 +79,8 @@ class ImageViewer extends FileViewer implements ActionListener {
     private ImageViewerImpl imageViewerImpl;
     private ImageFileViewerService imageFileViewerService;
 
-    public ImageViewer() {
+    public ImageViewer(ImageFileViewerService imageFileViewerService) {
+        this.imageFileViewerService = imageFileViewerService;
     	imageViewerImpl = new ImageViewerImpl();
     	
     	setComponentToPresent(imageViewerImpl);
@@ -100,10 +102,6 @@ class ImageViewer extends FileViewer implements ActionListener {
         menuBar.add(controlsMenu);
     	
     	return menuBar;
-    }
-
-    public void setImageFileViewerService(ImageFileViewerService imageFileViewerService) {
-        this.imageFileViewerService = imageFileViewerService;
     }
 
     private synchronized void loadImage(AbstractFile file) throws IOException {
@@ -189,14 +187,14 @@ class ImageViewer extends FileViewer implements ActionListener {
                                                   && zoomFactor/2*image.getHeight(null)>120));
     }
 
-    private void goToImage(Boolean next) {
+    private void goToImage(Function<Integer, Integer> advance) {
         FileTable fileTable = getFrame().getMainFrame().getActiveTable();
 
         AbstractFile newFile;
         int originalRow = fileTable.getSelectedRow();
         do {
             int currentRow = fileTable.getSelectedRow();
-            int newRow = next ? currentRow + 1 : currentRow - 1;
+            int newRow = advance.apply(currentRow);
 
             if (newRow < 0 || newRow >= fileTable.getRowCount()) {
                 fileTable.selectRow(originalRow);
@@ -205,13 +203,13 @@ class ImageViewer extends FileViewer implements ActionListener {
             fileTable.selectRow(newRow);
             newFile = fileTable.getSelectedFile();
 
-        } while (newFile == null || imageFileViewerService == null || !imageFileViewerService.canViewFile(newFile));
+        } while (newFile == null || !imageFileViewerService.canViewFile(newFile));
 
         try {
             setCurrentFile(newFile);
             loadImage(newFile);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("failed to load next/prev image", e);
         }
     }
 
@@ -237,10 +235,10 @@ class ImageViewer extends FileViewer implements ActionListener {
         Object source = e.getSource();
 
         if (source == prevImageItem) {
-            goToImage(false);
+            goToImage(i -> i - 1);
         }
         else if (source == nextImageItem) {
-            goToImage(true);
+            goToImage(i -> i + 1);
         }
         else if (source == zoomInItem && zoomInItem.isEnabled()) {
             zoomFactor = zoomFactor * 2;
