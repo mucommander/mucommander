@@ -176,45 +176,33 @@ public class OSXTrash extends QueuedTrash {
         if (queuedFiles.isEmpty())
             return true;
 
-        switch(type(queuedFiles)) {
-        case 1:
-            // JNA works fine for Apple File Systems
-            return moveToTrashJna(queuedFiles);
-        case -1:
-            // Finder knows how to move files to the Trash of Samba shares, JNA not
-            return moveToTrashAppleScript(queuedFiles);
-        case 0:
-        default:
-            // Otherwise, try JNA and fallback to Finder if it fails
-            if (moveToTrashJna(queuedFiles))
-                return true;
-            LOGGER.info("failed to move files to trash using JNA, trying Apple script");
-            return moveToTrashAppleScript(queuedFiles);
-        }
-    }
+        if (moveToTrashViaAppleScript(queuedFiles))
+            return true;
 
-    private int type(List<AbstractFile> queuedFiles) {
-        List<String> fileStoreTypes = queuedFiles.stream()
+        boolean smbfs = queuedFiles.stream()
                 .map(file -> (File) file.getUnderlyingFileObject())
                 .map(File::toPath)
                 .map(path -> {
                     try {
                         return Files.getFileStore(path);
                     } catch (IOException e) {
-                        LOGGER.error("failed to retrieve FileStore of {}", path, e);
+                        LOGGER.warn("failed to retrieve FileStore of {}", path, e);
                         return null;
                     }
                 })
                 .map(fs -> fs != null ? fs.type() : null)
-                .collect(Collectors.toList());
-        if (fileStoreTypes.stream().allMatch("apfs"::equals))
-            return 1;
-        if (fileStoreTypes.stream().anyMatch("smbfs"::equals))
-            return -1;
-        return 0;
+                .anyMatch("smbfs"::equals);
+        if (smbfs) {
+            // JNA doesn't move files on SMB shares to trash
+            LOGGER.error("failed to move SMB files to trash");
+            return false;
+        }
+
+        LOGGER.info("fall back to removing files using JNA");
+        return moveToTrashViaJna(queuedFiles);
     }
 
-    private boolean moveToTrashJna(List<AbstractFile> queuedFiles) {
+    private boolean moveToTrashViaJna(List<AbstractFile> queuedFiles) {
         File[] files = queuedFiles.stream().map(AbstractFile::getAbsolutePath).map(File::new).toArray(File[]::new);
         try { macFileUtils.moveToTrash(files); }
         catch (IOException e) {
@@ -224,13 +212,11 @@ public class OSXTrash extends QueuedTrash {
         return true;
     }
 
-    private boolean moveToTrashAppleScript(List<AbstractFile> queuedFiles) {
-        String appleScript;
-
+    private boolean moveToTrashViaAppleScript(List<AbstractFile> queuedFiles) {
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
         // script (AppleScript 2.0 / Mac OS X 10.5 or higher).
         if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {
-            appleScript = queuedFiles.stream()
+            String appleScript = queuedFiles.stream()
                     .map(AbstractFile::getAbsolutePath)
                     .map(path -> String.format("posix file \"%s\"", path))
                     .collect(Collectors.joining(", ", "tell application \"Finder\" to move {", "} to the trash"));
@@ -258,7 +244,7 @@ public class OSXTrash extends QueuedTrash {
                 tmpOut.close();
 
                 // Set the 'tmpFilePath' variable to the path of the temporary file we just created
-                appleScript = "set tmpFilePath to \""+tmpFile.getAbsolutePath()+"\"\n";
+                String appleScript = "set tmpFilePath to \""+tmpFile.getAbsolutePath()+"\"\n";
                 appleScript += MOVE_TO_TRASH_APPLESCRIPT_NO_UNICODE;
 
                 boolean success = AppleScript.execute(appleScript, null);
