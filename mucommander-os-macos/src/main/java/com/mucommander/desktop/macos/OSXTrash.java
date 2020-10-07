@@ -176,7 +176,7 @@ public class OSXTrash extends QueuedTrash {
         if (queuedFiles.isEmpty())
             return true;
 
-        if (moveToTrashAppleScript(queuedFiles))
+        if (moveToTrashViaAppleScript(queuedFiles))
             return true;
 
         boolean smbfs = queuedFiles.stream()
@@ -198,11 +198,11 @@ public class OSXTrash extends QueuedTrash {
             return false;
         }
 
-        LOGGER.error("fall back to removing files using JNA");
-        return moveToTrashJna(queuedFiles);
+        LOGGER.info("fall back to removing files using JNA");
+        return moveToTrashViaJna(queuedFiles);
     }
 
-    private boolean moveToTrashJna(List<AbstractFile> queuedFiles) {
+    private boolean moveToTrashViaJna(List<AbstractFile> queuedFiles) {
         File[] files = queuedFiles.stream().map(AbstractFile::getAbsolutePath).map(File::new).toArray(File[]::new);
         try { macFileUtils.moveToTrash(files); }
         catch (IOException e) {
@@ -212,13 +212,11 @@ public class OSXTrash extends QueuedTrash {
         return true;
     }
 
-    private boolean moveToTrashAppleScript(List<AbstractFile> queuedFiles) {
-        String appleScript;
-
+    private boolean moveToTrashViaAppleScript(List<AbstractFile> queuedFiles) {
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
         // script (AppleScript 2.0 / Mac OS X 10.5 or higher).
         if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {
-            appleScript = queuedFiles.stream()
+            String appleScript = queuedFiles.stream()
                     .map(AbstractFile::getAbsolutePath)
                     .map(path -> String.format("posix file \"%s\"", path))
                     .collect(Collectors.joining(", ", "tell application \"Finder\" to move {", "} to the trash"));
@@ -246,7 +244,7 @@ public class OSXTrash extends QueuedTrash {
                 tmpOut.close();
 
                 // Set the 'tmpFilePath' variable to the path of the temporary file we just created
-                appleScript = "set tmpFilePath to \""+tmpFile.getAbsolutePath()+"\"\n";
+                String appleScript = "set tmpFilePath to \""+tmpFile.getAbsolutePath()+"\"\n";
                 appleScript += MOVE_TO_TRASH_APPLESCRIPT_NO_UNICODE;
 
                 boolean success = AppleScript.execute(appleScript, null);
