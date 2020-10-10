@@ -86,6 +86,7 @@ dependencies {
 
     osgiRuntime project('mucommander-os-api')
     osgiRuntime project('mucommander-os-macos')
+    // osgiRuntime project('mucommander-os-macos-java8')
     osgiRuntime project('mucommander-os-linux')
     osgiRuntime project('mucommander-os-win')
     osgiRuntime project('mucommander-os-openvms')
