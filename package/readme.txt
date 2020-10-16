@@ -39,6 +39,7 @@ Improvements:
 - File-search dialog is loaded with the previously selected search options instead of the default search options.
 - The wildcard characters '*' and '?' can be used within filenames in file-search.
 - Revert the bundled JRE on macOS to version 11.0.4 that appear to be more stable than 11.0.7.
+- Add the replace_jre.sh script that replaces the bundled JRE with the one of JavaAppletPlugin on macOS/Mac OS X.
 
 Localization:
 - Korean translation updated.
@@ -65,6 +66,8 @@ Known issues:
 - Version 5.0 of RAR is not supported. Such archives would appear empty.
 - Issues with browsing Documents/Desktop/Downloads on macOS may be solved by resetting Security and Privacy settings.
   See https://github.com/mucommander/mucommander/wiki/Reset-Security-&-Privacy-Settings-on-macOS for more details.
+- Mac OS X: muCommander may not be able to start on version <= 10.10 (OS X Yosemite) due to incompatibility of the bundled JRE.
+  This can be solved by installing Java 8 and running '/Applications/muCommander.app/Contents/replace_jre.sh'.
 
 License
 -------
