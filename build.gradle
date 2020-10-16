@@ -296,6 +296,13 @@ task copyInfoToAppOutputDir(type: Copy) {
     include "readme.txt"
     into "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/"
 }
+copyInfoToAppOutputDir.doLast {
+    copy {
+        from "package/osx"
+        include "replace_jre.sh"
+        into "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/"
+    }
+}
 createDmg.dependsOn copyInfoToAppOutputDir
 
 launch4j {
