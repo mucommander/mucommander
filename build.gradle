@@ -253,10 +253,14 @@ macAppBundle {
            set arrangement of viewOptions to not arranged
            set icon size of viewOptions to 72
            set background picture of viewOptions to file ".background:\${DMG_BACKGROUND_IMG}"
+           set extension hidden of item "change_jre.command" of container window to true
+           set extension hidden of item "license.txt" of container window to true
+           set extension hidden of item "readme.txt" of container window to true
            set position of item "\${APP_NAME}.app" of container window to { \${APPICONX}, \${APPICONY} }
            set position of item "Applications" of container window to { \${APPFOLDERX}, \${APPFOLDERY} }
            set position of item "license.txt" of container window to { 75, 75 }
            set position of item "readme.txt" of container window to { 375, 75 }
+           set position of item "change_jre.command" of container window to { 375, 350 }
            close
            open
            update without registering applications
@@ -296,12 +300,10 @@ task copyInfoToAppOutputDir(type: Copy) {
     include "readme.txt"
     into "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/"
 }
-copyInfoToAppOutputDir.doLast {
-    copy {
-        from "package/osx"
-        include "replace_jre.sh"
-        into "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/"
-    }
+copyInfoToAppOutputDir.doFirst {
+    from "package/osx"
+    include "change_jre.command"
+    into "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/"
 }
 createDmg.dependsOn copyInfoToAppOutputDir
 
