@@ -17,7 +17,14 @@
 
 package com.mucommander.ui.main.table;
 
+import java.awt.Cursor;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import javax.swing.table.AbstractTableModel;
@@ -43,7 +50,9 @@ import com.mucommander.text.SizeFormat;
  */
 public class FileTableModel extends AbstractTableModel {
 
-    /** The current folder */
+    private static final Cursor WAIT_CURSOR = new Cursor(Cursor.WAIT_CURSOR);
+
+     /** The current folder */
     private AbstractFile currentFolder;
 
     /** Date of the current folder when it was changed */
@@ -63,7 +72,7 @@ public class FileTableModel extends AbstractTableModel {
 
     /** Marked rows array */
     private boolean rowMarked[];
-	
+
     /** Combined size of files currently marked */
     private long markedTotalSize;
 
@@ -82,6 +91,24 @@ public class FileTableModel extends AbstractTableModel {
     /** String used as size information for directories */
     public final static String DIRECTORY_SIZE_STRING = "<DIR>";
 
+    /** String used as size information for directories that queued to size calculation */
+    public static final String QUEUED_DIRECTORY_SIZE_STRING = "<...>";
+
+    /** Here will be stored sizes of directories calculated by F3 command */
+    private final Map<AbstractFile, Long> directorySizes = new HashMap<>();
+
+    /** Tasks queue for directory size calculate */
+    private final List<AbstractFile> calculateSizeQueue = new LinkedList<>();
+
+    /** Worker to calculate directories sizes */
+    private CalculateDirectorySizeWorker calculateDirectorySizeWorker;
+
+    /** True if the table has directories with calculated size */
+    private boolean hasCalculatedDirectories;
+
+    /** Stores marked directories to calculate these size if need */
+    private final Set<AbstractFile> markedDirectories = new HashSet<>();
+
 
     static {
         // Initialize the size column format based on the configuration
@@ -93,15 +120,24 @@ public class FileTableModel extends AbstractTableModel {
     /**
      * Sets the SizeFormat format used to create the size column's string.
      *
-     * @param compactSize true to use a compact size format, false for full size in bytes 
+     * @param compactSize true to use a compact size format, false for full size in bytes
      */
     static void setSizeFormat(boolean compactSize) {
         if(compactSize)
             sizeFormat = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.ROUND_TO_KB;
         else
-            sizeFormat = SizeFormat.DIGITS_FULL | SizeFormat.UNIT_NONE;
+        sizeFormat = SizeFormat.DIGITS_FULL;
 
         sizeFormat |= SizeFormat.INCLUDE_SPACE;
+    }
+
+
+    /**
+     * Returns the SizeFormat format used to create the size column's string
+     * @return  SizeFormat bit mask
+     */
+    static int getSizeFormat() {
+        return sizeFormat;
     }
 
 
@@ -189,6 +225,7 @@ public class FileTableModel extends AbstractTableModel {
             // Pre-fetch the attributes that are used by the table renderer and some actions.
             prefetchCachedFileAttributes(parent);
         }
+        stopSizeCalculation();
 
         // Initialize file indexes and create CachedFile instances to speed up table display and navigation
         this.cachedFiles = children;
@@ -235,7 +272,7 @@ public class FileTableModel extends AbstractTableModel {
         }
     }
 
-	
+
     /**
      * Retrieves all cell values and stores them in an array for fast access.
      */
@@ -243,7 +280,7 @@ public class FileTableModel extends AbstractTableModel {
         int len = cellValuesCache.length;
         if(len==0)
             return;
-		
+
         // Special '..' file
         if(parent!=null) {
             cellValuesCache[0][Column.NAME.ordinal()-1] = "..";
@@ -259,11 +296,33 @@ public class FileTableModel extends AbstractTableModel {
 
         Function<AbstractFile, String> nameFunc = getNameFunc();
         int fileIndex = 0;
-        for(int i=parent==null?0:1; i<len; i++) {
+        final int indexOffset = parent == null ? 0 : 1;
+        for (int i = indexOffset; i < len; i++) {
             AbstractFile file = getCachedFileAtRow(i);
-            int cellIndex = fileArrayIndex[fileIndex]+(parent==null?0:1);
+            int cellIndex = fileArrayIndex[fileIndex] + indexOffset;
+            Object sizeValue;
+            if (file.isDirectory()) {
+                if (hasCalculatedDirectories) {
+                    Long dirSize;
+                    synchronized (directorySizes) {
+                        dirSize = directorySizes.get(file);
+                    }
+                    if (dirSize != null) {
+                        sizeValue = SizeFormat.format(dirSize, sizeFormat);
+                    } else {
+                        synchronized (calculateSizeQueue) {
+                            sizeValue = calculateSizeQueue.contains(file) ? QUEUED_DIRECTORY_SIZE_STRING : DIRECTORY_SIZE_STRING;
+                        }
+                    }
+                } else {
+                    sizeValue = DIRECTORY_SIZE_STRING;
+                }
+            } else {
+                sizeValue = SizeFormat.format(file.getSize(), sizeFormat);
+            }
+
             cellValuesCache[cellIndex][Column.NAME.ordinal()-1] = nameFunc.apply(file);
-            cellValuesCache[cellIndex][Column.SIZE.ordinal()-1] = file.isDirectory()?DIRECTORY_SIZE_STRING:SizeFormat.format(file.getSize(), sizeFormat);
+            cellValuesCache[cellIndex][Column.SIZE.ordinal()-1] = sizeValue;
             cellValuesCache[cellIndex][Column.DATE.ordinal()-1] = CustomDateFormat.format(new Date(file.getDate()));
             cellValuesCache[cellIndex][Column.PERMISSIONS.ordinal()-1] = file.getPermissionsString();
             cellValuesCache[cellIndex][Column.OWNER.ordinal()-1] = file.getOwner();
@@ -292,7 +351,7 @@ public class FileTableModel extends AbstractTableModel {
     /**
      * Returns a CachedFile instance of the file located at the given row index.
      * This method can return the parent folder file ('..') if a parent exists and rowIndex is 0.
-     * 
+     *
      * <p>Returns <code>null</code> if rowIndex is lower than 0 or is greater than or equals
      * {@link #getRowCount() getRowCount()}.</p>
      *
@@ -302,10 +361,10 @@ public class FileTableModel extends AbstractTableModel {
     public synchronized AbstractFile getCachedFileAtRow(int rowIndex) {
         if(rowIndex==0 && parent!=null)
             return parent;
-		
+
         if(parent!=null)
             rowIndex--;
-		
+
         // Need to check that row index is not larger than actual number of rows
         // because if table has just been changed (rows have been removed),
         // JTable may have an old row count value and may try to repaint rows that are out of bounds.
@@ -331,7 +390,7 @@ public class FileTableModel extends AbstractTableModel {
 
 
     /**
-     * Returns the file located at the given row index. 
+     * Returns the file located at the given row index.
      * This method can return the parent folder file ('..') if a parent exists and rowIndex is 0.
      *
      * <p>Returns <code>null</code> if rowIndex is lower than 0 or is greater than or equals
@@ -342,14 +401,14 @@ public class FileTableModel extends AbstractTableModel {
      */
     public synchronized AbstractFile getFileAtRow(int rowIndex) {
         AbstractFile file = getCachedFileAtRow(rowIndex);
-	
+
         if (file==null)
             return null;
         if (file instanceof CachedFile)
             return ((CachedFile)file).getProxiedFile();
         return file;
     }
-	
+
     /**
      * Returns the current folder's children. The returned array contains {@link AbstractFile} instances, and not
      * CachedFile instances contrary to {@link #getCachedFiles()}.
@@ -397,11 +456,11 @@ public class FileTableModel extends AbstractTableModel {
             else
                 left = mid+1;
         }
-		
+
         return -1;
     }
 
-	
+
     /**
      * Returns the file located at the given index, not including the parent file.
      * Returns <code>null</code> if fileIndex is lower than 0 or is greater than or equals {@link #getFileCount() getFileCount()}.
@@ -419,7 +478,7 @@ public class FileTableModel extends AbstractTableModel {
     	return null;
     }
 
-	
+
     /**
      * Returns the actual number of files the current folder contains, excluding the parent '..' file (if any).
      *
@@ -429,7 +488,7 @@ public class FileTableModel extends AbstractTableModel {
         return cachedFiles.length;
     }
 
-	
+
     /**
      * Returns <code>true</code> if the given row is marked (/!\ not selected). If the specified row corresponds to the
      * special '..' parent file, <code>false</code> is always returned.
@@ -455,21 +514,29 @@ public class FileTableModel extends AbstractTableModel {
     public synchronized void setRowMarked(int row, boolean marked) {
         if(row==0 && parent!=null)
             return;
-			
+
         int rowIndex = parent==null?row:row-1;
 
         // Return if the row is already marked/unmarked
-        if((marked && rowMarked[fileArrayIndex[rowIndex]]) || (!marked && !rowMarked[fileArrayIndex[rowIndex]]))
+        final int fileIndex = fileArrayIndex[rowIndex];
+        if (marked == rowMarked[fileIndex])
             return;
 
         AbstractFile file = getCachedFileAtRow(row);
 
         // Do not call getSize() on directories, it's unnecessary and the value is most likely not cached by CachedFile yet
-        long fileSize = file.isDirectory()?0:file.getSize();
+        long fileSize;
+
+        if (file.isDirectory()) {
+            markedDirectories.add(file);
+            fileSize = 0;
+        } else {
+            fileSize = file.getSize();
+        }
 
         // Update :
         // - Combined size of marked files
-        // - marked files FileSet 
+        // - marked files FileSet
         if(marked) {
             // File size can equal -1 if not available, do not count that in total
             if(fileSize>0)
@@ -485,7 +552,7 @@ public class FileTableModel extends AbstractTableModel {
             nbRowsMarked--;
         }
 
-        rowMarked[fileArrayIndex[rowIndex]] = marked;
+        rowMarked[fileIndex] = marked;
     }
 
 
@@ -494,7 +561,7 @@ public class FileTableModel extends AbstractTableModel {
      * End row may be less, greater or equal to the start row.
      *
      * @param startRow index of the first row to mark/unmark
-     * @param endRow index of the last row to mark/ummark, startRow may be less or greater than startRow
+     * @param endRow index of the last row to mark/unmark, startRow may be less or greater than startRow
      * @param marked if true, all the rows within the range will be marked, unmarked otherwise
      */
     public void setRangeMarked(int startRow, int endRow, boolean marked) {
@@ -581,17 +648,18 @@ public class FileTableModel extends AbstractTableModel {
         return nbRowsMarked;
     }
 
-	
+
     /**
-     * Returns the combined size of marked files. This number is pre-calculated so calling this method is much faster
+     * Returns the combined size of marked files. This number consists of two parts:
+     * 1) pre-calculated size of files so calling this method is much faster
      * than retrieving the list of marked files and calculating their combined size.
+     * 2) calculated size of directories (if that was calculated)
      *
-     * @return the combined size of marked files
+     * @return the combined size of marked files and directories
      */
     public long getTotalMarkedSize() {
-        return markedTotalSize;
+        return markedTotalSize + calcMarkedDirectoriesSize();
     }
-
     /**
      * Makes the name column temporarily editable. This method should only be called by FileTable.
      *
@@ -601,7 +669,7 @@ public class FileTableModel extends AbstractTableModel {
         this.nameColumnEditable = editable;
     }
 
-	
+
     //////////////////
     // Sort methods //
     //////////////////
@@ -684,9 +752,9 @@ public class FileTableModel extends AbstractTableModel {
 
 
     //////////////////////////////////////////
-    // Overriden AbstractTableModel methods //
+    // Overridden AbstractTableModel methods //
     //////////////////////////////////////////
-	
+
     public int getColumnCount() {
         return Column.values().length; // icon, name, size, date, permissions, owner, group
     }
@@ -703,7 +771,7 @@ public class FileTableModel extends AbstractTableModel {
         return fileArrayIndex.length + (parent==null?0:1);
     }
 
-		
+
     //	public Object getValueAt(int rowIndex, int columnIndex) {
     public synchronized Object getValueAt(int rowIndex, int columnIndex) {
         // Need to check that row index is not larger than actual number of rows
@@ -718,7 +786,7 @@ public class FileTableModel extends AbstractTableModel {
         Column column = Column.valueOf(columnIndex);
         if(column==Column.EXTENSION)
             return null;
-		
+
         // Decrement column index for cellValuesCache array
         columnIndex--;
         // Handle special '..' file
@@ -728,7 +796,7 @@ public class FileTableModel extends AbstractTableModel {
         return cellValuesCache[fileArrayIndex[fileIndex]+(parent==null?0:1)][columnIndex];
     }
 
-	
+
     /**
      * Returns <code>true</code> if name column has temporarily be made editable by FileTable
      * and given row doesn't correspond to parent file '..', <code>false</code> otherwise.
@@ -739,7 +807,123 @@ public class FileTableModel extends AbstractTableModel {
         // but parent file '..' name should never be editable
         if(Column.valueOf(columnIndex)==Column.NAME && (parent==null || rowIndex!=0))
             return nameColumnEditable;
-	
+
         return false;
     }
+
+
+    /**
+     * Add directory to size calculation and start calculation worker if it doesn't busy
+     * @param table
+     * @param file
+     */
+    public void startDirectorySizeCalculation(FileTable table, AbstractFile file) {
+        if (!file.isDirectory()) {
+            return;
+        }
+        hasCalculatedDirectories = true;
+        synchronized (directorySizes) {
+            if (directorySizes.containsKey(file)) {
+                return;
+            }
+        }
+        synchronized (calculateSizeQueue) {
+            if (calculateSizeQueue.contains(file)) {
+                return;
+            }
+            calculateSizeQueue.add(file);
+        }
+        if (calculateDirectorySizeWorker == null) {
+            processNextQueuedFile(table);
+
+        }
+    }
+
+    /**
+     * Takes a first ask for queue and starts calculation worker
+     * @param table
+     */
+    private void processNextQueuedFile(FileTable table) {
+        AbstractFile nextFile;
+        synchronized (calculateSizeQueue) {
+            if (calculateSizeQueue.size() > 0) {
+                nextFile = calculateSizeQueue.remove(0);
+            } else {
+                nextFile = null;
+            }
+        }
+        if (nextFile == null) {
+            calculateDirectorySizeWorker = null;
+            table.getParent().setCursor(Cursor.getDefaultCursor());
+        } else {
+            calculateDirectorySizeWorker = new CalculateDirectorySizeWorker(this, table, nextFile);
+            table.getParent().setCursor(WAIT_CURSOR);
+            calculateDirectorySizeWorker.execute();
+        }
+    }
+
+    /**
+     * Called from size-calculation worker after it finish or requests to repaint table.
+     * Updates map of directory sizes and starts next task if worker finished
+     *
+     * @param path
+     * @param table
+     * @param size calculated directory size
+     * @param finish true if worker completely finish task, false if it will just repaint table
+     */
+    public void addProcessedDirectory(AbstractFile path, FileTable table, long size, boolean finish) {
+        synchronized (directorySizes) {
+            directorySizes.put(path, size);
+        }
+        synchronized (calculateSizeQueue) {
+            calculateSizeQueue.remove(path);
+        }
+        if (finish) {
+            processNextQueuedFile(table);
+        }
+    }
+
+
+    /**
+     * Stops directory calculation, clears calculated size ant tasks queue, interrupts currently executed worker if exists
+     */
+    private void stopSizeCalculation() {
+        synchronized (directorySizes) {
+            directorySizes.clear();
+        }
+        synchronized (calculateSizeQueue) {
+            calculateSizeQueue.clear();
+        }
+        if (calculateDirectorySizeWorker != null) {
+            try {
+                calculateDirectorySizeWorker.cancel(true);
+            } catch (Exception e) { }
+            calculateDirectorySizeWorker = null;
+        }
+        synchronized (this) {
+            markedDirectories.clear();
+        }
+        hasCalculatedDirectories = false;
+    }
+
+
+    private long calcMarkedDirectoriesSize() {
+        if (!hasCalculatedDirectories) {
+            return 0;
+        }
+        long result = 0;
+        synchronized (this) {
+            for (AbstractFile file : markedDirectories) {
+                Long dirSize;
+                synchronized (directorySizes) {
+                    dirSize = directorySizes.get(file);
+                }
+                if (dirSize != null) {
+                    result += dirSize;
+                }
+            }
+        }
+        return result;
+    }
+
 }

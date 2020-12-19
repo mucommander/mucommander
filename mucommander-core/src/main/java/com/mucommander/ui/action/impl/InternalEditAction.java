@@ -27,11 +27,13 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.FileOperationFilter;
+import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.dialog.file.ChangePermissionsDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.viewer.EditorRegistrar;
 
@@ -70,7 +72,13 @@ public class InternalEditAction extends AbstractViewerAction {
      */
     @Override
     protected void performInternalAction(AbstractFile file) {
-        EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
+        if (file.isDirectory()) {
+            FileSet fileSet = new FileSet();
+            fileSet.add(file);
+            new ChangePermissionsDialog(mainFrame, fileSet).showDialog();
+        } else {
+            EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
+        }
     }
 
     @Override
@@ -90,10 +98,10 @@ public class InternalEditAction extends AbstractViewerAction {
 			return new InternalEditAction(mainFrame, properties);
 		}
     }
-    
+
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "InternalEdit";
-    	
+
 		public String getId() { return ACTION_ID; }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }

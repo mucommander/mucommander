@@ -51,10 +51,10 @@ abstract class AbstractViewerAction extends SelectedFileAction {
         super(mainFrame, properties);
 
         // Enable this action only if the currently selected file is not a directory and can be read.
-        setSelectedFileFilter(new AndFileFilter(
-            new FileOperationFilter(FileOperation.READ_FILE),
-            new AttributeFileFilter(FileAttribute.DIRECTORY, true)
-        ));
+        // setSelectedFileFilter(new AndFileFilter(
+        //     new FileOperationFilter(FileOperation.READ_FILE),
+        //     new AttributeFileFilter(FileAttribute.DIRECTORY, true)
+        // ));
     }
 
 
@@ -85,7 +85,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
                     catch(Exception e) {
                         InformationDialog.showErrorDialog(mainFrame);}
                 }
-                
+
                 // If it's distant, copies it locally before running the custom editor on it.
                 else {
                     ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
