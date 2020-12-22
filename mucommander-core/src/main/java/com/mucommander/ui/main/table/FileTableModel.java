@@ -126,7 +126,7 @@ public class FileTableModel extends AbstractTableModel {
         if(compactSize)
             sizeFormat = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.ROUND_TO_KB;
         else
-        sizeFormat = SizeFormat.DIGITS_FULL;
+            sizeFormat = SizeFormat.DIGITS_FULL;
 
         sizeFormat |= SizeFormat.INCLUDE_SPACE;
     }
