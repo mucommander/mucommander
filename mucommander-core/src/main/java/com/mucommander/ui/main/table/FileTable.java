@@ -1087,28 +1087,19 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     // - Layout management ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private void doAutoLayout(boolean respectSize) {
-        Iterator<TableColumn> columns;
-        TableColumn           column;
-        TableColumn           nameColumn;
-        Column                c;
-        int                   remainingWidth;
-        int                   columnWidth;
-        int                   rowCount;
-        String                val;
-        int                   stringWidth;
-
         final FontMetrics fm = getFontMetrics(FileTableCellRenderer.getCellFont());
         final int dirStringWidth1 = fm.stringWidth(FileTableModel.DIRECTORY_SIZE_STRING);
         final int dirStringWidth2 = fm.stringWidth(SizeFormat.format(1024*1024*555, FileTableModel.getSizeFormat())); // some big value with big string-length
         final int dirStringWidth = Math.max(dirStringWidth1, dirStringWidth2);
 
-        remainingWidth = getSize().width - RESERVED_NAME_COLUMN_WIDTH;
-        columns        = respectSize ? new Enumerator<TableColumn>(getColumnModel().getColumns()) : getFileTableColumnModel().getAllColumns();
-        nameColumn     = null;
+        int remainingWidth = getSize().width - RESERVED_NAME_COLUMN_WIDTH;
+        Iterator<TableColumn> columns = respectSize ? new Enumerator<TableColumn>(getColumnModel().getColumns()) : getFileTableColumnModel().getAllColumns();
+        TableColumn nameColumn = null;
 
         while(columns.hasNext()) {
-            column = columns.next();
-            c = Column.valueOf(column.getModelIndex());
+            TableColumn column = columns.next();
+            Column c = Column.valueOf(column.getModelIndex());
+            int columnWidth;
 
             if(c == Column.NAME)
                 nameColumn = column;
@@ -1118,11 +1109,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 else {
                     columnWidth = MIN_COLUMN_AUTO_WIDTH;
 
-                    rowCount = getModel().getRowCount();
+                    int rowCount = getModel().getRowCount();
                     for(int rowNum = 0; rowNum < rowCount; rowNum++) {
-                        val = (String)getModel().getValueAt(rowNum, column.getModelIndex());
+                        String val = (String)getModel().getValueAt(rowNum, column.getModelIndex());
                         boolean isDirectorySize = c == Column.SIZE && val.equals(FileTableModel.DIRECTORY_SIZE_STRING);
-                        stringWidth = val == null ? 0 : isDirectorySize ? dirStringWidth : fm.stringWidth(val);
+                        int stringWidth = val == null ? 0 : isDirectorySize ? dirStringWidth : fm.stringWidth(val);
 
                         columnWidth = Math.max(columnWidth, stringWidth);
                     }
