@@ -82,7 +82,7 @@ public class LocationManager {
 
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fire) {
         LOGGER.trace("calling ls()");
-        currentFolderDate = folder.getDate();
+        currentFolderDate = folder.getDateCurrentFolder();
     	AbstractFile[] children = emptyAbstractFilesArray;
     	try {
     	    children = folder.ls(configurableFolderFilter);

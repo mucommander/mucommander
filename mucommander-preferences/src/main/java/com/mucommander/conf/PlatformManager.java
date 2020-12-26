@@ -88,10 +88,17 @@ public class PlatformManager {
      */
     public static AbstractFile getPreferencesFolder() {
         // If the preferences folder has been set, use it.
-        if(prefFolder != null)
+        if (prefFolder != null)
             return prefFolder;
 
         return getDefaultPreferencesFolder();
+    }
+
+    public static AbstractFile getCredentialsFolder() throws IOException {
+        AbstractFile credentialsFolder = getPreferencesFolder().getChild("/.credentials");
+        if (!credentialsFolder.exists())
+            credentialsFolder.mkdir();
+        return credentialsFolder;
     }
 
     /**

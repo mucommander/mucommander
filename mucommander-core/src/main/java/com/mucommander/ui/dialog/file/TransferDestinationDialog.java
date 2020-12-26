@@ -471,7 +471,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
 
             final String destPath = pathField.getText();
             // Resolves destination folder (I/O bound)
-            final PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(destPath, mainFrame.getActivePanel().getCurrentFolder());
+            final PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(destPath, mainFrame.getActivePanel().getCurrentFolder(), mainFrame.getInactivePanel().getCurrentFolder());
             // Resolves destination folder (I/O bound)
             final boolean isValid = isValidDestination(resolvedDest, destPath);
 

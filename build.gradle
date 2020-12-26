@@ -61,6 +61,7 @@ dependencies {
     osgiRuntime project('mucommander-protocol-sftp')
     osgiRuntime project('mucommander-format-rar')
     osgiRuntime project('mucommander-protocol-http')
+    osgiRuntime project('mucommander-protocol-gdrive')
     osgiRuntime project('mucommander-protocol-nfs')
     osgiRuntime project('mucommander-protocol-smb')
     osgiRuntime project('mucommander-protocol-vsphere')
@@ -122,6 +123,15 @@ runOsgi {
         }
         manifest("sdk-.*") {
             instruction 'Bundle-Name', 'ovirt-sdk'
+        }
+        manifest("google-api-services.*") {
+            instruction 'Bundle-Version', '1.23.0'
+        }
+        manifest("google-oauth-client-[0-9].*") {
+            instruction 'Export-Package', 'com.google.api.client.auth.oauth2', '*'
+        }
+        manifest("google-http-client.*") {
+            instruction 'Import-Package', 'com.google.api.client.auth.oauth2', '*'
         }
     }
 }

@@ -158,9 +158,8 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         // Checks which kind of initial path we're dealing with.
         boolean isCustom = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
 
-        return isCustom ? 
-                0 :
-                    MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
+        return isCustom ? 0
+                : MuSnapshot.getSnapshot().getIntegerVariable(MuSnapshot.getTabsSelectionVariable(window, folderPanelType == FolderPanelType.LEFT));
     }
 
     private FileURL restoreFileURL(String url) {

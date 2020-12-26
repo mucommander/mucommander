@@ -25,6 +25,7 @@ import com.mucommander.commons.file.FileURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
@@ -149,6 +150,44 @@ public class PathUtils {
      * describes the kind of destination that was resolved
      */
     public static ResolvedDestination resolveDestination(String destPath, AbstractFile baseFolder) {
+        return resolveDestination(destPath, baseFolder, null);
+    }
+
+    /**
+     * Resolves a destination path entered by the user and returns a {@link ResolvedDestination} object that
+     * that contains a {@link AbstractFile} instance corresponding to the path and a type that describes the kind of
+     * destination that was resolved. <code>null</code> is returned if the path is not a valid destination (see below)
+     * or could not be resolved, for example becuase of I/O or authentication error.
+     * <p>
+     * The given path may be either absolute or relative to the specified base folder. If the base folder argument is
+     * <code>null</code> and the path is relative, <code>null</code> will always be returned.
+     * The path may contain '.', '..' and '~' tokens which will be left for the corresponding
+     * {@link com.mucommander.commons.file.SchemeParser} to canonize.
+     * </p>
+     * <p>
+     * The path may refer to the following listed destination types. In all cases, the destination's parent folder must
+     * exist, if it doesn't <code>null</code> will always be returned. For example, <code>/non_existing_folder/file</code>
+     * is not a valid destination (provided that '/non_existing_folder' does not exist).
+     * <dl>
+     *  <dt>{@link ResolvedDestination#EXISTING_FOLDER}</dt><dd>if the path denotes a folder, either a directory or a
+     * browsable archive.</dd>
+     *  <dt>{@link ResolvedDestination#EXISTING_FILE}</dt><dd>if the path denotes a regular file. The file may be a browsable archive,
+     * see below.</dd>
+     *  <dt>{@link ResolvedDestination#NEW_FILE}</dt><dd>if the path denotes a non-existing file whose parent exists.</dd>
+     * </dl>
+     * Paths to browsable archives are considered as denoting a folder only if they end with a trailing separator
+     * character. If they don't, they're considered as denoting a regular file. For example,
+     * <code>/existing_folder/existing_archive.zip/</code> refers to the archive as a folder where as
+     * <code>/existing_folder/existing_archive.zip</code> refers to the archive as a regular file.
+     * </p>
+     *
+     * @param destPath the destination path to resolve
+     * @param baseFolder the base folder used for relative paths, <code>null</code> to accept only absolute paths
+     * @param parent the parent of destPath
+     * @return the object that that contains a {@link AbstractFile} instance corresponding to the path and a type that
+     * describes the kind of destination that was resolved
+     */
+    public static ResolvedDestination resolveDestination(String destPath, AbstractFile baseFolder, AbstractFile parent) {
         FileURL destURL;
 
         // Try to resolve the path as a URL
@@ -187,7 +226,16 @@ public class PathUtils {
         }
 
         // No point in going any further if the URL cannot be resolved into a file
-        AbstractFile destFile = FileFactory.getFile(destURL);
+        AbstractFile destFile = null;
+        if (parent != null && destURL.equals(parent.getURL())) {
+            destFile = parent;
+        } else {
+            try {
+                destFile = FileFactory.getFile(destURL, parent);
+            } catch (IOException e) {
+                LOGGER.debug("failed to retrieve file", e);
+            }
+        }
         if(destFile ==null) {
             LOGGER.info("could not resolve a file for {}", destURL);
             return null;
