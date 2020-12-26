@@ -242,7 +242,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 
         // Check folder's date
         AbstractFile currentFolder = folderPanel.getCurrentFolder();
-        long date = currentFolder.getDate();
+        long date = currentFolder.getDateCurrentFolder();
 
         totalCheckTime += System.currentTimeMillis()-timeStamp;
         nbSamples++;

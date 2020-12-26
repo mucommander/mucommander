@@ -216,6 +216,7 @@ public class CopyJob extends AbstractCopyJob {
     protected void jobCompleted() {
         super.jobCompleted();
 
+        baseDestFolder.postCopyHook();
         // If the destination files are located inside an archive, optimize the archive file
         AbstractArchiveFile archiveFile = baseDestFolder.getParentArchive();
         if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable())

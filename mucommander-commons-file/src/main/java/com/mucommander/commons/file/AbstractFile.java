@@ -1549,6 +1549,24 @@ public abstract class AbstractFile implements FileAttributes {
     public abstract long getDate();
 
     /**
+     * Return this file's last modified date.
+     * For some file protocols (e.g., Google Drive), folder's modification date doesn't change when a new file is
+     * added or removed from the folder. But we count of identifying when the folder needs to be refreshed by its
+     * modification time so this method can be overridden to provide an alternative way to compute the modification
+     * time of the browsed folder in that case.
+     *
+     * @return this file's last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
+     */
+    public long getDateCurrentFolder() {
+        return getDate();
+    }
+
+    /**
+     * This hook enables to add logic after files were copied to this folder / archive.
+     */
+    public void postCopyHook() {}
+
+    /**
      * Changes this file's last modified date to the specified one. Throws an <code>IOException</code> if the date
      * couldn't be changed, either because of insufficient permissions or because of an I/O error.
      *

@@ -70,6 +70,9 @@ public class CustomFileIconProvider implements FileIconProvider {
     /** Icon for the not accessible remote locations */
     public final static String DISCONNECTED_ICON_NAME = "disconnect.png";
 
+    /** Icon for Google Drive */
+    public final static String GOOGLE_DRIVE_ICON_NAME = "gdrive.png";
+
     /** Icon for not accessible files (used for quick-lists) **/
     public final static String NOT_ACCESSIBLE_FILE = "not_accessible.png";
 

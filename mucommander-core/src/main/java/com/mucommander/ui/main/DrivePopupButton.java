@@ -239,6 +239,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FIND_RESULT_ICON_NAME));
             break;
 
+        case "gdrive":
+            setText(Translator.get("gdrive"));
+            setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.GOOGLE_DRIVE_ICON_NAME));
+            break;
+
         default:
         	// Remote file, use the protocol's name
     		setText(protocol.toUpperCase());

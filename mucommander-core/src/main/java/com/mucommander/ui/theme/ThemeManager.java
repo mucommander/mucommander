@@ -347,10 +347,8 @@ public class ThemeManager {
      * @throws IOException if an error occured while locating the default user themes folder.
      */
     public static AbstractFile getCustomThemesFolder() throws IOException {
-        AbstractFile customFolder;
-
         // Retrieves the path to the custom themes folder and creates it if necessary.
-        customFolder = PlatformManager.getPreferencesFolder().getChild(CUSTOM_THEME_FOLDER);
+        AbstractFile customFolder = PlatformManager.getPreferencesFolder().getChild(CUSTOM_THEME_FOLDER);
         if(!customFolder.exists())
             customFolder.mkdir();
 
