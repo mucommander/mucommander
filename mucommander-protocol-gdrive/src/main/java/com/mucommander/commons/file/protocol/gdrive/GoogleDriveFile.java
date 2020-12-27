@@ -24,11 +24,13 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.api.client.http.InputStreamContent;
+import com.google.api.services.drive.model.About;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.mucommander.commons.file.AbstractFile;
@@ -326,12 +328,25 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
-        return 0;
+        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+            About about = connHandler.getConnection().about().get().setFields("storageQuota").execute();
+            Map<String, Long> storageQuota = (Map<String, Long>) about.get("storageQuota");
+            Long limit = storageQuota.get("limit");
+            if (limit == null)
+                return -1;
+            Long usage = storageQuota.get("usage");
+            return limit - usage;
+        }
     }
 
     @Override
     public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
-        return 0;
+        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+            About about = connHandler.getConnection().about().get().setFields("storageQuota").execute();
+            Map<String, Long> storageQuota = (Map<String, Long>) about.get("storageQuota");
+            Long limit = storageQuota.get("limit");
+            return limit != null ? limit : -1;
+        }
     }
 
     @Override
