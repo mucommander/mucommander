@@ -32,6 +32,7 @@ What's new since v0.9.5 ?
 -----------------------
 
 New features:
+- Support for Google Drive as a file protocol (including browsing, uploading and downloading capabilities).
 - Enhance file searching with the ability to specify text that the files should contain (similar to 'grep').
 - Enable switching to the next or previous image found in the active folder from the image viewer.
 - The 'View' action now displays the calculated size of the selected directories in the folder panel.
