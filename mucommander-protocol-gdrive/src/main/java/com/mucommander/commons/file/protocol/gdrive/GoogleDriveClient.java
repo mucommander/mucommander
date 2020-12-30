@@ -58,9 +58,14 @@ public class GoogleDriveClient implements Closeable {
 
     private Drive drive;
     private FileURL fileUrl;
+    private Credential credential;
 
     public GoogleDriveClient(FileURL fileUrl) {
         this.fileUrl = fileUrl;
+    }
+
+    public GoogleDriveClient(Credential credential) {
+        this.credential = credential;
     }
 
     public Drive getConnection() {
@@ -76,30 +81,26 @@ public class GoogleDriveClient implements Closeable {
     }
 
     public void connect() throws AuthException {
-        // Build a new authorized API client service.
-        NetHttpTransport HTTP_TRANSPORT;
         try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            Credential credential = this.credential != null ? this.credential : getCredentials(HTTP_TRANSPORT, fileUrl.getHost(), null);
+            drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
         } catch (GeneralSecurityException e) {
             throw new AuthException(fileUrl);
         } catch (IOException e) {
             throw new IOError(e);
         }
-        try {
-            drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT, fileUrl.getHost()))
-                    .build();
-        } catch (IOException e) {
-            throw new IOError(e);
-        }
+    }
+
+    public static Credential getCredentials(LocalServerReceiver receiver) throws IOException, GeneralSecurityException {
+        NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        return getCredentials(HTTP_TRANSPORT, null, receiver);
     }
 
     /**
      * Creates an authorized Credential object.
-     * @param HTTP_TRANSPORT The network HTTP Transport.
-     * @return An authorized Credential object.
-     * @throws IOException If the credentials.json file cannot be found.
      */
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT, String host) throws IOException {
+    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT, String host, LocalServerReceiver receiver) throws IOException {
         // Load client secrets.
         Details details = new Details();
         details.setClientId(BuildConfig.CLIENT_ID);
@@ -109,15 +110,16 @@ public class GoogleDriveClient implements Closeable {
         details.setRedirectUris(Arrays.asList("urn:ietf:wg:oauth:2.0:oob","http://localhost"));
         GoogleClientSecrets clientSecrets = new GoogleClientSecrets().setInstalled(details);
 
-        String tokensDir = getCredentialsFolder().getAbsolutePath(true) + host;
-        // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(tokensDir)))
-                .setAccessType("offline")
-                .build();
-        LocalServerReceiver receiver = new LocalServerReceiver();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES);
+        if (host != null) {
+            String tokensDir = getCredentialsFolder().getAbsolutePath();
+            builder.setDataStoreFactory(tokensDir != null ? new FileDataStoreFactory(new java.io.File(tokensDir)) : null);
+        }
+        builder.setAccessType("offline");
+        GoogleAuthorizationCodeFlow flow = builder.build();
+        if (receiver == null)
+            receiver = new LocalServerReceiver();
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize(host);
     }
 
     @Override
