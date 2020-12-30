@@ -40,11 +40,11 @@ New features:
 Improvements:
 - File-search dialog is loaded with the previously selected search options instead of the default search options.
 - The wildcard characters '*' and '?' can be used within filenames in file-search.
-- Revert the bundled JRE on macOS to version 11.0.4 that appear to be more stable than 11.0.7.
 - Add the replace_jre.sh script that replaces the bundled JRE with the one of JavaAppletPlugin on macOS/Mac OS X.
 
 Localization:
 - Korean translation updated.
+- French translation updated.
 
 Bug fixes:
 - Moving files on SMB shares to trash moves them to SAMBA trash on macOS.
