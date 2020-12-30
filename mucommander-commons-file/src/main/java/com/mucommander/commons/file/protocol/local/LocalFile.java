@@ -21,6 +21,7 @@ package com.mucommander.commons.file.protocol.local;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -332,13 +333,13 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Parses <code>/proc/mounts</code> kernel virtual file, resolves all the mount points that look like regular
-     * filesystems it contains and adds them to the given <code>Vector</code>.
+     * Parses the output of <code>/sbin/mount -p</code> on FreeBSD or the <code>/proc/mounts</code> kernel virtual file otherwise,
+     * resolves all the mount points that look like regular filesystems it contains and adds them to the given <code>Vector</code>.
      *
      * @param v the <code>Vector</code> to add mount points to
      */
     private static void addMountEntries(Vector<AbstractFile> v) {
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/mounts")))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(streamMountPoints()))) {
             String line;
             // read each line in file and parse it
             while ((line=br.readLine())!=null) {
@@ -365,8 +366,15 @@ public class LocalFile extends ProtocolFile {
                 }
             }
         } catch(Exception e) {
-            LOGGER.warn("Error parsing /proc/mounts entries", e);
+            String warning = "Error parsing" + (OsFamily.FREEBSD.isCurrent() ? "/sbin/mount -p output" : "/proc/mounts entries");
+            LOGGER.warn(warning, e);
         }
+    }
+
+    private static InputStream streamMountPoints() throws FileNotFoundException, IOException {
+        return OsFamily.FREEBSD.isCurrent() ?
+                new ProcessBuilder("/sbin/mount", "-p").start().getInputStream()
+                : new FileInputStream("/proc/mounts");
     }
 
     /**
