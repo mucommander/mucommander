@@ -338,26 +338,18 @@ public class LocalFile extends ProtocolFile {
      * @param v the <code>Vector</code> to add mount points to
      */
     private static void addMountEntries(Vector<AbstractFile> v) {
-        BufferedReader br;
-
-        br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/mounts")));
-            StringTokenizer st;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/mounts")))) {
             String line;
-            AbstractFile file;
-            String mountPoint, fsType;
-            boolean knownFS;
             // read each line in file and parse it
             while ((line=br.readLine())!=null) {
                 line = line.trim();
                 // split line into tokens separated by " \t\n\r\f"
                 // tokens are: device, mount_point, fs_type, attributes, fs_freq, fs_passno
-                st = new StringTokenizer(line);
+                StringTokenizer st = new StringTokenizer(line);
                 st.nextToken();
-                mountPoint = st.nextToken().replace("\\040", " ");
-                fsType = st.nextToken();
-                knownFS = false;
+                String mountPoint = st.nextToken().replace("\\040", " ");
+                String fsType = st.nextToken();
+                boolean knownFS = false;
                 for (String fs : KNOWN_UNIX_FS) {
                     if (fs.equals(fsType)) {
                         // this is really known physical FS
@@ -367,22 +359,13 @@ public class LocalFile extends ProtocolFile {
                 }
 
                 if (knownFS) {
-                    file = FileFactory.getFile(mountPoint);
-                    if(file!=null && !v.contains(file))
+                    AbstractFile file = FileFactory.getFile(mountPoint);
+                    if (file!=null && !v.contains(file))
                         v.add(file);
                 }
             }
-        }
-        catch(Exception e) {
+        } catch(Exception e) {
             LOGGER.warn("Error parsing /proc/mounts entries", e);
-        }
-        finally {
-            if(br != null) {
-                try {
-                    br.close();
-                }
-                catch(IOException e) {}
-            }
         }
     }
 
