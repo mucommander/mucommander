@@ -41,6 +41,7 @@ Improvements:
 - File-search dialog is loaded with the previously selected search options instead of the default search options.
 - The wildcard characters '*' and '?' can be used within filenames in file-search.
 - Add the replace_jre.sh script that replaces the bundled JRE with the one of JavaAppletPlugin on macOS/Mac OS X.
+- Resolve mount points using `/sbin/mount -p` on FreeBSD.
 
 Localization:
 - Korean translation updated.
