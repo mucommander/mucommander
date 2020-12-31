@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v0.9.6
+muCommander v0.9.7
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,29 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.9.5 ?
+What's new since v0.9.6 ?
 -----------------------
 
 New features:
-- Support for Google Drive as a file protocol (including browsing, uploading and downloading capabilities).
-- Enhance file searching with the ability to specify text that the files should contain (similar to 'grep').
-- The wildcard characters '*' and '?' can be used within filenames in file-search.
-- Enable switching to the next or previous image found in the active folder from the image viewer.
-- The 'View' action now displays the calculated size of the selected directories in the folder panel.
+- 
 
 Improvements:
-- File-search dialog is loaded with the previously selected search options instead of the default search options.
-- Add the replace_jre.sh script that replaces the bundled JRE with the one of JavaAppletPlugin on macOS/Mac OS X.
-- Resolve mount points using `/sbin/mount -p` on FreeBSD.
+- 
 
 Localization:
-- Korean translation updated.
-- French translation updated.
+- 
 
 Bug fixes:
-- Files can move to trash on macOS Big Sur.
-- Moving files on SMB shares to trash moves them to SAMBA trash on macOS.
-- Reverse sorting can be set using shortcut keys on macOS.
+- 
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
