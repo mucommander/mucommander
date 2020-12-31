@@ -47,6 +47,7 @@ Localization:
 - French translation updated.
 
 Bug fixes:
+- Files can move to trash on macOS Big Sur.
 - Moving files on SMB shares to trash moves them to SAMBA trash on macOS.
 - Reverse sorting can be set using shortcut keys.
 
