@@ -20,7 +20,7 @@ plugins {
 allprojects {
     group = 'org.mucommander'
     version = '0.9.6'
-    ext.release = 'snapshot'
+    ext.release = '1'
     configurations {
         compileOnly.extendsFrom comprise
     }
