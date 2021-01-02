@@ -56,6 +56,9 @@ public class GoogleDriveClient implements Closeable {
     private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE);
 //            DriveScopes.DRIVE, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_METADATA);
 
+    private static final String CLIENT_ID = "";
+    private static final String CLIENT_SECRET = "";
+
     private Drive drive;
     private FileURL fileUrl;
     private Credential credential;
@@ -103,8 +106,8 @@ public class GoogleDriveClient implements Closeable {
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT, String host, LocalServerReceiver receiver) throws IOException {
         // Load client secrets.
         Details details = new Details();
-        details.setClientId(BuildConfig.CLIENT_ID);
-        details.setClientSecret(BuildConfig.CLIENT_SECRET);
+        details.setClientId(CLIENT_ID);
+        details.setClientSecret(CLIENT_SECRET);
         details.setAuthUri("https://accounts.google.com/o/oauth2/auth");
         details.setTokenUri("https://oauth2.googleapis.com/token");
         details.setRedirectUris(Arrays.asList("urn:ietf:wg:oauth:2.0:oob","http://localhost"));
