@@ -67,8 +67,8 @@ public class OpenNativelyAction extends MuAction {
         else {
             // Tries to execute file with native file associations
             try {
-            	DesktopManager.open(selectedFile);
-            	RecentExecutedFilesQL.addFile(selectedFile);
+                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.open(selectedFile));
+                RecentExecutedFilesQL.addFile(selectedFile);
         	}
             catch(IOException e) {
                 InformationDialog.showErrorDialog(mainFrame);
