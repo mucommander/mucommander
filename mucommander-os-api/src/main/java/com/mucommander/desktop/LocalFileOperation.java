@@ -24,6 +24,8 @@ import com.mucommander.commons.file.protocol.local.SpecialWindowsLocation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 /**
  * {@link DesktopOperation} implementation meant for actions that involve local files.
@@ -48,10 +50,11 @@ public abstract class LocalFileOperation implements DesktopOperation {
     /**
      * Executes the operation on the specified file.
      * @param  file                          file on which to execute the operation.
+     * @return                               the {@link CompletionStage} allowing to receive asynchronously the output messages in case of error if any.
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported.
      */
-    public abstract void execute(AbstractFile file) throws IOException, UnsupportedOperationException;
+    public abstract CompletionStage<Optional<String>> execute(AbstractFile file) throws IOException, UnsupportedOperationException;
 
     /**
      * Checks whether the operation knows how to deal with the specified file.
@@ -97,19 +100,20 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * implementations should ignore it.
      * </p>
      * @param  target                        parameters of the operation.
+     * @return                               the {@link CompletionStage} allowing to receive asynchronously the output messages in case of error if any.
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported.
      * @see                                  #execute(AbstractFile)
      * @see                                  #extractTarget(Object[])
      */
-    public void execute(Object[] target) throws IOException, UnsupportedOperationException {
+    public CompletionStage<Optional<String>> execute(Object[] target) throws IOException, UnsupportedOperationException {
         // Makes sure we received the right kind of parameters.
         AbstractFile file = extractTarget(target);
         if(file == null)
             throw new UnsupportedOperationException();
 
         // Execute the operation.
-        execute(file);
+        return execute(file);
     }
 
 

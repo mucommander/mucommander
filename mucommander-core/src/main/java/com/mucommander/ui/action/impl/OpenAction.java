@@ -35,6 +35,7 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
+import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -134,9 +135,9 @@ public class OpenAction extends MuAction {
         // Opens local files using their native associations.
         else if(resolvedFile.getURL().getScheme().equals(LocalFile.SCHEMA) && (resolvedFile.hasAncestor(LocalFile.class))) {
             try {
-            	DesktopManager.open(resolvedFile);
-            	RecentExecutedFilesQL.addFile(resolvedFile);
-    		}
+                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.open(resolvedFile));
+                RecentExecutedFilesQL.addFile(resolvedFile);
+            }
             catch(IOException e) {
                 InformationDialog.showErrorDialog(mainFrame);
             }

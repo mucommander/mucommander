@@ -22,11 +22,9 @@ import java.util.Map;
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
-import com.mucommander.commons.file.filter.AndFileFilter;
-import com.mucommander.commons.file.filter.AttributeFileFilter;
-import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.filter.FileOperationFilter;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
@@ -78,9 +76,12 @@ abstract class AbstractViewerAction extends SelectedFileAction {
             if(customCommand != null) {
                 // If it's local, run the custom editor on it.
                 if(file.hasAncestor(LocalFile.class)) {
-                    try {ProcessRunner.execute(customCommand.getTokens(file), file);}
+                    try {
+                        InformationDialog.showErrorDialogIfNeeded(getMainFrame(), ProcessRunner.executeAsync(customCommand.getTokens(file), file));
+                    }
                     catch(Exception e) {
-                        InformationDialog.showErrorDialog(mainFrame);}
+                        InformationDialog.showErrorDialog(mainFrame);
+                    }
                 }
 
                 // If it's distant, copies it locally before running the custom editor on it.

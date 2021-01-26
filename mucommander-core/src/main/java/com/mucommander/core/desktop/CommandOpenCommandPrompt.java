@@ -1,6 +1,9 @@
 package com.mucommander.core.desktop;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.commons.file.AbstractFile;
@@ -14,7 +17,7 @@ class CommandOpenCommandPrompt extends LocalFileOperation {
     }
 
     @Override
-    public void execute(AbstractFile file) throws IOException {
+    public CompletionStage<Optional<String>> execute(AbstractFile file) throws IOException {
         Command command = CommandManager.getCommandForAlias(CommandManager.CMD_OPENER_ALIAS);
         if (command == null)
             throw new UnsupportedOperationException();
@@ -22,7 +25,7 @@ class CommandOpenCommandPrompt extends LocalFileOperation {
         if (!file.isDirectory()) {
             file = file.getParent();
         }
-        ProcessRunner.execute(command.getTokens(file), file);
+        return ProcessRunner.executeAsync(command.getTokens(file), file);
     }
 
     @Override

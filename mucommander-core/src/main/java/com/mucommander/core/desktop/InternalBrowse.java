@@ -21,6 +21,9 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import com.mucommander.desktop.UrlOperation;
 
@@ -72,14 +75,19 @@ class InternalBrowse extends UrlOperation {
     /**
      * Opens the specified URL in the system's default browser.
      * @param  url         URL to browse.
-     * @throws IOException if an error occured.
+     * @return             the {@link CompletionStage} allowing to receive asynchronously the output messages in case of error if any.
+     * @throws IOException if an error occurred.
      */
     @Override
-    public void execute(URL url) throws IOException {
+    public CompletionStage<Optional<String>> execute(URL url) throws IOException {
         // If java.awt.Desktop browsing is available, use it.
         if(isAvailable()) {
-            try {getDesktop().browse(url.toURI()); return;}
-            catch(URISyntaxException e) {throw new IOException(e.getMessage());}
+            try {
+                getDesktop().browse(url.toURI());
+                return CompletableFuture.completedFuture(Optional.empty());
+            } catch(URISyntaxException e) {
+                throw new IOException(e.getMessage());
+            }
         }
 
         throw new UnsupportedOperationException();

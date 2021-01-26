@@ -24,6 +24,8 @@ import com.mucommander.desktop.LocalFileOperation;
 import com.mucommander.process.ProcessRunner;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author Nicolas Rinaudo
@@ -60,15 +62,15 @@ class CommandOpen extends LocalFileOperation {
     }
 
     @Override
-    public void execute(AbstractFile file) throws IOException {
+    public CompletionStage<Optional<String>> execute(AbstractFile file) throws IOException {
         Command command = CommandManager.getCommandForFile(file, allowDefault);
 
-        // Attemps to find a command that matches the specified target.
+        // Attempts to find a command that matches the specified target.
         if (command == null)
             throw new UnsupportedOperationException();
 
         // If found, executes it.
-        ProcessRunner.execute(command.getTokens(file), file);
+        return ProcessRunner.executeAsync(command.getTokens(file), file);
     }
 
     /**

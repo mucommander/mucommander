@@ -18,8 +18,8 @@
 package com.mucommander.desktop;
 
 import java.io.IOException;
-
-import com.mucommander.desktop.UrlOperation;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Contract for basic desktop operations.
@@ -76,7 +76,7 @@ public interface DesktopOperation {
      * </p>
      * @return the operation's name.
      */
-    public String getName();
+    String getName();
 
     /**
      * Checks whether the operation is available.
@@ -93,7 +93,7 @@ public interface DesktopOperation {
      * @return <code>true</code> if the operation is available, <code>false</code> otherwise.
      * @see    #canExecute(Object[])
      */
-    public boolean isAvailable();
+    boolean isAvailable();
 
     /**
      * Checks whether an operation is supported for the specified parameters.
@@ -125,7 +125,7 @@ public interface DesktopOperation {
      * @param  target parameters to check.
      * @return        <code>true</code> if the operation can be executed with the specified parameters, <code>false</code> otherwise.
      */
-    public boolean canExecute(Object[] target);
+    boolean canExecute(Object[] target);
 
     /**
      * Executes the operation on the specified parameters.
@@ -134,8 +134,9 @@ public interface DesktopOperation {
      * through {@link #canExecute(Object[])}.
      * </p>
      * @param  target                        parameters on which to execute the operation.
+     * @return                               the {@link CompletionStage} allowing to receive asynchronously the output messages in case of error if any.
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported for the specified parameters.
      */
-    public void execute(Object[] target) throws IOException, UnsupportedOperationException;
+    CompletionStage<Optional<String>> execute(Object[] target) throws IOException, UnsupportedOperationException;
 }

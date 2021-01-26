@@ -22,7 +22,9 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Used to run process in as safe a manner as possible.
@@ -306,6 +308,21 @@ public class ProcessRunner {
      * @throws IOException      thrown if an error happens while starting the process.
      */
     public static AbstractProcess execute(String[] tokens, AbstractFile currentDirectory) throws IOException {return execute(tokens, currentDirectory, null, null);}
+
+    /**
+     * Executes the specified command in the specified directory asynchronously with the ability to perform an
+     * action in case of an error.
+     * @param  tokens           command to execute.
+     * @param  currentDirectory directory in which to run the command.
+     * @return                  the {@link CompletionStage} allowing to receive asynchronously the output messages in case of error if any.
+     * @see                     #execute(String[],AbstractFile,ProcessListener,String)
+     * @throws IOException      thrown if an error happens while starting the process.
+     */
+    public static CompletionStage<Optional<String>> executeAsync(String[] tokens, AbstractFile currentDirectory) throws IOException {
+        final AsyncProcessListener listener = new AsyncProcessListener();
+        execute(tokens, currentDirectory, listener, null);
+        return listener.toCompletionStage();
+    }
 
     /**
      * Executes the specified command in the specified directory.

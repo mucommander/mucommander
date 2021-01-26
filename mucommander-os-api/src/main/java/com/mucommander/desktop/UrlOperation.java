@@ -20,6 +20,8 @@ package com.mucommander.desktop;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 /**
  * {@link DesktopOperation} implementation meant for actions that involve <code>java.net.URL</code>.
@@ -44,10 +46,11 @@ public abstract class UrlOperation implements DesktopOperation {
     /**
      * Executes the operation on the specified URL.
      * @param  url                           URL on which to execute the operation.
+     * @return                               the {@link CompletionStage} allowing to receive asynchronously the output messages in case of error if any.
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported.
      */
-    public abstract void execute(URL url) throws IOException;
+    public abstract CompletionStage<Optional<String>> execute(URL url) throws IOException;
 
     /**
      * Checks whether the operation knows how to deal with the specified URL.
@@ -96,17 +99,18 @@ public abstract class UrlOperation implements DesktopOperation {
      * implementations should ignore it.
      * </p>
      * @param  target                        parameters of the operation.
+     * @return                               the {@link CompletionStage} allowing to receive asynchronously the output messages in case of error if any.
      * @throws IOException                   if an error occurs.
      * @throws UnsupportedOperationException if the operation is not supported.
      * @see                                  #execute(URL)
      * @see                                  #extractTarget(Object[])
      */
-    public void execute(Object[] target) throws IOException, UnsupportedOperationException {
+    public CompletionStage<Optional<String>> execute(Object[] target) throws IOException, UnsupportedOperationException {
         URL url;
 
         if((url = extractTarget(target)) == null)
             throw new UnsupportedOperationException();
-        execute(url);
+        return execute(url);
     }
 
 

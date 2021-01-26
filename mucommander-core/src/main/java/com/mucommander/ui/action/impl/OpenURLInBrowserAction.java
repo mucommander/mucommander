@@ -53,9 +53,9 @@ public class OpenURLInBrowserAction extends MuAction {
     public void performAction() {
         Object url = getValue(URL_PROPERTY_KEY);
 
-        if(url!=null && (url instanceof String)) {
+        if(url instanceof String) {
             try {
-                DesktopManager.browse(new URL((String)url));
+                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.browse(new URL((String)url)));
             }
             catch(Exception e) {
                 InformationDialog.showErrorDialog(mainFrame);

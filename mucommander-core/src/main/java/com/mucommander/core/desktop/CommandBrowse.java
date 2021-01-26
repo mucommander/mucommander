@@ -26,6 +26,8 @@ import com.mucommander.process.ProcessRunner;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author Nicolas Rinaudo
@@ -39,13 +41,13 @@ class CommandBrowse extends UrlOperation {
     }
 
     @Override
-    public void execute(URL url) throws IOException {
+    public CompletionStage<Optional<String>> execute(URL url) throws IOException {
         Command command = CommandManager.getCommandForAlias(CommandManager.URL_OPENER_ALIAS);
         if (command == null)
             throw new UnsupportedOperationException();
 
         AbstractFile target = FileFactory.getFile(url.toString());
-        ProcessRunner.execute(command.getTokens(target), target);
+        return ProcessRunner.executeAsync(command.getTokens(target), target);
     }
 
     /**

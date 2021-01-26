@@ -27,6 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -100,6 +102,20 @@ public class InformationDialog {
      */
     public static void showErrorDialog(Component parentComponent, String message) {
         showErrorDialog(parentComponent, null, message, null, null);
+    }
+
+    /**
+     * Brings up an error dialog with the specified message and a generic localized title if and only if the
+     * provided asynchronous task provides an output message.
+     *
+     * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,
+     * or if the parentComponent has no <code>Frame</code>, a default <code>Frame</code> is used
+     * @param asyncTask the asynchronous task that will provide an output message to display in case of error
+     */
+    public static void showErrorDialogIfNeeded(Component parentComponent, CompletionStage<Optional<String>> asyncTask) {
+        asyncTask.thenAccept(
+            outputMessages -> outputMessages.ifPresent(s -> InformationDialog.showErrorDialog(parentComponent, s))
+        );
     }
 
     /**

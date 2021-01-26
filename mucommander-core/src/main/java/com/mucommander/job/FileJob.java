@@ -28,7 +28,6 @@ import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.job.ui.UserInputHelper;
-import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;

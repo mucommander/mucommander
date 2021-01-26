@@ -20,6 +20,9 @@ package com.mucommander.core.desktop;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.desktop.LocalFileOperation;
@@ -71,11 +74,12 @@ class InternalOpen extends LocalFileOperation {
     public boolean isAvailable() {return getDesktop() != null && getDesktop().isSupported(Desktop.Action.OPEN);}
 
     @Override
-    public void execute(AbstractFile file) throws IOException {
+    public CompletionStage<Optional<String>> execute(AbstractFile file) throws IOException {
         if(isAvailable())
             getDesktop().open(new File(file.getAbsolutePath()));
         else
             throw new UnsupportedOperationException();
+        return CompletableFuture.completedFuture(Optional.empty());
     }
     /**
      * Returns the action's label.

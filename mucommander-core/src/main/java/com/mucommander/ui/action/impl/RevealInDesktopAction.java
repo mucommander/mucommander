@@ -64,7 +64,7 @@ public class RevealInDesktopAction extends ParentFolderAction {
     @Override
     public void performAction() {
         try {
-            DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder());
+            InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder()));
         }
         catch(Exception e) {
             InformationDialog.showErrorDialog(mainFrame);

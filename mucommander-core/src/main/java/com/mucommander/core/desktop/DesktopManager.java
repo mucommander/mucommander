@@ -25,7 +25,9 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Vector;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 
 import javax.swing.JComponent;
@@ -91,16 +93,16 @@ public class DesktopManager {
     /** AbstractNotifier instance, null if none is available on the current platform */
     private static AbstractNotifier notifier;
 
-    public static void openCommandPrompt(File file) throws IOException, UnsupportedOperationException {
-        executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
+    public static CompletionStage<Optional<String>> openCommandPrompt(File file) throws IOException, UnsupportedOperationException {
+        return executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
     }
 
-    public static void openCommandPrompt(String file) throws IOException, UnsupportedOperationException {
-        executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
+    public static CompletionStage<Optional<String>> openCommandPrompt(String file) throws IOException, UnsupportedOperationException {
+        return executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
     }
 
-    public static void openCommandPrompt(AbstractFile file) throws IOException, UnsupportedOperationException {
-        executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
+    public static CompletionStage<Optional<String>> openCommandPrompt(AbstractFile file) throws IOException, UnsupportedOperationException {
+        return executeOperation(OPEN_COMMAND_PROMPT, new Object[] { file });
     }
 
 
@@ -344,13 +346,12 @@ public class DesktopManager {
 
     public static boolean isOperationSupported(String type, Object[] target) {return getSupportedOperation(type, target) != null;}
 
-    public static void executeOperation(String type, Object[] target) throws IOException, UnsupportedOperationException {
+    public static CompletionStage<Optional<String>> executeOperation(String type, Object[] target) throws IOException, UnsupportedOperationException {
         DesktopOperation operation = getSupportedOperation(type, target);
 
         if (operation!= null)
-            operation.execute(target);
-        else
-            throw new UnsupportedOperationException();
+            return operation.execute(target);
+        throw new UnsupportedOperationException();
     }
 
     public static String getOperationName(String type) throws UnsupportedOperationException {
@@ -382,11 +383,11 @@ public class DesktopManager {
 
     public static boolean canBrowse(AbstractFile url) {return isOperationSupported(BROWSE, new Object[] {url});}
 
-    public static void browse(URL url) throws IOException, UnsupportedOperationException {executeOperation(BROWSE, new Object[] {url});}
+    public static CompletionStage<Optional<String>> browse(URL url) throws IOException, UnsupportedOperationException {return executeOperation(BROWSE, new Object[] {url});}
 
-    public static void browse(String url) throws IOException, UnsupportedOperationException {executeOperation(BROWSE, new Object[] {url});}
+    public static CompletionStage<Optional<String>> browse(String url) throws IOException, UnsupportedOperationException {return executeOperation(BROWSE, new Object[] {url});}
 
-    public static void browse(AbstractFile url) throws IOException, UnsupportedOperationException {executeOperation(BROWSE, new Object[] {url});}
+    public static CompletionStage<Optional<String>> browse(AbstractFile url) throws IOException, UnsupportedOperationException {return executeOperation(BROWSE, new Object[] {url});}
 
 
 
@@ -400,11 +401,11 @@ public class DesktopManager {
 
     public static boolean canOpen(AbstractFile file) {return isOperationSupported(OPEN, new Object[] {file});}
 
-    public static void open(File file) throws IOException, UnsupportedOperationException {executeOperation(OPEN, new Object[] {file});}
+    public static CompletionStage<Optional<String>> open(File file) throws IOException, UnsupportedOperationException {return executeOperation(OPEN, new Object[] {file});}
 
-    public static void open(String file) throws IOException, UnsupportedOperationException {executeOperation(OPEN, new Object[] {file});}
+    public static CompletionStage<Optional<String>> open(String file) throws IOException, UnsupportedOperationException {return executeOperation(OPEN, new Object[] {file});}
 
-    public static void open(AbstractFile file) throws IOException, UnsupportedOperationException {executeOperation(OPEN, new Object[] {file});}
+    public static CompletionStage<Optional<String>> open(AbstractFile file) throws IOException, UnsupportedOperationException {return executeOperation(OPEN, new Object[] {file});}
 
 
 
@@ -418,11 +419,11 @@ public class DesktopManager {
 
     public static boolean canOpenInFileManager(AbstractFile file) {return isOperationSupported(OPEN_IN_FILE_MANAGER, new Object[] {file});}
 
-    public static void openInFileManager(File file) throws IOException, UnsupportedOperationException {executeOperation(OPEN_IN_FILE_MANAGER, new Object[] {file});}
+    public static CompletionStage<Optional<String>> openInFileManager(File file) throws IOException, UnsupportedOperationException {return executeOperation(OPEN_IN_FILE_MANAGER, new Object[] {file});}
 
-    public static void openInFileManager(String file) throws IOException, UnsupportedOperationException {executeOperation(OPEN_IN_FILE_MANAGER, new Object[] {file});}
+    public static CompletionStage<Optional<String>> openInFileManager(String file) throws IOException, UnsupportedOperationException {return executeOperation(OPEN_IN_FILE_MANAGER, new Object[] {file});}
 
-    public static void openInFileManager(AbstractFile file) throws IOException, UnsupportedOperationException {executeOperation(OPEN_IN_FILE_MANAGER, new Object[] {file});}
+    public static CompletionStage<Optional<String>> openInFileManager(AbstractFile file) throws IOException, UnsupportedOperationException {return executeOperation(OPEN_IN_FILE_MANAGER, new Object[] {file});}
 
     private static String getFileManagerName(DesktopOperation operation) throws UnsupportedOperationException {
         if(operation == null)
