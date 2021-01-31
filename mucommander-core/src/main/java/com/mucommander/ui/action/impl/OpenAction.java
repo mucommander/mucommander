@@ -35,12 +35,12 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
-import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionFactory;
+import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -135,7 +135,7 @@ public class OpenAction extends MuAction {
         // Opens local files using their native associations.
         else if(resolvedFile.getURL().getScheme().equals(LocalFile.SCHEMA) && (resolvedFile.hasAncestor(LocalFile.class))) {
             try {
-                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.open(resolvedFile));
+                OpenAction.openFile(getMainFrame(), resolvedFile);
                 RecentExecutedFilesQL.addFile(resolvedFile);
             }
             catch(IOException e) {
@@ -181,6 +181,31 @@ public class OpenAction extends MuAction {
         open(file, mainFrame.getActivePanel());
 
     }
+
+	/**
+	 * Brings up an opening file error dialog with the output message and a generic localized title if and only
+	 * if the task that opens the given file provides an output message and the user preference
+	 * {@code MuPreference.VIEW_ON_ERROR} has not been enabled.
+	 * <p>
+	 * In case the user preference {@code MuPreference.VIEW_ON_ERROR} has been enabled, the viewer will automatically
+	 * be launched to open the file.
+	 *
+	 * @param mainFrame determines the <code>Frame</code> in which the dialog is displayed
+	 * @param file the file to open.
+	 */
+	public static void openFile(MainFrame mainFrame, AbstractFile file) throws IOException {
+		DesktopManager.open(file).thenAccept(
+			outputMessages -> outputMessages.ifPresent(
+				s -> {
+					if (MuConfigurations.getPreferences().getVariable(MuPreference.VIEW_ON_ERROR, MuPreferences.DEFAULT_VIEW_ON_ERROR)) {
+						ActionManager.getActionInstance(ViewAction.Descriptor.ACTION_ID, mainFrame).performAction();
+					} else {
+						InformationDialog.showErrorDialog(mainFrame, s);
+					}
+				}
+			)
+		);
+	}
 
 	@Override
 	public ActionDescriptor getDescriptor() {
