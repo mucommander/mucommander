@@ -75,6 +75,9 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** 'Enable Bonjour services discovery' checkbox */
     private PrefCheckBox bonjourDiscoveryCheckBox;
 
+    /** 'Open the file with the viewer in case of opening error' checkbox */
+    private PrefCheckBox viewOnErrorDiscoveryCheckBox;
+
     /** Shell encoding auto-detect checkbox */
     private PrefCheckBox shellEncodingautoDetectCheckbox;
 
@@ -195,6 +198,16 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
                                                                                      MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS));
             northPanel.add(systemNotificationsCheckBox);
         }
+        // 'Open the file with the viewer in case of opening error' option
+        viewOnErrorDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.open_with_viewer_on_error")) {
+            public boolean hasChanged() {
+                return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.VIEW_ON_ERROR,
+                    MuPreferences.DEFAULT_VIEW_ON_ERROR);
+            }
+        };
+        viewOnErrorDiscoveryCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.VIEW_ON_ERROR,
+            MuPreferences.DEFAULT_VIEW_ON_ERROR));
+        northPanel.add(viewOnErrorDiscoveryCheckBox);
 
         // 'Enable Bonjour services discovery' option
         bonjourDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_bonjour_discovery")) {
@@ -215,6 +228,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     	quitConfirmationCheckBox.addDialogListener(parent);
         showSplashScreenCheckBox.addDialogListener(parent);
         bonjourDiscoveryCheckBox.addDialogListener(parent);
+        viewOnErrorDiscoveryCheckBox.addDialogListener(parent);
         shellEncodingautoDetectCheckbox.addDialogListener(parent);
         shellEncodingSelectBox.addDialogListener(parent);
         if(systemNotificationsCheckBox!=null)
@@ -264,6 +278,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
             MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS, enabled);
             NotifierProvider.getNotifier().setEnabled(enabled);
         }
+
+        MuConfigurations.getPreferences().setVariable(MuPreference.VIEW_ON_ERROR, viewOnErrorDiscoveryCheckBox.isSelected());
 
         enabled = bonjourDiscoveryCheckBox.isSelected();
         MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, enabled);

@@ -105,7 +105,7 @@ public class InformationDialog {
     }
 
     /**
-     * Brings up an error dialog with the specified message and a generic localized title if and only if the
+     * Brings up an error dialog with the output message and a generic localized title if and only if the
      * provided asynchronous task provides an output message.
      *
      * @param parentComponent determines the <code>Frame</code> in which the dialog is displayed; if <code>null</code>,

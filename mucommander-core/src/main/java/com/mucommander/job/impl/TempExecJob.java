@@ -26,8 +26,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionType;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.ui.dialog.InformationDialog;
+import com.mucommander.ui.action.impl.OpenAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
@@ -100,7 +99,7 @@ public class TempExecJob extends TempCopyJob {
 
             // Try to open the file.
             try {
-                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.open(currentDestFile));
+                OpenAction.openFile(getMainFrame(), currentDestFile);
                 RecentExecutedFilesQL.addFile(file);
             }
             catch(Exception e) {

@@ -340,6 +340,15 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Default Bonjour discovery activation used on startup. */
 	public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = false;
 
+	// - Variables used to launch the viewer in case of error opening a file -
+	// -----------------------------------------------------------------------
+	/** Section controlling parameters related to view on error. */
+	public static final String VIEW_ON_SECTION = "view_on_error";
+	/** Used do determine whether view on error should be activated or not. */
+	public static final String VIEW_ON_ERROR = VIEW_ON_SECTION + '.' + "enabled";
+	/** Default value of view on error activation used on startup. */
+	public static final boolean DEFAULT_VIEW_ON_ERROR = false;
+
 
 
 	// - Variables used for FTP ----------------------------------------------
