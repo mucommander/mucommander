@@ -20,7 +20,6 @@
 package com.mucommander.commons.file.protocol.sftp;
 
 import java.io.FilterInputStream;
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -55,6 +54,7 @@ import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.ByteCounter;
 import com.mucommander.commons.io.ByteUtils;
 import com.mucommander.commons.io.CounterOutputStream;
+import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
@@ -911,7 +911,7 @@ public class SFTPFile extends ProtocolFile {
         }
     }
 
-    private class SFTPOutputStream extends FilterOutputStream {
+    private class SFTPOutputStream extends FilteredOutputStream {
 
         private SFTPConnectionHandler connHandler;
 

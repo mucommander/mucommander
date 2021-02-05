@@ -35,7 +35,7 @@ New features:
 - 
 
 Improvements:
-- 
+- Copying to remote servers using SFTP is faster.
 
 Localization:
 - 
