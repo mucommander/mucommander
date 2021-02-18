@@ -32,13 +32,13 @@ What's new since v0.9.6 ?
 -----------------------
 
 New features:
-- 
+- Add an option to use a file viewer when failing to open a file.
 
 Improvements:
-- Copying to remote servers using SFTP is faster.
+- Copying to remote servers using SFTP is now faster.
 
 Localization:
-- 
+- Korean translation updated.
 
 Bug fixes:
 - 
