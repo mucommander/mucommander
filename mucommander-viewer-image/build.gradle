@@ -4,7 +4,7 @@ dependencies {
     compile project(':mucommander-viewer-api')
     compile project(':mucommander-translator')
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 repositories.jcenter()

@@ -6,7 +6,7 @@ dependencies {
     compile project(':mucommander-format-tar')
     compile project(':mucommander-format-zip')
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 jar {

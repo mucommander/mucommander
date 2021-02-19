@@ -8,7 +8,7 @@ dependencies {
     compile 'org.apache.commons:commons-vfs2:2.3'
     compile 'com.github.junrar:junrar:4.0.0'
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 // In this section you declare where to find the dependencies of your project
