@@ -4,8 +4,7 @@ dependencies {
     api project(':mucommander-translator')
 
     implementation 'org.osgi:osgi.core:7.0.0'
-
-    compileOnly 'com.sun:yanfs:1.3'
+    implementation 'com.sun:yanfs:1.3'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -18,7 +17,6 @@ dependencies {
 repositories.jcenter()
 
 jar {
-   from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
    bnd ('Bundle-Name': 'muCommander-nfs',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Library with configuration tools',
