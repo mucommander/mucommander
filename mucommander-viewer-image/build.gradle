@@ -18,7 +18,7 @@ jar {
         'Bundle-Activator': 'com.mucommander.viewer.image.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': version,
+        'Specification-Version': archiveVersion,
         'Implementation-Title': "muCommander",
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),

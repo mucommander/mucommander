@@ -55,7 +55,7 @@ jar {
         'Bundle-Activator': 'com.mucommander.viewer.pdf.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': version,
+        'Specification-Version': archiveVersion,
         'Impxlementation-Title': "muCommander",
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),

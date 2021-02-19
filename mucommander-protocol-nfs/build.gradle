@@ -25,7 +25,7 @@ jar {
         'Bundle-Activator': 'com.mucommander.commons.file.protocol.nfs.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': version,
+        'Specification-Version': archiveVersion,
         'Implementation-Title': "muCommander",
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
