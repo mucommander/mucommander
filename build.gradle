@@ -324,7 +324,7 @@ launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
     mainClassName = "com.mucommander.main.muCommander"
     copyConfigurable = project.tasks.shadowJar.outputs.files
-    jar = "${project.tasks.shadowJar.archiveFileName}"
+    jar = "${project.tasks.shadowJar.archiveFileName.get()}"
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"
@@ -363,7 +363,7 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
                                        MU_README: 'readme.txt',
                                        MU_OUT: 'mucommander-'+project.version+'-'+project.ext.release+'-setup.exe',
                                        MU_EXE: 'mucommander.exe',
-                                       MU_JAR: project.tasks.shadowJar.archiveFileName])
+                                       MU_JAR: project.tasks.shadowJar.archiveFileName.get()])
     }
     from ('package') {
         include 'license.txt', 'readme.txt'
