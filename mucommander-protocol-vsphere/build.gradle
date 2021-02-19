@@ -1,16 +1,18 @@
 dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-protocol-api')
-    compile project(':mucommander-translator')
-    compile 'javax.xml.ws:jaxws-api:2.2.12'
+    api project(':mucommander-commons-file')
+    api project(':mucommander-protocol-api')
+    api project(':mucommander-translator')
+    implementation 'javax.xml.ws:jaxws-api:2.2.12'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     runtimeOnly 'javax.jws:javax.jws-api:1.1'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
-    compile project(':mucommander-commons-file')
+    api project(':mucommander-commons-file')
     testImplementation 'org.testng:testng:6.11'
-    compile files('libs/vim25.jar')
+    implementation files('libs/vim25.jar')
 }
 
 repositories.jcenter()

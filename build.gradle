@@ -28,6 +28,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'biz.aQute.bnd.builder'
+    apply plugin: 'java-library'
     compileJava.options.compilerArgs += ['--release', '8']
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
@@ -43,8 +44,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.felix:org.apache.felix.main:6.0.3'
-    compile 'com.beust:jcommander:1.78'
+    implementation 'org.apache.felix:org.apache.felix.main:6.0.3'
+    implementation 'com.beust:jcommander:1.78'
 
     osgiRuntime project('mucommander-core')
     osgiRuntime project('mucommander-command')

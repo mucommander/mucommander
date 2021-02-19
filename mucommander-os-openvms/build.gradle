@@ -13,10 +13,11 @@
  repositories.jcenter()
  
  dependencies {
-     compile project(":mucommander-core")
-     compile project(":mucommander-commons-runtime")
-     compile project(":mucommander-os-api")
-     compile 'org.slf4j:slf4j-api:1.7.26'
+     api project(":mucommander-core")
+     api project(":mucommander-commons-runtime")
+     api project(":mucommander-os-api")
+     implementation 'org.slf4j:slf4j-api:1.7.26'
+     implementation 'org.osgi:osgi.core:7.0.0'
  
      // Use JUnit test framework
      testImplementation 'junit:junit:4.12'

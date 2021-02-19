@@ -17,11 +17,12 @@ dependencies {
     compileOnly project(':mucommander-os-api')
     compileOnly project(':mucommander-viewer-api')
 
-    compile 'ch.qos.logback:logback-core:1.2.3'
-    compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile 'org.jmdns:jmdns:3.5.5'
-    compile 'org.slf4j:slf4j-api:1.7.26'
-    compile 'org.osgi:osgi.core:7.0.0'
+    implementation 'ch.qos.logback:logback-core:1.2.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'org.jmdns:jmdns:3.5.5'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.osgi:osgi.core:7.0.0'
+    implementation 'commons-collections:commons-collections:3.2.2'
     comprise 'org.unix4j:unix4j-command:0.5'
 
     testImplementation 'org.testng:testng:6.11'

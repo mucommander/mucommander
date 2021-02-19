@@ -3,10 +3,10 @@ configurations {
 }
 
 dependencies {
-    compile project(':mucommander-commons-file')
-    compile 'org.osgi:osgi.core:7.0.0'
-    compile 'org.apache.commons:commons-vfs2:2.3'
-    compile 'com.github.junrar:junrar:4.0.0'
+    api project(':mucommander-commons-file')
+    implementation 'org.osgi:osgi.core:7.0.0'
+    implementation 'org.apache.commons:commons-vfs2:2.3'
+    implementation 'com.github.junrar:junrar:4.0.0'
 
     testImplementation 'org.testng:testng:6.11'
 }

@@ -1,8 +1,11 @@
 dependencies {
-    compile project(':mucommander-core')
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-viewer-api')
-    compile project(':mucommander-translator')
+    api project(':mucommander-core')
+    api project(':mucommander-commons-file')
+    api project(':mucommander-viewer-api')
+    api project(':mucommander-translator')
+
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'
 }

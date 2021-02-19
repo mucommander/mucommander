@@ -13,9 +13,9 @@ plugins {
 repositories.jcenter()
 
 dependencies {
-    compile project(":mucommander-commons-file")
-    compile project(":mucommander-preferences")
-    compile 'org.slf4j:slf4j-api:1.7.26'
+    api project(":mucommander-commons-file")
+    api project(":mucommander-preferences")
+    implementation 'org.slf4j:slf4j-api:1.7.26'
 
     testImplementation 'org.testng:testng:6.11'
 }

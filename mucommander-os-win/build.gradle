@@ -13,15 +13,33 @@ plugins {
 repositories.jcenter()
  
 dependencies {
-    compile project(":mucommander-core")
-    compile project(":mucommander-os-api")
-    compile 'org.slf4j:slf4j-api:1.7.26'
+    api project(":mucommander-core")
+    api project(":mucommander-os-api")
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.osgi:osgi.core:7.0.0'
+
+    comprise 'net.java.dev.jna:jna-platform:5.5.0'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
  
 jar {
+
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'com/sun/jna/aix*/**'
+        exclude 'com/sun/jna/freebsd*/**'
+        exclude 'com/sun/jna/linux*/**'
+        exclude 'com/sun/jna/openbsd*/**'
+        exclude 'com/sun/jna/sunos*/**'
+        exclude 'com/sun/jna/win*/**'
+        exclude 'META-INF/**'
+        exclude 'com/sun/jna/platform/linux/**'
+        exclude 'com/sun/jna/platform/unix/**'
+        exclude 'com/sun/jna/platform/win32/**'
+        exclude 'com/sun/jna/platform/wince/**'
+    } }
+
     bnd ('Bundle-Name': 'muCommander-os-win',
          'Bundle-Vendor': 'muCommander',
          'Bundle-Description': 'Windows specifics',

@@ -18,15 +18,16 @@ repositories.jcenter()
 compileJava.options.compilerArgs += ['--release', '11']
 
 dependencies {
-    compile project(":mucommander-commons-util")
-    compile project(":mucommander-core")
-    compile project(":mucommander-os-api")
-    compile project(":mucommander-process")
-    compile project(":mucommander-translator")
+    api project(":mucommander-commons-util")
+    api project(":mucommander-core")
+    api project(":mucommander-os-api")
+    api project(":mucommander-process")
+    api project(":mucommander-translator")
 
     comprise 'net.java.dev.jna:jna-platform:5.5.0'
-    compile 'org.slf4j:slf4j-api:1.7.26'
-    compile 'com.googlecode.plist:dd-plist:1.23'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'com.googlecode.plist:dd-plist:1.23'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     // the java.desktop module that contains macOS-specific extensions
     compileOnly files('libs/java.desktop.jar')
