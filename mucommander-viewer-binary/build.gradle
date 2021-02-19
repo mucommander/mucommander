@@ -1,13 +1,14 @@
 dependencies {
-    compile project(':mucommander-core')
-    compile project(':mucommander-viewer-api')
-    compile project(':mucommander-preferences')
-    compile project(':mucommander-translator')
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-commons-util')
+    api project(':mucommander-core')
+    api project(':mucommander-viewer-api')
+    api project(':mucommander-preferences')
+    api project(':mucommander-translator')
+    api project(':mucommander-commons-file')
+    api project(':mucommander-commons-util')
 
-    compile 'org.exbin.deltahex:deltahex-swing:0.1.2'
-    compile 'org.exbin.deltahex:deltahex-swing:0.1.2'
+    implementation 'org.exbin.deltahex:deltahex-swing:0.1.2'
+    implementation 'org.exbin.deltahex:deltahex-swing:0.1.2'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'
 }

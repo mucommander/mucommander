@@ -1,7 +1,7 @@
 repositories.jcenter()
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
     testImplementation 'org.testng:testng:6.11'
 }
 

@@ -1,15 +1,15 @@
 repositories.jcenter()
 
 dependencies {
-    compile project(':mucommander-commons-io')
-    compile project(':mucommander-commons-runtime')
-    compile project(':mucommander-commons-util')
+    api project(':mucommander-commons-io')
+    api project(':mucommander-commons-runtime')
+    api project(':mucommander-commons-util')
 
     comprise 'net.java.dev.jna:jna:5.5.0'
     comprise 'net.java.dev.jna:jna-platform:5.5.0'
-    compile 'org.slf4j:slf4j-api:1.7.26'
-    compile 'commons-collections:commons-collections:3.2.2'
-    compile 'org.osgi:osgi.core:7.0.0'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'commons-collections:commons-collections:3.2.2'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'
     testImplementation 'junit:junit:4.12'

@@ -1,7 +1,9 @@
 dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-protocol-api')
-    compile project(':mucommander-translator')
+    api project(':mucommander-commons-file')
+    api project(':mucommander-protocol-api')
+    api project(':mucommander-translator')
+
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     compileOnly 'com.sun:yanfs:1.3'
 

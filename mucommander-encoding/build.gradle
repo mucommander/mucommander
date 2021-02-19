@@ -1,9 +1,9 @@
 repositories.jcenter()
 
 dependencies {
-    compile project(":mucommander-commons-util")
-    compile project(":mucommander-preferences")
-    compile project(":mucommander-translator")
+    api project(":mucommander-commons-util")
+    api project(":mucommander-preferences")
+    api project(":mucommander-translator")
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

@@ -1,9 +1,11 @@
 dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-protocol-api')
-    compile project(':mucommander-encoding')
-    compile project(':mucommander-translator')
-    compile 'commons-net:commons-net:3.6'
+    api project(':mucommander-commons-file')
+    api project(':mucommander-protocol-api')
+    api project(':mucommander-encoding')
+    api project(':mucommander-translator')
+    implementation 'commons-net:commons-net:3.6'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'junit:junit:4.12'
 

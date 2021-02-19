@@ -2,9 +2,9 @@
 repositories.jcenter()
 
 dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-format-tar')
-    compile project(':mucommander-format-zip')
+    api project(':mucommander-commons-file')
+    api project(':mucommander-format-tar')
+    api project(':mucommander-format-zip')
 
     testImplementation 'org.testng:testng:6.11'
 }

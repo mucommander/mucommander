@@ -2,8 +2,11 @@
 repositories.jcenter()
 
 dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':apache-bzip2')
+    api project(':mucommander-commons-file')
+    api project(':apache-bzip2')
+
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'
 }

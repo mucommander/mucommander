@@ -1,11 +1,13 @@
 dependencies {
-    compile project(':mucommander-commons-file')
-    compile project(':mucommander-protocol-api')
-    compile project(':mucommander-encoding')
-    compile project(':mucommander-translator')
-    compile 'com.google.api-client:google-api-client:1.23.0'
-    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
-    compile 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'
+    api project(':mucommander-commons-file')
+    api project(':mucommander-protocol-api')
+    api project(':mucommander-encoding')
+    api project(':mucommander-translator')
+    implementation 'com.google.api-client:google-api-client:1.23.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'junit:junit:4.12'
 
