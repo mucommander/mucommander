@@ -18,7 +18,7 @@ dependencies {
 repositories.jcenter()
 
 jar {
-   from { configurations.compileOnly.collect { it.isDirectory() ? it : zipTree(it) } }
+   from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
    bnd ('Bundle-Name': 'muCommander-nfs',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Library with configuration tools',
