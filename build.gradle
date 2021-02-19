@@ -29,6 +29,8 @@ allprojects {
 subprojects {
     apply plugin: 'biz.aQute.bnd.builder'
     compileJava.options.compilerArgs += ['--release', '8']
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
 }
 
 compileJava.options.encoding = 'UTF-8'
