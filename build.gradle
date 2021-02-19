@@ -149,14 +149,14 @@ ext {
     bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
 }
 
-shadowJar.classifier = null
+shadowJar.archiveClassifier = null
 
 jar {
     manifest {
         attributes("Main-Class": "com.mucommander.main.muCommander",
                    "Specification-Title": "muCommander",
                    "Specification-Vendor": "Arik Hadas",
-                   "Specification-Version": version,
+                   "Specification-Version": archiveVersion,
                    "Implementation-Title": "muCommander",
                    "Implementation-Vendor": "Arik Hadas",
                    "Implementation-Version": revision.substring(0, 7),
@@ -323,7 +323,7 @@ launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
     mainClassName = "com.mucommander.main.muCommander"
     copyConfigurable = project.tasks.shadowJar.outputs.files
-    jar = "${project.tasks.shadowJar.archiveName}"
+    jar = "${project.tasks.shadowJar.archiveFileName}"
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"
@@ -362,7 +362,7 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
                                        MU_README: 'readme.txt',
                                        MU_OUT: 'mucommander-'+project.version+'-'+project.ext.release+'-setup.exe',
                                        MU_EXE: 'mucommander.exe',
-                                       MU_JAR: project.tasks.shadowJar.archiveName])
+                                       MU_JAR: project.tasks.shadowJar.archiveFileName])
     }
     from ('package') {
         include 'license.txt', 'readme.txt'
@@ -399,7 +399,7 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     from ('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
-    into "muCommander-$version"
+    into "muCommander-$archiveVersion"
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
         exclude 'osgiaas*'
@@ -411,8 +411,8 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
         into 'app'
     }
 
-    classifier = 'portable'
-    version = project.version+'-'+project.ext.release
+    archiveClassifier = 'portable'
+    archiveVersion = project.version+'-'+project.ext.release
 }
 
 // Unix packaging
@@ -441,9 +441,9 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         into 'app'
     }
 
-    extension = 'tar.gz'
+    archiveExtension = 'tar.gz'
     compression = Compression.GZIP
-    version = project.version+'-'+project.ext.release
+    archiveVersion = project.version+'-'+project.ext.release
 }
 
 task(afterEclipseImport).doLast {
