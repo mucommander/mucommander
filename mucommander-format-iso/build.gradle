@@ -4,7 +4,7 @@ repositories.jcenter()
 dependencies {
     compile project(':mucommander-commons-file')
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 jar {

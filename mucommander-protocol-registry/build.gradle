@@ -9,8 +9,8 @@ dependencies {
     compile 'org.osgi:osgi.core:7.0.0'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
 
-    testCompile 'org.testng:testng:6.11'
-    testCompile files(project(':mucommander-commons-file').sourceSets.test.output)
+    testImplementation 'org.testng:testng:6.11'
+    testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
 repositories.jcenter()

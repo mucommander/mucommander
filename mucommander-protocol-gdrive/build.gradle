@@ -9,7 +9,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 repositories.mavenCentral()

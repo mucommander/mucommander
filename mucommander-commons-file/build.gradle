@@ -11,8 +11,8 @@ dependencies {
     compile 'commons-collections:commons-collections:3.2.2'
     compile 'org.osgi:osgi.core:7.0.0'
 
-    testCompile 'org.testng:testng:6.11'
-    testCompile 'junit:junit:4.12'
+    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'junit:junit:4.12'
 }
 
 jar {

@@ -6,7 +6,7 @@ dependencies {
     compile project(':mucommander-encoding')
     compile project(":mucommander-preferences")
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 repositories.jcenter()

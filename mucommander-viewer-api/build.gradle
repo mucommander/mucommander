@@ -2,7 +2,7 @@ dependencies {
     compile project(':mucommander-commons-file')
     compile project(':mucommander-commons-util')
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 repositories.jcenter()

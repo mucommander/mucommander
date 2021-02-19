@@ -9,7 +9,7 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     compile project(':mucommander-commons-file')
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
     compile files('libs/vim25.jar')
 }
 

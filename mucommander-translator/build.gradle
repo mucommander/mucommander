@@ -4,8 +4,8 @@ dependencies {
     compile project(":mucommander-preferences")
     compile 'org.slf4j:slf4j-api:1.7.26'
 
-    testCompile 'org.testng:testng:6.11'
-    testCompile 'junit:junit:4.12'
+    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'junit:junit:4.12'
 }
 
 jar {

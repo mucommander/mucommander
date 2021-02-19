@@ -9,7 +9,7 @@ dependencies {
     compile 'org.exbin.deltahex:deltahex-swing:0.1.2'
     compile 'org.exbin.deltahex:deltahex-swing:0.1.2'
 
-    testCompile 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:6.11'
 }
 
 repositories.jcenter()
