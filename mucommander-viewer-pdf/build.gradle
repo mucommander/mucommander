@@ -34,7 +34,7 @@ repositories {
     }
     maven {
         // for jai.core and dai.codec
-        url 'http://maven.icm.edu.pl/artifactory/repo'
+        url 'https://maven.ceon.pl/artifactory/repo/'
     }
     mavenCentral()
 }
