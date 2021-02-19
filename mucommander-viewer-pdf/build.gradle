@@ -43,6 +43,7 @@ repositories {
 
 jar {
    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it)}
+   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
    bnd ('Bundle-Name': 'muCommander-viewer-pdf',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Library for viewing PDF files',
