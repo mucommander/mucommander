@@ -54,26 +54,7 @@ It is recommended that whenever you get unclear compilation error and before sub
 ```    
 
 ### How to Debug  
-Debugging is a bit more tricky due to the use of an OSGI container. One way of doing that is by extending the launcher 
-script (either run.bat or run.sh, depending on your operating system) with, e.g., `-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005`, 
-and then debug the application from an IDE as a remote application on host `localhost` and port `5005`.
-
-#### Debugging example for IntelliJ IDEA
-
-- First checkout the repository with IDEA (*VCS* / *Checkout from Version Control* / *Git*)
-- Confirm the creation of a new IDEA project
-- Add a new *Run Configuration* of type *Gradle* like in the first screenshot below - with `DEBUG=1` gradle enables remote debugging (see task `runOsgi` in `build.gradle` for details)
-- Add a new *Run Configuration* of type *Remote* like in the seconds screenshot below
-- Place your breakpoints
-- Back in the Editor, select `mucommander runOsgi` config and click the green *play* button
-- After mucommander has started, select `mucommander-remote-debug` config and click the green *debug* button
-- Now you should see something like `Connected to the target VM, address: 'localhost:5005', transport: 'socket'` 
-- If everything works like expected, IDEA will now provide debugging
-
-**Run OSGI Configuration - starting the osgi container in debug mode**
-![runOsgi config](doc/img/howto_debug_001.png "Run OSGI Configuration - starting the osgi container in debug mode")
-**Remote Debug Configuration - enables remote debugging and attaches the session to IDEA**
-![runOsgi config](doc/img/howto_debug_002.png "Remote Debug Configuration - enables remote debugging and attaches the session to IDEA")
+In order to debug muCommander, you first need to configure a port using an environment variable named `DEBUG` (e.g., 5005). Then, you can run a debugger that connects to this port using your favorite IDE (see [an example for doing this with IntelliJ](https://github.com/mucommander/mucommander/wiki/Debug-from-IntelliJ)).
 
 
 ### Packaging
