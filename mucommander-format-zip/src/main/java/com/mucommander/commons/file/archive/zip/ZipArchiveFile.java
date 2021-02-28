@@ -57,9 +57,9 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
     /** Contents of an empty Zip file, 22 bytes long */
     private final static byte EMPTY_ZIP_BYTES[] = {
-        0x50, 0x4B, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+            0x50, 0x4B, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
 
@@ -113,8 +113,8 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         zipEntry.setMethod(ZipConstants.DEFLATED);
         zipEntry.setTime(System.currentTimeMillis());
         zipEntry.setUnixMode(SimpleFilePermissions.padPermissions(entry.getPermissions(), isDirectory
-                    ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
-                    : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
+                ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+                        : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
         return zipEntry;
     }
@@ -270,8 +270,8 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
                     super.close();
 
                     // Declare the zip file and entries tree up-to-date and add the new entry to the entries tree
-                        finishAddEntry(entry);
-                    }
+                    finishAddEntry(entry);
+                }
             };
         }
     }
@@ -318,7 +318,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
             zipEntry.setTime(entry.getDate());
             zipEntry.setUnixMode(entry.getPermissions().getIntValue());
-            
+
             // Physically update the entry's attributes in the Zip file
             zipFile.updateEntry(zipEntry);
 
@@ -355,7 +355,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     @Override
     public boolean isWritable() {
         return file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)
-            && file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE);
+                && file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE);
     }
 
     /**
