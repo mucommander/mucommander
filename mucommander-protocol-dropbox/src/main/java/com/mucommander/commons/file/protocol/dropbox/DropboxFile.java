@@ -1,22 +1,30 @@
 package com.mucommander.commons.file.protocol.dropbox;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.files.CommitInfo;
+import com.dropbox.core.v2.files.CreateFolderResult;
 import com.dropbox.core.v2.files.DbxUserFilesRequests;
 import com.dropbox.core.v2.files.DeletedMetadata;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
-import com.dropbox.core.v2.files.UploadUploader;
+import com.dropbox.core.v2.files.UploadSessionCursor;
+import com.dropbox.core.v2.files.WriteMode;
 import com.dropbox.core.v2.users.SpaceUsage;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileURL;
@@ -29,7 +37,7 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
 import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.file.protocol.ProtocolFile;
-import com.mucommander.commons.io.FilteredOutputStream;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
@@ -37,10 +45,14 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 	private static final Logger LOGGER = LoggerFactory.getLogger(DropboxFile.class);
 
 	private String id;
-	private AbstractFile parent;
 	private boolean dir;
 	private long size;
 	private long date;
+
+	private boolean parentValSet;
+	private AbstractFile parent;
+
+	private boolean fileResolved;
 
 	protected DropboxFile(FileURL url) {
 		super(url);
@@ -48,8 +60,9 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 
 	protected DropboxFile(FileURL url, DropboxFile parent, Metadata metadata) {
 		this(url);
-		this.parent = parent;
+		setParent(parent);
 		updateAttributes(metadata);
+		fileResolved = true;
 	}
 
 	void updateAttributes(Metadata metadata) {
@@ -69,6 +82,19 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 		}
 	}
 
+	private void resolveFile() throws IOException {
+		try (DropboxConnectionHandler connHandler = getConnHandler()) {
+			LOGGER.info("Resolving {}", getURL());
+			String path = PathUtils.removeTrailingSeparator(getURL().getPath());
+			Metadata metadata = connHandler.getDbxClient().files().getMetadata(path);
+			updateAttributes(metadata);
+		} catch (DbxException e) {
+			LOGGER.error("failed to resolve dropbox file", e);
+		} finally {
+			fileResolved = true;
+		}
+	}
+
 	protected String getId() {
 		return id;
 	}
@@ -80,6 +106,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 
 	@Override
 	public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
+		throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
 	}
 
 	@Override
@@ -89,16 +116,30 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 
 	@Override
 	public AbstractFile getParent() {
-		return parent;
+		if(!parentValSet) {
+            FileURL parentURL = fileURL.getParent();
+            if (parentURL==null)
+                this.parent = null;
+            else {
+                this.parent = FileFactory.getFile(parentURL);
+            }
+            this.parentValSet = true;
+        }
+        return this.parent;
 	}
 
 	@Override
 	public void setParent(AbstractFile parent) {
 		this.parent = parent;
+		this.parentValSet = true;
 	}
 
 	@Override
 	public boolean exists() {
+		if (!fileResolved) {
+			try { resolveFile(); }
+			catch(IOException e) {}
+		}
 		return id != null;
 	}
 
@@ -186,13 +227,20 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 
 	@Override
 	public void mkdir() throws IOException, UnsupportedFileOperationException {
-		
+		try (DropboxConnectionHandler connHandler = getConnHandler()) {
+			CreateFolderResult result = connHandler.getDbxClient().files().createFolderV2(getURL().getPath());
+			id = result.getMetadata().getId();
+		} catch (DbxException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
 	}
 
 	@Override
 	public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
 		try (DropboxConnectionHandler connHandler = getConnHandler()) {
-			return connHandler.getDbxClient().files().download(id).getInputStream();
+			InputStream in = connHandler.getDbxClient().files().download(id).getInputStream();
+			return new BufferedInputStream(in, 4 << 20);
 		} catch (DbxException e) {
 			e.printStackTrace();
 			throw new IOException(e);
@@ -202,20 +250,54 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 	@Override
 	public OutputStream getOutputStream() throws IOException, UnsupportedFileOperationException {
 		try (DropboxConnectionHandler connHandler = getConnHandler()) {
-			UploadUploader uploader = connHandler.getDbxClient().files().upload(fileURL.getPath());
-			return new FilteredOutputStream(uploader.getOutputStream()) {
+			OutputStream out = new OutputStream() {
+				UploadSessionCursor cursor;
+
+				@Override
+				public void write(int b) throws IOException {
+					// noop
+				}
+
+				@Override
+				public void write(byte[] b, int off, int len) throws IOException {
+					if (cursor == null) {
+						try {
+							String sessionId = connHandler.getDbxClient().files().uploadSessionStart()
+							        .uploadAndFinish(new ByteArrayInputStream(b), len)
+							        .getSessionId();
+							cursor = new UploadSessionCursor(sessionId, len);
+						} catch (DbxException | IOException e) {
+							e.printStackTrace();
+						}
+					} else {
+						try {
+							connHandler.getDbxClient().files().uploadSessionAppendV2(cursor)
+							.uploadAndFinish(new ByteArrayInputStream(b), len);
+							cursor = new UploadSessionCursor(cursor.getSessionId(), cursor.getOffset() + len);
+						} catch (DbxException | IOException e) {
+							e.printStackTrace();
+						}
+					}
+					connHandler.updateLastActivityTimestamp();
+				}
+
+				@Override
 				public void close() throws IOException {
-					super.close();
+					CommitInfo commitInfo = CommitInfo.newBuilder(getURL().getPath())
+							.withMode(WriteMode.ADD)
+							.withClientModified(new Date())
+							.build();
+					FileMetadata metadata;
 					try {
-						id = uploader.finish().getId();
+						metadata = connHandler.getDbxClient().files().uploadSessionFinish(cursor, commitInfo).finish();
 					} catch (DbxException e) {
 						e.printStackTrace();
+						throw new IOException(e);
 					}
+					id = metadata.getId();
 				}
 			};
-		} catch (DbxException e) {
-			e.printStackTrace();
-			throw new IOException(e);
+			return new BufferedOutputStream(out, 4 << 20);
 		}
 	}
 
@@ -230,8 +312,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 	}
 
 	@Override
-	public RandomAccessOutputStream getRandomAccessOutputStream()
-			throws IOException, UnsupportedFileOperationException {
+	public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException, UnsupportedFileOperationException {
 		return null;
 	}
 
@@ -247,6 +328,12 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 
 	@Override
 	public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
+		try (DropboxConnectionHandler connHandler = getConnHandler()) {
+			connHandler.getDbxClient().files().moveV2(getId(), destFile.getURL().getPath());
+		} catch (DbxException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
 	}
 
 	@Override
