@@ -73,6 +73,9 @@ public class CustomFileIconProvider implements FileIconProvider {
     /** Icon for Google Drive */
     public final static String GOOGLE_DRIVE_ICON_NAME = "gdrive.png";
 
+    /** Icon for Dropbox */
+    public final static String DROPBOX_ICON_NAME = "dropbox.png";
+
     /** Icon for not accessible files (used for quick-lists) **/
     public final static String NOT_ACCESSIBLE_FILE = "not_accessible.png";
 
