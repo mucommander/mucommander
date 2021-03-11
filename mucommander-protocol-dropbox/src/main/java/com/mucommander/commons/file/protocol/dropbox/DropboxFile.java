@@ -240,7 +240,13 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 	public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
 		try (DropboxConnectionHandler connHandler = getConnHandler()) {
 			InputStream in = connHandler.getDbxClient().files().download(id).getInputStream();
-			return new BufferedInputStream(in, 4 << 20);
+			return new BufferedInputStream(in, 4 << 20) {
+				public synchronized int read(byte[] b, int off, int len) throws IOException {
+					int read = super.read(b, off, len);
+					connHandler.updateLastActivityTimestamp();
+					return read;
+				}
+			};
 		} catch (DbxException e) {
 			LOGGER.error("failed to get input stream", e);
 			throw new IOException(e);
