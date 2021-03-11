@@ -197,7 +197,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 			try {
 				result = r.listFolder(getId());
 			} catch (DbxException e) {
-				e.printStackTrace();
+				LOGGER.error("failed to list folder", e);
 				return null;
 			}
 			return result.getEntries().stream()
@@ -231,7 +231,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 			CreateFolderResult result = connHandler.getDbxClient().files().createFolderV2(getURL().getPath());
 			id = result.getMetadata().getId();
 		} catch (DbxException e) {
-			e.printStackTrace();
+			LOGGER.error("failed to make directory" , e);
 			throw new IOException(e);
 		}
 	}
@@ -242,7 +242,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 			InputStream in = connHandler.getDbxClient().files().download(id).getInputStream();
 			return new BufferedInputStream(in, 4 << 20);
 		} catch (DbxException e) {
-			e.printStackTrace();
+			LOGGER.error("failed to get input stream", e);
 			throw new IOException(e);
 		}
 	}
@@ -267,7 +267,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 							        .getSessionId();
 							cursor = new UploadSessionCursor(sessionId, len);
 						} catch (DbxException | IOException e) {
-							e.printStackTrace();
+							LOGGER.error("failed to initiate upload", e);
 						}
 					} else {
 						try {
@@ -275,7 +275,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 							.uploadAndFinish(new ByteArrayInputStream(b), len);
 							cursor = new UploadSessionCursor(cursor.getSessionId(), cursor.getOffset() + len);
 						} catch (DbxException | IOException e) {
-							e.printStackTrace();
+							LOGGER.error("failed to append to file", e);
 						}
 					}
 					connHandler.updateLastActivityTimestamp();
@@ -291,7 +291,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 					try {
 						metadata = connHandler.getDbxClient().files().uploadSessionFinish(cursor, commitInfo).finish();
 					} catch (DbxException e) {
-						e.printStackTrace();
+						LOGGER.error("failed to finish upload", e);
 						throw new IOException(e);
 					}
 					id = metadata.getId();
@@ -321,7 +321,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 		try (DropboxConnectionHandler connHandler = getConnHandler()) { 
 			connHandler.getDbxClient().files().deleteV2(getId());
 		} catch (DbxException e) {
-			e.printStackTrace();
+			LOGGER.error("failed to delete file", e);
 			throw new IOException(e);
 		}
 	}
@@ -331,7 +331,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 		try (DropboxConnectionHandler connHandler = getConnHandler()) {
 			connHandler.getDbxClient().files().moveV2(getId(), destFile.getURL().getPath());
 		} catch (DbxException e) {
-			e.printStackTrace();
+			LOGGER.error("failed to rename file", e);
 			throw new IOException(e);
 		}
 	}
@@ -348,7 +348,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 			SpaceUsage storage = connHandler.getDbxClient().users().getSpaceUsage();
 			return storage.getAllocation().getIndividualValue().getAllocated() - storage.getUsed();
 		} catch (DbxException e) {
-			e.printStackTrace();
+			LOGGER.error("failed to get free space", e);
 			throw new IOException(e);
 		}
 	}
@@ -359,7 +359,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 			SpaceUsage storage = connHandler.getDbxClient().users().getSpaceUsage();
 			return storage.getAllocation().getIndividualValue().getAllocated();
 		} catch (DbxException e) {
-			e.printStackTrace();
+			LOGGER.error("failed to get total space", e);
 			throw new IOException(e);
 		}
 	}
