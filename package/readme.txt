@@ -32,6 +32,7 @@ What's new since v0.9.6 ?
 -----------------------
 
 New features:
+- Add Dropbox as a file protocol (including browsing, uploading and downloading capabilities).
 - Add an option to use a file viewer when failing to open a file.
 
 Improvements:
