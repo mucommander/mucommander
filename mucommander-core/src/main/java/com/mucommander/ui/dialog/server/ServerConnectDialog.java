@@ -49,6 +49,7 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
@@ -176,6 +177,11 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
         serverPanels.add(serverPanel);
     }
 
+    @Override
+    public void browse(String url) {
+        try {DesktopManager.browse(url);}
+        catch(IOException e) {}
+    }
 
     @Override
     public void updateURLLabel() {
