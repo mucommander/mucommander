@@ -21,4 +21,5 @@ import java.awt.event.ActionListener;
 
 public interface ServerPanelListener extends ActionListener {
     void updateURLLabel();
+    void browse(String url);
 }
