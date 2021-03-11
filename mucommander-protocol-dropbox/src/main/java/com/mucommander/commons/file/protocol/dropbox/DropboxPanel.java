@@ -103,7 +103,7 @@ public class DropboxPanel extends ServerPanel implements ActionListener {
 
 	@Override
 	public FileURL getServerURL() throws MalformedURLException {
-		FileURL url = FileURL.getFileURL(String.format("%s://%s", SCHEMA,accountAlias.getText()));
+		FileURL url = FileURL.getFileURL(String.format("%s://%s", SCHEMA, accountAlias.getText()));
 		url.setCredentials(new Credentials(accountAlias.getText(), token.getText()));
 		return url;
 	}
