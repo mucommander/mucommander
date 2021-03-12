@@ -26,7 +26,7 @@ jar {
                 'com.mucommander.commons.io.security',
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",
-         'Specification-Version': archiveVersion,
+         'Specification-Version': project.version+'-'+project.ext.release,
          'Implementation-Title': "muCommander",
          'Implementation-Vendor': "Arik Hadas",
          'Implementation-Version': revision.substring(0, 7),
