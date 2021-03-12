@@ -53,8 +53,7 @@ public class InvertSelectionAction extends MuAction {
         int nbRows = tableModel.getRowCount();
         for(int i=tableModel.getFirstMarkableRow(); i<nbRows; i++) {
             file = tableModel.getFileAtRow(i);
-            if(!file.isDirectory())
-                tableModel.setRowMarked(i, !tableModel.isRowMarked(i));
+            tableModel.setRowMarked(i, !tableModel.isRowMarked(i));
         }
         fileTable.repaint();
 
