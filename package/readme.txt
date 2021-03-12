@@ -36,7 +36,8 @@ New features:
 - Add an option to use a file viewer when failing to open a file.
 
 Improvements:
-- Copying to remote servers using SFTP is now faster.
+- Accelerate copying to remote servers using SFTP.
+- Invert selection is now also applied on directories.
 
 Localization:
 - Korean translation updated.
