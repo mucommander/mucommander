@@ -19,7 +19,7 @@ jar {
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Plugin for Dropbox',
         'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.protocol.dropbox',
+        'Export-Package': 'com.mucommander.commons.file.protocol.dropbox',
         'Import-Package': 'com.google.api.client.auth.oauth2,*',
         'Bundle-Activator': 'com.mucommander.commons.file.protocol.dropbox.Activator',
         'Specification-Title': "muCommander",
