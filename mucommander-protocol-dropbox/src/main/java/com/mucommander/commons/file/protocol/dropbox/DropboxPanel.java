@@ -42,7 +42,9 @@ public class DropboxPanel extends ServerPanel implements ActionListener {
 	public static final String SCHEMA = "dropbox";
 	private static final String DROPBOX_ICON_PATH = "/images/file/dropbox.png";
 	// Read app info file (contains app key and app secret)
-	private static DbxAppInfo appInfo = new DbxAppInfo("", "");
+	private static String appKey = "";
+	private static String appSecret = "";
+	private static DbxAppInfo appInfo;
 
 	private DbxCredential credential;
 
@@ -63,7 +65,7 @@ public class DropboxPanel extends ServerPanel implements ActionListener {
 		CANCEL_SIGN_IN,
 	}
 
-	protected DropboxPanel(ServerPanelListener listener, JFrame mainFrame) {
+	DropboxPanel(ServerPanelListener listener, JFrame mainFrame) {
 		super(listener, mainFrame);
 
 		URL resourceURL = ResourceLoader.getResourceAsURL(DROPBOX_ICON_PATH);
@@ -202,11 +204,12 @@ public class DropboxPanel extends ServerPanel implements ActionListener {
 			token.setText("");
 			SwingUtilities.invokeLater(() -> {
 				new Thread(() ->  {
-					PkceAuthorize pkceAuthorize = new PkceAuthorize(appInfo);
-					String authUrl = pkceAuthorize.getAuthorizationUrl();
-					listener.browse(authUrl);
-					setAuthorizationFieldsVisible(pkceAuthorize);
-					setAccountFieldsVisible(null);
+				    appInfo = new DbxAppInfo(appKey, appSecret);
+				    PkceAuthorize pkceAuthorize = new PkceAuthorize(appInfo);
+				    String authUrl = pkceAuthorize.getAuthorizationUrl();
+				    listener.browse(authUrl);
+				    setAuthorizationFieldsVisible(pkceAuthorize);
+				    setAccountFieldsVisible(null);
 				}).start();
 			});
 			break;
