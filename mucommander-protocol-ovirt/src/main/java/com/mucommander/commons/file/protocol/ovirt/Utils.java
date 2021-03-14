@@ -119,7 +119,7 @@ public class Utils {
                 .send()
                 .storageDomains()
                 .stream()
-                .filter(s -> s.dataCenters().iterator().next().id().equals(dcId))
+                .filter(s -> s.dataCenters().stream().map(DataCenter::id).anyMatch(id -> id.equals(dcId)))
                 .filter(s -> s.name().equals(sdName))
                 .findAny()
                 .orElse(null);
