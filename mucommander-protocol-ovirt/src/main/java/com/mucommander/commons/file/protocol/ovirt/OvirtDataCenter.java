@@ -58,7 +58,7 @@ public class OvirtDataCenter extends OvirtFile {
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
         String dcName = fileURL.getFilename();
-        log.debug("listing Data Center %s", dcName);
+        log.debug("listing Data Center {}", dcName);
         try (OvirtConnHandler connHandler = getConnHandler()) {
             DataCenter dc = Utils.getDataCenter(connHandler, dcName);
             return Utils.getStorageDomains(connHandler, dc.id())
