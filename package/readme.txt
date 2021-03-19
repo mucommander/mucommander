@@ -43,7 +43,7 @@ Localization:
 - Korean translation updated.
 
 Bug fixes:
-- 
+- File-search returns matches in the root folder that is searched when search-subfolders is disabled.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
