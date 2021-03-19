@@ -67,9 +67,9 @@ public class SearchJob extends FileJob {
         this.lsFilter = browseMatcher;
     }
 
-    private List<AbstractFile> search(List<AbstractFile> files) {
+    private List<AbstractFile> search(List<AbstractFile> files, boolean subfolder) {
         return files.parallelStream()
-                .filter(lsFilter)
+                .filter(subfolder ? lsFilter : file -> true)
                 .map(this::search)
                 .flatMap(stream -> stream)
                 .collect(Collectors.toList());
@@ -124,7 +124,7 @@ public class SearchJob extends FileJob {
         LOGGER.info("start searching {}", file);
         List<AbstractFile> files = Collections.singletonList(file);
         for (int i=0; getState() != FileJobState.INTERRUPTED && i<depth && !files.isEmpty(); i++) {
-            files = search(files);
+            files = search(files, i > 0);
         }
         LOGGER.info("completed searching {}", file);
         listener = null;
