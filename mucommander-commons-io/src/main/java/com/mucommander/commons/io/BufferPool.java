@@ -229,7 +229,7 @@ public class BufferPool {
             }
         }
 
-        LOGGER.trace("Creating new buffer with {} size=", factory, size);
+        LOGGER.trace("Creating new buffer with {} size= {}", factory, size);
 
         // No buffer with the same class and size found in the pool, create a new one and return it
         return factory.newBuffer(size);
