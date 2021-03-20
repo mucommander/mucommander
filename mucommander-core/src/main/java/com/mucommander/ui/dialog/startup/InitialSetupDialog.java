@@ -64,42 +64,42 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
      * @return the dialog's theme panel.
      */
     private JPanel createThemePanel() {
-	JPanel    themePanel;    // Theme panel.
-	JPanel    tempPanel;     // Temporary panel used to hold the dialog's description.
+        JPanel    themePanel;    // Theme panel.
+        JPanel    tempPanel;     // Temporary panel used to hold the dialog's description.
         Iterator<Theme> themes;        // All available themes.
         Theme           theme;         // Currently analyzed theme.
         int             index;         // Index of the currently analyzed theme.
         int             selectedIndex; // Index of the current theme in the combo box.
 
-	// Initialises the theme panel.
-	themePanel = new YBoxPanel();
-	themePanel.setAlignmentX(LEFT_ALIGNMENT);
+        // Initialises the theme panel.
+        themePanel = new YBoxPanel();
+        themePanel.setAlignmentX(LEFT_ALIGNMENT);
         themePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.themes")));
 
-	// Adds the panel description.
-	tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-	tempPanel.add(new JLabel(Translator.get("setup.theme") + ':'));
-	themePanel.add(tempPanel);
+        // Adds the panel description.
+        tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        tempPanel.add(new JLabel(Translator.get("setup.theme") + ':'));
+        themePanel.add(tempPanel);
 
-	// Adds the theme combo box.
+        // Adds the theme combo box.
         themeComboBox = new JComboBox<>();
         themes        = ThemeManager.availableThemes();
-	index         = 0;
-	selectedIndex = 0;
+        index         = 0;
+        selectedIndex = 0;
 
-	// Adds all themes to the combo box.
+        // Adds all themes to the combo box.
         while(themes.hasNext()) {
             themeComboBox.addItem(theme = themes.next());
             if(ThemeManager.isCurrentTheme(theme))
                 selectedIndex = index;
             index++;
         }
-	// Selects the current theme.
+        // Selects the current theme.
         themeComboBox.setSelectedIndex(selectedIndex);
-	themeComboBox.addActionListener(this);
-	themePanel.add(themeComboBox);
+        themeComboBox.addActionListener(this);
+        themePanel.add(themeComboBox);
 
-	return themePanel;
+        return themePanel;
     }
 
     /**
@@ -107,30 +107,24 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
      * @return the dialog's look and feel panel.
      */
     private JPanel createLookAndFeelPanel() {
-	JPanel                    lfPanel;       // Look and feel panel.
-	JPanel                    tempPanel;     // Temporary panel used to hold the dialog's description.
-	int                       selectedIndex; // Index of the current look and feel in the list.
-	String                    currentLf;     // Name of the current look&feel.
-	String                    buffer;        // Buffer for look&feel names.
-
-	// Initialises the theme panel.
-	lfPanel = new YBoxPanel();
-	lfPanel.setAlignmentX(LEFT_ALIGNMENT);
+        // Initialises the theme panel.
+        JPanel lfPanel = new YBoxPanel(); // Look and feel panel.
+        lfPanel.setAlignmentX(LEFT_ALIGNMENT);
         lfPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.look_and_feel")));
 
-	// Adds the panel description.
-	tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-	tempPanel.add(new JLabel(Translator.get("setup.look_and_feel") + ':'));
-	lfPanel.add(tempPanel);
+        // Adds the panel description.
+        JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));  // Temporary panel used to hold the dialog's description.
+        tempPanel.add(new JLabel(Translator.get("setup.look_and_feel") + ':'));
+        lfPanel.add(tempPanel);
 
-	// Initialises the l&f combo box.
-	lfComboBox    = new JComboBox<>();
-	lfInfo        = UIManager.getInstalledLookAndFeels();
-        currentLf     = UIManager.getLookAndFeel().getName();
-	selectedIndex = -1;
-	// Goes through all available look&feels and selects the current one.
+        // Initialises the l&f combo box.
+        lfComboBox = new JComboBox<>();
+        lfInfo = UIManager.getInstalledLookAndFeels();
+        String currentLf = UIManager.getLookAndFeel().getName(); // Name of the current look&feel.
+        int selectedIndex = -1; // Index of the current look and feel in the list.
+        // Goes through all available look&feels and selects the current one.
         for(int i = 0; i < lfInfo.length; i++) {
-            buffer = lfInfo[i].getName();
+            String buffer = lfInfo[i].getName(); // Buffer for look&feel names.
 
             // Tries to select current L&F
             if(currentLf.equals(buffer))
@@ -138,7 +132,8 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
             // Under Mac OS X, Mac L&F is either reported as 'MacOS' or 'MacOS Adaptative'
             // so we need this test
             else if(selectedIndex == -1 && (currentLf.startsWith(buffer) || buffer.startsWith(currentLf)))
-                selectedIndex = i;                
+                selectedIndex = i;
+
             lfComboBox.addItem(buffer);
         }
 
@@ -146,10 +141,10 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
         if(selectedIndex == -1)
             selectedIndex = 0;
         lfComboBox.setSelectedIndex(selectedIndex);
-	lfComboBox.addActionListener(this);
-	lfPanel.add(lfComboBox);
+        lfComboBox.addActionListener(this);
+        lfPanel.add(lfComboBox);
 
-	return lfPanel;
+        return lfPanel;
     }
 
     /**
@@ -157,25 +152,25 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
      * @return the dialog's main panel.
      */
     private JPanel createMainPanel() {
-	YBoxPanel mainPanel;
-	JPanel    okPanel;
+        YBoxPanel mainPanel;
+        JPanel    okPanel;
 
-	mainPanel   = new YBoxPanel();
-	mainPanel.add(new JLabel(Translator.get("setup.intro")));
-	mainPanel.addSpace(10);
-	mainPanel.add(createThemePanel());
-	mainPanel.addSpace(10);
-	mainPanel.add(createLookAndFeelPanel());
-	mainPanel.addSpace(10);
+        mainPanel   = new YBoxPanel();
+        mainPanel.add(new JLabel(Translator.get("setup.intro")));
+        mainPanel.addSpace(10);
+        mainPanel.add(createThemePanel());
+        mainPanel.addSpace(10);
+        mainPanel.add(createLookAndFeelPanel());
+        mainPanel.addSpace(10);
 
-	okPanel = new JPanel();
-	okPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
-	okPanel.add(okButton = new JButton(Translator.get("ok")));
-	okButton.addActionListener(this);
+        okPanel = new JPanel();
+        okPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
+        okPanel.add(okButton = new JButton(Translator.get("ok")));
+        okButton.addActionListener(this);
 
-	mainPanel.add(okPanel);
+        mainPanel.add(okPanel);
 
-	return mainPanel;
+        return mainPanel;
     }
 
     /**
@@ -183,12 +178,12 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
      * @param owner dialog's owner.
      */
     public InitialSetupDialog(Frame owner) {
-	super(owner, Translator.get("setup.title"), owner);
+        super(owner, Translator.get("setup.title"), owner);
 
-	getContentPane().add(createMainPanel(), BorderLayout.CENTER);
-	setResizable(false);
+        getContentPane().add(createMainPanel(), BorderLayout.CENTER);
+        setResizable(false);
         setInitialFocusComponent(themeComboBox);
-	setKeyboardDisposalEnabled(false);
+        setKeyboardDisposalEnabled(false);
         getRootPane().setDefaultButton(okButton);
     }
 
@@ -196,14 +191,14 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
     // - ActionListener code -------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
-	if(e.getSource() == themeComboBox)
-	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
-	else if(e.getSource() == lfComboBox)
-		MuConfigurations.getPreferences().setVariable(MuPreference.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
-	else if(e.getSource() == okButton) {
-	    ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
-	    MuConfigurations.getPreferences().setVariable(MuPreference.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
-	    dispose();
-	}
+        if(e.getSource() == themeComboBox)
+            ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
+        else if(e.getSource() == lfComboBox)
+            MuConfigurations.getPreferences().setVariable(MuPreference.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+        else if(e.getSource() == okButton) {
+            ThemeManager.setCurrentTheme((Theme)themeComboBox.getSelectedItem());
+            MuConfigurations.getPreferences().setVariable(MuPreference.LOOK_AND_FEEL, lfInfo[lfComboBox.getSelectedIndex()].getClassName());
+            dispose();
+        }
     }
 }
