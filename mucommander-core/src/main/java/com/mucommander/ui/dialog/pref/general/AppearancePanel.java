@@ -221,15 +221,12 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * Populates the look&feel combo box with all available look&feels.
      */
     private void populateLookAndFeels() {
-        int    currentIndex;
-        String currentName;
-
         lookAndFeelComboBox.removeAllItems();
         initializeAvailableLookAndFeels();
 
         // Populates the combo box.
-        currentIndex = -1;
-        currentName  = UIManager.getLookAndFeel().getClass().getName();
+        int currentIndex = -1;
+        String currentName = UIManager.getLookAndFeel().getClass().getName();
         for(int i = 0; i < lookAndFeels.length; i++) {
             // Looks for the currently selected look&feel.
             if(lookAndFeels[i].getClassName().equals(currentName))

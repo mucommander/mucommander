@@ -28,6 +28,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.Application;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -112,6 +114,16 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             LOGGER.debug("Could load look'n feel from preferences");
         
         MuConfigurations.addPreferencesListener(this);
+    }
+
+    public static void setLookAndFeel() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        if (OsFamily.LINUX.isCurrent()) {
+            for (UIManager.LookAndFeelInfo lfInfo : UIManager.getInstalledLookAndFeels())
+                if (lfInfo.getName().startsWith("GTK")) {
+                    UIManager.setLookAndFeel(lfInfo.getClassName());
+                    break;
+                }
+        }
     }
 
     /**

@@ -38,6 +38,7 @@ New features:
 Improvements:
 - Accelerate copying to remote servers using SFTP.
 - Invert selection is now also applied on directories.
+- Set initial look and feel to "GTK+" on Linux as it better handles scaling for HiDPI.
 
 Localization:
 - Korean translation updated.
