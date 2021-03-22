@@ -325,6 +325,11 @@ public class Application {
             // Configure filesystems
             configureFilesystems();
 
+            if (isFirstBoot) {
+                try { com.mucommander.ui.main.WindowManager.setLookAndFeel(); }
+                catch(Exception e) {printError("Could not initialize look & feel", e, true);}
+            }
+
             // Initializes the desktop.
             try {com.mucommander.core.desktop.DesktopManager.init(isFirstBoot);}
             catch(Exception e) {printError("Could not initialize desktop", e, true);}

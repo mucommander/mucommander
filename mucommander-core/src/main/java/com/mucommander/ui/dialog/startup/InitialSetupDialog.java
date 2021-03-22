@@ -64,33 +64,27 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
      * @return the dialog's theme panel.
      */
     private JPanel createThemePanel() {
-        JPanel    themePanel;    // Theme panel.
-        JPanel    tempPanel;     // Temporary panel used to hold the dialog's description.
-        Iterator<Theme> themes;        // All available themes.
-        Theme           theme;         // Currently analyzed theme.
-        int             index;         // Index of the currently analyzed theme.
-        int             selectedIndex; // Index of the current theme in the combo box.
-
         // Initialises the theme panel.
-        themePanel = new YBoxPanel();
+        JPanel themePanel = new YBoxPanel(); // Theme panel.
         themePanel.setAlignmentX(LEFT_ALIGNMENT);
         themePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.themes")));
 
         // Adds the panel description.
-        tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Temporary panel used to hold the dialog's description.
         tempPanel.add(new JLabel(Translator.get("setup.theme") + ':'));
         themePanel.add(tempPanel);
 
         // Adds the theme combo box.
         themeComboBox = new JComboBox<>();
-        themes        = ThemeManager.availableThemes();
-        index         = 0;
-        selectedIndex = 0;
+        Iterator<Theme> themes = ThemeManager.availableThemes(); // All available themes.
+        int index = 0; // Index of the currently analyzed theme.
+        int selectedIndex = 0; // Index of the current theme in the combo box.
 
         // Adds all themes to the combo box.
-        while(themes.hasNext()) {
-            themeComboBox.addItem(theme = themes.next());
-            if(ThemeManager.isCurrentTheme(theme))
+        while (themes.hasNext()) {
+            Theme theme = themes.next();
+            themeComboBox.addItem(theme);
+            if (ThemeManager.isCurrentTheme(theme))
                 selectedIndex = index;
             index++;
         }
@@ -117,28 +111,28 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
         tempPanel.add(new JLabel(Translator.get("setup.look_and_feel") + ':'));
         lfPanel.add(tempPanel);
 
-        // Initialises the l&f combo box.
+        // Initializes the L&F combo box.
         lfComboBox = new JComboBox<>();
         lfInfo = UIManager.getInstalledLookAndFeels();
-        String currentLf = UIManager.getLookAndFeel().getName(); // Name of the current look&feel.
+        String currentLf = UIManager.getLookAndFeel().getClass().getName(); // Name of the current look&feel.
         int selectedIndex = -1; // Index of the current look and feel in the list.
         // Goes through all available look&feels and selects the current one.
-        for(int i = 0; i < lfInfo.length; i++) {
-            String buffer = lfInfo[i].getName(); // Buffer for look&feel names.
+        for (int i = 0; i < lfInfo.length; i++) {
+            String className = lfInfo[i].getClassName(); // Buffer for look&feel names.
 
             // Tries to select current L&F
-            if(currentLf.equals(buffer))
+            if (currentLf.equals(className))
                 selectedIndex = i;
             // Under Mac OS X, Mac L&F is either reported as 'MacOS' or 'MacOS Adaptative'
             // so we need this test
-            else if(selectedIndex == -1 && (currentLf.startsWith(buffer) || buffer.startsWith(currentLf)))
+            else if (selectedIndex == -1 && (currentLf.startsWith(className) || className.startsWith(currentLf)))
                 selectedIndex = i;
 
-            lfComboBox.addItem(buffer);
+            lfComboBox.addItem(lfInfo[i].getName());
         }
 
         // If no match, selects first one
-        if(selectedIndex == -1)
+        if (selectedIndex == -1)
             selectedIndex = 0;
         lfComboBox.setSelectedIndex(selectedIndex);
         lfComboBox.addActionListener(this);
