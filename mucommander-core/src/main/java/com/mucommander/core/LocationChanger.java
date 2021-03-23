@@ -39,6 +39,7 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.main.tabs.FileTableTab;
 
 /**
  * 
@@ -72,13 +73,13 @@ public class LocationChanger {
 	 * @param folderURL the URL of the folder to switch to
 	 * @param runnable an Implementation of {@link Runnable} that would be executed after the location is changed
 	 */
-	public void tryChangeCurrentFolderInternal(final FileURL folderURL, final Runnable runnable) {
+	public void tryChangeCurrentFolderInternal(FileTableTab tab, Runnable runnable) {
 		mainFrame.setNoEventsMode(true);
 		// Set cursor to hourglass/wait
 		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		Runnable locationSetter = () -> {
-		    AbstractFile folder = getWorkableLocation(folderURL);
+		    AbstractFile folder = getWorkableLocation(tab.getLocation());
 		    try {
 		        locationManager.setCurrentFolder(folder, null, true);
 		    } finally {

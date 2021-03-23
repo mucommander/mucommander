@@ -56,7 +56,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 
 		// Add the initial folders
 		for (FileTableTab tab : initialTabs)
-			addTab(clonedTabsFactory.createTab(tab));
+		    addTab(clonedTabsFactory.createTab(tab));
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 
 	@Override
 	protected void show(final int tabIndex) {
-	    folderPanel.tryChangeCurrentFolderInternal(getTab(tabIndex).getLocation(), () -> fireActiveTabChanged());
+	    folderPanel.tryChangeCurrentFolderInternal(getTab(tabIndex), this::fireActiveTabChanged);
 	}
 
 	/**

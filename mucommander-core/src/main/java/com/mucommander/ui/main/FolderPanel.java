@@ -172,6 +172,11 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         
 		// Select the tab that was previously selected on last run
 		tabs.selectTab(indexOfSelectedTab);
+		// Select the file-to-select in this tab, if set (note that we already validated
+		// that the file exists in ConfigFileTableTab#getInitialAbstractPaths)
+		AbstractFile fileToSelect = initialTabs[indexOfSelectedTab].getFileToSelect();
+		if (fileToSelect != null)
+		    fileTable.selectFile(fileToSelect);
 		
 		tabs.addActiveTabListener(this);
 
@@ -323,8 +328,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     	locationTextField.setProgressValue(value);
     }
 
-    public void tryChangeCurrentFolderInternal(FileURL folderURL, Runnable runnable) {
-        locationChanger.tryChangeCurrentFolderInternal(folderURL, runnable);
+    public void tryChangeCurrentFolderInternal(FileTableTab tab, Runnable runnable) {
+        locationChanger.tryChangeCurrentFolderInternal(tab, runnable);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {

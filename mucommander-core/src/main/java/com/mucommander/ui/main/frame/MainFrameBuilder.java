@@ -186,7 +186,7 @@ public abstract class MainFrameBuilder {
         return new Rectangle(x, y, width, height);
     }
 
-    protected AbstractFile getHomeFolder() {
+    public static AbstractFile getHomeFolder() {
         return FileFactory.getFile(System.getProperty("user.home"));
     }
 }
