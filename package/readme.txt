@@ -39,6 +39,7 @@ Improvements:
 - Accelerate copying to remote servers using SFTP.
 - Invert selection is now also applied on directories.
 - Set initial look and feel to "GTK+" on Linux as it better handles scaling for HiDPI.
+- Non-browsable initial locations that are specified by command line arguments are selected on startup.
 
 Localization:
 - Korean translation updated.
