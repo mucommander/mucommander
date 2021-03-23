@@ -1551,7 +1551,7 @@ public abstract class AbstractFile implements FileAttributes {
     /**
      * Return this file's last modified date.
      * For some file protocols (e.g., Google Drive), folder's modification date doesn't change when a new file is
-     * added or removed from the folder. But we count of identifying when the folder needs to be refreshed by its
+     * added or removed from the folder. But we count on identifying when the folder needs to be refreshed by its
      * modification time so this method can be overridden to provide an alternative way to compute the modification
      * time of the browsed folder in that case.
      *

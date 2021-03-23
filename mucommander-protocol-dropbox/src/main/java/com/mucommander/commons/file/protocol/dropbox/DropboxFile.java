@@ -284,6 +284,8 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 							LOGGER.error("failed to append to file", e);
 						}
 					}
+					// we use the connection handler during the upload process so we need to
+					// make sure it won't time out before we finish uploading
 					connHandler.updateLastActivityTimestamp();
 				}
 
