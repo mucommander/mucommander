@@ -100,11 +100,10 @@ public class PlatformManager {
      * @see    #setPreferencesFolder(AbstractFile)
      */
     public static AbstractFile getPreferencesFolder() {
-        // If the preferences folder has been set, use it.
-        if (prefFolder != null)
-            return prefFolder;
-
-        return getDefaultPreferencesFolder();
+        // Retrieve the preferences folder if it is not set.
+        if (prefFolder == null)
+            prefFolder = getDefaultPreferencesFolder();
+        return prefFolder;
     }
 
     public static AbstractFile getCredentialsFolder() throws IOException {
