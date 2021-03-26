@@ -70,7 +70,19 @@ public class PlatformManager {
             return new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");
 
         // For all other platforms, use generic folder (~/.mucommander)
-        return new File(System.getProperty("user.home"), "/.mucommander");
+        File folder = new File(System.getProperty("user.home"), "/.mucommander");
+
+        // Respect the environment variable XDG_CONFIG_HOME on Linux and try
+        // to migrate ~/.mucommander, if exists, to the configured folder, if set.
+        String xdgConfigHome = System.getenv("XDG_CONFIG_HOME");
+        if (xdgConfigHome != null) {
+            File xdgConfigHomeFolder = new File(xdgConfigHome, "/mucommander");
+            if (folder.exists())
+                folder.renameTo(xdgConfigHomeFolder);
+            folder = xdgConfigHomeFolder;
+        }
+
+        return folder;
     }
 
     /**
