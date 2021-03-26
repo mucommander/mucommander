@@ -55,21 +55,22 @@ public class PlatformManager {
      * @return the path to the default muCommander preferences folder.
      */
     public static AbstractFile getDefaultPreferencesFolder() {
-        File folder;
-
-        // Mac OS X specific folder (~/Library/Preferences/muCommander)
-        if(OsFamily.MAC_OS_X.isCurrent())
-            folder = new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");
-        // For all other platforms, use generic folder (~/.mucommander)
-        else
-            folder = new File(System.getProperty("user.home"), "/.mucommander");
+        File folder = getDefaultPreferencesFolderPath();
 
         // Makes sure the folder exists.
-        if(!folder.exists())
-            if(!folder.mkdir())
-                LOGGER.warn("Could not create preference folder: " + folder.getAbsolutePath());
+        if (!folder.exists() && !folder.mkdir())
+            LOGGER.warn("Could not create preference folder: " + folder.getAbsolutePath());
 
         return FileFactory.getFile(folder.getAbsolutePath());
+    }
+
+    private static File getDefaultPreferencesFolderPath() {
+        // macOS X specific folder (~/Library/Preferences/muCommander)
+        if (OsFamily.MAC_OS_X.isCurrent())
+            return new File(System.getProperty("user.home")+"/Library/Preferences/muCommander");
+
+        // For all other platforms, use generic folder (~/.mucommander)
+        return new File(System.getProperty("user.home"), "/.mucommander");
     }
 
     /**
