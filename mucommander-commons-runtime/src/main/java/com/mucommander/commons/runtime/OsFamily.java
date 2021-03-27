@@ -46,6 +46,8 @@ public enum OsFamily {
     HP_UX("HP-UX"),
     /** OpenVMS */
     OPENVMS("OpenVMS"),
+    /** Haiku */
+    HAIKU("Haiku"),
     /** Other OS */
     UNKNOWN_OS_FAMILY("Unknown");
 
@@ -163,6 +165,9 @@ public enum OsFamily {
         }
         if (osNameProp.startsWith("OpenVMS")) {
             return OPENVMS;
+        }
+        if (osNameProp.startsWith("Haiku")) {
+            return HAIKU;
         }
 
         // Any other OS
