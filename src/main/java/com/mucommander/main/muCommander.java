@@ -278,7 +278,9 @@ public class muCommander
 
         final String appDir = configProps.get("mucommander.app.dir");
         configProps.computeIfAbsent("felix.auto.start.2", key -> "file:" + new File(appDir, "mucommander-core-0.9.7.jar").getAbsolutePath());
-        configProps.computeIfAbsent(Constants.FRAMEWORK_STORAGE, key -> new File(codeParentFolder, "felix-cache").getAbsolutePath());
+
+        Path cacheDir = Paths.get(System.getProperty("java.io.tmpdir"), "mucommander-felix-cache");
+        configProps.put(Constants.FRAMEWORK_STORAGE, cacheDir.toFile().getAbsolutePath());
 
         // Copy framework properties from the system properties.
         muCommander.copySystemProperties(configProps);

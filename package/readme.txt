@@ -41,6 +41,7 @@ Improvements:
 - Set initial look and feel to "GTK+" on Linux as it better handles scaling for HiDPI.
 - Non-browsable initial locations that are specified by command line arguments are selected on startup.
 - Store user-files in '$XDG_CONFIG_HOME/mucommander' if environment variable XDG_CONFIG_HOME is set on Linux.
+- Create Felix cache directory within the system's temporary folder instead of within the installation folder.
 
 Localization:
 - Korean translation updated.
