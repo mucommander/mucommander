@@ -17,18 +17,21 @@
 
 package com.mucommander.ui.dialog.debug;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.AppenderBase;
-import ch.qos.logback.core.Layout;
 
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.utils.MuLogging;
 import com.mucommander.utils.MuLogging.LogLevel;
+
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.AppenderBase;
+import ch.qos.logback.core.CoreConstants;
+import ch.qos.logback.core.Layout;
+import ch.qos.logback.core.LayoutBase;
 
 /**
  * This <code>java.util.logging</code> <code>Handler</code> collects the last log messages that were published by
@@ -55,8 +58,8 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      * Creates a new <code>DebugConsoleHandler</code>. This constructor is automatically by
      * <code>java.util.logging</code> when it is configured and should never be called directly.
      */
-    public DebugConsoleAppender(Layout<ILoggingEvent> loggingEventsLayout) {
-    	this.loggingEventLayout = loggingEventsLayout;
+    public DebugConsoleAppender() {
+        this.loggingEventLayout = new CustomLoggingLayout();
     	
         bufferSize = MuConfigurations.getPreferences().getVariable(MuPreference.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
         loggingEventsList = new LinkedList<>();
@@ -125,9 +128,44 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
         }
         
         public LogLevel getLevel() {
-        	if (logLevel == null)
-        		logLevel = MuLogging.getLevel(loggingEvent);
-        	return logLevel;
+            if (logLevel == null)
+                logLevel = getLogLevel(loggingEvent);
+            return logLevel;
+        }
+    }
+
+    /**
+     * Returns the log level, in mucommander terms, that match the level of a given logback logging event
+     *
+     * @param loggingEvent logback logging event
+     * @return log level, in mucommander terms, that match the level of the given logback logging event
+     */
+    public static LogLevel getLogLevel(ILoggingEvent loggingEvent) {
+        return LogLevel.valueOf(loggingEvent.getLevel());
+    }
+
+    private static class CustomLoggingLayout extends LayoutBase<ILoggingEvent> {
+
+        private final static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        public String doLayout(ILoggingEvent event) {
+            StackTraceElement stackTraceElement = event.getCallerData()[0];
+
+            StringBuilder sbuf = new StringBuilder(128);
+            sbuf.append("[");
+            sbuf.append(SIMPLE_DATE_FORMAT.format(new Date(event.getTimeStamp())));
+            sbuf.append("] ");
+            sbuf.append(getLogLevel(event));
+            sbuf.append(" ");
+            sbuf.append(stackTraceElement.getFileName());
+            sbuf.append("#");
+            sbuf.append(stackTraceElement.getMethodName());
+            sbuf.append(",");
+            sbuf.append(stackTraceElement.getLineNumber());
+            sbuf.append(" ");
+            sbuf.append(event.getFormattedMessage());
+            sbuf.append(CoreConstants.LINE_SEPARATOR);
+            return sbuf.toString();
         }
     }
 }

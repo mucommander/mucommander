@@ -18,8 +18,6 @@
 package com.mucommander.utils;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +28,6 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.dialog.debug.DebugConsoleAppender;
 
 import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.CoreConstants;
-import ch.qos.logback.core.LayoutBase;
 
 /**
  * This class manages logging issues within mucommander
@@ -117,16 +112,6 @@ public class MuLogging {
     }
 
     /**
-     * Returns the log level, in mucommander terms, that match the level of a given logback logging event
-     *
-     * @param loggingEvent logback logging event
-     * @return log level, in mucommander terms, that match the level of the given logback logging event
-     */
-    public static LogLevel getLevel(ILoggingEvent loggingEvent) {
-        return LogLevel.valueOf(loggingEvent.getLevel());
-    }
-
-    /**
      * Returns the current log level used by all <code>org.slf4j</code> loggers.
      *
      * @return the current log level used by all <code>org.slf4j</code> loggers.
@@ -167,34 +152,8 @@ public class MuLogging {
     }
 
     private static DebugConsoleAppender createDebugConsoleAppender() {
-        DebugConsoleAppender debugConsoleAppender = new DebugConsoleAppender(new CustomLoggingLayout());
+        DebugConsoleAppender debugConsoleAppender = new DebugConsoleAppender();
         debugConsoleAppender.start();
-
         return debugConsoleAppender;
-    }
-
-    private static class CustomLoggingLayout extends LayoutBase<ILoggingEvent> {
-
-        private final static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-        public String doLayout(ILoggingEvent event) {
-            StackTraceElement stackTraceElement = event.getCallerData()[0];
-
-            StringBuilder sbuf = new StringBuilder(128);
-            sbuf.append("[");
-            sbuf.append(SIMPLE_DATE_FORMAT.format(new Date(event.getTimeStamp())));
-            sbuf.append("] ");
-            sbuf.append(getLevel(event));
-            sbuf.append(" ");
-            sbuf.append(stackTraceElement.getFileName());
-            sbuf.append("#");
-            sbuf.append(stackTraceElement.getMethodName());
-            sbuf.append(",");
-            sbuf.append(stackTraceElement.getLineNumber());
-            sbuf.append(" ");
-            sbuf.append(event.getFormattedMessage());
-            sbuf.append(CoreConstants.LINE_SEPARATOR);
-            return sbuf.toString();
-        }
     }
 }
