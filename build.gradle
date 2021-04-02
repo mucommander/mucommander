@@ -100,10 +100,18 @@ dependencies {
 createBundlesDir.doLast {
    ant.move file: "${buildDir}/osgi/bundle/${project('mucommander-core').jar.archiveName}",
             todir: "${buildDir}/osgi/app"
-   copy{
+   copy {
        from "build/libs"
        include project(':').jar.archiveName
        into "${buildDir}/osgi"
+   }
+}
+
+createOsgiRuntime.doLast {
+   copy {
+       from "package"
+       include "logback.xml"
+       into "${buildDir}/osgi/conf"
    }
 }
 
@@ -113,6 +121,7 @@ runOsgi {
     if (port) {
         javaArgs += ' -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=' + port
     }
+    javaArgs += ' -Dlogback.configurationFile=conf/logback.xml'
     configSettings = 'felix'
     osgiMain = project(':')
     config += [
