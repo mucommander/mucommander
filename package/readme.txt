@@ -42,6 +42,7 @@ Improvements:
 - Non-browsable initial locations that are specified by command line arguments are selected on startup.
 - Store user-files in '$XDG_CONFIG_HOME/mucommander' if environment variable XDG_CONFIG_HOME is set on Linux.
 - Create Felix cache directory within the system's temporary folder instead of within the installation folder.
+- Write logs also to file in order to ease debugging.
 
 Localization:
 - Korean translation updated.
