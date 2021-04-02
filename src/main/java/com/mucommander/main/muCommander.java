@@ -285,7 +285,7 @@ public class muCommander
         muCommander.copySystemProperties(configProps);
 
         // Copy configuration provided by command line arguments
-        configProps.putAll(configuration.serialize());
+        configProps.putAll(configuration);
 
         // If enabled, register a shutdown hook to make sure the framework is
         // cleanly shutdown when the VM exits.
