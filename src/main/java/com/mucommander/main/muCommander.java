@@ -284,6 +284,27 @@ public class muCommander
         // Copy framework properties from the system properties.
         muCommander.copySystemProperties(configProps);
 
+        File preferencesFolder;
+        if (configuration.preferences == null) {
+            try {
+                preferencesFolder = UserPreferencesDir.getDefaultPreferencesFolder();
+            } catch(RuntimeException e) {
+                System.err.println("Failed to retrieve default preferences folder: " + e.getMessage());
+                return;
+            }
+        } else {
+            try {
+                preferencesFolder = UserPreferencesDir.getPreferencesFolder(configuration.preferences);
+            } catch(RuntimeException e) {
+                System.err.println("Failed to retrieve specified preferences folder: " + configuration.preferences);
+                return;
+            }
+        }
+        // override the specified preferences folder
+        configuration.preferences = preferencesFolder.getAbsolutePath();
+        // set a system property that determines where logs would be written (see logback.xml)
+        System.setProperty("MUCOMMANDER_USER_PREFERENCES", configuration.preferences);
+
         // Copy configuration provided by command line arguments
         configProps.putAll(configuration);
 

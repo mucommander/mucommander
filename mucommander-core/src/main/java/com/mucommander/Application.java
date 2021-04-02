@@ -258,13 +258,6 @@ public class Application {
                 catch(Exception e) {printError("Could not set credentials file", e, activator.fatalWarnings());}
             }
 
-            // Preference folder.
-            String preferences = activator.preferences();
-            if (preferences != null) {
-                try {PlatformManager.setPreferencesFolder(preferences);}
-                catch(Exception e) {printError("Could not set preferences folder", e, activator.fatalWarnings());}
-            }
-
             // Extensions folder.
             String extensions = activator.extensions();
             if (extensions != null) {
