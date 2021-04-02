@@ -17,22 +17,22 @@
 
 package com.mucommander.utils;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.*;
-import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.ui.dialog.debug.DebugConsoleAppender;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.CoreConstants;
+import ch.qos.logback.core.LayoutBase;
 
 /**
  * This class manages logging issues within mucommander
@@ -103,9 +103,6 @@ public class MuLogging {
         }
     }
 
-    /** Appender that writes log printings to the standard console */
-    private static ConsoleAppender<ILoggingEvent> consoleAppender;
-
     /** Appender that writes log printings to the debug console dialog */
     private static DebugConsoleAppender debugConsoleAppender;
 
@@ -153,10 +150,6 @@ public class MuLogging {
         return debugConsoleAppender;
     }
 
-    public static ConsoleAppender<ILoggingEvent> getConsoleAppender() {
-        return consoleAppender;
-    }
-
     public static void configureLogging() throws IOException {
         // We're no longer using LogManager and a logging.properties file to initialize java.util.logging, because of
         // a limitation with Webstart limiting the use of handlers and formatters residing in the system's classpath,
@@ -165,50 +158,16 @@ public class MuLogging {
         // Get root logger
         ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 
-        // we are not interested in auto-configuration
-        LoggerContext loggerContext = rootLogger.getLoggerContext();
-        loggerContext.reset();
-
-        // Remove default appenders
-        rootLogger.detachAndStopAllAppenders();
-
-        // and add ours
-        Appender<ILoggingEvent>[] appenders = createAppenders(loggerContext);
-        for (Appender<ILoggingEvent> appender : appenders)
-            rootLogger.addAppender(appender);
+        // and debug-console-adapter
+        debugConsoleAppender = createDebugConsoleAppender();
+        rootLogger.addAppender(debugConsoleAppender);
 
         // Set the log level to the value defined in the configuration
         updateLogLevel(getLogLevel());
     }
 
-    private static Appender<ILoggingEvent>[] createAppenders(LoggerContext loggerContext) {
-        Layout<ILoggingEvent> layout = new CustomLoggingLayout();
-
-        consoleAppender = createConsoleAppender(loggerContext, layout);
-        debugConsoleAppender = createDebugConsoleAppender(loggerContext, layout);
-
-        return new Appender[] { consoleAppender, debugConsoleAppender };
-    }
-
-    private static ConsoleAppender<ILoggingEvent> createConsoleAppender(LoggerContext loggerContext, Layout<ILoggingEvent> layout) {
-        ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<ILoggingEvent>();
-
-        LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<ILoggingEvent>();
-        encoder.setContext(loggerContext);
-        encoder.setLayout(layout);
-        encoder.start();
-
-        consoleAppender.setContext(loggerContext);
-        consoleAppender.setEncoder(encoder);
-        consoleAppender.start();
-
-        return consoleAppender;
-    }
-
-    private static DebugConsoleAppender createDebugConsoleAppender(LoggerContext loggerContext, Layout<ILoggingEvent> layout) {
-        DebugConsoleAppender debugConsoleAppender = new DebugConsoleAppender(layout);
-
-        debugConsoleAppender.setContext(loggerContext);
+    private static DebugConsoleAppender createDebugConsoleAppender() {
+        DebugConsoleAppender debugConsoleAppender = new DebugConsoleAppender(new CustomLoggingLayout());
         debugConsoleAppender.start();
 
         return debugConsoleAppender;
