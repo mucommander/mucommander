@@ -62,7 +62,7 @@ import com.mucommander.utils.MuLogging.LogLevel;
 public class DebugConsoleDialog extends FocusDialog implements ActionListener, ItemListener {
 
     /** Displays log events, and allows to copy their values to the clipboard */
-    private JList loggingEventsList;
+    private JList<LoggingEvent> loggingEventsList;
 
     /** Allows the log level to be changed */
     private JComboBox<LogLevel> levelComboBox;
@@ -88,7 +88,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
         Container contentPane = getContentPane();
 
-        loggingEventsList = new JList();
+        loggingEventsList = new JList<>();
         // Autoscroll when dragged
         loggingEventsList.setAutoscrolls(true);
         loggingEventsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

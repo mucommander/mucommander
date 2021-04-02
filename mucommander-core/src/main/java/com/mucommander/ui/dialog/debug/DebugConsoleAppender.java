@@ -59,7 +59,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
     	this.loggingEventLayout = loggingEventsLayout;
     	
         bufferSize = MuConfigurations.getPreferences().getVariable(MuPreference.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
-        loggingEventsList = new LinkedList<LogbackLoggingEvent>();
+        loggingEventsList = new LinkedList<>();
     }
 
     /**
