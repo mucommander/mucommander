@@ -177,10 +177,6 @@ public class Activator implements BundleActivator {
         return context.getProperty("mucommander.keymap");
     }
 
-    public String preferences() {
-        return context.getProperty("mucommander.preferences");
-    }
-
     public String shellHistory() {
         return context.getProperty("mucommander.shellHistory");
     }

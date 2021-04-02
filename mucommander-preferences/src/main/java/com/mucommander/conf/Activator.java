@@ -11,7 +11,12 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext context) throws Exception {
         LOGGER.debug("starting");
+        PlatformManager.setPreferencesFolder(preferences(context));
         MuConfigurations.loadPreferences();
+    }
+
+    private String preferences(BundleContext context) {
+        return context.getProperty("mucommander.preferences");
     }
 
     @Override

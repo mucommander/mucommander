@@ -5,10 +5,10 @@
         </encoder>
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>mucommander.log</file>
+        <file>${MUCOMMANDER_USER_PREFERENCES}/logs/mucommander.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>mucommander-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${MUCOMMANDER_USER_PREFERENCES}/logs/mucommander-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!-- each file should be at most 10MB, keep 7 days worth of history, but at most 200MB -->
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>7</maxHistory>

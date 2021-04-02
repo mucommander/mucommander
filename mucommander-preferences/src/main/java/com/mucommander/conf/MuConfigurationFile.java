@@ -43,7 +43,7 @@ abstract class MuConfigurationFile implements ConfigurationSource {
     // - Class fields ---------------------------------------------------------------
     // ------------------------------------------------------------------------------
     /** Path to the configuration file. */
-    private 		     AbstractFile configurationFile;
+    private AbstractFile configurationFile;
     /** Default configuration file name. */
     private final String DEFAULT_CONFIGURATION_FILE_NAME;
 
@@ -71,7 +71,7 @@ abstract class MuConfigurationFile implements ConfigurationSource {
      * @throws IOException if an error occurred while locating the default configuration file.
      */
     private synchronized AbstractFile getConfigurationFile() throws IOException {
-        if(configurationFile == null)
+        if (configurationFile == null)
             return PlatformManager.getPreferencesFolder().getChild(DEFAULT_CONFIGURATION_FILE_NAME);
         return configurationFile;
     }
@@ -82,9 +82,8 @@ abstract class MuConfigurationFile implements ConfigurationSource {
      * @throws FileNotFoundException if the specified file is not a valid file.
      */
     private synchronized void setConfigurationFile(String path) throws FileNotFoundException {
-        AbstractFile file;
-
-        if((file = FileFactory.getFile(path)) == null)
+        AbstractFile file = FileFactory.getFile(path);
+        if (file == null)
             setConfigurationFile(new File(path));
         else
             setConfigurationFile(file);
@@ -104,7 +103,7 @@ abstract class MuConfigurationFile implements ConfigurationSource {
      */
     private synchronized void setConfigurationFile(AbstractFile file) throws FileNotFoundException {
         // Makes sure file can be used as a configuration.
-        if(file.isBrowsable())
+        if (file.isBrowsable())
             throw new FileNotFoundException("Not a valid file: " + file.getAbsolutePath());
 
         configurationFile = file;
