@@ -5,7 +5,7 @@ dependencies {
     api project(':mucommander-format-tar')
     api project(':mucommander-process')
     api project(':mucommander-translator')
-    implementation 'org.ovirt.engine.api:sdk:4.2.1'
+    implementation 'org.ovirt.engine.api:sdk:4.4.5'
     implementation 'org.osgi:osgi.core:7.0.0'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
