@@ -46,6 +46,7 @@ public class PlatformManager {
      * This folder is:
      * <ul>
      *  <li><code>~/Library/Preferences/muCommander/</code> under MAC OS X.</li>
+     *  <li><code>/boot/home/config/settings/mucommander</code> under Haiku.</li>
      *  <li><code>~/.mucommander/</code> under all other OSes.</li>
      * </ul>
      * </p>
@@ -140,9 +141,8 @@ public class PlatformManager {
      * @see                #setPreferencesFolder(AbstractFile)
      */
     public static void setPreferencesFolder(String path) throws IOException {
-        AbstractFile folder;
-
-        if((folder = FileFactory.getFile(path)) == null)
+        AbstractFile folder = FileFactory.getFile(path);
+        if (folder == null)
             setPreferencesFolder(new File(path));
         else
             setPreferencesFolder(folder);
@@ -161,7 +161,7 @@ public class PlatformManager {
      * @see                #setPreferencesFolder(File)
      */
     public static void setPreferencesFolder(AbstractFile folder) throws IOException {
-        if(!folder.exists())
+        if (!folder.exists())
             folder.mkdir();
         else if(!folder.isBrowsable())
             folder = folder.getParent();
