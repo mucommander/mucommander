@@ -17,18 +17,18 @@
 
 package com.mucommander.main;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import com.beust.jcommander.Parameter;
 
 /**
  * @author Arik Hadas
  */
-public class Configuration {
+public class Configuration extends AbstractMap<String, String> {
 
     /** Whether or not to display verbose error messages. */
     @Parameter(names={"-S", "--silent"}, description="Do not print verbose error messages")
@@ -75,22 +75,45 @@ public class Configuration {
     @Parameter(description="[folders]")
     public List<String> folders = new ArrayList<>();
 
-    public Map<String, String> serialize() {
-        Map<String, String> map = new HashMap<>();
-        map.put("mucommander.silent", Boolean.toString(silent));
-        map.put("mucommander.assoc", assoc);
-        map.put("mucommander.bookmark", bookmark);
-        map.put("mucommander.configuration", configuration);
-        map.put("mucommander.commandbar", commandbar);
-        map.put("mucommander.extensions", extensions);
-        map.put("mucommander.commands", commands);
-        map.put("mucommander.fatalWarnings", Boolean.toString(fatalWarnings));
-        map.put("mucommander.keymap", keymap);
-        map.put("mucommander.preferences", preferences);
-        map.put("mucommander.shellHistory", shellHistory);
-        map.put("mucommander.toolbar", toolbar);
-        map.put("mucommander.credentials", credentials);
-        map.put("mucommander.folders", folders.stream().collect(Collectors.joining(",")));
-        return map;
+    @Override
+    public Set<Entry<String, String>> entrySet() {
+        Set<Entry<String, String>> set = new LinkedHashSet<>();
+        set.add(toEntry("mucommander.silent", Boolean.toString(silent)));
+        set.add(toEntry("mucommander.assoc", assoc));
+        set.add(toEntry("mucommander.bookmark", bookmark));
+        set.add(toEntry("mucommander.configuration", configuration));
+        set.add(toEntry("mucommander.commandbar", commandbar));
+        set.add(toEntry("mucommander.extensions", extensions));
+        set.add(toEntry("mucommander.commands", commands));
+        set.add(toEntry("mucommander.fatalWarnings", Boolean.toString(fatalWarnings)));
+        set.add(toEntry("mucommander.keymap", keymap));
+        set.add(toEntry("mucommander.preferences", preferences));
+        set.add(toEntry("mucommander.shellHistory", shellHistory));
+        set.add(toEntry("mucommander.toolbar", toolbar));
+        set.add(toEntry("mucommander.credentials", credentials));
+        set.add(toEntry("mucommander.folders", String.join(",", folders)));
+        return set;
+    }
+
+    /**
+     * Can be replaced with java.util.KeyValueHolder once we upgrade to Java 9
+     */
+    private Entry<String, String> toEntry(String key, String value) {
+        return new Entry<String, String>() {
+            @Override
+            public String getValue() {
+                return value;
+            }
+
+            @Override
+            public String getKey() {
+                return key;
+            }
+
+            @Override
+            public String setValue(String value) {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 }
