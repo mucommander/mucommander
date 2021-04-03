@@ -54,7 +54,7 @@ public class LocationManager {
 	private FolderChangeMonitor folderChangeMonitor;
 
 	// TODO: replace this with a proper solution
-	private static boolean firstRun = true;
+	private boolean firstRun = true;
 
 	private static final AbstractFile[] emptyAbstractFilesArray = new AbstractFile[0];
 
