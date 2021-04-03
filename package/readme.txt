@@ -37,7 +37,7 @@ New features:
 
 Improvements:
 - Accelerate copying to remote servers using SFTP.
-- Invert selection is now also applied on directories.
+- Invert selection also applies to directories now.
 - Set initial look and feel to "GTK+" on Linux as it better handles scaling for HiDPI.
 - Non-browsable initial locations that are specified by command line arguments are selected on startup.
 - Store user-files in '$XDG_CONFIG_HOME/mucommander' if environment variable XDG_CONFIG_HOME is set on Linux.
