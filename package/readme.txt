@@ -49,7 +49,7 @@ Localization:
 
 Bug fixes:
 - File-search returns matches in the root folder of the search when search-subfolders is disabled.
-- The application no longer fails to start by a non-admin user after it starts by an admin user.
+- The application can start by a non-admin user after it started by an admin user.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
