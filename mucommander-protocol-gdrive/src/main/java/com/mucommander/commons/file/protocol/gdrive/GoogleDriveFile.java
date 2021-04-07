@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.api.client.http.InputStreamContent;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.drive.model.About;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
@@ -94,15 +95,15 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public long getDateCurrentFolder() {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             FileList result = connHandler.getConnection().files().list()
                     .setFields("files(id,name,parents,size,modifiedTime,mimeType)")
                     .setQ(String.format("'%s' in parents", getId()))
                     .execute();
             return result.getFiles().stream()
-                    .filter(file -> !isFolderMimeType(file.getMimeType()))
-                    .map(this::toFile)
-                    .map(AbstractFile::getDate)
+                    .filter(this::isNotFolder)
+                    .map(File::getModifiedTime)
+                    .map(DateTime::getValue)
                     .max(Long::compareTo)
                     .orElse(0l);
         } catch (IOException e) {
@@ -187,11 +188,15 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public boolean isDirectory() {
-        return file != null ? isFolderMimeType(file.getMimeType()) : false;
+        return file != null ? isFolder(file) : false;
     }
 
-    private boolean isFolderMimeType(String mimeType) {
-        return FOLDER_MIME_TYPE.equals(mimeType);
+    private boolean isNotFolder(File file) {
+        return !isFolder(file);
+    }
+
+    private boolean isFolder(File file) {
+        return FOLDER_MIME_TYPE.equals(file.getMimeType());
     }
 
     @Override
@@ -218,7 +223,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
             }
 
             return files.stream()
-                    .filter(file -> file.getSize() != null || isFolderMimeType(file.getMimeType()))
+                    .filter(file -> file.getSize() != null || isFolder(file))
                     .map(this::toFile)
                     .toArray(AbstractFile[]::new);
         }
