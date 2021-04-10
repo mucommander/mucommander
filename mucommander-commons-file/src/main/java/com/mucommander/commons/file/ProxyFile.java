@@ -363,6 +363,11 @@ public abstract class ProxyFile extends AbstractFile {
         file.deleteRecursively();
     }
 
+    @Override
+    public MonitoredFile toMonitoredFile() {
+        return file.toMonitoredFile();
+    }
+
     public boolean equals(Object f) {
         return file.equals(f);
     }

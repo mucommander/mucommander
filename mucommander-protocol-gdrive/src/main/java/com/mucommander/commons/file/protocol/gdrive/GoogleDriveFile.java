@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.api.client.http.InputStreamContent;
-import com.google.api.client.util.DateTime;
 import com.google.api.services.drive.model.About;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
@@ -39,6 +38,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.PermissionType;
@@ -77,6 +77,11 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
     }
 
     @Override
+    public MonitoredFile toMonitoredFile() {
+        return new GoogleDriveMonitoredFile(this);
+    }
+
+    @Override
     public ConnectionHandler createConnectionHandler(FileURL location) {
         return new GoogleDriveConnHandler(location);
     }
@@ -91,28 +96,6 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {}
-    }
-
-    @Override
-    public long getDateCurrentFolder() {
-        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
-            FileList result = connHandler.getConnection().files().list()
-                    .setFields("files(id,name,parents,size,modifiedTime,mimeType)")
-                    .setQ(String.format("'%s' in parents", getId()))
-                    .execute();
-            return result.getFiles().stream()
-                    .filter(this::isNotFolder)
-                    .map(File::getModifiedTime)
-                    .map(DateTime::getValue)
-                    .max(Long::compareTo)
-                    .orElse(0l);
-        } catch (IOException e) {
-            LOGGER.error("failed to retrieve folder modification date", e);
-            return 0;
-        } catch (RuntimeException e) {
-            LOGGER.error("runtime exception while retrieving folder modification date", e);
-            return 0;
-        }
     }
 
     @Override
@@ -191,11 +174,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
         return file != null ? isFolder(file) : false;
     }
 
-    private boolean isNotFolder(File file) {
-        return !isFolder(file);
-    }
-
-    private boolean isFolder(File file) {
+    protected static boolean isFolder(File file) {
         return FOLDER_MIME_TYPE.equals(file.getMimeType());
     }
 

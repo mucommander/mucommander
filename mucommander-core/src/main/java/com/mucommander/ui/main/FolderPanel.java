@@ -43,6 +43,7 @@ import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.core.ChangeFolderThread;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.core.LocationChanger;
@@ -373,11 +374,11 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
 
     /**
-     * Returns the folder that is currently being displayed by this panel.
+     * Returns a {@link MonitoredFile} for the folder that is currently being displayed by this panel.
      *
-     * @return the folder that is currently being displayed by this panel
+     * @return a {@link MonitoredFile} for the folder that is currently being displayed by this panel
      */
-    public AbstractFile getCurrentFolder() {
+    public MonitoredFile getCurrentFolder() {
         return locationManager.getCurrentFolder();
     }
 
