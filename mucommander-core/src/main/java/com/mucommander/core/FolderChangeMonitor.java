@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.filter.AbstractFileFilter;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.OrFileFilter;
@@ -214,7 +215,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * Note that folder change check took an average of N milliseconds, the returned value will be at least N*WAIT_MULTIPLIER
      */
     private synchronized long checkAndRefresh() {
-        if (!mayFolderChangeByFileJob() && isFolderDateChanged()) {
+        if (!mayFolderChangeByFileJob() && isFolderChanged()) {
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
             return nbSamples==0 ?
@@ -231,23 +232,17 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         return JobsManager.getInstance().mayFolderChangeByExistingJob(folderPanel.getCurrentFolder());
     }
 
-    /**
-     * Has date changed ?
-     * Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
-     * what we want (the folder will be changed to a 'workable' folder).
-     */
-    private boolean isFolderDateChanged() {
+    private boolean isFolderChanged() {
         // Update time average next loop
         long timeStamp = System.currentTimeMillis();
 
-        // Check folder's date
-        AbstractFile currentFolder = folderPanel.getCurrentFolder();
-        long date = currentFolder.getDateCurrentFolder();
+        MonitoredFile currentFolder = folderPanel.getCurrentFolder();
+        boolean changed = currentFolder.isChanged();
 
         totalCheckTime += System.currentTimeMillis()-timeStamp;
         nbSamples++;
 
-        if (date == folderPanel.getLocationManager().getCurrentFolderDate())
+        if (!changed)
             return false;
 
         LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");

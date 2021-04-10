@@ -678,6 +678,17 @@ public abstract class AbstractFile implements FileAttributes {
         return isFileOperationSupported(op, getClass());
     }
 
+    /**
+     * This method returns an instance of {@link MonitoredFile} that can be used
+     * to monitor changes to the content of this file.
+     * The default implementation of this method returns an instance of {@link ModificationDateBasedMonitoredFile}.
+     * This method should be overridden by subclasses that require a different mechanism
+     * for monitoring changes to their content.
+     * @return {@link MonitoredFile} that can monitor changes to the content of this file.
+     */
+    public MonitoredFile toMonitoredFile() {
+        return new ModificationDateBasedMonitoredFile(this);
+    }
 
     ///////////////////
     // Final methods //
@@ -1547,19 +1558,6 @@ public abstract class AbstractFile implements FileAttributes {
      * @return this file's last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
      */
     public abstract long getDate();
-
-    /**
-     * Return this file's last modified date.
-     * For some file protocols (e.g., Google Drive), folder's modification date doesn't change when a new file is
-     * added or removed from the folder. But we count on identifying when the folder needs to be refreshed by its
-     * modification time so this method can be overridden to provide an alternative way to compute the modification
-     * time of the browsed folder in that case.
-     *
-     * @return this file's last modified date, in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
-     */
-    public long getDateCurrentFolder() {
-        return getDate();
-    }
 
     /**
      * This hook enables to add logic after files were copied to this folder / archive.

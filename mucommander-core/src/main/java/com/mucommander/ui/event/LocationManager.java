@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.core.FolderChangeMonitor;
 import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.ui.main.ConfigurableFolderFilter;
@@ -43,10 +44,7 @@ public class LocationManager {
     private FolderPanel folderPanel;
 
     /** Current location presented in the FolderPanel */
-    private AbstractFile currentFolder;
-
-    /** Current folder's modification date */
-    private long currentFolderDate;
+    private MonitoredFile currentFolder;
 
     /** Filters out unwanted files when listing folder contents */
 	private ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
@@ -82,7 +80,9 @@ public class LocationManager {
 
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fire) {
         LOGGER.trace("calling ls()");
-        currentFolderDate = folder.getDateCurrentFolder();
+        MonitoredFile newCurrentFile = folder.toMonitoredFile();
+        newCurrentFile.watch();
+
     	AbstractFile[] children = emptyAbstractFilesArray;
     	try {
     	    children = folder.ls(configurableFolderFilter);
@@ -96,7 +96,9 @@ public class LocationManager {
 
     	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
 
-    	this.currentFolder = folder;
+    	if (currentFolder != null)
+    	    currentFolder.unwatch();
+    	this.currentFolder = newCurrentFile;
 
     	if (fire)
     	    // Notify listeners that the location has changed
@@ -108,25 +110,12 @@ public class LocationManager {
     }
 
     /**
-     * Return the folder presented in the {@link FolderPanel}
+     * Return a {@link MonitoredFile} for the folder presented in the {@link FolderPanel}
      * 
-     * @return the {@link AbstractFile} presented in the {@link FolderPanel}
+     * @return a {@link MonitoredFile} for the {@link AbstractFile} presented in the {@link FolderPanel}
      */
-    public AbstractFile getCurrentFolder() {
+    public MonitoredFile getCurrentFolder() {
     	return currentFolder;
-    }
-
-    /**
-     * Return the modification date of {@link LocationManager#currentFolder}
-     * as it appeared right before listing its children.
-     * Note that it may return the modification date prior to the lasts
-     * listing in case the file as been modified after calling {@link AbstractFile#getDate()}
-     * and before calling {@link AbstractFile#ls()}.
-     *
-     * @return the modification date of the currently presented folder.
-     */
-    public long getCurrentFolderDate() {
-        return currentFolderDate;
     }
 
     /**
