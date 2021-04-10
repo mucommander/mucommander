@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Objects;
 
 /**
  * This class contains static helper methods that operate on file paths.
@@ -226,33 +227,28 @@ public class PathUtils {
         }
 
         // No point in going any further if the URL cannot be resolved into a file
-        AbstractFile destFile = null;
-        if (parent != null && destURL.equals(parent.getURL())) {
-            destFile = parent;
-        } else {
-            try {
-                destFile = FileFactory.getFile(destURL, parent);
-            } catch (IOException e) {
-                LOGGER.debug("failed to retrieve file", e);
-            }
-        }
-        if(destFile ==null) {
+        AbstractFile destFile = FileFactory.getFile(destURL);
+        if (destFile == null) {
             LOGGER.info("could not resolve a file for {}", destURL);
             return null;
         }
 
         // Test if the destination file exists
         boolean destFileExists = destFile.exists();
-        if(destFileExists) {
+        if (destFileExists) {
             // Note: path to archives must end with a trailing separator character to refer to the archive as a folder,
             //  if they don't, they'll refer to the archive as a file.
             if(destFile.isDirectory() || (destPath.endsWith(destFile.getSeparator()) && destFile.isBrowsable()))
                 return new ResolvedDestination(destFile, DestinationType.EXISTING_FOLDER, destFile);
         }
 
+        if (Objects.equals(parent, destFile.getParent())) {
+            destFile.setParent(parent);
+        }
+
         // Test if the destination's parent exists, if not the path is not a valid destination
         AbstractFile destParent = destFile.getParent();
-        if(destParent==null || !destParent.exists())
+        if (destParent == null || !destParent.exists())
             return null;
 
         return new ResolvedDestination(destFile, destFileExists?DestinationType.EXISTING_FILE:DestinationType.NEW_FILE, destParent);
