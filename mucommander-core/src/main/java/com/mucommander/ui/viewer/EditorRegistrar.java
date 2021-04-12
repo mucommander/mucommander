@@ -107,6 +107,7 @@ public class EditorRegistrar {
 
                 // User confirmed the operation
                 editor = factory.createFileEditor();
+                break;
             }
         }
 
