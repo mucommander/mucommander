@@ -104,6 +104,7 @@ public class ViewerRegistrar {
 
                 // User confirmed the operation
                 viewer = (FileViewer) ((FileViewerWrapper) service.createFileViewer()).getViewerComponent();
+                break;
             }
         }
 
