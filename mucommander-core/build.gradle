@@ -23,7 +23,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.26'
     implementation 'org.osgi:osgi.core:7.0.0'
     implementation 'commons-collections:commons-collections:3.2.2'
-    comprise 'org.unix4j:unix4j-command:0.5'
+    comprise 'org.unix4j:unix4j-command:0.6'
 
     testImplementation 'org.testng:testng:6.11'
     testImplementation 'junit:junit:4.12'
