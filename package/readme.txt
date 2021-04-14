@@ -49,6 +49,7 @@ Localization:
 
 Bug fixes:
 - File-search returns matches in the root folder of the search when search-subfolders is disabled.
+- Fixed an issue that might cause file-search with case insensitive text search not to return all matches.
 - The application can start by a non-admin user after it started by an admin user.
 - The application can start with an inaccessible location at the right panel.
 - Files are transferred properly when the destination folder is not presented in the other panel.
