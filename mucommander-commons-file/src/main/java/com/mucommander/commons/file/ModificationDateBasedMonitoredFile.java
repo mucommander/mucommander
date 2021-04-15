@@ -38,7 +38,7 @@ public class ModificationDateBasedMonitoredFile extends MonitoredFile {
     }
 
     @Override
-    public void watch() {
+    public void startWatch() {
         lastModificationDate = getDate();
     }
 }

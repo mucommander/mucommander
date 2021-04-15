@@ -43,6 +43,8 @@ Improvements:
 - Store user-files in '$XDG_CONFIG_HOME/mucommander' if environment variable XDG_CONFIG_HOME is set on Linux.
 - Create Felix cache directory within the system's temporary folder instead of within the installation folder.
 - Write logs also to file in order to ease debugging.
+- Local folders are automatically refreshed also on file systems in which their modification date doesn't
+  change when their content changes, like USB folders on macOS.
 
 Localization:
 - Korean translation updated.

@@ -81,7 +81,7 @@ public class LocationManager {
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fire) {
         LOGGER.trace("calling ls()");
         MonitoredFile newCurrentFile = folder.toMonitoredFile();
-        newCurrentFile.watch();
+        newCurrentFile.startWatch();
 
     	AbstractFile[] children = emptyAbstractFilesArray;
     	try {
@@ -97,7 +97,7 @@ public class LocationManager {
     	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
 
     	if (currentFolder != null)
-    	    currentFolder.unwatch();
+    	    currentFolder.stopWatch();
     	this.currentFolder = newCurrentFile;
 
     	if (fire)

@@ -28,7 +28,7 @@ public abstract class MonitoredFile extends ProxyFile {
     }
 
     /**
-     * This method can be called after calling {@link #watch()} to detect if
+     * This method can be called after calling {@link #startWatch()} to detect if
      * changes were made to the content of the specified file since the previous time
      * this method returned {@code true} or since starting to watch this file for changes.
      * @return true if the content of this file has changed, false otherwise.
@@ -38,10 +38,10 @@ public abstract class MonitoredFile extends ProxyFile {
     /**
      * Start watching for changes to the content of this file.
      */
-    public void watch() {}
+    public void startWatch() {}
 
     /**
      * Stop watching for changes to the content of this file.
      */
-    public void unwatch() {}
+    public void stopWatch() {}
 }
