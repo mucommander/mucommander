@@ -49,6 +49,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.GroupedPermissionBits;
 import com.mucommander.commons.file.IndividualPermissionBits;
 import com.mucommander.commons.file.MacOsSystemFolder;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.PermissionType;
@@ -311,6 +312,10 @@ public class LocalFile extends ProtocolFile {
         return volumes;
     }
 
+    @Override
+    public MonitoredFile toMonitoredFile() {
+        return new LocalMonitoredFile(this);
+    }
 
     ////////////////////
     // Helper methods //
