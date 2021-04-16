@@ -48,6 +48,7 @@ Improvements:
 - Detect Java versions 14 to 17.
 - The initial width of the built-in text viewer/editor is better calculated for files that contain more than 10k lines.
 - The visiblity of line numbers is persisted across invocations of the built-in text editor.
+- Add the refresh action to the file table's context menu.
 
 Localization:
 - Korean translation updated.

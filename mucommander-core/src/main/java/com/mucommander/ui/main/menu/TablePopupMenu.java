@@ -99,6 +99,9 @@ public class TablePopupMenu extends MuActionsPopupMenu {
 
         add(new JSeparator());
 
+        addAction(com.mucommander.ui.action.impl.RefreshAction.Descriptor.ACTION_ID);
+        add(new JSeparator());
+
         // 'Rename' displayed if a single file was clicked
         if(clickedFile!=null)
             addAction(com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID);
