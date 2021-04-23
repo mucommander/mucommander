@@ -138,7 +138,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 
 	@Override
 	public void update(FileTableTab tab, int index) {
-		if (JavaVersion.JAVA_1_5.isCurrentOrLower()) {
+		if (JavaVersion.JAVA_5.isCurrentOrLower()) {
 			/*setLockedAt(index, tab.isLocked());
 			setTitleAt(index, tab.getLocation().getName());	*/
 		}

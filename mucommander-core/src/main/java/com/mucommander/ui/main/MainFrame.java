@@ -120,7 +120,7 @@ public class MainFrame extends JFrame implements LocationListener {
             return;
 
         // Use Java 1.6 's new Window#setIconImages(List<Image>) when available
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
+        if(JavaVersion.JAVA_6.isCurrentOrHigher()) {
             java.util.List<Image> icons = new Vector<Image>();
 
             // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.

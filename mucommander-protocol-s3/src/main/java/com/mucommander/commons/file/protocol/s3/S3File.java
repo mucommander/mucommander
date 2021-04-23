@@ -81,7 +81,7 @@ public abstract class S3File extends ProtocolFile {
         if(cause instanceof IOException)
             return (IOException)cause;
 
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
+        if(JavaVersion.JAVA_6.isCurrentOrHigher())
             return new IOException(e);
 
         return new IOException(e.getMessage());

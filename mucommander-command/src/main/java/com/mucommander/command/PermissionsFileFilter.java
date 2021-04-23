@@ -42,7 +42,7 @@ public class PermissionsFileFilter extends AbstractFileFilter {
     }
 
     public boolean accept(AbstractFile file) {
-        if(permission== PermissionType.EXECUTE && JavaVersion.JAVA_1_5.isCurrentOrLower())
+        if(permission== PermissionType.EXECUTE && JavaVersion.JAVA_5.isCurrentOrLower())
             return true;
 
         return filter ? file.getPermissions().getBitValue(PermissionAccess.USER, permission) : !file.getPermissions().getBitValue(PermissionAccess.USER, permission);
