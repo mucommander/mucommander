@@ -126,7 +126,6 @@ public enum OsVersion implements ComparableRuntimeProperty {
      */
     static {
     	currentValue = parseSystemProperty(getRawSystemProperty(), OsFamily.getRawSystemProperty(), OsFamily.getCurrent());
-    	LOGGER.info("Current OS version: {}", currentValue);
     }
 
 
