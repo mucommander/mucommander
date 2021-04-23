@@ -74,10 +74,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     public static final String COMMENT_PROPERTY_NAME = "com.apple.metadata:kMDItemFinderComment";
     public static final String TAGS_PROPERTY_NAME = "com.apple.metadata:_kMDItemUserTags";
 
-    public String toString() {return "MAC OS X Desktop";}
+    public String toString() {return "macOS Desktop";}
 
     @Override
-    public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.MAC_OS_X);}
+    public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.MAC_OS);}
 
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
@@ -189,7 +189,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     @Override
     public List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) {
-        if (OsVersion.MAC_OS_X_10_4.isCurrentOrHigher()) {
+        if (OsVersion.MAC_OS_10_4.isCurrentOrHigher()) {
             String comment = OSXFileUtils.getSpotlightComment(file);
             JLabel commentLabel = new JLabel(Translator.get("comment")+":");
             commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);

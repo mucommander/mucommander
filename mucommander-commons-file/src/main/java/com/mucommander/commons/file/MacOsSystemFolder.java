@@ -75,7 +75,7 @@ public enum MacOsSystemFolder {
 	static Set<String> paths;
 
 	static {
-	    if (OsFamily.MAC_OS_X.isCurrent())
+	    if (OsFamily.MAC_OS.isCurrent())
 	        paths = Stream.of(values()).map(f -> f.path).collect(Collectors.toSet());
 	}
 

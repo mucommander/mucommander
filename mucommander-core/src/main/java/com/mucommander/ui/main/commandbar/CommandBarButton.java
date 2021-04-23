@@ -57,7 +57,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	protected CommandBarButton(String actionId, MainFrame mainFrame) {
 		
 		// Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
         }

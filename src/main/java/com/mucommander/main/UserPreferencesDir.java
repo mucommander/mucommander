@@ -52,7 +52,7 @@ public class UserPreferencesDir {
      * <p>
      * This folder is:
      * <ul>
-     *  <li><code>~/Library/Preferences/muCommander/</code> under MAC OS X.</li>
+     *  <li><code>~/Library/Preferences/muCommander/</code> under macOS.</li>
      *  <li><code>/boot/home/config/settings/mucommander</code> under Haiku.</li>
      *  <li><code>~/.mucommander/</code> under all other OSes.</li>
      * </ul>

@@ -96,7 +96,7 @@ public class KeyStrokeUtils {
         if((modifiers&KeyEvent.CTRL_DOWN_MASK)!=0)
             modifiersString += (modifiersString.equals("")?"":"+")+CTRL_MODIFIER_STRING;
 
-        if(OsFamily.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             if((modifiers&KeyEvent.ALT_DOWN_MASK)!=0)
                 modifiersString += (modifiersString.equals("")?"":"+")+ALT_MODIFIER_STRING;
 

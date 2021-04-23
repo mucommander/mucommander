@@ -194,7 +194,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     }
 
     private static boolean usesTableHeaderRenderingProperties() {
-        return OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher();
+        return OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher();
     }
 
     /**

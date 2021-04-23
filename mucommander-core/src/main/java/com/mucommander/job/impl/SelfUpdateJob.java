@@ -196,7 +196,7 @@ public class SelfUpdateJob extends CopyJob {
         try {
             AbstractFile parent;
             // Mac OS X
-            if(OsFamily.MAC_OS_X.isCurrent()) {
+            if(OsFamily.MAC_OS.isCurrent()) {
                 parent = destJar.getParent();
 
                 // Look for an .app container that encloses the JAR file

@@ -59,7 +59,7 @@ public class OSXFileUtils {
      * @return the Spotlight/Finder comment of the specified file
      */
     public static String getSpotlightComment(AbstractFile file) {
-        if(!OsVersion.MAC_OS_X_10_4.isCurrentOrHigher())
+        if(!OsVersion.MAC_OS_10_4.isCurrentOrHigher())
             return null;
 
         byte[] bytes = XAttrUtils.read(file.getAbsolutePath(), XAttrUtils.COMMENT);

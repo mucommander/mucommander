@@ -49,7 +49,7 @@ public abstract class FilePresenter extends JScrollPane {
 		});
 
 		// Catch Apple+W keystrokes under Mac OS X to close the window
-        if(OsFamily.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
         	getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
         	getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
         		public void actionPerformed(ActionEvent e){

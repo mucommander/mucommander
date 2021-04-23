@@ -64,7 +64,7 @@ public class EditorRegistrar {
         EditorFrame frame = new EditorFrame(mainFrame, file, icon);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
             // Displays the document icon in the window title bar, works only for local files
             if(file.getURL().getScheme().equals(LocalFile.SCHEMA))
                 frame.getRootPane().putClientProperty("Window.documentFile", file.getUnderlyingFileObject());

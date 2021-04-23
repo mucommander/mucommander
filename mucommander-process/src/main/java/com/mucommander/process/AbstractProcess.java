@@ -58,7 +58,7 @@ public abstract class AbstractProcess {
         // Process destruction occurs in a separate thread, as in some (rare)
         // cases, deadlocks will occur while trying to kill a native process.
         // An example of that is executing <code>echo blah | ssh localhost ls -l</code>
-        // under MAC OS X.
+        // under macOS.
         // Using a separate thread allows muCommander to continue working properly even
         // when that occurs.
         new Thread() {

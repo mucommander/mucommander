@@ -82,8 +82,8 @@ public class AppleScript {
      * @return true if the script was successfully executed, false if the
      */
     public static boolean execute(String appleScript, StringBuilder outputBuffer) {
-        // No point in going any further if the current OS is not Mac OS X
-        if(!OsFamily.MAC_OS_X.isCurrent())
+        // No point in going any further if the current OS is not macOS
+        if(!OsFamily.MAC_OS.isCurrent())
             return false;
 
         LOGGER.debug("Executing AppleScript: "+appleScript);
@@ -138,8 +138,8 @@ public class AppleScript {
     /**
      * Returns the encoding that AppleScript uses on the current runtime environment:
      * <ul>
-     *   <li>{@link #UTF8} for AppleScript 2.0+ (Mac OS X 10.5 and up)</li>
-     *   <li>{@link #MACROMAN} for AppleScript 1.10- (Mac OS X 10.4 or lower)</li>
+     *   <li>{@link #UTF8} for AppleScript 2.0+ (macOS 10.5 and up)</li>
+     *   <li>{@link #MACROMAN} for AppleScript 1.10- (macOS 10.4 or lower)</li>
      * </ul>
      *
      * If {@link #MACROMAN} is used, the scripts passed to {@link #execute(String, StringBuilder)} should not contain
@@ -148,10 +148,10 @@ public class AppleScript {
      * @return the encoding that AppleScript uses on the current runtime environment
      */
     public static String getScriptEncoding() {
-        // - AppleScript 2.0+ (Mac OS X 10.5 and up) is fully Unicode-aware and expects a script in UTF-8 encoding.
-        // - AppleScript 1.3- (Mac OS X 10.4 or lower) expects MacRoman encoding, not UTF-8.
+        // - AppleScript 2.0+ (macOS 10.5 and up) is fully Unicode-aware and expects a script in UTF-8 encoding.
+        // - AppleScript 1.3- (macOS 10.4 or lower) expects MacRoman encoding, not UTF-8.
         String encoding;
-        if(OsVersion.MAC_OS_X_10_5.isCurrentOrHigher())
+        if(OsVersion.MAC_OS_10_5.isCurrentOrHigher())
             encoding = UTF8;
         else
             encoding = MACROMAN;
