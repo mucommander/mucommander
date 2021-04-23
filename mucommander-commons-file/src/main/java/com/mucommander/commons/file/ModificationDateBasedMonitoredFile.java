@@ -16,29 +16,34 @@
  */
 package com.mucommander.commons.file;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is an implementation of {@link MonitoredFile} that is based
  * on checking the file's modication date to detect changes to its content.
  * @author Arik Hadas
  */
 public class ModificationDateBasedMonitoredFile extends MonitoredFile {
-
-    /** last observed modification date */
-    protected long lastModificationDate;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModificationDateBasedMonitoredFile.class);
+    /** the original modification date of the monitored file */
+    protected long originalModificationDate;
 
     public ModificationDateBasedMonitoredFile(AbstractFile file) {
         super(file);
     }
 
     @Override
-    public boolean isChanged() {
+    public boolean isChanged(boolean periodicCheck) {
         // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
         // what we want (the folder will be changed to a 'workable' folder).
-        return lastModificationDate != getDate();
+        boolean modificationDateChanged = originalModificationDate != getDate();
+        LOGGER.debug("isChanged = {}", modificationDateChanged);
+        return modificationDateChanged;
     }
 
     @Override
     public void startWatch() {
-        lastModificationDate = getDate();
+        originalModificationDate = getDate();
     }
 }

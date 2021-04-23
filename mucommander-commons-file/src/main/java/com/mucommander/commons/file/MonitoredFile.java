@@ -31,14 +31,15 @@ public abstract class MonitoredFile extends ProxyFile {
      * This method can be called after calling {@link #startWatch()} to detect if
      * changes were made to the content of the specified file since the previous time
      * this method returned {@code true} or since starting to watch this file for changes.
+     * @param periodicCheck indicates whether this is a periodic or on-demand check
      * @return true if the content of this file has changed, false otherwise.
      */
-    public abstract boolean isChanged();
+    public abstract boolean isChanged(boolean periodicCheck);
 
     /**
      * Start watching for changes to the content of this file.
      */
-    public void startWatch() {}
+    public abstract void startWatch();
 
     /**
      * Stop watching for changes to the content of this file.

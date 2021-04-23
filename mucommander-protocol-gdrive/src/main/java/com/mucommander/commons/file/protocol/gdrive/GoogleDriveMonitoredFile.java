@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.mucommander.commons.file.ModificationDateBasedMonitoredFile;
 import com.mucommander.commons.file.MonitoredFile;
 
 /**
@@ -35,26 +36,18 @@ import com.mucommander.commons.file.MonitoredFile;
  * This mechanism is unable to detect if a file is removed from the folder though.
  * @author Arik Hadas
  */
-public class GoogleDriveMonitoredFile extends MonitoredFile {
+public class GoogleDriveMonitoredFile extends ModificationDateBasedMonitoredFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDriveMonitoredFile.class);
 
     private GoogleDriveFile file;
-    private long lastChangedDate = -1;
 
     public GoogleDriveMonitoredFile(GoogleDriveFile file) {
         super(file);
         this.file = file;
     }
 
-    public boolean isChanged() {
-        long changedDate = getChangedDate();
-        if (changedDate == lastChangedDate)
-            return false;
-        lastChangedDate = changedDate;
-        return true;
-    }
-
-    private long getChangedDate() {
+    @Override
+    public long getDate() {
         try (GoogleDriveConnHandler connHandler = file.getConnHandler()) {
             FileList result = connHandler.getConnection().files().list()
                     .setFields("files(id,name,parents,size,modifiedTime,mimeType)")
