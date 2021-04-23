@@ -45,6 +45,7 @@ Improvements:
 - Write logs also to file in order to ease debugging.
 - Local folders are automatically refreshed also on file systems in which their modification date doesn't
   change when their content changes, like USB folders on macOS.
+- Detect Java versions 14 to 17.
 
 Localization:
 - Korean translation updated.

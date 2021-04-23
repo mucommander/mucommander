@@ -57,6 +57,14 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     JAVA_12("12"),
     /** Java 13.x */
     JAVA_13("13"),
+    /** Java 14.x */
+    JAVA_14("14"),
+    /** Java 15.x */
+    JAVA_15("15"),
+    /** Java 16.x */
+    JAVA_16("16"),
+    /** Java 17.x */
+    JAVA_17("17"),
     ;
 
     /** Logger used by this class. */
@@ -135,6 +143,18 @@ public enum JavaVersion implements ComparableRuntimeProperty {
 				|| (javaVersionProp = javaVersionProp.trim()).equals(""))
 			// Assume java 1.8 (first supported Java version)
 			return JavaVersion.JAVA_1_8;
+		// Java 17
+		if (javaVersionProp.startsWith("17"))
+			return JavaVersion.JAVA_17;
+		// Java 16
+		if (javaVersionProp.startsWith("16"))
+			return JavaVersion.JAVA_16;
+		// Java 15
+		if (javaVersionProp.startsWith("15"))
+			return JavaVersion.JAVA_15;
+		// Java 14
+		if (javaVersionProp.startsWith("14"))
+			return JavaVersion.JAVA_14;
 		// Java 13
 		if (javaVersionProp.startsWith("13"))
 			return JavaVersion.JAVA_13;
@@ -178,9 +198,8 @@ public enum JavaVersion implements ComparableRuntimeProperty {
 		if (javaVersionProp.startsWith("1.0"))
 			return JavaVersion.JAVA_1_0;
 
-		// Newer version we don't know of yet, assume latest supported Java
-		// version
-		return JavaVersion.JAVA_11;
+		// Newer version we don't know of yet, assume latest supported Java version
+		return JavaVersion.JAVA_16;
 	}
 
     /**
