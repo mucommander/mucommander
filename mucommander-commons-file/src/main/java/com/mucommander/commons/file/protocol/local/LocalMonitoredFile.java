@@ -21,6 +21,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
@@ -44,6 +45,11 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
     private WatchService watchService;
     private WatchKey watchKey;
 
+    private static WatchEvent.Kind<?>[] kinds = new WatchEvent.Kind<?>[] {
+        StandardWatchEventKinds.ENTRY_CREATE,
+        StandardWatchEventKinds.ENTRY_DELETE,
+        StandardWatchEventKinds.ENTRY_MODIFY};
+
     public LocalMonitoredFile(AbstractFile file) {
         super(file);
     }
@@ -55,9 +61,8 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
         try {
             watchService = FileSystems.getDefault().newWatchService();
             watchKey = path.register(watchService,
-                    StandardWatchEventKinds.ENTRY_CREATE,
-                    StandardWatchEventKinds.ENTRY_DELETE,
-                    StandardWatchEventKinds.ENTRY_MODIFY);
+                    kinds);
+            super.startWatch();
         } catch (IOException e) {
             watchService = null;
             LOGGER.error("failed to register WatchService", e);
@@ -80,12 +85,18 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
     }
 
     @Override
-    public boolean isChanged() {
+    public boolean isChanged(boolean periodicCheck) {
         if (watchService == null) {
-            return super.isChanged();
+            return super.isChanged(periodicCheck);
         }
 
         try {
+            // if this is not a periodic check then we want to first check by
+            // the modicifation date of the file as it appears to be faster
+            // than getting events from WatchService on macOS
+            if (!periodicCheck && super.isChanged(false)) {
+                return true;
+            }
             WatchKey watchKey = watchService.poll();
             if (watchKey != null) {
                 watchKey.reset();
@@ -98,4 +109,5 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
             return false;
         }
     }
+
 }

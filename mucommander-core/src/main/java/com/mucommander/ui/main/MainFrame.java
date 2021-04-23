@@ -72,7 +72,6 @@ import com.mucommander.ui.main.toolbar.ToolBar;
  * @author Maxence Bernard
  */
 public class MainFrame extends JFrame implements LocationListener {
-	
     private ProportionalSplitPane splitPane;
 
     private FolderPanel leftFolderPanel;
