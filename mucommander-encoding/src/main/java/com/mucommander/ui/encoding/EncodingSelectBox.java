@@ -95,7 +95,7 @@ public class EncodingSelectBox extends JPanel {
         // Customize button
         customizeButton = new JButton("...");
         // Mac OS X: small component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS.isCurrent())
             customizeButton.putClientProperty("JComponent.sizeVariant", "small");
 
         customizeButton.addActionListener(new ActionListener() {

@@ -2190,7 +2190,7 @@ public abstract class AbstractFileTest {
 
         // Skips the test if under OS X (this would create a new instance of JFileChooser, which fails 
         isHeadless = GraphicsEnvironment.isHeadless();
-        if(isHeadless && OsFamily.MAC_OS_X.isCurrent())
+        if(isHeadless && OsFamily.MAC_OS.isCurrent())
             return;
 
         // Some icon providers will fail (return a null icon) if the file doesn't exist

@@ -38,7 +38,7 @@ public class CustomFileIconProviderTest {
         testIconExistence(CustomFileIconProvider.FILE_ICON_NAME);
         testIconExistence(CustomFileIconProvider.ARCHIVE_ICON_NAME);
         testIconExistence(CustomFileIconProvider.PARENT_FOLDER_ICON_NAME);
-        testIconExistence(CustomFileIconProvider.MAC_OS_X_APP_ICON_NAME);
+        testIconExistence(CustomFileIconProvider.MAC_OS_APP_ICON_NAME);
 
         for(int i=0; i<CustomFileIconProvider.ICON_EXTENSIONS.length; i++)
             testIconExistence(CustomFileIconProvider.ICON_EXTENSIONS[i][0]);

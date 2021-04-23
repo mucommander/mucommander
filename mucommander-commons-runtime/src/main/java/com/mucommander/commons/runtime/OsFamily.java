@@ -31,7 +31,7 @@ public enum OsFamily {
 	/** Windows */
     WINDOWS("Windows"),
     /** Mac OS X */
-    MAC_OS_X("Mac OS X"),
+    MAC_OS("macOS"),
     /** Linux */
     LINUX("Linux"),
     /** Solaris */
@@ -94,7 +94,7 @@ public enum OsFamily {
      * Returns <code>true</code> if this OS family is UNIX-based. The following OS families are considered UNIX-based:
      * <ul>
      *  <li>{@link #LINUX}</li>
-     *  <li>{@link #MAC_OS_X}</li>
+     *  <li>{@link #MAC_OS}</li>
      *  <li>{@link #SOLARIS}</li>
      *  <li>{@link #FREEBSD}</li>
      *  <li>{@link #AIX}</li>
@@ -105,7 +105,7 @@ public enum OsFamily {
      * @return <code>true</code> if the current OS is UNIX-based
      */
     public boolean isUnixBased() {
-        return this==MAC_OS_X
+        return this==MAC_OS
                 || this==LINUX
                 || this==SOLARIS
                 || this==FREEBSD
@@ -141,7 +141,7 @@ public enum OsFamily {
         }
         // Mac OS X family
         if (osNameProp.startsWith("Mac OS X")) {
-            return MAC_OS_X;
+            return MAC_OS;
         }
         // OS/2 family
         if (osNameProp.startsWith("OS/2")) {

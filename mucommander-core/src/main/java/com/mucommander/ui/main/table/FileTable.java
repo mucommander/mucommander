@@ -355,7 +355,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * headers by setting client properties.
      */
     static boolean usesTableHeaderRenderingProperties() {
-        return OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher();
+        return OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher();
     }
 
 

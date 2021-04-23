@@ -104,8 +104,8 @@ public class GrowlNotifier extends AbstractNotifier {
     @Override
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
-            // No need to bother if the OS is not Mac OS X
-            if(!OsFamily.MAC_OS_X.isCurrent())
+            // No need to bother if the OS is not macOS
+            if(!OsFamily.MAC_OS.isCurrent())
                 return false;
 
             // Nothing else to do if the application has already been registered

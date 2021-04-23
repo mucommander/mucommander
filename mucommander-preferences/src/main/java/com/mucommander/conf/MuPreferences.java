@@ -82,7 +82,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** System notifications are enabled by default on platforms where a notifier is available and works well enough.
 	 * In particular, the system tray notifier is available under Linux+Java 1.6, but it doesn't work well so it is not
 	 * enabled by default. */
-	public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamily.MAC_OS_X.isCurrent() ||
+	public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamily.MAC_OS.isCurrent() ||
 			(OsFamily.WINDOWS.isCurrent() && JavaVersion.JAVA_6.isCurrentOrHigher());
 	/** List of encodings that are displayed in encoding selection components. */
 	public static final String  PREFERRED_ENCODINGS               = "preferred_encodings";
@@ -241,9 +241,9 @@ public class MuPreferences implements MuPreferencesAPI {
 
 
 
-	// - Mac OS X variables --------------------------------------------------
+	// - macOS variables --------------------------------------------------
 	// -----------------------------------------------------------------------
-	/** Section describing muCommander's Mac OS X integration. */
+	/** Section describing muCommander's macOS integration. */
 	public static final String  MAC_OSX_SECTION                   = "macosx";
 	/** Whether or not to use the brushed metal look. */
 	public static final String  USE_BRUSHED_METAL                 = MAC_OSX_SECTION + '.' + "brushed_metal_look";
@@ -252,7 +252,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	// so we disable brushed metal on that OS version but leave it for earlier versions where it works fine.
 	// See http://www.mucommander.com/forums/viewtopic.php?f=4&t=746 for more info about this issue.
 	public static final boolean DEFAULT_USE_BRUSHED_METAL         = false;
-	/** Whether or not to use a Mac OS X style menu bar. */
+	/** Whether or not to use a macOS style menu bar. */
 	public static final String  USE_SCREEN_MENU_BAR               = MAC_OSX_SECTION + '.' + "screen_menu_bar";
 	/** Default menu bar type. */
 	public static final boolean DEFAULT_USE_SCREEN_MENU_BAR       = true;
@@ -411,8 +411,8 @@ public class MuPreferences implements MuPreferencesAPI {
 	    configuration.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
 	    configuration.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
 
-	    // Initializes MAC OS X specific values
-	    if(OsFamily.MAC_OS_X.isCurrent()) {
+	    // Initializes macOS specific values
+	    if(OsFamily.MAC_OS.isCurrent()) {
 	        if(configuration.getVariable(SHELL_ENCODING) == null) {
 	            configuration.setVariable(SHELL_ENCODING, "UTF-8");
 	            configuration.setVariable(AUTODETECT_SHELL_ENCODING, false);
@@ -436,7 +436,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	        conf.setVariable(preference.toString(), configuration.getVariable(preference.toString()));
 
 	    // Remove preferences which are not relevant if we're not using MAC
-	    if (!OsFamily.MAC_OS_X.isCurrent()) {
+	    if (!OsFamily.MAC_OS.isCurrent()) {
 	        conf.removeVariable(USE_BRUSHED_METAL);
 	        conf.removeVariable(USE_SCREEN_MENU_BAR);
 	    }

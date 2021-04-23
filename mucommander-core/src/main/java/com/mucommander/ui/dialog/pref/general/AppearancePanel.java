@@ -306,7 +306,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         // At the time of writing, the 'brushed metal' look causes the JVM to crash randomly under Leopard (10.5)
         // so we disable brushed metal on that OS version but leave it for earlier versions where it works fine.
         // See http://www.mucommander.com/forums/viewtopic.php?f=4&t=746 for more info about this issue.
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_4.isCurrentOrLower()) {
+        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_4.isCurrentOrLower()) {
             // 'Use brushed metal look' option
             brushedMetalCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.use_brushed_metal")) {
             	public boolean hasChanged() {

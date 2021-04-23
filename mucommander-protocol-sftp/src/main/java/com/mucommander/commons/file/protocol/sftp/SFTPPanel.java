@@ -95,7 +95,7 @@ public class SFTPPanel extends ServerPanel {
 
         JButton chooseFileButton = new JButton("...");
         // Mac OS X: small component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS.isCurrent())
             chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
 
         chooseFileButton.addActionListener(new ActionListener() {

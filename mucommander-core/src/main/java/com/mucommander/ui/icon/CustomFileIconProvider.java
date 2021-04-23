@@ -62,7 +62,7 @@ public class CustomFileIconProvider implements FileIconProvider {
     public final static String SYMLINK_ICON_NAME = "link.png";
 
     /** Icon for Mac OS X's applications */
-    public final static String MAC_OS_X_APP_ICON_NAME = "executable_osx.png";
+    public final static String MAC_OS_APP_ICON_NAME = "executable_osx.png";
 
     /** Icon for the root of remote (non-local) locations */
     public final static String NETWORK_ICON_NAME = "network.png";
@@ -208,7 +208,7 @@ public class CustomFileIconProvider implements FileIconProvider {
         else if(file.isDirectory()) {
             // Mac OS X application are directories with the .app extension and have a dedicated icon
             if(fileExtension!=null && fileExtension.equals("app"))
-                icon = IconManager.getIcon(IconManager.FILE_ICON_SET, MAC_OS_X_APP_ICON_NAME);
+                icon = IconManager.getIcon(IconManager.FILE_ICON_SET, MAC_OS_APP_ICON_NAME);
             // Default folder icon
             else
                 icon = IconManager.getIcon(IconManager.FILE_ICON_SET, FOLDER_ICON_NAME);

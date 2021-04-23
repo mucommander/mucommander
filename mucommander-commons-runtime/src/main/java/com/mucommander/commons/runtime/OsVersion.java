@@ -75,39 +75,39 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	///////////////////////
 
 	/** Cheetah */
-	MAC_OS_X_10_0("10.0"),
+	MAC_OS_10_0("10.0"),
 	/** Puma */
-	MAC_OS_X_10_1("10.1"),
+	MAC_OS_10_1("10.1"),
 	/** Jaguar */
-	MAC_OS_X_10_2("10.2"),
+	MAC_OS_10_2("10.2"),
 	/** Panther */
-	MAC_OS_X_10_3("10.3"),
+	MAC_OS_10_3("10.3"),
 	/** Tiger */
-	MAC_OS_X_10_4("10.4"),
+	MAC_OS_10_4("10.4"),
 	/** Leopard */
-	MAC_OS_X_10_5("10.5"),
+	MAC_OS_10_5("10.5"),
 	/** Snow Leopard */
-	MAC_OS_X_10_6("10.6"),
+	MAC_OS_10_6("10.6"),
 	/** Lion */
-	MAC_OS_X_10_7("10.7"),
+	MAC_OS_10_7("10.7"),
 	/** Mountain Lion */
-	MAC_OS_X_10_8("10.8"),
+	MAC_OS_10_8("10.8"),
 	/** Mavericks */
-	MAC_OS_X_10_9("10.9"),
+	MAC_OS_10_9("10.9"),
 	/** Yosemite */
-	MAC_OS_X_10_10("10.10"),
+	MAC_OS_10_10("10.10"),
 	/** El Capitan */
-	MAC_OS_X_10_11("10.11"),
+	MAC_OS_10_11("10.11"),
 	/** Sierra */
-	MAC_OS_X_10_12("10.12"),
+	MAC_OS_10_12("10.12"),
 	/** High Sierra */
-	MAC_OS_X_10_13("10.13"),
+	MAC_OS_10_13("10.13"),
 	/** Mojave */
-	MAC_OS_X_10_14("10.14"),
+	MAC_OS_10_14("10.14"),
 	/** Catalina */
-	MAC_OS_X_10_15("10.15"),
+	MAC_OS_10_15("10.15"),
 	/** Big Sur */
-	MAC_OS_X_10_16("10.16");
+	MAC_OS_10_16("10.16");
 	
 
     /** Logger used by this class. */
@@ -209,60 +209,60 @@ public enum OsVersion implements ComparableRuntimeProperty {
             return WINDOWS_10;
         }
         // Mac OS X versions
-        if (osFamily==OsFamily.MAC_OS_X) {
+        if (osFamily==OsFamily.MAC_OS) {
             if(osVersionProp.startsWith("10.16"))
-                return MAC_OS_X_10_16;
+                return MAC_OS_10_16;
 
             if(osVersionProp.startsWith("10.15"))
-                return MAC_OS_X_10_15;
+                return MAC_OS_10_15;
 
             if(osVersionProp.startsWith("10.14"))
-                return MAC_OS_X_10_14;
+                return MAC_OS_10_14;
 
             if(osVersionProp.startsWith("10.13"))
-                return MAC_OS_X_10_13;
+                return MAC_OS_10_13;
 
             if(osVersionProp.startsWith("10.12"))
-                return MAC_OS_X_10_12;
+                return MAC_OS_10_12;
 
         	if(osVersionProp.startsWith("10.11"))
-                return MAC_OS_X_10_11;
+                return MAC_OS_10_11;
 
         	if(osVersionProp.startsWith("10.10"))
-                return MAC_OS_X_10_10;
+                return MAC_OS_10_10;
         	
         	if(osVersionProp.startsWith("10.9"))
-                return MAC_OS_X_10_9;
+                return MAC_OS_10_9;
 
             if(osVersionProp.startsWith("10.8"))
-                return MAC_OS_X_10_8;
+                return MAC_OS_10_8;
 
             if(osVersionProp.startsWith("10.7"))
-                return MAC_OS_X_10_7;
+                return MAC_OS_10_7;
 
             if (osVersionProp.startsWith("10.6"))
-                return MAC_OS_X_10_6;
+                return MAC_OS_10_6;
 
             if (osVersionProp.startsWith("10.5"))
-                return MAC_OS_X_10_5;
+                return MAC_OS_10_5;
 
             if (osVersionProp.startsWith("10.4"))
-                return MAC_OS_X_10_4;
+                return MAC_OS_10_4;
 
             if (osVersionProp.startsWith("10.3"))
-                return MAC_OS_X_10_3;
+                return MAC_OS_10_3;
 
             if (osVersionProp.startsWith("10.2"))
-                return MAC_OS_X_10_2;
+                return MAC_OS_10_2;
 
             if (osVersionProp.startsWith("10.1"))
-                return MAC_OS_X_10_1;
+                return MAC_OS_10_1;
 
             if (osVersionProp.startsWith("10.0"))
-                return MAC_OS_X_10_0;
+                return MAC_OS_10_0;
 
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_X_10_14;
+            return MAC_OS_10_14;
         }
 
         return OsVersion.UNKNOWN_VERSION;

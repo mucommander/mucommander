@@ -289,7 +289,7 @@ public class LocalFile extends ProtocolFile {
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
-        if(OsFamily.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             addMacOSXVolumes(volumesV);
         }
         else {
@@ -438,7 +438,7 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public boolean isSystem() {
-        if (OsFamily.MAC_OS_X.isCurrent()) {
+        if (OsFamily.MAC_OS.isCurrent()) {
         	return MacOsSystemFolder.isSystemFile(this);
         }
         if (OsFamily.WINDOWS.isCurrent()) {

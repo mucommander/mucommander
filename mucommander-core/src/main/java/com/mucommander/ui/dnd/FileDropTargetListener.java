@@ -94,7 +94,7 @@ public class FileDropTargetListener implements DropTargetListener {
      * <code>InputEvent.META_DOWN_MASK</code> under Mac OS X, <code>InputEvent.ALT_DOWN_MASK</code> under any other
      * platform.
      */
-    private final static int MOVE_ACTION_MODIFIERS_EX = OsFamily.MAC_OS_X.isCurrent() ? InputEvent.META_DOWN_MASK
+    private final static int MOVE_ACTION_MODIFIERS_EX = OsFamily.MAC_OS.isCurrent() ? InputEvent.META_DOWN_MASK
             : InputEvent.ALT_DOWN_MASK;
 
     /**

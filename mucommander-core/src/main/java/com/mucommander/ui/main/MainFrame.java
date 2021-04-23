@@ -116,7 +116,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // TODO: this code should probably be moved to the desktop API
 
         // - Mac OS X completely ignores calls to #setIconImage/setIconImages, no need to waste time
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS.isCurrent())
             return;
 
         // Use Java 1.6 's new Window#setIconImages(List<Image>) when available
@@ -644,7 +644,7 @@ public class MainFrame extends JFrame implements LocationListener {
         String title = activeTable.getFolderPanel().getCurrentFolder().getAbsolutePath();
 
 	// Add the application name to window title on all OSs except MAC
-        if (!OsFamily.MAC_OS_X.isCurrent())
+        if (!OsFamily.MAC_OS.isCurrent())
         	title += " - muCommander";
 
         java.util.List<MainFrame> mainFrames = WindowManager.getMainFrames();
@@ -653,7 +653,7 @@ public class MainFrame extends JFrame implements LocationListener {
         setTitle(title);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS_X.isCurrent() && OsVersion.MAC_OS_X_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getFolderPanel().getCurrentFolder();
             Object javaIoFile;

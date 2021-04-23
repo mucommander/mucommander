@@ -195,7 +195,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         northPanel.add(showHiddenFilesCheckBox);
 
         // Mac OS X-only options
-        if(OsFamily.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             // Monitor showHiddenFilesCheckBox state to disable 'show .DS_Store files' option
             // when 'Show hidden files' is disabled, as .DS_Store files are hidden files
             showHiddenFilesCheckBox.addItemListener(this);
@@ -212,7 +212,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
             northPanel.add(showDSStoreFilesCheckBox, 20);
         }
 
-        if (OsFamily.MAC_OS_X.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
+        if (OsFamily.MAC_OS.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
         	showSystemFoldersCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_system_folders")) {
         		public boolean hasChanged() {
         			return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SYSTEM_FOLDERS, MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS);
@@ -260,10 +260,10 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         compactSizeCheckBox.addDialogListener(parent);
         followSymlinksCheckBox.addDialogListener(parent);
         showTabHeaderCheckBox.addDialogListener(parent);
-        if(OsFamily.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
         	showDSStoreFilesCheckBox.addDialogListener(parent);
         }
-        if(OsFamily.MAC_OS_X.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
         	showSystemFoldersCheckBox.addDialogListener(parent);    		
         }
     }
@@ -297,11 +297,11 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
         boolean refreshFolders = MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());
         
-        if(OsFamily.MAC_OS_X.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_DS_STORE_FILES, showDSStoreFilesCheckBox.isSelected());
         }
 
-        if(OsFamily.MAC_OS_X.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
+        if(OsFamily.MAC_OS.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
         	refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());	
         }
 

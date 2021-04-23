@@ -83,7 +83,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
 
     protected void init() {
         // Mac OS X: small window borders
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS.isCurrent())
             getRootPane().putClientProperty("Window.style", "small");
 
         Container contentPane = getContentPane();
@@ -93,7 +93,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
         JLabel label = new JLabel(Translator.get("preferred_encodings")+":");
 
         // Mac OS X: small component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS.isCurrent())
             label.putClientProperty("JComponent.sizeVariant", "small");
 
         contentPane.add(label, BorderLayout.NORTH);
@@ -107,7 +107,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
         for(String enc : Charset.availableCharsets().keySet()) {
             checkbox = new JCheckBox(enc);
             // Mac OS X: component size
-            if(OsFamily.MAC_OS_X.isCurrent())
+            if(OsFamily.MAC_OS.isCurrent())
                 checkbox.putClientProperty("JComponent.sizeVariant", "small");
 
             checkboxes.add(checkbox);
@@ -123,7 +123,7 @@ public class PreferredEncodingsDialog extends FocusDialog {
 
         JButton defaultsButton = new JButton(Translator.get("reset"));
         // Mac OS X: component size
-        if(OsFamily.MAC_OS_X.isCurrent())
+        if(OsFamily.MAC_OS.isCurrent())
             defaultsButton.putClientProperty("JComponent.sizeVariant", "small");
 
         defaultsButton.addActionListener(new ActionListener(){
