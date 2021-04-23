@@ -66,14 +66,14 @@ public class UNCFile extends ProtocolFile {
     // read-write) and as such can't be changed.
 
     /** Changeable permissions mask for Java 1.6 and up, on Windows OS (any version) */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_1_6_WINDOWS = new GroupedPermissionBits(128);   // -w------- (200 octal)
+    private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_6_WINDOWS = new GroupedPermissionBits(128);   // -w------- (200 octal)
 
     /** Changeable permissions mask for Java 1.5 or below */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_1_5 = PermissionBits.EMPTY_PERMISSION_BITS;   // --------- (0)
+    private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_5 = PermissionBits.EMPTY_PERMISSION_BITS;   // --------- (0)
 
     /** Bit mask that indicates which permissions can be changed */
-    private final static PermissionBits CHANGEABLE_PERMISSIONS = JavaVersion.JAVA_1_6.isCurrentOrHigher()
-            ?CHANGEABLE_PERMISSIONS_JAVA_1_6_WINDOWS:CHANGEABLE_PERMISSIONS_JAVA_1_5;
+    private final static PermissionBits CHANGEABLE_PERMISSIONS = JavaVersion.JAVA_6.isCurrentOrHigher()
+            ?CHANGEABLE_PERMISSIONS_JAVA_6_WINDOWS:CHANGEABLE_PERMISSIONS_JAVA_5;
     
 	/**
      * Creates a new instance of UNCFile and a corresponding {@link File} instance.
@@ -197,7 +197,7 @@ public class UNCFile extends ProtocolFile {
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
         // Only the 'user' permissions under Java 1.6 are supported
-        if(access!=PermissionAccess.USER || JavaVersion.JAVA_1_6.isCurrentLower())
+        if(access!=PermissionAccess.USER || JavaVersion.JAVA_6.isCurrentLower())
             throw new IOException();
 
         boolean success = false;
@@ -579,14 +579,14 @@ public class UNCFile extends ProtocolFile {
         // read-write), but we return default values.
 
         /** Mask for supported permissions under Java 1.6 */
-        private static PermissionBits JAVA_1_6_PERMISSIONS = new GroupedPermissionBits(448);   // rwx------ (700 octal)
+        private static PermissionBits JAVA_6_PERMISSIONS = new GroupedPermissionBits(448);   // rwx------ (700 octal)
 
         /** Mask for supported permissions under Java 1.5 */
-        private static PermissionBits JAVA_1_5_PERMISSIONS = new GroupedPermissionBits(384);   // rw------- (300 octal)
+        private static PermissionBits JAVA_5_PERMISSIONS = new GroupedPermissionBits(384);   // rw------- (300 octal)
 
-        private final static PermissionBits MASK = JavaVersion.JAVA_1_6.isCurrentOrHigher()
-                ?JAVA_1_6_PERMISSIONS
-                :JAVA_1_5_PERMISSIONS;
+        private final static PermissionBits MASK = JavaVersion.JAVA_6.isCurrentOrHigher()
+                ?JAVA_6_PERMISSIONS
+                :JAVA_5_PERMISSIONS;
 
         private UNCFilePermissions(java.io.File file) {
             this.file = file;
@@ -603,7 +603,7 @@ public class UNCFile extends ProtocolFile {
             case WRITE:
             	return file.canWrite();
             case EXECUTE:
-            	if (JavaVersion.JAVA_1_6.isCurrentOrHigher())
+            	if (JavaVersion.JAVA_6.isCurrentOrHigher())
                     return file.canExecute();
             default:
             	return false;

@@ -69,7 +69,7 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
             // With this, a +x PDF file will not be opened.
             /*
             // Identifies which kind of filter should be used to match executable files.
-            if(JavaVersion.JAVA_1_6.isCurrentOrHigher())
+            if(JavaVersion.JAVA_6.isCurrentOrHigher())
                 filter = new PermissionsFileFilter(PermissionTypes.EXECUTE_PERMISSION, true);
             else
             */

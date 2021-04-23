@@ -182,7 +182,7 @@ public class DesktopManager {
         //   operations are user configurable).
         // - they are executed before any other operations (if available, they will
         //   provide safer and better integration than any other operation).
-        if(JavaVersion.JAVA_1_6.isCurrentOrHigher()) {
+        if(JavaVersion.JAVA_6.isCurrentOrHigher()) {
             innerRegisterOperation(OPEN,   SYSTEM_OPERATION,  new InternalOpen());
             innerRegisterOperation(BROWSE, SYSTEM_OPERATION,  new InternalBrowse());
         }
