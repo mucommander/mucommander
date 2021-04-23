@@ -66,8 +66,9 @@ public enum OsFamily {
      * to force the initialization if it needs to happen at a predictable time.
      */
     static {
-    	currentValue = parseSystemProperty(getRawSystemProperty());
-    	LOGGER.info("Current OS family: {}", currentValue);
+        currentValue = parseSystemProperty(getRawSystemProperty());
+        LOGGER.info("Current OS family: {}", currentValue);
+        LOGGER.info("Current OS version: {}", OsVersion.getCurrent());
     }
 
     
