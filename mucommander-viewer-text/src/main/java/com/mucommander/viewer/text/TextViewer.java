@@ -66,6 +66,8 @@ public class TextViewer extends FileViewer implements EncodingListener {
 
     private static boolean lineNumbers = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewerSnapshot.DEFAULT_LINE_NUMBERS);
 
+    private TextLineNumbersPanel lineNumbersPanel;
+
     /** Menu items */
     // Menus //
     private JMenu editMenu;
@@ -90,7 +92,9 @@ public class TextViewer extends FileViewer implements EncodingListener {
 
         setComponentToPresent(textEditorImpl.getTextArea());
 
+        initLineNumbersPanel();
         showLineNumbers(lineNumbers);
+
         textEditorImpl.wrap(lineWrap);
 
         initMenuBarItems();
@@ -220,13 +224,17 @@ public class TextViewer extends FileViewer implements EncodingListener {
     }
 
     protected void showLineNumbers(boolean show) {
-        setRowHeaderView(show ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
+        setRowHeaderView(show ? lineNumbersPanel : null);
         setLineNumbers(show);
     }
 
     protected void wrapLines(boolean wrap) {
         textEditorImpl.wrap(wrap);
         setLineWrap(wrap);
+    }
+
+    protected void initLineNumbersPanel() {
+        lineNumbersPanel = new TextLineNumbersPanel(textEditorImpl.getTextArea());
     }
 
     protected void initMenuBarItems() {
@@ -259,6 +267,7 @@ public class TextViewer extends FileViewer implements EncodingListener {
     @Override
     public void show(AbstractFile file) throws IOException {
         startEditing(file, null);
+        lineNumbersPanel.setPreferredWidth();
     }
 
     ///////////////////////////////////
