@@ -57,6 +57,8 @@ import com.mucommander.ui.viewer.FileFrame;
 class TextEditor extends FileEditor implements DocumentListener, EncodingListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TextEditor.class);
 
+    private TextLineNumbersPanel lineNumbersPanel;
+
     /** Menu bar */
     // Menus //
     private JMenu editMenu;
@@ -85,9 +87,14 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     		
     		@Override
     		protected void showLineNumbers(boolean show) {
-    			TextEditor.this.setRowHeaderView(show ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
+                TextEditor.this.setRowHeaderView(show ? TextEditor.this.lineNumbersPanel : null);
     	    }
     		
+            @Override
+            protected void initLineNumbersPanel() {
+                lineNumbersPanel = new TextLineNumbersPanel(textEditorImpl.getTextArea());
+            }
+
     		@Override
     		protected void initMenuBarItems() {
     			// Edit menu
@@ -200,7 +207,8 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
 
     @Override
     public void show(AbstractFile file) throws IOException {
-    	textViewerDelegate.startEditing(file, this);
+        textViewerDelegate.startEditing(file, this);
+        lineNumbersPanel.setPreferredWidth();
     }
     
     /////////////////////////////////////

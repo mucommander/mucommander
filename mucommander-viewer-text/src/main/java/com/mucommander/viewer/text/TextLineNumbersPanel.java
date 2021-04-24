@@ -147,7 +147,7 @@ public class TextLineNumbersPanel extends JPanel implements CaretListener, Docum
 	/**
 	 *  Calculate the width needed to display the maximum line number
 	 */
-	private void setPreferredWidth() {
+	protected void setPreferredWidth() {
 		Element root = component.getDocument().getDefaultRootElement();
 		int lines = root.getElementCount();
 		int digits = Math.max(String.valueOf(lines).length(), minimumDisplayDigits);
