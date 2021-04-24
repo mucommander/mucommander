@@ -262,7 +262,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
                 return MAC_OS_10_0;
 
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_10_14;
+            return MAC_OS_10_15;
         }
 
         return OsVersion.UNKNOWN_VERSION;
