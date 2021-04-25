@@ -150,7 +150,7 @@ public class TextLineNumbersPanel extends JPanel implements CaretListener, Docum
 	protected void setPreferredWidth() {
 		Element root = component.getDocument().getDefaultRootElement();
 		int lines = root.getElementCount();
-		int digits = Math.max(String.valueOf(lines).length(), minimumDisplayDigits);
+		int digits = Math.max(String.valueOf(lines).length() + 2, minimumDisplayDigits);
 
 		//  Update sizes when number of digits in the line number changes
 		if (lastDigits != digits) {
