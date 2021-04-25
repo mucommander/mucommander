@@ -88,6 +88,7 @@ class TextEditor extends FileEditor implements DocumentListener, EncodingListene
     		@Override
     		protected void showLineNumbers(boolean show) {
                 TextEditor.this.setRowHeaderView(show ? TextEditor.this.lineNumbersPanel : null);
+                setLineNumbers(show);
     	    }
     		
             @Override
