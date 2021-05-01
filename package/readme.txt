@@ -46,6 +46,8 @@ Improvements:
 - Local folders are automatically refreshed also on file systems in which their modification date doesn't
   change when their content changes, like USB folders on macOS.
 - Detect Java versions 14 to 17.
+- The initial width of the built-in text viewer/editor is better calculated for files that contain more than 10k lines.
+- The visiblity of line numbers is persisted across invocations of the built-in text editor.
 
 Localization:
 - Korean translation updated.
