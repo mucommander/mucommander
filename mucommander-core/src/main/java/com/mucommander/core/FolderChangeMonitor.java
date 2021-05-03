@@ -132,7 +132,6 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     }
 
     public FolderChangeMonitor(FolderPanel folderPanel) {
-
         this.folderPanel = folderPanel;
 
         // Listen to folder changes to know when a folder is being / has been changed
@@ -146,15 +145,17 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         folderPanel.getMainFrame().addWindowFocusListener(this);
 
         instances.add(this);
+        init();
+    }
 
+    public void init() {
         // Create and start the monitor thread on first FolderChangeMonitor instance
-        if(monitorThread==null && checkPeriod>=0) {
+        if (monitorThread==null && checkPeriod>=0) {
             monitorThread = new Thread(this, getClass().getName());
             monitorThread.setDaemon(true);
             monitorThread.start();
         }
     }
-
 	
     public void run() {
         // TODO: it would be more efficient to use a wait/notify scheme rather than sleeping. 
@@ -253,9 +254,8 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         totalCheckTime += System.currentTimeMillis()-timeStamp;
         nbSamples++;
 
-        if (!changed) {
+        if (!changed)
             return false;
-        }
 
         LOGGER.debug(this+" ("+currentFolder.getName()+") Detected changes in current folder, refreshing table!");
         return true;
