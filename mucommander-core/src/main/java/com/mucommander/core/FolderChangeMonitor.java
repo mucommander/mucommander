@@ -20,8 +20,9 @@ package com.mucommander.core;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +105,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private static boolean forceRefresh;
 
     static {
-        instances = new Vector<FolderChangeMonitor>();
+        instances = new ArrayList<>();
 
         // Retrieve configuration values
         checkPeriod = MuConfigurations.getPreferences().getVariable(MuPreference.REFRESH_CHECK_PERIOD,
@@ -140,15 +141,21 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Folder contents is up-to-date let's wait before checking it for changes
         this.lastCheckTimestamp = System.currentTimeMillis();
         this.waitBeforeCheckTime = waitAfterRefresh;
-		
+
+        // Listen to window changes to know when a folder panel is disposed
         folderPanel.getMainFrame().addWindowListener(this);
-        folderPanel.getMainFrame().addWindowFocusListener(this);
+
+        // Listen to window focus changes to know when a MainFrame gains focus and make sure
+        // that only one instance of FolderChangeMonitor is registered per MainFrame (no need for both panels)
+        WindowFocusListener[] listeners = folderPanel.getMainFrame().getWindowFocusListeners();
+        if (!Arrays.stream(listeners).anyMatch(l -> l instanceof FolderChangeMonitor))
+            folderPanel.getMainFrame().addWindowFocusListener(this);
 
         instances.add(this);
-        init();
+        initMonitoringThread();
     }
 
-    public void init() {
+    private void initMonitoringThread() {
         // Create and start the monitor thread on first FolderChangeMonitor instance
         if (monitorThread==null && checkPeriod>=0) {
             monitorThread = new Thread(this, getClass().getName());
