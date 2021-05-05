@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v0.9.7
+muCommander v0.9.8
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,39 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.9.6 ?
+What's new since v0.9.7 ?
 -----------------------
 
 New features:
-- Add Dropbox as a file protocol (including browsing, uploading and downloading capabilities).
-- Add an option to use a file viewer when failing to open a file.
+-
 
 Improvements:
-- Accelerate copying to remote servers using SFTP.
-- Invert selection also applies to directories now.
-- Set initial look and feel to "GTK+" on Linux as it better handles scaling for HiDPI.
-- Non-browsable initial locations that are specified by command line arguments are selected on startup.
-- Store user-files in '$XDG_CONFIG_HOME/mucommander' if environment variable XDG_CONFIG_HOME is set on Linux.
-- Create Felix cache directory within the system's temporary folder instead of within the installation folder.
-- Write logs also to file in order to ease debugging.
-- Local folders are automatically refreshed also on file systems in which their modification date doesn't
-  change when their content changes, like USB folders on macOS.
-- Detect Java versions 14 to 17.
-- The initial width of the built-in text viewer/editor is better calculated for files that contain more than 10k lines.
-- The visiblity of line numbers is persisted across invocations of the built-in text editor.
-- Add the refresh action to the file table's context menu.
-- When switching back to muCommander, the presented folders are immediately refreshed.
+-
 
 Localization:
-- Korean translation updated.
+-
 
 Bug fixes:
-- File-search returns matches in the root folder of the search when search-subfolders is disabled.
-- Fixed an issue that might cause file-search with case insensitive text search not to return all matches.
-- The application can start by a non-admin user after it started by an admin user.
-- The application can start with an inaccessible location at the right panel.
-- Files are transferred properly when the destination folder is not presented in the other panel.
-- Use the correct file viewer/editor when a warning is raised.
+-
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
