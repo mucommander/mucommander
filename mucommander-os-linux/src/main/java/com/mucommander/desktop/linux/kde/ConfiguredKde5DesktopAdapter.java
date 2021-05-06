@@ -22,7 +22,7 @@ package com.mucommander.desktop.linux.kde;
  * <code>KDE_SESSION_VERSION</code> environment variable that was introduced in KDE 4.
  * The variable contains major KDE version
  *
- * @author Maxence Bernard
+ * @author Vadim Kalinnikov
  */
 public class ConfiguredKde5DesktopAdapter extends Kde5DesktopAdapter {
 
