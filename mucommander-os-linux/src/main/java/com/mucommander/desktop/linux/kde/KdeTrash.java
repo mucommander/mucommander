@@ -43,19 +43,21 @@ import com.mucommander.process.ProcessRunner;
 class KdeTrash extends QueuedTrash {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KdeTrash.class);
 	
-    /** Command that empties the trash */
-    private final static String EMPTY_TRASH_COMMAND = "ktrash --empty";
-
     /** Command that allows to interact with the trash */
     private String baseCommand;
+
+    /** Command that allows to interact with the trash */
+    private String trashCommand;
 
     /**
      * Creates a new <code>KDETrash</code> instance using the specified command for interacting with the trash.
      *
      * @param baseCommand command that allows to interact with the trash.
+     * @param trashCommand command that allows to interact with the trash.
      */
-    KdeTrash(String baseCommand) {
+    KdeTrash(String baseCommand, String trashCommand) {
         this.baseCommand = baseCommand;
+        this.trashCommand = trashCommand;
     }
 
     /**
@@ -116,7 +118,7 @@ class KdeTrash extends QueuedTrash {
 
     @Override
     public boolean empty() {
-        return executeAndWait(EMPTY_TRASH_COMMAND);
+        return executeAndWait(trashCommand+" --empty");
     }
 
     @Override
