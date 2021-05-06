@@ -29,6 +29,7 @@ import com.mucommander.desktop.linux.gnome.ConfiguredGnomeDesktopAdapter;
 import com.mucommander.desktop.linux.gnome.GuessedGnomeDesktopAdapter;
 import com.mucommander.desktop.linux.kde.ConfiguredKde3DesktopAdapter;
 import com.mucommander.desktop.linux.kde.ConfiguredKde4DesktopAdapter;
+import com.mucommander.desktop.linux.kde.ConfiguredKde5DesktopAdapter;
 import com.mucommander.desktop.linux.kde.GuessedKde3DesktopAdapter;
 import com.mucommander.desktop.linux.kde.GuessedKde4DesktopAdapter;
 import com.mucommander.desktop.linux.xfce.GuessedXfceDesktopAdapter;
@@ -53,6 +54,7 @@ public class Activator implements BundleActivator  {
                         new GuessedGnomeDesktopAdapter(),
                         new ConfiguredKde3DesktopAdapter(),
                         new ConfiguredKde4DesktopAdapter(),
+                        new ConfiguredKde5DesktopAdapter(),
                         new ConfiguredGnomeDesktopAdapter());
             }
         };

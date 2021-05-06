@@ -34,18 +34,28 @@
 
 package com.mucommander.desktop.linux.kde;
 
-import com.mucommander.desktop.AbstractTrash;
-import com.mucommander.desktop.TrashProvider;
+import com.mucommander.process.ProcessRunner;
 
 /**
- * This class is a trash provider for the {@link KdeTrash KDE 3 trash}.
+ * 'Guessed' desktop adapter for KDE 5. The availability of this desktop depends on the presence of the
+ * <code>kioclient5</code> command.
  *
- * @see KdeTrash
  * @author Maxence Bernard
  */
-class Kde4TrashProvider implements TrashProvider {
+public class GuessedKde4DesktopAdapter extends Kde5DesktopAdapter {
 
-    public AbstractTrash getTrash() {
-        return new KdeTrash(Kde4DesktopAdapter.BASE_COMMAND, Kde4DesktopAdapter.TRASH_COMMAND);
+    public String toString() {
+        return "KDE 5 Desktop (guessed)";
+    }
+
+    @Override
+    public boolean isAvailable() {
+        try {
+            ProcessRunner.execute(BASE_COMMAND);
+            return true;
+        }
+        catch(Exception e) {
+            return false;
+        }
     }
 }
