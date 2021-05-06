@@ -40,7 +40,7 @@ import com.mucommander.process.ProcessRunner;
  * 'Guessed' desktop adapter for KDE 5. The availability of this desktop depends on the presence of the
  * <code>kioclient5</code> command.
  *
- * @author Maxence Bernard
+ * @author Vadim Kalinnikov
  */
 public class GuessedKde5DesktopAdapter extends Kde5DesktopAdapter {
 

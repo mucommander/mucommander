@@ -24,7 +24,7 @@ import com.mucommander.desktop.TrashProvider;
  * This class is a trash provider for the {@link KdeTrash KDE 3 trash}.
  *
  * @see KdeTrash
- * @author Maxence Bernard
+ * @author Vadim Kalinnikov
  */
 class Kde5TrashProvider implements TrashProvider {
 
