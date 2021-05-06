@@ -20,7 +20,7 @@ package com.mucommander.desktop.linux.kde;
 import com.mucommander.desktop.TrashProvider;
 
 /**
- * @author Maxence Bernard
+ * @author Vadim Kalinnikov
  */
 abstract class Kde5DesktopAdapter extends KdeDesktopAdapter {
 
