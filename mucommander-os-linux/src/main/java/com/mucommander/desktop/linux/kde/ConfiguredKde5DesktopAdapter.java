@@ -17,29 +17,24 @@
 
 package com.mucommander.desktop.linux.kde;
 
-import com.mucommander.desktop.TrashProvider;
-
 /**
+ * 'Configured' desktop adapter for KDE 5. The availability of this desktop depends on the presence of the
+ * <code>KDE_SESSION_VERSION</code> environment variable that was introduced in KDE 4.
+ * The variable contains major KDE version
+ *
  * @author Maxence Bernard
  */
-abstract class Kde3DesktopAdapter extends KdeDesktopAdapter {
+public class ConfiguredKde5DesktopAdapter extends Kde5DesktopAdapter {
 
-    static String BASE_COMMAND = "kfmclient";
+    private static final String KDE_SESSION_VERSION_VAR = "KDE_SESSION_VERSION";
 
-    static String TRASH_COMMAND = "ktrash";
-
-    @Override
-    protected String getFileManagerName() {
-        return "Konqueror";
+    public String toString() {
+        return "KDE 5 Desktop";
     }
 
     @Override
-    protected String getBaseCommand() {
-        return BASE_COMMAND;
-    }
-
-    @Override
-    public TrashProvider getTrash() {
-        return new Kde3TrashProvider();
+    public boolean isAvailable() {
+        String var = getConfiguredEnvVariable(KDE_SESSION_VERSION_VAR);
+        return var!=null && !var.trim().equals("") && var.trim().equals("5");
     }
 }
