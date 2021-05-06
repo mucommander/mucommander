@@ -42,7 +42,7 @@ import com.mucommander.process.ProcessRunner;
  *
  * @author Maxence Bernard
  */
-public class GuessedKde4DesktopAdapter extends Kde5DesktopAdapter {
+public class GuessedKde5DesktopAdapter extends Kde5DesktopAdapter {
 
     public String toString() {
         return "KDE 5 Desktop (guessed)";
