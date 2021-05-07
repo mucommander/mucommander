@@ -47,17 +47,17 @@ class KdeTrash extends QueuedTrash {
     private String baseCommand;
 
     /** Command that allows to interact with the trash */
-    private String trashCommand;
+    private String trashEmptyCommand;
 
     /**
      * Creates a new <code>KDETrash</code> instance using the specified command for interacting with the trash.
      *
      * @param baseCommand command that allows to interact with the trash.
-     * @param trashCommand command that allows to interact with the trash.
+     * @param trashEmptyCommand command that allows to empty trash.
      */
-    KdeTrash(String baseCommand, String trashCommand) {
+    KdeTrash(String baseCommand, String trashEmptyCommand) {
         this.baseCommand = baseCommand;
-        this.trashCommand = trashCommand;
+        this.trashEmptyCommand = trashEmptyCommand;
     }
 
     /**
@@ -118,7 +118,7 @@ class KdeTrash extends QueuedTrash {
 
     @Override
     public boolean empty() {
-        return executeAndWait(trashCommand+" --empty");
+        return executeAndWait(trashEmptyCommand);
     }
 
     @Override

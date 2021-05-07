@@ -26,7 +26,7 @@ abstract class Kde5DesktopAdapter extends KdeDesktopAdapter {
 
     static String BASE_COMMAND = "kioclient5";
 
-    static String TRASH_COMMAND = "ktrash5";
+    static String TRASH_EMPTY_COMMAND = "ktrash5 --empty";
 
     @Override
     protected String getFileManagerName() {
