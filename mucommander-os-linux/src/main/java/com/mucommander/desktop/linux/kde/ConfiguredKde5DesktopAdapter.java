@@ -35,6 +35,6 @@ public class ConfiguredKde5DesktopAdapter extends Kde5DesktopAdapter {
     @Override
     public boolean isAvailable() {
         String var = getConfiguredEnvVariable(KDE_SESSION_VERSION_VAR);
-        return var!=null && !var.trim().equals("") && var.trim().equals("5");
+        return "5".equals(var);
     }
 }

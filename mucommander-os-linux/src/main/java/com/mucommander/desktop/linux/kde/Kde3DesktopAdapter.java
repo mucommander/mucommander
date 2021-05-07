@@ -26,7 +26,7 @@ abstract class Kde3DesktopAdapter extends KdeDesktopAdapter {
 
     static String BASE_COMMAND = "kfmclient";
 
-    static String TRASH_COMMAND = "ktrash";
+    static String TRASH_EMPTY_COMMAND = "ktrash --empty";
 
     @Override
     protected String getFileManagerName() {
