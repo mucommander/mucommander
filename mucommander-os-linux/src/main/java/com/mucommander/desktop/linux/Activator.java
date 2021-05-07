@@ -51,6 +51,7 @@ public class Activator implements BundleActivator  {
                         new GuessedXfceDesktopAdapter(),
                         new GuessedKde3DesktopAdapter(),
                         new GuessedKde4DesktopAdapter(),
+                        new GuessedKde5DesktopAdapter(),
                         new GuessedGnomeDesktopAdapter(),
                         new ConfiguredKde3DesktopAdapter(),
                         new ConfiguredKde4DesktopAdapter(),

@@ -46,6 +46,6 @@ import com.mucommander.desktop.TrashProvider;
 class Kde4TrashProvider implements TrashProvider {
 
     public AbstractTrash getTrash() {
-        return new KdeTrash(Kde4DesktopAdapter.BASE_COMMAND, Kde4DesktopAdapter.TRASH_COMMAND);
+        return new KdeTrash(Kde4DesktopAdapter.BASE_COMMAND, Kde4DesktopAdapter.TRASH_EMPTY_COMMAND);
     }
 }

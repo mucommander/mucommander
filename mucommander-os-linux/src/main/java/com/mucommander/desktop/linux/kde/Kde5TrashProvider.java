@@ -21,7 +21,7 @@ import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.TrashProvider;
 
 /**
- * This class is a trash provider for the {@link KdeTrash KDE 3 trash}.
+ * This class is a trash provider for the {@link KdeTrash KDE 5 trash}.
  *
  * @see KdeTrash
  * @author Vadim Kalinnikov
@@ -29,6 +29,6 @@ import com.mucommander.desktop.TrashProvider;
 class Kde5TrashProvider implements TrashProvider {
 
     public AbstractTrash getTrash() {
-        return new KdeTrash(Kde5DesktopAdapter.BASE_COMMAND, Kde5DesktopAdapter.TRASH_COMMAND);
+        return new KdeTrash(Kde5DesktopAdapter.BASE_COMMAND, Kde5DesktopAdapter.TRASH_EMPTY_COMMAND);
     }
 }
