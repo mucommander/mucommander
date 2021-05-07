@@ -32,6 +32,7 @@ import com.mucommander.desktop.linux.kde.ConfiguredKde4DesktopAdapter;
 import com.mucommander.desktop.linux.kde.ConfiguredKde5DesktopAdapter;
 import com.mucommander.desktop.linux.kde.GuessedKde3DesktopAdapter;
 import com.mucommander.desktop.linux.kde.GuessedKde4DesktopAdapter;
+import com.mucommander.desktop.linux.kde.GuessedKde5DesktopAdapter;
 import com.mucommander.desktop.linux.xfce.GuessedXfceDesktopAdapter;
 import com.mucommander.osgi.OperatingSystemService;
 
