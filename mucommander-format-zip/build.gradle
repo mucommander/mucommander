@@ -27,7 +27,7 @@ jar {
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-URL': "https://www.mucommander.com/version/nightly.xml",
+        'Build-URL': "https://www.mucommander.com/version/version.xml",
         'Bundle-Activator': 'com.mucommander.commons.file.archive.zip.Activator')
 }
 
