@@ -416,7 +416,7 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     from ('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
-    into "muCommander-$archiveVersion"
+    into ""
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
         exclude 'osgiaas*'
