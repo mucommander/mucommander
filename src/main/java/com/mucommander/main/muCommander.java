@@ -237,9 +237,6 @@ public class muCommander
         }
         File codeParentFolder = codeLocation.getParent().toFile();
 
-        File confFolder = new File(codeParentFolder, "conf");
-        System.setProperty("logback.configurationFile", new File(confFolder, "logback.xml").getAbsolutePath());
-
         // Load system properties.
         muCommander.loadSystemProperties();
 
@@ -275,6 +272,11 @@ public class muCommander
         );
 
         configProps.computeIfAbsent(AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY, key -> new File(codeParentFolder, "bundle").getAbsolutePath());
+
+        configProps.computeIfAbsent("mucommander.conf.dir", key -> new File(codeParentFolder, "conf").getAbsolutePath());
+
+        String confDir = configProps.get("mucommander.conf.dir");
+        System.setProperty("logback.configurationFile", new File(confDir, "logback.xml").getAbsolutePath());
 
         configProps.computeIfAbsent("mucommander.app.dir", key -> new File(codeParentFolder, "app").getAbsolutePath());
 
