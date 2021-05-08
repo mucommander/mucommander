@@ -449,7 +449,7 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
     from ('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
-    into "."
+    into ""
 
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
@@ -466,7 +466,7 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         into 'conf'
     }
 
-    archiveExtension = 'tar.gz'
+    archiveExtension = 'tgz'
     compression = Compression.GZIP
     archiveVersion = project.version+'-'+project.ext.release
 }
