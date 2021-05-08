@@ -43,7 +43,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
     private MainFrame mainFrame;
 
-    private JList connectionList;
+    private JList<String> connectionList;
     private java.util.List<ConnectionHandler> connections;
 
     private JButton disconnectButton;
@@ -68,19 +68,24 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
         connections = ConnectionPool.getConnectionHandlersSnapshot();
 
-        connectionList = new JList(new AbstractListModel() {
+        connectionList = new JList<>(new AbstractListModel<String>() {
+            @Override
             public int getSize() {
                 return connections.size();
             }
 
-            public Object getElementAt(int i) {
+            @Override
+            public String getElementAt(int i) {
                 ConnectionHandler connHandler = connections.get(i);
 
                 // Show login (but not password) in the URL
                 // Note: realm returned by ConnectionHandler does not contain credentials
                 FileURL clonedRealm = (FileURL)connHandler.getRealm().clone();
-                Credentials loginCredentials = new Credentials(connHandler.getCredentials().getLogin(), "");
-                clonedRealm.setCredentials(loginCredentials);
+                Credentials credentials = connHandler.getCredentials();
+                if (credentials != null) {
+                    Credentials loginCredentials = new Credentials(credentials.getLogin(), "");
+                    clonedRealm.setCredentials(loginCredentials);
+                }
 
                 return clonedRealm.toString(true)
                         +" ("+Translator.get(connHandler.isLocked()?"server_connections_dialog.connection_busy":"server_connections_dialog.connection_idle")+")";
