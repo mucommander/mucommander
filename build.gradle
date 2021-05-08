@@ -124,6 +124,7 @@ runOsgi {
         'org.osgi.framework.storage': 'felix-cache',
         'felix.auto.deploy.dir': 'bundle',
         'mucommander.app.dir': 'app',
+        'mucommander.conf.dir': 'conf',
     ]
     wrapInstructions {
         manifest("httpclient.*") {
@@ -209,6 +210,10 @@ ospackage {
     from ("$buildDir/osgi/app") {
         include '*.jar'
         into '/usr/share/mucommander/app'
+    }
+    from ("$buildDir/osgi/conf") {
+        include '*'
+        into '/usr/share/mucommander/conf'
     }
     from ('mucommander-core/src/main/resources/images/mucommander') {
         include 'icon128_24.png'
@@ -388,6 +393,10 @@ task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
         exclude 'mucommander-os-openvms*'
         into "bundle"
     }
+    from("$buildDir/osgi/conf") {
+        include '*'
+        into "conf"
+    }
     into "$buildDir/tmp/nsis"
 }
 
@@ -418,6 +427,10 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
         include '*.jar'
         into 'app'
     }
+    from ("$buildDir/osgi/conf") {
+        include '*'
+        into 'conf'
+    }
 
     archiveClassifier = 'portable'
     archiveVersion = project.version+'-'+project.ext.release
@@ -447,6 +460,10 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
     from ("$buildDir/osgi/app") {
         include '*.jar'
         into 'app'
+    }
+    from ("$buildDir/osgi/conf") {
+        include '*'
+        into 'conf'
     }
 
     archiveExtension = 'tar.gz'
