@@ -237,6 +237,9 @@ public class muCommander
         }
         File codeParentFolder = codeLocation.getParent().toFile();
 
+        File confFolder = new File(codeParentFolder, "conf");
+        System.setProperty("logback.configurationFile", new File(confFolder, "logback.xml").getAbsolutePath());
+
         // Load system properties.
         muCommander.loadSystemProperties();
 
