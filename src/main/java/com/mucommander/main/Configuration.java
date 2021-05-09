@@ -17,10 +17,10 @@
 
 package com.mucommander.main;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.beust.jcommander.Parameter;
@@ -28,7 +28,7 @@ import com.beust.jcommander.Parameter;
 /**
  * @author Arik Hadas
  */
-public class Configuration extends AbstractMap<String, String> {
+public class Configuration {
 
     /** Whether or not to display verbose error messages. */
     @Parameter(names={"-S", "--silent"}, description="Do not print verbose error messages")
@@ -75,7 +75,6 @@ public class Configuration extends AbstractMap<String, String> {
     @Parameter(description="[folders]")
     public List<String> folders = new ArrayList<>();
 
-    @Override
     public Set<Entry<String, String>> entrySet() {
         Set<Entry<String, String>> set = new LinkedHashSet<>();
         set.add(toEntry("mucommander.silent", Boolean.toString(silent)));

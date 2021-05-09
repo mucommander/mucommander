@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.AbstractMap;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -311,7 +312,12 @@ public class muCommander
         System.setProperty("MUCOMMANDER_USER_PREFERENCES", configuration.preferences);
 
         // Copy configuration provided by command line arguments
-        configProps.putAll(configuration);
+        configProps.putAll(new AbstractMap<String,String>() {
+            @Override
+            public java.util.Set<Map.Entry<String,String>> entrySet() {
+                return configuration.entrySet();
+            }
+        });
 
         // If enabled, register a shutdown hook to make sure the framework is
         // cleanly shutdown when the VM exits.
