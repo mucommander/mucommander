@@ -18,8 +18,7 @@
 
 package com.mucommander.job.impl;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.ProxyFile;
+import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
@@ -49,14 +48,10 @@ import java.util.List;
  */
 public class UnpackJob extends AbstractCopyJob {
 
-    /**
-     * Archive entries to be unpacked
-     */
+    /** Archive entries to be unpacked */
     protected List<ArchiveEntry> selectedEntries;
 
-    /**
-     * Depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder)
-     */
+    /** Depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder) */
     protected int baseArchiveDepth;
 
 
@@ -66,10 +61,10 @@ public class UnpackJob extends AbstractCopyJob {
      * The base destination folder will be created if it doesn't exist.
      * </p>
      *
-     * @param progressDialog   dialog which shows this job's progress
-     * @param mainFrame        mainFrame this job has been triggered by
-     * @param files            files which are going to be unpacked
-     * @param destFolder       destination folder where the files will be copied
+     * @param progressDialog dialog which shows this job's progress
+     * @param mainFrame mainFrame this job has been triggered by
+     * @param files files which are going to be unpacked
+     * @param destFolder destination folder where the files will be copied
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
     public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, int fileExistsAction) {
@@ -82,11 +77,11 @@ public class UnpackJob extends AbstractCopyJob {
     /**
      * Creates a new UnpackJob without starting it.
      *
-     * @param progressDialog   dialog which shows this job's progress
-     * @param mainFrame        mainFrame this job has been triggered by
-     * @param archiveFile      the archive file which is going to be unpacked
-     * @param destFolder       destination folder where the files will be copied
-     * @param newName          the new filename in the destination folder, if <code>null</code> the original filename will be used
+     * @param progressDialog dialog which shows this job's progress
+     * @param mainFrame mainFrame this job has been triggered by
+     * @param archiveFile the archive file which is going to be unpacked
+     * @param destFolder destination folder where the files will be copied
+     * @param newName the new filename in the destination folder, if <code>null</code> the original filename will be used
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      * @param selectedEntries  entries to be unpacked
      * @param baseArchiveDepth depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder)
@@ -133,7 +128,7 @@ public class UnpackJob extends AbstractCopyJob {
      * Unpacks the given archive file. If the file is a directory, its children will be processed recursively.
      * If the file is not an archive file nor a directory, it is not processed and <code>false</code> is returned.
      *
-     * @param file          the file to unpack
+     * @param file the file to unpack
      * @param recurseParams unused
      * @return <code>true</code> if the file has been processed successfully
      */
