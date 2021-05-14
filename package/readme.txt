@@ -38,7 +38,7 @@ Improvements:
 -
 
 Localization:
--
+Updated Russian translation
 
 Bug fixes:
 -
