@@ -38,10 +38,10 @@ Improvements:
 -
 
 Localization:
-Updated Russian translation
+- Updated Russian translation
 
 Bug fixes:
--
+- Fix installation using GDebi Package Installer
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
