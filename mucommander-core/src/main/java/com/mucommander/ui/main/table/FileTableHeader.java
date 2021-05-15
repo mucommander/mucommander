@@ -38,9 +38,24 @@ public class FileTableHeader extends JTableHeader {
     public FileTableHeader(FileTable table) {
         super(table.getColumnModel());
 
-        addMouseListener(new MouseAdapter() {
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            private transient short counter;
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
+                counter = 0;
+            }
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                ++counter;
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // if we get more than 3 mouseDragged events since the mousePressed event,
+                // we will not process the mouseReleased event here. Otherwise, we treat
+                // the mouseReleased event as mouseClicked event
+                if (counter > 3)
+                    return;
+
                 table.requestFocus();
 
                 // One of the table headers was left-clicked, sort the table by the clicked column's criterion
@@ -81,7 +96,9 @@ public class FileTableHeader extends JTableHeader {
                     popupMenu.setVisible(true);
                 }
             }
-        });
+        };
+        addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
     }
 
 
