@@ -233,7 +233,7 @@ ospackage {
 // RPM packaging
 buildRpm {
     dependsOn createBundlesDir
-    suggests('java-11-openjdk')
+    requires('java')
     os = LINUX
 }
 
