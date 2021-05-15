@@ -35,7 +35,7 @@ New features:
 -
 
 Improvements:
--
+- Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
 
 Localization:
 - Updated Russian translation
