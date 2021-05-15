@@ -78,7 +78,7 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
         compPanel.addRow(Translator.get("name")+":", nameField, 10);
 		
         // Add URL field, non editable
-        this.locationField = new JTextField(currentFolder.getCanonicalPath());
+        this.locationField = new JTextField(currentFolder.getAbsolutePath());
         compPanel.addRow(Translator.get("location")+":", locationField, 10);
 
         mainPanel.add(compPanel);

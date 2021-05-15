@@ -37,6 +37,7 @@ New features:
 Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
 - Require non-headless Java when installing from RPM.
+- Use absolute path rather than canonical path in bookmarks to avoid resolving symbolic links.
 
 Localization:
 - Updated Russian translation
