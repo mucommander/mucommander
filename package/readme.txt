@@ -36,6 +36,7 @@ New features:
 
 Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
+- Require non-headless Java when installing from RPM.
 
 Localization:
 - Updated Russian translation
