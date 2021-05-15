@@ -16,7 +16,7 @@
  */
 
 
-package com.mucommander.cache;
+package com.mucommander.commons.util.cache;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -46,7 +46,6 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
 
     /** Number of millisecond to wait between 2 expired items purges, if cache is not full */
     private final static int PURGE_EXPIRED_DELAY = 1000;
-		
 
     public FastLRUCache(int capacity) {
         super(capacity);

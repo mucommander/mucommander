@@ -39,11 +39,11 @@ import javax.swing.SwingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.cache.FastLRUCache;
-import com.mucommander.cache.LRUCache;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.cache.FastLRUCache;
+import com.mucommander.commons.util.cache.LRUCache;
 import com.mucommander.commons.util.ui.border.MutableLineBorder;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
