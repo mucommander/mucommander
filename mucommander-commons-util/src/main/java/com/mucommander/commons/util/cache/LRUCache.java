@@ -44,8 +44,8 @@ import org.slf4j.LoggerFactory;
  * @author Maxence Bernard
  */
 public abstract class LRUCache<K, V> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LRUCache.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(LRUCache.class);
+
     /** Cache capacity: maximum number of items this cache can contain */
     protected int capacity;
 
@@ -115,7 +115,7 @@ public abstract class LRUCache<K, V> {
      * found or has expired
      */
     public abstract V get(K key);
-	
+
     /**
      * Adds a new key/value pair to the cache and marks it as the most recently used.
      *
@@ -139,13 +139,13 @@ public abstract class LRUCache<K, V> {
     public synchronized void add(K key, V value) {
         add(key, value, -1);
     }
-	
+
 
     /**
      * Removes all items from this cache, leaving the cache in the same state as when it was just created.
      */
     public abstract void clearAll();
-		
+
 
     /**
      * Returns the current size of this cache, i.e. the number of cached elements it contains.
@@ -163,7 +163,7 @@ public abstract class LRUCache<K, V> {
      * Tests this LRUCache for corruption and throws a RuntimeException if something is wrong.
      */
     protected abstract void testCorruption() throws RuntimeException;
-	
+
 
     /**
      * Test method : simple test case + stress/sanity test
@@ -182,7 +182,7 @@ public abstract class LRUCache<K, V> {
 
         System.out.println("get(orange)= "+cache.get("orange"));
         System.out.println(cache.toString());
-		
+
         cache.add("apricot", "APRICOT");
         System.out.println(cache.toString());
 
@@ -196,7 +196,7 @@ public abstract class LRUCache<K, V> {
         System.out.println("get(banana)= "+cache.get("banana"));
 
         System.out.println(cache.toString());
-        */
+         */
 
         long timeStamp = System.currentTimeMillis();
 
@@ -215,7 +215,7 @@ public abstract class LRUCache<K, V> {
                 //				System.out.println("cache.get()");
                 cache.get(random.nextInt(capacity));
             }
-		
+
             try {
                 // Test the cache for corruption
                 cache.testCorruption();

@@ -50,12 +50,12 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
     public FastLRUCache(int capacity) {
         super(capacity);
         this.cacheMap = new LinkedHashMap<K, Object[]>(16, 0.75f, true) {
-                // Override this method to automatically remove eldest entry before insertion when cache is full
-                @Override
-                protected final boolean removeEldestEntry(Map.Entry<K, Object[]> eldest) {
-                    return cacheMap.size() > FastLRUCache.this.capacity;
-                }
-            };
+            // Override this method to automatically remove eldest entry before insertion when cache is full
+            @Override
+            protected final boolean removeEldestEntry(Map.Entry<K, Object[]> eldest) {
+                return cacheMap.size() > FastLRUCache.this.capacity;
+            }
+        };
     }
 
 
@@ -73,10 +73,10 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
             value = mapEntry.getValue();
             s += (i++)+"- key="+key+" value="+value[0]+" expirationDate="+value[1]+"\n";
         }
-		
+
         if(UPDATE_CACHE_COUNTERS)
             s += "nbCacheHits="+nbHits+" nbCacheMisses="+nbMisses+"\n";
-		
+
         return s;
     }
 
@@ -100,7 +100,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
         // Iterate on all cached values
         while(iterator.hasNext()) {
             expirationDateL = (Long)iterator.next()[1];
-			
+
             // No expiration date for this value
             if(expirationDateL==null)
                 continue;
@@ -116,7 +116,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
                 this.eldestExpirationDate = expirationDate;
             }
         }
-		
+
         // Set last purge timestamp to now
         lastExpiredPurge = now;
     }
@@ -152,7 +152,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
             cacheMap.remove(key);
             return null;
         }
-			
+
 
         if(UPDATE_CACHE_COUNTERS)
             nbHits++;	// Increase cache hit counter
@@ -160,7 +160,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
         return (V)value[0];
     }
 
-	
+
     @Override
     public synchronized void add(K key, V value, long timeToLive) {
         // Look for expired items and purge them (if any)
@@ -189,14 +189,14 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
         return cacheMap.size();
     }
 
-	
+
     @Override
     public synchronized void clearAll() {
         cacheMap.clear();
         eldestExpirationDate = Long.MAX_VALUE;
     }
-	
-	
+
+
     //////////////////
     // Test methods //
     //////////////////
@@ -218,11 +218,11 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
             expirationDateL = (Long)value[1];
             if(expirationDateL==null)
                 continue;
-			
+
             expirationDate = expirationDateL;
             if(expirationDate<eldestExpirationDate)
                 throw new RuntimeException("cache corrupted: expiration date for key="+key+" older than eldestExpirationDate");
         }
     }
-	
+
 }
