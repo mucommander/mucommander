@@ -163,7 +163,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
             } else {
                 search.stop();
                 if (killed)
-                    setCurrentFolderDismissException(false);
+                    setCurrentFolderDismissException();
             }
         }
 
@@ -178,9 +178,9 @@ public class SearchUpdaterThread extends ChangeFolderThread {
         locationChanger.setCurrentFolder(search, null, changeLockedTab, fireLocationChanged);
     }
 
-    private void setCurrentFolderDismissException(boolean fireLocationChanged) {
+    private void setCurrentFolderDismissException() {
         try {
-            setCurrentFolder(fireLocationChanged);
+            setCurrentFolder(false);
         } catch (IOException e) {
             LOGGER.debug("failed to set current folder", e);
         }
