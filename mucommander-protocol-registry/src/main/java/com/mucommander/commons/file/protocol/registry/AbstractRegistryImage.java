@@ -26,6 +26,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
@@ -65,11 +66,11 @@ public abstract class AbstractRegistryImage extends ProtocolFile implements Conn
 
 	@Override
 	public long getDate() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
 	}
@@ -91,6 +92,7 @@ public abstract class AbstractRegistryImage extends ProtocolFile implements Conn
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled)
 			throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
@@ -132,51 +134,62 @@ public abstract class AbstractRegistryImage extends ProtocolFile implements Conn
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public void mkdir() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);		
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.READ_FILE);
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public OutputStream getOutputStream() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public OutputStream getAppendOutputStream() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public RandomAccessInputStream getRandomAccessInputStream() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public RandomAccessOutputStream getRandomAccessOutputStream()
 			throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.RENAME);		
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public void copyRemotelyTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
 	}
 
+	@Override
+	@UnsupportedFileOperation
 	public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
 	}
@@ -204,6 +217,7 @@ public abstract class AbstractRegistryImage extends ProtocolFile implements Conn
 	}
 
 	@Override
+	@UnsupportedFileOperation
 	public void delete() throws IOException, UnsupportedFileOperationException {
 		throw new UnsupportedFileOperationException(FileOperation.DELETE);
 	}
