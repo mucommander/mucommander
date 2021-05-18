@@ -22,10 +22,10 @@ import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
-import com.mucommander.commons.file.archive.tar.provider.TarEntry;
-import com.mucommander.commons.file.archive.tar.provider.TarInputStream;
 import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.commons.util.StringUtils;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.tools.bzip2.CBZip2InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +40,8 @@ import java.util.zip.GZIPInputStream;
 /**
  * TarArchiveFile provides read-only access to archives in the Tar/Tgz format.
  *
- * <p>The actual decompression work is performed by the <code>Apache Ant</code> library under the terms of the
- * Apache Software License.</p>
+ * <p>The actual decompression work is performed by the <code>Apache Commons Compress</code> library under the terms of
+ * the Apache Software License.</p>
  *
  * @see com.mucommander.commons.file.archive.tar.TarFormatProvider
  * @author Maxence Bernard
@@ -58,19 +58,16 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         super(file);
     }
 
-
     /**
-     * Returns a TarInputStream which can be used to read TAR entries.
+     * Returns a {@link TarArchiveInputStream} which can be used to read TAR entries.
      *
-     * @param entryOffset offset from the start of the archive to an entry. Must be a multiple of recordSize, or
-     * <code>0</code> to start at the first entry.
-     * @return a TarInputStream which can be used to read TAR entries
+     * @return a TarArchiveInputStream which can be used to read TAR entries
      * @throws IOException if an error occurred while create the stream
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying filesystem,
-     * or is not implemented.
+     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying
+     *     filesystem, or is not implemented.
      */
-    private TarInputStream createTarStream(long entryOffset) throws IOException, UnsupportedFileOperationException {
-        InputStream in = file.getInputStream();
+    private TarArchiveInputStream createTarStream() throws IOException, UnsupportedFileOperationException {
+        InputStream in = getInputStream();
 
         String name = getCustomExtension() != null ? getCustomExtension() : getName();
             // Gzip-compressed file
@@ -102,7 +99,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
             }
         }
 
-        return new TarInputStream(in, entryOffset);
+        return new TarArchiveInputStream(in);
     }
 
 
@@ -112,7 +109,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
 
     @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
-        return new TarEntryIterator(createTarStream(0));
+        return new TarEntryIterator(createTarStream());
     }
 
 
@@ -121,15 +118,15 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         if(entry.isDirectory())
             throw new IOException();
 
-        // Optimization: first check if the specified iterator is positionned at the beginning of the entry.
+        // Optimization: first check if the specified iterator is positioned at the beginning of the entry.
         // This will typically be the case if an iterator is being used to read all the archive's entries
         // (unpack operation). In that case, we save the cost of looking for the entry in the archive, which is all
         // the more expensive if the TAR archive is GZipped.
         if(entryIterator!=null && (entryIterator instanceof TarEntryIterator)) {
             ArchiveEntry currentEntry = ((TarEntryIterator)entryIterator).getCurrentEntry();
-            if(currentEntry.getPath().equals(entry.getPath())) {
+            if(currentEntry.equals(entry)) {
                 // The entry/tar stream is wrapped in a FilterInputStream where #close is implemented as a no-op:
-                // we don't want the TarInputStream to be closed when the caller closes the entry's stream.
+                // we don't want the TarArchiveInputStream to be closed when the caller closes the entry's stream.
                 return new FilterInputStream(((TarEntryIterator)entryIterator).getTarInputStream()) {
                     @Override
                     public void close() throws IOException {
@@ -141,13 +138,15 @@ public class TarArchiveFile extends AbstractROArchiveFile {
             // This is not the one, look for the entry from the beginning of the archive
         }
 
+        TarArchiveInputStream tin = createTarStream();
+        TarArchiveEntry tarEntry;
+        String targetPath = entry.getPath();
         // Iterate through the archive until we've found the entry
-        TarEntry tarEntry = (TarEntry)entry.getEntryObject();
-        if(tarEntry!=null) {
-            TarInputStream tin = createTarStream(tarEntry.getOffset());
-            tin.getNextEntry();
-
-            return tin;
+         while ((tarEntry = tin.getNextTarEntry()) != null) {
+             if (tarEntry.getName().equals(targetPath)) {
+                 // That's the one, return it
+                 return tin;
+            }
         }
 
         throw new IOException("Unknown TAR entry: "+entry.getName());

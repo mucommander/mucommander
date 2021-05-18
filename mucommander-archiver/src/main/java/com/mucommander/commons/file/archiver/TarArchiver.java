@@ -20,8 +20,8 @@ package com.mucommander.commons.file.archiver;
 import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.SimpleFilePermissions;
-import com.mucommander.commons.file.archive.tar.provider.TarEntry;
-import com.mucommander.commons.file.archive.tar.provider.TarOutputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,15 +34,15 @@ import java.io.OutputStream;
  */
 class TarArchiver extends Archiver {
 
-    private TarOutputStream tos;
+    private TarArchiveOutputStream tos;
     private boolean firstEntry = true;
 
     protected TarArchiver(OutputStream outputStream) {
         super(outputStream);
 
-        this.tos = new TarOutputStream(outputStream);
+        this.tos = new TarArchiveOutputStream(outputStream);
         // Specifies how to handle files which filename is > 100 chars (default is to fail!)
-        this.tos.setLongFileMode(TarOutputStream.LONGFILE_GNU);
+        this.tos.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
     }
 
 
@@ -54,13 +54,13 @@ class TarArchiver extends Archiver {
     public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
-            tos.closeEntry();
+            tos.closeArchiveEntry();
 
         boolean isDirectory = attributes.isDirectory();
 		
         // Create the entry
-        TarEntry entry = new TarEntry(normalizePath(entryPath, isDirectory));
-        // Use provided file's size (required by TarOutputStream) and date
+        TarArchiveEntry entry = new TarArchiveEntry(normalizePath(entryPath, isDirectory));
+        // Use provided file's size (required by TarArchiveOutputStream) and date
         long size = attributes.getSize();
         if(!isDirectory && size>=0)		// Do not set size if file is directory or file size is unknown!
             entry.setSize(size);
@@ -72,7 +72,7 @@ class TarArchiver extends Archiver {
                     : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
         // Add the entry
-        tos.putNextEntry(entry);
+        tos.putArchiveEntry(entry);
 
         if(firstEntry)
             firstEntry = false;
@@ -86,7 +86,7 @@ class TarArchiver extends Archiver {
     public void close() throws IOException {
         // Close current entry
         if(!firstEntry)
-            tos.closeEntry();
+            tos.closeArchiveEntry();
 		
         tos.close();
     }

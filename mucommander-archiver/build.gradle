@@ -2,9 +2,11 @@
 repositories.jcenter()
 
 dependencies {
+    api project(':apache-bzip2')
     api project(':mucommander-commons-file')
-    api project(':mucommander-format-tar')
     api project(':mucommander-format-zip')
+
+    implementation 'org.apache.commons:commons-compress:1.20'
 
     testImplementation 'org.testng:testng:6.11'
 }

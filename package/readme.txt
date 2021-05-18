@@ -38,6 +38,8 @@ Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
 - Require non-headless Java when installing from RPM.
 - Use absolute path rather than canonical path in bookmarks to avoid resolving symbolic links.
+- Drop inbuilt tar format provider and use Apache Commons Compress instead. One advantage of this is that
+  tar archives with headers in tha pax format are now supported.
 
 Localization:
 - Updated Russian translation
