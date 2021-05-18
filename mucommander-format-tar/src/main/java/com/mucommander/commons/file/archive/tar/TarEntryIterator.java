@@ -21,62 +21,62 @@ import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.SimpleFilePermissions;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
-import com.mucommander.commons.file.archive.tar.provider.TarEntry;
-import com.mucommander.commons.file.archive.tar.provider.TarInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
 import java.io.IOException;
 
 /**
- * An <code>ArchiveEntryIterator</code> that iterates through a {@link TarInputStream}.
+ * An <code>ArchiveEntryIterator</code> that iterates through a {@link TarArchiveInputStream}.
  *
  * @author Maxence Bernard
  */
 class TarEntryIterator implements ArchiveEntryIterator {
 
     /** InputStream to the archive file */
-    private TarInputStream tin;
+    private TarArchiveInputStream tin;
 
-    /** The current entry, where the TarInputStream is currently positionned */
+    /** The current entry, where the TarArchiveInputStream is currently positioned */
     private ArchiveEntry currentEntry;
 
 
     /**
-     * Creates a new TarEntryIterator that iterates through the entries of the given {@link TarInputStream}.
+     * Creates a new TarEntryIterator that iterates through the entries of the given {@link TarArchiveInputStream}.
      *
-     * @param tin the TarInputStream to iterate through
+     * @param tin the TarArchiveInputStream to iterate through
      * @throws IOException if an error occurred while fetching the first entry
      */
-    TarEntryIterator(TarInputStream tin) throws IOException {
+    TarEntryIterator(TarArchiveInputStream tin) throws IOException {
         this.tin = tin;
     }
 
     /**
-     * Returns the {@link TarInputStream} instance that was used to create this object.
+     * Returns the {@link TarArchiveInputStream} instance that was used to create this object.
      *
-     * @return the {@link TarInputStream} instance that was used to create this object.
+     * @return the {@link TarArchiveInputStream} instance that was used to create this object.
      */
-    TarInputStream getTarInputStream() {
+    TarArchiveInputStream getTarInputStream() {
         return tin;
     }
 
     /**
-     * Returns the current entry where the {@link #getTarInputStream()} TarInputStream} is currently positionned.
+     * Returns the current entry where the {@link TarArchiveInputStream} is currently positioned.
      * The returned value is <code>null</code> until {@link #nextEntry()} is called for the first time.
      *
-     * @return the current entry where the {@link #getTarInputStream()} TarInputStream} is currently positionned.
+     * @return the current entry where the {@link TarArchiveInputStream} is currently positioned.
      */
     ArchiveEntry getCurrentEntry() {
         return currentEntry;
     }
 
     /**
-     * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given
-     * <code>org.apache.tools.tar.TarEntry</code>.
+     * Creates and returns an {@link ArchiveEntry()} whose attributes are fetched from the given
+     * {@link TarArchiveEntry}.
      *
      * @param tarEntry the object that serves to initialize the attributes of the returned ArchiveEntry
-     * @return an ArchiveEntry whose attributes are fetched from the given org.apache.tools.tar.TarEntry
+     * @return an ArchiveEntry whose attributes are fetched from the given {@link TarArchiveEntry}
      */
-    private ArchiveEntry createArchiveEntry(TarEntry tarEntry) {
+    private ArchiveEntry createArchiveEntry(TarArchiveEntry tarEntry) {
         ArchiveEntry entry = new ArchiveEntry(tarEntry.getName(), tarEntry.isDirectory(), tarEntry.getModTime().getTime(), tarEntry.getSize(), true);
         entry.setPermissions(new SimpleFilePermissions(tarEntry.getMode() & PermissionBits.FULL_PERMISSION_INT));
         entry.setOwner(tarEntry.getUserName());
@@ -87,13 +87,13 @@ class TarEntryIterator implements ArchiveEntryIterator {
     }
 
     /**
-     * Advances the {@link TarInputStream} to the next entry and returns the corresponding {@link ArchiveEntry}.
+     * Advances the {@link TarArchiveInputStream} to the next entry and returns the corresponding {@link ArchiveEntry}.
      *
      * @return the next ArchiveEntry
      * @throws IOException if an I/O error occurred
      */
     private ArchiveEntry getNextEntry() throws IOException {
-        TarEntry entry = tin.getNextEntry();
+        TarArchiveEntry entry = tin.getNextTarEntry();
 
         if(entry==null)
             return null;
