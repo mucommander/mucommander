@@ -781,17 +781,18 @@ public class LocalFile extends ProtocolFile {
         // Note: canonical path must not be cached as its resolution can change over time, for instance
         // if a file 'Test' is renamed to 'test' in the same folder, its canonical path would still be 'Test'
         // if it was resolved prior to the renaming and thus be recognized as a symbolic link
-        try {
-            String canonicalPath = file.getCanonicalPath();
-            // Append separator for directories
-            if(isDirectory() && !canonicalPath.endsWith(SEPARATOR))
-                canonicalPath = canonicalPath + SEPARATOR;
+        String canonicalPath;
 
-            return canonicalPath;
-        }
-        catch(IOException e) {
+        try {
+            canonicalPath = file.getCanonicalPath();
+        } catch(IOException e) {
             return absPath;
         }
+
+        if (isDirectory())
+            canonicalPath = addTrailingSeparator(canonicalPath);
+
+        return canonicalPath;
     }
 
 
