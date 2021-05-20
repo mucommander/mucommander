@@ -778,14 +778,6 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public String getCanonicalPath() {
-        // This test is not necessary anymore now that 'No disk' error dialogs are disabled entirely (using Kernel32
-        // DLL's SetErrorMode function). Leaving this code commented for a while in case the problem comes back.
-         
-//        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
-//        // triggered by java.io.File.getCanonicalPath()
-//        if(IS_WINDOWS && guessFloppyDrive())
-//            return absPath;
-
         // Note: canonical path must not be cached as its resolution can change over time, for instance
         // if a file 'Test' is renamed to 'test' in the same folder, its canonical path would still be 'Test'
         // if it was resolved prior to the renaming and thus be recognized as a symbolic link
