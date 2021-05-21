@@ -428,13 +428,6 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public boolean isSymlink() {
-        // At the moment symlinks under Windows (aka NTFS junction points) are not supported because java.io.File
-        // knows nothing about them and there is no way to discriminate them. So there is no need to waste time
-        // comparing canonical paths, just return false.
-        // Todo: add support for .lnk files (~hard links)
-        if(IS_WINDOWS)
-            return false;
-
         return Files.isSymbolicLink(file.toPath());
     }
 

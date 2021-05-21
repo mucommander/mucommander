@@ -45,6 +45,7 @@ Localization:
 
 Bug fixes:
 - Fix installation using GDebi Package Installer
+- Permanent deletion of symlinks on Windows no longer deletes their linked content.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
