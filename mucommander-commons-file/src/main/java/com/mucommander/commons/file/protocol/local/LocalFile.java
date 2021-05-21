@@ -32,6 +32,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -60,6 +61,7 @@ import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.file.util.Kernel32;
 import com.mucommander.commons.file.util.Kernel32API;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.file.util.PathUtils.ResolvedDestination;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
@@ -784,7 +786,15 @@ public class LocalFile extends ProtocolFile {
         String canonicalPath;
 
         try {
-            canonicalPath = file.getCanonicalPath();
+            // java.io.File#getCanonicalPath resolves symlinks only on UNIX platform,
+            // the following code resolves symlinks on Windows
+            if (IS_WINDOWS && isSymlink()) {
+                Path targetPath = Files.readSymbolicLink(file.toPath());
+                ResolvedDestination resolvedTarget = PathUtils.resolveDestination(targetPath.toString(), getParent());
+                canonicalPath = resolvedTarget.getDestinationFile().getCanonicalPath();
+            }
+            else
+                canonicalPath = file.getCanonicalPath();
         } catch(IOException e) {
             return absPath;
         }
