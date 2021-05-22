@@ -221,6 +221,14 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 triggerVolumeInfoUpdate();
             }
         });
+
+        // Catch window gained focus events to update the volume info when current windows has changed
+        mainFrame.addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                triggerVolumeInfoUpdate();
+            }
+        });
 		
         // Catch mouse events to pop up a menu on right-click
         selectedFilesLabel.addMouseListener(this);
