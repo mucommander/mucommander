@@ -796,6 +796,8 @@ public class LocalFile extends ProtocolFile {
             else
                 canonicalPath = file.getCanonicalPath();
         } catch(IOException e) {
+            LOGGER.error("failed to retrieve canonical path of {}, returning {}", this, absPath);
+            LOGGER.error("exception", e);
             return absPath;
         }
 
