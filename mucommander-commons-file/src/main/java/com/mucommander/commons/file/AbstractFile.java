@@ -30,6 +30,9 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.swing.Icon;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
@@ -55,6 +58,7 @@ import com.mucommander.commons.io.StreamUtils;
  * @author Maxence Bernard
  */
 public abstract class AbstractFile implements FileAttributes {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFile.class);
 
     /** URL representing this file */
     protected FileURL fileURL;
@@ -212,6 +216,8 @@ public abstract class AbstractFile implements FileAttributes {
             return FileFactory.getFile(canonicalURL);
         }
         catch(IOException e) {
+            LOGGER.error("failed to retrieve canonical file of {}", this);
+            LOGGER.error("exception", e);
             return this;
         }
     }
