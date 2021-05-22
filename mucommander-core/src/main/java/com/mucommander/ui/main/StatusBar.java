@@ -101,19 +101,9 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /** Thread which auto updates volume info */
     private Thread autoUpdateThread;
 
-    /** Number of volume info strings that can be temporarily cached */
-    private final static int VOLUME_INFO_CACHE_CAPACITY = 50;
-
-    /** Number of milliseconds before cached volume info strings expire */
-    private final static int VOLUME_INFO_TIME_TO_LIVE = 60000;
-
     /** Number of milliseconds between each volume info update by auto-update thread */
     private final static int AUTO_UPDATE_PERIOD = 60000;
 
-    /** Caches volume info strings (free/total space) for a while, since this information is expensive to retrieve
-     * (I/O bound). This map uses folders' volume path as its key. */
-    private static LRUCache<String, Long[]> volumeInfoCache = new FastLRUCache<String, Long[]>(VOLUME_INFO_CACHE_CAPACITY);
-	
     /** Icon that is displayed when folder is changing */
     public final static String WAITING_ICON = "waiting.png";
 
@@ -240,9 +230,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             return;
 
         updateSelectedFilesInfo();
-        updateVolumeInfo();
+        triggerVolumeInfoUpdate();
     }
-	
 
     /**
      * Updates info about currently selected files ((nb of selected files, combined size), displayed on the left-side of this status bar.
@@ -251,7 +240,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 //    public synchronized void updateSelectedFilesInfo() {
     public void updateSelectedFilesInfo() {
         // No need to waste precious cycles if status bar is not visible
-        if(!isVisible())
+        if (!isVisible())
             return;
 
         FileTable currentFileTable = mainFrame.getActiveTable();
@@ -292,63 +281,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Update label
         setStatusInfo(filesInfo);
-    }
-	
-	
-    /**
-     * Updates info about current volume (free space, total space), displayed on the right-side of this status bar.
-     */
-    private synchronized void updateVolumeInfo() {
-        // No need to waste precious cycles if status bar is not visible
-        if(!isVisible())
-            return;
-
-        final AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        // Resolve the current folder's volume and use its path as a key for the volume info cache
-        final String volumePath = currentFolder.exists() ?
-        		currentFolder.getVolume().getAbsolutePath(true) : "";
-
-        Long cachedVolumeInfo[] = volumeInfoCache.get(volumePath);
-        if(cachedVolumeInfo!=null) {
-            LOGGER.debug("Cache hit!");
-            volumeSpaceLabel.setVolumeSpace(cachedVolumeInfo[0], cachedVolumeInfo[1]);
-        }
-        else {
-            // Retrieves free and total volume space.
-            // Perform volume info retrieval in a separate thread as this method may be called
-            // by the event thread and it can take a while, we want to return as soon as possible
-            new Thread("StatusBar.updateVolumeInfo") {
-                @Override
-                public void run() {
-                    long volumeFree = getFreeSpace();
-                    long volumeTotal = getTotalSpace();
-
-// For testing the free space indicator 
-//volumeFree = (long)(volumeTotal * Math.random());
-                    
-                    volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
-
-                    LOGGER.debug("Adding to cache");
-                    volumeInfoCache.add(volumePath, new Long[]{volumeTotal, volumeFree}, VOLUME_INFO_TIME_TO_LIVE);
-                }
-
-                /**
-                 * @return Free space on current volume, -1 if this information is not available
-                 */
-                private long getFreeSpace() {
-                    try { return currentFolder.getFreeSpace(); }
-                    catch(IOException e) { return -1; }
-                }
-
-                /**
-                 * @return Total space on current volume, -1 if this information is not available
-                 */
-                private long getTotalSpace() {
-                    try { return currentFolder.getTotalSpace(); }
-                    catch(IOException e) { return -1; }
-                }
-            }.start();
-        }
     }
 
 
@@ -394,7 +326,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      * Starts a volume info auto-update thread, only if there isn't already one running.
      */    
     private synchronized void startAutoUpdate() {
-        if(autoUpdateThread==null) {
+        if (autoUpdateThread==null) {
             // Start volume info auto-update thread
             autoUpdateThread = new Thread(this, "StatusBar autoUpdateThread");
             // Set the thread as a daemon thread
@@ -410,9 +342,9 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     @Override
     public void setVisible(boolean visible) {
         if(visible) {
+            super.setVisible(true);
             // Start auto-update thread
             startAutoUpdate();
-            super.setVisible(true);
             // Update status bar info
             updateStatusInfo();
         }
@@ -432,21 +364,55 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      * Periodically updates volume info (free / total space).
      */
     public void run() {
-        do {
-            // Sleep for a while
-            try { Thread.sleep(AUTO_UPDATE_PERIOD); }
-            catch (InterruptedException e) {}
-            
+        while (autoUpdateThread!=null) { // Stop when MainFrame is disposed
             // Update volume info if:
             // - status bar is visible
             // - MainFrame is active and in the foreground
             // Volume info update will potentially hit the LRU cache and not actually update volume info
-            if(isVisible() && mainFrame.isForegroundActive())
-                updateVolumeInfo();
+            if (isVisible() && mainFrame.isForegroundActive()) {
+                final AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
+
+                // Retrieves free and total volume space.
+                long volumeFree = getFreeSpace(currentFolder);
+                long volumeTotal = getTotalSpace(currentFolder);
+
+                volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
+            }
+
+            // Sleep for a while
+            sleep();
         }
-        while(autoUpdateThread!=null && mainFrame.isVisible());   // Stop when MainFrame is disposed
     }
-    
+
+    private void sleep() {
+        synchronized(autoUpdateThread) {
+            try { autoUpdateThread.wait(AUTO_UPDATE_PERIOD); }
+            catch (InterruptedException e) {}
+        }
+    }
+
+    private void triggerVolumeInfoUpdate() {
+        synchronized(autoUpdateThread) {
+            autoUpdateThread.notify();
+            LOGGER.info("notified");
+        }
+    }
+
+    /**
+     * @return Free space on current volume, -1 if this information is not available
+     */
+    private long getFreeSpace(AbstractFile currentFolder) {
+        try { return currentFolder.getFreeSpace(); }
+        catch(IOException e) { return -1; }
+    }
+
+    /**
+     * @return Total space on current volume, -1 if this information is not available
+     */
+    private long getTotalSpace(AbstractFile currentFolder) {
+        try { return currentFolder.getTotalSpace(); }
+        catch(IOException e) { return -1; }
+    }
 
     ////////////////////////////////////////
     // ActivePanelListener implementation //
