@@ -411,7 +411,8 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     from ('package') { include 'license.txt', 'readme.txt' }
     def tempDir = File.createTempDir()
     tempDir.deleteOnExit()
-    from ({ new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
+    from ({ new File(temporaryDir, '.portable').createNewFile(); new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
+        include '.portable'
         include 'felix-cache'
         dirMode 0777
     }
