@@ -41,6 +41,7 @@ Improvements:
 - Tar archives with headers in the pax format are now supported.
 - The free space indicator in the status bar is updated right after relevant events like switching to the application.
 - Symbolic links are unpacked from tar archives.
+- The portable version stores preferences files in the installation directory.
 
 Localization:
 - Updated Russian translation

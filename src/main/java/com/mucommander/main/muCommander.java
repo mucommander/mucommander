@@ -291,18 +291,26 @@ public class muCommander
         muCommander.copySystemProperties(configProps);
 
         File preferencesFolder;
-        if (configuration.preferences == null) {
-            try {
-                preferencesFolder = UserPreferencesDir.getDefaultPreferencesFolder();
-            } catch(RuntimeException e) {
-                System.err.println("Failed to retrieve default preferences folder: " + e.getMessage());
-                return;
-            }
-        } else {
+        if (configuration.preferences != null) {
             try {
                 preferencesFolder = UserPreferencesDir.getPreferencesFolder(configuration.preferences);
             } catch(RuntimeException e) {
                 System.err.println("Failed to retrieve specified preferences folder: " + configuration.preferences);
+                return;
+            }
+        } else if (new File(codeParentFolder, ".portable").exists()) {
+            String portableDir = new File(codeParentFolder, ".mucommander").getAbsolutePath();
+            try {
+                preferencesFolder = UserPreferencesDir.getPreferencesFolder(portableDir);
+            } catch(RuntimeException e) {
+                System.err.println("Failed to retrieve portable preferences folder: " + portableDir);
+                return;
+            }
+        } else {
+            try {
+                preferencesFolder = UserPreferencesDir.getDefaultPreferencesFolder();
+            } catch(RuntimeException e) {
+                System.err.println("Failed to retrieve default preferences folder: " + e.getMessage());
                 return;
             }
         }
