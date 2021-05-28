@@ -121,6 +121,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /** Indicates whether the main frame that holds this status bar has been disposed */
     private boolean mainFrameDisposed;
 
+    /** Indicates whether {@link #autoUpdateThread} has been notified */
+    private boolean autoUpdateThreadNotified;
+
+    /** Holds the path of the volume for which free/total space was last retrieved by {@link #autoUpdateThread} */
+    private String volumePath;
+
     static {
         // Initialize the size column format based on the configuration
         setSelectedFileSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE,
@@ -239,11 +245,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      */
     private void updateStatusInfo() {
         // No need to waste precious cycles if status bar is not visible
-        if(!isVisible())
+        if (!isVisible())
             return;
 
         updateSelectedFilesInfo();
-        triggerVolumeInfoUpdate();
+        if (isVolumeChanged())
+            triggerVolumeInfoUpdate();
     }
 
     /**
@@ -378,7 +385,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
             // - MainFrame is active and in the foreground
             // Volume info update will potentially hit the LRU cache and not actually update volume info
             if (isVisible() && mainFrame.isForegroundActive()) {
-                final AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
+                final AbstractFile currentFolder = getCurrentFolder();
+                volumePath = getVolumePath(currentFolder);
 
                 // Retrieves free and total volume space.
                 long volumeFree = getFreeSpace(currentFolder);
@@ -392,17 +400,39 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         }
     }
 
+    private AbstractFile getCurrentFolder() {
+        return mainFrame.getActivePanel().getCurrentFolder();
+    }
+
+    private String getVolumePath(AbstractFile folder) {
+        return folder.exists() ? folder.getVolume().getAbsolutePath(true) : "";
+    }
+
+    private boolean isVolumeChanged() {
+        return volumePath == null || !volumePath.equals(getVolumePath(getCurrentFolder()));
+    }
+
     private void sleep() {
-        synchronized(autoUpdateThread) {
-            try { autoUpdateThread.wait(AUTO_UPDATE_PERIOD); }
-            catch (InterruptedException e) {}
+        if (!autoUpdateThreadNotified) {
+            synchronized(autoUpdateThread) {
+                if (!autoUpdateThreadNotified) {
+                    try { autoUpdateThread.wait(AUTO_UPDATE_PERIOD); }
+                    catch (InterruptedException e) {}
+                }
+            }
         }
+        autoUpdateThreadNotified = false;
     }
 
     private void triggerVolumeInfoUpdate() {
-        synchronized(autoUpdateThread) {
-            autoUpdateThread.notify();
-            LOGGER.info("notified");
+        if (!autoUpdateThreadNotified) {
+            synchronized(autoUpdateThread) {
+                if (!autoUpdateThreadNotified) {
+                    autoUpdateThreadNotified = true;
+                    autoUpdateThread.notify();
+                    LOGGER.info("notified");
+                }
+            }
         }
     }
 
