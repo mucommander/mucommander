@@ -24,6 +24,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -116,6 +118,8 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     /** SizeFormat format used to create the selected file(s) size string */
     private static int selectedFileSizeFormat;
 
+    /** Indicates whether the main frame that holds this status bar has been disposed */
+    private boolean mainFrameDisposed;
 
     static {
         // Initialize the size column format based on the configuration
@@ -202,6 +206,15 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
         // Catch active panel change events to update status bar info when current table has changed
         mainFrame.addActivePanelListener(this);
+
+        // Catch main frame close events to make sure autoUpdateThread is finished
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                mainFrameDisposed = true;
+                triggerVolumeInfoUpdate();
+            }
+        });
 		
         // Catch mouse events to pop up a menu on right-click
         selectedFilesLabel.addMouseListener(this);
@@ -341,17 +354,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      */
     @Override
     public void setVisible(boolean visible) {
-        if(visible) {
-            super.setVisible(true);
+        super.setVisible(visible);
+        if (visible) {
             // Start auto-update thread
             startAutoUpdate();
             // Update status bar info
             updateStatusInfo();
-        }
-        else {
-            // Stop auto-update thread
-            this.autoUpdateThread = null;
-            super.setVisible(false);
         }
     }
     
@@ -364,7 +372,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
      * Periodically updates volume info (free / total space).
      */
     public void run() {
-        while (autoUpdateThread!=null) { // Stop when MainFrame is disposed
+        while (!mainFrameDisposed) { // Stop when MainFrame is disposed
             // Update volume info if:
             // - status bar is visible
             // - MainFrame is active and in the foreground
