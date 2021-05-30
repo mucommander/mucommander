@@ -119,8 +119,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         archiveEntryFiles = new WeakHashMap<ArchiveEntry, AbstractArchiveEntryFile>();
 
         long start = System.currentTimeMillis();
-        ArchiveEntryIterator entries = getEntryIterator();
-        try {
+        try(ArchiveEntryIterator entries = getEntryIterator()) {
             ArchiveEntry entry;
             while((entry=entries.nextEntry())!=null)
                 treeRoot.addArchiveEntry(entry);
@@ -129,12 +128,6 @@ public abstract class AbstractArchiveFile extends ProxyFile {
 
             this.entryTreeRoot = treeRoot;
             declareEntriesTreeUpToDate();
-        }
-        finally {
-            try { entries.close(); }
-            catch(IOException e) {
-                // Not much we can do about it
-            }
         }
     }
 

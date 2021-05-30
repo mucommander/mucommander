@@ -176,7 +176,6 @@ public class UnpackJob extends AbstractCopyJob {
 
         // 'Cast' the file as an archive file
         AbstractArchiveFile archiveFile = file.getAncestor(AbstractArchiveFile.class);
-        ArchiveEntryIterator iterator = null;
 
         ArchiveEntry entry;
         String entryPath;
@@ -186,8 +185,7 @@ public class UnpackJob extends AbstractCopyJob {
         String relDestPath;
 
         // Unpack the archive, copying entries one by one, in the iterator's order
-        try {
-            iterator = archiveFile.getEntryIterator();
+        try(ArchiveEntryIterator iterator = archiveFile.getEntryIterator()) {
             while((entry = iterator.nextEntry())!=null && getState() != FileJobState.INTERRUPTED) {
                 entryPath = entry.getPath();
 
@@ -302,15 +300,6 @@ public class UnpackJob extends AbstractCopyJob {
         }
         catch(IOException e) {
             showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", archiveFile.getName()));
-        }
-        finally {
-            // The ArchiveEntryIterator must be closed when finished
-            if(iterator!=null) {
-                try { iterator.close(); }
-                catch(IOException e) {
-                    // Not much we can do about it
-                }
-            }
         }
 
         return false;

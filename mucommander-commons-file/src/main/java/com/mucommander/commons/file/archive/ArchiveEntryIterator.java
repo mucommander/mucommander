@@ -35,7 +35,7 @@ import java.io.IOException;
  * @see com.mucommander.commons.file.archive.WrapperArchiveEntryIterator
  * @author Maxence Bernard
  */
-public interface ArchiveEntryIterator {
+public interface ArchiveEntryIterator extends AutoCloseable {
 
     /**
      * Returns the next entry in this iterator, <code>null</code> if this iterator has no more entries.
@@ -46,11 +46,6 @@ public interface ArchiveEntryIterator {
      */
     ArchiveEntry nextEntry() throws IOException;
 
-    /**
-     * Closes this iterator and releases all the resources it holds. This method must be called when this iterator
-     * is not needed anymore.
-     *
-     * @throws IOException if an error occurred while closing the resources
-     */
+    @Override
     void close() throws IOException;
 }
