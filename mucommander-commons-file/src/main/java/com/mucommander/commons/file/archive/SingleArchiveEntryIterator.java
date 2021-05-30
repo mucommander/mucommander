@@ -38,6 +38,7 @@ public class SingleArchiveEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
+    @Override
     public ArchiveEntry nextEntry() {
         if(entry==null)
             return null;
@@ -46,11 +47,5 @@ public class SingleArchiveEntryIterator implements ArchiveEntryIterator {
         entry = null;
 
         return nextEntry;
-    }
-
-    /**
-     * Implemented as a no-op (nothing to close).
-     */
-    public void close() {
     }
 }

@@ -106,6 +106,7 @@ class TarEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
+    @Override
     public ArchiveEntry nextEntry() throws IOException {
         // Get the next entry, if any
         this.currentEntry = getNextEntry();
@@ -113,6 +114,7 @@ class TarEntryIterator implements ArchiveEntryIterator {
         return currentEntry;
     }
 
+    @Override
     public void close() throws IOException {
         tin.close();
     }

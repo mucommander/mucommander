@@ -146,6 +146,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
+    @Override
     public ArchiveEntry nextEntry() throws IOException {
         if(currentEntry!=null) {
             // Skip the current entry's data, plus 1 padding byte if size is odd
@@ -159,6 +160,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
         return currentEntry;
     }
 
+    @Override
     public void close() throws IOException {
         in.close();
     }

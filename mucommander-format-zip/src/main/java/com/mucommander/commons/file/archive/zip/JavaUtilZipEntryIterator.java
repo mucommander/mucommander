@@ -100,6 +100,7 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
+    @Override
     public ArchiveEntry nextEntry() throws IOException {
         // Get the next entry, if any
         this.currentEntry = getNextEntry();
@@ -107,6 +108,7 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
         return currentEntry;
     }
 
+    @Override
     public void close() throws IOException {
         zin.close();
     }
