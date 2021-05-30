@@ -177,17 +177,13 @@ public class UnpackJob extends AbstractCopyJob {
         // 'Cast' the file as an archive file
         AbstractArchiveFile archiveFile = file.getAncestor(AbstractArchiveFile.class);
 
-        ArchiveEntry entry;
-        String entryPath;
-        AbstractFile entryFile;
-        AbstractFile destFile;
         String destSeparator = destFolder.getSeparator();
-        String relDestPath;
 
         // Unpack the archive, copying entries one by one, in the iterator's order
         try(ArchiveEntryIterator iterator = archiveFile.getEntryIterator()) {
+            ArchiveEntry entry;
             while((entry = iterator.nextEntry())!=null && getState() != FileJobState.INTERRUPTED) {
-                entryPath = entry.getPath();
+                String entryPath = entry.getPath();
 
                 boolean processEntry = false;
                 if(selectedEntries ==null) {    // Entries are processed
@@ -221,13 +217,13 @@ public class UnpackJob extends AbstractCopyJob {
                     continue;
 
                 // Resolve the entry file
-                entryFile = archiveFile.getArchiveEntryFile(entryPath);
+                AbstractFile entryFile = archiveFile.getArchiveEntryFile(entryPath);
 
                 // Notify the job that we're starting to process this file
                 nextFile(entryFile);
 
                 // Figure out the destination file's path, relatively to the base destination folder
-                relDestPath = baseArchiveDepth==0
+                String relDestPath = baseArchiveDepth==0
                         ?entry.getPath()
                         :PathUtils.removeLeadingFragments(entry.getPath(), "/", baseArchiveDepth);
 
@@ -238,7 +234,7 @@ public class UnpackJob extends AbstractCopyJob {
                     relDestPath = relDestPath.replace("/", destSeparator);
 
                 // Create destination AbstractFile instance
-                destFile = destFolder.getChild(relDestPath);
+                AbstractFile destFile = destFolder.getChild(relDestPath);
 
                 // Do nothing if the file is a symlink (skip file and return)
                 if(entryFile.isSymlink())
