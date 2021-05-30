@@ -168,6 +168,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             final Iterator<ZipEntry> iterator = zipFile.getEntries();
 
             return new ArchiveEntryIterator() {
+                @Override
                 public ArchiveEntry nextEntry() throws IOException {
                     ZipEntry entry;
 
@@ -175,9 +176,6 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
                         return null;
 
                     return createArchiveEntry(entry);
-                }
-
-                public void close() throws IOException {
                 }
             };
         }

@@ -17,7 +17,6 @@
 
 package com.mucommander.commons.file.archive;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -46,16 +45,11 @@ public class WrapperArchiveEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     //////////////////////////////////////////
 
+    @Override
     public ArchiveEntry nextEntry() {
         if(!iterator.hasNext())
             return null;
         
         return iterator.next();
-    }
-
-    /**
-     * Implemented as a no-op (nothing to close).
-     */
-    public void close() throws IOException {
     }
 }

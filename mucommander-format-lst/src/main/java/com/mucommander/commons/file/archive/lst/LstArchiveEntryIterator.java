@@ -115,11 +115,13 @@ class LstArchiveEntryIterator implements ArchiveEntryIterator {
     // ArchiveEntryIterator implementation //
     /////////////////////////////////////////
 
+    @Override
     public ArchiveEntry nextEntry() throws IOException {
         // Return the next entry, if any
         return getNextEntry();
     }
 
+    @Override
     public void close() throws IOException {
         br.close();
     }
