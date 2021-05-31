@@ -362,7 +362,7 @@ public class StreamUtils {
 
         do {
             long nbSkipped = in.skip(n);
-            if(nbSkipped<0)
+            if(nbSkipped==0)
                 throw new EOFException();
 
             n -= nbSkipped;

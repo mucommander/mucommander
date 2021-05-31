@@ -95,10 +95,10 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * plus the number of bytes to skip doesn't exceed the length of this stream as returned by {@link #getLength()}.
      * If it does, all the remaining bytes will be skipped so that the offset of this stream will be positioned to
      * {@link #getLength()}.
-     * Returns <code>-1</code> if the offset is already positioned to the end of the stream when this method is called.
+     * Returns <code>0</code> if the offset is already positioned to the end of the stream when this method is called.
      *
      * @param n number of bytes to skip
-     * @return the number of bytes that have effectively been skipped, -1 if the offset is already positioned to the
+     * @return the number of bytes that have effectively been skipped, 0 if the offset is already positioned to the
      * end of the stream when this method is called
      * @throws IOException if something went wrong
      */
@@ -110,9 +110,9 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
         long offset = getOffset();
         long length = getLength();
 
-        // Return -1 if the offset is already at the end of the stream
+        // Return 0 if the offset is already at the end of the stream
         if(offset>=length)
-            return -1;
+            return 0;
 
         // Makes sure not to go beyond the end of the stream
         long newOffset = offset + n;
