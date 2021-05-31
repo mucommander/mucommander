@@ -40,6 +40,11 @@ public class ArchiveEntry extends SimpleFileAttributes {
     /** Caches the computed hashcode */
     private int hashCode;
 
+    /** Indicates whether this entry represents a symbolic link */
+    private boolean symbolicLink;
+
+    /** If this entry represents a symbolic link, this field holds its target */
+    private String linkTarget;
 
     /**
      * Creates a new ArchiveEntry with all attributes set to their default value.
@@ -189,5 +194,25 @@ public class ArchiveEntry extends SimpleFileAttributes {
                 :path.hashCode();
 
         return hashCode;
+    }
+
+
+    public String getLinkTarget() {
+        return linkTarget;
+    }
+
+
+    public void setLinkTarget(String linkTarget) {
+        this.linkTarget = linkTarget;
+    }
+
+
+    public boolean isSymbolicLink() {
+        return symbolicLink;
+    }
+
+
+    public void setSymbolicLink(boolean symbolicLink) {
+        this.symbolicLink = symbolicLink;
     }
 }

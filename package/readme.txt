@@ -40,6 +40,7 @@ Improvements:
 - Use absolute path rather than canonical path in bookmarks to avoid resolving symbolic links.
 - Tar archives with headers in the pax format are now supported.
 - The free space indicator in the status bar is updated right after relevant events like switching to the application.
+- Symbolic links are unpacked from tar archives.
 
 Localization:
 - Updated Russian translation
