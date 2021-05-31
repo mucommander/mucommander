@@ -35,7 +35,11 @@ import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.List;
+
+import javax.swing.tree.DefaultMutableTreeNode;
 
 
 /**
@@ -216,6 +220,16 @@ public class UnpackJob extends AbstractCopyJob {
                 if(!processEntry)
                     continue;
 
+                DefaultMutableTreeNode entryNode = archiveFile.getArchiveEntryNode(entryPath);
+                if (entryNode != null) {
+                    ArchiveEntry archiveEntry = (ArchiveEntry) entryNode.getUserObject();
+                    if (archiveEntry.isSymbolicLink()) {
+                        Files.createSymbolicLink(
+                                FileSystems.getDefault().getPath(destFolder.getPath(), entry.getName()),
+                                FileSystems.getDefault().getPath(entry.getLinkTarget()));
+                        continue;
+                    }
+                }
                 // Resolve the entry file
                 AbstractFile entryFile = archiveFile.getArchiveEntryFile(entryPath);
 
@@ -235,10 +249,6 @@ public class UnpackJob extends AbstractCopyJob {
 
                 // Create destination AbstractFile instance
                 AbstractFile destFile = destFolder.getChild(relDestPath);
-
-                // Do nothing if the file is a symlink (skip file and return)
-                if(entryFile.isSymlink())
-                    return true;
 
                 // Check if the file does not already exist in the destination
                 destFile = checkForCollision(entryFile, destFolder, destFile, false);

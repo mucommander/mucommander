@@ -82,6 +82,8 @@ class TarEntryIterator implements ArchiveEntryIterator {
         entry.setOwner(tarEntry.getUserName());
         entry.setGroup(tarEntry.getGroupName());
         entry.setEntryObject(tarEntry);
+        entry.setSymbolicLink(tarEntry.isSymbolicLink());
+        entry.setLinkTarget(tarEntry.getLinkName());
 
         return entry;
     }
