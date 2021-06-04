@@ -27,7 +27,6 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.conf.ValueList;
 import com.mucommander.commons.conf.XmlConfigurationReader;
 import com.mucommander.commons.conf.XmlConfigurationWriter;
-import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 
 /**
@@ -80,10 +79,9 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Controls whether system notifications are enabled. */
 	public static final String  ENABLE_SYSTEM_NOTIFICATIONS       = "enable_system_notifications";
 	/** System notifications are enabled by default on platforms where a notifier is available and works well enough.
-	 * In particular, the system tray notifier is available under Linux+Java 1.6, but it doesn't work well so it is not
+	 * In particular, the system tray notifier is available under Linux, but it doesn't work well so it is not
 	 * enabled by default. */
-	public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamily.MAC_OS.isCurrent() ||
-			(OsFamily.WINDOWS.isCurrent() && JavaVersion.JAVA_6.isCurrentOrHigher());
+	public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamily.MAC_OS.isCurrent() || OsFamily.WINDOWS.isCurrent();
 	/** List of encodings that are displayed in encoding selection components. */
 	public static final String  PREFERRED_ENCODINGS               = "preferred_encodings";
 

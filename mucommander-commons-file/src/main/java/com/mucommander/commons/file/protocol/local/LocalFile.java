@@ -66,7 +66,6 @@ import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
 
@@ -136,19 +135,14 @@ public class LocalFile extends ProtocolFile {
     // Note: 'read' and 'execute' permissions have no meaning under Windows (files are either read-only or
     // read-write) and as such can't be changed.
 
-    /** Changeable permissions mask for Java 1.6 and up, on OSes other than Windows */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_6_NON_WINDOWS = new GroupedPermissionBits(448);   // rwx------ (700 octal)
+    /** Changeable permissions mask on OSes other than Windows */
+    private static PermissionBits CHANGEABLE_PERMISSIONS_NON_WINDOWS = new GroupedPermissionBits(448);   // rwx------ (700 octal)
 
-    /** Changeable permissions mask for Java 1.6 and up, on Windows OS (any version) */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_6_WINDOWS = new GroupedPermissionBits(128);   // -w------- (200 octal)
-
-    /** Changeable permissions mask for Java 1.5 or below */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_JAVA_5 = PermissionBits.EMPTY_PERMISSION_BITS;   // --------- (0)
+    /** Changeable permissions mask on Windows OS (any version) */
+    private static PermissionBits CHANGEABLE_PERMISSIONS_WINDOWS = new GroupedPermissionBits(128);   // -w------- (200 octal)
 
     /** Bit mask that indicates which permissions can be changed */
-    private final static PermissionBits CHANGEABLE_PERMISSIONS = JavaVersion.JAVA_6.isCurrentOrHigher()
-            ?(IS_WINDOWS?CHANGEABLE_PERMISSIONS_JAVA_6_WINDOWS:CHANGEABLE_PERMISSIONS_JAVA_6_NON_WINDOWS)
-            : CHANGEABLE_PERMISSIONS_JAVA_5;
+    private final static PermissionBits CHANGEABLE_PERMISSIONS = IS_WINDOWS?CHANGEABLE_PERMISSIONS_WINDOWS:CHANGEABLE_PERMISSIONS_NON_WINDOWS;
 
     /**
  	 * List of known UNIX filesystems.
@@ -527,8 +521,8 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
-        // Only the 'user' permissions under Java 1.6 are supported
-        if(access!=PermissionAccess.USER || JavaVersion.JAVA_6.isCurrentLower())
+        // Only the 'user' permissions are supported
+        if(access!=PermissionAccess.USER)
             throw new IOException();
 
         boolean success = false;
@@ -1131,15 +1125,7 @@ public class LocalFile extends ProtocolFile {
         // Note: 'read' and 'execute' permissions have no meaning under Windows (files are either read-only or
         // read-write), but we return default values.
 
-        /** Mask for supported permissions under Java 1.6 */
-        private static PermissionBits JAVA_6_PERMISSIONS = new GroupedPermissionBits(448);   // rwx------ (700 octal)
-
-        /** Mask for supported permissions under Java 1.5 */
-        private static PermissionBits JAVA_5_PERMISSIONS = new GroupedPermissionBits(384);   // rw------- (300 octal)
-
-        private final static PermissionBits MASK = JavaVersion.JAVA_6.isCurrentOrHigher()
-                ?JAVA_6_PERMISSIONS
-                :JAVA_5_PERMISSIONS;
+        private final static PermissionBits MASK = new GroupedPermissionBits(448);   // rwx------ (700 octal)
 
         private LocalFilePermissions(java.io.File file) {
             this.file = file;
@@ -1156,9 +1142,7 @@ public class LocalFile extends ProtocolFile {
             case WRITE:
             	return file.canWrite();
             case EXECUTE:
-            	// Execute permission can only be retrieved under Java 1.6 and up
-            	if (JavaVersion.JAVA_6.isCurrentOrHigher())
-            		return file.canExecute();
+                return file.canExecute();
             default:
             	return false;
             }

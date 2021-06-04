@@ -29,22 +29,6 @@ import org.slf4j.LoggerFactory;
  * @author Maxence Bernard, Arik Hadas
 */
 public enum JavaVersion implements ComparableRuntimeProperty {
-	/** Java 1.0.x */
-    JAVA_1_0("1.0"),
-    /** Java 1.1.x */
-    JAVA_1_1("1.1"),
-    /** Java 1.2.x */
-    JAVA_1_2("1.2"),
-    /** Java 1.3.x */
-    JAVA_1_3("1.3"),
-    /** Java 1.4.x */
-    JAVA_1_4("1.4"),
-    /** Java 1.5.x */
-    JAVA_5("1.5"),
-    /** Java 1.6.x */
-    JAVA_6("1.6"),
-    /** Java 1.7.x */
-    JAVA_7("1.7"),
     /** Java 1.8.x */
     JAVA_8("1.8"),
     /** Java 9.x */
@@ -173,30 +157,6 @@ public enum JavaVersion implements ComparableRuntimeProperty {
 		// Java 1.8
 		if (javaVersionProp.startsWith("1.8"))
 			return JavaVersion.JAVA_8;
-		// Java 1.7
-		if (javaVersionProp.startsWith("1.7"))
-			return JavaVersion.JAVA_7;
-		// Java 1.6
-		if (javaVersionProp.startsWith("1.6"))
-			return JavaVersion.JAVA_6;
-		// Java 1.5
-		if (javaVersionProp.startsWith("1.5"))
-			return JavaVersion.JAVA_5;
-		// Java 1.4
-		if (javaVersionProp.startsWith("1.4"))
-			return JavaVersion.JAVA_1_4;
-		// Java 1.3
-		if (javaVersionProp.startsWith("1.3"))
-			return JavaVersion.JAVA_1_3;
-		// Java 1.2
-		if (javaVersionProp.startsWith("1.2"))
-			return JavaVersion.JAVA_1_2;
-		// Java 1.1
-		if (javaVersionProp.startsWith("1.1"))
-			return JavaVersion.JAVA_1_1;
-		// Java 1.0
-		if (javaVersionProp.startsWith("1.0"))
-			return JavaVersion.JAVA_1_0;
 
 		// Newer version we don't know of yet, assume latest supported Java version
 		return JavaVersion.JAVA_16;

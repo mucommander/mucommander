@@ -69,12 +69,6 @@ class LocalProcess extends AbstractProcess {
 
     // - Implementation --------------------------------------------------------
     // -------------------------------------------------------------------------
-    /**
-     * Returns <code>true</code> if the current JRE version supports merged <code>java.lang.Process</code> streams.
-     * @return <code>true</code> if the current JRE version supports merged <code>java.lang.Process</code> streams, <code>false</code> otherwise.
-     */
-    @Override
-    public boolean usesMergedStreams() {return JavaVersion.JAVA_5.isCurrentOrHigher();}
 
     /**
      * Waits for the process to die.
@@ -103,25 +97,6 @@ class LocalProcess extends AbstractProcess {
      */
     @Override
     public OutputStream getOutputStream() {return process.getOutputStream();}
-
-    /**
-     * Returns the process' error stream.
-     * <p>
-     * On Java 1.5 or higher, this will throw an <code>java.io.IOException</code>, as we're using
-     * merged output streams. Developers should protect themselves against this by checking
-     * {@link #usesMergedStreams()} before accessing streams.
-     * </p>
-     * @return             the process' error stream.
-     * @throws IOException if this process is using merged streams.
-     */
-    @Override
-    public InputStream getErrorStream()  throws IOException {
-        if(usesMergedStreams()) {
-            LOGGER.debug("Tried to access the error stream of a merged streams process.");
-            throw new IOException();
-        }
-        return process.getErrorStream();
-    }
 
     /**
      * Returns the process' input stream.

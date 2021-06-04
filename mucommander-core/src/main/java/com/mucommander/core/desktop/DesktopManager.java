@@ -176,16 +176,14 @@ public class DesktopManager {
         // ---------------------------------------------------------------
         operations = new Hashtable[3];
 
-        // Having 1.6 specific operations registered as the lowest priority system
+        // internal operations registered as the lowest priority system
         // ones ensures that:
         // - they are executed after CommandXXX operations (important, since CommandXXX
         //   operations are user configurable).
         // - they are executed before any other operations (if available, they will
         //   provide safer and better integration than any other operation).
-        if(JavaVersion.JAVA_6.isCurrentOrHigher()) {
-            innerRegisterOperation(OPEN,   SYSTEM_OPERATION,  new InternalOpen());
-            innerRegisterOperation(BROWSE, SYSTEM_OPERATION,  new InternalBrowse());
-        }
+        innerRegisterOperation(OPEN,   SYSTEM_OPERATION,  new InternalOpen());
+        innerRegisterOperation(BROWSE, SYSTEM_OPERATION,  new InternalBrowse());
 
         // Registers CommandXXX operations.
         innerRegisterOperation(BROWSE,               SYSTEM_OPERATION,    new CommandBrowse());
