@@ -47,7 +47,8 @@ Localization:
 
 Bug fixes:
 - Fix installation using GDebi Package Installer
-- Permanent deletion of symlinks on Windows no longer deletes their linked content.
+- Permanent deletion of symbolic links on Windows no longer deletes their linked content.
+- Restore file table configuration (column visibility, width and position) on startup also when custom folders are set.
 
 Known issues:
 - Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This

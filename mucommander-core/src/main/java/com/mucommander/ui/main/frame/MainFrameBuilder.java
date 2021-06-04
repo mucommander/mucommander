@@ -144,9 +144,7 @@ public abstract class MainFrameBuilder {
     }
 
     protected FileTableConfiguration getFileTableConfiguration(FolderPanelType folderPanelType, int window) {
-        FileTableConfiguration conf;
-
-        conf = new FileTableConfiguration();
+        FileTableConfiguration conf = new FileTableConfiguration();
 
         // Loop on columns
         for(Column c  : Column.values()) {

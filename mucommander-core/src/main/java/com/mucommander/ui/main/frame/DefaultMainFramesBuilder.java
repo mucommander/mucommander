@@ -21,10 +21,10 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,17 +62,18 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
         // if last configuration is requested and exists in the snapshot file, restore it
         if (nbFrames > 0 && MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_LAST)) {
-            List<MainFrame> mainFrames = new ArrayList<>();
-            for (int i=0; i<nbFrames; ++i)
-                mainFrames.add(createMainFrame(i));
-            return mainFrames;
+            return IntStream.range(0, nbFrames)
+                    .mapToObj(this::createMainFrame)
+                    .collect(Collectors.toList());
         }
         else {
+            int index = getSelectedFrame();
+
             MainFrame mainFrame = new MainFrame(
                     new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
-                    getFileTableConfiguration(FolderPanelType.LEFT, -1),
+                    getFileTableConfiguration(FolderPanelType.LEFT, index),
                     new ConfFileTableTab(getInitialPath(FolderPanelType.RIGHT)),
-                    getFileTableConfiguration(FolderPanelType.RIGHT, -1));
+                    getFileTableConfiguration(FolderPanelType.RIGHT, index));
 
             // if there is no window saved in the snapshot file, use default settings
             if (nbFrames == 0) {
@@ -80,7 +81,6 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
             }
             // otherwise, use the settings of the selected window
             else {
-                int index = getSelectedFrame();
                 int x      = snapshot.getIntegerVariable(MuSnapshot.getX(index));
                 int y      = snapshot.getIntegerVariable(MuSnapshot.getY(index));
                 int width  = snapshot.getIntegerVariable(MuSnapshot.getWidth(index));
