@@ -686,17 +686,7 @@ public class LocalFile extends ProtocolFile {
             if(!getRoot().equals(destFile.getRoot()))
                 throw new IOException();
 
-            // Windows 9x or Windows Me: Kernel32's MoveFileEx function is NOT available
-            if(OsVersion.WINDOWS_ME.isCurrentOrLower()) {
-                // The destination file is deleted before calling java.io.File#renameTo().
-                // Note that in this case, the atomicity of this method is not guaranteed anymore -- if
-                // java.io.File#renameTo() fails (for whatever reason), the destination file is deleted anyway.
-                if(destFile.exists())
-                    if(!destJavaIoFile.delete())
-                        throw new IOException();
-            }
-            // Windows NT: Kernel32's MoveFileEx can be used, if the Kernel32 DLL is available.
-            else if(Kernel32.isAvailable()) {
+            if(Kernel32.isAvailable()) {
                 // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
                 // call #exists() on the destination file which has a cost.
                 if(!Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),

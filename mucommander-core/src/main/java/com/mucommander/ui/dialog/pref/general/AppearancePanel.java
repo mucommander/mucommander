@@ -88,8 +88,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     private PrefComboBox<String>              lookAndFeelComboBox;
     /** All available look&feels. */
     private UIManager.LookAndFeelInfo lookAndFeels[];
-    /** 'Use brushed metal look' checkbox */
-    private PrefCheckBox              brushedMetalCheckBox;
     /** Triggers look and feel importing. */
     private JButton                   importLookAndFeelButton;
     /** Triggers look and feel deletion. */
@@ -213,8 +211,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         toolbarIconsSizeComboBox.addDialogListener(parent);
         commandBarIconsSizeComboBox.addDialogListener(parent);
         fileIconsSizeComboBox.addDialogListener(parent);
-        if(brushedMetalCheckBox!=null)
-        	brushedMetalCheckBox.addDialogListener(parent);
     }
 
     /**
@@ -301,24 +297,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         flowPanel.add(deleteLookAndFeelButton);
         flowPanel.add(new JLabel(dial = new SpinningDial()));
         lnfPanel.add(flowPanel);
-
-        // For Mac OS X only, creates the 'brushed metal' checkbox.
-        // At the time of writing, the 'brushed metal' look causes the JVM to crash randomly under Leopard (10.5)
-        // so we disable brushed metal on that OS version but leave it for earlier versions where it works fine.
-        // See http://www.mucommander.com/forums/viewtopic.php?f=4&t=746 for more info about this issue.
-        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_4.isCurrentOrLower()) {
-            // 'Use brushed metal look' option
-            brushedMetalCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.use_brushed_metal")) {
-            	public boolean hasChanged() {
-            		return !String.valueOf(isSelected()).equals(MuConfigurations.getPreferences().getVariable(MuPreference.USE_BRUSHED_METAL));
-				}
-			};
-            brushedMetalCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.USE_BRUSHED_METAL,
-                                                                              MuPreferences.DEFAULT_USE_BRUSHED_METAL));
-            flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            flowPanel.add(brushedMetalCheckBox);
-            lnfPanel.add(flowPanel);
-        }
 
         return lnfPanel;
     }
@@ -525,9 +503,6 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
             resetLookAndFeelButtons();
             SwingUtilities.updateComponentTreeUI(parent);
         }
-
-        if(brushedMetalCheckBox!=null)
-            MuConfigurations.getPreferences().setVariable(MuPreference.USE_BRUSHED_METAL,  brushedMetalCheckBox.isSelected());
 
         // Set ToolBar's icon size
         float scaleFactor = ICON_SCALE_FACTORS[toolbarIconsSizeComboBox.getSelectedIndex()];

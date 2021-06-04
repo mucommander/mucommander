@@ -60,7 +60,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -194,7 +193,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     }
 
     private static boolean usesTableHeaderRenderingProperties() {
-        return OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher();
+        return OsFamily.MAC_OS.isCurrent();
     }
 
     /**

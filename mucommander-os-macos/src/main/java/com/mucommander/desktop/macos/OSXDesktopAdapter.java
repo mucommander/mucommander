@@ -44,7 +44,6 @@ import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.commons.util.ui.text.MultiLineLabel;
 import com.mucommander.desktop.DefaultDesktopAdapter;
@@ -189,13 +188,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     @Override
     public List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) {
-        if (OsVersion.MAC_OS_10_4.isCurrentOrHigher()) {
-            String comment = OSXFileUtils.getSpotlightComment(file);
-            JLabel commentLabel = new JLabel(Translator.get("comment")+":");
-            commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);
-            commentLabel.setVerticalAlignment(SwingConstants.TOP);
-            return Collections.singletonList(new Pair<>(commentLabel, new MultiLineLabel(comment)));
-        }
-        return Collections.emptyList();
+        String comment = OSXFileUtils.getSpotlightComment(file);
+        JLabel commentLabel = new JLabel(Translator.get("comment")+":");
+        commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);
+        commentLabel.setVerticalAlignment(SwingConstants.TOP);
+        return Collections.singletonList(new Pair<>(commentLabel, new MultiLineLabel(comment)));
     }
 }

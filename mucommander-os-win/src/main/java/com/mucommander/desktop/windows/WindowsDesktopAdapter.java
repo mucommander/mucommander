@@ -17,7 +17,12 @@
 
 package com.mucommander.desktop.windows;
 
+import com.mucommander.command.Command;
+import com.mucommander.command.CommandException;
+import com.mucommander.command.CommandManager;
+import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
@@ -28,16 +33,29 @@ import com.mucommander.desktop.TrashProvider;
  */
 class WindowsDesktopAdapter extends DefaultDesktopAdapter {
     protected static final String EXPLORER_NAME = "Explorer";
+    private static final String FILE_OPENER_COMMAND = "cmd /c start \"\" \"$f\"";
+    private static final String CMD_OPENER_COMMAND = "cmd /k \"cd /d $f\"";
+    private static final String EXE_OPENER_COMMAND  = "cmd /c $f";
+    private static final String EXE_REGEXP          = ".*\\.exe";
 
     public String toString() {return "Windows Desktop";}
 
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
+        try {
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER_COMMAND,  CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+
+            CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, new RegexpFilenameFilter(EXE_REGEXP, false));
+        } catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
 
     @Override
     public boolean isAvailable() {
-        return OsFamily.getCurrent().equals(OsFamily.WINDOWS);
+        return OsFamily.WINDOWS.isCurrent();
     }
 
     /**
@@ -62,4 +80,7 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
         // is available on the current runtime environment.
         return WindowsTrashProvider.isAvailable() ? new WindowsTrashProvider() : null;
     }
+
+    @Override
+    public String getDefaultShell() {return "cmd /c";}
 }

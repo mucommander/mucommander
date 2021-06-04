@@ -38,7 +38,6 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.ui.icon.IconManager;
 
 /*
@@ -91,7 +90,7 @@ public class ToolbarMoreButton extends JToggleButton implements ActionListener {
         setContentAreaFilled(false);
         setBorderPainted(false);
         // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if (OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
+        if (OsFamily.MAC_OS.isCurrent()) {
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
         }

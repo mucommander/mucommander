@@ -17,7 +17,7 @@
 
 package com.mucommander.desktop.windows;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -36,9 +36,7 @@ public class Activator implements BundleActivator  {
         OperatingSystemService service = new OperatingSystemService() {
             @Override
             public List<DesktopAdapter> getDesktopAdapters() {
-                return Arrays.asList(
-                        new Win9xDesktopAdapter(),
-                        new WinNtDesktopAdapter());
+                return Collections.singletonList(new WindowsDesktopAdapter());
             }
         };
         osRegistration = context.registerService(OperatingSystemService.class, service, null);

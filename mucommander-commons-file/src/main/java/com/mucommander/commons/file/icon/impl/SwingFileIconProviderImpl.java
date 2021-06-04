@@ -41,7 +41,6 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.io.SilenceableOutputStream;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 
 /**
  * Package-protected class which provides the {@link com.mucommander.commons.file.icon.LocalFileIconProvider} and
@@ -228,8 +227,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
         //
         // Note that the symlink test is performed last because it is the most expensive.
         //
-        if((!(originalFile.getTopAncestor() instanceof LocalFile) || (OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrent()))
-                && originalFile.isSymlink()) {
+        if((!(originalFile.getTopAncestor() instanceof LocalFile)) && originalFile.isSymlink()) {
             icon = getSymlinkIcon(icon);
         }
 

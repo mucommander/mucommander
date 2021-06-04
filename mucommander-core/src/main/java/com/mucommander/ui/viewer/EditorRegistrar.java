@@ -25,7 +25,6 @@ import java.util.Vector;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -63,8 +62,7 @@ public class EditorRegistrar {
     public static FileFrame createEditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
         EditorFrame frame = new EditorFrame(mainFrame, file, icon);
 
-        // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             // Displays the document icon in the window title bar, works only for local files
             if(file.getURL().getScheme().equals(LocalFile.SCHEMA))
                 frame.getRootPane().putClientProperty("Window.documentFile", file.getUnderlyingFileObject());

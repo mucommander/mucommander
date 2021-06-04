@@ -39,27 +39,6 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	// Windows versions //
 	//////////////////////
 
-	// Windows 9X subfamily
-
-	/** Windows 95 */
-	WINDOWS_95("Windows 95"),
-	/** Windows 98 */
-	WINDOWS_98("Windows 98"),
-	/** Windows Me */
-	WINDOWS_ME("Windows Me"),
-
-	// Windows NT subfamily
-
-	/** Windows NT */
-	WINDOWS_NT("Windows NT"),
-	/** Windows 2000 */
-	WINDOWS_2000("Windows 2000"),
-	/** Windows XP */
-	WINDOWS_XP("Windows XP"),
-	/** Windows 2003 */
-	WINDOWS_2003("Windows 2003"),
-	/** Windows Vista */
-	WINDOWS_VISTA("Windows Vista"),
 	/** Windows 7 */
 	WINDOWS_7("Windows 7"),
 	/** Windows 8 */
@@ -74,20 +53,6 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	// Mac OS X versions //
 	///////////////////////
 
-	/** Cheetah */
-	MAC_OS_10_0("10.0"),
-	/** Puma */
-	MAC_OS_10_1("10.1"),
-	/** Jaguar */
-	MAC_OS_10_2("10.2"),
-	/** Panther */
-	MAC_OS_10_3("10.3"),
-	/** Tiger */
-	MAC_OS_10_4("10.4"),
-	/** Leopard */
-	MAC_OS_10_5("10.5"),
-	/** Snow Leopard */
-	MAC_OS_10_6("10.6"),
 	/** Lion */
 	MAC_OS_10_7("10.7"),
 	/** Mountain Lion */
@@ -169,30 +134,6 @@ public enum OsVersion implements ComparableRuntimeProperty {
         // http://lopica.sourceforge.net/os.html
 
         if(osFamily==OsFamily.WINDOWS) {
-            if (osNameProp.equals("Windows 95"))
-                return WINDOWS_95;
-
-            if (osNameProp.equals("Windows 98"))
-                return WINDOWS_98;
-
-            if (osNameProp.equals("Windows Me"))
-                return WINDOWS_ME;
-
-            if (osNameProp.equals("Windows NT"))
-                return WINDOWS_NT;
-
-            if (osNameProp.equals("Windows 2000"))
-                return WINDOWS_2000;
-
-            if (osNameProp.equals("Windows XP"))
-                return WINDOWS_XP;
-
-            if (osNameProp.equals("Windows 2003"))
-                return WINDOWS_2003;
-
-            if (osNameProp.equals("Windows Vista"))
-                return WINDOWS_VISTA;
-
             if (osNameProp.equals("Windows 7"))
                 return WINDOWS_7;
 
@@ -240,29 +181,8 @@ public enum OsVersion implements ComparableRuntimeProperty {
             if(osVersionProp.startsWith("10.7"))
                 return MAC_OS_10_7;
 
-            if (osVersionProp.startsWith("10.6"))
-                return MAC_OS_10_6;
-
-            if (osVersionProp.startsWith("10.5"))
-                return MAC_OS_10_5;
-
-            if (osVersionProp.startsWith("10.4"))
-                return MAC_OS_10_4;
-
-            if (osVersionProp.startsWith("10.3"))
-                return MAC_OS_10_3;
-
-            if (osVersionProp.startsWith("10.2"))
-                return MAC_OS_10_2;
-
-            if (osVersionProp.startsWith("10.1"))
-                return MAC_OS_10_1;
-
-            if (osVersionProp.startsWith("10.0"))
-                return MAC_OS_10_0;
-
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_10_15;
+            return MAC_OS_10_16;
         }
 
         return OsVersion.UNKNOWN_VERSION;
