@@ -33,7 +33,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.ui.action.AWTActionProxy;
@@ -103,8 +102,8 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     @Override
     public boolean setEnabled(boolean enabled) {
         if(enabled) {
-            // No need to bother if the current Java runtime version is not 1.6 or up, or if SystemTray is not available
-            if(JavaVersion.JAVA_6.isCurrentLower() || !SystemTray.isSupported())
+            // No need to bother if SystemTray is not available
+            if(!SystemTray.isSupported())
                 return false;
 
             // If System Tray has already been initialized

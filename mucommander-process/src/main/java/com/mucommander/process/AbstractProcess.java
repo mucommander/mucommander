@@ -87,33 +87,14 @@ public abstract class AbstractProcess {
      * @param encoding encoding that should be used by the process' stdout and stderr streams.
      */
     final void startMonitoring(ProcessListener listener, String encoding) throws IOException {
-        // Only monitors stdout if the process uses merged streams.
-        if(usesMergedStreams()) {
-        	LOGGER.debug("Starting process merged output monitor...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process sdtout/stderr monitor").start();
-        }
-        // Monitors both stdout and stderr.
-        else {
-        	LOGGER.debug("Starting process stdout and stderr monitors...");
-            new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process stdout monitor").start();
-            new Thread(stderrMonitor = new ProcessOutputMonitor(getErrorStream(), encoding, listener), "Process stderr monitor").start();
-        }
+        LOGGER.debug("Starting process merged output monitor...");
+        new Thread(stdoutMonitor = new ProcessOutputMonitor(getInputStream(), encoding, listener, this), "Process sdtout/stderr monitor").start();
     }
 
 
 
     // - Abstract methods ------------------------------------------------------
     // -------------------------------------------------------------------------
-    /**
-     * Returns <code>true</code> if this process only uses one output stream.
-     * <p>
-     * Some processes will use a single stream for their standard error and standard output streams. Such
-     * processes should return <code>true</code> here to prevent both streams from being monitored.<br>
-     * Note that if a process uses merged streams, {@link #getInputStream()} will be monitored.
-     * </p>
-     * @return <code>true</code> if this process merges his output streams, <code>false</code> otherwise.
-     */
-    public abstract boolean usesMergedStreams();
 
     /**
      * Makes the current thread wait for the process to die.
@@ -148,12 +129,5 @@ public abstract class AbstractProcess {
      * @throws IOException thrown if an error occurs while retrieving the process' input stream.
      */
     public abstract InputStream getInputStream() throws IOException;
-
-    /**
-     * Returns the process' standard error stream.
-     * @return             the process' standard error stream.
-     * @throws IOException thrown if an error occurs while retrieving the process' error stream.
-     */
-    public abstract InputStream getErrorStream() throws IOException;
 
 }

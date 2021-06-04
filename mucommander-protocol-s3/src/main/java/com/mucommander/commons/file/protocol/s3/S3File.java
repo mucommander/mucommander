@@ -45,7 +45,6 @@ import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * Super class of {@link S3Root}, {@link S3Bucket} and {@link S3Object}.
@@ -81,10 +80,7 @@ public abstract class S3File extends ProtocolFile {
         if(cause instanceof IOException)
             return (IOException)cause;
 
-        if(JavaVersion.JAVA_6.isCurrentOrHigher())
-            return new IOException(e);
-
-        return new IOException(e.getMessage());
+        return new IOException(e);
     }
 
     protected static void handleAuthException(ServiceException e, FileURL fileURL) throws AuthException {

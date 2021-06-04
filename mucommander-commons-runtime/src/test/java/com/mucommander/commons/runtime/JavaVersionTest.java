@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 /**
  * A JUnit test case for {@link JavaVersion}.
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class JavaVersionTest {
 
@@ -31,13 +31,15 @@ public class JavaVersionTest {
      */
     @Test
     public void testOrder() {
-        assert JavaVersion.JAVA_7.compareTo(JavaVersion.JAVA_6)>0;
-        assert JavaVersion.JAVA_6.compareTo(JavaVersion.JAVA_5)>0;
-        assert JavaVersion.JAVA_5.compareTo(JavaVersion.JAVA_1_4)>0;
-        assert JavaVersion.JAVA_1_4.compareTo(JavaVersion.JAVA_1_3)>0;
-        assert JavaVersion.JAVA_1_3.compareTo(JavaVersion.JAVA_1_2)>0;
-        assert JavaVersion.JAVA_1_2.compareTo(JavaVersion.JAVA_1_1)>0;
-        assert JavaVersion.JAVA_1_1.compareTo(JavaVersion.JAVA_1_0)>0;
+        assert JavaVersion.JAVA_17.compareTo(JavaVersion.JAVA_16)>0;
+        assert JavaVersion.JAVA_16.compareTo(JavaVersion.JAVA_15)>0;
+        assert JavaVersion.JAVA_15.compareTo(JavaVersion.JAVA_14)>0;
+        assert JavaVersion.JAVA_14.compareTo(JavaVersion.JAVA_13)>0;
+        assert JavaVersion.JAVA_13.compareTo(JavaVersion.JAVA_12)>0;
+        assert JavaVersion.JAVA_12.compareTo(JavaVersion.JAVA_11)>0;
+        assert JavaVersion.JAVA_11.compareTo(JavaVersion.JAVA_10)>0;
+        assert JavaVersion.JAVA_10.compareTo(JavaVersion.JAVA_9)>0;
+        assert JavaVersion.JAVA_9.compareTo(JavaVersion.JAVA_8)>0;
     }
 
     /**
@@ -45,18 +47,10 @@ public class JavaVersionTest {
      */
     @Test
     public void testCurrent() {
-        // Note: this test safely assumes that the current Java version is greater than 1.0
-
-        assert JavaVersion.getCurrent().compareTo(JavaVersion.JAVA_1_0)>0;
-
-        assert !JavaVersion.JAVA_1_0.isCurrent();
-        assert JavaVersion.JAVA_1_0.isCurrentHigher();
-        assert JavaVersion.JAVA_1_0.isCurrentOrHigher();
-
-        if(JavaVersion.getCurrent().compareTo(JavaVersion.JAVA_7)<0) {
-            assert !JavaVersion.JAVA_7.isCurrent();
-            assert JavaVersion.JAVA_7.isCurrentLower();
-            assert JavaVersion.JAVA_7.isCurrentOrLower();
+        if(JavaVersion.getCurrent().compareTo(JavaVersion.JAVA_17)<0) {
+            assert !JavaVersion.JAVA_17.isCurrent();
+            assert JavaVersion.JAVA_17.isCurrentLower();
+            assert JavaVersion.JAVA_17.isCurrentOrLower();
         }
     }
 
@@ -65,14 +59,16 @@ public class JavaVersionTest {
      */
     @Test
     public void testParsing() {
-        assert JavaVersion.parseSystemProperty("1.0")==JavaVersion.JAVA_1_0;
-        assert JavaVersion.parseSystemProperty("1.1")==JavaVersion.JAVA_1_1;
-        assert JavaVersion.parseSystemProperty("1.2")==JavaVersion.JAVA_1_2;
-        assert JavaVersion.parseSystemProperty("1.3")==JavaVersion.JAVA_1_3;
-        assert JavaVersion.parseSystemProperty("1.4")==JavaVersion.JAVA_1_4;
-        assert JavaVersion.parseSystemProperty("1.5")==JavaVersion.JAVA_5;
-        assert JavaVersion.parseSystemProperty("1.6")==JavaVersion.JAVA_6;
-        assert JavaVersion.parseSystemProperty("1.7")==JavaVersion.JAVA_7;
+        assert JavaVersion.parseSystemProperty("1.8")==JavaVersion.JAVA_8;
+        assert JavaVersion.parseSystemProperty("9")==JavaVersion.JAVA_9;
+        assert JavaVersion.parseSystemProperty("10")==JavaVersion.JAVA_10;
+        assert JavaVersion.parseSystemProperty("11")==JavaVersion.JAVA_11;
+        assert JavaVersion.parseSystemProperty("12")==JavaVersion.JAVA_12;
+        assert JavaVersion.parseSystemProperty("13")==JavaVersion.JAVA_13;
+        assert JavaVersion.parseSystemProperty("14")==JavaVersion.JAVA_14;
+        assert JavaVersion.parseSystemProperty("15")==JavaVersion.JAVA_15;
+        assert JavaVersion.parseSystemProperty("16")==JavaVersion.JAVA_16;
+        assert JavaVersion.parseSystemProperty("17")==JavaVersion.JAVA_17;
     }
 
 

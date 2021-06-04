@@ -138,13 +138,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 
 	@Override
 	public void update(FileTableTab tab, int index) {
-		if (JavaVersion.JAVA_5.isCurrentOrLower()) {
-			/*setLockedAt(index, tab.isLocked());
-			setTitleAt(index, tab.getLocation().getName());	*/
-		}
-		else {
-			setTabHeader(index, headersFactory.create(tab));
-		}
+	    setTabHeader(index, headersFactory.create(tab));
 
 		String locationText = tab.getLocation().getPath();
 		// For OSes with 'root drives' (Windows, OS/2), remove the leading '/' character
