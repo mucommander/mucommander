@@ -185,14 +185,18 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         // Set new window's title. Window titles show window number only if there is more than one window.
         // So if a second window was just created, we update first window's title so that it shows window number (#1).
-        instance.mainFrames.forEach(frame -> frame.updateWindowTitle());
+        instance.mainFrames.forEach(MainFrame::updateWindowTitle);
 
         // Make frames visible
         newMainFrames.forEach(frame -> frame.setVisible(true));
 
         if (!instance.mainFrames.isEmpty()) {
-        	int previouslySelectedMainFrame = mainFrameBuilder.getSelectedFrame();
-        	instance.mainFrames.get(previouslySelectedMainFrame).toFront();
+            // get the main frame that was previously selected
+            int mainFrameToSelect = mainFrameBuilder.getSelectedFrame();
+            // if we cannot restore previous selection, default to the first main frame
+            if (mainFrameToSelect >= instance.mainFrames.size())
+                mainFrameToSelect = 0;
+            instance.mainFrames.get(mainFrameToSelect).toFront();
         }
     }
 
