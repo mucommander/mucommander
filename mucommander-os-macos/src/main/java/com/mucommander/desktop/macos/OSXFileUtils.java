@@ -27,7 +27,6 @@ import com.dd.plist.BinaryPropertyListParser;
 import com.dd.plist.NSString;
 import com.dd.plist.PropertyListFormatException;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.runtime.OsVersion;
 import com.sun.jna.platform.mac.XAttrUtils;
 
 /**
@@ -59,9 +58,6 @@ public class OSXFileUtils {
      * @return the Spotlight/Finder comment of the specified file
      */
     public static String getSpotlightComment(AbstractFile file) {
-        if(!OsVersion.MAC_OS_10_4.isCurrentOrHigher())
-            return null;
-
         byte[] bytes = XAttrUtils.read(file.getAbsolutePath(), XAttrUtils.COMMENT);
         if (bytes == null)
             return null;

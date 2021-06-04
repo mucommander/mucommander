@@ -23,7 +23,6 @@ import java.awt.Insets;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -55,9 +54,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	}
 	
 	protected CommandBarButton(String actionId, MainFrame mainFrame) {
-		
-		// Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
         }

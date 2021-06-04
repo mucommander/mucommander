@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
@@ -62,10 +61,6 @@ public class AppleScript {
 	
     /** The UTF-8 encoding */
     public final static String UTF8 = "UTF-8";
-
-    /** The MacRoman encoding */
-    public final static String MACROMAN = "MacRoman";
-
 
     /**
      * Executes the given AppleScript and returns <code>true</code> if it completed its execution normally, i.e. without
@@ -139,7 +134,6 @@ public class AppleScript {
      * Returns the encoding that AppleScript uses on the current runtime environment:
      * <ul>
      *   <li>{@link #UTF8} for AppleScript 2.0+ (macOS 10.5 and up)</li>
-     *   <li>{@link #MACROMAN} for AppleScript 1.10- (macOS 10.4 or lower)</li>
      * </ul>
      *
      * If {@link #MACROMAN} is used, the scripts passed to {@link #execute(String, StringBuilder)} should not contain
@@ -148,15 +142,7 @@ public class AppleScript {
      * @return the encoding that AppleScript uses on the current runtime environment
      */
     public static String getScriptEncoding() {
-        // - AppleScript 2.0+ (macOS 10.5 and up) is fully Unicode-aware and expects a script in UTF-8 encoding.
-        // - AppleScript 1.3- (macOS 10.4 or lower) expects MacRoman encoding, not UTF-8.
-        String encoding;
-        if(OsVersion.MAC_OS_10_5.isCurrentOrHigher())
-            encoding = UTF8;
-        else
-            encoding = MACROMAN;
-
-        return encoding;
+        return UTF8;
     }
 
 

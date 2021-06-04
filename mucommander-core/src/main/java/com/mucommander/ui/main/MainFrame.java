@@ -122,22 +122,12 @@ public class MainFrame extends JFrame implements LocationListener {
         // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.
         icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_8.png").getImage());
 
-        // - Windows XP messes up 8-bit PNG transparency.
-        // We would be better off with the .ico of the launch4j exe (which has 8-bit alpha transparency) but there
-        // seems to be no way to keep it when in 'dontWrapJar' mode (separate exe and jar files).
-        if(OsFamily.WINDOWS.isCurrent() && OsVersion.WINDOWS_XP.isCurrentOrLower()) {
-            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon48_8.png").getImage());
-        }
-        // - Windows Vista supports 8-bit transparency and icon resolutions up to 256x256.
-        // - GNOME and KDE support 8-bit transparency.
-        else {
-            // Add PNG 24 images (8-bit transparency)
-            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_24.png").getImage());
-            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon32_24.png").getImage());
-            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon48_24.png").getImage());
-            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png").getImage());
-            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon256_24.png").getImage());
-        }
+        // Add PNG 24 images (8-bit transparency)
+        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_24.png").getImage());
+        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon32_24.png").getImage());
+        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon48_24.png").getImage());
+        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png").getImage());
+        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon256_24.png").getImage());
 
         setIconImages(icons);
     }
@@ -642,8 +632,7 @@ public class MainFrame extends JFrame implements LocationListener {
             title += " ["+(mainFrames.indexOf(this)+1)+"]";
         setTitle(title);
 
-        // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getFolderPanel().getCurrentFolder();
             Object javaIoFile;

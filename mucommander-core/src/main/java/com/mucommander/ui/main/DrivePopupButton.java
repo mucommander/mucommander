@@ -54,7 +54,6 @@ import com.mucommander.commons.file.filter.RegexpPathFilter;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -145,8 +144,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // Listen to configuration changes to update the button if the system file icons policy has changed
         MuConfigurations.addPreferencesListener(this);
 
-        // Use new JButton decorations introduced in Mac OS X 10.5 (Leopard)
-        if(OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_5.isCurrentOrHigher()) {
+        if(OsFamily.MAC_OS.isCurrent()) {
             setMargin(new Insets(1,1,1,1));
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
