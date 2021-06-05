@@ -98,6 +98,6 @@ public class FocusNextAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.CTRL_DOWN_MASK); }
+		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }
