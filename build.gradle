@@ -409,7 +409,9 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
         include '*.jar'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix') {
+    def tempDir = File.createTempDir()
+    tempDir.deleteOnExit()
+    from ({ new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
         include 'felix-cache'
         dirMode 0777
     }
@@ -442,7 +444,9 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         include '*.jar'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix') {
+    def tempDir = File.createTempDir()
+    tempDir.deleteOnExit()
+    from ({ new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
         include 'felix-cache'
         dirMode 0777
     }
