@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander.search.ui;
+package com.mucommander.search;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -49,8 +49,6 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.spinner.IntEditor;
-import com.mucommander.search.SearchBuilder;
-import com.mucommander.search.SearchUtils;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.FindAction;
