@@ -32,13 +32,13 @@ import javax.swing.table.AbstractTableModel;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 
@@ -334,7 +334,7 @@ public class FileTableModel extends AbstractTableModel {
 
     public Function<AbstractFile, String> getNameFunc() {
         switch (currentFolder.getURL().getScheme()) {
-        case SearchProtocolProvider.SCHEMA:
+        case SearchFile.SCHEMA:
             String base = currentFolder.getURL().getHost();
             int beginIndex = base.length() + 1; // + path separator
             return file -> {

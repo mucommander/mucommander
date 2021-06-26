@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.search.file;
+package com.mucommander.commons.file.protocol.search;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
@@ -38,10 +37,6 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.job.FileJobState;
-import com.mucommander.search.SearchBuilder;
-import com.mucommander.search.SearchJob;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * @author Arik Hadas
@@ -49,8 +44,10 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchFile extends ProtocolFile implements SearchListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchFile.class);
     private static final AbstractFile[] EMPTY_RESULTS = new AbstractFile[0];
-    private static final EnumSet<FileJobState> COMPLETED_SEARCH_STATUSES = EnumSet.of(FileJobState.FINISHED, FileJobState.INTERRUPTED);
     public static final int MAX_RESULTS = 10 * 1000;
+
+    /** The corresponding schema part of virtual search files in {@link FileURL} */
+    public static final String SCHEMA = "find";
 
     /** Time at which the search results were last modified. */
     private long lastModified;
@@ -170,18 +167,29 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     @Override
     public Object getUnderlyingFileObject() {return null;}
 
-    public boolean isSearchCompleted() {
-        return COMPLETED_SEARCH_STATUSES.contains(search.getState());
+    public Object getSearchPhase() {
+        return search.getState();
     }
 
     /**
      * Starts a search thread.
      * @param mainFrame the MainFrame the search is initiated from
      */
-    public void start(MainFrame mainFrame) {
+    public void start(SearchBuilder builder) {
         lastModified = System.currentTimeMillis();
         pausedToDueMaxResults = null;
-        search = createSearchJob(mainFrame);
+        search = builder
+                .listener(this)
+                .what(searchStr)
+                .where(searchPlace)
+                .searchArchives(properties)
+                .searchHidden(properties)
+                .searchSubfolders(properties)
+                .searchDepth(properties)
+                .matchCaseInsensitive(properties)
+                .matchRegex(properties)
+                .searchText(properties)
+                .build();
         search.start();
     }
 
@@ -200,21 +208,5 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     public void continueSearch() {
         search.setListener(this);
         pausedToDueMaxResults = false;
-    }
-
-    private SearchJob createSearchJob(MainFrame mainFrame) {
-        return SearchBuilder.newSearch()
-                .listener(this)
-                .mainFrame(mainFrame)
-                .what(searchStr)
-                .where(searchPlace)
-                .searchArchives(properties)
-                .searchHidden(properties)
-                .searchSubfolders(properties)
-                .searchDepth(properties)
-                .matchCaseInsensitive(properties)
-                .matchRegex(properties)
-                .searchText(properties)
-                .build();
     }
 }

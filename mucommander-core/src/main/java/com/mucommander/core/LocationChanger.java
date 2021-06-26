@@ -32,8 +32,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.search.file.SearchFile;
-import com.mucommander.search.file.SearchProtocolProvider;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.event.LocationManager;
@@ -176,7 +175,7 @@ public class LocationChanger {
 			FileURL folderURL = folder.getURL();
 			ChangeFolderThread thread;
 			switch(folderURL.getScheme()) {
-			case SearchProtocolProvider.SCHEMA:
+			case SearchFile.SCHEMA:
 			    if (folder instanceof SearchFile)
 			        ((SearchFile) folder).stop();
 			    else
@@ -284,7 +283,7 @@ public class LocationChanger {
 			// a null value to be returned, which is particularly problematic during startup (would cause an NPE).
 			ChangeFolderThread thread;
 			switch (folderURL.getScheme()) {
-			case SearchProtocolProvider.SCHEMA:
+			case SearchFile.SCHEMA:
 			    thread = new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
 			    break;
 			default:

@@ -39,6 +39,8 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.local.LocalProtocolProvider;
+import com.mucommander.commons.file.protocol.search.SearchFile;
+import com.mucommander.commons.file.protocol.search.SearchProtocolProvider;
 import com.mucommander.commons.file.util.FilePool;
 import com.mucommander.commons.file.util.PathTokenizer;
 import com.mucommander.commons.file.util.PathUtils;
@@ -119,6 +121,7 @@ public class FileFactory {
     static {
         // Register built-in file protocols.
         registerProtocol(LocalFile.SCHEMA, new LocalProtocolProvider());
+        registerProtocol(SearchFile.SCHEMA, new SearchProtocolProvider());
 
         // Set the default FileIconProvider instance
         defaultFileIconProvider = new SwingFileIconProvider();

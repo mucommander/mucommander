@@ -19,6 +19,7 @@ package com.mucommander.core;
 
 import java.awt.Cursor;
 import java.io.IOException;
+import java.util.EnumSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,10 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
-import com.mucommander.search.file.SearchFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
+import com.mucommander.job.FileJobState;
+import com.mucommander.job.impl.SearchJob;
+import com.mucommander.search.SearchBuilder;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.event.LocationManager;
@@ -50,6 +54,8 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
     private final static int CONTINUE_ACTION = 0;
     private final static int STOP_ACTION = 1;
+
+    private static final EnumSet<FileJobState> COMPLETED_SEARCH_STATUSES = EnumSet.of(FileJobState.FINISHED, FileJobState.INTERRUPTED);
 
     public SearchUpdaterThread(FileURL folderURL, boolean changeLockedTab,
             MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
@@ -83,7 +89,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
             search = (SearchFile) FileFactory.getFile(folderURL, true);
 
             // Initiate the search thread
-            search.start(mainFrame);
+            search.start(SearchBuilder.newSearch().mainFrame(mainFrame));
 
             // Retrieve the timestamp of the latest search results
             long date = search.getDate();
@@ -100,7 +106,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
                 sleep(1000);
 
-                boolean searchCompleted = search.isSearchCompleted();
+                boolean searchCompleted = COMPLETED_SEARCH_STATUSES.contains(search.getSearchPhase());
                 // Retrieve the timestamp of the latest search results
                 long currentDate = search.getDate();
                 boolean searchResultsChanged = currentDate != date;
