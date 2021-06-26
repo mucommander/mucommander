@@ -25,7 +25,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.search.SearchBuilder;
-import com.mucommander.search.ui.SearchDialog;
+import com.mucommander.search.SearchDialog;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
