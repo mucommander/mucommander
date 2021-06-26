@@ -5,7 +5,7 @@ dependencies {
     implementation 'org.apache.hadoop:hadoop-core:0.20.2'
     implementation 'org.osgi:osgi.core:7.0.0'
     implementation 'commons-logging:commons-logging:1.2'
-    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
 
     // Use JUnit test framework
     testImplementation 'org.testng:testng:6.11'

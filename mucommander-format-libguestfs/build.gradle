@@ -1,7 +1,7 @@
 dependencies {
     api project(':mucommander-commons-file')
 
-    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'org.osgi:osgi.core:7.0.0'
     implementation files('libs/libguestfs.jar')
 }

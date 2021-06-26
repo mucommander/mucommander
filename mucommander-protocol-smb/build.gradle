@@ -3,7 +3,7 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
     implementation 'jcifs:jcifs:1.3.17'
-    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'org.osgi:osgi.core:7.0.0'
 
     // Use JUnit test framework
