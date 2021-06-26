@@ -456,9 +456,13 @@ public class FileFactory {
         // Extract every filename from the path from left to right and for each of them, see if it looks like an archive.
         // If it does, create the appropriate protocol file and wrap it with an archive file.
         while (pt.hasMoreFilenames()) {
+            String filename = pt.nextFilename();
+            if (SearchFile.SCHEMA.equals(protocol))
+                continue;
+
             // Test if the filename's extension looks like a supported archive format...
             // Note that the archive can also be a directory with an archive extension.
-            if (isArchiveFilename(pt.nextFilename())) {
+            if (isArchiveFilename(filename)) {
                 // Remove trailing separator of file, some file protocols such as SFTP don't like trailing separators.
                 // On the contrary, directories without a trailing slash are fine.
                 String currentPath = PathUtils.removeTrailingSeparator(pt.getCurrentPath(), pathSeparator);
