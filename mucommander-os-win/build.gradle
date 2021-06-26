@@ -15,7 +15,7 @@ repositories.jcenter()
 dependencies {
     api project(":mucommander-core")
     api project(":mucommander-os-api")
-    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'org.osgi:osgi.core:7.0.0'
 
     comprise 'net.java.dev.jna:jna-platform:5.5.0'

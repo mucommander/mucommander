@@ -16,7 +16,7 @@
      api project(":mucommander-core")
      api project(":mucommander-os-api")
      api project(":mucommander-process")
-     implementation 'org.slf4j:slf4j-api:1.7.26'
+     implementation 'org.slf4j:slf4j-api:1.7.30'
      implementation 'org.osgi:osgi.core:7.0.0'
  
      // Use JUnit test framework
