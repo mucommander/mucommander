@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.search;
+package com.mucommander.job.impl;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -28,10 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.protocol.search.SearchListener;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobState;
-import com.mucommander.search.file.SearchListener;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -39,7 +39,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Arik Hadas
  */
-public class SearchJob extends FileJob {
+public class SearchJob extends FileJob implements com.mucommander.commons.file.protocol.search.SearchJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchJob.class);
 
     private Predicate<AbstractFile> fileMatcher;
@@ -55,7 +55,7 @@ public class SearchJob extends FileJob {
         findings = new CopyOnWriteArrayList<>();
     }
 
-    void setDepth(int depth) {
+    public void setDepth(int depth) {
         this.depth = depth;
     }
 

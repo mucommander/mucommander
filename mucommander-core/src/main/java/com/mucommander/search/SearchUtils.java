@@ -19,7 +19,7 @@ package com.mucommander.search;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.search.file.SearchProtocolProvider;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 
 /**
  * @author Arik Hadas
@@ -30,10 +30,10 @@ public class SearchUtils {
         FileURL fileURL = (FileURL) file.getURL().clone();
         switch(fileURL.getScheme()) {
         default:
-            fileURL.setScheme(SearchProtocolProvider.SCHEMA);
+            fileURL.setScheme(SearchFile.SCHEMA);
             fileURL.setHost(file.getAbsolutePath(false));
             fileURL.setPath(null);
-        case SearchProtocolProvider.SCHEMA:
+        case SearchFile.SCHEMA:
             fileURL.setQuery(null);
         }
         return fileURL;

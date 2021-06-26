@@ -48,6 +48,7 @@ jar {
             'com.mucommander.commons.file.osgi,' +
             'com.mucommander.commons.file.protocol,' +
             'com.mucommander.commons.file.protocol.local,' +
+            'com.mucommander.commons.file.protocol.search,' +
             'com.mucommander.commons.file.util,' +
             'com.sun.jna.platform.win32',
          'Specification-Title': "muCommander",

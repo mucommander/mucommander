@@ -30,15 +30,16 @@ import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
 import org.unix4j.unix.grep.GrepOptions;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.protocol.search.SearchListener;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.search.file.SearchListener;
+import com.mucommander.job.impl.SearchJob;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * Builder of SearchJobs
  * @author Arik Hadas
  */
-public class SearchBuilder {
+public class SearchBuilder implements com.mucommander.commons.file.protocol.search.SearchBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchBuilder.class);
 
     public static final String SEARCH_ARCHIVES = "archives";
@@ -64,6 +65,8 @@ public class SearchBuilder {
     private String searchText;
     private boolean textCaseInsensitive;
     private boolean textMatchRegex;
+
+    private SearchJob searchJob;
 
     private SearchBuilder() {
         searchSubfolders = true;
@@ -160,17 +163,18 @@ public class SearchBuilder {
     }
 
     public SearchJob build() {
-        SearchJob job = new SearchJob(mainFrame, new FileSet(entrypoint, entrypoint));
-        job.setListener(listener);
-        job.setDepth(searchDepth);
-        
-        Predicate<AbstractFile> fileMatcher = createFilePredicate();
-        job.setFileMatcher(fileMatcher);
+        if (searchJob == null) {
+            searchJob = new SearchJob(mainFrame, new FileSet(entrypoint, entrypoint));
+            searchJob.setListener(listener);
+            searchJob.setDepth(searchDepth);
 
-        Predicate<AbstractFile> lsFilter = createListFilter();
-        job.setListFilter(lsFilter);
+            Predicate<AbstractFile> fileMatcher = createFilePredicate();
+            searchJob.setFileMatcher(fileMatcher);
 
-        return job;
+            Predicate<AbstractFile> lsFilter = createListFilter();
+            searchJob.setListFilter(lsFilter);
+        }
+        return searchJob;
     }
 
     private Predicate<AbstractFile> createFilePredicate() {

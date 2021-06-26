@@ -23,8 +23,8 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.search.SearchProtocolProvider;
 import com.mucommander.search.SearchUtils;
-import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;

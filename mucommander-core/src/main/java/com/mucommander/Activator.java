@@ -38,8 +38,6 @@ import com.mucommander.os.api.CoreService;
 import com.mucommander.osgi.FileEditorServiceTracker;
 import com.mucommander.osgi.FileViewerServiceTracker;
 import com.mucommander.osgi.OperatingSystemServiceTracker;
-import com.mucommander.search.file.SearchProtocolProvider;
-import com.mucommander.search.file.SearchSchemeParser;
 import com.mucommander.text.TranslationTracker;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.about.AboutDialog;
@@ -68,7 +66,6 @@ public class Activator implements BundleActivator {
 
     private ServiceRegistration<CoreService> coreRegistration;
     private ServiceRegistration<FileProtocolService> bookmarksRegistration;
-    private ServiceRegistration<FileProtocolService> searchRegistration;
 
     /** Registered shutdown-hook */
     private ShutdownHook shutdownHook;
@@ -82,9 +79,6 @@ public class Activator implements BundleActivator {
         // Register the application-specific 'bookmark' protocol.
         FileProtocolService bookmarksService = createBookmarkProtocolService();
         bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
-        // Register the application-specific 'search' protocol.
-        FileProtocolService searchService = createSearchProtocolService();
-        searchRegistration = context.registerService(FileProtocolService.class, searchService, null);
         // Listen to protocol panel services
         protocolPanelTracker = new ProtocolPanelProviderTracker(context);
         protocolPanelTracker.open();
@@ -118,7 +112,6 @@ public class Activator implements BundleActivator {
         osTracker.close();
         coreRegistration.unregister();
         bookmarksRegistration.unregister();
-        searchRegistration.unregister();
         // if the activator performs the shutdown tasks, no need for the shutdown-hook
         if (ShutdownHook.performShutdownTasks())
             Runtime.getRuntime().removeShutdownHook(shutdownHook);
@@ -260,25 +253,6 @@ public class Activator implements BundleActivator {
             @Override
             public ProtocolProvider getProtocolProvider() {
                 return new BookmarkProtocolProvider();
-            }
-        };
-    }
-
-    private FileProtocolService createSearchProtocolService() {
-        return new FileProtocolService() {
-            @Override
-            public String getSchema() {
-                return SearchProtocolProvider.SCHEMA;
-            }
-
-            @Override
-            public ProtocolProvider getProtocolProvider() {
-                return new SearchProtocolProvider();
-            }
-
-            @Override
-            public SchemeHandler getSchemeHandler() {
-                return new DefaultSchemeHandler(new SearchSchemeParser());
             }
         };
     }

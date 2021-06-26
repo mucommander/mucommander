@@ -53,6 +53,7 @@ import com.mucommander.commons.file.filter.PathFilter;
 import com.mucommander.commons.file.filter.RegexpPathFilter;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.conf.MuConfigurations;
@@ -60,7 +61,6 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
-import com.mucommander.search.file.SearchProtocolProvider;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
@@ -232,7 +232,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         	setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARKS_ICON_NAME));
         	break;
 
-        case SearchProtocolProvider.SCHEMA:
+        case SearchFile.SCHEMA:
             setText(Translator.get("find"));
             setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FIND_RESULT_ICON_NAME));
             break;

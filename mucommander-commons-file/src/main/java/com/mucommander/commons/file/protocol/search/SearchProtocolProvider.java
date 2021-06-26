@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.search.file;
+package com.mucommander.commons.file.protocol.search;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,9 +35,6 @@ import com.mucommander.commons.file.protocol.ProtocolProvider;
  */
 public class SearchProtocolProvider implements ProtocolProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchProtocolProvider.class);
-
-    /** The corresponding schema part of virtual search files in {@link FileURL} */
-    public static final String SCHEMA = "find";
 
     @Override
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
