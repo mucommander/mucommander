@@ -200,7 +200,7 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
         case CANCEL_SIGN_IN:
             signingIn.setText(Translator.get("cancel"));
             signingIn.setIcon(null);
-            signingInInstructions.setText(Translator.get("server_connect_dialog.google.wait_for_sign_in"));
+            signingInInstructions.setText(Translator.get("server_connect_dialog.wait_for_sign_in"));
             break;
         case SIGN_IN:
             if (setAccountFieldsVisible)
