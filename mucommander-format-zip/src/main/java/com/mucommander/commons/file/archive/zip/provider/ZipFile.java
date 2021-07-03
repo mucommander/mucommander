@@ -791,11 +791,11 @@ public class ZipFile implements ZipConstants {
 
             if(isUTF8) {
                 entryInfo.encoding = UTF_8;
-                LOGGER.info("Entry declared as UTF-8");
+                LOGGER.debug("Entry declared as UTF-8");
             }
             else if(defaultEncodingSet) {
                 entryInfo.encoding = defaultEncoding;
-                LOGGER.info("Using default encoding: "+defaultEncoding);
+                LOGGER.debug("Using default encoding: "+defaultEncoding);
             }
             else {
 //                FileLogger.finest("Encoding will be detected later");
