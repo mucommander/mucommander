@@ -438,7 +438,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
                 if (!autoUpdateThreadNotified) {
                     autoUpdateThreadNotified = true;
                     autoUpdateThread.notify();
-                    LOGGER.info("notified");
                 }
             }
         }
