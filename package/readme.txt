@@ -32,7 +32,7 @@ What's new since v0.9.7 ?
 -----------------------
 
 New features:
--
+- Add OneDrive as a file protocol (including browsing, uploading and downloading capabilities).
 
 Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.

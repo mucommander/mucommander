@@ -66,6 +66,7 @@ dependencies {
     osgiRuntime project('mucommander-protocol-http')
     osgiRuntime project('mucommander-protocol-dropbox')
     osgiRuntime project('mucommander-protocol-gdrive')
+    osgiRuntime project('mucommander-protocol-onedrive')
     osgiRuntime project('mucommander-protocol-nfs')
     osgiRuntime project('mucommander-protocol-smb')
     osgiRuntime project('mucommander-protocol-vsphere')
@@ -142,6 +143,11 @@ runOsgi {
         }
         manifest("google-http-client.*") {
             instruction 'Import-Package', 'com.google.api.client.auth.oauth2', '*'
+        }
+        manifest("graph.*") {
+            //instruction 'Import-Package', '!android.*', '!com.aayushatharva.brotli4j.*', '*'
+            instruction 'Import-Package', 'javax.xml.transform', 'javax.xml.stream', 'javax.*', 'com.sun.net.httpserver', '!*'
+            instruction 'Export-Package', '!org.slf4j', '*'
         }
     }
 }
