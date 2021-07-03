@@ -58,17 +58,17 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
     public void startWatch() {
         Path path = Paths.get(getAbsolutePath());
         LOGGER.debug("start watching {}", this);
-        try {
-            watchService = FileSystems.getDefault().newWatchService();
-            watchKey = path.register(watchService,
-                    kinds);
-            super.startWatch();
-        } catch (IOException e) {
-            watchService = null;
-            LOGGER.error("failed to register WatchService", e);
-            LOGGER.warn("fallback to monitor {} by polling", this);
-            super.startWatch();
+        if (isDirectory()) {
+            try {
+                watchService = FileSystems.getDefault().newWatchService();
+                watchKey = path.register(watchService, kinds);
+            } catch (IOException e) {
+                watchService = null;
+                LOGGER.error("failed to register WatchService", e);
+                LOGGER.warn("fallback to monitor {} by polling", this);
+            }
         }
+        super.startWatch();
     }
 
     @Override
