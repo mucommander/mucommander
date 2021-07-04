@@ -39,13 +39,13 @@ jar {
         exclude 'codegen/**'
         exclude 'META-INF/**'
    } }
-   bnd ('Bundle-Name': 'muCommander-core',
+    bnd('Bundle-Name': 'muCommander-core',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'The core part of muCommander',
         'Bundle-DocURL': 'https://www.mucommander.com',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version+'-'+project.ext.release,
+        'Specification-Version': project.version + '-' + project.ext.release,
         'Implementation-Title': "muCommander",
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
@@ -53,20 +53,22 @@ jar {
         'Build-Url': "https://www.mucommander.com/version/nightly.xml",
         'Import-Package': 'com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
         'Export-Package':
-            'com.mucommander.core.desktop,' +
-            'com.mucommander.job,' +
-            'com.mucommander.job.impl,' +
-            'com.mucommander.process,' +
-            'com.mucommander.text,' +
-            'com.mucommander.osgi,' +
-            'com.mucommander.ui.dialog,' +
-            'com.mucommander.ui.dialog.file,' +
-            'com.mucommander.ui.dialog.server,' +
-            'com.mucommander.ui.encoding,' +
-            'com.mucommander.ui.theme,' +
-            'com.mucommander.snapshot,' +
-            'com.mucommander.ui.viewer,' +
-            'com.mucommander.ui.main,' +
-            'com.mucommander.ui.main.table',
+                'com.mucommander.core.desktop,' +
+                'com.mucommander.job,' +
+                'com.mucommander.job.impl,' +
+                'com.mucommander.process,' +
+                'com.mucommander.text,' +
+                'com.mucommander.osgi,' +
+                'com.mucommander.ui.dialog,' +
+                'com.mucommander.ui.dialog.file,' +
+                'com.mucommander.ui.dialog.server,' +
+                'com.mucommander.ui.encoding,' +
+                'com.mucommander.ui.theme,' +
+                'com.mucommander.snapshot,' +
+                'com.mucommander.ui.viewer,' +
+                'com.mucommander.ui.main,' +
+                'com.mucommander.ui.main.table,' +
+                'com.mucommander.ui.dialog.pref,' +
+                'com.mucommander.preferences.osgi',
         'Bundle-Activator': 'com.mucommander.Activator')
 }

@@ -130,6 +130,11 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         return prefPanel;
     }
 
+    public void addPreferencesPanel(String title, PreferencesPanel prefPanel) {
+        tabbedPane.add(title, prefPanel);
+        prefPanels.add(prefPanel);
+    }
+
     /**
      * Adds the specified preferences panel to this dialog.
      * @param prefPanel panel to add.

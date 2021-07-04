@@ -16,30 +16,33 @@
  */
 package com.mucommander.ui.plaf;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.mucommander.preferences.osgi.PreferencePanelProvider;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 import javax.swing.*;
 
 public class Activator implements BundleActivator {
+
+    private ServiceRegistration<PreferencePanelProvider> serviceRegistration;
+
     @Override
     public void start(BundleContext context) throws Exception {
-        SwingUtilities.invokeAndWait(this::registerLafs);
+        SwingUtilities.invokeLater(this::registerLafs);
+        serviceRegistration = context.registerService(PreferencePanelProvider.class, new LookAndFeelPreferencesPanelProvider(), null);
     }
 
     private void registerLafs() {
         UIManager.put("swing.boldMetal", Boolean.FALSE);
-        UIManager.installLookAndFeel(FlatDarkLaf.NAME, FlatDarkLaf.class.getName());
-        UIManager.installLookAndFeel(FlatLightLaf.NAME, FlatLightLaf.class.getName());
-        UIManager.installLookAndFeel(FlatDarculaLaf.NAME, FlatDarculaLaf.class.getName());
-        UIManager.installLookAndFeel(FlatIntelliJLaf.NAME, FlatIntelliJLaf.class.getName());
+//        UIManager.installLookAndFeel(FlatDarkLaf.NAME, FlatDarkLaf.class.getName());
+//        UIManager.installLookAndFeel(FlatLightLaf.NAME, FlatLightLaf.class.getName());
+//        UIManager.installLookAndFeel(FlatDarculaLaf.NAME, FlatDarculaLaf.class.getName());
+//        UIManager.installLookAndFeel(FlatIntelliJLaf.NAME, FlatIntelliJLaf.class.getName());
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
+        serviceRegistration.unregister();
     }
 }

@@ -17,16 +17,18 @@
 
 package com.mucommander.ui.dialog.pref.general;
 
-import java.awt.Dimension;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import com.mucommander.conf.MuConfigurations;
+import com.mucommander.preferences.osgi.PreferencePanelProvider;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This is the main preferences dialog that contains all preferences panels organized by tabs.
@@ -92,6 +94,11 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
 
 
 
+    // - Tab icons --------------------------------------------------------------
+    // --------------------------------------------------------------------------
+    private final static List<PreferencePanelProvider> ADDITIONAL_PANEL_PROVIDERS = new ArrayList<>();
+
+
     // - Initialisation ---------------------------------------------------------
     // --------------------------------------------------------------------------
     /**
@@ -108,6 +115,12 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
         addPreferencesPanel(new ShortcutsPanel(this),  SHORTCUTS_ICON);
         addPreferencesPanel(new MailPanel(this),       MAIL_ICON);
         addPreferencesPanel(new MiscPanel(this),       MISC_ICON);
+
+        // Add additional preferences tabs:
+        ADDITIONAL_PANEL_PROVIDERS
+                .stream()
+                .sorted(Comparator.comparing(PreferencePanelProvider::getWeight))
+                .forEach(p -> addPreferencesPanel(p.getTitle(), p.createPreferencePanel(this)));
 
         // Sets the dialog's size.
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -181,5 +194,13 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     	// located in this dialog => we can clear the list of modified components in this dialog.
     	if (!enable)
     		modifiedComponents.clear();
+    }
+
+    public static synchronized void addPreferencePanelProvider(PreferencePanelProvider preferencePanelProvider) {
+        ADDITIONAL_PANEL_PROVIDERS.add(preferencePanelProvider);
+    }
+
+    public static synchronized void removePreferencePanelProvider(PreferencePanelProvider preferencePanelProvider) {
+        ADDITIONAL_PANEL_PROVIDERS.remove(preferencePanelProvider);
     }
 }

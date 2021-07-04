@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.mucommander.preferences.osgi.PreferencePanelProviderTracker;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -79,6 +80,9 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         LOGGER.debug("starting");
         this.context = context;
+        // Listen to Preferences panels:
+        PreferencePanelProviderTracker preferencePanelProviderTracker = new PreferencePanelProviderTracker(context);
+        preferencePanelProviderTracker.open();
         // Register the application-specific 'bookmark' protocol.
         FileProtocolService bookmarksService = createBookmarkProtocolService();
         bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
