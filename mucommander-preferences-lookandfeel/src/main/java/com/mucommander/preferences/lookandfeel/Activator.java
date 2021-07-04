@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.ui.plaf;
+package com.mucommander.preferences.lookandfeel;
 
 import com.mucommander.preferences.osgi.PreferencePanelProvider;
 import org.osgi.framework.BundleActivator;

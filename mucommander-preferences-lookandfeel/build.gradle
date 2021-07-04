@@ -14,6 +14,8 @@ dependencies {
 }
 
 jar {
+    // flatlaf contains some classes that we do not want to include in OSGI bundle,
+    // so we will package it as part of our bundle:
     from(configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }) {
         eachFile { f ->
             // those files will be moved from META-INF/versions/9/ :
@@ -35,12 +37,12 @@ jar {
     classpath = []
 
     bnd(
-            'Bundle-Name': 'muCommander-ui-plaf',
+            'Bundle-Name': 'mucommander-preferences-lookandfeel',
             'Bundle-Vendor': 'muCommander',
-            'Bundle-Description': 'Additional LookAndFeels',
+            'Bundle-Description': 'Look and Feel preferences',
             'Bundle-DocURL': 'https://www.mucommander.com',
-            'Bundle-Activator': 'com.mucommander.ui.plaf.Activator',
-            'Export-Package': 'com.mucommander.ui.plaf,com.formdev.flatlaf,com.formdev.flatlaf.ui,com.formdev.flatlaf.util,com.formdev.flatlaf.resources,com.formdev.flatlaf.natives,com.formdev.flatlaf.json,com.formdev.flatlaf.icons',
+            'Bundle-Activator': 'com.mucommander.preferences.lookandfeel.Activator',
+            'Export-Package': 'com.mucommander.preferences.lookandfeel',
             'Import-Package': '*',
             'Specification-Version': project.version + '-' + project.ext.release,
             'Implementation-Title': "muCommander",

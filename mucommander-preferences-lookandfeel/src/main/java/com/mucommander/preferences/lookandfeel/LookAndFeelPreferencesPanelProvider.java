@@ -1,4 +1,4 @@
-package com.mucommander.ui.plaf;
+package com.mucommander.preferences.lookandfeel;
 
 import com.mucommander.preferences.osgi.PreferencePanelProvider;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
