@@ -256,20 +256,24 @@ public class muCommander
         configProps.putIfAbsent(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERTY, "install, start");
         configProps.putIfAbsent("felix.log.level", "1");
 
-        configProps.computeIfAbsent("org.osgi.framework.system.packages.extra",
-                key -> "sun.net.www," +
-                        "sun.misc," +
-                        "sun.plugin.protocol," + //optional
-                        "com.sun.java.browser.net," + //optional
-                        "javax.annotation," +
-                        "javax.activation," +
-                        "sun.security.action," +
-                        "com.apple.eawt," +
-                        "com.apple.eio," +
-                        "com.sun.image.codec.jpeg," +
-                        "sun.awt.image," +
-                        "sun.awt.image.codec," +
-                        "com.apple.laf"
+        configProps.putIfAbsent("org.osgi.framework.system.packages.extra", "" +
+                "com.apple.eawt," +
+                "com.apple.eio," +
+                "com.apple.laf," +
+                "com.sun.image.codec.jpeg," +
+                "com.sun.java.browser.net," +
+                "javax.activation," +
+                "javax.annotation," +
+                "sun.awt," +
+                "sun.awt.image," +
+                "sun.awt.image.codec," +
+                "sun.awt.windows," +
+                "sun.java2d," +
+                "sun.misc," +
+                "sun.net.www," +
+                "sun.plugin.protocol," +
+                "sun.security.action," +
+                "sun.swing"
         );
 
         configProps.computeIfAbsent(AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY, key -> new File(codeParentFolder, "bundle").getAbsolutePath());

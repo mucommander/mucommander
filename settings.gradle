@@ -49,4 +49,6 @@ include 'mucommander-viewer-binary'
 
 include 'apache-bzip2'
 
+include 'mucommander-ui-plaf'
+
 rootProject.name = 'mucommander'

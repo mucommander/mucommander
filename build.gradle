@@ -95,6 +95,8 @@ dependencies {
     osgiRuntime project('mucommander-os-linux')
     osgiRuntime project('mucommander-os-win')
     osgiRuntime project('mucommander-os-openvms')
+
+    osgiRuntime project('mucommander-ui-plaf')
 }
 
 createBundlesDir.doLast {
@@ -507,4 +509,3 @@ task(afterEclipseImport).doLast {
     f.append('encoding//src/main/resources/dictionary_zh_CN.properties=UTF-8\n')
     f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
 }
-

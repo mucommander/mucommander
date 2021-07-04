@@ -1,0 +1,49 @@
+plugins {
+    id 'biz.aQute.bnd.builder'
+}
+
+repositories.mavenCentral()
+
+dependencies {
+    api project(":mucommander-core")
+
+    implementation 'org.osgi:osgi.core:7.0.0'
+
+    comprise 'com.formdev:flatlaf:1.3'
+}
+
+jar {
+    from(configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }) {
+        eachFile { f ->
+            // those files will be moved from META-INF/versions/9/ :
+            if (f.relativePath.pathString.startsWith('com/formdev/flatlaf/util/LoggingFacadeImpl') || f.relativePath.pathString.startsWith('com/formdev/flatlaf/util/MultiResolutionImageSupport')) {
+                f.relativePath = new RelativePath(true, f.relativePath.parent, f.relativePath.lastName + ".jdk8")
+            }
+            // move JDK9 classes as main ones:
+            if (f.relativePath.pathString.startsWith('META-INF/versions/9/')) {
+                f.relativePath = new RelativePath(true, f.relativePath.segments.drop(1).drop(1).drop(1))
+            }
+            // not using MigLayout and it causes OSGI failures, excluding it:
+            if (f.relativePath.pathString.contains('MigLayout')) {
+                f.relativePath = new RelativePath(true, f.relativePath.parent, f.relativePath.lastName + ".deleted")
+            }
+        }
+    }
+
+    // clearing classpath so bnd will not copy all the packages blindly after we filtered them out:
+    classpath = []
+
+    bnd(
+            'Bundle-Name': 'muCommander-ui-plaf',
+            'Bundle-Vendor': 'muCommander',
+            'Bundle-Description': 'Additional LookAndFeels',
+            'Bundle-DocURL': 'https://www.mucommander.com',
+            'Bundle-Activator': 'com.mucommander.ui.plaf.Activator',
+            'Export-Package': 'com.mucommander.ui.plaf,com.formdev.flatlaf,com.formdev.flatlaf.ui,com.formdev.flatlaf.util,com.formdev.flatlaf.resources,com.formdev.flatlaf.natives,com.formdev.flatlaf.json,com.formdev.flatlaf.icons',
+            'Import-Package': '*',
+            'Specification-Version': project.version + '-' + project.ext.release,
+            'Implementation-Title': "muCommander",
+            'Implementation-Version': revision.substring(0, 7),
+            'Build-Date': new Date().format('yyyyMMdd'),
+            'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+}
