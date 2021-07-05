@@ -11,6 +11,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.26'
 
     comprise 'com.formdev:flatlaf:1.3'
+    comprise 'com.formdev:flatlaf-intellij-themes:1.3'
 }
 
 jar {
@@ -21,6 +22,10 @@ jar {
             // those files will be moved from META-INF/versions/9/ :
             if (f.relativePath.pathString.startsWith('com/formdev/flatlaf/util/LoggingFacadeImpl') || f.relativePath.pathString.startsWith('com/formdev/flatlaf/util/MultiResolutionImageSupport')) {
                 f.relativePath = new RelativePath(true, f.relativePath.parent, f.relativePath.lastName + ".jdk8")
+            }
+            // not copying module-info from dependencies:
+            if (f.relativePath.pathString.contains('module-info.class')) {
+                f.relativePath = new RelativePath(true, f.relativePath.parent, f.relativePath.lastName + ".deleted")
             }
             // move JDK9 classes as main ones:
             if (f.relativePath.pathString.startsWith('META-INF/versions/9/')) {

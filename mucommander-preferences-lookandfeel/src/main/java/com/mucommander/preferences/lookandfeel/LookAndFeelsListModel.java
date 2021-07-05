@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -42,6 +43,7 @@ class LookAndFeelsListModel extends AbstractListModel<LAFInfo> {
         list.add(new LookAndFeelInfo(FlatLightLaf.NAME, FlatLightLaf.class.getName()));
         list.add(new LookAndFeelInfo(FlatDarculaLaf.NAME, FlatDarculaLaf.class.getName()));
         list.add(new LookAndFeelInfo(FlatIntelliJLaf.NAME, FlatIntelliJLaf.class.getName()));
+        list.addAll(Arrays.asList(FlatAllIJThemes.INFOS));
 
         return list;
     }
