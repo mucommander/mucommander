@@ -96,7 +96,7 @@ dependencies {
     osgiRuntime project('mucommander-os-win')
     osgiRuntime project('mucommander-os-openvms')
 
-    osgiRuntime project('mucommander-ui-plaf')
+    osgiRuntime project('mucommander-preferences-lookandfeel')
 }
 
 createBundlesDir.doLast {

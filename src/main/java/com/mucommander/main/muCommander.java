@@ -50,7 +50,7 @@ import com.beust.jcommander.JCommander;
  * </p>
  * @author Arik Hadas
  */
-public class muCommander 
+public class muCommander
 {
     /**
      * Switch for specifying bundle directory.
