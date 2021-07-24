@@ -143,8 +143,9 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
     public void startJob() {
         String enteredPath = pathField.getText();
 
+        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         // Resolves destination folder
-        PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, mainFrame.getActivePanel().getCurrentFolder());
+        PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, currentFolder, currentFolder);
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null) {
             InformationDialog.showErrorDialog(mainFrame, Translator.get("invalid_path", enteredPath));
