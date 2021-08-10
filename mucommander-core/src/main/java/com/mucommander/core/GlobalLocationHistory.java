@@ -65,7 +65,12 @@ public class GlobalLocationHistory implements LocationListener {
 		// Restore the global history from last run
 		int nbLocations = snapshot.getIntegerVariable(MuSnapshot.getRecentLocationsCountVariable());
     	for (int i=0; i<nbLocations; ++i) {
-    		String filePath = snapshot.getVariable(MuSnapshot.getRecentLocationVariable(i));
+            String filePath = snapshot.getVariable(MuSnapshot.getRecentLocationVariable(i));
+            if (filePath == null) {
+                LOGGER.error("failed to restore recent location with index {}", i);
+                continue;
+            }
+
 			try {
 				history.add(FileURL.getFileURL(filePath));
 			} catch (MalformedURLException e) {
