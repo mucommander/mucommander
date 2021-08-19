@@ -79,7 +79,7 @@ public class LocationManager {
     }
 
     public void setCurrentFolder(AbstractFile folder, AbstractFile fileToSelect, boolean changeLockedTab, boolean fire) {
-        LOGGER.trace("calling ls()");
+        LOGGER.trace("calling ls() on {}", folder);
         MonitoredFile newCurrentFile = folder.toMonitoredFile();
         newCurrentFile.startWatch();
 
