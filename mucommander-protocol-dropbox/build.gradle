@@ -4,7 +4,7 @@ dependencies {
     api project(':mucommander-encoding')
     api project(':mucommander-translator')
     implementation 'com.dropbox.core:dropbox-core-sdk:3.1.5'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'junit:junit:4.12'

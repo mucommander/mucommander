@@ -6,7 +6,7 @@ dependencies {
     api project(':apache-bzip2')
 
     implementation 'org.apache.commons:commons-compress:1.20'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'
