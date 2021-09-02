@@ -16,6 +16,7 @@
  */
 package com.mucommander.osgi;
 
+import com.mucommander.viewer.FileViewerService;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

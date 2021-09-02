@@ -16,17 +16,44 @@
  */
 package com.mucommander.viewer;
 
-/**
- * This exception is thrown by {@link com.mucommander.ui.viewer.ViewerFactory}
- * and {@link com.mucommander.ui.viewer.EditorFactory} when the user should be
- * warned about something before going ahead with viewing/editing a file.
- * {@link #getMessage()} contains the message to display to the user.
- *
- * @author Maxence Bernard
- */
-public class WarnUserException extends Exception {
+import javax.swing.JFrame;
 
-    public WarnUserException(String localizedMessage) {
-        super(localizedMessage);
-    }
+/**
+ * Interface for file editor.
+ *
+ * @author Miroslav Hajda
+ */
+public interface EditorPresenter {
+
+    /**
+     * Extends title of the presenter.
+     *
+     * @param title title
+     */
+    void extendTitle(String title);
+
+    /**
+     * Returns presenter's frame.
+     *
+     * @return frame
+     */
+    JFrame getWindowFrame();
+
+    /**
+     * TODO: Remove
+     *
+     * Reads fullscreen state
+     *
+     * @return full screen state
+     */
+    boolean isFullScreen();
+
+    /**
+     * TODO: Remove
+     *
+     * Method to set fullscreen.
+     *
+     * @param fullScreen full screen state
+     */
+    void setFullScreen(boolean fullScreen);
 }

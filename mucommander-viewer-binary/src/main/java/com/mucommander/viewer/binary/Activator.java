@@ -16,13 +16,14 @@
  */
 package com.mucommander.viewer.binary;
 
-import com.mucommander.osgi.FileViewerService;
+import com.mucommander.viewer.FileEditorService;
+import com.mucommander.viewer.FileViewerService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 /**
- * Binary files viewer.
+ * Binary files viewer/editor.
  *
  * TODO:<br>
  * - editation mode<br>
@@ -39,14 +40,17 @@ import org.osgi.framework.ServiceRegistration;
 public class Activator implements BundleActivator {
 
     private ServiceRegistration<FileViewerService> viewerRegistration;
+    private ServiceRegistration<FileEditorService> editorRegistration;
 
     @Override
     public void start(BundleContext context) throws Exception {
         viewerRegistration = context.registerService(FileViewerService.class, new BinaryFileViewerService(), null);
+// TODO        editorRegistration = context.registerService(FileEditorService.class, new BinaryFileViewerService(), null);
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
         viewerRegistration.unregister();
+// TODO        editorRegistration.unregister();
     }
 }

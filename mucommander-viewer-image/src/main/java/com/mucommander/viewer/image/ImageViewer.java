@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.viewer.image;
 
 import java.awt.Color;
@@ -31,7 +30,6 @@ import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.Function;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -50,8 +48,11 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
-import com.mucommander.ui.viewer.FileFrame;
-import com.mucommander.ui.viewer.FileViewer;
+import com.mucommander.viewer.FileViewer;
+import com.mucommander.viewer.ViewerPresenter;
+import java.util.function.Function;
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,9 +61,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-class ImageViewer extends FileViewer implements ActionListener {
+class ImageViewer implements FileViewer, ActionListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageViewer.class);
 
+    private ViewerPresenter presenter;
+    private JScrollPane ui = new JScrollPane();
     private Image image;
     private Image scaledImage;
     private double zoomFactor;
@@ -83,9 +86,9 @@ class ImageViewer extends FileViewer implements ActionListener {
         this.imageFileViewerService = imageFileViewerService;
     	imageViewerImpl = new ImageViewerImpl();
     	
-    	setComponentToPresent(imageViewerImpl);
-    	
-    	// Create Go menu
+        ui.getViewport().setView(imageViewerImpl);
+
+        // Create Go menu
     	MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
     	controlsMenu = MenuToolkit.addMenu(Translator.get("image_viewer.controls_menu"), menuMnemonicHelper, null);
         nextImageItem = MenuToolkit.addMenuItem(controlsMenu, Translator.get("image_viewer.next_image"), menuMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), this);
@@ -96,17 +99,22 @@ class ImageViewer extends FileViewer implements ActionListener {
     }
 
     @Override
-    public JMenuBar getMenuBar() {
-    	JMenuBar menuBar = super.getMenuBar();
-    	
+    public JComponent getUI() {
+        return ui;
+    }
+
+    @Override
+    public void setPresenter(ViewerPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void extendMenu(JMenuBar menuBar) {
         menuBar.add(controlsMenu);
-    	
-    	return menuBar;
     }
 
     private synchronized void loadImage(AbstractFile file) throws IOException {
-        FileFrame frame = getFrame();
-        frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        presenter.getWindowFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
         int read;
         byte buffer[] = new byte[1024];
@@ -141,7 +149,7 @@ class ImageViewer extends FileViewer implements ActionListener {
             zoom(zoomFactor);
 			
         checkZoom();
-        frame.setCursor(Cursor.getDefaultCursor());
+        presenter.getWindowFrame().setCursor(Cursor.getDefaultCursor());
     }
 
 	
@@ -157,24 +165,21 @@ class ImageViewer extends FileViewer implements ActionListener {
 	
 	
     private synchronized void zoom(double factor) {
-        FileFrame frame = getFrame();
-
-        frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        presenter.getWindowFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
         this.scaledImage = image.getScaledInstance((int)(image.getWidth(null)*factor), (int)(image.getHeight(null)*factor), Image.SCALE_DEFAULT);
         waitForImage(scaledImage);
 
-        frame.setCursor(Cursor.getDefaultCursor());
+        presenter.getWindowFrame().setCursor(Cursor.getDefaultCursor());
     }
 
     private void updateFrame() {
-    	FileFrame frame = getFrame();
-
         // Revalidate, pack and repaint should be called in this order
-        frame.setTitle(this.getTitle());
+        presenter.extendTitle(this.getTitleExt());
         imageViewerImpl.revalidate();
-        frame.pack();
-        frame.getContentPane().repaint();
+        // TODO Is this necessary?
+        presenter.getWindowFrame().pack();
+        presenter.getWindowFrame().getContentPane().repaint();
     }
 
     private void checkZoom() {
@@ -188,26 +193,8 @@ class ImageViewer extends FileViewer implements ActionListener {
     }
 
     private void goToImage(Function<Integer, Integer> advance) {
-        FileTable fileTable = getFrame().getMainFrame().getActiveTable();
-
-        AbstractFile newFile;
-        int originalRow = fileTable.getSelectedRow();
-        do {
-            int currentRow = fileTable.getSelectedRow();
-            int newRow = advance.apply(currentRow);
-
-            if (newRow < 0 || newRow >= fileTable.getRowCount()) {
-                fileTable.selectRow(originalRow);
-                return;
-            }
-            fileTable.selectRow(newRow);
-            newFile = fileTable.getSelectedFile();
-
-        } while (newFile == null || !imageFileViewerService.canViewFile(newFile));
-
         try {
-            setCurrentFile(newFile);
-            loadImage(newFile);
+            presenter.goToFile(advance, imageFileViewerService);
         } catch (IOException e) {
             LOGGER.error("failed to load next/prev image", e);
         }
@@ -218,18 +205,21 @@ class ImageViewer extends FileViewer implements ActionListener {
     ///////////////////////////////
 
     @Override
-    public void show(AbstractFile file) throws IOException {
+    public void open(AbstractFile file) throws IOException {
         loadImage(file);
+    }
+
+    @Override
+    public void close() {
+    }
+
+    public String getTitleExt() {
+        return " - "+image.getWidth(null)+"x"+image.getHeight(null)+" - "+((int)(zoomFactor*100))+"%";
     }
 
     ///////////////////////////////////
     // ActionListener implementation //
     ///////////////////////////////////
-
-    @Override
-    public String getTitle() {
-        return super.getTitle()+" - "+image.getWidth(null)+"x"+image.getHeight(null)+" - "+((int)(zoomFactor*100))+"%";
-    }
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -247,7 +237,6 @@ class ImageViewer extends FileViewer implements ActionListener {
             zoomFactor = zoomFactor / 2;
             zoom(zoomFactor);
         } else {
-            super.actionPerformed(e);
             return;
         }
         updateFrame();
@@ -294,6 +283,7 @@ class ImageViewer extends FileViewer implements ActionListener {
         /**
          * Receives theme color changes notifications.
          */
+        @Override
         public void colorChanged(ColorChangedEvent event) {
             if(event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
                 backgroundColor = event.getColor();
@@ -304,6 +294,7 @@ class ImageViewer extends FileViewer implements ActionListener {
         /**
          * Not used, implemented as a no-op.
          */
+        @Override
         public void fontChanged(FontChangedEvent event) {}
     }
 }

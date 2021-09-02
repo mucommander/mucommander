@@ -6,8 +6,9 @@ dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-commons-util')
 
-    implementation 'org.exbin.deltahex:deltahex-swing:0.1.2'
-    implementation 'org.exbin.deltahex:deltahex-swing:0.1.2'
+    implementation 'org.exbin.bined:bined-core:0.2.0'
+    implementation 'org.exbin.bined:bined-swing:0.2.0'
+    implementation 'org.exbin.auxiliary:paged_data:0.2.0'
     implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'
@@ -18,7 +19,7 @@ repositories.jcenter()
 jar {
    bnd ('Bundle-Name': 'muCommander-viewer-binary',
         'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library for hexadecimal viewer/editor',
+        'Bundle-Description': 'Library for binary/hexadecimal viewer/editor',
         'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package': 'com.mucommander.viewer.binary',
         'Bundle-Activator': 'com.mucommander.viewer.binary.Activator',

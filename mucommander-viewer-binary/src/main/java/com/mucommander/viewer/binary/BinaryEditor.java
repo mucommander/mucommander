@@ -45,17 +45,17 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
-import com.mucommander.viewer.FileViewer;
-import com.mucommander.viewer.ViewerPresenter;
+import com.mucommander.viewer.EditorPresenter;
+import com.mucommander.viewer.FileEditor;
 
 /**
- * General viewer for binary files.
+ * General editor for binary files.
  *
  * @author Miroslav Hajda
  */
-class BinaryViewer implements FileViewer {
+class BinaryEditor implements FileEditor {
 
-    private ViewerPresenter presenter;
+    private EditorPresenter presenter;
 
     private JMenu editMenu;
     private JMenu viewMenu;
@@ -74,7 +74,7 @@ class BinaryViewer implements FileViewer {
 
     private BinaryViewerImpl binaryViewerImpl;
 
-    public BinaryViewer() {
+    public BinaryEditor() {
         binaryViewerImpl = new BinaryViewerImpl();
 
         initMenuBars();
@@ -156,11 +156,10 @@ class BinaryViewer implements FileViewer {
         try {
             data.loadFromStream(file.getInputStream());
         } catch (IOException ex) {
-            Logger.getLogger(BinaryViewer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BinaryEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         binaryViewerImpl.setContentData(data);
-        binaryViewerImpl.setEditMode(EditMode.READ_ONLY);
 
         presenter.getWindowFrame().setCursor(Cursor.getDefaultCursor());
     }
@@ -186,7 +185,7 @@ class BinaryViewer implements FileViewer {
     }
 
     @Override
-    public void setPresenter(ViewerPresenter presenter) {
+    public void setPresenter(EditorPresenter presenter) {
         this.presenter = presenter;
     }
 

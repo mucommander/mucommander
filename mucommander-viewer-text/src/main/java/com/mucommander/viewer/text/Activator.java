@@ -16,16 +16,15 @@
  */
 package com.mucommander.viewer.text;
 
-import com.mucommander.osgi.FileEditorService;
-import com.mucommander.osgi.FileViewerService;
+import com.mucommander.viewer.FileEditorService;
+import com.mucommander.viewer.FileViewerService;
 import com.mucommander.snapshot.MuSnapshot;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import static com.mucommander.ui.viewer.EditorRegistrar.registerFileEditor;
 import org.osgi.framework.ServiceRegistration;
 
 /**
- * Activator for viewer for text files.
+ * Activator for viewer and editor for text files.
  *
  * @author Miroslav Hajda
  */
@@ -37,8 +36,6 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext context) throws Exception {
         MuSnapshot.registerHandler(new TextViewerSnapshot());
-
-        registerFileEditor(new com.mucommander.viewer.text.TextFactory());
 
         TextFileViewerService service = new TextFileViewerService();
 

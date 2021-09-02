@@ -24,21 +24,27 @@ import org.icepdf.ri.common.SwingController;
 import org.icepdf.ri.common.SwingViewBuilder;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.viewer.FileViewer;
+import com.mucommander.viewer.FileViewer;
+import com.mucommander.viewer.ViewerPresenter;
+import javax.swing.JComponent;
+import javax.swing.JMenuBar;
 
 /**
  * A simple pdf viewer
  *
  * @author Oleg Trifonov
  */
-public class PdfViewer extends FileViewer {
+public class PdfViewer implements FileViewer {
 
     private SwingController controller;
+    private SwingViewBuilder factory;
+    
+    private ViewerPresenter presenter;
 
     PdfViewer() {
         // create a controller and a swing factory
         controller = new SwingController();
-        SwingViewBuilder factory = new SwingViewBuilder(controller);
+        factory = new SwingViewBuilder(controller);
         // add interactive mouse link annotation support via callback
         controller.getDocumentViewController().setAnnotationCallback(
                 new org.icepdf.ri.common.MyAnnotationCallback(
@@ -53,17 +59,20 @@ public class PdfViewer extends FileViewer {
         //getContentPane().setLayout(new BorderLayout());
         //getContentPane().add(factory.buildViewerPanel(), BorderLayout.CENTER);
         //getContentPane().add(factory.buildCompleteMenuBar(), BorderLayout.NORTH);
-        setComponentToPresent(factory.buildViewerPanel());
     }
 
     @Override
-    protected void show(AbstractFile file) throws IOException {
+    public void open(AbstractFile file) throws IOException {
         String description = "";
         String path = file.getPath();
         org.icepdf.core.util.Library.initializeThreadPool();
         try (InputStream is = file.getInputStream()) {
             controller.openDocument(is, description, path);
         }
+    }
+    
+    @Override
+    public void close() {
     }
 
 //    @Override
@@ -80,5 +89,17 @@ public class PdfViewer extends FileViewer {
 //    protected void restoreStateOnStartup() {
 //        org.icepdf.core.util.Library.initializeThreadPool();
 //    }
+    @Override
+    public JComponent getUI() {
+        return factory.buildViewerPanel();
+    }
 
+    @Override
+    public void setPresenter(ViewerPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void extendMenu(JMenuBar menuBar) {
+    }
 }

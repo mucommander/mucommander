@@ -18,12 +18,8 @@ package com.mucommander.viewer.image;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
-import com.mucommander.osgi.FileViewerService;
-import com.mucommander.ui.viewer.FileFrame;
-import com.mucommander.viewer.FileViewerWrapper;
-import java.awt.Frame;
-import java.io.IOException;
-import javax.swing.JComponent;
+import com.mucommander.viewer.FileViewerService;
+import com.mucommander.viewer.FileViewer;
 
 /**
  * <code>FileViewerService</code> implementation for creating image viewers.
@@ -43,7 +39,7 @@ public class ImageFileViewerService implements FileViewerService {
     }
 
     @Override
-    public String getTabTitle() {
+    public String getName() {
         return "Image";
     }
 
@@ -63,24 +59,7 @@ public class ImageFileViewerService implements FileViewerService {
     }
 
     @Override
-    public FileViewerWrapper createFileViewer() {
-        final ImageViewer viewer = new ImageViewer(this);
-
-        return new FileViewerWrapper() {
-            @Override
-            public void open(AbstractFile file) throws IOException {
-                viewer.open(file);
-            }
-
-            @Override
-            public JComponent getViewerComponent() {
-                return viewer;
-            }
-
-            @Override
-            public void setFrame(Frame frame) {
-                viewer.setFrame((FileFrame) frame);
-            }
-        };
+    public FileViewer createFileViewer() {
+        return new ImageViewer(this);
     }
 }

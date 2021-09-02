@@ -27,8 +27,8 @@ import com.mucommander.ui.main.MainFrame;
 
 
 /**
- * A specialized <code>JFrame</code> that displays a {@link FileViewer} for a given file.
- * The {@link FileViewer} instance is provided by {@link ViewerRegistrar}.
+ * A specialized <code>JFrame</code> that displays a {@link FileViewerPresenter} for a given file.
+ * The {@link FileViewerPresenter} instance is provided by {@link ViewerRegistrar}.
  *
  * @author Maxence Bernard, Arik Hadas
  */
@@ -57,7 +57,10 @@ public class ViewerFrame extends FileFrame {
 
 	@Override
 	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
-		return ViewerRegistrar.createFileViewer(file, ViewerFrame.this);
+        FileViewerPresenter presenter = new FileViewerPresenter();
+        int count = ViewerRegistrar.registerFileViewers(file, presenter, this);
+        presenter.setFrame(this);
+		return count == 0 ? null : presenter;
 	}
 
 	@Override

@@ -17,19 +17,16 @@
 package com.mucommander.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
-import java.awt.Frame;
 import java.io.IOException;
 import javax.swing.JComponent;
+import javax.swing.JMenuBar;
 
 /**
  * Interface for file viewer.
- * 
- * TODO: Currently doesn't replace FileViewer, but is intended to do so with
- * possible support for tabbing in file viewer dialog in the future.
  *
  * @author Miroslav Hajda
  */
-public interface FileViewerWrapper {
+public interface FileViewer {
 
     /**
      * Opens a given AbstractFile for display.
@@ -40,16 +37,28 @@ public interface FileViewerWrapper {
     void open(AbstractFile file) throws IOException;
 
     /**
-     * Returns panel for viewer.
-     *
-     * @return component instance
+     * Closes currently opened file.
      */
-    JComponent getViewerComponent();
+    void close();
 
     /**
-     * Sets parent frame.
+     * Returns UI for viewer.
      *
-     * @param frame window frame
+     * @return UI component instance
      */
-    void setFrame(Frame frame);
+    JComponent getUI();
+
+    /**
+     * Sets presenter API.
+     *
+     * @param presenter presenter API
+     */
+    void setPresenter(ViewerPresenter presenter);
+
+    /**
+     * Extends provided menu with new menu items specific for this viewer.
+     *
+     * @param menuBar menu bar
+     */
+    void extendMenu(JMenuBar menuBar);
 }
