@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.mucommander.ui.viewer;
 
 import java.awt.Dimension;
@@ -24,23 +23,23 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
-
 /**
- * A specialized <code>JFrame</code> that displays a {@link FileEditor} for a given file and provides some common
- * editing functionality. The {@link FileEditor} instance is provided by {@link EditorRegistrar}.
+ * A specialized <code>JFrame</code> that displays a {@link FileEditorPresenter}
+ * for a given file and provides some common editing functionality. The
+ * {@link FileEditorPresenter} instance is provided by {@link EditorRegistrar}.
  *
  * @author Maxence Bernard, Arik Hadas
  */
 public class EditorFrame extends FileFrame {
 
-    private FileEditor editor;
-	
     private final static Dimension MIN_DIMENSION = new Dimension(500, 360);
 
     /**
      * Creates a new EditorFrame to start viewing the given file.
      *
-     * <p>This constructor has package access only, EditorFrame can to be created by
+     * <p>
+     * This constructor has package access only, EditorFrame can to be created
+     * by
      * {@link EditorRegistrar#createEditorFrame(MainFrame,AbstractFile,Image)}.
      */
     EditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
@@ -50,30 +49,26 @@ public class EditorFrame extends FileFrame {
     ////////////////////////
     // Overridden methods //
     ////////////////////////
-
     @Override
     public Dimension getMinimumSize() {
         return MIN_DIMENSION;
     }
 
     @Override
-    public void dispose() {
-    	if(editor==null || editor.askSave())   /// Returns true if the file does not have any unsaved change or if the user refused to save the changes
-    		super.dispose();
+    protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
+        FileEditorPresenter presenter = new FileEditorPresenter();
+        int count = EditorRegistrar.registerFileEditors(file, presenter, this);
+        presenter.setFrame(this);
+        return count == 0 ? null : presenter;
     }
-    
-    @Override
-	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
-		return editor = EditorRegistrar.createFileEditor(file, EditorFrame.this);
-	}
 
     @Override
     protected String getGenericErrorDialogTitle() {
-    	return Translator.get("file_editor.edit_error_title");
+        return Translator.get("file_editor.edit_error_title");
     }
 
     @Override
     protected String getGenericErrorDialogMessage() {
-    	return Translator.get("file_editor.edit_error");
+        return Translator.get("file_editor.edit_error");
     }
 }

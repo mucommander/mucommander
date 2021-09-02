@@ -1,32 +1,48 @@
-/*
+/**
  * This file is part of muCommander, http://www.mucommander.com
  *
  * muCommander is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.ui.viewer;
+package com.mucommander.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.viewer.FileViewer;
-import com.mucommander.viewer.WarnUserException;
 
 /**
- * A common interface for instantiating {@link FileViewer} implementations, and
- * finding out if a viewer is capable of viewing a particular file.
+ * Interface for file viewer service.
  *
- * @author Nicolas Rinaudo, Maxence Bernard
+ * @author Miroslav Hajda
  */
-public interface ViewerFactory {
+public interface FileViewerService {
+
+    /**
+     * Returns name for viewer.
+     *
+     * @return name title
+     */
+    String getName();
+
+    /**
+     * Returns order priority.
+     *
+     * Reference viewers use:<br>
+     * 20 - image<br>
+     * 10 - text<br>
+     * 0 - binary
+     *
+     * @return order priority
+     */
+    int getOrderPriority();
 
     /**
      * Returns <code>true</code> if this factory can create a file viewer for
@@ -38,10 +54,10 @@ public interface ViewerFactory {
      * </p>
      *
      * @param file file for which a viewer must be created.
-     * @throws WarnUserException if the specified file can be viewed after the
-     * warning message contained in the exception is displayed to the end user.
      * @return <code>true</code> if this factory can create a file viewer for
      * the specified file.
+     * @throws WarnUserException if the specified file can be viewed after the
+     * warning message contained in the exception is displayed to the end user.
      */
     boolean canViewFile(AbstractFile file) throws WarnUserException;
 

@@ -16,16 +16,11 @@
  */
 package com.mucommander.viewer.pdf;
 
-import java.awt.Frame;
-import java.io.IOException;
-
-import javax.swing.JComponent;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
-import com.mucommander.osgi.FileViewerService;
-import com.mucommander.ui.viewer.FileFrame;
-import com.mucommander.viewer.FileViewerWrapper;
+import com.mucommander.viewer.FileViewer;
+import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.WarnUserException;
 
 /**
@@ -36,7 +31,7 @@ public class PdfFileViewer implements FileViewerService {
     public final static ExtensionFilenameFilter filter = new ExtensionFilenameFilter(new String[] {".pdf"});
 
     @Override
-    public String getTabTitle() {
+    public String getName() {
         return "PDF";
     }
 
@@ -51,24 +46,7 @@ public class PdfFileViewer implements FileViewerService {
     }
 
     @Override
-    public FileViewerWrapper createFileViewer() {
-        return new FileViewerWrapper() {
-            PdfViewer pdfViewer = new PdfViewer();
-
-            @Override
-            public void setFrame(Frame frame) {
-                pdfViewer.setFrame((FileFrame) frame);
-            }
-            
-            @Override
-            public void open(AbstractFile file) throws IOException {
-                pdfViewer.open(file);
-            }
-            
-            @Override
-            public JComponent getViewerComponent() {
-                return pdfViewer;
-            }
-        };
+    public FileViewer createFileViewer() {
+        return new PdfViewer();
     }
 }

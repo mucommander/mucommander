@@ -16,10 +16,12 @@
  */
 package com.mucommander.osgi;
 
+import com.mucommander.viewer.FileEditorService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,19 +46,21 @@ public class FileEditorServiceTracker extends ServiceTracker<FileEditorService, 
     @Override
     public FileEditorService addingService(ServiceReference<FileEditorService> reference) {
         FileEditorService service = super.addingService(reference);
-        SERVICES.add(service);
-//        EditorRegistrar.registerFileEditor(null);
-//        FileFactory.registerArchiveFormat(service.getProvider());
+        FileEditorServiceTracker.addEditorService(service);
         LOGGER.info("FileEditorService is registered: " + service);
         return service;
     }
 
     @Override
     public void removedService(ServiceReference<FileEditorService> reference, FileEditorService service) {
-        // EditorRegistrar.unregisterFileEditor(null);
         super.removedService(reference, service);
         SERVICES.add(service);
         LOGGER.info("FileFormatService is unregistered: " + service);
+    }
+
+    private static void addEditorService(FileEditorService service) {
+        SERVICES.add(service);
+        SERVICES.sort(Comparator.comparing(FileEditorService::getOrderPriority).reversed());
     }
 
     public static List<FileEditorService> getEditorServices() {

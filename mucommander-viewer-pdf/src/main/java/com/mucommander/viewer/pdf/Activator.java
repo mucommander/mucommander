@@ -16,11 +16,10 @@
  */
 package com.mucommander.viewer.pdf;
 
+import com.mucommander.viewer.FileViewerService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
-import com.mucommander.osgi.FileViewerService;
 
 /**
  * Activator for viewer of PDF files.

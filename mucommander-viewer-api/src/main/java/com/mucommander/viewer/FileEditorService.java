@@ -14,31 +14,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.osgi;
+package com.mucommander.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.viewer.FileViewerWrapper;
-import com.mucommander.viewer.WarnUserException;
 
 /**
- * Interface for file viewer service.
+ * Interface for file editor service.
  *
  * @author Miroslav Hajda
  */
-public interface FileViewerService {
+public interface FileEditorService {
 
     /**
-     * Returns tab title for viewer.
+     * Returns name for editor.
      *
-     * @return tab title
+     * @return name title
      */
-    String getTabTitle();
+    String getName();
 
     /**
      * Returns order priority.
      *
-     * Reference viewers use:<br>
-     * 20 - image<br>
+     * Reference editors use:<br>
      * 10 - text<br>
      * 0 - binary
      *
@@ -47,7 +44,7 @@ public interface FileViewerService {
     int getOrderPriority();
 
     /**
-     * Returns <code>true</code> if this factory can create a file viewer for
+     * Returns <code>true</code> if this factory can create a file editor for
      * the specified file.
      * <p>
      * The FileEditor may base its decision strictly upon the file's name and
@@ -55,16 +52,18 @@ public interface FileViewerService {
      * magic number.
      * </p>
      *
-     * @param file file for which a viewer must be created.
-     * @return <code>true</code> if this factory can create a file viewer for
+     * @param file file for which a editor must be created.
+     * @return <code>true</code> if this factory can create a file editor for
      * the specified file.
+     * @throws WarnUserException if the specified file can be edited after the
+     * warning message contained in the exception is displayed to the end user.
      */
-    boolean canViewFile(AbstractFile file) throws WarnUserException;
+    boolean canEditFile(AbstractFile file) throws WarnUserException;
 
     /**
-     * Returns a new instance of {@link FileViewerWrapper}.
+     * Returns a new instance of {@link FileEditor}.
      *
-     * @return a new instance of {@link FileViewerWrapper}.
+     * @return a new instance of {@link FileEditor}.
      */
-    FileViewerWrapper createFileViewer();
+    FileEditor createFileEditor();
 }

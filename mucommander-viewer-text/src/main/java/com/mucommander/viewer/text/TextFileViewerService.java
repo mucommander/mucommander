@@ -18,17 +18,15 @@ package com.mucommander.viewer.text;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.io.BinaryDetector;
-import com.mucommander.osgi.FileEditorService;
-import com.mucommander.osgi.FileViewerService;
-import com.mucommander.ui.viewer.FileFrame;
-import com.mucommander.viewer.FileViewerWrapper;
+import com.mucommander.viewer.FileEditorService;
+import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.WarnUserException;
 import com.mucommander.text.Translator;
-import java.awt.Frame;
+import com.mucommander.viewer.FileEditor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import javax.swing.JComponent;
+import com.mucommander.viewer.FileViewer;
 
 /**
  * <code>FileViewerService</code> and <code>FileEditorService</code>
@@ -39,10 +37,10 @@ import javax.swing.JComponent;
 public class TextFileViewerService implements FileViewerService, FileEditorService {
 
     @Override
-    public String getTabTitle() {
+    public String getName() {
         return "Text";
     }
-    
+
     @Override
     public int getOrderPriority() {
         return 10;
@@ -83,51 +81,17 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
     }
 
     @Override
-    public boolean canEditFile(AbstractFile file) {
-        // Do not allow directories
-        if (file.isDirectory()) {
-            return false;
-        }
-
-        // Warn the user if the file looks like a binary file
-        InputStream in = null;
-        try {
-            in = file.getInputStream();
-            if (BinaryDetector.guessBinary(in)) {
-                return false;
-            }
-        } catch (IOException e) {
-            // Not much too do
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e2) {
-                }
-            }
-        }
-
-        return true;
+    public boolean canEditFile(AbstractFile file) throws WarnUserException {
+        return canViewFile(file);
     }
 
     @Override
-    public FileViewerWrapper createFileViewer() {
-        final TextViewer viewer = new TextViewer();
-        return new FileViewerWrapper() {
-            @Override
-            public void open(AbstractFile file) throws IOException {
-                viewer.open(file);
-            }
+    public FileViewer createFileViewer() {
+        return new TextViewer();
+    }
 
-            @Override
-            public JComponent getViewerComponent() {
-                return viewer;
-            }
-
-            @Override
-            public void setFrame(Frame frame) {
-                viewer.setFrame((FileFrame) frame);
-            }
-        };
+    @Override
+    public FileEditor createFileEditor() {
+        return new TextEditor();
     }
 }
