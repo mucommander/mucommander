@@ -74,7 +74,7 @@ public class EditorRegistrar {
      * @param file the file that will be displayed by the returned FileEditor
      * @param presenter file editor presenter to register to
      * @param frame the frame in which the FileEditor is shown
-     * @return the created FileEditor, or null if no suitable editor was found
+     * @return number of editor services registered
      * @throws UserCancelledException if the user has been asked to confirm the
      * operation and canceled
      */
