@@ -57,9 +57,9 @@ public class EditorFrame extends FileFrame {
     @Override
     protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
         FileEditorPresenter presenter = new FileEditorPresenter();
-        int count = EditorRegistrar.registerFileEditors(file, presenter, this);
+        int numOfEditors = EditorRegistrar.registerFileEditors(file, presenter, this);
         presenter.setFrame(this);
-        return count == 0 ? null : presenter;
+        return numOfEditors == 0 ? null : presenter;
     }
 
     @Override
