@@ -38,7 +38,7 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
  *
  * @author Arik Hadas, Maxence Bernard, Vassil Dichev
  */
-class SFTPConnectionHandler extends ConnectionHandler {
+class SFTPConnectionHandler extends ConnectionHandler implements AutoCloseable {
     private static final Logger LOGGER = LoggerFactory.getLogger(SFTPConnectionHandler.class);
 
     Session session;
@@ -182,4 +182,8 @@ class SFTPConnectionHandler extends ConnectionHandler {
         }
     }
 
+    @Override
+    public void close() throws Exception {
+        releaseLock();
+    }
 }
