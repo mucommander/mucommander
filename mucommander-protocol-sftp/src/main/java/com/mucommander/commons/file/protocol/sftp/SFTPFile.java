@@ -19,7 +19,6 @@
 
 package com.mucommander.commons.file.protocol.sftp;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,7 +53,6 @@ import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.ByteCounter;
 import com.mucommander.commons.io.ByteUtils;
 import com.mucommander.commons.io.CounterOutputStream;
-import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
@@ -156,8 +154,8 @@ public class SFTPFile extends ProtocolFile {
     }
 
     private OutputStream getOutputStream(boolean append) throws IOException {
-        // Retrieve a ConnectionHandler and lock it
-        try (SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true)) {
+        SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+        try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
@@ -179,18 +177,34 @@ public class SFTPFile extends ProtocolFile {
                 fileAttributes.setSize(0);
             }
 
-            return new CounterOutputStream(
-                    new SFTPOutputStream(outputStream, connHandler),
-                    new ByteCounter() {
-                        @Override
-                        public synchronized void add(long nbBytes) {
-                            fileAttributes.addToSize(nbBytes);
-                            fileAttributes.setDate(System.currentTimeMillis());
-                        }
+            return new OutputStream() {
+                @Override
+                public void write(int b) throws IOException {
+                    outputStream.write(b);
+                }
+                @Override
+                public void write(byte[] b) throws IOException {
+                    outputStream.write(b);
+                }
+                @Override
+                public void write(byte[] b, int off, int len) throws IOException {
+                    outputStream.write(b, off, len);
+                }
+                @Override
+                public void close() throws IOException {
+                    outputStream.close();
+                    try {
+                        connHandler.close();
+                    } catch (Exception e) {
+                        throw new IOException(e);
                     }
-                    );
+                }
+            };
         } catch (Exception e) {
             LOGGER.error("failed to get output stream for %s", getURL());
+            try {
+                connHandler.close();
+            } catch (Exception e1) {}
             throw new IOException(e);
         }
     }
@@ -555,15 +569,41 @@ public class SFTPFile extends ProtocolFile {
 
     @Override
     public InputStream getInputStream(long offset) throws IOException {
-        try (SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true)) {
+        SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true);
+        try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
 
-            InputStream in = new SFTPInputStream(connHandler.channelSftp.get(absPath), connHandler);
+            InputStream in = connHandler.channelSftp.get(absPath);
             in.skip(offset);
-            return in;
+            return new InputStream() {
+                @Override
+                public int read() throws IOException {
+                    return in.read();
+                }
+                @Override
+                public int read(byte[] b) throws IOException {
+                    return in.read(b);
+                }
+                @Override
+                public int read(byte[] b, int off, int len) throws IOException {
+                    return in.read(b, off, len);
+                }
+                @Override
+                public void close() throws IOException {
+                    in.close();
+                    try {
+                        connHandler.close();
+                    } catch (Exception e) {
+                        throw new IOException(e);
+                    }
+                }
+            };
         } catch(Exception e) {
             LOGGER.error("failed to get input stream %s", getURL());
+            try {
+                connHandler.close();
+            } catch (Exception e1) {}
             throw new IOException(e);
         }
     }
@@ -801,38 +841,6 @@ public class SFTPFile extends ProtocolFile {
         @Override
         public void close() throws IOException {
             in.close();
-        }
-    }
-
-    private class SFTPInputStream extends FilterInputStream {
-
-        private SFTPConnectionHandler connHandler;
-
-        protected SFTPInputStream(InputStream in, SFTPConnectionHandler connHandler) {
-            super(in);
-            this.connHandler = connHandler;
-        }
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-            connHandler.releaseLock();
-        }
-    }
-
-    private class SFTPOutputStream extends FilteredOutputStream {
-
-        private SFTPConnectionHandler connHandler;
-
-        protected SFTPOutputStream(OutputStream out, SFTPConnectionHandler connHandler) {
-            super(out);
-            this.connHandler = connHandler;
-        }
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-            connHandler.releaseLock();
         }
     }
 }
