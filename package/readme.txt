@@ -32,7 +32,7 @@ What's new since v0.9.7 ?
 -----------------------
 
 New features:
-- Support opening compressed files in the XZ file format.
+- Support compression and decompression of XZ archives.
 
 Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
