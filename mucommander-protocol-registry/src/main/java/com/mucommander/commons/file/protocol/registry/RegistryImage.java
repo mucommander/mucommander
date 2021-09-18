@@ -60,7 +60,7 @@ public class RegistryImage extends AbstractRegistryImage {
 		childURL.setPath(parentPath + layer.split(":")[1]);
 		childURL.setScheme("file");
 		TarArchiveFile tar = new TarArchiveFile(FileFactory.getFile(childURL));
-		tar.setCustomExtension(".tar.gz");
+		tar.setCustomExtension("tar.gz");
 		tar.setParent(this);
 		return tar;
 	}

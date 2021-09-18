@@ -72,7 +72,7 @@ public class OpenAsAction extends OpenAction {
 
         try {
             resolvedFile = FileFactory.wrapArchive(resolvedFile, extension);
-            resolvedFile.setCustomExtension(extension);
+            resolvedFile.setCustomExtension(extension.substring(1));
         } catch (IOException e) {
             e.printStackTrace();
             return;
