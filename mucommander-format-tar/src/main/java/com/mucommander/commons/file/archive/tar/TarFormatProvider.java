@@ -37,7 +37,7 @@ import java.util.List;
 public class TarFormatProvider implements ArchiveFormatProvider {
 
     /** extensions of archive filenames */
-    public static final String[] EXTENSIONS = new String[] {".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".cbt", ".ova"};
+    public static final String[] EXTENSIONS = new String[] {".tar", ".cbt", ".ova"};
 
     @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {

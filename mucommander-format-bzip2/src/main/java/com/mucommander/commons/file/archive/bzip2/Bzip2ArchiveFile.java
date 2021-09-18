@@ -18,7 +18,7 @@
 
 package com.mucommander.commons.file.archive.bzip2;
 
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
@@ -62,18 +62,17 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         String extension = getCustomExtension() != null ? getCustomExtension() : getExtension();
         String name = getName();
-		
-        if(extension!=null) {
+
+        if (extension != null) {
             // Remove the 'bz2' or 'tbz2' extension from the entry's name
-            switch(extension.toLowerCase()) {
-            case "tbz2":
-                name = name.substring(0, name.length()-4)+"tar";
-                break;
-            case "bz2":
-                name = name.substring(0, name.length()-4);
-                break;
-            default:
-            }
+            extension = extension.toLowerCase();
+            int extensionIndex = name.toLowerCase().lastIndexOf("." + extension);
+
+            if (extensionIndex > -1)
+                name = name.substring(0, extensionIndex);
+
+            if (extension.equals("tbz2") || extension.equals("tar.bz2"))
+                name += ".tar";
         }
 
         return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1, true));

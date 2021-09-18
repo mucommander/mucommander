@@ -37,7 +37,7 @@ import java.util.List;
 public class Bzip2FormatProvider implements ArchiveFormatProvider {
 
     /** extensions of archive filenames */
-    public static final String[] EXTENSIONS = new String[] {".bz2"};
+    public static final String[] EXTENSIONS = new String[] {".bz2", ".tbz2", ".tar.bz2"};
 
     @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
