@@ -75,6 +75,7 @@ dependencies {
     osgiRuntime project('mucommander-format-tar')
     osgiRuntime project('mucommander-format-bzip2')
     osgiRuntime project('mucommander-format-gzip')
+    osgiRuntime project('mucommander-format-xz')
     osgiRuntime project('mucommander-format-iso')
     osgiRuntime project('mucommander-format-lst')
     osgiRuntime project('mucommander-archiver')
