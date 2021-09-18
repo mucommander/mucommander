@@ -313,7 +313,8 @@ public class FileFactory {
     /**
      * Returns an instance of AbstractFile for the given absolute path.
      *
-     * <p>This method does not throw any IOException but returns <code>null</code> if the file could not be created.</p>
+     * <p>If throwException is set to false, this method does not throw any IOException. Instead, it returns <code>null</code> if the 
+     * file could not be created.</p>
      *
      * @param absPath the absolute path to the file
      * @param throwException if set to <code>true</code>, an IOException will be thrown if something went wrong during file creation

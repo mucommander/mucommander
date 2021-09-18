@@ -37,7 +37,7 @@ import java.util.List;
 public class GzipFormatProvider implements ArchiveFormatProvider {
 
     /** extensions of archive filenames */
-    public static final String[] EXTENSIONS = new String[] {".gz"};
+    public static final String[] EXTENSIONS = new String[] {".gz", ".tgz", ".tar.gz"};
 
     @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {

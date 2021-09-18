@@ -18,23 +18,19 @@
 
 package com.mucommander.commons.file.archive.tar;
 
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
-import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.commons.util.StringUtils;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.tools.bzip2.CBZip2InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.GZIPInputStream;
 
 
 /**
@@ -58,50 +54,6 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         super(file);
     }
 
-    /**
-     * Returns a {@link TarArchiveInputStream} which can be used to read TAR entries.
-     *
-     * @return a TarArchiveInputStream which can be used to read TAR entries
-     * @throws IOException if an error occurred while create the stream
-     * @throws UnsupportedFileOperationException if this operation is not supported by the underlying
-     *     filesystem, or is not implemented.
-     */
-    private TarArchiveInputStream createTarStream() throws IOException, UnsupportedFileOperationException {
-        InputStream in = getInputStream();
-
-        String name = getCustomExtension() != null ? getCustomExtension() : getName();
-            // Gzip-compressed file
-        if(StringUtils.endsWithIgnoreCase(name, "tgz") || StringUtils.endsWithIgnoreCase(name, "tar.gz"))
-                // Note: this will fail for gz/tgz entries inside a tar file (IOException: Not in GZIP format),
-                // why is a complete mystery: the gz/tgz entry can be extracted and then properly browsed
-            in = new GZIPInputStream(in);
-
-        // Bzip2-compressed file
-        else if(StringUtils.endsWithIgnoreCase(name, "tbz2") || StringUtils.endsWithIgnoreCase(name, "tar.bz2")) {
-            try {
-                // Skips the 2 magic bytes 'BZ', as required by CBZip2InputStream. Quoted from CBZip2InputStream's Javadoc:
-                // "Although BZip2 headers are marked with the magic 'Bz'. this constructor expects the next byte in the
-                // stream to be the first one after the magic.  Thus callers have to skip the first two bytes. Otherwise
-                // this constructor will throw an exception."
-                StreamUtils.skipFully(in, 2);
-
-                // Quoted from CBZip2InputStream's Javadoc:
-                // "CBZip2InputStream reads bytes from the compressed source stream via the single byte {@link java.io.InputStream#read()
-                // read()} method exclusively. Thus you should consider to use a buffered source stream."
-                in = new CBZip2InputStream(new BufferedInputStream(in));
-            }
-            catch(Exception e) {
-                // CBZip2InputStream is known to throw NullPointerException if file is not properly Bzip2-encoded
-                // so we need to catch those and throw them as IOException
-                LOGGER.info("Exception caught while creating CBZip2InputStream, throwing IOException", e);
-
-                throw new IOException();
-            }
-        }
-
-        return new TarArchiveInputStream(in);
-    }
-
 
     ////////////////////////////////////////
     // AbstractArchiveFile implementation //
@@ -109,7 +61,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
 
     @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
-        return new TarEntryIterator(createTarStream());
+        return new TarEntryIterator(new TarArchiveInputStream(getInputStream()));
     }
 
 
@@ -138,7 +90,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
             // This is not the one, look for the entry from the beginning of the archive
         }
 
-        TarArchiveInputStream tin = createTarStream();
+        TarArchiveInputStream tin = new TarArchiveInputStream(getInputStream());
         TarArchiveEntry tarEntry;
         String targetPath = entry.getPath();
         // Iterate through the archive until we've found the entry

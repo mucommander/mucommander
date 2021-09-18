@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.archive.tar.TarArchiveFile;
+import com.mucommander.commons.file.archive.gzip.GzipArchiveFile;
 import com.mucommander.commons.file.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,10 +59,10 @@ public class RegistryImage extends AbstractRegistryImage {
 		FileURL childURL = (FileURL) fileURL.clone();
 		childURL.setPath(parentPath + layer.split(":")[1]);
 		childURL.setScheme("file");
-		TarArchiveFile tar = new TarArchiveFile(FileFactory.getFile(childURL));
-		tar.setCustomExtension("tar.gz");
-		tar.setParent(this);
-		return tar;
+		GzipArchiveFile archive = new GzipArchiveFile(FileFactory.getFile(childURL));
+		archive.setCustomExtension("tar.gz");
+		archive.setParent(this);
+		return archive;
 	}
 
 	@Override

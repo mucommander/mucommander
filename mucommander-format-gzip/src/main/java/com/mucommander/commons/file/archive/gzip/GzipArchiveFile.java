@@ -18,7 +18,8 @@
 
 package com.mucommander.commons.file.archive.gzip;
 
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
@@ -56,18 +57,17 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         String extension = getCustomExtension() != null ? getCustomExtension() : getExtension();
         String name = getName();
-		
-        if(extension!=null) {
+
+        if (extension != null) {
             // Remove the 'gz' or 'tgz' extension from the entry's name
-            switch(extension.toLowerCase()) {
-            case "tgz":
-                name = name.substring(0, name.length()-3)+"tar";
-                break;
-            case "gz":
-                name = name.substring(0, name.length()-3);
-                break;
-            default:
-            }
+            extension = extension.toLowerCase();
+            int extensionIndex = name.toLowerCase().lastIndexOf("." + extension);
+
+            if (extensionIndex > -1)
+                name = name.substring(0, extensionIndex);
+
+            if (extension.equals("tgz") || extension.equals("tar.gz"))
+                name += ".tar";
         }
 
         return new SingleArchiveEntryIterator(new ArchiveEntry("/"+name, false, getDate(), -1, true));
