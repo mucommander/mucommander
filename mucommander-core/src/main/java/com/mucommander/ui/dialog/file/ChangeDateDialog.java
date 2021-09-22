@@ -17,8 +17,26 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Date;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.FluentPanel;
@@ -29,14 +47,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ChangeDateAction;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Date;
 
 /**
  * This dialog allows the user to change the date of the currently selected/marked file(s). By default, the date is now
@@ -66,8 +76,21 @@ public class ChangeDateDialog extends JobDialog implements ActionListener, ItemL
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
-        AbstractFile destFile = files.size()==1?files.elementAt(0):files.getBaseFolder();
-        boolean canChangeDate = destFile.isFileOperationSupported(FileOperation.CHANGE_DATE);
+        AbstractFile destFile;
+        boolean canChangeDate;
+        if (files.size() == 1) {
+            destFile = files.elementAt(0);
+            canChangeDate = destFile.isFileOperationSupported(FileOperation.CHANGE_DATE);
+        } else {
+            destFile = files.getBaseFolder();
+            switch (destFile.getURL().getScheme()) {
+            case SearchFile.SCHEMA:
+                canChangeDate = files.stream().allMatch(file -> file.isFileOperationSupported(FileOperation.CHANGE_DATE));
+                break;
+            default:
+                canChangeDate = destFile.isFileOperationSupported(FileOperation.CHANGE_DATE);
+            }
+        }
 
         nowRadioButton = new JRadioButton(Translator.get("change_date_dialog.now"));
         nowRadioButton.setSelected(true);
