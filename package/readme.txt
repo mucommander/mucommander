@@ -42,6 +42,7 @@ Improvements:
 - The free space indicator in the status bar is updated right after relevant events like switching to the application.
 - Symbolic links are unpacked from tar archives.
 - The portable version stores preferences files in the installation directory.
+- It is now possible to change the modification date of multiple search results.
 
 Localization:
 - Updated Russian translation
