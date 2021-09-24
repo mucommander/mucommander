@@ -43,13 +43,14 @@ Improvements:
 - Symbolic links are unpacked from tar archives.
 - The portable version stores preferences files in the installation directory.
 - It is now possible to change the modification date of multiple search results.
-- Prevention of ZipSlip (https://snyk.io/research/zip-slip-vulnerability)
+- Prevention of ZipSlip (https://snyk.io/research/zip-slip-vulnerability).
 
 Localization:
-- Updated Russian translation
+- Russian translation updated.
+- Korean translation updated.
 
 Bug fixes:
-- Fix installation using GDebi Package Installer
+- Fix installation using GDebi Package Installer.
 - Permanent deletion of symbolic links on Windows no longer deletes their linked content.
 - Restore file table configuration (column visibility, width and position) on startup also when custom folders are set.
 - The default keyboard shortcut for packing files (CTRL+I) opens the 'Pack files' dialog on macOS.
