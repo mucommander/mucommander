@@ -33,7 +33,6 @@ import com.mucommander.ui.action.impl.UnmarkAllAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
@@ -251,10 +250,18 @@ public class UnpackJob extends AbstractCopyJob {
                 // Create destination AbstractFile instance
                 AbstractFile destFile = destFolder.getChild(relDestPath);
 
+                // Check for ZipSlip (see https://snyk.io/research/zip-slip-vulnerability)
+                do {
+                    if (destFolder.isParentOf(destFile))
+                        break;
 
-                //Check for ZipSlip
-                if(!checkForZipSlip(destFile, destFolder))
+                    int ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.entry_out_of_target_dir", destFile.getName()));
+                    // Retry loops
+                    if(ret==FileJobAction.RETRY)
+                        continue;
+                    // Cancel, skip or close dialog returns false
                     return false;
+                } while(true);
 
                 // Check if the file does not already exist in the destination
                 destFile = checkForCollision(entryFile, destFolder, destFile, false);
@@ -315,26 +322,6 @@ public class UnpackJob extends AbstractCopyJob {
         }
 
         return false;
-    }
-
-    /** This methods checks for a zipSlip attack.
-     * It is inspired by the mitigation shown in https://snyk.io/research/zip-slip-vulnerability.
-     * @param destFile destination file to unpack to.
-     * @param destFolder destionation folder where the file is put.
-     * @return false if file is outside the target unpack fodler, true if everything is fine.
-     **/
-    private boolean checkForZipSlip(AbstractFile destFile, AbstractFile destFolder) {
-
-        String canonicalDestinationDirPath = destFolder.getCanonicalPath();
-        if (!canonicalDestinationDirPath.endsWith(File.separator)) {
-            canonicalDestinationDirPath = canonicalDestinationDirPath + File.separator;
-        }
-        String canonicalDestinationFile = destFile.getCanonicalPath();
-        if (!canonicalDestinationFile.startsWith(canonicalDestinationDirPath)) {
-            showErrorDialog(errorDialogTitle, Translator.get("entry_outside_of_target_dir", destFile.getName()));
-            return false;
-        }
-        return true;
     }
 
     // This job modifies the base destination folder and its subfolders

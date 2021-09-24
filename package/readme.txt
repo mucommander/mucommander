@@ -43,6 +43,7 @@ Improvements:
 - Symbolic links are unpacked from tar archives.
 - The portable version stores preferences files in the installation directory.
 - It is now possible to change the modification date of multiple search results.
+- Prevention of ZipSlip (https://snyk.io/research/zip-slip-vulnerability)
 
 Localization:
 - Updated Russian translation
