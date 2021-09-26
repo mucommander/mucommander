@@ -23,6 +23,8 @@ import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.apache.tools.bzip2.CBZip2OutputStream;
+import org.tukaani.xz.XZOutputStream;
+import org.tukaani.xz.LZMA2Options;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileAttributes;
@@ -58,18 +60,24 @@ public abstract class Archiver {
     public final static int GZ_FORMAT = 1;
     /** Bzip2 archive format (single entry format) */
     public final static int BZ2_FORMAT = 2;
+    /** XZ archive format (single entry format) */
+    public final static int XZ_FORMAT = 3;
     /** Tar archive format without any compression (many entries format) */
-    public final static int TAR_FORMAT = 3;
+    public final static int TAR_FORMAT = 4;
     /** Tar archive compressed with Gzip format (many entries format) */
-    public final static int TAR_GZ_FORMAT = 4;
+    public final static int TAR_GZ_FORMAT = 5;
     /** Tar archive compressed with Bzip2 format (many entries format) */
-    public final static int TAR_BZ2_FORMAT = 5;
+    public final static int TAR_BZ2_FORMAT = 6;
+    /** Tar archive compressed with XZ format (many entries format) */
+    public final static int TAR_XZ_FORMAT = 7;
 
     /** Boolean array describing for each format if it can store more than one entry */
     private final static boolean SUPPORTS_MANY_ENTRIES[] = {
         true,
         false,
         false,
+        false,
+        true,
         true,
         true,
         true
@@ -80,9 +88,11 @@ public abstract class Archiver {
         ZIP_FORMAT,
         GZ_FORMAT,
         BZ2_FORMAT,
+        XZ_FORMAT,
         TAR_FORMAT,
         TAR_GZ_FORMAT,
-        TAR_BZ2_FORMAT
+        TAR_BZ2_FORMAT,
+        TAR_XZ_FORMAT
     };
 
     /** Array of many entries formats */
@@ -90,7 +100,8 @@ public abstract class Archiver {
         ZIP_FORMAT,
         TAR_FORMAT,
         TAR_GZ_FORMAT,
-        TAR_BZ2_FORMAT
+        TAR_BZ2_FORMAT,
+        TAR_XZ_FORMAT
     };
 	
     /** Array of format names */
@@ -98,9 +109,11 @@ public abstract class Archiver {
         "Zip",
         "Gzip",
         "Bzip2",
+        "XZ",
         "Tar",
         "Tar/Gzip",
-        "Tar/Bzip2"
+        "Tar/Bzip2",
+        "Tar/XZ"
     };
 
     /** Array of format extensions */
@@ -108,9 +121,11 @@ public abstract class Archiver {
         "zip",
         "gz",
         "bz2",
+        "xz",
         "tar",
         "tar.gz",
-        "tar.bz2"
+        "tar.bz2",
+        "tar.xz"
     };
 	
 
@@ -280,6 +295,9 @@ public abstract class Archiver {
             case BZ2_FORMAT:
                 archiver = new SingleFileArchiver(createBzip2OutputStream(out));
                 break;
+            case XZ_FORMAT:
+                archiver = new SingleFileArchiver(new XZOutputStream(out, new LZMA2Options()));
+                break;
             case TAR_FORMAT:
                 archiver = new TarArchiver(out);
                 break;
@@ -288,6 +306,9 @@ public abstract class Archiver {
                 break;
             case TAR_BZ2_FORMAT:
                 archiver = new TarArchiver(createBzip2OutputStream(out));
+                break;
+            case TAR_XZ_FORMAT:
+                archiver = new TarArchiver(new XZOutputStream(out, new LZMA2Options()));
                 break;
 
             default:
