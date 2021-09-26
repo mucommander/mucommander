@@ -44,6 +44,7 @@ Improvements:
 - The portable version stores preferences files in the installation directory.
 - It is now possible to change the modification date of multiple search results.
 - Prevention of ZipSlip (https://snyk.io/research/zip-slip-vulnerability).
+- An informative error dialog is displayed when failing to change directory while browsing an ftp server.
 
 Localization:
 - Russian translation updated.

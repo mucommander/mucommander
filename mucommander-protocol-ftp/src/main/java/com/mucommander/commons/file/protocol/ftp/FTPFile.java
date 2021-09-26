@@ -243,8 +243,10 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             // http://issues.apache.org/jira/browse/NET-10
 
             connHandler.ftpClient.changeWorkingDirectory(absPath);
-            files = connHandler.ftpClient.listFiles();
+            // Throw an IOException if server replied with an error
+            connHandler.checkServerReply();
 
+            files = connHandler.ftpClient.listFiles();
             // Throw an IOException if server replied with an error
             connHandler.checkServerReply();
 
