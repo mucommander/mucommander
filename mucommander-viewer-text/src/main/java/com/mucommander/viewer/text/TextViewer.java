@@ -237,7 +237,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     }
 
     protected void showLineNumbers(boolean show) {
-        ui.setRowHeaderView(show ? new TextLineNumbersPanel(textEditorImpl.getTextArea()) : null);
+        ui.setRowHeaderView(show ? lineNumbersPanel : null);
         setLineNumbers(show);
     }
 
