@@ -46,7 +46,6 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.CloseCancelledException;
 import com.mucommander.viewer.EditorPresenter;
-import com.mucommander.viewer.FileEditor;
 import static com.mucommander.viewer.text.TextViewer.CUSTOM_FULL_SCREEN_EVENT;
 import static com.mucommander.viewer.text.TextViewer.isFullScreen;
 import static com.mucommander.viewer.text.TextViewer.setFullScreen;
@@ -60,7 +59,7 @@ import javax.swing.JScrollPane;
  *
  * @author Maxence Bernard, Nicolas Rinaudo, Arik Hadas
  */
-class TextEditor extends BasicFileEditor implements FileEditor, DocumentListener, EncodingListener, ActionListener {
+class TextEditor extends BasicFileEditor implements DocumentListener, EncodingListener, ActionListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TextEditor.class);
 
     private JScrollPane ui = new JScrollPane();

@@ -149,7 +149,7 @@ class BinaryViewer implements FileViewer {
     }
 
     private synchronized void loadFile(AbstractFile file) throws IOException {
-        // TODO
+        // TODO provide method for long operations in presenter instead
         presenter.getWindowFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
         ByteArrayEditableData data = new ByteArrayEditableData();
