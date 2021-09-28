@@ -83,7 +83,7 @@ public class FileDropTargetListener implements DropTargetListener {
     /** Mode that specifies what to do when files are dropped */
     private boolean changeFolderOnlyMode;
 
-    /** Drop action (copy or move) currenlty specified by the user */
+    /** Drop action (copy or move) currently specified by the user */
     private int currentDropAction;
 
     /** Has DropTargetDragEvent event been accepted ? */
@@ -161,16 +161,13 @@ public class FileDropTargetListener implements DropTargetListener {
 
         if (dragAccepted) {
             this.currentDropAction = determineDropAction(event);
-        }
-
-        LOGGER.trace("dragAccepted=" + dragAccepted + " dropAction=" + currentDropAction);
-
-        if (dragAccepted) {
             // Accept the drag event with our drop action
             event.acceptDrag(currentDropAction);
+            LOGGER.trace("drag accepted, dropAction=" + currentDropAction);
         } else {
             // Reject the drag event
             event.rejectDrag();
+            LOGGER.trace("drag rejected");
         }
 
         // Change the mouse cursor on this FolderPanel and child components
@@ -199,13 +196,13 @@ public class FileDropTargetListener implements DropTargetListener {
             case DnDConstants.ACTION_MOVE:
                 if ((event.getSourceActions() & DnDConstants.ACTION_COPY) != 0) {
                     dropAction = DnDConstants.ACTION_COPY;
-                    LOGGER.debug("changing default action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
+                    LOGGER.debug("changing default external action, was: DnDConstants.ACTION_MOVE, now: DnDConstants.ACTION_COPY");
                 }
                 break;
             case DnDConstants.ACTION_COPY:
                 if ((event.getSourceActions() & DnDConstants.ACTION_MOVE) != 0) {
                     dropAction = DnDConstants.ACTION_MOVE;
-                    LOGGER.debug("changing default action, was: DnDConstants.ACTION_COPY, now: DnDConstants.ACTION_MOVE");
+                    LOGGER.debug("changing default external action, was: DnDConstants.ACTION_COPY, now: DnDConstants.ACTION_MOVE");
                 }
                 break;
             }
