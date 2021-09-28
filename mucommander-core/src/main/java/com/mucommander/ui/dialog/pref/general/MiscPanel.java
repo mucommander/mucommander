@@ -79,7 +79,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     private PrefCheckBox viewOnErrorDiscoveryCheckBox;
 
     /** Shell encoding auto-detect checkbox */
-    private PrefCheckBox shellEncodingautoDetectCheckbox;
+    private PrefCheckBox shellEncodingAutoDetectCheckbox;
 
     /** Shell encoding select box. */
     private PrefEncodingSelectBox shellEncodingSelectBox;
@@ -88,23 +88,21 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     private JPanel createShellEncodingPanel(PreferencesDialog parent) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
-        shellEncodingautoDetectCheckbox = new PrefCheckBox(Translator.get("prefs_dialog.auto_detect_shell_encoding")) {
-            public boolean hasChanged() {
-                return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.AUTODETECT_SHELL_ENCODING, MuPreferences.DEFAULT_AUTODETECT_SHELL_ENCODING);
-            }
-        };
-        boolean autoDetect = MuConfigurations.getPreferences().getVariable(MuPreference.AUTODETECT_SHELL_ENCODING, MuPreferences.DEFAULT_AUTODETECT_SHELL_ENCODING);
-        shellEncodingautoDetectCheckbox.setSelected(autoDetect);
-        shellEncodingautoDetectCheckbox.addItemListener(this);
+        shellEncodingAutoDetectCheckbox = new PrefCheckBox(Translator.get("prefs_dialog.auto_detect_shell_encoding"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.AUTODETECT_SHELL_ENCODING,
+                MuPreferences.DEFAULT_AUTODETECT_SHELL_ENCODING));
+        shellEncodingAutoDetectCheckbox.addDialogListener(parent);
+        shellEncodingAutoDetectCheckbox.addItemListener(this);
 
-        panel.add(shellEncodingautoDetectCheckbox);
+        panel.add(shellEncodingAutoDetectCheckbox);
 
         shellEncodingSelectBox = new PrefEncodingSelectBox(new DialogOwner(parent), MuConfigurations.getPreferences().getVariable(MuPreference.SHELL_ENCODING)) {
             public boolean hasChanged() {
                 return !MuConfigurations.getPreferences().getVariable(MuPreference.SHELL_ENCODING).equals(getSelectedEncoding());
             }
         };
-        shellEncodingSelectBox.setEnabled(!autoDetect); 
+        shellEncodingSelectBox.addDialogListener(parent);
+        shellEncodingSelectBox.setEnabled(!shellEncodingAutoDetectCheckbox.isSelected());
 
         panel.add(shellEncodingSelectBox);
 
@@ -160,79 +158,53 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         northPanel.addSpace(10);
 
         // 'Show splash screen' option
-        showSplashScreenCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_splash_screen")) {
-			public boolean hasChanged() {
-				return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN);
-			}
-        };
-        showSplashScreenCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN));
+        showSplashScreenCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_splash_screen"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.SHOW_SPLASH_SCREEN,
+                MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN));
+        showSplashScreenCheckBox.addDialogListener(parent);
         northPanel.add(showSplashScreenCheckBox);
 
         // 'Check for updates on startup' option
-        checkForUpdatesCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup")) {
-			public boolean hasChanged() {
-				return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.CHECK_FOR_UPDATE, MuPreferences.DEFAULT_CHECK_FOR_UPDATE);
-			}
-        };
-        checkForUpdatesCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.CHECK_FOR_UPDATE, MuPreferences.DEFAULT_CHECK_FOR_UPDATE));
+        checkForUpdatesCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.CHECK_FOR_UPDATE,
+                MuPreferences.DEFAULT_CHECK_FOR_UPDATE));
+        checkForUpdatesCheckBox.addDialogListener(parent);
         northPanel.add(checkForUpdatesCheckBox);
 
         // 'Show confirmation dialog on quit' option
-        quitConfirmationCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.confirm_on_quit")) {
-			public boolean hasChanged() {
-				return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.CONFIRM_ON_QUIT, MuPreferences.DEFAULT_CONFIRM_ON_QUIT);
-			}
-        };
-        quitConfirmationCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.CONFIRM_ON_QUIT, MuPreferences.DEFAULT_CONFIRM_ON_QUIT));
+        quitConfirmationCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.confirm_on_quit"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.CONFIRM_ON_QUIT,
+                MuPreferences.DEFAULT_CONFIRM_ON_QUIT));
+        quitConfirmationCheckBox.addDialogListener(parent);
         northPanel.add(quitConfirmationCheckBox);
 
         // 'Enable system notifications' option, displayed only if current platform supports system notifications
-        if(NotifierProvider.isAvailable()) {
-            systemNotificationsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_system_notifications")+" ("+NotifierProvider.getNotifier().getPrettyName()+")") {
-				public boolean hasChanged() {
-					return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
-                            								MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS);
-				}
-            };
-            systemNotificationsCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
-                                                                                     MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS));
+        if (NotifierProvider.isAvailable()) {
+            systemNotificationsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_system_notifications")+" ("+NotifierProvider.getNotifier().getPrettyName()+")",
+                    () -> MuConfigurations.getPreferences().getVariable(
+                            MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
+                            MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS));
+            systemNotificationsCheckBox.addDialogListener(parent);
             northPanel.add(systemNotificationsCheckBox);
         }
         // 'Open the file with the viewer in case of opening error' option
-        viewOnErrorDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.open_with_viewer_on_error")) {
-            public boolean hasChanged() {
-                return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.VIEW_ON_ERROR,
-                    MuPreferences.DEFAULT_VIEW_ON_ERROR);
-            }
-        };
-        viewOnErrorDiscoveryCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.VIEW_ON_ERROR,
-            MuPreferences.DEFAULT_VIEW_ON_ERROR));
+        viewOnErrorDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.open_with_viewer_on_error"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.VIEW_ON_ERROR,
+                MuPreferences.DEFAULT_VIEW_ON_ERROR));
+        viewOnErrorDiscoveryCheckBox.addDialogListener(parent);
         northPanel.add(viewOnErrorDiscoveryCheckBox);
 
         // 'Enable Bonjour services discovery' option
-        bonjourDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_bonjour_discovery")) {
-			public boolean hasChanged() {
-				return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY,
-                        									MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY);
-			}
-        };
-        bonjourDiscoveryCheckBox.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY,
-                                                                              MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
+        bonjourDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_bonjour_discovery"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.ENABLE_BONJOUR_DISCOVERY,
+                MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
+        bonjourDiscoveryCheckBox.addDialogListener(parent);
         northPanel.add(bonjourDiscoveryCheckBox);
 
         add(northPanel, BorderLayout.NORTH);
         
         customShellField.addDialogListener(parent);
     	useCustomShellRadioButton.addDialogListener(parent);
-    	checkForUpdatesCheckBox.addDialogListener(parent);
-    	quitConfirmationCheckBox.addDialogListener(parent);
-        showSplashScreenCheckBox.addDialogListener(parent);
-        bonjourDiscoveryCheckBox.addDialogListener(parent);
-        viewOnErrorDiscoveryCheckBox.addDialogListener(parent);
-        shellEncodingautoDetectCheckbox.addDialogListener(parent);
-        shellEncodingSelectBox.addDialogListener(parent);
-        if(systemNotificationsCheckBox!=null)
-            systemNotificationsCheckBox.addDialogListener(parent);
     }
 
 
@@ -245,8 +217,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         if(source==useCustomShellRadioButton) {
             customShellField.setEnabled(useCustomShellRadioButton.isSelected());
         }
-        else if(source==shellEncodingautoDetectCheckbox) {
-            shellEncodingSelectBox.setEnabled(!shellEncodingautoDetectCheckbox.isSelected());
+        else if(source==shellEncodingAutoDetectCheckbox) {
+            shellEncodingSelectBox.setEnabled(!shellEncodingAutoDetectCheckbox.isSelected());
         }
     }
 
@@ -264,7 +236,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         MuConfigurations.getPreferences().setVariable(MuPreference.CUSTOM_SHELL, customShellField.getText());
 
         // Saves the shell encoding data.
-        boolean isAutoDetect = shellEncodingautoDetectCheckbox.isSelected();
+        boolean isAutoDetect = shellEncodingAutoDetectCheckbox.isSelected();
         MuConfigurations.getPreferences().setVariable(MuPreference.AUTODETECT_SHELL_ENCODING, isAutoDetect);
         if(!isAutoDetect)
         	MuConfigurations.getPreferences().setVariable(MuPreference.SHELL_ENCODING, shellEncodingSelectBox.getSelectedEncoding());

@@ -228,13 +228,9 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         tempPanel.add(Box.createHorizontalGlue());
         dateFormatPanel.add(tempPanel);
 
-        showCenturyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_century")) {
-			public boolean hasChanged() {
-				return isSelected() != (MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT).indexOf("yyyy")!=-1);
-			}
-        };
-        showCenturyCheckBox.setSelected(dateFormat.indexOf("yyyy")!=-1);
+        showCenturyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_century"), () -> MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT).indexOf("yyyy")!=-1);
         showCenturyCheckBox.addItemListener(this);
+        showCenturyCheckBox.addDialogListener(parent);
         dateFormatPanel.add(showCenturyCheckBox);
         dateFormatPanel.addSpace(10);
         gridPanel.add(dateFormatPanel);
@@ -272,13 +268,9 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         timeFormatPanel.add(time24RadioButton);
         timeFormatPanel.addSpace(10);
 
-        showSecondsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_seconds")) {
-			public boolean hasChanged() {
-				return isSelected() != (MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT).indexOf(":ss")!=-1);
-			}
-        };
-        showSecondsCheckBox.setSelected(timeFormat.indexOf(":ss")!=-1);
+        showSecondsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_seconds"), () -> MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT).indexOf(":ss")!=-1);
         showSecondsCheckBox.addItemListener(this);
+        showSecondsCheckBox.addDialogListener(parent);
         timeFormatPanel.add(showSecondsCheckBox);
         timeFormatPanel.addSpace(10);
         gridPanel.add(timeFormatPanel);
@@ -306,8 +298,6 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         time24RadioButton.addDialogListener(parent);
         dateFormatComboBox.addDialogListener(parent);
         dateSeparatorField.addDialogListener(parent);
-        showSecondsCheckBox.addDialogListener(parent);
-        showCenturyCheckBox.addDialogListener(parent);
     }
 
     private String getTimeFormatString() {
