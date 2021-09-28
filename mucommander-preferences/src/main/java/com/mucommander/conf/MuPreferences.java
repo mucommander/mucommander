@@ -84,6 +84,10 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final boolean DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS = OsFamily.MAC_OS.isCurrent() || OsFamily.WINDOWS.isCurrent();
 	/** List of encodings that are displayed in encoding selection components. */
 	public static final String  PREFERRED_ENCODINGS               = "preferred_encodings";
+	/** Controls whether the default file drag and drop action is set to 'COPY' */
+	public static final String  SET_DROP_ACTION_TO_COPY           = "change_drop_action_to_copy";
+	/** Default file drag and drop behavior */
+	public static final boolean DEFAULT_SET_DROP_ACTION_TO_COPY   =  true;
 
 
 	// - Log variables -------------------------------------------------------

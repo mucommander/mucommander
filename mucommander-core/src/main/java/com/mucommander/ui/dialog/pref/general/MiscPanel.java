@@ -84,6 +84,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** Shell encoding select box. */
     private PrefEncodingSelectBox shellEncodingSelectBox;
 
+    /** 'Set default file drag and drop action to COPY' checkbox */
+    private PrefCheckBox setDropActionToCopyCheckBox;
 
     private JPanel createShellEncodingPanel(PreferencesDialog parent) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -202,7 +204,13 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         northPanel.add(bonjourDiscoveryCheckBox);
 
         add(northPanel, BorderLayout.NORTH);
-        
+
+        setDropActionToCopyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.set_drop_action_to_copy"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.SET_DROP_ACTION_TO_COPY,
+                MuPreferences.DEFAULT_SET_DROP_ACTION_TO_COPY));
+        setDropActionToCopyCheckBox.addDialogListener(parent);
+        northPanel.add(setDropActionToCopyCheckBox);
+
         customShellField.addDialogListener(parent);
     	useCustomShellRadioButton.addDialogListener(parent);
     }
@@ -256,5 +264,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         enabled = bonjourDiscoveryCheckBox.isSelected();
         MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, enabled);
         BonjourDirectory.setActive(enabled);
+
+        MuConfigurations.getPreferences().setVariable(MuPreference.SET_DROP_ACTION_TO_COPY, setDropActionToCopyCheckBox.isSelected());
     }
 }
