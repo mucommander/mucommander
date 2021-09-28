@@ -33,6 +33,9 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.impl.CopyJob;
 import com.mucommander.job.impl.MoveJob;
 import com.mucommander.job.impl.CopyJob.TransferMode;
@@ -180,6 +183,11 @@ public class FileDropTargetListener implements DropTargetListener {
 
     private int determineDropAction(DropTargetDragEvent event) {
         int dropAction = event.getDropAction();
+
+        boolean changeDefaultDropAction = MuConfigurations.getPreferences().getVariable(MuPreference.SET_DROP_ACTION_TO_COPY, MuPreferences.DEFAULT_SET_DROP_ACTION_TO_COPY);
+        if (!changeDefaultDropAction)
+            return dropAction;
+
         if (DnDContext.isDragInitiatedByMucommander()) {
             // Change the default drop action to DnDConstants.ACTION_COPY instead of DnDConstants.ACTION_MOVE,
             // if the move extended modifiers are not currently down.

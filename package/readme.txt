@@ -45,6 +45,7 @@ Improvements:
 - It is now possible to change the modification date of multiple search results.
 - Prevention of ZipSlip (https://snyk.io/research/zip-slip-vulnerability).
 - An informative error dialog is displayed when failing to change directory while browsing an ftp server.
+- Setting the default file drag and drop action to 'COPY' (rather than 'MOVE') is now configurable.
 
 Localization:
 - Russian translation updated.

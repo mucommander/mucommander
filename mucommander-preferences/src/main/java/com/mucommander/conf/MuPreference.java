@@ -74,7 +74,8 @@ public enum MuPreference {
 	LIST_HIDDEN_FILES(MuPreferences.LIST_HIDDEN_FILES),
 	SMB_LM_COMPATIBILITY(MuPreferences.SMB_LM_COMPATIBILITY),
 	SMB_USE_EXTENDED_SECURITY(MuPreferences.SMB_USE_EXTENDED_SECURITY),
-	SHOW_TAB_HEADER(MuPreferences.SHOW_SINGLE_TAB_HEADER);
+	SHOW_TAB_HEADER(MuPreferences.SHOW_SINGLE_TAB_HEADER),
+	SET_DROP_ACTION_TO_COPY(MuPreferences.SET_DROP_ACTION_TO_COPY);
 	private String label;
 	
 	private MuPreference(String label) {
