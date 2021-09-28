@@ -30,7 +30,7 @@ public interface PrefComponent {
 	 * 
 	 * @param dialog - parent dialog of the component parent panel.
 	 */
-	public void addDialogListener(final PreferencesDialog dialog);
+	void addDialogListener(final PreferencesDialog dialog);
 	
 	/**
 	 * This function checks if the component's value was changed from the value that is saved
@@ -38,5 +38,5 @@ public interface PrefComponent {
 	 * 
 	 * @return true if component's value differ from the value at MuConfiguration, else otherwise.
 	 */
-	public boolean hasChanged();
+	boolean hasChanged();
 }
