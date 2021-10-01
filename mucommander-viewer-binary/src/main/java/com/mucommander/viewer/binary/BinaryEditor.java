@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,12 +30,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
-
-import org.exbin.bined.CodeType;
-import org.exbin.bined.EditMode;
-import org.exbin.bined.CodeCharactersCase;
-import org.exbin.bined.swing.basic.CodeArea;
-import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
@@ -47,6 +42,11 @@ import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
 import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
+
+import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
+import org.exbin.bined.CodeCharactersCase;
+import org.exbin.bined.CodeType;
+import org.exbin.bined.swing.basic.CodeArea;
 
 /**
  * General editor for binary files.
@@ -153,8 +153,8 @@ class BinaryEditor implements FileEditor {
         presenter.getWindowFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
         ByteArrayEditableData data = new ByteArrayEditableData();
-        try {
-            data.loadFromStream(file.getInputStream());
+        try (InputStream in = file.getInputStream()) {
+            data.loadFromStream(in);
         } catch (IOException ex) {
             Logger.getLogger(BinaryEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
