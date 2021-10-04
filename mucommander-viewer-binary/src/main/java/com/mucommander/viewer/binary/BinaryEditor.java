@@ -48,6 +48,11 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
+import org.exbin.bined.CodeCharactersCase;
+import org.exbin.bined.CodeType;
+import org.exbin.bined.swing.basic.CodeArea;
+
 /**
  * General editor for binary files.
  *

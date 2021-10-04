@@ -33,6 +33,12 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
 
+import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
+import org.exbin.bined.CodeCharactersCase;
+import org.exbin.bined.CodeType;
+import org.exbin.bined.EditMode;
+import org.exbin.bined.swing.basic.CodeArea;
+
 /**
  * General viewer for binary files.
  *
