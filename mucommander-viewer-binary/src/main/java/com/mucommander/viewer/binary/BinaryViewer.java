@@ -16,212 +16,106 @@
  */
 package com.mucommander.viewer.binary;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-
-import org.exbin.bined.CodeType;
-import org.exbin.bined.EditMode;
-import org.exbin.bined.CodeCharactersCase;
-import org.exbin.bined.swing.basic.CodeArea;
-import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
-
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
+import org.exbin.bined.EditMode;
+import org.exbin.bined.swing.basic.CodeArea;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.util.Objects;
 
 /**
  * General viewer for binary files.
  *
  * @author Miroslav Hajda
  */
-class BinaryViewer implements FileViewer {
+@ParametersAreNonnullByDefault
+class BinaryViewer extends BinaryBase implements FileViewer {
 
     private ViewerPresenter presenter;
-
-    private JMenu editMenu;
-    private JMenu viewMenu;
-    private JMenu codeTypeMenu;
-    private JMenu codeCharacterCaseMenu;
-    private javax.swing.ButtonGroup codeTypeButtonGroup;
-    private javax.swing.ButtonGroup codeCharacterCaseButtonGroup;
-    private JMenuItem copyItem;
-    private JMenuItem selectAllItem;
-    private javax.swing.JRadioButtonMenuItem binaryCodeTypeRadioButtonMenuItem;
-    private javax.swing.JRadioButtonMenuItem octalCodeTypeRadioButtonMenuItem;
-    private javax.swing.JRadioButtonMenuItem decimalCodeTypeRadioButtonMenuItem;
-    private javax.swing.JRadioButtonMenuItem hexadecimalCodeTypeRadioButtonMenuItem;
-    private javax.swing.JRadioButtonMenuItem lowerCaseRadioButtonMenuItem;
-    private javax.swing.JRadioButtonMenuItem upperCaseRadioButtonMenuItem;
-
-    private BinaryViewerImpl binaryViewerImpl;
+    private JMenuItem copyPopupMenuItem;
 
     public BinaryViewer() {
-        binaryViewerImpl = new BinaryViewerImpl();
+        super();
 
         initMenuBars();
+        init();
     }
 
     private void initMenuBars() {
-        editMenu = new JMenu(Translator.get("text_viewer.edit"));
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+        JPopupMenu popupMenu = new JPopupMenu();
+        int metaMask = getMetaMask();
 
-        copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.copy"), menuItemMnemonicHelper, null,
-                e -> binaryViewerImpl.copy()
+        copyPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_viewer.copy"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_C, metaMask),
+                e -> binaryComponent.getCodeArea().copy()
         );
+        popupMenu.add(copyPopupMenuItem);
+        popupMenu.add(MenuToolkit.createMenuItem(Translator.get("binary_viewer.select_all"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_A, metaMask),
+                e -> binaryComponent.getCodeArea().selectAll()
+        ));
 
-        selectAllItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.select_all"), menuItemMnemonicHelper, null,
-                e -> binaryViewerImpl.selectAll()
-        );
+        binaryComponent.getCodeArea().setComponentPopupMenu(popupMenu);
+    }
 
-        // View menu
-        viewMenu = new JMenu(Translator.get("text_viewer.view"));
+    private void init() {
+        CodeArea codeArea = binaryComponent.getCodeArea();
+        codeArea.addSelectionChangedListener(this::updateClipboardActionsStatus);
+        updateClipboardActionsStatus();
+    }
 
-        codeTypeMenu = new JMenu("Code Type");
-
-        codeTypeButtonGroup = new ButtonGroup();
-        binaryCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
-        codeTypeButtonGroup.add(binaryCodeTypeRadioButtonMenuItem);
-        binaryCodeTypeRadioButtonMenuItem.setText("Binary");
-        binaryCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryViewerImpl.setCodeType(CodeType.BINARY));
-        codeTypeMenu.add(binaryCodeTypeRadioButtonMenuItem);
-
-        octalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
-        codeTypeButtonGroup.add(octalCodeTypeRadioButtonMenuItem);
-        octalCodeTypeRadioButtonMenuItem.setText("Octal");
-        octalCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryViewerImpl.setCodeType(CodeType.OCTAL));
-        codeTypeMenu.add(octalCodeTypeRadioButtonMenuItem);
-
-        decimalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
-        codeTypeButtonGroup.add(decimalCodeTypeRadioButtonMenuItem);
-        decimalCodeTypeRadioButtonMenuItem.setText("Decimal");
-        decimalCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryViewerImpl.setCodeType(CodeType.DECIMAL));
-        codeTypeMenu.add(decimalCodeTypeRadioButtonMenuItem);
-
-        hexadecimalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
-        codeTypeButtonGroup.add(hexadecimalCodeTypeRadioButtonMenuItem);
-        hexadecimalCodeTypeRadioButtonMenuItem.setSelected(true);
-        hexadecimalCodeTypeRadioButtonMenuItem.setText("Hexadecimal");
-        hexadecimalCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryViewerImpl.setCodeType(CodeType.HEXADECIMAL));
-        codeTypeMenu.add(hexadecimalCodeTypeRadioButtonMenuItem);
-        viewMenu.add(codeTypeMenu);
-
-        codeCharacterCaseMenu = new JMenu("Code Character Case");
-        codeCharacterCaseButtonGroup = new ButtonGroup();
-
-        upperCaseRadioButtonMenuItem = new JRadioButtonMenuItem();
-        codeCharacterCaseButtonGroup.add(upperCaseRadioButtonMenuItem);
-        upperCaseRadioButtonMenuItem.setSelected(true);
-        upperCaseRadioButtonMenuItem.setText("Upper Case");
-        upperCaseRadioButtonMenuItem.addActionListener(e -> binaryViewerImpl.setCodeCharactersCase(CodeCharactersCase.UPPER));
-        codeCharacterCaseMenu.add(upperCaseRadioButtonMenuItem);
-
-        lowerCaseRadioButtonMenuItem = new JRadioButtonMenuItem();
-        codeCharacterCaseButtonGroup.add(lowerCaseRadioButtonMenuItem);
-        lowerCaseRadioButtonMenuItem.setText("Lower Case");
-        lowerCaseRadioButtonMenuItem.addActionListener(e -> binaryViewerImpl.setCodeCharactersCase(CodeCharactersCase.LOWER));
-        codeCharacterCaseMenu.add(lowerCaseRadioButtonMenuItem);
-        viewMenu.add(codeCharacterCaseMenu);
+    private void updateClipboardActionsStatus() {
+        CodeArea codeArea = binaryComponent.getCodeArea();
+        copyMenuItem.setEnabled(codeArea.hasSelection());
+        copyPopupMenuItem.setEnabled(codeArea.hasSelection());
     }
 
     @Override
     public void extendMenu(JMenuBar menuBar) {
         menuBar.add(editMenu);
         menuBar.add(viewMenu);
+
+        EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(presenter.getWindowFrame()), binaryComponent.getCodeArea().getCharset().name());
+        encodingMenu.addEncodingListener((source, oldEncoding, newEncoding) -> changeEncoding(newEncoding));
+        menuBar.add(encodingMenu);
     }
 
-    private synchronized void loadFile(AbstractFile file) throws IOException {
-        // TODO provide method for long operations in presenter instead
-        presenter.getWindowFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-
-        ByteArrayEditableData data = new ByteArrayEditableData();
-        try {
-            data.loadFromStream(file.getInputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(BinaryViewer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        binaryViewerImpl.setContentData(data);
-        binaryViewerImpl.setEditMode(EditMode.READ_ONLY);
-
-        presenter.getWindowFrame().setCursor(Cursor.getDefaultCursor());
+    private synchronized void loadFile(AbstractFile file) {
+        CodeArea codeArea = binaryComponent.getCodeArea();
+        codeArea.setContentData(new FileBinaryData(file));
+        codeArea.setEditMode(EditMode.READ_ONLY);
+        notifyOrigFileChanged();
+        binaryComponent.updateCurrentMemoryMode();
     }
 
     @Override
-    public void open(AbstractFile file) throws IOException {
+    public void open(AbstractFile file) {
         loadFile(file);
     }
 
     @Override
     public void close() {
-
+        Objects.requireNonNull(((FileBinaryData) binaryComponent.getCodeArea().getContentData())).close();
     }
 
-    /**
-     * Returns UI for viewer.
-     *
-     * @return UI component instance
-     */
+    @Nonnull
     @Override
     public JComponent getUI() {
-        return binaryViewerImpl;
+        return binaryComponent;
     }
 
     @Override
     public void setPresenter(ViewerPresenter presenter) {
         this.presenter = presenter;
-    }
-
-    private class BinaryViewerImpl extends CodeArea implements ThemeListener {
-
-        private Color backgroundColor;
-
-        BinaryViewerImpl() {
-            backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
-            super.setBackground(backgroundColor);
-            ThemeManager.addCurrentThemeListener(this);
-        }
-
-        @Override
-        public synchronized Dimension getPreferredSize() {
-            return new Dimension(750, 500);
-        }
-
-        /**
-         * Receives theme color changes notifications.
-         */
-        @Override
-        public void colorChanged(ColorChangedEvent event) {
-            if (event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
-                backgroundColor = event.getColor();
-                super.setBackground(backgroundColor);
-                repaint();
-            }
-        }
-
-        /**
-         * Not used, implemented as a no-op.
-         */
-        @Override
-        public void fontChanged(FontChangedEvent event) {
-        }
+        setWindowFrame(presenter.getWindowFrame());
     }
 }
