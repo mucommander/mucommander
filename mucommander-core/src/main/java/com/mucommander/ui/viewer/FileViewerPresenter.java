@@ -27,6 +27,7 @@ import com.mucommander.viewer.ViewerPresenter;
 import com.mucommander.viewer.WarnUserException;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -123,6 +124,13 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     @Override
     public void setFullScreen(boolean fullScreen) {
         getFrame().setFullScreen(fullScreen);
+    }
+
+    @Override
+    public void longOperation(Runnable operation) {
+        getFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        operation.run();
+        getFrame().setCursor(Cursor.getDefaultCursor());
     }
 
     public void addViewerService(FileViewerService service) throws UserCancelledException {

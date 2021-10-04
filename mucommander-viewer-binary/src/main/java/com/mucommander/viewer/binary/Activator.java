@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of muCommander, http://www.mucommander.com
  *
  * muCommander is free software; you can redistribute it and/or modify
@@ -22,21 +22,14 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
- * Binary files viewer/editor.
- *
- * TODO:<br>
- * - editation mode<br>
- * - status bar<br>
- * - dynamic files loading<br>
- * - snapshot for settings<br>
- * - support for encoding<br>
- * - translation support<br>
- * - searching<br>
- * - popup menu<br>
+ * Viewer/editor for binary files.
  *
  * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public class Activator implements BundleActivator {
 
     private ServiceRegistration<FileViewerService> viewerRegistration;
@@ -45,12 +38,12 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext context) throws Exception {
         viewerRegistration = context.registerService(FileViewerService.class, new BinaryFileViewerService(), null);
-// TODO        editorRegistration = context.registerService(FileEditorService.class, new BinaryFileViewerService(), null);
+        editorRegistration = context.registerService(FileEditorService.class, new BinaryFileViewerService(), null);
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
         viewerRegistration.unregister();
-// TODO        editorRegistration.unregister();
+        editorRegistration.unregister();
     }
 }

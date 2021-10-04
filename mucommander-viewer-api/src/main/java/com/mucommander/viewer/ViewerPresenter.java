@@ -67,4 +67,11 @@ public interface ViewerPresenter {
      * @param fullScreen full screen state
      */
     void setFullScreen(boolean fullScreen);
+
+    /**
+     * Setups long operation.
+     *
+     * @param operation operation
+     */
+    void longOperation(Runnable operation);
 }

@@ -39,8 +39,6 @@ public class FileEditorServiceTracker extends ServiceTracker<FileEditorService, 
 
     public FileEditorServiceTracker(BundleContext context) {
         super(context, FileEditorService.class, null);
-
-//        context.getAllServiceReferences(FileEditorService.class, "");
     }
 
     @Override
