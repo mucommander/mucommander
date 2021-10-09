@@ -16,11 +16,12 @@
  */
 package com.mucommander.viewer.binary.ui;
 
-import com.mucommander.text.Translator;
-import com.mucommander.viewer.binary.GoToBinaryPositionMode;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.exbin.bined.CodeAreaUtils;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.mucommander.text.Translator;
+import com.mucommander.viewer.binary.GoToBinaryPositionMode;
 
 /**
  * Go-to position panel for binary editor.
@@ -69,7 +70,8 @@ public class GoToBinaryPanel extends javax.swing.JPanel {
         currentPositionTextField.setEditable(false);
         currentPositionTextField.setText("0");
 
-        goToPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Translator.get("binary_viewer.go_to.border.title")));
+        goToPanel.setBorder(
+                javax.swing.BorderFactory.createTitledBorder(Translator.get("binary_viewer.go_to.border.title")));
 
         positionTypeButtonGroup.add(fromStartRadioButton);
         fromStartRadioButton.setSelected(true);
@@ -90,32 +92,51 @@ public class GoToBinaryPanel extends javax.swing.JPanel {
         goToPanel.setLayout(goToPanelLayout);
         goToPanelLayout.setHorizontalGroup(
                 goToPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(fromStartRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fromStartRadioButton,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
                         .addComponent(fromCursorRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-                        .addComponent(fromEndRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fromEndRadioButton,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
                         .addGroup(goToPanelLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(goToPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(baseSwitchableSpinnerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(baseSwitchableSpinnerPanel,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                Short.MAX_VALUE)
                                         .addGroup(goToPanelLayout.createSequentialGroup()
                                                 .addComponent(positionLabel)
                                                 .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())
-        );
+                                .addContainerGap()));
         goToPanelLayout.setVerticalGroup(
                 goToPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(goToPanelLayout.createSequentialGroup()
-                                .addComponent(fromStartRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fromStartRadioButton,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        22,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fromEndRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fromEndRadioButton,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        22,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fromCursorRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fromCursorRadioButton,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        20,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(positionLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(baseSwitchableSpinnerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                                .addComponent(baseSwitchableSpinnerPanel,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         targetPositionLabel.setText(Translator.get("binary_viewer.go_to.targetPositionLabel.text"));
 
@@ -130,30 +151,41 @@ public class GoToBinaryPanel extends javax.swing.JPanel {
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(currentPositionTextField)
-                                        .addComponent(goToPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(goToPanel,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                Short.MAX_VALUE)
                                         .addComponent(targetPositionTextField)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(currentPositionLabel)
                                                         .addComponent(targetPositionLabel))
                                                 .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())
-        );
+                                .addContainerGap()));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(currentPositionLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(currentPositionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(currentPositionTextField,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(goToPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(goToPanel,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(targetPositionLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(targetPositionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                                .addComponent(targetPositionTextField,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
     }
 
     private void fromStartRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {
@@ -186,17 +218,17 @@ public class GoToBinaryPanel extends javax.swing.JPanel {
         long absolutePosition;
         long position = getPositionValue();
         switch (goToMode) {
-            case FROM_START:
-                absolutePosition = position;
-                break;
-            case FROM_END:
-                absolutePosition = maxPosition - position;
-                break;
-            case FROM_CURSOR:
-                absolutePosition = cursorPosition + position;
-                break;
-            default:
-                throw CodeAreaUtils.getInvalidTypeException(goToMode);
+        case FROM_START:
+            absolutePosition = position;
+            break;
+        case FROM_END:
+            absolutePosition = maxPosition - position;
+            break;
+        case FROM_CURSOR:
+            absolutePosition = cursorPosition + position;
+            break;
+        default:
+            throw CodeAreaUtils.getInvalidTypeException(goToMode);
         }
 
         if (absolutePosition < 0) {
@@ -214,17 +246,17 @@ public class GoToBinaryPanel extends javax.swing.JPanel {
             absolutePosition = maxPosition;
         }
         switch (goToMode) {
-            case FROM_START:
-                setPositionValue(absolutePosition);
-                break;
-            case FROM_END:
-                setPositionValue(maxPosition - absolutePosition);
-                break;
-            case FROM_CURSOR:
-                setPositionValue(absolutePosition - cursorPosition);
-                break;
-            default:
-                throw CodeAreaUtils.getInvalidTypeException(goToMode);
+        case FROM_START:
+            setPositionValue(absolutePosition);
+            break;
+        case FROM_END:
+            setPositionValue(maxPosition - absolutePosition);
+            break;
+        case FROM_CURSOR:
+            setPositionValue(absolutePosition - cursorPosition);
+            break;
+        default:
+            throw CodeAreaUtils.getInvalidTypeException(goToMode);
         }
         updateTargetPosition();
     }
@@ -257,23 +289,23 @@ public class GoToBinaryPanel extends javax.swing.JPanel {
         long absolutePosition = getTargetPosition();
         this.goToMode = goToMode;
         switch (goToMode) {
-            case FROM_START:
-            case FROM_END: {
-                setPositionValue(0L);
-                baseSwitchableSpinnerPanel.setMinimum(0L);
-                baseSwitchableSpinnerPanel.setMaximum(maxPosition);
-                baseSwitchableSpinnerPanel.revalidateSpinner();
-                break;
-            }
-            case FROM_CURSOR: {
-                setPositionValue(0L);
-                baseSwitchableSpinnerPanel.setMinimum(-cursorPosition);
-                baseSwitchableSpinnerPanel.setMaximum(maxPosition - cursorPosition);
-                baseSwitchableSpinnerPanel.revalidateSpinner();
-                break;
-            }
-            default:
-                throw CodeAreaUtils.getInvalidTypeException(goToMode);
+        case FROM_START:
+        case FROM_END: {
+            setPositionValue(0L);
+            baseSwitchableSpinnerPanel.setMinimum(0L);
+            baseSwitchableSpinnerPanel.setMaximum(maxPosition);
+            baseSwitchableSpinnerPanel.revalidateSpinner();
+            break;
+        }
+        case FROM_CURSOR: {
+            setPositionValue(0L);
+            baseSwitchableSpinnerPanel.setMinimum(-cursorPosition);
+            baseSwitchableSpinnerPanel.setMaximum(maxPosition - cursorPosition);
+            baseSwitchableSpinnerPanel.revalidateSpinner();
+            break;
+        }
+        default:
+            throw CodeAreaUtils.getInvalidTypeException(goToMode);
         }
         setTargetPosition(absolutePosition);
     }

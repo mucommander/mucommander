@@ -17,9 +17,12 @@
 package com.mucommander.viewer.binary;
 
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
@@ -34,44 +37,52 @@ public interface BinaryStatusApi {
     /**
      * Reports cursor position.
      *
-     * @param cursorPosition cursor position
+     * @param cursorPosition
+     *            cursor position
      */
     void setCursorPosition(CodeAreaCaretPosition cursorPosition);
 
     /**
      * Sets current selection.
      *
-     * @param selectionRange current selection
+     * @param selectionRange
+     *            current selection
      */
     void setSelectionRange(SelectionRange selectionRange);
 
     /**
      * Reports currently active edit mode.
      *
-     * @param mode edit mode
-     * @param operation edit operation
+     * @param mode
+     *            edit mode
+     * @param operation
+     *            edit operation
      */
     void setEditMode(EditMode mode, EditOperation operation);
 
     /**
      * Sets control handler for status operations.
      *
-     * @param statusControlHandler status control handler
+     * @param statusControlHandler
+     *            status control handler
      */
     void setControlHandler(StatusControlHandler statusControlHandler);
 
     /**
      * Sets current document size.
      *
-     * @param documentSize document size
-     * @param initialDocumentSize document size when file was opened
+     * @param documentSize
+     *            document size
+     * @param initialDocumentSize
+     *            document size when file was opened
      */
     void setCurrentDocumentSize(long documentSize, long initialDocumentSize);
 
     /**
      * Sets current memory mode.
      *
-     * @param memoryMode memory mode
+     * @param memoryMode
+     *            memory mode
      */
     void setMemoryMode(MemoryMode memoryMode);
 
@@ -81,7 +92,8 @@ public interface BinaryStatusApi {
         /**
          * Requests change of edit operation from given operation.
          *
-         * @param operation edit operation
+         * @param operation
+         *            edit operation
          */
         void changeEditOperation(EditOperation operation);
 
@@ -98,14 +110,16 @@ public interface BinaryStatusApi {
         /**
          * Handles encodings popup menu.
          *
-         * @param mouseEvent mouse event
+         * @param mouseEvent
+         *            mouse event
          */
         void encodingsPopupEncodingsMenu(MouseEvent mouseEvent);
 
         /**
          * Requests change of memory mode.
          *
-         * @param memoryMode memory mode
+         * @param memoryMode
+         *            memory mode
          */
         void changeMemoryMode(MemoryMode memoryMode);
     }
@@ -136,14 +150,11 @@ public interface BinaryStatusApi {
             return value;
         }
 
-        @Nullable
-        public static MemoryMode findByPreferencesValue(String matchValue) {
-            for (MemoryMode value : values()) {
-                if (value.getPreferencesValue().equals(matchValue)) {
-                    return value;
-                }
-            }
-            return null;
+        @Nonnull
+        public static Optional<MemoryMode> findByPreferencesValue(String matchValue) {
+            return Arrays.stream(values())
+                    .filter(memoryMode -> memoryMode.getPreferencesValue().equals(matchValue))
+                    .findFirst();
         }
     }
 }

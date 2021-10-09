@@ -28,7 +28,8 @@ public interface EditorPresenter {
     /**
      * Extends title of the presenter.
      *
-     * @param title title
+     * @param title
+     *            title
      */
     void extendTitle(String title);
 
@@ -53,14 +54,16 @@ public interface EditorPresenter {
      *
      * Method to set fullscreen.
      *
-     * @param fullScreen full screen state
+     * @param fullScreen
+     *            full screen state
      */
     void setFullScreen(boolean fullScreen);
 
     /**
-     * Setups long operation.
+     * Executes long operation.
      *
-     * @param operation operation
+     * @param operation
+     *            operation
      */
     void longOperation(Runnable operation);
 }

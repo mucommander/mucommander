@@ -16,25 +16,46 @@
  */
 package com.mucommander.viewer.binary;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.nio.charset.Charset;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeCharactersCase;
+import org.exbin.bined.CodeType;
+import org.exbin.bined.EditMode;
+import org.exbin.bined.EditOperation;
+import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.bined.swing.basic.CodeArea;
+
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.theme.*;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 import com.mucommander.viewer.binary.ui.BinaryStatusPanel;
 import com.mucommander.viewer.binary.ui.GoToBinaryPanel;
-import org.exbin.bined.*;
-import org.exbin.bined.capability.EditModeCapable;
-import org.exbin.bined.swing.basic.CodeArea;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.nio.charset.Charset;
 
 /**
  * Base class for both viewer and editor for binary files.
@@ -75,19 +96,25 @@ class BinaryBase {
         int metaMask = getMetaMask();
 
         copyMenuItemPosition = editMenu.getItemCount();
-        copyMenuItem = MenuToolkit.addMenuItem(editMenu, Translator.get("binary_viewer.copy"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_C, metaMask),
-                e -> binaryComponent.getCodeArea().copy()
-        );
+        copyMenuItem = MenuToolkit.addMenuItem(editMenu,
+                Translator.get("binary_viewer.copy"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_C, metaMask),
+                e -> binaryComponent.getCodeArea().copy());
 
-        selectAllMenuItem = MenuToolkit.addMenuItem(editMenu, Translator.get("binary_viewer.select_all"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_A, metaMask),
-                e -> binaryComponent.getCodeArea().selectAll()
-        );
+        selectAllMenuItem = MenuToolkit.addMenuItem(editMenu,
+                Translator.get("binary_viewer.select_all"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_A, metaMask),
+                e -> binaryComponent.getCodeArea().selectAll());
 
         editMenu.addSeparator();
 
-        goToMenuItem = MenuToolkit.addMenuItem(editMenu, Translator.get("binary_viewer.go_to"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_G, metaMask),
-                e -> goToPosition()
-        );
+        goToMenuItem = MenuToolkit.addMenuItem(editMenu,
+                Translator.get("binary_viewer.go_to"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_G, metaMask),
+                e -> goToPosition());
 
         viewMenu = new JMenu(Translator.get("binary_viewer.view"));
 
@@ -97,26 +124,30 @@ class BinaryBase {
         binaryCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeTypeButtonGroup.add(binaryCodeTypeRadioButtonMenuItem);
         binaryCodeTypeRadioButtonMenuItem.setText(Translator.get("binary_viewer.code_type.binary"));
-        binaryCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.BINARY));
+        binaryCodeTypeRadioButtonMenuItem
+                .addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.BINARY));
         codeTypeMenu.add(binaryCodeTypeRadioButtonMenuItem);
 
         octalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeTypeButtonGroup.add(octalCodeTypeRadioButtonMenuItem);
         octalCodeTypeRadioButtonMenuItem.setText(Translator.get("binary_viewer.code_type.octal"));
-        octalCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.OCTAL));
+        octalCodeTypeRadioButtonMenuItem
+                .addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.OCTAL));
         codeTypeMenu.add(octalCodeTypeRadioButtonMenuItem);
 
         decimalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeTypeButtonGroup.add(decimalCodeTypeRadioButtonMenuItem);
         decimalCodeTypeRadioButtonMenuItem.setText(Translator.get("binary_viewer.code_type.decimal"));
-        decimalCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.DECIMAL));
+        decimalCodeTypeRadioButtonMenuItem
+                .addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.DECIMAL));
         codeTypeMenu.add(decimalCodeTypeRadioButtonMenuItem);
 
         hexadecimalCodeTypeRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeTypeButtonGroup.add(hexadecimalCodeTypeRadioButtonMenuItem);
         hexadecimalCodeTypeRadioButtonMenuItem.setSelected(true);
         hexadecimalCodeTypeRadioButtonMenuItem.setText(Translator.get("binary_viewer.code_type.hexadecimal"));
-        hexadecimalCodeTypeRadioButtonMenuItem.addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.HEXADECIMAL));
+        hexadecimalCodeTypeRadioButtonMenuItem
+                .addActionListener(e -> binaryComponent.getCodeArea().setCodeType(CodeType.HEXADECIMAL));
         codeTypeMenu.add(hexadecimalCodeTypeRadioButtonMenuItem);
         viewMenu.add(codeTypeMenu);
 
@@ -127,13 +158,15 @@ class BinaryBase {
         codeCharacterCaseButtonGroup.add(upperCaseRadioButtonMenuItem);
         upperCaseRadioButtonMenuItem.setSelected(true);
         upperCaseRadioButtonMenuItem.setText(Translator.get("binary_viewer.char_case.upper"));
-        upperCaseRadioButtonMenuItem.addActionListener(e -> binaryComponent.getCodeArea().setCodeCharactersCase(CodeCharactersCase.UPPER));
+        upperCaseRadioButtonMenuItem
+                .addActionListener(e -> binaryComponent.getCodeArea().setCodeCharactersCase(CodeCharactersCase.UPPER));
         codeCharacterCaseMenu.add(upperCaseRadioButtonMenuItem);
 
         lowerCaseRadioButtonMenuItem = new JRadioButtonMenuItem();
         codeCharacterCaseButtonGroup.add(lowerCaseRadioButtonMenuItem);
         lowerCaseRadioButtonMenuItem.setText(Translator.get("binary_viewer.char_case.lower"));
-        lowerCaseRadioButtonMenuItem.addActionListener(e -> binaryComponent.getCodeArea().setCodeCharactersCase(CodeCharactersCase.LOWER));
+        lowerCaseRadioButtonMenuItem
+                .addActionListener(e -> binaryComponent.getCodeArea().setCodeCharactersCase(CodeCharactersCase.LOWER));
         codeCharacterCaseMenu.add(lowerCaseRadioButtonMenuItem);
         viewMenu.add(codeCharacterCaseMenu);
     }
@@ -147,15 +180,15 @@ class BinaryBase {
     public static int getMetaMask() {
         try {
             switch (java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
-                case java.awt.Event.META_MASK:
-                    return KeyEvent.META_DOWN_MASK;
-                case java.awt.Event.SHIFT_MASK:
-                    return KeyEvent.SHIFT_DOWN_MASK;
-                case java.awt.Event.ALT_MASK:
-                    return KeyEvent.ALT_DOWN_MASK;
-                case java.awt.Event.CTRL_MASK:
-                default:
-                    return KeyEvent.CTRL_DOWN_MASK;
+            case java.awt.Event.META_MASK:
+                return KeyEvent.META_DOWN_MASK;
+            case java.awt.Event.SHIFT_MASK:
+                return KeyEvent.SHIFT_DOWN_MASK;
+            case java.awt.Event.ALT_MASK:
+                return KeyEvent.ALT_DOWN_MASK;
+            case java.awt.Event.CTRL_MASK:
+            default:
+                return KeyEvent.CTRL_DOWN_MASK;
             }
         } catch (java.awt.HeadlessException ex) {
             return KeyEvent.CTRL_DOWN_MASK;
@@ -175,7 +208,9 @@ class BinaryBase {
 
     public void goToPosition() {
         CodeArea codeArea = binaryComponent.getCodeArea();
-        FocusDialog dialog = new FocusDialog(windowFrame, Translator.get("binary_viewer.go_to.dialog_title"), windowFrame);
+        FocusDialog dialog = new FocusDialog(windowFrame,
+                Translator.get("binary_viewer.go_to.dialog_title"),
+                windowFrame);
         Container contentPane = dialog.getContentPane();
         GoToBinaryPanel goToPanel = new GoToBinaryPanel();
         goToPanel.setCursorPosition(codeArea.getDataPosition());
@@ -262,10 +297,13 @@ class BinaryBase {
 
         public void registerBinaryStatus(BinaryStatusApi binaryStatusApi) {
             this.binaryStatus = binaryStatusApi;
-            codeArea.addCaretMovedListener((CodeAreaCaretPosition caretPosition) -> binaryStatus.setCursorPosition(caretPosition));
+            codeArea.addCaretMovedListener(
+                    (CodeAreaCaretPosition caretPosition) -> binaryStatus.setCursorPosition(caretPosition));
             codeArea.addSelectionChangedListener(() -> binaryStatus.setSelectionRange(codeArea.getSelection()));
-            codeArea.addDataChangedListener(() -> binaryStatus.setCurrentDocumentSize(codeArea.getDataSize(), origFileSize));
-            codeArea.addEditModeChangedListener((EditMode mode, EditOperation operation) -> binaryStatus.setEditMode(mode, operation));
+            codeArea.addDataChangedListener(
+                    () -> binaryStatus.setCurrentDocumentSize(codeArea.getDataSize(), origFileSize));
+            codeArea.addEditModeChangedListener(
+                    (EditMode mode, EditOperation operation) -> binaryStatus.setEditMode(mode, operation));
             notifyOrigFileChanged();
             binaryStatus.setEditMode(codeArea.getEditMode(), codeArea.getActiveOperation());
 

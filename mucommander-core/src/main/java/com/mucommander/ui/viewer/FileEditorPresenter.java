@@ -16,17 +16,7 @@
  */
 package com.mucommander.ui.viewer;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.util.ui.helper.MenuToolkit;
-import com.mucommander.commons.util.ui.helper.MnemonicHelper;
-import com.mucommander.text.Translator;
-import com.mucommander.viewer.CloseCancelledException;
-import com.mucommander.viewer.EditorPresenter;
-import com.mucommander.viewer.FileEditor;
-import com.mucommander.viewer.FileEditorService;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -36,12 +26,30 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
+import com.mucommander.viewer.CloseCancelledException;
+import com.mucommander.viewer.EditorPresenter;
+import com.mucommander.viewer.FileEditor;
+import com.mucommander.viewer.FileEditorService;
+import com.mucommander.text.Translator;
+
 /**
  * File editor presenter to handle multiple file editors.
  *
  * <p>
- * <b>Warning:</b> the file viewer/editor API may soon receive a major
- * overhaul.</p>
+ * <b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.
+ * </p>
  *
  * @author Maxence Bernard, Arik Hadas
  */
@@ -64,9 +72,8 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
     }
 
     /**
-     * Returns the menu bar that controls the editor's frame. The menu bar
-     * should be retrieved using this method and not by calling
-     * {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     * Returns the menu bar that controls the editor's frame. The menu bar should be retrieved using this method and not
+     * by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
      *
      * @return the menu bar that controls the editor's frame.
      */
@@ -149,14 +156,18 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
 
             MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
             editorMenu.addSeparator();
-            closeMenuItem = MenuToolkit.addMenuItem(editorMenu, Translator.get("file_editor.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), (e) -> {
-                try {
-                    fileEditor.close();
-                    getFrame().dispose();
-                } catch (CloseCancelledException ex) {
-                    // cancelled
-                }
-            });
+            closeMenuItem = MenuToolkit.addMenuItem(editorMenu,
+                    Translator.get("file_editor.close"),
+                    menuItemMnemonicHelper,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                    (e) -> {
+                        try {
+                            fileEditor.close();
+                            getFrame().dispose();
+                        } catch (CloseCancelledException ex) {
+                            // cancelled
+                        }
+                    });
             editorMenu.add(closeMenuItem);
 
             try {

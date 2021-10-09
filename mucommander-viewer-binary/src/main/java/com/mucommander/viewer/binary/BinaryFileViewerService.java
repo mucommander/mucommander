@@ -16,15 +16,15 @@
  */
 package com.mucommander.viewer.binary;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
 import com.mucommander.viewer.FileEditor;
 import com.mucommander.viewer.FileEditorService;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.FileViewerService;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * <code>FileViewerService</code> implementation for creating binary viewers.

@@ -16,19 +16,26 @@
  */
 package com.mucommander.viewer.binary.ui;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.JToolTip;
+
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeAreaUtils;
+import org.exbin.bined.EditMode;
+import org.exbin.bined.EditOperation;
+import org.exbin.bined.PositionCodeType;
+import org.exbin.bined.SelectionRange;
+
 import com.mucommander.text.Translator;
 import com.mucommander.viewer.binary.BinaryStatusApi;
 import com.mucommander.viewer.binary.StatusCursorPositionFormat;
 import com.mucommander.viewer.binary.StatusDocumentSizeFormat;
-import org.exbin.bined.*;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.MouseEvent;
 
 /**
  * Binary editor status panel.
@@ -138,26 +145,34 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
         cursorPositionCodeTypeMenu.setText(Translator.get("binary_viewer.status.cursorPositionCodeTypeMenu.text"));
 
         cursorPositionModeButtonGroup.add(octalCursorPositionModeRadioButtonMenuItem);
-        octalCursorPositionModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.octalCursorPositionModeRadioButtonMenuItem.text"));
-        octalCursorPositionModeRadioButtonMenuItem.addActionListener(this::octalCursorPositionModeRadioButtonMenuItemActionPerformed);
+        octalCursorPositionModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.octalCursorPositionModeRadioButtonMenuItem.text"));
+        octalCursorPositionModeRadioButtonMenuItem
+                .addActionListener(this::octalCursorPositionModeRadioButtonMenuItemActionPerformed);
         cursorPositionCodeTypeMenu.add(octalCursorPositionModeRadioButtonMenuItem);
 
         cursorPositionModeButtonGroup.add(decimalCursorPositionModeRadioButtonMenuItem);
         decimalCursorPositionModeRadioButtonMenuItem.setSelected(true);
-        decimalCursorPositionModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.decimalCursorPositionModeRadioButtonMenuItem.text"));
-        decimalCursorPositionModeRadioButtonMenuItem.addActionListener(this::decimalCursorPositionModeRadioButtonMenuItemActionPerformed);
+        decimalCursorPositionModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.decimalCursorPositionModeRadioButtonMenuItem.text"));
+        decimalCursorPositionModeRadioButtonMenuItem
+                .addActionListener(this::decimalCursorPositionModeRadioButtonMenuItemActionPerformed);
         cursorPositionCodeTypeMenu.add(decimalCursorPositionModeRadioButtonMenuItem);
 
         cursorPositionModeButtonGroup.add(hexadecimalCursorPositionModeRadioButtonMenuItem);
-        hexadecimalCursorPositionModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.hexadecimalCursorPositionModeRadioButtonMenuItem.text"));
-        hexadecimalCursorPositionModeRadioButtonMenuItem.addActionListener(this::hexadecimalCursorPositionModeRadioButtonMenuItemActionPerformed);
+        hexadecimalCursorPositionModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.hexadecimalCursorPositionModeRadioButtonMenuItem.text"));
+        hexadecimalCursorPositionModeRadioButtonMenuItem
+                .addActionListener(this::hexadecimalCursorPositionModeRadioButtonMenuItemActionPerformed);
         cursorPositionCodeTypeMenu.add(hexadecimalCursorPositionModeRadioButtonMenuItem);
 
         positionPopupMenu.add(cursorPositionCodeTypeMenu);
 
         cursorPositionShowOffsetCheckBoxMenuItem.setSelected(true);
-        cursorPositionShowOffsetCheckBoxMenuItem.setText(Translator.get("binary_viewer.status.cursorPositionShowOffsetCheckBoxMenuItem.text"));
-        cursorPositionShowOffsetCheckBoxMenuItem.addActionListener(this::cursorPositionShowOffsetCheckBoxMenuItemActionPerformed);
+        cursorPositionShowOffsetCheckBoxMenuItem.setText(Translator.get(
+                "binary_viewer.status.cursorPositionShowOffsetCheckBoxMenuItem.text"));
+        cursorPositionShowOffsetCheckBoxMenuItem
+                .addActionListener(this::cursorPositionShowOffsetCheckBoxMenuItemActionPerformed);
         positionPopupMenu.add(cursorPositionShowOffsetCheckBoxMenuItem);
 
         positionPopupMenu.add(jSeparator2);
@@ -173,26 +188,34 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
         documentSizeCodeTypeMenu.setText(Translator.get("binary_viewer.status.documentSizeCodeTypeMenu.text"));
 
         documentSizeModeButtonGroup.add(octalDocumentSizeModeRadioButtonMenuItem);
-        octalDocumentSizeModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.octDocumentSizeModeRadioButtonMenuItem.text"));
-        octalDocumentSizeModeRadioButtonMenuItem.addActionListener(this::octalDocumentSizeModeRadioButtonMenuItemActionPerformed);
+        octalDocumentSizeModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.octDocumentSizeModeRadioButtonMenuItem.text"));
+        octalDocumentSizeModeRadioButtonMenuItem
+                .addActionListener(this::octalDocumentSizeModeRadioButtonMenuItemActionPerformed);
         documentSizeCodeTypeMenu.add(octalDocumentSizeModeRadioButtonMenuItem);
 
         documentSizeModeButtonGroup.add(decimalDocumentSizeModeRadioButtonMenuItem);
         decimalDocumentSizeModeRadioButtonMenuItem.setSelected(true);
-        decimalDocumentSizeModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.decDocumentSizeModeRadioButtonMenuItem.text"));
-        decimalDocumentSizeModeRadioButtonMenuItem.addActionListener(this::decimalDocumentSizeModeRadioButtonMenuItemActionPerformed);
+        decimalDocumentSizeModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.decDocumentSizeModeRadioButtonMenuItem.text"));
+        decimalDocumentSizeModeRadioButtonMenuItem
+                .addActionListener(this::decimalDocumentSizeModeRadioButtonMenuItemActionPerformed);
         documentSizeCodeTypeMenu.add(decimalDocumentSizeModeRadioButtonMenuItem);
 
         documentSizeModeButtonGroup.add(hexadecimalDocumentSizeModeRadioButtonMenuItem);
-        hexadecimalDocumentSizeModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.hexDocumentSizeModeRadioButtonMenuItem.text"));
-        hexadecimalDocumentSizeModeRadioButtonMenuItem.addActionListener(this::hexadecimalDocumentSizeModeRadioButtonMenuItemActionPerformed);
+        hexadecimalDocumentSizeModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.hexDocumentSizeModeRadioButtonMenuItem.text"));
+        hexadecimalDocumentSizeModeRadioButtonMenuItem
+                .addActionListener(this::hexadecimalDocumentSizeModeRadioButtonMenuItemActionPerformed);
         documentSizeCodeTypeMenu.add(hexadecimalDocumentSizeModeRadioButtonMenuItem);
 
         documentSizePopupMenu.add(documentSizeCodeTypeMenu);
 
         documentSizeShowRelativeCheckBoxMenuItem.setSelected(true);
-        documentSizeShowRelativeCheckBoxMenuItem.setText(Translator.get("binary_viewer.status.showRelativeCheckBoxMenuItem.text"));
-        documentSizeShowRelativeCheckBoxMenuItem.addActionListener(this::documentSizeShowRelativeCheckBoxMenuItemActionPerformed);
+        documentSizeShowRelativeCheckBoxMenuItem.setText(Translator.get(
+                "binary_viewer.status.showRelativeCheckBoxMenuItem.text"));
+        documentSizeShowRelativeCheckBoxMenuItem
+                .addActionListener(this::documentSizeShowRelativeCheckBoxMenuItemActionPerformed);
         documentSizePopupMenu.add(documentSizeShowRelativeCheckBoxMenuItem);
 
         documentSizePopupMenu.add(jSeparator1);
@@ -203,18 +226,21 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
 
         memoryModeButtonGroup.add(deltaMemoryModeRadioButtonMenuItem);
         deltaMemoryModeRadioButtonMenuItem.setSelected(true);
-        deltaMemoryModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.deltaMemoryModeRadioButtonMenuItem.text"));
+        deltaMemoryModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.deltaMemoryModeRadioButtonMenuItem.text"));
         deltaMemoryModeRadioButtonMenuItem.addActionListener(this::deltaMemoryModeRadioButtonMenuItemActionPerformed);
         memoryModePopupMenu.add(deltaMemoryModeRadioButtonMenuItem);
 
         memoryModeButtonGroup.add(directMemoryModeRadioButtonMenuItem);
         directMemoryModeRadioButtonMenuItem.setSelected(true);
-        directMemoryModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.directMemoryModeRadioButtonMenuItem.text"));
+        directMemoryModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.directMemoryModeRadioButtonMenuItem.text"));
         directMemoryModeRadioButtonMenuItem.addActionListener(this::directMemoryModeRadioButtonMenuItemActionPerformed);
         memoryModePopupMenu.add(directMemoryModeRadioButtonMenuItem);
 
         memoryModeButtonGroup.add(ramMemoryModeRadioButtonMenuItem);
-        ramMemoryModeRadioButtonMenuItem.setText(Translator.get("binary_viewer.status.ramMemoryModeRadioButtonMenuItem.text"));
+        ramMemoryModeRadioButtonMenuItem.setText(Translator.get(
+                "binary_viewer.status.ramMemoryModeRadioButtonMenuItem.text"));
         ramMemoryModeRadioButtonMenuItem.addActionListener(this::ramMemoryModeRadioButtonMenuItemActionPerformed);
         memoryModePopupMenu.add(ramMemoryModeRadioButtonMenuItem);
 
@@ -273,26 +299,55 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
         this.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(195, Short.MAX_VALUE)
-                                .addComponent(encodingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(documentSizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(cursorPositionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(memoryModeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(editModeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                layout.createSequentialGroup()
+                                        .addContainerGap(195, Short.MAX_VALUE)
+                                        .addComponent(encodingLabel,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                148,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(documentSizeLabel,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                168,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(cursorPositionLabel,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                168,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(memoryModeLabel,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                16,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(editModeLabel,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                35,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(editModeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(documentSizeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(memoryModeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cursorPositionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(encodingLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                        .addComponent(editModeLabel,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+                        .addComponent(documentSizeLabel,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+                        .addComponent(memoryModeLabel,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+                        .addComponent(cursorPositionLabel,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+                        .addComponent(encodingLabel,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE));
     }
 
     private void editModeLabelMouseClicked(java.awt.event.MouseEvent evt) {
@@ -445,32 +500,32 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
     public void setEditMode(EditMode editMode, EditOperation editOperation) {
         this.editOperation = editOperation;
         switch (editMode) {
-            case READ_ONLY: {
-                editModeLabel.setText(Translator.get("binary_viewer.edit_mode.read_only"));
+        case READ_ONLY: {
+            editModeLabel.setText(Translator.get("binary_viewer.edit_mode.read_only"));
+            break;
+        }
+        case EXPANDING:
+        case CAPPED: {
+            switch (editOperation) {
+            case INSERT: {
+                editModeLabel.setText(Translator.get("binary_viewer.edit_operation.insert"));
                 break;
             }
-            case EXPANDING:
-            case CAPPED: {
-                switch (editOperation) {
-                    case INSERT: {
-                        editModeLabel.setText(Translator.get("binary_viewer.edit_operation.insert"));
-                        break;
-                    }
-                    case OVERWRITE: {
-                        editModeLabel.setText(Translator.get("binary_viewer.edit_operation.overwrite"));
-                        break;
-                    }
-                    default:
-                        throw CodeAreaUtils.getInvalidTypeException(editOperation);
-                }
-                break;
-            }
-            case INPLACE: {
-                editModeLabel.setText(Translator.get("binary_viewer.edit_mode.in_place"));
+            case OVERWRITE: {
+                editModeLabel.setText(Translator.get("binary_viewer.edit_operation.overwrite"));
                 break;
             }
             default:
-                throw CodeAreaUtils.getInvalidTypeException(editMode);
+                throw CodeAreaUtils.getInvalidTypeException(editOperation);
+            }
+            break;
+        }
+        case INPLACE: {
+            editModeLabel.setText(Translator.get("binary_viewer.edit_mode.in_place"));
+            break;
+        }
+        default:
+            throw CodeAreaUtils.getInvalidTypeException(editMode);
         }
     }
 
@@ -507,7 +562,8 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
                 labelBuilder.append(" to ");
                 labelBuilder.append(numberToPosition(last, cursorPositionFormat.getCodeType()));
             } else {
-                labelBuilder.append(numberToPosition(caretPosition.getDataPosition(), cursorPositionFormat.getCodeType()));
+                labelBuilder.append(numberToPosition(caretPosition.getDataPosition(),
+                        cursorPositionFormat.getCodeType()));
                 if (cursorPositionFormat.isShowOffset()) {
                     labelBuilder.append(":");
                     labelBuilder.append(caretPosition.getCodeOffset());
@@ -543,7 +599,9 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
                 long dataPosition = caretPosition.getDataPosition();
                 builder.append(Translator.get("binary_viewer.status.cursorPositionLabel.toolTipText")).append(BR_TAG);
                 builder.append(octLabel).append(numberToPosition(dataPosition, PositionCodeType.OCTAL)).append(BR_TAG);
-                builder.append(decLabel).append(numberToPosition(dataPosition, PositionCodeType.DECIMAL)).append(BR_TAG);
+                builder.append(decLabel)
+                        .append(numberToPosition(dataPosition, PositionCodeType.DECIMAL))
+                        .append(BR_TAG);
                 builder.append(hexLabel).append(numberToPosition(dataPosition, PositionCodeType.HEXADECIMAL));
                 builder.append("</html>");
             }
@@ -608,20 +666,20 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
 
         int spaceGroupSize;
         switch (codeType) {
-            case OCTAL: {
-                spaceGroupSize = octalSpaceGroupSize;
-                break;
-            }
-            case DECIMAL: {
-                spaceGroupSize = decimalSpaceGroupSize;
-                break;
-            }
-            case HEXADECIMAL: {
-                spaceGroupSize = hexadecimalSpaceGroupSize;
-                break;
-            }
-            default:
-                throw CodeAreaUtils.getInvalidTypeException(codeType);
+        case OCTAL: {
+            spaceGroupSize = octalSpaceGroupSize;
+            break;
+        }
+        case DECIMAL: {
+            spaceGroupSize = decimalSpaceGroupSize;
+            break;
+        }
+        case HEXADECIMAL: {
+            spaceGroupSize = hexadecimalSpaceGroupSize;
+            break;
+        }
+        default:
+            throw CodeAreaUtils.getInvalidTypeException(codeType);
         }
 
         long remainder = value > 0 ? value : -value;
