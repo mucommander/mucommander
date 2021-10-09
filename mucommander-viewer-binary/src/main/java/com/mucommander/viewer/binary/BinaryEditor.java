@@ -93,47 +93,59 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         fileMenu = new JMenu(Translator.get("binary_editor.file"));
 
         int metaMask = getMetaMask();
-        saveMenuItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("binary_editor.save"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_S, metaMask),
-                e -> saveFile()
-        );
-        saveAsMenuItem = MenuToolkit.addMenuItem(fileMenu, Translator.get("binary_editor.save_as"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.SHIFT_DOWN_MASK | metaMask),
-                e -> saveAsFile()
-        );
-        cutMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.cut"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_X, metaMask),
-                e -> binaryComponent.getCodeArea().cut()
-        );
+        saveMenuItem = MenuToolkit.addMenuItem(fileMenu,
+                Translator.get("binary_editor.save"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, metaMask),
+                e -> saveFile());
+        saveAsMenuItem = MenuToolkit.addMenuItem(fileMenu,
+                Translator.get("binary_editor.save_as"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.SHIFT_DOWN_MASK | metaMask),
+                e -> saveAsFile());
+        cutMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.cut"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_X, metaMask),
+                e -> binaryComponent.getCodeArea().cut());
         editMenu.add(cutMenuItem, copyMenuItemPosition);
-        pasteMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.paste"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_V, metaMask),
-                e -> binaryComponent.getCodeArea().paste()
-        );
-        deleteMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.delete"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
-                e -> binaryComponent.getCodeArea().delete()
-        );
+        pasteMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.paste"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_V, metaMask),
+                e -> binaryComponent.getCodeArea().paste());
+        deleteMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.delete"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+                e -> binaryComponent.getCodeArea().delete());
 
         editMenu.add(pasteMenuItem, copyMenuItemPosition + 2);
         editMenu.add(deleteMenuItem, copyMenuItemPosition + 3);
 
         JPopupMenu popupMenu = new JPopupMenu();
 
-        cutPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.cut"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_X, metaMask),
-                e -> binaryComponent.getCodeArea().cut()
-        );
+        cutPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.cut"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_X, metaMask),
+                e -> binaryComponent.getCodeArea().cut());
         popupMenu.add(cutPopupMenuItem);
-        copyPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_viewer.copy"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_C, getMetaMask()),
-                e -> binaryComponent.getCodeArea().copy()
-        );
+        copyPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_viewer.copy"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_C, getMetaMask()),
+                e -> binaryComponent.getCodeArea().copy());
         popupMenu.add(copyPopupMenuItem);
-        pastePopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.paste"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_V, metaMask),
-                e -> binaryComponent.getCodeArea().paste()
-        );
+        pastePopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.paste"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_V, metaMask),
+                e -> binaryComponent.getCodeArea().paste());
         popupMenu.add(pastePopupMenuItem);
-        deletePopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.delete"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
-                e -> binaryComponent.getCodeArea().delete()
-        );
+        deletePopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.delete"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+                e -> binaryComponent.getCodeArea().delete());
         popupMenu.add(deletePopupMenuItem);
-        popupMenu.add(MenuToolkit.createMenuItem(Translator.get("binary_viewer.select_all"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_A, getMetaMask()),
-                e -> binaryComponent.getCodeArea().selectAll()
-        ));
+        popupMenu.add(MenuToolkit.createMenuItem(Translator.get("binary_viewer.select_all"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_A, getMetaMask()),
+                e -> binaryComponent.getCodeArea().selectAll()));
 
         binaryComponent.getCodeArea().setComponentPopupMenu(popupMenu);
     }
@@ -162,7 +174,8 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         menuBar.add(editMenu);
         menuBar.add(viewMenu);
 
-        EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(presenter.getWindowFrame()), binaryComponent.getCodeArea().getCharset().name());
+        EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(presenter.getWindowFrame()),
+                binaryComponent.getCodeArea().getCharset().name());
         encodingMenu.addEncodingListener((source, oldEncoding, newEncoding) -> changeEncoding(newEncoding));
         menuBar.add(encodingMenu);
     }
@@ -198,13 +211,14 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                 setSaveNeeded(false);
                 notifyOrigFileChanged();
 
-                // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh (see ticket #258)
+                // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh
                 if (file.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
                     try {
                         file.getParent().changeDate(System.currentTimeMillis());
                     } catch (IOException e) {
                         // Fail silently
-                        Logger.getLogger(BinaryEditor.class.getName()).log(Level.FINE, "failed to change the date of " + file, e);
+                        Logger.getLogger(BinaryEditor.class.getName())
+                                .log(Level.FINE, "failed to change the date of " + file, e);
                     }
                 }
             } catch (IOException ex) {
@@ -234,7 +248,9 @@ class BinaryEditor extends BinaryBase implements FileEditor {
             try {
                 destFile = FileFactory.getFile(fileChooser.getSelectedFile().getAbsolutePath(), true);
             } catch (IOException e) {
-                InformationDialog.showErrorDialog(windowFrame, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
+                InformationDialog.showErrorDialog(windowFrame,
+                        Translator.get("write_error"),
+                        Translator.get("file_editor.cannot_write"));
                 return;
             }
 
@@ -243,7 +259,13 @@ class BinaryEditor extends BinaryBase implements FileEditor {
             if (collision != FileCollisionChecker.NO_COLLOSION) {
                 // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                 // do not offer the multiple file mode options such as 'skip' and 'apply to all'.
-                int action = new FileCollisionDialog(windowFrame, windowFrame/*mainFrame*/, collision, null, destFile, false, false).getActionValue();
+                int action = new FileCollisionDialog(windowFrame,
+                        windowFrame/* mainFrame */,
+                        collision,
+                        null,
+                        destFile,
+                        false,
+                        false).getActionValue();
 
                 if (action != FileCollisionDialog.OVERWRITE_ACTION) {
                     return;
@@ -271,20 +293,24 @@ class BinaryEditor extends BinaryBase implements FileEditor {
     }
 
     /**
-     * Asks whether file should be saved before closing.
+     * Checks whether file can be closed and asks for confirmation if necessary.
      *
-     * @return true if the file does not have any unsaved change or if the user refused to save the changes,
-     * false if the user canceled the dialog or the save failed.
+     * @return true if the file does not have any unsaved change or if the user opted to save the changes, false if the
+     *         user canceled the dialog or the save failed.
      */
-    public boolean askSave() {
+    public boolean canClose() {
         if (!saveNeeded) {
             return true;
         }
 
-        QuestionDialog dialog = new QuestionDialog(windowFrame, null, Translator.get("file_editor.save_warning"), binaryComponent,
-                new String[]{Translator.get("save"), Translator.get("dont_save"), Translator.get("cancel")},
-                new int[]{JOptionPane.YES_OPTION, JOptionPane.NO_OPTION, JOptionPane.CANCEL_OPTION},
-                0);
+        QuestionDialog dialog =
+                new QuestionDialog(windowFrame,
+                        null,
+                        Translator.get("file_editor.save_warning"),
+                        binaryComponent,
+                        new String[] { Translator.get("save"), Translator.get("dont_save"), Translator.get("cancel") },
+                        new int[] { JOptionPane.YES_OPTION, JOptionPane.NO_OPTION, JOptionPane.CANCEL_OPTION },
+                        0);
         int ret = dialog.getActionValue();
 
         if ((ret == JOptionPane.YES_OPTION && trySave(currentFile)) || ret == JOptionPane.NO_OPTION) {
@@ -292,7 +318,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
             return true;
         }
 
-        return false;       // User canceled or the file couldn't be properly saved
+        return false; // User canceled or the file couldn't be properly saved
     }
 
     /**
@@ -305,14 +331,16 @@ class BinaryEditor extends BinaryBase implements FileEditor {
             saveFile(destFile);
             return true;
         } catch (IOException e) {
-            InformationDialog.showErrorDialog(windowFrame, Translator.get("write_error"), Translator.get("file_editor.cannot_write"));
+            InformationDialog.showErrorDialog(windowFrame,
+                    Translator.get("write_error"),
+                    Translator.get("file_editor.cannot_write"));
             return false;
         }
     }
 
     @Override
     public void close() throws CloseCancelledException {
-        if (!askSave()) {
+        if (!canClose()) {
             throw new CloseCancelledException();
         }
 

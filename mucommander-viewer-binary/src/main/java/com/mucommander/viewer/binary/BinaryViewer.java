@@ -62,13 +62,15 @@ class BinaryViewer extends BinaryBase implements FileViewer {
         JPopupMenu popupMenu = new JPopupMenu();
         int metaMask = getMetaMask();
 
-        copyPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_viewer.copy"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_C, metaMask),
-                e -> binaryComponent.getCodeArea().copy()
-        );
+        copyPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_viewer.copy"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_C, metaMask),
+                e -> binaryComponent.getCodeArea().copy());
         popupMenu.add(copyPopupMenuItem);
-        popupMenu.add(MenuToolkit.createMenuItem(Translator.get("binary_viewer.select_all"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_A, metaMask),
-                e -> binaryComponent.getCodeArea().selectAll()
-        ));
+        popupMenu.add(MenuToolkit.createMenuItem(Translator.get("binary_viewer.select_all"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_A, metaMask),
+                e -> binaryComponent.getCodeArea().selectAll()));
 
         binaryComponent.getCodeArea().setComponentPopupMenu(popupMenu);
     }
@@ -90,7 +92,8 @@ class BinaryViewer extends BinaryBase implements FileViewer {
         menuBar.add(editMenu);
         menuBar.add(viewMenu);
 
-        EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(presenter.getWindowFrame()), binaryComponent.getCodeArea().getCharset().name());
+        EncodingMenu encodingMenu = new EncodingMenu(new DialogOwner(presenter.getWindowFrame()),
+                binaryComponent.getCodeArea().getCharset().name());
         encodingMenu.addEncodingListener((source, oldEncoding, newEncoding) -> changeEncoding(newEncoding));
         menuBar.add(encodingMenu);
     }

@@ -16,26 +16,37 @@
  */
 package com.mucommander.viewer.binary.ui;
 
-import com.mucommander.text.Translator;
-import org.exbin.bined.CodeAreaUtils;
-import org.exbin.bined.CodeCharactersCase;
-import org.exbin.bined.PositionCodeType;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.util.Arrays;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
+
+import org.exbin.bined.CodeAreaUtils;
+import org.exbin.bined.CodeCharactersCase;
+import org.exbin.bined.PositionCodeType;
+
+import com.mucommander.text.Translator;
 
 /**
  * Spinner supporting multiple bases.
@@ -114,34 +125,38 @@ public class BaseSwitchableSpinnerPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addComponent(baseSwitchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(baseSwitchButton,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        65,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(spinner, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
-        );
+                                .addComponent(spinner, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(spinner)
-                        .addComponent(baseSwitchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                        .addComponent(baseSwitchButton,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE));
     }
 
     private void baseSwitchButtonActionPerformed(java.awt.event.ActionEvent evt) {
         PositionCodeType positionCodeType = spinnerEditor.getPositionCodeType();
         switch (positionCodeType) {
-            case OCTAL: {
-                switchNumBase(PositionCodeType.DECIMAL);
-                break;
-            }
-            case DECIMAL: {
-                switchNumBase(PositionCodeType.HEXADECIMAL);
-                break;
-            }
-            case HEXADECIMAL: {
-                switchNumBase(PositionCodeType.OCTAL);
-                break;
-            }
-            default:
-                throw CodeAreaUtils.getInvalidTypeException(positionCodeType);
+        case OCTAL: {
+            switchNumBase(PositionCodeType.DECIMAL);
+            break;
+        }
+        case DECIMAL: {
+            switchNumBase(PositionCodeType.HEXADECIMAL);
+            break;
+        }
+        case HEXADECIMAL: {
+            switchNumBase(PositionCodeType.OCTAL);
+            break;
+        }
+        default:
+            throw CodeAreaUtils.getInvalidTypeException(positionCodeType);
         }
     }
 
@@ -232,7 +247,8 @@ public class BaseSwitchableSpinnerPanel extends javax.swing.JPanel {
             textField.setText(getPositionAsString((Long) spinner.getValue()));
             textField.addPropertyChangeListener(this);
             textField.getDocument().addDocumentListener(new DocumentListener() {
-                private final PropertyChangeEvent changeEvent = new PropertyChangeEvent(textField, SPINNER_PROPERTY, null, null);
+                private final PropertyChangeEvent changeEvent =
+                        new PropertyChangeEvent(textField, SPINNER_PROPERTY, null, null);
 
                 @Override
                 public void changedUpdate(DocumentEvent e) {
@@ -394,7 +410,13 @@ public class BaseSwitchableSpinnerPanel extends javax.swing.JPanel {
         @Nonnull
         private String getNonNegativePositionAsString(long position) {
             Arrays.fill(cache, ' ');
-            CodeAreaUtils.longToBaseCode(cache, 0, position, positionCodeType.getBase(), LENGTH_LIMIT, false, CodeCharactersCase.LOWER);
+            CodeAreaUtils.longToBaseCode(cache,
+                    0,
+                    position,
+                    positionCodeType.getBase(),
+                    LENGTH_LIMIT,
+                    false,
+                    CodeCharactersCase.LOWER);
             return new String(cache).trim();
         }
 

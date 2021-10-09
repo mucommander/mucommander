@@ -16,13 +16,14 @@
  */
 package com.mucommander.viewer.binary;
 
-import com.mucommander.viewer.FileEditorService;
-import com.mucommander.viewer.FileViewerService;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.mucommander.viewer.FileEditorService;
+import com.mucommander.viewer.FileViewerService;
 
 /**
  * Viewer/editor for binary files.

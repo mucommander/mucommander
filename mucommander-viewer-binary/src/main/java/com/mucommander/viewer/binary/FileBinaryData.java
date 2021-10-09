@@ -16,18 +16,21 @@
  */
 package com.mucommander.viewer.binary;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.io.RandomAccess;
-import org.exbin.auxiliary.paged_data.BinaryData;
-import org.exbin.auxiliary.paged_data.PagedData;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.exbin.auxiliary.paged_data.BinaryData;
+import org.exbin.auxiliary.paged_data.PagedData;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.io.RandomAccess;
+import com.mucommander.commons.io.StreamUtils;
 
 /**
  * Class for direct binary access to abstract file.
@@ -42,7 +45,7 @@ public class FileBinaryData implements BinaryData {
 
     private InputStream cacheInputStream = null;
     private long cachePosition = 0;
-    private final DataPage[] cachePages = new DataPage[]{new DataPage(), new DataPage()};
+    private final DataPage[] cachePages = new DataPage[] { new DataPage(), new DataPage() };
     private int nextCachePage = 0;
 
     public FileBinaryData(AbstractFile file) {
@@ -141,7 +144,7 @@ public class FileBinaryData implements BinaryData {
     @Override
     public void saveToStream(OutputStream outputStream) throws IOException {
         try (InputStream inputStream = file.getInputStream()) {
-            StreamUtils.copyInputStreamToOutputStream(inputStream, outputStream);
+            StreamUtils.copyStream(inputStream, outputStream);
         }
     }
 
@@ -186,7 +189,7 @@ public class FileBinaryData implements BinaryData {
             ((RandomAccess) cacheInputStream).seek(position);
             cachePosition = position;
         } else if (cacheInputStream != null && position > cachePosition) {
-            StreamUtils.skipInputStreamData(cacheInputStream, position - cachePosition);
+            StreamUtils.skipFully(cacheInputStream, position - cachePosition);
             cachePosition = position;
         } else {
             if (cacheInputStream != null) {
@@ -196,7 +199,7 @@ public class FileBinaryData implements BinaryData {
             if (cacheInputStream instanceof RandomAccess) {
                 ((RandomAccess) cacheInputStream).seek(position);
             } else {
-                StreamUtils.skipInputStreamData(cacheInputStream, position);
+                StreamUtils.skipFully(cacheInputStream, position);
             }
             cachePosition = position;
         }

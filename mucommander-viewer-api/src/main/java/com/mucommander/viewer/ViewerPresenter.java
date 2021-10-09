@@ -18,6 +18,7 @@ package com.mucommander.viewer;
 
 import java.io.IOException;
 import java.util.function.Function;
+
 import javax.swing.JFrame;
 
 /**
@@ -30,7 +31,8 @@ public interface ViewerPresenter {
     /**
      * Extends title of the presenter.
      *
-     * @param title title
+     * @param title
+     *            title
      */
     void extendTitle(String title);
 
@@ -44,9 +46,12 @@ public interface ViewerPresenter {
     /**
      * Performs goto (for image plugin).
      *
-     * @param advance advance
-     * @param viewerService viewer service to use for filtering
-     * @throws java.io.IOException exception if loading fails
+     * @param advance
+     *            advance
+     * @param viewerService
+     *            viewer service to use for filtering
+     * @throws java.io.IOException
+     *             exception if loading fails
      */
     void goToFile(Function<Integer, Integer> advance, FileViewerService viewerService) throws IOException;
 
@@ -64,14 +69,16 @@ public interface ViewerPresenter {
      *
      * Method to set fullscreen.
      *
-     * @param fullScreen full screen state
+     * @param fullScreen
+     *            full screen state
      */
     void setFullScreen(boolean fullScreen);
 
     /**
-     * Setups long operation.
+     * Executes long operation.
      *
-     * @param operation operation
+     * @param operation
+     *            operation
      */
     void longOperation(Runnable operation);
 }

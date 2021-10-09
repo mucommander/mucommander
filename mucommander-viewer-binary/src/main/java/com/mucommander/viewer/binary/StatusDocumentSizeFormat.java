@@ -16,11 +16,12 @@
  */
 package com.mucommander.viewer.binary;
 
-import org.exbin.bined.PositionCodeType;
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import java.util.Objects;
+import org.exbin.bined.PositionCodeType;
 
 /**
  * Document size format for status.

@@ -17,8 +17,10 @@
 package com.mucommander.viewer.binary;
 
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.exbin.bined.PositionCodeType;
 
 /**
