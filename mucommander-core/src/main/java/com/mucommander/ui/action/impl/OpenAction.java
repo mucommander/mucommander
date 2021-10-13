@@ -193,7 +193,7 @@ public class OpenAction extends MuAction {
 	 * @param mainFrame determines the <code>Frame</code> in which the dialog is displayed
 	 * @param file the file to open.
 	 */
-	public static void openFile(MainFrame mainFrame, AbstractFile file) throws IOException {
+	public static void openFile(MainFrame mainFrame, AbstractFile file) throws IOException, UnsupportedOperationException {
 		DesktopManager.open(file).thenAccept(
 			outputMessages -> outputMessages.ifPresent(
 				s -> {

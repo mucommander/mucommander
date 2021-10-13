@@ -26,7 +26,6 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -70,7 +69,7 @@ public class OpenNativelyAction extends MuAction {
                 OpenAction.openFile(getMainFrame(), selectedFile);
                 RecentExecutedFilesQL.addFile(selectedFile);
         	}
-            catch(IOException e) {
+            catch (IOException | UnsupportedOperationException e) {
                 InformationDialog.showErrorDialog(mainFrame);
             }
         }
