@@ -17,15 +17,16 @@
 
 package com.mucommander.desktop;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.commons.file.protocol.local.SpecialWindowsLocation;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.file.protocol.local.SpecialWindowsLocation;
+import com.mucommander.commons.file.protocol.local.UNCFile;
 
 /**
  * {@link DesktopOperation} implementation meant for actions that involve local files.
@@ -127,36 +128,43 @@ public abstract class LocalFileOperation implements DesktopOperation {
      * <ul>
      *   <li>has a length of 1.</li>
      *   <li>
-     *     contains an instance of either <code>java.io.File</code>, {@link com.mucommander.commons.file.protocol.local.LocalFile}, <code>String</code>
-     *     or {@link com.mucommander.commons.file.protocol.local.SpecialWindowsLocation}.
+     *     contains an instance of either <code>java.io.File</code>,
+     *     {@link com.mucommander.commons.file.protocol.local.SpecialWindowsLocation},
+     *     {@link com.mucommander.commons.file.protocol.local.LocalFile},
+     *     {@link com.mucommander.commons.file.protocol.local.UNCFile}, or <code>String</code>.
      *   </li>
      * </ul>
      * </p>
      * <p>
-     * This behaviour can be overridden by implementations to fit their own needs, although it's probably not a great idea.
+     * This behaviour can be overridden by implementations to fit their own needs, although it's probably not a great
+     * idea.
      * </p>
+     * 
      * @param  target operation parameters.
-     * @return        <code>null</code> if the parameters are not legal, a {@link com.mucommander.commons.file.AbstractFile} instance instead.
+     * @return <code>null</code> if the parameters are not legal, a {@link com.mucommander.commons.file.AbstractFile}
+     *         instance instead.
      */
     protected AbstractFile extractTarget(Object[] target) {
         // We only deal with arrays containing 1 element.
-        if(target.length != 1)
+        if (target.length != 1)
             return null;
 
         // If we find an instance of java.io.File, we can stop here.
-        if(target[0] instanceof File)
-            return FileFactory.getFile(((File)target[0]).getAbsolutePath());
+        if (target[0] instanceof File)
+            return FileFactory.getFile(((File) target[0]).getAbsolutePath());
 
-        if(target[0] instanceof SpecialWindowsLocation)
-            return (AbstractFile)target[0];
+        if (target[0] instanceof SpecialWindowsLocation)
+            return (AbstractFile) target[0];
 
-        // Deals with instances of LocalFile: raw instances or wrapped in another AbstractFile container (e.g. archive files)
-        if(target[0] instanceof AbstractFile && ((AbstractFile)target[0]).hasAncestor(LocalFile.class))
-            return (AbstractFile)target[0];
+        // Deals with instances of LocalFile and UNCFile: raw instances or wrapped in another AbstractFile container
+        // (e.g. archive files)
+        if (target[0] instanceof AbstractFile && (((AbstractFile) target[0]).hasAncestor(LocalFile.class)
+                                               || ((AbstractFile) target[0]).hasAncestor(UNCFile.class)))
+            return (AbstractFile) target[0];
 
         // Deals with instances of String.
-        if(target[0] instanceof String)
-            return FileFactory.getFile((String)target[0]);
+        if (target[0] instanceof String)
+            return FileFactory.getFile((String) target[0]);
 
         // Illegal parameters.
         return null;
