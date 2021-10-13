@@ -46,6 +46,7 @@ Improvements:
 - Prevention of ZipSlip (https://snyk.io/research/zip-slip-vulnerability).
 - An informative error dialog is displayed when failing to change directory while browsing an ftp server.
 - Setting the default file drag and drop action to 'COPY' (rather than 'MOVE') is now configurable.
+- Support "Open natively" operation for files from UNC paths.
 
 Localization:
 - Russian translation updated.
