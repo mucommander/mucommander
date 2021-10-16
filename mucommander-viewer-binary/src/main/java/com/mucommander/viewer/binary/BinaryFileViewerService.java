@@ -16,23 +16,28 @@
  */
 package com.mucommander.viewer.binary;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.text.Translator;
 import com.mucommander.viewer.FileEditor;
 import com.mucommander.viewer.FileEditorService;
-import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.FileViewer;
-import com.mucommander.viewer.WarnUserException;
+import com.mucommander.viewer.FileViewerService;
 
 /**
  * <code>FileViewerService</code> implementation for creating binary viewers.
  *
  * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public class BinaryFileViewerService implements FileViewerService, FileEditorService {
 
+    @Nonnull
     @Override
     public String getName() {
-        return "Binary";
+        return Translator.get("binary_viewer.name");
     }
 
     @Override
@@ -45,16 +50,18 @@ public class BinaryFileViewerService implements FileViewerService, FileEditorSer
         return !file.isDirectory();
     }
 
+    @Nonnull
     @Override
     public FileViewer createFileViewer() {
         return new BinaryViewer();
     }
 
     @Override
-    public boolean canEditFile(AbstractFile file) throws WarnUserException {
+    public boolean canEditFile(AbstractFile file) {
         return !file.isDirectory();
     }
 
+    @Nonnull
     @Override
     public FileEditor createFileEditor() {
         return new BinaryEditor();

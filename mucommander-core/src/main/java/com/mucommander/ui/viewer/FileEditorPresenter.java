@@ -16,37 +16,40 @@
  */
 package com.mucommander.ui.viewer;
 
+import java.awt.Cursor;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
-import com.mucommander.viewer.FileEditorService;
-import com.mucommander.text.Translator;
 import com.mucommander.viewer.CloseCancelledException;
 import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
-import javax.swing.JRadioButtonMenuItem;
+import com.mucommander.viewer.FileEditorService;
+import com.mucommander.text.Translator;
 
 /**
  * File editor presenter to handle multiple file editors.
  *
  * <p>
- * <b>Warning:</b> the file viewer/editor API may soon receive a major
- * overhaul.</p>
+ * <b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.
+ * </p>
  *
  * @author Maxence Bernard, Arik Hadas
  */
@@ -69,9 +72,8 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
     }
 
     /**
-     * Returns the menu bar that controls the editor's frame. The menu bar
-     * should be retrieved using this method and not by calling
-     * {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     * Returns the menu bar that controls the editor's frame. The menu bar should be retrieved using this method and not
+     * by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
      *
      * @return the menu bar that controls the editor's frame.
      */
@@ -104,13 +106,20 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
         getFrame().setFullScreen(fullScreen);
     }
 
+    @Override
+    public void longOperation(Runnable operation) {
+        getFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        operation.run();
+        getFrame().setCursor(Cursor.getDefaultCursor());
+    }
+
     public void addEditorService(FileEditorService service) throws UserCancelledException {
         services.add(service);
         JRadioButtonMenuItem editorMenuItem = new JRadioButtonMenuItem(service.getName());
         final int serviceIndex = editorsCount;
         editorMenuItem.addActionListener((e) -> {
             try {
-                switchFileViewer(serviceIndex);
+                switchFileEditor(serviceIndex);
             } catch (IOException ex) {
                 Logger.getLogger(FileViewerPresenter.class.getName()).log(Level.SEVERE, null, ex);
             } catch (CloseCancelledException ex) {
@@ -129,27 +138,47 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
     protected void show(AbstractFile file) throws IOException {
         setCurrentFile(file);
         if (fileEditor == null) {
-            MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
-            editorMenu.addSeparator();
-            closeMenuItem = MenuToolkit.addMenuItem(editorMenu, Translator.get("file_editor.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), (e) -> {
-                try {
-                    fileEditor.close();
+            getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            getFrame().addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    if (fileEditor != null) {
+                        try {
+                            fileEditor.close();
+                        } catch (CloseCancelledException ex) {
+                            return;
+                        }
+                    }
+
                     getFrame().dispose();
-                } catch (CloseCancelledException ex) {
-                    // cancelled
                 }
             });
+
+            MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+            editorMenu.addSeparator();
+            closeMenuItem = MenuToolkit.addMenuItem(editorMenu,
+                    Translator.get("file_editor.close"),
+                    menuItemMnemonicHelper,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                    (e) -> {
+                        try {
+                            fileEditor.close();
+                            getFrame().dispose();
+                        } catch (CloseCancelledException ex) {
+                            // cancelled
+                        }
+                    });
             editorMenu.add(closeMenuItem);
 
             try {
-                switchFileViewer(0);
+                switchFileEditor(0);
             } catch (CloseCancelledException ex) {
                 Logger.getLogger(FileViewerPresenter.class.getName()).log(Level.SEVERE, "Unexpected cancellation", ex);
             }
         }
     }
 
-    private void switchFileViewer(int index) throws IOException, CloseCancelledException {
+    private void switchFileEditor(int index) throws IOException, CloseCancelledException {
         if (fileEditor != null) {
             fileEditor.close();
             clearComponentToPresent();

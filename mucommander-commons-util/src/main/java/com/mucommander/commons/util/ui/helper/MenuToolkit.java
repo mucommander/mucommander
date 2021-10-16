@@ -75,6 +75,18 @@ public class MenuToolkit {
         return addMenuItem(menu, text, mnemonicHelper, accelerator, actionListener, false);
     }
 
+    /**
+     * Creates a new JMenuItem.
+     *
+     * @param text text used by the menu item.
+     * @param mnemonicHelper an optional (can be null) mnemonic helper which will be used along with
+     *  the item's text to set a mnemonic to the menu.
+     * @param accelerator an optional (can be null) keyboard shortcut used by the menu item.
+     * @param actionListener an optional (can be null) action listener which will listen to the events triggered by the menu item.
+     */
+    public static JMenuItem createMenuItem(String text, MnemonicHelper mnemonicHelper, KeyStroke accelerator, ActionListener actionListener) {
+        return createMenuItem(text, mnemonicHelper, accelerator, actionListener, false);
+    }
 
     /**
      * Creates a new JCheckBoxMenuItem initially unselected and adds it to the given JMenu.
@@ -103,6 +115,22 @@ public class MenuToolkit {
      * @param createCheckBoxMenuItem specifies whether the menu item to be created is a JCheckBoxMenuItem or just a regular JMenuItem.
      */
     private static JMenuItem addMenuItem(JMenu menu, String text, MnemonicHelper mnemonicHelper, KeyStroke accelerator, ActionListener actionListener, boolean createCheckBoxMenuItem) {
+        JMenuItem menuItem = createMenuItem(text, mnemonicHelper, accelerator, actionListener, createCheckBoxMenuItem);
+        menu.add(menuItem);
+        return menuItem;
+    }
+
+    /**
+     * Creates a new JMenuItem or JCheckBoxMenuItem.
+     *
+     * @param text text used by the menu item.
+     * @param mnemonicHelper an optional (can be null) mnemonic helper which will be used along with
+     *  the item's text to set a mnemonic to the menu.
+     * @param accelerator an optional (can be null) keyboard shortcut used by the menu item.
+     * @param actionListener an optional (can be null) action listener which will listen to the events triggered by the menu item.
+     * @param createCheckBoxMenuItem specifies whether the menu item to be created is a JCheckBoxMenuItem or just a regular JMenuItem.
+     */
+    private static JMenuItem createMenuItem(String text, MnemonicHelper mnemonicHelper, KeyStroke accelerator, ActionListener actionListener, boolean createCheckBoxMenuItem) {
         JMenuItem menuItem = createCheckBoxMenuItem?new JCheckBoxMenuItem(text, false):new JMenuItem(text);
 
         if(mnemonicHelper!=null) {
@@ -116,8 +144,6 @@ public class MenuToolkit {
 
         if(actionListener!=null)
             menuItem.addActionListener(actionListener);
-
-        menu.add(menuItem);
 
         return menuItem;
     }

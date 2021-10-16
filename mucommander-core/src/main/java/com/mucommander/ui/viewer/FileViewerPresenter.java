@@ -16,17 +16,7 @@
  */
 package com.mucommander.ui.viewer;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.util.ui.helper.MenuToolkit;
-import com.mucommander.commons.util.ui.helper.MnemonicHelper;
-import com.mucommander.viewer.FileViewerService;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.main.table.FileTable;
-import com.mucommander.viewer.FileViewer;
-import com.mucommander.viewer.ViewerPresenter;
-import com.mucommander.viewer.WarnUserException;
-
-import javax.swing.*;
+import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,12 +25,31 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
+import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.viewer.FileViewer;
+import com.mucommander.viewer.FileViewerService;
+import com.mucommander.viewer.ViewerPresenter;
+import com.mucommander.viewer.WarnUserException;
+import com.mucommander.text.Translator;
+
 /**
  * File viewer presenter to handle multiple file viewers.
  *
  * <p>
- * <b>Warning:</b> the file viewer/editor API may soon receive a major
- * overhaul.</p>
+ * <b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.
+ * </p>
  *
  * @author Maxence Bernard, Arik Hadas
  */
@@ -62,9 +71,8 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     }
 
     /**
-     * Returns the menu bar that controls the viewer's frame. The menu bar
-     * should be retrieved using this method and not by calling
-     * {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and not
+     * by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
      *
      * @return the menu bar that controls the viewer's frame.
      */
@@ -125,6 +133,13 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         getFrame().setFullScreen(fullScreen);
     }
 
+    @Override
+    public void longOperation(Runnable operation) {
+        getFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        operation.run();
+        getFrame().setCursor(Cursor.getDefaultCursor());
+    }
+
     public void addViewerService(FileViewerService service) throws UserCancelledException {
         services.add(service);
         JRadioButtonMenuItem viewerMenuItem = new JRadioButtonMenuItem(service.getName());
@@ -150,10 +165,14 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         if (fileViewer == null) {
             MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
             viewerMenu.addSeparator();
-            closeMenuItem = MenuToolkit.addMenuItem(viewerMenu, Translator.get("file_viewer.close"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), (e) -> {
-                fileViewer.close();
-                getFrame().dispose();
-            });
+            closeMenuItem = MenuToolkit.addMenuItem(viewerMenu,
+                    Translator.get("file_viewer.close"),
+                    menuItemMnemonicHelper,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                    (e) -> {
+                        fileViewer.close();
+                        getFrame().dispose();
+                    });
             viewerMenu.add(closeMenuItem);
 
             switchFileViewer(0);
