@@ -24,6 +24,7 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+import jcifs.context.SingletonContext;
 import jcifs.smb.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,7 +158,8 @@ import java.util.Collections;
         // The reason for doing this rather than using the SmbFile(String) constructor is that SmbFile uses java.net.URL
         // for the URL parsing which is unable to properly parse urls where the password contains a '@' character,
         // such as smb://user:p@ssword@host/path . 
-        return new SmbFile(url.toString(false), new NtlmPasswordAuthentication(domain, login, credentials.getPassword()));
+        // @todo update deprecated constructor call for jcifs-ng
+        return new SmbFile(url.toString(false), SingletonContext.getInstance().withCredentials(new NtlmPasswordAuthentication(SingletonContext.getInstance(), domain, login, credentials.getPassword())));
     }
 
 
@@ -200,7 +202,8 @@ import java.util.Collections;
      * @param period time period during which attributes values are cached, in milliseconds
      */
     public static void setAttributeCachingPeriod(long period) {
-        jcifs.Config.setProperty("jcifs.smb.client.attrExpirationPeriod", ""+period);
+        // @todo convert for jcifs-ng
+        //  jcifs.Config.setProperty("jcifs.smb.client.attrExpirationPeriod", ""+period);
     }
 
 
