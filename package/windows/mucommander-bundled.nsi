@@ -86,7 +86,9 @@ Section "muCommander @MU_VERSION@ (required)"
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\muCommander "Install_Dir" "$INSTDIR"
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "DisplayName" "muCommander (remove only)"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "DisplayName" "muCommander"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "DisplayVersion" "@MU_VERSION@"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "Publisher" "muCommander"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\muCommander" "NoRepair" 1
