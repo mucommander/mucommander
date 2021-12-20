@@ -184,6 +184,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
                 .where(searchPlace)
                 .searchArchives(properties)
                 .searchHidden(properties)
+                .searchSymlinks(properties)
                 .searchSubfolders(properties)
                 .searchDepth(properties)
                 .matchCaseInsensitive(properties)

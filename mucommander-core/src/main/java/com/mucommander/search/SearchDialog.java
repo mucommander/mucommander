@@ -65,6 +65,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox searchSubfolders;
     private JCheckBox searchArchives;
     private JCheckBox searchHidden;
+    private JCheckBox searchSymlinks;
     private JCheckBox matchCase;
     private JCheckBox matchRegex;
     private JSpinner depth;
@@ -77,6 +78,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static boolean lastSearchSubfolders = true;
     private static boolean lastSearchArchives = false;
     private static boolean lastSearchHidden = false;
+    private static boolean lastSearchSymlinks = false;
     private static boolean lastMatchCase = true;
     private static boolean lastMatchRegex = false;
     private static int lastDepth = 0;
@@ -161,6 +163,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
         searchHidden = new JCheckBox(Translator.get("search_dialog.search_hidden_files"), lastSearchHidden);
         compPanel.addRow("", searchHidden, 10);
+
+        searchSymlinks = new JCheckBox(Translator.get("search_dialog.search_symlinks"), lastSearchSymlinks);
+        compPanel.addRow("", searchSymlinks, 10);
 
         depth = new JSpinner();
         IntEditor editor = new IntEditor(depth, "#####", UNLIMITED_DEPTH);
@@ -255,6 +260,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         lastSearchSubfolders = searchSubfolders.isSelected();
         lastSearchArchives = searchArchives.isSelected();
         lastSearchHidden = searchHidden.isSelected();
+        lastSearchSymlinks = searchSymlinks.isSelected();
         lastMatchCase = matchCase.isSelected();
         lastMatchRegex = matchRegex.isSelected();
         lastDepth = ((Number) this.depth.getValue()).intValue();
@@ -277,6 +283,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             properties.add(new Pair<>(SearchBuilder.SEARCH_ARCHIVES, Boolean.TRUE.toString()));
         if (lastSearchHidden)
             properties.add(new Pair<>(SearchBuilder.SEARCH_HIDDEN, Boolean.TRUE.toString()));
+        if (lastSearchSymlinks)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_SYMLINKS, Boolean.TRUE.toString()));
         if (!lastMatchCase)
             properties.add(new Pair<>(SearchBuilder.MATCH_CASEINSENSITIVE, Boolean.TRUE.toString()));
         if (lastMatchRegex)
