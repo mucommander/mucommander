@@ -47,6 +47,7 @@ Improvements:
 - An informative error dialog is displayed when failing to change directory while browsing an ftp server.
 - Setting the default file drag and drop action to 'COPY' (rather than 'MOVE') is now configurable.
 - Support "Open natively" operation for files from UNC paths.
+- Add an option to follow symbolic links in file search. This option is disabled by default.
 
 Localization:
 - Russian translation updated.

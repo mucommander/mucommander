@@ -31,6 +31,7 @@ public interface SearchBuilder {
     SearchBuilder where(AbstractFile entrypoint);
     SearchBuilder searchArchives(Map<String, String> properties);
     SearchBuilder searchHidden(Map<String, String> properties);
+    SearchBuilder searchSymlinks(Map<String, String> properties);
     SearchBuilder searchSubfolders(Map<String, String> properties);
     SearchBuilder searchDepth(Map<String, String> properties);
     SearchBuilder matchCaseInsensitive(Map<String, String> properties);

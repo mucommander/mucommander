@@ -44,6 +44,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     public static final String SEARCH_ARCHIVES = "archives";
     public static final String SEARCH_HIDDEN = "hidden";
+    public static final String SEARCH_SYMLINKS = "symlinks";
     public static final String SEARCH_SUBFOLDERS = "subfolders";
     public static final String SEARCH_DEPTH = "depth";
     public static final String MATCH_CASEINSENSITIVE = "caseinsensitive";
@@ -59,6 +60,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private boolean matchRegex;
     private boolean searchArchives;
     private boolean searchHidden;
+    private boolean searchSymlinks;
     private boolean searchSubfolders;
     private int searchDepth;
     private MainFrame mainFrame;
@@ -121,6 +123,13 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         String value = properties.get(SearchBuilder.SEARCH_HIDDEN);
         if (value != null)
             searchHidden = Boolean.parseBoolean(value);
+        return this;
+    }
+
+    public SearchBuilder searchSymlinks(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_SYMLINKS);
+        if (value != null)
+            searchSymlinks = Boolean.parseBoolean(value);
         return this;
     }
 
@@ -232,9 +241,15 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
                     : AbstractFile::isArchive;
         }
 
+        if (!searchSymlinks) {
+            Predicate<AbstractFile> isSymlink = AbstractFile::isSymlink;
+            Predicate<AbstractFile> isNotSymlink = isSymlink.negate();
+            listFilter = listFilter != null ? listFilter.and(isNotSymlink) : isNotSymlink;
+        }
         if (listFilter != null && !searchHidden) {
             Predicate<AbstractFile> isHidden = AbstractFile::isHidden;
-            listFilter = listFilter.and(isHidden.negate());
+            Predicate<AbstractFile> isNotHidden = isHidden.negate();
+            listFilter = listFilter.and(isNotHidden);
         }
 
         return listFilter != null ? listFilter : file -> false;
