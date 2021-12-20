@@ -61,14 +61,9 @@ Bug fixes:
 - When selection changes in the tree view and the presented tab is locked, the selected location is opened in a new tab.
 
 Known issues:
-- Mac OS X: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
-  can be solved by executing: xattr -d com.apple.quarantine <jar_name>.jar
 - Some translations may not be up-to-date.
-- Mac OS X: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
-  up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
 - SMB support may not work properly on non multi-language JRE.
 - 'Copy files to clipboard' not working with some applications (files are not pasted).
-- Mac OS X: some keyboard shortcuts may conflict with global system shortcuts.
 - Authentication issues when using several sets of credentials (login/password) for the same server.
 - Untrusted HTTPS connections are allowed without a warning.
 - Windows Vista/7: "java.net.SocketException: Permission denied: recv failed" error can appear when trying to access FTP
@@ -77,10 +72,15 @@ Known issues:
 - Unpacking files from 7z archive files can be slow.
 - Need to enable NTLM authentication manually in order to authenticate to Samba >= 4.5. This is done by adding 'ntlm auth = yes' to smb.conf.
 - Version 5.0 of RAR is not supported. Such archives would appear empty.
-- Issues with browsing Documents/Desktop/Downloads on macOS may be solved by resetting Security and Privacy settings.
+- macOS: issues with browsing Documents/Desktop/Downloads may be solved by resetting Security and Privacy settings.
   See https://github.com/mucommander/mucommander/wiki/Reset-Security-&-Privacy-Settings-on-macOS for more details.
-- Mac OS X: muCommander may not be able to start on version <= 10.10 (OS X Yosemite) due to incompatibility of the bundled JRE.
+- macOS: muCommander may not be able to start on version <= 10.10 (OS X Yosemite) due to incompatibility of the bundled JRE.
   This can be solved by installing Java 8 and running '/Applications/muCommander.app/Contents/replace_jre.sh'.
+- macOS: "muCommander damaged and cannot be opened" may appear after downloading muCommander from the browser. This
+  can be solved by executing: xattr -d com.apple.quarantine <jar_name>.jar
+- macOS: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
+  up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
+- macOS: some keyboard shortcuts may conflict with global system shortcuts.
 
 License
 -------
