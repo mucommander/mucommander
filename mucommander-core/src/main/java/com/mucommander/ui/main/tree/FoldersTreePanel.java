@@ -58,6 +58,8 @@ import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.tabs.FileTableTab;
+import com.mucommander.ui.main.tabs.FileTableTabs;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeCache;
@@ -301,10 +303,14 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         @Override
         public void fireActionPerformed(ActionEvent ae) {
             if (!folderPanel.getCurrentFolder().equals(folder)) {
-                folderPanel.tryChangeCurrentFolder(folder);
+                FileTableTabs tabs = folderPanel.getTabs();
+                FileTableTab tab = tabs.getCurrentTab();
+                if (tab.isLocked())
+                    tabs.add(folder);
+                else
+                    folderPanel.tryChangeCurrentFolder(folder);
             }
         }
-
     }
     
 
