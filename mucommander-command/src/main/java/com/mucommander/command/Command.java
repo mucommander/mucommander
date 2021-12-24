@@ -19,6 +19,7 @@ package com.mucommander.command;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.runtime.OsFamily;
 
 import java.io.File;
 import java.util.List;
@@ -364,10 +365,10 @@ public class Command implements Comparable<Command> {
     private static String getKeywordReplacement(char keyword, AbstractFile file) {
         switch(keyword) {
         case KEYWORD_PATH:
-            return file.getAbsolutePath();
+            return escapeParenthesesOnWindows(file.getAbsolutePath());
 
         case KEYWORD_NAME:
-            return file.getName();
+            return escapeParenthesesOnWindows(file.getName());
 
         case KEYWORD_PARENT:
             AbstractFile parentFile = file.getParent();
@@ -389,7 +390,11 @@ public class Command implements Comparable<Command> {
         throw new IllegalArgumentException();
     }
 
-
+    private static String escapeParenthesesOnWindows(String filepath) {
+        if (OsFamily.WINDOWS.isCurrent())
+            filepath = filepath.replace("(", "^(").replace(")", "^)");
+        return filepath;
+    }
 
     // - Misc. ---------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
