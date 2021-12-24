@@ -1,3 +1,5 @@
+repositories.mavenCentral()
+
 dependencies {
     api project(':mucommander-core')
     api project(':mucommander-viewer-api')
@@ -21,8 +23,6 @@ dependencies {
 
     testImplementation 'org.testng:testng:6.11'
 }
-
-repositories.jcenter()
 
 jar {
    bnd ('Bundle-Name': 'muCommander-viewer-binary',

@@ -13,7 +13,7 @@ plugins {
 
 test.useTestNG()
 
-repositories.jcenter()
+repositories.mavenCentral()
 
 compileJava.options.compilerArgs += ['--release', '11']
 

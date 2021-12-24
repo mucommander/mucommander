@@ -1,6 +1,3 @@
-// In this section you declare where to find the dependencies of your project
-repositories.jcenter()
-
 jar {
    bnd ('Bundle-Name': 'muCommander-apache-bzip2',
         'Bundle-Vendor': 'muCommander',

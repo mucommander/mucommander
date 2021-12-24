@@ -1,3 +1,5 @@
+repositories.mavenCentral()
+
 dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-protocol-api')
@@ -10,8 +12,6 @@ dependencies {
     testImplementation 'org.testng:testng:6.11'
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }
-
-repositories.jcenter()
 
 jar {
    bnd ('Bundle-Name': 'muCommander-sftp',
