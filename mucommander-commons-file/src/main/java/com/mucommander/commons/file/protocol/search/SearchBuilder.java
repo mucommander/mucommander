@@ -29,10 +29,14 @@ public interface SearchBuilder {
     SearchBuilder listener(SearchListener listener);
     SearchBuilder what(String searchStr);
     SearchBuilder where(AbstractFile entrypoint);
-    SearchBuilder searchArchives(Map<String, String> properties);
-    SearchBuilder searchHidden(Map<String, String> properties);
-    SearchBuilder searchSymlinks(Map<String, String> properties);
-    SearchBuilder searchSubfolders(Map<String, String> properties);
+    SearchBuilder searchInArchives(Map<String, String> properties);
+    SearchBuilder searchInHidden(Map<String, String> properties);
+    SearchBuilder searchInSymlinks(Map<String, String> properties);
+    SearchBuilder searchInSubfolders(Map<String, String> properties);
+    SearchBuilder searchForArchives(Map<String, String> properties);
+    SearchBuilder searchForHidden(Map<String, String> properties);
+    SearchBuilder searchForSymlinks(Map<String, String> properties);
+    SearchBuilder searchForSubfolders(Map<String, String> properties);
     SearchBuilder searchDepth(Map<String, String> properties);
     SearchBuilder matchCaseInsensitive(Map<String, String> properties);
     SearchBuilder matchRegex(Map<String, String> properties);

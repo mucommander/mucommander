@@ -42,10 +42,14 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchBuilder implements com.mucommander.commons.file.protocol.search.SearchBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchBuilder.class);
 
-    public static final String SEARCH_ARCHIVES = "archives";
-    public static final String SEARCH_HIDDEN = "hidden";
-    public static final String SEARCH_SYMLINKS = "symlinks";
-    public static final String SEARCH_SUBFOLDERS = "subfolders";
+    public static final String SEARCH_IN_ARCHIVES = "archives";
+    public static final String SEARCH_IN_HIDDEN = "hidden";
+    public static final String SEARCH_IN_SYMLINKS = "symlinks";
+    public static final String SEARCH_IN_SUBFOLDERS = "subfolders";
+    public static final String SEARCH_FOR_ARCHIVES = "filter_archives";
+    public static final String SEARCH_FOR_HIDDEN = "filter_hidden";
+    public static final String SEARCH_FOR_SYMLINKS = "filter_symlinks";
+    public static final String SEARCH_FOR_SUBFOLDERS = "filter_subfolders";
     public static final String SEARCH_DEPTH = "depth";
     public static final String MATCH_CASEINSENSITIVE = "caseinsensitive";
     public static final String MATCH_REGEX = "regex";
@@ -58,10 +62,14 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private SearchListener listener;
     private boolean matchCaseInsensitive;
     private boolean matchRegex;
-    private boolean searchArchives;
-    private boolean searchHidden;
-    private boolean searchSymlinks;
-    private boolean searchSubfolders;
+    private boolean searchInArchives;
+    private boolean searchInHidden;
+    private boolean searchInSymlinks;
+    private boolean searchInSubfolders;
+    private boolean searchForArchives;
+    private boolean searchForHidden;
+    private boolean searchForSymlinks;
+    private boolean searchForSubfolders;
     private int searchDepth;
     private MainFrame mainFrame;
     private String searchText;
@@ -71,7 +79,11 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private SearchJob searchJob;
 
     private SearchBuilder() {
-        searchSubfolders = true;
+        searchInSubfolders = true;
+        searchForArchives = true;
+        searchForHidden = true;
+        searchForSymlinks = true;
+        searchForSubfolders = true;
         searchDepth = Integer.MAX_VALUE;
     }
 
@@ -112,31 +124,59 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 //        return this;
 //    }
 
-    public SearchBuilder searchArchives(Map<String, String> properties) {
-        String value = properties.get(SearchBuilder.SEARCH_ARCHIVES);
+    public SearchBuilder searchInArchives(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_IN_ARCHIVES);
         if (value != null)
-            searchArchives = Boolean.parseBoolean(value);
+            searchInArchives = Boolean.parseBoolean(value);
         return this;
     }
 
-    public SearchBuilder searchHidden(Map<String, String> properties) {
-        String value = properties.get(SearchBuilder.SEARCH_HIDDEN);
+    public SearchBuilder searchInHidden(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_IN_HIDDEN);
         if (value != null)
-            searchHidden = Boolean.parseBoolean(value);
+            searchInHidden = Boolean.parseBoolean(value);
         return this;
     }
 
-    public SearchBuilder searchSymlinks(Map<String, String> properties) {
-        String value = properties.get(SearchBuilder.SEARCH_SYMLINKS);
+    public SearchBuilder searchInSymlinks(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_IN_SYMLINKS);
         if (value != null)
-            searchSymlinks = Boolean.parseBoolean(value);
+            searchInSymlinks = Boolean.parseBoolean(value);
         return this;
     }
 
-    public SearchBuilder searchSubfolders(Map<String, String> properties) {
-        String value = properties.get(SearchBuilder.SEARCH_SUBFOLDERS);
+    public SearchBuilder searchInSubfolders(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_IN_SUBFOLDERS);
         if (value != null)
-            searchSubfolders = Boolean.parseBoolean(value);
+            searchInSubfolders = Boolean.parseBoolean(value);
+        return this;
+    }
+
+    public SearchBuilder searchForArchives(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_FOR_ARCHIVES);
+        if (value != null)
+            searchForArchives = Boolean.parseBoolean(value);
+        return this;
+    }
+
+    public SearchBuilder searchForHidden(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_FOR_HIDDEN);
+        if (value != null)
+            searchForHidden = Boolean.parseBoolean(value);
+        return this;
+    }
+
+    public SearchBuilder searchForSymlinks(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_FOR_SYMLINKS);
+        if (value != null)
+            searchForSymlinks = Boolean.parseBoolean(value);
+        return this;
+    }
+
+    public SearchBuilder searchForSubfolders(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_FOR_SUBFOLDERS);
+        if (value != null)
+            searchForSubfolders = Boolean.parseBoolean(value);
         return this;
     }
 
@@ -188,9 +228,28 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     private Predicate<AbstractFile> createFilePredicate() {
         Predicate<AbstractFile> predicate = createFilenamePredicate();
-        if (searchText != null) {
-            predicate = predicate.and(createFileContentPredicate());
+        if (!searchForSubfolders) {
+            Predicate<AbstractFile> isDirectory = AbstractFile::isDirectory;
+            Predicate<AbstractFile> isNotDirectory = isDirectory.negate();
+            predicate = predicate.and(isNotDirectory);
         }
+        if (!searchForArchives) {
+            Predicate<AbstractFile> isArchive = AbstractFile::isArchive;
+            Predicate<AbstractFile> isNotArchive = isArchive.negate();
+            predicate = predicate.and(isNotArchive);
+        }
+        if (!searchForHidden) {
+            Predicate<AbstractFile> isHidden = AbstractFile::isHidden;
+            Predicate<AbstractFile> isNotHidden = isHidden.negate();
+            predicate = predicate.and(isNotHidden);
+        }
+        if (!searchForSymlinks) {
+            Predicate<AbstractFile> isSymlink = AbstractFile::isSymlink;
+            Predicate<AbstractFile> isNotSymlink = isSymlink.negate();
+            predicate = predicate.and(isNotSymlink);
+        }
+        if (searchText != null)
+            predicate = predicate.and(createFileContentPredicate());
         return predicate;
     }
 
@@ -233,20 +292,20 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     private Predicate<AbstractFile> createListFilter() {
         Predicate<AbstractFile> listFilter = null;
-        if (searchSubfolders)
+        if (searchInSubfolders)
             listFilter = AbstractFile::isDirectory;
-        if (searchArchives) {
+        if (searchInArchives) {
             listFilter = listFilter != null ?
                     listFilter.or(AbstractFile::isArchive)
                     : AbstractFile::isArchive;
         }
 
-        if (!searchSymlinks) {
+        if (!searchInSymlinks) {
             Predicate<AbstractFile> isSymlink = AbstractFile::isSymlink;
             Predicate<AbstractFile> isNotSymlink = isSymlink.negate();
             listFilter = listFilter != null ? listFilter.and(isNotSymlink) : isNotSymlink;
         }
-        if (listFilter != null && !searchHidden) {
+        if (listFilter != null && !searchInHidden) {
             Predicate<AbstractFile> isHidden = AbstractFile::isHidden;
             Predicate<AbstractFile> isNotHidden = isHidden.negate();
             listFilter = listFilter.and(isNotHidden);
