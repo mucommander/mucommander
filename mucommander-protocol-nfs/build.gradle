@@ -4,7 +4,7 @@ dependencies {
     api project(':mucommander-translator')
 
     implementation 'org.osgi:osgi.core:7.0.0'
-    implementation 'com.sun:yanfs:1.3'
+    implementation 'com.sun:yanfs:1.4'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -14,7 +14,12 @@ dependencies {
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
-repositories.jcenter()
+repositories {
+    maven {
+        url 'https://raw.githubusercontent.com/raisercostin/maven-repo/master/'
+    }
+    jcenter()
+}
 
 jar {
    bnd ('Bundle-Name': 'muCommander-nfs',
