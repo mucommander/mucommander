@@ -21,6 +21,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -46,6 +48,7 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
+import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.spinner.IntEditor;
@@ -62,10 +65,14 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchDialog extends FocusDialog implements ActionListener, DocumentListener {
     private JTextField searchFilesField;
     private JTextField searchInField;
-    private JCheckBox searchSubfolders;
-    private JCheckBox searchArchives;
-    private JCheckBox searchHidden;
-    private JCheckBox searchSymlinks;
+    private JCheckBox searchInSubfolders;
+    private JCheckBox searchInArchives;
+    private JCheckBox searchInHidden;
+    private JCheckBox searchInSymlinks;
+    private JCheckBox searchForSubfolders;
+    private JCheckBox searchForArchives;
+    private JCheckBox searchForHidden;
+    private JCheckBox searchForSymlinks;
     private JCheckBox matchCase;
     private JCheckBox matchRegex;
     private JSpinner depth;
@@ -75,10 +82,14 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox textRegex;
 
     // Store last values, initialized to the default values
-    private static boolean lastSearchSubfolders = true;
-    private static boolean lastSearchArchives = false;
-    private static boolean lastSearchHidden = false;
-    private static boolean lastSearchSymlinks = false;
+    private static boolean lastSearchInSubfolders = true;
+    private static boolean lastSearchInArchives = false;
+    private static boolean lastSearchInHidden = false;
+    private static boolean lastSearchInSymlinks = false;
+    private static boolean lastSearchForSubfolders = true;
+    private static boolean lastSearchForArchives = true;
+    private static boolean lastSearchForHidden = true;
+    private static boolean lastSearchForSymlinks = true;
     private static boolean lastMatchCase = true;
     private static boolean lastMatchRegex = false;
     private static int lastDepth = 0;
@@ -155,17 +166,31 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         });
         compPanel.addRow(Translator.get("search_dialog.search_path"), searchInField, 10);
 
-        searchSubfolders = new JCheckBox(Translator.get("search_dialog.search_subfolders"), lastSearchSubfolders);
-        compPanel.addRow("", searchSubfolders, 10);
+        GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
+        gbc.weightx = 1.0;
+        JPanel groupingPanel = new ProportionalGridPanel(2, gbc);
 
-        searchArchives = new JCheckBox(Translator.get("search_dialog.search_archives"), lastSearchArchives);
-        compPanel.addRow("", searchArchives, 10);
+        searchInSubfolders = new JCheckBox(Translator.get("search_dialog.search_in_subfolders"), lastSearchInSubfolders);
+        groupingPanel.add(searchInSubfolders);
+        searchForSubfolders = new JCheckBox(Translator.get("search_dialog.search_for_folders"), lastSearchForSubfolders);
+        groupingPanel.add(searchForSubfolders);
 
-        searchHidden = new JCheckBox(Translator.get("search_dialog.search_hidden_files"), lastSearchHidden);
-        compPanel.addRow("", searchHidden, 10);
+        searchInArchives = new JCheckBox(Translator.get("search_dialog.search_in_archives"), lastSearchInArchives);
+        groupingPanel.add(searchInArchives);
+        searchForArchives = new JCheckBox(Translator.get("search_dialog.search_for_archives"), lastSearchForArchives);
+        groupingPanel.add(searchForArchives);
 
-        searchSymlinks = new JCheckBox(Translator.get("search_dialog.search_symlinks"), lastSearchSymlinks);
-        compPanel.addRow("", searchSymlinks, 10);
+        searchInHidden = new JCheckBox(Translator.get("search_dialog.search_in_hidden_files"), lastSearchInHidden);
+        groupingPanel.add(searchInHidden);
+        searchForHidden = new JCheckBox(Translator.get("search_dialog.search_for_hidden_files"), lastSearchForHidden);
+        groupingPanel.add(searchForHidden);
+
+        searchInSymlinks = new JCheckBox(Translator.get("search_dialog.search_in_symlinks"), lastSearchInSymlinks);
+        groupingPanel.add(searchInSymlinks);
+        searchForSymlinks = new JCheckBox(Translator.get("search_dialog.search_for_symlinks"), lastSearchForSymlinks);
+        groupingPanel.add(searchForSymlinks);
+
+        compPanel.addRow("", groupingPanel, 10);
 
         depth = new JSpinner();
         IntEditor editor = new IntEditor(depth, "#####", UNLIMITED_DEPTH);
@@ -257,10 +282,14 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     }
 
     private void updateValues() {
-        lastSearchSubfolders = searchSubfolders.isSelected();
-        lastSearchArchives = searchArchives.isSelected();
-        lastSearchHidden = searchHidden.isSelected();
-        lastSearchSymlinks = searchSymlinks.isSelected();
+        lastSearchInSubfolders = searchInSubfolders.isSelected();
+        lastSearchInArchives = searchInArchives.isSelected();
+        lastSearchInHidden = searchInHidden.isSelected();
+        lastSearchInSymlinks = searchInSymlinks.isSelected();
+        lastSearchForSubfolders = searchForSubfolders.isSelected();
+        lastSearchForArchives = searchForArchives.isSelected();
+        lastSearchForHidden = searchForHidden.isSelected();
+        lastSearchForSymlinks = searchForSymlinks.isSelected();
         lastMatchCase = matchCase.isSelected();
         lastMatchRegex = matchRegex.isSelected();
         lastDepth = ((Number) this.depth.getValue()).intValue();
@@ -277,14 +306,22 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
      */
     private String getSearchQuery() {
         List<Pair<String, String>> properties = new ArrayList<>();
-        if (!lastSearchSubfolders)
-            properties.add(new Pair<>(SearchBuilder.SEARCH_SUBFOLDERS, Boolean.FALSE.toString()));
-        if (lastSearchArchives)
-            properties.add(new Pair<>(SearchBuilder.SEARCH_ARCHIVES, Boolean.TRUE.toString()));
-        if (lastSearchHidden)
-            properties.add(new Pair<>(SearchBuilder.SEARCH_HIDDEN, Boolean.TRUE.toString()));
-        if (lastSearchSymlinks)
-            properties.add(new Pair<>(SearchBuilder.SEARCH_SYMLINKS, Boolean.TRUE.toString()));
+        if (!lastSearchInSubfolders)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_IN_SUBFOLDERS, Boolean.FALSE.toString()));
+        if (lastSearchInArchives)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_IN_ARCHIVES, Boolean.TRUE.toString()));
+        if (lastSearchInHidden)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_IN_HIDDEN, Boolean.TRUE.toString()));
+        if (lastSearchInSymlinks)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_IN_SYMLINKS, Boolean.TRUE.toString()));
+        if (!lastSearchForSubfolders)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_FOR_SUBFOLDERS, Boolean.FALSE.toString()));
+        if (!lastSearchForArchives)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_FOR_ARCHIVES, Boolean.FALSE.toString()));
+        if (!lastSearchForHidden)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_FOR_HIDDEN, Boolean.FALSE.toString()));
+        if (!lastSearchForSymlinks)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_FOR_SYMLINKS, Boolean.FALSE.toString()));
         if (!lastMatchCase)
             properties.add(new Pair<>(SearchBuilder.MATCH_CASEINSENSITIVE, Boolean.TRUE.toString()));
         if (lastMatchRegex)

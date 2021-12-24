@@ -33,10 +33,17 @@ public class ProportionalGridPanel extends JPanel {
     private GridBagConstraints gbc;
 
     public ProportionalGridPanel(int nbColumns) {
+        this(nbColumns, getDefaultGridBagConstraints());
+    }
+
+    public ProportionalGridPanel(int nbColumns, GridBagConstraints gbc) {
         super(new GridBagLayout());
         this.nbColumns = nbColumns;
+        this.gbc = gbc;
+    }
 
-        gbc = new GridBagConstraints();
+    public static GridBagConstraints getDefaultGridBagConstraints() {
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 3, 2, 3);
@@ -50,8 +57,8 @@ public class ProportionalGridPanel extends JPanel {
         //        gbc.fill = GridBagConstraints.NONE;
 
         gbc.anchor = GridBagConstraints.WEST;
+        return gbc;
     }
-
 
     @Override
     public Component add(Component component) {

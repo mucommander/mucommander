@@ -48,6 +48,7 @@ Improvements:
 - Setting the default file drag and drop action to 'COPY' (rather than 'MOVE') is now configurable.
 - Support "Open natively" operation for files from UNC paths.
 - Add an option to follow symbolic links in file search. This option is disabled by default.
+- Enable filtering out folders, hidden files, archive files or symlinks from file search results.
 
 Localization:
 - Russian translation updated.
