@@ -13,8 +13,7 @@ plugins {
 
 test.useTestNG()
 
-repositories.jcenter()
-
+repositories.mavenCentral()
 
 dependencies {
     api project(":mucommander-commons-util")

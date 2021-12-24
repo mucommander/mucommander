@@ -1,3 +1,6 @@
+// In this section you declare where to find the dependencies of your project
+repositories.mavenCentral()
+
 configurations {
     library.extendsFrom compileOnly
 }
@@ -10,9 +13,6 @@ dependencies {
 
     testImplementation 'org.testng:testng:6.11'
 }
-
-// In this section you declare where to find the dependencies of your project
-repositories.jcenter()
 
 jar {
    from { configurations.library.collect { it.isDirectory() ? it : zipTree(it) } }

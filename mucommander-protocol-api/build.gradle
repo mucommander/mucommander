@@ -1,4 +1,4 @@
-repositories.jcenter()
+repositories.mavenCentral()
 
 dependencies {
     api project(":mucommander-commons-file")

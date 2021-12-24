@@ -18,7 +18,7 @@ repositories {
     maven {
         url 'https://raw.githubusercontent.com/raisercostin/maven-repo/master/'
     }
-    jcenter()
+    mavenCentral()
 }
 
 jar {

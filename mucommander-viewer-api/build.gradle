@@ -1,11 +1,11 @@
+repositories.mavenCentral()
+
 dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-commons-util')
 
     testImplementation 'org.testng:testng:6.11'
 }
-
-repositories.jcenter()
 
 jar {
    bnd ('Bundle-Name': 'muCommander-viewer-api',

@@ -1,3 +1,5 @@
+repositories.mavenCentral()
+
 dependencies {
     api project(':mucommander-commons-file')
 
@@ -5,8 +7,6 @@ dependencies {
     implementation 'org.osgi:osgi.core:7.0.0'
     implementation files('libs/libguestfs.jar')
 }
-
-repositories.jcenter()
 
 jar {
    bnd ('Bundle-Name': 'muCommander-libguestfs',

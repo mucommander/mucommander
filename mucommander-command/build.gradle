@@ -10,7 +10,7 @@ plugins {
     id 'biz.aQute.bnd.builder'
 }
 
-repositories.jcenter()
+repositories.mavenCentral()
 
 dependencies {
     api project(":mucommander-commons-file")
