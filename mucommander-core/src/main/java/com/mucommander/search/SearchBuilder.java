@@ -51,11 +51,13 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     public static final String SEARCH_FOR_SYMLINKS = "filter_symlinks";
     public static final String SEARCH_FOR_SUBFOLDERS = "filter_subfolders";
     public static final String SEARCH_DEPTH = "depth";
+    public static final String SEARCH_THREADS = "threads";
     public static final String MATCH_CASEINSENSITIVE = "caseinsensitive";
     public static final String MATCH_REGEX = "regex";
     public static final String SEARCH_TEXT = "text";
     public static final String TEXT_CASEINSENSITIVE = "text-caseinsensitive";
     public static final String TEXT_MATCH_REGEX= "text-regex";
+    public static final int DEFAULT_THREADS = 2;
 
     private AbstractFile entrypoint;
     private String searchStr;
@@ -71,6 +73,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private boolean searchForSymlinks;
     private boolean searchForSubfolders;
     private int searchDepth;
+    private int searchThreads;
     private MainFrame mainFrame;
     private String searchText;
     private boolean textCaseInsensitive;
@@ -85,6 +88,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         searchForSymlinks = true;
         searchForSubfolders = true;
         searchDepth = Integer.MAX_VALUE;
+        searchThreads = DEFAULT_THREADS;
     }
 
     public static SearchBuilder newSearch() {
@@ -187,6 +191,13 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         return this;
     }
 
+    public SearchBuilder searchThreads(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_THREADS);
+        if (value != null)
+            searchThreads = Integer.parseInt(value);
+        return this;
+    }
+
     public SearchBuilder matchCaseInsensitive(Map<String, String> properties) {
         String value = properties.get(SearchBuilder.MATCH_CASEINSENSITIVE);
         if (value != null)
@@ -216,6 +227,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
             searchJob = new SearchJob(mainFrame, new FileSet(entrypoint, entrypoint));
             searchJob.setListener(listener);
             searchJob.setDepth(searchDepth);
+            searchJob.setThreads(searchThreads);
 
             Predicate<AbstractFile> fileMatcher = createFilePredicate();
             searchJob.setFileMatcher(fileMatcher);

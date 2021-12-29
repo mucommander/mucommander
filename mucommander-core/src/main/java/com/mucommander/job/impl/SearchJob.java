@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,7 +49,9 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     private Predicate<AbstractFile> lsFilter;
     private List<AbstractFile> findings;
     private SearchListener listener;
-    private int depth;
+    private int depth, threads;
+
+    private ExecutorService customThreadPool;
 
     private static final SearchListener nullListener = () -> {};
 
@@ -59,6 +64,10 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
         this.depth = depth;
     }
 
+    public void setThreads(int threads) {
+        this.threads = threads;
+    }
+
     public void setFileMatcher(Predicate<AbstractFile> fileMatcher) {
         this.fileMatcher = fileMatcher;
     }
@@ -68,6 +77,14 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     }
 
     private List<AbstractFile> search(List<AbstractFile> files, boolean subfolder) {
+        try {
+            return customThreadPool.submit(() -> parallelSearch(files, subfolder)).get();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    private List<AbstractFile> parallelSearch(List<AbstractFile> files, boolean subfolder) {
         return files.parallelStream()
                 .filter(subfolder ? lsFilter : file -> true)
                 .map(this::search)
@@ -107,6 +124,8 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     @Override
     public void interrupt() {
         setListener(null);
+        if (customThreadPool != null)
+            customThreadPool.shutdown();
         super.interrupt();
     }
 
@@ -122,12 +141,17 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     @Override
     protected boolean processFile(AbstractFile file, Object recurseParams) {
         LOGGER.info("start searching {}", file);
-        List<AbstractFile> files = Collections.singletonList(file);
-        for (int i=0; getState() != FileJobState.INTERRUPTED && i<depth && !files.isEmpty(); i++) {
-            files = search(files, i > 0);
+        customThreadPool = threads > 0 ? new ForkJoinPool(threads) : new ForkJoinPool();
+        try {
+            List<AbstractFile> files = Collections.singletonList(file);
+            for (int i=0; getState() != FileJobState.INTERRUPTED && i<depth && !files.isEmpty(); i++) {
+                files = search(files, i > 0);
+            }
+        } finally {
+            LOGGER.info("completed searching {}", file);
+            listener = null;
+            customThreadPool.shutdown();
         }
-        LOGGER.info("completed searching {}", file);
-        listener = null;
         return true;
     }
 }
