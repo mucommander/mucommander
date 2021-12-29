@@ -151,7 +151,6 @@ public class SevenZipArchiveFile extends AbstractROArchiveFile {
         for(int i = 0 ; i < sevenZipFile.size() ; i++) {
 //            	System.out.println("check " + sevenZipFile.getEntry(i).getName());
             if (entry.getPath().equals(sevenZipFile.getEntry(i).getName())) {
-            	System.out.println("entry.getPath = " + entry.getPath() + ", sevenZipFile.getEntry(i).getName() " + sevenZipFile.getEntry(i).getName());
                 arrays[0] = i;
                 break;
             }

@@ -60,31 +60,24 @@ public class MuArchiveExtractCallback implements IArchiveExtractCallback // , IC
 	        return HRESULT.S_OK;
 	    }
 	    
-	    public void PrintString(String str) {
-	        System.out.print(str);
-	    }
-	    
 	    public int PrepareOperation(int askExtractMode) {
-	    	System.out.println("askExtractMode = " + askExtractMode);
 	        _extractMode = false;
 	        switch (askExtractMode) {
 	            case IInArchive.NExtract_NAskMode_kExtract:
 	                _extractMode = true;
 	        };
-	        System.out.println("here1");
 	        switch (askExtractMode) {
 	            case IInArchive.NExtract_NAskMode_kExtract:
-	                PrintString("Extracting  ");
+	            	LOGGER.debug("Extracting  ");
 	                break;
 	            case IInArchive.NExtract_NAskMode_kTest:
-	                PrintString("Testing     ");
+	            	LOGGER.debug("Testing     ");
 	                break;
 	            case IInArchive.NExtract_NAskMode_kSkip:
-	                PrintString("Skipping    ");
+	            	LOGGER.debug("Skipping    ");
 	                break;
 	        };
-	        System.out.println("here2");
-	        PrintString(_filePath);
+	        LOGGER.debug(_filePath);
 	        return HRESULT.S_OK;
 	    }
 	    
@@ -95,19 +88,19 @@ public class MuArchiveExtractCallback implements IArchiveExtractCallback // , IC
             default:
             {
                 NumErrors++;
-                PrintString("     ");
+                LOGGER.debug("     ");
                 switch(operationResult) {
                     case IInArchive.NExtract_NOperationResult_kUnSupportedMethod:
-                        PrintString("Unsupported Method");
+                    	LOGGER.debug("Unsupported Method");
                         break;
                     case IInArchive.NExtract_NOperationResult_kCRCError:
-                        PrintString("CRC Failed");
+                    	LOGGER.debug("CRC Failed");
                         break;
                     case IInArchive.NExtract_NOperationResult_kDataError:
-                        PrintString("Data Error");
+                    	LOGGER.debug("Data Error");
                         break;
                     default:
-                        PrintString("Unknown Error");
+                    	LOGGER.debug("Unknown Error");
                 }
             }
         }
