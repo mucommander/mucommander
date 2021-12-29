@@ -49,6 +49,7 @@ Improvements:
 - Support "Open natively" operation for files from UNC paths.
 - Add an option to follow symbolic links in file search. This option is disabled by default.
 - Enable filtering out folders, hidden files, archive files or symlinks from file search results.
+- Limit the amount of threads used for file searching to two. This can be overridden per-search.
 
 Localization:
 - Russian translation updated.

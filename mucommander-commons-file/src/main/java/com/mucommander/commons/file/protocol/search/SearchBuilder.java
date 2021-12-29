@@ -38,6 +38,7 @@ public interface SearchBuilder {
     SearchBuilder searchForSymlinks(Map<String, String> properties);
     SearchBuilder searchForSubfolders(Map<String, String> properties);
     SearchBuilder searchDepth(Map<String, String> properties);
+    SearchBuilder searchThreads(Map<String, String> properties);
     SearchBuilder matchCaseInsensitive(Map<String, String> properties);
     SearchBuilder matchRegex(Map<String, String> properties);
     SearchBuilder searchText(Map<String, String> properties);

@@ -76,6 +76,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox matchCase;
     private JCheckBox matchRegex;
     private JSpinner depth;
+    private JSpinner threads;
     private JLabel wildcards;
     private JTextField searchTextField;
     private JCheckBox textCase;
@@ -93,6 +94,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static boolean lastMatchCase = true;
     private static boolean lastMatchRegex = false;
     private static int lastDepth = 0;
+    private static int lastThreads = SearchBuilder.DEFAULT_THREADS;
     private static String lastText = "";
     private static boolean lastTextCase = true;
     private static boolean lastTextRegex = false;
@@ -103,10 +105,11 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private MainFrame mainFrame;
 
     public static final String UNLIMITED_DEPTH = Translator.get("search_dialog.unlimited_depth");
+    public static final String MAX_THREADS = Translator.get("search_dialog.max_threads");
 
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(550,0);
-
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(800,10000);
+    private final static int MAX_NUM_OF_SEARCH_THREADS = 0x7fff; // taken from FormJoinPool#MAX_CAP
 
     public SearchDialog(MainFrame mainFrame) {
         super(mainFrame, ActionProperties.getActionLabel(FindAction.Descriptor.ACTION_ID), mainFrame);
@@ -198,6 +201,13 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         depth.setModel(new SpinnerNumberModel(0, 0, null, 1));
         depth.setValue(lastDepth);
         compPanel.addRow(Translator.get("search_dialog.search_depth"), depth, 5);
+
+        threads = new JSpinner();
+        editor = new IntEditor(threads, "#####", MAX_THREADS);
+        threads.setEditor(editor);
+        threads.setModel(new SpinnerNumberModel(0, 0, MAX_NUM_OF_SEARCH_THREADS, 1));
+        threads.setValue(lastThreads);
+        compPanel.addRow(Translator.get("search_dialog.search_threads"), threads, 5);
 
         fileSearchPanel.add(compPanel);
         mainPanel.add(fileSearchPanel);
@@ -292,7 +302,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         lastSearchForSymlinks = searchForSymlinks.isSelected();
         lastMatchCase = matchCase.isSelected();
         lastMatchRegex = matchRegex.isSelected();
-        lastDepth = ((Number) this.depth.getValue()).intValue();
+        lastDepth = ((Number) depth.getValue()).intValue();
+        lastThreads = ((Number) threads.getValue()).intValue();
         lastText = searchTextField.getText();
         lastTextCase = textCase.isSelected();
         lastTextRegex = textRegex.isSelected();
@@ -328,6 +339,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             properties.add(new Pair<>(SearchBuilder.MATCH_REGEX, Boolean.TRUE.toString()));
         if (lastDepth > 0)
             properties.add(new Pair<>(SearchBuilder.SEARCH_DEPTH, String.valueOf(lastDepth)));
+        if (lastThreads != SearchBuilder.DEFAULT_THREADS)
+            properties.add(new Pair<>(SearchBuilder.SEARCH_THREADS, String.valueOf(lastThreads)));
         if (!lastText.isEmpty()) {
             properties.add(new Pair<>(SearchBuilder.SEARCH_TEXT, lastText));
             if (!lastTextCase)

@@ -191,6 +191,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
                 .searchForSymlinks(properties)
                 .searchForSubfolders(properties)
                 .searchDepth(properties)
+                .searchThreads(properties)
                 .matchCaseInsensitive(properties)
                 .matchRegex(properties)
                 .searchText(properties)
