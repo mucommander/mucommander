@@ -51,19 +51,14 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
     }
 
     private JPanel createConfigurationPanel() {
-        FontChooser           fontChooser;
-        YBoxPanel             mainPanel;
-        JPanel                flowPanel;
-        ProportionalGridPanel colorsPanel;
-        PreviewLabel          label;
-
-        fontChooser = createFontChooser(ThemeData.LOCATION_BAR_FONT);
+        FontChooser fontChooser = createFontChooser(ThemeData.LOCATION_BAR_FONT);
         addFontChooserListener(fontChooser, normalPreview);
         addFontChooserListener(fontChooser, progressPreview);
 
-        addLabelRow(colorsPanel = new ProportionalGridPanel(3), false);
+        ProportionalGridPanel colorsPanel = new ProportionalGridPanel(3);
+        addLabelRow(colorsPanel, false);
 
-        label = new PreviewLabel();
+        PreviewLabel label = new PreviewLabel();
         addColorButtons(colorsPanel, fontChooser, "theme_editor.normal",
                           ThemeData.LOCATION_BAR_FOREGROUND_COLOR, ThemeData.LOCATION_BAR_BACKGROUND_COLOR, label).addPropertyChangeListener(this);
         addColorButtons(colorsPanel, fontChooser, "theme_editor.selected",
@@ -76,11 +71,11 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
         colorsPanel.add(new ColorButton(parent, themeData, ThemeData.LOCATION_BAR_PROGRESS_COLOR, PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME, label));
         label.addPropertyChangeListener(this);
 
-        flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         flowPanel.add(colorsPanel);
         flowPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
 
-        mainPanel = new YBoxPanel();
+        YBoxPanel mainPanel = new YBoxPanel();
         mainPanel.add(fontChooser);
         mainPanel.addSpace(10);
         mainPanel.add(flowPanel);
@@ -94,10 +89,7 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
     }
 
     private JPanel createPreviewPanel() {
-        YBoxPanel panel;
-        JPanel    borderPanel;
-
-        panel = new YBoxPanel();
+        YBoxPanel panel = new YBoxPanel();
 
         //        panel.add(new JLabel(Translator.get("theme_editor.normal")));
         panel.add(createCaptionLabel("theme_editor.normal"));
@@ -112,7 +104,7 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
         progressPreview.setText(System.getProperty("user.home"));
         progressPreview.setEnabled(false);
 
-        borderPanel = new JPanel(new BorderLayout());
+        JPanel borderPanel = new JPanel(new BorderLayout());
         borderPanel.add(panel, BorderLayout.NORTH);
         borderPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
 
@@ -127,9 +119,7 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
      * Initialises the panel's UI.
      */
     private void initUI() {
-        JPanel panel;
-
-        panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout());
         panel.add(createPreviewPanel(), BorderLayout.EAST);
         panel.add(createConfigurationPanel(), BorderLayout.CENTER);
 

@@ -85,22 +85,18 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
     }
 
     private JPanel createGeneralPanel(FontChooser chooser, ColorButton foreground) {
-        YBoxPanel mainPanel;
-        JPanel    colorPanel;
-        JPanel    flowPanel;
-
         // Initialises the color panel.
-        colorPanel = new ProportionalGridPanel(2);
+        JPanel colorPanel = new ProportionalGridPanel(2);
         colorPanel.add(createCaptionLabel("theme_editor.text"));
         colorPanel.add(foreground);
 
         // Wraps the color panel in a flow layout.
-        flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         flowPanel.add(colorPanel);
         flowPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
 
         // Creates the general panel.
-        mainPanel = new YBoxPanel();
+        YBoxPanel mainPanel = new YBoxPanel();
         mainPanel.add(chooser);
         mainPanel.addSpace(10);
         mainPanel.add(flowPanel);
@@ -109,11 +105,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
     }
 
     private JPanel createFreeSpacePanel(FontChooser chooser, ColorButton foreground, ColorButton background, ColorButton border) {
-        JPanel       colorPanel;
-        JPanel       flowPanel;
-        PreviewLabel previewLabel;
-
-        colorPanel = new ProportionalGridPanel(2);
+        JPanel colorPanel = new ProportionalGridPanel(2);
         colorPanel.add(new JLabel());
         colorPanel.add(createCaptionLabel("theme_editor.color"));
         colorPanel.add(createCaptionLabel("theme_editor.background"));
@@ -122,7 +114,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
         colorPanel.add(border);
 
         for(int i=0; i<3; i++) {
-            previewLabel = new PreviewLabel();
+            PreviewLabel previewLabel = new PreviewLabel();
             previewLabel.setOverlayUnderText(true);
             previewLabel.setTextPainted(true);
             foreground.addUpdatedPreviewComponent(previewLabel);
@@ -135,18 +127,16 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
             previewLabel.addPropertyChangeListener(this);
         }
 
-        flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         flowPanel.add(colorPanel);
 
         return flowPanel;
     }
 
     private void addPreviewLabel(YBoxPanel panel, JLabel preview, String label, FontChooser chooser) {
-        JPanel wrapper;
-
         panel.add(createCaptionLabel(label));
 
-        wrapper = new JPanel(new BorderLayout());
+        JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.add(preview, BorderLayout.NORTH);
         panel.add(wrapper);
 
@@ -154,10 +144,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
     }
 
     private JPanel createPreviewPanel(FontChooser fontChooser) {
-        YBoxPanel previewPanel;
-        Insets    insets;
-
-        previewPanel = new YBoxPanel();
+        YBoxPanel previewPanel = new YBoxPanel();
 
         addPreviewLabel(previewPanel, normalPreview = new JLabel(Translator.get("status_bar.selected_files", "3", "14")), "theme_editor.normal", fontChooser);
         normalPreview.setForeground(themeData.getColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR));
@@ -168,7 +155,7 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
 
         previewPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
 
-        insets = previewPanel.getInsets();
+        Insets insets = previewPanel.getInsets();
         previewPanel.setInsets(new Insets(insets.top, insets.left + 8, insets.bottom, insets.right + 6));
 
         return previewPanel;
@@ -178,26 +165,20 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
      * Initialises the panel's UI.
      */
     private void initUI() {
-        JPanel       mainPanel;
-        ColorButton  foreground;
-        ColorButton  background;
-        ColorButton  border;
         PreviewLabel previewLabel;
         PreviewLabel borderPreviewLabel;
-        FontChooser  fontChooser;
 
-        JTabbedPane tabbedPane;
-        fontChooser = createFontChooser(ThemeData.STATUS_BAR_FONT);
+        FontChooser fontChooser = createFontChooser(ThemeData.STATUS_BAR_FONT);
 
         // Initialises the foreground color button.
-        foreground = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_FOREGROUND_COLOR, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewLabel = new PreviewLabel());
+        ColorButton foreground = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_FOREGROUND_COLOR, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewLabel = new PreviewLabel());
         previewLabel.setTextPainted(true);
         addFontChooserListener(fontChooser, previewLabel);
         previewLabel.addPropertyChangeListener(this);
 
         // Initialises the background and border color buttons.
-        background = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel = new PreviewLabel());
-        border     = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME, borderPreviewLabel = new PreviewLabel());
+        ColorButton background = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel = new PreviewLabel());
+        ColorButton border = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME, borderPreviewLabel = new PreviewLabel());
 
         // Initialises the background color preview.
         previewLabel.setTextPainted(true);
@@ -213,13 +194,13 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
         addFontChooserListener(fontChooser, borderPreviewLabel);
         borderPreviewLabel.addPropertyChangeListener(this);
 
-        tabbedPane   = new JTabbedPane();
+        JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.add(Translator.get("theme_editor.general"), createGeneralPanel(fontChooser, foreground));
         tabbedPane.add(Translator.get("theme_editor.free_space"), createFreeSpacePanel(fontChooser, foreground, background, border));
 
 
         // Main layout.
-        mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
         mainPanel.add(createPreviewPanel(fontChooser), BorderLayout.EAST);
 
