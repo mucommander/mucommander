@@ -50,6 +50,8 @@ Improvements:
 - Add an option to follow symbolic links in file search. This option is disabled by default.
 - Enable filtering out folders, hidden files, archive files or symlinks from file search results.
 - Limit the amount of threads used for file searching to two. This can be overridden per-search.
+- 'Find next' opens the 'Find' dialog on text editor/viewer when invoked for the first time.
+- The search string that is used by 'Find next/previous' is preserved across text editors/viewers.
 
 Localization:
 - Russian translation updated.
