@@ -40,7 +40,6 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
-
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
  *
@@ -48,7 +47,9 @@ import com.mucommander.ui.theme.ThemeManager;
  */
 class TextEditorImpl implements ThemeListener {
 
-	private String searchString;
+
+
+	private static String searchString;
 
 	private JFrame frame;
 
@@ -78,7 +79,6 @@ class TextEditorImpl implements ThemeListener {
 		};
 
 		textArea.setEditable(isEditable);
-
 		// Use theme colors and font
 		textArea.setForeground(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
 		textArea.setCaretColor(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
@@ -112,6 +112,8 @@ class TextEditorImpl implements ThemeListener {
 				}
 			}
 		});
+
+
 	}
 
 	/////////////////
@@ -128,12 +130,13 @@ class TextEditorImpl implements ThemeListener {
 				doSearch(0, true);
 		}
 
-		// Request the focus on the text area which could be lost after the Find dialog was disposed
-		textArea.requestFocus();
 	}
 
+
 	void findNext() {
-		doSearch(textArea.getSelectionEnd(), true);
+		if (isSearchStringEmpty())
+			find();
+			else doSearch(textArea.getSelectionEnd(), true);
 	}
 
 	void findPrevious() {
@@ -144,9 +147,15 @@ class TextEditorImpl implements ThemeListener {
 		return textArea.getText().toLowerCase();
 	}
 
+
+	boolean isSearchStringEmpty() { return searchString == null || searchString.length() == 0; }
+
 	private void doSearch(int startPos, boolean forward) {
-		if (searchString == null || searchString.length() == 0)
+		if (isSearchStringEmpty())
 			return;
+
+		textArea.requestFocus();
+
 		int pos;
 		if (forward) {
 			pos = getTextLC().indexOf(searchString, startPos);
