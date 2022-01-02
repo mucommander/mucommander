@@ -19,7 +19,6 @@ package com.mucommander.command;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.runtime.OsFamily;
 
 import java.io.File;
 import java.util.List;
@@ -78,9 +77,9 @@ public class Command implements Comparable<Command> {
     /** Header of replacement keywords. */
     private static final char KEYWORD_HEADER                      = '$';
     /** Instances of this keyword will be replaced by the file's full path. */
-    private static final char KEYWORD_PATH                        = 'f';
+    public static final char KEYWORD_PATH                         = 'f';
     /** Instances of this keyword will be replaced by the file's name. */
-    private static final char KEYWORD_NAME                        = 'n';
+    public static final char KEYWORD_NAME                         = 'n';
     /** Instances of this keyword will be replaced by the file's parent directory. */
     private static final char KEYWORD_PARENT                      = 'p';
     /** Instances of this keyword will be replaced by the JVM's current directory. */
@@ -193,7 +192,7 @@ public class Command implements Comparable<Command> {
      * @return         the specified command's tokens without performing keyword substitution.
      */
     public static String[] getTokens(String command) {
-    	return getTokens(command, (AbstractFile[])null);
+        return new Command(null, null, null, null).getTokens(command, (AbstractFile[])null);
     }
 
     /**
@@ -202,7 +201,7 @@ public class Command implements Comparable<Command> {
      * @param  file    file from which to retrieve keyword substitution values.
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified file.
      */
-    public static String[] getTokens(String command, AbstractFile file) {
+    public String[] getTokens(String command, AbstractFile file) {
     	return getTokens(command, new AbstractFile[] {file});
     }
 
@@ -212,7 +211,7 @@ public class Command implements Comparable<Command> {
      * @param  files   file from which to retrieve keyword substitution values.
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
      */
-    public static String[] getTokens(String command, FileSet files) {
+    public String[] getTokens(String command, FileSet files) {
     	return getTokens(command, files.toArray(new AbstractFile[files.size()]));
     }
 
@@ -222,7 +221,7 @@ public class Command implements Comparable<Command> {
      * @param  files   file from which to retrieve keyword substitution values.
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified files.
      */
-    public static String[] getTokens(String command, AbstractFile[] files) {
+    public String[] getTokens(String command, AbstractFile[] files) {
         List<String> tokens = new Vector<String>(); // All tokens.
         StringBuilder currentToken = new StringBuilder(command.length()); // Buffer for the current token.
         char[] buffer = command.toCharArray(); // All the characters that compose command.
@@ -362,13 +361,13 @@ public class Command implements Comparable<Command> {
      * @param  file    file from which to retrieve the replacement value.
      * @return         the requested replacement value.
      */
-    private static String getKeywordReplacement(char keyword, AbstractFile file) {
+    protected String getKeywordReplacement(char keyword, AbstractFile file) {
         switch(keyword) {
         case KEYWORD_PATH:
-            return escapeParenthesesOnWindows(file.getAbsolutePath());
+            return file.getAbsolutePath();
 
         case KEYWORD_NAME:
-            return escapeParenthesesOnWindows(file.getName());
+            return file.getName();
 
         case KEYWORD_PARENT:
             AbstractFile parentFile = file.getParent();
@@ -388,12 +387,6 @@ public class Command implements Comparable<Command> {
             return file.getNameWithoutExtension();
         }
         throw new IllegalArgumentException();
-    }
-
-    private static String escapeParenthesesOnWindows(String filepath) {
-        if (OsFamily.WINDOWS.isCurrent())
-            filepath = filepath.replace("(", "^(").replace(")", "^)");
-        return filepath;
     }
 
     // - Misc. ---------------------------------------------------------------------------------------------------------

@@ -17,7 +17,6 @@
 
 package com.mucommander.desktop.windows;
 
-import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
@@ -43,11 +42,11 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
         try {
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER_COMMAND,  CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER_COMMAND,  CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
 
             CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, new RegexpFilenameFilter(EXE_REGEXP, false));
         } catch(CommandException e) {throw new DesktopInitialisationException(e);}
