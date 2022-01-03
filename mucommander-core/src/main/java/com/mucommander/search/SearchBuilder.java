@@ -278,11 +278,12 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
             Predicate<AbstractFile> isNotSymlink = isSymlink.negate();
             predicate = predicate.and(isNotSymlink);
         }
-        if (searchText != null)
-            predicate = predicate.and(createFileContentPredicate());
-
         if (searchSize != null)
             predicate =  predicate.and(createFileSizePredicate());
+
+        // text should be the last predicate because it is the most expensive
+        if (searchText != null)
+            predicate = predicate.and(createFileContentPredicate());
 
         return predicate;
     }
