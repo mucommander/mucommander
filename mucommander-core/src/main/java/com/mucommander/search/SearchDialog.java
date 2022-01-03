@@ -36,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
@@ -46,6 +47,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.Pair;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
@@ -55,7 +57,11 @@ import com.mucommander.commons.util.ui.spinner.IntEditor;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.FindAction;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.text.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Dialog used to set parameters for file searching.
@@ -63,6 +69,9 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 public class SearchDialog extends FocusDialog implements ActionListener, DocumentListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchDialog.class);
+
     private JTextField searchFilesField;
     private JTextField searchInField;
     private JCheckBox searchInSubfolders;
@@ -82,6 +91,11 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox textCase;
     private JCheckBox textRegex;
 
+    private JComboBox<SizeUnit> cboSizeUnit = new JComboBox(SizeUnit.VALUES);
+    private JComboBox<SizeRelation> cboSizeRel = new JComboBox(SizeRelation.VALUES);
+    private JTextField tfSize = new EnhancedTextField(8, true);
+
+
     // Store last values, initialized to the default values
     private static boolean lastSearchInSubfolders = true;
     private static boolean lastSearchInArchives = false;
@@ -98,6 +112,10 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static String lastText = "";
     private static boolean lastTextCase = true;
     private static boolean lastTextRegex = false;
+    private static Long lastSize = null;
+    private static SizeRelation lastSizeRel = SizeRelation.VALUES[0];
+    private static SizeUnit lastSizeUnit = SizeUnit.VALUES[0];
+
 
     private JButton searchButton;
     private JButton cancelButton;
@@ -127,7 +145,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
 
         String searchFor = PathUtils.removeLeadingSeparator(searchURL.getPath());
-        searchFilesField = new JTextField(searchFor);
+        if (searchFor.isEmpty()) searchFor = "*";
+        searchFilesField = new EnhancedTextField(searchFor, true);
         searchFilesField.getDocument().addDocumentListener(this);
         compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 5);
 
@@ -217,8 +236,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Text search (Optional)")));
         compPanel = new XAlignedComponentPanel(5);
 
-        searchTextField = new JTextField(lastText);
-        compPanel.addRow(Translator.get("search_dialog.search_text"), searchTextField, 10);
+        searchTextField = new EnhancedTextField(lastText, true);
+        JLabel l = compPanel.addRow(Translator.get("search_dialog.search_text"), searchTextField, 10);
+        l.setDisplayedMnemonic(Translator.get("search_dialog.search_memonic", "T").charAt(0));
 
         textCase = new JCheckBox(Translator.get("search_dialog.text_case_sensitive"), lastTextCase);
         compPanel.addRow("", textCase, 10);
@@ -234,6 +254,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         mainPanel.add(textSearchPanel);
         mainPanel.addSpace(10);
 
+        addSizePanel(mainPanel);
+
         contentPane.add(mainPanel, BorderLayout.CENTER);
 
         contentPane.add(DialogToolkit.createOKCancelPanel(searchButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
@@ -247,6 +269,32 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         checkInputs();
         showDialog();
     }
+
+
+    void addSizePanel(YBoxPanel mainPanel) {
+        YBoxPanel sizePanel = new YBoxPanel(10);
+        sizePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Size")));
+        XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
+        GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
+        gbc.weightx = 1.0;
+        JPanel sz = new ProportionalGridPanel(4, gbc);
+        sz.add(new JLabel(""));
+
+        cboSizeRel.setSelectedIndex(lastSizeRel.index);
+        sz.add(cboSizeRel);
+
+        tfSize.setText(lastSize == null ? "" : lastSize.toString());
+        sz.add(tfSize);
+
+        cboSizeUnit.setSelectedIndex(lastSizeUnit.index);
+        sz.add(cboSizeUnit);
+
+        compPanel.addRow("", sz, 10);
+        sizePanel.add(compPanel);
+        mainPanel.add(sizePanel);
+        mainPanel.addSpace(10);
+    }
+
 
     /**
      * Checks if search string or search location is empty (or white space), and enable/disable 'Add'
@@ -274,7 +322,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             return;
         }
         // otherwise, searchButton was pressed
-        updateValues();
+        if (!validateAndUpdateValues()) return;
+
         String searchIn = searchInField.getText();
         AbstractFile file = FileFactory.getFile(searchIn);
         if (file == null || !file.exists()) {
@@ -291,7 +340,11 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         mainFrame.getActivePanel().tryChangeCurrentFolder(fileURL);
     }
 
-    private void updateValues() {
+    /**
+     *
+     * @return true on success, false on input validation error
+     */
+    private boolean validateAndUpdateValues() {
         lastSearchInSubfolders = searchInSubfolders.isSelected();
         lastSearchInArchives = searchInArchives.isSelected();
         lastSearchInHidden = searchInHidden.isSelected();
@@ -307,6 +360,24 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         lastText = searchTextField.getText();
         lastTextCase = textCase.isSelected();
         lastTextRegex = textRegex.isSelected();
+
+        lastSizeRel = SizeRelation.VALUES[cboSizeRel.getSelectedIndex()];
+        lastSizeUnit = SizeUnit.VALUES[cboSizeUnit.getSelectedIndex()];
+
+        String s = tfSize.getText();
+        if (StringUtils.isNullOrEmpty(s)) {
+            lastSize = null;
+        } else {
+            try {
+                lastSize = Long.parseLong(s);
+            } catch (NumberFormatException nfe) {
+                InformationDialog.showErrorDialog(this, Translator.get("search_dialog.size_error"));
+                tfSize.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -347,6 +418,11 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
                 properties.add(new Pair<>(SearchBuilder.TEXT_CASEINSENSITIVE, Boolean.TRUE.toString()));
             if (lastTextRegex)
                 properties.add(new Pair<>(SearchBuilder.TEXT_MATCH_REGEX, Boolean.TRUE.toString()));
+        }
+        if (lastSize != null) {
+            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE_REL, lastSizeRel.name()));
+            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE, lastSize.toString()));
+            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE_UNIT, lastSizeUnit.toString() ));
         }
         return properties.stream()
                 .map(pair -> pair.first + "=" + pair.second)

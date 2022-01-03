@@ -77,7 +77,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
+    public AbstractFile[] ls() throws IOException {
         if (search == null) {
             return EMPTY_RESULTS;
         }
@@ -173,8 +173,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
 
     /**
      * Starts a search thread.
-     * @param mainFrame the MainFrame the search is initiated from
-     */
+     **/
     public void start(SearchBuilder builder) {
         lastModified = System.currentTimeMillis();
         pausedToDueMaxResults = null;
@@ -195,6 +194,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
                 .matchCaseInsensitive(properties)
                 .matchRegex(properties)
                 .searchText(properties)
+                .searchSize(properties)
                 .build();
         search.start();
     }

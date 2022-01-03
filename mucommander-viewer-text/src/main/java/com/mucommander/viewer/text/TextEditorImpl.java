@@ -58,11 +58,16 @@ class TextEditorImpl implements ThemeListener {
 	/** Indicates whether there is a line separator in the original file */
 	private boolean lineSeparatorExists;
 
+	private boolean isEditable;
+
+	private String textLC;
+
 	////////////////////
 	// Initialization //
 	////////////////////
 
 	public TextEditorImpl(boolean isEditable) {
+		this.isEditable = isEditable;
 		// Initialize text area
 		initTextArea(isEditable);
 
@@ -141,8 +146,15 @@ class TextEditorImpl implements ThemeListener {
 		doSearch(textArea.getSelectionStart() - 1, false);
 	}
 
+
+
 	private String getTextLC() {
-		return textArea.getText().toLowerCase();
+		if (isEditable) {
+			return textArea.getText().toLowerCase();
+		} else {
+			if (textLC == null) textLC = textArea.getText().toLowerCase();
+			return textLC;
+		}
 	}
 
 	private void doSearch(int startPos, boolean forward) {

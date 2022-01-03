@@ -42,5 +42,6 @@ public interface SearchBuilder {
     SearchBuilder matchCaseInsensitive(Map<String, String> properties);
     SearchBuilder matchRegex(Map<String, String> properties);
     SearchBuilder searchText(Map<String, String> properties);
+    SearchBuilder searchSize(Map<String, String> properties);
     SearchJob build();
 }
