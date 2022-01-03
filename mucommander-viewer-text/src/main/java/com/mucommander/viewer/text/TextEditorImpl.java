@@ -58,16 +58,11 @@ class TextEditorImpl implements ThemeListener {
 	/** Indicates whether there is a line separator in the original file */
 	private boolean lineSeparatorExists;
 
-	private boolean isEditable;
-
-	private String textLC;
-
 	////////////////////
 	// Initialization //
 	////////////////////
 
 	public TextEditorImpl(boolean isEditable) {
-		this.isEditable = isEditable;
 		// Initialize text area
 		initTextArea(isEditable);
 
@@ -99,7 +94,7 @@ class TextEditorImpl implements ThemeListener {
 			/**
 			 * Mouse events bubble up until finding a component with a relative listener.
 			 * That's why in case we get an event that needs to initiate its default behavior,
-			 * we just bubble it up to the parent component of the JTextArea.  
+			 * we just bubble it up to the parent component of the JTextArea.
 			 */
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				boolean isCtrlPressed = (e.getModifiers() & KeyEvent.CTRL_MASK)!=0;
@@ -136,25 +131,18 @@ class TextEditorImpl implements ThemeListener {
 
 
 	void findNext() {
-	    if (StringUtils.isNullOrEmpty(searchString))
-	        find();
-	    else
-	        doSearch(textArea.getSelectionEnd(), true);
+		if (StringUtils.isNullOrEmpty(searchString))
+			find();
+		else
+			doSearch(textArea.getSelectionEnd(), true);
 	}
 
 	void findPrevious() {
 		doSearch(textArea.getSelectionStart() - 1, false);
 	}
 
-
-
 	private String getTextLC() {
-		if (isEditable) {
-			return textArea.getText().toLowerCase();
-		} else {
-			if (textLC == null) textLC = textArea.getText().toLowerCase();
-			return textLC;
-		}
+		return textArea.getText().toLowerCase();
 	}
 
 	private void doSearch(int startPos, boolean forward) {
@@ -259,21 +247,21 @@ class TextEditorImpl implements ThemeListener {
 	 */
 	public void colorChanged(ColorChangedEvent event) {
 		switch(event.getColorId()) {
-		case Theme.EDITOR_FOREGROUND_COLOR:
-			textArea.setForeground(event.getColor());
-			break;
+			case Theme.EDITOR_FOREGROUND_COLOR:
+				textArea.setForeground(event.getColor());
+				break;
 
-		case Theme.EDITOR_BACKGROUND_COLOR:
-			textArea.setBackground(event.getColor());
-			break;
+			case Theme.EDITOR_BACKGROUND_COLOR:
+				textArea.setBackground(event.getColor());
+				break;
 
-		case Theme.EDITOR_SELECTED_FOREGROUND_COLOR:
-			textArea.setSelectedTextColor(event.getColor());
-			break;
+			case Theme.EDITOR_SELECTED_FOREGROUND_COLOR:
+				textArea.setSelectedTextColor(event.getColor());
+				break;
 
-		case Theme.EDITOR_SELECTED_BACKGROUND_COLOR:
-			textArea.setSelectionColor(event.getColor());
-			break;
+			case Theme.EDITOR_SELECTED_BACKGROUND_COLOR:
+				textArea.setSelectionColor(event.getColor());
+				break;
 		}
 	}
 
