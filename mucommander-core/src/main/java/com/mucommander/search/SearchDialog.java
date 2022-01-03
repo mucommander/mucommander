@@ -17,14 +17,11 @@
 
 package com.mucommander.search;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,14 +56,14 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.FindAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.*;
+import com.mucommander.ui.text.EnhancedTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Dialog used to set parameters for file searching.
  *
- * @author Arik Hadas
+ * @author Arik Hadas, Gerolf Scherr
  */
 public class SearchDialog extends FocusDialog implements ActionListener, DocumentListener {
 
@@ -91,8 +88,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox textCase;
     private JCheckBox textRegex;
 
-    private JComboBox<SizeUnit> cboSizeUnit = new JComboBox(SizeUnit.VALUES);
-    private JComboBox<SizeRelation> cboSizeRel = new JComboBox(SizeRelation.VALUES);
+    private JComboBox<SizeRelation> cboSizeRel = new JComboBox<SizeRelation>(SizeRelation.VALUES);
+    private JComboBox<String> cboSizeUnit;
     private JTextField tfSize = new EnhancedTextField(8, true);
 
 
@@ -114,7 +111,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static boolean lastTextRegex = false;
     private static Long lastSize = null;
     private static SizeRelation lastSizeRel = SizeRelation.VALUES[0];
-    private static SizeUnit lastSizeUnit = SizeUnit.VALUES[0];
+    private static SizeUnit lastSizeUnit = SizeUnit.VALUES[1];
 
 
     private JButton searchButton;
@@ -145,10 +142,13 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
 
         String searchFor = PathUtils.removeLeadingSeparator(searchURL.getPath());
-        if (searchFor.isEmpty()) searchFor = "*";
+        if (searchFor.isEmpty())
+            searchFor = "*";
         searchFilesField = new EnhancedTextField(searchFor, true);
         searchFilesField.getDocument().addDocumentListener(this);
-        compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 5);
+        JLabel l = compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 5);
+        l.setLabelFor(searchFilesField);
+        l.setDisplayedMnemonic('n');
 
         wildcards = new JLabel(!lastMatchRegex ? Translator.get("search_dialog.wildcards") : " ");
         compPanel.addRow("", wildcards, 10);
@@ -186,7 +186,10 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
                 searchInField.setToolTipText(null);
             }
         });
-        compPanel.addRow(Translator.get("search_dialog.search_path"), searchInField, 10);
+
+        l = compPanel.addRow(Translator.get("search_dialog.search_path"), searchInField, 10);
+        l.setLabelFor(searchInField);
+        l.setDisplayedMnemonic('p');
 
         GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
         gbc.weightx = 1.0;
@@ -214,6 +217,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
         compPanel.addRow("", groupingPanel, 10);
 
+        addSizePanel(compPanel);
+
         depth = new JSpinner();
         IntEditor editor = new IntEditor(depth, "#####", UNLIMITED_DEPTH);
         depth.setEditor(editor);
@@ -237,8 +242,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         compPanel = new XAlignedComponentPanel(5);
 
         searchTextField = new EnhancedTextField(lastText, true);
-        JLabel l = compPanel.addRow(Translator.get("search_dialog.search_text"), searchTextField, 10);
-        l.setDisplayedMnemonic(Translator.get("search_dialog.search_memonic", "T").charAt(0));
+        l = compPanel.addRow(Translator.get("search_dialog.search_text"), searchTextField, 10);
+        l.setLabelFor(searchTextField);
+        l.setDisplayedMnemonic('t');
 
         textCase = new JCheckBox(Translator.get("search_dialog.text_case_sensitive"), lastTextCase);
         compPanel.addRow("", textCase, 10);
@@ -254,8 +260,6 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         mainPanel.add(textSearchPanel);
         mainPanel.addSpace(10);
 
-        addSizePanel(mainPanel);
-
         contentPane.add(mainPanel, BorderLayout.CENTER);
 
         contentPane.add(DialogToolkit.createOKCancelPanel(searchButton, cancelButton, getRootPane(), this), BorderLayout.SOUTH);
@@ -270,29 +274,30 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         showDialog();
     }
 
-
-    void addSizePanel(YBoxPanel mainPanel) {
-        YBoxPanel sizePanel = new YBoxPanel(10);
-        sizePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Size")));
-        XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
-        GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
-        gbc.weightx = 1.0;
-        JPanel sz = new ProportionalGridPanel(4, gbc);
-        sz.add(new JLabel(""));
-
-        cboSizeRel.setSelectedIndex(lastSizeRel.index);
-        sz.add(cboSizeRel);
+    void addSizePanel(XAlignedComponentPanel compPanel) {
+        JPanel sp = new JPanel(new FlowLayout());
+        cboSizeRel.setSelectedIndex(lastSizeRel.ordinal());
+        sp.add(cboSizeRel);
 
         tfSize.setText(lastSize == null ? "" : lastSize.toString());
-        sz.add(tfSize);
+        sp.add(tfSize);
 
-        cboSizeUnit.setSelectedIndex(lastSizeUnit.index);
-        sz.add(cboSizeUnit);
+        cboSizeUnit = new JComboBox(getSizeUnitDisplayStrings());
+        cboSizeUnit.setSelectedIndex(lastSizeUnit.ordinal());
+        sp.add(cboSizeUnit);
 
-        compPanel.addRow("", sz, 10);
-        sizePanel.add(compPanel);
-        mainPanel.add(sizePanel);
-        mainPanel.addSpace(10);
+        JPanel p = new JPanel(new BorderLayout());
+        p.add(sp, BorderLayout.WEST);
+
+        JLabel l = compPanel.addRow(Translator.get("search_dialog.size", "Size"), p, 20);
+        l.setDisplayedMnemonic('s');
+        l.setLabelFor(cboSizeRel);
+    }
+
+
+    private String[] getSizeUnitDisplayStrings() {
+        return Arrays.stream(SizeUnit.VALUES).map(s->Translator.get("search_dialog.size_unit." + s.name() , s.name()))
+                .collect(Collectors.toList()).toArray(new String[0]);
     }
 
 
@@ -322,7 +327,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             return;
         }
         // otherwise, searchButton was pressed
-        if (!validateAndUpdateValues()) return;
+        if (!validateAndUpdateValues())
+            return;
 
         String searchIn = searchInField.getText();
         AbstractFile file = FileFactory.getFile(searchIn);
@@ -364,12 +370,12 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         lastSizeRel = SizeRelation.VALUES[cboSizeRel.getSelectedIndex()];
         lastSizeUnit = SizeUnit.VALUES[cboSizeUnit.getSelectedIndex()];
 
-        String s = tfSize.getText();
-        if (StringUtils.isNullOrEmpty(s)) {
+        String size = tfSize.getText();
+        if (StringUtils.isNullOrEmpty(size)) {
             lastSize = null;
         } else {
             try {
-                lastSize = Long.parseLong(s);
+                lastSize = Long.parseLong(size);
             } catch (NumberFormatException nfe) {
                 InformationDialog.showErrorDialog(this, Translator.get("search_dialog.size_error"));
                 tfSize.requestFocus();

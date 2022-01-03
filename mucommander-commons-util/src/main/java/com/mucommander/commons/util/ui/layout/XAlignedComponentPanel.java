@@ -104,7 +104,6 @@ public class XAlignedComponentPanel extends JPanel {
      */
     public JLabel addRow(String label, JComponent component, int ySpaceAfter) {
         JLabel l = new JLabel(label);
-        l.setLabelFor(component);
         addRow(l, component, ySpaceAfter);
         return l;
     }
