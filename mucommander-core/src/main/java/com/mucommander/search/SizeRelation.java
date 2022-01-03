@@ -20,28 +20,27 @@ package com.mucommander.search;
  * @author Gerolf Scherr
  */
 public enum SizeRelation {
-    eq(0,"=") {
+    eq("=") {
         @Override
         public boolean matches(long sz, long limit, SizeUnit unit) {
             return sz == limit * unit.factor;
         }
     },
-    lt(1,"<"){
+    lt("<"){
         @Override
         public boolean matches(long sz, long limit, SizeUnit unit) {
             return sz < limit * unit.factor;
         }
     },
-    gt(2,">"){
+    gt(">"){
         @Override
         public boolean matches(long sz, long limit, SizeUnit unit) {
             return sz > limit * unit.factor;
         }
     };
 
-    final int index;
     final String title;
-    SizeRelation(int index, String title) { this.index = index; this.title = title; }
+    SizeRelation(String title) { this.title = title; }
 
     // title for combo box display
     public String toString() {
