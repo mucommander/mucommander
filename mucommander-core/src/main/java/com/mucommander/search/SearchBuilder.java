@@ -57,6 +57,9 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     public static final String SEARCH_TEXT = "text";
     public static final String TEXT_CASEINSENSITIVE = "text-caseinsensitive";
     public static final String TEXT_MATCH_REGEX= "text-regex";
+    public static final String SEARCH_SIZE = "sz";
+    public static final String SEARCH_SIZE_REL = "sz-rel";
+    public static final String SEARCH_SIZE_UNIT = "sz-unit";
     public static final int DEFAULT_THREADS = 2;
 
     private AbstractFile entrypoint;
@@ -78,6 +81,9 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private String searchText;
     private boolean textCaseInsensitive;
     private boolean textMatchRegex;
+    private Long searchSize;
+    private SizeRelation searchSizeRelation;
+    private SizeUnit searchSizeUnit;
 
     private SearchJob searchJob;
 
@@ -212,12 +218,24 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         return this;
     }
 
+    @Override
     public SearchBuilder searchText(Map<String, String> properties) {
         String value = properties.get(SearchBuilder.SEARCH_TEXT);
         if (value != null) {
             searchText = value;
             textCaseInsensitive = Boolean.parseBoolean(properties.get(SearchBuilder.TEXT_CASEINSENSITIVE));
             textMatchRegex = Boolean.parseBoolean(properties.get(SearchBuilder.TEXT_MATCH_REGEX));
+        }
+        return this;
+    }
+
+    @Override
+    public SearchBuilder searchSize(Map<String, String> properties) {
+        String value = properties.get(SearchBuilder.SEARCH_SIZE);
+        if (value != null) {
+            searchSize = Long.parseLong(value);
+            searchSizeRelation = SizeRelation.valueOf(properties.get(SearchBuilder.SEARCH_SIZE_REL));
+            searchSizeUnit = SizeUnit.valueOf((properties.get(SearchBuilder.SEARCH_SIZE_UNIT)));
         }
         return this;
     }
@@ -262,6 +280,10 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         }
         if (searchText != null)
             predicate = predicate.and(createFileContentPredicate());
+
+        if (searchSize != null)
+            predicate =  predicate.and(createFileSizePredicate());
+
         return predicate;
     }
 
@@ -300,6 +322,10 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
                 return false;
             }
         };
+    }
+
+    private Predicate<AbstractFile> createFileSizePredicate() {
+        return file -> searchSizeRelation.matches(file.getSize(), searchSize, searchSizeUnit);
     }
 
     private Predicate<AbstractFile> createListFilter() {
