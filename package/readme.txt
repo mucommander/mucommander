@@ -33,6 +33,7 @@ What's new since v0.9.7 ?
 
 New features:
 - Support compression and decompression of XZ archives.
+- Enable filtering file search by file size.
 
 Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
