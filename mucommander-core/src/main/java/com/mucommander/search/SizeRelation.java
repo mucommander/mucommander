@@ -47,8 +47,5 @@ public enum SizeRelation {
         return title;
     }
 
-    public final static SizeRelation[] VALUES = values();
-
     abstract public boolean matches(long sz, long limit, SizeUnit searchSizeUnit);
-
 }

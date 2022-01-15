@@ -20,7 +20,11 @@ package com.mucommander.search;
  * @author Gerolf Scherr
  */
 public enum SizeUnit {
-    bytes(1), kB(1024), MB(1024*1024), GB(1024l*1024*1024);
+    bytes(1),
+    kB(1024),
+    MB(1024*1024),
+    GB(1024l*1024*1024),
+    TB(1024l*1024*1024*1024);
     final long factor;
     SizeUnit(long factor) {
         this.factor = factor;

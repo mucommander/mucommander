@@ -17,7 +17,12 @@
 
 package com.mucommander.search;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -29,15 +34,18 @@ import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -56,9 +64,7 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.FindAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.text.EnhancedTextField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mucommander.ui.text.SelectAllOnFocusTextField;
 
 /**
  * Dialog used to set parameters for file searching.
@@ -88,9 +94,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox textCase;
     private JCheckBox textRegex;
 
-    private JComboBox<SizeRelation> cboSizeRel = new JComboBox<SizeRelation>(SizeRelation.VALUES);
+    private JComboBox<SizeRelation> cboSizeRel = new JComboBox<>(SizeRelation.values());
     private JComboBox<String> cboSizeUnit;
-    private JTextField tfSize = new EnhancedTextField(8, true);
+    private JTextField tfSize = new SelectAllOnFocusTextField(8);
 
 
     // Store last values, initialized to the default values
@@ -110,8 +116,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static boolean lastTextCase = true;
     private static boolean lastTextRegex = false;
     private static Long lastSize = null;
-    private static SizeRelation lastSizeRel = SizeRelation.VALUES[0];
-    private static SizeUnit lastSizeUnit = SizeUnit.VALUES[1];
+    private static SizeRelation lastSizeRel = SizeRelation.eq;
+    private static SizeUnit lastSizeUnit = SizeUnit.kB;
 
 
     private JButton searchButton;
@@ -144,7 +150,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         String searchFor = PathUtils.removeLeadingSeparator(searchURL.getPath());
         if (searchFor.isEmpty())
             searchFor = "*";
-        searchFilesField = new EnhancedTextField(searchFor, true);
+        searchFilesField = new SelectAllOnFocusTextField(searchFor);
         searchFilesField.getDocument().addDocumentListener(this);
         JLabel l = compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 5);
         l.setLabelFor(searchFilesField);
@@ -241,7 +247,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Text search (Optional)")));
         compPanel = new XAlignedComponentPanel(5);
 
-        searchTextField = new EnhancedTextField(lastText, true);
+        searchTextField = new SelectAllOnFocusTextField(lastText);
         l = compPanel.addRow(Translator.get("search_dialog.search_text"), searchTextField, 10);
         l.setLabelFor(searchTextField);
         l.setDisplayedMnemonic('t');
@@ -276,7 +282,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
     void addSizePanel(XAlignedComponentPanel compPanel) {
         JPanel sp = new JPanel(new FlowLayout());
-        cboSizeRel.setSelectedIndex(lastSizeRel.ordinal());
+        cboSizeRel.setSelectedItem(lastSizeRel);
         sp.add(cboSizeRel);
 
         tfSize.setText(lastSize == null ? "" : lastSize.toString());
@@ -296,8 +302,10 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
 
     private String[] getSizeUnitDisplayStrings() {
-        return Arrays.stream(SizeUnit.VALUES).map(s->Translator.get("search_dialog.size_unit." + s.name() , s.name()))
-                .collect(Collectors.toList()).toArray(new String[0]);
+        return Arrays.stream(SizeUnit.VALUES)
+                .map(s -> String.format("search_dialog.size_unit.%s", s.name()))
+                .map(Translator::get)
+                .toArray(String[]::new);
     }
 
 
@@ -367,7 +375,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         lastTextCase = textCase.isSelected();
         lastTextRegex = textRegex.isSelected();
 
-        lastSizeRel = SizeRelation.VALUES[cboSizeRel.getSelectedIndex()];
+        lastSizeRel = (SizeRelation) cboSizeRel.getSelectedItem();
         lastSizeUnit = SizeUnit.VALUES[cboSizeUnit.getSelectedIndex()];
 
         String size = tfSize.getText();

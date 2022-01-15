@@ -16,30 +16,38 @@
  */
 package com.mucommander.ui.text;
 
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+
+import javax.swing.JTextField;
 
 
 /**
- * @author Gerolf Scherr
+ * @author Gerolf Scherr, Arik Hadas
  */
-public class EnhancedTextField extends JTextField {
+public class SelectAllOnFocusTextField extends JTextField {
 
-    public EnhancedTextField(int columns, boolean selectAllOnFocus) {
+    public SelectAllOnFocusTextField(int columns) {
         super(columns);
-        init(selectAllOnFocus);
+        addFocusListener(new SelectAllOnFocusListener(this));
     }
 
-    public EnhancedTextField(String s, boolean selectAllOnFocus) {
+    public SelectAllOnFocusTextField(String s) {
         super(s);
-        init(selectAllOnFocus);
+        addFocusListener(new SelectAllOnFocusListener(this));
     }
 
-    private void init(boolean selectAllOnFocus) {
-        if (selectAllOnFocus) addFocusListener(SelectAllOnFocusListener.get());
-    }
+    private static class SelectAllOnFocusListener extends FocusAdapter {
+        private JTextField textField;
 
+        SelectAllOnFocusListener(JTextField textField) {
+            this.textField = textField;
+        }
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            textField.selectAll();
+        }
+    }
 }
 

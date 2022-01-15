@@ -88,7 +88,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
         }
         // Use GridLayout to lay out buttons on 2-dimensional grid
         else {
-            setLayout(new GridLayout(0, nbCols, 10,10));
+            setLayout(new GridLayout(0, nbCols));
         }
 
         for (JButton button : buttons) {
