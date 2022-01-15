@@ -17,6 +17,8 @@
 
 package com.mucommander.search;
 
+import static com.mucommander.search.SearchUtils.buildSeachSizeClause;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -434,9 +436,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
                 properties.add(new Pair<>(SearchBuilder.TEXT_MATCH_REGEX, Boolean.TRUE.toString()));
         }
         if (lastSize != null) {
-            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE_REL, lastSizeRel.name()));
-            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE, lastSize.toString()));
-            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE_UNIT, lastSizeUnit.toString() ));
+            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE, buildSeachSizeClause(lastSizeRel, lastSize, lastSizeUnit)));
         }
         return properties.stream()
                 .map(pair -> pair.first + "=" + pair.second)

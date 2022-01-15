@@ -57,9 +57,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     public static final String SEARCH_TEXT = "text";
     public static final String TEXT_CASEINSENSITIVE = "text-caseinsensitive";
     public static final String TEXT_MATCH_REGEX= "text-regex";
-    public static final String SEARCH_SIZE = "sz";
-    public static final String SEARCH_SIZE_REL = "sz-rel";
-    public static final String SEARCH_SIZE_UNIT = "sz-unit";
+    public static final String SEARCH_SIZE = "size";
     public static final int DEFAULT_THREADS = 2;
 
     private AbstractFile entrypoint;
@@ -233,9 +231,10 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     public SearchBuilder searchSize(Map<String, String> properties) {
         String value = properties.get(SearchBuilder.SEARCH_SIZE);
         if (value != null) {
-            searchSize = Long.parseLong(value);
-            searchSizeRelation = SizeRelation.valueOf(properties.get(SearchBuilder.SEARCH_SIZE_REL));
-            searchSizeUnit = SizeUnit.valueOf((properties.get(SearchBuilder.SEARCH_SIZE_UNIT)));
+            String[] sizeProperties = SearchUtils.splitSearchSizeClause(value);
+            searchSizeRelation = SizeRelation.valueOf(sizeProperties[0]);
+            searchSize = Long.parseLong(sizeProperties[1]);
+            searchSizeUnit = SizeUnit.valueOf(sizeProperties[2]);
         }
         return this;
     }
