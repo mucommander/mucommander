@@ -67,4 +67,12 @@ public class SearchUtils {
         }
         return convert ? s.toString() : wildcard;
     }
+
+    public static String buildSeachSizeClause(SizeRelation relation, long size, SizeUnit unit) {
+        return String.format("%s:%s:%s", relation.name(), size, unit);
+    }
+
+    public static String[] splitSearchSizeClause(String sizeClause) {
+        return sizeClause.split(":");
+    }
 }
