@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Predicate;
@@ -113,7 +112,6 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
                 .collect(Collectors.toList());
         if (!passed.isEmpty()) {
             findings.addAll(passed);
-            listener.searchChanged();
         }
     }
 
@@ -146,6 +144,7 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
             List<AbstractFile> files = Collections.singletonList(file);
             for (int i=0; getState() != FileJobState.INTERRUPTED && i<depth && !files.isEmpty(); i++) {
                 files = search(files, i > 0);
+                listener.searchChanged();
             }
         } finally {
             LOGGER.info("completed searching {}", file);
