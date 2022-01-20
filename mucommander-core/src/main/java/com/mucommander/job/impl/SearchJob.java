@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.search.SearchListener;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.util.Pair;
 import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobState;
 import com.mucommander.ui.main.MainFrame;
@@ -75,14 +76,14 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
         this.lsFilter = browseMatcher;
     }
 
-    private List<AbstractFile> search(List<AbstractFile> files, boolean lsFilter) {
+    private Pair<List<AbstractFile>, Boolean> search(List<AbstractFile> files, boolean lsFilter) {
         try {
             List<AbstractFile> children = customThreadPool.submit(() -> ls(files, lsFilter)).get();
             List<AbstractFile> matches = customThreadPool.submit(() -> match(children)).get();
-            findings.addAll(matches);
-            return children;
+            boolean searchChanged = findings.addAll(matches);
+            return new Pair<>(children, searchChanged);
         } catch (Exception e) {
-            return Collections.emptyList();
+            return new Pair<>(Collections.emptyList(), false);
         }
     }
 
@@ -140,8 +141,10 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
         try {
             List<AbstractFile> files = Collections.singletonList(file);
             for (int i=0; getState() != FileJobState.INTERRUPTED && i<depth && !files.isEmpty(); i++) {
-                files = search(files, i != 0);
-                listener.searchChanged();
+                Pair<List<AbstractFile>, Boolean> result = search(files, i != 0);
+                files = result.first;
+                if (result.second)
+                    listener.searchChanged();
             }
         } finally {
             LOGGER.info("completed searching {}", file);
