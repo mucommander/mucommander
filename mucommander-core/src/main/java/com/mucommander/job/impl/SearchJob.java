@@ -75,44 +75,41 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
         this.lsFilter = browseMatcher;
     }
 
-    private List<AbstractFile> search(List<AbstractFile> files, boolean subfolder) {
+    private List<AbstractFile> search(List<AbstractFile> files, boolean lsFilter) {
         try {
-            return customThreadPool.submit(() -> parallelSearch(files, subfolder)).get();
+            List<AbstractFile> children = customThreadPool.submit(() -> ls(files, lsFilter)).get();
+            List<AbstractFile> matches = customThreadPool.submit(() -> match(children)).get();
+            findings.addAll(matches);
+            return children;
         } catch (Exception e) {
             return Collections.emptyList();
         }
     }
 
-    private List<AbstractFile> parallelSearch(List<AbstractFile> files, boolean subfolder) {
-        return files.parallelStream()
-                .filter(subfolder ? lsFilter : file -> true)
-                .map(this::search)
-                .flatMap(stream -> stream)
-                .collect(Collectors.toList());
+    private List<AbstractFile> ls(List<AbstractFile> files, boolean filter) {
+        Stream<AbstractFile> stream = files.parallelStream();
+        if (filter)
+            stream = stream.filter(lsFilter);
+        return stream.map(this::ls).flatMap(s -> s).collect(Collectors.toList());
     }
 
-    private Stream<AbstractFile> search(AbstractFile file) {
-        AbstractFile[] children;
-        try {
-            children = file.ls();
-        } catch (IOException e) {
-            LOGGER.debug("failed to list: " + file, e);
-            return Stream.empty();
-        }
-        if (getState() != FileJobState.INTERRUPTED)
-            examine(children);
-        return Stream.of(children);
+    private List<AbstractFile> match(List<AbstractFile> files) {
+        return files.parallelStream().filter(this::match).collect(Collectors.toList());
     }
 
-    private void examine(AbstractFile[] files) {
-        if (files.length == 0)
-            return;
-        List<AbstractFile> passed = Stream.of(files)
-                .filter(fileMatcher)
-                .collect(Collectors.toList());
-        if (!passed.isEmpty()) {
-            findings.addAll(passed);
+    private Stream<AbstractFile> ls(AbstractFile file) {
+        if (getState() != FileJobState.INTERRUPTED) {
+            try {
+                return Stream.of(file.ls());
+            } catch (IOException e) {
+                LOGGER.debug("failed to list: " + file, e);
+            }
         }
+        return Stream.empty();
+    }
+
+    private boolean match(AbstractFile file) {
+        return getState() != FileJobState.INTERRUPTED && fileMatcher.test(file);
     }
 
     public List<AbstractFile> getFindings() {
@@ -143,7 +140,7 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
         try {
             List<AbstractFile> files = Collections.singletonList(file);
             for (int i=0; getState() != FileJobState.INTERRUPTED && i<depth && !files.isEmpty(); i++) {
-                files = search(files, i > 0);
+                files = search(files, i != 0);
                 listener.searchChanged();
             }
         } finally {
