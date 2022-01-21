@@ -30,6 +30,7 @@ import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
@@ -322,8 +323,9 @@ public class LocationChanger {
 	 * @see #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)
 	 */
 	public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
-		folderPanel.getFoldersTreePanel().refreshFolder(locationManager.getCurrentFolder());
-		return tryChangeCurrentFolder(locationManager.getCurrentFolder(), selectThisFileAfter, true, true);
+	    MonitoredFile currentFolder = locationManager.getCurrentFolder();
+	    folderPanel.getFoldersTreePanel().refreshFolder(currentFolder);
+	    return tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true, true);
 	}
 	
 	 /**
@@ -359,14 +361,13 @@ public class LocationChanger {
     }
 
     /**
-     * Returns the thread that is currently changing the current folder, <code>null</code> is the folder is not being
-     * changed.
+     * Try to kill the thread that is currently changing the current folder, if exists
      *
-     * @return the thread that is currently changing the current folder, <code>null</code> is the folder is not being
-     * changed
+     * @return true if an attempt was made to stop the thread
      */
-    public ChangeFolderThread getChangeFolderThread() {
-        return changeFolderThread;
+    public boolean tryKillChangeFolderThread() {
+        ChangeFolderThread changeFolderThread = this.changeFolderThread;
+        return changeFolderThread != null ? changeFolderThread.tryKill() : false;
     }
 
 
