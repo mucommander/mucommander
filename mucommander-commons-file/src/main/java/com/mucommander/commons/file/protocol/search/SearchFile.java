@@ -96,7 +96,10 @@ public class SearchFile extends ProtocolFile implements SearchListener {
 
     @Override
     public synchronized void searchChanged() {
-        lastModified = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
+        if (lastModified == now)
+            now++;
+        lastModified = now;
     }
 
     @Override
