@@ -641,15 +641,16 @@ public abstract class FileJob implements Runnable {
      * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
      */
     protected void refreshTables() {
-    	FolderPanel activePanel = getMainFrame().getActivePanel();
-    	FolderPanel inactivePanel = getMainFrame().getInactivePanel();
+        FolderPanel inactivePanel = getMainFrame().getInactivePanel();
+        AbstractFile inactiveFolder = inactivePanel.getCurrentFolder();
+        if (hasFolderChanged(inactiveFolder))
+            inactivePanel.tryRefreshCurrentFolder();
 
-        if(hasFolderChanged(inactivePanel.getCurrentFolder()))
-        	inactivePanel.tryRefreshCurrentFolder();
-
-        if(hasFolderChanged(activePanel.getCurrentFolder())) {
+        FolderPanel activePanel = getMainFrame().getActivePanel();
+        AbstractFile activeFolder = activePanel.getCurrentFolder();
+        if (hasFolderChanged(activeFolder)) {
             // Select file specified by selectFileWhenFinished (if any) only if the file exists in the active table's folder
-            if(fileToSelect!=null && activePanel.getCurrentFolder().equalsCanonical(fileToSelect.getParent()) && fileToSelect.exists())
+            if (fileToSelect!=null && activeFolder.equalsCanonical(fileToSelect.getParent()) && fileToSelect.exists())
             	activePanel.tryRefreshCurrentFolder(fileToSelect);
             else
             	activePanel.tryRefreshCurrentFolder();

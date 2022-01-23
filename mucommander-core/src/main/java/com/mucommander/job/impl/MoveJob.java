@@ -263,7 +263,8 @@ public class MoveJob extends AbstractCopyJob {
     // This job modifies baseDestFolder and its subfolders
     @Override
     protected boolean hasFolderChanged(AbstractFile folder) {
-        return (getBaseSourceFolder()!=null && getBaseSourceFolder().isParentOf(folder)) || baseDestFolder.isParentOf(folder);
+        AbstractFile baseSourceFolder = getBaseSourceFolder();
+        return (baseSourceFolder!=null && baseSourceFolder.isParentOf(folder)) || baseDestFolder.isParentOf(folder);
     }
 
 

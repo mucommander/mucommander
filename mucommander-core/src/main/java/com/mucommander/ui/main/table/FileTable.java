@@ -1590,9 +1590,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             AbstractFile fileToRename = tableModel.getFileAtRow(editingRow);
 
             if(!newName.equals(fileToRename.getName())) {
-                AbstractFile current;
-
-                current = folderPanel.getCurrentFolder();
+                AbstractFile current = folderPanel.getCurrentFolder();
                 // Starts moving files
                 ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
                 FileSet files = new FileSet(current);
