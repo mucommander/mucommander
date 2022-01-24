@@ -301,11 +301,9 @@ public class LocationChanger {
 	/**
 	 * Shorthand for {@link #tryRefreshCurrentFolder(AbstractFile)} called with no specific file (<code>null</code>)
 	 * to select after the folder has been changed.
-	 *
-	 * @return the thread that performs the actual folder change, null if another folder change is already underway
 	 */
-	public ChangeFolderThread tryRefreshCurrentFolder() {
-		return tryRefreshCurrentFolder(null);
+	public void tryRefreshCurrentFolder() {
+		tryRefreshCurrentFolder(null);
 	}
 
 	/**
@@ -319,13 +317,12 @@ public class LocationChanger {
 	 *
 	 * @param selectThisFileAfter file to be selected after the folder has been refreshed (if it exists in the folder),
 	 * can be null in which case FileTable rules will be used to select current file
-	 * @return the thread that performs the actual folder change, null if another folder change is already underway
 	 * @see #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)
 	 */
-	public ChangeFolderThread tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
+	public void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
 	    MonitoredFile currentFolder = locationManager.getCurrentFolder();
 	    folderPanel.getFoldersTreePanel().refreshFolder(currentFolder);
-	    return tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true, true);
+	    tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true, true);
 	}
 	
 	 /**
