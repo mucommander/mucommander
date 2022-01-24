@@ -28,6 +28,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
@@ -87,6 +88,11 @@ public class MoveJob extends AbstractCopyJob {
 		
         // Destination folder
         AbstractFile destFolder = recurseParams==null?baseDestFolder:(AbstractFile)recurseParams;
+        // If we rename a file search results, destination folder should rather be the parent of
+        // the renamed file (the search results may reside in different sub-folders)
+        if (renameMode && SearchFile.SCHEMA.equals(destFolder.getURL().getScheme()))
+            destFolder = file.getParent();
+
 		
         // Is current file at the base folder level ?
         boolean isFileInBaseFolder = files.indexOf(file)!=-1;
