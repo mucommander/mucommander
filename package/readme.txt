@@ -53,6 +53,7 @@ Improvements:
 - Limit the amount of threads used for file searching to two. This can be overridden per-search.
 - 'Find next' opens the 'Find' dialog on text editor/viewer when invoked for the first time.
 - The search string that is used by 'Find next/previous' is preserved across text editors/viewers.
+- Operations on the presented location (e.g., make directory) are disabled when presenting file search.
 
 Localization:
 - Russian translation updated.
