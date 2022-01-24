@@ -19,6 +19,8 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
@@ -45,7 +47,7 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
         mainFrame.getLeftPanel().getLocationManager().addLocationListener(this);
         mainFrame.getRightPanel().getLocationManager().addLocationListener(this);
 
-        toggleEnabledState();
+        toggleEnabledStateAdapter();
     }
 
 
@@ -57,17 +59,24 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
      * Enables or disables this action based on the location of the currently active {@link FolderPanel}.
      * This method is called once by the constructor to set the initial state. Then it is called every time the location
      * of the currently active <code>FolderPanel</code> has changed, and when the currently active <code>FolderPanel</code>
-     * has changed.
+     * has changed, except for when the currently active {@link FolderPanel} displays file search results.
      */
     protected abstract void toggleEnabledState();
 
+    private void toggleEnabledStateAdapter() {
+        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
+        if (currentFolder.getURL().getScheme().equals(SearchFile.SCHEMA))
+            setEnabled(false);
+        else
+            toggleEnabledState();
+    }
 
     /////////////////////////////////
     // ActivePanelListener methods //
     /////////////////////////////////
 
     public void activePanelChanged(FolderPanel folderPanel) {
-        toggleEnabledState();
+        toggleEnabledStateAdapter();
     }
     
     /**********************************
@@ -75,6 +84,6 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
 	 **********************************/
 
     public void locationChanged(LocationEvent e) {
-        toggleEnabledState();
+        toggleEnabledStateAdapter();
     }
 }
