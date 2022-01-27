@@ -179,8 +179,7 @@ public class LocationChanger {
 			case SearchFile.SCHEMA:
 			    if (folder instanceof SearchFile)
 			        ((SearchFile) folder).stop();
-			    else
-			        folder = FileFactory.getFile(folderURL);
+			    folder = FileFactory.getFile(folderURL);
 			    thread = new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
 			    break;
 			default:

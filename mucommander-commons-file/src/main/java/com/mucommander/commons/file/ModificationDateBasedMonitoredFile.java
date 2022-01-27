@@ -37,7 +37,8 @@ public class ModificationDateBasedMonitoredFile extends MonitoredFile {
     public boolean isChanged(boolean periodicCheck) {
         // Note that date will be 0 if the folder is no longer available, and thus yield a refresh: this is exactly
         // what we want (the folder will be changed to a 'workable' folder).
-        boolean modificationDateChanged = originalModificationDate != getDate();
+        long currentModificationDate = getDate();
+        boolean modificationDateChanged = originalModificationDate != currentModificationDate;
         LOGGER.debug("isChanged = {}", modificationDateChanged);
         return modificationDateChanged;
     }
