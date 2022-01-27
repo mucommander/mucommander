@@ -26,7 +26,6 @@ import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
-import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
@@ -55,16 +54,6 @@ public class EditAction extends InternalEditAction {
         return CommandManager.getCommandForAlias(CommandManager.EDITOR_ALIAS);
     }
 
-
-
-    // - Factory -------------------------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
-    public static class Factory implements ActionFactory {
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new EditAction(mainFrame, properties);
-		}
-    }
-    
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "Edit";
     	

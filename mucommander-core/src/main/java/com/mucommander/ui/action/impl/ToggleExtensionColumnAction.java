@@ -20,8 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 
@@ -42,13 +40,6 @@ public class ToggleExtensionColumnAction extends ToggleColumnAction {
 		return new Descriptor();
 	}
 
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ToggleExtensionColumnAction(mainFrame, properties);
-		}
-    }
-    
     public static class Descriptor extends ToggleColumnAction.Descriptor {
         public Descriptor() { super(Column.EXTENSION); }
     }

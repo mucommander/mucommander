@@ -17,20 +17,19 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.util.Map;
+
+import javax.swing.KeyStroke;
+
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.main.table.FileTable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.Map;
 
 
 /**
@@ -69,13 +68,6 @@ public class ShowFilePopupMenuAction extends SelectedFilesAction {
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
-    }
-
-    public static class Factory implements ActionFactory {
-
-        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-            return new ShowFilePopupMenuAction(mainFrame, properties);
-        }
     }
 
     public static final class Descriptor extends AbstractActionDescriptor {

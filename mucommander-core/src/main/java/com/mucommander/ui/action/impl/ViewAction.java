@@ -50,16 +50,6 @@ public class ViewAction extends InternalViewAction {
         return CommandManager.getCommandForAlias(CommandManager.VIEWER_ALIAS);
     }
 
-
-    // - Factory -------------------------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new ViewAction(mainFrame, properties);
-		}
-    }
-    
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "View";
     	

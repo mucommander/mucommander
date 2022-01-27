@@ -17,19 +17,14 @@
 package com.mucommander.ui.action.impl;
 
 import java.awt.event.KeyEvent;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.search.SearchBuilder;
 import com.mucommander.search.SearchDialog;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
@@ -54,13 +49,6 @@ public class FindAction extends MuAction {
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
-    }
-
-    public static class Factory implements ActionFactory {
-
-        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-            return new FindAction(mainFrame, properties);
-        }
     }
 
     public static class Descriptor extends AbstractActionDescriptor {

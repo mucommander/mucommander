@@ -28,9 +28,7 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.InvokesDialog;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.file.CalculateChecksumDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -59,13 +57,6 @@ public class CalculateChecksumAction extends SelectedFilesAction  {
 		return new Descriptor();
 	}
 
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new CalculateChecksumAction(mainFrame, properties);
-		}
-    }
-    
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "CalculateChecksum";
     	

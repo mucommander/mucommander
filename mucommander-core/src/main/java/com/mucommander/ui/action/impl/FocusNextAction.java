@@ -18,7 +18,6 @@
 package com.mucommander.ui.action.impl;
 
 import java.awt.Component;
-import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.JTextField;
@@ -29,7 +28,6 @@ import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -82,13 +80,6 @@ public class FocusNextAction extends MuAction {
 		return new Descriptor();
 	}
 
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new FocusNextAction(mainFrame, properties);
-		}
-    }
-    
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "FocusNext";
     	

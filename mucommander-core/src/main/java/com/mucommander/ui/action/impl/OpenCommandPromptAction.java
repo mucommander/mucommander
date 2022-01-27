@@ -2,7 +2,9 @@ package com.mucommander.ui.action.impl;
 
 import java.awt.event.KeyEvent;
 import java.util.Map;
+
 import javax.swing.KeyStroke;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.FileProtocols;
@@ -11,9 +13,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -47,14 +47,6 @@ public class OpenCommandPromptAction extends ParentFolderAction {
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
-    }
-
-    public static class Factory implements ActionFactory {
-
-        @Override
-        public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-            return new OpenCommandPromptAction(mainFrame, properties);
-        }
     }
 
     public static class Descriptor extends AbstractActionDescriptor {

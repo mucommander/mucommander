@@ -26,7 +26,6 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
@@ -51,13 +50,6 @@ public class NewTabAction extends MuAction {
 	public ActionDescriptor getDescriptor() {
 		return new Descriptor();
 	}
-
-	public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new NewTabAction(mainFrame, properties);
-		}
-    }
 
 	public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "NewTab";

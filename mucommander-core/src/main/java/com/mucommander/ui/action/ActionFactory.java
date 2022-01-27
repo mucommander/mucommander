@@ -26,6 +26,7 @@ import java.util.Map;
  *
  * @author Arik Hadas
  */
+@FunctionalInterface
 public interface ActionFactory {
 	
 	/**

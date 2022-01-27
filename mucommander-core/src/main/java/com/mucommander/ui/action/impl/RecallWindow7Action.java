@@ -20,8 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -35,13 +33,6 @@ public class RecallWindow7Action extends RecallWindowAction {
         super(mainFrame, properties, 7);
     }
     
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new RecallWindow7Action(mainFrame, properties);
-		}
-    }
-
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();

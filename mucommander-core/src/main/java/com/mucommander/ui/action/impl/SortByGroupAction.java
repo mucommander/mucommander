@@ -23,8 +23,6 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.ActionFactory;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 
@@ -45,13 +43,6 @@ public class SortByGroupAction extends SortByAction {
 		return new Descriptor();
 	}
 
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new SortByGroupAction(mainFrame, properties);
-		}
-    }
-    
     public static class Descriptor extends SortByAction.Descriptor {
 
         public Descriptor() {

@@ -17,14 +17,16 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * Opens the muCommander online documentation in the system's default browser. The {@link #TOPIC_PROPERTY_KEY}
@@ -80,13 +82,6 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
         if(propertyChangeEvent.getPropertyName().equals(TOPIC_PROPERTY_KEY)) {
             updateURL();
         }
-    }
-    
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new GoToDocumentationAction(mainFrame, properties);
-		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {

@@ -17,11 +17,13 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.mucommander.ui.action.*;
-import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 import java.util.Map;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action opens the mucommander.com donation page URL in the system's default browser.
@@ -34,13 +36,6 @@ public class DonateAction extends OpenURLInBrowserAction {
         super(mainFrame, properties);
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.DONATION_URL);
-    }
-    
-    public static class Factory implements ActionFactory {
-
-		public MuAction createAction(MainFrame mainFrame, Map<String,Object> properties) {
-			return new DonateAction(mainFrame, properties);
-		}
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
