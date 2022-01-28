@@ -37,9 +37,6 @@ class FileTableTabPopupMenu extends MuActionsPopupMenu {
 
 	public FileTableTabPopupMenu(MainFrame mainFrame) {
 		super(mainFrame);
-
-		FileTableTab tab = mainFrame.getActivePanel().getTabs().getCurrentTab();
-		
 		addAction(DuplicateTabAction.Descriptor.ACTION_ID);
 		addAction(CloseTabAction.Descriptor.ACTION_ID);
 		addAction(CloseOtherTabsAction.Descriptor.ACTION_ID);

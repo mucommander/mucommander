@@ -17,6 +17,7 @@
 
 package com.mucommander.ui.main.tabs;
 
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.ui.main.FolderPanel;
@@ -36,10 +37,14 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 	}
 
 	public FileTableTab createTab(FileURL location) {
-		if (location == null)
-			throw new RuntimeException("Invalid location");
+	    return createTab(location, null);
+	}
 
-		return new DefaultFileTableTab(location, folderPanel);
+	public FileTableTab createTab(FileURL location, AbstractFile selectedFile) {
+	    if (location == null)
+	        throw new RuntimeException("Invalid location");
+
+	    return new DefaultFileTableTab(location, folderPanel, selectedFile);
 	}
 
 	class DefaultFileTableTab extends FileTableTab {
@@ -56,13 +61,17 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 		/** History of accessed location within the tab */
 		private LocalLocationHistory locationHistory;
 
+		/** The file to select after listing {@link #location} */
+		private AbstractFile selectedFile;
+
 		/**
 		 * Private constructor
 		 * 
 		 * @param location - the location that would be presented in the tab
 		 */
-		private DefaultFileTableTab(FileURL location, FolderPanel folderPanel) {
+		private DefaultFileTableTab(FileURL location, FolderPanel folderPanel, AbstractFile selectedFile) {
 			this.location = location;
+			this.selectedFile = selectedFile;
 			this.locked = false;
 			locationHistory = new LocalLocationHistory(folderPanel);
 		}
@@ -104,7 +113,17 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 		public LocalLocationHistory getLocationHistory() {
 			return locationHistory;
 		}
-		
+
+		@Override
+		public AbstractFile getSelectedFile() {
+		    return selectedFile;
+		}
+
+		@Override
+		public void setSelectedFile(AbstractFile selectedFile) {
+		    this.selectedFile = selectedFile;
+		}
+
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof FileTableTab) {

@@ -34,6 +34,7 @@ What's new since v0.9.7 ?
 New features:
 - Support compression and decompression of XZ archives.
 - Enable filtering file search by file size.
+- Added 'Show in enclosing folder' action for a file search result that opens a new tab with its enclosing folder and selects the result.
 
 Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
