@@ -48,12 +48,8 @@ public class ActionKeymap {
      * @param mainFrame - MainFrame instance to which all action shortcuts would be registered.
      */
     public static void registerActions(MainFrame mainFrame) {
-        Iterator<String> actionIds = ActionManager.getActionIds();
-        String actionId;
-        ActionDescriptor actionDescriptor;
-        while(actionIds.hasNext()) {
-            actionId = actionIds.next();
-            actionDescriptor = ActionProperties.getActionDescriptor(actionId);
+        for (String actionId : ActionManager.getActionIds()) {
+            ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 
             // Instantiate the action only if it is not parameterized: parameterized actions should only be instantiated
             // when they are needed and with the required parameters.

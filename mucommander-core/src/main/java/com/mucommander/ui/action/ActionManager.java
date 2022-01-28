@@ -17,6 +17,7 @@
 
 package com.mucommander.ui.action;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -259,10 +260,10 @@ public class ActionManager {
     /**
      * Return all ids of the registered actions.
      * 
-     * @return Enumeration of all registered actions' ids.
+     * @return List of all registered actions' ids.
      */
-    public static Iterator<String> getActionIds() {
-    	return actionFactories.keySet().iterator();
+    public static List<String> getActionIds() {
+        return new ArrayList<>(actionFactories.keySet());
     }
     
     /**

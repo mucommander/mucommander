@@ -121,9 +121,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
             categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<String>());
 
         // Go over all action ids
-        Iterator<String> actionIds = ActionManager.getActionIds();
-        while (actionIds.hasNext()) {
-            String actionId = actionIds.next();
+        for (String actionId : ActionManager.getActionIds()) {
             ActionCategory category = ActionProperties.getActionCategory(actionId);
             // If the action has category and there is a primary shortcut assigned to it, add its id to the list of the category
             if (category != null && ActionKeymap.doesActionHaveShortcut(actionId))

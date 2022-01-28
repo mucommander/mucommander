@@ -366,13 +366,11 @@ public class CommandBarDialog extends CustomizeDialog {
 	}
 	
 	private void initActionsPoolList(Set<String> usedActions) {
-		Iterator<String> actionIds = ActionManager.getActionIds();
-		while(actionIds.hasNext()) {
-            String actionId = actionIds.next();
-            // Filter out actions that are currently used in the command bar, and those that are parameterized
-			if (!usedActions.contains(actionId) && !ActionProperties.getActionDescriptor(actionId).isParameterized())
-				insertInOrder(commandBarAvailableButtons, CommandBarButtonForDisplay.create(actionId));			
-		}
+	    for (String actionId : ActionManager.getActionIds()) {
+	        // Filter out actions that are currently used in the command bar, and those that are parameterized
+	        if (!usedActions.contains(actionId) && !ActionProperties.getActionDescriptor(actionId).isParameterized())
+	            insertInOrder(commandBarAvailableButtons, CommandBarButtonForDisplay.create(actionId));
+	    }
 
 		commandBarAvailableButtonsList = new DynamicHorizontalWrapList<JButton>(commandBarAvailableButtons, CommandBarButtonForDisplay.PREFERRED_SIZE.width, 6);
 		
