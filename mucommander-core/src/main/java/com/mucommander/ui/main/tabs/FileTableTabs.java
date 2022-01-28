@@ -38,7 +38,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	private FolderPanel folderPanel;
 
 	/** Factory of instances of FileTableTab */
-	private TabFactory<FileTableTab, FileURL> defaultTabsFactory;
+	private DefaultFileTableTabFactory defaultTabsFactory;
 
 	/** Factory of instances of FileTableTab */
 	private TabFactory<FileTableTab, FileTableTab> clonedTabsFactory;
@@ -130,7 +130,11 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	/********************
 	 * MuActions support
 	 ********************/
-	
+
+	public void add(AbstractFile file, AbstractFile selectedFile) {
+	    addTab(defaultTabsFactory.createTab(file.getURL(), selectedFile));
+	}
+
 	public void add(AbstractFile file) {
 		addTab(defaultTabsFactory.createTab(file.getURL()));
 	}

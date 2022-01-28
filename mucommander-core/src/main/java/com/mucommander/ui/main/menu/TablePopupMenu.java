@@ -19,6 +19,7 @@
 package com.mucommander.ui.main.menu;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.ui.main.MainFrame;
@@ -74,6 +75,8 @@ public class TablePopupMenu extends MuActionsPopupMenu {
                 add(new OpenAsMenu(mainFrame));
 
             addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
+            if (SearchFile.SCHEMA.equals(currentFolder.getURL().getScheme()))
+                addAction(com.mucommander.ui.action.impl.ShowInEnclosingFolderAction.Descriptor.ACTION_ID);
             add(new JSeparator());
         }
 

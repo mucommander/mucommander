@@ -18,6 +18,7 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.bookmark.BookmarkManager;
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
@@ -73,6 +74,20 @@ public abstract class FileTableTab implements Tab {
 	 * @return the title that was assigned for the tab, null is returned if no title was assigned
 	 */
 	public abstract String getTitle();
+
+	/**
+	 * Returns the file to select after listing the location presented in the tab
+	 *
+	 * @return the file to select after listing the location presented in the tab
+	 */
+	public AbstractFile getSelectedFile() { return null; }
+
+	/**
+	 * Set the file to select after listing the location presented in the tab
+	 *
+	 * @param selectedFile the file to select after listing the location presented in the tab
+	 */
+	public void setSelectedFile(AbstractFile selectedFile) {}
 
 	/**
 	 * Returns a string representation for the tab:

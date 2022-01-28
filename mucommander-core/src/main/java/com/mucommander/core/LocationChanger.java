@@ -80,8 +80,10 @@ public class LocationChanger {
 		
 		Runnable locationSetter = () -> {
 		    AbstractFile folder = getWorkableLocation(tab.getLocation());
+		    AbstractFile selectedFile = tab.getSelectedFile();
 		    try {
-		        locationManager.setCurrentFolder(folder, null, true);
+		        locationManager.setCurrentFolder(folder, selectedFile, true);
+		        tab.setSelectedFile(null);
 		    } finally {
 		        mainFrame.setNoEventsMode(false);
 		        // Restore default cursor
