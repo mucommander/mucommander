@@ -66,9 +66,7 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         super(mainFrame);
 
         // 'Open ...' actions displayed if a single file was clicked
-        boolean openSectionShown = false;
         if (clickedFile!=null || parentFolderClicked) {
-            openSectionShown = true;
             addAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID);
             add(new OpenWithMenu(mainFrame));
@@ -76,16 +74,8 @@ public class TablePopupMenu extends MuActionsPopupMenu {
                 add(new OpenAsMenu(mainFrame));
 
             addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
-        }
-
-        // 'Reveal in desktop' displayed only if clicked file is a local file and the OS is capable of doing this
-        if (DesktopManager.canOpenInFileManager(currentFolder)) {
-            openSectionShown = true;
-            addAction(com.mucommander.ui.action.impl.RevealInDesktopAction.Descriptor.ACTION_ID);
-        }
-
-        if (openSectionShown)
             add(new JSeparator());
+        }
 
         // 'Copy name(s)' and 'Copy path(s)' are displayed only if a single file was clicked or files are marked
         if (clickedFile!=null || markedFiles.size()>0) {
@@ -105,6 +95,10 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         add(new JSeparator());
 
         addAction(com.mucommander.ui.action.impl.RefreshAction.Descriptor.ACTION_ID);
+        // 'Reveal in desktop' displayed only if clicked file is a local file and the OS is capable of doing this
+        if (DesktopManager.canOpenInFileManager(currentFolder)) {
+            addAction(com.mucommander.ui.action.impl.RevealInDesktopAction.Descriptor.ACTION_ID);
+        }
 
         // 'Rename' displayed if a single file was clicked
         if (clickedFile!=null) {
