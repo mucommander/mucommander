@@ -45,7 +45,8 @@ public class CommandTest {
     /** Used while testing keyword substitution. */
     private AbstractFile[] files;
 
-
+    /** The instance of {@link Command} to test with */
+    private Command command;
 
     // - Initialisation --------------------------------------------------------
     // -------------------------------------------------------------------------
@@ -54,6 +55,7 @@ public class CommandTest {
      */
     @BeforeClass
     public void setUp() {
+        command = new Command(null, null);
         try {
             files = new AbstractFile[6];
 
@@ -80,12 +82,12 @@ public class CommandTest {
         String[] tokens;
 
         // Makes sure single file substitution works.
-        tokens = Command.getTokens("$f", files[0]);
+        tokens = command.getTokens("$f", files[0]);
         assert 1 == tokens.length;
         assert files[0].getAbsolutePath().equals(tokens[0]);
 
         // Makes sure multiple file substitution works.
-        tokens = Command.getTokens("$f", files);
+        tokens = command.getTokens("$f", files);
         assert files.length == tokens.length;
         for(int i = 0; i < 3; i++)
             assert files[i].getAbsolutePath().equals(tokens[i]);
@@ -112,12 +114,12 @@ public class CommandTest {
         String[] tokens;
 
         // Makes sure single file substitution works.
-        tokens = Command.getTokens("$p", files[0]);
+        tokens = command.getTokens("$p", files[0]);
         assert 1 == tokens.length;
         assert getParent(files[0]).equals(tokens[0]);
 
         // Makes sure multiple file substitution works.
-        tokens = Command.getTokens("$p", files);
+        tokens = command.getTokens("$p", files);
         assert files.length == tokens.length;
         for(int i = 0; i < 3; i++)
             assert getParent(files[i]).equals(tokens[i]);
@@ -143,17 +145,17 @@ public class CommandTest {
         String[] tokens;
 
         // Makes sure single file substitution works (on directory).
-        tokens = Command.getTokens("$e", files[0]);
+        tokens = command.getTokens("$e", files[0]);
         assert 1 == tokens.length;
         assert getExtension(files[0]).equals(tokens[0]);
 
         // Makes sure single file substitution works (on file).
-        tokens = Command.getTokens("$e", files[1]);
+        tokens = command.getTokens("$e", files[1]);
         assert 1 == tokens.length;
         assert getExtension(files[1]).equals(tokens[0]);
 
         // Makes sure multiple file substitution works.
-        tokens = Command.getTokens("$e", files);
+        tokens = command.getTokens("$e", files);
         assert files.length == tokens.length;
         for(int i = 0; i < 3; i++)
             assert getExtension(files[i]).equals(tokens[i]);
@@ -167,12 +169,12 @@ public class CommandTest {
         String[] tokens;
 
         // Makes sure single file substitution works.
-        tokens = Command.getTokens("$b", files[0]);
+        tokens = command.getTokens("$b", files[0]);
         assert 1 == tokens.length;
         assert files[0].getNameWithoutExtension().equals(tokens[0]);
 
         // Makes sure multiple file substitution works.
-        tokens = Command.getTokens("$b", files);
+        tokens = command.getTokens("$b", files);
         assert files.length == tokens.length;
         for(int i = 0; i < 3; i++)
             assert files[i].getNameWithoutExtension().equals(tokens[i]);
@@ -186,12 +188,12 @@ public class CommandTest {
         String[] tokens;
 
         // Makes sure single file substitution works.
-        tokens = Command.getTokens("$n", files[0]);
+        tokens = command.getTokens("$n", files[0]);
         assert 1 == tokens.length;
         assert files[0].getName().equals(tokens[0]);
 
         // Makes sure multiple file substitution works.
-        tokens = Command.getTokens("$n", files);
+        tokens = command.getTokens("$n", files);
         assert files.length == tokens.length;
         for(int i = 0; i < 3; i++)
             assert files[i].getName().equals(tokens[i]);
@@ -205,12 +207,12 @@ public class CommandTest {
         String[] tokens;
 
         // Makes sure single file substitution works.
-        tokens = Command.getTokens("$j", files[0]);
+        tokens = command.getTokens("$j", files[0]);
         assert 1 == tokens.length;
         assert new File(System.getProperty("user.dir")).getAbsolutePath().equals(tokens[0]);
 
         // Makes sure multiple file substitution works.
-        tokens = Command.getTokens("$j", files);
+        tokens = command.getTokens("$j", files);
         assert 1 == tokens.length;
         assert new File(System.getProperty("user.dir")).getAbsolutePath().equals(tokens[0]);
     }
@@ -227,7 +229,7 @@ public class CommandTest {
         String[] tokens;
 
         // Makes sure unfinished keywords at the end of a command are kept.
-        tokens = Command.getTokens("ls -la $", files);
+        tokens = command.getTokens("ls -la $", files);
         assert 3 == tokens.length;
         assert "ls".equals(tokens[0]);
         assert "-la".equals(tokens[1]);
@@ -256,14 +258,14 @@ public class CommandTest {
         StringBuilder buffer;
 
         // Makes sure keywords are tokenised when not escaped.
-        tokens = Command.getTokens("ls $f", files);
+        tokens = command.getTokens("ls $f", files);
         assert 1 + files.length == tokens.length;
         assert "ls".equals(tokens[0]);
         for(int i = 0; i < files.length; i++)
             assert tokens[i + 1].equals(files[i].getAbsolutePath());
 
         // Makes sure keywords are not tokenised when escaped.
-        tokens = Command.getTokens("ls \"$f\"", files);
+        tokens = command.getTokens("ls \"$f\"", files);
         buffer = new StringBuilder("\"");
         buffer.append(files[0].getAbsolutePath());
         for(int i = 1; i < files.length; i++) {
@@ -277,11 +279,11 @@ public class CommandTest {
         
         // Makes sure that keyword substitution happens even if the keyword
         // is not a single token.
-        tokens = Command.getTokens("ls$fla", files[0]);
+        tokens = command.getTokens("ls$fla", files[0]);
         assert 1 == tokens.length;
         assert ("ls" + files[0].getAbsolutePath() + "la").equals(tokens[0]);
 
-        tokens = Command.getTokens("ls$fla", files);
+        tokens = command.getTokens("ls$fla", files);
         assert files.length == tokens.length;
         assert ("ls" + files[0].getAbsolutePath()).equals(tokens[0]);
         for(int i = 1; i < files.length - 1; i++)
