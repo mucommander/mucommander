@@ -56,6 +56,7 @@ Improvements:
 - The search string that is used by 'Find next/previous' is preserved across text editors/viewers.
 - Operations on the presented location (e.g., make directory) are disabled when presenting file search.
 - Enable renaming a file search result.
+- File search is case insensitive by default.
 
 Localization:
 - Russian translation updated.
