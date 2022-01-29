@@ -110,7 +110,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static boolean lastSearchForArchives = true;
     private static boolean lastSearchForHidden = true;
     private static boolean lastSearchForSymlinks = true;
-    private static boolean lastMatchCase = true;
+    private static boolean lastMatchCase = false;
     private static boolean lastMatchRegex = false;
     private static int lastDepth = 0;
     private static int lastThreads = SearchBuilder.DEFAULT_THREADS;
@@ -420,8 +420,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             properties.add(new Pair<>(SearchBuilder.SEARCH_FOR_HIDDEN, Boolean.FALSE.toString()));
         if (!lastSearchForSymlinks)
             properties.add(new Pair<>(SearchBuilder.SEARCH_FOR_SYMLINKS, Boolean.FALSE.toString()));
-        if (!lastMatchCase)
-            properties.add(new Pair<>(SearchBuilder.MATCH_CASEINSENSITIVE, Boolean.TRUE.toString()));
+        if (lastMatchCase)
+            properties.add(new Pair<>(SearchBuilder.MATCH_CASESENSITIVE, Boolean.TRUE.toString()));
         if (lastMatchRegex)
             properties.add(new Pair<>(SearchBuilder.MATCH_REGEX, Boolean.TRUE.toString()));
         if (lastDepth > 0)

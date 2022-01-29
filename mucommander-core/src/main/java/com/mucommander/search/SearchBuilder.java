@@ -52,7 +52,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     public static final String SEARCH_FOR_SUBFOLDERS = "filter_subfolders";
     public static final String SEARCH_DEPTH = "depth";
     public static final String SEARCH_THREADS = "threads";
-    public static final String MATCH_CASEINSENSITIVE = "caseinsensitive";
+    public static final String MATCH_CASESENSITIVE = "case_sensitive";
     public static final String MATCH_REGEX = "regex";
     public static final String SEARCH_TEXT = "text";
     public static final String TEXT_CASEINSENSITIVE = "text-caseinsensitive";
@@ -63,7 +63,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private AbstractFile entrypoint;
     private String searchStr;
     private SearchListener listener;
-    private boolean matchCaseInsensitive;
+    private boolean matchCaseSensitive;
     private boolean matchRegex;
     private boolean searchInArchives;
     private boolean searchInHidden;
@@ -203,9 +203,9 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     }
 
     public SearchBuilder matchCaseInsensitive(Map<String, String> properties) {
-        String value = properties.get(SearchBuilder.MATCH_CASEINSENSITIVE);
+        String value = properties.get(SearchBuilder.MATCH_CASESENSITIVE);
         if (value != null)
-            matchCaseInsensitive = Boolean.parseBoolean(value);
+            matchCaseSensitive = Boolean.parseBoolean(value);
         return this;
     }
 
@@ -297,14 +297,14 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         }
 
         if (matchRegex) {
-            int flags = matchCaseInsensitive ? Pattern.CASE_INSENSITIVE : 0;
+            int flags = matchCaseSensitive ? 0 : Pattern.CASE_INSENSITIVE;
             Pattern pattern = Pattern.compile(searchStr, flags);
             return file -> pattern.matcher(file.getName()).matches();
         }
 
-        return matchCaseInsensitive ?
-                file -> file.getName().equalsIgnoreCase(searchStr)
-                : file -> file.getName().equals(searchStr);
+        return matchCaseSensitive ?
+                file -> file.getName().equals(searchStr)
+                : file -> file.getName().equalsIgnoreCase(searchStr);
     }
 
     private Predicate<AbstractFile> createFileContentPredicate() {
