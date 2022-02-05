@@ -33,7 +33,7 @@ What's new since v0.9.7 ?
 
 New features:
 - Support compression and decompression of XZ archives.
-- Enable filtering file search by file size.
+- Added file size conditions to file search.
 - Added 'Show in enclosing folder' action for a file search result that opens a new tab with its enclosing folder and selects the result.
 
 Improvements:
