@@ -37,6 +37,7 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.commons.util.Pair;
 
 /**
  * @author Arik Hadas
@@ -51,7 +52,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
 
     /** Time at which the search results were last modified. */
     private long lastModified;
-    private Map<String, String> properties;
+    private List<Pair<String, String>> properties;
     private SearchJob search;
     private String searchStr;
     private AbstractFile searchPlace;
@@ -71,7 +72,7 @@ public class SearchFile extends ProtocolFile implements SearchListener {
         return this;
     }
 
-    public SearchFile setProperties(Map<String, String> properties) {
+    public SearchFile setProperties(List<Pair<String, String>> properties) {
         this.properties = properties;
         return this;
     }

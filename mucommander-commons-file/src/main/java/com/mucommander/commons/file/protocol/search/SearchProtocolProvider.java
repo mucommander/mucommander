@@ -19,6 +19,7 @@ package com.mucommander.commons.file.protocol.search;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
+import com.mucommander.commons.util.Pair;
 
 /**
  * @author Arik Hadas
@@ -49,11 +51,12 @@ public class SearchProtocolProvider implements ProtocolProvider {
                 .setSearchPlace(searchPlace);
     }
 
-    private Map<String, String> parseSearchProperties(String str) {
+    private List<Pair<String, String>> parseSearchProperties(String str) {
         if (str == null)
-            return Collections.emptyMap();
+            return Collections.emptyList();
         return Arrays.stream(str.split("&"))
                 .map(s -> s.split("="))
-                .collect(Collectors.toMap(p -> p[0], p -> p[1]));
+                .map(p -> new Pair<>(p[0], p[1]))
+                .collect(Collectors.toList());
     }
 }
