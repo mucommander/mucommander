@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -99,7 +100,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JComboBox<SizeRelation> firstSizeRel = new JComboBox<>(SizeRelation.values());
     private JComboBox<String> firstSizeUnit;
     private JTextField firstSize = new SelectAllOnFocusTextField(8);
-    private JComboBox<SizeRelation> secondSizeRel = new JComboBox<>(SizeRelation.values());
+    private JLabel secondSizeRel = new JLabel();
     private JComboBox<String> secondSizeUnit;
     private JTextField secondSize = new SelectAllOnFocusTextField(8);
 
@@ -119,10 +120,12 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static String lastText = "";
     private static boolean lastTextCase = true;
     private static boolean lastTextRegex = false;
-    private static Long lastFirstSize = null;
+    private static Long lastFirstSize;
     private static SizeRelation lastFirstSizeRel = SizeRelation.eq;
     private static SizeUnit lastFirstSizeUnit = SizeUnit.kB;
-
+    private static Long lastSecondSize;
+    private static SizeRelation lastSecondSizeRel = SizeRelation.gt;
+    private static SizeUnit lastSecondSizeUnit = SizeUnit.kB;
 
     private JButton searchButton;
     private JButton cancelButton;
@@ -285,23 +288,65 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     }
 
     void addSizePanel(XAlignedComponentPanel compPanel) {
-        JPanel sp = new JPanel(new FlowLayout());
+        JPanel firstSizePanel = new JPanel(new FlowLayout());
         firstSizeRel.setSelectedItem(lastFirstSizeRel);
-        sp.add(firstSizeRel);
+        firstSizePanel.add(firstSizeRel);
 
         firstSize.setText(lastFirstSize == null ? "" : lastFirstSize.toString());
-        sp.add(firstSize);
+        firstSizePanel.add(firstSize);
 
-        firstSizeUnit = new JComboBox(getSizeUnitDisplayStrings());
+        firstSizeUnit = new JComboBox<>(getSizeUnitDisplayStrings());
         firstSizeUnit.setSelectedIndex(lastFirstSizeUnit.ordinal());
-        sp.add(firstSizeUnit);
+        firstSizePanel.add(firstSizeUnit);
 
-        JPanel p = new JPanel(new BorderLayout());
-        p.add(sp, BorderLayout.WEST);
+        JPanel secondSizePanel = new JPanel(new FlowLayout());
+        secondSizePanel.add(secondSizeRel);
 
-        JLabel l = compPanel.addRow(Translator.get("search_dialog.size", "Size"), p, 20);
-        l.setDisplayedMnemonic('s');
-        l.setLabelFor(firstSizeRel);
+        secondSize.setText(lastSecondSize == null ? "" : lastSecondSize.toString());
+        secondSizePanel.add(secondSize);
+
+        secondSizeUnit = new JComboBox<>(getSizeUnitDisplayStrings());
+        secondSizeUnit.setSelectedIndex(lastSecondSizeUnit.ordinal());
+        secondSizePanel.add(secondSizeUnit);
+
+        Runnable updater = () -> {
+            if (firstSizeRel.getSelectedItem() == SizeRelation.eq || firstSize.getText().trim().isEmpty()) {
+                secondSizePanel.setVisible(false);
+                secondSize.setText("");
+            }
+            else {
+                secondSizePanel.setVisible(true);
+                SizeRelation item = firstSizeRel.getSelectedItem() == SizeRelation.lt ? SizeRelation.gt : SizeRelation.lt;
+                secondSizeRel.setText(item.toString());
+            }
+        };
+
+        firstSizeRel.addItemListener(e -> updater.run());
+        firstSize.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updater.run();
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updater.run();
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
+
+        updater.run();
+
+        JPanel combinedSizesPanel = new JPanel();
+        combinedSizesPanel.add(firstSizePanel);
+        combinedSizesPanel.add(secondSizePanel);
+        JPanel sizePanel = new JPanel(new BorderLayout());
+        sizePanel.add(combinedSizesPanel, BorderLayout.WEST);
+
+        JLabel sizeLabel = compPanel.addRow(Translator.get("search_dialog.size", "Size"), sizePanel, 20);
+        sizeLabel.setDisplayedMnemonic('s');
+        sizeLabel.setLabelFor(firstSizeRel);
     }
 
 
@@ -385,6 +430,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         String size = firstSize.getText();
         if (StringUtils.isNullOrEmpty(size)) {
             lastFirstSize = null;
+            lastSecondSize = null;
         } else {
             try {
                 lastFirstSize = Long.parseLong(size);
@@ -392,6 +438,20 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
                 InformationDialog.showErrorDialog(this, Translator.get("search_dialog.size_error"));
                 firstSize.requestFocus();
                 return false;
+            }
+            size = secondSize.getText();
+            if (StringUtils.isNullOrEmpty(size))
+                lastSecondSize = null;
+            else {
+                try {
+                    lastSecondSize = Long.parseLong(size);
+                } catch (NumberFormatException nfe) {
+                    InformationDialog.showErrorDialog(this, Translator.get("search_dialog.size_error"));
+                    secondSize.requestFocus();
+                    return false;
+                }
+                lastSecondSizeRel = lastFirstSizeRel == SizeRelation.gt ? SizeRelation.lt : SizeRelation.gt;
+                lastSecondSizeUnit = SizeUnit.VALUES[secondSizeUnit.getSelectedIndex()];
             }
         }
 
@@ -439,6 +499,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         }
         if (lastFirstSize != null) {
             properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE, buildSeachSizeClause(lastFirstSizeRel, lastFirstSize, lastFirstSizeUnit)));
+            if (lastSecondSize != null)
+                properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE, buildSeachSizeClause(lastSecondSizeRel, lastSecondSize, lastSecondSizeUnit)));
         }
         return properties.stream()
                 .map(pair -> pair.first + "=" + pair.second)
