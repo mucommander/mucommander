@@ -96,10 +96,12 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JCheckBox textCase;
     private JCheckBox textRegex;
 
-    private JComboBox<SizeRelation> cboSizeRel = new JComboBox<>(SizeRelation.values());
-    private JComboBox<String> cboSizeUnit;
-    private JTextField tfSize = new SelectAllOnFocusTextField(8);
-
+    private JComboBox<SizeRelation> firstSizeRel = new JComboBox<>(SizeRelation.values());
+    private JComboBox<String> firstSizeUnit;
+    private JTextField firstSize = new SelectAllOnFocusTextField(8);
+    private JComboBox<SizeRelation> secondSizeRel = new JComboBox<>(SizeRelation.values());
+    private JComboBox<String> secondSizeUnit;
+    private JTextField secondSize = new SelectAllOnFocusTextField(8);
 
     // Store last values, initialized to the default values
     private static boolean lastSearchInSubfolders = true;
@@ -117,9 +119,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static String lastText = "";
     private static boolean lastTextCase = true;
     private static boolean lastTextRegex = false;
-    private static Long lastSize = null;
-    private static SizeRelation lastSizeRel = SizeRelation.eq;
-    private static SizeUnit lastSizeUnit = SizeUnit.kB;
+    private static Long lastFirstSize = null;
+    private static SizeRelation lastFirstSizeRel = SizeRelation.eq;
+    private static SizeUnit lastFirstSizeUnit = SizeUnit.kB;
 
 
     private JButton searchButton;
@@ -284,22 +286,22 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
     void addSizePanel(XAlignedComponentPanel compPanel) {
         JPanel sp = new JPanel(new FlowLayout());
-        cboSizeRel.setSelectedItem(lastSizeRel);
-        sp.add(cboSizeRel);
+        firstSizeRel.setSelectedItem(lastFirstSizeRel);
+        sp.add(firstSizeRel);
 
-        tfSize.setText(lastSize == null ? "" : lastSize.toString());
-        sp.add(tfSize);
+        firstSize.setText(lastFirstSize == null ? "" : lastFirstSize.toString());
+        sp.add(firstSize);
 
-        cboSizeUnit = new JComboBox(getSizeUnitDisplayStrings());
-        cboSizeUnit.setSelectedIndex(lastSizeUnit.ordinal());
-        sp.add(cboSizeUnit);
+        firstSizeUnit = new JComboBox(getSizeUnitDisplayStrings());
+        firstSizeUnit.setSelectedIndex(lastFirstSizeUnit.ordinal());
+        sp.add(firstSizeUnit);
 
         JPanel p = new JPanel(new BorderLayout());
         p.add(sp, BorderLayout.WEST);
 
         JLabel l = compPanel.addRow(Translator.get("search_dialog.size", "Size"), p, 20);
         l.setDisplayedMnemonic('s');
-        l.setLabelFor(cboSizeRel);
+        l.setLabelFor(firstSizeRel);
     }
 
 
@@ -377,18 +379,18 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         lastTextCase = textCase.isSelected();
         lastTextRegex = textRegex.isSelected();
 
-        lastSizeRel = (SizeRelation) cboSizeRel.getSelectedItem();
-        lastSizeUnit = SizeUnit.VALUES[cboSizeUnit.getSelectedIndex()];
+        lastFirstSizeRel = (SizeRelation) firstSizeRel.getSelectedItem();
+        lastFirstSizeUnit = SizeUnit.VALUES[firstSizeUnit.getSelectedIndex()];
 
-        String size = tfSize.getText();
+        String size = firstSize.getText();
         if (StringUtils.isNullOrEmpty(size)) {
-            lastSize = null;
+            lastFirstSize = null;
         } else {
             try {
-                lastSize = Long.parseLong(size);
+                lastFirstSize = Long.parseLong(size);
             } catch (NumberFormatException nfe) {
                 InformationDialog.showErrorDialog(this, Translator.get("search_dialog.size_error"));
-                tfSize.requestFocus();
+                firstSize.requestFocus();
                 return false;
             }
         }
@@ -435,8 +437,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             if (lastTextRegex)
                 properties.add(new Pair<>(SearchBuilder.TEXT_MATCH_REGEX, Boolean.TRUE.toString()));
         }
-        if (lastSize != null) {
-            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE, buildSeachSizeClause(lastSizeRel, lastSize, lastSizeUnit)));
+        if (lastFirstSize != null) {
+            properties.add(new Pair<>(SearchBuilder.SEARCH_SIZE, buildSeachSizeClause(lastFirstSizeRel, lastFirstSize, lastFirstSizeUnit)));
         }
         return properties.stream()
                 .map(pair -> pair.first + "=" + pair.second)
