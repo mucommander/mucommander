@@ -252,7 +252,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             oldLoader     = currentThread.getContextClassLoader();
             currentThread.setContextClassLoader(ExtensionManager.getClassLoader());
 
-            UIManager.setLookAndFeel((LookAndFeel)Class.forName(lnfName, true, ExtensionManager.getClassLoader()).newInstance());
+            UIManager.setLookAndFeel(lnfName);
 
             // Restores the contextual ClassLoader.
             currentThread.setContextClassLoader(oldLoader);
