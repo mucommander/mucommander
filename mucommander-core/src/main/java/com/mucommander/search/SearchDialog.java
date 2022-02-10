@@ -118,7 +118,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private static int lastDepth = 0;
     private static int lastThreads = SearchBuilder.DEFAULT_THREADS;
     private static String lastText = "";
-    private static boolean lastTextCase = true;
+    private static boolean lastTextCase = false;
     private static boolean lastTextRegex = false;
     private static Long lastFirstSize;
     private static SizeRelation lastFirstSizeRel = SizeRelation.eq;
@@ -492,8 +492,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             properties.add(new Pair<>(SearchBuilder.SEARCH_THREADS, String.valueOf(lastThreads)));
         if (!lastText.isEmpty()) {
             properties.add(new Pair<>(SearchBuilder.SEARCH_TEXT, lastText));
-            if (!lastTextCase)
-                properties.add(new Pair<>(SearchBuilder.TEXT_CASEINSENSITIVE, Boolean.TRUE.toString()));
+            if (lastTextCase)
+                properties.add(new Pair<>(SearchBuilder.TEXT_CASESENSITIVE, Boolean.TRUE.toString()));
             if (lastTextRegex)
                 properties.add(new Pair<>(SearchBuilder.TEXT_MATCH_REGEX, Boolean.TRUE.toString()));
         }
