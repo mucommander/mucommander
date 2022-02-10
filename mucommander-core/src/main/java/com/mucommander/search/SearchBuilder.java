@@ -56,7 +56,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     public static final String MATCH_CASESENSITIVE = "case_sensitive";
     public static final String MATCH_REGEX = "regex";
     public static final String SEARCH_TEXT = "text";
-    public static final String TEXT_CASEINSENSITIVE = "text-caseinsensitive";
+    public static final String TEXT_CASESENSITIVE = "text-case_sensitive";
     public static final String TEXT_MATCH_REGEX= "text-regex";
     public static final String SEARCH_SIZE = "size";
     public static final int DEFAULT_THREADS = 2;
@@ -78,7 +78,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private int searchThreads;
     private MainFrame mainFrame;
     private String searchText;
-    private boolean textCaseInsensitive;
+    private boolean textCaseSensitive;
     private boolean textMatchRegex;
     private Predicate<AbstractFile> sizePredicate;
 
@@ -232,7 +232,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         String value = getProperty(properties, SearchBuilder.SEARCH_TEXT);
         if (value != null) {
             searchText = value;
-            textCaseInsensitive = Boolean.parseBoolean(getProperty(properties, SearchBuilder.TEXT_CASEINSENSITIVE));
+            textCaseSensitive = Boolean.parseBoolean(getProperty(properties, SearchBuilder.TEXT_CASESENSITIVE));
             textMatchRegex = Boolean.parseBoolean(getProperty(properties, SearchBuilder.TEXT_MATCH_REGEX));
         }
         return this;
@@ -324,7 +324,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     private Predicate<AbstractFile> createFileContentPredicate() {
         GrepOptionSet_Fcilnvx grepOptions = Grep.Options.l;
-        if (textCaseInsensitive)
+        if (!textCaseSensitive)
             grepOptions = grepOptions.i;
         if (!textMatchRegex)
             grepOptions = grepOptions.F;
