@@ -106,20 +106,20 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
     // Store last values, initialized to the default values
     private static boolean lastSearchInSubfolders = true;
-    private static boolean lastSearchInArchives = false;
-    private static boolean lastSearchInHidden = false;
-    private static boolean lastSearchInSymlinks = false;
+    private static boolean lastSearchInArchives;
+    private static boolean lastSearchInHidden;
+    private static boolean lastSearchInSymlinks;
     private static boolean lastSearchForSubfolders = true;
     private static boolean lastSearchForArchives = true;
     private static boolean lastSearchForHidden = true;
     private static boolean lastSearchForSymlinks = true;
-    private static boolean lastMatchCase = false;
-    private static boolean lastMatchRegex = false;
+    private static boolean lastMatchCase;
+    private static boolean lastMatchRegex;
     private static int lastDepth = 0;
     private static int lastThreads = SearchBuilder.DEFAULT_THREADS;
     private static String lastText = "";
-    private static boolean lastTextCase = false;
-    private static boolean lastTextRegex = false;
+    private static boolean lastTextCase;
+    private static boolean lastTextRegex;
     private static Long lastFirstSize;
     private static SizeRelation lastFirstSizeRel = SizeRelation.eq;
     private static SizeUnit lastFirstSizeUnit = SizeUnit.kB;
