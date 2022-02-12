@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v0.9.8
+muCommander v1.0.0
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
