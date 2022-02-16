@@ -467,7 +467,18 @@ task(afterEclipseImport).doLast {
 
 task macAppImage(type: Exec) {
     workingDir "${projectDir}"
-    commandLine 'jpackage', '--input', 'build/osgi/', '--name', 'muCommander', '--app-version', project.version, '--icon', 'package/osx/icon.icns', '--main-jar', 'mucommander-'+project.version+'.jar', '--main-class', 'com.mucommander.main.muCommander', '--runtime-image', 'jre/macOS', '--java-options', '--add-exports java.desktop/com.apple.laf=ALL-UNNAMED --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED --add-opens java.management/javax.management=ALL-UNNAMED --add-opens java.rmi/java.rmi=ALL-UNNAMED --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED --add-opens java.sql/java.sql=ALL-UNNAMED', '--mac-package-identifier', 'com.mucommander.muCommander', '--type', 'app-image', '--dest', "${buildDir}"
+    commandLine 'jpackage', \
+                '--input', 'build/osgi/', \
+                '--name', 'muCommander', \
+                '--app-version', project.version, \
+                '--icon', 'package/osx/icon.icns', \
+                '--main-jar', 'mucommander-'+project.version+'.jar', \
+                '--main-class', 'com.mucommander.main.muCommander', \
+                '--runtime-image', 'jre/macOS', \
+                '--java-options', '--add-exports java.desktop/com.apple.laf=ALL-UNNAMED --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED --add-opens java.management/javax.management=ALL-UNNAMED --add-opens java.rmi/java.rmi=ALL-UNNAMED --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED --add-opens java.sql/java.sql=ALL-UNNAMED', \
+                '--mac-package-identifier', 'com.mucommander.muCommander', \
+                '--type', 'app-image', \
+                '--dest', "${buildDir}"
     doLast {
        copy {
           from "package"
@@ -485,12 +496,25 @@ task macAppImage(type: Exec) {
 // after adding <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
 task dmg(type: Exec) {
     workingDir "${projectDir}"
-    commandLine 'jpackage', '--app-image', "${buildDir}/muCommander.app", '--app-version', project.version, '--license-file', 'package/license.txt', '--about-url', 'https://www.mucommander.com', '--dest', "${buildDir}/distribution"
+    commandLine 'jpackage', \
+                '--app-image', "${buildDir}/muCommander.app", \
+                '--app-version', project.version, \
+                '--license-file', 'package/license.txt', \
+                '--about-url', 'https://www.mucommander.com', \
+                '--dest', "${buildDir}/distribution"
 }
 
 task linuxAppImage(type: Exec) {
     workingDir "${projectDir}"
-    commandLine 'jpackage', '--input', 'build/osgi/', '--name', 'muCommander', '--app-version', project.version, '--main-jar', 'mucommander-'+project.version+'.jar', '--main-class', 'com.mucommander.main.muCommander', '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED --add-opens java.management/javax.management=ALL-UNNAMED --add-opens java.rmi/java.rmi=ALL-UNNAMED --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED --add-opens java.sql/java.sql=ALL-UNNAMED', '--type', 'app-image', '--dest', "${buildDir}"
+    commandLine 'jpackage', \
+                '--input', 'build/osgi/', \
+                '--name', 'muCommander', \
+                '--app-version', project.version, \
+                '--main-jar', 'mucommander-'+project.version+'.jar', \
+                '--main-class', 'com.mucommander.main.muCommander', \
+                '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED --add-opens java.management/javax.management=ALL-UNNAMED --add-opens java.rmi/java.rmi=ALL-UNNAMED --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED --add-opens java.sql/java.sql=ALL-UNNAMED', \
+                '--type', 'app-image', \
+                '--dest', "${buildDir}"
     doLast {
         copy {
            from "package"
@@ -506,7 +530,15 @@ task linuxAppImage(type: Exec) {
 
 task rpm(type: Exec) {
     workingDir "${projectDir}"
-    commandLine 'jpackage', '--type', 'rpm', '--app-image', "${buildDir}/muCommander", '--app-version', project.version, '--license-file', 'package/license.txt', '--about-url', 'https://www.mucommander.com', '--dest', "${buildDir}/distribution", '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', '--linux-app-category', 'Application;FileManager;Utility;'
+    commandLine 'jpackage', \
+                '--type', 'rpm', \
+                '--app-image', "${buildDir}/muCommander", \
+                '--app-version', project.version, \
+                '--license-file', 'package/license.txt', \
+                '--about-url', 'https://www.mucommander.com', \
+                '--dest', "${buildDir}/distribution", \
+                '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
+                '--linux-app-category', 'Application;FileManager;Utility;'
 }
 
 task winAppImage(type: Exec) {
@@ -521,17 +553,22 @@ task winAppImage(type: Exec) {
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/win', \
                 '--dest', "${buildDir}", \
-                '--icon', 'package/windows/mucommander.ico'
+                '--resource-dir', 'package/windows/'
     doLast {
         copy {
            from "package"
            include "license.txt"
            include "readme.txt"
-           into "${buildDir}/muCommander/app"
+           into "${buildDir}/muCommander/"
         }
         delete("${buildDir}/muCommander/app/run.bat")
         delete("${buildDir}/muCommander/app/run.sh")
         delete("${buildDir}/muCommander/app/system-libs")
+        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'osgiaas*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'jline*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-linux*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-macos*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-openvms*')
     }
 }
 
@@ -540,13 +577,12 @@ task msi(type: Exec) {
     commandLine 'jpackage', \
 	            '--type', 'msi', \
                 '--app-image', "${buildDir}/muCommander", \
-                '--license-file', "${buildDir}/muCommander/app/license.txt", \
+                '--license-file', "${buildDir}/muCommander/license.txt", \
                 '--app-version', project.version, \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distribution", \
                 '--win-menu', \
-//                '--win-menu-group', 'muCommander', \
+                '--win-shortcut', \
                 '--win-shortcut-prompt', \
-                '--win-dir-chooser', \
-                '--icon', 'package/windows/mucommander.ico'
+                '--win-dir-chooser'
 }
