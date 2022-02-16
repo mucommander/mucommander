@@ -558,3 +558,44 @@ task rpm(type: Exec) {
     commandLine 'jpackage', '--type', 'rpm', '--app-image', "${buildDir}/muCommander", '--app-version', project.version, '--license-file', 'package/license.txt', '--about-url', 'https://www.mucommander.com', '--dest', "${buildDir}/distribution", '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', '--linux-app-category', 'Application;FileManager;Utility;'
 }
 
+task winAppImage(type: Exec) {
+    workingDir "${projectDir}"
+    commandLine 'jpackage', \
+                '--input', "${buildDir}/osgi/", \
+                '--name', 'muCommander', \
+                '--app-version', project.version, \
+                '--main-jar', 'mucommander-'+project.version+'.jar', \
+                '--main-class', 'com.mucommander.main.muCommander', \
+                '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED --add-opens java.management/javax.management=ALL-UNNAMED --add-opens java.rmi/java.rmi=ALL-UNNAMED --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED --add-opens java.sql/java.sql=ALL-UNNAMED', \
+                '--type', 'app-image', \
+                '--runtime-image', 'jre/win', \
+                '--dest', "${buildDir}", \
+                '--icon', 'package/windows/mucommander.ico'
+    doLast {
+        copy {
+           from "package"
+           include "license.txt"
+           include "readme.txt"
+           into "${buildDir}/muCommander/app"
+        }
+        delete("${buildDir}/muCommander/app/run.bat")
+        delete("${buildDir}/muCommander/app/run.sh")
+        delete("${buildDir}/muCommander/app/system-libs")
+    }
+}
+
+task msi(type: Exec) {
+    workingDir "${projectDir}"
+    commandLine 'jpackage', \
+	            '--type', 'msi', \
+                '--app-image', "${buildDir}/muCommander", \
+                '--license-file', "${buildDir}/muCommander/app/license.txt", \
+                '--app-version', project.version, \
+                '--about-url', 'https://www.mucommander.com', \
+                '--dest', "${buildDir}/distribution", \
+                '--win-menu', \
+//                '--win-menu-group', 'muCommander', \
+                '--win-shortcut-prompt', \
+                '--win-dir-chooser', \
+                '--icon', 'package/windows/mucommander.ico'
+}
