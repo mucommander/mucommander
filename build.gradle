@@ -356,55 +356,6 @@ launch4j {
     outfile = "mucommander.exe"
 }
 
-// Windows installer
-task nsis(type: Copy, dependsOn: [createExe, createBundlesDir]) {
-    from("$buildDir/launch4j/") {
-        include 'mucommander.exe'
-    }
-    if (project.ext.bundleJRE) {
-        from('jre/win') {
-            into "jre"
-        }
-    }
-    from("$buildDir/osgi/") {
-        include '*.jar'
-    }
-    from('package/windows') {
-        include 'mucommander.ico'
-    }
-    from('package/windows') {
-        include project.ext.bundleJRE ? 'mucommander-bundled.nsi' : 'mucommander.nsi'
-        filter(ReplaceTokens, tokens: [MU_VERSION: project.version,
-                                       MU_ICON: 'mucommander.ico',
-                                       MU_LICENSE: 'license.txt',
-                                       MU_README: 'readme.txt',
-                                       MU_OUT: 'mucommander-'+project.version+'-'+project.ext.release+'-setup.exe',
-                                       MU_EXE: 'mucommander.exe',
-                                       MU_JAR: project.tasks.shadowJar.archiveFileName.get()])
-    }
-    from ('package') {
-        include 'license.txt', 'readme.txt'
-    }
-    from("$buildDir/osgi/app") {
-        include '*.jar'
-        into "app"
-    }
-    from("$buildDir/osgi/bundle") {
-        include '*.jar'
-        exclude 'osgiaas*'
-        exclude 'jline*'
-        exclude 'mucommander-os-linux*'
-        exclude 'mucommander-os-macos*'
-        exclude 'mucommander-os-openvms*'
-        into "bundle"
-    }
-    from("$buildDir/osgi/conf") {
-        include '*'
-        into "conf"
-    }
-    into "$buildDir/tmp/nsis"
-}
-
 // Portable packaging
 task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     from ("$buildDir/launch4j") {
