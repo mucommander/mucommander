@@ -11,7 +11,6 @@ plugins {
     id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
     id 'org.ajoberstar.grgit' version '3.1.1'
-    id 'nebula.ospackage' version '8.5.6'
     id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'edu.sc.seis.macAppBundle' version '2.3.0'
     id 'edu.sc.seis.launch4j' version '2.4.6'
@@ -183,71 +182,6 @@ jar.enabled = false
 test.useTestNG()
 
 import org.apache.tools.ant.filters.ReplaceTokens
-
-ospackage {
-    release = project.ext.release
-
-    postInstall file('package/unix/postinst')
-    postUninstall file('package/unix/postrm')
-
-    maintainer = 'Arik Hadas <arik.hadas1@gmail.com>'
-    summary = 'a lightweight, cross-platform file manager'
-
-    from ('package') { include 'license.txt', 'readme.txt' }
-    from ('package/unix/mucommander.sh') {
-        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
-    }
-    into '/usr/share/mucommander'
-
-    from ("$buildDir/osgi/") {
-        include '*.jar'
-        into '/usr/share/mucommander'
-    }
-    from ("$buildDir/osgi/bundle") {
-        include '*.jar'
-        exclude 'osgiaas*'
-        exclude 'jline*'
-        exclude 'mucommander-os-macos*'
-        exclude 'mucommander-os-openvms*'
-        exclude 'mucommander-os-win*'
-        into '/usr/share/mucommander/bundle'
-    }
-    from ("$buildDir/osgi/app") {
-        include '*.jar'
-        into '/usr/share/mucommander/app'
-    }
-    from ("$buildDir/osgi/conf") {
-        include '*'
-        into '/usr/share/mucommander/conf'
-    }
-    from ('mucommander-core/src/main/resources/images/mucommander') {
-        include 'icon128_24.png'
-        rename 'icon128_24.png', 'mucommander.png'
-        addParentDirs false
-        into '/usr/share/pixmaps'
-    }
-    from ('package/unix') {
-        include 'mucommander.desktop'
-        addParentDirs false
-        into '/usr/share/applications'
-    }
-
-    directory('/usr/share/mucommander/felix-cache')
-}
-
-// RPM packaging
-buildRpm {
-    dependsOn createBundlesDir
-    requires('java')
-    os = LINUX
-}
-
-// Debian packaging
-buildDeb {
-    dependsOn createBundlesDir
-    suggests('openjdk-11-jre')
-    recommends('java-virtual-machine')
-}
 
 macAppBundle {
     appName = "muCommander"
@@ -542,6 +476,24 @@ task rpm(type: Exec) {
                 '--linux-app-category', 'Application;FileManager;Utility;'
 }
 
+
+task deb(type: Exec) {
+    workingDir "${projectDir}"
+    commandLine 'jpackage', \
+                '--type', 'deb', \
+                '--description', 'a lightweight, cross-platform file manager', \
+                '--app-image', "${buildDir}/muCommander", \
+                '--app-version', project.version, \
+                '--license-file', 'package/license.txt', \
+                '--about-url', 'https://www.mucommander.com', \
+                '--dest', "${buildDir}/distribution", \
+                '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
+                '--linux-deb-maintainer', 'arik.hadas1@gmail.com', \
+                '--linux-app-category', 'utils', \
+                '--linux-shortcut', \
+                '--linux-menu-group', 'Application;FileManager;Utility;'
+}
+
 task winAppImage(type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
@@ -576,7 +528,7 @@ task winAppImage(type: Exec) {
 task msi(type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
-	            '--type', 'msi', \
+                '--type', 'msi', \
                 '--app-image', "${buildDir}/muCommander", \
                 '--license-file', "${buildDir}/muCommander/license.txt", \
                 '--app-version', project.version, \
