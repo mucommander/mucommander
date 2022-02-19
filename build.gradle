@@ -435,7 +435,7 @@ task dmg(type: Exec) {
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distribution"
+                '--dest', "${buildDir}/distributions"
 }
 
 task linuxAppImage(type: Exec) {
@@ -471,7 +471,7 @@ task rpm(type: Exec) {
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distribution", \
+                '--dest', "${buildDir}/distributions", \
                 '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
                 '--linux-app-category', 'Application;FileManager;Utility;'
 }
@@ -486,7 +486,7 @@ task deb(type: Exec) {
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distribution", \
+                '--dest', "${buildDir}/distributions", \
                 '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
                 '--linux-deb-maintainer', 'arik.hadas1@gmail.com', \
                 '--linux-app-category', 'utils', \
@@ -533,7 +533,7 @@ task msi(type: Exec) {
                 '--license-file', "${buildDir}/muCommander/license.txt", \
                 '--app-version', project.version, \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distribution", \
+                '--dest', "${buildDir}/distributions", \
                 '--win-menu', \
                 '--win-shortcut', \
                 '--win-shortcut-prompt', \
