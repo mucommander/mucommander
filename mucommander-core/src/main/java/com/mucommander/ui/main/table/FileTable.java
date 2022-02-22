@@ -185,6 +185,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /** Table that shows the user to refresh if the location doesn't exist */
     private DefaultOverlayable overlayTable;
 
+    /** Whether or not to proceed with renaming the next file after renaming the selected file */
+    private boolean consecutiveRename;
+
     public FileTable(MainFrame mainFrame, FolderPanel folderPanel, FileTableConfiguration conf) {
         super(new FileTableModel(), new FileTableColumnModel(conf));
 
@@ -1547,31 +1550,34 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             this.filenameField = textField;
             // Sets the font to the same one that's used for cell rendering (user-defined)
             filenameField.setFont(FileTableCellRenderer.getCellFont());
-            textField.addKeyListener(
-                new KeyAdapter() {
-                    // Cancel editing when escape key pressed, this is unfortunately not DefaultCellEditor's
-                    // default behavior
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        int keyCode = e.getKeyCode();
-                        if(keyCode == KeyEvent.VK_ESCAPE)
-                            cancelCellEditing();
+            filenameField.setFocusTraversalKeysEnabled(false);
+            textField.addKeyListener(new KeyAdapter() {
+                // Cancel editing when escape key pressed, this is unfortunately not DefaultCellEditor's
+                // default behavior
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    switch(e.getKeyCode()) {
+                    case KeyEvent.VK_ESCAPE:
+                        cancelCellEditing();
+                        break;
+                    case KeyEvent.VK_TAB:
+                        cancelCellEditing();
+                        consecutiveRename = editingRow != tableModel.getRowCount() - 1;
+                        rename();
+                        break;
                     }
                 }
-            );
+
+            });
             textField.addActionListener(e -> rename());
-            textField.addFocusListener(new FocusListener() {
-
-				public void focusLost(FocusEvent e) {
-					cancelCellEditing();
-					FileTable.this.repaint();
-				}
-
-
-				public void focusGained(FocusEvent e) {}
-			});
+            textField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusLost(FocusEvent e) {
+                    cancelCellEditing();
+                    FileTable.this.repaint();
+                }
+            });
         }
-
 
         /**
          * Renames the currently edited name cell, only if the filename has changed.
@@ -1585,8 +1591,23 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 // Starts moving files
                 FileSet files = new FileSet(current);
                 files.add(fileToRename);
-                MoveJob renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true);
+                MoveJob renameJob;
+                if (!consecutiveRename) {
+                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true);
+                } else {
+                    AbstractFile fileToBeSelected = tableModel.getFileAtRow(editingRow+1);
+                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true) {
+                        @Override
+                        protected void selectFileWhenFinished(AbstractFile file) {
+                            super.selectFileWhenFinished(fileToBeSelected);
+                        }
+                    };
+                }
                 renameJob.start();
+            } else if (consecutiveRename) {
+                selectRow(editingRow + 1);
+                fireSelectedFileChangedEvent();
+                SwingUtilities.invokeLater(FileTable.this::editCurrentFilename);
             }
         }
 
@@ -1890,7 +1911,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     // Notify registered listeners that currently marked files have changed on this FileTable
                     fireMarkedFilesChangedEvent();
                 }
-
+                if (consecutiveRename) {
+                    editCurrentFilename();
+                    consecutiveRename = false;
+                }
                 resizeAndRepaint();
             }
 

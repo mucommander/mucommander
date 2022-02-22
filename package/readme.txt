@@ -35,6 +35,7 @@ New features:
 - Support compression and decompression of XZ archives.
 - Added file size conditions to file search.
 - Added 'Show in enclosing folder' action for a file search result that opens a new tab with its enclosing folder and selects the result.
+- Pressing Tab key when editing a file name renames the selected file and the name of the next file automatically becomes editable.
 
 Improvements:
 - Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
