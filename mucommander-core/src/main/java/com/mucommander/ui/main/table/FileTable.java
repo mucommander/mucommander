@@ -1563,12 +1563,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     }
                 }
             );
-            textField.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    rename();
-                }
-            });
+            textField.addActionListener(e -> rename());
             textField.addFocusListener(new FocusListener() {
 
 				public void focusLost(FocusEvent e) {
@@ -1620,7 +1615,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
          * @param row row which is being edited
          * @see AbstractCopyDialog#selectDestinationFilename(AbstractFile, String, int)
          */
-        public void notifyEditingRow(int row) {
+        private void notifyEditingRow(int row) {
             // The editing row has to be saved as it could change after row editing has been started
             this.editingRow = row;
 
