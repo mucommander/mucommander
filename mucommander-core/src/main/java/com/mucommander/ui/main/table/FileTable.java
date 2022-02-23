@@ -67,7 +67,6 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.MoveJob;
 import com.mucommander.text.CustomDateFormat;
-import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
@@ -77,7 +76,6 @@ import com.mucommander.ui.action.impl.MarkSelectedFileAction;
 import com.mucommander.ui.action.impl.RefreshAction;
 import com.mucommander.ui.dialog.file.AbstractCopyDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
-import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.TableSelectionListener;
 import com.mucommander.ui.icon.FileIcons;
@@ -1585,11 +1583,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             if (!newName.equals(fileToRename.getName())) {
                 AbstractFile current = folderPanel.getCurrentFolder();
                 // Starts moving files
-                ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("move_dialog.moving"));
                 FileSet files = new FileSet(current);
                 files.add(fileToRename);
-                MoveJob renameJob = new MoveJob(progressDialog, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true);
-                progressDialog.start(renameJob);
+                MoveJob renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true);
+                renameJob.start();
             }
         }
 
