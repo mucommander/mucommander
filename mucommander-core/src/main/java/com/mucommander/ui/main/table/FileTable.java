@@ -1068,16 +1068,14 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Notifies all registered listeners that the currently selected file has changed on this FileTable.
      */
     public void fireSelectedFileChangedEvent() {
-        for(TableSelectionListener listener : tableSelectionListeners.keySet())
-            listener.selectedFileChanged(this);
+        tableSelectionListeners.keySet().forEach(listener -> listener.selectedFileChanged(this));
     }
 
     /**
      * Notifies all registered listeners that the currently marked files have changed on this FileTable.
      */
     public void fireMarkedFilesChangedEvent() {
-        for(TableSelectionListener listener : tableSelectionListeners.keySet())
-            listener.markedFilesChanged(this);
+        tableSelectionListeners.keySet().forEach(listener -> listener.markedFilesChanged(this));
     }
 
 
