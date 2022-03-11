@@ -11,6 +11,7 @@ DEBIAN
 *.log
 .classpath
 .project
+.DS_Store
 
 /bin
 /classes
