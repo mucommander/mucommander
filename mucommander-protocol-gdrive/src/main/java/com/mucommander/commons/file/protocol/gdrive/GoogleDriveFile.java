@@ -244,8 +244,10 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
         try(GoogleDriveConnHandler connHandler = getConnHandler()) {
             File fileMetadata = new File();
             String filename = getURL().getFilename();
-            GoogleDriveFile parent = (GoogleDriveFile) getParent();
-            fileMetadata.setParents(Collections.singletonList(parent.getId()));
+            AbstractFile parent = getParent();
+            if (parent instanceof GoogleDriveMonitoredFile)
+                parent = ((GoogleDriveMonitoredFile) parent).getUnderlyingFile();
+            fileMetadata.setParents(Collections.singletonList(((GoogleDriveFile) parent).getId()));
             fileMetadata.setName(filename);
             PipedOutputStream output = new PipedOutputStream();
             PipedInputStream input = new PipedInputStream(output);

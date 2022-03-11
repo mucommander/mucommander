@@ -71,4 +71,8 @@ public class GoogleDriveMonitoredFile extends ModificationDateBasedMonitoredFile
     protected boolean isNotFolder(File file) {
         return !GoogleDriveFile.isFolder(file);
     }
+
+    public GoogleDriveFile getUnderlyingFile() {
+        return file;
+    }
 }
