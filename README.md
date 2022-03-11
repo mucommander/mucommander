@@ -65,7 +65,7 @@ The different distributions of muCommander are based on a shadow-jar, standalone
 
 The creation of a DMG file for MAC OS (produced in build/distributions):  
 ```
-./gradlew createDmg
+./gradlew dmg
 ```
 
 The creation of an EXE file for Windows (produced in build/launch4j):  
