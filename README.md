@@ -78,6 +78,11 @@ The creation of a TGZ file for Linux/Unix (produced in build/distributions):
 ./gradlew tgz
 ```
 
+The creation of an RPM file:  
+```
+./gradlew rpm
+```
+
 More packaging options are described in [our wiki](https://github.com/mucommander/mucommander/wiki/Packaging).
 
 

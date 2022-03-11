@@ -438,7 +438,7 @@ task dmg(type: Exec) {
                 '--dest', "${buildDir}/distributions"
 }
 
-task linuxAppImage(type: Exec) {
+task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--input', 'build/osgi/', \
@@ -463,7 +463,7 @@ task linuxAppImage(type: Exec) {
     }
 }
 
-task rpm(type: Exec) {
+task rpm(dependsOn: 'linuxAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--type', 'rpm', \
