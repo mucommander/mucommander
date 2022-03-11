@@ -457,6 +457,8 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
            include "readme.txt"
            into "${buildDir}/muCommander/lib/app"
         }
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'osgiaas*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'jline*')
         delete("${buildDir}/muCommander/lib/app/run.bat")
         delete("${buildDir}/muCommander/lib/app/run.sh")
         delete("${buildDir}/muCommander/lib/app/system-libs")
