@@ -399,7 +399,7 @@ task(afterEclipseImport).doLast {
     f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
 }
 
-task macAppImage(type: Exec) {
+task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--input', 'build/osgi/', \
@@ -428,7 +428,7 @@ task macAppImage(type: Exec) {
 }
 
 // after adding <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
-task dmg(type: Exec) {
+task dmg(dependsOn: 'macAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--app-image', "${buildDir}/muCommander.app", \
