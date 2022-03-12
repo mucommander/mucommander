@@ -334,6 +334,11 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
        delete("${buildDir}/muCommander.app/Contents/app/run.bat")
        delete("${buildDir}/muCommander.app/Contents/app/run.sh")
        delete("${buildDir}/muCommander.app/Contents/app/system-libs")
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'osgiaas*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'jline*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-linux*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-win*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-openvms*')
        // todo: add NSSupportsAutomaticGraphicsSwitching?
     }
 }
