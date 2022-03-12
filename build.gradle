@@ -339,11 +339,12 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-linux*')
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-win*')
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-openvms*')
-       // todo: add NSSupportsAutomaticGraphicsSwitching?
+       exec {
+          executable "package/osx/muCommander-post-image.sh"
+       }
     }
 }
 
-// after adding <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
 task dmg(dependsOn: 'macAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
