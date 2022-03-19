@@ -18,6 +18,8 @@
 
 package com.mucommander.ui.action.impl;
 
+import static com.mucommander.core.desktop.DesktopManager.openInFileManager;
+
 import java.awt.event.KeyEvent;
 import java.util.Map;
 import java.util.Optional;
@@ -63,13 +65,15 @@ public class RevealInDesktopAction extends ParentFolderAction {
 
     @Override
     public void performAction() {
-        AbstractFile currentFile = mainFrame.getActivePanel().getCurrentFolder();
-        try {
-            CompletionStage<Optional<String>> completionStage = DesktopManager.openInFileManager(currentFile);
-            InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
-        }
-        catch(Exception e) {
-            InformationDialog.showErrorDialog(mainFrame);
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
+        if (selectedFile != null) {
+            try {
+                CompletionStage<Optional<String>> completionStage = openInFileManager(selectedFile);
+                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
+            }
+            catch(Exception e) {
+                InformationDialog.showErrorDialog(mainFrame);
+            }
         }
     }
 
