@@ -20,6 +20,8 @@ package com.mucommander.ui.action.impl;
 
 import java.awt.event.KeyEvent;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 import javax.swing.KeyStroke;
 
@@ -61,8 +63,10 @@ public class RevealInDesktopAction extends ParentFolderAction {
 
     @Override
     public void performAction() {
+        AbstractFile currentFile = mainFrame.getActivePanel().getCurrentFolder();
         try {
-            InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.openInFileManager(mainFrame.getActivePanel().getCurrentFolder()));
+            CompletionStage<Optional<String>> completionStage = DesktopManager.openInFileManager(currentFile);
+            InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
         }
         catch(Exception e) {
             InformationDialog.showErrorDialog(mainFrame);
