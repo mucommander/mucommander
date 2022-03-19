@@ -64,7 +64,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(OSXDesktopAdapter.class);
 
     private static final String OPENER_COMMAND = "open $f";
-    private static final String FINDER_COMMAND = "open -a Finder $f";
+    private static final String FINDER_COMMAND = "open -R $f";
     private static final String FINDER_NAME    = "Finder";
     // HINT: will work almost for every directory BUT NOT for /tmp on MacOS
     private static final String CMD_OPENER_COMMAND = "open -a Terminal $f";

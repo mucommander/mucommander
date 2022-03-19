@@ -71,6 +71,7 @@ Bug fixes:
 - File search works with search strings that resemble a path to an archive file, e.g., find:///home/*.zip.
 - When selection changes in the tree view and the presented tab is locked, the selected location is opened in a new tab.
 - Fix the execution of Windows executable files whose name contains parentheses characters.
+- 'Reveal in Finder' action reveals the selected file in the Finder instead of opening it on macOS.
 
 Known issues:
 - Some translations may not be up-to-date.
