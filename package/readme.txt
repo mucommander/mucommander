@@ -72,6 +72,7 @@ Bug fixes:
 - When selection changes in the tree view and the presented tab is locked, the selected location is opened in a new tab.
 - Fix the execution of Windows executable files whose name contains parentheses characters.
 - 'Reveal in Finder' action reveals the selected file in the Finder instead of opening it on macOS.
+- Fix 'Reveal in Explorer' on Windows.
 
 Known issues:
 - Some translations may not be up-to-date.

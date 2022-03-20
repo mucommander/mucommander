@@ -33,6 +33,7 @@ import com.mucommander.desktop.TrashProvider;
 class WindowsDesktopAdapter extends DefaultDesktopAdapter {
     protected static final String EXPLORER_NAME = "Explorer";
     private static final String FILE_OPENER_COMMAND = "cmd /c start \"\" \"$f\"";
+    private static final String EXPLORER_COMMAND = "explorer /select, \"$f\"";
     private static final String CMD_OPENER_COMMAND = "cmd /k \"cd /d $f\"";
     private static final String EXE_OPENER_COMMAND  = "cmd /c $f";
     private static final String EXE_REGEXP          = ".*\\.exe";
@@ -44,7 +45,7 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
         try {
             CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.FILE_MANAGER_ALIAS, EXPLORER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
             CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER_COMMAND,  CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
 

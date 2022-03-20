@@ -42,6 +42,7 @@ import java.util.concurrent.CompletionStage;
  * @author Nicolas Rinaudo
  */
 public class ProcessRunner {
+	private static final String[] UNMONITORED_COMMANDS = new String[] { "explorer" };
 
 	/**
 	 * Prevents instances of ProcessRunner from being created.
@@ -106,7 +107,8 @@ public class ProcessRunner {
 
 		// Starts the process.
 		process = new LocalProcess(tokens, (java.io.File) currentDirectory.getUnderlyingFileObject());
-		process.startMonitoring(listener, encoding);
+		if (!Arrays.stream(UNMONITORED_COMMANDS).anyMatch(tokens[0]::equals))
+			process.startMonitoring(listener, encoding);
 
 		return process;
 	}
