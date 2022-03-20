@@ -25,8 +25,6 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.runtime.JavaVersion;
-
 /**
  * Process running on the local computer.
  * @author Nicolas Rinaudo
