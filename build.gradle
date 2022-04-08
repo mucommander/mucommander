@@ -396,7 +396,7 @@ task rpm(dependsOn: 'linuxAppImage', type: Exec) {
 }
 
 
-task deb(type: Exec) {
+task deb(dependsOn: 'linuxAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--type', 'deb', \
