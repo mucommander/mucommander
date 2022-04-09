@@ -135,7 +135,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     public static final String UNLIMITED_DEPTH = Translator.get("search_dialog.unlimited_depth");
     public static final String MAX_THREADS = Translator.get("search_dialog.max_threads");
 
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(700,0);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(650,0);
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(1000,10000);
     private final static int MAX_NUM_OF_SEARCH_THREADS = 0x7fff; // taken from FormJoinPool#MAX_CAP
 
