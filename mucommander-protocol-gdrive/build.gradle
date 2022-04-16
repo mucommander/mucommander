@@ -3,9 +3,10 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-encoding')
     api project(':mucommander-translator')
-    implementation 'com.google.api-client:google-api-client:1.23.0'
-    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
-    implementation 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'
+
+    comprise 'com.google.oauth-client:google-oauth-client-jetty:1.34.0'
+    comprise 'com.google.apis:google-api-services-drive:v3-rev197-1.25.0'
+
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'org.osgi:osgi.core:7.0.0'
 
@@ -17,12 +18,16 @@ dependencies {
 repositories.mavenCentral()
 
 jar {
+   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+       exclude 'META-INF/**'
+   }}
+   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
    bnd ('Bundle-Name': 'muCommander-gdrive',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Plugin for Google-Drive',
         'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.protocol.gdrive',
-        'Import-Package': 'com.google.api.client.auth.oauth2,*',
+        'Export-Package': 'com.mucommander.commons.protocol.gdrive,com.google.api.client.auth.oauth2',
+        'Import-Package': '!org.apache.avalon.framework.logger,!org.apache.log,!org.apache.log4j,!com.google.appengine.api,!com.google.apphosting.api,!com.google.appengine.api.utils,!io.grpc.override,*',
         'Bundle-Activator': 'com.mucommander.commons.file.protocol.gdrive.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
