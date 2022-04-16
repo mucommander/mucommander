@@ -129,4 +129,13 @@ public abstract class ServerPanel extends XAlignedComponentPanel {
      * new instance of the panel is created.
      */
     public abstract void dialogValidated();
+
+    /**
+     * This method returns the applicability of the privacy policy to the remote server.
+     *
+     * @return true when our privacy policy is applicable to the remote server, false otherwise
+     */
+    public boolean privacyPolicyApplicable() {
+        return false;
+    }
 }

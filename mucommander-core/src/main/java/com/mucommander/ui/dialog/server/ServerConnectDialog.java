@@ -20,8 +20,11 @@ package com.mucommander.ui.dialog.server;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Comparator;
@@ -81,7 +84,7 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
     private JLabel urlLabel;
     private JCheckBox saveCredentialsCheckBox;
 
-    // Dialog's width has to be at least 320
+    // Dialog's width has to be at least 480
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
     private static Class<? extends ServerPanel> lastPanelClass;
@@ -118,7 +121,6 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
         this.folderPanel = folderPanel;
         lastPanelClass = selectPanelClass;
 
-        MainFrame mainFrame = folderPanel.getMainFrame();
         Container contentPane = getContentPane();
 		
         this.tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -169,12 +171,41 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
 
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(serverPanel, BorderLayout.NORTH);
+        if (serverPanel.privacyPolicyApplicable())
+            northPanel.add(createPrivacyPolicyPanel(), BorderLayout.SOUTH);
         tabbedPane.addTab(protocol.toUpperCase(), northPanel);
 
         if (serverPanel.getClass().equals(lastPanelClass))
             tabbedPane.setSelectedComponent(northPanel);
 
         serverPanels.add(serverPanel);
+    }
+
+    private JPanel createPrivacyPolicyPanel() {
+        String privacyPolicyText = Translator.get("server_connect_dialog.privacy_policy");
+        JLabel privacyPolicyLabel = new JLabel(privacyPolicyText);
+        privacyPolicyLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        privacyPolicyLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                try {
+                    DesktopManager.browse("https://www.mucommander.com/privacy");
+                } catch (UnsupportedOperationException | IOException e) {
+                    LOGGER.error("failed to browse privacy policy");
+                }
+            }
+            @Override
+            public void mouseEntered(MouseEvent event) {
+                privacyPolicyLabel.setText("<html><a href=''>" + privacyPolicyText + "</a></html>");
+            }
+            @Override
+            public void mouseExited(MouseEvent event) {
+                privacyPolicyLabel.setText(privacyPolicyText);
+            }
+        });
+        JPanel privacyPolicyPanel = new JPanel();
+        privacyPolicyPanel.add(privacyPolicyLabel);
+        return privacyPolicyPanel;
     }
 
     @Override
