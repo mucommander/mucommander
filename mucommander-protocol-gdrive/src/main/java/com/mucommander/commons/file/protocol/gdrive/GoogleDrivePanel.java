@@ -211,4 +211,9 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
         }
         this.loginPhase = loginPhase;
     }
+
+    @Override
+    public boolean privacyPolicyApplicable() {
+        return true;
+    }
 }
