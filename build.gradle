@@ -139,15 +139,6 @@ runOsgi {
         manifest("sdk-.*") {
             instruction 'Bundle-Name', 'ovirt-sdk'
         }
-        manifest("google-api-services.*") {
-            instruction 'Bundle-Version', '1.23.0'
-        }
-        manifest("google-oauth-client-[0-9].*") {
-            instruction 'Export-Package', 'com.google.api.client.auth.oauth2', '*'
-        }
-        manifest("google-http-client.*") {
-            instruction 'Import-Package', 'com.google.api.client.auth.oauth2', '*'
-        }
     }
 }
 
