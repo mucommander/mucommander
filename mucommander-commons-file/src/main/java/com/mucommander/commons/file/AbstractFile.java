@@ -1139,9 +1139,7 @@ public abstract class AbstractFile implements FileAttributes {
         // Even though getAbsolutePath() is not supposed to return a trailing separator, root folders ('/', 'c:\' ...)
         // are exceptions that's why we still have to test if path ends with a separator
         String separator = getSeparator();
-        if(!path.endsWith(separator))
-            return path+separator;
-        return path;
+        return path.endsWith(separator) ? path : path+separator;
     }
 
     /**

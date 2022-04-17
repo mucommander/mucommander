@@ -73,6 +73,7 @@ Bug fixes:
 - Fix the execution of Windows executable files whose name contains parentheses characters.
 - 'Reveal in Finder' action reveals the selected file in the Finder instead of opening it on macOS.
 - Fix 'Reveal in Explorer' on Windows.
+- Fix trancated file search results when searching the root folder.
 
 Known issues:
 - Some translations may not be up-to-date.
