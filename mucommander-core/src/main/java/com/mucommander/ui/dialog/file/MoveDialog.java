@@ -53,13 +53,13 @@ public class MoveDialog extends AbstractCopyDialog {
     //////////////////////////////////////////////
 
     @Override
-    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction) {
         return new MoveJob(
                 progressDialog,
                 mainFrame,
                 files,
                 resolvedDest.getDestinationFolder(),
-                resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                resolvedDest.getDestinationType() == DestinationType.EXISTING_FOLDER ? null : resolvedDest.getDestinationFile().getName(),
                 defaultFileExistsAction,
                 false);
     }

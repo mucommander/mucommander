@@ -22,7 +22,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.net.URL;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 
@@ -39,6 +40,7 @@ import com.mucommander.job.impl.SelfUpdateJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.GoToWebsiteAction;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -62,13 +64,28 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
     private boolean userInitiated;
 
     /** Dialog's width has to be at least 240 */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
 
-    private final static int OK_ACTION = 0;
-    private final static int GO_TO_WEBSITE_ACTION = 1;
-    private final static int INSTALL_AND_RESTART_ACTION = 2;
+    public enum CheckVersionAction implements DialogAction {
 
-	
+        OK(Translator.get("ok")),
+        // TODO not nice (to load the name into enum and in this way)
+        GO_TO_WEBSITE(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID)),
+        // TODO that action was not preset (it is commented out)
+        INSTALL_AND_RESTART("COMMENTED-OUT");
+
+        private final String actionName;
+
+        CheckVersionAction(String actionName) {
+            this.actionName = actionName;
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
+
     /**
      * Checks for updates and notifies the user of the outcome. The check itself is performed in a separate thread
      * to prevent the app from waiting for the request's result.
@@ -157,17 +174,12 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         // Set title
         setTitle(title);
 
-        java.util.List<Integer> actionsV = new Vector<Integer>();
-        java.util.List<String> labelsV = new Vector<String>();
-
-        // 'OK' choice
-        actionsV.add(OK_ACTION);
-        labelsV.add(Translator.get("ok"));
+        List<DialogAction> actions = new ArrayList<>();
+        actions.add(CheckVersionAction.OK);
 
         // 'Go to website' choice (if available)
         if(downloadOption) {
-            actionsV.add(GO_TO_WEBSITE_ACTION);
-            labelsV.add(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID));
+            actions.add(CheckVersionAction.GO_TO_WEBSITE);
         }
 
 //        // 'Install and restart' choice (if available)
@@ -176,17 +188,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 //            labelsV.add(Translator.get("version_dialog.install_and_restart"));
 //        }
 
-        // Turn the vectors into arrays
-        int nbChoices = actionsV.size();
-        int actions[] = new int[nbChoices];
-        String labels[] = new String[nbChoices];
-        for(int i=0; i<nbChoices; i++) {
-            actions[i] = actionsV.get(i);
-            labels[i] = labelsV.get(i);
-        }
-
         init(new InformationPane(message, null, Font.PLAIN, InformationPane.INFORMATION_ICON),
-             labels,
              actions,
              0);
 			
@@ -198,9 +200,9 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
 		
         // Show dialog and get user action
-        int action = getActionValue();
+        DialogAction action = getActionValue();
 
-        if(action==GO_TO_WEBSITE_ACTION) {
+        if(action == CheckVersionAction.GO_TO_WEBSITE) {
             try {
                 DesktopManager.executeOperation(DesktopManager.BROWSE, new Object[] {downloadURL});
             }
@@ -208,7 +210,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
                 InformationDialog.showErrorDialog(this);
             }
         }
-        else if(action==INSTALL_AND_RESTART_ACTION) {
+        else if(action == CheckVersionAction.INSTALL_AND_RESTART) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("Installing new version"));
             SelfUpdateJob job = new SelfUpdateJob(progressDialog, mainFrame, FileFactory.getFile(jarURL));
             progressDialog.start(job);

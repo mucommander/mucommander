@@ -27,11 +27,13 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -81,11 +83,22 @@ public class SendMailJob extends TransferFileJob {
     /** Socket connection to the SMTP server */
     private Socket socket;
 
-	
-    private final static String CLOSE_TEXT = Translator.get("close");
-    private final static int CLOSE_ACTION = 11;
-	
-	
+	private enum SendMailDialogAction implements DialogAction {
+
+        CLOSE("close");
+
+        private final String actionName;
+
+        SendMailDialogAction(String actionKey) {
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
+    
     public SendMailJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToSend, String recipientString, String mailSubject, String mailBody) {
         super(progressDialog, mainFrame, filesToSend);
 
@@ -115,7 +128,8 @@ public class SendMailJob extends TransferFileJob {
      * Shows an error dialog with a single action : close, and stops the job.
      */
     private void showErrorDialog(String message) {
-        showErrorDialog(errorDialogTitle, message, new String[]{CLOSE_TEXT}, new int[]{CLOSE_ACTION});
+        showErrorDialog(errorDialogTitle, message,
+                Arrays.asList(SendMailDialogAction.CLOSE));
         interrupt();
     }
 	

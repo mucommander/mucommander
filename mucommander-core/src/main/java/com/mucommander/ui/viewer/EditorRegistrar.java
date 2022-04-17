@@ -22,6 +22,7 @@ import java.awt.Image;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.viewer.FileEditorService;
 import com.mucommander.osgi.FileEditorServiceTracker;
 import com.mucommander.text.Translator;
@@ -29,7 +30,11 @@ import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.viewer.WarnUserException;
+
+import java.util.Arrays;
 import java.util.List;
+
+import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
 
 /**
  * EditorRegistrar maintains a list of registered file editors and provides
@@ -40,6 +45,24 @@ import java.util.List;
  * @author Maxence Bernard
  */
 public class EditorRegistrar {
+
+    public enum EditorRegistrarAction implements DialogAction {
+
+        OPEN_ANYWAY("file_editor.open_anyway"),
+        CANCEL("cancel");
+
+        private final String actionName;
+
+        EditorRegistrarAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
 
     /**
      * Creates and returns an EditorFrame to start viewing the given file. The
@@ -91,12 +114,11 @@ public class EditorRegistrar {
                 }
             } catch (WarnUserException e) {
                 QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"), Translator.get(e.getMessage()), frame.getMainFrame(),
-                        new String[]{Translator.get("file_editor.open_anyway"), Translator.get("cancel")},
-                        new int[]{0, 1},
+                        Arrays.asList(EditorRegistrarAction.OPEN_ANYWAY, EditorRegistrarAction.CANCEL),
                         0);
 
-                int ret = dialog.getActionValue();
-                if (ret == 1 || ret == -1) {
+                DialogAction ret = dialog.getActionValue();
+                if (ret == EditorRegistrarAction.CANCEL || ret == DIALOG_DISPOSED_ACTION) {
                     // User canceled the operation
                     editorCanceled = true;
                 } else {

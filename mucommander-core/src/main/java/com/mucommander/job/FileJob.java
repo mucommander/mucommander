@@ -18,6 +18,8 @@
 
 package com.mucommander.job;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import org.slf4j.Logger;
@@ -30,6 +32,7 @@ import com.mucommander.job.ui.DialogResult;
 import com.mucommander.job.ui.UserInputHelper;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
@@ -558,11 +561,10 @@ public abstract class FileJob implements Runnable {
      * The job is stopped if 'cancel' or 'close' was chosen, and the result 
      * is returned.
      */
-    protected int showErrorDialog(String title, String message) {
-        String actionTexts[] = new String[]{FileJobAction.SKIP_TEXT, FileJobAction.SKIP_ALL_TEXT, FileJobAction.RETRY_TEXT, FileJobAction.CANCEL_TEXT};
-        int actionValues[] = new int[]{FileJobAction.SKIP, FileJobAction.SKIP_ALL, FileJobAction.RETRY, FileJobAction.CANCEL};
-
-        return showErrorDialog(title, message, actionTexts, actionValues);
+    protected DialogAction showErrorDialog(String title, String message) {
+        List<DialogAction> actions = Arrays.asList(FileJobAction.SKIP, FileJobAction.SKIP_ALL,
+                        FileJobAction.RETRY, FileJobAction.CANCEL);
+        return showErrorDialog(title, message, actions);
     }
 
 
@@ -570,11 +572,11 @@ public abstract class FileJob implements Runnable {
     /**
      * Displays an error dialog with the specified title and message and returns the selection action's value.
      */
-    protected int showErrorDialog(String title, String message, String actionTexts[], int actionValues[]) {
+    protected DialogAction showErrorDialog(String title, String message, List<DialogAction> actionChoices) {
         // Return SKIP_ACTION if 'skip all' has previously been selected and 'skip' is in the list of actions.
         if(autoSkipErrors) {
-            for (int actionValue : actionValues)
-                if (actionValue == FileJobAction.SKIP)
+            for (DialogAction action : actionChoices)
+                if (action == FileJobAction.SKIP)
                     return FileJobAction.SKIP;
         }
 
@@ -588,24 +590,22 @@ public abstract class FileJob implements Runnable {
                                         title,
                                         message,
                                         getMainFrame(),
-                                        actionTexts,
-                                        actionValues,
+                                        actionChoices,
                                         0);
         else
             dialog = new QuestionDialog(getProgressDialog(), 
                                         title,
                                         message,
                                         getMainFrame(),
-                                        actionTexts,
-                                        actionValues,
+                                        actionChoices,
                                         0);
 
         // Cancel or close dialog stops this job
-        int userChoice = waitForUserResponse(dialog);
-        if(userChoice==-1 || userChoice==FileJobAction.CANCEL)
+        DialogAction userChoice = waitForUserResponse(dialog);
+        if (userChoice == QuestionDialog.DIALOG_DISPOSED_ACTION || userChoice == FileJobAction.CANCEL)
             interrupt();
-        // Keep 'skip all' choice for further error and return SKIP_ACTION
-        else if(userChoice==FileJobAction.SKIP_ALL) {
+        // Keep 'skip all' choice for further error and return SKIP
+        else if (userChoice == FileJobAction.SKIP_ALL) {
             autoSkipErrors = true;
             return FileJobAction.SKIP;
         }
@@ -618,9 +618,9 @@ public abstract class FileJob implements Runnable {
      * Waits for the user's answer to the given question dialog, putting this
      * job in pause mode while waiting for the user.
      */
-    protected int waitForUserResponse(DialogResult dialog) {
+    protected DialogAction waitForUserResponse(DialogResult dialog) {
         Object userInput = waitForUserResponseObject(dialog);
-        return (Integer) userInput;
+        return (DialogAction) userInput;
     }
     
     protected Object waitForUserResponseObject(DialogResult dialog) {

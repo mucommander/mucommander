@@ -21,6 +21,7 @@ import java.awt.Image;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.viewer.FileViewerService;
 import com.mucommander.osgi.FileViewerServiceTracker;
 import com.mucommander.text.Translator;
@@ -29,7 +30,10 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.viewer.WarnUserException;
 import java.awt.Frame;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
 
 /**
  * ViewerRegistrar maintains a list of registered file viewers and provides
@@ -40,6 +44,24 @@ import java.util.List;
  * @author Maxence Bernard, Arik Hadas
  */
 public class ViewerRegistrar {
+
+    public enum ViewerRegistrarAction implements DialogAction {
+
+        OPEN_ANYWAY("file_editor.open_anyway"),
+        CANCEL("cancel");
+
+        private final String actionName;
+
+        ViewerRegistrarAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
 
     /**
      * Creates and returns a ViewerFrame to start viewing the given file. The
@@ -94,12 +116,11 @@ public class ViewerRegistrar {
                 // Todo: display a proper warning dialog with the appropriate icon
 
                 QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"), Translator.get(e.getMessage()), viewerFrame.getMainFrame(),
-                        new String[]{Translator.get("file_editor.open_anyway"), Translator.get("cancel")},
-                        new int[]{0, 1},
+                        Arrays.asList(ViewerRegistrarAction.OPEN_ANYWAY, ViewerRegistrarAction.CANCEL),
                         0);
 
-                int ret = dialog.getActionValue();
-                if (ret == 1 || ret == -1) {
+                DialogAction ret = dialog.getActionValue();
+                if (ret == ViewerRegistrarAction.CANCEL || ret == DIALOG_DISPOSED_ACTION) {
                     // User canceled the operation
                     viewerCanceled = true;
                 } else {

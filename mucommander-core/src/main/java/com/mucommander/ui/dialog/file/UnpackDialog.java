@@ -62,7 +62,7 @@ public class UnpackDialog extends TransferDestinationDialog {
     }
 
     @Override
-    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction) {
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction) {
         DestinationType destinationType = resolvedDest.getDestinationType();
         if(destinationType==DestinationType.EXISTING_FILE) {
             showErrorDialog(Translator.get("invalid_path", resolvedDest.getDestinationFile().getAbsolutePath()));

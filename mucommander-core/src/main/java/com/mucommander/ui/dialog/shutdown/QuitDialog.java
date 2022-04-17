@@ -23,11 +23,13 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.QuitAction;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import java.util.Arrays;
 
 /**
  * Quit confirmation dialog invoked when the user asked the application to quit, which gives the user a chance
@@ -42,11 +44,25 @@ public class QuitDialog extends QuestionDialog {
 
     /** True when quit confirmation button has been pressed by the user */
     private boolean quitConfirmed;
-	
-    private final static int QUIT_ACTION = 0;
-    private final static int CANCEL_ACTION = 1;
 
-    
+    private enum QuitDialogAction implements DialogAction {
+
+        QUIT(QuitAction.Descriptor.ACTION_ID),
+        CANCEL("cancel");
+
+        private final String actionName;
+
+        QuitDialogAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
+
     /**
      * Creates a new instance of QuitDialog, displays the dialog and waits for a user's choice. This dialog
      * doesn't quit the application when 'Quit' is confirmed, it is up to the method that invoked this dialog
@@ -62,14 +78,13 @@ public class QuitDialog extends QuestionDialog {
               Translator.get("quit_dialog.title"),
               Translator.get("quit_dialog.desc", ""+WindowManager.getMainFrames().size()),
               mainFrame,
-              new String[] {ActionProperties.getActionLabel(QuitAction.Descriptor.ACTION_ID), Translator.get("cancel")},
-              new int[] {QUIT_ACTION, CANCEL_ACTION},
+              Arrays.asList(QuitDialogAction.QUIT, QuitDialogAction.CANCEL),
               0);
 		
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("quit_dialog.show_next_time"), true);
         addComponent(showNextTimeCheckBox);
 		
-        this.quitConfirmed = getActionValue()==QUIT_ACTION;
+        this.quitConfirmed = getActionValue() == QuitDialogAction.QUIT;
         if(quitConfirmed) {
             // Remember user preference
         	MuConfigurations.getPreferences().setVariable(MuPreference.CONFIRM_ON_QUIT, showNextTimeCheckBox.isSelected());

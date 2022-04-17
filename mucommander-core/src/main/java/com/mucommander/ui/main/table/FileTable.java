@@ -22,11 +22,8 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -1593,10 +1590,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 files.add(fileToRename);
                 MoveJob renameJob;
                 if (!consecutiveRename) {
-                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true);
+                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.OverwriteAction.ASK, true);
                 } else {
                     AbstractFile fileToBeSelected = tableModel.getFileAtRow(editingRow+1);
-                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.ASK_ACTION, true) {
+                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.OverwriteAction.ASK, true) {
                         @Override
                         protected void selectFileWhenFinished(AbstractFile file) {
                             super.selectFileWhenFinished(fileToBeSelected);

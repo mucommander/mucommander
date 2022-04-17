@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -325,7 +327,7 @@ public abstract class TransferFileJob extends FileJob {
                 // Print the exception's stack trace
                 LOGGER.debug("Copy failed", e);
 
-                int choice;
+                DialogAction choice;
                 switch(e.getReason()) {
                     // Could not open source file for read
                     case OPENING_SOURCE:
@@ -346,9 +348,9 @@ public abstract class TransferFileJob extends FileJob {
                     default:
                         choice = showErrorDialog(errorDialogTitle,
                                                  Translator.get("error_while_transferring", sourceFile.getName()),
-                                                 new String[]{FileJobAction.SKIP_TEXT, FileJobAction.SKIP_ALL_TEXT, FileJobAction.APPEND_TEXT, FileJobAction.RETRY_TEXT, FileJobAction.CANCEL_TEXT},
-                                                 new int[]{FileJobAction.SKIP, FileJobAction.SKIP_ALL, FileJobAction.APPEND, FileJobAction.RETRY, FileJobAction.CANCEL}
-                                                 );
+                                                 Arrays.asList(FileJobAction.SKIP, FileJobAction.SKIP_ALL,
+                                                         FileJobAction.APPEND, FileJobAction.RETRY,
+                                                         FileJobAction.CANCEL));
                     break;
                 }
 

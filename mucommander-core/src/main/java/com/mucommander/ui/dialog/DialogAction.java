@@ -14,35 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package com.mucommander.job;
-
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.DialogAction;
+package com.mucommander.ui.dialog;
 
 /**
- * Actions on {@code FileJob}
- *
- * @author Arik Hadas
+ * An interface (a base) for Dialog action enums.
+ * It is being used by QuestionDialog based dialogs to display action options (buttons or combo-boxes)
+ * and return the chosen one.
  */
-public enum FileJobAction implements DialogAction {
+ public interface DialogAction {
 
-    SKIP("skip"),
-    SKIP_ALL("skip_all"),
-    RETRY("retry"),
-    CANCEL("cancel"),
-    APPEND("resume"),
-    OK("ok");
-
-    private final String actionName;
-
-    FileJobAction(String actionKey) {
-        // here or when in #getActionName
-        this.actionName = Translator.get(actionKey);
-    }
-
-    @Override
-    public String getActionName() {
-        return actionName;
-    }
+    String getActionName();
 }

@@ -49,6 +49,9 @@ import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
+import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
+import static com.mucommander.ui.dialog.file.FileCollisionDialog.OverwriteAction.ASK;
+
 
 /**
  * This class is an abstract dialog which allows the user to enter the destination of a transfer in a text field
@@ -59,7 +62,7 @@ import com.mucommander.ui.text.FilePathField;
  * When the dialog is confirmed by the user, either by pressing the 'OK' button or the 'Enter' key, the destination
  * path is resolved and checked with {@link #isValidDestination(PathUtils.ResolvedDestination, String)}. If the
  * path is a valid destination, a job instance is created using
- * {@link #createTransferFileJob(ProgressDialog, PathUtils.ResolvedDestination, int)} and started. If it isn't,
+ * {@link #createTransferFileJob(ProgressDialog, PathUtils.ResolvedDestination, FileCollisionDialog.OverwriteAction)} and started. If it isn't,
  * the user is notified with an error message.
  * </p>
  *
@@ -75,7 +78,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     private FilePathField pathField;
     private SpinningDial spinningDial;
 
-    private JComboBox<String> fileExistsActionComboBox;
+    private JComboBox<Enum<?>> fileExistsActionComboBox;
     private JCheckBox skipErrorsCheckBox;
     private JCheckBox verifyIntegrityCheckBox;
     private JCheckBox runInBackgroundCheckBox;
@@ -87,27 +90,17 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     // Dialog size constraints
     protected final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
     // Dialog width should not exceed 360, height is not an issue (always the same)
-    protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);	
+    protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);
 
-	
-    private final static int DEFAULT_ACTIONS[] = {
-        FileCollisionDialog.CANCEL_ACTION,
-        FileCollisionDialog.SKIP_ACTION,
-        FileCollisionDialog.OVERWRITE_ACTION,
-        FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION,
-        FileCollisionDialog.RESUME_ACTION,
-        FileCollisionDialog.RENAME_ACTION
+    private final static FileCollisionDialog.OverwriteAction DEFAULT_ACTIONS[] = {
+        FileCollisionDialog.OverwriteAction.CANCEL,
+        FileCollisionDialog.OverwriteAction.SKIP,
+        FileCollisionDialog.OverwriteAction.OVERWRITE,
+        FileCollisionDialog.OverwriteAction.OVERWRITE_IF_OLDER,
+        FileCollisionDialog.OverwriteAction.OVERWRITE_IF_SIZE_DIFFERS,
+        FileCollisionDialog.OverwriteAction.RESUME,
+        FileCollisionDialog.OverwriteAction.RENAME
     };
-
-    private final static String DEFAULT_ACTIONS_TEXT[] = {
-        FileCollisionDialog.CANCEL_TEXT,
-        FileCollisionDialog.SKIP_TEXT,
-        FileCollisionDialog.OVERWRITE_TEXT,
-        FileCollisionDialog.OVERWRITE_IF_OLDER_TEXT,
-        FileCollisionDialog.RESUME_TEXT,
-        FileCollisionDialog.RENAME_TEXT
-    };
-
 
     public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle, boolean enableTransferOptions) {
         super(mainFrame, title, files);
@@ -137,10 +130,11 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             // Combo box that allows the user to choose the default action when a file already exists in destination
             mainPanel.add(new JLabel(Translator.get("destination_dialog.file_exists_action")+" :"));
             fileExistsActionComboBox = new JComboBox<>();
-            fileExistsActionComboBox.addItem(Translator.get("ask"));
-            int nbChoices = DEFAULT_ACTIONS_TEXT.length;
-            for(int i=0; i<nbChoices; i++)
-                fileExistsActionComboBox.addItem(DEFAULT_ACTIONS_TEXT[i]);
+            fileExistsActionComboBox.addItem(ASK);
+
+            for (FileCollisionDialog.OverwriteAction action : DEFAULT_ACTIONS) {
+                fileExistsActionComboBox.addItem(action);
+            }
             mainPanel.add(fileExistsActionComboBox);
 
             mainPanel.addSpace(10);
@@ -269,7 +263,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @param resolvedDest the resolved destination
      */
     private void startJob(PathUtils.ResolvedDestination resolvedDest) {
-        int defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
+        FileCollisionDialog.OverwriteAction defaultFileExistsAction = ASK;
         boolean skipErrors = false;
         boolean verifyIntegrity = false;
         boolean runInBackground = runInBackgroundCheckBox.isSelected();
@@ -277,11 +271,9 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         if (enableTransferOptions) {
             // Retrieve default action when a file exists in destination, default choice
             // (if not specified by the user) is 'Ask'
-            defaultFileExistsAction = fileExistsActionComboBox.getSelectedIndex();
-            if(defaultFileExistsAction==0)
-                defaultFileExistsAction = FileCollisionDialog.ASK_ACTION;
-            else
-                defaultFileExistsAction = DEFAULT_ACTIONS[defaultFileExistsAction-1];
+            defaultFileExistsAction = (FileCollisionDialog.OverwriteAction) fileExistsActionComboBox.getSelectedItem();
+            if (defaultFileExistsAction == DIALOG_DISPOSED_ACTION)
+                defaultFileExistsAction = ASK;
             // Note: we don't remember default action on purpose: we want the user to specify it each time,
             // it would be too dangerous otherwise.
 
@@ -383,7 +375,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @param defaultFileExistsAction the value of the 'default action when file exists' choice
      * @return the {@link TransferFileJob} instance that will subsequently be started
      */
-    protected abstract TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, int defaultFileExistsAction);
+    protected abstract TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction);
 
     /**
      * Returns the title to be used in the progress dialog.

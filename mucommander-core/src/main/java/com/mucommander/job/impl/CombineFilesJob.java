@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -49,7 +51,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 
 	public CombineFilesJob(ProgressDialog progressDialog, MainFrame mainFrame,
 			FileSet files, AbstractFile destFile,
-			int fileExistsAction) {
+			FileCollisionDialog.OverwriteAction fileExistsAction) {
 		super(progressDialog, mainFrame, files, destFile, null, fileExistsAction);
         this.errorDialogTitle = Translator.get("combine_files_dialog.error_title");
 	}
@@ -78,8 +80,7 @@ public class CombineFilesJob extends AbstractCopyJob {
             LOGGER.debug("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
-                    new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL}
+                    Arrays.asList(FileJobAction.CANCEL)
                     );
             interrupt();
 			return false;
@@ -109,8 +110,7 @@ public class CombineFilesJob extends AbstractCopyJob {
         	LOGGER.debug("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
-                    new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL}
+					Arrays.asList(FileJobAction.CANCEL)
                     );
             interrupt();
         }
@@ -151,8 +151,7 @@ public class CombineFilesJob extends AbstractCopyJob {
 		if (crcFile==null  || !crcFile.exists()) {
             showErrorDialog(errorDialogTitle,
                     Translator.get("combine_files_job.no_crc_file"),
-                    new String[]{FileJobAction.OK_TEXT},
-                    new int[]{FileJobAction.OK}
+                    Arrays.asList(FileJobAction.OK)
                     );
 			return;
 		}
@@ -166,22 +165,19 @@ public class CombineFilesJob extends AbstractCopyJob {
 			if (!crcLine.equals(crcDest)) {
 	            showErrorDialog(errorDialogTitle,
 	                    Translator.get("combine_files_job.crc_check_failed", crcDest, crcLine),
-	                    new String[]{FileJobAction.OK_TEXT},
-	                    new int[]{FileJobAction.OK}
+						Arrays.asList(FileJobAction.OK)
 	                    );
 			} else {
 	            showErrorDialog(Translator.get("combine_files_dialog.error_title"),
 	                    Translator.get("combine_files_job.crc_ok"),
-	                    new String[]{FileJobAction.OK_TEXT},
-	                    new int[]{FileJobAction.OK}
+						Arrays.asList(FileJobAction.OK)
 	                    );
 			}
 		} catch (Exception e) {
             LOGGER.debug("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("combine_files_job.crc_read_error"),
-                    new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL}
+                    Arrays.asList(FileJobAction.CANCEL)
                     );
 		} finally {
 			if (crcIn!=null) {
@@ -206,8 +202,7 @@ public class CombineFilesJob extends AbstractCopyJob {
                 LOGGER.debug("Caught exception", e);
 	            showErrorDialog(errorDialogTitle,
 	                    Translator.get("error_while_transferring", destFile.getName()),
-	                    new String[]{FileJobAction.CANCEL_TEXT},
-	                    new int[]{FileJobAction.CANCEL}
+	                    Arrays.asList(FileJobAction.CANCEL)
 	                    );
 			}
 		}

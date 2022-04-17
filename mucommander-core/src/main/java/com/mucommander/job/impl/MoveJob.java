@@ -33,6 +33,8 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -60,7 +62,7 @@ public class MoveJob extends AbstractCopyJob {
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      * @param renameMode true if this job corresponds to a single file renaming
      */
-    public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, int fileExistsAction, boolean renameMode) {
+    public MoveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, FileCollisionDialog.OverwriteAction fileExistsAction, boolean renameMode) {
         super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
         this.errorDialogTitle = Translator.get("move_dialog.error_title");
@@ -162,7 +164,7 @@ public class MoveJob extends AbstractCopyJob {
                         destFile.mkdir();
                     }
                     catch(IOException e) {
-                        int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFile.getAbsolutePath()));
+                        DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFile.getAbsolutePath()));
                         // Retry loops
                         if(ret==FileJobAction.RETRY)
                             continue;
@@ -206,7 +208,7 @@ public class MoveJob extends AbstractCopyJob {
                 }
                 catch(IOException e) {
                     // file.ls() failed
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
+                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
                         continue;
@@ -227,7 +229,7 @@ public class MoveJob extends AbstractCopyJob {
                     return true;
                 }
                 catch(IOException e) {
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_folder", file.getAbsolutePath()));
+                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_folder", file.getAbsolutePath()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
                         continue;
@@ -252,7 +254,7 @@ public class MoveJob extends AbstractCopyJob {
                     catch(IOException e) {
                         LOGGER.debug("IOException caught", e);
 
-                        int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
+                        DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
                         // Retry loops
                         if(ret==FileJobAction.RETRY)
                             continue;

@@ -19,7 +19,6 @@ package com.mucommander.viewer.text;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
@@ -29,6 +28,7 @@ import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.job.FileCollisionChecker;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
@@ -36,6 +36,8 @@ import com.mucommander.viewer.CloseCancelledException;
 import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -49,6 +51,24 @@ import javax.swing.KeyStroke;
  * @author Miroslav Hajda
  */
 public abstract class BasicFileEditor implements FileEditor {
+
+    public enum BasicFileAction implements DialogAction {
+        YES("save"),
+        NO("dont_save"),
+        CANCEL("cancel");
+
+        private final String actionName;
+
+        BasicFileAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
 
     protected final JMenu fileMenu;
     protected final JMenuItem saveItem;
@@ -139,10 +159,10 @@ public abstract class BasicFileEditor implements FileEditor {
             if (collision != FileCollisionChecker.NO_COLLOSION) {
                 // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                 // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-                int action = new FileCollisionDialog(getFrame(), getFrame()/*mainFrame*/, collision, null, destFile, false, false).getActionValue();
+                DialogAction action = new FileCollisionDialog(getFrame(), getFrame()/*mainFrame*/, collision, null, destFile, false, false).getActionValue();
 
                 // User chose to overwrite the file
-                if (action == FileCollisionDialog.OVERWRITE_ACTION) {
+                if (action == FileCollisionDialog.OverwriteAction.OVERWRITE) {
                     // Do nothing, simply continue and file will be overwritten
                 } // User chose to cancel or closed the dialog
                 else {
@@ -175,12 +195,11 @@ public abstract class BasicFileEditor implements FileEditor {
         }
 
         QuestionDialog dialog = new QuestionDialog(getFrame(), null, Translator.get("file_editor.save_warning"), getFrame(),
-                new String[]{Translator.get("save"), Translator.get("dont_save"), Translator.get("cancel")},
-                new int[]{JOptionPane.YES_OPTION, JOptionPane.NO_OPTION, JOptionPane.CANCEL_OPTION},
+                Arrays.asList(BasicFileAction.YES, BasicFileAction.NO, BasicFileAction.CANCEL),
                 0);
-        int ret = dialog.getActionValue();
+        DialogAction ret = dialog.getActionValue();
 
-        if ((ret == JOptionPane.YES_OPTION && trySave(getCurrentFile())) || ret == JOptionPane.NO_OPTION) {
+        if (ret == BasicFileAction.YES && trySave(getCurrentFile()) || ret == BasicFileAction.NO) {
             setSaveNeeded(false);
             return true;
         }

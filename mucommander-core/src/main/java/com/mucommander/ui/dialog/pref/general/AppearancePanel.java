@@ -47,8 +47,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
@@ -60,12 +58,12 @@ import com.mucommander.extension.ExtensionManager;
 import com.mucommander.extension.LookAndFeelFilter;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
-import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
 import com.mucommander.ui.dialog.pref.component.PrefComboBox;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
 import com.mucommander.ui.icon.FileIcons;
@@ -80,8 +78,27 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 class AppearancePanel extends PreferencesPanel implements ActionListener, Runnable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AppearancePanel.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppearancePanel.class);
+
+    public enum AppearanceAction implements DialogAction {
+
+        YES("yes"),
+        NO("no"),
+        CANCEL("cancel");
+
+        private final String actionName;
+
+        AppearanceAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
+
     // - Look and feel fields ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Combo box containing the list of available look&feels. */
@@ -152,12 +169,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     // -----------------------------------------------------------------------------------
     /** System icon combobox. */
     private PrefComboBox<String>   useSystemFileIconsComboBox;
-    /** Identifier of 'yes' actions in question dialogs. */
-    private final static int       YES_ACTION = 0;
-    /** Identifier of 'no' actions in question dialogs. */
-    private final static int       NO_ACTION = 1;
-    /** Identifier of 'cancel' actions in question dialogs. */
-    private final static int       CANCEL_ACTION = 2;
+
     /** All known custom look and feels. */
     private java.util.List<String> customLookAndFeels;
 
@@ -464,7 +476,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * Creates a combo box that allows to choose a size for a certain type of icon. The returned combo box is filled
      * with allowed choices, and the current configuration value is selected.
      *
-     * @param confVar the name of the configuration variable that contains the icon scale factor
+     * @param preference the name of the configuration variable that contains the icon scale factor
      * @param defaultValue the default value for the icon scale factor if the configuration variable has no value
      * @return a combo box that allows to choose a size for a certain type of icon
      */
@@ -654,9 +666,8 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         // Asks the user whether he's sure he wants to delete the selected look and feel.
         if(new QuestionDialog(parent, null, Translator.get("prefs_dialog.delete_look_and_feel", selection.getName()), parent,
-                              new String[] {Translator.get("yes"), Translator.get("no")},
-                              new int[]  {YES_ACTION, NO_ACTION},
-                              0).getActionValue() != YES_ACTION)
+                              Arrays.asList(AppearanceAction.YES, AppearanceAction.NO),
+                              0).getActionValue() != AppearanceAction.YES)
             return;
 
         // Removes the selected look and feel from the combo box.
@@ -709,16 +720,23 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         int collision = FileCollisionChecker.checkForCollision(library, destFile);
         if(collision!=FileCollisionChecker.NO_COLLOSION) {
             // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
-            int action = new FileCollisionDialog(parent, parent, collision, library, destFile, false, false).getActionValue();
+            DialogAction action = new FileCollisionDialog(parent, parent, collision, library, destFile, false, false).getActionValue();
 
             // User chose to overwrite the file
-            if(action==FileCollisionDialog.OVERWRITE_ACTION) {
+            if(action== FileCollisionDialog.OverwriteAction.OVERWRITE) {
                 // Simply continue and file will be overwritten
             }
-            else if(action==FileCollisionDialog.OVERWRITE_IF_OLDER_ACTION) {
+            else if (action == FileCollisionDialog.OverwriteAction.OVERWRITE_IF_OLDER) {
                 // Overwrite if the source is more recent than the destination
-                if(library.getDate()<=destFile.getDate())
+                if (library.getDate() <= destFile.getDate()) {
                     return false;
+                }
+                // Simply continue and file will be overwritten
+            } else if (action == FileCollisionDialog.OverwriteAction.OVERWRITE_IF_SIZE_DIFFERS) {
+                // Overwrite if the source and target file size differs
+                if (library.getSize() == destFile.getSize()) {
+                    return false;
+                }
                 // Simply continue and file will be overwritten
             }
             // User chose to cancel or closed the dialog
@@ -861,10 +879,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private void deleteTheme(Theme theme) {
         // Asks the user whether he's sure he wants to delete the selected theme.
-        if(new QuestionDialog(parent, null, Translator.get("prefs_dialog.delete_theme", theme.getName()), parent,
-                              new String[] {Translator.get("yes"), Translator.get("no")},
-                              new int[]  {YES_ACTION, NO_ACTION},
-                              0).getActionValue() != YES_ACTION)
+        if (new QuestionDialog(parent, null, Translator.get("prefs_dialog.delete_theme", theme.getName()), parent,
+                              Arrays.asList(AppearanceAction.YES, AppearanceAction.NO),
+                              0).getActionValue() != AppearanceAction.YES)
             return;
 
         // Deletes the selected theme and removes it from the list.
@@ -970,10 +987,10 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 int collision = FileCollisionChecker.checkForCollision(null, file);
                 if(collision!=FileCollisionChecker.NO_COLLOSION) {
                     // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
-                    int action = new FileCollisionDialog(parent, parent, collision, null, file, false, false).getActionValue();
+                    DialogAction action = new FileCollisionDialog(parent, parent, collision, null, file, false, false).getActionValue();
 
                     // User chose to overwrite the file
-                    if(action==FileCollisionDialog.OVERWRITE_ACTION) {
+                    if(action== FileCollisionDialog.OverwriteAction.OVERWRITE) {
                         // Simply continue and file will be overwritten
                     }
                     // User chose to cancel or closed the dialog
