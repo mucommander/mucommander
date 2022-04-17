@@ -28,52 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v0.9.7 ?
+What's new since v1.0.0 ?
 -----------------------
 
 New features:
-- Support compression and decompression of XZ archives.
-- Added file size conditions to file search.
-- Added 'Show in enclosing folder' action for a file search result that opens a new tab with its enclosing folder and selects the result.
-- Pressing Tab key when editing a file name renames the selected file and the name of the next file automatically becomes editable.
+- 
 
 Improvements:
-- Mouse clicks on the headers of a file table (e.g., NAME, SIZE, DATE) are better detected.
-- Require non-headless Java when installing from RPM.
-- Use absolute path rather than canonical path in bookmarks to avoid resolving symbolic links.
-- Tar archives with headers in the pax format are now supported.
-- The free space indicator in the status bar is updated right after relevant events like switching to the application.
-- Symbolic links are unpacked from tar archives.
-- The portable version stores preferences files in the installation directory.
-- It is now possible to change the modification date of multiple search results.
-- Prevention of ZipSlip (https://snyk.io/research/zip-slip-vulnerability).
-- An informative error dialog is displayed when failing to change directory while browsing an ftp server.
-- Setting the default file drag and drop action to 'COPY' (rather than 'MOVE') is now configurable.
-- Support "Open natively" operation for files from UNC paths.
-- Add an option to follow symbolic links in file search. This option is disabled by default.
-- Enable filtering out folders, hidden files, archive files or symlinks from file search results.
-- Limit the amount of threads used for file searching to two. This can be overridden per-search.
-- 'Find next' opens the 'Find' dialog on text editor/viewer when invoked for the first time.
-- The search string that is used by 'Find next/previous' is preserved across text editors/viewers.
-- Operations on the presented location (e.g., make directory) are disabled when presenting file search.
-- Enable renaming a file search result.
-- File search is case insensitive by default.
+- 
 
 Localization:
-- Russian translation updated.
-- Korean translation updated.
+- 
 
 Bug fixes:
-- Fix installation using GDebi Package Installer.
-- Permanent deletion of symbolic links on Windows no longer deletes their linked content.
-- Restore file table configuration (column visibility, width and position) on startup also when custom folders are set.
-- The default keyboard shortcut for packing files (CTRL+I) opens the 'Pack files' dialog on macOS.
-- File search works with search strings that resemble a path to an archive file, e.g., find:///home/*.zip.
-- When selection changes in the tree view and the presented tab is locked, the selected location is opened in a new tab.
-- Fix the execution of Windows executable files whose name contains parentheses characters.
-- 'Reveal in Finder' action reveals the selected file in the Finder instead of opening it on macOS.
-- Fix 'Reveal in Explorer' on Windows.
-- Fix trancated file search results when searching the root folder.
+- 
 
 Known issues:
 - Some translations may not be up-to-date.
