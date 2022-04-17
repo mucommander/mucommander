@@ -31,6 +31,7 @@ import javax.swing.table.AbstractTableModel;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.CachedFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileComparator;
@@ -335,14 +336,10 @@ public class FileTableModel extends AbstractTableModel {
     public Function<AbstractFile, String> getNameFunc() {
         switch (currentFolder.getURL().getScheme()) {
         case SearchFile.SCHEMA:
-            String base = currentFolder.getURL().getHost();
-            int beginIndex = base.length() + 1; // + path separator
-            return file -> {
-                String path = file.getAbsolutePath().substring(beginIndex);
-                if (file.isDirectory())
-                    path = PathUtils.removeTrailingSeparator(path);
-                return path;
-            };
+            String basePath = currentFolder.getURL().getHost();
+            AbstractFile baseFile = FileFactory.getFile(basePath);
+            int beginIndex = baseFile.getAbsolutePath(true).length();
+            return file -> file.getAbsolutePath(false).substring(beginIndex);
         default:
             return AbstractFile::getName;
         }
