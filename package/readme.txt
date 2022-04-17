@@ -15,7 +15,7 @@ It runs on any operating system with Java support (macOS, Windows, Linux, *BSD, 
 Please visit the muCommander project page on GitHub (https://github.com/mucommander) to ask questions,
 suggest features, report a bug or browse documentation. Your feedback is always welcome!
 
-Official website: http://www.mucommander.com
+Official website: https://www.mucommander.com
 
 
 Requirements
