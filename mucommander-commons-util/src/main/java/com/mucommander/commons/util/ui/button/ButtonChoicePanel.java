@@ -24,6 +24,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -51,7 +54,7 @@ import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListener {
 
     /** Provided JButton instances */
-    private JButton buttons[];
+    private List<JButton> buttons;
 
     /** RootPane associated with this ButtonChoicePanel */
     private JRootPane rootPane;
@@ -74,9 +77,9 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
      * @param nbCols   number of columns for the buttons grid, if <=0 all buttons will be put on a single row
      * @param rootPane associated with this ButtonChoicePanel
      */
-    public ButtonChoicePanel(JButton buttons[], int nbCols, JRootPane rootPane) {
-        this.buttons = buttons;
-        int nbButtons = buttons.length;
+    public ButtonChoicePanel(List<JButton> buttons, int nbCols, JRootPane rootPane) {
+        this.buttons = new ArrayList<>(buttons);
+        int nbButtons = buttons.size();
         this.nbCols = nbCols<=0?nbButtons:nbCols;
         this.rootPane = rootPane;
         this.nbRows = nbCols<=0?1:nbButtons/nbCols+(nbButtons%nbCols==0?0:1);
@@ -108,7 +111,9 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
         updateMnemonics();
 
         // First button is made 'default button'
-        rootPane.setDefaultButton(buttons[0]);
+        if (!buttons.isEmpty()) {
+            rootPane.setDefaultButton(buttons.get(0));
+        }
         this.currentButton = 0;
     }
 
@@ -136,7 +141,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
         int keyCode = e.getKeyCode();
 
         int oldCurrentButton = currentButton;
-        int nbButtons = buttons.length;
+        int nbButtons = buttons.size();
 
         // LEFT key goes back one button, to the last button if current button is the first one
         if (keyCode==KeyEvent.VK_LEFT) {
@@ -174,9 +179,9 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
         }
 
         // Make the new button the default button and request focus on this button
-        if(oldCurrentButton!=currentButton) {
-            rootPane.setDefaultButton(buttons[currentButton]);
-            buttons[currentButton].requestFocus();
+        if (oldCurrentButton != currentButton) {
+            rootPane.setDefaultButton(buttons.get(currentButton));
+            buttons.get(currentButton).requestFocus();
         }
     }
 

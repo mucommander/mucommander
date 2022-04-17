@@ -30,6 +30,8 @@ import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.UnmarkAllAction;
+import com.mucommander.ui.dialog.DialogAction;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -70,7 +72,7 @@ public class UnpackJob extends AbstractCopyJob {
      * @param destFolder destination folder where the files will be copied
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
-    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, int fileExistsAction) {
+    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, FileCollisionDialog.OverwriteAction fileExistsAction) {
         super(progressDialog, mainFrame, files, destFolder, null, fileExistsAction);
 
         this.errorDialogTitle = Translator.get("unpack_dialog.error_title");
@@ -89,7 +91,7 @@ public class UnpackJob extends AbstractCopyJob {
      * @param selectedEntries entries to be unpacked
      * @param baseArchiveDepth depth of the folder in which the top entries are located. 0 is the highest depth (archive's root folder)
      */
-    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, int fileExistsAction, List<ArchiveEntry> selectedEntries) {
+    public UnpackJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractArchiveFile archiveFile, int baseArchiveDepth, AbstractFile destFolder, String newName, FileCollisionDialog.OverwriteAction fileExistsAction, List<ArchiveEntry> selectedEntries) {
         super(progressDialog, mainFrame, new FileSet(archiveFile.getParent(), archiveFile), destFolder, newName, fileExistsAction);
 
         this.errorDialogTitle = Translator.get("unpack_dialog.error_title");
@@ -115,7 +117,7 @@ public class UnpackJob extends AbstractCopyJob {
                 }
                 catch(IOException e) {
                     // Unable to create folder
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", baseDestFolder.getName()));
+                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", baseDestFolder.getName()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
                         continue;
@@ -164,7 +166,7 @@ public class UnpackJob extends AbstractCopyJob {
                 }
                 catch(IOException e) {
                     // File could not be uncompressed properly
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", getCurrentFilename()));
+                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", getCurrentFilename()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
                         continue;
@@ -255,7 +257,7 @@ public class UnpackJob extends AbstractCopyJob {
                     if (destFolder.isParentOf(destFile))
                         break;
 
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.entry_out_of_target_dir", destFile.getName()));
+                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.entry_out_of_target_dir", destFile.getName()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
                         continue;
@@ -286,7 +288,7 @@ public class UnpackJob extends AbstractCopyJob {
                             }
                             catch(IOException e) {
                                 // Unable to create folder
-                                int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", entryFile.getName()));
+                                DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", entryFile.getName()));
                                 // Retry loops
                                 if(ret==FileJobAction.RETRY)
                                     continue;

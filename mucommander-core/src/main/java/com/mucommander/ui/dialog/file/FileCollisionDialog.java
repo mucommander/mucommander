@@ -22,8 +22,9 @@ import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -35,11 +36,11 @@ import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.text.FontUtils;
 import com.mucommander.job.FileCollisionChecker;
-import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.notifier.NotifierProvider;
@@ -55,26 +56,37 @@ import com.mucommander.ui.text.FileLabel;
  */
 public class FileCollisionDialog extends QuestionDialog {
 
-    /** This value is used by some FileJob classes */
-    public final static int ASK_ACTION = -1;
-	
-    public final static int CANCEL_ACTION = 0;
-    public final static int SKIP_ACTION = 1;
-    public final static int OVERWRITE_ACTION = 2;
-    public final static int OVERWRITE_IF_OLDER_ACTION = 3;
-    public final static int RESUME_ACTION = 4;
-    public final static int RENAME_ACTION = 5;
+    public enum OverwriteAction implements DialogAction {
 
-    public final static String CANCEL_TEXT = Translator.get("cancel");
-    public final static String SKIP_TEXT = Translator.get("skip");
-    public final static String OVERWRITE_TEXT = Translator.get("overwrite");
-    public final static String OVERWRITE_IF_OLDER_TEXT = Translator.get("overwrite_if_older");
-    public final static String RESUME_TEXT = Translator.get("resume");
-    public final static String RENAME_TEXT = Translator.get("rename");
+        ASK("ask"),
+        CANCEL("cancel"),
+        SKIP("skip"),
+        OVERWRITE("overwrite"),
+        OVERWRITE_IF_OLDER("overwrite_if_older"),
+        OVERWRITE_IF_SIZE_DIFFERS("overwrite_if_size_differs"),
+        RESUME("resume"),
+        RENAME("rename");
+
+        private final String actionName;
+
+        OverwriteAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        public String getActionName() {
+            return actionName;
+        }
+
+        // Required by JComboBox to properly display text when an object is set instead of String (sad)
+        @Override
+        public String toString() {
+            return getActionName();
+        }
+    }
 
     private JCheckBox applyToAllCheckBox;
 
-	
     /**
      * Creates a new FileCollisionDialog.
      *
@@ -114,68 +126,55 @@ public class FileCollisionDialog extends QuestionDialog {
 
         // Init choices
 
-        java.util.List<String> choicesTextV = new Vector<String>();
-        java.util.List<Integer> choicesActionsV = new Vector<Integer>();
+        List<DialogAction> actionChoices = new ArrayList<>();
 
-        choicesTextV.add(CANCEL_TEXT);
-        choicesActionsV.add(CANCEL_ACTION);
+        actionChoices.add(OverwriteAction.CANCEL);
 
-        if(multipleFilesMode) {
-            choicesTextV.add(SKIP_TEXT);
-            choicesActionsV.add(SKIP_ACTION);
+        if (multipleFilesMode) {
+            actionChoices.add(OverwriteAction.SKIP);
         }
 
         // Add 'overwrite' / 'overwrite if older' / 'resume' actions only for 'destination file already exists' collision type
-        if(collisionType==FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS && !destFile.isDirectory()) {
-            choicesTextV.add(OVERWRITE_TEXT);
-            choicesActionsV.add(OVERWRITE_ACTION);
+        if (collisionType == FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS && !destFile.isDirectory()) {
+            actionChoices.add(OverwriteAction.OVERWRITE);
 
-            if(sourceFile!=null) {
-                choicesTextV.add(OVERWRITE_IF_OLDER_TEXT);
-                choicesActionsV.add(OVERWRITE_IF_OLDER_ACTION);
+            if (sourceFile != null) {
+                actionChoices.add(OverwriteAction.OVERWRITE_IF_OLDER);
+                // TODO here (and line above) shouldn't we check condition as it is dome for resume below?
+                actionChoices.add(OverwriteAction.OVERWRITE_IF_SIZE_DIFFERS);
 
                 // Give resume option only if destination file is smaller than source file
                 long destSize = destFile.getSize();
                 long sourceSize = sourceFile.getSize();
-                if(destSize!=-1 && (sourceSize==-1 || destSize<sourceSize)) {
-                    choicesTextV.add(RESUME_TEXT);
-                    choicesActionsV.add(RESUME_ACTION);
+                if (destSize != -1 && (sourceSize == -1 || destSize < sourceSize)) {
+                    actionChoices.add(OverwriteAction.RESUME);
                 }
 
                 if (allowRename) {
-                    choicesTextV.add(RENAME_TEXT);
-                    choicesActionsV.add(RENAME_ACTION);
+                    actionChoices.add(OverwriteAction.RENAME);
                 }
             }
         
         }
 
-        // Convert choice vectors into arrays
-        int nbChoices = choicesActionsV.size();
-
-        String choicesText[] = new String[nbChoices];
-        choicesTextV.toArray(choicesText);
-
-        int choicesActions[] = new int[nbChoices];
-        for(int i=0; i<nbChoices; i++)
-            choicesActions[i] = choicesActionsV.get(i);
-
         // Init UI
+        String desc = null;
 
-        String desc;
-
-        if(collisionType==FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS)
-            desc = Translator.get("file_exists_in_destination");
-        else if(collisionType==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION)
-            desc = Translator.get("same_source_destination");
-        else if(collisionType==FileCollisionChecker.SOURCE_PARENT_OF_DESTINATION)
-            desc = Translator.get("source_parent_of_destination");
-        else
-            desc = null;
+        switch (collisionType) {
+            case FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS:
+                desc = Translator.get("file_exists_in_destination");
+                break;
+            case FileCollisionChecker.SAME_SOURCE_AND_DESTINATION:
+                desc = Translator.get("same_source_destination");
+                break;
+            case FileCollisionChecker.SOURCE_PARENT_OF_DESTINATION:
+                desc = Translator.get("source_parent_of_destination");
+                break;
+        }
 
         YBoxPanel yPanel = new YBoxPanel();
 
-        if(desc!=null) {
+        if (desc != null) {
             yPanel.add(new InformationPane(desc, null, Font.PLAIN, InformationPane.QUESTION_ICON));
             yPanel.addSpace(10);
         }
@@ -186,12 +185,12 @@ public class FileCollisionDialog extends QuestionDialog {
         XAlignedComponentPanel tfPanel = new XAlignedComponentPanel(10);
 
         // If collision type is 'same source and destination' no need to show both source and destination 
-        if(collisionType==FileCollisionChecker.SAME_SOURCE_AND_DESTINATION) {
+        if (collisionType == FileCollisionChecker.SAME_SOURCE_AND_DESTINATION) {
             addFileDetails(tfPanel, sourceFile, Translator.get("name"));
-        }
-        else {
-            if(sourceFile!=null)
+        }  else {
+            if (sourceFile != null) {
                 addFileDetails(tfPanel, sourceFile, Translator.get("source"));
+            }
 
             addFileDetails(tfPanel, destFile, Translator.get("destination"));
         }
@@ -201,20 +200,23 @@ public class FileCollisionDialog extends QuestionDialog {
         // Add a separator after file details
         yPanel.add(new JSeparator());
         
-        init(yPanel,
-             choicesText,
-             choicesActions,
-             3);
+        init(yPanel, actionChoices, 3);
+        // TODO below there's workaround to accommodate texts within buttons - any idea to how to make it better?
+        // override to avoid FocusDialog#pack making the dialog box too small for some buttons
+        // so they won't display full texts (observe when Spanish lang pack is chosen - a lot of them have ellipsis)
+        setMinimumSize(null);
+        setMaximumSize(null);
 
         // 'Apply to all' is available only for 'destination file already exists' collision type
-        if(multipleFilesMode && collisionType==FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS) {
+        if (multipleFilesMode && collisionType == FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS) {
             applyToAllCheckBox = new JCheckBox(Translator.get("apply_to_all"));
             addComponent(applyToAllCheckBox);
         }
 
         // Send a system notification if a notifier is available and enabled
-        if(NotifierProvider.isAvailable() && NotifierProvider.getNotifier().isEnabled())
+        if (NotifierProvider.isAvailable() && NotifierProvider.getNotifier().isEnabled()) {
             NotifierProvider.displayBackgroundNotification(NotificationType.JOB_ERROR, getTitle(), desc);
+        }
     }
 
 
@@ -223,7 +225,7 @@ public class FileCollisionDialog extends QuestionDialog {
 
         AbstractFile parent = file.getParent();
 
-        addFileDetailsRow(panel, Translator.get("location")+":", new FileLabel((parent==null?file:parent), true), 0);
+        addFileDetailsRow(panel, Translator.get("location")+":", new FileLabel(parent == null ? file : parent, true), 0);
 
         addFileDetailsRow(panel, Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
 

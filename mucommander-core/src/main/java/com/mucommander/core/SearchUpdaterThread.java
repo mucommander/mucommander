@@ -19,6 +19,7 @@ package com.mucommander.core;
 
 import java.awt.Cursor;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.EnumSet;
 
 import org.slf4j.Logger;
@@ -30,13 +31,15 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.job.FileJobState;
-import com.mucommander.job.impl.SearchJob;
 import com.mucommander.search.SearchBuilder;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
 
 /**
  * @author Arik Hadas
@@ -52,8 +55,23 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
     private boolean stoppedDueToMaxResults;
 
-    private final static int CONTINUE_ACTION = 0;
-    private final static int STOP_ACTION = 1;
+    public enum SearchUpdaterThreadAction implements DialogAction {
+
+        CONTINUE("yes"),
+        STOP("no");
+
+        private final String actionName;
+
+        SearchUpdaterThreadAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
 
     private static final EnumSet<FileJobState> COMPLETED_SEARCH_STATUSES = EnumSet.of(FileJobState.FINISHED, FileJobState.INTERRUPTED);
 
@@ -145,9 +163,9 @@ public class SearchUpdaterThread extends ChangeFolderThread {
                         mainFrame.setCursor(Cursor.getDefaultCursor());
 
                         // Download or browse file ?
-                        int ret = showSearchExceededMaxResults();
+                        DialogAction ret = showSearchExceededMaxResults();
 
-                        if (ret==-1 || ret==STOP_ACTION) {
+                        if (ret==DIALOG_DISPOSED_ACTION || ret==SearchUpdaterThreadAction.STOP) {
                             stoppedDueToMaxResults = true;
                             folderPanel.getLocationManager().fireLocationChanged(search.getURL());
                             break;
@@ -192,13 +210,12 @@ public class SearchUpdaterThread extends ChangeFolderThread {
         }
     }
 
-    private int showSearchExceededMaxResults() {
+    private DialogAction showSearchExceededMaxResults() {
         return new QuestionDialog(mainFrame,
                 Translator.get("warning"),
                 Translator.get("search.exceeds_max_results", String.valueOf(SearchFile.MAX_RESULTS)),
                 mainFrame,
-                new String[] {Translator.get("yes"), Translator.get("no")},
-                new int[] {STOP_ACTION, CONTINUE_ACTION},
+                Arrays.asList(SearchUpdaterThreadAction.STOP, SearchUpdaterThreadAction.CONTINUE),
                 0).getActionValue();
     }
 

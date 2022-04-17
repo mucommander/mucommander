@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.Box;
@@ -234,9 +235,9 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
         hideButton.addActionListener(this);
 
         this.buttonsChoicePanel = new ButtonChoicePanel(
-                skipButton==null ?
-                        new JButton[] {pauseResumeButton, stopButton, hideButton} :
-                            new JButton[] {pauseResumeButton, skipButton, stopButton, hideButton},
+                skipButton == null ?
+                        Arrays.asList(pauseResumeButton, stopButton, hideButton) :
+                        Arrays.asList(pauseResumeButton, skipButton, stopButton, hideButton),
                 0, getRootPane());
         contentPane.add(buttonsChoicePanel, BorderLayout.SOUTH);
 

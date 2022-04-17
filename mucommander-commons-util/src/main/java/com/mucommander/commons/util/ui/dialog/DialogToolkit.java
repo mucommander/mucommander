@@ -27,6 +27,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -139,21 +141,21 @@ public class DialogToolkit {
      * Creates an OK/Cancel panel using the given buttons, and register the given listener for button actions.
      */
     public static JPanel createOKCancelPanel(JButton okButton, JButton cancelButton, JRootPane rootPane, ActionListener actionListener) {
-        return createButtonPanel(new JButton[]{okButton, cancelButton}, rootPane, actionListener);
+        return createButtonPanel(Arrays.asList(okButton, cancelButton), rootPane, actionListener);
     }
 
     /**
      * Creates an OK panel using the given button, and register the given listener for button actions.
      */
     public static JPanel createOKPanel(JButton okButton, JRootPane rootPane, ActionListener actionListener) {
-        return createButtonPanel(new JButton[]{okButton}, rootPane, actionListener);
+        return createButtonPanel(Arrays.asList(okButton), rootPane, actionListener);
     }
 
     /**
      * Creates a button panel using the given buttons, and register the given listener for button actions.
      * Buttons are disposed horizontally, aligned to the right.
      */
-    public static JPanel createButtonPanel(JButton buttons[], JRootPane rootPane, ActionListener actionListener) {
+    public static JPanel createButtonPanel(List<JButton> buttons, JRootPane rootPane, ActionListener actionListener) {
         JPanel panel = new ButtonChoicePanel(buttons, 0, rootPane);
 
         MnemonicHelper mnemonicHelper = new MnemonicHelper();

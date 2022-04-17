@@ -33,6 +33,7 @@ import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -126,7 +127,7 @@ public class DeleteJob extends FileJob {
             return false;
 
         // Delete files recursively, only if trash is not used.
-        int ret;
+        DialogAction ret;
         if(!moveToTrash && file.isDirectory()) {
             String filePath = file.getAbsolutePath();
             filePath = filePath.substring(getBaseSourceFolder().getAbsolutePath(false).length()+1, filePath.length());

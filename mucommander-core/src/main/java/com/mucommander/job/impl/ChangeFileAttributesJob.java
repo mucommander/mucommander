@@ -29,6 +29,7 @@ import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -86,7 +87,7 @@ public class ChangeFileAttributesJob extends FileJob {
                 }
                 catch(IOException e) {
                     // Unable to open source file
-                    int ret = showErrorDialog("", Translator.get("cannot_read_folder", file.getName()));
+                    DialogAction ret = showErrorDialog("", Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
                         continue;

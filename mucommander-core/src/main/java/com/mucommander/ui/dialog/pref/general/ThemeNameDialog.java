@@ -23,10 +23,19 @@ import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
 
-import javax.swing.*;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * Dialog used to ask a new theme name to the user.
@@ -38,9 +47,9 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
     /** Field in which the user will enter the new name. */
     private JTextField nameField;
     /** Ok button. */
-    private JButton    okButton;
+    private JButton okButton;
     /** Cancel button. */
-    private JButton    cancelButton;
+    private JButton cancelButton;
 
 
 
@@ -49,7 +58,7 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
     /** Whether the dialog was closed by the ok button or by cancelling it. */
     private boolean wasValidated;
     /** Maximum dimensions for the dialog. */
-    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480,10000);	
+    private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480,10000);
 
 
 
@@ -109,9 +118,14 @@ public class ThemeNameDialog extends FocusDialog implements ActionListener {
         panel = new YBoxPanel();
         panel.add(createNamePanel(name));
 
+        List<JButton> buttons = Arrays.asList(
+                okButton = new JButton(Translator.get("ok")),
+                cancelButton = new JButton(Translator.get("cancel"))
+        );
         // Creates the button panel.
-        panel.add(new ButtonChoicePanel(new JButton[] {okButton = new JButton(Translator.get("ok")), cancelButton = new JButton(Translator.get("cancel"))},
+        panel.add(new ButtonChoicePanel(buttons,
                                         2, getRootPane()));
+        // TODO rework it to use Action based enums....
         okButton.addActionListener(this);
         cancelButton.addActionListener(this);
         getContentPane().add(panel, BorderLayout.NORTH);

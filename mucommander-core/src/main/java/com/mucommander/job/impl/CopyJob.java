@@ -33,6 +33,8 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
+import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -69,7 +71,7 @@ public class CopyJob extends AbstractCopyJob {
      * @param mode mode in which CopyJob is to operate: {@link #COPY_MODE} or {@link #DOWNLOAD_MODE}.
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
-    public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, TransferMode mode, int fileExistsAction) {
+    public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, TransferMode mode, FileCollisionDialog.OverwriteAction fileExistsAction) {
         super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
         this.mode = mode;
@@ -139,7 +141,7 @@ public class CopyJob extends AbstractCopyJob {
                     }
                     catch(IOException e) {
                         // Unable to create folder
-                        int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
+                        DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFileName));
                         // Retry loops
                         if (ret==FileJobAction.RETRY)
                             continue;
@@ -183,7 +185,7 @@ public class CopyJob extends AbstractCopyJob {
                 }
                 catch(IOException e) {
                     // file.ls() failed
-                    int ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
+                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
                     if (ret==FileJobAction.RETRY)
                         continue;

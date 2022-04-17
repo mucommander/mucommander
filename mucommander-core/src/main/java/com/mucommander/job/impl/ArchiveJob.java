@@ -20,6 +20,7 @@ package com.mucommander.job.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -128,9 +130,9 @@ public class ArchiveJob extends TransferFileJob {
 
                 LOGGER.debug("Caught IOException", e);
                 
-                int ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
+                DialogAction ret = showErrorDialog(Translator.get("pack_dialog.error_title"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
-                if(ret==FileJobAction.RETRY) {
+                if (ret == FileJobAction.RETRY) {
                     // Reset processed bytes currentFileByteCounter
                     resetCurrentFileByteCounter();
 
@@ -165,10 +167,10 @@ public class ArchiveJob extends TransferFileJob {
         if(collision!=FileCollisionChecker.NO_COLLOSION) {
             // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
             // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-            int choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, null, destFile, false, false));
+            DialogAction choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, null, destFile, false, false));
 
             // Overwrite file
-            if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
+            if (choice== FileCollisionDialog.OverwriteAction.OVERWRITE) {
                 // Do nothing, simply continue and file will be overwritten
             }
             // 'Cancel' or close dialog interrupts the job
@@ -188,10 +190,9 @@ public class ArchiveJob extends TransferFileJob {
                 break;
             }
             catch(Exception e) {
-                int choice = showErrorDialog(Translator.get("pack_dialog.error_title"),
+                DialogAction choice = showErrorDialog(Translator.get("pack_dialog.error_title"),
                                              Translator.get("cannot_write_file", destFile.getName()),
-                                             new String[] {FileJobAction.CANCEL_TEXT, FileJobAction.RETRY_TEXT},
-                                             new int[]  {FileJobAction.CANCEL, FileJobAction.RETRY}
+                                             Arrays.asList(FileJobAction.CANCEL, FileJobAction.RETRY)
                                              );
 
                 // Retry loops

@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class SplitFileJob extends AbstractCopyJob {
 	
 	public SplitFileJob(ProgressDialog progressDialog, MainFrame mainFrame, 
 			AbstractFile file, AbstractFile destFolder, long partSize, int parts) {
-        super(progressDialog, mainFrame, new FileSet(), destFolder, null, FileCollisionDialog.ASK_ACTION);
+        super(progressDialog, mainFrame, new FileSet(), destFolder, null, FileCollisionDialog.OverwriteAction.ASK);
         this.partSize = partSize;
         this.setNbFiles(parts);
         this.sourceFile = file;
@@ -136,8 +137,7 @@ public class SplitFileJob extends AbstractCopyJob {
             LOGGER.debug("Caught exception", e);
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", sourceFile.getName()),
-                    new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL}
+					Arrays.asList(FileJobAction.CANCEL)
                     );
             setState(FileJobState.INTERRUPTED);
             return;
@@ -185,13 +185,12 @@ public class SplitFileJob extends AbstractCopyJob {
 					sizeLeft -= e.getBytesWritten();
 					showErrorDialog(ActionProperties.getActionLabel(SplitFileAction.Descriptor.ACTION_ID),
 							Translator.get("split_file_dialog.insert_new_media"), 
-							new String[]{FileJobAction.OK_TEXT, FileJobAction.CANCEL_TEXT}, 
-							new int[]{FileJobAction.OK, FileJobAction.CANCEL});
+							Arrays.asList(FileJobAction.OK, FileJobAction.CANCEL));
 					if (getState() == FileJobState.INTERRUPTED) {
 						return false;
 					}
 					// create new output file if necessary
-					if ((sizeLeft>0) && (getCurrentFileIndex() == getNbFiles()-1)) {
+					if (sizeLeft > 0 && getCurrentFileIndex() == getNbFiles() - 1) {
 						setNbFiles(getNbFiles() + 1);
 						addDummyFile(getNbFiles(), sizeLeft);
 					}
@@ -229,8 +228,7 @@ public class SplitFileJob extends AbstractCopyJob {
 
             showErrorDialog(errorDialogTitle,
                     Translator.get("error_while_transferring", destFile.getName()),
-                    new String[]{FileJobAction.CANCEL_TEXT},
-                    new int[]{FileJobAction.CANCEL}
+                    Arrays.asList(FileJobAction.CANCEL)
                     );
 			return false;
 			
@@ -278,8 +276,7 @@ public class SplitFileJob extends AbstractCopyJob {
 					
 		            showErrorDialog(errorDialogTitle,
 		                    Translator.get("error_while_transferring", crcFileName),
-		                    new String[]{FileJobAction.CANCEL_TEXT},
-		                    new int[]{FileJobAction.CANCEL}
+		                    Arrays.asList(FileJobAction.CANCEL)
 		                    );
 				}
             }

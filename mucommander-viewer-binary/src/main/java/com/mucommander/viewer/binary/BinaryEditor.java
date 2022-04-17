@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +32,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
@@ -49,6 +49,7 @@ import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
@@ -64,6 +65,24 @@ import com.mucommander.viewer.FileEditor;
  */
 @ParametersAreNonnullByDefault
 class BinaryEditor extends BinaryBase implements FileEditor {
+
+    public enum BinaryEditorAction implements DialogAction {
+        YES("save"),
+        NO("dont_save"),
+        CANCEL("cancel");
+
+        private final String actionName;
+
+        BinaryEditorAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
 
     private EditorPresenter presenter;
     private AbstractFile currentFile;
@@ -259,7 +278,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
             if (collision != FileCollisionChecker.NO_COLLOSION) {
                 // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                 // do not offer the multiple file mode options such as 'skip' and 'apply to all'.
-                int action = new FileCollisionDialog(windowFrame,
+                DialogAction action = new FileCollisionDialog(windowFrame,
                         windowFrame/* mainFrame */,
                         collision,
                         null,
@@ -267,7 +286,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                         false,
                         false).getActionValue();
 
-                if (action != FileCollisionDialog.OVERWRITE_ACTION) {
+                if (action != FileCollisionDialog.OverwriteAction.OVERWRITE) {
                     return;
                 }
             }
@@ -308,12 +327,11 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                         null,
                         Translator.get("file_editor.save_warning"),
                         binaryComponent,
-                        new String[] { Translator.get("save"), Translator.get("dont_save"), Translator.get("cancel") },
-                        new int[] { JOptionPane.YES_OPTION, JOptionPane.NO_OPTION, JOptionPane.CANCEL_OPTION },
+                        Arrays.asList(BinaryEditorAction.YES, BinaryEditorAction.NO, BinaryEditorAction.CANCEL),
                         0);
-        int ret = dialog.getActionValue();
+        DialogAction ret = dialog.getActionValue();
 
-        if ((ret == JOptionPane.YES_OPTION && trySave(currentFile)) || ret == JOptionPane.NO_OPTION) {
+        if (ret == BinaryEditorAction.YES && trySave(currentFile) || ret == BinaryEditorAction.NO) {
             setSaveNeeded(false);
             return true;
         }

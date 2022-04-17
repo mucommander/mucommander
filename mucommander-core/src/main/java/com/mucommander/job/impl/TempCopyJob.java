@@ -46,7 +46,7 @@ public class TempCopyJob extends CopyJob {
      * @param fileToCopy the file to copy to a temporary location
      */
     public TempCopyJob(ProgressDialog progressDialog, MainFrame mainFrame, AbstractFile fileToCopy) {
-        super(progressDialog, mainFrame, new FileSet(fileToCopy.getParent(), fileToCopy), FileFactory.getTemporaryFolder(), getTemporaryFileName(fileToCopy), TransferMode.COPY, FileCollisionDialog.OVERWRITE_ACTION);
+        super(progressDialog, mainFrame, new FileSet(fileToCopy.getParent(), fileToCopy), FileFactory.getTemporaryFolder(), getTemporaryFileName(fileToCopy), TransferMode.COPY, FileCollisionDialog.OverwriteAction.OVERWRITE);
     }
 
     /**
@@ -57,7 +57,7 @@ public class TempCopyJob extends CopyJob {
      * @param filesToCopy the file to copy to a temporary location
      */
     public TempCopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet filesToCopy) {
-        super(progressDialog, mainFrame, filesToCopy, getTemporaryFolder(filesToCopy), null, TransferMode.COPY, FileCollisionDialog.OVERWRITE_ACTION);
+        super(progressDialog, mainFrame, filesToCopy, getTemporaryFolder(filesToCopy), null, TransferMode.COPY, FileCollisionDialog.OverwriteAction.OVERWRITE);
     }
 
 

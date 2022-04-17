@@ -18,6 +18,7 @@
 package com.mucommander.ui.dialog.pref.theme;
 
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
@@ -27,6 +28,7 @@ import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
 
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * Main dialog for the theme editor.
@@ -41,6 +43,24 @@ public class ThemeEditorDialog extends PreferencesDialog {
     private ThemeData data;
     private Theme     theme;
     private boolean   wasThemeModified;
+
+    public enum ThemeEditorAction implements DialogAction {
+
+        YES("yes"),
+        NO("no");
+
+        private final String actionName;
+
+        ThemeEditorAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
 
     /**
      * Creates a new theme editor dialog.
@@ -96,10 +116,14 @@ public class ThemeEditorDialog extends PreferencesDialog {
 
         // If the theme has been modified and is not the user theme, asks the user to confirm
         // whether it's ok to overwrite his user theme.
-        if(!theme.isIdentical(data) && !theme.canModify())
-            if(new QuestionDialog(this, Translator.get("warning"), Translator.get("theme_editor.theme_warning"),
-                                  this, new String[]{Translator.get("yes"), Translator.get("no")}, new int[]{0,1}, 0).getActionValue() != 0)
+        if(!theme.isIdentical(data) && !theme.canModify()) {
+            if (new QuestionDialog(this, Translator.get("warning"), Translator.get("theme_editor.theme_warning"),
+                    this,
+                    Arrays.asList(ThemeEditorAction.YES, ThemeEditorAction.NO),
+                    0).getActionValue() != ThemeEditorAction.YES) {
                 return false;
+            }
+        }
         return true;
     }
 

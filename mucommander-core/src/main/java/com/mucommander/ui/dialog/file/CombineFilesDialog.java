@@ -132,7 +132,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
     }
 
     @Override
-    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, ResolvedDestination resolvedDest, int defaultFileExistsAction) {
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction) {
 		return new CombineFilesJob(progressDialog, mainFrame,
 		       files, resolvedDest.getDestinationFile(), defaultFileExistsAction);
 	}

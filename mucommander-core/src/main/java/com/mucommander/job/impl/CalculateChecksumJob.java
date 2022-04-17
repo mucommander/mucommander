@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.icon.IconManager;
@@ -114,7 +116,7 @@ public class CalculateChecksumJob extends TransferFileJob {
                 }
                 catch(IOException e) {
                     // file.ls() failed
-                    int ret = showErrorDialog(Translator.get("error"), Translator.get("cannot_read_folder", file.getName()));
+                    DialogAction ret = showErrorDialog(Translator.get("error"), Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
                         continue;
@@ -176,7 +178,7 @@ public class CalculateChecksumJob extends TransferFileJob {
 
                 LOGGER.debug("Caught IOException", e);
                 
-                int ret = showErrorDialog(Translator.get("error"), Translator.get("error_while_transferring", file.getAbsolutePath()));
+                DialogAction ret = showErrorDialog(Translator.get("error"), Translator.get("error_while_transferring", file.getAbsolutePath()));
                 // Retry loops
                 if(ret==FileJobAction.RETRY) {
                     // Reset processed bytes currentFileByteCounter
@@ -211,10 +213,10 @@ public class CalculateChecksumJob extends TransferFileJob {
         if(collision!=FileCollisionChecker.NO_COLLOSION) {
             // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
             // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-            int choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, null, checksumFile, false, false));
+            DialogAction choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, null, checksumFile, false, false));
 
             // Overwrite file
-            if (choice== FileCollisionDialog.OVERWRITE_ACTION) {
+            if (choice== FileCollisionDialog.OverwriteAction.OVERWRITE) {
                 // Do nothing, simply continue and file will be overwritten
             }
             // 'Cancel' or close dialog interrupts the job
@@ -234,10 +236,9 @@ public class CalculateChecksumJob extends TransferFileJob {
 
             }
             catch(Exception e) {
-                int choice = showErrorDialog(Translator.get("error"),
+                DialogAction choice = showErrorDialog(Translator.get("error"),
                                              Translator.get("cannot_write_file", checksumFile.getName()),
-                                             new String[] {FileJobAction.CANCEL_TEXT, FileJobAction.RETRY_TEXT},
-                                             new int[]  {FileJobAction.CANCEL, FileJobAction.RETRY}
+                                             Arrays.asList(FileJobAction.CANCEL, FileJobAction.RETRY)
                                              );
 
                 // Retry loops

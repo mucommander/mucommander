@@ -19,6 +19,7 @@ package com.mucommander.core;
 
 import java.awt.Cursor;
 import java.net.MalformedURLException;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.dialog.auth.AuthDialog;
@@ -44,6 +46,8 @@ import com.mucommander.ui.dialog.file.DownloadDialog;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
+
+import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
 
 /**
  * This thread takes care of changing current folder without locking the main
@@ -58,13 +62,24 @@ import com.mucommander.ui.main.MainFrame;
 public class BrowseLocationThread extends ChangeFolderThread {
     private static final Logger LOGGER = LoggerFactory.getLogger(BrowseLocationThread.class);
 
-    private final static int CANCEL_ACTION = 0;
-    private final static int BROWSE_ACTION = 1;
-    private final static int DOWNLOAD_ACTION = 2;
+    public enum BrowseLocationThreadAction implements DialogAction {
 
-    private final static String CANCEL_TEXT = Translator.get("cancel");
-    private final static String BROWSE_TEXT = Translator.get("browse");
-    private final static String DOWNLOAD_TEXT = Translator.get("download");
+        CANCEL("cancel"),
+        BROWSE("browse"),
+        DOWNLOAD("download");
+
+        private final String actionName;
+
+        BrowseLocationThreadAction(String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
+    }
 
     private AbstractFile folder;
     private boolean findWorkableFolder;
@@ -243,21 +258,22 @@ public class BrowseLocationThread extends ChangeFolderThread {
                                         null,
                                         Translator.get("table.download_or_browse"),
                                         mainFrame,
-                                        new String[] {BROWSE_TEXT, DOWNLOAD_TEXT, CANCEL_TEXT},
-                                        new int[] {BROWSE_ACTION, DOWNLOAD_ACTION, CANCEL_ACTION},
+                                        Arrays.asList(BrowseLocationThreadAction.BROWSE,
+                                                BrowseLocationThreadAction.DOWNLOAD,
+                                                BrowseLocationThreadAction.CANCEL),
                                         0);
 
-                                int ret = dialog.getActionValue();
+                                DialogAction ret = dialog.getActionValue();
 
-                                if(ret==-1 || ret==CANCEL_ACTION)
+                                if(ret==DIALOG_DISPOSED_ACTION || ret==BrowseLocationThreadAction.CANCEL)
                                     break;
 
                                 // Download file
-                                if(ret==DOWNLOAD_ACTION) {
+                                if(ret==BrowseLocationThreadAction.DOWNLOAD) {
                                     showDownloadDialog(file);
                                     break;
                                 }
-                                // Continue if BROWSE_ACTION
+                                // Continue if BROWSE
                                 // Set cursor to hourglass/wait
                                 mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                             }

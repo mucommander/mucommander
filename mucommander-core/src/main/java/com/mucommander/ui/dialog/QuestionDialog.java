@@ -26,6 +26,8 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -38,23 +40,26 @@ import com.mucommander.ui.layout.InformationPane;
 
 
 /**
- * 
+ * A generic dialog box issued to users if muCommander is in doubt how to continue i.e.
+ * dialog boxes that ask questions or require confirmations.
  *
  * @author Maxence Bernard
  */
-public class QuestionDialog extends FocusDialog implements ActionListener, DialogResult {
-	
-    /** Dialog owner */
-    private JButton buttons[];
-    private int actionValues[];
-	
-    private int retValue = DIALOG_DISPOSED_ACTION;
-
-    private YBoxPanel mainPanel;
+public class QuestionDialog extends FocusDialog implements DialogResult {
 
     /** This value is returned by {@link #getActionValue()} when the dialog has been disposed without the user
      * selecting a custom action */
-    public final static int DIALOG_DISPOSED_ACTION = -1;
+    public static final DialogAction DIALOG_DISPOSED_ACTION = null;
+
+    /** Dialog owner */
+    private List<JButton> buttons = new ArrayList<>();
+    private List<DialogAction> actionChoices = new ArrayList<>();
+
+
+    private DialogAction retValue = DIALOG_DISPOSED_ACTION;
+
+    private YBoxPanel mainPanel;
+
 
     /** Minimum dialog size */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 0);
@@ -63,40 +68,24 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480, 10000);
 
 
-    /**
-     *
-     * @param actionValues values for actions, each of them must be >= 0
-     */
-    public QuestionDialog(Frame owner, String title, String msg, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
+    public QuestionDialog(Frame owner, String title, String msg, Component locationRelative, List<DialogAction> actionChoices, int maxNbCols) {
         super(owner, title, locationRelative);
-        init(new InformationPane(msg, null, Font.PLAIN, InformationPane.QUESTION_ICON), actionText, actionValues, maxNbCols);
+        init(new InformationPane(msg, null, Font.PLAIN, InformationPane.QUESTION_ICON), actionChoices, maxNbCols);
     }
 
-    /**
-     *
-     * @param actionValues values for actions, each of them must be >= 0
-     */
-    public QuestionDialog(Dialog owner, String title, String msg, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
+    public QuestionDialog(Dialog owner, String title, String msg, Component locationRelative, List<DialogAction> actionChoices, int maxNbCols) {
         super(owner, title, locationRelative);
-        init(new InformationPane(msg, null, Font.PLAIN, InformationPane.QUESTION_ICON), actionText, actionValues, maxNbCols);
+        init(new InformationPane(msg, null, Font.PLAIN, InformationPane.QUESTION_ICON), actionChoices, maxNbCols);
     }
 
-    /**
-     *
-     * @param actionValues values for actions, each of them must be >= 0
-     */
-    public QuestionDialog(Frame owner, String title, Component msgComp, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
+    public QuestionDialog(Frame owner, String title, Component msgComp, Component locationRelative, List<DialogAction> actionChoices, int maxNbCols) {
         super(owner, title, locationRelative);
-        init(msgComp, actionText, actionValues, maxNbCols);
+        init(msgComp, actionChoices, maxNbCols);
     }
 
-    /**
-     *
-     * @param actionValues values for actions, each of them must be >= 0
-     */
-    public QuestionDialog(Dialog owner, String title, Component msgComp, Component locationRelative, String actionText[], int actionValues[], int maxNbCols) {
+    public QuestionDialog(Dialog owner, String title, Component msgComp, Component locationRelative, List<DialogAction> actionChoices, int maxNbCols) {
         super(owner, title, locationRelative);
-        init(msgComp, actionText, actionValues, maxNbCols);
+        init(msgComp, actionChoices, maxNbCols);
     }
 
 	
@@ -109,8 +98,8 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
     }
 	
 	
-    protected void init(Component comp, String actionText[], int actionValues[], int maxNbCols) {
-        this.actionValues = actionValues;
+    protected void init(Component comp, List<DialogAction> actionChoices, int maxNbCols) {
+        this.actionChoices.addAll(actionChoices);
 
         // Sets minimum and maximum dimensions for this dialog
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
@@ -118,29 +107,38 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
 
         mainPanel = new YBoxPanel();
 
-        if(comp!=null) {
+        if (comp!=null) {
             mainPanel.addSpace(5);
             mainPanel.add(comp);
             mainPanel.addSpace(10);
         }
-		
-        int nbButtons = actionText.length;
-        buttons = new JButton[nbButtons];
-        String text;
-		
-        for(int i=0; i<nbButtons; i++) {
-            text = actionText[i];
 
-            buttons[i] = new JButton(text);
-            buttons[i].addActionListener(this);
+        for (DialogAction action : actionChoices) {
+            JButton button = new JButton(action.getActionName());
+            button.setToolTipText(action.getActionName());
+            button.addActionListener(getActionListener(action));
+            buttons.add(button);
         }
 		
-        setInitialFocusComponent(buttons[0]);
+        if (!buttons.isEmpty()) {
+            setInitialFocusComponent(buttons.get(0));
+        }
         mainPanel.add(new ButtonChoicePanel(buttons, maxNbCols, getRootPane()));
 		
         getContentPane().add(mainPanel, BorderLayout.NORTH);
     }
-	
+
+    private ActionListener getActionListener(DialogAction action) {
+        // using old-way to (still) support older jres
+        return new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                retValue = action;
+                dispose();
+            }
+        };
+    }
 
     /**
      * Adds a component to this dialog, under the buttons panel.
@@ -157,30 +155,13 @@ public class QuestionDialog extends FocusDialog implements ActionListener, Dialo
      * The dialog may be closed without the user selecting a custom action. In this case,
      * {@link #DIALOG_DISPOSED_ACTION} (-1) will be returned.
      */
-    public int getActionValue() {
+    public DialogAction getActionValue() {
 //        // Beep !
 //        Toolkit.getDefaultToolkit().beep();
         // Returns only when this dialog has been disposed
         // by actionPerformed or if window has been closed (-1)
         super.showDialog();
         return retValue;
-    }
-
-
-    ////////////////////////////
-    // ActionListener methods //
-    ////////////////////////////
-
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-		
-        for(int i=0; i<buttons.length; i++)
-            if (buttons[i]==source) {
-                retValue = actionValues[i];
-                break;
-            }
-	
-        dispose();
     }
 
     public Object getUserInput() {

@@ -20,6 +20,7 @@ package com.mucommander.job.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -104,15 +106,15 @@ public class MkdirJob extends FileJob {
                 if(collision!=FileCollisionChecker.NO_COLLOSION) {
                     // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                     // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-                    int choice = waitForUserResponse(new FileCollisionDialog(getMainFrame(), getMainFrame(), collision, null, file, false, false));
+                    DialogAction choice = waitForUserResponse(new FileCollisionDialog(getMainFrame(), getMainFrame(), collision, null, file, false, false));
 
                     // Overwrite file
-                    if (choice==FileCollisionDialog.OVERWRITE_ACTION) {
+                    if (choice== FileCollisionDialog.OverwriteAction.OVERWRITE) {
                         // Delete the file
                         file.delete();
                     }
                     // Cancel or dialog close (return)
-//                    else if (choice==-1 || choice==FileCollisionDialog.CANCEL_ACTION) {
+//                    else if (choice==-1 || choice==FileCollisionDialog.OverwriteAction.CANCEL) {
                     else {
                         interrupt();
                         return false;
@@ -185,11 +187,10 @@ public class MkdirJob extends FileJob {
 
                 LOGGER.debug("IOException caught", e);
 
-                int action = showErrorDialog(
+                DialogAction action = showErrorDialog(
                      Translator.get("error"),
                      Translator.get(mkfileMode?"cannot_write_file":"cannot_create_folder", file.getAbsolutePath()),
-                     new String[]{FileJobAction.RETRY_TEXT, FileJobAction.CANCEL_TEXT},
-                     new int[]{FileJobAction.RETRY, FileJobAction.CANCEL}
+                     Arrays.asList(FileJobAction.RETRY, FileJobAction.CANCEL)
                 );
                 // Retry (loop)
                 if(action==FileJobAction.RETRY)
