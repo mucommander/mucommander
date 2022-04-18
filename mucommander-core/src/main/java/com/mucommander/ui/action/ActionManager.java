@@ -201,6 +201,7 @@ public class ActionManager {
     	registerAction(new ShowRecentLocationsQLAction.Descriptor(),        ShowRecentLocationsQLAction::new);
     	registerAction(new ShowRootFoldersQLAction.Descriptor(), 			ShowRootFoldersQLAction::new);
     	registerAction(new ShowServerConnectionsAction.Descriptor(),        ShowServerConnectionsAction::new);
+        registerAction(new ShowTablePopupMenuAction.Descriptor(),           ShowTablePopupMenuAction::new);
     	registerAction(new ShowTabsQLAction.Descriptor(),					ShowTabsQLAction::new);
     	registerAction(new SortByDateAction.Descriptor(),             		SortByDateAction::new);
     	registerAction(new SortByExtensionAction.Descriptor(),              SortByExtensionAction::new);
