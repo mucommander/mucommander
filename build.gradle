@@ -421,7 +421,7 @@ task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                 '--app-version', project.version, \
                 '--main-jar', 'mucommander-'+project.version+'.jar', \
                 '--main-class', 'com.mucommander.main.muCommander', \
-                '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED --add-opens java.management/javax.management=ALL-UNNAMED --add-opens java.rmi/java.rmi=ALL-UNNAMED --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED --add-opens java.sql/java.sql=ALL-UNNAMED', \
+                '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED --add-opens java.management/javax.management=ALL-UNNAMED --add-opens java.rmi/java.rmi=ALL-UNNAMED --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED --add-opens java.sql/java.sql=ALL-UNNAMED --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/win', \
                 '--dest', "${buildDir}", \
