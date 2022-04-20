@@ -413,7 +413,7 @@ task deb(dependsOn: 'linuxAppImage', type: Exec) {
                 '--linux-menu-group', 'Application;FileManager;Utility;'
 }
 
-task winAppImage(type: Exec) {
+task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--input', "${buildDir}/osgi/", \
@@ -444,7 +444,7 @@ task winAppImage(type: Exec) {
     }
 }
 
-task msi(type: Exec) {
+task msi(dependsOn: 'winAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--type', 'msi', \
