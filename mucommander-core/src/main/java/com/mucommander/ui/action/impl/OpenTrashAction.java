@@ -17,6 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
@@ -38,32 +39,43 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class OpenTrashAction extends MuAction {
 
-    public OpenTrashAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenTrashAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         AbstractTrash trash = DesktopManager.getTrash();
-        setEnabled(trash!=null && trash.canOpen());
+        setEnabled(trash != null && trash.canOpen());
     }
 
     @Override
     public void performAction() {
-        DesktopManager.getTrash().open();
+        AbstractTrash trash = DesktopManager.getTrash();
+        if (trash != null) {
+            trash.open();
+        }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenTrash";
-    	
-		public String getId() { return ACTION_ID; }
+        public static final String ACTION_ID = "OpenTrash";
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return null;
+        }
+
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.ALT_MASK);
+        }
     }
 }
