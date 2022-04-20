@@ -35,7 +35,7 @@ New features:
 - 
 
 Improvements:
-- 
+- Added keyboard shortcut to Open Trash (plus minor fix for possible NPE)
 
 Localization:
 - Korean translation updated.
