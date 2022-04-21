@@ -36,6 +36,7 @@ New features:
 
 Improvements:
 - Added keyboard shortcut to Open Trash (plus minor fix for possible NPE)
+- Added keyboard shortcut to Popup menu plus it should now work also on Search results and parent folder
 
 Localization:
 - Korean translation updated.
