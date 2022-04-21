@@ -23,46 +23,55 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
-import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
 import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.ui.main.table.FileTableModel;
 
 
 /**
- * This action shows the popup menu for currently selected file
- *
- * @author Miroslav Oujesky
+ * This action shows the popup menu for currently selected file.
+ * Exactly the same popup menu appears also when right-clicking on file/folder.
  */
-public class ShowFilePopupMenuAction extends SelectedFilesAction {
+public class ShowFilePopupMenuAction extends SelectedFileAction {
 
     public ShowFilePopupMenuAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
+        setEnabled(DesktopManager.canOpenInFileManager());
     }
 
     @Override
-    public void performAction(FileSet files) {
-        FileTable table = mainFrame.getActiveTable();
+    public void performAction() {
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
 
-        int currentRow = table.getSelectedRow();
+        try {
+            FileTable fileTable = mainFrame.getActiveTable();
+            FileTableModel tableModel = (FileTableModel) fileTable.getModel();
+            int selectedRow = fileTable.getSelectedRow();
+            // column 1 - where the name is (0 is icon) - is there any way to avoid hardcoding?
+            Rectangle rect = fileTable.getCellRect(selectedRow, 1, true);
+            boolean parentFolderSelected = selectedRow == 0 && tableModel.hasParentFolder();
 
-        // Does the row correspond to the parent '..' folder ?
-        boolean parentFolderClicked = currentRow == 0 && table.getFileTableModel().hasParentFolder();
+            new TablePopupMenu(mainFrame,
+                    fileTable.getFolderPanel().getCurrentFolder(),
+                    parentFolderSelected ? null : selectedFile,
+                    parentFolderSelected,
+                    tableModel.getMarkedFiles()).show(fileTable, rect.x + rect.width, rect.y);
+        } catch (Exception e) {
+            InformationDialog.showErrorDialog(mainFrame);
+        }
+    }
 
-        TablePopupMenu popupMenu = new TablePopupMenu(
-            mainFrame,
-            table.getFolderPanel().getCurrentFolder(),
-            parentFolderClicked ? null : table.getSelectedFile(),
-            parentFolderClicked,
-            files
-        );
-
-        // find coordinates of current row and show popup menu bellow it
-        Rectangle rect = table.getCellRect(currentRow, table.getSelectedColumn(), true);
-        popupMenu.show(table, 0, rect.y + rect.height);
+    protected void updateEnabledState(FileTable fileTable) {
+        setEnabled(true);
     }
 
     @Override
@@ -73,12 +82,25 @@ public class ShowFilePopupMenuAction extends SelectedFilesAction {
     public static final class Descriptor extends AbstractActionDescriptor {
         public static final String ACTION_ID = "ShowFilePopupMenu";
 
-        public String getId() { return ACTION_ID; }
+        public String getId() {
+            return ACTION_ID;
+        }
 
-        public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
 
-        public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_CONTEXT_MENU, 0);
+        }
 
-        public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_CONTEXT_MENU, 0); }
+        public KeyStroke getDefaultKeyStroke() {
+            return KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.CTRL_DOWN_MASK);
+        }
+
+        @Override
+        public String getLabel() {
+            return Translator.get(ActionProperties.getActionLabelKey(ShowFilePopupMenuAction.Descriptor.ACTION_ID));
+        }
     }
 }
