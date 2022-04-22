@@ -24,7 +24,6 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -33,6 +32,7 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
+import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
 
@@ -45,19 +45,17 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
 
     public ShowFilePopupMenuAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
-        setEnabled(DesktopManager.canOpenInFileManager());
     }
 
     @Override
     public void performAction() {
-        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
-
         try {
+            AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
             FileTable fileTable = mainFrame.getActiveTable();
             FileTableModel tableModel = (FileTableModel) fileTable.getModel();
             int selectedRow = fileTable.getSelectedRow();
-            // column 1 - where the name is (0 is icon) - is there any way to avoid hardcoding?
-            Rectangle rect = fileTable.getCellRect(selectedRow, 1, true);
+            Rectangle rect = fileTable.getCellRect(selectedRow,
+                    fileTable.convertColumnIndexToView(Column.NAME.ordinal()), true);
             boolean parentFolderSelected = selectedRow == 0 && tableModel.hasParentFolder();
 
             new TablePopupMenu(mainFrame,
