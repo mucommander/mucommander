@@ -4,7 +4,7 @@ dependencies {
     api project(':mucommander-translator')
 
     implementation 'org.osgi:osgi.core:7.0.0'
-    implementation 'com.sun:yanfs:1.4'
+    implementation files('libs/yanfs-1.4.jar')
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -15,9 +15,6 @@ dependencies {
 }
 
 repositories {
-    maven {
-        url 'https://raw.githubusercontent.com/raisercostin/maven-repo/master/'
-    }
     mavenCentral()
 }
 
