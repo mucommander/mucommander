@@ -22,7 +22,6 @@ import java.util.Collection;
 
 import com.github.junrar.Archive;
 import com.github.junrar.exception.RarException;
-import com.github.junrar.exception.RarException.RarExceptionType;
 import com.github.junrar.rarfile.FileHeader;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
@@ -56,7 +55,7 @@ public class RarFile {
     	// If the file that is going to be extracted is divided and continued in another archive 
         // part - don't extract it and throw corresponding exception to raise an error. 
         if (header.isSplitAfter())
-    		throw new RarException(RarExceptionType.notImplementedYet);
+    		throw new RarException(new Throwable("Splitting is not implemented yet"));
     	
         final CircularByteBuffer cbb = new CircularByteBuffer(CircularByteBuffer.INFINITE_SIZE);
         
@@ -66,8 +65,7 @@ public class RarFile {
     		    	try {
 						archive.extractFile(header, cbb.getOutputStream());
 					} catch (RarException e) {
-						if (e.getType() != RarExceptionType.crcError)
-							e.printStackTrace();
+					    e.printStackTrace();
 					}
     		    	finally {
     		    		try {
