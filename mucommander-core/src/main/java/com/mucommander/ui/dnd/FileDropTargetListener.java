@@ -320,7 +320,7 @@ public class FileDropTargetListener implements DropTargetListener {
                         droppedFiles,
                         destFolder,
                         null,
-                        FileCollisionDialog.OverwriteAction.ASK,
+                        FileCollisionDialog.FileCollisionAction.ASK,
                         false);
                 progressDialog.start(moveJob);
             } else {
@@ -332,7 +332,7 @@ public class FileDropTargetListener implements DropTargetListener {
                         destFolder,
                         null,
                         TransferMode.COPY,
-                        FileCollisionDialog.OverwriteAction.ASK);
+                        FileCollisionDialog.FileCollisionAction.ASK);
                 progressDialog.start(job);
             }
         }

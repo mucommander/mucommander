@@ -71,7 +71,7 @@ public class CopyJob extends AbstractCopyJob {
      * @param mode mode in which CopyJob is to operate: {@link #COPY_MODE} or {@link #DOWNLOAD_MODE}.
      * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link com.mucommander.ui.dialog.file.FileCollisionDialog} for allowed values
      */
-    public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, TransferMode mode, FileCollisionDialog.OverwriteAction fileExistsAction) {
+    public CopyJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFolder, String newName, TransferMode mode, FileCollisionDialog.FileCollisionAction fileExistsAction) {
         super(progressDialog, mainFrame, files, destFolder, newName, fileExistsAction);
 
         this.mode = mode;

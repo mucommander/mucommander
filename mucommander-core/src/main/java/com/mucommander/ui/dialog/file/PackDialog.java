@@ -136,7 +136,7 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     }
 
     @Override
-    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction) {
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction) {
         // Remember last format used, for next time this dialog is invoked
         lastFormat = formats[formatsComboBox.getSelectedIndex()];
 

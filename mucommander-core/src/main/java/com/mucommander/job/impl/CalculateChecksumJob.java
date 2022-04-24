@@ -216,7 +216,7 @@ public class CalculateChecksumJob extends TransferFileJob {
             DialogAction choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, null, checksumFile, false, false));
 
             // Overwrite file
-            if (choice== FileCollisionDialog.OverwriteAction.OVERWRITE) {
+            if (choice== FileCollisionDialog.FileCollisionAction.OVERWRITE) {
                 // Do nothing, simply continue and file will be overwritten
             }
             // 'Cancel' or close dialog interrupts the job

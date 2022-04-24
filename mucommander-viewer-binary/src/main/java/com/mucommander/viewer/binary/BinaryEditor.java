@@ -286,7 +286,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                         false,
                         false).getActionValue();
 
-                if (action != FileCollisionDialog.OverwriteAction.OVERWRITE) {
+                if (action != FileCollisionDialog.FileCollisionAction.OVERWRITE) {
                     return;
                 }
             }

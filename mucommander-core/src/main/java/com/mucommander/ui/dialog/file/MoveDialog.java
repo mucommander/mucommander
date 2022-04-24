@@ -53,7 +53,7 @@ public class MoveDialog extends AbstractCopyDialog {
     //////////////////////////////////////////////
 
     @Override
-    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction) {
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction) {
         return new MoveJob(
                 progressDialog,
                 mainFrame,

@@ -170,7 +170,7 @@ public class ArchiveJob extends TransferFileJob {
             DialogAction choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, null, destFile, false, false));
 
             // Overwrite file
-            if (choice== FileCollisionDialog.OverwriteAction.OVERWRITE) {
+            if (choice== FileCollisionDialog.FileCollisionAction.OVERWRITE) {
                 // Do nothing, simply continue and file will be overwritten
             }
             // 'Cancel' or close dialog interrupts the job

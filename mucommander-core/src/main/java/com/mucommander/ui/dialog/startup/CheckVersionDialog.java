@@ -54,24 +54,29 @@ import com.mucommander.ui.main.MainFrame;
  * @author Maxence Bernard
  */
 public class CheckVersionDialog extends QuestionDialog implements Runnable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CheckVersionDialog.class);
-	
-    /** Parent MainFrame instance */
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckVersionDialog.class);
+
+    /**
+     * Parent MainFrame instance
+     */
     private MainFrame mainFrame;
 
-    /** true if the user manually clicked on the 'Check for updates' menu item,
-     * false if the update check was automatically triggered on startup */
+    /**
+     * true if the user manually clicked on the 'Check for updates' menu item,
+     * false if the update check was automatically triggered on startup
+     */
     private boolean userInitiated;
 
-    /** Dialog's width has to be at least 240 */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
+    /**
+     * Dialog's width has to be at least 240
+     */
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320, 0);
 
     public enum CheckVersionAction implements DialogAction {
 
         OK(Translator.get("ok")),
         // TODO not nice (to load the name into enum and in this way)
         GO_TO_WEBSITE(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID)),
-        // TODO that action was not preset (it is commented out)
         INSTALL_AND_RESTART("COMMENTED-OUT");
 
         private final String actionName;
@@ -91,8 +96,8 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
      * to prevent the app from waiting for the request's result.
      *
      * @param userInitiated true if the user manually clicked on the 'Check for updates' menu item,
-     * false if the update check was automatically triggered on startup. If the check was automatically triggered,
-     * the user won't be notified if there is no new version (current version is the latest).
+     *                      false if the update check was automatically triggered on startup. If the check was automatically triggered,
+     *                      the user won't be notified if there is no new version (current version is the latest).
      */
     public CheckVersionDialog(MainFrame mainFrame, boolean userInitiated) {
         super(mainFrame, "", mainFrame);
@@ -102,42 +107,41 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         // Do all the hard work in a separate thread
         new Thread(this, "com.mucommander.ui.dialog.startup.CheckVersionDialog's Thread").start();
     }
-	
-    
+
+
     /**
      * Checks for updates and notifies the user of the outcome.
      */
-    public void run() {    
+    public void run() {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
-        
-        String         message;
-        String         title;
+
+        String message;
+        String title;
         VersionChecker version;
-        URL            downloadURL = null;
-        boolean        downloadOption = false;
-        String         jarURL = null;
+        URL downloadURL = null;
+        boolean downloadOption = false;
+        String jarURL = null;
 
         try {
             LOGGER.debug("Checking for new version...");
 
             version = VersionChecker.getInstance();
             // A newer version is available
-            if(version.isNewVersionAvailable()) {
+            if (version.isNewVersionAvailable()) {
                 LOGGER.info("A new version is available!");
 
                 title = Translator.get("version_dialog.new_version_title");
 
                 // Checks if the current platform can open a new browser window
-                downloadURL    = new URL(version.getDownloadURL());
-                downloadOption = DesktopManager.isOperationSupported(DesktopManager.BROWSE, new Object[] {downloadURL});
-                
+                downloadURL = new URL(version.getDownloadURL());
+                downloadOption = DesktopManager.isOperationSupported(DesktopManager.BROWSE, new Object[]{downloadURL});
+
                 // If the platform is not capable of opening a new browser window,
                 // display the download URL.
-                if(downloadOption) {
+                if (downloadOption) {
                     message = Translator.get("version_dialog.new_version");
-                }
-                else {
+                } else {
                     message = Translator.get("version_dialog.new_version_url", downloadURL.toString());
                 }
 
@@ -149,20 +153,20 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 
                 // If the version check was not iniated by the user (i.e. was automatic),
                 // we do not need to inform the user that he already has the latest version
-                if(!userInitiated) {
+                if (!userInitiated) {
                     dispose();
                     return;
                 }
-                
+
                 title = Translator.get("version_dialog.no_new_version_title");
                 message = Translator.get("version_dialog.no_new_version");
             }
         }
         // Check failed
-        catch(Exception e) {
+        catch (Exception e) {
             // If the version check was not initiated by the user (i.e. was automatic),
             // we do not need to inform the user that the check failed
-            if(!userInitiated) {
+            if (!userInitiated) {
                 dispose();
                 return;
             }
@@ -178,7 +182,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         actions.add(CheckVersionAction.OK);
 
         // 'Go to website' choice (if available)
-        if(downloadOption) {
+        if (downloadOption) {
             actions.add(CheckVersionAction.GO_TO_WEBSITE);
         }
 
@@ -189,33 +193,31 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 //        }
 
         init(new InformationPane(message, null, Font.PLAIN, InformationPane.INFORMATION_ICON),
-             actions,
-             0);
-			
+                actions,
+                0);
+
         JCheckBox showNextTimeCheckBox = new JCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"),
-        												MuConfigurations.getPreferences().getVariable(MuPreference.CHECK_FOR_UPDATE,
-                                                                                        MuPreferences.DEFAULT_CHECK_FOR_UPDATE));
+                MuConfigurations.getPreferences().getVariable(MuPreference.CHECK_FOR_UPDATE,
+                        MuPreferences.DEFAULT_CHECK_FOR_UPDATE));
         addComponent(showNextTimeCheckBox);
 
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
-		
+
         // Show dialog and get user action
         DialogAction action = getActionValue();
 
-        if(action == CheckVersionAction.GO_TO_WEBSITE) {
+        if (action == CheckVersionAction.GO_TO_WEBSITE) {
             try {
-                DesktopManager.executeOperation(DesktopManager.BROWSE, new Object[] {downloadURL});
-            }
-            catch(Exception e) {
+                DesktopManager.executeOperation(DesktopManager.BROWSE, new Object[]{downloadURL});
+            } catch (Exception e) {
                 InformationDialog.showErrorDialog(this);
             }
-        }
-        else if(action == CheckVersionAction.INSTALL_AND_RESTART) {
+        } else if (action == CheckVersionAction.INSTALL_AND_RESTART) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("Installing new version"));
             SelfUpdateJob job = new SelfUpdateJob(progressDialog, mainFrame, FileFactory.getFile(jarURL));
             progressDialog.start(job);
         }
-		
+
         // Remember user preference
         MuConfigurations.getPreferences().setVariable(MuPreference.CHECK_FOR_UPDATE, showNextTimeCheckBox.isSelected());
     }
