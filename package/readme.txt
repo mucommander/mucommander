@@ -32,7 +32,7 @@ What's new since v1.0.0 ?
 -----------------------
 
 New features:
-- 
+- Added a new option to Overwrite files only if size differs
 
 Improvements:
 - Added keyboard shortcut to Open Trash (plus minor fix for possible NPE)
