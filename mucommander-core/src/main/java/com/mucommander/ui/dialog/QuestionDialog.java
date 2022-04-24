@@ -47,13 +47,17 @@ import com.mucommander.ui.layout.InformationPane;
  */
 public class QuestionDialog extends FocusDialog implements DialogResult {
 
-    /** This value is returned by {@link #getActionValue()} when the dialog has been disposed without the user
-     * selecting a custom action */
+    /**
+     * This value is returned by {@link #getActionValue()} when the dialog has been disposed without the user
+     * selecting a custom action
+     */
     public static final DialogAction DIALOG_DISPOSED_ACTION = null;
 
-    /** Dialog owner */
-    private List<JButton> buttons = new ArrayList<>();
-    private List<DialogAction> actionChoices = new ArrayList<>();
+    /**
+     * Dialog owner
+     */
+    private final List<JButton> buttons = new ArrayList<>();
+    private final List<DialogAction> actionChoices = new ArrayList<>();
 
 
     private DialogAction retValue = DIALOG_DISPOSED_ACTION;
@@ -61,10 +65,14 @@ public class QuestionDialog extends FocusDialog implements DialogResult {
     private YBoxPanel mainPanel;
 
 
-    /** Minimum dialog size */
+    /**
+     * Minimum dialog size
+     */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 0);
 
-    /** Maximum dialog size */
+    /**
+     * Maximum dialog size
+     */
     private final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(480, 10000);
 
 
@@ -88,7 +96,7 @@ public class QuestionDialog extends FocusDialog implements DialogResult {
         init(msgComp, actionChoices, maxNbCols);
     }
 
-	
+
     protected QuestionDialog(Frame owner, String title, Component locationRelative) {
         super(owner, title, locationRelative);
     }
@@ -96,8 +104,8 @@ public class QuestionDialog extends FocusDialog implements DialogResult {
     protected QuestionDialog(Dialog owner, String title, Component locationRelative) {
         super(owner, title, locationRelative);
     }
-	
-	
+
+
     protected void init(Component comp, List<DialogAction> actionChoices, int maxNbCols) {
         this.actionChoices.addAll(actionChoices);
 
@@ -107,7 +115,7 @@ public class QuestionDialog extends FocusDialog implements DialogResult {
 
         mainPanel = new YBoxPanel();
 
-        if (comp!=null) {
+        if (comp != null) {
             mainPanel.addSpace(5);
             mainPanel.add(comp);
             mainPanel.addSpace(10);
@@ -116,28 +124,19 @@ public class QuestionDialog extends FocusDialog implements DialogResult {
         for (DialogAction action : actionChoices) {
             JButton button = new JButton(action.getActionName());
             button.setToolTipText(action.getActionName());
-            button.addActionListener(getActionListener(action));
+            button.addActionListener((ActionEvent event) -> {
+                retValue = action;
+                dispose();
+            });
             buttons.add(button);
         }
-		
+
         if (!buttons.isEmpty()) {
             setInitialFocusComponent(buttons.get(0));
         }
         mainPanel.add(new ButtonChoicePanel(buttons, maxNbCols, getRootPane()));
-		
+
         getContentPane().add(mainPanel, BorderLayout.NORTH);
-    }
-
-    private ActionListener getActionListener(DialogAction action) {
-        // using old-way to (still) support older jres
-        return new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                retValue = action;
-                dispose();
-            }
-        };
     }
 
     /**
@@ -148,8 +147,8 @@ public class QuestionDialog extends FocusDialog implements DialogResult {
     protected void addComponent(JComponent comp) {
         mainPanel.add(comp);
     }
-	
-	
+
+
     /**
      * Shows this dialog, waits for an action/button to be selected and returns the selected action's value.
      * The dialog may be closed without the user selecting a custom action. In this case,

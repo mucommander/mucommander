@@ -50,7 +50,7 @@ import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
 import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
-import static com.mucommander.ui.dialog.file.FileCollisionDialog.OverwriteAction.ASK;
+import static com.mucommander.ui.dialog.file.FileCollisionDialog.FileCollisionAction.ASK;
 
 
 /**
@@ -62,7 +62,7 @@ import static com.mucommander.ui.dialog.file.FileCollisionDialog.OverwriteAction
  * When the dialog is confirmed by the user, either by pressing the 'OK' button or the 'Enter' key, the destination
  * path is resolved and checked with {@link #isValidDestination(PathUtils.ResolvedDestination, String)}. If the
  * path is a valid destination, a job instance is created using
- * {@link #createTransferFileJob(ProgressDialog, PathUtils.ResolvedDestination, FileCollisionDialog.OverwriteAction)} and started. If it isn't,
+ * {@link #createTransferFileJob(ProgressDialog, PathUtils.ResolvedDestination, FileCollisionDialog.FileCollisionAction)} and started. If it isn't,
  * the user is notified with an error message.
  * </p>
  *
@@ -92,14 +92,14 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     // Dialog width should not exceed 360, height is not an issue (always the same)
     protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);
 
-    private final static FileCollisionDialog.OverwriteAction DEFAULT_ACTIONS[] = {
-        FileCollisionDialog.OverwriteAction.CANCEL,
-        FileCollisionDialog.OverwriteAction.SKIP,
-        FileCollisionDialog.OverwriteAction.OVERWRITE,
-        FileCollisionDialog.OverwriteAction.OVERWRITE_IF_OLDER,
-        FileCollisionDialog.OverwriteAction.OVERWRITE_IF_SIZE_DIFFERS,
-        FileCollisionDialog.OverwriteAction.RESUME,
-        FileCollisionDialog.OverwriteAction.RENAME
+    private final static FileCollisionDialog.FileCollisionAction DEFAULT_ACTIONS[] = {
+        FileCollisionDialog.FileCollisionAction.CANCEL,
+        FileCollisionDialog.FileCollisionAction.SKIP,
+        FileCollisionDialog.FileCollisionAction.OVERWRITE,
+        FileCollisionDialog.FileCollisionAction.OVERWRITE_IF_OLDER,
+        FileCollisionDialog.FileCollisionAction.OVERWRITE_IF_SIZE_DIFFERS,
+        FileCollisionDialog.FileCollisionAction.RESUME,
+        FileCollisionDialog.FileCollisionAction.RENAME
     };
 
     public TransferDestinationDialog(MainFrame mainFrame, FileSet files, String title, String labelText, String okText, String errorDialogTitle, boolean enableTransferOptions) {
@@ -132,7 +132,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
             fileExistsActionComboBox = new JComboBox<>();
             fileExistsActionComboBox.addItem(ASK);
 
-            for (FileCollisionDialog.OverwriteAction action : DEFAULT_ACTIONS) {
+            for (FileCollisionDialog.FileCollisionAction action : DEFAULT_ACTIONS) {
                 fileExistsActionComboBox.addItem(action);
             }
             mainPanel.add(fileExistsActionComboBox);
@@ -263,7 +263,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @param resolvedDest the resolved destination
      */
     private void startJob(PathUtils.ResolvedDestination resolvedDest) {
-        FileCollisionDialog.OverwriteAction defaultFileExistsAction = ASK;
+        FileCollisionDialog.FileCollisionAction defaultFileExistsAction = ASK;
         boolean skipErrors = false;
         boolean verifyIntegrity = false;
         boolean runInBackground = runInBackgroundCheckBox.isSelected();
@@ -271,7 +271,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         if (enableTransferOptions) {
             // Retrieve default action when a file exists in destination, default choice
             // (if not specified by the user) is 'Ask'
-            defaultFileExistsAction = (FileCollisionDialog.OverwriteAction) fileExistsActionComboBox.getSelectedItem();
+            defaultFileExistsAction = (FileCollisionDialog.FileCollisionAction) fileExistsActionComboBox.getSelectedItem();
             if (defaultFileExistsAction == DIALOG_DISPOSED_ACTION)
                 defaultFileExistsAction = ASK;
             // Note: we don't remember default action on purpose: we want the user to specify it each time,
@@ -375,7 +375,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @param defaultFileExistsAction the value of the 'default action when file exists' choice
      * @return the {@link TransferFileJob} instance that will subsequently be started
      */
-    protected abstract TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction);
+    protected abstract TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction);
 
     /**
      * Returns the title to be used in the progress dialog.

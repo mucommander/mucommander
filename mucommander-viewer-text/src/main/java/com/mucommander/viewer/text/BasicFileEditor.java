@@ -162,7 +162,7 @@ public abstract class BasicFileEditor implements FileEditor {
                 DialogAction action = new FileCollisionDialog(getFrame(), getFrame()/*mainFrame*/, collision, null, destFile, false, false).getActionValue();
 
                 // User chose to overwrite the file
-                if (action == FileCollisionDialog.OverwriteAction.OVERWRITE) {
+                if (action == FileCollisionDialog.FileCollisionAction.OVERWRITE) {
                     // Do nothing, simply continue and file will be overwritten
                 } // User chose to cancel or closed the dialog
                 else {

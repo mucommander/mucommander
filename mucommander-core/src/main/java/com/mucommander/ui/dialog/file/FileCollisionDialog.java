@@ -49,14 +49,14 @@ import com.mucommander.ui.text.FileLabel;
 
 /**
  * Dialog used to inform the user that a file collision has been detected and ask him how to resolve the conflict.
- * Prior to invoking this dialog, {@link com.mucommander.job.FileCollisionChecker} can be used to check for file collisions. 
+ * Prior to invoking this dialog, {@link com.mucommander.job.FileCollisionChecker} can be used to check for file collisions.
  *
- * @see com.mucommander.job.FileCollisionChecker
  * @author Maxence Bernard
+ * @see com.mucommander.job.FileCollisionChecker
  */
 public class FileCollisionDialog extends QuestionDialog {
 
-    public enum OverwriteAction implements DialogAction {
+    public enum FileCollisionAction implements DialogAction {
 
         ASK("ask"),
         CANCEL("cancel"),
@@ -69,7 +69,7 @@ public class FileCollisionDialog extends QuestionDialog {
 
         private final String actionName;
 
-        OverwriteAction(String actionKey) {
+        FileCollisionAction(String actionKey) {
             // here or when in #getActionName
             this.actionName = Translator.get(actionKey);
         }
@@ -90,30 +90,30 @@ public class FileCollisionDialog extends QuestionDialog {
     /**
      * Creates a new FileCollisionDialog.
      *
-     * @param owner the Frame that owns this dialog
-     * @param locationRelative component the location of this dialog will be based on
-     * @param collisionType the type of collision as returned by {@link com.mucommander.job.FileCollisionChecker}
-     * @param sourceFile the source file that 'conflicts' with the destination file, can be null.
-     * @param destFile the destination file which already exists
+     * @param owner             the Frame that owns this dialog
+     * @param locationRelative  component the location of this dialog will be based on
+     * @param collisionType     the type of collision as returned by {@link com.mucommander.job.FileCollisionChecker}
+     * @param sourceFile        the source file that 'conflicts' with the destination file, can be null.
+     * @param destFile          the destination file which already exists
      * @param multipleFilesMode if true, options that apply to multiple files will be displayed (skip, apply to all)
-     * @param allowRename if true, display an option to rename a file
+     * @param allowRename       if true, display an option to rename a file
      */
     public FileCollisionDialog(Dialog owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
         super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
-		
+
         init(collisionType, sourceFile, destFile, multipleFilesMode, allowRename);
     }
 
     /**
      * Creates a new FileCollisionDialog.
      *
-     * @param owner the Frame that owns this dialog
-     * @param locationRelative component the location of this dialog will be based on
-     * @param collisionType the type of collision as returned by {@link com.mucommander.job.FileCollisionChecker}
-     * @param sourceFile the source file that 'conflicts' with the destination file, can be null.
-     * @param destFile the destination file which already exists
+     * @param owner             the Frame that owns this dialog
+     * @param locationRelative  component the location of this dialog will be based on
+     * @param collisionType     the type of collision as returned by {@link com.mucommander.job.FileCollisionChecker}
+     * @param sourceFile        the source file that 'conflicts' with the destination file, can be null.
+     * @param destFile          the destination file which already exists
      * @param multipleFilesMode if true, options that apply to multiple files will be displayed (skip, apply to all)
-     * @param allowRename if true, display an option to rename a file
+     * @param allowRename       if true, display an option to rename a file
      */
     public FileCollisionDialog(Frame owner, Component locationRelative, int collisionType, AbstractFile sourceFile, AbstractFile destFile, boolean multipleFilesMode, boolean allowRename) {
         super(owner, Translator.get("file_collision_dialog.title"), locationRelative);
@@ -128,33 +128,32 @@ public class FileCollisionDialog extends QuestionDialog {
 
         List<DialogAction> actionChoices = new ArrayList<>();
 
-        actionChoices.add(OverwriteAction.CANCEL);
+        actionChoices.add(FileCollisionAction.CANCEL);
 
         if (multipleFilesMode) {
-            actionChoices.add(OverwriteAction.SKIP);
+            actionChoices.add(FileCollisionAction.SKIP);
         }
 
         // Add 'overwrite' / 'overwrite if older' / 'resume' actions only for 'destination file already exists' collision type
         if (collisionType == FileCollisionChecker.DESTINATION_FILE_ALREADY_EXISTS && !destFile.isDirectory()) {
-            actionChoices.add(OverwriteAction.OVERWRITE);
+            actionChoices.add(FileCollisionAction.OVERWRITE);
 
             if (sourceFile != null) {
-                actionChoices.add(OverwriteAction.OVERWRITE_IF_OLDER);
-                // TODO here (and line above) shouldn't we check condition as it is dome for resume below?
-                actionChoices.add(OverwriteAction.OVERWRITE_IF_SIZE_DIFFERS);
+                actionChoices.add(FileCollisionAction.OVERWRITE_IF_OLDER);
+                actionChoices.add(FileCollisionAction.OVERWRITE_IF_SIZE_DIFFERS);
 
                 // Give resume option only if destination file is smaller than source file
                 long destSize = destFile.getSize();
                 long sourceSize = sourceFile.getSize();
                 if (destSize != -1 && (sourceSize == -1 || destSize < sourceSize)) {
-                    actionChoices.add(OverwriteAction.RESUME);
+                    actionChoices.add(FileCollisionAction.RESUME);
                 }
 
                 if (allowRename) {
-                    actionChoices.add(OverwriteAction.RENAME);
+                    actionChoices.add(FileCollisionAction.RENAME);
                 }
             }
-        
+
         }
 
         // Init UI
@@ -187,7 +186,7 @@ public class FileCollisionDialog extends QuestionDialog {
         // If collision type is 'same source and destination' no need to show both source and destination 
         if (collisionType == FileCollisionChecker.SAME_SOURCE_AND_DESTINATION) {
             addFileDetails(tfPanel, sourceFile, Translator.get("name"));
-        }  else {
+        } else {
             if (sourceFile != null) {
                 addFileDetails(tfPanel, sourceFile, Translator.get("source"));
             }
@@ -199,7 +198,7 @@ public class FileCollisionDialog extends QuestionDialog {
 
         // Add a separator after file details
         yPanel.add(new JSeparator());
-        
+
         init(yPanel, actionChoices, 3);
         // TODO below there's workaround to accommodate texts within buttons - any idea to how to make it better?
         // override to avoid FocusDialog#pack making the dialog box too small for some buttons
@@ -221,17 +220,17 @@ public class FileCollisionDialog extends QuestionDialog {
 
 
     private void addFileDetails(XAlignedComponentPanel panel, AbstractFile file, String nameLabel) {
-        addFileDetailsRow(panel, nameLabel+":", new FileLabel(file, false), 0);
+        addFileDetailsRow(panel, nameLabel + ":", new FileLabel(file, false), 0);
 
         AbstractFile parent = file.getParent();
 
-        addFileDetailsRow(panel, Translator.get("location")+":", new FileLabel(parent == null ? file : parent, true), 0);
+        addFileDetailsRow(panel, Translator.get("location") + ":", new FileLabel(parent == null ? file : parent, true), 0);
 
-        addFileDetailsRow(panel, Translator.get("size")+":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL| SizeFormat.UNIT_LONG| SizeFormat.INCLUDE_SPACE)), 0);
+        addFileDetailsRow(panel, Translator.get("size") + ":", new JLabel(SizeFormat.format(file.getSize(), SizeFormat.DIGITS_FULL | SizeFormat.UNIT_LONG | SizeFormat.INCLUDE_SPACE)), 0);
 
-        addFileDetailsRow(panel, Translator.get("date")+":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 0);
+        addFileDetailsRow(panel, Translator.get("date") + ":", new JLabel(CustomDateFormat.format(new Date(file.getDate()))), 0);
 
-        addFileDetailsRow(panel, Translator.get("permissions")+":", new JLabel(file.getPermissionsString()), 10);
+        addFileDetailsRow(panel, Translator.get("permissions") + ":", new JLabel(file.getPermissionsString()), 10);
     }
 
     private void addFileDetailsRow(XAlignedComponentPanel panel, String label, JComponent comp, int ySpaceAfter) {
@@ -246,5 +245,5 @@ public class FileCollisionDialog extends QuestionDialog {
     public boolean applyToAllSelected() {
         return applyToAllCheckBox != null && applyToAllCheckBox.isSelected();
     }
-	
+
 }

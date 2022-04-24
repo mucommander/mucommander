@@ -1590,10 +1590,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 files.add(fileToRename);
                 MoveJob renameJob;
                 if (!consecutiveRename) {
-                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.OverwriteAction.ASK, true);
+                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.FileCollisionAction.ASK, true);
                 } else {
                     AbstractFile fileToBeSelected = tableModel.getFileAtRow(editingRow+1);
-                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.OverwriteAction.ASK, true) {
+                    renameJob = new MoveJob(null, mainFrame, files, current, newName, FileCollisionDialog.FileCollisionAction.ASK, true) {
                         @Override
                         protected void selectFileWhenFinished(AbstractFile file) {
                             super.selectFileWhenFinished(fileToBeSelected);

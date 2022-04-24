@@ -54,7 +54,7 @@ import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListener {
 
     /** Provided JButton instances */
-    private List<JButton> buttons;
+    private final List<JButton> buttons;
 
     /** RootPane associated with this ButtonChoicePanel */
     private JRootPane rootPane;
@@ -78,7 +78,7 @@ public class ButtonChoicePanel extends JPanel implements KeyListener, FocusListe
      * @param rootPane associated with this ButtonChoicePanel
      */
     public ButtonChoicePanel(List<JButton> buttons, int nbCols, JRootPane rootPane) {
-        this.buttons = new ArrayList<>(buttons);
+        this.buttons = buttons;
         int nbButtons = buttons.size();
         this.nbCols = nbCols<=0?nbButtons:nbCols;
         this.rootPane = rootPane;

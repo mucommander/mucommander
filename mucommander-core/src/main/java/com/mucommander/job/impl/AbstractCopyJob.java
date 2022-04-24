@@ -31,7 +31,6 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
-;
 
 /**
  * This class is the parent class of {@link com.mucommander.job.impl.CopyJob} and {@link com.mucommander.job.impl.MoveJob} and
@@ -50,7 +49,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
     protected String newName;
 
     /** Default choice when encountering an existing file */
-    protected FileCollisionDialog.OverwriteAction defaultFileExistsAction = FileCollisionDialog.OverwriteAction.ASK;
+    protected FileCollisionDialog.FileCollisionAction defaultFileExistsAction = FileCollisionDialog.FileCollisionAction.ASK;
     
     /** Title used for error dialogs */
     protected String errorDialogTitle;
@@ -71,10 +70,10 @@ public abstract class AbstractCopyJob extends TransferFileJob {
      * @param files files which are going to be copied
      * @param destFolder destination folder where the files will be copied
      * @param newName the new filename in the destination folder, can be <code>null</code> in which case the original filename will be used.
-     * @param fileExistsAction default action to be performed when a file already exists in the destination, see {@link FileCollisionDialog.OverwriteAction} for allowed values
+     * @param fileExistsAction default action to be performed when a file already exists in the destination.
      */
     public AbstractCopyJob(ProgressDialog progressDialog, MainFrame mainFrame,
-            FileSet files, AbstractFile destFolder, String newName, FileCollisionDialog.OverwriteAction fileExistsAction) {
+            FileSet files, AbstractFile destFolder, String newName, FileCollisionDialog.FileCollisionAction fileExistsAction) {
         super(progressDialog, mainFrame, files);
 
         this.baseDestFolder = destFolder;
@@ -143,11 +142,11 @@ public abstract class AbstractCopyJob extends TransferFileJob {
             
             // Handle collision, asking the user what to do or using a default action to resolve the collision 
             if (collision != FileCollisionChecker.NO_COLLOSION) {
-                FileCollisionDialog.OverwriteAction choice;
+                FileCollisionDialog.FileCollisionAction choice;
                 // Use default action if one has been set, if not show up a dialog
-                if (defaultFileExistsAction == FileCollisionDialog.OverwriteAction.ASK) {
+                if (defaultFileExistsAction == FileCollisionDialog.FileCollisionAction.ASK) {
                     FileCollisionDialog dialog = new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, file, destFile, true, true);
-                    choice = (FileCollisionDialog.OverwriteAction) waitForUserResponse(dialog);
+                    choice = (FileCollisionDialog.FileCollisionAction) waitForUserResponse(dialog);
                     // If 'apply to all' was selected, this choice will be used for any other files (user will not be asked again)
                     if (dialog.applyToAllSelected()) {
                         defaultFileExistsAction = choice;
@@ -156,37 +155,37 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                     choice = defaultFileExistsAction;
                 }
                 // Cancel, skip or close dialog
-                if (choice == QuestionDialog.DIALOG_DISPOSED_ACTION || choice == FileCollisionDialog.OverwriteAction.CANCEL) {
+                if (choice == QuestionDialog.DIALOG_DISPOSED_ACTION || choice == FileCollisionDialog.FileCollisionAction.CANCEL) {
                     interrupt();
                     return null;
                 }
                 // Skip file
-                else if (choice == FileCollisionDialog.OverwriteAction.SKIP) {
+                else if (choice == FileCollisionDialog.FileCollisionAction.SKIP) {
                     return null;
                 }
                 // Append to file (resume file copy)
-                else if (choice == FileCollisionDialog.OverwriteAction.RESUME) {
+                else if (choice == FileCollisionDialog.FileCollisionAction.RESUME) {
                     append = true;
                     break;
                 }
                 // Overwrite file
-                else if (choice == FileCollisionDialog.OverwriteAction.OVERWRITE) {
+                else if (choice == FileCollisionDialog.FileCollisionAction.OVERWRITE) {
                     // Do nothing, simply continue
                     break;
                 }
                 //  Overwrite file if destination is older
-                else if (choice == FileCollisionDialog.OverwriteAction.OVERWRITE_IF_OLDER) {
+                else if (choice == FileCollisionDialog.FileCollisionAction.OVERWRITE_IF_OLDER) {
                     // Overwrite if file is newer (strictly)
                     if (file.getDate() <= destFile.getDate()) {
                         return null;
                     }
                     break;
-                } else if (choice == FileCollisionDialog.OverwriteAction.OVERWRITE_IF_SIZE_DIFFERS) {
+                } else if (choice == FileCollisionDialog.FileCollisionAction.OVERWRITE_IF_SIZE_DIFFERS) {
                     if (file.getSize() == destFile.getSize()) {
                         return null;
                     }
                     break;
-                } else if (choice == FileCollisionDialog.OverwriteAction.RENAME) {
+                } else if (choice == FileCollisionDialog.FileCollisionAction.RENAME) {
                     setPaused(true);
                     FileCollisionRenameDialog dlg = new FileCollisionRenameDialog(getMainFrame(), destFile);
                     String destFileName = (String) waitForUserResponseObject(dlg);
@@ -195,7 +194,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                         destFile = createDestinationFile(file, destFolder, destFileName);
                     } else {
                         // turn on FileCollisionDialog, so we don't loop indefinitely
-                        defaultFileExistsAction = FileCollisionDialog.OverwriteAction.ASK;
+                        defaultFileExistsAction = FileCollisionDialog.FileCollisionAction.ASK;
                     }
                     // continue with collision checking
                     continue;

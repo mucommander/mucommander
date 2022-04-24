@@ -33,7 +33,7 @@ public class BatchRenameJob extends MoveJob {
     private List<String> newNames;
 
     public BatchRenameJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, List<String> newNames) {
-        super(progressDialog, mainFrame, files, files.getBaseFolder(), null, FileCollisionDialog.OverwriteAction.ASK, true);
+        super(progressDialog, mainFrame, files, files.getBaseFolder(), null, FileCollisionDialog.FileCollisionAction.ASK, true);
         this.newNames = newNames;
     }
 

@@ -61,7 +61,7 @@ public class DownloadDialog extends TransferDestinationDialog {
     }
 
     @Override
-    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.OverwriteAction defaultFileExistsAction) {
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction) {
         return new CopyJob(
                 progressDialog,
                 mainFrame,
