@@ -79,46 +79,59 @@ import com.mucommander.ui.icon.IconManager;
  * @author Maxence Bernard
  */
 public class DrivePopupButton extends PopupButton implements BookmarkListener, ConfigurationListener, LocationListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DrivePopupButton.class);
-	
-    /** FolderPanel instance that contains this button */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DrivePopupButton.class);
+
+    /**
+     * FolderPanel instance that contains this button
+     */
     private FolderPanel folderPanel;
-	
-    /** Current volumes */
+
+    /**
+     * Current volumes
+     */
     private static AbstractFile volumes[];
 
-    /** static FileSystemView instance, has a (non-null) value only under Windows */
+    /**
+     * static FileSystemView instance, has a (non-null) value only under Windows
+     */
     private static FileSystemView fileSystemView;
 
-    /** Caches extended drive names, has a (non-null) value only under Windows */
+    /**
+     * Caches extended drive names, has a (non-null) value only under Windows
+     */
     private static Map<AbstractFile, String> extendedNameCache;
-    
-    /** Caches drive icons */
-    private static Map<AbstractFile, Icon> iconCache = new Hashtable<AbstractFile, Icon>();
-    
 
-    /** Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp
-     * is not defined. */
+    /**
+     * Caches drive icons
+     */
+    private static Map<AbstractFile, Icon> iconCache = new Hashtable<AbstractFile, Icon>();
+
+
+    /**
+     * Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp
+     * is not defined.
+     */
     private static PathFilter volumeFilter;
 
-    /** ProtocolPanelProviders that we should make shortcuts for */
-    private static Map<String, ProtocolPanelProvider> schemaToPanelProvider  = new HashMap<>();
+    /**
+     * ProtocolPanelProviders that we should make shortcuts for
+     */
+    private static Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
 
     static {
-        if(OsFamily.WINDOWS.isCurrent()) {
+        if (OsFamily.WINDOWS.isCurrent()) {
             fileSystemView = FileSystemView.getFileSystemView();
             extendedNameCache = new Hashtable<AbstractFile, String>();
         }
 
         try {
             String excludeRegexp = MuConfigurations.getPreferences().getVariable(MuPreference.VOLUME_EXCLUDE_REGEXP);
-            if(excludeRegexp!=null) {
+            if (excludeRegexp != null) {
                 volumeFilter = new RegexpPathFilter(excludeRegexp, true);
                 volumeFilter.setInverted(true);
             }
-        }
-        catch(PatternSyntaxException e) {
-            LOGGER.info("Invalid regexp for conf variable "+MuPreferences.VOLUME_EXCLUDE_REGEXP, e);
+        } catch (PatternSyntaxException e) {
+            LOGGER.info("Invalid regexp for conf variable " + MuPreferences.VOLUME_EXCLUDE_REGEXP, e);
         }
 
         // Initialize the volumes list
@@ -133,7 +146,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      */
     public DrivePopupButton(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
-		
+
         // Listen to location events to update the button when the current folder changes
         folderPanel.getLocationManager().addLocationListener(this);
 
@@ -144,8 +157,8 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // Listen to configuration changes to update the button if the system file icons policy has changed
         MuConfigurations.addPreferencesListener(this);
 
-        if(OsFamily.MAC_OS.isCurrent()) {
-            setMargin(new Insets(1,1,1,1));
+        if (OsFamily.MAC_OS.isCurrent()) {
+            setMargin(new Insets(1, 1, 1, 1));
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
         }
@@ -154,9 +167,9 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     /**
      * Updates the button's label and icon to reflect the current folder and match one of the current volumes:
      * <<ul>
-     *	<li>If the specified folder corresponds to a bookmark, the bookmark's name will be displayed
-     *	<li>If the specified folder corresponds to a local file, the enclosing volume's name will be displayed
-     *	<li>If the specified folder corresponds to a remote file, the protocol's name will be displayed
+     * <li>If the specified folder corresponds to a bookmark, the bookmark's name will be displayed
+     * <li>If the specified folder corresponds to a local file, the enclosing volume's name will be displayed
+     * <li>If the specified folder corresponds to a remote file, the protocol's name will be displayed
      * </ul>
      * The button's icon will be the current folder's one.
      */
@@ -166,8 +179,8 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         FileURL currentURL = currentFolder.getURL();
 
         // First try to find a bookmark matching the specified folder
-        for(Bookmark bookmark : BookmarkManager.getBookmarks()) {
-            if(currentPath.equals(bookmark.getLocation())) {
+        for (Bookmark bookmark : BookmarkManager.getBookmarks()) {
+            if (currentPath.equals(bookmark.getLocation())) {
                 // Note: if several bookmarks match current folder, the first one will be used
                 setText(bookmark.getName());
                 setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARK_ICON_NAME));
@@ -178,82 +191,89 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // If no bookmark matched current folder
         String protocol = currentURL.getScheme();
         switch (protocol) {
-        // Local file, use volume's name
-        case LocalFile.SCHEMA:
-        	String newLabel = null;
-        	// Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
-        	// display 'SMB' which is the underlying protocol
-        	if(OsFamily.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
-        		newLabel = "SMB";
-        	}
-        	else {
-        		// getCanonicalPath() must be avoided under Windows for the following reasons:
-        		// a) it is not necessary, Windows doesn't have symlinks
-        		// b) it triggers the dreaded 'No disk in drive' error popup dialog.
-        		// c) when network drives are present but not mounted (e.g. X:\ mapped onto an SMB share),
-        		// getCanonicalPath which is I/O bound will take a looooong time to execute
+            // Local file, use volume's name
+            case LocalFile.SCHEMA:
+                String newLabel = null;
+                // Patch for Windows UNC network paths (weakly characterized by having a host different from 'localhost'):
+                // display 'SMB' which is the underlying protocol
+                if (OsFamily.WINDOWS.isCurrent() && !FileURL.LOCALHOST.equals(currentURL.getHost())) {
+                    newLabel = "SMB";
+                } else {
+                    // getCanonicalPath() must be avoided under Windows for the following reasons:
+                    // a) it is not necessary, Windows doesn't have symlinks
+                    // b) it triggers the dreaded 'No disk in drive' error popup dialog.
+                    // c) when network drives are present but not mounted (e.g. X:\ mapped onto an SMB share),
+                    // getCanonicalPath which is I/O bound will take a looooong time to execute
 
-        		if(OsFamily.WINDOWS.isCurrent())
-        			currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
-        		else
-        			currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
+                    if (OsFamily.WINDOWS.isCurrent())
+                        currentPath = currentFolder.getAbsolutePath(false).toLowerCase();
+                    else
+                        currentPath = currentFolder.getCanonicalPath(false).toLowerCase();
 
-        		int bestLength = -1;
-        		int bestIndex = 0;
-        		String temp;
-        		int len;
-        		for(int i=0; i< volumes.length; i++) {
-        			if(OsFamily.WINDOWS.isCurrent())
-        				temp = volumes[i].getAbsolutePath(false).toLowerCase();
-        			else
-        				temp = volumes[i].getCanonicalPath(false).toLowerCase();
+                    int bestLength = -1;
+                    int bestIndex = 0;
+                    String temp;
+                    int len;
+                    for (int i = 0; i < volumes.length; i++) {
+                        if (OsFamily.WINDOWS.isCurrent())
+                            temp = volumes[i].getAbsolutePath(false).toLowerCase();
+                        else
+                            temp = volumes[i].getCanonicalPath(false).toLowerCase();
 
-        			len = temp.length();
-        			if (currentPath.startsWith(temp) && len>bestLength) {
-        				bestIndex = i;
-        				bestLength = len;
-        			}
-        		}
-        		newLabel = volumes[bestIndex].getName();
+                        len = temp.length();
+                        if (currentPath.startsWith(temp) && len > bestLength) {
+                            bestIndex = i;
+                            bestLength = len;
+                        }
+                    }
+                    newLabel = volumes[bestIndex].getName();
 
-        		// Not used because the call to FileSystemView is slow
-        		//                    if(fileSystemView!=null)
-        		//                        newToolTip = getWindowsExtendedDriveName(volumes[bestIndex]);
+                    // Not used because the call to FileSystemView is slow
+                    //                    if(fileSystemView!=null)
+                    //                        newToolTip = getWindowsExtendedDriveName(volumes[bestIndex]);
 
-        	}
-        	setText(newLabel);
-    		// Set the folder icon based on the current system icons policy
-    		setIcon(FileIcons.getFileIcon(currentFolder));
-        	break;
-
-        case BookmarkProtocolProvider.BOOKMARK:
-        	String currentFolderName = currentFolder.getName();
-        	setText(currentFolderName.isEmpty() ? Translator.get("bookmarks_menu") : currentFolderName);
-        	setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARKS_ICON_NAME));
-        	break;
-
-        case SearchFile.SCHEMA:
-            setText(Translator.get("find"));
-            setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FIND_RESULT_ICON_NAME));
+                }
+                setText(newLabel);
+            {
+                // Set the folder icon slightly disobeying system icons policy for the current folder
+                Icon icon = FileIcons.hasProperSystemIcons() ?
+                        FileIcons.getSystemFileIcon(currentFolder) : FileIcons.getFileIcon(currentFolder);
+                setIcon(icon);
+            }
             break;
 
-        case "gdrive":
-            setText(Translator.get("gdrive"));
-            setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.GOOGLE_DRIVE_ICON_NAME));
-            break;
+            case BookmarkProtocolProvider.BOOKMARK:
+                String currentFolderName = currentFolder.getName();
+                setText(currentFolderName.isEmpty() ? Translator.get("bookmarks_menu") : currentFolderName);
+                setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.BOOKMARKS_ICON_NAME));
+                break;
 
-        case "dropbox":
-            setText(Translator.get("dropbox"));
-            setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.DROPBOX_ICON_NAME));
-            break;
+            case SearchFile.SCHEMA:
+                setText(Translator.get("find"));
+                setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.FIND_RESULT_ICON_NAME));
+                break;
 
-        default:
-        	// Remote file, use the protocol's name
-    		setText(protocol.toUpperCase());
-    		// Set the folder icon based on the current system icons policy
-    		setIcon(FileIcons.getFileIcon(currentFolder));
+            case "gdrive":
+                setText(Translator.get("gdrive"));
+                setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.GOOGLE_DRIVE_ICON_NAME));
+                break;
+
+            case "dropbox":
+                setText(Translator.get("dropbox"));
+                setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.DROPBOX_ICON_NAME));
+                break;
+
+            default:
+                // Remote file, use the protocol's name
+                setText(protocol.toUpperCase());
+            {
+                // Set the folder icon slightly disobeying system icons policy for the current folder
+                Icon icon = FileIcons.hasProperSystemIcons() ?
+                        FileIcons.getSystemFileIcon(currentFolder) : FileIcons.getFileIcon(currentFolder);
+                setIcon(icon);
+            }
         }
-		
+
     }
 
 
@@ -267,9 +287,9 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      */
     private static String getExtendedDriveName(AbstractFile localFile) {
         // Note: fileSystemView.getSystemDisplayName(java.io.File) is unfortunately very very slow
-        String name = fileSystemView.getSystemDisplayName((java.io.File)localFile.getUnderlyingFileObject());
+        String name = fileSystemView.getSystemDisplayName((java.io.File) localFile.getUnderlyingFileObject());
 
-        if(name==null || name.equals(""))   // This happens for CD/DVD drives when they don't contain any disc
+        if (name == null || name.equals(""))   // This happens for CD/DVD drives when they don't contain any disc
             return localFile.getName();
 
         return name;
@@ -288,7 +308,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     public static AbstractFile[] getDisplayableVolumes() {
         AbstractFile[] volumes = LocalFile.getVolumes();
 
-        if(volumeFilter!=null)
+        if (volumeFilter != null)
             return volumeFilter.filter(volumes);
 
         return volumes;
@@ -315,17 +335,17 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         MuAction action;
         String volumeName;
 
-        boolean useExtendedDriveNames = fileSystemView!=null;
+        boolean useExtendedDriveNames = fileSystemView != null;
         ArrayList<JMenuItem> itemsV = new ArrayList<JMenuItem>();
 
-        for(int i=0; i<nbVolumes; i++) {
+        for (int i = 0; i < nbVolumes; i++) {
             action = new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), volumes[i]);
             volumeName = volumes[i].getName();
 
             // If several volumes have the same filename, use the volume's path for the action's label instead of the
             // volume's path, to disambiguate
-            for(int j=0; j<nbVolumes; j++) {
-                if(j!=i && volumes[j].getName().equalsIgnoreCase(volumeName)) {
+            for (int j = 0; j < nbVolumes; j++) {
+                if (j != i && volumes[j].getName().equalsIgnoreCase(volumeName)) {
                     action.setLabel(volumes[i].getAbsolutePath());
                     break;
                 }
@@ -336,14 +356,14 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
             // Set icon from cache
             Icon icon = iconCache.get(volumes[i]);
-            if (icon!=null) {
+            if (icon != null) {
                 item.setIcon(icon);
             }
 
-            if(useExtendedDriveNames) {
+            if (useExtendedDriveNames) {
                 // Use the last known value (if any) while we update it in a separate thread
                 String previousExtendedName = extendedNameCache.get(volumes[i]);
-                if(previousExtendedName!=null)
+                if (previousExtendedName != null)
                     item.setText(previousExtendedName);
 
             }
@@ -358,12 +378,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
 
         if (!bookmarks.isEmpty()) {
-            for(Bookmark bookmark : bookmarks) {
+            for (Bookmark bookmark : bookmarks) {
                 item = popupMenu.add(new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmark));
                 setMnemonic(item, mnemonicHelper);
             }
-        }
-        else {
+        } else {
             // No bookmark : add a disabled menu item saying there is no bookmark
             popupMenu.add(Translator.get("bookmarks_menu.no_bookmark")).setEnabled(false);
         }
@@ -371,7 +390,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         popupMenu.add(new JSeparator());
 
         // Add 'Network shares' shortcut
-        if(FileFactory.isRegisteredProtocol(FileProtocols.SMB)) {
+        if (FileFactory.isRegisteredProtocol(FileProtocols.SMB)) {
             action = new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), new Bookmark(Translator.get("drive_popup.network_shares"), "smb:///"));
             action.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NETWORK_ICON_NAME));
             setMnemonic(popupMenu.add(action), mnemonicHelper);
@@ -383,15 +402,15 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             public MuAction getMenuItemAction(BonjourService bs) {
                 return new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), bs);
             }
-        }) , mnemonicHelper);
+        }), mnemonicHelper);
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts
         schemaToPanelProvider.values().stream()
-        .sorted(Comparator.comparing(ProtocolPanelProvider::priority))
-        .map(this::toServerConnectAction)
-        .map(popupMenu::add)
-        .forEach(menuItem -> setMnemonic(menuItem, mnemonicHelper));
+                .sorted(Comparator.comparing(ProtocolPanelProvider::priority))
+                .map(this::toServerConnectAction)
+                .map(popupMenu::add)
+                .forEach(menuItem -> setMnemonic(menuItem, mnemonicHelper));
 
         return popupMenu;
     }
@@ -399,6 +418,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     /**
      * Registers an instance of {@link ProtocolPanelProvider} to the drive popup buttons,
      * this will add shortcut to the relevant 'connect to server' dialog.
+     *
      * @param protocolPanelProvider the {@link ProtocolPanelProvider} to register.
      */
     public static void register(ProtocolPanelProvider protocolPanelProvider) {
@@ -407,8 +427,9 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
     /**
      * Unregisters an instance of {@link ProtocolPanelProvider}.
-     * @see {@link #register(ProtocolPanelProvider)}}
+     *
      * @param protocolPanelProvider an instance of {@link ProtocolPanelProvider} to unregister.
+     * @see {@link #register(ProtocolPanelProvider)}}
      */
     public static void unregister(ProtocolPanelProvider protocolPanelProvider) {
         schemaToPanelProvider.remove(protocolPanelProvider.getSchema());
@@ -416,6 +437,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
     /**
      * Converts an instance of {@link ProtocolPanelProvider} to an instance of {@link ServerConnectAction}.
+     *
      * @param service an instance of {@link ProtocolPanelProvider} to convert.
      * @return an instance of of {@link ProtocolPanelProvider} that corresponds to the given instance of {@link ServerConnectAction}.
      */
@@ -425,12 +447,12 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     }
 
     /**
-     *  Calls to getExtendedDriveName(String) are very slow, so they are performed in a separate thread so as
-     *  to not lock the main even thread. The popup menu gets first displayed with the short drive names, and
-     * then refreshed with the extended names as they are retrieved.        
+     * Calls to getExtendedDriveName(String) are very slow, so they are performed in a separate thread so as
+     * to not lock the main even thread. The popup menu gets first displayed with the short drive names, and
+     * then refreshed with the extended names as they are retrieved.
      */
     private class RefreshDriveNamesAndIcons extends Thread {
-        
+
         private JPopupMenu popupMenu;
         private ArrayList<JMenuItem> items;
 
@@ -439,11 +461,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             this.popupMenu = popupMenu;
             this.items = items;
         }
-        
+
         @Override
         public void run() {
-            final boolean useExtendedDriveNames = fileSystemView!=null;
-            for(int i=0; i<items.size(); i++) {
+            final boolean useExtendedDriveNames = fileSystemView != null;
+            for (int i = 0; i < items.size(); i++) {
                 final JMenuItem item = items.get(i);
 
                 String extendedName = null;
@@ -458,8 +480,8 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
                 final String extendedNameFinal = extendedName;
 
                 // Set system icon for volumes, only if system icons are available on the current platform
-                final Icon icon = FileIcons.hasProperSystemIcons()?FileIcons.getSystemFileIcon(volumes[i]):null;
-                if (icon!=null) {
+                final Icon icon = FileIcons.hasProperSystemIcons() ? FileIcons.getSystemFileIcon(volumes[i]) : null;
+                if (icon != null) {
                     iconCache.put(volumes[i], icon);
                 }
 
@@ -467,7 +489,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
                     if (useExtendedDriveNames) {
                         item.setText(extendedNameFinal);
                     }
-                    if (icon!=null) {
+                    if (icon != null) {
                         item.setIcon(icon);
                     }
                 });
@@ -479,14 +501,14 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
                 popupMenu.pack();
             });
         }
-        
+
     }
 
 
     /**
      * Convenience method that sets a mnemonic to the given JMenuItem, using the specified MnemonicHelper.
      *
-     * @param menuItem the menu item for which to set a mnemonic
+     * @param menuItem       the menu item for which to set a mnemonic
      * @param mnemonicHelper the MnemonicHelper instance to be used to determine the mnemonic's character.
      */
     private void setMnemonic(JMenuItem menuItem, MnemonicHelper mnemonicHelper) {
@@ -497,7 +519,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     //////////////////////////////
     // BookmarkListener methods //
     //////////////////////////////
-	
+
     public void bookmarksChanged() {
         // Refresh label in case a bookmark with the current location was changed
         updateButton();
@@ -530,7 +552,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // as bookmarks name can be as long as users want them to be.
         // Note: would be better to use JButton.setMaximumSize() but it doesn't seem to work
         Dimension d = super.getPreferredSize();
-        if(d.width > 160)
+        if (d.width > 160)
             d.width = 160;
         return d;
     }
@@ -560,19 +582,19 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
     /**
      * This modified {@link OpenLocationAction} changes the current folder on the {@link FolderPanel} that contains
-     * this button, instead of the currently active {@link FolderPanel}.  
+     * this button, instead of the currently active {@link FolderPanel}.
      */
     private class CustomOpenLocationAction extends OpenLocationAction {
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, Bookmark bookmark) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, Bookmark bookmark) {
             super(mainFrame, properties, bookmark);
         }
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, AbstractFile file) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, AbstractFile file) {
             super(mainFrame, properties, file);
         }
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, BonjourService bs) {
+        public CustomOpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, BonjourService bs) {
             super(mainFrame, properties, bs);
         }
 
@@ -586,11 +608,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         }
     }
 
-	/**********************************
-	 * LocationListener Implementation
-	 **********************************/
-	
-	public void locationChanged(LocationEvent e) {
+    /**********************************
+     * LocationListener Implementation
+     **********************************/
+
+    public void locationChanged(LocationEvent e) {
         // Update the button's label to reflect the new current folder
         updateButton();
     }
