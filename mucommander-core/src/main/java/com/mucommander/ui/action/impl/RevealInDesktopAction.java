@@ -29,6 +29,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -55,21 +56,25 @@ public class RevealInDesktopAction extends ParentFolderAction {
     @Override
     protected void toggleEnabledState() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
         setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA)
                 && !currentFolder.isArchive()
-                && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class));
+                && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class)
+                || currentFolder.getURL().getScheme().equals(SearchFile.SCHEMA)
+                && selectedFile != null
+                && selectedFile.getURL().getScheme().equals(LocalFile.SCHEMA));
     }
 
     @Override
     public void performAction() {
+        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
-        if (selectedFile != null) {
-            try {
-                CompletionStage<Optional<String>> completionStage = openInFileManager(selectedFile);
-                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
-            } catch (Exception e) {
-                InformationDialog.showErrorDialog(mainFrame);
-            }
+        try {
+            CompletionStage<Optional<String>> completionStage =
+                    openInFileManager(selectedFile != null ? selectedFile : currentFolder);
+            InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
+        } catch (Exception e) {
+            InformationDialog.showErrorDialog(mainFrame);
         }
     }
 
