@@ -42,7 +42,7 @@ Localization:
 - Korean translation updated.
 
 Bug fixes:
-- 
+- "Reveal in" now available and works in search results and when clicking on parent folder
 
 Known issues:
 - Some translations may not be up-to-date.
