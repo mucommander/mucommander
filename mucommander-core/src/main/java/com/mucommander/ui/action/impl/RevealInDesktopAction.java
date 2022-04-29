@@ -45,7 +45,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class RevealInDesktopAction extends ParentFolderAction {
+public class RevealInDesktopAction extends ActiveTabAction {
 
     public RevealInDesktopAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
