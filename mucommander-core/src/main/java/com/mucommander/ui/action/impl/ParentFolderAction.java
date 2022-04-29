@@ -65,7 +65,11 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
 
     private void toggleEnabledStateAdapter() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        toggleEnabledState();
+        if (currentFolder.getURL().getScheme().equals(SearchFile.SCHEMA)) {
+            setEnabled(false);
+        } else {
+            toggleEnabledState();
+        }
     }
 
     /////////////////////////////////
