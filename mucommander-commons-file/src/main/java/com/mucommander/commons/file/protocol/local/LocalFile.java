@@ -149,16 +149,16 @@ public class LocalFile extends ProtocolFile {
                                                                                                    // octal)
 
     /** Bit mask that indicates which permissions can be changed */
-    private final static PermissionBits CHANGEABLE_PERMISSIONS = IS_WINDOWS ? CHANGEABLE_PERMISSIONS_WINDOWS : CHANGEABLE_PERMISSIONS_NON_WINDOWS;
+    private final static PermissionBits CHANGEABLE_PERMISSIONS =
             IS_WINDOWS ? CHANGEABLE_PERMISSIONS_WINDOWS : CHANGEABLE_PERMISSIONS_NON_WINDOWS;
 
     /**
      * List of known UNIX filesystems.
      */
-    public static final String[] KNOWN_UNIX_FS = {"adfs", "affs", "autofs", "cifs", "coda", "cramfs",
+    public static final String[] KNOWN_UNIX_FS = { "adfs", "affs", "autofs", "cifs", "coda", "cramfs",
             "debugfs", "efs", "ext2", "ext3", "fuseblk", "hfs", "hfsplus", "hpfs",
             "iso9660", "jfs", "minix", "msdos", "ncpfs", "nfs", "nfs4", "ntfs",
-            "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs"};
+            "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs" };
 
     static {
         // Prevents Windows from poping up a message box when it cannot find a file. Those message box are triggered by
@@ -167,7 +167,7 @@ public class LocalFile extends ProtocolFile {
         // This has been fixed in Java 1.6 b55 but this fixes previous versions of Java.
         // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4089199
         if (IS_WINDOWS && Kernel32.isAvailable())
-            Kernel32.getInstance().SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX | Kernel32API.SEM_FAILCRITICALERRORS);
+            Kernel32.getInstance()
                     .SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX | Kernel32API.SEM_FAILCRITICALERRORS);
     }
 
@@ -553,13 +553,13 @@ public class LocalFile extends ProtocolFile {
         boolean success = false;
         switch (permission) {
             case READ:
-                success = file.setReadable(enabled);
-                break;
+            success = file.setReadable(enabled);
+            break;
             case WRITE:
-                success = file.setWritable(enabled);
-                break;
+            success = file.setWritable(enabled);
+            break;
             case EXECUTE:
-                success = file.setExecutable(enabled);
+            success = file.setExecutable(enabled);
         }
 
         if (!success)
@@ -713,10 +713,10 @@ public class LocalFile extends ProtocolFile {
             if (Kernel32.isAvailable()) {
                 // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
                 // call #exists() on the destination file which has a cost.
-                if (!Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
+                if (!Kernel32.getInstance()
                         .MoveFileEx(absPath,
                                 destFile.getAbsolutePath(),
-                        Kernel32API.MOVEFILE_REPLACE_EXISTING | Kernel32API.MOVEFILE_WRITE_THROUGH)) {
+                                Kernel32API.MOVEFILE_REPLACE_EXISTING | Kernel32API.MOVEFILE_WRITE_THROUGH)) {
                     String errorMessage = Integer.toString(Kernel32.getInstance().GetLastError());
                     // TODO: use Kernel32.FormatMessage
                     throw new IOException("Rename using Kernel32 API failed: " + errorMessage);
@@ -1098,7 +1098,7 @@ public class LocalFile extends ProtocolFile {
             } else {
                 // Expand the file by positionning the offset at the new EOF and writing a byte, and reposition the
                 // offset to where it was
-                channel.position(newLength - 1);      // Note: newLength cannot be 0
+                channel.position(newLength - 1); // Note: newLength cannot be 0
                 write(0);
                 channel.position(currentPos);
             }
@@ -1149,13 +1149,13 @@ public class LocalFile extends ProtocolFile {
 
             switch (type) {
                 case READ:
-                    return file.canRead();
+                return file.canRead();
                 case WRITE:
-                    return file.canWrite();
+                return file.canWrite();
                 case EXECUTE:
                     return file.canExecute();
                 default:
-                    return false;
+                return false;
             }
         }
 
