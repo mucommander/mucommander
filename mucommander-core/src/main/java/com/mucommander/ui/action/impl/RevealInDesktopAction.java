@@ -56,13 +56,15 @@ public class RevealInDesktopAction extends ActiveTabAction {
     @Override
     protected void toggleEnabledState() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
-        setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA)
-                && !currentFolder.isArchive()
-                && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class)
-                || currentFolder.getURL().getScheme().equals(SearchFile.SCHEMA)
-                && selectedFile != null
-                && selectedFile.getURL().getScheme().equals(LocalFile.SCHEMA));
+        switch(currentFolder.getURL().getScheme()) {
+        case LocalFile.SCHEMA:
+            setEnabled(!currentFolder.isArchive() && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class));
+            break;
+        case SearchFile.SCHEMA:
+            AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
+            setEnabled(selectedFile != null && selectedFile.getURL().getScheme().equals(LocalFile.SCHEMA));
+            break;
+        }
     }
 
     @Override
