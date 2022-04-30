@@ -29,6 +29,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -44,7 +45,7 @@ import com.mucommander.ui.main.MainFrame;
  *
  * @author Maxence Bernard
  */
-public class RevealInDesktopAction extends ParentFolderAction {
+public class RevealInDesktopAction extends ActiveTabAction {
 
     public RevealInDesktopAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
@@ -55,21 +56,27 @@ public class RevealInDesktopAction extends ParentFolderAction {
     @Override
     protected void toggleEnabledState() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA)
-                && !currentFolder.isArchive()
-                && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class));
+        switch(currentFolder.getURL().getScheme()) {
+        case LocalFile.SCHEMA:
+            setEnabled(!currentFolder.isArchive() && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class));
+            break;
+        case SearchFile.SCHEMA:
+            AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
+            setEnabled(selectedFile != null && selectedFile.getURL().getScheme().equals(LocalFile.SCHEMA));
+            break;
+        }
     }
 
     @Override
     public void performAction() {
+        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
-        if (selectedFile != null) {
-            try {
-                CompletionStage<Optional<String>> completionStage = openInFileManager(selectedFile);
-                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
-            } catch (Exception e) {
-                InformationDialog.showErrorDialog(mainFrame);
-            }
+        try {
+            CompletionStage<Optional<String>> completionStage =
+                    openInFileManager(selectedFile != null ? selectedFile : currentFolder);
+            InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
+        } catch (Exception e) {
+            InformationDialog.showErrorDialog(mainFrame);
         }
     }
 

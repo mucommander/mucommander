@@ -37,7 +37,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public abstract class ParentFolderAction extends MuAction implements ActivePanelListener, LocationListener {
 
-    public ParentFolderAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ParentFolderAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Listen to active table change events
@@ -65,10 +65,11 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
 
     private void toggleEnabledStateAdapter() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        if (currentFolder.getURL().getScheme().equals(SearchFile.SCHEMA))
+        if (currentFolder.getURL().getScheme().equals(SearchFile.SCHEMA)) {
             setEnabled(false);
-        else
+        } else {
             toggleEnabledState();
+        }
     }
 
     /////////////////////////////////
@@ -78,10 +79,10 @@ public abstract class ParentFolderAction extends MuAction implements ActivePanel
     public void activePanelChanged(FolderPanel folderPanel) {
         toggleEnabledStateAdapter();
     }
-    
+
     /**********************************
-	 * LocationListener Implementation
-	 **********************************/
+     * LocationListener Implementation
+     **********************************/
 
     public void locationChanged(LocationEvent e) {
         toggleEnabledStateAdapter();

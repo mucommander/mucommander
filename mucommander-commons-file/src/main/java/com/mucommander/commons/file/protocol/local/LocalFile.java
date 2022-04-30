@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.mucommander.commons.file.protocol.local;
 
 import java.io.BufferedReader;
@@ -70,35 +69,38 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.runtime.OsVersion;
 
-
 /**
- * LocalFile provides access to files located on a locally-mounted filesystem. 
- * Note that despite the class' name, LocalFile instances may indifferently be residing on a local hard drive,
- * or on a remote server mounted locally by the operating system.
+ * LocalFile provides access to files located on a locally-mounted filesystem. Note that despite the class' name,
+ * LocalFile instances may indifferently be residing on a local hard drive, or on a remote server mounted locally by the
+ * operating system.
  *
- * <p>The associated {@link FileURL} scheme is {@link #SCHEMA}. The host part should be {@link FileURL#LOCALHOST},
- * except for Windows UNC URLs (see below). Native path separators ('/' or '\\' depending on the OS) can be used
- * in the path part.
+ * <p>
+ * The associated {@link FileURL} scheme is {@link #SCHEMA}. The host part should be {@link FileURL#LOCALHOST}, except
+ * for Windows UNC URLs (see below). Native path separators ('/' or '\\' depending on the OS) can be used in the path
+ * part.
  *
- * <p>Here are a few examples of valid local file URLs:
- * <code>
+ * <p>
+ * Here are a few examples of valid local file URLs: <code>
  * file://localhost/C:\winnt\system32\<br>
  * file://localhost/usr/bin/gcc<br>
  * file://localhost/~<br>
  * file://home/maxence/..<br>
  * </code>
  *
- * <p>Windows UNC paths can be represented as FileURL instances, using the host part of the URL. The URL format for
- * those is the following:<br>
+ * <p>
+ * Windows UNC paths can be represented as FileURL instances, using the host part of the URL. The URL format for those
+ * is the following:<br>
  * <code>file:\\server\share</code> .<br>
  *
- * <p>Under Windows, LocalFile will translate those URLs back into a UNC path. For example, a LocalFile created with the
+ * <p>
+ * Under Windows, LocalFile will translate those URLs back into a UNC path. For example, a LocalFile created with the
  * <code>file://garfield/stuff</code> FileURL will have the <code>getAbsolutePath()</code> method return
  * <code>\\garfield\stuff</code>. Note that this UNC path translation doesn't happen on OSes other than Windows, which
  * would not be able to handle the path.
  *
- * <p>Access to local files is provided by the <code>java.io</code> API, {@link #getUnderlyingFileObject()} allows
- * to retrieve an <code>java.io.File</code> instance corresponding to this LocalFile.
+ * <p>
+ * Access to local files is provided by the <code>java.io</code> API, {@link #getUnderlyingFileObject()} allows to
+ * retrieve an <code>java.io.File</code> instance corresponding to this LocalFile.
  *
  * @author Maxence Bernard
  */
@@ -122,8 +124,10 @@ public class LocalFile extends ProtocolFile {
     /** Are we running Windows ? */
     private final static boolean IS_WINDOWS = OsFamily.WINDOWS.isCurrent();
 
-    /** True if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead
-     * of having single a root folder '/' */
+    /**
+     * True if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...) instead of having
+     * single a root folder '/'
+     */
     public final static boolean USES_ROOT_DRIVES = IS_WINDOWS || OsFamily.OS_2.isCurrent();
 
     /** The corresponding schema part of these files in {@link FileURL} */
@@ -137,21 +141,24 @@ public class LocalFile extends ProtocolFile {
     // read-write) and as such can't be changed.
 
     /** Changeable permissions mask on OSes other than Windows */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_NON_WINDOWS = new GroupedPermissionBits(448);   // rwx------ (700 octal)
+    private static PermissionBits CHANGEABLE_PERMISSIONS_NON_WINDOWS = new GroupedPermissionBits(448); // rwx------ (700
+                                                                                                       // octal)
 
     /** Changeable permissions mask on Windows OS (any version) */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_WINDOWS = new GroupedPermissionBits(128);   // -w------- (200 octal)
+    private static PermissionBits CHANGEABLE_PERMISSIONS_WINDOWS = new GroupedPermissionBits(128); // -w------- (200
+                                                                                                   // octal)
 
     /** Bit mask that indicates which permissions can be changed */
-    private final static PermissionBits CHANGEABLE_PERMISSIONS = IS_WINDOWS ? CHANGEABLE_PERMISSIONS_WINDOWS : CHANGEABLE_PERMISSIONS_NON_WINDOWS;
+    private final static PermissionBits CHANGEABLE_PERMISSIONS =
+            IS_WINDOWS ? CHANGEABLE_PERMISSIONS_WINDOWS : CHANGEABLE_PERMISSIONS_NON_WINDOWS;
 
     /**
      * List of known UNIX filesystems.
      */
-    public static final String[] KNOWN_UNIX_FS = {"adfs", "affs", "autofs", "cifs", "coda", "cramfs",
+    public static final String[] KNOWN_UNIX_FS = { "adfs", "affs", "autofs", "cifs", "coda", "cramfs",
             "debugfs", "efs", "ext2", "ext3", "fuseblk", "hfs", "hfsplus", "hpfs",
             "iso9660", "jfs", "minix", "msdos", "ncpfs", "nfs", "nfs4", "ntfs",
-            "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs"};
+            "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs" };
 
     static {
         // Prevents Windows from poping up a message box when it cannot find a file. Those message box are triggered by
@@ -160,7 +167,8 @@ public class LocalFile extends ProtocolFile {
         // This has been fixed in Java 1.6 b55 but this fixes previous versions of Java.
         // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4089199
         if (IS_WINDOWS && Kernel32.isAvailable())
-            Kernel32.getInstance().SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX | Kernel32API.SEM_FAILCRITICALERRORS);
+            Kernel32.getInstance()
+                    .SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX | Kernel32API.SEM_FAILCRITICALERRORS);
     }
 
     /**
@@ -195,7 +203,8 @@ public class LocalFile extends ProtocolFile {
             if (absPath.endsWith(SEPARATOR))
                 absPath = absPath.substring(0, absPath.length() - 1);
         }
-        // the java.io.File instance was created by ls(), no need to re-create it or call the costly File#getAbsolutePath()
+        // the java.io.File instance was created by ls(), no need to re-create it or call the costly
+        // File#getAbsolutePath()
         else {
             this.absPath = fileURL.getPath();
 
@@ -207,7 +216,6 @@ public class LocalFile extends ProtocolFile {
         this.file = file;
         this.permissions = new LocalFilePermissions(file);
     }
-
 
     ////////////////////////////////
     // LocalFile-specific methods //
@@ -228,10 +236,10 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Attemps to detect if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...).
-     * This method produces accurate results only under Windows.
+     * Attemps to detect if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...). This
+     * method produces accurate results only under Windows.
      *
-     * @return <code>true</code> if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...). 
+     * @return <code>true</code> if this file is the root of a removable media drive (floppy, CD, DVD, USB drive...).
      */
     public boolean guessRemovableDrive() {
         if (IS_WINDOWS && Kernel32.isAvailable()) {
@@ -240,21 +248,19 @@ public class LocalFile extends ProtocolFile {
                 return driveType == Kernel32API.DRIVE_REMOVABLE || driveType == Kernel32API.DRIVE_CDROM;
         }
 
-
         // For other OS that have root drives (OS/2), a weak way to characterize removable drives is by checking if the
         // corresponding root folder is read-only.
         return hasRootDrives() && isRoot() && !file.canWrite();
     }
 
-
     /**
      * Returns <code>true</code> if the underlying local filesystem uses drives assigned to letters (e.g. A:\, C:\, ...)
-     * instead of having a single root folder '/' under which mount points are attached.
-     * This is <code>true</code> for the following platforms:
+     * instead of having a single root folder '/' under which mount points are attached. This is <code>true</code> for
+     * the following platforms:
      * <ul>
-     *  <li>Windows</li>
-     *  <li>OS/2</li>
-     *  <li>Any other platform that has '\' for a path separator</li>
+     * <li>Windows</li>
+     * <li>OS/2</li>
+     * <li>Any other platform that has '\' for a path separator</li>
      * </ul>
      *
      * @return <code>true</code> if the underlying local filesystem uses drives assigned to letters
@@ -265,12 +271,11 @@ public class LocalFile extends ProtocolFile {
                 || "\\".equals(SEPARATOR);
     }
 
-
     /**
      * Resolves and returns all local volumes:
      * <ul>
-     *   <li>On UNIX-based OSes, these are the mount points declared in <code>/etc/ftab</code>.</li>
-     *   <li>On the Windows platform, these are the drives displayed in Explorer. Some of the returned volumes may
+     * <li>On UNIX-based OSes, these are the mount points declared in <code>/etc/ftab</code>.</li>
+     * <li>On the Windows platform, these are the drives displayed in Explorer. Some of the returned volumes may
      * correspond to removable drives and thus may not always be available -- if they aren't, {@link #exists()} will
      * return <code>false</code>.</li>
      * </ul>
@@ -322,7 +327,8 @@ public class LocalFile extends ProtocolFile {
     /**
      * Resolves the root folders returned by {@link File#listRoots()} and adds them to the given <code>Vector</code>.
      *
-     * @param v the <code>Vector</code> to add root folders to
+     * @param v
+     *            the <code>Vector</code> to add root folders to
      */
     private static void addJavaIoFileRoots(Vector<AbstractFile> v) {
         // Warning : No file operation should be performed on the resolved folders as under Win32, this would cause a
@@ -336,10 +342,12 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Parses the output of <code>/sbin/mount -p</code> on FreeBSD or the <code>/proc/mounts</code> kernel virtual file otherwise,
-     * resolves all the mount points that look like regular filesystems it contains and adds them to the given <code>Vector</code>.
+     * Parses the output of <code>/sbin/mount -p</code> on FreeBSD or the <code>/proc/mounts</code> kernel virtual file
+     * otherwise, resolves all the mount points that look like regular filesystems it contains and adds them to the
+     * given <code>Vector</code>.
      *
-     * @param v the <code>Vector</code> to add mount points to
+     * @param v
+     *            the <code>Vector</code> to add mount points to
      */
     private static void addMountEntries(Vector<AbstractFile> v) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(streamMountPoints()))) {
@@ -369,7 +377,8 @@ public class LocalFile extends ProtocolFile {
                 }
             }
         } catch (Exception e) {
-            String warning = "Error parsing" + (OsFamily.FREEBSD.isCurrent() ? "/sbin/mount -p output" : "/proc/mounts entries");
+            String warning =
+                    "Error parsing" + (OsFamily.FREEBSD.isCurrent() ? "/sbin/mount -p output" : "/proc/mounts entries");
             LOGGER.warn(warning, e);
         }
     }
@@ -391,15 +400,15 @@ public class LocalFile extends ProtocolFile {
     }
 
     private static InputStream streamMountPoints() throws FileNotFoundException, IOException {
-        return OsFamily.FREEBSD.isCurrent() ?
-                new ProcessBuilder("/sbin/mount", "-p").start().getInputStream()
+        return OsFamily.FREEBSD.isCurrent() ? new ProcessBuilder("/sbin/mount", "-p").start().getInputStream()
                 : new FileInputStream("/proc/mounts");
     }
 
     /**
      * Adds all <code>/Volumes</code> subfolders to the given <code>Vector</code>.
      *
-     * @param v the <code>Vector</code> to add the volumes to
+     * @param v
+     *            the <code>Vector</code> to add the volumes to
      */
     private static void addMacOSXVolumes(Vector<AbstractFile> v) {
         // /Volumes not resolved for some reason, giving up
@@ -423,7 +432,6 @@ public class LocalFile extends ProtocolFile {
             LOGGER.warn("Can't get /Volumes subfolders", e);
         }
     }
-
 
     /////////////////////////////////
     // AbstractFile implementation //
@@ -536,7 +544,8 @@ public class LocalFile extends ProtocolFile {
     }
 
     @Override
-    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
+    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled)
+            throws IOException {
         // Only the 'user' permissions are supported
         if (access != PermissionAccess.USER)
             throw new IOException();
@@ -544,13 +553,13 @@ public class LocalFile extends ProtocolFile {
         boolean success = false;
         switch (permission) {
             case READ:
-                success = file.setReadable(enabled);
-                break;
+            success = file.setReadable(enabled);
+            break;
             case WRITE:
-                success = file.setWritable(enabled);
-                break;
+            success = file.setWritable(enabled);
+            break;
             case EXECUTE:
-                success = file.setExecutable(enabled);
+            success = file.setExecutable(enabled);
         }
 
         if (!success)
@@ -594,10 +603,10 @@ public class LocalFile extends ProtocolFile {
         // This test is not necessary anymore now that 'No disk' error dialogs are disabled entirely (using Kernel32
         // DLL's SetErrorMode function). Leaving this code commented for a while in case the problem comes back.
 
-//        // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
-//        // triggered by java.io.File.isDirectory()
-//        if(IS_WINDOWS && guessFloppyDrive())
-//            return true;
+        // // To avoid drive seeks and potential 'floppy drive not available' dialog under Win32
+        // // triggered by java.io.File.isDirectory()
+        // if(IS_WINDOWS && guessFloppyDrive())
+        // return true;
 
         return file.isDirectory();
     }
@@ -660,7 +669,6 @@ public class LocalFile extends ProtocolFile {
             throw new IOException();
     }
 
-
     @Override
     public AbstractFile[] ls() throws IOException {
         return ls((FilenameFilter) null);
@@ -705,8 +713,10 @@ public class LocalFile extends ProtocolFile {
             if (Kernel32.isAvailable()) {
                 // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
                 // call #exists() on the destination file which has a cost.
-                if (!Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
-                        Kernel32API.MOVEFILE_REPLACE_EXISTING | Kernel32API.MOVEFILE_WRITE_THROUGH)) {
+                if (!Kernel32.getInstance()
+                        .MoveFileEx(absPath,
+                                destFile.getAbsolutePath(),
+                                Kernel32API.MOVEFILE_REPLACE_EXISTING | Kernel32API.MOVEFILE_WRITE_THROUGH)) {
                     String errorMessage = Integer.toString(Kernel32.getInstance().GetLastError());
                     // TODO: use Kernel32.FormatMessage
                     throw new IOException("Rename using Kernel32 API failed: " + errorMessage);
@@ -737,14 +747,14 @@ public class LocalFile extends ProtocolFile {
     /**
      * Always throws {@link UnsupportedFileOperationException} when called.
      *
-     * @throws UnsupportedFileOperationException, always
+     * @throws UnsupportedFileOperationException,
+     *             always
      */
     @Override
     @UnsupportedFileOperation
     public void copyRemotelyTo(AbstractFile destFile) throws UnsupportedFileOperationException {
         throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
     }
-
 
     ////////////////////////
     // Overridden methods //
@@ -769,7 +779,6 @@ public class LocalFile extends ProtocolFile {
 
         return absPath;
     }
-
 
     @Override
     public String getCanonicalPath() {
@@ -799,12 +808,10 @@ public class LocalFile extends ProtocolFile {
         return canonicalPath;
     }
 
-
     @Override
     public String getSeparator() {
         return SEPARATOR;
     }
-
 
     @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
@@ -842,8 +849,8 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Overridden to play nice with platforms that have root drives -- for those, the drive's root (e.g. <code>C:\</code>)
-     * is returned instead of <code>/</code>.
+     * Overridden to play nice with platforms that have root drives -- for those, the drive's root (e.g.
+     * <code>C:\</code>) is returned instead of <code>/</code>.
      */
     @Override
     public AbstractFile getRoot() {
@@ -864,8 +871,8 @@ public class LocalFile extends ProtocolFile {
     }
 
     /**
-     * Overridden to play nice with platforms that have root drives -- for those, <code>true</code> is returned if
-     * this file's path matches the drive root's (e.g. <code>C:\</code>).
+     * Overridden to play nice with platforms that have root drives -- for those, <code>true</code> is returned if this
+     * file's path matches the drive root's (e.g. <code>C:\</code>).
      */
     @Override
     public boolean isRoot() {
@@ -910,14 +917,13 @@ public class LocalFile extends ProtocolFile {
         return getRoot();
     }
 
-
     ///////////////////
     // Inner classes //
     ///////////////////
 
     /**
-     * LocalRandomAccessInputStream extends RandomAccessInputStream to provide random read access to a LocalFile.
-     * This implementation uses a NIO <code>FileChannel</code> under the hood to benefit from
+     * LocalRandomAccessInputStream extends RandomAccessInputStream to provide random read access to a LocalFile. This
+     * implementation uses a NIO <code>FileChannel</code> under the hood to benefit from
      * <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted using
      * <code>Thread#interrupt()</code>.
      */
@@ -986,10 +992,12 @@ public class LocalFile extends ProtocolFile {
      * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
      * using <code>Thread#interrupt()</code>.
      *
-     * <p>This class simply delegates all its methods to a
-     * {@link com.mucommander.commons.file.protocol.local.LocalFile.LocalRandomAccessInputStream} instance. Therefore, this class
-     * does not derive from {@link com.mucommander.commons.io.RandomAccessInputStream}, preventing random-access methods from
-     * being used.</p>
+     * <p>
+     * This class simply delegates all its methods to a
+     * {@link com.mucommander.commons.file.protocol.local.LocalFile.LocalRandomAccessInputStream} instance. Therefore,
+     * this class does not derive from {@link com.mucommander.commons.io.RandomAccessInputStream}, preventing
+     * random-access methods from being used.
+     * </p>
      *
      */
     public static class LocalInputStream extends FilterInputStream {
@@ -1004,10 +1012,12 @@ public class LocalFile extends ProtocolFile {
      * benefit from <code>InterruptibleChannel</code> and allow a thread waiting for an I/O to be gracefully interrupted
      * using <code>Thread#interrupt()</code>.
      *
-     * <p>This class simply delegates all its methods to a
-     * {@link com.mucommander.commons.file.protocol.local.LocalFile.LocalRandomAccessOutputStream} instance. Therefore, this class
-     * does not derive from {@link com.mucommander.commons.io.RandomAccessOutputStream}, preventing random-access methods from
-     * being used.</p>
+     * <p>
+     * This class simply delegates all its methods to a
+     * {@link com.mucommander.commons.file.protocol.local.LocalFile.LocalRandomAccessOutputStream} instance. Therefore,
+     * this class does not derive from {@link com.mucommander.commons.io.RandomAccessOutputStream}, preventing
+     * random-access methods from being used.
+     * </p>
      *
      */
     public static class LocalOutputStream extends FilteredOutputStream {
@@ -1067,8 +1077,7 @@ public class LocalFile extends ProtocolFile {
 
                     len -= nbToWrite;
                     off += nbToWrite;
-                }
-                while (len > 0);
+                } while (len > 0);
             }
         }
 
@@ -1089,7 +1098,7 @@ public class LocalFile extends ProtocolFile {
             } else {
                 // Expand the file by positionning the offset at the new EOF and writing a byte, and reposition the
                 // offset to where it was
-                channel.position(newLength - 1);      // Note: newLength cannot be 0
+                channel.position(newLength - 1); // Note: newLength cannot be 0
                 write(0);
                 channel.position(currentPos);
             }
@@ -1115,7 +1124,6 @@ public class LocalFile extends ProtocolFile {
         }
     }
 
-
     /**
      * A Permissions implementation for LocalFile.
      */
@@ -1128,7 +1136,7 @@ public class LocalFile extends ProtocolFile {
         // Note: 'read' and 'execute' permissions have no meaning under Windows (files are either read-only or
         // read-write), but we return default values.
 
-        private final static PermissionBits MASK = new GroupedPermissionBits(448);   // rwx------ (700 octal)
+        private final static PermissionBits MASK = new GroupedPermissionBits(448); // rwx------ (700 octal)
 
         private LocalFilePermissions(java.io.File file) {
             this.file = file;
@@ -1141,13 +1149,13 @@ public class LocalFile extends ProtocolFile {
 
             switch (type) {
                 case READ:
-                    return file.canRead();
+                return file.canRead();
                 case WRITE:
-                    return file.canWrite();
+                return file.canWrite();
                 case EXECUTE:
                     return file.canExecute();
                 default:
-                    return false;
+                return false;
             }
         }
 
@@ -1175,7 +1183,6 @@ public class LocalFile extends ProtocolFile {
         }
     }
 
-
     /**
      * Turns a {@link FilenameFilter} into a {@link java.io.FilenameFilter}.
      */
@@ -1186,7 +1193,6 @@ public class LocalFile extends ProtocolFile {
         private LocalFilenameFilter(FilenameFilter filter) {
             this.filter = filter;
         }
-
 
         ///////////////////////////////////////////
         // java.io.FilenameFilter implementation //

@@ -32,19 +32,21 @@ What's new since v1.0.0 ?
 -----------------------
 
 New features:
-- Added a new option to Overwrite files only if size differs
+- Added an option to overwrite files only if size differs
 - Display Desktop folder in drive menu (just under home folder)
 
 Improvements:
-- Added keyboard shortcut to Open Trash (plus minor fix for possible NPE)
-- Added keyboard shortcut to Popup menu plus it should now work also on Search results and parent folder
+- Added a keyboard shortcut (ALT+DELETE) to Open Trash
+- Added a keyboard shortcut (CTRL+SPACE) to file contextual menu
 - Use system icons (if available) for the current folder in Drive button
+- Contextual menu is shown for file search results
+- Local file search results can now be revealed in the native Desktop's file manager
 
 Localization:
 - Korean translation updated.
 
 Bug fixes:
-- 
+-
 
 Known issues:
 - Some translations may not be up-to-date.
