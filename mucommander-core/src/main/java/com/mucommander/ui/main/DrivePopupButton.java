@@ -110,7 +110,6 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      * Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp is
      * not defined.
      */
-     */
     private static PathFilter volumeFilter;
 
     /**
