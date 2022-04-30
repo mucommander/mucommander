@@ -119,7 +119,7 @@ public class FileIcons {
         return getCustomFileIcon(file, iconDimension);
     }
 
-    private static boolean shouldUseSystemIconFor(AbstractFile file) {
+    public static boolean shouldUseSystemIconFor(AbstractFile file) {
         switch(systemIconsPolicy) {
         case ALWAYS:
             return true;

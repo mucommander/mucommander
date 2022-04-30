@@ -1,16 +1,16 @@
 /**
  * This file is part of muCommander, http://www.mucommander.com
- *
+ * <p>
  * muCommander is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * muCommander is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -148,16 +149,16 @@ public class LocalFile extends ProtocolFile {
                                                                                                    // octal)
 
     /** Bit mask that indicates which permissions can be changed */
-    private final static PermissionBits CHANGEABLE_PERMISSIONS =
+    private final static PermissionBits CHANGEABLE_PERMISSIONS = IS_WINDOWS ? CHANGEABLE_PERMISSIONS_WINDOWS : CHANGEABLE_PERMISSIONS_NON_WINDOWS;
             IS_WINDOWS ? CHANGEABLE_PERMISSIONS_WINDOWS : CHANGEABLE_PERMISSIONS_NON_WINDOWS;
 
     /**
      * List of known UNIX filesystems.
      */
-    public static final String[] KNOWN_UNIX_FS = { "adfs", "affs", "autofs", "cifs", "coda", "cramfs",
+    public static final String[] KNOWN_UNIX_FS = {"adfs", "affs", "autofs", "cifs", "coda", "cramfs",
             "debugfs", "efs", "ext2", "ext3", "fuseblk", "hfs", "hfsplus", "hpfs",
             "iso9660", "jfs", "minix", "msdos", "ncpfs", "nfs", "nfs4", "ntfs",
-            "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs" };
+            "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs"};
 
     static {
         // Prevents Windows from poping up a message box when it cannot find a file. Those message box are triggered by
@@ -166,7 +167,7 @@ public class LocalFile extends ProtocolFile {
         // This has been fixed in Java 1.6 b55 but this fixes previous versions of Java.
         // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4089199
         if (IS_WINDOWS && Kernel32.isAvailable())
-            Kernel32.getInstance()
+            Kernel32.getInstance().SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX | Kernel32API.SEM_FAILCRITICALERRORS);
                     .SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX | Kernel32API.SEM_FAILCRITICALERRORS);
     }
 
@@ -306,6 +307,8 @@ public class LocalFile extends ProtocolFile {
         if (!(homeFolder == null || volumesV.contains(homeFolder)))
             volumesV.add(homeFolder);
 
+        addDesktopEntry(volumesV, homeFolder);
+
         AbstractFile volumes[] = new AbstractFile[volumesV.size()];
         volumesV.toArray(volumes);
 
@@ -377,6 +380,22 @@ public class LocalFile extends ProtocolFile {
             String warning =
                     "Error parsing" + (OsFamily.FREEBSD.isCurrent() ? "/sbin/mount -p output" : "/proc/mounts entries");
             LOGGER.warn(warning, e);
+        }
+    }
+
+    /**
+     * Adds Desktop to the given volumes entries if home directory is defined and Desktop folder
+     * is present and is writable (~/Desktop)
+     * @param volumesV the <code>Vector</code> to add mount points to
+     * @param homeFolder  a home folder, can be null
+     */
+    private static void addDesktopEntry(Vector<AbstractFile> volumesV, AbstractFile homeFolder) {
+        if (homeFolder == null) {
+            return;
+        }
+        File desktop = Paths.get(homeFolder.getAbsolutePath(), "Desktop").toFile();
+        if (desktop.exists() && desktop.canWrite() && desktop.isDirectory()) {
+            volumesV.add(FileFactory.getFile(desktop.getAbsolutePath()));
         }
     }
 
@@ -533,14 +552,14 @@ public class LocalFile extends ProtocolFile {
 
         boolean success = false;
         switch (permission) {
-        case READ:
-            success = file.setReadable(enabled);
-            break;
-        case WRITE:
-            success = file.setWritable(enabled);
-            break;
-        case EXECUTE:
-            success = file.setExecutable(enabled);
+            case READ:
+                success = file.setReadable(enabled);
+                break;
+            case WRITE:
+                success = file.setWritable(enabled);
+                break;
+            case EXECUTE:
+                success = file.setExecutable(enabled);
         }
 
         if (!success)
@@ -694,10 +713,10 @@ public class LocalFile extends ProtocolFile {
             if (Kernel32.isAvailable()) {
                 // Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
                 // call #exists() on the destination file which has a cost.
-                if (!Kernel32.getInstance()
+                if (!Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
                         .MoveFileEx(absPath,
                                 destFile.getAbsolutePath(),
-                                Kernel32API.MOVEFILE_REPLACE_EXISTING | Kernel32API.MOVEFILE_WRITE_THROUGH)) {
+                        Kernel32API.MOVEFILE_REPLACE_EXISTING | Kernel32API.MOVEFILE_WRITE_THROUGH)) {
                     String errorMessage = Integer.toString(Kernel32.getInstance().GetLastError());
                     // TODO: use Kernel32.FormatMessage
                     throw new IOException("Rename using Kernel32 API failed: " + errorMessage);
@@ -1079,7 +1098,7 @@ public class LocalFile extends ProtocolFile {
             } else {
                 // Expand the file by positionning the offset at the new EOF and writing a byte, and reposition the
                 // offset to where it was
-                channel.position(newLength - 1); // Note: newLength cannot be 0
+                channel.position(newLength - 1);      // Note: newLength cannot be 0
                 write(0);
                 channel.position(currentPos);
             }
@@ -1129,14 +1148,14 @@ public class LocalFile extends ProtocolFile {
                 return false;
 
             switch (type) {
-            case READ:
-                return file.canRead();
-            case WRITE:
-                return file.canWrite();
-            case EXECUTE:
-                return file.canExecute();
-            default:
-                return false;
+                case READ:
+                    return file.canRead();
+                case WRITE:
+                    return file.canWrite();
+                case EXECUTE:
+                    return file.canExecute();
+                default:
+                    return false;
             }
         }
 
