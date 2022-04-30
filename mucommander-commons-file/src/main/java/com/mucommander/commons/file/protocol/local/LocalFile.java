@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -306,6 +307,8 @@ public class LocalFile extends ProtocolFile {
         if (!(homeFolder == null || volumesV.contains(homeFolder)))
             volumesV.add(homeFolder);
 
+        addDesktopEntry(volumesV, homeFolder);
+
         AbstractFile volumes[] = new AbstractFile[volumesV.size()];
         volumesV.toArray(volumes);
 
@@ -377,6 +380,22 @@ public class LocalFile extends ProtocolFile {
             String warning =
                     "Error parsing" + (OsFamily.FREEBSD.isCurrent() ? "/sbin/mount -p output" : "/proc/mounts entries");
             LOGGER.warn(warning, e);
+        }
+    }
+
+    /**
+     * Adds Desktop to the given volumes entries if home directory is defined and Desktop folder
+     * is present and is writable (~/Desktop)
+     * @param volumesV the <code>Vector</code> to add mount points to
+     * @param homeFolder  a home folder, can be null
+     */
+    private static void addDesktopEntry(Vector<AbstractFile> volumesV, AbstractFile homeFolder) {
+        if (homeFolder == null) {
+            return;
+        }
+        File desktop = Paths.get(homeFolder.getAbsolutePath(), "Desktop").toFile();
+        if (desktop.exists() && desktop.canWrite() && desktop.isDirectory()) {
+            volumesV.add(FileFactory.getFile(desktop.getAbsolutePath()));
         }
     }
 
