@@ -46,6 +46,8 @@ public class RuntimeConstants {
     // -----------------------------------------------------------------------------------------------------------------
     /** Homepage URL. */
     public static final String HOMEPAGE_URL       = "https://www.mucommander.com";
+    /** GitHub URL */
+    public static final String GITHUB_URL         = "https://github.com/mucommander/mucommander";
     /** URL at which to download the latest version description. */
     public static final String VERSION_URL;
     /** URL of the muCommander forums. */
@@ -55,7 +57,7 @@ public class RuntimeConstants {
     /** Bug tracker URL. */
     public static final String BUG_REPOSITORY_URL = HOMEPAGE_URL + "/bugs/";
     /** Documentation URL. */
-    public static final String DOCUMENTATION_URL  = HOMEPAGE_URL + "/documentation/";
+    public static final String DOCUMENTATION_URL  = GITHUB_URL + "/wiki/";
 
 
 
