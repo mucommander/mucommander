@@ -39,12 +39,13 @@ Improvements:
 - Added a keyboard shortcut (CTRL+SPACE) to file contextual menu
 - Contextual menu is shown for file search results
 - Local file search results can now be revealed in the native Desktop's file manager
+- Added back the 'Go to forums' action that now points to the GitHub discussions page
 
 Localization:
 - Korean translation updated.
 
 Bug fixes:
--
+- Fix broken links to: 'Online documentation', 'Report a bug' and 'Make a donation'
 
 Known issues:
 - Some translations may not be up-to-date.
