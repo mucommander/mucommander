@@ -51,7 +51,7 @@ public class RuntimeConstants {
     /** URL at which to download the latest version description. */
     public static final String VERSION_URL;
     /** URL of the muCommander forums. */
-    public static final String FORUMS_URL        = HOMEPAGE_URL + "/forums/";
+    public static final String FORUMS_URL        = GITHUB_URL + "/discussions/";
     /** URL at which to make a donation. */
     public static final String DONATION_URL      = "https://flattr.com/@mucommander";
     /** URL at which to file a new bug. */
