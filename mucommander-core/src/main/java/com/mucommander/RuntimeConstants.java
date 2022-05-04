@@ -45,19 +45,19 @@ public class RuntimeConstants {
     // - URLs ----------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Homepage URL. */
-    public static final String HOMEPAGE_URL       = "https://www.mucommander.com";
+    public static final String HOMEPAGE_URL      = "https://www.mucommander.com";
     /** GitHub URL */
-    public static final String GITHUB_URL         = "https://github.com/mucommander/mucommander";
+    public static final String GITHUB_URL        = "https://github.com/mucommander/mucommander";
     /** URL at which to download the latest version description. */
     public static final String VERSION_URL;
     /** URL of the muCommander forums. */
-    public static final String FORUMS_URL         = HOMEPAGE_URL + "/forums/";
+    public static final String FORUMS_URL        = HOMEPAGE_URL + "/forums/";
     /** URL at which to see the donation information. */
-    public static final String DONATION_URL       = HOMEPAGE_URL + "/#donate";
-    /** Bug tracker URL. */
-    public static final String BUG_REPOSITORY_URL = HOMEPAGE_URL + "/bugs/";
+    public static final String DONATION_URL      = HOMEPAGE_URL + "/#donate";
+    /** URL at which to file a new bug */
+    public static final String REPORT_BUG_URL    = GITHUB_URL + "/issues/new/";
     /** Documentation URL. */
-    public static final String DOCUMENTATION_URL  = GITHUB_URL + "/wiki/";
+    public static final String DOCUMENTATION_URL = GITHUB_URL + "/wiki/";
 
 
 
