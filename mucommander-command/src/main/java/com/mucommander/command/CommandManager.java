@@ -98,7 +98,7 @@ public class CommandManager implements CommandBuilder {
     /** Path to the custom commands XML file, <code>null</code> if the default one should be used. */
     private static       AbstractFile         commandsFile;
     /** Whether the custom commands have been modified since the last time they were saved. */
-    private static       boolean              wereCommandsModified;
+    protected static     boolean              wereCommandsModified;
     /** Default name of the custom commands file. */
     public  static final String               DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
     /** Default command used when no other command is found for a specific file type. */
@@ -236,8 +236,7 @@ public class CommandManager implements CommandBuilder {
         LOGGER.debug("Registering '" + command.getCommand() + "' as '" + command.getAlias() + "'");
 
         Command oldCommand = commands.put(command.getAlias(), command);
-        if(mark && !command.equals(oldCommand))
-            wereCommandsModified = true;
+        wereCommandsModified = wereCommandsModified || (mark && !command.equals(oldCommand));
     }
 
     public static void registerDefaultCommand(Command command) throws CommandException {registerCommand(command, false);}
@@ -570,7 +569,7 @@ public class CommandManager implements CommandBuilder {
      * @see    #writeCommands()
      * @throws IOException if there was some error locating the default commands file.
      */
-    public static AbstractFile getCommandFile() throws IOException {
+    public static AbstractFile getCommandsFile() throws IOException {
         if(commandsFile == null)
             return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMANDS_FILE_NAME);
         return commandsFile;
@@ -583,7 +582,7 @@ public class CommandManager implements CommandBuilder {
      * </p>
      * @param  path                  path to the custom commands file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
-     * @see    #getCommandFile()
+     * @see    #getCommandsFile()
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
@@ -603,7 +602,7 @@ public class CommandManager implements CommandBuilder {
      * </p>
      * @param  file                  path to the custom commands file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
-     * @see    #getCommandFile()
+     * @see    #getCommandsFile()
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
@@ -613,7 +612,7 @@ public class CommandManager implements CommandBuilder {
      * Sets the path to the custom commands file.
      * @param  file                  path to the custom commands file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
-     * @see    #getCommandFile()
+     * @see    #getCommandsFile()
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
@@ -628,7 +627,7 @@ public class CommandManager implements CommandBuilder {
     /**
      * Writes all registered commands to the custom commands file.
      * <p>
-     * Data will be written to the path returned by {@link #getCommandFile()}. Note, however,
+     * Data will be written to the path returned by {@link #getCommandsFile()}. Note, however,
      * that this method will not actually do anything if the command list hasn't been modified
      * since the last time it was saved.
      * </p>
@@ -639,29 +638,19 @@ public class CommandManager implements CommandBuilder {
      * @throws IOException      if an I/O error occurs.
      * @throws CommandException if an error occurs.
      * @see                     #loadCommands()
-     * @see                     #getCommandFile()
+     * @see                     #getCommandsFile()
      * @see                     #setCommandFile(String)
      */
     public static void writeCommands() throws IOException, CommandException {
         // Only saves the command if they were modified since the last time they were written.
-        if(wereCommandsModified) {
-            BackupOutputStream out;    // Where to write the associations.
-
-            LOGGER.debug("Writing custom commands to file: " + getCommandFile());
+        if (wereCommandsModified) {
+            AbstractFile commandsFile = getCommandsFile();
+            LOGGER.debug("Writing custom commands to file: " + commandsFile);
 
             // Writes the commands.
-            out = null;
-            try {
-                buildCommands(new CommandWriter(out = new BackupOutputStream(getCommandFile())));
+            try (BackupOutputStream out = new BackupOutputStream(commandsFile)) {
+                buildCommands(new CommandWriter(out));
                 wereCommandsModified = false;
-            }
-            finally {
-                if(out != null) {
-                    try {out.close();}
-                    catch(Exception e) {
-                        // Ignores this.
-                    }
-                }
             }
         }
         else
@@ -676,27 +665,17 @@ public class CommandManager implements CommandBuilder {
      * </p>
      * @throws IOException if an I/O error occurs.
      * @see                #writeCommands()
-     * @see                #getCommandFile()
+     * @see                #getCommandsFile()
      * @see                #setCommandFile(String)
      */
     public static void loadCommands() throws IOException, CommandException {
-        AbstractFile file = getCommandFile();
-        LOGGER.debug("Loading custom commands from: " + file.getAbsolutePath());
+        AbstractFile commandsFile = getCommandsFile();
+        LOGGER.debug("Loading custom commands from: " + commandsFile.getAbsolutePath());
 
         // Tries to load the commands file.
         // Commands are not considered to be modified by this.
-        InputStream in = null;
-        try {CommandReader.read(in = new BackupInputStream(file), new CommandManager());}
-        finally {
-            wereCommandsModified = false;
-
-            // Makes sure the input stream is closed.
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {
-                    // Ignores this.
-                }
-            }
+        try(InputStream in = new BackupInputStream(commandsFile)) {
+            CommandReader.read(in , new CommandManager());
         }
     }
 

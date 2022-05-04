@@ -103,12 +103,19 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
 
             // Makes sure the required attributes are there.
             if(alias != null && command != null) {
-            	CommandType type = CommandType.parseCommandType(attributes.getValue(ATTRIBUTE_TYPE));
-            	String display = attributes.getValue(ATTRIBUTE_DISPLAY);
+                if (command.equals("open -a Finder $f")) {
+                    // we made a backward incompatible change when the default 'open with file manager'
+                    // on macOS changed to "open -R $f" so if we detect the previous command, we ignore
+                    // it and indicate that the commands were modified to update the commands.xml file
+                    CommandManager.wereCommandsModified = true;
+                } else {
+                    CommandType type = CommandType.parseCommandType(attributes.getValue(ATTRIBUTE_TYPE));
+                    String display = attributes.getValue(ATTRIBUTE_DISPLAY);
 
-            	// Creates the command and passes it to the builder.
-            	try {builder.addCommand(new Command(alias, command, type, display));}
-            	catch(CommandException e) {throw new SAXException(e);}
+                    // Creates the command and passes it to the builder.
+                    try {builder.addCommand(new Command(alias, command, type, display));}
+                    catch(CommandException e) {throw new SAXException(e);}
+                }
             }
         }
     }
