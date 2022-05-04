@@ -35,7 +35,7 @@ public class ReportBugAction extends OpenURLInBrowserAction {
     public ReportBugAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
 
-        putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.BUG_REPOSITORY_URL);
+        putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.REPORT_BUG_URL);
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
