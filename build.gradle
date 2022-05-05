@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.felix:org.apache.felix.main:6.0.3'
+    implementation 'org.apache.felix:org.apache.felix.main:7.0.3'
     implementation 'com.beust:jcommander:1.78'
 
     osgiRuntime project('mucommander-core')
