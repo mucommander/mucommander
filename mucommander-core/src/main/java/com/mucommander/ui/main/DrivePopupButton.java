@@ -221,12 +221,10 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
             }
             setText(newLabel);
-            { // local ctx for icon
             // Set the folder icon slightly disobeying system icons policy for the current folder
             Icon icon = FileIcons.hasProperSystemIcons() ?
                     FileIcons.getSystemFileIcon(currentFolder) : FileIcons.getFileIcon(currentFolder);
             setIcon(icon);
-            }
             break;
 
         case BookmarkProtocolProvider.BOOKMARK:
@@ -253,12 +251,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         default:
             // Remote file, use the protocol's name
             setText(protocol.toUpperCase());
-            { // local ctx for icon
-            // Set the folder icon slightly disobeying system icons policy for the current folder
-            Icon icon = FileIcons.hasProperSystemIcons() ?
-                    FileIcons.getSystemFileIcon(currentFolder) : FileIcons.getFileIcon(currentFolder);
-            setIcon(icon);
-            }
+            setIcon(FileIcons.getFileIcon(currentFolder));
         }
 
     }
