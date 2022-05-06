@@ -396,7 +396,7 @@ public class LocalFile extends ProtocolFile {
         try {
             AbstractFile desktop = homeFolder.getDirectChild("Desktop");
             if (desktop.exists() && desktop.isDirectory() && desktop.canRead()) {
-                volumesV.add(FileFactory.getFile(desktop.getAbsolutePath()));
+                volumesV.add(desktop);
             }
         } catch (IOException e) {
             LOGGER.debug("Thrown exception while getting Desktop folder", e);
