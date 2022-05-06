@@ -166,15 +166,20 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         wildcards = new JLabel(!lastMatchRegex ? Translator.get("search_dialog.wildcards") : " ");
         compPanel.addRow("", wildcards, 10);
 
+        GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
+        gbc.weightx = 1.0;
+        JPanel groupingPanel = new ProportionalGridPanel(2, gbc);
+
         matchCase = new JCheckBox(Translator.get("search_dialog.case_sensitive"), lastMatchCase);
-        compPanel.addRow("", matchCase, 10);
+        groupingPanel.add(matchCase);
 
         matchRegex = new JCheckBox(Translator.get("search_dialog.matches_regexp"), lastMatchRegex);
         matchRegex.addChangeListener(e -> {
             AbstractButton b = (AbstractButton) e.getSource();
             wildcards.setText(!b.isSelected() ? Translator.get("search_dialog.wildcards") : " ");
         });
-        compPanel.addRow("", matchRegex, 10);
+        groupingPanel.add(matchRegex);
+        compPanel.addRow("", groupingPanel, 10);
 
         searchInField = new JTextField(searchURL.getHost());
         Border border = searchInField.getBorder();
@@ -204,9 +209,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         l.setLabelFor(searchInField);
         l.setDisplayedMnemonic('p');
 
-        GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
-        gbc.weightx = 1.0;
-        JPanel groupingPanel = new ProportionalGridPanel(2, gbc);
+        groupingPanel = new ProportionalGridPanel(2, gbc);
 
         searchInSubfolders = new JCheckBox(Translator.get("search_dialog.search_in_subfolders"), lastSearchInSubfolders);
         groupingPanel.add(searchInSubfolders);
@@ -259,11 +262,13 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         l.setLabelFor(searchTextField);
         l.setDisplayedMnemonic('t');
 
+        groupingPanel = new ProportionalGridPanel(2, gbc);
         textCase = new JCheckBox(Translator.get("search_dialog.text_case_sensitive"), lastTextCase);
-        compPanel.addRow("", textCase, 10);
+        groupingPanel.add(textCase);
 
         textRegex = new JCheckBox(Translator.get("search_dialog.text_matches_regexp"), lastTextRegex);
-        compPanel.addRow("", textRegex, 5);
+        groupingPanel.add(textRegex);
+        compPanel.addRow("", groupingPanel, 5);
 
         searchButton = new JButton(Translator.get("Find.label"));
         searchButton.setEnabled(false);
