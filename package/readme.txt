@@ -41,7 +41,6 @@ Improvements:
 - Contextual menu is shown for file search results
 - Local file search results can now be revealed in the native Desktop's file manager
 - Added back the 'Go to forums' action that now points to the GitHub discussions page
-- Use system icons (if available) for the current folder in Drive button
 
 Localization:
 - Korean translation updated.
