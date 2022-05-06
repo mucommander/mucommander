@@ -12,7 +12,7 @@ plugins {
     id 'java'
     id 'org.ajoberstar.grgit' version '3.1.1'
     id 'com.github.johnrengelman.shadow' version '5.1.0'
-    id 'edu.sc.seis.launch4j' version '2.4.6'
+    id 'edu.sc.seis.launch4j' version '2.5.3'
 }
 
 allprojects {
