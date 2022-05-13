@@ -489,12 +489,16 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         this.useSystemFileIconsComboBox = new PrefComboBox<String>() {
             public boolean hasChanged() {
                 SystemIconsPolicy systemIconsPolicy;
+                // TODO use objects instead of index.....
                 switch (useSystemFileIconsComboBox.getSelectedIndex()) {
                     case 0:
                         systemIconsPolicy = SystemIconsPolicy.NEVER;
                         break;
                     case 1:
                         systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
+                        break;
+                    case 2:
+                        systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_AND_NAVI_ONLY;
                         break;
                     default:
                         systemIconsPolicy = SystemIconsPolicy.ALWAYS;
@@ -504,9 +508,14 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         };
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.never"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.applications"));
+        useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.applications_and_navigation"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.always"));
+        // TODO use objects instead of index.....
         switch (FileIcons.getSystemIconsPolicy()) {
             case ALWAYS:
+                useSystemFileIconsComboBox.setSelectedIndex(3);
+                break;
+            case APPLICATIONS_AND_NAVI_ONLY:
                 useSystemFileIconsComboBox.setSelectedIndex(2);
                 break;
             case APPLICATIONS_ONLY:
@@ -598,6 +607,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
                 break;
             case 2:
+                systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_AND_NAVI_ONLY;
+                break;
+            case 3:
             default:
                 systemIconsPolicy = SystemIconsPolicy.ALWAYS;
         }
