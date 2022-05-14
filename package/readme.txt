@@ -48,6 +48,7 @@ Localization:
 Bug fixes:
 - Fix broken links to: 'Online documentation', 'Report a bug' and 'Make a donation'
 - If 'open -a Finder $f' is found in commands.xml, it is replaced with 'open -R $f' to preserve the behavior of 'Reveal in Finder' action
+- Make folder operation creates the folder within the correct path rather than always within the root folder of Google Drive.
 
 Known issues:
 - Some translations may not be up-to-date.

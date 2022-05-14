@@ -222,6 +222,10 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
         try(GoogleDriveConnHandler connHandler = getConnHandler()) {
             File fileMetadata = new File();
             String filename = getURL().getFilename();
+            AbstractFile parent = getParent();
+            if (parent instanceof GoogleDriveMonitoredFile)
+                parent = ((GoogleDriveMonitoredFile) parent).getUnderlyingFile();
+            fileMetadata.setParents(Collections.singletonList(((GoogleDriveFile) parent).getId()));
             fileMetadata.setName(filename);
             fileMetadata.setMimeType(FOLDER_MIME_TYPE);
             file = connHandler.getConnection().files().create(fileMetadata)
