@@ -270,7 +270,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
                 try {
                     file = connHandler.getConnection().files()
                             .create(fileMetadata, in)
-                            .setFields("id")
+                            .setFields("id,name,parents,size,modifiedTime,mimeType")
                             .execute();
                 } catch (IOException e) {
                     LOGGER.error("failed to copy to Google Drive", e);
