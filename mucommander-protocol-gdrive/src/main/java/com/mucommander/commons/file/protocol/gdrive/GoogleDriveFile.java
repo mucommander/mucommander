@@ -242,7 +242,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
             fileMetadata.setName(filename);
             fileMetadata.setMimeType(FOLDER_MIME_TYPE);
             file = connHandler.getConnection().files().create(fileMetadata)
-                    .setFields("id")
+                    .setFields("id,name,parents,size,modifiedTime,mimeType")
                     .execute();
         }
     }
