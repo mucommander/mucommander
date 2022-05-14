@@ -22,10 +22,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +140,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
             return false;
 
         try {
-            Arrays.stream(parent.ls()).filter(this::equals).findFirst().ifPresent(other -> this.file = other.file);
+            Stream.of(parent.ls()).filter(this::equals).findFirst().ifPresent(other -> this.file = other.file);
         } catch (IOException e) {
             LOGGER.warn("failed to list {}", parent);
             return false;

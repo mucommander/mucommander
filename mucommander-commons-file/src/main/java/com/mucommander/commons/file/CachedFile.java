@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,7 +191,7 @@ public class CachedFile extends ProxyFile {
      * Creates a CachedFile instance for each of the AbstractFile instances in the given array.
      */
     private AbstractFile[] createCachedFiles(AbstractFile files[]) {
-        return Arrays.stream(files).map(file -> new CachedFile(file, true)).toArray(CachedFile[]::new);
+        return Stream.of(files).map(file -> new CachedFile(file, true)).toArray(CachedFile[]::new);
     }
 
 
