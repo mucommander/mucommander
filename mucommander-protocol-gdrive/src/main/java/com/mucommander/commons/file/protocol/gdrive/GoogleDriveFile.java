@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +132,20 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public boolean exists() {
+        if (file != null)
+            return true;
+
+        GoogleDriveFile parent = getParent();
+        if (parent == null || !parent.exists())
+            return false;
+
+        try {
+            Arrays.stream(parent.ls()).filter(this::equals).findFirst().ifPresent(other -> this.file = other.file);
+        } catch (IOException e) {
+            LOGGER.warn("failed to list {}", parent);
+            return false;
+        }
+
         return file != null;
     }
 
@@ -190,8 +205,8 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+    public GoogleDriveFile[] ls() throws IOException, UnsupportedFileOperationException {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             FileList result = connHandler.getConnection().files().list()
                     .setFields("files(id,name,parents,size,modifiedTime,mimeType)")
                     .setQ(String.format("'%s' in parents", getId()))
@@ -199,17 +214,17 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
             List<File> files = result.getFiles();
             if (files == null || files.isEmpty()) {
                 LOGGER.info("No files found.");
-                return new AbstractFile[0];
+                return new GoogleDriveFile[0];
             }
 
             return files.stream()
                     .filter(file -> file.getSize() != null || isFolder(file))
                     .map(this::toFile)
-                    .toArray(AbstractFile[]::new);
+                    .toArray(GoogleDriveFile[]::new);
         }
     }
 
-    private AbstractFile toFile(File file) {
+    private GoogleDriveFile toFile(File file) {
         FileURL url = (FileURL) getURL().clone();
         String parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
         url.setPath(parentPath + file.getName());
@@ -220,7 +235,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public void mkdir() throws IOException, UnsupportedFileOperationException {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             File fileMetadata = new File();
             String filename = getURL().getFilename();
             fileMetadata.setParents(Collections.singletonList(getParent().getId()));
@@ -234,7 +249,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             return connHandler.getConnection().files()
                     .get(file.getId())
                     .executeMediaAsInputStream();
@@ -243,7 +258,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public OutputStream getOutputStream() throws IOException, UnsupportedFileOperationException {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             File fileMetadata = new File();
             String filename = getURL().getFilename();
             fileMetadata.setParents(Collections.singletonList(getParent().getId()));
@@ -313,7 +328,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             About about = connHandler.getConnection().about().get().setFields("storageQuota").execute();
             Map<String, Long> storageQuota = (Map<String, Long>) about.get("storageQuota");
             Long limit = storageQuota.get("limit");
@@ -326,7 +341,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             About about = connHandler.getConnection().about().get().setFields("storageQuota").execute();
             Map<String, Long> storageQuota = (Map<String, Long>) about.get("storageQuota");
             Long limit = storageQuota.get("limit");
