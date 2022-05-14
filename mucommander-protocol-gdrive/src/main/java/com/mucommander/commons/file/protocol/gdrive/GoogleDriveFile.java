@@ -57,7 +57,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDriveFile.class);
 
     private File file;
-    private AbstractFile parent;
+    private GoogleDriveFile parent;
 
     public static String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 
@@ -112,20 +112,21 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
     }
 
     @Override
-    public AbstractFile getParent() {
+    public GoogleDriveFile getParent() {
         if (parent == null) {
             FileURL parentFileURL = this.fileURL.getParent();
-            if(parentFileURL!=null) {
-                parent = FileFactory.getFile(parentFileURL);
-                // Note: parent may be null if it can't be resolved
-            }
+            if (parentFileURL != null)
+                setParent(FileFactory.getFile(parentFileURL));
+            // Note: parent may be null if it can't be resolved
         }
         return parent;
     }
 
     @Override
     public void setParent(AbstractFile parent) {
-        this.parent = parent;
+        if (parent instanceof GoogleDriveMonitoredFile)
+            parent = ((GoogleDriveMonitoredFile) parent).getUnderlyingFile();
+        this.parent = (GoogleDriveFile) parent;
     }
 
     @Override
@@ -222,10 +223,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
         try(GoogleDriveConnHandler connHandler = getConnHandler()) {
             File fileMetadata = new File();
             String filename = getURL().getFilename();
-            AbstractFile parent = getParent();
-            if (parent instanceof GoogleDriveMonitoredFile)
-                parent = ((GoogleDriveMonitoredFile) parent).getUnderlyingFile();
-            fileMetadata.setParents(Collections.singletonList(((GoogleDriveFile) parent).getId()));
+            fileMetadata.setParents(Collections.singletonList(getParent().getId()));
             fileMetadata.setName(filename);
             fileMetadata.setMimeType(FOLDER_MIME_TYPE);
             file = connHandler.getConnection().files().create(fileMetadata)
@@ -248,10 +246,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
         try(GoogleDriveConnHandler connHandler = getConnHandler()) {
             File fileMetadata = new File();
             String filename = getURL().getFilename();
-            AbstractFile parent = getParent();
-            if (parent instanceof GoogleDriveMonitoredFile)
-                parent = ((GoogleDriveMonitoredFile) parent).getUnderlyingFile();
-            fileMetadata.setParents(Collections.singletonList(((GoogleDriveFile) parent).getId()));
+            fileMetadata.setParents(Collections.singletonList(getParent().getId()));
             fileMetadata.setName(filename);
             PipedOutputStream output = new PipedOutputStream();
             PipedInputStream input = new PipedInputStream(output);
