@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -333,10 +334,9 @@ public class LocalFile extends ProtocolFile {
     private static void addJavaIoFileRoots(Vector<AbstractFile> v) {
         // Warning : No file operation should be performed on the resolved folders as under Win32, this would cause a
         // dialog to appear for removable drives such as A:\ if no disk is present.
-        File fileRoots[] = File.listRoots();
-        for (File fileRoot : fileRoots)
+        for (Path path : FileSystems.getDefault().getRootDirectories())
             try {
-                v.add(FileFactory.getFile(fileRoot.getAbsolutePath(), true));
+                v.add(FileFactory.getFile(path.toAbsolutePath().toString(), true));
             } catch (IOException e) {
             }
     }
