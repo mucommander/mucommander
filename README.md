@@ -68,6 +68,9 @@ The creation of a DMG file for MAC OS (produced in build/distributions):
 ./gradlew dmg
 ```
 
+Note: as the application is not signed, the following error may appear when trying to start is on macOS: "muCommander damaged and cannot be opened".  
+This can be solved by executing: `sudo xattr -r -d com.apple.quarantine /Applications/muCommander.app`
+
 The creation of an EXE file for Windows (produced in build/launch4j):  
 ```
 ./gradlew createExe
