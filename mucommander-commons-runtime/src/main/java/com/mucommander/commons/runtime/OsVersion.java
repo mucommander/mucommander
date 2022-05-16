@@ -47,6 +47,8 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	WINDOWS_8_1("Windows 8.1"),
 	/** Windows 10 */
 	WINDOWS_10("Windows 10"),
+	/** Windows 11 */
+	WINDOWS_11("Windows 11"),
 
 
 	///////////////////////
@@ -146,8 +148,11 @@ public enum OsVersion implements ComparableRuntimeProperty {
             if (osNameProp.equals("Windows 10"))
                 return WINDOWS_10;
 
+            if (osNameProp.equals("Windows 11"))
+                return WINDOWS_11;
+
             // Newer version we don't know of yet, assume latest supported OS version
-            return WINDOWS_10;
+            return WINDOWS_11;
         }
         // Mac OS X versions
         if (osFamily==OsFamily.MAC_OS) {
