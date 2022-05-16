@@ -103,7 +103,7 @@ public class MkdirJob extends FileJob {
 
                 // Check for file collisions, i.e. if the file already exists in the destination
                 int collision = FileCollisionChecker.checkForCollision(null, file);
-                if (collision != FileCollisionChecker.NO_COLLOSION) {
+                if (collision != FileCollisionChecker.NO_COLLISION) {
                     // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
                     // do not offer the multiple files' mode options such as 'skip' and 'apply to all'.
                     DialogAction choice = waitForUserResponse(new FileCollisionDialog(getMainFrame(), getMainFrame(), collision, null, file, false, false));

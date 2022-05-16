@@ -137,7 +137,7 @@ public class DeleteJob extends FileJob {
                 do {		// Loop for retry
                     // Delete each file in this folder
                     try {
-                        AbstractFile subFiles[] = file.ls();
+                        AbstractFile[] subFiles = file.ls();
                         for(int i=0; i<subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
                             // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                             nextFile(subFiles[i]);

@@ -48,7 +48,7 @@ public class MoveJob extends AbstractCopyJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MoveJob.class);
 	
     /** True if this job corresponds to a single file renaming */
-    protected boolean renameMode;
+    protected final boolean renameMode;
 
     
     /**
@@ -178,7 +178,7 @@ public class MoveJob extends AbstractCopyJob {
             // move each file in this folder recursively
             do {		// Loop for retry
                 try {
-                    AbstractFile subFiles[] = file.ls();
+                    AbstractFile[] subFiles = file.ls();
                     boolean isFolderEmpty = true;
                     for (AbstractFile subFile : subFiles) {
                         // Return now if the job was interrupted, so that we do not attempt to delete this folder

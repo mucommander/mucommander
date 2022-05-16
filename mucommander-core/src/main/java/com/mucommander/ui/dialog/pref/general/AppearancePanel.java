@@ -780,7 +780,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         AbstractFile destFile = ExtensionManager.getExtensionsFile(library.getName());
 
         int collision = FileCollisionChecker.checkForCollision(library, destFile);
-        if (collision != FileCollisionChecker.NO_COLLOSION) {
+        if (collision != FileCollisionChecker.NO_COLLISION) {
             // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
             DialogAction action = new FileCollisionDialog(parent, parent, collision, library, destFile, false, false).getActionValue();
 
@@ -1049,7 +1049,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                     file = lastSelectedFolder.getDirectChild(file.getName() + ".xml");
 
                 int collision = FileCollisionChecker.checkForCollision(null, file);
-                if (collision != FileCollisionChecker.NO_COLLOSION) {
+                if (collision != FileCollisionChecker.NO_COLLISION) {
                     // Do not offer the multiple files mode options such as 'skip' and 'apply to all'
                     DialogAction action = new FileCollisionDialog(parent, parent, collision, null, file, false, false).getActionValue();
 

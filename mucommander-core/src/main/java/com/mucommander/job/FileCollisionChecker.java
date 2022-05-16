@@ -40,7 +40,7 @@ import com.mucommander.commons.file.AbstractFile;
 public class FileCollisionChecker {
 
     /** No collision detected */
-    public static final int NO_COLLOSION = 0;
+    public static final int NO_COLLISION = 0;
 
     /** The destination file already exists and is not a directory */
     public static final int DESTINATION_FILE_ALREADY_EXISTS = 1;
@@ -55,7 +55,7 @@ public class FileCollisionChecker {
      *
      * @param sourceFile source file, can be null in which case the only collision checked against is {@link #DESTINATION_FILE_ALREADY_EXISTS}.
      * @param destFile destination file, cannot be null
-     * @return an int describing the collision type, or {@link #NO_COLLOSION} if no collision was detected (see constants)
+     * @return an int describing the collision type, or {@link #NO_COLLISION} if no collision was detected (see constants)
      */
     public static int checkForCollision(AbstractFile sourceFile, AbstractFile destFile) {
 
@@ -73,6 +73,6 @@ public class FileCollisionChecker {
         if(destFile.exists() && !destFile.isDirectory())
             return DESTINATION_FILE_ALREADY_EXISTS;
 
-        return NO_COLLOSION;
+        return NO_COLLISION;
     }
 }
