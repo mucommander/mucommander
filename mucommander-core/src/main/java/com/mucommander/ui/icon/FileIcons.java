@@ -19,7 +19,6 @@ package com.mucommander.ui.icon;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.util.EnumSet;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -120,30 +119,14 @@ public class FileIcons {
         return getCustomFileIcon(file, iconDimension);
     }
 
-    /**
-     * Returns a system icon for a given folder (file) iff system icons are available and given
-     * file is folder and {@link #getSystemIconsPolicy()} is set to either APPLICATIONS_AND_NAVI_ONLY or ALWAYS.
-     * Otherwise, the returned icon is the same as if it was returned by {@link #getFileIcon(AbstractFile)}
-     *
-     * @param file the AbstractFile instance for which an icon will be returned
-     * @return an icon for the given folder (icon)
-     * @see #getSystemIconsPolicy()
-     */
-    public static Icon getFileIconForNavigation(AbstractFile file) {
-        Icon icon = EnumSet.of(SystemIconsPolicy.APPLICATIONS_AND_NAVI_ONLY,
-                SystemIconsPolicy.ALWAYS).contains(systemIconsPolicy)
-                && file.isDirectory() && FileIcons.hasProperSystemIcons() ?
-            FileIcons.getSystemFileIcon(file) : FileIcons.getFileIcon(file);
-        return icon;
-    }
-
     private static boolean shouldUseSystemIconFor(AbstractFile file) {
         switch(systemIconsPolicy) {
         case ALWAYS:
             return true;
         case APPLICATIONS_ONLY:
-        case APPLICATIONS_AND_NAVI_ONLY:
             return com.mucommander.core.desktop.DesktopManager.isApplication(file);
+        case FOLDERS_ONLY:
+            return file.isDirectory();
         case NEVER:
         default:
             return false;
