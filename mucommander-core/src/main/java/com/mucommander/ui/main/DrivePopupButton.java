@@ -221,7 +221,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
             }
             setText(newLabel);
-            setIcon(FileIcons.getFileIconForNavigation((currentFolder)));
+            setIcon(FileIcons.getFileIcon(currentFolder));
             break;
 
         case BookmarkProtocolProvider.BOOKMARK:

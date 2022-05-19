@@ -498,7 +498,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                         systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
                         break;
                     case 2:
-                        systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_AND_NAVI_ONLY;
+                        systemIconsPolicy = SystemIconsPolicy.FOLDERS_ONLY;
                         break;
                     default:
                         systemIconsPolicy = SystemIconsPolicy.ALWAYS;
@@ -508,14 +508,14 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         };
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.never"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.applications"));
-        useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.applications_and_navigation"));
+        useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.folders"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.always"));
         // TODO use objects instead of index.....
         switch (FileIcons.getSystemIconsPolicy()) {
             case ALWAYS:
                 useSystemFileIconsComboBox.setSelectedIndex(3);
                 break;
-            case APPLICATIONS_AND_NAVI_ONLY:
+            case FOLDERS_ONLY:
                 useSystemFileIconsComboBox.setSelectedIndex(2);
                 break;
             case APPLICATIONS_ONLY:
@@ -607,7 +607,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
                 break;
             case 2:
-                systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_AND_NAVI_ONLY;
+                systemIconsPolicy = SystemIconsPolicy.FOLDERS_ONLY;
                 break;
             case 3:
             default:
