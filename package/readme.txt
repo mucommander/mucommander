@@ -42,6 +42,7 @@ Improvements:
 - Local file search results can now be revealed in the native Desktop's file manager
 - Added back the 'Go to forums' action that now points to the GitHub discussions page
 - Speed up collecting file-system roots when Windows network shares disconnect
+- Added option to use system icons (if available) for Folders in Drive button
 
 Localization:
 - Korean translation updated.

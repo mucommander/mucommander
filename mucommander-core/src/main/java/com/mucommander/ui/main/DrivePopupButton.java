@@ -221,8 +221,10 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
             }
             setText(newLabel);
-            // Set the folder icon based on the current system icons policy
-            setIcon(FileIcons.getFileIcon(currentFolder));
+            // Set the folder icon slightly disobeying system icons policy for the current folder
+            Icon icon = FileIcons.hasProperSystemIcons() ?
+                    FileIcons.getSystemFileIcon(currentFolder) : FileIcons.getFileIcon(currentFolder);
+            setIcon(icon);
             break;
 
         case BookmarkProtocolProvider.BOOKMARK:
@@ -249,7 +251,6 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         default:
             // Remote file, use the protocol's name
             setText(protocol.toUpperCase());
-            // Set the folder icon based on the current system icons policy
             setIcon(FileIcons.getFileIcon(currentFolder));
         }
 
