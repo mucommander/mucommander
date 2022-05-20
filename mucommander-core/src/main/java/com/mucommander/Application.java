@@ -319,7 +319,7 @@ public class Application {
             configureFilesystems();
 
             if (isFirstBoot) {
-                try { com.mucommander.ui.main.WindowManager.setLookAndFeel(); }
+                try { com.mucommander.ui.main.WindowManager.setDefaultLookAndFeel(); }
                 catch(Exception e) {printError("Could not initialize look & feel", e, true);}
             }
 

@@ -125,13 +125,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         MuConfigurations.addPreferencesListener(this);
     }
 
-    public static void setLookAndFeel() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public static void setDefaultLookAndFeel() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         if (OsFamily.LINUX.isCurrent()) {
-            for (UIManager.LookAndFeelInfo lfInfo : UIManager.getInstalledLookAndFeels())
-                if (lfInfo.getName().startsWith("GTK")) {
-                    UIManager.setLookAndFeel(lfInfo.getClassName());
-                    break;
-                }
+            UIManager.setLookAndFeel(FlatLightLaf.class.getName());
         }
     }
 
