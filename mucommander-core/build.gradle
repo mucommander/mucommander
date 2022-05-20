@@ -17,6 +17,8 @@ dependencies {
     compileOnly project(':mucommander-os-api')
     compileOnly project(':mucommander-viewer-api')
 
+    compileOnly 'com.formdev:flatlaf:2.2'
+
     implementation 'ch.qos.logback:logback-core:1.2.3'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'org.jmdns:jmdns:3.5.5'
@@ -51,7 +53,7 @@ jar {
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
         'Build-Url': "https://www.mucommander.com/version/nightly.xml",
-        'Import-Package': 'com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
+        'Import-Package': 'com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
         'Export-Package':
             'com.mucommander.core.desktop,' +
             'com.mucommander.job,' +

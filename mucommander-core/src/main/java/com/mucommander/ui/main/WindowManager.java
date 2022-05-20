@@ -33,6 +33,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.mucommander.Application;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -95,7 +99,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * Creates a new instance of WindowManager.
      */
     private WindowManager() {
-    	mainFrames = new Vector<MainFrame>();
+        mainFrames = new Vector<MainFrame>();
+
+        FlatDarculaLaf.installLafInfo();
+        FlatDarkLaf.installLafInfo();
+        FlatLightLaf.installLafInfo();
+        FlatIntelliJLaf.installLafInfo();
 
         // Notifies Swing that look&feels must be loaded as extensions.
         // This is necessary to ensure that look and feels placed in the extensions folder
@@ -242,21 +251,17 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      */
     private void setLookAndFeel(String lnfName) {
         try {
-            ClassLoader oldLoader;
-            Thread      currentThread;
-
             // Initializes class loading.
             // This is necessary due to Swing's UIDefaults.LazyProxyValue behaviour that just
             // won't use the right ClassLoader instance to load resources.
-            currentThread = Thread.currentThread();
-            oldLoader     = currentThread.getContextClassLoader();
+            Thread currentThread = Thread.currentThread();
+            ClassLoader oldLoader = currentThread.getContextClassLoader();
             currentThread.setContextClassLoader(ExtensionManager.getClassLoader());
 
             UIManager.setLookAndFeel(lnfName);
 
             // Restores the contextual ClassLoader.
             currentThread.setContextClassLoader(oldLoader);
-
             mainFrames.forEach(SwingUtilities::updateComponentTreeUI);
         }
         catch(Throwable e) {
