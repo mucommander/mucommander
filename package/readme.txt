@@ -32,6 +32,7 @@ What's new since v1.0.0 ?
 -----------------------
 
 New features:
+- Added new looks and feels: FlatLaf Light, FlatLaf IntelliJ, FlatLaf Dark, FlatLaf Darcula
 - Added an option to overwrite files only if size differs
 - Display Desktop folder in drive menu (just under home folder)
 
@@ -42,7 +43,7 @@ Improvements:
 - Local file search results can now be revealed in the native Desktop's file manager
 - Added back the 'Go to forums' action that now points to the GitHub discussions page
 - Speed up collecting file-system roots when Windows network shares disconnect
-- Added option to use system icons (if available) for Folders in Drive button
+- Added an option to use system icons (if available) for Folders in Drive button
 
 Localization:
 - Korean translation updated.
@@ -130,6 +131,9 @@ muCommander uses the following great third party works :
 
 - the Unix4j library released under the MIT License.
  Unix4j can be found at http://unix4j.org/.
+
+- the FlatLaf library released under the Apache License.
+ FlatLaf cab be found at https://www.formdev.com/flatlaf.
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .
