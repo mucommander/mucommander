@@ -40,7 +40,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -751,6 +750,14 @@ public class MainFrame extends JFrame implements LocationListener {
     public void setAutoSizeColumnsEnabled(boolean b) {
         leftTable.setAutoSizeColumnsEnabled(b);
         rightTable.setAutoSizeColumnsEnabled(b);
+    }
+
+    /**
+     * Update the header renderer of both tables according to {@link FileTable#createHeaderRenderer}
+     */
+    public void updateFileTablesHeaderRenderer() {
+        leftTable.updateHeaderRenderer();
+        rightTable.updateHeaderRenderer();
     }
     
     /**********************************

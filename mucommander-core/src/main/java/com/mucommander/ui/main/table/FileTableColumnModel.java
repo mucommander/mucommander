@@ -68,6 +68,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         // The name column is always visible, so we know that the column count is always
         // at least 1.
         countCache = 1;
+        FileTableHeaderRenderer headerRenderer = FileTable.createHeaderRenderer();
 
         // Initializes the columns.
         for(Column c : Column.values()) {
@@ -78,11 +79,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
             column.setCellEditor(null);
             column.setHeaderValue(c.getLabel());
 
-            // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers.
-            // On other platforms, we use a custom table header renderer.
-            if(!FileTable.usesTableHeaderRenderingProperties()) {
-                column.setHeaderRenderer(new FileTableHeaderRenderer());
-            }
+            column.setHeaderRenderer(headerRenderer);
 
             column.addPropertyChangeListener(this);
 
