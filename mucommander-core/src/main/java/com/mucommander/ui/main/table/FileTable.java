@@ -222,10 +222,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         mainFrame.addActivePanelListener(this);
         MuConfigurations.addPreferencesListener(this);
 
-        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
-        // instead of a custom header renderer.
-        if(usesTableHeaderRenderingProperties())
-            setTableHeaderRenderingProperties();
+        setTableHeaderRenderingProperties();
 
         // Initialize a wrapper of presentation adjustments for the file-table
         scrollpaneWrapper = new FileTableWrapperForDisplay(this, folderPanel, mainFrame);
@@ -292,9 +289,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * returns <code>false</code>.
      */
     private void setTableHeaderRenderingProperties() {
-        if(usesTableHeaderRenderingProperties()) {
+        if (usesTableHeaderRenderingProperties()) {
             JTableHeader tableHeader = getTableHeader();
-            if(tableHeader==null)
+            if (tableHeader==null)
                 return;
 
             boolean isActiveTable = isActiveTable();
@@ -302,12 +299,12 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // Highlights the selected column
             tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
                     ? convertColumnIndexToView(sortInfo.getCriterion().ordinal())
-                    :null);
+                    : null);
 
             // Displays an ascending/descending arrow
             tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
                     ? sortInfo.getAscendingOrder()?"ascending":"decending"      // 'decending' is misspelled but this is OK
-                    :null);
+                    : null);
 
             // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
             // However, clearing the properties does not yield the desired behavior as it does not restore the table
@@ -814,10 +811,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             sortInfo.setCriterion(criterion);
             sortInfo.setAscendingOrder(ascending);
 
-            // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
-            if(usesTableHeaderRenderingProperties()) {
-                setTableHeaderRenderingProperties();
-            }
+            setTableHeaderRenderingProperties();
 
             // Repaint header
             getTableHeader().repaint();
@@ -878,12 +872,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         // super.setColumnModel() must be called BEFORE the methods below
         super.setColumnModel(columnModel);
 
-        if(filenameEditor != null)
+        if (filenameEditor != null)
             columnModel.getColumn(convertColumnIndexToView(Column.NAME.ordinal())).setCellEditor(filenameEditor);
 
-        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
-        if(usesTableHeaderRenderingProperties())
-            setTableHeaderRenderingProperties();
+        setTableHeaderRenderingProperties();
     }
 
     /**
@@ -982,10 +974,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         sortInfo.setAscendingOrder(newSortOrder);
 
-        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
-        if(usesTableHeaderRenderingProperties()) {
-            setTableHeaderRenderingProperties();
-        }
+        setTableHeaderRenderingProperties();
 
         // Repaint header
         getTableHeader().repaint();
@@ -1090,15 +1079,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         Iterator<TableColumn> columns = respectSize ? new Enumerator<TableColumn>(getColumnModel().getColumns()) : getFileTableColumnModel().getAllColumns();
         TableColumn nameColumn = null;
 
-        while(columns.hasNext()) {
+        while (columns.hasNext()) {
             TableColumn column = columns.next();
             Column c = Column.valueOf(column.getModelIndex());
-            int columnWidth;
 
-            if(c == Column.NAME)
+            if (c == Column.NAME)
                 nameColumn = column;
             else {
-                if(c == Column.EXTENSION)
+                int columnWidth;
+                if (c == Column.EXTENSION)
                     columnWidth = (int)FileIcons.getIconDimension().getWidth();
                 else {
                     columnWidth = MIN_COLUMN_AUTO_WIDTH;
@@ -1112,7 +1101,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                         columnWidth = Math.max(columnWidth, stringWidth);
                     }
                 }
-                if(respectSize)
+                if (respectSize)
                     columnWidth = Math.min(columnWidth, remainingWidth);
                 columnWidth +=  2 * CellLabel.CELL_BORDER_WIDTH;
 
@@ -1120,7 +1109,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
                 // Update subtotal
                 remainingWidth -= columnWidth;
-                if(remainingWidth < 0)
+                if (remainingWidth < 0)
                     remainingWidth = 0;
             }
         }
@@ -1470,10 +1459,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     public void activePanelChanged(FolderPanel folderPanel) {
         isActiveTable = folderPanel==getFolderPanel();
 
-        // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
-        // instead of a custom header renderer. These indicators change when the active table has changed.
-        if(usesTableHeaderRenderingProperties())
-            setTableHeaderRenderingProperties();
+        setTableHeaderRenderingProperties();
 
         if(isActiveTable)
         	focusGained();
@@ -1865,11 +1851,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 // If that is the case, change the criterion to NAME.
                 if(!columnModel.isColumnVisible(sortInfo.getCriterion())) {
                     sortInfo.setCriterion(Column.NAME);
-
-                    // Mac OS X 10.5 (Leopard) and up uses JTableHeader properties to render sort indicators on table headers
-                    if(usesTableHeaderRenderingProperties()) {
-                        setTableHeaderRenderingProperties();
-                    }
+                    setTableHeaderRenderingProperties();
                 }
 
                 // Sort the new folder using the current sort criteria, ascending/descending order and

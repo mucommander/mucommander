@@ -460,6 +460,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * Returns an enumeration on all visible columns.
      * @return an enumeration on all visible columns.
      */
+    @Override
     public Enumeration<TableColumn> getColumns() {
         return new ColumnEnumeration();
     }
