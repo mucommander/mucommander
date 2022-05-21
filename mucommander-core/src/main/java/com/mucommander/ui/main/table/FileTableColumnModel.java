@@ -65,18 +65,16 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
      * Creates a new file table column model.
      */
     public FileTableColumnModel(FileTableConfiguration conf) {
-        TableColumn column;         // Buffer for the current column.
-        int columnIndex;
-
         // The name column is always visible, so we know that the column count is always
         // at least 1.
         countCache = 1;
 
         // Initializes the columns.
         for(Column c : Column.values()) {
-            columnIndex = c.ordinal();
+            int columnIndex = c.ordinal();
 
-            columns.add(column = new TableColumn(columnIndex));
+            TableColumn column = new TableColumn(columnIndex);
+            columns.add(column);
             column.setCellEditor(null);
             column.setHeaderValue(c.getLabel());
 
@@ -115,16 +113,11 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
     // - Configuration -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     public synchronized FileTableConfiguration getConfiguration() {
-        FileTableConfiguration conf;
-        TableColumn            column;
-        int                    modelCIndex;
-        Column                 modelC;
-
-        conf = new FileTableConfiguration();
+        FileTableConfiguration conf = new FileTableConfiguration();
         for(Column c : Column.values()) {
-            column = columns.get(c.ordinal());
-            modelC = Column.valueOf(column.getModelIndex());
-            modelCIndex = modelC.ordinal();
+            TableColumn column = columns.get(c.ordinal());
+            Column modelC = Column.valueOf(column.getModelIndex());
+            int modelCIndex = modelC.ordinal();
 
             conf.setEnabled(modelC, enabled[modelCIndex]);
             conf.setPosition(modelC, c.ordinal());
