@@ -43,6 +43,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -57,7 +58,6 @@ import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -282,35 +282,30 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Under Mac OS X 10.5 (Leopard) and up, sets client properties on this table's JTableHeader to indicate the current
-     * sort criterion/column and sort order (ascending or descending). These properties allow Mac OS X/Java to render
+     * Sets client properties on this table's JTableHeader to indicate the current sort criterion/column and sort order
+     * (ascending or descending). These properties allow macOS X/Java under Mac OS X 10.5 (Leopard) and up to render
      * the headers accordingly, instead of having to use a {@link FileTableHeaderRenderer custom header renderer}.
-     * This method has no effect whatsoever on platforms other where {@link #usesTableHeaderRenderingProperties()}
-     * returns <code>false</code>.
      */
     private void setTableHeaderRenderingProperties() {
-        if (usesTableHeaderRenderingProperties()) {
-            JTableHeader tableHeader = getTableHeader();
-            if (tableHeader==null)
-                return;
+        JTableHeader tableHeader = getTableHeader();
+        if (tableHeader==null)
+            return;
 
-            boolean isActiveTable = isActiveTable();
+        boolean isActiveTable = isActiveTable();
 
-            // Highlights the selected column
-            tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
-                    ? convertColumnIndexToView(sortInfo.getCriterion().ordinal())
+        // Highlights the selected column
+        tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
+                ? convertColumnIndexToView(sortInfo.getCriterion().ordinal())
+                        : null);
+
+        // Displays an ascending/descending arrow
+        tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
+                ? sortInfo.getAscendingOrder()?"ascending":"decending"      // 'decending' is misspelled but this is OK
                     : null);
 
-            // Displays an ascending/descending arrow
-            tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
-                    ? sortInfo.getAscendingOrder()?"ascending":"decending"      // 'decending' is misspelled but this is OK
-                    : null);
-
-            // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
-            // However, clearing the properties does not yield the desired behavior as it does not restore the table
-            // header back to normal. This looks like a bug in Apple's implementation.
-
-        }
+        // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
+        // However, clearing the properties does not yield the desired behavior as it does not restore the table
+        // header back to normal. This looks like a bug in Apple's implementation.
     }
 
     /**
@@ -341,14 +336,20 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Returns <code>true</code> if the current platform is capable of indicating the sort criterion and sort order
-     * on the table headers by setting client properties, instead of using a {@link FileTableHeaderRenderer custom header renderer}.
+     * Returns a {@link FileTableHeaderRenderer} that is capable of indicating the sort criterion and sort order with
+     * the current Look and Feel.
      *
-     * @return true if the current platform is capable of indicating the sort criterion and sort order on the table
-     * headers by setting client properties.
+     * The native Look and Feel on macOS (since Mac OS X 10.5) is able to indicate the sort criterion and sort order
+     * by setting client properties, otherwise a {@link FileTableHeaderRenderer custom header renderer} is needed.
+     *
+     * @return a FileTableHeaderRenderer that can be set on a {@link TableColumn} to indicate sort criterion and sort order.
+     * Might be <code>null</code> if no renderer is needed.
      */
-    static boolean usesTableHeaderRenderingProperties() {
-        return OsFamily.MAC_OS.isCurrent();
+    static FileTableHeaderRenderer createHeaderRenderer() {
+        // The native Look and Feel on macOS (since Mac OS x 10.5) is the only one that consumes client properties
+        // and doesn't require a customer header renderer
+        return UIManager.getLookAndFeel().getClass().getName().startsWith("com.apple.laf") ?
+                null : new FileTableHeaderRenderer();
     }
 
 
@@ -1915,4 +1916,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         mainFrame.getStatusBar().updateSelectedFilesInfo();
     }
 
+    /**
+     * Updates the header renderer of each column according to {@link FileTable#createHeaderRenderer}
+     */
+    public void updateHeaderRenderer() {
+        FileTableHeaderRenderer renderer = FileTable.createHeaderRenderer();
+        Iterator<TableColumn> columns = getFileTableColumnModel().getAllColumns();
+        while (columns.hasNext())
+            columns.next().setHeaderRenderer(renderer);
+    }
 }

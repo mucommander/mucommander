@@ -72,11 +72,15 @@ public class FileTableHeaderRenderer extends DefaultTableCellRenderer {
             if(fileTable.getSortInfo().getCriterion()==Column.valueOf(fileTable.convertColumnIndexToModel(column))) {
                 // This header is the currently selected one
                 label.setIcon(fileTable.getSortInfo().getAscendingOrder()? ASCENDING_ICON : DESCENDING_ICON);
+                Font font = label.getFont();
+                label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
             }
             else {
-                // The renderer component acts as a rubber-stamp, therefore the icon value needs to be set to null explicitely
+                // The renderer component acts as a rubber-stamp, therefore the icon value needs to be set to null explicitly
                 // as it might still hold a previous value
                 label.setIcon(null);
+                Font font = label.getFont();
+                label.setFont(font.deriveFont(font.getStyle() & ~Font.BOLD));
             }
         }
 
