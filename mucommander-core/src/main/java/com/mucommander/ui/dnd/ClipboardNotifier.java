@@ -61,7 +61,7 @@ public class ClipboardNotifier implements FlavorListener {
      */
     private void toggleActionState() {
         try {
-            action.setEnabled(ClipboardSupport.getClipboard().isDataFlavorAvailable(DataFlavor.javaFileListFlavor));
+            action.setEnabled(isPasteClipboardFilesActionEnabled());
         }
         catch(Exception e) {
             // Works around "java.lang.IllegalStateException: cannot open system clipboard" thrown when the clipboard
@@ -69,6 +69,14 @@ public class ClipboardNotifier implements FlavorListener {
 
             LOGGER.debug("Caught an exception while querying the clipboard for files", e);
         }
+    }
+
+    /**
+     * Checks whether the {@link PasteClipboardFilesAction} should be enabled based on the clipboard state
+     * @return true if PasteClipboardFilesAction should be enabled, false otherwise
+     */
+    public static boolean isPasteClipboardFilesActionEnabled() {
+        return ClipboardSupport.getClipboard().isDataFlavorAvailable(DataFlavor.javaFileListFlavor);
     }
 
     ///////////////////////////////////

@@ -22,6 +22,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.ui.dnd.ClipboardNotifier;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
 
@@ -80,15 +81,23 @@ public class TablePopupMenu extends MuActionsPopupMenu {
             add(new JSeparator());
         }
 
+        boolean copyOrPasteActionAdded = false;
         // 'Copy name(s)' and 'Copy path(s)' are displayed only if a single file was clicked or files are marked
         if (clickedFile != null || markedFiles.size() > 0) {
             addAction(com.mucommander.ui.action.impl.CopyFilesToClipboardAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFileNamesAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFileBaseNamesAction.Descriptor.ACTION_ID);
             addAction(com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID);
-
-            add(new JSeparator());
+            copyOrPasteActionAdded = true;
         }
+
+        if (ClipboardNotifier.isPasteClipboardFilesActionEnabled()) {
+            addAction(com.mucommander.ui.action.impl.PasteClipboardFilesAction.Descriptor.ACTION_ID);
+            copyOrPasteActionAdded = true;
+        }
+
+        if (copyOrPasteActionAdded)
+            add(new JSeparator());
 
         // Those following items are displayed in all cases
         addAction(com.mucommander.ui.action.impl.MarkAllAction.Descriptor.ACTION_ID);
