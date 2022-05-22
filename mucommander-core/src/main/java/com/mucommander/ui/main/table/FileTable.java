@@ -348,8 +348,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     static FileTableHeaderRenderer createHeaderRenderer() {
         // The native Look and Feel on macOS (since Mac OS x 10.5) is the only one that consumes client properties
         // and doesn't require a customer header renderer
-        return UIManager.getLookAndFeel().getClass().getName().startsWith("com.apple.laf") ?
-                null : new FileTableHeaderRenderer();
+        String className = UIManager.getLookAndFeel().getClass().getName();
+        return className.startsWith("com.apple.laf") ? null : new FileTableHeaderRenderer();
     }
 
 
