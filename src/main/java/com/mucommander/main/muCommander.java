@@ -270,7 +270,8 @@ public class muCommander
                         "sun.awt.image," +
                         "sun.awt.image.codec," +
                         "com.apple.laf," +
-                        "com.formdev.flatlaf"
+                        "com.formdev.flatlaf," +
+                        "org.violetlib.aqua"
         );
 
         configProps.computeIfAbsent(AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY, key -> new File(codeParentFolder, "bundle").getAbsolutePath());
