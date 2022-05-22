@@ -33,6 +33,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.Iterator;
 import java.util.WeakHashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -49,7 +50,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import com.mucommander.text.SizeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +64,7 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.MoveJob;
 import com.mucommander.text.CustomDateFormat;
+import com.mucommander.text.SizeFormat;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
@@ -205,7 +206,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         inputMap.setParent(null);
 
         // Initializes the table.
-        cellRenderer     = new FileTableCellRenderer(this);
+        cellRenderer = new FileTableCellRenderer(this);
         getColumnModel().getColumn(convertColumnIndexToView(Column.NAME.ordinal())).setCellEditor(filenameEditor = new FilenameEditor(new JTextField()));
         getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setTableHeader(new FileTableHeader(this));
@@ -1532,6 +1533,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         public FilenameEditor(JTextField textField) {
             super(textField);
             this.filenameField = textField;
+            filenameField.setBorder(BorderFactory.createEmptyBorder());
             // Sets the font to the same one that's used for cell rendering (user-defined)
             filenameField.setFont(FileTableCellRenderer.getCellFont());
             filenameField.setFocusTraversalKeysEnabled(false);
@@ -1621,6 +1623,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
             AbstractFile file = tableModel.getFileAtRow(editingRow);
             AbstractCopyDialog.selectDestinationFilename(file, file.getName(), 0).feedToPathField(filenameField);
+
+            filenameField.setBackground(cellRenderer.getBakgroundOfSelectedFileInInactiveTable());
+            filenameField.setSelectionColor(cellRenderer.getBakgroundOfNormalFileInInactiveTable());
+            filenameField.setForeground(cellRenderer.getForegroundOfSelectedFileInInactiveTable(editingRow, file));
+            filenameField.setSelectedTextColor(cellRenderer.getForegroundOfNormalFileInInactiveTable(editingRow, file));
 
             // Request focus on text field
             filenameField.requestFocus();

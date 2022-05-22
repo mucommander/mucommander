@@ -18,6 +18,7 @@
 
 package com.mucommander.ui.main.table;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -101,7 +102,24 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         return ThemeCache.tableFont;
     }
 
-	
+    public Color getBakgroundOfSelectedFileInInactiveTable() {
+        return ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.SELECTED];
+    }
+
+    public Color getBakgroundOfNormalFileInInactiveTable() {
+        return ThemeCache.backgroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL];
+    }
+
+    public Color getForegroundOfSelectedFileInInactiveTable(int row, AbstractFile file) {
+        int colorIndex = getColorIndex(row, file, tableModel);
+        return ThemeCache.foregroundColors[ThemeCache.INACTIVE][ThemeCache.SELECTED][colorIndex];
+    }
+
+    public Color getForegroundOfNormalFileInInactiveTable(int row, AbstractFile file) {
+        int colorIndex = getColorIndex(row, file, tableModel);
+        return ThemeCache.foregroundColors[ThemeCache.INACTIVE][ThemeCache.NORMAL][colorIndex];
+    }
+
     /**
      * Sets CellLabels' font to the current one.
      */
