@@ -45,6 +45,7 @@ Improvements:
 - Speed up collecting file-system roots when Windows network shares disconnect
 - Added an option to use system icons (if available) for Folders in Drive button
 - Sort criterion/column and sort order are presented on files tables when using a non-native look and feel on macOS
+- Added the 'Paste file(s)' action, when enabled, to the context menu of file tables.
 
 Localization:
 - Korean translation updated.
