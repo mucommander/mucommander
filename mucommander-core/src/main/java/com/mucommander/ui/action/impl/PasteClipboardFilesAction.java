@@ -51,11 +51,7 @@ public class PasteClipboardFilesAction extends MuAction {
 
     public PasteClipboardFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
-
-        // Allows this action to be dynamically enabled when the clipboard contains files, and disabled otherwise.
-        // ClipboardNotifier does not work under Mac OS X (tested under Tiger with Java 1.5.0_06)
-        if(!OsFamily.MAC_OS.isCurrent())
-            new ClipboardNotifier(this);
+        new ClipboardNotifier(this);
     }
 
     @Override
