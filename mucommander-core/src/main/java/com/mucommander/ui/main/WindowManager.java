@@ -32,6 +32,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.violetlib.aqua.AquaLookAndFeel;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -105,6 +106,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         FlatDarkLaf.installLafInfo();
         FlatLightLaf.installLafInfo();
         FlatIntelliJLaf.installLafInfo();
+
+        if (OsFamily.MAC_OS.isCurrent()) {
+            AquaLookAndFeel aquaLookAndFeel = new AquaLookAndFeel();
+            UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(aquaLookAndFeel.getName(), aquaLookAndFeel.getClass().getName()));
+        }
 
         // Notifies Swing that look&feels must be loaded as extensions.
         // This is necessary to ensure that look and feels placed in the extensions folder

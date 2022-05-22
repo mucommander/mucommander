@@ -32,7 +32,7 @@ What's new since v1.0.0 ?
 -----------------------
 
 New features:
-- Added new looks and feels: FlatLaf Light, FlatLaf IntelliJ, FlatLaf Dark, FlatLaf Darcula
+- Added new looks and feels: FlatLaf Light, FlatLaf IntelliJ, FlatLaf Dark, FlatLaf Darcula, VAqua
 - Added an option to overwrite files only if size differs
 - Display Desktop folder in drive menu (just under home folder)
 
