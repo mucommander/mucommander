@@ -169,15 +169,6 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
     }
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int columnIndex) {
-        Column                column;
-        int                   colorIndex;
-        int                   focusedIndex;
-        int                   selectedIndex;
-        CellLabel             label;
-        AbstractFile          file;
-        boolean               matches;
-        QuickSearch 		  search;
-
         // Need to check that row index is not out of bounds because when the folder
         // has just been changed, the JTable may try to repaint the old folder and
         // ask for a row index greater than the length if the old folder contained more files
@@ -185,13 +176,14 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             return null;
 
         // Sanity check.
-        file = tableModel.getCachedFileAtRow(rowIndex);
+        AbstractFile file = tableModel.getCachedFileAtRow(rowIndex);
         if(file==null) {
             LOGGER.debug("tableModel.getCachedFileAtRow("+ rowIndex +") RETURNED NULL !");
             return null;
         }
 
-        search = this.table.getQuickSearch();
+        QuickSearch search = this.table.getQuickSearch();
+        boolean matches;
         if(!table.hasFocus())
             matches = true;
         else {
@@ -203,12 +195,12 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
 
         // Retrieves the various indexes of the colors to apply.
         // Selection only applies when the table is the active one
-        selectedIndex =  (isSelected && ((FileTable)table).isActiveTable()) ? ThemeCache.SELECTED : ThemeCache.NORMAL;
-        focusedIndex  = table.hasFocus() ? ThemeCache.ACTIVE : ThemeCache.INACTIVE;
-        colorIndex    = getColorIndex(rowIndex, file, tableModel);
+        int selectedIndex =  (isSelected && ((FileTable)table).isActiveTable()) ? ThemeCache.SELECTED : ThemeCache.NORMAL;
+        int focusedIndex  = table.hasFocus() ? ThemeCache.ACTIVE : ThemeCache.INACTIVE;
+        int colorIndex    = getColorIndex(rowIndex, file, tableModel);
 
-        column = Column.valueOf(table.convertColumnIndexToModel(columnIndex));
-        label = cellLabels[column.ordinal()];
+        Column column = Column.valueOf(table.convertColumnIndexToModel(columnIndex));
+        CellLabel label = cellLabels[column.ordinal()];
 
         // Extension/icon column: return ImageIcon instance
         if(column == Column.EXTENSION) {

@@ -133,13 +133,11 @@ public class ThemeCache implements ThemeListener {
     }
     
     private static void fireColorChanged(ColorChangedEvent event) {
-        for(ThemeListener listener : listeners.keySet())
-            listener.colorChanged(event);
+        listeners.keySet().forEach(listener -> listener.colorChanged(event));
     }
     
     private static void fireFontChanged(FontChangedEvent event) {
-        for(ThemeListener listener : listeners.keySet())
-            listener.fontChanged(event);
+        listeners.keySet().forEach(listener -> listener.fontChanged(event));
     }
     
 
