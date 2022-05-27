@@ -24,7 +24,26 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'org.jmdns:jmdns:3.5.5'
     implementation 'commons-collections:commons-collections:3.2.2'
+
     comprise 'org.unix4j:unix4j-command:0.6'
+
+    // The following libs are required by JediTerm.
+    // Since, I haven't found any repo where they are published,
+    // so they have been built from sources (https://github.com/JetBrains/jediterm, c21a2b27629dd3760c603edeb258f9a862e75d34)
+    // and placed directly into muC.
+    comprise files('libs/JediTerm-2.69.jar')
+    comprise files('libs/jediterm-typeahead-2.69-SNAPSHOT.jar')
+    comprise files('libs/kotlin-stdlib-common-1.5.10.jar')
+    comprise files('libs/annotations-20.1.0.jar')
+    comprise files('libs/jna-5.10.0.jar')
+    comprise files('libs/pty4j-0.12.7.jar')
+    comprise files('libs/terminal-2.69.jar')
+    comprise files('libs/eawtstub.jar')
+    comprise files('libs/jna-platform-5.10.0.jar')
+    comprise files('libs/purejavacomm-0.0.11.1.jar')
+    comprise files('libs/trove4j.jar')
+    comprise files('libs/jediterm-pty-2.69-SNAPSHOT.jar')
+    comprise files('libs/kotlin-stdlib-1.5.10.jar')
 
     testImplementation 'org.testng:testng:6.11'
     testImplementation 'junit:junit:4.12'
@@ -37,6 +56,17 @@ dependencies {
 jar {
    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         include 'org/unix4j/**'
+        include 'com/jediterm/**'
+        include 'com/intellij/**'
+        include 'com/pty4j/**'
+        include 'gnu/trove/**'
+        include 'jtermios/**'
+        include 'purejavacomm/**'
+        include 'kotlin/**'
+        include 'org/jetbrains/**'
+        include 'resources/com/pty4j/**'
+        include 'com/sun/**'
+        include 'org/apache/log4j/**'
         exclude 'codegen/**'
         exclude 'META-INF/**'
    } }
@@ -52,7 +82,7 @@ jar {
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
         'Build-Url': "https://www.mucommander.com/version/nightly.xml",
-        'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
+        'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,kotlin.internal.*;resolution:=dynamic,javax.jms;resolution:=dynamic,com.ibm.uvm.tools;resolution:=dynamic,sun.swing;resolution:=dynamic,org.apache.log4j;resolution:=dynamic,java.awt.*;resolution:=dynamic,sun.awt.*;resolution:=dynamic,kotlin.reflect.jvm.internal;resolution:=dynamic,com.sun.*;resolution:=dynamic,apple.awt.*;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
         'Export-Package':
             'com.mucommander.core.desktop,' +
             'com.mucommander.job,' +
