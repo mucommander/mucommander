@@ -203,6 +203,7 @@ public class ActionManager {
     	registerAction(new ShowRootFoldersQLAction.Descriptor(), 			ShowRootFoldersQLAction::new);
     	registerAction(new ShowServerConnectionsAction.Descriptor(),        ShowServerConnectionsAction::new);
     	registerAction(new ShowTabsQLAction.Descriptor(),					ShowTabsQLAction::new);
+    	registerAction(new ShowTerminalAction.Descriptor(),                 ShowTerminalAction::new);
     	registerAction(new SortByDateAction.Descriptor(),             		SortByDateAction::new);
     	registerAction(new SortByExtensionAction.Descriptor(),              SortByExtensionAction::new);
     	registerAction(new SortByGroupAction.Descriptor(),            		SortByGroupAction::new);

@@ -82,6 +82,9 @@ public class MainFrame extends JFrame implements LocationListener {
     /** Active table in the MainFrame */
     private FileTable activeTable;
 
+    /** The main panel (i.e. in the center) */
+    private JPanel insetsPane;
+
     /** Toolbar panel */
     private JPanel toolbarPanel;
 
@@ -161,7 +164,7 @@ public class MainFrame extends JFrame implements LocationListener {
         this.toolbarPanel.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
         contentPane.add(toolbarPanel, BorderLayout.NORTH);
 
-        JPanel insetsPane = new JPanel(new BorderLayout()) {
+        insetsPane = new JPanel(new BorderLayout()) {
                 // Add an x=3,y=3 gap around content pane
                 @Override
                 public Insets getInsets() {
@@ -348,6 +351,9 @@ public class MainFrame extends JFrame implements LocationListener {
         this.noEventsMode = enabled;
     }
 
+    public JPanel getMainPanel() {
+        return insetsPane;
+    }
 
     /**
      * Returns the {@link ToolBar} where shortcut buttons (go back, go forward, ...) are.
