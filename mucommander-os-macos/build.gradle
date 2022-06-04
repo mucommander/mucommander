@@ -15,8 +15,6 @@ test.useTestNG()
 
 repositories.mavenCentral()
 
-compileJava.options.compilerArgs += ['--release', '11']
-
 dependencies {
     api project(":mucommander-commons-util")
     api project(":mucommander-core")
