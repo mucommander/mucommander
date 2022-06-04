@@ -3,7 +3,7 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-encoding')
     api project(':mucommander-translator')
-    implementation 'com.dropbox.core:dropbox-core-sdk:3.1.5'
+    implementation 'com.dropbox.core:dropbox-core-sdk:5.2.0'
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'org.osgi:osgi.core:7.0.0'
 
