@@ -5,7 +5,7 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
     implementation 'org.osgi:osgi.core:7.0.0'
-    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
 
     testImplementation 'org.testng:testng:6.11'
     testImplementation project(':mucommander-commons-file')
