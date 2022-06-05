@@ -18,17 +18,27 @@
 
 package com.mucommander.ui.dialog.pref;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
 
 
 /**
@@ -39,15 +49,15 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Displays the different panels. */
-    private JTabbedPane                      tabbedPane;
+    private JTabbedPane tabbedPane;
     /** Stores the different panels. */
-    private java.util.List<PreferencesPanel> prefPanels;
+    private List<PreferencesPanel> prefPanels;
     /** Apply button. */
-    private JButton                          applyButton;
+    private JButton applyButton;
     /** OK button. */
-    private JButton                          okButton;
+    private JButton okButton;
     /** Cancel button. */
-    private JButton                          cancelButton;
+    private JButton cancelButton;
 
 
 
@@ -81,21 +91,17 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
      * Initializes the tabbed panel's UI.
      */
     private void initUI() {
-        Container contentPane;
-        XBoxPanel buttonsPanel;
-        JPanel    tempPanel;
-
         // Initializes the tabbed pane.
-        prefPanels = new Vector<PreferencesPanel>();
+        prefPanels = new Vector<>();
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Adds the tabbed pane.
-        contentPane = getContentPane();
+        Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
         // Buttons panel.
-        buttonsPanel = new XBoxPanel();
+        XBoxPanel buttonsPanel = new XBoxPanel();
         buttonsPanel.add(applyButton = new JButton(Translator.get("apply")));
         buttonsPanel.addSpace(20);
         buttonsPanel.add(okButton     = new JButton(Translator.get("ok")));
@@ -111,7 +117,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
         cancelButton.addActionListener(this);
 
         // Aligns the button panel to the right.
-        tempPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel tempPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         tempPanel.add(buttonsPanel);
         contentPane.add(tempPanel, BorderLayout.SOUTH);
 
@@ -169,9 +175,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
      */
     public void commit() {
         // Ask pref panels to commit changes
-        int nbPanels = prefPanels.size();
-        for(int i = 0; i < nbPanels; i++)
-            prefPanels.get(i).commit();
+        prefPanels.forEach(PreferencesPanel::commit);
         setCommitButtonsEnabled(false);
     }
 
@@ -184,12 +188,7 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
      * @return <code>true</code> if all preference panels are ok with committing the changes, <code>false</code> otherwise.
      */
     public boolean checkCommit() {
-        // Ask pref panels to commit changes
-        int nbPanels = prefPanels.size();
-        for(int i = 0; i < nbPanels; i++)
-            if(!prefPanels.get(i).checkCommit())
-                return false;
-        return true;
+        return prefPanels.stream().allMatch(PreferencesPanel::checkCommit);
     }
 
     /**
