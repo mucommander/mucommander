@@ -6,7 +6,6 @@ dependencies {
     api project(':mucommander-encoding')
     api project(':mucommander-translator')
     implementation 'commons-net:commons-net:3.6'
-    implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'junit:junit:4.12'

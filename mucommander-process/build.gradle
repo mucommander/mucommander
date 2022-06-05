@@ -14,7 +14,6 @@ repositories.mavenCentral()
 
 dependencies {
     api project(":mucommander-commons-file")
-    implementation 'org.slf4j:slf4j-api:1.7.36'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

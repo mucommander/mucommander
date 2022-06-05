@@ -6,7 +6,6 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
-    implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'

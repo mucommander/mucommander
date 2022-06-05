@@ -1,3 +1,5 @@
+repositories.mavenCentral()
+
 jar {
    bnd ('Bundle-Name': 'muCommander-apache-bzip2',
         'Bundle-Vendor': 'muCommander',
