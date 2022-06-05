@@ -47,6 +47,7 @@ Improvements:
 - Sort criterion/column and sort order are presented on files tables when using a non-native look and feel on macOS
 - Added the 'Paste file(s)' action, when enabled, to the context menu of file tables.
 - Changed the rendering of the text field which is used when renaming a file/folder.
+- When searching a file that contains specified text, that text would be used by following 'Find next/previous' action within a text viewer/editor.
 
 Localization:
 - Korean translation updated.

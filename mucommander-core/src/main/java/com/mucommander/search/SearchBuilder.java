@@ -266,6 +266,8 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
             Predicate<AbstractFile> lsFilter = createListFilter();
             searchJob.setListFilter(lsFilter);
+
+            searchJob.setSearchText(searchText);
         }
         return searchJob;
     }
