@@ -36,6 +36,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 
 import com.mucommander.commons.util.StringUtils;
+import com.mucommander.job.impl.SearchJob;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
@@ -48,8 +49,6 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Maxence Bernard, Mariusz Jakubowski, Nicolas Rinaudo, Arik Hadas
  */
 class TextEditorImpl implements ThemeListener {
-
-	private static String searchString;
 
 	private JFrame frame;
 
@@ -122,16 +121,18 @@ class TextEditorImpl implements ThemeListener {
 		FindDialog findDialog = new FindDialog(frame);
 
 		if (findDialog.wasValidated()) {
-			searchString = findDialog.getSearchString().toLowerCase();
+		    String searchString = findDialog.getSearchString().toLowerCase();
 
-			if (!StringUtils.isNullOrEmpty(searchString))
-				doSearch(0, true);
+		    if (!StringUtils.isNullOrEmpty(searchString)) {
+		        SearchJob.lastSearchString = searchString;
+		        doSearch(0, true);
+		    }
 		}
 	}
 
 
 	void findNext() {
-	    if (StringUtils.isNullOrEmpty(searchString))
+	    if (StringUtils.isNullOrEmpty(SearchJob.lastSearchString))
 	        find();
 	    else
 	        doSearch(textArea.getSelectionEnd(), true);
@@ -146,8 +147,9 @@ class TextEditorImpl implements ThemeListener {
 	}
 
 	private void doSearch(int startPos, boolean forward) {
-		if (StringUtils.isNullOrEmpty(searchString))
-			return;
+	    String searchString = SearchJob.lastSearchString;
+	    if (StringUtils.isNullOrEmpty(searchString))
+	        return;
 
 		textArea.requestFocus();
 
