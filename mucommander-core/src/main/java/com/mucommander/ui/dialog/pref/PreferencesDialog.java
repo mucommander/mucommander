@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.text.Translator;
@@ -93,7 +94,8 @@ public abstract class PreferencesDialog extends FocusDialog implements ActionLis
     private void initUI() {
         // Initializes the tabbed pane.
         prefPanels = new Vector<>();
-        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        int tabPlacement = OsFamily.MAC_OS.isCurrent() ? JTabbedPane.TOP : JTabbedPane.LEFT;
+        tabbedPane = new JTabbedPane(tabPlacement);
 
         // Adds the tabbed pane.
         Container contentPane = getContentPane();
