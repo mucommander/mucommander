@@ -56,6 +56,7 @@ Bug fixes:
 - If 'open -a Finder $f' is found in commands.xml, it is replaced with 'open -R $f' to preserve the behavior of 'Reveal in Finder' action
 - Make folder operation creates the folder within the correct path rather than always within the root folder of Google Drive.
 - Fixed copying multiple files to Google Drive.
+- Fixed opening the authentication page for Google Drive in latest Chrome on Linux.
 
 Known issues:
 - Some translations may not be up-to-date.

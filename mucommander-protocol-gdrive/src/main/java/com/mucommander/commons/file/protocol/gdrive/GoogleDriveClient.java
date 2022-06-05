@@ -44,6 +44,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.PlatformManager;
+import com.mucommander.core.desktop.DesktopManager;
 
 /**
  * @author Arik Hadas
@@ -122,7 +123,7 @@ public class GoogleDriveClient implements Closeable {
         GoogleAuthorizationCodeFlow flow = builder.build();
         if (receiver == null)
             receiver = new LocalServerReceiver();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize(host);
+        return new AuthorizationCodeInstalledApp(flow, receiver, DesktopManager::browse).authorize(host);
     }
 
     @Override
