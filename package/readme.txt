@@ -58,6 +58,7 @@ Bug fixes:
 - Make folder operation creates the folder within the correct path rather than always within the root folder of Google Drive.
 - Fixed copying multiple files to Google Drive.
 - Fixed opening the authentication page for Google Drive in latest Chrome on Linux.
+- The headers of the file table(s) are now translated and no longer appear in uppercase letters.
 
 Known issues:
 - Some translations may not be up-to-date.

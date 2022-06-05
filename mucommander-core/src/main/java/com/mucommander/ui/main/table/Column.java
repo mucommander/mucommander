@@ -54,7 +54,7 @@ public enum Column {
     private String sortByActionId;
 
     private Column(boolean hasMinimumWidth, boolean showByDefault, int fileComparatorCriterion, String toggleActionId, String sortByActionId) {
-        this.label = Translator.get(toString());
+        this.label = Translator.get(toString().toLowerCase());
         this.minimumWidth = hasMinimumWidth?STANDARD_MINIMUM_WIDTH:0;
         this.showByDefault = showByDefault;
         this.fileComparatorCriterion = fileComparatorCriterion;
