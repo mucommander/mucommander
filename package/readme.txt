@@ -48,6 +48,7 @@ Improvements:
 - Added the 'Paste file(s)' action, when enabled, to the context menu of file tables.
 - Changed the rendering of the text field which is used when renaming a file/folder.
 - When searching a file that contains specified text, that text would be used by following 'Find next/previous' action within a text viewer/editor.
+- The tab headers within the Preferences dialog are placed at the left side (instead of top) of the dialog on Windows and Linux.
 
 Localization:
 - Korean translation updated.
