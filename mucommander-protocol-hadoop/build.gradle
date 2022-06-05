@@ -4,8 +4,8 @@ dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
+
     implementation 'org.apache.hadoop:hadoop-core:0.20.2'
-    implementation 'org.osgi:osgi.core:7.0.0'
     implementation 'commons-logging:commons-logging:1.2'
 
     // Use JUnit test framework

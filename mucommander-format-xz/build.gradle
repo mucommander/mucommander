@@ -4,7 +4,6 @@ repositories.mavenCentral()
 dependencies {
     api project(':mucommander-commons-file')
 
-    implementation 'org.osgi:osgi.core:7.0.0'
     implementation 'org.tukaani:xz:1.9'
 
     testImplementation 'org.testng:testng:6.11'

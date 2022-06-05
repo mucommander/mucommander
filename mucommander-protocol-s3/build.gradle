@@ -9,12 +9,12 @@ dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
+
     implementation 'net.java.dev.jets3t:jets3t:0.9.4'
     implementation 'commons-logging:commons-logging:1.2'
     implementation 'javax.xml:jaxrpc-api:1.1'
     implementation 'org.glassfish:javax.xml.soap:10.0-b28'
     implementation files('libs/mail.osgi-1.4.jar')
-    implementation 'org.osgi:osgi.core:7.0.0'
 
     testImplementation 'org.testng:testng:6.11'
     testImplementation project(':mucommander-commons-file')

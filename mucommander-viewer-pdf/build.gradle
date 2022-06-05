@@ -3,8 +3,6 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
-    implementation 'org.osgi:osgi.core:7.0.0'
-
     comprise group: 'com.levigo.jbig2', name: 'levigo-jbig2-imageio', version: '2.0'
     comprise group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.57'
     comprise group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on', version: '1.57'

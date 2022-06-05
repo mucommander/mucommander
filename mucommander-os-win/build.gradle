@@ -16,8 +16,6 @@ dependencies {
     api project(":mucommander-core")
     api project(":mucommander-os-api")
 
-    implementation 'org.osgi:osgi.core:7.0.0'
-
     comprise 'net.java.dev.jna:jna-platform:5.5.0'
 
     // Use JUnit test framework

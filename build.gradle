@@ -38,6 +38,7 @@ subprojects {
     compileTestJava.options.encoding = 'UTF-8'
     dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.36'
+        implementation 'org.osgi:osgi.core:7.0.0'
     }
 }
 
