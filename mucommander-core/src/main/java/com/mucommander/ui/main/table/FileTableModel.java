@@ -36,7 +36,6 @@ import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;

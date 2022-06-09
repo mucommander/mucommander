@@ -60,6 +60,7 @@ Bug fixes:
 - Fixed copying multiple files to Google Drive.
 - Fixed opening the authentication page for Google Drive in latest Chrome on Linux.
 - The headers of the file table(s) are now translated and no longer appear in uppercase letters.
+- Fixed possible IndexOutOfBoundsException that could have prevented file searching from being completed.
 
 Known issues:
 - Some translations may not be up-to-date.
