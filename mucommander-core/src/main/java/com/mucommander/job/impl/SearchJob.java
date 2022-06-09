@@ -61,6 +61,7 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     public SearchJob(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files);
         findings = new CopyOnWriteArrayList<>();
+        setAutoUnmark(false);
     }
 
     public void setDepth(int depth) {
