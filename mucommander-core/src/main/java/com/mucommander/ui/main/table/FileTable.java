@@ -1119,13 +1119,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     private void doStaticLayout() {
-        int         width;
-        TableColumn nameColumn;
-
-        if((width = getSize().width - getColumnModel().getTotalColumnWidth()) == 0)
+        int width = getSize().width - getColumnModel().getTotalColumnWidth();
+        if (width == 0)
             return;
-        nameColumn = getColumnModel().getColumn(convertColumnIndexToView(Column.NAME.ordinal()));
-        if(nameColumn.getWidth() + width >= RESERVED_NAME_COLUMN_WIDTH)
+        TableColumn nameColumn = getColumnModel().getColumn(convertColumnIndexToView(Column.NAME.ordinal()));
+        if (nameColumn.getWidth() + width >= RESERVED_NAME_COLUMN_WIDTH)
             nameColumn.setWidth(nameColumn.getWidth() + width);
         else
             nameColumn.setWidth(RESERVED_NAME_COLUMN_WIDTH);
