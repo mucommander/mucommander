@@ -45,7 +45,7 @@ import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
  * @author Arik Hadas
  */
 public class SearchUpdaterThread extends ChangeFolderThread {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFolderThread.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchUpdaterThread.class);
 
     private SearchFile search;
     private boolean changeLockedTab;
