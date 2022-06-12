@@ -18,6 +18,7 @@
 package com.mucommander.ui.dialog.file;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
@@ -81,6 +82,8 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         // - the base folder can be moved to the trash (the eligibility conditions should be the same as the files to-be-deleted)
         AbstractTrash trash = DesktopManager.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
+        if (baseFolder.getURL().getScheme().equals(SearchFile.SCHEMA))
+            baseFolder = ((SearchFile) baseFolder.getUnderlyingFileObject()).getSearchPlace();
         if(trash!=null && !baseFolder.isArchive() && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
             moveToTrash = !deletePermanently;
 

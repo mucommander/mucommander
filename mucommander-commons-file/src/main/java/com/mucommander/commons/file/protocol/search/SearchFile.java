@@ -168,11 +168,18 @@ public class SearchFile extends ProtocolFile implements SearchListener {
     @Override
     @UnsupportedFileOperation
     public long getTotalSpace() throws UnsupportedFileOperationException {throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);}
+
     @Override
-    public Object getUnderlyingFileObject() {return null;}
+    public Object getUnderlyingFileObject() {
+        return this;
+    }
 
     public Object getSearchPhase() {
         return search.getState();
+    }
+
+    public AbstractFile getSearchPlace() {
+        return searchPlace;
     }
 
     /**
