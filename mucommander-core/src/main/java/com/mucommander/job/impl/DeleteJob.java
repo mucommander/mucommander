@@ -129,8 +129,6 @@ public class DeleteJob extends FileJob {
         // Delete files recursively, only if trash is not used.
         DialogAction ret;
         if(!moveToTrash && file.isDirectory()) {
-            String filePath = file.getAbsolutePath();
-            filePath = filePath.substring(getBaseSourceFolder().getAbsolutePath(false).length()+1, filePath.length());
 
             // Important: symlinks must *not* be followed -- following symlinks could have disastrous effects.
             if(!file.isSymlink()) {
@@ -148,7 +146,7 @@ public class DeleteJob extends FileJob {
                     catch(IOException e) {
                         LOGGER.debug("IOException caught", e);
 
-                        ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", filePath));
+                        ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", file.getAbsolutePath()));
                         // Retry loops
                         if(ret==FileJobAction.RETRY)
                             continue;
