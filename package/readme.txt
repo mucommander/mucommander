@@ -49,7 +49,7 @@ Improvements:
 - Changed the rendering of the text field which is used when renaming a file/folder.
 - When searching a file that contains specified text, that text would be used by following 'Find next/previous' action within a text viewer/editor.
 - The tab headers within the Preferences dialog are placed at the left side (instead of top) of the dialog on Windows and Linux.
-- File search results can be moved to trash.
+- File search results can be deleted (or moved to trash when applicable).
 
 Localization:
 - Korean translation updated.
