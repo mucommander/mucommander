@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-package com.mucommander.job;
+package com.mucommander.job.impl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +27,11 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.CachedFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.job.FileJobAction;
+import com.mucommander.job.FileJobListener;
+import com.mucommander.job.FileJobState;
+import com.mucommander.job.JobProgress;
+import com.mucommander.job.JobsManager;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.job.ui.UserInputHelper;
 import com.mucommander.os.notifier.NotificationType;
@@ -39,7 +43,6 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.NotifierProvider;
-
 
 
 /**
@@ -63,8 +66,8 @@ import com.mucommander.ui.notifier.NotifierProvider;
  *
  * @author Maxence Bernard
  */
-public abstract class FileJob implements Runnable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FileJob.class);
+public abstract class FileJob implements com.mucommander.job.FileJob {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileJob.class);
 
     /** Thread in which the file job is performed */
     private Thread jobThread;
@@ -90,10 +93,10 @@ public abstract class FileJob implements Runnable {
 
     /** Main frame on which the job is to be performed */ 
     private MainFrame mainFrame;
-	
+    
     /** Base source folder */
     private AbstractFile baseSourceFolder;
-	
+    
     /** Files which are going to be processed */
     protected FileSet files;
 
@@ -111,7 +114,7 @@ public abstract class FileJob implements Runnable {
 
     /** If set to true, processed files will be unmarked from current table */
     private boolean autoUnmark = true;
-	
+    
     /** File to be selected after job has finished (can be null if not set) */
     private AbstractFile fileToSelect;
 
@@ -142,7 +145,7 @@ public abstract class FileJob implements Runnable {
         this.progressDialog = progressDialog;
     }
 
-	
+    
     /**
      * Creates a new FileJob without starting it, and with no associated ProgressDialog.
      *
@@ -170,10 +173,10 @@ public abstract class FileJob implements Runnable {
         if (this.baseSourceFolder!=null)
             this.baseSourceFolder = (getBaseSourceFolder() instanceof CachedFile)?getBaseSourceFolder():new CachedFile(getBaseSourceFolder(), true);
 
-    	this.jobProgress = new JobProgress(this);    
+        this.jobProgress = new JobProgress(this);    
     }
-	
-	
+    
+    
     /**
      * Specifies whether or not files that have been processed should be unmarked from current table (enabled by default).
      *
@@ -192,7 +195,7 @@ public abstract class FileJob implements Runnable {
         this.autoSkipErrors = autoSkipErrors;
     }
 
-	
+    
     /**
      * Sets the given file to be selected in the active table after this job has finished.
      * The file will only be selected if it exists in the active table's folder and if this job hasn't
@@ -203,11 +206,8 @@ public abstract class FileJob implements Runnable {
     protected void selectFileWhenFinished(AbstractFile file) {
         this.fileToSelect = file;
     }
-	
-	
-    /**
-     * Starts file job in a separate thread.
-     */
+    
+    @Override
     public void start() {
         // Return if job has already been started
         if (getState() != FileJobState.NOT_STARTED)
@@ -220,30 +220,21 @@ public abstract class FileJob implements Runnable {
         jobThread.start();
     }
 
-
-	/**
-	 * Returns the dialog showing progress of this job.
-	 * @return the progressDialog
-	 */
-	public ProgressDialog getProgressDialog() {
-		return progressDialog;
-	}
+    @Override
+    public ProgressDialog getProgressDialog() {
+        return progressDialog;
+    }
 
 
-	/**
-	 * Returns the main frame.
-	 * @return the mainFrame
-	 */
-	protected MainFrame getMainFrame() {
-		return mainFrame;
-	}
-
-
-	/**
-     * Returns the current state of this FileJob. See constant fields for possible return values.
-     *
-     * @return the current state of this FileJob. See constant fields for possible return values.
+    /**
+     * Returns the main frame.
+     * @return the mainFrame
      */
+    protected MainFrame getMainFrame() {
+        return mainFrame;
+    }
+
+    @Override
     public FileJobState getState() {
         return jobState;
     }
@@ -254,28 +245,19 @@ public abstract class FileJob implements Runnable {
      * @param jobState the new state
      */
     protected void setState(FileJobState jobState) {
-    	FileJobState oldState = this.jobState;
+        FileJobState oldState = this.jobState;
         this.jobState = jobState;
 
         for(FileJobListener listener : listeners.keySet())
             listener.jobStateChanged(this, oldState, jobState);
     }
 
-
-    /**
-     * Indicates whether or not this job is executed in a non-blocking mode.
-     *
-     * @return true if the job is executed in the background, false otherwise.
-     */
+    @Override
     public boolean isRunInBackground() {
         return runInBackground;
     }
 
-    /**
-     * Specifies whether or not this job needs to be executed in a non-blocking mode.
-     *
-     * @param runInBackground true if the job needs to be executed in the background, false otherwise.
-     */
+    @Override
     public void setRunInBackground(boolean runInBackground) {
         this.runInBackground = runInBackground;
 
@@ -285,25 +267,12 @@ public abstract class FileJob implements Runnable {
         }
     }
 
-
-    /**
-     * Registers a FileJobListener to receive notifications whenever state of this FileJob changes.
-     *
-     * <p>Listeners are stored as weak references so {@link #removeFileJobListener(FileJobListener)}
-     * doesn't need to be called for listeners to be garbage collected when they're not used anymore.</p>
-     *
-     * @param listener the FileJobListener to register
-     */
+    @Override
     public void addFileJobListener(FileJobListener listener) {
         listeners.put(listener, null);
     }
 
-    /**
-     * Removes the given FileJobListener from the list of listeners that receive notifications when the state of
-     * this FileJob has changed.
-     *
-     * @param listener the FileJobListener to remove
-     */
+    @Override
     public void removeFileJobListener(FileJobListener listener) {
         listeners.remove(listener);
     }
@@ -318,21 +287,12 @@ public abstract class FileJob implements Runnable {
         return startDate;
     }
 
-    /**
-     * Returns the timestamp in milliseconds when this job ended, <code>0</code> if this job hasn't finished yet.
-     *
-     * @return the timestamp in milliseconds when this job ended
-     */
+    @Override
     public long getEndDate() {
         return endDate;
     }
 
-    /**
-     * Returns the timestamp in milliseconds when this job was last paused, <code>0</code> if this job has not been
-     * paused yet.
-     *
-     * @return the timestamp in milliseconds when this job was last paused
-     */
+    @Override
     public long getPauseStartDate() {
         return pauseStartDate;
     }
@@ -363,12 +323,7 @@ public abstract class FileJob implements Runnable {
         this.pausedTime += System.currentTimeMillis() - this.getPauseStartDate();
     }
 
-
-    /**
-     * Returns the number of milliseconds this job effectively spent processing files, excluding any pause time.
-     *
-     * @return the number of milliseconds this job effectively spent processing files, excluding any pause time
-     */
+    @Override
     public long getEffectiveJobTime() {
         // If job hasn't start yet, return 0
         if(getStartDate()==0)
@@ -377,12 +332,9 @@ public abstract class FileJob implements Runnable {
         return (getEndDate()==0?System.currentTimeMillis():getEndDate())-getStartDate()-getPausedTime();
     }
 
-    
-    /**
-     * Interrupts this job, changes the job state to {@link #INTERRUPTED} and notifies listeners.
-     */	
+    @Override
     public void interrupt() {
-    	FileJobState state = getState();
+        FileJobState state = getState();
         if (state == FileJobState.INTERRUPTED || state == FileJobState.FINISHED)
             return;
 
@@ -416,10 +368,7 @@ public abstract class FileJob implements Runnable {
         jobStopped();
     }
 
-	
-    /**
-     * Sets or unsets this job in paused mode.
-     */
+    @Override
     public void setPaused(boolean paused) {
         // Lock the pause lock while updating paused status
         synchronized(pauseLock) {
@@ -497,7 +446,7 @@ public abstract class FileJob implements Runnable {
     protected void jobStarted() {
         LOGGER.debug("called");
     }
-	
+    
 
     /**
      * This method is called when this job has completed normal execution : all files have been processed without any interruption
@@ -505,7 +454,7 @@ public abstract class FileJob implements Runnable {
      *
      * <p>The call happens after the last call to {@link #processFile(AbstractFile,Object)} is made.
      * This method implementation does nothing but it can be overriden by subclasses to properly complete the job.</p>
-	 
+     
      * <p>Note that this method will NOT be called if a call to {@link #interrupt()} was made before all files were processed.</p>
      */
     protected void jobCompleted() {
@@ -553,8 +502,8 @@ public abstract class FileJob implements Runnable {
     protected void jobStopped() {
         LOGGER.debug("called");
     }
-	
-	
+    
+    
     /**
      * Displays an error dialog with the specified title and message,
      * offers to skip the file, retry or cancel and waits for user choice.
@@ -568,7 +517,7 @@ public abstract class FileJob implements Runnable {
     }
 
 
-	
+    
     /**
      * Displays an error dialog with the specified title and message and returns the selection action's value.
      */
@@ -612,8 +561,8 @@ public abstract class FileJob implements Runnable {
 
         return userChoice;
     }
-	
-	
+    
+    
     /**
      * Waits for the user's answer to the given question dialog, putting this
      * job in pause mode while waiting for the user.
@@ -635,8 +584,8 @@ public abstract class FileJob implements Runnable {
         return userInput;
     }
     
-	
-	
+    
+    
     /**
      * Check and if needed, refreshes both file tables's current folders, based on the job's refresh policy.
      */
@@ -651,21 +600,16 @@ public abstract class FileJob implements Runnable {
         if (hasFolderChanged(activeFolder)) {
             // Select file specified by selectFileWhenFinished (if any) only if the file exists in the active table's folder
             if (fileToSelect!=null && activeFolder.equalsCanonical(fileToSelect.getParent()) && fileToSelect.exists())
-            	activePanel.tryRefreshCurrentFolder(fileToSelect);
+                activePanel.tryRefreshCurrentFolder(fileToSelect);
             else
-            	activePanel.tryRefreshCurrentFolder();
+                activePanel.tryRefreshCurrentFolder();
         }
 
         // Repaint the status bar as marked files have changed
         mainFrame.getStatusBar().updateSelectedFilesInfo();
     }
-	
-
-    /**
-     * Returns this job's percentage of completion, as a float comprised between 0 and 1.
-     *
-     * @return this job's percentage of completion, as a float comprised between 0 and 1
-     */
+    
+    @Override
     public float getTotalPercentDone() {
         return getCurrentFileIndex()/(float)getNbFiles();
     }
@@ -685,7 +629,7 @@ public abstract class FileJob implements Runnable {
      * @return the file currently being processed.
      */
     public AbstractFile getCurrentFile() {
-    	return currentFile;
+        return currentFile;
     }
     
     /**
@@ -713,27 +657,18 @@ public abstract class FileJob implements Runnable {
      * @param nbFiles the number of files that this job contains.
      */
     protected void setNbFiles(int nbFiles) {
-    	this.nbFiles = nbFiles;
+        this.nbFiles = nbFiles;
     }
 
-    /**
-     * Returns a String describing what the job is currently doing. This default implementation returns
-     * <i>Processing CURRENT_FILE</i> where CURRENT_FILE is the name of the file currently being processed.
-     * This method should be overridden to provide a more accurate description.
-     *
-     * @return a String describing what the job is currently doing
-     */
+    @Override
     public String getStatusString() {
         return Translator.get("progress_dialog.processing_file", getCurrentFilename());
     }
 
-    /**
-     * Returns information about the job progress.
-     * @return the job progress
-     */
-	public JobProgress getJobProgress() {
-		return jobProgress;		
-	}
+    @Override
+    public JobProgress getJobProgress() {
+        return jobProgress;     
+    }
 
     /**
      * Returns the base source folder.
@@ -742,8 +677,8 @@ public abstract class FileJob implements Runnable {
     protected AbstractFile getBaseSourceFolder() {
         return baseSourceFolder;
     }
-	
-	
+    
+    
     /////////////////////////////
     // Runnable implementation //
     /////////////////////////////
@@ -797,18 +732,7 @@ public abstract class FileJob implements Runnable {
     //////////////////////
     // Abstract methods //
     //////////////////////
-
-    /**
-     * Returns <code>true</code> if the given folder has or may have been modified by this job.
-     * This method is called after this job has finished processing files, to determine if the current MainFrame's
-     * file tables need to be refreshed to reveal the modified contents.
-     *
-     * @param folder the folder to test 
-     * @return true if the given folder has or may have been modified by this job
-     */
-    protected abstract boolean hasFolderChanged(AbstractFile folder);
-	
-	
+    
     /**
      * Automatically called by {@link #run()} for each file that needs to be processed.
      *
@@ -818,6 +742,4 @@ public abstract class FileJob implements Runnable {
      * @return <code>true</code> if the operation was successful
      */
     protected abstract boolean processFile(AbstractFile file, Object recurseParams);
-
-
 }

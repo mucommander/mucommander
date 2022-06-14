@@ -58,7 +58,7 @@ public class CombineFilesJob extends AbstractCopyJob {
     }
 
     @Override
-    protected boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChanged(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
     }
 

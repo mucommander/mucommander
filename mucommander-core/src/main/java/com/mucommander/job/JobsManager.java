@@ -196,7 +196,7 @@ public class JobsManager implements FileJobListener {
 	 * Removes the given job from the jobs collection. Should be called when the job is ended.
 	 * @param job a job to remove
 	 */
-	void jobEnded(FileJob job) {
+	public void jobEnded(FileJob job) {
 	    Timer timer = new Timer(FINISHED_JOB_REMOVE_TIME, event -> removeJob(job));
 	    timer.setRepeats(false);
 	    timer.start();

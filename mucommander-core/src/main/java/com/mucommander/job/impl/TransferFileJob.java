@@ -42,7 +42,6 @@ import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.ThroughputLimitInputStream;
 import com.mucommander.commons.io.security.MuProvider;
 import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;

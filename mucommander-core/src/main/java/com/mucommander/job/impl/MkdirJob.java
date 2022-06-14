@@ -32,7 +32,6 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.io.BufferPool;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.job.FileCollisionChecker;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
@@ -206,7 +205,7 @@ public class MkdirJob extends FileJob {
      * Folders only needs to be refreshed if it is the destination folder
      */
     @Override
-    protected boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChanged(AbstractFile folder) {
         return destFolder.equalsCanonical(folder);
     }
 

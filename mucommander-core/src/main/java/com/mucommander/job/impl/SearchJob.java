@@ -33,7 +33,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.search.SearchListener;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.Pair;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobState;
 import com.mucommander.ui.main.MainFrame;
 
@@ -138,7 +137,7 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     }
 
     @Override
-    protected boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChanged(AbstractFile folder) {
         return false;
     }
 

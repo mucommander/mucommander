@@ -244,7 +244,7 @@ public class SplitFileJob extends AbstractCopyJob {
 
     // This job modifies baseDestFolder and its subfolders
     @Override
-    protected boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChanged(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
     }
 
