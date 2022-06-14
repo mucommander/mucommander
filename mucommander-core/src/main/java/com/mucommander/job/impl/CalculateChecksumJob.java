@@ -194,7 +194,7 @@ public class CalculateChecksumJob extends TransferFileJob {
     }
 
     @Override
-    public boolean hasFolderChangedImpl(AbstractFile folder) {
+    protected boolean hasFolderChangedImpl(AbstractFile folder) {
         // This job modifies the folder where the checksum file is
         return folder.equalsCanonical(checksumFile.getParent());     // Note: parent may be null
     }

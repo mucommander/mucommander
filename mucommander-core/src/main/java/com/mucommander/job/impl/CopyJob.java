@@ -205,7 +205,7 @@ public class CopyJob extends AbstractCopyJob {
 
     // This job modifies baseDestFolder and its subfolders
     @Override
-    public boolean hasFolderChangedImpl(AbstractFile folder) {
+    protected boolean hasFolderChangedImpl(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
     }
 

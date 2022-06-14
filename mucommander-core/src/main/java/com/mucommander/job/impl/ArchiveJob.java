@@ -145,7 +145,7 @@ public class ArchiveJob extends TransferFileJob {
     }
 
     @Override
-    public boolean hasFolderChangedImpl(AbstractFile folder) {
+    protected boolean hasFolderChangedImpl(AbstractFile folder) {
         // This job modifies the folder where the archive is
         return folder.equalsCanonical(destFile.getParent());     // Note: parent may be null
     }

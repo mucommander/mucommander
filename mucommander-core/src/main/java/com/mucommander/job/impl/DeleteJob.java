@@ -182,7 +182,7 @@ public class DeleteJob extends FileJob {
 
     // This job modifies baseFolder and subfolders
     @Override
-    public boolean hasFolderChangedImpl(AbstractFile folder) {
+    protected boolean hasFolderChangedImpl(AbstractFile folder) {
         return getBaseSourceFolder().isParentOf(folder);
     }
 
