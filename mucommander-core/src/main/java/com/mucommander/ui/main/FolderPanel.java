@@ -338,11 +338,11 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
-    	return locationChanger.tryChangeCurrentFolder(FileFactory.getFile(folderURL), selectThisFileAfter, findWorkableFolder, false);
+    	return locationChanger.tryChangeCurrentFolder(true, FileFactory.getFile(folderURL), selectThisFileAfter, findWorkableFolder, false);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
-    	return locationChanger.tryChangeCurrentFolder(folder, selectThisFileAfter, findWorkableFolder, false);
+    	return locationChanger.tryChangeCurrentFolder(true, folder, selectThisFileAfter, findWorkableFolder, false);
     }
 
     public ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
@@ -358,11 +358,15 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     }
 
     public void tryRefreshCurrentFolder() {
-        locationChanger.tryRefreshCurrentFolder();
+        tryRefreshCurrentFolder(true);
+    }
+
+    public void tryRefreshCurrentFolder(boolean internal) {
+        locationChanger.tryRefreshCurrentFolder(internal);
     }
 
     public void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
-        locationChanger.tryRefreshCurrentFolder(selectThisFileAfter);
+        locationChanger.tryRefreshCurrentFolder(selectThisFileAfter, true);
     }
 
     public boolean tryKillChangeFolderThread() {
