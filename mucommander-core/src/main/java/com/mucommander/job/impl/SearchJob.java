@@ -137,7 +137,7 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     }
 
     @Override
-    public boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChangedImpl(AbstractFile folder) {
         return false;
     }
 

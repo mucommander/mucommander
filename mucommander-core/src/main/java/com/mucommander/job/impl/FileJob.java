@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.CachedFile;
+import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobListener;
@@ -677,8 +678,14 @@ public abstract class FileJob implements com.mucommander.job.FileJob {
     protected AbstractFile getBaseSourceFolder() {
         return baseSourceFolder;
     }
-    
-    
+
+    @Override
+    public boolean hasFolderChanged(AbstractFile folder) {
+        if (folder.getURL().getScheme().equals(SearchFile.SCHEMA))
+            folder = ((SearchFile) folder.getUnderlyingFileObject()).getSearchPlace();
+        return hasFolderChangedImpl(folder);
+    }
+
     /////////////////////////////
     // Runnable implementation //
     /////////////////////////////
@@ -732,7 +739,8 @@ public abstract class FileJob implements com.mucommander.job.FileJob {
     //////////////////////
     // Abstract methods //
     //////////////////////
-    
+    protected abstract boolean hasFolderChangedImpl(AbstractFile folder);
+
     /**
      * Automatically called by {@link #run()} for each file that needs to be processed.
      *

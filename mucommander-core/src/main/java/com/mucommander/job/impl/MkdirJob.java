@@ -205,7 +205,7 @@ public class MkdirJob extends FileJob {
      * Folders only needs to be refreshed if it is the destination folder
      */
     @Override
-    public boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChangedImpl(AbstractFile folder) {
         return destFolder.equalsCanonical(folder);
     }
 
