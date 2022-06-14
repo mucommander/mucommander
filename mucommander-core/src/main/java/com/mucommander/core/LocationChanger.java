@@ -134,7 +134,7 @@ public class LocationChanger {
 	 */
 	public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, boolean changeLockedTab) {
 		/* TODO branch setBranchView(false); */
-		return tryChangeCurrentFolder(folder, null, false, changeLockedTab);
+		return tryChangeCurrentFolder(true, folder, null, false, changeLockedTab);
 	}
 
 	/**
@@ -153,12 +153,13 @@ public class LocationChanger {
 	 * This method is <b>not</b> I/O-bound and returns immediately, without any chance of locking the calling thread.
 	 * </p>
 	 *
+	 * @param internal whether or not the action is initiated automatically by the application or by the user
 	 * @param folder the folder to be made current folder
 	 * @param selectThisFileAfter the file to be selected after the folder has been changed (if it exists in the folder), can be null in which case FileTable rules will be used to select current file
 	 * @param changeLockedTab - flag that indicates whether to change the presented folder in the currently selected tab although it's locked
 	 * @return the thread that performs the actual folder change, null if another folder change is already underway  
 	 */
-	public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder, boolean changeLockedTab) {
+	public ChangeFolderThread tryChangeCurrentFolder(boolean internal, AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder, boolean changeLockedTab) {
 		LOGGER.debug("folder="+folder+" selectThisFileAfter="+selectThisFileAfter);
 
 		synchronized(FOLDER_CHANGE_LOCK) {
@@ -179,11 +180,13 @@ public class LocationChanger {
 			ChangeFolderThread thread;
 			switch(folderURL.getScheme()) {
 			case SearchFile.SCHEMA:
-			    if (folder instanceof SearchFile)
-			        ((SearchFile) folder).stop();
-			    folder = FileFactory.getFile(folderURL);
-			    thread = new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
-			    break;
+			    if (!internal) {
+			        if (folder instanceof SearchFile)
+			            ((SearchFile) folder).stop();
+			        folder = FileFactory.getFile(folderURL);
+			        thread = new SearchUpdaterThread(folderURL, changeLockedTab, mainFrame, folderPanel, locationManager, this);
+			        break;
+			    }
 			default:
 			    thread = new BrowseLocationThread(folder,
 			            findWorkableFolder,
@@ -303,8 +306,8 @@ public class LocationChanger {
 	 * Shorthand for {@link #tryRefreshCurrentFolder(AbstractFile)} called with no specific file (<code>null</code>)
 	 * to select after the folder has been changed.
 	 */
-	public void tryRefreshCurrentFolder() {
-		tryRefreshCurrentFolder(null);
+	public void tryRefreshCurrentFolder(boolean internal) {
+		tryRefreshCurrentFolder(null, internal);
 	}
 
 	/**
@@ -320,10 +323,10 @@ public class LocationChanger {
 	 * can be null in which case FileTable rules will be used to select current file
 	 * @see #tryChangeCurrentFolder(AbstractFile, AbstractFile, boolean)
 	 */
-	public void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
+	public void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter, boolean internal) {
 	    MonitoredFile currentFolder = locationManager.getCurrentFolder();
 	    folderPanel.getFoldersTreePanel().refreshFolder(currentFolder);
-	    tryChangeCurrentFolder(currentFolder, selectThisFileAfter, true, true);
+	    tryChangeCurrentFolder(internal, currentFolder, selectThisFileAfter, true, true);
 	}
 	
 	 /**
