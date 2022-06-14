@@ -31,4 +31,5 @@ public interface SearchJob {
     void setListener(SearchListener listener);
     Object getState();
     List<AbstractFile> getFindings();
+    boolean isFinished();
 }

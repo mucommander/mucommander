@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.ProxyFile;
 import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.ProtocolFile;
@@ -87,7 +87,12 @@ public class SearchFile extends ProtocolFile implements SearchListener {
             search.setListener(null);
             pausedToDueMaxResults = true;
         }
-        return results.toArray(EMPTY_RESULTS);
+        if (!search.isFinished())
+            results.toArray(EMPTY_RESULTS);
+        return results.stream()
+                .map(file -> file instanceof ProxyFile ? ((ProxyFile) file).getProxiedFile() : file)
+                .filter(AbstractFile::exists)
+                .toArray(AbstractFile[]::new);
     }
 
     @Override
