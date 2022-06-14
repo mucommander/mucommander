@@ -114,7 +114,7 @@ public class PropertiesJob extends FileJob {
 
     // This job does not modify anything
     @Override
-    public boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChangedImpl(AbstractFile folder) {
         return false;
     }
 }
