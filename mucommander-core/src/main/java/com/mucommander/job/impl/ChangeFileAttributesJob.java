@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
@@ -126,7 +125,7 @@ public class ChangeFileAttributesJob extends FileJob {
 
     // This job modifies the FileSet's base folder and potentially its subfolders
     @Override
-    protected boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChanged(AbstractFile folder) {
         return getBaseSourceFolder().isParentOf(folder);
     }
 }

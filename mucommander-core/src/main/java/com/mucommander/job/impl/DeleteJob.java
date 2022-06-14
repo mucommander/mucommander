@@ -29,7 +29,6 @@ import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
@@ -183,7 +182,7 @@ public class DeleteJob extends FileJob {
 
     // This job modifies baseFolder and subfolders
     @Override
-    protected boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChanged(AbstractFile folder) {
         return getBaseSourceFolder().isParentOf(folder);
     }
 

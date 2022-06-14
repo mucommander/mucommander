@@ -20,7 +20,6 @@ package com.mucommander.job.impl;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.job.FileJob;
 import com.mucommander.job.FileJobState;
 import com.mucommander.ui.main.MainFrame;
 
@@ -115,7 +114,7 @@ public class PropertiesJob extends FileJob {
 
     // This job does not modify anything
     @Override
-    protected boolean hasFolderChanged(AbstractFile folder) {
+    public boolean hasFolderChanged(AbstractFile folder) {
         return false;
     }
 }
