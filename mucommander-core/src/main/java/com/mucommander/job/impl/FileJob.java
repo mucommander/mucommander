@@ -676,7 +676,12 @@ public abstract class FileJob implements com.mucommander.job.FileJob {
      * @return the baseSourceFolder
      */
     protected AbstractFile getBaseSourceFolder() {
-        return baseSourceFolder;
+        switch(baseSourceFolder.getURL().getScheme()) {
+        case SearchFile.SCHEMA:
+            return ((SearchFile) baseSourceFolder.getUnderlyingFileObject()).getSearchPlace();
+        default:
+            return baseSourceFolder;
+        }
     }
 
     @Override
