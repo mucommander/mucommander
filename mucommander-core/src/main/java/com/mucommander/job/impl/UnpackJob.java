@@ -326,7 +326,7 @@ public class UnpackJob extends AbstractCopyJob {
 
     // This job modifies the base destination folder and its subfolders
     @Override
-    public boolean hasFolderChangedImpl(AbstractFile folder) {
+    protected boolean hasFolderChangedImpl(AbstractFile folder) {
         return baseDestFolder.isParentOf(folder);
     }
 

@@ -316,7 +316,7 @@ public class SendMailJob extends TransferFileJob {
     }
 
     @Override
-    public boolean hasFolderChangedImpl(AbstractFile folder) {
+    protected boolean hasFolderChangedImpl(AbstractFile folder) {
         // This job does not modify anything
         return false;
     }
