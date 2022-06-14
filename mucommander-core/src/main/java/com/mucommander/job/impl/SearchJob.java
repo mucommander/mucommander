@@ -166,4 +166,9 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
         SearchJob.lastSearchString = searchText;
         super.start();
     }
+
+    @Override
+    public boolean isFinished() {
+        return getState() == FileJobState.FINISHED;
+    }
 }
