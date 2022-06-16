@@ -50,6 +50,7 @@ Improvements:
 - When searching a file that contains specified text, that text would be used by following 'Find next/previous' action within a text viewer/editor.
 - The tab headers within the Preferences dialog are placed at the left side (instead of top) of the dialog on Windows and Linux.
 - File search results can be deleted (or moved to trash when applicable).
+- Do not round sizes of non-empty files that are smaller than 1 KB to 1 KB when 'Round displayed files sizes' is set.
 
 Localization:
 - Korean translation updated.

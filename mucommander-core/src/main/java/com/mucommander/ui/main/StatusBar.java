@@ -110,7 +110,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
     public final static String WAITING_ICON = "waiting.png";
 
     /** SizeFormat's format used to display volume info in status bar */
-    public final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
+    public final static int VOLUME_INFO_SIZE_FORMAT = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE;
 
     /** Listens to configuration changes and updates static fields accordingly */
     public final static ConfigurationListener CONFIGURATION_ADAPTER;
