@@ -25,6 +25,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
+import com.mucommander.ui.main.StatusBar;
 import com.mucommander.ui.theme.ThemeData;
 
 import javax.swing.*;
@@ -52,7 +53,6 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
         Translator.get("theme_editor.free_space.critical")
     };
 
-    private final static int VOLUME_INFO_SIZE_FORMAT    = SizeFormat.DIGITS_MEDIUM | SizeFormat.UNIT_SHORT | SizeFormat.INCLUDE_SPACE | SizeFormat.ROUND_TO_KB;
     private final static long TOTAL_SIZE                = 85899345920l;
     private final static long NORMAL_SIZE               = TOTAL_SIZE / 2;
     private final static long WARNING_SIZE              = TOTAL_SIZE / 10;
@@ -61,9 +61,9 @@ class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener 
     private final static int WARNING_DRAW_PERCENTAGE[] = {50, 10, 1};
 
     private final static String WARNING_LEVEL_TEXT[] = {
-        Translator.get("status_bar.volume_free", SizeFormat.format(NORMAL_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT)),
-        Translator.get("status_bar.volume_free", SizeFormat.format(WARNING_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT)),
-        Translator.get("status_bar.volume_free", SizeFormat.format(CRITICAL_SIZE, VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, VOLUME_INFO_SIZE_FORMAT))
+        Translator.get("status_bar.volume_free", SizeFormat.format(NORMAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT)),
+        Translator.get("status_bar.volume_free", SizeFormat.format(WARNING_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT)),
+        Translator.get("status_bar.volume_free", SizeFormat.format(CRITICAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT))
     };
 
     private JLabel  normalPreview;
