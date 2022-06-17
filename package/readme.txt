@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.0.0
+muCommander v1.1.0
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,41 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v1.0.0 ?
+What's new since v1.0.1 ?
 -----------------------
 
 New features:
-- Added new looks and feels: FlatLaf Light, FlatLaf IntelliJ, FlatLaf Dark, FlatLaf Darcula, VAqua
-- Added an option to overwrite files only if size differs
-- Display Desktop folder in drive menu (just under home folder)
+-
 
 Improvements:
-- Added a keyboard shortcut (ALT+DELETE) to Open Trash
-- Added a keyboard shortcut (CTRL+SPACE) to file contextual menu
-- Contextual menu is shown for file search results
-- Local file search results can now be revealed in the native Desktop's file manager
-- Added back the 'Go to forums' action that now points to the GitHub discussions page
-- Speed up collecting file-system roots when Windows network shares disconnect
-- Added an option to use system icons (if available) for Folders in Drive button
-- Sort criterion/column and sort order are presented on files tables when using a non-native look and feel on macOS
-- Added the 'Paste file(s)' action, when enabled, to the context menu of file tables.
-- Changed the rendering of the text field which is used when renaming a file/folder.
-- When searching a file that contains specified text, that text would be used by following 'Find next/previous' action within a text viewer/editor.
-- The tab headers within the Preferences dialog are placed at the left side (instead of top) of the dialog on Windows and Linux.
-- File search results can be deleted (or moved to trash when applicable).
-- Do not round sizes of non-empty files that are smaller than 1 KB to 1 KB when 'Round displayed files sizes' is set.
+-
 
 Localization:
-- Korean translation updated.
+-
 
 Bug fixes:
-- Fixed broken links to: 'Online documentation', 'Report a bug' and 'Make a donation'
-- If 'open -a Finder $f' is found in commands.xml, it is replaced with 'open -R $f' to preserve the behavior of 'Reveal in Finder' action
-- Make folder operation creates the folder within the correct path rather than always within the root folder of Google Drive.
-- Fixed copying multiple files to Google Drive.
-- Fixed opening the authentication page for Google Drive in latest Chrome on Linux.
-- The headers of the file table(s) are now translated and no longer appear in uppercase letters.
-- Fixed possible IndexOutOfBoundsException that could have prevented file searching from being completed.
+-
 
 Known issues:
 - Some translations may not be up-to-date.
