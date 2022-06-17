@@ -371,6 +371,9 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
         }
         delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'osgiaas*')
         delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'jline*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-win*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-macos*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-openvms*')
         delete("${buildDir}/muCommander/lib/app/run.bat")
         delete("${buildDir}/muCommander/lib/app/run.sh")
         delete("${buildDir}/muCommander/lib/app/system-libs")
