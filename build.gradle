@@ -454,6 +454,7 @@ task msi(dependsOn: 'winAppImage', type: Exec) {
                 '--win-menu', \
                 '--win-shortcut', \
                 '--win-shortcut-prompt', \
-                '--win-dir-chooser'
+                '--win-dir-chooser', \
+                '--vendor', 'Arik Hadas'
 }
 
