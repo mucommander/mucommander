@@ -342,27 +342,24 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     }
 
     private Predicate<AbstractFile> createListFilter() {
-        Predicate<AbstractFile> listFilter = null;
+        Predicate<AbstractFile> listFilter = file -> false;
         if (searchInSubfolders)
-            listFilter = AbstractFile::isDirectory;
-        if (searchInArchives) {
-            listFilter = listFilter != null ?
-                    listFilter.or(AbstractFile::isArchive)
-                    : AbstractFile::isArchive;
-        }
+            listFilter = listFilter.or(AbstractFile::isDirectory);
+        if (searchInArchives)
+            listFilter = listFilter.or(AbstractFile::isArchive);
 
         if (!searchInSymlinks) {
             Predicate<AbstractFile> isSymlink = AbstractFile::isSymlink;
             Predicate<AbstractFile> isNotSymlink = isSymlink.negate();
-            listFilter = listFilter != null ? listFilter.and(isNotSymlink) : isNotSymlink;
+            listFilter = listFilter.and(isNotSymlink);
         }
-        if (listFilter != null && !searchInHidden) {
+        if (!searchInHidden) {
             Predicate<AbstractFile> isHidden = AbstractFile::isHidden;
             Predicate<AbstractFile> isNotHidden = isHidden.negate();
             listFilter = listFilter.and(isNotHidden);
         }
 
-        return listFilter != null ? listFilter : file -> false;
+        return listFilter;
     }
 
     private String getProperty(List<Pair<String, String>> properties, String property) {
