@@ -79,8 +79,7 @@ Known issues:
 - Version 5.0 of RAR is not supported. Such archives would appear empty.
 - macOS: issues with browsing Documents/Desktop/Downloads may be solved by resetting Security and Privacy settings.
   See https://github.com/mucommander/mucommander/wiki/Reset-Security-&-Privacy-Settings-on-macOS for more details.
-- macOS: muCommander may not be able to start on version <= 10.10 (OS X Yosemite) due to incompatibility of the bundled JRE.
-  This can be solved by installing Java 8 and running '/Applications/muCommander.app/Contents/replace_jre.sh'.
+- macOS: muCommander may not start on older versions of macOS due to incompatibility of the bundled JRE.
 - macOS: "muCommander is damaged and cannot be opened" may appear when trying to start the application for the first time.
   This can be solved by executing: sudo xattr -r -d com.apple.quarantine /Applications/muCommander.app
 - macOS: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
