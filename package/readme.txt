@@ -63,6 +63,7 @@ Bug fixes:
 - Fixed opening the authentication page for Google Drive in latest Chrome on Linux.
 - The headers of the file table(s) are now translated and no longer appear in uppercase letters.
 - Fixed possible IndexOutOfBoundsException that could have prevented file searching from being completed.
+- File search with 'Search in subfolders' and 'Search in archive files' disabled no longer searches outside of the root folder.
 
 Known issues:
 - Some translations may not be up-to-date.
