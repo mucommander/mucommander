@@ -58,8 +58,6 @@ Known issues:
 - macOS: issues with browsing Documents/Desktop/Downloads may be solved by resetting Security and Privacy settings.
   See https://github.com/mucommander/mucommander/wiki/Reset-Security-&-Privacy-Settings-on-macOS for more details.
 - macOS: muCommander may not start on older versions of macOS due to incompatibility of the bundled JRE.
-- macOS: "muCommander is damaged and cannot be opened" may appear when trying to start the application for the first time.
-  This can be solved by executing: sudo xattr -r -d com.apple.quarantine /Applications/muCommander.app
 - macOS: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
   up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
 - macOS: some keyboard shortcuts may conflict with global system shortcuts.
