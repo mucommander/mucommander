@@ -53,17 +53,17 @@ Improvements:
 - The size of non-empty files that are smaller than 1 KB is no longer rounded to 1 KB when 'Round displayed file sizes' is set
 
 Localization:
-- Korean translation updated.
+- Korean translation updated
 
 Bug fixes:
 - Fixed broken links to: 'Online documentation', 'Report a bug' and 'Make a donation'
 - If 'open -a Finder $f' is found in commands.xml, it is replaced with 'open -R $f' to preserve the behavior of 'Reveal in Finder' action
-- Make folder operation creates the folder within the correct path rather than always within the root folder of Google Drive.
-- Fixed copying multiple files to Google Drive.
-- Fixed opening the authentication page for Google Drive in latest Chrome on Linux.
-- The headers of the file table(s) are now translated and no longer appear in uppercase letters.
-- Fixed possible IndexOutOfBoundsException that could have prevented file searching from being completed.
-- File search with 'Search in subfolders' and 'Search in archive files' disabled no longer searches outside of the root folder.
+- Make folder operation creates the folder within the correct path rather than always within the root folder of Google Drive
+- Fixed copying multiple files to Google Drive
+- Fixed opening the authentication page for Google Drive in latest Chrome on Linux
+- The headers of the file table(s) are now translated and no longer appear in uppercase letters
+- Fixed possible IndexOutOfBoundsException that could have prevented file searching from being completed
+- File search with 'Search in subfolders' and 'Search in archive files' disabled no longer searches outside of the root folder
 
 Known issues:
 - Some translations may not be up-to-date.
