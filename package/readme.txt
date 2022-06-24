@@ -62,7 +62,7 @@ Bug fixes:
 - Fixed copying multiple files to Google Drive
 - Fixed opening the authentication page for Google Drive in latest Chrome on Linux
 - The headers of the file table(s) are now translated and no longer appear in uppercase letters
-- Fixed possible IndexOutOfBoundsException that could have prevented file searching from being completed
+- Fixed possible IndexOutOfBoundsException that could have prevented file search from being completed
 - File search with 'Search in subfolders' and 'Search in archive files' disabled no longer searches outside of the root folder
 
 Known issues:
@@ -84,7 +84,7 @@ Known issues:
 - macOS: "muCommander is damaged and cannot be opened" may appear when trying to start the application for the first time.
   This can be solved by executing: sudo xattr -r -d com.apple.quarantine /Applications/muCommander.app
 - macOS: "Do you want the application "muCommander.app" to accept incoming network connections?" dialog keeps popping
-  up on startup even if the dialog has been previously accepted (ticket #339), when 'Bonjour' support is enabled.
+  up on startup even if the dialog has been previously accepted, when 'Bonjour' support is enabled.
 - macOS: some keyboard shortcuts may conflict with global system shortcuts.
 
 License
