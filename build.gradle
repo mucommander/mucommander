@@ -256,6 +256,9 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         include '*.jar'
         exclude 'osgiaas*'
         exclude 'jline*'
+        exclude 'mucommander-os-win*'
+        exclude 'mucommander-os-macos*'
+        exclude 'mucommander-os-openvms*'
         into 'bundle'
     }
     from ("$buildDir/osgi/app") {
