@@ -21,8 +21,8 @@ Official website: https://www.mucommander.com
 Requirements
 ------------
 
-A Java Runtime Environment (JRE) 8 or later is required to run muCommander.
-Java 11 is recommended, you can download it at https://www.oracle.com/technetwork/java/javase/downloads/.
+A Java Runtime Environment (JRE) 11 or later is required to run muCommander.
+Java 17 is recommended, you can download it at https://www.oracle.com/technetwork/java/javase/downloads/.
 
 If you're having problems launching muCommander, make sure the JAVA_HOME environment variable points to the directory
 where your Java runtime is installed.
