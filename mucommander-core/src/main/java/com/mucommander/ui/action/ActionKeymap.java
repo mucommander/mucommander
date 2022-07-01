@@ -106,10 +106,10 @@ public class ActionKeymap {
     
     private static void unregisterAcceleratorFromAction(String actionId, KeyStroke accelerator) {
     	switch (getAcceleratorType(accelerator)) {
-		case AcceleratorMap.PRIMARY_ACCELERATOR:
+		case PRIMARY:
 			registerActionAccelerators(actionId, null, getAlternateAccelerator(actionId));
 			break;
-		case AcceleratorMap.ALTERNATIVE_ACCELERATOR:
+		case ALTERNATIVE:
 			registerActionAccelerators(actionId, getAccelerator(actionId), null);
 			break;
 		}
@@ -205,9 +205,9 @@ public class ActionKeymap {
      * @param ks - accelerator.
      * @return accelerator type.
      */
-    private static int getAcceleratorType(KeyStroke ks) {
-    	int type = acceleratorMap.getAcceleratorType(ks);
-    	return type != 0 ? type : ActionProperties.getDefaultAcceleratorType(ks);
+    private static AcceleratorMap.AcceleratorType getAcceleratorType(KeyStroke ks) {
+        AcceleratorMap.AcceleratorType type = acceleratorMap.getAcceleratorType(ks);
+        return type != null ? type : ActionProperties.getDefaultAcceleratorType(ks);
     }
     
     /**
