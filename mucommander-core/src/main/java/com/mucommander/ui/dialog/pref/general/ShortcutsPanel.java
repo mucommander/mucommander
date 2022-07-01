@@ -198,26 +198,22 @@ public class ShortcutsPanel extends PreferencesPanel {
             public void actionPerformed(ActionEvent e) {
                 final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
 
-
                 String f = filterField.getText().toLowerCase().trim();
                 String[] words = f.split("\\s+");
 
-                shortcutsTable.updateModel(new ShortcutsTable.ActionFilter() {
-                    @Override
-                    public boolean accept(String actionId, String rowAsText) {
-                        if (selectedActionCategory != null && !selectedActionCategory.contains(actionId)) {
-                            return false;
-                        }
-                        if (words.length == 0) {
-                            return true;
-                        }
-                        for (String word : words) {
-                            if (!rowAsText.contains(word)) {
-                                return false;
-                            }
-                        }
+                shortcutsTable.updateModel((actionId, rowAsText) -> {
+                    if (selectedActionCategory != null && !selectedActionCategory.contains(actionId)) {
+                        return false;
+                    }
+                    if (words.length == 0) {
                         return true;
                     }
+                    for (String word : words) {
+                        if (!rowAsText.contains(word)) {
+                            return false;
+                        }
+                    }
+                    return true;
                 });
                 tooltipBar.showDefaultMessage();
                 if (e.getSource() == filterField) {

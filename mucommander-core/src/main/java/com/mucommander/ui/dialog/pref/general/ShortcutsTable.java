@@ -317,8 +317,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
     public void keyTyped(KeyEvent e) {}
 
-    public static abstract class ActionFilter {
-        public abstract boolean accept(String actionId, String rowAsText);
+    public static interface ActionFilter {
+        boolean accept(String actionId, String rowAsText);
     }
 
     /**
