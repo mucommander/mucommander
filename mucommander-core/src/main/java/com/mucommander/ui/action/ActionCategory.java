@@ -25,26 +25,26 @@ import com.mucommander.text.Translator;
  * @author Arik Hadas
  */
 public enum ActionCategory {
-	ALL("all") {
+	ALL("action_categories.all") {
 		@Override
         public boolean contains(String actionId) {
             return true;
 		}
 	},
-	NAVIGATION("navigation"),
-	SELECTION("selection"),
-	VIEW("view"),
-	FILES("file_operations"),
-	WINDOW("windows"),
-	TAB("tabs"),
-	MISC("misc"),
-	COMMANDS("commands");
+	NAVIGATION("action_categories.navigation"),
+	SELECTION("action_categories.selection"),
+	VIEW("action_categories.view"),
+	FILES("action_categories.file_operations"),
+	WINDOW("action_categories.windows"),
+	TAB("action_categories.tabs"),
+	MISC("action_categories.misc"),
+	COMMANDS("action_categories.commands");
 
 	/** The category's label key in the dictionary file */
 	private String descriptionKey;
 	 
 	ActionCategory(String descriptionKey) {
-		this.descriptionKey = "action_categories." + descriptionKey;
+		this.descriptionKey = descriptionKey;
 	}
 
 	public String getDescriptionKey() { return descriptionKey; } 
