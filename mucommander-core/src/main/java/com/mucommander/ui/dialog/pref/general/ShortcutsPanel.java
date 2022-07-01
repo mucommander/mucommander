@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -198,24 +199,18 @@ public class ShortcutsPanel extends PreferencesPanel {
             public void actionPerformed(ActionEvent e) {
                 final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
 
-                String f = filterField.getText().toLowerCase().trim();
-                String[] words = f.split("\\s+");
+                String filter = filterField.getText().toLowerCase().trim();
+                String[] filterWords = filter.split("\\s+");
 
                 shortcutsTable.updateModel((actionId, rowAsText) -> {
                     if (selectedActionCategory != null && !selectedActionCategory.contains(actionId)) {
                         return false;
                     }
-                    if (words.length == 0) {
-                        return true;
-                    }
-                    for (String word : words) {
-                        if (!rowAsText.contains(word)) {
-                            return false;
-                        }
-                    }
-                    return true;
+                    return Arrays.stream(filterWords).allMatch(rowAsText::contains);
                 });
+
                 tooltipBar.showDefaultMessage();
+
                 if (e.getSource() == filterField) {
                     filterField.requestFocus();
                 }
