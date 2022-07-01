@@ -150,7 +150,7 @@ public class ActionProperties {
 	 * @param keyStroke - shortcut.
 	 * @return default shortcut's type (PRIMARY_ACCELERATOR/ALTERNATIVE_ACCELERATOR).
 	 */
-	static int getDefaultAcceleratorType(KeyStroke keyStroke) {
+	static AcceleratorMap.AcceleratorType getDefaultAcceleratorType(KeyStroke keyStroke) {
 		return defaultAcceleratorMap.getAcceleratorType(keyStroke);
 	}
 	
