@@ -347,7 +347,7 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--app-image', "${buildDir}/muCommander.app", \
-                '--app-version', project.version, \
+                '--app-version', project.version+'-'+project.ext.release, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distributions"
