@@ -163,11 +163,15 @@ public class VersionChecker extends DefaultHandler {
      *         <code>false</code> otherwise.
      */
     public boolean isNewVersionAvailable() {
+        int releaseSeparator = latestVersion.indexOf('-');
+        if (releaseSeparator > 0)
+            latestVersion = latestVersion.substring(0, releaseSeparator);
+
         // If the local and remote versions are the same, compares release dates.
-        if(latestVersion.equals(RuntimeConstants.VERSION.trim().toLowerCase())) {
+        if (latestVersion.equals(RuntimeConstants.VERSION.trim().toLowerCase())) {
             // This ensures backward compatibility - if the remote version file does not contain
             // release date information, ignore it.
-            if(releaseDate.equals(""))
+            if (releaseDate.equals(""))
                 return true;
 
             // Checks whether the remote release date is later than the current release date.
