@@ -32,7 +32,7 @@ jar {
         'Bundle-Activator': 'com.mucommander.viewer.binary.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Miroslav Hajda",
-        'Specification-Version': project.version+'-'+project.ext.release,
+        'Specification-Version': project.version,
         'Implementation-Title': "muCommander",
         'Implementation-Vendor': "Miroslav Hajda",
         'Implementation-Version': revision.substring(0, 7),

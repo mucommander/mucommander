@@ -9,7 +9,7 @@ jar {
         'Import-Package': '*',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version+'-'+project.ext.release,
+        'Specification-Version': project.version,
         'Implementation-Title': "muCommander",
         'Implementation-Vendor': "Arik Hadas",
         'Implementation-Version': revision.substring(0, 7),
