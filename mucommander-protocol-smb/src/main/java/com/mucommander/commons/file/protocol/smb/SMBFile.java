@@ -24,6 +24,8 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+
+import jcifs.CIFSContext;
 import jcifs.context.SingletonContext;
 import jcifs.smb.*;
 import org.slf4j.Logger;
@@ -159,7 +161,8 @@ import java.util.Collections;
         // for the URL parsing which is unable to properly parse urls where the password contains a '@' character,
         // such as smb://user:p@ssword@host/path . 
         // @todo update deprecated constructor call for jcifs-ng
-        return new SmbFile(url.toString(false), SingletonContext.getInstance().withCredentials(new NtlmPasswordAuthentication(SingletonContext.getInstance(), domain, login, credentials.getPassword())));
+        CIFSContext context = SingletonContext.getInstance().withCredentials(new NtlmPasswordAuthentication(SingletonContext.getInstance(), domain, login, credentials.getPassword()));
+        return new SmbFile(url.toString(false), context);
     }
 
 

@@ -5,7 +5,7 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
 
-    implementation 'eu.agno3.jcifs:jcifs-ng:2.1.6'
+    implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
