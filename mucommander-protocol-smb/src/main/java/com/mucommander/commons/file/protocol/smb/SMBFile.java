@@ -205,8 +205,7 @@ import java.util.Collections;
      * @param period time period during which attributes values are cached, in milliseconds
      */
     public static void setAttributeCachingPeriod(long period) {
-        // @todo convert for jcifs-ng
-        //  jcifs.Config.setProperty("jcifs.smb.client.attrExpirationPeriod", ""+period);
+        System.setProperty("jcifs.smb.client.attrExpirationPeriod", ""+period);
     }
 
 
