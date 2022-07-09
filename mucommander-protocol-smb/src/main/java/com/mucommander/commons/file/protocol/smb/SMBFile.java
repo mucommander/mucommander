@@ -160,8 +160,8 @@ import java.util.Collections;
         // The reason for doing this rather than using the SmbFile(String) constructor is that SmbFile uses java.net.URL
         // for the URL parsing which is unable to properly parse urls where the password contains a '@' character,
         // such as smb://user:p@ssword@host/path . 
-        // @todo update deprecated constructor call for jcifs-ng
-        CIFSContext context = SingletonContext.getInstance().withCredentials(new NtlmPasswordAuthentication(SingletonContext.getInstance(), domain, login, credentials.getPassword()));
+        CIFSContext context = SingletonContext.getInstance().withCredentials(new NtlmPasswordAuthenticator(
+                domain, login, credentials.getPassword()));
         return new SmbFile(url.toString(false), context);
     }
 
