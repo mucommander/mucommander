@@ -32,7 +32,7 @@ What's new since v1.0.1 ?
 -----------------------
 
 New features:
--
+- Add support for SMBv2
 
 Improvements:
 - Symbolic links are extracted properly from zip archives to the local file system.
