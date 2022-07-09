@@ -32,7 +32,7 @@ What's new since v1.0.1 ?
 -----------------------
 
 New features:
--
+- Add support for SMBv2
 
 Improvements:
 -
