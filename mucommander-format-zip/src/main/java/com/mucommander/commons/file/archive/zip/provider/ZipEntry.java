@@ -20,6 +20,7 @@ package com.mucommander.commons.file.archive.zip.provider;
 
 import java.util.Calendar;
 import java.util.Vector;
+import java.util.stream.Stream;
 import java.util.zip.ZipException;
 
 /**
@@ -238,9 +239,8 @@ public class ZipEntry implements Cloneable {
      * @param fields an array of extra fields
      */
     public void setExtraFields(ZipExtraField[] fields) {
-        extraFields = new Vector<ZipExtraField>();
-        for (ZipExtraField field : fields)
-            extraFields.addElement(field);
+        extraFields = new Vector<>();
+        Stream.of(fields).forEach(extraFields::addElement);
     }
 
     /**
@@ -264,7 +264,7 @@ public class ZipEntry implements Cloneable {
      */
     public void addExtraField(ZipExtraField ze) {
         if (extraFields == null)
-            extraFields = new Vector<ZipExtraField>();
+            extraFields = new Vector<>();
 
         ZipShort type = ze.getHeaderId();
         for (int i=0, nbFields=extraFields.size(); i<nbFields; i++) {
