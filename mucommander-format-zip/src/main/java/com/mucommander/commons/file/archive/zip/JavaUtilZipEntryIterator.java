@@ -45,7 +45,7 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
      * @param zin the TarInputStream to iterate through
      * @throws IOException if an error occurred while fetching the first entry
      */
-    JavaUtilZipEntryIterator(ZipInputStream zin) throws IOException {
+    JavaUtilZipEntryIterator(ZipInputStream zin) {
         this.zin = zin;
     }
 

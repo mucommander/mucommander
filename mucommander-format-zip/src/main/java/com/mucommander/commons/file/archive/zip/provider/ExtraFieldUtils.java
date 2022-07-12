@@ -41,7 +41,7 @@ public class ExtraFieldUtils {
     private static Hashtable<ZipShort, Class<? extends ZipExtraField>> implementations;
 
     static {
-        implementations = new Hashtable<ZipShort, Class<? extends ZipExtraField>>();
+        implementations = new Hashtable<>();
         register(AsiExtraField.class);
         register(JarMarker.class);
     }
@@ -93,7 +93,7 @@ public class ExtraFieldUtils {
      * @throws ZipException on error
      */
     public static ZipExtraField[] parse(byte[] data) throws ZipException {
-        Vector<ZipExtraField> v = new Vector<ZipExtraField>();
+        Vector<ZipExtraField> v = new Vector<>();
         int start = 0;
         while (start <= data.length - 4) {
             ZipShort headerId = new ZipShort(data, start);
