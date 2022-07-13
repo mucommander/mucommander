@@ -691,7 +691,7 @@ public class SFTPFile extends ProtocolFile {
             // return false for isLink().
             // That means the value of isSymlink is not updated by fetchAttributes(), because if it was, isSymlink
             // would be false after the first attributes update.
-            this.isSymlink = attrs.isLink();
+            setSymlink(attrs.isLink());
 
             updateExpirationDate(); // declare the attributes as 'fresh'
         }
@@ -752,26 +752,11 @@ public class SFTPFile extends ProtocolFile {
             setSize(getSize()+increment);
         }
 
-        /**
-         * Returns <code>true</code> if the file is a symlink.
-         *
-         * @return <code>true</code> if the file is a symlink
-         */
-        private boolean isSymlink() {
+        @Override
+        public boolean isSymlink() {
             checkForExpiration(false);
-
-            return isSymlink;
+            return super.isSymlink();
         }
-
-        /**
-         * Sets whether the file is a symlink.
-         *
-         * @param isSymlink <code>true</code> if the file is a symlink
-         */
-        private void setSymlink(boolean isSymlink) {
-            this.isSymlink = isSymlink;
-        }
-
 
         ////////////////////////////////////////////
         // SyncedFileAttributes implementation //

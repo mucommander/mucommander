@@ -17,12 +17,19 @@
 
 package com.mucommander.commons.file.archiver;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.SimpleFilePermissions;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.archive.zip.provider.UnixStat;
 import com.mucommander.commons.file.archive.zip.provider.ZipEntry;
 import com.mucommander.commons.file.archive.zip.provider.ZipOutputStream;
 
@@ -75,9 +82,11 @@ class ZipArchiver extends Archiver {
             entry.setSize(size);
 
         entry.setTime(attributes.getDate());
-        entry.setUnixMode(SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory
-                    ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
-                    : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
+        int unixMode = SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory ?
+                FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+                : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue();
+        unixMode |= attributes.isSymlink() ? UnixStat.LINK_FLAG : 0;
+        entry.setUnixMode(unixMode);
 
         // Add the entry
         zos.putNextEntry(entry);
@@ -93,5 +102,16 @@ class ZipArchiver extends Archiver {
     @Override
     public void close() throws IOException {
         zos.close();
+    }
+
+    @Override
+    public InputStream getContentStream(AbstractFile file) throws UnsupportedFileOperationException, IOException {
+        if (file.isSymlink()) {
+            // we return the target of the link here so it will be
+            // written to the "file" within the archive
+            Path path = Path.of(file.getAbsolutePath());
+            return new ByteArrayInputStream(Files.readSymbolicLink(path).toString().getBytes());
+        }
+        return super.getContentStream(file);
     }
 }

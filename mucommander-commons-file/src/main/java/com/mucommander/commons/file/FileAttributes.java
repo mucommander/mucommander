@@ -116,4 +116,11 @@ public interface FileAttributes {
      * @return the file's group, <code>null</code> by default
      */
     String getGroup();
+
+    /**
+     * Returns <code>true</code> if the file is a symbolic link, <code>false</code> otherwise
+     *
+     * @return <code>true</code> if the file is a symbolic link, <code>false</code> otherwise
+     */
+    boolean isSymlink();
 }

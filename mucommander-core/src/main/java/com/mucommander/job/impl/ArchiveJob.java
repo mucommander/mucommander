@@ -109,13 +109,14 @@ public class ArchiveJob extends TransferFileJob {
                     return folderComplete;
                 }
                 else {
-                    InputStream in = setCurrentInputStream(file.getInputStream());
-                    // Synchronize this block to ensure that Archiver.close() is not closed while data is still being
-                    // written to the archive OutputStream, this would cause ZipOutputStream to deadlock.
-                    synchronized(ioLock) {
-                        // Create a new file entry in archive and copy the current file
-                        StreamUtils.copyStream(in, archiver.createEntry(entryRelativePath, file));
-                        in.close();
+                    InputStream contentStream = archiver.getContentStream(file);
+                    try (InputStream in = setCurrentInputStream(contentStream)) {
+                        // Synchronize this block to ensure that Archiver.close() is not closed while data is still being
+                        // written to the archive OutputStream, this would cause ZipOutputStream to deadlock.
+                        synchronized(ioLock) {
+                            // Create a new file entry in archive and copy the current file
+                            StreamUtils.copyStream(in, archiver.createEntry(entryRelativePath, file));
+                        }
                     }
                     return true;
                 }

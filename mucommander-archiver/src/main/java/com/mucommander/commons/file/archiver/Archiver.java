@@ -19,6 +19,7 @@ package com.mucommander.commons.file.archiver;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -426,4 +427,8 @@ public abstract class Archiver {
      * must be called when all entries have been added to the archive.
      */
     public abstract void close() throws IOException;
+
+    public InputStream getContentStream(AbstractFile file) throws UnsupportedFileOperationException, IOException {
+        return file.getInputStream();
+    }
 }
