@@ -215,6 +215,18 @@ public class ZipEntry implements Cloneable {
     }
 
     /**
+     * Returns true if this entry represents a unix symlink,
+     * in which case the entry's content contains the target path
+     * for the symlink.
+     *
+     * @since 1.5
+     * @return true if the entry represents a unix symlink, false otherwise.
+     */
+    public boolean isUnixSymlink() {
+        return (getUnixMode() & UnixStat.FILE_TYPE_FLAG) == UnixStat.LINK_FLAG;
+    }
+
+    /**
      * Returns the platform specification to put into the 'version made by' part of the central file header.
      *
      * @return {@link #PLATFORM_FAT} unless {@link #setUnixMode setUnixMode} has been called,
