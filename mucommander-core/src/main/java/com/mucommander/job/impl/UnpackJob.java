@@ -222,16 +222,6 @@ public class UnpackJob extends AbstractCopyJob {
                 if (!processEntry)
                     continue;
 
-                DefaultMutableTreeNode entryNode = archiveFile.getArchiveEntryNode(entryPath);
-                if (entryNode != null) {
-                    ArchiveEntry archiveEntry = (ArchiveEntry) entryNode.getUserObject();
-                    if (archiveEntry.isSymbolicLink()) {
-                        Files.createSymbolicLink(
-                                FileSystems.getDefault().getPath(destFolder.getPath(), entry.getName()),
-                                FileSystems.getDefault().getPath(entry.getLinkTarget()));
-                        continue;
-                    }
-                }
                 // Resolve the entry file
                 AbstractFile entryFile = archiveFile.getArchiveEntryFile(entryPath);
 
@@ -306,6 +296,13 @@ public class UnpackJob extends AbstractCopyJob {
                     if (!destParentFile.exists()) {
                         // Use mkdirs() instead of mkdir() to create any parent folder that doesn't exist yet
                         destParentFile.mkdirs();
+                    }
+
+                    if (entry.isSymbolicLink()) {
+                        Files.createSymbolicLink(
+                                FileSystems.getDefault().getPath(destFile.getAbsolutePath()),
+                                FileSystems.getDefault().getPath(entry.getLinkTarget()));
+                        continue;
                     }
 
                     // The entry is wrapped in a ProxyFile to override #getInputStream() and delegate it to
