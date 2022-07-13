@@ -19,6 +19,7 @@
 package com.mucommander.commons.file.archive.zip;
 
 import java.io.IOException;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -38,6 +39,8 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
     /** The current entry, where the ZipInputStream is currently positionned */
     private ArchiveEntry currentEntry;
 
+    /** A function that enables creating {@link com.mucommander.commons.file.archive.zip.provider.ZipEntry} */
+    private Function<com.mucommander.commons.file.archive.zip.provider.ZipEntry, ArchiveEntry> createArchiveEntryFunc;
 
     /**
      * Creates a new TarEntryIterator that iterates through the entries of the given {@link ZipInputStream}.
@@ -45,8 +48,9 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
      * @param zin the TarInputStream to iterate through
      * @throws IOException if an error occurred while fetching the first entry
      */
-    JavaUtilZipEntryIterator(ZipInputStream zin) {
+    JavaUtilZipEntryIterator(ZipInputStream zin, Function<com.mucommander.commons.file.archive.zip.provider.ZipEntry, ArchiveEntry> createArchiveEntryFunc) {
         this.zin = zin;
+        this.createArchiveEntryFunc = createArchiveEntryFunc;
     }
 
     /**
@@ -80,7 +84,7 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
             if(entry==null)
                 return null;
 
-            return ZipArchiveFile.createArchiveEntry(new com.mucommander.commons.file.archive.zip.provider.ZipEntry(entry));
+            return createArchiveEntryFunc.apply(new com.mucommander.commons.file.archive.zip.provider.ZipEntry(entry));
         }
         catch(Exception e) {
             // java.util.zip.ZipInputStream can throw an IllegalArgumentException when the filename/comment encoding

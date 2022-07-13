@@ -26,10 +26,15 @@ import com.mucommander.commons.file.archive.zip.provider.ZipConstants;
 import com.mucommander.commons.file.archive.zip.provider.ZipEntry;
 import com.mucommander.commons.file.archive.zip.provider.ZipFile;
 import com.mucommander.commons.io.FilteredOutputStream;
+import com.mucommander.commons.io.StreamUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.zip.ZipInputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -48,6 +53,7 @@ import java.util.zip.ZipInputStream;
  * @author Maxence Bernard
  */
 public class ZipArchiveFile extends AbstractRWArchiveFile {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZipArchiveFile.class);
 
     /** The ZipFile object that actually reads and modifies the entries in the Zip file */
     private ZipFile zipFile;
@@ -126,15 +132,32 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      * @param zipEntry the object that serves to initialize the attributes of the returned ArchiveEntry
      * @return an ArchiveEntry whose attributes are fetched from the given ZipEntry
      */
-    static ArchiveEntry createArchiveEntry(ZipEntry zipEntry) {
+    ArchiveEntry createArchiveEntry(ZipEntry zipEntry) {
         ArchiveEntry entry = new ArchiveEntry(zipEntry.getName(), zipEntry.isDirectory(), zipEntry.getTime(), zipEntry.getSize(), true);
 
-        if(zipEntry.hasUnixMode())
+        if (zipEntry.hasUnixMode()) {
             entry.setPermissions(new SimpleFilePermissions(zipEntry.getUnixMode()));
+            entry.setSymbolicLink(zipEntry.isUnixSymlink());
+            entry.setLinkTarget(getUnixSymlink(zipEntry));
+        }
 
         entry.setEntryObject(zipEntry);
 
         return entry;
+    }
+
+    public String getUnixSymlink(final ZipEntry entry) {
+        if (entry != null && entry.isUnixSymlink()) {
+            try (InputStream in = zipFile.getInputStream(entry)) {
+                final ByteArrayOutputStream output = new ByteArrayOutputStream();
+                StreamUtils.copyStream(in, output);
+                return new String(output.toByteArray(), Charset.forName("utf-8"));
+            } catch(Exception e) {
+                LOGGER.warn("found a symlink entry '{}' but failed to get its target", entry.getName());
+                LOGGER.debug("exception: ", e);
+            }
+        }
+        return "";
     }
 
     /**
@@ -183,7 +206,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         // read the entries. This is much slower than the former method as the file cannot be sought through and needs
         // to be traversed.
         else {
-            return new JavaUtilZipEntryIterator(new ZipInputStream(file.getInputStream()));
+            return new JavaUtilZipEntryIterator(new ZipInputStream(file.getInputStream()), this::createArchiveEntry);
         }
     }
 
