@@ -50,6 +50,9 @@ public class SimpleFileAttributes implements MutableFileAttributes {
     /** Group attribute */
     private String group;
 
+    /** Symlink attribute */
+    private boolean symlink;
+
     /**
      * Creates a new SimpleFileAttributes instance with unspecified/null attribute values.
      */
@@ -72,6 +75,7 @@ public class SimpleFileAttributes implements MutableFileAttributes {
         setPermissions(file.getPermissions());
         setOwner(file.getOwner());
         setGroup(file.getGroup());
+        setSymlink(file.isSymlink());
     }
 
 
@@ -141,5 +145,13 @@ public class SimpleFileAttributes implements MutableFileAttributes {
 
     public void setGroup(String group) {
         this.group = group;
+    }
+
+    public void setSymlink(boolean symlink) {
+        this.symlink = symlink;
+    }
+
+    public boolean isSymlink() {
+        return symlink;
     }
 }
