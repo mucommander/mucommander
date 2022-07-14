@@ -298,7 +298,7 @@ public class UnpackJob extends AbstractCopyJob {
                         destParentFile.mkdirs();
                     }
 
-                    if (entry.isSymbolicLink()) {
+                    if (entry.isSymlink()) {
                         Files.createSymbolicLink(
                                 FileSystems.getDefault().getPath(destFile.getAbsolutePath()),
                                 FileSystems.getDefault().getPath(entry.getLinkTarget()));

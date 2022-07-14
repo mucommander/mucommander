@@ -137,7 +137,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
         if (zipEntry.hasUnixMode()) {
             entry.setPermissions(new SimpleFilePermissions(zipEntry.getUnixMode()));
-            entry.setSymbolicLink(zipEntry.isUnixSymlink());
+            entry.setSymlink(zipEntry.isUnixSymlink());
             entry.setLinkTarget(getUnixSymlink(zipEntry));
         }
 
