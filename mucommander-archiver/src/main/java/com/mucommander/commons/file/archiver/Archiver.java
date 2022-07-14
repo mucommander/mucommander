@@ -28,7 +28,6 @@ import org.tukaani.xz.XZOutputStream;
 import org.tukaani.xz.LZMA2Options;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.io.BufferedRandomOutputStream;
@@ -419,7 +418,7 @@ public abstract class Archiver {
      * @throws IOException if this Archiver failed to write the entry, or in the case of a single entry archiver, if
      * this method was called more than once.
      */
-    public abstract OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException;
+    public abstract OutputStream createEntry(String entryPath, AbstractFile file) throws IOException;
 
 
     /**

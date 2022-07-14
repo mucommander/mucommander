@@ -35,7 +35,7 @@ New features:
 -
 
 Improvements:
-- Symbolic links are extracted properly from zip archives.
+- Symbolic links are extracted properly from zip archives to the local file system.
 - Local symbolic links are packed properly into zip and tar archives.
 
 Localization:
