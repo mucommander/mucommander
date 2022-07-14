@@ -17,7 +17,7 @@
 
 package com.mucommander.commons.file.archiver;
 
-import com.mucommander.commons.file.FileAttributes;
+import com.mucommander.commons.file.AbstractFile;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,7 +47,7 @@ class SingleFileArchiver extends Archiver {
      * which should never be the case as this Archiver is only meant to store one file. 
      */
     @Override
-    public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
+    public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
         if(firstEntry)
             firstEntry = false;
         else

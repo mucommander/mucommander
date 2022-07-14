@@ -25,13 +25,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.SimpleFilePermissions;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.archive.zip.provider.UnixStat;
 import com.mucommander.commons.file.archive.zip.provider.ZipEntry;
 import com.mucommander.commons.file.archive.zip.provider.ZipOutputStream;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 
 
 /**
@@ -67,25 +67,25 @@ class ZipArchiver extends Archiver {
     /////////////////////////////
 
     @Override
-    public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
+    public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
             zos.closeEntry();
 
-        boolean isDirectory = attributes.isDirectory();
+        boolean isDirectory = file.isDirectory();
 		
         // Create the entry and use the provided file's date
         ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size and date
-        long size = attributes.getSize();
+        long size = file.getSize();
         if(!isDirectory && size>=0) 	// Do not set size if file is directory or file size is unknown!
             entry.setSize(size);
 
-        entry.setTime(attributes.getDate());
-        int unixMode = SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory ?
+        entry.setTime(file.getDate());
+        int unixMode = SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory ?
                 FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                 : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue();
-        unixMode |= attributes.isSymlink() ? UnixStat.LINK_FLAG : 0;
+        unixMode |= file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink() ? UnixStat.LINK_FLAG : 0;
         entry.setUnixMode(unixMode);
 
         // Add the entry
@@ -106,7 +106,7 @@ class ZipArchiver extends Archiver {
 
     @Override
     public InputStream getContentStream(AbstractFile file) throws UnsupportedFileOperationException, IOException {
-        if (file.isSymlink()) {
+        if (file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink()) {
             // we return the target of the link here so it will be
             // written to the "file" within the archive
             Path path = Path.of(file.getAbsolutePath());

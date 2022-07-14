@@ -18,11 +18,10 @@
 package com.mucommander.commons.file.archiver;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileAttributes;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.SimpleFilePermissions;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
-import com.mucommander.commons.file.archive.zip.provider.UnixStat;
+import com.mucommander.commons.file.protocol.local.LocalFile;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -60,30 +59,30 @@ class TarArchiver extends Archiver {
     /////////////////////////////
 
     @Override
-    public OutputStream createEntry(String entryPath, FileAttributes attributes) throws IOException {
+    public OutputStream createEntry(String entryPath, AbstractFile file) throws IOException {
         // Start by closing current entry
         if(!firstEntry)
             tos.closeArchiveEntry();
 
-        boolean isDirectory = attributes.isDirectory();
-        boolean symlink = attributes.isSymlink();
+        boolean isDirectory = file.isDirectory();
+        boolean symlink = file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink();
 
         // Create the entry
         TarArchiveEntry entry = symlink ?
                 new TarArchiveEntry(normalizePath(entryPath, isDirectory), TarConstants.LF_SYMLINK)
                 : new TarArchiveEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size (required by TarArchiveOutputStream) and date
-        long size = attributes.getSize();
+        long size = file.getSize();
         if(!isDirectory && !symlink && size>=0) // Do not set size if file is directory or file size is unknown!
             entry.setSize(size);
 
         // Set the entry's date and permissions
-        entry.setModTime(attributes.getDate());
-        entry.setMode(SimpleFilePermissions.padPermissions(attributes.getPermissions(), isDirectory
+        entry.setModTime(file.getDate());
+        entry.setMode(SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory
                 ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                 : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
         if (symlink) {
-            Path source = Path.of(attributes.getPath());
+            Path source = Path.of(file.getPath());
             Path target = Files.readSymbolicLink(source);
             entry.setLinkName(target.toString());
         }
@@ -110,7 +109,7 @@ class TarArchiver extends Archiver {
 
     @Override
     public InputStream getContentStream(AbstractFile file) throws UnsupportedFileOperationException, IOException {
-        if (file.isSymlink()) {
+        if (file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink()) {
             return new ByteArrayInputStream(new byte[0]);
         }
         return super.getContentStream(file);
