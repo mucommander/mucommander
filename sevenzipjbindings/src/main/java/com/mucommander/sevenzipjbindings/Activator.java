@@ -14,30 +14,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.commons.file.archive.sevenzip;
+package com.mucommander.sevenzipjbindings;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
-import com.mucommander.commons.file.osgi.FileFormatService;
+import net.sf.sevenzipjbinding.SevenZip;
 
 /**
  * @author Arik Hadas
  */
 public class Activator implements BundleActivator {
 
-    private ServiceRegistration<FileFormatService> serviceRegistration;
-
 	@Override
 	public void start(BundleContext context) throws Exception {
-		FileFormatService service = () -> new SevenZipFormatProvider();
-		serviceRegistration = context.registerService(FileFormatService.class, service, null);
+		SevenZip.initSevenZipFromPlatformJAR();
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		serviceRegistration.unregister();
 	}
-
 }

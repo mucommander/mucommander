@@ -1,21 +1,24 @@
-// In this section you declare where to find the dependencies of your project
 repositories.mavenCentral()
 
 dependencies {
     api project(':mucommander-commons-file')
-    api project(':sevenzipjbindings')
-    api 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
+
+    comprise 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
+    comprise 'net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms:16.02-2.01'
 
     testImplementation 'org.testng:testng:6.11'
 }
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-7z',
+   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'META-INF/**'
+   } }
+   bnd ('Bundle-Name': 'muCommander-sevenzipjbindings',
         'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-Description': 'Wrapper for SevenZipJBindings',
         'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.file.archive.sevenzip',
-        'Bundle-Activator': 'com.mucommander.commons.file.archive.sevenzip.Activator',
+        'Export-Package': 'com.mucommander.sevenzipjbindings,net.sf.sevenzipjbinding',
+        'Import-Package': '*',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
         'Specification-Version': project.version,

@@ -27,6 +27,7 @@ import java.util.Locale;
 public final class StringUtils {
 
 	public static final String EMPTY = "";
+	private static final char[] HEX_CHAR_ARRAY = "0123456789ABCDEF".toCharArray();
 
     /**
      * Prevents instantiation of this class.
@@ -319,5 +320,15 @@ public final class StringUtils {
      */
     public static boolean isNullOrEmpty(String string) {
     	return string == null || string.isEmpty();
+    }
+
+    public static String bytesToHexStr(byte[] bytes, int offset, int size) {
+        char[] hexChars = new char[size * 2];
+        for (int i = offset; i < offset + size; i++) {
+            int v = bytes[i] & 0xFF;
+            hexChars[i * 2] = HEX_CHAR_ARRAY[v >>> 4];
+            hexChars[i * 2 + 1] = HEX_CHAR_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }
