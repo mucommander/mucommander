@@ -22,6 +22,9 @@ import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
+import com.mucommander.sevenzipjbindings.SevenZipJBindingROArchiveFile;
+
+import net.sf.sevenzipjbinding.ArchiveFormat;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -37,9 +40,12 @@ public class SevenZipFormatProvider implements ArchiveFormatProvider {
     /** extensions of archive filenames */
     public static final String[] EXTENSIONS = new String[] {".7z", ".cb7"};
 
+    /** signature of 7z files */
+    private static final byte[] SIGNATURE = { 0x37, 0x7A, (byte) 0xBC, (byte) 0xAF, 0x27, 0x1C };
+
     @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
-        return new SevenZipArchiveFile(file);
+        return new SevenZipJBindingROArchiveFile(file, ArchiveFormat.SEVEN_ZIP, SIGNATURE);
     }
 
     @Override

@@ -34,6 +34,8 @@ import com.mucommander.commons.file.util.PathUtils;
  */
 public class ArchiveEntry extends SimpleFileAttributes {
 
+    public static final char SEPARATOR_CHAR = '/';
+
     /** Encapsulated entry object */
     protected Object entryObject;
 

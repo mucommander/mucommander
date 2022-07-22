@@ -60,6 +60,7 @@ dependencies {
     osgiRuntime project('mucommander-commons-io')
     osgiRuntime project('mucommander-commons-runtime')
     osgiRuntime project('apache-bzip2')
+    osgiRuntime project('sevenzipjbindings')
     osgiRuntime project('mucommander-encoding')
     osgiRuntime project('mucommander-preferences')
     osgiRuntime project('mucommander-process')
@@ -140,6 +141,9 @@ runOsgi {
         }
         manifest("sdk-.*") {
             instruction 'Bundle-Name', 'ovirt-sdk'
+        }
+        manifest("sevenzipjbinding.*") {
+            instruction 'Bundle-Version', '16.2'
         }
     }
 }

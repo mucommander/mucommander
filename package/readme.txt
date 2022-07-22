@@ -37,6 +37,7 @@ New features:
 Improvements:
 - Symbolic links are extracted properly from zip archives to the local file system.
 - Local symbolic links are packed properly into zip and tar archives.
+- Unpacking of 7z archives is now faster and more reliable using a newer native library.
 
 Localization:
 -
@@ -54,7 +55,6 @@ Known issues:
 - Windows Vista/7: "java.net.SocketException: Permission denied: recv failed" error can appear when trying to access FTP
   sites. This seems to be a Windows firewall problem, with a possible workaround:
   http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7077696
-- Unpacking files from 7z archive files can be slow.
 - Need to enable NTLM authentication manually in order to authenticate to Samba >= 4.5. This is done by adding 'ntlm auth = yes' to smb.conf.
 - Version 5.0 of RAR is not supported. Such archives would appear empty.
 - macOS: issues with browsing Documents/Desktop/Downloads may be solved by resetting Security and Privacy settings.
@@ -90,8 +90,8 @@ muCommander uses the following great third party works :
 - the JSCH library released under the BSD license.
  JSCH can be found at http://www.jcraft.com/jsch/ .
 
-- the J7Zip library released under the GNU LGPL.
- J7Zip can be found at http://sourceforge.net/projects/p7zip/ .
+- the 7-Zip-JBinding library released under the GNU LGPL.
+ 7-Zip-JBinding can be found at http://sevenzipjbind.sourceforge.net .
 
 - the jCIFS library released under the GNU LGPL.
  jCIFS can be found at http://jcifs.samba.org .
