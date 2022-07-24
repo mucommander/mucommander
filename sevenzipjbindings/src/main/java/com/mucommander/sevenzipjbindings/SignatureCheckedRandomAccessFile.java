@@ -19,6 +19,7 @@ package com.mucommander.sevenzipjbindings;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PushbackInputStream;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.ProxyFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.StreamUtils;
@@ -42,7 +44,7 @@ public class SignatureCheckedRandomAccessFile implements IInStream, ISequentialI
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SignatureCheckedRandomAccessFile.class);
 
-    private final AbstractFile file;
+    private AbstractFile file;
 
     private InputStream stream;
 
@@ -113,7 +115,18 @@ public class SignatureCheckedRandomAccessFile implements IInStream, ISequentialI
         case SEEK_END:
             long size = file.getSize();
             if (size == -1) {
-                throw new IOException("can't seek from file end without knowing it's size");
+                long copiedSize = StreamUtils.copyStream(file.getInputStream(), new OutputStream() {
+                    @Override
+                    public void write(int b) throws IOException {}
+                });
+                file = new ProxyFile(file) {
+                    @Override
+                    public long getSize() {
+                        return copiedSize;
+                    }
+                };
+                size = copiedSize;
+                //throw new IOException("can't seek from file end without knowing it's size");
             }
             long newPosition = size + (offset > 0 ? offset : 0);
             if (position != newPosition) {
