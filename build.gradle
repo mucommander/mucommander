@@ -78,6 +78,7 @@ dependencies {
     osgiRuntime project('mucommander-format-ar')
     osgiRuntime project('mucommander-format-sevenzip')
     osgiRuntime project('mucommander-format-rpm')
+    osgiRuntime project('mucommander-format-cpio')
     osgiRuntime project('mucommander-format-zip')
     osgiRuntime project('mucommander-format-tar')
     osgiRuntime project('mucommander-format-bzip2')
