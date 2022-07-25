@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class is the provider for the '7z' archive format implemented by {@link RarArchiveFile}.
+ * This class is the provider for the 'RPM' archive format using 7-Zip-Binding.
  *
  * @author Arik Hadas
  */

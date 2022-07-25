@@ -29,14 +29,14 @@ public class Activator implements BundleActivator {
 
     private ServiceRegistration<FileFormatService> serviceRegistration;
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		serviceRegistration = context.registerService(FileFormatService.class, () -> new CpioFormatProvider(), null);
-	}
+    @Override
+    public void start(BundleContext context) throws Exception {
+        serviceRegistration = context.registerService(FileFormatService.class, () -> new CpioFormatProvider(), null);
+    }
 
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		serviceRegistration.unregister();
-	}
+    @Override
+    public void stop(BundleContext context) throws Exception {
+        serviceRegistration.unregister();
+    }
 
 }
