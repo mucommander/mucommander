@@ -109,7 +109,6 @@ public class SignatureCheckedRandomAccessFile implements IInStream, ISequentialI
             break;
         case SEEK_CUR:
             skip(offset);
-            position += offset;
             break;
         case SEEK_END:
             long size = file.getSize();
@@ -188,7 +187,8 @@ public class SignatureCheckedRandomAccessFile implements IInStream, ISequentialI
             } else {
                 PushbackInputStream pushbackInputStream = null;
                 if (buf.length > 0) {
-                    is = new PushbackInputStream(file.getInputStream(), buf.length);
+                    pushbackInputStream = new PushbackInputStream(file.getInputStream(), buf.length);
+                    is = pushbackInputStream;
                     read = StreamUtils.readUpTo(pushbackInputStream, buf);
                 } else {
                     is = file.getInputStream();
