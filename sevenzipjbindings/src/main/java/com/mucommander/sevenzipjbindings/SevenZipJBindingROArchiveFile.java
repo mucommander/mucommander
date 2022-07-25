@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
@@ -42,6 +45,7 @@ import net.sf.sevenzipjbinding.SevenZipException;
  * @author Oleg Trifonov, Arik Hadas
  */
 public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SevenZipJBindingROArchiveFile.class);
 
     protected IInArchive inArchive;
     private ArchiveFormat sevenZipJBindingFormat;
@@ -81,6 +85,8 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
             }
             return new WrapperArchiveEntryIterator(entries.iterator());
         } catch (SevenZipException e) {
+            LOGGER.warn("failed to list archive: %s", e.getMessage());
+            LOGGER.debug("failed to list archive", e);
             throw new IOException(e);
         } finally {
             try {
