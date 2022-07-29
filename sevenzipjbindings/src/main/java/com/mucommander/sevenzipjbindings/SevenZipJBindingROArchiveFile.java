@@ -66,6 +66,16 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
         this.formatSignature = formatSignature;
     }
 
+    /**
+     * Open the file and check its signature compared to the one provided in {@link #SevenZipJBindingROArchiveFile(AbstractFile, ArchiveFormat, byte[])}
+     * @return this {@code SevenZipJBindingROArchiveFile} instance when file signature matches the specified signature
+     * @throws IOException in case the file cannot be opened or its signature differs from the specified signature
+     */
+    public SevenZipJBindingROArchiveFile check() throws IOException {
+        openInArchive();
+        return this;
+    }
+
     private IInArchive openInArchive() throws IOException {
         if (inArchive == null) {
             SignatureCheckedRandomAccessFile in = new SignatureCheckedRandomAccessFile(file, formatSignature);
