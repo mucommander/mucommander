@@ -19,7 +19,7 @@ package com.mucommander.commons.file.archive.zip;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import com.mucommander.commons.file.archive.ArchiveFormatProvider;
+
 import com.mucommander.commons.file.osgi.FileFormatService;
 
 /**
@@ -31,13 +31,7 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		FileFormatService service = new FileFormatService() {
-			@Override
-			public ArchiveFormatProvider getProvider() {
-				return new ZipFormatProvider();
-			}
-		};
-		serviceRegistration = context.registerService(FileFormatService.class, service, null);
+		serviceRegistration = context.registerService(FileFormatService.class, () -> new ZipFormatProvider(), null);
 	}
 
 	@Override

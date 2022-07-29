@@ -31,8 +31,7 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		FileFormatService service = () -> new RpmFormatProvider();
-		serviceRegistration = context.registerService(FileFormatService.class, service, null);
+		serviceRegistration = context.registerService(FileFormatService.class, () -> new RpmFormatProvider(), null);
 	}
 
 	@Override

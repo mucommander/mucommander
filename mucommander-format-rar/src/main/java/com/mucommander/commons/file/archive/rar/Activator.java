@@ -20,7 +20,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 import com.mucommander.commons.file.osgi.FileFormatService;
 
 /**
@@ -32,13 +31,7 @@ private ServiceRegistration<FileFormatService> serviceRegistration;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		FileFormatService service = new FileFormatService() {
-			@Override
-			public ArchiveFormatProvider getProvider() {
-				return new RarFormatProvider();
-			}
-		};
-		serviceRegistration = context.registerService(FileFormatService.class, service, null);
+		serviceRegistration = context.registerService(FileFormatService.class, () -> new RarFormatProvider(), null);
 	}
 
 	@Override

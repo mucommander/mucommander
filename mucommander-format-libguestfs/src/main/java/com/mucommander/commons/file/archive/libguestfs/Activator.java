@@ -4,7 +4,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 import com.mucommander.commons.file.osgi.FileFormatService;
 import com.mucommander.commons.runtime.OsFamily;
 
@@ -18,13 +17,7 @@ public class Activator implements BundleActivator {
         if (!OsFamily.LINUX.isCurrent())
             return;
 
-        FileFormatService service = new FileFormatService() {
-            @Override
-            public ArchiveFormatProvider getProvider() {
-                return new LibguestfsFormatProvider();
-            }
-        };
-        serviceRegistration = context.registerService(FileFormatService.class, service, null);
+        serviceRegistration = context.registerService(FileFormatService.class, () -> new LibguestfsFormatProvider(), null);
     }
 
     @Override
