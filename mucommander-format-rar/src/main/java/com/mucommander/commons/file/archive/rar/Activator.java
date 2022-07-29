@@ -31,7 +31,7 @@ private ServiceRegistration<FileFormatService> serviceRegistration;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		serviceRegistration = context.registerService(FileFormatService.class, () -> new RarFormatProvider(), null);
+		serviceRegistration = context.registerService(FileFormatService.class, RarFormatProvider::new, null);
 	}
 
 	@Override

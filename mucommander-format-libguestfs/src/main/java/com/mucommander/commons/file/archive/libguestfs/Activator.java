@@ -17,7 +17,7 @@ public class Activator implements BundleActivator {
         if (!OsFamily.LINUX.isCurrent())
             return;
 
-        serviceRegistration = context.registerService(FileFormatService.class, () -> new LibguestfsFormatProvider(), null);
+        serviceRegistration = context.registerService(FileFormatService.class, LibguestfsFormatProvider::new, null);
     }
 
     @Override

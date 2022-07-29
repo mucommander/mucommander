@@ -31,7 +31,7 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		serviceRegistration = context.registerService(FileFormatService.class, () -> new GzipFormatProvider(), null);
+		serviceRegistration = context.registerService(FileFormatService.class, GzipFormatProvider::new, null);
 	}
 
 	@Override

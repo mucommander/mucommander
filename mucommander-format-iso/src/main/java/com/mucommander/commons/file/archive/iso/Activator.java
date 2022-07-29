@@ -31,7 +31,7 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		serviceRegistration = context.registerService(FileFormatService.class, () -> new IsoFormatProvider(), null);
+		serviceRegistration = context.registerService(FileFormatService.class, IsoFormatProvider::new, null);
 	}
 
 	@Override
