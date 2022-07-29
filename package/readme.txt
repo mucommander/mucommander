@@ -33,6 +33,7 @@ What's new since v1.0.1 ?
 
 New features:
 - Add support for SMBv2
+- Add support for RAR 5+
 - New archive formats: RPM, cpio
 
 Improvements:
@@ -57,7 +58,6 @@ Known issues:
   sites. This seems to be a Windows firewall problem, with a possible workaround:
   http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7077696
 - Need to enable NTLM authentication manually in order to authenticate to Samba >= 4.5. This is done by adding 'ntlm auth = yes' to smb.conf.
-- Version 5.0 of RAR is not supported. Such archives would appear empty.
 - macOS: issues with browsing Documents/Desktop/Downloads may be solved by resetting Security and Privacy settings.
   See https://github.com/mucommander/mucommander/wiki/Reset-Security-&-Privacy-Settings-on-macOS for more details.
 - macOS: muCommander may not start on older versions of macOS due to incompatibility of the bundled JRE.
