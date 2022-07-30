@@ -40,6 +40,7 @@ Improvements:
 - Symbolic links are extracted properly from zip archives to the local file system.
 - Local symbolic links are packed properly into zip and tar archives.
 - Unpacking of 7z archives is now faster and more reliable using a newer native library.
+- The filename cell is rendered differently when renaming a file to reflect that the filename is editable when no text is selected.
 
 Localization:
 -
