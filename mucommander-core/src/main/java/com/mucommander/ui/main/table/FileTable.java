@@ -1531,7 +1531,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         public FilenameEditor(JTextField textField) {
             super(textField);
             this.filenameField = textField;
-            filenameField.setBorder(BorderFactory.createEmptyBorder());
             // Sets the font to the same one that's used for cell rendering (user-defined)
             filenameField.setFont(FileTableCellRenderer.getCellFont());
             filenameField.setFocusTraversalKeysEnabled(false);
@@ -1622,10 +1621,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             AbstractFile file = tableModel.getFileAtRow(editingRow);
             AbstractCopyDialog.selectDestinationFilename(file, file.getName(), 0).feedToPathField(filenameField);
 
-            filenameField.setBackground(cellRenderer.getBakgroundOfSelectedFileInInactiveTable());
-            filenameField.setSelectionColor(cellRenderer.getBakgroundOfNormalFileInInactiveTable());
-            filenameField.setForeground(cellRenderer.getForegroundOfSelectedFileInInactiveTable(editingRow, file));
-            filenameField.setSelectedTextColor(cellRenderer.getForegroundOfNormalFileInInactiveTable(editingRow, file));
+            filenameField.setBorder(BorderFactory.createLineBorder(cellRenderer.getBakgroundOfSelectedFileInInactiveTable()));
 
             // Request focus on text field
             filenameField.requestFocus();
