@@ -35,4 +35,4 @@ fi
 cd `dirname "$BASE_FOLDER"`
 
 # Starts mucommander.
-$JAVA -DGNOME_DESKTOP_SESSION_ID=$GNOME_DESKTOP_SESSION_ID -DKDE_FULL_SESSION=$KDE_FULL_SESSION -DKDE_SESSION_VERSION=$KDE_SESSION_VERSION -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander $@
+$JAVA -DGNOME_DESKTOP_SESSION_ID=$GNOME_DESKTOP_SESSION_ID -DKDE_FULL_SESSION=$KDE_FULL_SESSION -DKDE_SESSION_VERSION=$KDE_SESSION_VERSION --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED --add-exports java.desktop/com.apple.laf=ALL-UNNAMED  --add-exports java.desktop/com.apple.eio=ALL-UNNAMED -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander $@
