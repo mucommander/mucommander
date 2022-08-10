@@ -263,6 +263,8 @@ public class muCommander
                         "com.sun.java.browser.net," + //optional
                         "javax.annotation," +
                         "javax.activation," +
+                        "javax.servlet," +
+                        "javax.servlet.http," +
                         "sun.security.action," +
                         "com.apple.eawt," +
                         "com.apple.eio," +
