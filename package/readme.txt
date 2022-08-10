@@ -48,6 +48,7 @@ Localization:
 Bug fixes:
 - 'Move' action does not get stuck when an external file is dragged and dropped to the application.
 - Symbolic links are extracted from archive files to the right location rather than to the destination base folder.
+- Fix detection of 'skopeo' binary which is used in order to connect to container registries.
 
 Known issues:
 - Some translations may not be up-to-date.
