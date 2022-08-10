@@ -20,6 +20,7 @@ package com.mucommander.commons.file.protocol.registry;
 
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.process.ProcessRunner;
@@ -80,10 +81,22 @@ public class SkopeoCommandExecutor {
         return tempFolder;
     }
 
+    private static String getSkopeoPath() {
+        switch (OsFamily.getCurrent()) {
+            case MAC_OS:
+                return "/usr/local/bin/skopeo";
+            case LINUX:
+                return "/usr/bin/skopeo";
+            default:
+                return "skopeo";
+        }
+    }
+
     public static void execute(StringBuilder outputBuffer, String command, Credentials creds, String... args) throws IOException {
         LOGGER.debug("Executing skopeo command: " + command);
+
         List<String> tokens = new ArrayList<>(Arrays.asList(
-                "skopeo",
+                getSkopeoPath(),
                 "--insecure-policy",
                 "--override-os",
                 "linux", // TODO: make this configurable
