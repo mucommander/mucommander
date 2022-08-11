@@ -22,7 +22,7 @@ dependencies {
     api project(":mucommander-process")
     api project(":mucommander-translator")
 
-    comprise 'net.java.dev.jna:jna-platform:5.5.0'
+    comprise 'net.java.dev.jna:jna-platform:5.12.1'
     implementation 'com.googlecode.plist:dd-plist:1.23'
 
     // the java.desktop module that contains macOS-specific extensions
