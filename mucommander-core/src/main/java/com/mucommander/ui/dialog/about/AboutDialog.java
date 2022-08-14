@@ -47,10 +47,9 @@ import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.FluentPanel;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.GoToWebsiteAction;
-import com.mucommander.ui.action.impl.ShowAboutAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.theme.Theme;
@@ -98,7 +97,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
      * @param mainFrame frame this dialog is relative to.
      */
     public AboutDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ShowAboutAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.ShowAbout), mainFrame);
 
         // Initializes the dialog's content.
         Container contentPane = getContentPane();
@@ -245,7 +244,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 	}
 
 	private JButton createHomeButton() {
-		homeButton = new JButton(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID));
+		homeButton = new JButton(ActionProperties.getActionLabel(ActionType.GoToWebsite));
 		homeButton.addActionListener(this);
 		return homeButton;
 	}

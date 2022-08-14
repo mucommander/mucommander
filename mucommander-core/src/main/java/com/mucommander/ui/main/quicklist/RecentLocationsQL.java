@@ -24,6 +24,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.util.CollectionUtils;
 import com.mucommander.core.GlobalLocationHistory;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
@@ -41,7 +42,7 @@ public class RecentLocationsQL extends QuickListWithIcons<RecentLocationsQL.Rece
 
     public RecentLocationsQL(FolderPanel folderPanel) {
         super(folderPanel,
-                ActionProperties.getActionLabel(ShowRecentLocationsQLAction.Descriptor.ACTION_ID),
+                ActionProperties.getActionLabel(ActionType.ShowRecentLocationsQL),
                 Translator.get("recent_locations_quick_list.empty_message"));
 
         this.folderPanel = folderPanel;

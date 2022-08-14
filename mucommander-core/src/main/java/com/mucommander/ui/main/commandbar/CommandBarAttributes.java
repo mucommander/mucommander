@@ -18,6 +18,9 @@
 package com.mucommander.ui.main.commandbar;
 
 import javax.swing.*;
+
+import com.mucommander.desktop.ActionType;
+
 import java.awt.event.KeyEvent;
 import java.util.WeakHashMap;
 
@@ -39,24 +42,24 @@ public class CommandBarAttributes {
     /** Command bar default actions */
     private static final String DEFAULT_ACTION_IDS[] = 
     {
-    	com.mucommander.ui.action.impl.ViewAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.EditAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.CopyAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.MoveAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.MkdirAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.DeleteAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.RefreshAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.CloseWindowAction.Descriptor.ACTION_ID
+    	ActionType.View.toString(),
+    	ActionType.Edit.toString(),
+    	ActionType.Copy.toString(),
+    	ActionType.Move.toString(),
+    	ActionType.Mkdir.toString(),
+    	ActionType.Delete.toString(),
+    	ActionType.Refresh.toString(),
+    	ActionType.CloseWindow.toString()
     };
     /** Command bar default alternate actions */
     private static final String DEFAULT_ALTERNATE_ACTION_IDS[] =
     {
     	null,
     	null,
-    	com.mucommander.ui.action.impl.LocalCopyAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.MkfileAction.Descriptor.ACTION_ID,
-    	com.mucommander.ui.action.impl.PermanentDeleteAction.Descriptor.ACTION_ID,
+    	ActionType.LocalCopy.toString(),
+    	ActionType.Rename.toString(),
+    	ActionType.Mkfile.toString(),
+    	ActionType.PermanentDelete.toString(),
     	null,
     	null
     };

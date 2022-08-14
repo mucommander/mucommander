@@ -19,6 +19,8 @@ package com.mucommander.ui.action;
 
 import javax.swing.*;
 
+import com.mucommander.desktop.ActionType;
+
 /**
  * Each MuAction is registered with an object of ActionDescriptor type
  * that provides its properties. ActionDescriptor is an interface that 

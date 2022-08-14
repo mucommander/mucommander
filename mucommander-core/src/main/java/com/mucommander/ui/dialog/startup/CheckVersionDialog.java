@@ -36,6 +36,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.SelfUpdateJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -76,7 +77,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
 
         OK(Translator.get("ok")),
         // TODO not nice (to load the name into enum and in this way)
-        GO_TO_WEBSITE(ActionProperties.getActionLabel(GoToWebsiteAction.Descriptor.ACTION_ID)),
+        GO_TO_WEBSITE(ActionProperties.getActionLabel(ActionType.GoToWebsite)),
         INSTALL_AND_RESTART("COMMENTED-OUT");
 
         private final String actionName;

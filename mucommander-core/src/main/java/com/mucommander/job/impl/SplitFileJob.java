@@ -38,6 +38,7 @@ import com.mucommander.commons.io.ChecksumInputStream;
 import com.mucommander.commons.io.FileTransferError;
 import com.mucommander.commons.io.FileTransferException;
 import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
@@ -184,7 +185,7 @@ public class SplitFileJob extends AbstractCopyJob {
                     out.close();
                     out = null;
                     sizeLeft -= e.getBytesWritten();
-                    showErrorDialog(ActionProperties.getActionLabel(SplitFileAction.Descriptor.ACTION_ID),
+                    showErrorDialog(ActionProperties.getActionLabel(ActionType.SplitFile),
                             Translator.get("split_file_dialog.insert_new_media"),
                             Arrays.asList(FileJobAction.OK, FileJobAction.CANCEL));
                     if (getState() == FileJobState.INTERRUPTED) {

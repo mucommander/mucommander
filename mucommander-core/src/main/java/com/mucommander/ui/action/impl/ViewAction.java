@@ -19,6 +19,7 @@ package com.mucommander.ui.action.impl;
 
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.*;
 import com.mucommander.ui.main.MainFrame;
 
@@ -51,9 +52,7 @@ public class ViewAction extends InternalViewAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "View";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.View.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
 

@@ -22,6 +22,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
 
@@ -47,6 +48,10 @@ public abstract class MuActionsPopupMenu extends JPopupMenu {
         return add(ActionManager.getActionInstance(actionId, mainFrame));
     }
 
+    protected JMenuItem addAction(ActionType actionType) {
+        return addAction(actionType.toString());
+    }
+    
     @Override
     public final JMenuItem add(Action a) {
     	JMenuItem item = super.add(a);

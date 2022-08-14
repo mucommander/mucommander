@@ -40,6 +40,7 @@ import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.SendMailJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -80,7 +81,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
 	
 	
     public EmailFilesDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, ActionProperties.getActionLabel(EmailAction.Descriptor.ACTION_ID), files);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.Email), files);
 
         // Notifies the user that mail preferences are not set and brings the preferences dialog 
         if(!SendMailJob.mailPreferencesSet()) {

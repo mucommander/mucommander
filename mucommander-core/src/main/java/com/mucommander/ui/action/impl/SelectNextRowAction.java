@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -50,10 +51,8 @@ public class SelectNextRowAction extends SelectForwardAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "SelectNextRow";
-
         public String getId() {
-            return ACTION_ID;
+            return ActionType.SelectNextRow.toString();
         }
 
         public ActionCategory getCategory() {

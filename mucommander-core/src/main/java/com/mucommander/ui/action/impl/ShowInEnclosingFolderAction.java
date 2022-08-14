@@ -23,6 +23,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -58,9 +59,7 @@ public class ShowInEnclosingFolderAction extends SelectedFileAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "ShowInEnclosingFolder";
-        
-        public String getId() { return ACTION_ID; }
+        public String getId() { return ActionType.ShowInEnclosingFolder.toString(); }
 
         public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 

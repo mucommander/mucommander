@@ -28,6 +28,7 @@ import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.CopyJob;
 import com.mucommander.job.impl.CopyJob.TransferMode;
 import com.mucommander.job.impl.TransferFileJob;
@@ -55,7 +56,7 @@ public class CopyDialog extends AbstractCopyDialog {
      */
     public CopyDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
-              ActionProperties.getActionLabel(CopyAction.Descriptor.ACTION_ID),
+              ActionProperties.getActionLabel(ActionType.Copy),
               Translator.get("copy_dialog.destination"),
               Translator.get("copy"),
               Translator.get("copy_dialog.error_title"));

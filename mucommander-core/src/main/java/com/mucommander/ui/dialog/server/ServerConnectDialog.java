@@ -53,6 +53,7 @@ import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
@@ -117,7 +118,7 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
      * @param selectPanelClass class of the ServerPanel to select
      */
     public ServerConnectDialog(FolderPanel folderPanel, Class<? extends ServerPanel> selectPanelClass) {
-        super(folderPanel.getMainFrame(), ActionProperties.getActionLabel(ConnectToServerAction.Descriptor.ACTION_ID), folderPanel.getMainFrame());
+        super(folderPanel.getMainFrame(), ActionProperties.getActionLabel(ActionType.ConnectToServer), folderPanel.getMainFrame());
         this.folderPanel = folderPanel;
         lastPanelClass = selectPanelClass;
 

@@ -18,6 +18,7 @@
 package com.mucommander.ui.main.commandbar;
 
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
 
@@ -140,8 +141,8 @@ public class CommandBar extends JPanel implements KeyListener, MouseListener, Co
         if (DesktopManager.isRightMouseButton(e)) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
-            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.ToggleCommandBarAction.Descriptor.ACTION_ID, mainFrame));
-            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.CustomizeCommandBarAction.Descriptor.ACTION_ID, mainFrame));
+            popupMenu.add(ActionManager.getActionInstance(ActionType.ToggleCommandBar, mainFrame));
+            popupMenu.add(ActionManager.getActionInstance(ActionType.CustomizeCommandBar, mainFrame));
 			// Get the click location in  the CommandBar's coordinate system. 
 			// The location returned by the MouseEvent is in the source component (button) coordinate system. it's converted using SwingUtilities to the CommandBar's coordinate system.
 			Point clickLocation = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), this);

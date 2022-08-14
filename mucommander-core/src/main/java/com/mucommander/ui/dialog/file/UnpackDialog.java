@@ -21,11 +21,11 @@ package com.mucommander.ui.dialog.file;
 import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.job.impl.UnpackJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.UnpackAction;
 import com.mucommander.ui.main.MainFrame;
 
 
@@ -44,7 +44,7 @@ public class UnpackDialog extends TransferDestinationDialog {
      */
     public UnpackDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame, files,
-        	  ActionProperties.getActionLabel(UnpackAction.Descriptor.ACTION_ID),
+        	  ActionProperties.getActionLabel(ActionType.Unpack),
               Translator.get("unpack_dialog.destination"),
               Translator.get("unpack"),
               Translator.get("unpack_dialog.error_title"),

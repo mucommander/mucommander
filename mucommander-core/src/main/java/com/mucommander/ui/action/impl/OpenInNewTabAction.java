@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -86,9 +87,7 @@ public class OpenInNewTabAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenInNewTab";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.OpenInNewTab.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 

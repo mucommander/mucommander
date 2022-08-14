@@ -24,6 +24,7 @@ import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.DeleteJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -69,7 +70,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
 
 
     public DeleteDialog(MainFrame mainFrame, FileSet files, boolean deletePermanently) {
-        super(mainFrame, ActionProperties.getActionLabel(DeleteAction.Descriptor.ACTION_ID), files);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.Delete), files);
 
         this.mainFrame = mainFrame;
 
@@ -132,7 +133,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         informationPane.getMainLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation":"delete_dialog.permanently_delete.confirmation"));
         informationPane.getCaptionLabel().setText(Translator.get(moveToTrash?"delete_dialog.move_to_trash.confirmation_details":"this_operation_cannot_be_undone"));
         informationPane.setIcon(moveToTrash?null: InformationPane.getPredefinedIcon(InformationPane.WARNING_ICON));
-        setTitle(ActionManager.getActionInstance(moveToTrash?DeleteAction.Descriptor.ACTION_ID:PermanentDeleteAction.Descriptor.ACTION_ID, mainFrame).getLabel());
+        setTitle(ActionManager.getActionInstance(moveToTrash?ActionType.Delete:ActionType.PermanentDelete, mainFrame).getLabel());
     }
 
 

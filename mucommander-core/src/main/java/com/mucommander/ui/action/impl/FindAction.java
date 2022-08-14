@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.search.SearchDialog;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -52,13 +53,11 @@ public class FindAction extends MuAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "Find";
-
-        public String getId() { return ACTION_ID; }
+        public String getId() { return ActionType.Find.toString(); }
 
         public ActionCategory getCategory() { return ActionCategory.FILES; }
 
-        public KeyStroke getDefaultAltKeyStroke() { return null; }
+        public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.META_DOWN_MASK); }
 
         public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK); }
     }

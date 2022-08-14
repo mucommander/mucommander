@@ -39,8 +39,6 @@ public class RecallWindow4Action extends RecallWindowAction {
     }
 
     public static class Descriptor extends RecallWindowAction.Descriptor {
-        public static final String ACTION_ID = RecallWindowAction.Descriptor.ACTION_ID+"4";
-
         public Descriptor() {
             super(4);
         }

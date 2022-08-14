@@ -43,6 +43,7 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.text.SizeConstrainedDocument;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -75,11 +76,11 @@ public class ChangePermissionsDialog extends JobDialog
 
 
     public ChangePermissionsDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, ActionProperties.getActionLabel(ChangePermissionsAction.Descriptor.ACTION_ID), files);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.ChangePermissions), files);
 
         YBoxPanel mainPanel = new YBoxPanel();
 
-        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ChangePermissionsAction.Descriptor.ACTION_ID)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionLabel(ActionType.ChangePermissions)+" :"));
         mainPanel.addSpace(10);
 
         JPanel gridPanel = new JPanel(new GridLayout(4, 4));

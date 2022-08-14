@@ -34,6 +34,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.SchemeHandler;
 import com.mucommander.commons.file.osgi.FileProtocolService;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.os.api.CoreService;
 import com.mucommander.osgi.FileEditorServiceTracker;
 import com.mucommander.osgi.FileViewerServiceTracker;
@@ -204,7 +205,7 @@ public class Activator implements BundleActivator {
                 if(mainFrame.getNoEventsMode())
                     return;
 
-                ActionManager.performAction(com.mucommander.ui.action.impl.ShowPreferencesAction.Descriptor.ACTION_ID, mainFrame);
+                ActionManager.performAction(ActionType.ShowPreferences, mainFrame);
             }
 
             @Override

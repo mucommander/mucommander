@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -78,10 +79,8 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
     }
 
     public static final class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "ShowFilePopupMenu";
-
         public String getId() {
-            return ACTION_ID;
+            return ActionType.ShowFilePopupMenu.toString();
         }
 
         public ActionCategory getCategory() {
@@ -98,7 +97,7 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
 
         @Override
         public String getLabel() {
-            return Translator.get(ActionProperties.getActionLabelKey(ShowFilePopupMenuAction.Descriptor.ACTION_ID));
+            return Translator.get(ActionProperties.getActionLabelKey(ActionType.ShowFilePopupMenu));
         }
     }
 }

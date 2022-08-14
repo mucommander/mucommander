@@ -33,6 +33,7 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -80,7 +81,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 					}
 
 					if (DesktopManager.isMiddleMouseButton(e)) {
-						ActionManager.performAction(com.mucommander.ui.action.impl.CloseTabAction.Descriptor.ACTION_ID, FileTableTabbedPane.this.mainFrame);
+						ActionManager.performAction(ActionType.CloseTab, FileTableTabbedPane.this.mainFrame);
 					}
 				}
 			}

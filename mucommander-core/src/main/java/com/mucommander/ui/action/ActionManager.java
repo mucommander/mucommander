@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.impl.*;
 import com.mucommander.ui.main.MainFrame;
 
@@ -323,6 +324,10 @@ public class ActionManager {
         return getActionInstance(new ActionParameters(actionId), mainFrame);
     }
 
+    public static MuAction getActionInstance(ActionType actionId, MainFrame mainFrame) {
+        return getActionInstance(actionId.toString(), mainFrame);
+    }
+
     /**
      * Returns an instance of the MuAction class denoted by the given ActionParameters and for the
      * specified MainFrame. If an existing instance corresponding to the same ActionParameters and MainFrame is found,
@@ -454,6 +459,10 @@ public class ActionManager {
      */
     public static boolean performAction(String actionId, MainFrame mainFrame) {
         return performAction(new ActionParameters(actionId), mainFrame);
+    }
+
+    public static boolean performAction(ActionType actionType, MainFrame mainFrame) {
+        return performAction(actionType.toString(), mainFrame);
     }
 
     /**

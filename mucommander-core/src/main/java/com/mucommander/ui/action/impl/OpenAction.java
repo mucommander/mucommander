@@ -34,6 +34,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -197,7 +198,7 @@ public class OpenAction extends MuAction {
 			outputMessages -> outputMessages.ifPresent(
 				s -> {
 					if (MuConfigurations.getPreferences().getVariable(MuPreference.VIEW_ON_ERROR, MuPreferences.DEFAULT_VIEW_ON_ERROR)) {
-						ActionManager.getActionInstance(ViewAction.Descriptor.ACTION_ID, mainFrame).performAction();
+						ActionManager.getActionInstance(ActionType.View, mainFrame).performAction();
 					} else {
 						InformationDialog.showErrorDialog(mainFrame, s);
 					}
@@ -212,9 +213,7 @@ public class OpenAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "Open";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.Open.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 

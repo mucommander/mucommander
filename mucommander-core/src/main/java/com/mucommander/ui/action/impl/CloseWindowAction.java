@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -48,7 +49,7 @@ public class CloseWindowAction extends MuAction {
     public void performAction() {
         // Closing the last window is equivalent to quitting the application: perform QuitAction in that case
         if(WindowManager.getMainFrames().size()==1)
-            ActionManager.performAction(QuitAction.Descriptor.ACTION_ID, mainFrame);
+            ActionManager.performAction(ActionType.Quit, mainFrame);
         // Simply dispose the MainFrame
         else
             mainFrame.dispose();
@@ -60,9 +61,7 @@ public class CloseWindowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "CloseWindow";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.CloseWindow.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
 

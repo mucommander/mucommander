@@ -31,6 +31,7 @@ import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -86,10 +87,8 @@ public class RevealInDesktopAction extends ActiveTabAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "RevealInDesktop";
-
         public String getId() {
-            return ACTION_ID;
+            return ActionType.RevealInDesktop.toString();
         }
 
         public ActionCategory getCategory() {
@@ -106,7 +105,7 @@ public class RevealInDesktopAction extends ActiveTabAction {
 
         @Override
         public String getLabel() {
-            return Translator.get(ActionProperties.getActionLabelKey(RevealInDesktopAction.Descriptor.ACTION_ID),
+            return Translator.get(ActionProperties.getActionLabelKey(ActionType.RevealInDesktop),
                     DesktopManager.canOpenInFileManager() ? DesktopManager.getFileManagerName()
                             : Translator.get("file_manager"));
         }

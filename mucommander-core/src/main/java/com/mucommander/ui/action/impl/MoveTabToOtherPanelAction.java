@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -61,9 +62,7 @@ public class MoveTabToOtherPanelAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MoveTabToOtherPanel";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.MoveTabToOtherPanel.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
 

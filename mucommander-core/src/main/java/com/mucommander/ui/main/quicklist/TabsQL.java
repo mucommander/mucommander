@@ -24,9 +24,9 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ShowTabsQLAction;
 import com.mucommander.ui.icon.EmptyIcon;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.FolderPanel;
@@ -52,7 +52,7 @@ public class TabsQL extends QuickListWithIcons<FileTableTab> {
 	Icon unlockedTabIcon = new EmptyIcon(8, 9);
 	
 	public TabsQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowTabsQLAction.Descriptor.ACTION_ID), Translator.get("tabs_quick_list.empty_message"));
+		super(folderPanel, ActionProperties.getActionLabel(ActionType.ShowTabsQL), Translator.get("tabs_quick_list.empty_message"));
 		
 		this.folderPanel = folderPanel;
 	}

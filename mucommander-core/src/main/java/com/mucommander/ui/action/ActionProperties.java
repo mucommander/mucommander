@@ -18,6 +18,9 @@
 package com.mucommander.ui.action;
 
 import javax.swing.*;
+
+import com.mucommander.desktop.ActionType;
+
 import java.util.*;
 
 /**
@@ -161,7 +164,11 @@ public class ActionProperties {
 	public static String getActionLabel(String actionId) {
 		return getNullSafeActionDescriptor(actionId).getLabel();
 	}
-	
+
+	public static String getActionLabel(ActionType actionId) {
+        return getNullSafeActionDescriptor(actionId.toString()).getLabel();
+    }
+
 	/**
 	 * Getter for MuAction's label key.
 	 * 
@@ -170,7 +177,11 @@ public class ActionProperties {
 	public static String getActionLabelKey(String actionId) {
 		return getNullSafeActionDescriptor(actionId).getLabelKey();
 	}
-	
+
+	public static String getActionLabelKey(ActionType actionId) {
+	    return getActionLabelKey(actionId.toString());
+	}
+
 	/**
 	 * Getter for MuAction's icon.
 	 *  
@@ -190,7 +201,11 @@ public class ActionProperties {
 	public static String getActionTooltip(String actionId) {
 		return getNullSafeActionDescriptor(actionId).getTooltip();
 	}
-	
+
+	public static String getActionTooltip(ActionType actionType) {
+        return getNullSafeActionDescriptor(actionType.toString()).getTooltip();
+    }
+
 	/**
 	 * Getter for all existed categories.
 	 * Existed category means an actions category which at least one of its actions is registered.

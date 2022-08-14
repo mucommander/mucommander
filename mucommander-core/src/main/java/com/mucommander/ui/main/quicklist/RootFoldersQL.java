@@ -21,9 +21,9 @@ import javax.swing.Icon;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ShowRootFoldersQLAction;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
@@ -38,7 +38,7 @@ public class RootFoldersQL extends QuickListWithIcons<AbstractFile> {
 	private FolderPanel folderPanel;
 	
 	public RootFoldersQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowRootFoldersQLAction.Descriptor.ACTION_ID), Translator.get("roots_quick_list.empty_message"));
+		super(folderPanel, ActionProperties.getActionLabel(ActionType.ShowRootFoldersQL), Translator.get("roots_quick_list.empty_message"));
 		
 		this.folderPanel = folderPanel;
 	}

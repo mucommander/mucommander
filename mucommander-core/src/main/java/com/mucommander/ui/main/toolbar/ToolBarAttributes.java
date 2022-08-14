@@ -19,6 +19,7 @@ package com.mucommander.ui.main.toolbar;
 
 import java.util.WeakHashMap;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.impl.AddBookmarkAction;
 import com.mucommander.ui.action.impl.NewTabAction;
 import com.mucommander.ui.action.impl.ConnectToServerAction;
@@ -62,41 +63,41 @@ public class ToolBarAttributes {
     
     /** Default command bar actions: Class instances or null to signify a separator */
     private final static String[] DEFAULT_TOOLBAR_ACTIONS = new String[] {
-            NewWindowAction.Descriptor.ACTION_ID,
-            NewTabAction.Descriptor.ACTION_ID,
+            ActionType.NewWindow.toString(),
+            ActionType.NewTab.toString(),
             null,
-            GoBackAction.Descriptor.ACTION_ID,
-            GoForwardAction.Descriptor.ACTION_ID,
+            ActionType.GoBack.toString(),
+            ActionType.GoForward.toString(),
             null,
-            GoToParentAction.Descriptor.ACTION_ID,
-            GoToHomeAction.Descriptor.ACTION_ID,
+            ActionType.GoToParent.toString(),
+            ActionType.GoToHome.toString(),
             null,
-            StopAction.Descriptor.ACTION_ID,
+            ActionType.Stop.toString(),
             null,
-            MarkGroupAction.Descriptor.ACTION_ID,
-            UnmarkGroupAction.Descriptor.ACTION_ID,
+            ActionType.MarkGroup.toString(),
+            ActionType.UnmarkGroup.toString(),
             null,
-            SwapFoldersAction.Descriptor.ACTION_ID,
-            SetSameFolderAction.Descriptor.ACTION_ID,
+            ActionType.SwapFolders.toString(),
+            ActionType.SetSameFolder.toString(),
             null,
-            PackAction.Descriptor.ACTION_ID,
-            UnpackAction.Descriptor.ACTION_ID,
+            ActionType.Pack.toString(),
+            ActionType.Unpack.toString(),
             null,
-            FindAction.Descriptor.ACTION_ID,
+            ActionType.Find.toString(),
             null,
-            AddBookmarkAction.Descriptor.ACTION_ID,
-            EditBookmarksAction.Descriptor.ACTION_ID,
-            EditCredentialsAction.Descriptor.ACTION_ID,
+            ActionType.AddBookmark.toString(),
+            ActionType.EditBookmarks.toString(),
+            ActionType.EditCredentials.toString(),
             null,
-            ConnectToServerAction.Descriptor.ACTION_ID,
-            ShowServerConnectionsAction.Descriptor.ACTION_ID,
-            RunCommandAction.Descriptor.ACTION_ID,
-            EmailAction.Descriptor.ACTION_ID,
+            ActionType.ConnectToServer.toString(),
+            ActionType.ShowServerConnections.toString(),
+            ActionType.RunCommand.toString(),
+            ActionType.Email.toString(),
             null,
-            RevealInDesktopAction.Descriptor.ACTION_ID,
-            ShowFilePropertiesAction.Descriptor.ACTION_ID,
+            ActionType.RevealInDesktop.toString(),
+            ActionType.ShowFileProperties.toString(),
             null,
-            ShowPreferencesAction.Descriptor.ACTION_ID
+            ActionType.ShowPreferences.toString()
     };
 
     /**

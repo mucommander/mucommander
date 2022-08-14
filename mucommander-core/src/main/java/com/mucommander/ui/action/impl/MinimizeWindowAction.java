@@ -24,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -55,9 +56,7 @@ public class MinimizeWindowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MinimizeWindow";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.MinimizeWindow.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
 
@@ -68,7 +67,7 @@ public class MinimizeWindowAction extends MuAction {
         @Override
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
-            String macLabelKey = ActionProperties.getActionLabelKey(ACTION_ID)+".mac_os_x";
+            String macLabelKey = ActionProperties.getActionLabelKey(ActionType.MinimizeWindow)+".mac_os_x";
             if(OsFamily.MAC_OS.isCurrent() && Translator.hasValue(macLabelKey, false))
                 return Translator.get(macLabelKey);
 

@@ -25,6 +25,7 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.BatchRenameJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -113,7 +114,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
      * @param files a list of files to rename
      */
     public BatchRenameDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, ActionProperties.getActionLabel(BatchRenameAction.Descriptor.ACTION_ID), null);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.BatchRename), null);
         this.mainFrame = mainFrame;
         this.files = files;
         for (AbstractFile f : files) {        	

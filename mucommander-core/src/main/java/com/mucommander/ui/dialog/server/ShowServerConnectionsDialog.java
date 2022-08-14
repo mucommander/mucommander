@@ -24,9 +24,9 @@ import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
 import com.mucommander.ui.main.MainFrame;
 
 import javax.swing.*;
@@ -58,7 +58,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
     
     public ShowServerConnectionsDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ShowServerConnectionsAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.ShowServerConnections), mainFrame);
 
         this.mainFrame = mainFrame;
 

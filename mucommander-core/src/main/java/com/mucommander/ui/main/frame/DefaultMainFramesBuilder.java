@@ -34,6 +34,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
@@ -148,7 +149,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
         // Retrieve the Frame's SinglePanelView toggle state...
         if (MuSnapshot.getSnapshot().getBooleanVariable(MuSnapshot.getSinglePanelViewToggleState(index))) {
-            ActionManager.performAction(ToggleUseSinglePanelAction.Descriptor.ACTION_ID, mainFrame);
+            ActionManager.performAction(ActionType.ToggleUseSinglePanel, mainFrame);
         }
 
         return mainFrame;

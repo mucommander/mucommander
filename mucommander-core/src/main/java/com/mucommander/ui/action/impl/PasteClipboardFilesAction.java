@@ -25,6 +25,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.CopyJob;
 import com.mucommander.job.impl.CopyJob.TransferMode;
 import com.mucommander.text.Translator;
@@ -74,9 +75,7 @@ public class PasteClipboardFilesAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "PasteClipboardFiles";
-
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.PasteClipboardFiles.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 

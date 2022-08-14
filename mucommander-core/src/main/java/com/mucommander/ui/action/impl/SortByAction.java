@@ -126,7 +126,7 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
         private Column column;
         private KeyStroke defaultKeyStroke;
 
-        public Descriptor(Column column, KeyStroke defaultKeyStroke) {
+        protected Descriptor(Column column, KeyStroke defaultKeyStroke) {
             this.column = column;
             this.defaultKeyStroke = defaultKeyStroke;
         }

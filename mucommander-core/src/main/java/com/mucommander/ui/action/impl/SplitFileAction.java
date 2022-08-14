@@ -26,6 +26,7 @@ import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.filter.FileOperationFilter;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -64,9 +65,7 @@ public class SplitFileAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "SplitFile";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.SplitFile.toString(); }
 
 		public ActionCategory getCategory() { return null; }
 

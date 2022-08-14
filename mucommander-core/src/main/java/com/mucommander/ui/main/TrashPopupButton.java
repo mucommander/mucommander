@@ -20,6 +20,7 @@ package com.mucommander.ui.main;
 import com.mucommander.commons.util.ui.button.RolloverButtonAdapter;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.EmptyTrashAction;
 import com.mucommander.ui.action.impl.OpenTrashAction;
@@ -65,10 +66,10 @@ class TrashPopupButton extends PopupButton {
         AbstractTrash trash = DesktopManager.getTrash();
         if(trash!=null) {
             if(trash.canOpen())
-                popupMenu.add(ActionManager.getActionInstance(OpenTrashAction.Descriptor.ACTION_ID, mainFrame));
+                popupMenu.add(ActionManager.getActionInstance(ActionType.OpenTrash, mainFrame));
 
             if(trash.canEmpty()) {
-                JMenuItem emptyTrashItem = new JMenuItem(ActionManager.getActionInstance(EmptyTrashAction.Descriptor.ACTION_ID, mainFrame));
+                JMenuItem emptyTrashItem = new JMenuItem(ActionManager.getActionInstance(ActionType.EmptyTrash, mainFrame));
 
                 // Retrieve the number of items that the trash contains, -1 if this information is not available.
                 int itemCount = trash.getItemCount();

@@ -46,6 +46,7 @@ import com.mucommander.commons.util.ui.combobox.SaneComboBox;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.SplitFileJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
@@ -106,7 +107,7 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
      * @param destFolder default destination folder 
      */
     public SplitFileDialog(MainFrame mainFrame, AbstractFile file, AbstractFile destFolder) {
-        super(mainFrame, ActionProperties.getActionLabel(SplitFileAction.Descriptor.ACTION_ID), new FileSet());
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.SplitFile), new FileSet());
         this.file = file;
         this.destFolder = destFolder;
         initialize();

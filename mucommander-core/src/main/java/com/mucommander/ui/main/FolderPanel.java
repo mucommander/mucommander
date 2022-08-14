@@ -47,6 +47,7 @@ import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.core.ChangeFolderThread;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.core.LocationChanger;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.FocusNextAction;
@@ -244,12 +245,12 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      */
     private void registerCycleThruFolderPanelAction(JComponent component) {
         ActionKeymap.registerActionAccelerators(
-                ActionManager.getActionInstance(FocusNextAction.Descriptor.ACTION_ID, mainFrame),
+                ActionManager.getActionInstance(ActionType.FocusNext, mainFrame),
                 component,
                 JComponent.WHEN_FOCUSED);
 
         ActionKeymap.registerActionAccelerators(
-                ActionManager.getActionInstance(FocusPreviousAction.Descriptor.ACTION_ID, mainFrame),
+                ActionManager.getActionInstance(ActionType.FocusPrevious, mainFrame),
                 component,
                 JComponent.WHEN_FOCUSED);
     }

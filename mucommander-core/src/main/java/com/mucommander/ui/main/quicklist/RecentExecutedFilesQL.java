@@ -25,6 +25,7 @@ import javax.swing.Icon;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
@@ -47,7 +48,7 @@ public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
 	private FolderPanel folderPanel;
 	
 	public RecentExecutedFilesQL(FolderPanel folderPanel) {
-		super(folderPanel, ActionProperties.getActionLabel(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID), Translator.get("recent_executed_files_quick_list.empty_message"));
+		super(folderPanel, ActionProperties.getActionLabel(ActionType.ShowRecentExecutedFilesQL), Translator.get("recent_executed_files_quick_list.empty_message"));
 		
 		this.folderPanel = folderPanel;
 	}

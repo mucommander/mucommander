@@ -51,6 +51,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -524,7 +525,7 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         if (DesktopManager.isRightMouseButton(e)) {
             //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
             JPopupMenu popupMenu = new JPopupMenu();
-            popupMenu.add(ActionManager.getActionInstance(com.mucommander.ui.action.impl.ToggleStatusBarAction.Descriptor.ACTION_ID, mainFrame));
+            popupMenu.add(ActionManager.getActionInstance(ActionType.ToggleStatusBar, mainFrame));
             popupMenu.show(this, e.getX(), e.getY());
             popupMenu.setVisible(true);
         }
