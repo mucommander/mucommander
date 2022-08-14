@@ -315,7 +315,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         ArrayList<JMenuItem> itemsV = new ArrayList<JMenuItem>();
 
         for (int i = 0; i < nbVolumes; i++) {
-            action = new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), volumes[i]);
+            action = new CustomOpenLocationAction(mainFrame, new Hashtable<>(), volumes[i]);
             volumeName = volumes[i].getName();
 
             // If several volumes have the same filename, use the volume's path for the action's label instead of the
@@ -356,7 +356,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         if (!bookmarks.isEmpty()) {
             for (Bookmark bookmark : bookmarks) {
                 item = popupMenu
-                        .add(new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmark));
+                        .add(new CustomOpenLocationAction(mainFrame, new Hashtable<>(), bookmark));
                 setMnemonic(item, mnemonicHelper);
             }
         } else {
@@ -369,7 +369,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // Add 'Network shares' shortcut
         if (FileFactory.isRegisteredProtocol(FileProtocols.SMB)) {
             action = new CustomOpenLocationAction(mainFrame,
-                    new Hashtable<String, Object>(),
+                    new Hashtable<>(),
                     new Bookmark(Translator.get("drive_popup.network_shares"), "smb:///"));
             action.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NETWORK_ICON_NAME));
             setMnemonic(popupMenu.add(action), mnemonicHelper);
@@ -379,7 +379,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         setMnemonic(popupMenu.add(new BonjourMenu() {
             @Override
             public MuAction getMenuItemAction(BonjourService bs) {
-                return new CustomOpenLocationAction(mainFrame, new Hashtable<String, Object>(), bs);
+                return new CustomOpenLocationAction(mainFrame, new Hashtable<>(), bs);
             }
         }), mnemonicHelper);
         popupMenu.add(new JSeparator());

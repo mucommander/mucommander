@@ -25,7 +25,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.impl.BatchRenameAction.Descriptor;
+import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
@@ -157,6 +157,6 @@ public class OpenLocationAction extends ActiveTabAction {
 
 	@Override
 	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
+		return new ActionProperties.NullActionDescriptor();
 	}
 }

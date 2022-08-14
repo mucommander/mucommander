@@ -45,7 +45,6 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.GoBackAction;
 import com.mucommander.ui.action.impl.GoForwardAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
-import com.mucommander.ui.action.impl.ToggleToolBarAction;
 import com.mucommander.ui.button.NonFocusableButton;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.icon.IconManager;
@@ -284,15 +283,15 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
             FileURL history[] = action instanceof GoBackAction?
                     mainFrame.getActivePanel().getFolderHistory().getBackFolders()
                     :mainFrame.getActivePanel().getFolderHistory().getForwardFolders();
-            int historyLen = history.length;        
 
             // If no back/forward folder, do not display popup menu
             if(history.length==0)
                 return null;
 
             JPopupMenu popupMenu = new JPopupMenu();
+            int historyLen = history.length;
             for(int i=0; i<historyLen; i++)
-                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), history[i]));
+                popupMenu.add(new OpenLocationAction(mainFrame, new Hashtable<>(), history[i]));
 
             return popupMenu;
         }

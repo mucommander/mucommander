@@ -77,7 +77,6 @@ public enum ActionType {
     OpenInBothPanels("OpenInBothPanels"),
     OpenInNewTab("OpenInNewTab"),
     OpenInOtherPanel("OpenInOtherPanel"),
-//    OpenLocation(),
     OpenNatively("OpenNatively"),
     OpenTrash("OpenTrash"),
     OpenURLInBrowser("OpenURLInBrowser"),
