@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -54,7 +51,5 @@ public class CloseOtherTabsAction extends MuAction {
 		public String getId() { return ActionType.CloseOtherTabs.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

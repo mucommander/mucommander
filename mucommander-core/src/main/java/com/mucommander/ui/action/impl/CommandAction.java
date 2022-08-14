@@ -19,11 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -37,6 +32,9 @@ import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nicolas Rinaudo
@@ -118,7 +116,5 @@ public class CommandAction extends MuAction {
     	public String getLabel() { return label; }
 
     	public ActionCategory getCategory() { return ActionCategory.COMMANDS; }
-
-    	public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

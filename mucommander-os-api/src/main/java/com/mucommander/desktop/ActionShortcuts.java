@@ -242,4 +242,37 @@ public class ActionShortcuts {
             return null;
         }
     }
+
+    public KeyStroke getDefaultAltKeyStroke(ActionType actionId) {
+        switch(actionId) {
+        case CloseWindow:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.META_DOWN_MASK);
+        case CopyFilesToClipboard:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK);
+        case Delete:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+        case GoToParent:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
+        case GoToRoot:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SLASH, KeyEvent.CTRL_DOWN_MASK);
+        case MarkSelectedFile:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0);
+        case NextTab:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK);
+        case Open:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
+        case PasteClipboardFiles:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK);
+        case PermanentDelete:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK);
+        case PreviousTab:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK);
+        case ShowFilePopupMenu:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_CONTEXT_MENU, 0);
+        case SwitchActiveTable:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_DOWN_MASK);
+        default:
+            return null;
+        }
+    }
 }

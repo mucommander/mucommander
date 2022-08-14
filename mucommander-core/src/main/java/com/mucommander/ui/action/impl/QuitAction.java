@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.Application;
 import com.mucommander.desktop.ActionType;
@@ -58,7 +55,5 @@ public class QuitAction extends MuAction {
 		public String getId() { return ActionType.Quit.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

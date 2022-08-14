@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.ActionType;
@@ -72,8 +69,6 @@ public class CopyFileBaseNamesAction extends SelectedFilesAction {
 		public String getId() {	return ActionType.CopyFileBaseNames.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
-
-		public KeyStroke getDefaultAltKeyStroke() {	return null; }
 	}
 
 }

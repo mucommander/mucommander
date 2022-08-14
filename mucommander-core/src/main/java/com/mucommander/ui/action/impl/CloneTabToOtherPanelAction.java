@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -55,8 +53,6 @@ public class CloneTabToOtherPanelAction extends MuAction {
 		public String getId() { return ActionType.CloneTabToOtherPanel.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }
 

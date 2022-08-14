@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
@@ -67,10 +64,6 @@ public class OpenTrashAction extends MuAction {
 
         public ActionCategory getCategory() {
             return ActionCategory.NAVIGATION;
-        }
-
-        public KeyStroke getDefaultAltKeyStroke() {
-            return null;
         }
     }
 }

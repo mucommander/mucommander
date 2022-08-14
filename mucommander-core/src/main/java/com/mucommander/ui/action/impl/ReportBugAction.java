@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -43,7 +41,5 @@ public class ReportBugAction extends OpenURLInBrowserAction {
 		public String getId() { return ActionType.ReportBug.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

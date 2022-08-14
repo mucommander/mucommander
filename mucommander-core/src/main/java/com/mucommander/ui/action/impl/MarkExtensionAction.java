@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AbstractFilenameFilter;
@@ -207,7 +204,5 @@ public class MarkExtensionAction extends MuAction {
 		public String getId() { return ActionType.MarkExtension.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

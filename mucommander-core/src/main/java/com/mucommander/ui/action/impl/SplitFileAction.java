@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -68,7 +66,5 @@ public class SplitFileAction extends SelectedFileAction {
 		public String getId() { return ActionType.SplitFile.toString(); }
 
 		public ActionCategory getCategory() { return null; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

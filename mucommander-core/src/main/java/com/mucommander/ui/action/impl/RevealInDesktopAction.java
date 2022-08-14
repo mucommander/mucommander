@@ -19,12 +19,9 @@ package com.mucommander.ui.action.impl;
 
 import static com.mucommander.core.desktop.DesktopManager.openInFileManager;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
@@ -93,10 +90,6 @@ public class RevealInDesktopAction extends ActiveTabAction {
 
         public ActionCategory getCategory() {
             return ActionCategory.NAVIGATION;
-        }
-
-        public KeyStroke getDefaultAltKeyStroke() {
-            return null;
         }
 
         @Override

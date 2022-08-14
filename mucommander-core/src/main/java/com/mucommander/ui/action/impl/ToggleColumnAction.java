@@ -17,15 +17,14 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
-
-import javax.swing.*;
-import java.util.Map;
 
 /**
  * Shows/hides a specified column of the currently active FileTable. If the column is currently visible, this action
@@ -68,8 +67,6 @@ public abstract class ToggleColumnAction extends MuAction {
         public String getId() { return column.getToggleColumnActionId(); }
 
         public ActionCategory getCategory() { return ActionCategory.VIEW; }
-
-        public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
         public String getLabel() { return Translator.get("ToggleColumn.show", column.getLabel()); }

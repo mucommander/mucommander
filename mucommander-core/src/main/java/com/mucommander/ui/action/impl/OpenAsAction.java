@@ -20,8 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.desktop.ActionType;
@@ -91,8 +89,6 @@ public class OpenAsAction extends OpenAction {
         public String getId() { return ActionType.OpenAs.toString(); }
 
         public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
-
-        public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 
 }

@@ -1,9 +1,6 @@
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
@@ -56,9 +53,6 @@ public class OpenCommandPromptAction extends ParentFolderAction {
 
         @Override
         public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
-
-        @Override
-        public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
         public String getLabel() {

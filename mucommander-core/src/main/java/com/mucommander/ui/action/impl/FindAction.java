@@ -16,10 +16,7 @@
  */
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.desktop.ActionType;
 import com.mucommander.search.SearchDialog;
@@ -56,7 +53,5 @@ public class FindAction extends MuAction {
         public String getId() { return ActionType.Find.toString(); }
 
         public ActionCategory getCategory() { return ActionCategory.FILES; }
-
-        public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

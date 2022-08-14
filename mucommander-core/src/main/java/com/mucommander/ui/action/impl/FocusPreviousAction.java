@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.swing.JTextField;
 import javax.swing.JTree;
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.util.ui.helper.FocusRequester;
 import com.mucommander.desktop.ActionType;
@@ -86,7 +85,5 @@ public class FocusPreviousAction extends MuAction {
 		public String getId() { return ActionType.FocusPrevious.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }
