@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -65,8 +63,6 @@ public class MoveTabToOtherPanelAction extends ActiveTabAction {
 		public String getId() { return ActionType.MoveTabToOtherPanel.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }
 

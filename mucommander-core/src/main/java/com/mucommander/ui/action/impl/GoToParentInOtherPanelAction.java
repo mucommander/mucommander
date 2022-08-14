@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.desktop.ActionType;
@@ -95,7 +92,5 @@ public class GoToParentInOtherPanelAction extends ParentFolderAction {
 		public String getId() { return ActionType.GoToParentInOtherPanel.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

@@ -54,7 +54,5 @@ public class ShowKeyboardShortcutsAction extends MuAction {
 		public String getId() { return ActionType.ShowKeyboardShortcuts.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

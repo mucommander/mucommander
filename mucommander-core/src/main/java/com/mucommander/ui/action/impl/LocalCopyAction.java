@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
@@ -74,7 +71,5 @@ public class LocalCopyAction extends SelectedFileAction {
 		public String getId() { return ActionType.LocalCopy.toString(); }
 
 		public ActionCategory getCategory() { return null; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

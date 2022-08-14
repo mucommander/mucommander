@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -55,7 +52,5 @@ public class RecallPreviousWindowAction extends MuAction {
 		public String getId() { return ActionType.RecallPreviousWindow.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

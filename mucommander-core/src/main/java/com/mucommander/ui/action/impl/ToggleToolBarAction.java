@@ -20,7 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -77,8 +76,6 @@ public class ToggleToolBarAction extends MuAction {
 		public String getId() { return ActionType.ToggleToolBar.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
         public String getLabelKey() { return ActionType.ToggleToolBar+".show"; }

@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -69,7 +66,5 @@ public class ToggleHiddenFilesAction extends MuAction {
 		public String getId() { return ActionType.ToggleHiddenFiles.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

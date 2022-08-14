@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.ActionType;
@@ -56,7 +53,5 @@ public class NewTabAction extends MuAction {
 		public String getId() { return ActionType.NewTab.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.ActionType;
@@ -60,7 +58,5 @@ public class EmptyTrashAction extends MuAction {
 		public String getId() { return ActionType.EmptyTrash.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

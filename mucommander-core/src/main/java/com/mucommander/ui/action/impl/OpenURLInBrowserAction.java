@@ -20,8 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.net.URL;
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -72,8 +70,6 @@ public class OpenURLInBrowserAction extends MuAction {
 		public String getId() { return ActionType.OpenURLInBrowser.toString(); }
 
 		public ActionCategory getCategory() { return null; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
         public boolean isParameterized() { return true; }

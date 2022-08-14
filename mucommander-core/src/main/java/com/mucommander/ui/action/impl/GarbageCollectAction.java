@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -53,7 +51,5 @@ public class GarbageCollectAction extends MuAction {
 		public String getId() { return ActionType.GarbageCollect.toString(); }
 
 		public ActionCategory getCategory() { return null; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

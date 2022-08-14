@@ -17,14 +17,8 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -33,6 +27,9 @@ import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Brings a {@link MainFrame} window to the front. This action operates on a specific window number specified in the
@@ -107,8 +104,6 @@ public class RecallWindowAction extends MuAction {
 		public String getId() { return ACTION_ID+(windowNumber==-1?"":""+windowNumber); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
         public String getLabel() {

@@ -17,14 +17,10 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.CopyJob;
 import com.mucommander.job.impl.CopyJob.TransferMode;
@@ -78,7 +74,5 @@ public class PasteClipboardFilesAction extends MuAction {
 		public String getId() { return ActionType.PasteClipboardFiles.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK); }
     }
 }

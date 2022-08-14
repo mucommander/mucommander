@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
@@ -66,7 +63,5 @@ public class MkfileAction extends ParentFolderAction {
 		public String getId() { return ActionType.Mkfile.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

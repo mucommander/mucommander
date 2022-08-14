@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.desktop.ActionType;
@@ -70,7 +67,5 @@ public class InvertSelectionAction extends MuAction {
 		public String getId() { return ActionType.InvertSelection.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

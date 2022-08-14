@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.desktop.ActionType;
@@ -60,7 +58,5 @@ public class ToggleShowFoldersFirstAction extends MuAction {
 		public String getId() { return ActionType.ToggleShowFoldersFirst.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

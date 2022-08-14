@@ -17,11 +17,8 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
@@ -84,7 +81,5 @@ public class OpenNativelyAction extends MuAction {
 		public String getId() { return ActionType.OpenNatively.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

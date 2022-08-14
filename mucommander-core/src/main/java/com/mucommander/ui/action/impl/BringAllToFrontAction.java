@@ -20,8 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -77,7 +75,5 @@ public class BringAllToFrontAction extends MuAction {
 		public String getId() { return ActionType.BringAllToFront.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

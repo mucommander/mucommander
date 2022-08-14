@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -72,7 +70,5 @@ public class CombineFilesAction extends SelectedFilesAction {
 		public String getId() { return ActionType.CombineFiles.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

@@ -20,7 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.ActionType;
@@ -58,8 +57,6 @@ public class MaximizeWindowAction extends MuAction {
 		public String getId() { return ActionType.MaximizeWindow.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
         public String getLabel() {

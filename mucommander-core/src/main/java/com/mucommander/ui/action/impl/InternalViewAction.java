@@ -20,7 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
 
 import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
@@ -28,7 +27,6 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
-import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
@@ -83,7 +81,5 @@ public class InternalViewAction extends AbstractViewerAction {
 		public String getId() { return ActionType.InternalView.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

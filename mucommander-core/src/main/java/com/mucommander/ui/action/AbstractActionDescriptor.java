@@ -170,4 +170,14 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
         }
         catch(Exception e) { return null; }
     }
+
+    @Override
+    public KeyStroke getDefaultAltKeyStroke() {
+        try {
+            ActionType type = ActionType.valueOf(getId());
+            return DesktopManager.getActionShortcuts().getDefaultAltKeyStroke(type);
+        }
+        catch(Exception e) { return null; }
+
+    }
 }

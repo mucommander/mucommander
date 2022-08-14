@@ -21,8 +21,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -89,7 +87,5 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
 		public String getId() { return ActionType.GoToDocumentation.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

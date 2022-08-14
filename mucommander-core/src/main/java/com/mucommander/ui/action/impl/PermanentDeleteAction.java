@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.filter.FileOperationFilter;
@@ -62,7 +59,5 @@ public class PermanentDeleteAction extends SelectedFilesAction {
 		public String getId() { return ActionType.PermanentDelete.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK); }
     }
 }

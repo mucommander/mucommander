@@ -17,11 +17,9 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.swing.KeyStroke;
 
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.desktop.ActionType;
@@ -59,8 +57,6 @@ public class MinimizeWindowAction extends MuAction {
 		public String getId() { return ActionType.MinimizeWindow.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
         public String getLabel() {

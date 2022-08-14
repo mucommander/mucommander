@@ -17,11 +17,8 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.net.MalformedURLException;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
@@ -90,7 +87,5 @@ public class OpenInNewTabAction extends SelectedFileAction {
 		public String getId() { return ActionType.OpenInNewTab.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

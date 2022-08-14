@@ -17,15 +17,14 @@
 
 package com.mucommander.ui.action.impl;
 
+import java.util.Map;
+
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandManager;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.ui.action.*;
+import com.mucommander.ui.action.AbstractActionDescriptor;
+import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.util.Map;
 
 /**
  * User configurable variant of {@link InternalViewAction}.
@@ -55,7 +54,5 @@ public class ViewAction extends InternalViewAction {
 		public String getId() { return ActionType.View.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
-
-		public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }
