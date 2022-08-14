@@ -286,7 +286,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         BonjourMenu bonjourMenu = new BonjourMenu() {
             @Override
             public MuAction getMenuItemAction(BonjourService bs) {
-                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable<String, Object>(), bs);
+                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable<>(), bs);
             }
         };
         char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
@@ -439,7 +439,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             int nbFolders = volumes.length;
 
             for(int i=0; i<nbFolders; i++)
-                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), volumes[i]));
+                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<>(), volumes[i]));
         }
         else if(source==bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu
@@ -452,7 +452,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             int nbBookmarks = bookmarks.size();
             if(nbBookmarks>0) {
                 for(int i=0; i<nbBookmarks; i++)
-                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<String, Object>(), bookmarks.get(i)), null);
+                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<>(), bookmarks.get(i)), null);
             }
             else {
                 // Show 'No bookmark' as a disabled menu item instead showing nothing
@@ -476,7 +476,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             // This WeakHashMap maps menu items to frame instances. It has to be a weakly referenced hash map
             // and not a regular hash map, since it will not (and cannot) be emptied when the menu has been deselected
             // and we really do not want this hash map to prevent the frames to be GCed 
-            windowMenuFrames = new WeakHashMap<JMenuItem, Frame>();
+            windowMenuFrames = new WeakHashMap<>();
             
             // Create a menu item for each of the MainFrame instances, that displays the MainFrame's path
             // and a keyboard accelerator to recall the frame (for the first 10 frames only).
@@ -495,7 +495,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 }
                 // Else use the generic RecallWindowAction
                 else {
-                    Hashtable<String, Object> actionProps = new Hashtable<String, Object>();
+                    Hashtable<String, Object> actionProps = new Hashtable<>();
                     // Specify the window number using the dedicated property
                     actionProps.put(RecallWindowAction.WINDOW_NUMBER_PROPERTY_KEY, ""+(i+1));
                     recallWindowAction = ActionManager.getActionInstance(new ActionParameters(RecallWindowAction.Descriptor.ACTION_ID, actionProps), this.mainFrame);

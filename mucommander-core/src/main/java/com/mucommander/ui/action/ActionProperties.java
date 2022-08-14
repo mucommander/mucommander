@@ -226,7 +226,7 @@ public class ActionProperties {
 	/**
 	 * Helper class that represent ActionDescriptor with null values
 	 */
-	private static class NullActionDescriptor implements ActionDescriptor {
+	public static class NullActionDescriptor implements ActionDescriptor {
 
 		public ActionCategory getCategory() { return null; }
 
