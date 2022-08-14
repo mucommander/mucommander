@@ -17,10 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
-
-import javax.swing.KeyStroke;
 
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.main.MainFrame;
@@ -46,7 +43,7 @@ public class SortByExtensionAction extends SortByAction {
     public static class Descriptor extends SortByAction.Descriptor {
 
         public Descriptor() {
-            super(Column.EXTENSION, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_DOWN_MASK));
+            super(Column.EXTENSION);
         }
     }
 }

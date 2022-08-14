@@ -61,8 +61,6 @@ public class MaximizeWindowAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
-
         @Override
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise

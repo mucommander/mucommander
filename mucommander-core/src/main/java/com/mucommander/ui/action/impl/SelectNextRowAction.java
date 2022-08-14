@@ -59,10 +59,6 @@ public class SelectNextRowAction extends SelectForwardAction {
             return ActionCategory.SELECTION;
         }
 
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
-        }
-
         public KeyStroke getDefaultAltKeyStroke() {
             return null;
         }

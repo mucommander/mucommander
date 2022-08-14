@@ -91,10 +91,6 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
             return KeyStroke.getKeyStroke(KeyEvent.VK_CONTEXT_MENU, 0);
         }
 
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.CTRL_DOWN_MASK);
-        }
-
         @Override
         public String getLabel() {
             return Translator.get(ActionProperties.getActionLabelKey(ActionType.ShowFilePopupMenu));

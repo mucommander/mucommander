@@ -62,7 +62,5 @@ public class MarkToLastRowAction extends MarkForwardAction {
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_END, KeyEvent.SHIFT_DOWN_MASK); }
     }
 }

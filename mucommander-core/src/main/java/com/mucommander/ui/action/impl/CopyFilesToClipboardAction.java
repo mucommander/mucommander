@@ -58,7 +58,5 @@ public class CopyFilesToClipboardAction extends SelectedFilesAction {
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK); }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

@@ -18,6 +18,8 @@
 package com.mucommander.ui.action;
 
 import com.mucommander.commons.file.util.ResourceLoader;
+import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.IconManager;
 
@@ -158,5 +160,14 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      */
     private static String getStandardTooltipKey(String actionId) {
         return actionId+".tooltip";
+    }
+
+    @Override
+    public KeyStroke getDefaultKeyStroke() {
+        try {
+            ActionType type = ActionType.valueOf(getId());
+            return DesktopManager.getActionShortcuts().getDefaultKeystroke(type);
+        }
+        catch(Exception e) { return null; }
     }
 }

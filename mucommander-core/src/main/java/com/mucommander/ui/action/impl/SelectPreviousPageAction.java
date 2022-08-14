@@ -60,10 +60,6 @@ public class SelectPreviousPageAction extends SelectBackwardAction {
             return ActionCategory.SELECTION;
         }
 
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
-        }
-
         public KeyStroke getDefaultAltKeyStroke() {
             return null;
         }

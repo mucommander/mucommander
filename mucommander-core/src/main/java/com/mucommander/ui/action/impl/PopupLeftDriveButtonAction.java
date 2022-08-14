@@ -70,7 +70,5 @@ public class PopupLeftDriveButtonAction extends MuAction implements ActiveTabLis
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.ALT_DOWN_MASK); }
     }
 }

@@ -57,7 +57,5 @@ public class ShowRecentLocationsQLAction extends ShowQuickListAction {
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.ALT_DOWN_MASK); }
     }
 }

@@ -62,8 +62,6 @@ public class MinimizeWindowAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.META_DOWN_MASK); }
-
         @Override
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise

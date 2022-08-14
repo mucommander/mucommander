@@ -75,7 +75,5 @@ public class ToggleLockTabAction extends ActiveTabAction {
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

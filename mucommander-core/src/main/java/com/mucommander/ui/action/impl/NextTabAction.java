@@ -74,7 +74,5 @@ public class NextTabAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK); }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

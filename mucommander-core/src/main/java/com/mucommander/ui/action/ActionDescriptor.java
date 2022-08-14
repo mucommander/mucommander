@@ -17,9 +17,8 @@
 
 package com.mucommander.ui.action;
 
-import javax.swing.*;
-
-import com.mucommander.desktop.ActionType;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 
 /**
  * Each MuAction is registered with an object of ActionDescriptor type

@@ -111,7 +111,5 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK); }
     }
 }

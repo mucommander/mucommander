@@ -64,7 +64,5 @@ public class SwitchActiveTableAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_DOWN_MASK); }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0); }
     }
 }

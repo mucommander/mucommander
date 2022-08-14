@@ -51,7 +51,5 @@ public class ShowBookmarksQLAction extends ShowQuickListAction {
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_4, KeyEvent.ALT_DOWN_MASK); }
     }
 }

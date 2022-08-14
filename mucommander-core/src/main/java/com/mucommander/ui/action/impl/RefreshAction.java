@@ -57,7 +57,5 @@ public class RefreshAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0); }
     }
 }

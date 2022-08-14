@@ -74,8 +74,6 @@ public class OpenURLInBrowserAction extends MuAction {
 		public ActionCategory getCategory() { return null; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-		
-		public KeyStroke getDefaultKeyStroke() { return null; }
 
         @Override
         public boolean isParameterized() { return true; }

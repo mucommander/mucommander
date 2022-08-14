@@ -97,7 +97,5 @@ public class InternalEditAction extends AbstractViewerAction {
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

@@ -124,11 +124,9 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
     public static class Descriptor extends AbstractActionDescriptor {
 
         private Column column;
-        private KeyStroke defaultKeyStroke;
 
-        protected Descriptor(Column column, KeyStroke defaultKeyStroke) {
+        protected Descriptor(Column column) {
             this.column = column;
-            this.defaultKeyStroke = defaultKeyStroke;
         }
 
         public String getId() { return column.getSortByColumnActionId(); }
@@ -136,7 +134,5 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return defaultKeyStroke; }
     }
 }

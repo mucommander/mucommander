@@ -59,7 +59,5 @@ public class UnmarkGroupAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0); }
     }
 }

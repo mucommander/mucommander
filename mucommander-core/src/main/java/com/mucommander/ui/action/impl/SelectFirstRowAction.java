@@ -56,7 +56,5 @@ public class SelectFirstRowAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0); }
     }
 }

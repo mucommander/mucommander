@@ -67,7 +67,5 @@ public class CloseTabAction extends ActiveTabAction {
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

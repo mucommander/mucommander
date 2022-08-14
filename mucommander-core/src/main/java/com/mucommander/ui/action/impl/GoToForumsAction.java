@@ -45,7 +45,5 @@ public class GoToForumsAction extends OpenURLInBrowserAction {
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

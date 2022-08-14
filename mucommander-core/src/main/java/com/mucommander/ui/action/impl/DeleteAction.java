@@ -65,7 +65,5 @@ public class DeleteAction extends SelectedFilesAction {
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0); }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0); }
     }
 }

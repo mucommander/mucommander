@@ -71,8 +71,6 @@ public abstract class ToggleColumnAction extends MuAction {
 
         public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-        public KeyStroke getDefaultKeyStroke() { return null; }
-
         @Override
         public String getLabel() { return Translator.get("ToggleColumn.show", column.getLabel()); }
     }

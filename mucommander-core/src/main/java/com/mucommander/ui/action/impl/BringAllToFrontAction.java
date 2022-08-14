@@ -79,7 +79,5 @@ public class BringAllToFrontAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

@@ -64,7 +64,5 @@ public class ChangeDateAction extends SelectedFilesAction {
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.ALT_DOWN_MASK); }
     }
 }

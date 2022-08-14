@@ -50,7 +50,5 @@ public class UnmarkAllAction extends MarkAllAction {
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

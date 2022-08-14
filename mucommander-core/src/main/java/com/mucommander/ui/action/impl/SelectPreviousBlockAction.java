@@ -63,10 +63,6 @@ public class SelectPreviousBlockAction extends SelectBackwardAction {
             return ActionCategory.SELECTION;
         }
 
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_UP, KeyEvent.CTRL_DOWN_MASK);
-        }
-
         public KeyStroke getDefaultAltKeyStroke() {
             return null;
         }

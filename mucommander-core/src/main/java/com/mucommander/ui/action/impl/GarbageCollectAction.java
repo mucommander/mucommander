@@ -55,7 +55,5 @@ public class GarbageCollectAction extends MuAction {
 		public ActionCategory getCategory() { return null; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

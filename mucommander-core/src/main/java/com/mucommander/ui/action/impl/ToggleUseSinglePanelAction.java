@@ -81,9 +81,5 @@ public class ToggleUseSinglePanelAction extends MuAction {
         public KeyStroke getDefaultAltKeyStroke() {
             return null;
         }
-
-        public KeyStroke getDefaultKeyStroke() {
-            return null;
-        }
     }
 }

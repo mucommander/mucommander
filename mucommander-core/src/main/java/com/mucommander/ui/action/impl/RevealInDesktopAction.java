@@ -99,10 +99,6 @@ public class RevealInDesktopAction extends ActiveTabAction {
             return null;
         }
 
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
-        }
-
         @Override
         public String getLabel() {
             return Translator.get(ActionProperties.getActionLabelKey(ActionType.RevealInDesktop),

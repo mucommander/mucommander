@@ -61,7 +61,5 @@ public class NewWindowAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

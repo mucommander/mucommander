@@ -57,7 +57,5 @@ public class ShowFilePropertiesAction extends SelectedFilesAction {
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.ALT_DOWN_MASK); }
     }
 }
