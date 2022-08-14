@@ -60,7 +60,5 @@ public class ToggleTreeAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK); }
     }
 }

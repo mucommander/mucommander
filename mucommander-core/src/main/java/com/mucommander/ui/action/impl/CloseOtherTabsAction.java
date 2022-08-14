@@ -56,7 +56,5 @@ public class CloseOtherTabsAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK); }
     }
 }

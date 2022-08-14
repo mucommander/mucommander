@@ -70,7 +70,5 @@ public class SplitFileAction extends SelectedFileAction {
 		public ActionCategory getCategory() { return null; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

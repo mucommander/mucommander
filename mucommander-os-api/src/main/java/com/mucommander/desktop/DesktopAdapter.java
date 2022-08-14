@@ -171,4 +171,5 @@ public interface DesktopAdapter {
     default void postCopy(AbstractFile source, AbstractFile target) {}
     default void customizeMainFrame(Window window) {}
     default List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) { return Collections.emptyList(); }
+    ActionShortcuts getActionShortcuts();
 }

@@ -148,4 +148,8 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
     public boolean isApplication(AbstractFile file) {
         return false;
     }
+
+    public ActionShortcuts getActionShortcuts() {
+        return new ActionShortcuts();
+    }
 }

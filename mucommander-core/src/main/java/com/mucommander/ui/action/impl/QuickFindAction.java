@@ -65,7 +65,5 @@ public class QuickFindAction extends MuAction {
         public ActionCategory getCategory() { return ActionCategory.FILES; }
 
         public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-        public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK  | KeyEvent.SHIFT_DOWN_MASK); }
     }
 }

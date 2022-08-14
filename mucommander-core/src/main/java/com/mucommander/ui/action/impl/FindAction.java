@@ -57,8 +57,6 @@ public class FindAction extends MuAction {
 
         public ActionCategory getCategory() { return ActionCategory.FILES; }
 
-        public KeyStroke getDefaultAltKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.META_DOWN_MASK); }
-
-        public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK); }
+        public KeyStroke getDefaultAltKeyStroke() { return null; }
     }
 }

@@ -61,11 +61,6 @@ public class OpenCommandPromptAction extends ParentFolderAction {
         public KeyStroke getDefaultAltKeyStroke() { return null; }
 
         @Override
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_DOWN_MASK);
-        }
-
-        @Override
         public String getLabel() {
             return Translator.get(ActionProperties.getActionLabelKey(ActionType.OpenCommandPrompt));
         }

@@ -41,6 +41,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.ActionShortcuts;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
@@ -147,7 +148,7 @@ public class DesktopManager {
     private static DesktopAdapter                        desktop;
     /** Object used to create instances of {@link AbstractTrash}. */
     private static TrashProvider                         trashProvider;
-
+    private static ActionShortcuts                       actionShortcuts;
 
 
     // - Initialisation --------------------------------------------------
@@ -218,6 +219,7 @@ public class DesktopManager {
                 setTrashProvider(desktop.getTrash());
                 setNotifier(desktop.getNotifier());
                 setTabbedPaneCustomizer(desktop.getTabbedPaneCustomizer());
+                setActionShortcuts(desktop.getActionShortcuts());
                 return;
             }
         }
@@ -594,5 +596,14 @@ public class DesktopManager {
 
     public static List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) {
         return desktop.getExtendedFileProperties(file);
+    }
+
+    public static ActionShortcuts getActionShortcuts() {
+        return actionShortcuts;
+    }
+
+    public static void setActionShortcuts(ActionShortcuts actionShortcuts) {
+        if (actionShortcuts != null)
+            DesktopManager.actionShortcuts = actionShortcuts;
     }
 }

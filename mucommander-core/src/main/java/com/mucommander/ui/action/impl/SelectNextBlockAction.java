@@ -63,10 +63,6 @@ public class SelectNextBlockAction extends SelectForwardAction {
             return ActionCategory.SELECTION;
         }
 
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.CTRL_DOWN_MASK);
-        }
-
         public KeyStroke getDefaultAltKeyStroke() {
             return null;
         }

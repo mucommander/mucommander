@@ -91,7 +91,5 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

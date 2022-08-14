@@ -120,7 +120,5 @@ public class CommandAction extends MuAction {
     	public ActionCategory getCategory() { return ActionCategory.COMMANDS; }
 
     	public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-    	public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

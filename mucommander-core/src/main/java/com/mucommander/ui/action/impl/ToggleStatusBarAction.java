@@ -80,8 +80,6 @@ public class ToggleStatusBarAction extends MuAction {
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
 
-		public KeyStroke getDefaultKeyStroke() { return null; }
-
         @Override
         public String getLabelKey() { return ActionType.ToggleStatusBar+".show"; }
     }

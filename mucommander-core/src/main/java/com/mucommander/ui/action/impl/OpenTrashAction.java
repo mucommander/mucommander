@@ -72,9 +72,5 @@ public class OpenTrashAction extends MuAction {
         public KeyStroke getDefaultAltKeyStroke() {
             return null;
         }
-
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.ALT_MASK);
-        }
     }
 }

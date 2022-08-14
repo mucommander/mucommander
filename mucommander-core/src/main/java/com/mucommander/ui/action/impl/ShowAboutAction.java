@@ -56,7 +56,5 @@ public class ShowAboutAction extends MuAction {
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return null; }
     }
 }

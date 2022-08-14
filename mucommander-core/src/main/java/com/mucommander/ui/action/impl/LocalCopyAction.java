@@ -76,7 +76,5 @@ public class LocalCopyAction extends SelectedFileAction {
 		public ActionCategory getCategory() { return null; }
 
 		public KeyStroke getDefaultAltKeyStroke() { return null; }
-
-		public KeyStroke getDefaultKeyStroke() { return KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_DOWN_MASK); }
     }
 }
