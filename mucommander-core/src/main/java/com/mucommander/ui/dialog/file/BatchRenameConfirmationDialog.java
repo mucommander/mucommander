@@ -21,6 +21,7 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.BatchRenameAction;
@@ -39,7 +40,7 @@ public class BatchRenameConfirmationDialog extends FocusDialog implements Action
     private boolean proceedWithRename = false;
  
     public BatchRenameConfirmationDialog(MainFrame mainFrame, FileSet files, int changed, int unchanged) {
-        super(mainFrame, ActionProperties.getActionLabel(BatchRenameAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.BatchRename), mainFrame);
 
         YBoxPanel mainPanel = new YBoxPanel();
         String msg = Translator.get("batch_rename_dialog.proceed_renaming", Integer.toString(changed), Integer.toString(unchanged));

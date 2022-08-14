@@ -25,9 +25,9 @@ import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.EditBookmarksAction;
 import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.list.SortableListPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -81,7 +81,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
 
     public EditBookmarksDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(EditBookmarksAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.EditBookmarks), mainFrame);
 
         this.mainFrame = mainFrame;
 

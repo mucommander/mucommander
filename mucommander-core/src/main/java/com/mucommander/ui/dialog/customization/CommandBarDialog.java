@@ -19,6 +19,7 @@ package com.mucommander.ui.dialog.customization;
 
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
@@ -86,7 +87,7 @@ public class CommandBarDialog extends CustomizeDialog {
 	 * Constructor
 	 */
     public CommandBarDialog(MainFrame mainFrame) {
-		super(mainFrame, ActionProperties.getActionLabel(CustomizeCommandBarAction.Descriptor.ACTION_ID));
+		super(mainFrame, ActionProperties.getActionLabel(ActionType.CustomizeCommandBar));
 	}
 	
     @Override

@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -80,9 +81,7 @@ public class OpenNativelyAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "OpenNatively";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.OpenNatively.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 

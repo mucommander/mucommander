@@ -34,11 +34,11 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.ArchiveJob;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.PackAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
@@ -64,7 +64,7 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
 
 
     public PackDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, files, ActionProperties.getActionLabel(PackAction.Descriptor.ACTION_ID), Translator.get("pack_dialog_description"), Translator.get("pack"), Translator.get("pack_dialog.error_title"), false);
+        super(mainFrame, files, ActionProperties.getActionLabel(ActionType.Pack), Translator.get("pack_dialog_description"), Translator.get("pack"), Translator.get("pack_dialog.error_title"), false);
 
         // Retrieve available formats for single file or many file archives
         int nbFiles = files.size();

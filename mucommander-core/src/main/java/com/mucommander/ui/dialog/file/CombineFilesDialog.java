@@ -31,6 +31,7 @@ import com.mucommander.commons.file.filter.StartsWithFilenameFilter;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.file.util.PathUtils.ResolvedDestination;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.CombineFilesJob;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.Translator;
@@ -57,7 +58,7 @@ public class CombineFilesDialog extends TransferDestinationDialog {
      */
     public CombineFilesDialog(MainFrame mainFrame, FileSet files, AbstractFile destFolder) {
         super(mainFrame, files,
-                ActionProperties.getActionLabel(CombineFilesAction.Descriptor.ACTION_ID),
+                ActionProperties.getActionLabel(ActionType.CombineFiles),
                 Translator.get("copy_dialog.destination"),
                 Translator.get("combine"),
                 Translator.get("combine_files_dialog.error_title"),

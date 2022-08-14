@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -54,10 +55,8 @@ public class SelectPreviousBlockAction extends SelectBackwardAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "SelectPreviousBlock";
-
         public String getId() {
-            return ACTION_ID;
+            return ActionType.SelectPreviousBlock.toString();
         }
 
         public ActionCategory getCategory() {

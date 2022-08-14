@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.mucommander.commons.file.util.FileComparator;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 
 /**
@@ -31,15 +32,15 @@ import com.mucommander.text.Translator;
  */
 public enum Column {
 
-    EXTENSION(true, true, FileComparator.EXTENSION_CRITERION, "ToggleExtensionColumn", "SortByExtension"),
-    NAME(false, true, FileComparator.NAME_CRITERION, null, "SortByName"),
-    SIZE(true, true, FileComparator.SIZE_CRITERION, "ToggleSizeColumn", "SortBySize"),
-    DATE(true, true, FileComparator.DATE_CRITERION, "ToggleDateColumn", "SortByDate"),
-    PERMISSIONS(true, true, FileComparator.PERMISSIONS_CRITERION, "TogglePermissionsColumn", "SortByPermissions"),
-    OWNER(true, false, FileComparator.OWNER_CRITERION, "ToggleOwnerColumn", "SortByOwner"),
-    GROUP(true, false, FileComparator.GROUP_CRITERION, "ToggleGroupColumn", "SortByGroup");
+    EXTENSION(true, true, FileComparator.EXTENSION_CRITERION, ActionType.ToggleExtensionColumn, ActionType.SortByExtension),
+    NAME(false, true, FileComparator.NAME_CRITERION, null, ActionType.SortByName),
+    SIZE(true, true, FileComparator.SIZE_CRITERION, ActionType.ToggleSizeColumn, ActionType.SortBySize),
+    DATE(true, true, FileComparator.DATE_CRITERION, ActionType.ToggleDateColumn, ActionType.SortByDate),
+    PERMISSIONS(true, true, FileComparator.PERMISSIONS_CRITERION, ActionType.TogglePermissionsColumn, ActionType.SortByPermissions),
+    OWNER(true, false, FileComparator.OWNER_CRITERION, ActionType.ToggleOwnerColumn, ActionType.SortByOwner),
+    GROUP(true, false, FileComparator.GROUP_CRITERION, ActionType.ToggleGroupColumn, ActionType.SortByGroup);
 
-    private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<Integer, Column>(){{
+    private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<>(){{
         Stream.of(Column.values()).forEach(column -> put(column.ordinal(), column));
     }};
 
@@ -50,10 +51,10 @@ public enum Column {
     private int minimumWidth;
     private boolean showByDefault;
     private int fileComparatorCriterion;
-    private String toggleActionId;
-    private String sortByActionId;
+    private ActionType toggleActionId;
+    private ActionType sortByActionId;
 
-    private Column(boolean hasMinimumWidth, boolean showByDefault, int fileComparatorCriterion, String toggleActionId, String sortByActionId) {
+    private Column(boolean hasMinimumWidth, boolean showByDefault, int fileComparatorCriterion, ActionType toggleActionId, ActionType sortByActionId) {
         this.label = Translator.get(toString().toLowerCase());
         this.minimumWidth = hasMinimumWidth?STANDARD_MINIMUM_WIDTH:0;
         this.showByDefault = showByDefault;
@@ -115,7 +116,7 @@ public enum Column {
      * @return the ID of the action that allows this column to be shown/hidden.
      */
     public String getToggleColumnActionId() {
-        return toggleActionId;
+        return toggleActionId.toString();
     }
 
     /**
@@ -124,6 +125,6 @@ public enum Column {
      * @return the ID of the action that allows to sort the table by this column.
      */
     public String getSortByColumnActionId() {
-        return sortByActionId;
+        return sortByActionId.toString();
     }
 }

@@ -44,6 +44,7 @@ import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.process.ProcessListener;
 import com.mucommander.shell.Shell;
@@ -196,7 +197,7 @@ public class RunDialog extends FocusDialog implements ActionListener, ProcessLis
      * @param mainFrame the main frame this dialog is attached to.
      */
     public RunDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(RunCommandAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.RunCommand), mainFrame);
         this.mainFrame = mainFrame;
 		
         // Initializes the dialog's UI.

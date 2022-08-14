@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.main.MainFrame;
@@ -39,9 +40,7 @@ public class GoToForumsAction extends OpenURLInBrowserAction {
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "GoToForums";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.GoToForums.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
 

@@ -33,6 +33,7 @@ import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.text.SizeConstrainedDocument;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.SetTabTitleAction;
@@ -64,7 +65,7 @@ public class TabTitleDialog extends FocusDialog implements ActionListener {
     private FolderPanel folderPanel;
 
 	public TabTitleDialog(MainFrame mainFrame, FolderPanel folderPanel) {
-        super(mainFrame, ActionProperties.getActionLabel(SetTabTitleAction.Descriptor.ACTION_ID), folderPanel);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.SetTabTitle), folderPanel);
 
         this.folderPanel = folderPanel;
 

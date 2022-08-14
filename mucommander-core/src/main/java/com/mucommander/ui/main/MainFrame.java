@@ -45,6 +45,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
@@ -229,7 +230,7 @@ public class MainFrame extends JFrame implements LocationListener {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                ActionManager.performAction(CloseWindowAction.Descriptor.ACTION_ID, MainFrame.this);
+                ActionManager.performAction(ActionType.CloseWindow, MainFrame.this);
             }
         });
 

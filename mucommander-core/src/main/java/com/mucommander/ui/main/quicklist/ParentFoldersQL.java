@@ -23,9 +23,9 @@ import java.util.List;
 import javax.swing.Icon;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
@@ -40,7 +40,7 @@ public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> {
 
     public ParentFoldersQL(FolderPanel folderPanel) {
         super(folderPanel,
-                ActionProperties.getActionLabel(ShowParentFoldersQLAction.Descriptor.ACTION_ID),
+                ActionProperties.getActionLabel(ActionType.ShowParentFoldersQL),
                 Translator.get("parent_folders_quick_list.empty_message"));
 
         this.folderPanel = folderPanel;

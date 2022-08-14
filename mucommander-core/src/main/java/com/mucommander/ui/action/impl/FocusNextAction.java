@@ -25,6 +25,7 @@ import javax.swing.JTree;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.util.ui.helper.FocusRequester;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -81,9 +82,7 @@ public class FocusNextAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "FocusNext";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.FocusNext.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
 

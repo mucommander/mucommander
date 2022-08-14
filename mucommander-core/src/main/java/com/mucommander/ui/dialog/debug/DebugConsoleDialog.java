@@ -41,6 +41,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.RefreshAction;
@@ -84,7 +85,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      * @param mainFrame the {@link MainFrame} to use as a parent
      */
     public DebugConsoleDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ShowDebugConsoleAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.ShowDebugConsole), mainFrame);
 
         Container contentPane = getContentPane();
 

@@ -33,6 +33,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.ui.action.AWTActionProxy;
@@ -84,6 +85,10 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     SystemTrayNotifier() {
     }
 
+    private void addMenuItem(Menu menu, ActionType muActionType) {
+        addMenuItem(menu, muActionType.toString());
+    }
+
     /**
      * Creates and adds a menu item that triggers the MuAction denoted by the given Class. The menu item's label
      * is set to the value returned by {@link MuAction#getLabel()}.
@@ -131,10 +136,10 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
             // Create the popup (AWT!) menu. Note there is no way with java.awt.Menu to know when the menu is selected
             // and thus it makes it hard to have contextual menu items such as the list of open windows.
             PopupMenu menu = new PopupMenu();
-            addMenuItem(menu, NewWindowAction.Descriptor.ACTION_ID);
-            addMenuItem(menu, BringAllToFrontAction.Descriptor.ACTION_ID);
+            addMenuItem(menu, ActionType.NewWindow);
+            addMenuItem(menu, ActionType.BringAllToFront);
             menu.addSeparator();
-            addMenuItem(menu, QuitAction.Descriptor.ACTION_ID);
+            addMenuItem(menu, ActionType.Quit);
 
             trayIcon.setPopupMenu(menu);
 

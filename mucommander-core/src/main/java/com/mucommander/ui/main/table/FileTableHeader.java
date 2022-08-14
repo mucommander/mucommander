@@ -26,8 +26,8 @@ import javax.swing.JSeparator;
 import javax.swing.table.JTableHeader;
 
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.ToggleAutoSizeAction;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -88,7 +88,7 @@ public class FileTableHeader extends JTableHeader {
 
                     popupMenu.add(new JSeparator());
 
-                    JCheckBoxMenuItem checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(ToggleAutoSizeAction.Descriptor.ACTION_ID, mainFrame));
+                    JCheckBoxMenuItem checkboxMenuItem = new JCheckBoxMenuItem(ActionManager.getActionInstance(ActionType.ToggleAutoSize, mainFrame));
                     checkboxMenuItem.setSelected(mainFrame.isAutoSizeColumnsEnabled());
                     popupMenu.add(checkboxMenuItem);
 

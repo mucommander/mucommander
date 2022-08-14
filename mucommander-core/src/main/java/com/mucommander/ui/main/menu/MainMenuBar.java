@@ -47,96 +47,13 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.impl.AddBookmarkAction;
-import com.mucommander.ui.action.impl.NewTabAction;
-import com.mucommander.ui.action.impl.BatchRenameAction;
-import com.mucommander.ui.action.impl.BringAllToFrontAction;
-import com.mucommander.ui.action.impl.CalculateChecksumAction;
-import com.mucommander.ui.action.impl.ChangeDateAction;
-import com.mucommander.ui.action.impl.ChangeLocationAction;
-import com.mucommander.ui.action.impl.ChangePermissionsAction;
-import com.mucommander.ui.action.impl.CheckForUpdatesAction;
-import com.mucommander.ui.action.impl.CloseWindowAction;
-import com.mucommander.ui.action.impl.CombineFilesAction;
-import com.mucommander.ui.action.impl.CompareFoldersAction;
-import com.mucommander.ui.action.impl.ConnectToServerAction;
-import com.mucommander.ui.action.impl.CopyFileBaseNamesAction;
-import com.mucommander.ui.action.impl.CopyFileNamesAction;
-import com.mucommander.ui.action.impl.CopyFilePathsAction;
-import com.mucommander.ui.action.impl.CopyFilesToClipboardAction;
-import com.mucommander.ui.action.impl.CustomizeCommandBarAction;
-import com.mucommander.ui.action.impl.DonateAction;
-import com.mucommander.ui.action.impl.EditBookmarksAction;
-import com.mucommander.ui.action.impl.EditCredentialsAction;
-import com.mucommander.ui.action.impl.EmailAction;
-import com.mucommander.ui.action.impl.ExploreBookmarksAction;
-import com.mucommander.ui.action.impl.FindAction;
-import com.mucommander.ui.action.impl.GoBackAction;
-import com.mucommander.ui.action.impl.GoForwardAction;
-import com.mucommander.ui.action.impl.GoToDocumentationAction;
-import com.mucommander.ui.action.impl.GoToForumsAction;
-import com.mucommander.ui.action.impl.GoToParentAction;
-import com.mucommander.ui.action.impl.GoToParentInBothPanelsAction;
-import com.mucommander.ui.action.impl.GoToParentInOtherPanelAction;
-import com.mucommander.ui.action.impl.GoToRootAction;
-import com.mucommander.ui.action.impl.GoToWebsiteAction;
-import com.mucommander.ui.action.impl.InvertSelectionAction;
-import com.mucommander.ui.action.impl.MarkAllAction;
-import com.mucommander.ui.action.impl.MarkExtensionAction;
-import com.mucommander.ui.action.impl.MarkGroupAction;
-import com.mucommander.ui.action.impl.MarkSelectedFileAction;
-import com.mucommander.ui.action.impl.MaximizeWindowAction;
-import com.mucommander.ui.action.impl.MinimizeWindowAction;
-import com.mucommander.ui.action.impl.NewWindowAction;
-import com.mucommander.ui.action.impl.OpenAction;
-import com.mucommander.ui.action.impl.OpenInBothPanelsAction;
-import com.mucommander.ui.action.impl.OpenInNewTabAction;
-import com.mucommander.ui.action.impl.OpenInOtherPanelAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
-import com.mucommander.ui.action.impl.OpenNativelyAction;
-import com.mucommander.ui.action.impl.PackAction;
-import com.mucommander.ui.action.impl.PasteClipboardFilesAction;
-import com.mucommander.ui.action.impl.QuitAction;
-import com.mucommander.ui.action.impl.RecallNextWindowAction;
-import com.mucommander.ui.action.impl.RecallPreviousWindowAction;
 import com.mucommander.ui.action.impl.RecallWindowAction;
-import com.mucommander.ui.action.impl.ReportBugAction;
-import com.mucommander.ui.action.impl.RevealInDesktopAction;
-import com.mucommander.ui.action.impl.ReverseSortOrderAction;
-import com.mucommander.ui.action.impl.RunCommandAction;
-import com.mucommander.ui.action.impl.SetSameFolderAction;
-import com.mucommander.ui.action.impl.ShowAboutAction;
-import com.mucommander.ui.action.impl.ShowBookmarksQLAction;
-import com.mucommander.ui.action.impl.ShowDebugConsoleAction;
-import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
-import com.mucommander.ui.action.impl.ShowKeyboardShortcutsAction;
-import com.mucommander.ui.action.impl.ShowParentFoldersQLAction;
-import com.mucommander.ui.action.impl.ShowPreferencesAction;
-import com.mucommander.ui.action.impl.ShowRecentExecutedFilesQLAction;
-import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
-import com.mucommander.ui.action.impl.ShowRootFoldersQLAction;
-import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
-import com.mucommander.ui.action.impl.ShowTabsQLAction;
-import com.mucommander.ui.action.impl.SplitEquallyAction;
-import com.mucommander.ui.action.impl.SplitFileAction;
-import com.mucommander.ui.action.impl.SplitHorizontallyAction;
-import com.mucommander.ui.action.impl.SplitVerticallyAction;
-import com.mucommander.ui.action.impl.SwapFoldersAction;
-import com.mucommander.ui.action.impl.ToggleAutoSizeAction;
-import com.mucommander.ui.action.impl.ToggleCommandBarAction;
-import com.mucommander.ui.action.impl.ToggleHiddenFilesAction;
-import com.mucommander.ui.action.impl.ToggleShowFoldersFirstAction;
-import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
-import com.mucommander.ui.action.impl.ToggleStatusBarAction;
-import com.mucommander.ui.action.impl.ToggleToolBarAction;
-import com.mucommander.ui.action.impl.ToggleTreeAction;
-import com.mucommander.ui.action.impl.UnmarkAllAction;
-import com.mucommander.ui.action.impl.UnmarkGroupAction;
-import com.mucommander.ui.action.impl.UnpackAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.theme.ThemeEditorDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -197,16 +114,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
 
     private final static String RECALL_WINDOW_ACTION_IDS[] = {
-        com.mucommander.ui.action.impl.RecallWindow1Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow2Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow3Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow4Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow5Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow6Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow7Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow8Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow9Action.Descriptor.ACTION_ID,
-        com.mucommander.ui.action.impl.RecallWindow10Action.Descriptor.ACTION_ID
+            ActionType.RecallWindow1.toString(),
+            ActionType.RecallWindow2.toString(),
+            ActionType.RecallWindow3.toString(),
+            ActionType.RecallWindow4.toString(),
+            ActionType.RecallWindow5.toString(),
+            ActionType.RecallWindow6.toString(),
+            ActionType.RecallWindow7.toString(),
+            ActionType.RecallWindow8.toString(),
+            ActionType.RecallWindow9.toString(),
+            ActionType.RecallWindow10.toString()
     };
 
 
@@ -226,81 +143,81 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // File menu
         JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(NewWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(NewTabAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.NewWindow, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.NewTab, mainFrame), menuItemMnemonicHelper);
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenNativelyAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.Open, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenNatively, mainFrame), menuItemMnemonicHelper);
         fileMenu.add(new OpenWithMenu(mainFrame));
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInNewTabAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInOtherPanelAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(OpenInBothPanelsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RevealInDesktopAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenInNewTab, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenInOtherPanel, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenInBothPanels, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.RevealInDesktop, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(FindAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(RunCommandAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(PackAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(UnpackAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(EmailAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(BatchRenameAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(SplitFileAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CombineFilesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.Find, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.RunCommand, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.Pack, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.Unpack, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.Email, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.BatchRename, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.SplitFile, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.CombineFiles, mainFrame), menuItemMnemonicHelper);
 
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowFilePropertiesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CalculateChecksumAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ChangePermissionsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ChangeDateAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.ShowFileProperties, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.CalculateChecksum, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.ChangePermissions, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.ChangeDate, mainFrame), menuItemMnemonicHelper);
 
         // Under Mac OS X, 'Preferences' already appears in the application (muCommander) menu, do not display it again
         if(!OsFamily.MAC_OS.isCurrent()) {
             fileMenu.add(new JSeparator());
-            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ShowPreferencesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.ShowPreferences, mainFrame), menuItemMnemonicHelper);
         }
 
         fileMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(CloseWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.CloseWindow, mainFrame), menuItemMnemonicHelper);
         // Under Mac OS X, 'Quit' already appears in the application (muCommander) menu, do not display it again
         if(!OsFamily.MAC_OS.isCurrent())
-            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(QuitAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.Quit, mainFrame), menuItemMnemonicHelper);
 
         add(fileMenu);
 
         // Mark menu
         menuItemMnemonicHelper.clear();
         JMenu markMenu = MenuToolkit.addMenu(Translator.get("mark_menu"), menuMnemonicHelper, this);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkGroupAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(UnmarkGroupAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkAllAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(UnmarkAllAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(MarkExtensionAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(InvertSelectionAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.MarkSelectedFile, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.MarkGroup, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.UnmarkGroup, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.MarkAll, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.UnmarkAll, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.MarkExtension, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.InvertSelection, mainFrame), menuItemMnemonicHelper);
 
         markMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFilesToClipboardAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFileNamesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFileBaseNamesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CopyFilePathsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(PasteClipboardFilesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.CopyFilesToClipboard, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.CopyFileNames, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.CopyFileBaseNames, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.CopyFilePaths, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.PasteClipboardFiles, mainFrame), menuItemMnemonicHelper);
 
         markMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(CompareFoldersAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(markMenu, ActionManager.getActionInstance(ActionType.CompareFolders, mainFrame), menuItemMnemonicHelper);
 
         add(markMenu);
 
         // View menu
         menuItemMnemonicHelper.clear();
         viewMenu = MenuToolkit.addMenu(Translator.get("view_menu"), menuMnemonicHelper, this);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(SwapFoldersAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(SetSameFolderAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.SwapFolders, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.SetSameFolder, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
-        toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleShowFoldersFirstAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        toggleShowHiddenFilesItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleHiddenFilesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        toggleTreeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleTreeAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        toggleUseSinglePanel = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleUseSinglePanelAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleShowFoldersFirst, mainFrame), menuItemMnemonicHelper);
+        toggleShowHiddenFilesItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleHiddenFiles, mainFrame), menuItemMnemonicHelper);
+        toggleTreeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleTree, mainFrame), menuItemMnemonicHelper);
+        toggleUseSinglePanel = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleUseSinglePanel, mainFrame), menuItemMnemonicHelper);
         /* TODO branch toggleBranchView = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleBranchViewAction.class, mainFrame), menuItemMnemonicHelper); */
 
         viewMenu.add(new JSeparator());
@@ -308,7 +225,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         for(Column c : Column.values())
             buttonGroup.add(sortByItems[c.ordinal()] = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(c.getSortByColumnActionId(), mainFrame), menuItemMnemonicHelper));
 
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ReverseSortOrderAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ReverseSortOrder, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
 
@@ -323,13 +240,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
         viewMenu.add(columnsMenu);
 
-        toggleToggleAutoSizeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleAutoSizeAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        toggleToggleAutoSizeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleAutoSize, mainFrame), menuItemMnemonicHelper);
 
         viewMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleToolBarAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleStatusBarAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ToggleCommandBarAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(CustomizeCommandBarAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleToolBar, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleStatusBar, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleCommandBar, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.CustomizeCommandBar, mainFrame), menuItemMnemonicHelper);
 
         add(viewMenu);
 
@@ -337,31 +254,31 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         menuItemMnemonicHelper.clear();
         goMenu = MenuToolkit.addMenu(Translator.get("go_menu"), menuMnemonicHelper, this);
 
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoBackAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoForwardAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.GoBack, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.GoForward, mainFrame), menuItemMnemonicHelper);
 
         goMenu.add(new JSeparator());
 
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToParentAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToParentInOtherPanelAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToParentInBothPanelsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(GoToRootAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.GoToParent, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.GoToParentInOtherPanel, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.GoToParentInBothPanels, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.GoToRoot, mainFrame), menuItemMnemonicHelper);
 
         goMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ChangeLocationAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ConnectToServerAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ShowServerConnectionsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.ChangeLocation, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.ConnectToServer, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(goMenu, ActionManager.getActionInstance(ActionType.ShowServerConnections, mainFrame), menuItemMnemonicHelper);
 
         // Quick lists
         goMenu.add(new JSeparator());
         JMenu quickListMenu = MenuToolkit.addMenu(Translator.get("quick_lists_menu"), menuMnemonicHelper, this);
         menuItemMnemonicHelper2.clear();
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowParentFoldersQLAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper2);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentLocationsQLAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper2);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRecentExecutedFilesQLAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper2);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowBookmarksQLAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper2);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowRootFoldersQLAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper2);
-        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ShowTabsQLAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowParentFoldersQL, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowRecentLocationsQL, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowRecentExecutedFilesQL, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowBookmarksQL, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowRootFoldersQL, mainFrame), menuItemMnemonicHelper2);
+        MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowTabsQL, mainFrame), menuItemMnemonicHelper2);
         goMenu.add(quickListMenu);
 
         // Add Bonjour services menu
@@ -387,11 +304,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         // Bookmark menu, menu items will be added when the menu gets selected
         menuItemMnemonicHelper.clear();
         bookmarksMenu = MenuToolkit.addMenu(Translator.get("bookmarks_menu"), menuMnemonicHelper, this);
-        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(AddBookmarkAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(EditBookmarksAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(ExploreBookmarksAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(ActionType.AddBookmark, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(ActionType.EditBookmarks, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(ActionType.ExploreBookmarks, mainFrame), menuItemMnemonicHelper);
         bookmarksMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(EditCredentialsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(bookmarksMenu, ActionManager.getActionInstance(ActionType.EditCredentials, mainFrame), menuItemMnemonicHelper);
         bookmarksMenu.add(new JSeparator());
 
         // Save the first bookmark menu item's offset for later (bookmarks will be added when menu becomes visible)
@@ -406,15 +323,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // If running Mac OS X, add 'Minimize' and 'Zoom' items
         if(OsFamily.MAC_OS.isCurrent()) {
-            MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(MinimizeWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-            MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(MaximizeWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.MinimizeWindow, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.MaximizeWindow, mainFrame), menuItemMnemonicHelper);
             windowMenu.add(new JSeparator());
         }
 
-        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(SplitEquallyAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.SplitEqually, mainFrame), menuItemMnemonicHelper);
         buttonGroup = new ButtonGroup();
-        buttonGroup.add(splitVerticallyItem = MenuToolkit.addCheckBoxMenuItem(windowMenu, ActionManager.getActionInstance(SplitVerticallyAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
-        buttonGroup.add(splitHorizontallyItem = MenuToolkit.addCheckBoxMenuItem(windowMenu, ActionManager.getActionInstance(SplitHorizontallyAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(splitVerticallyItem = MenuToolkit.addCheckBoxMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.SplitVertically, mainFrame), menuItemMnemonicHelper));
+        buttonGroup.add(splitHorizontallyItem = MenuToolkit.addCheckBoxMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.SplitHorizontally, mainFrame), menuItemMnemonicHelper));
 
         windowMenu.add(new JSeparator());
         themesMenu = MenuToolkit.addMenu(Translator.get("prefs_dialog.themes"), null, this);
@@ -422,9 +339,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         windowMenu.add(themesMenu);
 
         windowMenu.add(new JSeparator());
-        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(RecallPreviousWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(RecallNextWindowAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(BringAllToFrontAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.RecallPreviousWindow, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.RecallNextWindow, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(windowMenu, ActionManager.getActionInstance(ActionType.BringAllToFront, mainFrame), menuItemMnemonicHelper);
         // All other window menu items will be added when the menu gets selected
         windowMenu.add(new JSeparator());
 
@@ -437,26 +354,26 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         menuItemMnemonicHelper.clear();
         JMenu helpMenu = MenuToolkit.addMenu(Translator.get("help_menu"), menuMnemonicHelper, null);
 
-        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToDocumentationAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowKeyboardShortcutsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowDebugConsoleAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.GoToDocumentation, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.ShowKeyboardShortcuts, mainFrame), menuItemMnemonicHelper);
+        MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.ShowDebugConsole, mainFrame), menuItemMnemonicHelper);
 
         // Links to website, only shows for OS/Window manager that can launch the default browser to open URLs
         if(DesktopManager.canBrowse()) {
             helpMenu.add(new JSeparator());
-            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToWebsiteAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(GoToForumsAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ReportBugAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
-            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(DonateAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.GoToWebsite, mainFrame), menuItemMnemonicHelper);
+             MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.GoToForums, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.ReportBug, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.Donate, mainFrame), menuItemMnemonicHelper);
 
             helpMenu.add(new JSeparator());
-            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(CheckForUpdatesAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.CheckForUpdates, mainFrame), menuItemMnemonicHelper);
         }
 		
         // Under Mac OS X, 'About' already appears in the application (muCommander) menu, do not display it again
         if(!OsFamily.MAC_OS.isCurrent()) {
             helpMenu.add(new JSeparator());
-            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ShowAboutAction.Descriptor.ACTION_ID, mainFrame), menuItemMnemonicHelper);
+            MenuToolkit.addMenuItem(helpMenu, ActionManager.getActionInstance(ActionType.ShowAbout, mainFrame), menuItemMnemonicHelper);
         }
 		
         add(helpMenu);

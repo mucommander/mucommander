@@ -43,12 +43,12 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.FileJobState;
 import com.mucommander.job.impl.PropertiesJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
@@ -84,7 +84,7 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 	
     public PropertiesDialog(MainFrame mainFrame, FileSet files) {
         super(mainFrame,
-              files.size() > 1 ? ActionProperties.getActionLabel(ShowFilePropertiesAction.Descriptor.ACTION_ID) :
+              files.size() > 1 ? ActionProperties.getActionLabel(ActionType.ShowFileProperties) :
               Translator.get("properties_dialog.file_properties", files.elementAt(0).getName()), mainFrame);
 
         this.job = new PropertiesJob(files, mainFrame);

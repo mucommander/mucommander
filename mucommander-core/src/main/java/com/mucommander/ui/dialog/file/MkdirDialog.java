@@ -39,6 +39,7 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.MkdirJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -83,14 +84,14 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
      * @param mkfileMode if true, the dialog will operate in 'mkfile' mode, if false in 'mkdir' mode
      */
     public MkdirDialog(MainFrame mainFrame, boolean mkfileMode) {
-        super(mainFrame, ActionManager.getActionInstance(mkfileMode?MkfileAction.Descriptor.ACTION_ID:MkdirAction.Descriptor.ACTION_ID,mainFrame).getLabel(), mainFrame);
+        super(mainFrame, ActionManager.getActionInstance(mkfileMode?ActionType.Mkfile:ActionType.Mkdir,mainFrame).getLabel(), mainFrame);
         this.mainFrame = mainFrame;
         this.mkfileMode = mkfileMode;
 
         Container contentPane = getContentPane();
 
         YBoxPanel mainPanel = new YBoxPanel();
-        mainPanel.add(new JLabel(ActionProperties.getActionTooltip(mkfileMode?MkfileAction.Descriptor.ACTION_ID:MkdirAction.Descriptor.ACTION_ID)+" :"));
+        mainPanel.add(new JLabel(ActionProperties.getActionTooltip(mkfileMode?ActionType.Mkfile:ActionType.Mkdir)+" :"));
 
         // Create a path field with auto-completion capabilities
         pathField = new FilePathField();

@@ -42,6 +42,7 @@ import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.EditCredentialsAction;
@@ -83,7 +84,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
 
 
     public EditCredentialsDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(EditCredentialsAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.EditCredentials), mainFrame);
 
         this.mainFrame = mainFrame;
 

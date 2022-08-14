@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -42,7 +43,7 @@ public class ToggleLockTabAction extends ActiveTabAction {
     }
 
     private void updateLabel(boolean locked) {
-        setLabel(Translator.get(locked?Descriptor.ACTION_ID+".unlock":Descriptor.ACTION_ID+".lock"));
+        setLabel(Translator.get(locked?ActionType.ToggleLockTab+".unlock":ActionType.ToggleLockTab+".lock"));
     }
 
     @Override
@@ -69,9 +70,7 @@ public class ToggleLockTabAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ToggleLockTab";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.ToggleLockTab.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
 

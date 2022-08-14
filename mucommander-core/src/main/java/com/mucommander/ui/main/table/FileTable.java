@@ -62,6 +62,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.MoveJob;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
@@ -1317,11 +1318,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                                             editCurrentFilename();
                                     }
                                     else if(column == Column.DATE) {
-                                        ActionManager.performAction(com.mucommander.ui.action.impl.ChangeDateAction.Descriptor.ACTION_ID, mainFrame);
+                                        ActionManager.performAction(ActionType.ChangeDate, mainFrame);
                                     }
                                     else if(column == Column.PERMISSIONS) {
                                         if(getSelectedFile().getChangeablePermissions().getIntValue()!=0)
-                                            ActionManager.performAction(com.mucommander.ui.action.impl.ChangePermissionsAction.Descriptor.ACTION_ID, mainFrame);
+                                            ActionManager.performAction(ActionType.ChangePermissions, mainFrame);
                                     }
                                 }
                             }
@@ -1332,10 +1333,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             // Double-clicking on a row opens the file/folder
             else if (doubleClickCounter == 2) { // Note: user can double-click multiple times
                 this.lastDoubleClickTimestamp = System.currentTimeMillis();
-                ActionManager.performAction(e.isShiftDown()
-                        ?com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID
-                        :com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID
-                    , mainFrame);
+                ActionManager.performAction(e.isShiftDown()?ActionType.OpenNatively:ActionType.Open, mainFrame);
             }
 
         }
@@ -1445,7 +1443,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             return;
 
         // Test if the event corresponds to the 'Mark/unmark selected file' action keystroke.
-        if(ActionManager.getActionInstance(MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
+        if(ActionManager.getActionInstance(ActionType.MarkSelectedFile, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
             // Reset variables used to detect repeated key strokes
             markKeyRepeated = false;
             lastRowMarked = false;
@@ -1741,8 +1739,8 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 	            findMatch(currentRow + (down ? 1 : -1), down, false);
 	        }
 	        // MarkSelectedFileAction and MarkNextRowAction mark the current row and moves to the next match
-	        else if(ActionManager.getActionInstance(MarkSelectedFileAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))
-	             || ActionManager.getActionInstance(MarkNextRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
+	        else if(ActionManager.getActionInstance(ActionType.MarkSelectedFile, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))
+	             || ActionManager.getActionInstance(ActionType.MarkNextRow, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
 
 	            if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
 	                setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));
@@ -1751,7 +1749,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 	            findMatch(currentRow+1, true, false);
 	        }
 	        // MarkPreviousRowAction marks the current row and moves to the previous match
-	        else if(ActionManager.getActionInstance(MarkPreviousRowAction.Descriptor.ACTION_ID, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
+	        else if(ActionManager.getActionInstance(ActionType.MarkPreviousRow, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
 
 	            if(!isParentFolderSelected())  // Don't mark/unmark the '..' file
 	                setRowMarked(currentRow, !tableModel.isRowMarked(currentRow));

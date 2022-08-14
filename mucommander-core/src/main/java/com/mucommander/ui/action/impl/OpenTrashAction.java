@@ -24,6 +24,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -60,10 +61,8 @@ public class OpenTrashAction extends MuAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "OpenTrash";
-
         public String getId() {
-            return ACTION_ID;
+            return ActionType.OpenTrash.toString();
         }
 
         public ActionCategory getCategory() {

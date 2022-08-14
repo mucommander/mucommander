@@ -26,6 +26,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.AbstractFilenameFilter;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
@@ -203,9 +204,7 @@ public class MarkExtensionAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "MarkExtension";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.MarkExtension.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
 

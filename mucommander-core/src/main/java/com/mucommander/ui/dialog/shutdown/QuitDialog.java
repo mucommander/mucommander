@@ -22,8 +22,8 @@ import javax.swing.JCheckBox;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -47,7 +47,7 @@ public class QuitDialog extends QuestionDialog {
 
     private enum QuitDialogAction implements DialogAction {
 
-        QUIT(QuitAction.Descriptor.ACTION_ID),
+        QUIT(ActionType.Quit.toString()),
         CANCEL("cancel");
 
         private final String actionName;

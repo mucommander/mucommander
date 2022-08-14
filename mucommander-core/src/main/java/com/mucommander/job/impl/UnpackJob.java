@@ -25,11 +25,11 @@ import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.UnmarkAllAction;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -343,7 +343,7 @@ public class UnpackJob extends AbstractCopyJob {
 
         // Unselect all files in the active table upon successful completion
         if (selectedEntries != null) {
-            ActionManager.performAction(UnmarkAllAction.Descriptor.ACTION_ID, getMainFrame());
+            ActionManager.performAction(ActionType.UnmarkAll, getMainFrame());
         }
     }
 

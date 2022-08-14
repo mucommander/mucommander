@@ -22,6 +22,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.dnd.ClipboardNotifier;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
@@ -69,30 +70,30 @@ public class TablePopupMenu extends MuActionsPopupMenu {
 
         // 'Open ...' actions displayed if a single file was clicked
         if (clickedFile != null || parentFolderClicked) {
-            addAction(com.mucommander.ui.action.impl.OpenAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.OpenNativelyAction.Descriptor.ACTION_ID);
+            addAction(ActionType.Open);
+            addAction(ActionType.OpenNatively);
             add(new OpenWithMenu(mainFrame));
             if (clickedFile != null && !clickedFile.isDirectory())
                 add(new OpenAsMenu(mainFrame));
 
-            addAction(com.mucommander.ui.action.impl.OpenInNewTabAction.Descriptor.ACTION_ID);
+            addAction(ActionType.OpenInNewTab);
             if (SearchFile.SCHEMA.equals(currentFolder.getURL().getScheme()))
-                addAction(com.mucommander.ui.action.impl.ShowInEnclosingFolderAction.Descriptor.ACTION_ID);
+                addAction(ActionType.ShowInEnclosingFolder);
             add(new JSeparator());
         }
 
         boolean copyOrPasteActionAdded = false;
         // 'Copy name(s)' and 'Copy path(s)' are displayed only if a single file was clicked or files are marked
         if (clickedFile != null || markedFiles.size() > 0) {
-            addAction(com.mucommander.ui.action.impl.CopyFilesToClipboardAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.CopyFileNamesAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.CopyFileBaseNamesAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.CopyFilePathsAction.Descriptor.ACTION_ID);
+            addAction(ActionType.CopyFilesToClipboard);
+            addAction(ActionType.CopyFileNames);
+            addAction(ActionType.CopyFileBaseNames);
+            addAction(ActionType.CopyFilePaths);
             copyOrPasteActionAdded = true;
         }
 
         if (ClipboardNotifier.isPasteClipboardFilesActionEnabled()) {
-            addAction(com.mucommander.ui.action.impl.PasteClipboardFilesAction.Descriptor.ACTION_ID);
+            addAction(ActionType.PasteClipboardFiles);
             copyOrPasteActionAdded = true;
         }
 
@@ -100,31 +101,31 @@ public class TablePopupMenu extends MuActionsPopupMenu {
             add(new JSeparator());
 
         // Those following items are displayed in all cases
-        addAction(com.mucommander.ui.action.impl.MarkAllAction.Descriptor.ACTION_ID);
-        addAction(com.mucommander.ui.action.impl.UnmarkAllAction.Descriptor.ACTION_ID);
-        addAction(com.mucommander.ui.action.impl.MarkSelectedFileAction.Descriptor.ACTION_ID);
+        addAction(ActionType.MarkAll);
+        addAction(ActionType.UnmarkAll);
+        addAction(ActionType.MarkSelectedFile);
 
         add(new JSeparator());
 
-        addAction(com.mucommander.ui.action.impl.RefreshAction.Descriptor.ACTION_ID);
+        addAction(ActionType.Refresh);
         // 'Reveal in desktop' displayed only if clicked file is a local file and the OS is capable of doing this,
         // if clicked file is null, then it was clicked either on background (current folder) or on '..'
         if (DesktopManager.canOpenInFileManager(clickedFile != null ? clickedFile : currentFolder)) {
-            addAction(com.mucommander.ui.action.impl.RevealInDesktopAction.Descriptor.ACTION_ID);
+            addAction(ActionType.RevealInDesktop);
         }
 
         // 'Rename' displayed if a single file was clicked
         if (clickedFile != null) {
             add(new JSeparator());
-            addAction(com.mucommander.ui.action.impl.RenameAction.Descriptor.ACTION_ID);
+            addAction(ActionType.Rename);
 
-            addAction(com.mucommander.ui.action.impl.DeleteAction.Descriptor.ACTION_ID);
+            addAction(ActionType.Delete);
 
             add(new JSeparator());
 
-            addAction(com.mucommander.ui.action.impl.ShowFilePropertiesAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.ChangePermissionsAction.Descriptor.ACTION_ID);
-            addAction(com.mucommander.ui.action.impl.ChangeDateAction.Descriptor.ACTION_ID);
+            addAction(ActionType.ShowFileProperties);
+            addAction(ActionType.ChangePermissions);
+            addAction(ActionType.ChangeDate);
         }
     }
 }

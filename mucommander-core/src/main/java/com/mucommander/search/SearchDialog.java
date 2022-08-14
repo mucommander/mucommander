@@ -62,6 +62,7 @@ import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.commons.util.ui.spinner.IntEditor;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.FindAction;
@@ -140,7 +141,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private final static int MAX_NUM_OF_SEARCH_THREADS = 0x7fff; // taken from FormJoinPool#MAX_CAP
 
     public SearchDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(FindAction.Descriptor.ACTION_ID), mainFrame);
+        super(mainFrame, ActionProperties.getActionLabel(ActionType.Find), mainFrame);
         this.mainFrame = mainFrame;
 
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();

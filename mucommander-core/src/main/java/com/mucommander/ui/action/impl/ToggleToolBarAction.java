@@ -25,6 +25,7 @@ import javax.swing.KeyStroke;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -51,7 +52,7 @@ public class ToggleToolBarAction extends MuAction {
     }
 
     private void updateLabel(boolean visible) {
-        setLabel(Translator.get(visible?Descriptor.ACTION_ID+".hide":Descriptor.ACTION_ID+".show"));
+        setLabel(Translator.get(visible?ActionType.ToggleToolBar+".hide":ActionType.ToggleToolBar+".show"));
     }
 
     @Override
@@ -73,9 +74,7 @@ public class ToggleToolBarAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	public static final String ACTION_ID = "ToggleToolBar";
-    	
-		public String getId() { return ACTION_ID; }
+		public String getId() { return ActionType.ToggleToolBar.toString(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
 
@@ -84,6 +83,6 @@ public class ToggleToolBarAction extends MuAction {
 		public KeyStroke getDefaultKeyStroke() { return null; }
 
         @Override
-        public String getLabelKey() { return ACTION_ID+".show"; }
+        public String getLabelKey() { return ActionType.ToggleToolBar+".show"; }
     }
 }
