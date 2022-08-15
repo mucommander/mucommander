@@ -191,6 +191,8 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
         case RunCommand:
             return KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+        case Save:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
         case SelectFirstRow:
             return KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0);
         case SelectLastRow:

@@ -18,7 +18,7 @@
 package com.mucommander.desktop;
 
 /**
- * Enumeration of built-in subclasses of {@code com.mucommander.ui.action.MuAction}
+ * Enumeration of built-in actions
  * @author Arik Hadas
  */
 public enum ActionType {
@@ -127,6 +127,7 @@ public enum ActionType {
     RevealInDesktop("RevealInDesktop"),
     ReverseSortOrder("ReverseSortOrder"),
     RunCommand("RunCommand"),
+    Save("Save"),
     SelectFirstRow("SelectFirstRow"),
     SelectLastRow("SelectLastRow"),
     SelectNextBlock("SelectNextBlock"),
