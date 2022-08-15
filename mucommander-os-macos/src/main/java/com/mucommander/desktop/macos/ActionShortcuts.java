@@ -59,6 +59,10 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.META_DOWN_MASK);
         case Find:
             return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.META_DOWN_MASK);
+        case GoBack:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, KeyEvent.META_DOWN_MASK);
+        case GoForward:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, KeyEvent.META_DOWN_MASK);
         case GoToParentInBothPanels:
             return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.META_DOWN_MASK);
         case GoToParentInOtherPanel:
@@ -185,6 +189,10 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
         case Find:
             return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
+        case GoBack:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK);
+        case GoForward:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK);
         case GoToParentInBothPanels:
             return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
         case GoToParentInOtherPanel:
