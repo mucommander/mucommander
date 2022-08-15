@@ -46,6 +46,7 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.commons.util.ui.text.MultiLineLabel;
+import com.mucommander.desktop.ActionShortcuts;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.TrashProvider;
@@ -193,5 +194,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         commentLabel.setAlignmentY(JLabel.TOP_ALIGNMENT);
         commentLabel.setVerticalAlignment(SwingConstants.TOP);
         return Collections.singletonList(new Pair<>(commentLabel, new MultiLineLabel(comment)));
+    }
+
+    @Override
+    public ActionShortcuts getActionShortcuts() {
+        return new com.mucommander.desktop.macos.ActionShortcuts();
     }
 }
