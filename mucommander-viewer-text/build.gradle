@@ -4,6 +4,7 @@ dependencies {
     api project(':mucommander-core')
     api project(':mucommander-commons-file')
     api project(':mucommander-viewer-api')
+    api project(':mucommander-os-api')
     api project(':mucommander-translator')
     api project(':mucommander-encoding')
     api project(":mucommander-preferences")
