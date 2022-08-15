@@ -85,6 +85,9 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     SystemTrayNotifier() {
     }
 
+    /**
+     * @see #addMenuItem(Menu, String)
+     */
     private void addMenuItem(Menu menu, ActionType muActionType) {
         addMenuItem(menu, muActionType.toString());
     }

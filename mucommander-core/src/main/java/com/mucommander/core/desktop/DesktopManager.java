@@ -148,6 +148,7 @@ public class DesktopManager {
     private static DesktopAdapter                        desktop;
     /** Object used to create instances of {@link AbstractTrash}. */
     private static TrashProvider                         trashProvider;
+    /** Default action shortcuts, never null (see {@link DefaultDesktopAdapter#getActionShortcuts()} */
     private static ActionShortcuts                       actionShortcuts;
 
 

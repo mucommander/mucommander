@@ -324,6 +324,9 @@ public class ActionManager {
         return getActionInstance(new ActionParameters(actionId), mainFrame);
     }
 
+    /**
+     * @see {@link #getActionInstance(String, MainFrame)}
+     */
     public static MuAction getActionInstance(ActionType actionId, MainFrame mainFrame) {
         return getActionInstance(actionId.toString(), mainFrame);
     }
@@ -461,6 +464,9 @@ public class ActionManager {
         return performAction(new ActionParameters(actionId), mainFrame);
     }
 
+    /**
+     * @see #performAction(String, MainFrame)
+     */
     public static boolean performAction(ActionType actionType, MainFrame mainFrame) {
         return performAction(actionType.toString(), mainFrame);
     }
