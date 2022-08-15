@@ -149,6 +149,10 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
         return false;
     }
 
+    /**
+     * Returns default action shortcuts
+     * @return default action shortcuts
+     */
     public ActionShortcuts getActionShortcuts() {
         return new ActionShortcuts();
     }

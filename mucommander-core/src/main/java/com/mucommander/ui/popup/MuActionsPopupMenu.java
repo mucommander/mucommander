@@ -48,6 +48,9 @@ public abstract class MuActionsPopupMenu extends JPopupMenu {
         return add(ActionManager.getActionInstance(actionId, mainFrame));
     }
 
+    /**
+     * @see #addAction(String)
+     */
     protected JMenuItem addAction(ActionType actionType) {
         return addAction(actionType.toString());
     }

@@ -165,9 +165,14 @@ public class ActionProperties {
 		return getNullSafeActionDescriptor(actionId).getLabel();
 	}
 
+	/**
+	 * @see #getActionLabel(String)
+	 * @param actionId
+	 * @return
+	 */
 	public static String getActionLabel(ActionType actionId) {
-        return getNullSafeActionDescriptor(actionId.toString()).getLabel();
-    }
+	    return getActionLabel(actionId.toString());
+	}
 
 	/**
 	 * Getter for MuAction's label key.
@@ -178,6 +183,9 @@ public class ActionProperties {
 		return getNullSafeActionDescriptor(actionId).getLabelKey();
 	}
 
+	/**
+	 * @see #getActionLabelKey(String)
+	 */
 	public static String getActionLabelKey(ActionType actionId) {
 	    return getActionLabelKey(actionId.toString());
 	}
@@ -202,8 +210,11 @@ public class ActionProperties {
 		return getNullSafeActionDescriptor(actionId).getTooltip();
 	}
 
+	/**
+	 * @see #getActionTooltip(String)
+	 */
 	public static String getActionTooltip(ActionType actionType) {
-        return getNullSafeActionDescriptor(actionType.toString()).getTooltip();
+        return getActionTooltip(actionType.toString());
     }
 
 	/**
