@@ -74,7 +74,7 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
         case NewWindow:
             return KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.META_DOWN_MASK);
         case NextTab:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, KeyEvent.META_DOWN_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, KeyEvent.META_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case OpenInBothPanels:
             return KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.META_DOWN_MASK);
         case OpenInNewTab:
@@ -86,9 +86,9 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
         case PasteClipboardFiles:
             return KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK);
         case PreviousTab:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, KeyEvent.META_DOWN_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, KeyEvent.META_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case QuickFind:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.META_DOWN_MASK  | KeyEvent.SHIFT_DOWN_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.META_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case Quit:
             return KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.META_DOWN_MASK);
         case RecallNextWindow:
