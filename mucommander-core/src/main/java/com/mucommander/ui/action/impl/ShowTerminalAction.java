@@ -145,7 +145,6 @@ public class ShowTerminalAction extends ActiveTabAction {
         }
         mainFrame.getSplitPane().setVisible(true);
         SwingUtilities.invokeLater(() -> {
-            // TODO - it seems like keyboard buffer is being tainted or focus is not complete/exact......
             mainFrame.getActivePanel().requestFocusInWindow();
             mainFrame.getActiveTable().requestFocusInWindow();
         });
