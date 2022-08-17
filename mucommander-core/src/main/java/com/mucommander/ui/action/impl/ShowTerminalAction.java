@@ -17,7 +17,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import com.jediterm.terminal.ProcessTtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
@@ -32,10 +31,8 @@ import com.mucommander.ui.main.MainFrame;
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.List;
 import java.util.Map;
 
-import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
