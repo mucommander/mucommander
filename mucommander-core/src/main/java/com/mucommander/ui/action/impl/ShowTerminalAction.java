@@ -33,6 +33,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 
+import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -43,6 +44,7 @@ import javax.swing.SwingUtilities;
 public class ShowTerminalAction extends ActiveTabAction {
 
     private JediTermWidget terminal;
+    private boolean isTermShown;
 
     public ShowTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
@@ -58,11 +60,19 @@ public class ShowTerminalAction extends ActiveTabAction {
 
     @Override
     public void performAction() {
-        if (terminal == null) {
+        if (!isTermShown) {
             try {
                 LOGGER.info("Going to show Terminal...");
                 mainFrame.getSplitPane().setVisible(false);
-                terminal = getTerminal();
+                if (terminal == null) {
+                    terminal = getTerminal();
+                } else {
+                    // TODO check somehow if term is busy..... or find another way to set CWD
+                    // trailing space added deliberately to skip history
+                    terminal.getTtyConnector().write(
+                            " cd \"" + mainFrame.getActivePanel().getCurrentFolder() + "\""
+                                    + System.getProperty("line.separator"));
+                }
                 mainFrame.getMainPanel().add(terminal, BorderLayout.CENTER);
                 terminal.revalidate();
                 SwingUtilities.invokeLater(() -> {
@@ -75,16 +85,19 @@ public class ShowTerminalAction extends ActiveTabAction {
                         if (keyEvent.getKeyCode() == KeyEvent.VK_O &&
                                 (keyEvent.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0) {
                             revertToTableView();
+                            isTermShown = false;
                         }
                     }
                 });
+                isTermShown = true;
             } catch (Exception e) {
                 LOGGER.error("Caught exception while trying to show Terminal", e);
                 revertToTableView();
             }
         } else {
+            // Normally this case is being handled by keyadapter above
             revertToTableView();
-            terminal = null;
+            isTermShown = false;
         }
 
     }
@@ -129,12 +142,12 @@ public class ShowTerminalAction extends ActiveTabAction {
         LOGGER.info("Going to hide Terminal...");
         if (terminal != null) {
             mainFrame.getMainPanel().remove(terminal);
-            terminal.stop();
         }
         mainFrame.getSplitPane().setVisible(true);
         SwingUtilities.invokeLater(() -> {
-            // TODO focus on active terminal....
-            mainFrame.getSplitPane().requestFocusInWindow();
+            // TODO - it seems like keyboard buffer is being tainted or focus is not complete/exact......
+            mainFrame.getActivePanel().requestFocusInWindow();
+            mainFrame.getActiveTable().requestFocusInWindow();
         });
     }
 }
