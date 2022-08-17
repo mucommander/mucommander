@@ -44,6 +44,8 @@ import javax.swing.SwingUtilities;
 public class ShowTerminalAction extends ActiveTabAction {
 
     private JediTermWidget terminal;
+
+    private String cwd; // keep it as String or as MonitoredFile maybe?
     private boolean isTermShown;
 
     public ShowTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
@@ -64,15 +66,19 @@ public class ShowTerminalAction extends ActiveTabAction {
             try {
                 LOGGER.info("Going to show Terminal...");
                 mainFrame.getSplitPane().setVisible(false);
+                String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
                 if (terminal == null) {
-                    terminal = getTerminal();
+                    terminal = getTerminal(newCwd);
                 } else {
-                    // TODO check somehow if term is busy..... or find another way to set CWD
-                    // trailing space added deliberately to skip history
-                    terminal.getTtyConnector().write(
-                            " cd \"" + mainFrame.getActivePanel().getCurrentFolder() + "\""
-                                    + System.getProperty("line.separator"));
+                    if (cwd == null || !cwd.equals(newCwd)) {
+                        // TODO check somehow if term is busy..... or find another way to set CWD
+                        // trailing space added deliberately to skip history
+                        terminal.getTtyConnector().write(
+                                " cd \"" + newCwd + "\""
+                                        + System.getProperty("line.separator"));
+                    }
                 }
+                cwd = newCwd;
                 mainFrame.getMainPanel().add(terminal, BorderLayout.CENTER);
                 terminal.revalidate();
                 SwingUtilities.invokeLater(() -> {
@@ -99,7 +105,6 @@ public class ShowTerminalAction extends ActiveTabAction {
             revertToTableView();
             isTermShown = false;
         }
-
     }
 
     @Override
@@ -134,8 +139,8 @@ public class ShowTerminalAction extends ActiveTabAction {
         }
     }
 
-    private JediTermWidget getTerminal() {
-        return TerminalWindow.createTerminal(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath());
+    private JediTermWidget getTerminal(String initialPath) {
+        return TerminalWindow.createTerminal(initialPath);
     }
 
     private void revertToTableView() {
@@ -145,7 +150,6 @@ public class ShowTerminalAction extends ActiveTabAction {
         }
         mainFrame.getSplitPane().setVisible(true);
         SwingUtilities.invokeLater(() -> {
-            mainFrame.getActivePanel().requestFocusInWindow();
             mainFrame.getActiveTable().requestFocusInWindow();
         });
     }
