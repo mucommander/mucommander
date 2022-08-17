@@ -36,14 +36,14 @@ dependencies {
     // Since, I haven't found any repo where they are published,
     // so they have been built from sources (https://github.com/JetBrains/jediterm, c21a2b27629dd3760c603edeb258f9a862e75d34)
     // and placed directly into muC.
+    comprise files('libs/jediterm-2.69.jar')
+    comprise files('libs/eawtstub.jar')
     implementation 'com.google.guava:guava:31.1-jre'
-    comprise files('libs/JediTerm-2.69.jar')
     comprise 'org.jetbrains.jediterm:jediterm-typeahead:2.69'
     comprise 'org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10'
     implementation 'org.jetbrains:annotations:23.0.0'
     comprise 'net.java.dev.jna:jna:5.10.0'
     comprise 'org.jetbrains.pty4j:pty4j:0.12.3'
-    comprise files('libs/eawtstub.jar')
     comprise 'net.java.dev.jna:jna-platform:5.10.0'
     comprise 'org.jetbrains.pty4j:purejavacomm:0.0.11.1'
     runtimeOnly 'org.jetbrains.intellij.deps:trove4j:1.0.20200330'
