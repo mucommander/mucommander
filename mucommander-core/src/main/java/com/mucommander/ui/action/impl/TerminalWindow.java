@@ -18,6 +18,8 @@
 package com.mucommander.ui.action.impl;
 
 import com.jediterm.pty.PtyProcessTtyConnector;
+import com.jediterm.terminal.TerminalColor;
+import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.UIUtil;
@@ -26,19 +28,16 @@ import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
 
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Creates JediTerm widget.
  * Based on JediTerm's BasicTerminalShellExample class.
  */
 public final class TerminalWindow {
-
-    private static Logger LOGGER = LoggerFactory.getLogger(TerminalWindow.class);
 
     private TerminalWindow() {
     }
@@ -48,18 +47,29 @@ public final class TerminalWindow {
     }
 
     private static JediTermWidget createTerminalWidget(String currentFolder) {
-        JediTermWidget widget = new JediTermWidget(80, 24, new DefaultSettingsProvider());
+        DefaultSettingsProvider settings = getDefaultSettings();new DefaultSettingsProvider();
+        JediTermWidget widget = new JediTermWidget(80, 24, getDefaultSettings());
         widget.setTtyConnector(createTtyConnector(currentFolder));
         widget.start();
         return widget;
     }
 
+    private static DefaultSettingsProvider getDefaultSettings() {
+        return new DefaultSettingsProvider() {
+            @Override
+            public TextStyle getDefaultStyle() {
+                return new TextStyle(TerminalColor.WHITE, TerminalColor.BLACK);
+            }
+        };
+    }
+
     private static @NotNull TtyConnector createTtyConnector(String currentFolder) {
         try {
-            Map<String, String> envs = System.getenv();
+            Map<String, String> envs;
             String[] command;
             if (UIUtil.isWindows) {
                 command = new String[]{"cmd.exe"};
+                envs = System.getenv();
             } else {
                 command = new String[]{"/bin/bash", "--login"};
                 envs = new HashMap<>(System.getenv());
