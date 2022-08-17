@@ -274,6 +274,10 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK);
         case Delete:
             return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+        case GoBack:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, KeyEvent.CTRL_DOWN_MASK);
+        case GoForward:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, KeyEvent.CTRL_DOWN_MASK);
         case GoToParent:
             return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
         case GoToRoot:
@@ -281,7 +285,7 @@ public class ActionShortcuts {
         case MarkSelectedFile:
             return KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0);
         case NextTab:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case Open:
             return KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         case PasteClipboardFiles:
@@ -289,7 +293,7 @@ public class ActionShortcuts {
         case PermanentDelete:
             return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK);
         case PreviousTab:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case ShowFilePopupMenu:
             return KeyStroke.getKeyStroke(KeyEvent.VK_CONTEXT_MENU, 0);
         case SwitchActiveTable:
