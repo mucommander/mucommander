@@ -17,6 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
+import com.jediterm.terminal.ProcessTtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
@@ -31,6 +32,7 @@ import com.mucommander.ui.main.MainFrame;
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.InputMap;
@@ -67,7 +69,8 @@ public class ShowTerminalAction extends ActiveTabAction {
                 LOGGER.info("Going to show Terminal...");
                 mainFrame.getSplitPane().setVisible(false);
                 String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
-                if (terminal == null) {
+                // If !connected means that terminal process has ended (via `exit` command for ex.).
+                if (terminal == null || !terminal.getTtyConnector().isConnected()) {
                     terminal = getTerminal(newCwd);
                 } else {
                     if (cwd == null || !cwd.equals(newCwd)) {
