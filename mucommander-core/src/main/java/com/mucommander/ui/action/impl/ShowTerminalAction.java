@@ -64,6 +64,9 @@ public class ShowTerminalAction extends ActiveTabAction {
         if (!isTermShown) {
             try {
                 LOGGER.info("Going to show Terminal...");
+                // TODO either hide them, or disable all the options (or maybe add 'return' option?)
+                //mainFrame.getToolBarPanel().setVisible(false);
+                //mainFrame.getCommandBar().setVisible(false);
                 mainFrame.getSplitPane().setVisible(false);
                 String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
                 // If !connected means that terminal process has ended (via `exit` command for ex.).
@@ -148,6 +151,9 @@ public class ShowTerminalAction extends ActiveTabAction {
         if (terminal != null) {
             mainFrame.getMainPanel().remove(terminal);
         }
+        // TODO see #performAction above
+        //mainFrame.getToolBarPanel().setVisible(true);
+        //mainFrame.getCommandBar().setVisible(true);
         mainFrame.getSplitPane().setVisible(true);
         SwingUtilities.invokeLater(() -> {
             mainFrame.getActiveTable().requestFocusInWindow();
