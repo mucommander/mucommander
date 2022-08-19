@@ -11,7 +11,6 @@ plugins {
     id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
     id 'org.ajoberstar.grgit' version '3.1.1'
-    id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'edu.sc.seis.launch4j' version '2.5.3'
 }
 
@@ -47,10 +46,10 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.options.compilerArgs += ['--release', '11']
 
 dependencies {
-    implementation 'org.apache.felix:org.apache.felix.main:7.0.3'
-    implementation 'com.beust:jcommander:1.78'
-    implementation 'com.formdev:flatlaf:2.2'
-    implementation 'org.violetlib:vaqua:10'
+    comprise 'org.apache.felix:org.apache.felix.main:7.0.3'
+    comprise 'com.beust:jcommander:1.78'
+    comprise 'com.formdev:flatlaf:2.2'
+    comprise 'org.violetlib:vaqua:10'
 
     osgiRuntime project('mucommander-core')
     osgiRuntime project('mucommander-command')
@@ -161,9 +160,9 @@ ext {
     bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
 }
 
-shadowJar.archiveClassifier = null
-
 jar {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes("Main-Class": "com.mucommander.main.muCommander",
                    "Specification-Title": "muCommander",
@@ -177,8 +176,6 @@ jar {
     }
 }
 
-jar.enabled = false
-
 test.useTestNG()
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -186,8 +183,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
     mainClassName = "com.mucommander.main.muCommander"
-    copyConfigurable = project.tasks.shadowJar.outputs.files
-    jar = "${project.tasks.shadowJar.archiveFileName.get()}"
+    jar = "${project.tasks.jar.archiveFileName.get()}"
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"

@@ -58,11 +58,6 @@ In order to debug muCommander, you first need to configure a port using an envir
 
 
 ### Packaging
-The different distributions of muCommander are based on a shadow-jar, standalone jar that contains all the required dependencies and filter their unneeded parts. The creation of the shadow-jar is done by the following command:  
-```
-./gradlew shadowJar
-```
-
 The creation of a DMG file for MAC OS (produced in build/distributions):  
 ```
 ./gradlew dmg
