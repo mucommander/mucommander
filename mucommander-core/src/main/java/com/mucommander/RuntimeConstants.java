@@ -127,7 +127,7 @@ public class RuntimeConstants {
             VERSION_URL  = getAttribute(attributes, "Build-URL");
             BUILD_NUMBER = getAttribute(attributes, "Implementation-Version");
         }
-        APP_STRING = "muCommander v" + VERSION;
+        APP_STRING = String.format("muCommander v%s", VERSION);
     }
 
     /**
