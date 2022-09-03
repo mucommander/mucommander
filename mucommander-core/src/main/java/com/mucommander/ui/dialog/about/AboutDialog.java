@@ -43,6 +43,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import com.mucommander.Activator;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.FluentPanel;
@@ -135,7 +136,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
             // VM information.
             insertHeader(doc,         "muCommander");
-            insertNormalString(doc,   "Version: " + RuntimeConstants.VERSION);
+            insertNormalString(doc,   "Version: " + String.format(Activator.portable ? "%s (%s)" : "%s", RuntimeConstants.VERSION, Translator.get("portable")));
             insertNormalString(doc,   "Build date: " + getFormatedDate());
             insertNormalString(doc,   "Build number: " +  RuntimeConstants.BUILD_NUMBER);
             insertLineBreak(doc);
