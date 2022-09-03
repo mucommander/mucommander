@@ -304,6 +304,7 @@ public class muCommander
             }
         } else if (new File(codeParentFolder, ".portable").exists()) {
             String portableDir = new File(codeParentFolder, ".mucommander").getAbsolutePath();
+            configProps.put("app_mode", "portable");
             try {
                 preferencesFolder = UserPreferencesDir.getPreferencesFolder(portableDir);
             } catch(RuntimeException e) {

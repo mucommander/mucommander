@@ -73,10 +73,13 @@ public class Activator implements BundleActivator {
 
     private BundleContext context;
 
+    public static boolean portable;
+
     @Override
     public void start(BundleContext context) throws Exception {
         LOGGER.debug("starting");
         this.context = context;
+        portable = "portable".equals(context.getProperty("app_mode"));
         // Register the application-specific 'bookmark' protocol.
         FileProtocolService bookmarksService = createBookmarkProtocolService();
         bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
