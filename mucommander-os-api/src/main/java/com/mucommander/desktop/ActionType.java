@@ -178,6 +178,7 @@ public enum ActionType {
     ToggleShowFoldersFirst("ToggleShowFoldersFirst"),
     ToggleSizeColumn("ToggleSizeColumn"),
     ToggleStatusBar("ToggleStatusBar"),
+    ToggleTerminal("ToggleTerminal"),
     ToggleToolBar("ToggleToolBar"),
     ToggleTree("ToggleTree"),
     ToggleUseSinglePanel("ToggleSinglePanel"),

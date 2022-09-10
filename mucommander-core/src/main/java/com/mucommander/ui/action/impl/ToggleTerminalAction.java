@@ -21,10 +21,12 @@ import com.jediterm.terminal.ui.JediTermWidget;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
 
@@ -40,14 +42,14 @@ import javax.swing.SwingUtilities;
  * This action shows built-in terminal (it mimics the behavior of Midnight Commander Ctrl-O command
  * that originates back from Norton Commander).
  */
-public class ShowTerminalAction extends ActiveTabAction {
+public class ToggleTerminalAction extends ActiveTabAction {
 
     private JediTermWidget terminal;
 
     private String cwd; // keep it as String or as MonitoredFile maybe?
     private boolean isTermShown;
 
-    public ShowTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
+    public ToggleTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         setEnabled(DesktopManager.canOpenInFileManager());
@@ -90,9 +92,10 @@ public class ShowTerminalAction extends ActiveTabAction {
 
                 terminal.getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
                     public void keyPressed(KeyEvent keyEvent) {
-                        // TODO get the real configured key seq
-                        if (keyEvent.getKeyCode() == KeyEvent.VK_O &&
-                                (keyEvent.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0) {
+                        KeyStroke pressedKeyStroke = KeyStroke.getKeyStrokeForEvent(keyEvent);
+                        KeyStroke accelerator = ActionKeymap.getAccelerator(ActionType.ToggleTerminal.toString());
+                        KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(ActionType.ToggleTerminal.toString());
+                        if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
                             revertToTableView();
                             isTermShown = false;
                         }
@@ -116,7 +119,7 @@ public class ShowTerminalAction extends ActiveTabAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public static final String ACTION_ID = "ShowTerminal";
+        public static final String ACTION_ID = "ToggleTerminal";
 
         public String getId() {
             return ACTION_ID;
@@ -126,17 +129,9 @@ public class ShowTerminalAction extends ActiveTabAction {
             return ActionCategory.NAVIGATION;
         }
 
-        public KeyStroke getDefaultAltKeyStroke() {
-            return null;
-        }
-
-        public KeyStroke getDefaultKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
-        }
-
         @Override
         public String getLabel() {
-            return Translator.get(ActionProperties.getActionLabelKey(ShowTerminalAction.Descriptor.ACTION_ID),
+            return Translator.get(ActionProperties.getActionLabelKey(ToggleTerminalAction.Descriptor.ACTION_ID),
                     DesktopManager.canOpenInFileManager() ? DesktopManager.getFileManagerName()
                             : Translator.get("file_manager"));
         }
