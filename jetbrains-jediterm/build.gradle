@@ -10,8 +10,6 @@ dependencies {
     // Since, I haven't found any repo where they are published,
     // so they have been built from sources (https://github.com/JetBrains/jediterm, c21a2b27629dd3760c603edeb258f9a862e75d34)
     // and placed directly into muC.
-    comprise files('libs/jediterm-2.69.jar')
-    comprise files('libs/eawtstub.jar')
     implementation 'org.checkerframework:checker-qual:3.24.0'
 
     comprise 'com.google.guava:guava:31.1-jre'
