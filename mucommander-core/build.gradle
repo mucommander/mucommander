@@ -21,6 +21,7 @@ dependencies {
     compileOnly project(':mucommander-protocol-api')
     compileOnly project(':mucommander-os-api')
     compileOnly project(':mucommander-viewer-api')
+    api project(':jetbrains-jediterm')
 
     compileOnly 'com.formdev:flatlaf:2.2'
     compileOnly 'org.violetlib:vaqua:10'
@@ -31,28 +32,6 @@ dependencies {
     implementation 'commons-collections:commons-collections:3.2.2'
 
     comprise 'org.unix4j:unix4j-command:0.6'
-
-    // The following libs are required by JediTerm.
-    // Since, I haven't found any repo where they are published,
-    // so they have been built from sources (https://github.com/JetBrains/jediterm, c21a2b27629dd3760c603edeb258f9a862e75d34)
-    // and placed directly into muC.
-    comprise files('libs/jediterm-2.69.jar')
-    comprise files('libs/eawtstub.jar')
-    implementation 'org.checkerframework:checker-qual:3.24.0'
-
-    comprise 'com.google.guava:guava:31.1-jre'
-    comprise 'org.jetbrains.jediterm:jediterm-typeahead:2.69'
-    comprise 'org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10'
-    implementation 'org.jetbrains:annotations:23.0.0'
-    comprise 'net.java.dev.jna:jna:5.10.0'
-    comprise 'org.jetbrains.pty4j:pty4j:0.12.3'
-    comprise 'net.java.dev.jna:jna-platform:5.10.0'
-    comprise 'org.jetbrains.pty4j:purejavacomm:0.0.11.1'
-    runtimeOnly 'org.jetbrains.intellij.deps:trove4j:1.0.20200330'
-    comprise 'org.jetbrains.jediterm:jediterm-pty:2.69'
-    comprise 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
-    implementation 'log4j:log4j:1.2.17'
-
 
     testImplementation 'org.testng:testng:6.11'
     testImplementation 'junit:junit:4.12'
@@ -65,17 +44,6 @@ dependencies {
 jar {
    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         include 'org/unix4j/**'
-        include 'com/jediterm/**'
-        include 'com/intellij/**'
-        include 'com/pty4j/**'
-        include 'gnu/trove/**'
-        include 'jtermios/**'
-        include 'purejavacomm/**'
-        include 'kotlin/**'
-        include 'org/jetbrains/**'
-        include 'resources/com/pty4j/**'
-        include 'com/sun/**'
-        include 'com/google/**'
         exclude 'codegen/**'
         exclude 'META-INF/**'
    } }
@@ -92,7 +60,7 @@ jar {
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
         'Build-Url': "https://www.mucommander.com/version/nightly.xml",
-        'Import-Package': '!javax.annotation.*,!com.google.appengine*,!com.google.apphosting.*,!kotlin.internal.*,!com.ibm.uvm.tools,!kotlin.reflect.jvm.internal,org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
+        'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
         'Export-Package':
             'com.mucommander.core.desktop,' +
             'com.mucommander.job,' +

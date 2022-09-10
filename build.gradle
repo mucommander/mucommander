@@ -59,6 +59,7 @@ dependencies {
     osgiRuntime project('mucommander-commons-io')
     osgiRuntime project('mucommander-commons-runtime')
     osgiRuntime project('apache-bzip2')
+    osgiRuntime project('jetbrains-jediterm')
     osgiRuntime project('sevenzipjbindings')
     osgiRuntime project('mucommander-encoding')
     osgiRuntime project('mucommander-preferences')

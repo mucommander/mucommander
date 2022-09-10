@@ -51,6 +51,7 @@ include 'mucommander-viewer-pdf'
 include 'mucommander-viewer-binary'
 
 include 'apache-bzip2'
+include 'jetbrains-jediterm'
 include 'sevenzipjbindings'
 
 rootProject.name = 'mucommander'
