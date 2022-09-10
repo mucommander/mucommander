@@ -251,6 +251,8 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
         case ToggleHiddenFiles:
             return KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
+        case ToggleTerminal:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
         case ToggleTree:
             return KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK);
         case UnmarkAll:

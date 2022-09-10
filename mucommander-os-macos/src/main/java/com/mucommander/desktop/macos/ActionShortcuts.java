@@ -151,6 +151,8 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_F5, KeyEvent.META_DOWN_MASK);
         case SwapFolders:
             return KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.META_DOWN_MASK);
+        case ToggleTerminal:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.META_DOWN_MASK);
         case ToggleTree:
             return KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.META_DOWN_MASK);
         case UnmarkAll:

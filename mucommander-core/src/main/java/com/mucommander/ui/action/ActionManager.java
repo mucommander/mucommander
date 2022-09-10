@@ -203,7 +203,6 @@ public class ActionManager {
     	registerAction(new ShowRootFoldersQLAction.Descriptor(), 			ShowRootFoldersQLAction::new);
     	registerAction(new ShowServerConnectionsAction.Descriptor(),        ShowServerConnectionsAction::new);
     	registerAction(new ShowTabsQLAction.Descriptor(),					ShowTabsQLAction::new);
-    	registerAction(new ShowTerminalAction.Descriptor(),                 ShowTerminalAction::new);
     	registerAction(new SortByDateAction.Descriptor(),             		SortByDateAction::new);
     	registerAction(new SortByExtensionAction.Descriptor(),              SortByExtensionAction::new);
     	registerAction(new SortByGroupAction.Descriptor(),            		SortByGroupAction::new);
@@ -232,6 +231,7 @@ public class ActionManager {
     	registerAction(new ToggleShowFoldersFirstAction.Descriptor(),       ToggleShowFoldersFirstAction::new);
     	registerAction(new ToggleSizeColumnAction.Descriptor(),             ToggleSizeColumnAction::new);
     	registerAction(new ToggleStatusBarAction.Descriptor(),              ToggleStatusBarAction::new);
+        registerAction(new ToggleTerminalAction.Descriptor(),               ToggleTerminalAction::new);
     	registerAction(new ToggleToolBarAction.Descriptor(),                ToggleToolBarAction::new);
     	registerAction(new ToggleTreeAction.Descriptor(),             	    ToggleTreeAction::new);
     	registerAction(new UnmarkAllAction.Descriptor(),            		UnmarkAllAction::new);
