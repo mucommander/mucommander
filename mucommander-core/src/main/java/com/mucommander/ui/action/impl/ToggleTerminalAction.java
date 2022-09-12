@@ -47,7 +47,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
     private JediTermWidget terminal;
 
     private String cwd; // keep it as String or as MonitoredFile maybe?
-    private boolean isTermShown;
+    private boolean visible; // is terminal visible?
 
     public ToggleTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
@@ -61,9 +61,18 @@ public class ToggleTerminalAction extends ActiveTabAction {
         setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA));
     }
 
+    private void setVisible(boolean visible) {
+        this.visible = visible;
+        setLabel(Translator.get(visible?ActionType.ToggleTerminal+".hide":ActionType.ToggleTerminal+".label"));
+    }
+
+    private boolean isVisible() {
+        return visible;
+    }
+
     @Override
     public void performAction() {
-        if (!isTermShown) {
+        if (!isVisible()) {
             try {
                 LOGGER.info("Going to show Terminal...");
                 // TODO either hide them, or disable all the options (or maybe add 'return' option?)
@@ -97,11 +106,11 @@ public class ToggleTerminalAction extends ActiveTabAction {
                         KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(ActionType.ToggleTerminal.toString());
                         if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
                             revertToTableView();
-                            isTermShown = false;
+                            setVisible(false);
                         }
                     }
                 });
-                isTermShown = true;
+                setVisible(true);
             } catch (Exception e) {
                 LOGGER.error("Caught exception while trying to show Terminal", e);
                 revertToTableView();
@@ -109,7 +118,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
         } else {
             // Normally this case is being handled by keyadapter above
             revertToTableView();
-            isTermShown = false;
+            setVisible(false);
         }
     }
 
