@@ -81,18 +81,20 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
     	
     	setAction(action);
     	
-        // Append the action's shortcut to the button's label
-        String label;
-        label = action.getLabel();
-        if(action.getAcceleratorText() != null)
-            label += " [" + action.getAcceleratorText() + ']';
-        setText(label);
+    	// Scale icon if scale factor is different from 1.0
+    	if(scaleFactor!=1.0f)
+    	    setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
+	}
 
-        // Scale icon if scale factor is different from 1.0
-        if(scaleFactor!=1.0f)
-            setIcon(IconManager.getScaledIcon(action.getIcon(), scaleFactor));
-    }
-	
+	@Override
+	public void setText(String text) {
+	    MuAction action = (MuAction) getAction();
+	    // Append the action's shortcut to the button's label
+	    if(action.getAcceleratorText() != null)
+	        text += " [" + action.getAcceleratorText() + ']';
+	    super.setText(text);
+	}
+
     /**
      * Return the id of the button's action
      * 
