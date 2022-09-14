@@ -47,7 +47,7 @@ public final class TerminalWindow {
     }
 
     private static JediTermWidget createTerminalWidget(String currentFolder) {
-        DefaultSettingsProvider settings = getDefaultSettings();new DefaultSettingsProvider();
+        DefaultSettingsProvider settings = getDefaultSettings();
         JediTermWidget widget = new JediTermWidget(80, 24, getDefaultSettings());
         widget.setTtyConnector(createTtyConnector(currentFolder));
         widget.start();
