@@ -141,6 +141,10 @@ public class ToggleTerminalAction extends ActiveTabAction {
                 KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(
                         ActionType.ToggleTerminal.toString());
                 if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
+                    keyEvent.consume();
+                    // FIXME workaround, since JediTerm doesn't check #isConsumed status
+                    // https://github.com/JetBrains/jediterm/issues/251
+                    keyEvent.setKeyCode(-1);
                     revertToTableView();
                     setVisible(false);
                 }
