@@ -83,10 +83,11 @@ public class ToggleTerminalAction extends ActiveTabAction {
                 // If !connected means that terminal process has ended (via `exit` command for ex.).
                 if (terminal == null || !terminal.getTtyConnector().isConnected()) {
                     terminal = getTerminal(newCwd);
+                    terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
                 } else {
                     if (cwd == null || !cwd.equals(newCwd)) {
                         // TODO check somehow if term is busy..... or find another way to set CWD
-                        // trailing space added deliberately to skip history
+                        // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
                         terminal.getTtyConnector().write(
                                 " cd \"" + newCwd + "\""
                                         + System.getProperty("line.separator"));
@@ -97,18 +98,6 @@ public class ToggleTerminalAction extends ActiveTabAction {
                 terminal.revalidate();
                 SwingUtilities.invokeLater(() -> {
                     terminal.requestFocusInWindow();
-                });
-
-                terminal.getTerminalPanel().addCustomKeyListener(new KeyAdapter() {
-                    public void keyPressed(KeyEvent keyEvent) {
-                        KeyStroke pressedKeyStroke = KeyStroke.getKeyStrokeForEvent(keyEvent);
-                        KeyStroke accelerator = ActionKeymap.getAccelerator(ActionType.ToggleTerminal.toString());
-                        KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(ActionType.ToggleTerminal.toString());
-                        if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
-                            revertToTableView();
-                            setVisible(false);
-                        }
-                    }
                 });
                 setVisible(true);
             } catch (Exception e) {
@@ -144,6 +133,21 @@ public class ToggleTerminalAction extends ActiveTabAction {
                     DesktopManager.canOpenInFileManager() ? DesktopManager.getFileManagerName()
                             : Translator.get("file_manager"));
         }
+    }
+
+    private KeyAdapter termCloseKeyHandler() {
+        return new KeyAdapter() {
+            public void keyPressed(KeyEvent keyEvent) {
+                KeyStroke pressedKeyStroke = KeyStroke.getKeyStrokeForEvent(keyEvent);
+                KeyStroke accelerator = ActionKeymap.getAccelerator(ActionType.ToggleTerminal.toString());
+                KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(
+                        ActionType.ToggleTerminal.toString());
+                if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
+                    revertToTableView();
+                    setVisible(false);
+                }
+            }
+        };
     }
 
     private JediTermWidget getTerminal(String initialPath) {

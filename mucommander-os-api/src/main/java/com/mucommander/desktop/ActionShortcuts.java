@@ -142,7 +142,7 @@ public class ActionShortcuts {
         case OpenNatively:
             return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.SHIFT_DOWN_MASK);
         case OpenTrash:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.ALT_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, KeyEvent.ALT_DOWN_MASK);
         case Pack:
             return KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK);
         case PasteClipboardFiles:
