@@ -41,7 +41,6 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.process.AbstractProcess;
-import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.icon.SpinningDial;

@@ -39,10 +39,12 @@ import com.mucommander.commons.file.AbstractFile;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 public class DefaultDesktopAdapter implements DesktopAdapter {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDesktopAdapter.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDesktopAdapter.class);
+
     /** Default multi-click interval when the desktop property cannot be retrieved. */
     public final static int DEFAULT_MULTICLICK_INTERVAL = 500;
+
+    private static final String DEFAULT_UNIX_SHELL = "/bin/bash -l";
 
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
     private static int multiClickInterval;
@@ -135,11 +137,8 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
         return multiClickInterval;
     }
 
-    /**
-     * Returns <code>/bin/sh -l -c"</code>.
-     * @return <code>/bin/sh -l -c"</code>.
-     */
-    public String getDefaultShell() {return "/bin/sh -l -c";}
+    @Override
+    public String getDefaultShell() { return DEFAULT_UNIX_SHELL; }
 
     /**
      * Always returns <code>false</code>.
