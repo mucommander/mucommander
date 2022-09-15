@@ -19,9 +19,12 @@ package com.mucommander.desktop.macos;
 
 import java.awt.Window;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import javax.swing.JComponent;
@@ -70,6 +73,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     // HINT: will work almost for every directory BUT NOT for /tmp on MacOS
     private static final String CMD_OPENER_COMMAND = "open -a Terminal $f";
 
+    private static final String DEFAULT_MACOS_SHELL = "/bin/bash";
+
+    private static final String DEFAULT_SHELL_INTERACTIVE = "--login";
+
     /** The key of the comment attribute in file metadata */
     public static final String COMMENT_PROPERTY_NAME = "com.apple.metadata:kMDItemFinderComment";
     public static final String TAGS_PROPERTY_NAME = "com.apple.metadata:_kMDItemUserTags";
@@ -103,6 +110,11 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     public boolean isRightMouseButton(MouseEvent e) {
         int modifiers = e.getModifiers();
         return (modifiers & MouseEvent.BUTTON3_MASK) != 0 || ((modifiers & MouseEvent.BUTTON1_MASK) != 0 && e.isControlDown());
+    }
+
+    @Override
+    public String getDefaultShell() {
+        return getMacOsUserShell() + " " + DEFAULT_SHELL_INTERACTIVE;
     }
 
     /**
@@ -199,5 +211,35 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     @Override
     public ActionShortcuts getActionShortcuts() {
         return new com.mucommander.desktop.macos.ActionShortcuts();
+    }
+
+    /**
+     * Tries to figure out a default shell for a current user under macOS.
+     * @return a shell path
+     */
+    private static String getMacOsUserShell() {
+        String result = DEFAULT_MACOS_SHELL;
+        try {
+            Runtime rt = Runtime.getRuntime();
+            String[] commands = {"dscl", ".", "-read" , System.getProperty("user.home"), "UserShell"};
+            Process proc = rt.exec(commands);
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            if (!proc.waitFor(500, TimeUnit.MILLISECONDS) || proc.exitValue() != 0) {
+                LOGGER.error("Error finding a default shell for a user, going to use a default one");
+                return result;
+            }
+            String s = null;
+            String prefix = "UserShell: ";
+            while ((s = stdInput.readLine()) != null) {
+                if (s.startsWith(prefix)) {
+                    result = s.substring(prefix.length());
+                    break;
+                }
+            }
+            LOGGER.info("Going to use the following shell: {}", result);
+        } catch (Exception e) {
+            LOGGER.error("Error finding default shell for user, going to use a default one", e);
+        }
+        return result;
     }
 }

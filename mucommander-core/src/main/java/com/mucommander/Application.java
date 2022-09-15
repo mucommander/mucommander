@@ -37,7 +37,6 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.SystemIconsPolicy;
 import com.mucommander.extension.ExtensionManager;
-import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
@@ -226,13 +225,6 @@ public class Application {
                 catch(Exception e) {printError("Could not set configuration file", e, activator.fatalWarnings());}
             }
 
-            // Shell history.
-            String shellHistory = activator.shellHistory();
-            if (shellHistory != null) {
-                try {ShellHistoryManager.setHistoryFile(shellHistory);}
-                catch(Exception e) {printError("Could not set shell history file", e, activator.fatalWarnings());}
-            }
-
             // Keymap file.
             String keymap = activator.keymap();
             if (keymap != null) {
@@ -361,11 +353,6 @@ public class Application {
             printStartupMessage("Loading credentials...");
             try {com.mucommander.auth.CredentialsManager.loadCredentials();}
             catch(Exception e) {printFileError("Could not load credentials", e, activator.fatalWarnings());}
-
-            // Loads shell history
-            printStartupMessage("Loading shell history...");
-            try {ShellHistoryManager.loadHistory();}
-            catch(Exception e) {printFileError("Could not load shell history", e, activator.fatalWarnings());}
 
             // Inits CustomDateFormat to make sure that its ConfigurationListener is added
             // before FileTable, so CustomDateFormat gets notified of date format changes first

@@ -18,30 +18,25 @@
 package com.mucommander.ui.dialog.pref.general;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import com.mucommander.bonjour.BonjourDirectory;
-import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
-import com.mucommander.ui.dialog.pref.component.PrefEncodingSelectBox;
 import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
 import com.mucommander.ui.dialog.pref.component.PrefTextField;
@@ -78,39 +73,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** 'Open the file with the viewer in case of opening error' checkbox */
     private PrefCheckBox viewOnErrorDiscoveryCheckBox;
 
-    /** Shell encoding auto-detect checkbox */
-    private PrefCheckBox shellEncodingAutoDetectCheckbox;
-
-    /** Shell encoding select box. */
-    private PrefEncodingSelectBox shellEncodingSelectBox;
-
     /** 'Set default file drag and drop action to COPY' checkbox */
     private PrefCheckBox setDropActionToCopyCheckBox;
-
-    private JPanel createShellEncodingPanel(PreferencesDialog parent) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-
-        shellEncodingAutoDetectCheckbox = new PrefCheckBox(Translator.get("prefs_dialog.auto_detect_shell_encoding"), () -> MuConfigurations.getPreferences().getVariable(
-                MuPreference.AUTODETECT_SHELL_ENCODING,
-                MuPreferences.DEFAULT_AUTODETECT_SHELL_ENCODING));
-        shellEncodingAutoDetectCheckbox.addDialogListener(parent);
-        shellEncodingAutoDetectCheckbox.addItemListener(this);
-
-        panel.add(shellEncodingAutoDetectCheckbox);
-
-        shellEncodingSelectBox = new PrefEncodingSelectBox(new DialogOwner(parent), MuConfigurations.getPreferences().getVariable(MuPreference.SHELL_ENCODING)) {
-            public boolean hasChanged() {
-                return !MuConfigurations.getPreferences().getVariable(MuPreference.SHELL_ENCODING).equals(getSelectedEncoding());
-            }
-        };
-        shellEncodingSelectBox.addDialogListener(parent);
-        shellEncodingSelectBox.setEnabled(!shellEncodingAutoDetectCheckbox.isSelected());
-
-        panel.add(shellEncodingSelectBox);
-
-        return panel;
-    }
-
 
     public MiscPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.misc_tab"));
@@ -126,7 +90,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
             }
         };
 
-        // Use sytem default or custom shell ?
+        // Use system default or custom shell ?
         if(MuConfigurations.getPreferences().getVariable(MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL))
             useCustomShellRadioButton.setSelected(true);
         else
@@ -153,7 +117,6 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         shellPanel.addRow(useDefaultShellRadioButton, new JLabel(DesktopManager.getDefaultShell()), 5);
         shellPanel.addRow(useCustomShellRadioButton, customShellField, 10);
-        shellPanel.addRow(Translator.get("prefs_dialog.shell_encoding"), createShellEncodingPanel(parent), 5);
 
         northPanel.add(shellPanel, 5);
 
@@ -222,11 +185,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getSource();
-        if(source==useCustomShellRadioButton) {
+        if (source == useCustomShellRadioButton) {
             customShellField.setEnabled(useCustomShellRadioButton.isSelected());
-        }
-        else if(source==shellEncodingAutoDetectCheckbox) {
-            shellEncodingSelectBox.setEnabled(!shellEncodingAutoDetectCheckbox.isSelected());
         }
     }
 
@@ -242,12 +202,6 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         // Saves the shell data.
         MuConfigurations.getPreferences().setVariable(MuPreference.USE_CUSTOM_SHELL, useCustomShellRadioButton.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.CUSTOM_SHELL, customShellField.getText());
-
-        // Saves the shell encoding data.
-        boolean isAutoDetect = shellEncodingAutoDetectCheckbox.isSelected();
-        MuConfigurations.getPreferences().setVariable(MuPreference.AUTODETECT_SHELL_ENCODING, isAutoDetect);
-        if(!isAutoDetect)
-            MuConfigurations.getPreferences().setVariable(MuPreference.SHELL_ENCODING, shellEncodingSelectBox.getSelectedEncoding());
 
         MuConfigurations.getPreferences().setVariable(MuPreference.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SPLASH_SCREEN, showSplashScreenCheckBox.isSelected());

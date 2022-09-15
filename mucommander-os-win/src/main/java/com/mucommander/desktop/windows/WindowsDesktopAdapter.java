@@ -38,6 +38,8 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
     private static final String EXE_OPENER_COMMAND  = "cmd /c $f";
     private static final String EXE_REGEXP          = ".*\\.exe";
 
+    private static final String DEFAULT_WIN_SHELL = "cmd.exe";
+
     public String toString() {return "Windows Desktop";}
 
     @Override
@@ -82,5 +84,5 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     @Override
-    public String getDefaultShell() {return "cmd /c";}
+    public String getDefaultShell() { return DEFAULT_WIN_SHELL; }
 }

@@ -17,6 +17,17 @@
 
 package com.mucommander.ui.terminal;
 
+import java.awt.event.KeyListener;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jediterm.pty.PtyProcessTtyConnector;
 import com.jediterm.terminal.TerminalColor;
 import com.jediterm.terminal.TextStyle;
@@ -24,25 +35,24 @@ import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.TerminalWidget;
 import com.jediterm.terminal.ui.TerminalWidgetListener;
-import com.jediterm.terminal.ui.UIUtil;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.event.KeyListener;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Creates JediTerm widget.
  * Based on JediTerm's BasicTerminalShellExample class.
  */
 public final class TerminalWindow {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TerminalWindow.class);
 
     private TerminalWindow() {
     }
@@ -83,22 +93,48 @@ public final class TerminalWindow {
 
     private static @NotNull TtyConnector createTtyConnector(String currentFolder) {
         try {
+            List<String> shellCommand = getShellCommand();
+            if (shellCommand.isEmpty()) {
+                LOGGER.error("Shell command is not properly set, terminal won't be created");
+                throw new IllegalStateException("Shell command is not properly set");
+            }
             Map<String, String> envs;
             String[] command;
-            if (UIUtil.isWindows) {
-                command = new String[]{"cmd.exe"};
+            if (OsFamily.WINDOWS.isCurrent()) {
                 envs = System.getenv();
             } else {
-                command = new String[]{"/bin/bash", "--login"};
                 envs = new HashMap<>(System.getenv());
-                envs.put("BASH_SILENCE_DEPRECATION_WARNING", "1");
                 envs.put("TERM", "xterm-256color");
+                if (OsFamily.MAC_OS.isCurrent()) {
+                    envs.put("BASH_SILENCE_DEPRECATION_WARNING", "1");
+                }
             }
-
-            PtyProcess process = new PtyProcessBuilder().setDirectory(currentFolder).setCommand(command).setEnvironment(envs).start();
+            PtyProcess process = new PtyProcessBuilder().setDirectory(currentFolder)
+                    .setCommand(shellCommand.toArray(new String[0])).setEnvironment(envs).start();
             return new PtyProcessTtyConnector(process, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    private static List<String> getShellCommand() {
+        List<String> result = new ArrayList<>();
+
+        // Retrieves the shell interactive command from preferences,
+        // falls back to default if not set in prefs.
+        String shellCommandAndParams;
+        if (MuConfigurations.getPreferences().getVariable(
+                MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL)) {
+            shellCommandAndParams = MuConfigurations.getPreferences().getVariable(
+                    MuPreference.CUSTOM_SHELL, DesktopManager.getDefaultShell());
+        } else {
+            shellCommandAndParams = DesktopManager.getDefaultShell();
+        }
+
+        String[] shellCommandParts = shellCommandAndParams.split("\\s+");
+        for (String part : shellCommandParts) {
+            result.add(part);
+        }
+        return result;
     }
 }

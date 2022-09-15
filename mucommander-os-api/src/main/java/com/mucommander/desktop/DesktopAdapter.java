@@ -145,12 +145,12 @@ public interface DesktopAdapter {
     // - Misc. -----------------------------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Returns the command used to start shell processes.
+     * Returns the command used to start shell in interactive mode.
      * <p>
-     * The returned command must set the shell in its 'run script' mode.
-     * For example, for bash, the returned command should be <code>/bin/bash -l -c"</code>.
+     * The returned command must set the shell in interactive mode.
+     * For example, for bash, the returned command should be <code>/bin/bash -l"</code>.
      * </p>
-     * @return the command used to start shell processes.
+     * @return the command used to start shell in interactive mode.
      */
     public String getDefaultShell();
 

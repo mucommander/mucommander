@@ -53,8 +53,8 @@ import com.mucommander.os.notifier.AbstractNotifier;
  * @author Nicolas Rinaudo
  */
 public class DesktopManager {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DesktopManager.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(DesktopManager.class);
+
     // - Predefined operation types --------------------------------------
     // -------------------------------------------------------------------
     /**

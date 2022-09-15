@@ -24,7 +24,6 @@ import com.mucommander.auth.CredentialsManager;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.command.CommandManager;
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.shell.ShellHistoryManager;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
@@ -77,10 +76,6 @@ public class ShutdownHook extends Thread {
         // Save preferences
         try {MuConfigurations.savePreferences();}
         catch(Exception e) {LOGGER.warn("Failed to save configuration", e);}
-
-        // Save shell history
-        try {ShellHistoryManager.writeHistory();}
-        catch(Exception e) {LOGGER.warn("Failed to save shell history", e);}
 
         // Write credentials file to disk, only if changes were made
         try {CredentialsManager.writeCredentials(false);}
