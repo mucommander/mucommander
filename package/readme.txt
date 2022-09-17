@@ -42,7 +42,8 @@ Improvements:
 - Unpacking of 7z archives is now faster and more reliable using a newer native library.
 - The filename cell is rendered differently when renaming a file to reflect that the filename is editable when no text is selected.
 - Keyboard shortcuts on macOS better align with the default keyboard shortcuts in Safari.
-- The 'About' dialog indicates whether the portable version is used.
+- The 'About' dialog indicates when the portable version is used.
+- Commands that are executed from the 'Run command' dialog are now typed within a terminal that recognizes shell aliases.
 
 Localization:
 -

@@ -22,13 +22,18 @@ import com.jediterm.terminal.TerminalColor;
 import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
+import com.jediterm.terminal.ui.TerminalWidget;
+import com.jediterm.terminal.ui.TerminalWidgetListener;
 import com.jediterm.terminal.ui.UIUtil;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.event.KeyListener;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,23 +47,36 @@ public final class TerminalWindow {
     private TerminalWindow() {
     }
 
-    public static JediTermWidget createTerminal(String currentFolder) {
-        return createTerminalWidget(currentFolder);
+    public static JediTermWidget createTerminal(String currentFolder, Runnable listener, KeyListener keyListener) {
+        DefaultSettingsProvider settings = getDefaultSettings(
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND_COLOR)),
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.SHELL_FOREGROUND_COLOR)));
+        JediTermWidget jediTermWidget = createTerminalWidget(currentFolder, settings);
+        jediTermWidget.addListener(new TerminalWidgetListener() {
+            public void allSessionsClosed(TerminalWidget widget) {
+                listener.run();
+            }
+        });
+        jediTermWidget.getTerminalPanel().addCustomKeyListener(keyListener);
+        return jediTermWidget;
     }
 
-    private static JediTermWidget createTerminalWidget(String currentFolder) {
-        DefaultSettingsProvider settings = getDefaultSettings();
-        JediTermWidget widget = new JediTermWidget(80, 24, getDefaultSettings());
+    public static JediTermWidget createTerminal(String currentFolder) {
+        return createTerminalWidget(currentFolder, getDefaultSettings(TerminalColor.BLACK, TerminalColor.WHITE));
+    }
+
+    private static JediTermWidget createTerminalWidget(String currentFolder, DefaultSettingsProvider settings) {
+        JediTermWidget widget = new JediTermWidget(80, 24, settings);
         widget.setTtyConnector(createTtyConnector(currentFolder));
         widget.start();
         return widget;
     }
 
-    private static DefaultSettingsProvider getDefaultSettings() {
+    private static DefaultSettingsProvider getDefaultSettings(TerminalColor background, TerminalColor foreground) {
         return new DefaultSettingsProvider() {
             @Override
             public TextStyle getDefaultStyle() {
-                return new TextStyle(TerminalColor.WHITE, TerminalColor.BLACK);
+                return new TextStyle(foreground, background);
             }
         };
     }
