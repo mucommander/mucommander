@@ -96,9 +96,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
                 cwd = newCwd;
                 mainFrame.getMainPanel().add(terminal, BorderLayout.CENTER);
                 terminal.revalidate();
-                SwingUtilities.invokeLater(() -> {
-                    terminal.requestFocusInWindow();
-                });
+                SwingUtilities.invokeLater(terminal::requestFocusInWindow);
                 setVisible(true);
             } catch (Exception e) {
                 LOGGER.error("Caught exception while trying to show Terminal", e);
@@ -163,8 +161,6 @@ public class ToggleTerminalAction extends ActiveTabAction {
         //mainFrame.getToolBarPanel().setVisible(true);
         //mainFrame.getCommandBar().setVisible(true);
         mainFrame.getSplitPane().setVisible(true);
-        SwingUtilities.invokeLater(() -> {
-            mainFrame.getActiveTable().requestFocusInWindow();
-        });
+        SwingUtilities.invokeLater(mainFrame.getActiveTable()::requestFocusInWindow);
     }
 }
