@@ -73,6 +73,7 @@ public final class TerminalWindow {
             } else {
                 command = new String[]{"/bin/bash", "--login"};
                 envs = new HashMap<>(System.getenv());
+                envs.put("BASH_SILENCE_DEPRECATION_WARNING", "1");
                 envs.put("TERM", "xterm-256color");
             }
 
