@@ -29,6 +29,7 @@ import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.terminal.TerminalWindow;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
