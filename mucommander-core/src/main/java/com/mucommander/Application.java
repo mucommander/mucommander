@@ -19,6 +19,7 @@ package com.mucommander;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -328,7 +329,7 @@ public class Application {
             catch(Exception e) {printError("Could not initialize desktop", e, true);}
 
             // Loads custom commands
-            printStartupMessage("Loading file associations...");
+            printStartupMessage("Loading file associations..."); // TODO Localize those messages.....
             try {com.mucommander.command.CommandManager.loadCommands();}
             catch(Exception e) {
                 printFileError("Could not load custom commands", e, activator.fatalWarnings());
@@ -399,8 +400,11 @@ public class Application {
             com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
 
             // Starts Bonjour services discovery (only if enabled in prefs)
-            printStartupMessage("Starting Bonjour services discovery...");
-            com.mucommander.bonjour.BonjourDirectory.setActive(MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
+            boolean bonjourEnabled = MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY);
+            if (bonjourEnabled) {
+                printStartupMessage("Starting Bonjour services discovery...");
+            }
+            CompletableFuture.runAsync(() -> com.mucommander.bonjour.BonjourDirectory.setActive(bonjourEnabled));
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
