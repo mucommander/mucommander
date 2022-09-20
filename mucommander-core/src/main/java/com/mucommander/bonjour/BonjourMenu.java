@@ -90,8 +90,9 @@ public abstract class BonjourMenu extends JMenu implements MenuListener {
                 // Inform that no service have been discovered
                 add(new JMenuItem(Translator.get("bonjour.no_service_discovered"))).setEnabled(false);
             }
-        }
-        else {
+        } else if (BonjourDirectory.isStarting()) {
+            add(new JMenuItem(Translator.get("bonjour.bonjour_initializing"))).setEnabled(false);
+        } else {
             // Inform that Bonjour support has been disabled
             add(new JMenuItem(Translator.get("bonjour.bonjour_disabled"))).setEnabled(false);
         }
