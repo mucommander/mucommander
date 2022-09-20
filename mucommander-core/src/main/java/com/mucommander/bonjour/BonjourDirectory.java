@@ -50,6 +50,12 @@ public class BonjourDirectory implements ServiceListener {
     private final static BonjourDirectory instance = new BonjourDirectory();
     /** Does all the hard work */
     private static JmDNS jmDNS;
+
+    /**
+     * To track whether the service is now starting.
+     */
+    private static boolean starting = false;
+
     /** List of discovered and currently active Bonjour services */
     private static List<BonjourService> services = new Vector<BonjourService>();
 
@@ -83,16 +89,17 @@ public class BonjourDirectory implements ServiceListener {
         if(enabled && jmDNS==null) {
             // Start JmDNS
             try {
+                starting = true;
                 jmDNS = JmDNS.create();
 
                 // Listens to service events for known service types
                 int nbServices = KNOWN_SERVICE_TYPES.length;
                 for(int i=0; i<nbServices; i++)
                     jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], instance);
+            } catch(IOException e) {
+                LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
             }
-            catch(IOException e) {
-            	LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
-            }
+            starting = false;
         }
         else if(!enabled && jmDNS!=null) {
             // Shutdown JmDNS
@@ -114,6 +121,14 @@ public class BonjourDirectory implements ServiceListener {
         return jmDNS!=null;
     }
 
+    /**
+     * Returns true if Bonjour services discovery is still starting, false if either disabled
+     * or failed to finish starting.
+     * @return true if starting, otherwise either disabled or failed to start
+     */
+    public static boolean isStarting() {
+        return starting;
+    }
 
     /**
      * Returns all currently available Bonjour services. The returned array may be empty but never null.
