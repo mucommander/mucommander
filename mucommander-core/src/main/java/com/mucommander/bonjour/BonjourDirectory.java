@@ -22,6 +22,7 @@ import java.net.Inet6Address;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.CompletableFuture;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
@@ -44,8 +45,8 @@ import com.mucommander.commons.file.protocol.FileProtocols;
  * @see BonjourMenu
  */
 public class BonjourDirectory implements ServiceListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BonjourDirectory.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(BonjourDirectory.class);
+
     /** Singleton instance held to prevent garbage collection and also used for synchronization */
     private final static BonjourDirectory instance = new BonjourDirectory();
     /** Does all the hard work */
@@ -57,7 +58,7 @@ public class BonjourDirectory implements ServiceListener {
     private static boolean starting = false;
 
     /** List of discovered and currently active Bonjour services */
-    private static List<BonjourService> services = new Vector<BonjourService>();
+    private static List<BonjourService> services = new Vector<>();
 
     /** Known Bonjour/Zeroconf service types and their corresponding protocol */
     private final static String KNOWN_SERVICE_TYPES[][] = {
@@ -82,26 +83,16 @@ public class BonjourDirectory implements ServiceListener {
      * Enables/disables Bonjour services discovery. If currently active and false is specified, current services
      * will be lost and {@link #getServices()} will return an empty array. If currently inactive and true is specified,
      * services discovery will be immediately started but it may take a while (a few seconds at least) to
-     * collect services.
+     * collect services. The activation (aka initialization) is being done asynchronously.
      * @param enabled whether Bonjour services discovery should be enabled.
      */
     public static void setActive(boolean enabled) {
-        if(enabled && jmDNS==null) {
-            // Start JmDNS
-            try {
-                starting = true;
-                jmDNS = JmDNS.create();
-
-                // Listens to service events for known service types
-                int nbServices = KNOWN_SERVICE_TYPES.length;
-                for(int i=0; i<nbServices; i++)
-                    jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], instance);
-            } catch(IOException e) {
-                LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
-            }
-            starting = false;
+        if (starting) {     // not so thread-safe, but I don't see risk here.
+            return;
         }
-        else if(!enabled && jmDNS!=null) {
+        if (enabled && jmDNS == null) {
+            CompletableFuture.runAsync(() -> initiateBonjour());
+        } else if(!enabled && jmDNS!=null) {
             // Shutdown JmDNS
             try {
                 jmDNS.close();
@@ -118,7 +109,7 @@ public class BonjourDirectory implements ServiceListener {
      * @return <code>true</code> if Bonjour services discovery is currently running, <code>false</code> otherwise.
      */
     public static boolean isActive() {
-        return jmDNS!=null;
+        return jmDNS != null;
     }
 
     /**
@@ -154,13 +145,12 @@ public class BonjourDirectory implements ServiceListener {
             String type = serviceInfo.getType();
             int nbServices = KNOWN_SERVICE_TYPES.length;
             // Looks for the file protocol corresponding to the service type
-            for(int i=0; i<nbServices; i++) {
+            for (int i = 0; i < nbServices; i++) {
                 if(KNOWN_SERVICE_TYPES[i][0].equals(type)) {
                     return new BonjourService(serviceInfo.getName(), FileURL.getFileURL(serviceInfo.getURL(KNOWN_SERVICE_TYPES[i][1])), serviceInfo.getQualifiedName());
                 }
             }
-        }
-        catch(MalformedURLException e) {
+        } catch(MalformedURLException e) {
             // Null will be returned
         }
 
@@ -173,11 +163,12 @@ public class BonjourDirectory implements ServiceListener {
     ////////////////////////////////////
 
     public void serviceAdded(final ServiceEvent serviceEvent) {
-    	LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
+        LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
         
         // Ignore if Bonjour has been disabled
-        if(!isActive())
+        if (!isActive()) {
             return;
+        }
 
         // Resolve service info in a separate thread, serviceResolved() will be called once service info has been resolved.
         // Not spawning a thread often leads to service info loss (serviceResolved() not called).
@@ -190,26 +181,27 @@ public class BonjourDirectory implements ServiceListener {
     }
 
     public void serviceResolved(ServiceEvent serviceEvent) {
-    	LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType()+" info="+serviceEvent.getInfo());
+        LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType()+" info="+serviceEvent.getInfo());
 
         // Ignore if Bonjour has been disabled
-        if(!isActive())
+        if (!isActive()) {
             return;
+        }
 
         // Creates a new BonjourService corresponding to the new service and add it to the list of current Bonjour services
         ServiceInfo serviceInfo = serviceEvent.getInfo();
-        if(serviceInfo!=null) {
-            if(serviceInfo.getInetAddress() instanceof Inet6Address) {
+        if (serviceInfo!=null) {
+            if (serviceInfo.getInetAddress() instanceof Inet6Address) {
                 // IPv6 addresses not supported at this time + they seem not to be correctly handled by ServiceInfo
-            	LOGGER.debug("ignoring IPv6 service");
+                LOGGER.debug("ignoring IPv6 service");
                 return;
             }
 
             BonjourService bs = createBonjourService(serviceInfo);
             // Synchronized to properly handle duplicate calls
             synchronized(instance) {
-                if(bs!=null && !services.contains(bs)) {
-                	LOGGER.debug("BonjourService "+bs+" added");
+                if (bs != null && !services.contains(bs)) {
+                    LOGGER.debug("BonjourService "+bs+" added");
                     services.add(bs);
                 }
             }
@@ -217,11 +209,12 @@ public class BonjourDirectory implements ServiceListener {
     }
 
     public void serviceRemoved(ServiceEvent serviceEvent) {
-    	LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
+        LOGGER.trace("name="+serviceEvent.getName()+" type="+serviceEvent.getType());
 
         // Ignore if Bonjour has been disabled
-        if(!isActive())
+        if (!isActive()) {
             return;
+        }
 
         // Looks for an existing BonjourService instance corresponding to the service being removed and removes it from
         // the list of current Bonjour services.
@@ -230,7 +223,7 @@ public class BonjourDirectory implements ServiceListener {
         if(serviceInfo!=null) {
             if(serviceInfo.getInetAddress() instanceof Inet6Address) {
                 // IPv6 addresses not supported at this time + they seem not to be correctly handled by ServiceInfo
-            	LOGGER.debug("ignoring IPv6 service");
+                LOGGER.debug("ignoring IPv6 service");
                 return;
             }
 
@@ -239,10 +232,27 @@ public class BonjourDirectory implements ServiceListener {
             synchronized(instance) {
                 // Note: BonjourService#equals() uses the service's fully qualified name as the discriminator.
                 if(bs!=null && services.contains(bs)) {
-                	LOGGER.debug("BonjourService "+bs+" removed");
+                    LOGGER.debug("BonjourService "+bs+" removed");
                     services.remove(bs);
                 }
             }
         }
+    }
+
+    private static void initiateBonjour() {
+        // Start JmDNS
+        try {
+            starting = true;
+            jmDNS = JmDNS.create();
+
+            // Listens to service events for known service types
+            int nbServices = KNOWN_SERVICE_TYPES.length;
+            for (int i=0; i<nbServices; i++) {
+                jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], instance);
+            }
+        } catch(IOException e) {
+            LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
+        }
+        starting = false;
     }
 }

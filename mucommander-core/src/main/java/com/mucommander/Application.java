@@ -19,7 +19,6 @@ package com.mucommander;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -36,7 +35,6 @@ import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.conf.PlatformManager;
 import com.mucommander.conf.SystemIconsPolicy;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.shell.ShellHistoryManager;
@@ -93,9 +91,9 @@ public class Application {
                 try {
                     LOGGER.debug("waiting");
                     LAUNCH_LOCK.wait();
-                }
-                catch(InterruptedException e) {
+                } catch (InterruptedException e) {
                     // will loop
+                    LOGGER.trace("Interrupted exception", e);
                 }
             }
         }
@@ -126,8 +124,9 @@ public class Application {
         StringBuilder error;
 
         error = new StringBuilder();
-        if(quit)
+        if (quit) {
             error.append("Warning: ");
+        }
         error.append(msg);
         if (!activator.silent() && (exception != null)) {
             error.append(": ");
@@ -142,7 +141,7 @@ public class Application {
      */
     private static void printError(String msg, boolean quit) {
         System.err.println(msg);
-        if(quit) {
+        if (quit) {
             System.err.println("See mucommander --help for more information.");
             System.exit(1);
         }
@@ -155,8 +154,9 @@ public class Application {
         StringBuilder error;
 
         error = createErrorMessage(msg, exception, quit);
-        if(!quit)
+        if (!quit) {
             error.append(". Using default values.");
+        }
 
         printError(error.toString(), quit);
     }
@@ -165,8 +165,9 @@ public class Application {
      * Prints the specified startup message.
      */
     private void printStartupMessage(String message) {
-        if(useSplash)
+        if (useSplash) {
             splashScreen.setLoadingMessage(message);
+        }
 
         LOGGER.trace(message);
     }
@@ -182,11 +183,12 @@ public class Application {
     private static void migrateCommand(String useName, String commandName, String alias) {
         String command;
 
-        if(MuConfigurations.getPreferences().getBooleanVariable(useName) && (command = MuConfigurations.getPreferences().getVariable(commandName)) != null) {
+        if (MuConfigurations.getPreferences().getBooleanVariable(useName) && (command = MuConfigurations.getPreferences().getVariable(commandName)) != null) {
             try {
-                CommandManager.registerCommand(new Command(alias, command, CommandType.SYSTEM_COMMAND));}
-            catch(CommandException e) {
+                CommandManager.registerCommand(new Command(alias, command, CommandType.SYSTEM_COMMAND));
+            } catch(CommandException e) {
                 // Ignore this: the command didn't work in the first place, we might as well get rid of it.
+                LOGGER.trace("Command exception", e);
             }
             MuConfigurations.getPreferences().removeVariable(useName);
             MuConfigurations.getPreferences().removeVariable(commandName);
@@ -404,7 +406,7 @@ public class Application {
             if (bonjourEnabled) {
                 printStartupMessage("Starting Bonjour services discovery...");
             }
-            CompletableFuture.runAsync(() -> com.mucommander.bonjour.BonjourDirectory.setActive(bonjourEnabled));
+            com.mucommander.bonjour.BonjourDirectory.setActive(bonjourEnabled);
 
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
