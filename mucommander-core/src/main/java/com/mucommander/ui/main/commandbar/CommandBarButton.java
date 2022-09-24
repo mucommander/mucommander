@@ -90,7 +90,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	public void setText(String text) {
 	    MuAction action = (MuAction) getAction();
 	    // Append the action's shortcut to the button's label
-	    if(action.getAcceleratorText() != null)
+	    if (action != null && action.getAcceleratorText() != null)
 	        text += " [" + action.getAcceleratorText() + ']';
 	    super.setText(text);
 	}
