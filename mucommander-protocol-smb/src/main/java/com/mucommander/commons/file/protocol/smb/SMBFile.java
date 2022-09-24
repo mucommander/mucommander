@@ -18,7 +18,31 @@
 
 package com.mucommander.commons.file.protocol.smb;
 
-import com.mucommander.commons.file.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.Credentials;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.GroupedPermissionBits;
+import com.mucommander.commons.file.IndividualPermissionBits;
+import com.mucommander.commons.file.PermissionAccess;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolFile;
@@ -27,15 +51,13 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 
 import jcifs.CIFSContext;
 import jcifs.context.SingletonContext;
-import jcifs.smb.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.util.Collections;
+import jcifs.smb.NtlmPasswordAuthenticator;
+import jcifs.smb.SmbAuthException;
+import jcifs.smb.SmbException;
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileInputStream;
+import jcifs.smb.SmbFileOutputStream;
+import jcifs.smb.SmbRandomAccessFile;
 
 
 /**
@@ -478,41 +500,37 @@ import java.util.Collections;
             SmbFile smbFiles[] = file.listFiles(filenameFilter==null?null:new SMBFilenameFilter(filenameFilter));
 
             if(smbFiles==null)
-                throw new IOException();
+                throw new IOException("failed to list " + file);
 
-            // Count the number of files to exclude: excluded files are those that are not file share/ not browsable
-            // (Printers, named pipes, comm ports)
-            int nbSmbFiles = smbFiles.length;
-            int nbSmbFilesToExclude = 0;
-            int smbFileType;
-            for(int i=0; i<nbSmbFiles; i++) {
-                smbFileType = smbFiles[i].getType();
-                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
-                    nbSmbFilesToExclude++;
-            }
-
-            // Create SMBFile by using SmbFile instance and sharing parent instance among children
-            AbstractFile children[] = new AbstractFile[nbSmbFiles-nbSmbFilesToExclude];
-            FileURL childURL;
-            SmbFile smbFile;
-            int currentIndex = 0;
-
-            for(int i=0; i<nbSmbFiles; i++) {
-                smbFile = smbFiles[i];
-                smbFileType = smbFile.getType();
-                if(smbFileType==SmbFile.TYPE_PRINTER || smbFileType==SmbFile.TYPE_NAMED_PIPE || smbFileType==SmbFile.TYPE_COMM)
-                    continue;
-
-                // Note: properties and credentials are cloned for every children's url
-                childURL = (FileURL)fileURL.clone();
-                childURL.setHost(smbFile.getServer());
-                childURL.setPath(smbFile.getURL().getPath());
-
-                // Use SMBFile private constructor to recycle the SmbFile instance
-                children[currentIndex++] = FileFactory.getFile(childURL, this, Collections.singletonMap("parentSmbFile", smbFile));
-            }
-
-            return children;
+            return Stream.of(smbFiles)
+                    .filter(file -> {
+                        int smbFileType;
+                        try {
+                            smbFileType = file.getType();
+                        } catch (SmbException e) {
+                            LOGGER.error("failed to get type of {}, skipping", file);
+                            LOGGER.debug("failed to get smb type", e);
+                            // this typically means that the user has no access to the file
+                            return false;
+                        }
+                        // excluded files are those that are not file share / not browsable
+                        // (Printers, named pipes, comm ports)
+                        return smbFileType != SmbFile.TYPE_PRINTER && smbFileType != SmbFile.TYPE_NAMED_PIPE && smbFileType != SmbFile.TYPE_COMM;
+                    })
+                    .map(file -> {
+                        // Note: properties and credentials are cloned for every children's url
+                        FileURL childURL = (FileURL)fileURL.clone();
+                        childURL.setHost(file.getServer());
+                        childURL.setPath(file.getURL().getPath());
+                        try {
+                            return FileFactory.getFile(childURL, this, Collections.singletonMap("parentSmbFile", file));
+                        } catch (IOException e) {
+                            LOGGER.debug("failed to get file {}", childURL);
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .toArray(AbstractFile[]::new);
         }
         catch(SmbAuthException e) {
             throw new AuthException(fileURL, e.getMessage());
