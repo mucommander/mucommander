@@ -52,6 +52,7 @@ Bug fixes:
 - 'Move' action does not get stuck when an external file is dragged and dropped to the application.
 - Symbolic links are extracted from archive files to the right location rather than to the destination base folder.
 - Fix detection of 'skopeo' binary which is used in order to connect to container registries.
+- When extracting an item from an archive file to the archive file's parent folder, the archive file remains presented.
 
 Known issues:
 - Some translations may not be up-to-date.

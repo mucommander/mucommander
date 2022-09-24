@@ -22,6 +22,8 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.ModificationDateBasedMonitoredFile;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.ProxyFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.filter.FileFilter;
@@ -530,6 +532,11 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         checkEntriesTree();
 
         return ls(entryTreeRoot, this, null, filter);
+    }
+
+    @Override
+    public MonitoredFile toMonitoredFile() {
+        return new ModificationDateBasedMonitoredFile(this);
     }
 
     // Note: do not override #isDirectory() to always return true, as AbstractArchiveFile instances may be created when
