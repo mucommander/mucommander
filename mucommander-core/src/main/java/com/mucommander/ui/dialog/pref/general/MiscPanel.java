@@ -56,7 +56,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
     /** Custom shell command text field */
     private PrefTextField customShellField;
-	
+
     /** 'Use custom shell' radio button */
     private PrefRadioButton useCustomShellRadioButton;
 
@@ -121,9 +121,9 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         JRadioButton useDefaultShellRadioButton = new JRadioButton(Translator.get("prefs_dialog.default_shell") + ':');
         useCustomShellRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.custom_shell") + ':') {
-			public boolean hasChanged() {
-				return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL);
-			}
+            public boolean hasChanged() {
+                return isSelected() != MuConfigurations.getPreferences().getVariable(MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL);
+            }
         };
 
         // Use sytem default or custom shell ?
@@ -145,9 +145,9 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         // Create a path field with auto-completion capabilities
         customShellField = new PrefFilePathField(MuConfigurations.getPreferences().getVariable(MuPreference.CUSTOM_SHELL, "")) {
-			public boolean hasChanged() {
-				return isEnabled() && !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.CUSTOM_SHELL));
-			}
+            public boolean hasChanged() {
+                return isEnabled() && !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.CUSTOM_SHELL));
+            }
         };
         customShellField.setEnabled(useCustomShellRadioButton.isSelected());
 
@@ -212,7 +212,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         northPanel.add(setDropActionToCopyCheckBox);
 
         customShellField.addDialogListener(parent);
-    	useCustomShellRadioButton.addDialogListener(parent);
+        useCustomShellRadioButton.addDialogListener(parent);
     }
 
 
@@ -237,17 +237,17 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
     @Override
     protected void commit() {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.CHECK_FOR_UPDATE, checkForUpdatesCheckBox.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreference.CHECK_FOR_UPDATE, checkForUpdatesCheckBox.isSelected());
 
         // Saves the shell data.
-    	MuConfigurations.getPreferences().setVariable(MuPreference.USE_CUSTOM_SHELL, useCustomShellRadioButton.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreference.USE_CUSTOM_SHELL, useCustomShellRadioButton.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.CUSTOM_SHELL, customShellField.getText());
 
         // Saves the shell encoding data.
         boolean isAutoDetect = shellEncodingAutoDetectCheckbox.isSelected();
         MuConfigurations.getPreferences().setVariable(MuPreference.AUTODETECT_SHELL_ENCODING, isAutoDetect);
         if(!isAutoDetect)
-        	MuConfigurations.getPreferences().setVariable(MuPreference.SHELL_ENCODING, shellEncodingSelectBox.getSelectedEncoding());
+            MuConfigurations.getPreferences().setVariable(MuPreference.SHELL_ENCODING, shellEncodingSelectBox.getSelectedEncoding());
 
         MuConfigurations.getPreferences().setVariable(MuPreference.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SPLASH_SCREEN, showSplashScreenCheckBox.isSelected());
