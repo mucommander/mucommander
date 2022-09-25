@@ -45,8 +45,8 @@ Improvements:
 - Keyboard shortcuts on macOS better align with the default keyboard shortcuts in Safari.
 - The 'About' dialog indicates when the portable version is used.
 - Commands that are executed from the 'Run command' dialog are now typed within a terminal that recognizes shell aliases.
-- When referencing an SMB server (smb://<server>/), its accessible shares are listed
-- Faster launch when Bonjour services enabled (initialization done asynchronously)
+- When referencing an SMB server (smb://<server>/), its accessible shares are listed.
+- Bonjour services are initialized asynchronously in order to accelerate startup time.
 
 Localization:
 -

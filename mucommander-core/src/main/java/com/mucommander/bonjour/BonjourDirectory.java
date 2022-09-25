@@ -91,7 +91,7 @@ public class BonjourDirectory implements ServiceListener {
             return;
         }
         if (enabled && jmDNS == null) {
-            CompletableFuture.runAsync(() -> initiateBonjour());
+            CompletableFuture.runAsync(BonjourDirectory::initiateBonjour);
         } else if(!enabled && jmDNS!=null) {
             // Shutdown JmDNS
             try {
