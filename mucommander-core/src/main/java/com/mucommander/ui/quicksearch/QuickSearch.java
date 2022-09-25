@@ -17,13 +17,13 @@
 
 package com.mucommander.ui.quicksearch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class contains 'quick search' common functionality - selection of rows that match
@@ -120,7 +120,8 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
      * <code>false</code> in any of the following cases:
      *
      * <ul>
-     *   <li>has any of the Alt, Ctrl or Meta modifier keys down (Shift is OK)</li>
+     *   <li>has any of the Ctrl or Meta modifier keys down (Shift is OK)</li>
+     *   <li>has Alt but it is not a letter (in some languages diacritics are typed with ALT+letter)</li>
      *   <li>is an ASCII control character (<32 or ==127)</li>
      *   <li>is not a valid Unicode character</li>
      * </ul>
@@ -129,10 +130,17 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
      * @return true if the given <code>KeyEvent</code> corresponds to a valid quick search input
      */
     protected boolean isValidQuickSearchInput(KeyEvent e) {
-        if((e.getModifiersEx()&(KeyEvent.ALT_DOWN_MASK|KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK))!=0)
-            return false;
-
+        int modifier = e.getModifiersEx();
         char keyChar = e.getKeyChar();
+        if ((modifier&(KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK)) != 0) {
+            return false;
+        } else if ((modifier & (KeyEvent.ALT_DOWN_MASK)) != 0) {
+            // special case for certain keyboard layouts where diacritics
+            // typed using letter+ALT/OPTION (like Polish Programmer keyboard, the most popular variant in PL).
+            if (!Character.isLetter(keyChar)) {
+                return false;
+            }
+        }
         return keyChar>=32 && keyChar!=127 && Character.isDefined(keyChar);
     }
     
