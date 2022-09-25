@@ -31,7 +31,6 @@ import java.io.PrintStream;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JTextArea;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +42,6 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.process.AbstractProcess;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.terminal.TerminalWindow;
 
@@ -60,14 +58,12 @@ import com.mucommander.ui.terminal.TerminalWindow;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class RunDialog extends FocusDialog implements ActionListener, KeyListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(RunDialog.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(RunDialog.class);
+
     // - UI components -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Cancel button. */
     private JButton       closeButton;
-
-
 
     // - Process management --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -76,14 +72,10 @@ public class RunDialog extends FocusDialog implements ActionListener, KeyListene
     /** Process currently running, <code>null</code> if none. */
     private AbstractProcess currentProcess;
 
-
-
     // - Misc. class variables -----------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Minimum dimensions for the dialog. */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(600, 400);
-
-
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -114,7 +106,7 @@ public class RunDialog extends FocusDialog implements ActionListener, KeyListene
      */
     public RunDialog(MainFrame mainFrame) {
         super(mainFrame, ActionProperties.getActionLabel(ActionType.RunCommand), mainFrame);
-		
+
         // Initializes the dialog's UI.
         Container contentPane = getContentPane();
         JComponent terminal = TerminalWindow.createTerminal(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath(), this::dispose, this);
@@ -138,8 +130,6 @@ public class RunDialog extends FocusDialog implements ActionListener, KeyListene
         // Sets the dialog's minimum size.
         setMinimumSize(MINIMUM_DIALOG_DIMENSION);
     }
-
-
 
     // - KeyListener code ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -178,8 +168,6 @@ public class RunDialog extends FocusDialog implements ActionListener, KeyListene
      * Not used.
      */
     public void keyReleased(KeyEvent event) {}
-
-
 
     // - ActionListener code -------------------------------------------------------------
     // -----------------------------------------------------------------------------------

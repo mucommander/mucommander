@@ -18,10 +18,12 @@
 package com.mucommander.ui.terminal;
 
 import java.awt.event.KeyListener;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -98,12 +100,14 @@ public final class TerminalWindow {
                 LOGGER.error("Shell command is not properly set, terminal won't be created");
                 throw new IllegalStateException("Shell command is not properly set");
             }
+
             Map<String, String> envs;
             String[] command;
             if (OsFamily.WINDOWS.isCurrent()) {
                 envs = System.getenv();
             } else {
                 envs = new HashMap<>(System.getenv());
+                addDefaultLocaleIfNeeded(envs);
                 envs.put("TERM", "xterm-256color");
                 if (OsFamily.MAC_OS.isCurrent()) {
                     envs.put("BASH_SILENCE_DEPRECATION_WARNING", "1");
@@ -114,6 +118,22 @@ public final class TerminalWindow {
             return new PtyProcessTtyConnector(process, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * Checks if LC_ALL env is set and if not then it will set LC_ALL in provided
+     * envs accordingly to the best JVM knowledge.
+     *
+     * @param envs the env variables to be updated
+     */
+    private static void addDefaultLocaleIfNeeded(Map<String, String> envs) {
+        String lcAll = System.getenv("LC_ALL");
+        if (lcAll == null || lcAll.isEmpty()) {
+            Locale locale = Locale.getDefault();
+            String localeStr = locale.toString().split("#")[0];
+            String charSetStr = Charset.defaultCharset().name();
+            envs.put("LC_ALL", localeStr + "." + charSetStr);
         }
     }
 
