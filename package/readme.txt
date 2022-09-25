@@ -32,9 +32,10 @@ What's new since v1.0.1 ?
 -----------------------
 
 New features:
-- Add support for SMBv2
-- Add support for RAR 5+
-- New archive formats: RPM, cpio
+- Support SMBv2.
+- Support RAR 5+.
+- New archive formats: RPM, cpio.
+- New 'Toggle terminal' action (defaults to F12) that shows/hides a new terminal view.
 
 Improvements:
 - Symbolic links are extracted properly from zip archives to the local file system.
@@ -52,7 +53,7 @@ Localization:
 Bug fixes:
 - 'Move' action does not get stuck when an external file is dragged and dropped to the application.
 - Symbolic links are extracted from archive files to the right location rather than to the destination base folder.
-- Fix detection of 'skopeo' binary which is used in order to connect to container registries.
+- Fix detection of the 'skopeo' binary that is used to connect to container registries.
 - When extracting an item from an archive file to the archive file's parent folder, the archive file remains presented.
 
 Known issues:
