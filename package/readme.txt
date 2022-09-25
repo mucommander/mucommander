@@ -47,6 +47,7 @@ Improvements:
 - Commands that are executed from the 'Run command' dialog are now typed within a terminal that recognizes shell aliases.
 - When referencing an SMB server (smb://<server>/), its accessible shares are listed.
 - Bonjour services are initialized asynchronously in order to accelerate startup time.
+- Quick search accepts diacritics that are typed using ALT+letter (like in Polish Programmer keyboard layout).
 
 Localization:
 -
