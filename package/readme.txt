@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.1.0
+muCommander v1.2.0
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,35 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v1.0.1 ?
+What's new since v1.1.0 ?
 -----------------------
 
 New features:
-- Support SMBv2.
-- Support RAR 5+.
-- New archive formats: RPM, cpio.
-- New 'Toggle terminal' action (defaults to F12) that shows/hides a new terminal view.
+-
 
 Improvements:
-- Symbolic links are extracted properly from zip archives to the local file system.
-- Local symbolic links are packed properly into zip and tar archives.
-- Unpacking of 7z archives is now faster and more reliable using a newer native library.
-- The filename cell is rendered differently when renaming a file to reflect that the filename is editable when no text is selected.
-- Keyboard shortcuts on macOS better align with the default keyboard shortcuts in Safari.
-- The 'About' dialog indicates when the portable version is used.
-- Commands that are executed from the 'Run command' dialog are now typed within a terminal that recognizes shell aliases.
-- When referencing an SMB server (smb://<server>/), its accessible shares are listed.
-- Bonjour services are initialized asynchronously in order to accelerate startup time.
-- Quick search accepts diacritics that are typed using ALT+letter (like in Polish Programmer keyboard layout).
+-
 
 Localization:
 -
 
 Bug fixes:
-- 'Move' action does not get stuck when an external file is dragged and dropped to the application.
-- Symbolic links are extracted from archive files to the right location rather than to the destination base folder.
-- Fix detection of the 'skopeo' binary that is used to connect to container registries.
-- When extracting an item from an archive file to the archive file's parent folder, the archive file remains presented.
+-
 
 Known issues:
 - Some translations may not be up-to-date.
