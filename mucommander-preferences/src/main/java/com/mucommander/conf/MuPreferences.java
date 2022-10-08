@@ -17,10 +17,6 @@
 
 package com.mucommander.conf;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.commons.conf.ConfigurationException;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -28,6 +24,10 @@ import com.mucommander.commons.conf.ValueList;
 import com.mucommander.commons.conf.XmlConfigurationReader;
 import com.mucommander.commons.conf.XmlConfigurationWriter;
 import com.mucommander.commons.runtime.OsFamily;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * muCommander specific wrapper for the <code>com.mucommander.conf</code> API which is used to save 'static' configurations.
@@ -109,24 +109,12 @@ public class MuPreferences implements MuPreferencesAPI {
 	// -----------------------------------------------------------------------
 	/** Section describing the shell CONFIGURATION. */
 	public static final String  SHELL_SECTION                     = "shell";
-	/** Shell invocation command (in case muCommander is not using the default one). */
-	public static final String  CUSTOM_SHELL                      = SHELL_SECTION + '.' + "custom_command";
-	/** Whether or not to use a custom shell invocation command. */
-	public static final String  USE_CUSTOM_SHELL                  = SHELL_SECTION + '.' + "use_custom";
+	/** Shell (interactive aka login) - a path and parameters (in case muCommander is not configured to use a default one). */
+	public static final String  CUSTOM_SHELL                      = SHELL_SECTION + '.' + "custom_shell";
+	/** Whether or not to use a custom shell (interactive aka login) path along with necessary parameters (like --login/-l). */
+	public static final String  USE_CUSTOM_SHELL                  = SHELL_SECTION + '.' + "use_custom_shell";
 	/** Default custom shell behavior. */
 	public static final boolean DEFAULT_USE_CUSTOM_SHELL          = false;
-	/** Maximum number of items that should be present in the shell history. */
-	public static final String  SHELL_HISTORY_SIZE                = SHELL_SECTION + '.' + "history_size";
-	/** Default maximum shell history size. */
-	public static final int     DEFAULT_SHELL_HISTORY_SIZE        = 100;
-	/** Encoding used to read the shell output. */
-	public static final String  SHELL_ENCODING                    = SHELL_SECTION + '.' + "encoding";
-	/** Whether or not shell encoding should be auto-detected. */
-	public static final String  AUTODETECT_SHELL_ENCODING         = SHELL_SECTION + '.' + "autodect_encoding";
-	/** Default shell encoding auto-detection behaviour. */
-	public static final boolean DEFAULT_AUTODETECT_SHELL_ENCODING = true;
-
-
 
 	// - Mail variables ------------------------------------------------------
 	// -----------------------------------------------------------------------
@@ -405,14 +393,6 @@ public class MuPreferences implements MuPreferencesAPI {
 	    configuration.renameVariable("show_toolbar",      TOOLBAR_VISIBLE);
 	    configuration.renameVariable("show_status_bar",   STATUS_BAR_VISIBLE);
 	    configuration.renameVariable("show_command_bar",  COMMAND_BAR_VISIBLE);
-
-	    // Initializes macOS specific values
-	    if(OsFamily.MAC_OS.isCurrent()) {
-	        if(configuration.getVariable(SHELL_ENCODING) == null) {
-	            configuration.setVariable(SHELL_ENCODING, "UTF-8");
-	            configuration.setVariable(AUTODETECT_SHELL_ENCODING, false);
-	        }
-	    }
 	}
 
 	/**
@@ -463,7 +443,6 @@ public class MuPreferences implements MuPreferencesAPI {
 	 * Sets the path to the CONFIGURATION file.
 	 * @param  file                  path to the file that should be used for CONFIGURATION storage.
 	 * @throws FileNotFoundException if the specified file is not a valid file.
-	 * @see                          #getConfigurationFile()
 	 */
 	void setConfigurationFile(String file) throws FileNotFoundException {
 		configuration.setSource(MuPreferencesFile.getPreferencesFile(file));
