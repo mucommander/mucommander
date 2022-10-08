@@ -21,6 +21,8 @@ import java.awt.event.KeyListener;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -102,19 +104,21 @@ public final class TerminalWindow {
             }
 
             Map<String, String> envs;
-            String[] command;
             if (OsFamily.WINDOWS.isCurrent()) {
                 envs = System.getenv();
             } else {
                 envs = new HashMap<>(System.getenv());
-                addDefaultLocaleIfNeeded(envs);
+                envs.putAll(getDefaultLocaleSetting());
                 envs.put("TERM", "xterm-256color");
                 if (OsFamily.MAC_OS.isCurrent()) {
                     envs.put("BASH_SILENCE_DEPRECATION_WARNING", "1");
                 }
             }
-            PtyProcess process = new PtyProcessBuilder().setDirectory(currentFolder)
-                    .setCommand(shellCommand.toArray(new String[0])).setEnvironment(envs).start();
+            PtyProcess process = new PtyProcessBuilder()
+                    .setDirectory(currentFolder)
+                    .setCommand(shellCommand.toArray(String[]::new))
+                    .setEnvironment(envs)
+                    .start();
             return new PtyProcessTtyConnector(process, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new IllegalStateException(e);
@@ -122,26 +126,24 @@ public final class TerminalWindow {
     }
 
     /**
-     * Checks if LC_ALL env is set and if not then it will set LC_ALL in provided
-     * envs accordingly to the best JVM knowledge.
+     * Maps "LC_ALL" to the value of the LC_ALL environment variable if set,
+     * or to a value that is determined based on the best JVM knowledge otherwise.
      *
-     * @param envs the env variables to be updated
+     * @return a map of "LC_ALL" to its desired value
      */
-    private static void addDefaultLocaleIfNeeded(Map<String, String> envs) {
+    private static Map<String, String> getDefaultLocaleSetting() {
         String lcAll = System.getenv("LC_ALL");
         if (lcAll == null || lcAll.isEmpty()) {
-            Locale locale = Locale.getDefault();
-            String localeStr = locale.toString().split("#")[0];
-            String charSetStr = Charset.defaultCharset().name();
-            envs.put("LC_ALL", localeStr + "." + charSetStr);
+            lcAll = String.format("%s.%s",
+                    Locale.getDefault().toLanguageTag().replace('-', '_'),
+                    Charset.defaultCharset());
         }
+        return Collections.singletonMap("LC_ALL", lcAll);
     }
 
     private static List<String> getShellCommand() {
-        List<String> result = new ArrayList<>();
-
         // Retrieves the shell interactive command from preferences,
-        // falls back to default if not set in prefs.
+        // falls back to default if not set in preferences.
         String shellCommandAndParams;
         if (MuConfigurations.getPreferences().getVariable(
                 MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL)) {
@@ -152,9 +154,6 @@ public final class TerminalWindow {
         }
 
         String[] shellCommandParts = shellCommandAndParams.split("\\s+");
-        for (String part : shellCommandParts) {
-            result.add(part);
-        }
-        return result;
+        return Arrays.asList(shellCommandParts);
     }
 }
