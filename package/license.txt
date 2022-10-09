@@ -19,6 +19,7 @@ Additionally, muCommander uses the following third party works:
 - the J7Zip library under the terms of the GNU Lesser General Public License
 - the jCIFS library under the terms of the GNU Lesser General Public License
 - the JetS3t library under the terms of the Apache License
+- the JediTerm library under the terms of dual GNU Lesser General Public License and Apache License
 - the JmDNS library under the terms of the GNU Lesser General Public License
 - the JNA library under the terms of the GNU Lesser General Public License
 - the JUnRar library under the terms of the GNU Lesser General Public License
