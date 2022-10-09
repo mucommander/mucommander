@@ -92,6 +92,9 @@ muCommander uses the following great third party works :
 - the jCIFS library released under the GNU LGPL.
  jCIFS can be found at http://jcifs.samba.org .
 
+- JediTerm library released under dual GNU LGPL and Apache License.
+ JediTerm can be found at https://github.com/JetBrains/jediterm .
+
 - the JetS3t library released under the Apache License.
  JetS3t can be found at http://jets3t.s3.amazonaws.com/index.html .
 

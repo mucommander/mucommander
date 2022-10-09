@@ -170,6 +170,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertTitle(doc,         "Powered by");
 
             // External Libraries.
+            // TODO - it should be fed dynamically from package/readme.txt
             insertHeader(doc,         "Libraries");
             insertDetailedUrl(doc,    "Ant",                 "Apache License",                       "http://ant.apache.org");
             insertDetailedUrl(doc,    "Apache Commons",      "Apache License",                       "http://commons.apache.org");
@@ -181,6 +182,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertDetailedUrl(doc,    "7-Zip-JBinding",      "LGPL",                                 "http://sevenzipjbind.sourceforge.net");
             insertDetailedUrl(doc,    "jCIFS",               "LGPL",                                 "http://jcifs.samba.org");
             insertDetailedUrl(doc,    "JetS3t",              "Apache License",                       "http://jets3t.s3.amazonaws.com/index.html");
+            insertDetailedUrl(doc,    "JediTerm",            "LGPL and Apache License",              "https://github.com/JetBrains/jediterm");
             insertDetailedUrl(doc,    "JmDNS",               "LGPL",                                 "http://jmdns.sourceforge.net");
             insertDetailedUrl(doc,    "JNA",                 "LGPL",                                 "http://jna.dev.java.net");
             insertDetailedUrl(doc,    "JUnRar",              "Freeware",                             "http://sourceforge.net/projects/java-unrar");
