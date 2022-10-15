@@ -225,7 +225,19 @@ public class MoveJob extends AbstractCopyJob {
             // finally, delete the empty folder
             do {		// Loop for retry
                 try  {
-                    file.delete();
+                    if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                        long dateOfParent = file.getParent().getDate();
+                        file.delete();
+                        try {
+                            // deleting a file/directory updates the timestamp of the parent directory, so change the timestamp of the parent back, otherwise the timestamp's at the destination directories are the current timestamp (see also #720)
+                            file.getParent().changeDate(dateOfParent);
+                        }
+                        catch (IOException e) {
+                        }
+                    }
+                    else {
+                        file.delete();
+                    }
                     return true;
                 }
                 catch(IOException e) {
@@ -247,7 +259,19 @@ public class MoveJob extends AbstractCopyJob {
                 // Delete the source file
                 do {		// Loop for retry
                     try  {
-                        file.delete();
+                        if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                            long dateOfParent = file.getParent().getDate();
+                            file.delete();
+                            try {
+                                // deleting a file/directory updates the timestamp of the parent directory, so change the timestamp of the parent back, otherwise the timestamp's at the destination directories are the current timestamp (see also #720)
+                                file.getParent().changeDate(dateOfParent);
+                            }
+                            catch (IOException e) {
+                            }
+                        }
+                        else {
+                            file.delete();
+                        }
                         // All OK
                         return true;
                     }
