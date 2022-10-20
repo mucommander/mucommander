@@ -22,7 +22,8 @@ import javax.swing.*;
 import com.mucommander.desktop.ActionType;
 
 import java.awt.event.KeyEvent;
-import java.util.WeakHashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is responsible to handle the attributes of CommandBars - their actions, alternate actions and modifier.
@@ -67,7 +68,7 @@ public class CommandBarAttributes {
     private static KeyStroke DEFAULT_MODIFIER = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
     
     /** Contains all registered command-bar attributes listeners, stored as weak references */
-    private static WeakHashMap<CommandBarAttributesListener, ?> listeners = new WeakHashMap<CommandBarAttributesListener, Object>();
+    private static List<CommandBarAttributesListener> listeners = new ArrayList<>();
 
     /**
      * This method restore the default command-bar attributes.
@@ -144,7 +145,7 @@ public class CommandBarAttributes {
     // - Listeners -------------------------------------------------------------
     // -------------------------------------------------------------------------
     public static void addCommandBarAttributesListener(CommandBarAttributesListener listener) {
-    	synchronized(listeners) {listeners.put(listener, null);}
+        synchronized(listeners) {listeners.add(listener);}
     }
     
     public static void removeCommandBarAttributesListener(CommandBarAttributesListener listener) {
@@ -152,10 +153,9 @@ public class CommandBarAttributes {
     }
     
     protected static void fireAttributesChanged() {
-    	synchronized(listeners) {
+        synchronized(listeners) {
             // Iterate on all listeners
-            for(CommandBarAttributesListener listener : listeners.keySet())
-                listener.commandBarAttributeChanged();
+            listeners.forEach(CommandBarAttributesListener::commandBarAttributeChanged);
         }
     }
 }
