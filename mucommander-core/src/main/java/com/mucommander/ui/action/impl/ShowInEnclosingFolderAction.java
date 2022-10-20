@@ -20,7 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -28,7 +27,7 @@ import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * 
+ * This action opens the parent folder of the selected file and keeps the latter file selected.
  * @author Arik Hadas
  */
 public class ShowInEnclosingFolderAction extends SelectedFileAction {
@@ -39,10 +38,6 @@ public class ShowInEnclosingFolderAction extends SelectedFileAction {
 
     @Override
     public void performAction() {
-        AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        if (!SearchFile.SCHEMA.equals(currentFolder.getURL().getScheme()))
-            return;
-
         AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true);
         if (selectedFile == null)
             return;
