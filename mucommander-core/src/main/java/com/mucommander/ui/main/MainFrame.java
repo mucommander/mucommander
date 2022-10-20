@@ -49,7 +49,6 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.CloseWindowAction;
 import com.mucommander.ui.button.ToolbarMoreButton;
 import com.mucommander.ui.event.ActivePanelListener;
 import com.mucommander.ui.event.LocationEvent;
@@ -774,5 +773,11 @@ public class MainFrame extends JFrame implements LocationListener {
     public void locationChanged(LocationEvent e) {
         // Update window title to reflect the new current folder
         updateWindowTitle();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        commandBar.dispose();
     }
 }
