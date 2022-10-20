@@ -35,7 +35,7 @@ New features:
 -
 
 Improvements:
--
+- 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.
 
 Localization:
 -

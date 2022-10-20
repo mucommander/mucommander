@@ -43,12 +43,12 @@ public class ShowInEnclosingFolderAction extends SelectedFileAction {
         if (!SearchFile.SCHEMA.equals(currentFolder.getURL().getScheme()))
             return;
 
-        AbstractFile file = mainFrame.getActiveTable().getSelectedFile(true, true);
-        if (file == null)
+        AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true);
+        if (selectedFile == null)
             return;
 
-        AbstractFile enclosingFolder = file.getParent();
-        mainFrame.getInactivePanel().getTabs().add(enclosingFolder, file);
+        AbstractFile enclosingFolder = selectedFile.getParent();
+        mainFrame.getActivePanel().tryChangeCurrentFolder(enclosingFolder, selectedFile, true);
     }
 
     @Override

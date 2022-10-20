@@ -131,10 +131,6 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	 * MuActions support
 	 ********************/
 
-	public void add(AbstractFile file, AbstractFile selectedFile) {
-	    addTab(defaultTabsFactory.createTab(file.getURL(), selectedFile));
-	}
-
 	public void add(AbstractFile file) {
 		addTab(defaultTabsFactory.createTab(file.getURL()));
 	}
