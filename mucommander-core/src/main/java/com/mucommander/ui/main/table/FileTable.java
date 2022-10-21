@@ -69,8 +69,6 @@ import com.mucommander.text.SizeFormat;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.impl.MarkNextRowAction;
-import com.mucommander.ui.action.impl.MarkPreviousRowAction;
 import com.mucommander.ui.action.impl.MarkSelectedFileAction;
 import com.mucommander.ui.action.impl.RefreshAction;
 import com.mucommander.ui.dialog.file.AbstractCopyDialog;
@@ -1057,7 +1055,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     /**
      * Notifies all registered listeners that the currently selected file has changed on this FileTable.
      */
-    public void fireSelectedFileChangedEvent() {
+    private void fireSelectedFileChangedEvent() {
         tableSelectionListeners.keySet().forEach(listener -> listener.selectedFileChanged(this));
     }
 
@@ -1909,10 +1907,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 }
             }
         }
-    }
-
-    public void updateSelectedFilesStatusbar() {
-        mainFrame.getStatusBar().updateSelectedFilesInfo();
     }
 
     /**
