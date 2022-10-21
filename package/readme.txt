@@ -36,6 +36,7 @@ New features:
 
 Improvements:
 - 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.
+- The free space indicator within the status bar is updated quicker for 'ext4' and 'btrfs' UNIX file systems.
 
 Localization:
 -
