@@ -20,10 +20,10 @@ package com.mucommander.ui.main;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -44,8 +44,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.util.cache.FastLRUCache;
-import com.mucommander.commons.util.cache.LRUCache;
 import com.mucommander.commons.util.ui.border.MutableLineBorder;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -87,7 +85,7 @@ import com.mucommander.ui.theme.ThemeManager;
  *
  * @author Maxence Bernard
  */
-public class StatusBar extends JPanel implements Runnable, MouseListener, ActivePanelListener, TableSelectionListener, LocationListener, ComponentListener, ThemeListener {
+public class StatusBar extends JPanel implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StatusBar.class);
 	
     private MainFrame mainFrame;
@@ -127,6 +125,12 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
 
     /** Holds the path of the volume for which free/total space was last retrieved by {@link #autoUpdateThread} */
     private String volumePath;
+
+    /** hold references to listeners that are stored with weak references to prevent them from being collected by the garbage collector */
+    private LocationListener locationListener;
+    private TableSelectionListener tableSelectionListener;
+    private ActivePanelListener activePanelListener;
+    private ThemeListener themeListener;
 
     static {
         // Initialize the size column format based on the configuration
@@ -200,19 +204,58 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
         
         // Catch location events to update status bar info when folder is changed
+        locationListener = new LocationListener() {
+            @Override
+            public void locationChanged(LocationEvent e) {
+                dial.setAnimated(false);
+                updateStatusInfo();
+            }
+            @Override
+            public void locationChanging(LocationEvent e) {
+                // Show a message in the status bar saying that folder is being changed
+                setStatusInfo(Translator.get("status_bar.connecting_to_folder"), dial, true);
+                dial.setAnimated(true);
+            }
+            @Override
+            public void locationCancelled(LocationEvent e) {
+                dial.setAnimated(false);
+                updateStatusInfo();
+            }
+            @Override
+            public void locationFailed(LocationEvent e) {
+                dial.setAnimated(false);
+                updateStatusInfo();
+            }
+        };
+
         FolderPanel leftPanel = mainFrame.getLeftPanel();
-        leftPanel.getLocationManager().addLocationListener(this);
+        leftPanel.getLocationManager().addLocationListener(locationListener);
 
         FolderPanel rightPanel = mainFrame.getRightPanel();
-        rightPanel.getLocationManager().addLocationListener(this);
+        rightPanel.getLocationManager().addLocationListener(locationListener);
 
         // Catch table selection change events to update the selected files info when the selected files have changed on
         // one of the file tables
-        leftPanel.getFileTable().addTableSelectionListener(this);
-        rightPanel.getFileTable().addTableSelectionListener(this);
+        tableSelectionListener = new TableSelectionListener() {
+            @Override
+            public void selectedFileChanged(FileTable source) {
+                // No need to update if the originating FileTable is not the currently active one
+                if(source==mainFrame.getActiveTable() && mainFrame.isForegroundActive())
+                    updateSelectedFilesInfo();
+            }
+            @Override
+            public void markedFilesChanged(FileTable source) {
+                // No need to update if the originating FileTable is not the currently active one
+                if(source==mainFrame.getActiveTable() && mainFrame.isForegroundActive())
+                    updateSelectedFilesInfo();
+            }
+        };
+        leftPanel.getFileTable().addTableSelectionListener(tableSelectionListener);
+        rightPanel.getFileTable().addTableSelectionListener(tableSelectionListener);
 
         // Catch active panel change events to update status bar info when current table has changed
-        mainFrame.addActivePanelListener(this);
+        activePanelListener = folderPanel -> updateStatusInfo();
+        mainFrame.addActivePanelListener(activePanelListener);
 
         // Catch main frame close events to make sure autoUpdateThread is finished
         mainFrame.addWindowListener(new WindowAdapter() {
@@ -232,20 +275,62 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         });
 		
         // Catch mouse events to pop up a menu on right-click
-        selectedFilesLabel.addMouseListener(this);
-        volumeSpaceLabel.addMouseListener(this);
-        addMouseListener(this);
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Discard mouse events while in 'no events mode'
+                if(mainFrame.getNoEventsMode())
+                    return;
+
+                // Right clicking on the toolbar brings up a popup menu that allows the user to hide this status bar
+                if (DesktopManager.isRightMouseButton(e)) {
+                    //      if (e.isPopupTrigger()) {   // Doesn't work under Mac OS X (CTRL+click doesn't return true)
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    popupMenu.add(ActionManager.getActionInstance(ActionType.ToggleStatusBar, mainFrame));
+                    popupMenu.show(StatusBar.this, e.getX(), e.getY());
+                    popupMenu.setVisible(true);
+                }
+            };
+        };
+        selectedFilesLabel.addMouseListener(mouseAdapter);
+        volumeSpaceLabel.addMouseListener(mouseAdapter);
+        addMouseListener(mouseAdapter);
 		
         // Catch component events to be notified when this component is made visible
         // and update status info
-        addComponentListener(this);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                // Invoked when the component has been made visible (apparently not called when just created)
+                // Status bar needs to be updated since it is not updated when not visible
+                updateStatusInfo();
+            };
+        });
 
         // Initialises theme.
         selectedFilesLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
         selectedFilesLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
         volumeSpaceLabel.setFont(ThemeManager.getCurrentFont(Theme.STATUS_BAR_FONT));
         volumeSpaceLabel.setForeground(ThemeManager.getCurrentColor(Theme.STATUS_BAR_FOREGROUND_COLOR));
-        ThemeManager.addCurrentThemeListener(this);
+        themeListener = new ThemeListener() {
+            @Override
+            public void fontChanged(FontChangedEvent event) {
+                if(event.getFontId() == Theme.STATUS_BAR_FONT) {
+                    selectedFilesLabel.setFont(event.getFont());
+                    volumeSpaceLabel.setFont(event.getFont());
+                    repaint();
+                }
+            }
+            @Override
+            public void colorChanged(ColorChangedEvent event) {
+                if(event.getColorId() == Theme.STATUS_BAR_FOREGROUND_COLOR) {
+                    selectedFilesLabel.setForeground(event.getColor());
+                    volumeSpaceLabel.setForeground(event.getColor());
+                    repaint();
+                }
+            }
+        };
+        ThemeManager.addCurrentThemeListener(themeListener);
     }
 
 
@@ -459,127 +544,6 @@ public class StatusBar extends JPanel implements Runnable, MouseListener, Active
         try { return currentFolder.getTotalSpace(); }
         catch(IOException e) { return -1; }
     }
-
-    ////////////////////////////////////////
-    // ActivePanelListener implementation //
-    ////////////////////////////////////////
-	
-    public void activePanelChanged(FolderPanel folderPanel) {
-        updateStatusInfo();
-    }
-
-
-    ///////////////////////////////////////////
-    // TableSelectionListener implementation //
-    ///////////////////////////////////////////
-
-    public void selectedFileChanged(FileTable source) {
-        // No need to update if the originating FileTable is not the currently active one
-        if(source==mainFrame.getActiveTable() && mainFrame.isForegroundActive())
-            updateSelectedFilesInfo();
-    }
-
-    public void markedFilesChanged(FileTable source) {
-        // No need to update if the originating FileTable is not the currently active one
-        if(source==mainFrame.getActiveTable() && mainFrame.isForegroundActive())
-            updateSelectedFilesInfo();
-    }
-
-
-    /////////////////////////////////////
-    // LocationListener implementation //
-    /////////////////////////////////////
-
-    public void locationChanged(LocationEvent e) {
-        dial.setAnimated(false);
-        updateStatusInfo();
-    }
-
-    public void locationChanging(LocationEvent e) {
-        // Show a message in the status bar saying that folder is being changed
-        setStatusInfo(Translator.get("status_bar.connecting_to_folder"), dial, true);
-        dial.setAnimated(true);
-    }
-	
-    public void locationCancelled(LocationEvent e) {
-        dial.setAnimated(false);
-        updateStatusInfo();
-    }
-
-    public void locationFailed(LocationEvent e) {
-        dial.setAnimated(false);
-        updateStatusInfo();
-    }
-
-
-    //////////////////////////////////
-    // MouseListener implementation //
-    //////////////////////////////////
-	
-    public void mouseClicked(MouseEvent e) {
-        // Discard mouse events while in 'no events mode'
-        if(mainFrame.getNoEventsMode())
-            return;
-
-        // Right clicking on the toolbar brings up a popup menu that allows the user to hide this status bar
-        if (DesktopManager.isRightMouseButton(e)) {
-            //		if (e.isPopupTrigger()) {	// Doesn't work under Mac OS X (CTRL+click doesn't return true)
-            JPopupMenu popupMenu = new JPopupMenu();
-            popupMenu.add(ActionManager.getActionInstance(ActionType.ToggleStatusBar, mainFrame));
-            popupMenu.show(this, e.getX(), e.getY());
-            popupMenu.setVisible(true);
-        }
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mousePressed(MouseEvent e) {
-    }
-	
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }	
-	
-	
-    //////////////////////////////////////
-    // ComponentListener implementation //
-    //////////////////////////////////////
-	
-    public void componentShown(ComponentEvent e) {
-        // Invoked when the component has been made visible (apparently not called when just created)
-        // Status bar needs to be updated since it is not updated when not visible
-        updateStatusInfo();
-    }     
-
-    public void componentHidden(ComponentEvent e) {
-    }
-
-    public void componentMoved(ComponentEvent e) {
-    }
-
-    public void componentResized(ComponentEvent e) {
-    }
-
-
-    public void fontChanged(FontChangedEvent event) {
-        if(event.getFontId() == Theme.STATUS_BAR_FONT) {
-            selectedFilesLabel.setFont(event.getFont());
-            volumeSpaceLabel.setFont(event.getFont());
-            repaint();
-        }
-    }
-
-    public void colorChanged(ColorChangedEvent event) {
-        if(event.getColorId() == Theme.STATUS_BAR_FOREGROUND_COLOR) {
-            selectedFilesLabel.setForeground(event.getColor());
-            volumeSpaceLabel.setForeground(event.getColor());
-            repaint();
-        }
-    }
-
 
     ///////////////////
     // Inner classes //
