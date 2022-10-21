@@ -30,10 +30,11 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -68,7 +69,6 @@ import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.runtime.OsVersion;
 
 /**
  * LocalFile provides access to files located on a locally-mounted filesystem. Note that despite the class' name,
@@ -288,32 +288,29 @@ public class LocalFile extends ProtocolFile {
      * @return all local volumes
      */
     public static AbstractFile[] getVolumes() {
-        Vector<AbstractFile> volumesV = new Vector<AbstractFile>();
+        Vector<AbstractFile> volumes = new Vector<AbstractFile>();
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
         if (OsFamily.MAC_OS.isCurrent()) {
-            addMacOSXVolumes(volumesV);
+            addMacOSXVolumes(volumes);
         } else {
             // Add java.io.File's root folders
-            addJavaIoFileRoots(volumesV);
+            addJavaIoFileRoots(volumes);
 
             // Add /proc/mounts folders under UNIX-based systems.
             if (OsFamily.getCurrent().isUnixBased())
-                addMountEntries(volumesV);
+                addMountEntries(volumes);
         }
 
         // Add home folder, if it is not already present in the list
         AbstractFile homeFolder = getUserHome();
-        if (!(homeFolder == null || volumesV.contains(homeFolder)))
-            volumesV.add(homeFolder);
+        if (!(homeFolder == null || volumes.contains(homeFolder)))
+            volumes.add(homeFolder);
 
-        addDesktopEntry(volumesV, homeFolder);
+        addDesktopEntry(volumes, homeFolder);
 
-        AbstractFile volumes[] = new AbstractFile[volumesV.size()];
-        volumesV.toArray(volumes);
-
-        return volumes;
+        return volumes.toArray(AbstractFile[]::new);
     }
 
     @Override
@@ -326,7 +323,7 @@ public class LocalFile extends ProtocolFile {
     ////////////////////
 
     /**
-     * Resolves the root folders returned by {@link File#listRoots()} and adds them to the given <code>Vector</code>.
+     * Resolves the root folders returned by {@link FileSystem#getRootDirectories()} and adds them to the given <code>Vector</code>.
      *
      * @param v
      *            the <code>Vector</code> to add root folders to
@@ -336,7 +333,7 @@ public class LocalFile extends ProtocolFile {
         // dialog to appear for removable drives such as A:\ if no disk is present.
         for (Path path : FileSystems.getDefault().getRootDirectories())
             try {
-                v.add(FileFactory.getFile(path.toAbsolutePath().toString(), true));
+                v.add(FileFactory.getFile(path.toFile().getAbsolutePath(), true));
             } catch (IOException e) {
             }
     }
@@ -361,15 +358,8 @@ public class LocalFile extends ProtocolFile {
                 st.nextToken();
                 String mountPoint = st.nextToken().replace("\\040", " ");
                 String fsType = st.nextToken();
-                boolean knownFS = false;
-                for (String fs : KNOWN_UNIX_FS) {
-                    if (fs.equals(fsType)) {
-                        // this is really known physical FS
-                        knownFS = true;
-                        break;
-                    }
-                }
-
+                // check whether this is really a known physical FS
+                boolean knownFS = Arrays.stream(KNOWN_UNIX_FS).anyMatch(fs -> fs.equals(fsType));
                 if (knownFS) {
                     AbstractFile file = FileFactory.getFile(mountPoint);
                     if (file != null && !v.contains(file))
