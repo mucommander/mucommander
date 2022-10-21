@@ -97,9 +97,9 @@ public class Translator {
      * @param paramValues array of parameters which will be used as values for variables.
      * @return the localized text String for the given key expressed in the current language
      */
-    public static String get(String key, String... paramValues) {
+    public static String get(String key, Object... paramValues) {
         if (dictionaryBundle.containsKey(key))
-            return MessageFormat.format(dictionaryBundle.getString(key), (Object[]) paramValues);
+            return MessageFormat.format(dictionaryBundle.getString(key), paramValues);
 
         if (languagesBundle.containsKey(key))
             return languagesBundle.getString(key);

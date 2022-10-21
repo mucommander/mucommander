@@ -85,7 +85,7 @@ import com.mucommander.ui.theme.ThemeManager;
  *
  * @author Maxence Bernard
  */
-public class StatusBar extends JPanel implements Runnable {
+public class StatusBar extends JPanel {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StatusBar.class);
 	
     private MainFrame mainFrame;
@@ -188,7 +188,7 @@ public class StatusBar extends JPanel implements Runnable {
         add(Box.createRigidArea(new Dimension(2, 0)));
 
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
-        if(DesktopManager.getTrash()!=null) {
+        if (DesktopManager.getTrash() != null) {
             TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
             trashButton.setPopupMenuLocation(SwingConstants.TOP);
 
@@ -279,7 +279,7 @@ public class StatusBar extends JPanel implements Runnable {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Discard mouse events while in 'no events mode'
-                if(mainFrame.getNoEventsMode())
+                if (mainFrame.getNoEventsMode())
                     return;
 
                 // Right clicking on the toolbar brings up a popup menu that allows the user to hide this status bar
@@ -376,25 +376,24 @@ public class StatusBar extends JPanel implements Runnable {
         else
             nbSelectedFiles = nbMarkedFiles;
 
-        String filesInfo;
+        StringBuilder filesInfo = new StringBuilder();
 		
-        if(fileCount==0) {
+        if (fileCount==0) {
             // Set status bar to a space character, not an empty string
             // otherwise it will disappear
-            filesInfo = " ";
-        }
-        else {
-            filesInfo = Translator.get("status_bar.selected_files", ""+nbSelectedFiles, ""+fileCount);
+            filesInfo.append(" ");
+        } else {
+            filesInfo.append(Translator.get("status_bar.selected_files", nbSelectedFiles, fileCount));
 			
-            if(nbMarkedFiles>0)
-                filesInfo += " - " + SizeFormat.format(markedTotalSize, selectedFileSizeFormat);
+            if (nbMarkedFiles > 0)
+                filesInfo.append(String.format(" - %s", SizeFormat.format(markedTotalSize, selectedFileSizeFormat)));
 	
-            if(selectedFile!=null)
-                filesInfo += " - "+selectedFile.getName();
+            if (selectedFile != null)
+                filesInfo.append(String.format(" - %s", selectedFile.getName()));
         }		
 
         // Update label
-        setStatusInfo(filesInfo);
+        setStatusInfo(filesInfo.toString());
     }
 
 
@@ -442,7 +441,37 @@ public class StatusBar extends JPanel implements Runnable {
     private synchronized void startAutoUpdate() {
         if (autoUpdateThread==null) {
             // Start volume info auto-update thread
-            autoUpdateThread = new Thread(this, "StatusBar autoUpdateThread");
+            autoUpdateThread = new Thread(() -> {
+                // Periodically updates volume info (free / total space).
+                while (!mainFrameDisposed) { // Stop when MainFrame is disposed
+                    // Update volume info if:
+                    // - status bar is visible
+                    // - MainFrame is active and in the foreground
+                    // Volume info update will potentially hit the LRU cache and not actually update volume info
+                    if (isVisible() && mainFrame.isForegroundActive()) {
+                        final AbstractFile currentFolder = getCurrentFolder();
+                        volumePath = getVolumePath(currentFolder);
+
+                        // Retrieves free and total volume space.
+                        long volumeFree = getFreeSpace(currentFolder);
+                        long volumeTotal = getTotalSpace(currentFolder);
+
+                        volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
+                    }
+
+                    // Sleep for a while
+                    if (!autoUpdateThreadNotified) {
+                        synchronized(autoUpdateThread) {
+                            if (!autoUpdateThreadNotified) {
+                                try { autoUpdateThread.wait(AUTO_UPDATE_PERIOD); }
+                                catch (InterruptedException e) {}
+                            }
+                        }
+                    }
+                    autoUpdateThreadNotified = false;
+                }
+            });
+            autoUpdateThread.setName("StatusBar autoUpdateThread");
             // Set the thread as a daemon thread
             autoUpdateThread.setDaemon(true);
             autoUpdateThread.start();
@@ -465,35 +494,6 @@ public class StatusBar extends JPanel implements Runnable {
     }
     
     
-    //////////////////////
-    // Runnable methods //
-    //////////////////////
-
-    /**
-     * Periodically updates volume info (free / total space).
-     */
-    public void run() {
-        while (!mainFrameDisposed) { // Stop when MainFrame is disposed
-            // Update volume info if:
-            // - status bar is visible
-            // - MainFrame is active and in the foreground
-            // Volume info update will potentially hit the LRU cache and not actually update volume info
-            if (isVisible() && mainFrame.isForegroundActive()) {
-                final AbstractFile currentFolder = getCurrentFolder();
-                volumePath = getVolumePath(currentFolder);
-
-                // Retrieves free and total volume space.
-                long volumeFree = getFreeSpace(currentFolder);
-                long volumeTotal = getTotalSpace(currentFolder);
-
-                volumeSpaceLabel.setVolumeSpace(volumeTotal, volumeFree);
-            }
-
-            // Sleep for a while
-            sleep();
-        }
-    }
-
     private AbstractFile getCurrentFolder() {
         return mainFrame.getActivePanel().getCurrentFolder();
     }
@@ -504,18 +504,6 @@ public class StatusBar extends JPanel implements Runnable {
 
     private boolean isVolumeChanged() {
         return volumePath == null || !volumePath.equals(getVolumePath(getCurrentFolder()));
-    }
-
-    private void sleep() {
-        if (!autoUpdateThreadNotified) {
-            synchronized(autoUpdateThread) {
-                if (!autoUpdateThreadNotified) {
-                    try { autoUpdateThread.wait(AUTO_UPDATE_PERIOD); }
-                    catch (InterruptedException e) {}
-                }
-            }
-        }
-        autoUpdateThreadNotified = false;
     }
 
     private void triggerVolumeInfoUpdate() {
