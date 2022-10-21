@@ -519,7 +519,7 @@ public class StatusBar extends JPanel implements Runnable {
     }
 
     private void triggerVolumeInfoUpdate() {
-        if (!autoUpdateThreadNotified) {
+        if (!autoUpdateThreadNotified && autoUpdateThread != null) {
             synchronized(autoUpdateThread) {
                 if (!autoUpdateThreadNotified) {
                     autoUpdateThreadNotified = true;
