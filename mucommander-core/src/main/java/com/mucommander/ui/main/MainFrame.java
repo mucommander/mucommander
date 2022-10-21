@@ -774,10 +774,4 @@ public class MainFrame extends JFrame implements LocationListener {
         // Update window title to reflect the new current folder
         updateWindowTitle();
     }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        commandBar.dispose();
-    }
 }

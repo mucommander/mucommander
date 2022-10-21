@@ -24,6 +24,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Arrays;
 
 import javax.swing.JPanel;
@@ -61,8 +63,6 @@ public class CommandBar extends JPanel {
     
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
-
-    private CommandBarAttributesListener commandBarAttributesListener;
 
     /**
      * Creates a new CommandBar instance associated with the given MainFrame.
@@ -114,7 +114,7 @@ public class CommandBar extends JPanel {
         
         addButtons(mouseAdapter);
         
-        commandBarAttributesListener = () -> {
+        CommandBarAttributesListener commandBarAttributesListener = () -> {
                 actionIds = CommandBarAttributes.getActions();
                 alternateActionIds = CommandBarAttributes.getAlternateActions();
                 modifier = CommandBarAttributes.getModifier();
@@ -123,6 +123,13 @@ public class CommandBar extends JPanel {
                 doLayout();
         };
         CommandBarAttributes.addCommandBarAttributesListener(commandBarAttributesListener);
+
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                CommandBarAttributes.removeCommandBarAttributesListener(commandBarAttributesListener);
+            }
+        });
     }
     
     /**
@@ -161,9 +168,5 @@ public class CommandBar extends JPanel {
             for(int i=0; i<nbButtons; i++)
                 buttons[i].setButtonAction(on && alternateActionIds[i]!=null?alternateActionIds[i]:actionIds[i], mainFrame);
         }
-    }
-
-    public void dispose() {
-        CommandBarAttributes.removeCommandBarAttributesListener(commandBarAttributesListener);
     }
 }
