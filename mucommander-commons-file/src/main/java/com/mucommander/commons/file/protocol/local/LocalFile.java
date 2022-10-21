@@ -156,8 +156,8 @@ public class LocalFile extends ProtocolFile {
     /**
      * List of known UNIX filesystems.
      */
-    public static final String[] KNOWN_UNIX_FS = { "adfs", "affs", "autofs", "cifs", "coda", "cramfs",
-            "debugfs", "efs", "ext2", "ext3", "fuseblk", "hfs", "hfsplus", "hpfs",
+    public static final String[] KNOWN_UNIX_FS = { "adfs", "affs", "autofs", "btrfs", "cifs", "coda", "cramfs",
+            "debugfs", "efs", "ext2", "ext3", "ext4", "fuseblk", "hfs", "hfsplus", "hpfs",
             "iso9660", "jfs", "minix", "msdos", "ncpfs", "nfs", "nfs4", "ntfs",
             "qnx4", "reiserfs", "smbfs", "udf", "ufs", "usbfs", "vfat", "xfs" };
 
