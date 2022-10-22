@@ -21,10 +21,12 @@ dependencies {
     compileOnly project(':mucommander-protocol-api')
     compileOnly project(':mucommander-os-api')
     compileOnly project(':mucommander-viewer-api')
-    api project(':jetbrains-jediterm')
 
     compileOnly 'com.formdev:flatlaf:2.2'
     compileOnly 'org.violetlib:vaqua:10'
+    compileOnly 'org.jetbrains.jediterm:jediterm-pty:2.69'
+    compileOnly 'org.jetbrains.pty4j:pty4j:0.12.3'
+    compileOnly 'org.jetbrains:annotations:23.0.0'
 
     implementation 'ch.qos.logback:logback-core:1.2.3'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
