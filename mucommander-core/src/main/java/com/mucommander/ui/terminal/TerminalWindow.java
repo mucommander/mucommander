@@ -20,7 +20,6 @@ package com.mucommander.ui.terminal;
 import java.awt.event.KeyListener;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
