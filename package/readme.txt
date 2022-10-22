@@ -38,6 +38,7 @@ Improvements:
 - 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.
 - The free space indicator within the status bar is updated quicker for 'ext4' and 'btrfs' UNIX file systems.
 - The trash icon and free space indicator remain visible in the status bar when a file with a long name is selected.
+- The 'commons-net' library that is used for connecting to FTP servers has been upgraded to version 3.8.0
 
 Localization:
 -
