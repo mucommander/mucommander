@@ -17,8 +17,10 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -30,7 +32,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -171,33 +172,35 @@ public class StatusBar extends JPanel {
      */
     public StatusBar(MainFrame mainFrame) {
         // Create and add status bar
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setLayout(new BorderLayout());
 
         this.mainFrame = mainFrame;
 		
         selectedFilesLabel = new JLabel("");
         dial               = new SpinningDial();
-        add(selectedFilesLabel);
+        add(selectedFilesLabel, BorderLayout.CENTER);
 
-        add(Box.createHorizontalGlue());
+        JPanel eastPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
         JobsPopupButton jobsButton = new JobsPopupButton();
         jobsButton.setPopupMenuLocation(SwingConstants.TOP);
 
-        add(jobsButton);
-        add(Box.createRigidArea(new Dimension(2, 0)));
+        eastPanel.add(jobsButton);
+        eastPanel.add(Box.createRigidArea(new Dimension(2, 0)));
 
         // Add a button for interacting with the trash, only if the current platform has a trash implementation
         if (DesktopManager.getTrash() != null) {
             TrashPopupButton trashButton = new TrashPopupButton(mainFrame);
             trashButton.setPopupMenuLocation(SwingConstants.TOP);
 
-            add(trashButton);
-            add(Box.createRigidArea(new Dimension(2, 0)));
+            eastPanel.add(trashButton);
+            eastPanel.add(Box.createRigidArea(new Dimension(2, 0)));
         }
 
         volumeSpaceLabel = new VolumeSpaceLabel();
-        add(volumeSpaceLabel);
+        eastPanel.add(volumeSpaceLabel);
+
+        add(eastPanel, BorderLayout.EAST);
 
         // Show/hide this status bar based on user preferences
         // Note: setVisible has to be called even with true for the auto-update thread to be initialized
