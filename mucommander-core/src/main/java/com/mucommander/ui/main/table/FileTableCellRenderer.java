@@ -225,7 +225,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
                     label.setText(leftText+"..."+rightText);
                 }
 
-                // Set the toop
+                // Set the tooltip
                 label.setToolTipText(text);
             }
             // Have to set it to null otherwise the defaultRender sets the tooltip text to the last one

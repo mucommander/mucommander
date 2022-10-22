@@ -380,6 +380,7 @@ public class StatusBar extends JPanel {
             nbSelectedFiles = nbMarkedFiles;
 
         StringBuilder filesInfo = new StringBuilder();
+        String tooltip = null;
 		
         if (fileCount==0) {
             // Set status bar to a space character, not an empty string
@@ -391,12 +392,14 @@ public class StatusBar extends JPanel {
             if (nbMarkedFiles > 0)
                 filesInfo.append(String.format(" - %s", SizeFormat.format(markedTotalSize, selectedFileSizeFormat)));
 	
-            if (selectedFile != null)
+            if (selectedFile != null) {
                 filesInfo.append(String.format(" - %s", selectedFile.getName()));
+                tooltip = selectedFile.getName();
+            }
         }		
 
         // Update label
-        setStatusInfo(filesInfo.toString());
+        setStatusInfo(filesInfo.toString(), tooltip, null, false);
     }
 
 
@@ -409,7 +412,12 @@ public class StatusBar extends JPanel {
      * @param iconBeforeText if true, icon will be placed on the left side of the text, if not on the right side
      */
     public void setStatusInfo(String text, Icon icon, boolean iconBeforeText) {
+        setStatusInfo(text, null, icon, iconBeforeText);
+    }
+
+    private void setStatusInfo(String text, String tooltip, Icon icon, boolean iconBeforeText) {
         selectedFilesLabel.setText(text);
+        selectedFilesLabel.setToolTipText(tooltip);
 
         if(icon==null) {
             // What we don't want here is the label's height to change depending on whether it has an icon or not.
