@@ -6,7 +6,7 @@ dependencies {
     api project(':mucommander-encoding')
     api project(':mucommander-translator')
 
-    implementation 'commons-net:commons-net:3.6'
+    implementation 'commons-net:commons-net:3.8.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.testng:testng:6.11'
