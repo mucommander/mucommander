@@ -142,12 +142,11 @@ public class MoveJob extends AbstractCopyJob {
         // - if the 'rename' operation is not supported
         // Note: we want to avoid calling AbstractFile#renameTo when we know it will fail, as it performs some costly
         // I/O bound checks and ends up throwing an exception which also comes at a cost.
-        if(!append && file.getURL().schemeEquals(destFile.getURL()) && file.isFileOperationSupported(FileOperation.RENAME)) {
+        if (!append && file.getURL().schemeEquals(destFile.getURL()) && file.isFileOperationSupported(FileOperation.RENAME)) {
             try {
                 file.renameTo(destFile);
                 return true;
-            }
-            catch(IOException e) {
+            } catch(IOException e) {
                 // Fail silently: renameTo might fail under normal conditions, for instance for local files which are
                 // not located on the same volume.
                 LOGGER.debug("Failed to rename "+file+" into "+destFile+" (not necessarily an error)", e);
@@ -156,14 +155,13 @@ public class MoveJob extends AbstractCopyJob {
         // Rename couldn't be used or didn't succeed: move the file manually
 
         // Move the directory and all its children recursively, by copying files to the destination and then deleting them.
-        if(file.isDirectory()) {
+        if (file.isDirectory()) {
             // create the destination folder if it doesn't exist
-            if(!(destFile.exists() && destFile.isDirectory())) {
+            if (!(destFile.exists() && destFile.isDirectory())) {
                 do {		// Loop for retry
                     try {
                         destFile.mkdir();
-                    }
-                    catch(IOException e) {
+                    } catch(IOException e) {
                         DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", destFile.getAbsolutePath()));
                         // Retry loops
                         if(ret==FileJobAction.RETRY)
@@ -181,16 +179,15 @@ public class MoveJob extends AbstractCopyJob {
             // move each file in this folder recursively
             do {		// Loop for retry
                 try {
-                    AbstractFile[] subFiles = file.ls();
                     boolean isFolderEmpty = true;
-                    for (AbstractFile subFile : subFiles) {
+                    for (AbstractFile child : file.ls()) {
                         // Return now if the job was interrupted, so that we do not attempt to delete this folder
                         if (getState() == FileJobState.INTERRUPTED)
                             return false;
 
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
-                        nextFile(subFile);
-                        if (!processFile(subFile, destFile))
+                        nextFile(child);
+                        if (!processFile(child, destFile))
                             isFolderEmpty = false;
                     }
 
@@ -198,18 +195,16 @@ public class MoveJob extends AbstractCopyJob {
                     if (destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
                         try {
                             destFile.changeDate(originalDate);
-                        }
-                        catch (IOException e) {
+                        } catch (IOException e) {
                             LOGGER.debug("failed to change the date of "+destFile, e);
                             // Fail silently
                         }
                     }
 
                     // If one file failed to be moved, return false (failure) since this folder could not be moved totally
-                    if(!isFolderEmpty)
+                    if (!isFolderEmpty)
                         return false;
-                }
-                catch(IOException e) {
+                } catch(IOException e) {
                     // file.ls() failed
                     DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_folder", file.getName()));
                     // Retry loops
@@ -230,8 +225,7 @@ public class MoveJob extends AbstractCopyJob {
                 try  {
                     file.delete();
                     return true;
-                }
-                catch(IOException e) {
+                } catch(IOException e) {
                     DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_folder", file.getAbsolutePath()));
                     // Retry loops
                     if(ret==FileJobAction.RETRY)
@@ -246,15 +240,14 @@ public class MoveJob extends AbstractCopyJob {
 
             // if renameTo() was not supported or failed, or if it wasn't possible because of 'append',
             // try the hard way by copying the file first, and then deleting the source file.
-            if(tryCopyFile(file, destFile, append, errorDialogTitle) && getState() != FileJobState.INTERRUPTED) {
+            if (tryCopyFile(file, destFile, append, errorDialogTitle) && getState() != FileJobState.INTERRUPTED) {
                 // Delete the source file
                 do {		// Loop for retry
                     try  {
                         file.delete();
                         // All OK
                         return true;
-                    }
-                    catch(IOException e) {
+                    } catch(IOException e) {
                         LOGGER.debug("IOException caught", e);
 
                         DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_delete_file", file.getAbsolutePath()));
