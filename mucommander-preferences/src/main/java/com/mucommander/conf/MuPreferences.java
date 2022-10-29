@@ -225,6 +225,10 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final String SHOW_SINGLE_TAB_HEADER			   = FILE_TABLE_SECTION + '.' + "show_single_tab_header";
 	/** Default value for 'Always show single tab header" */
 	public static final boolean DEFAULT_SHOW_TAB_HEADER            = false;
+	/** Quick search timeout in seconds */
+	public static final String QUICK_SEARCH_TIMEOUT                = FILE_TABLE_SECTION + '.' + "quick_search_timeout";
+	/** Default value for 'Quick search timeout' */
+	public static final int DEFAULT_QUICK_SEARCH_TIMEOUT           = 2;
 
 	/** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
 	static final String VERSION_ATTRIBUTE = "version";

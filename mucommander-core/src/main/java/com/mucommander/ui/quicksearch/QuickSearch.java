@@ -20,6 +20,12 @@ package com.mucommander.ui.quicksearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -33,7 +39,7 @@ import javax.swing.JComponent;
  * 
  * @author Arik Hadas
  */
-public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
+public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, ConfigurationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(QuickSearch.class);
 	
 	/** Quick search string */
@@ -46,8 +52,11 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
      * has a null value when quick search is not active */
     private Thread timeoutThread;
 
-	/** Quick search timeout in ms */
-    private final static int QUICK_SEARCH_TIMEOUT = 2000;
+    /** Quick search timeout in milliseconds */
+    private int quickSearchTimeout;
+
+    /** Whether or not the search is active */
+    private boolean active;
 
     /** Icon that is used to indicate in the status bar that quick search has failed */
     protected final static String QUICK_SEARCH_KO_ICON = "quick_search_ko.png";
@@ -62,6 +71,10 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
     	
     	// Listener to key events to start quick search or update search string when it is active
     	component.addKeyListener(this);
+    	// set the initial timeout according to the configuration
+    	quickSearchTimeout = MuConfigurations.getPreferences().getVariable(MuPreference.QUICK_SEARCH_TIMEOUT, MuPreferences.DEFAULT_QUICK_SEARCH_TIMEOUT) * 1000;
+    	// and update the timeout when the configuration changes
+    	MuConfigurations.addPreferencesListener(this);
     }
     
     /**
@@ -73,9 +86,12 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
         if(!isActive()) {
             // Reset search string
             searchString = "";
-            // Start the thread that's responsible for canceling the quick search on timeout
-            timeoutThread = new Thread(this, "QuickSearch timeout thread");
-            timeoutThread.start();
+            // Start the thread that's responsible for canceling the quick search on timeout, if timeout is set
+            if (quickSearchTimeout > 0) {
+                timeoutThread = new Thread(this, "QuickSearch timeout thread");
+                timeoutThread.start();
+            }
+            active = true;
             lastSearchStringChange = System.currentTimeMillis();
 
             searchStarted();
@@ -88,7 +104,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
     public synchronized void stop() {
         if(isActive()) {
             timeoutThread = null;
-
+            active = false;
             searchStopped();
         }
     }
@@ -99,7 +115,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
      * @return true if a quick search is being performed
      */
     public synchronized boolean isActive() {
-        return timeoutThread != null;
+        return active;
     }
 
 
@@ -348,7 +364,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
             }
 
             synchronized(this) {
-                if(timeoutThread!=null && System.currentTimeMillis()-lastSearchStringChange >= QUICK_SEARCH_TIMEOUT) {
+                if (timeoutThread!=null && System.currentTimeMillis()-lastSearchStringChange >= quickSearchTimeout) {
                     stop();
                 }
             }
@@ -369,6 +385,14 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable {
         if(isActive() && e.getKeyCode()==KeyEvent.VK_BACK_SPACE && searchString.equals("")) {
             e.consume();
             stop();
+        }
+    }
+
+    @Override
+    public void configurationChanged(ConfigurationEvent event) {
+        String var = event.getVariable();
+        if (var.equals(MuPreferences.QUICK_SEARCH_TIMEOUT)) {
+            quickSearchTimeout = event.getIntegerValue() * 1000;
         }
     }
 }

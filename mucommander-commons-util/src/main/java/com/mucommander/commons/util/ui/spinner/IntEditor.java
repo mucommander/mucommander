@@ -27,6 +27,7 @@ import javax.swing.JSpinner;
 import javax.swing.JSpinner.NumberEditor;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
@@ -41,10 +42,14 @@ public class IntEditor extends JSpinner.DefaultEditor {
     }
 
     public IntEditor(JSpinner spinner, String decimalFormatPattern, String defaultStr) {
-        this(spinner, new DecimalFormat(decimalFormatPattern), defaultStr);
+        this(spinner, new DecimalFormat(decimalFormatPattern), defaultStr, SwingConstants.LEADING);
     }
 
-    private IntEditor(JSpinner spinner, DecimalFormat format, String defaultStr) {
+    public IntEditor(JSpinner spinner, String decimalFormatPattern, String defaultStr, int alignment) {
+        this(spinner, new DecimalFormat(decimalFormatPattern), defaultStr, alignment);
+    }
+
+    private IntEditor(JSpinner spinner, DecimalFormat format, String defaultStr, int alignment) {
         super(spinner);
         if (!(spinner.getModel() instanceof SpinnerNumberModel)) {
             throw new IllegalArgumentException(
@@ -77,7 +82,7 @@ public class IntEditor extends JSpinner.DefaultEditor {
         ftf.setEditable(true);
         ftf.setFormatterFactory(factory);
 
-        ftf.setHorizontalAlignment(JTextField.LEADING);
+        ftf.setHorizontalAlignment(alignment);
 
         /* TBD - initializing the column width of the text field
          * is imprecise and doing it here is tricky because

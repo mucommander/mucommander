@@ -19,6 +19,7 @@ package com.mucommander.ui.dialog.pref.general;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,6 +38,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
@@ -44,6 +46,7 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.ui.layout.SpringUtilities;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.commons.util.ui.spinner.IntEditor;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -53,6 +56,7 @@ import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
 import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
+import com.mucommander.ui.dialog.pref.component.PrefSpinner;
 import com.mucommander.ui.main.WindowManager;
 
 
@@ -90,6 +94,9 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     
     // Always show single tab's header ?
     private PrefCheckBox showTabHeaderCheckBox;
+
+    // Timeout for quick searches
+    private PrefSpinner quickSearchTimeoutSpinner;
 
     public FoldersPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.folders_tab"));
@@ -232,7 +239,18 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
                 MuPreferences.DEFAULT_SHOW_TAB_HEADER));
         showTabHeaderCheckBox.addDialogListener(parent);
         northPanel.add(showTabHeaderCheckBox);
-        
+
+        JPanel quickSearchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        quickSearchPanel.setBorder(BorderFactory.createEmptyBorder());
+        quickSearchTimeoutSpinner = new PrefSpinner(0, 999, 1, () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.QUICK_SEARCH_TIMEOUT,
+                MuPreferences.DEFAULT_QUICK_SEARCH_TIMEOUT));
+        quickSearchTimeoutSpinner.addDialogListener(parent);
+        quickSearchTimeoutSpinner.setEditor(new IntEditor(quickSearchTimeoutSpinner, "###", Translator.get("prefs_dialog.no_quick_search_timeout"), SwingConstants.TRAILING));
+        quickSearchPanel.add(new JLabel(Translator.get("prefs_dialog.quick_search_timeout_sec")));
+        quickSearchPanel.add(quickSearchTimeoutSpinner);
+        northPanel.add(quickSearchPanel);
+
         add(northPanel, BorderLayout.NORTH);
         
         lastFoldersRadioButton.addDialogListener(parent);
@@ -266,6 +284,8 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     	MuConfigurations.getPreferences().setVariable(MuPreference.CD_FOLLOWS_SYMLINKS, followSymlinksCheckBox.isSelected());
     	
     	MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_TAB_HEADER, showTabHeaderCheckBox.isSelected());
+
+    	MuConfigurations.getPreferences().setVariable(MuPreference.QUICK_SEARCH_TIMEOUT, (int) quickSearchTimeoutSpinner.getValue());
 
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
         boolean refreshFolders = MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());
