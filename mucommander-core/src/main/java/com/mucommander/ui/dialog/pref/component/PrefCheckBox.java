@@ -17,8 +17,6 @@
 
 package com.mucommander.ui.dialog.pref.component;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.function.Supplier;
 
 import javax.swing.JCheckBox;
@@ -44,11 +42,6 @@ public class PrefCheckBox extends JCheckBox implements PrefComponent {
     }
 
     public void addDialogListener(final PreferencesDialog dialog) {
-        addItemListener(new ItemListener() {
-
-            public void itemStateChanged(ItemEvent e) {
-                dialog.componentChanged(PrefCheckBox.this);
-            }
-        });
+        addItemListener(e -> dialog.componentChanged(PrefCheckBox.this));
     }
 }
