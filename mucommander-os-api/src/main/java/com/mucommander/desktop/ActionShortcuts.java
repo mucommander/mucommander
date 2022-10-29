@@ -284,10 +284,12 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
         case GoToRoot:
             return KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SLASH, KeyEvent.CTRL_DOWN_MASK);
+        case InvertSelection:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_8, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case MarkExtension:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 0);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK);
         case MarkGroup:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.SHIFT_DOWN_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case MarkSelectedFile:
             return KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0);
         case NextTab:
@@ -305,7 +307,7 @@ public class ActionShortcuts {
         case SwitchActiveTable:
             return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_DOWN_MASK);
         case UnmarkGroup:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 0);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK);
         default:
             return null;
         }
