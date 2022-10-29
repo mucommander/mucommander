@@ -174,7 +174,10 @@ public class MoveJob extends AbstractCopyJob {
                     break;
                 } while(true);
             }
-			
+
+            // save the source folder's date before its children are removed
+            long originalDate = file.getDate();
+
             // move each file in this folder recursively
             do {		// Loop for retry
                 try {
@@ -192,9 +195,9 @@ public class MoveJob extends AbstractCopyJob {
                     }
 
                     // Only when finished with folder, set destination folder's date to match the original folder one
-                    if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
+                    if (destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
                         try {
-                            destFile.changeDate(file.getDate());
+                            destFile.changeDate(originalDate);
                         }
                         catch (IOException e) {
                             LOGGER.debug("failed to change the date of "+destFile, e);
@@ -225,19 +228,7 @@ public class MoveJob extends AbstractCopyJob {
             // finally, delete the empty folder
             do {		// Loop for retry
                 try  {
-                    if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
-                        long dateOfParent = file.getParent().getDate();
-                        file.delete();
-                        try {
-                            // deleting a file/directory updates the timestamp of the parent directory, so change the timestamp of the parent back, otherwise the timestamp's at the destination directories are the current timestamp (see also #720)
-                            file.getParent().changeDate(dateOfParent);
-                        }
-                        catch (IOException e) {
-                        }
-                    }
-                    else {
-                        file.delete();
-                    }
+                    file.delete();
                     return true;
                 }
                 catch(IOException e) {
@@ -259,19 +250,7 @@ public class MoveJob extends AbstractCopyJob {
                 // Delete the source file
                 do {		// Loop for retry
                     try  {
-                        if(destFile.isFileOperationSupported(FileOperation.CHANGE_DATE)) {
-                            long dateOfParent = file.getParent().getDate();
-                            file.delete();
-                            try {
-                                // deleting a file/directory updates the timestamp of the parent directory, so change the timestamp of the parent back, otherwise the timestamp's at the destination directories are the current timestamp (see also #720)
-                                file.getParent().changeDate(dateOfParent);
-                            }
-                            catch (IOException e) {
-                            }
-                        }
-                        else {
-                            file.delete();
-                        }
+                        file.delete();
                         // All OK
                         return true;
                     }
