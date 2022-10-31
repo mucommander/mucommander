@@ -10,16 +10,20 @@ dependencies {
     api project(":mucommander-preferences")
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
+    comprise group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.3.0'
 
     testImplementation 'org.testng:testng:6.11'
 }
 
 jar {
+   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it)}
+   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
    bnd ('Bundle-Name': 'muCommander-viewer-text',
         'Bundle-Vendor': 'muCommander',
         'Bundle-Description': 'Library for textual viewer/editor',
         'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package': 'com.mucommander.viewer.text',
+        'Import-Package': 'org.fife.ui.rsyntaxtextarea;resolution:=dynamic,*',
         'Bundle-Activator': 'com.mucommander.viewer.text.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",

@@ -27,6 +27,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -43,6 +45,9 @@ import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
  *
@@ -52,7 +57,7 @@ class TextEditorImpl implements ThemeListener {
 
     private JFrame frame;
 
-    private JTextArea textArea;
+    private RSyntaxTextArea textArea;
 
     /**
      * Indicates whether there is a line separator in the original file
@@ -72,12 +77,22 @@ class TextEditorImpl implements ThemeListener {
     }
 
     private void initTextArea(boolean isEditable) {
-        textArea = new JTextArea() {
+        textArea = new RSyntaxTextArea() {
             @Override
             public Insets getInsets() {
                 return new Insets(4, 3, 4, 3);
             }
         };
+        // TODO these RSyntaxTextArea props (some of them) should be user-configurable
+        textArea.setAnimateBracketMatching(true);
+        textArea.setAntiAliasingEnabled(true);
+        textArea.setAutoIndentEnabled(true);
+        textArea.setEOLMarkersVisible(true);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setMarkOccurrences(true);
+        textArea.setPaintTabLines(true);
+        // TODO Should be overridable by user?
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
 
         textArea.setEditable(isEditable);
         // Use theme colors and font
@@ -240,6 +255,23 @@ class TextEditorImpl implements ThemeListener {
         }
     }
 
+
+    public void setSyntaxBasedOnFilename(String fileExtension) {
+        // TODO use Apache Tika or some other way to work out mime-type (java built-in options suck)
+        String defaultMimeType = SyntaxConstants.SYNTAX_STYLE_NONE;
+        Map<String, String> extToMime = new HashMap<String, String>() {{
+            put("java", SyntaxConstants.SYNTAX_STYLE_JAVA);
+            put("js", SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+            put("gradle", SyntaxConstants.SYNTAX_STYLE_GROOVY);
+            put("c", SyntaxConstants.SYNTAX_STYLE_C);
+            put("cpp", SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+            put("html", SyntaxConstants.SYNTAX_STYLE_HTML);
+            put("htm", SyntaxConstants.SYNTAX_STYLE_HTML);
+        }};
+
+        textArea.setSyntaxEditingStyle(extToMime.getOrDefault(fileExtension.toLowerCase(), defaultMimeType));
+    }
+
     //////////////////////////////////
     // ThemeListener implementation //
     //////////////////////////////////
@@ -271,7 +303,8 @@ class TextEditorImpl implements ThemeListener {
      * Receives theme font changes notifications.
      */
     public void fontChanged(FontChangedEvent event) {
-        if (event.getFontId() == Theme.EDITOR_FONT)
+        if (event.getFontId() == Theme.EDITOR_FONT) {
             textArea.setFont(event.getFont());
+        }
     }
 }
