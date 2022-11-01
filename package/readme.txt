@@ -40,6 +40,7 @@ Improvements:
 - The trash icon and free space indicator remain visible in the status bar when a file with a long name is selected.
 - The 'commons-net' library that is used for connecting to FTP servers has been upgraded to version 3.8.0
 - The timeout for showing 'quick search' results is configurable via the 'Preferences' dialog.
+- Set alternative keyboard shortcuts that don't require numeric keypad for Mark/Unmark actions.
 
 Localization:
 -
