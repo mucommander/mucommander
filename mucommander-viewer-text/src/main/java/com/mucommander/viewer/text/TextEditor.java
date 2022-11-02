@@ -48,11 +48,7 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.CloseCancelledException;
 import com.mucommander.viewer.EditorPresenter;
-import static com.mucommander.viewer.text.TextViewer.CUSTOM_FULL_SCREEN_EVENT;
-import static com.mucommander.viewer.text.TextViewer.isFullScreen;
-import static com.mucommander.viewer.text.TextViewer.setFullScreen;
 import java.awt.event.ActionListener;
-import javax.swing.AbstractAction;
 import javax.swing.JScrollPane;
 
 
@@ -180,17 +176,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     @Override
     public void setPresenter(EditorPresenter presenter) {
         super.setPresenter(presenter);
-        
-        presenter.setFullScreen(isFullScreen());
-
-        ui.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
-        ui.getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFullScreen(!presenter.isFullScreen());
-                presenter.setFullScreen(isFullScreen());
-            }
-        });
     }
 
     @Override

@@ -37,7 +37,6 @@ import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.viewer.CloseCancelledException;
 import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
-import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
 import javax.swing.JComponent;
@@ -45,7 +44,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 
 /**
  * Abstract file editor with basic support for save operation.

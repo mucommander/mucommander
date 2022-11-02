@@ -6,6 +6,8 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
+    compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
+
     testImplementation 'org.testng:testng:6.11'
 }
 

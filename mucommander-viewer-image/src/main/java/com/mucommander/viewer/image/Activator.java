@@ -17,15 +17,15 @@
 package com.mucommander.viewer.image;
 
 import com.mucommander.viewer.FileViewerService;
+import javax.annotation.ParametersAreNonnullByDefault;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 /**
  * Activator for viewer for image files.
- *
- * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public class Activator implements BundleActivator {
 
     private ServiceRegistration<FileViewerService> viewerRegistration;

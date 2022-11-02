@@ -50,7 +50,6 @@ import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
 import java.awt.event.ActionListener;
-import javax.swing.AbstractAction;
 import javax.swing.JScrollPane;
 
 /**
@@ -60,14 +59,10 @@ import javax.swing.JScrollPane;
  */
 public class TextViewer implements FileViewer, EncodingListener, ActionListener {
 
-    public final static String CUSTOM_FULL_SCREEN_EVENT = "CUSTOM_FULL_SCREEN_EVENT";
-
     private JScrollPane ui = new JScrollPane();
     private ViewerPresenter presenter;
     private TextEditorImpl textEditorImpl;
     private AbstractFile currentFile;
-
-    private static boolean fullScreen = MuSnapshot.getSnapshot().getBooleanVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_FULL_SCREEN);
 
     private static boolean lineWrap = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_WRAP, TextViewerSnapshot.DEFAULT_LINE_WRAP);
 
@@ -112,14 +107,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     
     protected void attachView() {
         ui.getViewport().setView(textEditorImpl.getTextArea());
-    }
-
-    static void setFullScreen(boolean fullScreen) {
-        TextViewer.fullScreen = fullScreen;
-    }
-
-    public static boolean isFullScreen() {
-        return fullScreen;
     }
 
     static void setLineWrap(boolean lineWrap) {
@@ -210,17 +197,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     @Override
     public void setPresenter(ViewerPresenter presenter) {
         this.presenter = presenter;
-        
-        presenter.setFullScreen(isFullScreen());
-
-        ui.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK), CUSTOM_FULL_SCREEN_EVENT);
-        ui.getActionMap().put(CUSTOM_FULL_SCREEN_EVENT, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFullScreen(!presenter.isFullScreen());
-                presenter.setFullScreen(isFullScreen());
-            }
-        });
     }
 
     @Override

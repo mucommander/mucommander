@@ -16,14 +16,16 @@
  */
 package com.mucommander.viewer;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
- * This exception is thrown by {@link com.mucommander.ui.viewer.ViewerFactory}
- * and {@link com.mucommander.ui.viewer.EditorFactory} when the user should be
- * warned about something before going ahead with viewing/editing a file.
- * {@link #getMessage()} contains the message to display to the user.
+ * This exception is thrown by {@link com.mucommander.ui.viewer.ViewerFactory} and
+ * {@link com.mucommander.ui.viewer.EditorFactory} when the user should be warned about something before going ahead
+ * with viewing/editing a file. {@link #getMessage()} contains the message to display to the user.
  *
  * @author Maxence Bernard
  */
+@ParametersAreNonnullByDefault
 public class WarnUserException extends Exception {
 
     public WarnUserException(String localizedMessage) {

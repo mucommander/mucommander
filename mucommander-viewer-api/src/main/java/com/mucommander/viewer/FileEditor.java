@@ -18,28 +18,32 @@ package com.mucommander.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
 import java.io.IOException;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
 /**
  * Interface for file editor.
- *
- * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public interface FileEditor {
 
     /**
      * Opens a given AbstractFile for display.
      *
-     * @param file the file to be presented
-     * @throws IOException in case of an I/O problem
+     * @param file
+     *            the file to be presented
+     * @throws IOException
+     *             in case of an I/O problem
      */
     void open(AbstractFile file) throws IOException;
 
     /**
      * Closes currently opened file.
      *
-     * @throws CloseCancelledException when cancelled
+     * @throws CloseCancelledException
+     *             when cancelled
      */
     void close() throws CloseCancelledException;
 
@@ -48,19 +52,22 @@ public interface FileEditor {
      *
      * @return UI component instance
      */
+    @Nonnull
     JComponent getUI();
 
     /**
      * Sets presenter API.
      *
-     * @param presenter presenter API
+     * @param presenter
+     *            presenter API
      */
     void setPresenter(EditorPresenter presenter);
 
     /**
      * Extends provided menu with new menu items specific for this viewer.
      *
-     * @param menuBar menu bar
+     * @param menuBar
+     *            menu bar
      */
     void extendMenu(JMenuBar menuBar);
 }
