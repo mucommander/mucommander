@@ -24,11 +24,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -37,6 +36,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.job.impl.SearchJob;
 import com.mucommander.ui.theme.ColorChangedEvent;
@@ -45,6 +45,7 @@ import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
 
+import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -145,7 +146,6 @@ class TextEditorImpl implements ThemeListener {
             }
         }
     }
-
 
     void findNext() {
         if (StringUtils.isNullOrEmpty(SearchJob.lastSearchString))
@@ -255,21 +255,15 @@ class TextEditorImpl implements ThemeListener {
         }
     }
 
+    public void setSyntaxHighlighting(AbstractFile file) {
+        String mimeType = FileTypeUtil.get().guessContentType(
+                new File(file.getCanonicalPath()), true);
+        textArea.setSyntaxEditingStyle(mimeType);
+    }
 
-    public void setSyntaxBasedOnFilename(String fileExtension) {
-        // TODO use Apache Tika or some other way to work out mime-type (java built-in options suck)
-        String defaultMimeType = SyntaxConstants.SYNTAX_STYLE_NONE;
-        Map<String, String> extToMime = new HashMap<String, String>() {{
-            put("java", SyntaxConstants.SYNTAX_STYLE_JAVA);
-            put("js", SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
-            put("gradle", SyntaxConstants.SYNTAX_STYLE_GROOVY);
-            put("c", SyntaxConstants.SYNTAX_STYLE_C);
-            put("cpp", SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
-            put("html", SyntaxConstants.SYNTAX_STYLE_HTML);
-            put("htm", SyntaxConstants.SYNTAX_STYLE_HTML);
-        }};
-
-        textArea.setSyntaxEditingStyle(extToMime.getOrDefault(fileExtension.toLowerCase(), defaultMimeType));
+    public void setFocusAndCursorOnFirstLine() {
+        textArea.requestFocusInWindow();
+        textArea.setCaretPosition(0);
     }
 
     //////////////////////////////////

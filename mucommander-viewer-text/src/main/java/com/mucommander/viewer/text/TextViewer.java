@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 import javax.swing.JComponent;
@@ -161,7 +160,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
             }
 
             // Load the file into the text area
-            loadDocument(file.getExtension(), in, encoding, documentListener);
+            loadDocument(file, in, encoding, documentListener);
         } finally {
             if (in != null) {
                 try {
@@ -173,7 +172,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         }
     }
 
-    void loadDocument(String fileExtension, InputStream in, final String encoding, DocumentListener documentListener) throws IOException {
+    void loadDocument(AbstractFile file, InputStream in, final String encoding, DocumentListener documentListener) throws IOException {
         // If the encoding is UTF-something, wrap the stream in a BOMInputStream to filter out the byte-order mark
         // (see ticket #245)
         if (encoding != null && encoding.toLowerCase().startsWith("utf")) {
@@ -184,13 +183,14 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         this.encoding = encoding == null || !Charset.isSupported(encoding) ? "UTF-8" : encoding;
 
         textEditorImpl.read(new BufferedReader(new InputStreamReader(in, this.encoding)));
+        textEditorImpl.setSyntaxHighlighting(file);
+        // TODO it doesn't work - should it be invoked somewhere else?
+        textEditorImpl.setFocusAndCursorOnFirstLine();
 
         // Listen to document changes
         if (documentListener!=null) {
             textEditorImpl.addDocumentListener(documentListener);
         }
-
-        textEditorImpl.setSyntaxBasedOnFilename(fileExtension);
     }
 
     @Override
@@ -303,7 +303,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         try {
             // Reload the file using the new encoding
             // Note: loadDocument closes the InputStream
-            loadDocument(currentFile.getExtension(), currentFile.getInputStream(), newEncoding, null);
+            loadDocument(currentFile, currentFile.getInputStream(), newEncoding, null);
         } catch (IOException ex) {
             InformationDialog.showErrorDialog(presenter.getWindowFrame(), Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", currentFile.getName()));
         }

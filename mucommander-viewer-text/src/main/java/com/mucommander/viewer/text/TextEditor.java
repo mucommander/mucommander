@@ -134,7 +134,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     }
 
     void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
-        textViewerDelegate.loadDocument(getCurrentFile().getExtension(), in, encoding, documentListener);
+        textViewerDelegate.loadDocument(getCurrentFile(), in, encoding, documentListener);
     }
 
     private void write(OutputStream out) throws IOException {
