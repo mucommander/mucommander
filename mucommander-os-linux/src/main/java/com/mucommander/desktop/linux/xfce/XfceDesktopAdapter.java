@@ -32,6 +32,7 @@ abstract class XfceDesktopAdapter extends DefaultDesktopAdapter {
 	private static final String FILE_MANAGER_NAME = "Thunar";
     private static final String FILE_OPENER       = "exo-open $f";
     private static final String EXE_OPENER        = "$f";
+    private static final String CMD_OPENER_COMMAND = "xfce4-terminal --default-working-directory $f";
     
 	@Override
     public void init(boolean install) throws DesktopInitialisationException {
@@ -41,6 +42,7 @@ abstract class XfceDesktopAdapter extends DefaultDesktopAdapter {
             CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER,  CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FILE_OPENER, CommandType.SYSTEM_COMMAND, FILE_MANAGER_NAME));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
     }
