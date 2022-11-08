@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
@@ -167,20 +168,12 @@ class ImageViewer implements FileViewer, ActionListener {
     private synchronized void loadImage(AbstractFile file) throws IOException {
         presenter.getWindowFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-        int read;
-        byte buffer[] = new byte[1024];
-        InputStream in;
-        byte[] imageBytes;
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
-            in = file.getInputStream();
-            while ((read = in.read(buffer, 0, buffer.length)) != -1) {
-                bout.write(buffer, 0, read);
+            try (InputStream in = file.getInputStream()) {
+                StreamUtils.copyStream(in, bout);
+                this.image = imageViewerImpl.getToolkit().createImage(bout.toByteArray());
             }
-            imageBytes = bout.toByteArray();
         }
-        in.close();
-
-        this.image = imageViewerImpl.getToolkit().createImage(imageBytes);
 
         waitForImage(image);
 
@@ -376,7 +369,7 @@ class ImageViewer implements FileViewer, ActionListener {
             backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
             ThemeManager.addCurrentThemeListener(this);
 
-            MouseAdapter ma = new MouseAdapter() {
+            MouseAdapter mouseAdapter = new MouseAdapter() {
 
                 private Point origin;
 
@@ -443,9 +436,9 @@ class ImageViewer implements FileViewer, ActionListener {
                 }
             };
 
-            addMouseListener(ma);
-            addMouseMotionListener(ma);
-            addMouseWheelListener(ma);
+            addMouseListener(mouseAdapter);
+            addMouseMotionListener(mouseAdapter);
+            addMouseWheelListener(mouseAdapter);
         }
 
         ////////////////////////

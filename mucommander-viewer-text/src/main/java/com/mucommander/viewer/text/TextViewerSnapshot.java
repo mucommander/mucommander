@@ -47,6 +47,10 @@ public final class TextViewerSnapshot implements MuSnapshotable {
      * Default line numbers value.
      */
     public static final boolean DEFAULT_LINE_NUMBERS = true;
+    /**
+     * Last known file presenter full screen mode.
+     */
+    public static final String TEXT_FILE_PRESENTER_FULL_SCREEN = TEXT_FILE_PRESENTER_SECTION + "." + "full_screen";
 
     @Override
     public void read(Configuration configuration) {

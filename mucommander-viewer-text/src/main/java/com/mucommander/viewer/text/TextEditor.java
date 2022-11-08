@@ -174,11 +174,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     }
 
     @Override
-    public void setPresenter(EditorPresenter presenter) {
-        super.setPresenter(presenter);
-    }
-
-    @Override
     public void open(AbstractFile file) throws IOException {
         setCurrentFile(file);
         textViewerDelegate.startEditing(file, this);
