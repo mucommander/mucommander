@@ -42,7 +42,6 @@ import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.encoding.EncodingListener;
@@ -63,11 +62,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     private ViewerPresenter presenter;
     private TextEditorImpl textEditorImpl;
     private AbstractFile currentFile;
-
-    private static boolean lineWrap = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_WRAP, TextViewerSnapshot.DEFAULT_LINE_WRAP);
-
-    private static boolean lineNumbers = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewerSnapshot.DEFAULT_LINE_NUMBERS);
-
     private TextLineNumbersPanel lineNumbersPanel;
 
     /** Menu items */
@@ -80,7 +74,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleLineWrapItem;
     private JMenuItem toggleLineNumbersItem;
 
     private String encoding;
@@ -98,10 +91,13 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         attachView();
 
         initLineNumbersPanel();
-        showLineNumbers(lineNumbers);
+        showLineNumbers(TextViewerSnapshot.Preferences.LINE_NUMBERS.getValue());
 
-        textEditorImpl.wrap(lineWrap);
-
+        for (TextViewerSnapshot.Preferences pref : TextViewerSnapshot.Preferences.values()) {
+            if (pref.isTextEditorPref()) {
+                pref.setValue(textEditorImpl, pref.getValue());
+            }
+        }
         initMenuBarItems();
     }
     
@@ -109,20 +105,10 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         ui.getViewport().setView(textEditorImpl.getTextArea());
     }
 
-    static void setLineWrap(boolean lineWrap) {
-        TextViewer.lineWrap = lineWrap;
-    }
-
-    public static boolean isLineWrap() {
-        return lineWrap;
     }
 
     static void setLineNumbers(boolean lineNumbers) {
-        TextViewer.lineNumbers = lineNumbers;
-    }
-
-    public static boolean isLineNumbers() {
-        return lineNumbers;
+        TextViewerSnapshot.Preferences.LINE_NUMBERS.setValue(lineNumbers);
     }
 
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
@@ -223,11 +209,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         setLineNumbers(show);
     }
 
-    protected void wrapLines(boolean wrap) {
-        textEditorImpl.wrap(wrap);
-        setLineWrap(wrap);
-    }
-
     protected void initLineNumbersPanel() {
         lineNumbersPanel = new TextLineNumbersPanel(textEditorImpl.getTextArea());
     }
@@ -249,9 +230,20 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         // View menu
         viewMenu = new JMenu(Translator.get("text_viewer.view"));
 
-        toggleLineWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.line_wrap"), menuItemMnemonicHelper, null, this);
-        toggleLineWrapItem.setSelected(textEditorImpl.isWrap());
-        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.line_numbers"), menuItemMnemonicHelper, null, this);
+        JMenuItem item;
+
+        for (TextViewerSnapshot.Preferences pref : TextViewerSnapshot.Preferences.values()) {
+            if (pref.isTextEditorPref()) {
+                item = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                        Translator.get(pref.getI18nKey()), menuItemMnemonicHelper,
+                        null,  e -> pref.setValue(textEditorImpl, ((JMenuItem)e.getSource()).isSelected()));
+                item.setSelected(pref.getValue()); // the last known (or the most current) value
+            }
+        }
+
+        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                Translator.get(TextViewerSnapshot.Preferences.LINE_NUMBERS.getI18nKey()),
+                menuItemMnemonicHelper, null, this);
         toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
     }
 
@@ -277,7 +269,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-
+        // TODO declare inline action handlers instead of those ifs
         if(source == copyItem)
             textEditorImpl.copy();
         else if(source == selectAllItem)
@@ -288,8 +280,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
             textEditorImpl.findNext();
         else if(source == findPreviousItem)
             textEditorImpl.findPrevious();
-        else if(source == toggleLineWrapItem)
-            wrapLines(toggleLineWrapItem.isSelected());
         else if(source == toggleLineNumbersItem)
             showLineNumbers(toggleLineNumbersItem.isSelected());
     }

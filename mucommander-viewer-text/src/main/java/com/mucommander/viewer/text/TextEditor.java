@@ -80,7 +80,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleLineWrapItem;
     private JMenuItem toggleLineNumbersItem;
 
     private final TextEditorImpl textEditorImpl;
@@ -125,9 +124,19 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
 
                 viewMenu = new JMenu(Translator.get("text_editor.view"));
 
-                toggleLineWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_wrap"), menuItemMnemonicHelper, null, listener);
-                toggleLineWrapItem.setSelected(textEditorImpl.isWrap());
-                toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_numbers"), menuItemMnemonicHelper, null, listener);
+                JMenuItem item;
+                for (TextViewerSnapshot.Preferences pref : TextViewerSnapshot.Preferences.values()) {
+                    if (pref.isTextEditorPref()) {
+                        item = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                                Translator.get(pref.getI18nKey()), menuItemMnemonicHelper,
+                                null,  e -> pref.setValue(textEditorImpl, ((JMenuItem)e.getSource()).isSelected()));
+                        item.setSelected(pref.getValue()); // the last known (or current) value
+                    }
+                }
+
+                toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                        Translator.get(TextViewerSnapshot.Preferences.LINE_NUMBERS.getI18nKey()),
+                        menuItemMnemonicHelper, null, listener);
                 toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
             }
         };
@@ -250,8 +259,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
             textEditorImpl.findNext();
         else if (source == findPreviousItem)
             textEditorImpl.findPrevious();
-        else if (source == toggleLineWrapItem)
-            textViewerDelegate.wrapLines(toggleLineWrapItem.isSelected());
         else if (source == toggleLineNumbersItem)
             textViewerDelegate.showLineNumbers(toggleLineNumbersItem.isSelected());
     }

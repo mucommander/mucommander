@@ -84,16 +84,11 @@ class TextEditorImpl implements ThemeListener {
                 return new Insets(4, 3, 4, 3);
             }
         };
-        // TODO these RSyntaxTextArea props (some of them) should be user-configurable
-        textArea.setAnimateBracketMatching(true);
-        textArea.setAntiAliasingEnabled(true);
-        textArea.setAutoIndentEnabled(true);
-        textArea.setEOLMarkersVisible(true);
-        textArea.setCodeFoldingEnabled(true);
-        textArea.setMarkOccurrences(true);
-        textArea.setPaintTabLines(true);
+
         // TODO Should be overridable by user?
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        // TODO Should be overridable by user?
+        textArea.setTabSize(4);
 
         textArea.setEditable(isEditable);
         // Use theme colors and font
@@ -148,10 +143,11 @@ class TextEditorImpl implements ThemeListener {
     }
 
     void findNext() {
-        if (StringUtils.isNullOrEmpty(SearchJob.lastSearchString))
+        if (StringUtils.isNullOrEmpty(SearchJob.lastSearchString)) {
             find();
-        else
+        } else {
             doSearch(textArea.getSelectionEnd(), true);
+        }
     }
 
     void findPrevious() {
@@ -164,8 +160,9 @@ class TextEditorImpl implements ThemeListener {
 
     private void doSearch(int startPos, boolean forward) {
         String searchString = SearchJob.lastSearchString;
-        if (StringUtils.isNullOrEmpty(searchString))
+        if (StringUtils.isNullOrEmpty(searchString)) {
             return;
+        }
 
         textArea.requestFocus();
 
@@ -188,10 +185,6 @@ class TextEditorImpl implements ThemeListener {
         }
     }
 
-    public boolean isWrap() {
-        return textArea.getLineWrap();
-    }
-
     ////////////////////////////
     // Package-access methods //
     ////////////////////////////
@@ -199,6 +192,34 @@ class TextEditorImpl implements ThemeListener {
     void wrap(boolean isWrap) {
         textArea.setLineWrap(isWrap);
         textArea.repaint();
+    }
+
+    void animateBracketMatching(boolean aBool) {
+        textArea.setAnimateBracketMatching(aBool);
+    }
+
+    void antiAliasing(boolean aBool) {
+        textArea.setAntiAliasingEnabled(aBool);
+    }
+
+    void autoIndent(boolean aBool) {
+        textArea.setAutoIndentEnabled(aBool);
+    }
+
+    void eolMarkersVisible(boolean aBool) {
+        textArea.setEOLMarkersVisible(aBool);
+    }
+
+    void codeFolding(boolean aBool) {
+        textArea.setCodeFoldingEnabled(aBool);
+    }
+
+    void markOccurrences(boolean aBool) {
+        textArea.setMarkOccurrences(aBool);
+    }
+
+    void paintTabLines(boolean aBool) {
+        textArea.setPaintTabLines(aBool);
     }
 
     void copy() {
@@ -245,9 +266,9 @@ class TextEditorImpl implements ThemeListener {
 
         // According to the documentation in DefaultEditorKit, the line separator is set to be as the system property
         // if no other line separator exists in the file, but in practice it is not, so this is a workaround for it
-        if (!lineSeparatorExists)
+        if (!lineSeparatorExists) {
             document.putProperty(DefaultEditorKit.EndOfLineStringProperty, System.getProperty("line.separator"));
-
+        }
         try {
             textArea.getUI().getEditorKit(textArea).write(new BufferedWriter(writer), document, 0, document.getLength());
         } catch (BadLocationException e) {
