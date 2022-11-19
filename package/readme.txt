@@ -32,7 +32,7 @@ What's new since v1.1.0 ?
 -----------------------
 
 New features:
--
+- Syntax Highlighting in both text Viewer and Editor
 
 Improvements:
 - 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.
@@ -113,6 +113,9 @@ muCommander uses the following great third party works :
 - the JUnRar library released as Freeware.
  JUnRar can be found at http://sourceforge.net/projects/java-unrar .
 
+- the RSyntaxTextArea library under the terms of BSD 3-Clause "New" or "Revised" License
+ RSyntaxTextArea can be found at https://github.com/bobbylight/RSyntaxTextArea .
+
 - the Yanfs library released under the BSD license.
  Yanfs can be found at http://yanfs.dev.java.net .
 
@@ -150,6 +153,7 @@ Contributors:
 - LeO
 - Xavier Martin
 - Alejandro Scandroli
+- Piotr Skowronek
 - Alexander Yerenkow
 - Johann Schmitz
 - Thomas Uebel

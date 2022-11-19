@@ -23,6 +23,7 @@ Additionally, muCommander uses the following third party works:
 - the JmDNS library under the terms of the GNU Lesser General Public License
 - the JNA library under the terms of the GNU Lesser General Public License
 - the JUnRar library under the terms of the GNU Lesser General Public License
+- the RSyntaxTextArea library under the terms of BSD 3-Clause "New" or "Revised" License
 - the Yanfs library under the terms of the Berkeley Software Distribution License
 - the JCommander library under the terms of the Apache License
 - the ICEpdf library under the terms of the Apache License
