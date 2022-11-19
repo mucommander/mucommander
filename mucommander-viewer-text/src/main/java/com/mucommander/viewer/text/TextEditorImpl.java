@@ -214,6 +214,10 @@ class TextEditorImpl implements ThemeListener {
         textArea.setCodeFoldingEnabled(aBool);
     }
 
+    void highlightCurrentLine(boolean aBool) {
+        textArea.setHighlightCurrentLine(aBool);
+    }
+
     void markOccurrences(boolean aBool) {
         textArea.setMarkOccurrences(aBool);
     }

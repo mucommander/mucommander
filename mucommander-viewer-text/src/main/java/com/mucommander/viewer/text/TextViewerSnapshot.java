@@ -59,6 +59,9 @@ public final class TextViewerSnapshot implements MuSnapshotable {
         // Whether to use code folding
         CODE_FOLDING("code_folding", "text_viewer.code_folding", true,
                 (textEditorImpl, aBoolean) -> textEditorImpl.codeFolding(aBoolean)),
+        // Whether to highlight a current line
+        HIGHLIGHT_CURRENT_LINE("highlight_current_line", "text_viewer.highlight_current_line", true,
+                (textEditorImpl, aBoolean) -> textEditorImpl.highlightCurrentLine(aBoolean)),
         // Whether to mark occurrences
         MARK_OCCURRENCES("mark_occurrences", "text_viewer.mark_occurrences", true,
                 (textEditorImpl, aBoolean) -> textEditorImpl.markOccurrences(aBoolean)),
