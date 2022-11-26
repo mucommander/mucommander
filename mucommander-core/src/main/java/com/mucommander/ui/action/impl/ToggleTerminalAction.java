@@ -148,8 +148,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
                     keyEvent.setKeyCode(-1);
                     revertToTableView();
                     setVisible(false);
-                }
-                if (!terminal.getTtyConnector().isConnected()) {
+                } else if (!terminal.getTtyConnector().isConnected()) {
                     // just close terminal if it is not active/connected (for example when sb typed 'exit')
                     revertToTableView();
                     setVisible(false);
