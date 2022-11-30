@@ -125,7 +125,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                 viewMenu = new JMenu(Translator.get("text_editor.view"));
 
                 JMenuItem item;
-                for (TextViewerSnapshot.Preferences pref : TextViewerSnapshot.Preferences.values()) {
+                for (TextViewerPreferences pref : TextViewerPreferences.values()) {
                     if (pref.isTextEditorPref()) {
                         item = MenuToolkit.addCheckBoxMenuItem(viewMenu,
                                 Translator.get(pref.getI18nKey()), menuItemMnemonicHelper,
@@ -135,7 +135,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                 }
 
                 toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
-                        Translator.get(TextViewerSnapshot.Preferences.LINE_NUMBERS.getI18nKey()),
+                        Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),
                         menuItemMnemonicHelper, null, listener);
                 toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
             }

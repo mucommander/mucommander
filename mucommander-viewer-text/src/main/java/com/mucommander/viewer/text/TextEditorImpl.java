@@ -32,6 +32,7 @@ import java.io.Writer;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
@@ -84,6 +85,13 @@ class TextEditorImpl implements ThemeListener {
                 return new Insets(4, 3, 4, 3);
             }
         };
+
+        // TODO add this pref when https://github.com/bobbylight/RSyntaxTextArea/issues/469 is resolved
+        //textArea.setClearWhitespaceLinesEnabled(true);
+        // TODO should we allow opening links directly from editor/viewer?
+        textArea.setHyperlinksEnabled(false); // @see #addHyperlinkListener(HyperlinkListener)
+
+        //textArea.convertTabsToSpaces(); // TODO
 
         // TODO Should be overridable by user?
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
@@ -206,12 +214,32 @@ class TextEditorImpl implements ThemeListener {
         textArea.setAutoIndentEnabled(aBool);
     }
 
-    void eolMarkersVisible(boolean aBool) {
-        textArea.setEOLMarkersVisible(aBool);
+    void bracketMatching(boolean aBool) {
+        textArea.setBracketMatchingEnabled(aBool);
+    }
+
+    void closeCurlyBraces(boolean aBool) {
+        textArea.setCloseCurlyBraces(aBool);
+    }
+
+    void closeMarkupTags(boolean aBool) {
+        textArea.setCloseMarkupTags(aBool);
     }
 
     void codeFolding(boolean aBool) {
         textArea.setCodeFoldingEnabled(aBool);
+    }
+
+    void dragEnabled(boolean aBool) {
+        textArea.setDragEnabled(aBool);
+    }
+
+    void eolMarkersVisible(boolean aBool) {
+        textArea.setEOLMarkersVisible(aBool);
+    }
+
+    void fadeCurrentLineHighlight(boolean aBool) {
+        textArea.setFadeCurrentLineHighlight(aBool);
     }
 
     void highlightCurrentLine(boolean aBool) {
@@ -225,6 +253,23 @@ class TextEditorImpl implements ThemeListener {
     void paintTabLines(boolean aBool) {
         textArea.setPaintTabLines(aBool);
     }
+
+    void roundedSelectionEdges(boolean aBool) {
+        textArea.setRoundedSelectionEdges(aBool);
+    }
+
+    void showMatchedBracketPopup(boolean aBool) {
+        textArea.setShowMatchedBracketPopup(aBool);
+    }
+
+    void tabsEmulated(boolean aBool) {
+        textArea.setTabsEmulated(aBool);
+    }
+
+    void whitespaceVisible(boolean aBool) {
+        textArea.setWhitespaceVisible(aBool);
+    }
+
 
     void copy() {
         textArea.copy();
