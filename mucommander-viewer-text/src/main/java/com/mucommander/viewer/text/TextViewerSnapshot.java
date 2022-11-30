@@ -28,11 +28,6 @@ import com.mucommander.snapshot.MuSnapshotable;
  */
 public final class TextViewerSnapshot implements MuSnapshotable {
 
-    /**
-     * Section describing information specific to text file presenter.
-     */
-    public static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
-
     @Override
     public void read(Configuration configuration) {
     }

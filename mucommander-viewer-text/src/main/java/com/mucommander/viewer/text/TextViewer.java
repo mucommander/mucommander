@@ -227,6 +227,11 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), this);
         findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
 
+        MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.spaces_to_tabs"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertSpacesToTabs());
+        MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.tabs_to_spaces"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertTabsToSpaces());
+
+        viewMenu = new JMenu(Translator.get("text_editor.view"));
+
         // View menu
         viewMenu = new JMenu(Translator.get("text_viewer.view"));
 

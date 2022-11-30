@@ -20,6 +20,8 @@ import com.mucommander.snapshot.MuSnapshot;
 
 import java.util.function.BiConsumer;
 
+import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
+
 /**
  * TextEditor preferences gluing visual aspects (like i18n, source of menu generation),
  * configuration to be stored and actual setter for TextArea UI.
@@ -27,6 +29,7 @@ import java.util.function.BiConsumer;
  * @author Piotr Skowronek
  */
 enum TextViewerPreferences {
+
     // Whether to wrap long lines.
     LINE_WRAP("line_wrap", "text_viewer.line_wrap", false,
             (textEditorImpl, aBoolean) -> textEditorImpl.wrap(aBoolean)),
@@ -56,7 +59,7 @@ enum TextViewerPreferences {
     CODE_FOLDING("code_folding", "text_viewer.code_folding", true,
             (textEditorImpl, aBoolean) -> textEditorImpl.codeFolding(aBoolean)),
     // Whether text drag-n-drop is enabled
-    DRAG_ENABLED("drag_enabled", "text_viewer.drag_enabled", true,
+    DRAG_ENABLED("drag_n_drop", "text_viewer.drag_n_drop", true,
             (textEditorImpl, aBoolean) -> textEditorImpl.dragEnabled(aBoolean)),
     // Whether to show EOL markers
     EOL_MARKERS("eol_markers", "text_viewer.eol_markers", false,
@@ -88,6 +91,11 @@ enum TextViewerPreferences {
 
     ; // end of prefs (syntax sugar aka developer vanity marker)
 
+    /**
+     * Section describing information specific to text file presenter.
+     */
+    private static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
+
     String prefKey;
     String i18nKey;
     boolean currentValue;
@@ -100,15 +108,15 @@ enum TextViewerPreferences {
 
     TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue,
                           BiConsumer<TextEditorImpl, Boolean> textEditorSetter) {
-        this.prefKey = prefKey;
+        this.prefKey = prefKey != null ? TEXT_FILE_PRESENTER_SECTION + "." + prefKey : null;
         this.i18nKey = i18nKey;
         this.textEditorSetter = textEditorSetter;
         this.currentValue = prefKey != null ?
-                MuSnapshot.getSnapshot().getVariable(prefKey, defaultValue) : false;
+                MuSnapshot.getSnapshot().getVariable(this.prefKey, defaultValue) : false;
     }
 
     public String getPrefKey() {
-        return TextViewerSnapshot.TEXT_FILE_PRESENTER_SECTION + "." + prefKey;
+        return prefKey;
     }
 
     public String getI18nKey() {
@@ -130,7 +138,8 @@ enum TextViewerPreferences {
         setValue(value);
     }
 
-    boolean isTextEditorPref() {
+    public boolean isTextEditorPref() {
         return textEditorSetter != null;
     }
+
 }

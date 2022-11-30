@@ -122,6 +122,11 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                 findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), listener);
                 findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), listener);
 
+                editMenu.addSeparator();
+
+                MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.spaces_to_tabs"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertSpacesToTabs());
+                MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.tabs_to_spaces"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertTabsToSpaces());
+
                 viewMenu = new JMenu(Translator.get("text_editor.view"));
 
                 JMenuItem item;
@@ -133,7 +138,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                         item.setSelected(pref.getValue()); // the last known (or current) value
                     }
                 }
-
+                viewMenu.addSeparator();
                 toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
                         Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),
                         menuItemMnemonicHelper, null, listener);

@@ -91,8 +91,6 @@ class TextEditorImpl implements ThemeListener {
         // TODO should we allow opening links directly from editor/viewer?
         textArea.setHyperlinksEnabled(false); // @see #addHyperlinkListener(HyperlinkListener)
 
-        //textArea.convertTabsToSpaces(); // TODO
-
         // TODO Should be overridable by user?
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
         // TODO Should be overridable by user?
@@ -161,6 +159,10 @@ class TextEditorImpl implements ThemeListener {
     void findPrevious() {
         doSearch(textArea.getSelectionStart() - 1, false);
     }
+
+    void convertTabsToSpaces() { textArea.convertTabsToSpaces(); }
+
+    void convertSpacesToTabs() { textArea.convertSpacesToTabs(); }
 
     private String getTextLC() {
         return textArea.getText().toLowerCase();
