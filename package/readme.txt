@@ -47,6 +47,7 @@ Localization:
 
 Bug fixes:
 - The modification timestamp of folders is preserved when they are moved to a different file system.
+- 'Open command prompt' action now works on Xfce.
 
 Known issues:
 - Some translations may not be up-to-date.
