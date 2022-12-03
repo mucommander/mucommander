@@ -109,6 +109,7 @@ public final class TerminalWindow {
                 envs = new HashMap<>(System.getenv());
                 envs.putAll(getDefaultLocaleSetting());
                 envs.put("TERM", "xterm-256color");
+                envs.put("HISTCONTROL", "ignoreboth");
                 if (OsFamily.MAC_OS.isCurrent()) {
                     envs.put("BASH_SILENCE_DEPRECATION_WARNING", "1");
                 }
