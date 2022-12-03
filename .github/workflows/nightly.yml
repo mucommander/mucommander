@@ -18,3 +18,10 @@ jobs:
           tag_name: nightly
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: avakar/tag-and-release@v1
+        with:
+          tag_name: nightly
+          release_name: Nightly
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
