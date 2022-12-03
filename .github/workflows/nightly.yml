@@ -62,4 +62,19 @@ jobs:
           asset_name: mucommander-snapshot-portable.zip
           asset_content_type: application/zip
 
+      - uses: DovnarAlexander/github-action-file-detection@master
+        id: find_tgz
+        with:
+          wildcard: '*.tgz'
+          base_path: build/distributions
+
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-new-release.outputs.upload_url }}
+          asset_path: ${{ steps.find_tgz.outputs.found }}
+          asset_name: mucommander-snapshot.tgz
+          asset_content_type: application/gzip
+
 
