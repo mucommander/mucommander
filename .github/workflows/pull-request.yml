@@ -1,6 +1,6 @@
 name: Unit Tests
 
-on: [pull-request, workflow_dispatch]
+on: [pull_request, workflow_dispatch]
 
 jobs:
   unit-tests:
