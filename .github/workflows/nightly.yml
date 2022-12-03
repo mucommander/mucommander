@@ -1,0 +1,19 @@
+name: Nightly
+
+on: 
+  schedule:
+    - cron:  '* 23 * * *'
+
+jobs:
+  create-tag-and-release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Remove previous tag and release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: nightly
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
