@@ -35,8 +35,6 @@ enum TextViewerPreferences {
             (textEditorImpl, aBoolean) -> textEditorImpl.wrap(aBoolean)),
     // Whether to show line numbers.
     LINE_NUMBERS("line_numbers", "text_viewer.line_numbers", true),
-    // Last known file presenter full screen mode.
-    FULL_SCREEN(null, "text_viewer.full_screen", false),
     // Whether to animate bracket matching
     ANIMATE_BRACKET_MATCHING("animate_bracket_matching", "text_viewer.animate_bracket_matching", true,
             (textEditorImpl, aBoolean) -> textEditorImpl.animateBracketMatching(aBoolean)),
