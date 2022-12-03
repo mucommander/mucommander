@@ -6,21 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-tag-and-release:
+  create-new-release:
 
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: portable
-
       - name: Remove previous tag and release
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
@@ -39,6 +29,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  release-linux-artifacts:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: portable tgz
+
       - uses: DovnarAlexander/github-action-file-detection@master
         id: find_portable
         with:
@@ -49,7 +54,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ jobs.create_new_release.steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.find_portable.outputs.found }}
           asset_name: mucommander-snapshot-portable.zip
           asset_content_type: application/zip
+
+
