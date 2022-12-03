@@ -95,18 +95,18 @@ jobs:
         with:
           arguments: dmg
 
-      - uses: DovnarAlexander/github-action-file-detection@master
+      - uses: Rishabh510/Path-lister-action@master
         id: find_dmg
         with:
-          wildcard: '*.dmg'
-          base_path: build/distributions
+          type: '.dmg'
+          path: build/distributions
 
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-new-release.outputs.upload_url }}
-          asset_path: ${{ steps.find_dmg.outputs.found }}
+          asset_path: ${{ steps.find_dmg.outputs.paths }}
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
