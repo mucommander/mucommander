@@ -95,12 +95,19 @@ jobs:
         with:
           arguments: dmg
 
+      - uses: mirko-felice/list-files-action@v3.0.1
+        id: list-files
+        with:
+          repo: ${{ github.repository }}
+          path: "./build/distributions"
+          ext: ".dmg"
+
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-new-release.outputs.upload_url }}
-          asset_path: ./build/distributions/mucommander-1.2.0-snapshot.dmg
+          asset_path: ${{ steps.list-files.outputs.paths }}
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
