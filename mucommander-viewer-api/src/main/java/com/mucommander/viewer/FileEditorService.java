@@ -17,12 +17,13 @@
 package com.mucommander.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Interface for file editor service.
- *
- * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public interface FileEditorService {
 
     /**
@@ -30,6 +31,7 @@ public interface FileEditorService {
      *
      * @return name title
      */
+    @Nonnull
     String getName();
 
     /**
@@ -44,19 +46,18 @@ public interface FileEditorService {
     int getOrderPriority();
 
     /**
-     * Returns <code>true</code> if this factory can create a file editor for
-     * the specified file.
+     * Returns <code>true</code> if this factory can create a file editor for the specified file.
      * <p>
-     * The FileEditor may base its decision strictly upon the file's name and
-     * its extension or may wish to read some of the file and compare it to a
-     * magic number.
+     * The FileEditor may base its decision strictly upon the file's name and its extension or may wish to read some of
+     * the file and compare it to a magic number.
      * </p>
      *
-     * @param file file for which a editor must be created.
-     * @return <code>true</code> if this factory can create a file editor for
-     * the specified file.
-     * @throws WarnUserException if the specified file can be edited after the
-     * warning message contained in the exception is displayed to the end user.
+     * @param file
+     *            file for which a editor must be created.
+     * @return <code>true</code> if this factory can create a file editor for the specified file.
+     * @throws WarnUserException
+     *             if the specified file can be edited after the warning message contained in the exception is displayed
+     *             to the end user.
      */
     boolean canEditFile(AbstractFile file) throws WarnUserException;
 
@@ -65,5 +66,6 @@ public interface FileEditorService {
      *
      * @return a new instance of {@link FileEditor}.
      */
+    @Nonnull
     FileEditor createFileEditor();
 }

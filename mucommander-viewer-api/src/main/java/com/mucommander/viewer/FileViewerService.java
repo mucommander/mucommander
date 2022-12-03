@@ -17,12 +17,13 @@
 package com.mucommander.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Interface for file viewer service.
- *
- * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public interface FileViewerService {
 
     /**
@@ -30,6 +31,7 @@ public interface FileViewerService {
      *
      * @return name title
      */
+    @Nonnull
     String getName();
 
     /**
@@ -45,19 +47,18 @@ public interface FileViewerService {
     int getOrderPriority();
 
     /**
-     * Returns <code>true</code> if this factory can create a file viewer for
-     * the specified file.
+     * Returns <code>true</code> if this factory can create a file viewer for the specified file.
      * <p>
-     * The FileEditor may base its decision strictly upon the file's name and
-     * its extension or may wish to read some of the file and compare it to a
-     * magic number.
+     * The FileEditor may base its decision strictly upon the file's name and its extension or may wish to read some of
+     * the file and compare it to a magic number.
      * </p>
      *
-     * @param file file for which a viewer must be created.
-     * @return <code>true</code> if this factory can create a file viewer for
-     * the specified file.
-     * @throws WarnUserException if the specified file can be viewed after the
-     * warning message contained in the exception is displayed to the end user.
+     * @param file
+     *            file for which a viewer must be created.
+     * @return <code>true</code> if this factory can create a file viewer for the specified file.
+     * @throws WarnUserException
+     *             if the specified file can be viewed after the warning message contained in the exception is displayed
+     *             to the end user.
      */
     boolean canViewFile(AbstractFile file) throws WarnUserException;
 
@@ -66,5 +67,6 @@ public interface FileViewerService {
      *
      * @return a new instance of {@link FileViewer}.
      */
+    @Nonnull
     FileViewer createFileViewer();
 }

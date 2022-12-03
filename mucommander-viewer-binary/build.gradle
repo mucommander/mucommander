@@ -9,7 +9,7 @@ dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-commons-util')
     // Version jsr305 3.0.2 conflicts with felix framework
-    implementation 'com.google.code.findbugs:jsr305:1.3.9'
+    compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
     implementation('org.exbin.bined:bined-core:0.2.0') {
         exclude group: 'org.exbin.auxiliary', module: 'paged_data'

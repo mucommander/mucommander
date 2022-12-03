@@ -43,13 +43,10 @@ import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.ViewerPresenter;
 import com.mucommander.viewer.WarnUserException;
 import com.mucommander.text.Translator;
+import java.awt.event.ActionEvent;
 
 /**
  * File viewer presenter to handle multiple file viewers.
- *
- * <p>
- * <b>Warning:</b> the file viewer/editor API may soon receive a major overhaul.
- * </p>
  *
  * @author Maxence Bernard, Arik Hadas
  */
@@ -61,6 +58,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     private final ButtonGroup viewersButtonGroup;
     private final List<FileViewerService> services = new ArrayList<>();
     private int viewersCount = 0;
+    private JMenuItem fullScreenMenuItem;
     private JMenuItem closeMenuItem;
 
     public FileViewerPresenter() {
@@ -71,8 +69,9 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     }
 
     /**
-     * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and not
-     * by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     * Returns the menu bar that controls the viewer's frame. The menu bar
+     * should be retrieved using this method and not by calling
+     * {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
      *
      * @return the menu bar that controls the viewer's frame.
      */
@@ -113,7 +112,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
             fileTable.selectRow(newRow);
             newFile = fileTable.getSelectedFile();
             try {
-                canView = viewerService.canViewFile(newFile);
+                canView = (newFile != null) && viewerService.canViewFile(newFile);
             } catch (WarnUserException ex) {
                 canView = false;
             }
@@ -121,16 +120,6 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
 
         setCurrentFile(newFile);
         fileViewer.open(newFile);
-    }
-
-    @Override
-    public boolean isFullScreen() {
-        return getFrame().isFullScreen();
-    }
-
-    @Override
-    public void setFullScreen(boolean fullScreen) {
-        getFrame().setFullScreen(fullScreen);
     }
 
     @Override
@@ -165,6 +154,20 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         if (fileViewer == null) {
             MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
             viewerMenu.addSeparator();
+
+            fullScreenMenuItem = MenuToolkit.addCheckBoxMenuItem(viewerMenu,
+                    Translator.get("file_viewer.fullscreen"),
+                    menuItemMnemonicHelper,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK),
+                    (e) -> {
+                        boolean fullScreen = getFrame().isFullScreen();
+                        getFrame().setFullScreen(!fullScreen);
+                        fullScreenMenuItem.setSelected(!fullScreen);
+                    }
+            );
+            fullScreenMenuItem.setSelected(getFrame().isFullScreen());
+            viewerMenu.add(fullScreenMenuItem);
+
             closeMenuItem = MenuToolkit.addMenuItem(viewerMenu,
                     Translator.get("file_viewer.close"),
                     menuItemMnemonicHelper,
@@ -197,6 +200,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         fileViewer.open(getCurrentFile());
         fileViewer.extendMenu(menuBar);
         menuBar.revalidate();
+        menuBar.repaint();
         setComponentToPresent(viewerComponent);
     }
 }

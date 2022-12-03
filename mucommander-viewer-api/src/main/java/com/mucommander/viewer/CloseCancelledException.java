@@ -19,8 +19,6 @@ package com.mucommander.viewer;
 
 /**
  * This exception is thrown when file close is cancelled.
- *
- * @author Miroslav Hajda
  */
 public class CloseCancelledException extends Exception {
 }

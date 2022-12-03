@@ -58,7 +58,6 @@ public final class TextViewerSnapshot implements MuSnapshotable {
 
     @Override
     public void write(Configuration configuration) {
-        configuration.setVariable(TEXT_FILE_PRESENTER_FULL_SCREEN, TextViewer.isFullScreen());
         configuration.setVariable(TEXT_FILE_PRESENTER_LINE_WRAP, TextViewer.isLineWrap());
         configuration.setVariable(TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewer.isLineNumbers());
     }

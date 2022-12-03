@@ -16,6 +16,8 @@
  */
 package com.mucommander.viewer;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JFrame;
 
 /**
@@ -23,6 +25,7 @@ import javax.swing.JFrame;
  *
  * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public interface EditorPresenter {
 
     /**
@@ -38,26 +41,8 @@ public interface EditorPresenter {
      *
      * @return frame
      */
+    @Nonnull
     JFrame getWindowFrame();
-
-    /**
-     * TODO: Remove
-     *
-     * Reads fullscreen state
-     *
-     * @return full screen state
-     */
-    boolean isFullScreen();
-
-    /**
-     * TODO: Remove
-     *
-     * Method to set fullscreen.
-     *
-     * @param fullScreen
-     *            full screen state
-     */
-    void setFullScreen(boolean fullScreen);
 
     /**
      * Executes long operation.

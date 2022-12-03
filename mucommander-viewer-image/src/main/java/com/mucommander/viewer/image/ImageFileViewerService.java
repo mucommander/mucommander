@@ -20,12 +20,15 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.FileViewer;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * <code>FileViewerService</code> implementation for creating image viewers.
  *
  * @author Nicolas Rinaudo
  */
+@ParametersAreNonnullByDefault
 public class ImageFileViewerService implements FileViewerService {
 
     /**
@@ -34,10 +37,10 @@ public class ImageFileViewerService implements FileViewerService {
     private ExtensionFilenameFilter filter;
 
     public ImageFileViewerService() {
-        filter = new ExtensionFilenameFilter(new String[]{".png", ".gif", ".jpg", ".jpeg"});
-        filter.setCaseSensitive(false);
+        filter = new ExtensionFilenameFilter(new String[]{".png", ".gif", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".wbmp"}, false, false);
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "Image";
@@ -58,6 +61,7 @@ public class ImageFileViewerService implements FileViewerService {
         return filter.accept(file);
     }
 
+    @Nonnull
     @Override
     public FileViewer createFileViewer() {
         return new ImageViewer(this);

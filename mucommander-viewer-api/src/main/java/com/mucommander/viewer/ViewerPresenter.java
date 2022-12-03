@@ -18,14 +18,15 @@ package com.mucommander.viewer;
 
 import java.io.IOException;
 import java.util.function.Function;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import javax.swing.JFrame;
 
 /**
  * Interface for viewer presenter.
- *
- * @author Miroslav Hajda
  */
+@ParametersAreNonnullByDefault
 public interface ViewerPresenter {
 
     /**
@@ -41,6 +42,7 @@ public interface ViewerPresenter {
      *
      * @return frame
      */
+    @Nonnull
     JFrame getWindowFrame();
 
     /**
@@ -54,25 +56,6 @@ public interface ViewerPresenter {
      *             exception if loading fails
      */
     void goToFile(Function<Integer, Integer> advance, FileViewerService viewerService) throws IOException;
-
-    /**
-     * TODO: Remove
-     *
-     * Reads fullscreen state
-     *
-     * @return full screen state
-     */
-    boolean isFullScreen();
-
-    /**
-     * TODO: Remove
-     *
-     * Method to set fullscreen.
-     *
-     * @param fullScreen
-     *            full screen state
-     */
-    void setFullScreen(boolean fullScreen);
 
     /**
      * Executes long operation.
