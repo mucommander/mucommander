@@ -49,6 +49,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.find_portable.outputs.found.0 }}
+          asset_path: ${{ steps.find_portable.outputs.found }}
           asset_name: portable.zip
           asset_content_type: application/zip
