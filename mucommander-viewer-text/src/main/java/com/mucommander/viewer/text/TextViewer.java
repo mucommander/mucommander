@@ -105,8 +105,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         ui.getViewport().setView(textEditorImpl.getTextArea());
     }
 
-    }
-
     static void setLineNumbers(boolean lineNumbers) {
         TextViewerPreferences.LINE_NUMBERS.setValue(lineNumbers);
     }
