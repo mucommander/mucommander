@@ -234,9 +234,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), this);
         findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
 
-        MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.spaces_to_tabs"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertSpacesToTabs());
-        MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.tabs_to_spaces"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertTabsToSpaces());
-
         viewMenu = new JMenu(Translator.get("text_editor.view"));
 
         // View menu
@@ -245,13 +242,15 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         JMenuItem item;
 
         for (TextViewerPreferences pref : TextViewerPreferences.values()) {
-            if (pref.isTextEditorPref()) {
+            if (pref.isTextEditorPref() && !pref.isEditorOnly()) {
                 item = MenuToolkit.addCheckBoxMenuItem(viewMenu,
                         Translator.get(pref.getI18nKey()), menuItemMnemonicHelper,
                         null,  e -> pref.setValue(textEditorImpl, ((JMenuItem)e.getSource()).isSelected()));
                 item.setSelected(pref.getValue()); // the last known (or the most current) value
             }
         }
+
+        viewMenu.addSeparator();
 
         toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
                 Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),

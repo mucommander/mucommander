@@ -171,6 +171,10 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                 }
                 viewMenu.add(tabSizeMenu);
             }
+
+            protected void initViewMenu() {
+
+            }
         };
     }
 

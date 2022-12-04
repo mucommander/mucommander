@@ -29,6 +29,7 @@ import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
  * @author Piotr Skowronek
  */
 enum TextViewerPreferences {
+
     // Whether to wrap long lines.
     LINE_WRAP("line_wrap", "text_viewer.line_wrap", false,
             (textEditorImpl, aBoolean) -> textEditorImpl.wrap(aBoolean)),
@@ -42,16 +43,16 @@ enum TextViewerPreferences {
             (textEditorImpl, aBoolean) -> textEditorImpl.antiAliasing(aBoolean)),
     // Whether to use auto-indent
     AUTO_INDENT("auto_indent", "text_viewer.auto_indent", false,
-            (textEditorImpl, aBoolean) -> textEditorImpl.autoIndent(aBoolean)),
+            (textEditorImpl, aBoolean) -> textEditorImpl.autoIndent(aBoolean), EditorViewerMode.EDITOR),
     // Whether to match brackets
     BRACKET_MATCHING("bracket_matching", "text_viewer.bracket_matching", true,
             (textEditorImpl, aBoolean) -> textEditorImpl.bracketMatching(aBoolean)),
     // Whether to close curly braces
     CLOSE_CURLY_BRACES("close_curly_braces", "text_viewer.close_curly_braces", true,
-            (textEditorImpl, aBoolean) -> textEditorImpl.closeCurlyBraces(aBoolean)),
+            (textEditorImpl, aBoolean) -> textEditorImpl.closeCurlyBraces(aBoolean), EditorViewerMode.EDITOR),
     // Whether to markup tags (only honored for markup languages, such as HTML, XML and PHP)
     CLOSE_MARKUP_TAGS("close_markup_tags", "text_viewer.close_markup_tags", true,
-            (textEditorImpl, aBoolean) -> textEditorImpl.closeMarkupTags(aBoolean)),
+            (textEditorImpl, aBoolean) -> textEditorImpl.closeMarkupTags(aBoolean), EditorViewerMode.EDITOR),
     // Whether to use code folding
     CODE_FOLDING("code_folding", "text_viewer.code_folding", true,
             (textEditorImpl, aBoolean) -> textEditorImpl.codeFolding(aBoolean)),
@@ -81,7 +82,7 @@ enum TextViewerPreferences {
             (textEditorImpl, aBoolean) -> textEditorImpl.showMatchedBracketPopup(aBoolean)),
     // Whether to emulated tabs with spaces
     TABS_EMULATED("tabs_emulated", "text_viewer.tabs_emulated", true,
-            (textEditorImpl, aBoolean) -> textEditorImpl.tabsEmulated(aBoolean)),
+            (textEditorImpl, aBoolean) -> textEditorImpl.tabsEmulated(aBoolean), EditorViewerMode.EDITOR),
     // Whether to show whitespace chars
     WHITESPACE_VISIBLE("whitespace_visible", "text_viewer.whitespace_visible", false,
             (textEditorImpl, aBoolean) -> textEditorImpl.whitespaceVisible(aBoolean)),
@@ -93,23 +94,35 @@ enum TextViewerPreferences {
      */
     public static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
 
+    enum EditorViewerMode {
+        BOTH,
+        EDITOR
+    };
+
     String prefKey;
     String i18nKey;
     boolean currentValue;
+    EditorViewerMode mode;
 
     BiConsumer<TextEditorImpl, Boolean> textEditorSetter;
 
     TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue) {
-        this(prefKey, i18nKey, defaultValue, null);
+        this(prefKey, i18nKey, defaultValue, null, EditorViewerMode.BOTH);
     }
 
     TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue,
                           BiConsumer<TextEditorImpl, Boolean> textEditorSetter) {
+        this(prefKey, i18nKey, defaultValue, textEditorSetter, EditorViewerMode.BOTH);
+    }
+
+    TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue,
+                          BiConsumer<TextEditorImpl, Boolean> textEditorSetter, EditorViewerMode mode) {
         this.prefKey = prefKey != null ? TEXT_FILE_PRESENTER_SECTION + "." + prefKey : null;
         this.i18nKey = i18nKey;
         this.textEditorSetter = textEditorSetter;
         this.currentValue = prefKey != null ?
                 MuSnapshot.getSnapshot().getVariable(this.prefKey, defaultValue) : false;
+        this.mode = mode;
     }
 
     public String getPrefKey() {
@@ -138,5 +151,7 @@ enum TextViewerPreferences {
     public boolean isTextEditorPref() {
         return textEditorSetter != null;
     }
+
+    public boolean isEditorOnly() { return mode == EditorViewerMode.EDITOR; };
 
 }
