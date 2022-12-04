@@ -109,7 +109,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-new-release.outputs.upload_url }}
-          asset_path: 'build/distributions/mucommander-' + ${{env.version_name}} + '.dmg'
+          asset_path: "build/distributions/mucommander-$(${{github.workspace}}/gradlew -q printVersionName).dmg"
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
