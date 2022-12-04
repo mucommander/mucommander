@@ -32,7 +32,6 @@ import java.io.Writer;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
@@ -93,8 +92,6 @@ class TextEditorImpl implements ThemeListener {
 
         // TODO Should be overridable by user?
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
-        // TODO Should be overridable by user?
-        textArea.setTabSize(4);
 
         textArea.setEditable(isEditable);
         // Use theme colors and font
@@ -272,6 +269,13 @@ class TextEditorImpl implements ThemeListener {
         textArea.setWhitespaceVisible(aBool);
     }
 
+    int getTabSize() {
+        return textArea.getTabSize();
+    }
+
+    void setTabSize(int size) {
+        textArea.setTabSize(size);
+    }
 
     void copy() {
         textArea.copy();

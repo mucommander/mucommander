@@ -29,7 +29,6 @@ import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
  * @author Piotr Skowronek
  */
 enum TextViewerPreferences {
-
     // Whether to wrap long lines.
     LINE_WRAP("line_wrap", "text_viewer.line_wrap", false,
             (textEditorImpl, aBoolean) -> textEditorImpl.wrap(aBoolean)),
@@ -92,7 +91,7 @@ enum TextViewerPreferences {
     /**
      * Section describing information specific to text file presenter.
      */
-    private static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
+    public static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
 
     String prefKey;
     String i18nKey;

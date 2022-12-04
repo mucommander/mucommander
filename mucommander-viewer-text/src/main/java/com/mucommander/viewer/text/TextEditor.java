@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -42,17 +43,21 @@ import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.CloseCancelledException;
-import com.mucommander.viewer.EditorPresenter;
 
 
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JScrollPane;
+
+import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
 
 
 /**
@@ -104,7 +109,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
             }
 
             @Override
-            protected void initMenuBarItems() {
+            protected void initMenuBarItems() { // TODO code dup with TextViewer, fix it
                 // Edit menu
                 ActionListener listener = TextEditor.this;
                 editMenu = new JMenu(Translator.get("text_editor.edit"));
@@ -143,6 +148,28 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                         Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),
                         menuItemMnemonicHelper, null, listener);
                 toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
+
+                viewMenu.addSeparator();
+                int tabSize = textEditorImpl.getTabSize();
+                JMenu tabSizeMenu = new JMenu(Translator.get("text_editor.tab_size"));
+
+                Map<Integer, JCheckBoxMenuItem> tabCheckers = new HashMap<>();
+                for (int i : new int[]{2, 4, 8}) {
+                    JCheckBoxMenuItem check = MenuToolkit.addCheckBoxMenuItem(tabSizeMenu, Integer.toString(i),
+                            menuItemMnemonicHelper, null,
+                            e -> {
+                                for (Integer key : tabCheckers.keySet()) {
+                                    if (key.intValue() != i) {
+                                        tabCheckers.get(key).setSelected(false);
+                                    }
+                                }
+                                textEditorImpl.setTabSize(i);
+                                MuSnapshot.getSnapshot().setVariable(TEXT_FILE_PRESENTER_SECTION + ".tab_size", i);
+                            });
+                    check.setSelected(tabSize == i);
+                    tabCheckers.put(i, check);
+                }
+                viewMenu.add(tabSizeMenu);
             }
         };
     }
