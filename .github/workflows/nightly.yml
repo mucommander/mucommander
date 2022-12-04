@@ -95,29 +95,21 @@ jobs:
         with:
           arguments: dmg
 
-      - uses: mirko-felice/list-files-action@v3.0.1
-        id: list-files
-        with:
-          repo: ${{ github.repository }}
-          path: "build/distributions"
-          ext: ".dmg"
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v34
-      
-      - name: List all added files
+      - name : Retrieve Version
         run: |
-          for file in ${{ steps.changed-files.outputs.added_files }}; do
-            echo "$file was added"
-          done
+          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
+        id: mucommander_version
+
+      - name: Get version
+        run: |
+          echo "version_name=${{steps.android_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
 
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-new-release.outputs.upload_url }}
-          asset_path: ${{ steps.changed-files.outputs.added_files}}
+          asset_path: 'build/distributions/mucommander-' + ${{env.version_name}} + '.dmg'
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
