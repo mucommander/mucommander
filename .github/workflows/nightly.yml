@@ -99,12 +99,12 @@ jobs:
         id: list-files
         with:
           repo: ${{ github.repository }}
-          path: "./build/distributions"
+          path: "build/distributions"
           ext: ".dmg"
 
       - name: Output results
         run: |
-          echo ${{ fromJson(steps.list-files.outputs.paths) }}
+          echo ${{ steps.list-files.outputs.paths }}
 
       - uses: actions/upload-release-asset@v1
         env:
