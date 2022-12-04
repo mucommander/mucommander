@@ -102,16 +102,22 @@ jobs:
           path: "build/distributions"
           ext: ".dmg"
 
-      - name: Output results
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v34
+      
+      - name: List all added files
         run: |
-          echo ${{ steps.list-files.outputs.paths }}
+          for file in ${{ steps.changed-files.outputs.added_files }}; do
+            echo "$file was added"
+          done
 
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-new-release.outputs.upload_url }}
-          asset_path: ${{ fromJson(steps.list-files.outputs.paths) }}
+          asset_path: ${{ steps.changed-files.outputs.added_files}}
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
