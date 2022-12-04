@@ -102,14 +102,14 @@ jobs:
 
       - name: Get version
         run: |
-          echo "version_name=${{steps.android_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
+          echo "version_name=${{steps.mucommander_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
 
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-new-release.outputs.upload_url }}
-          asset_path: "build/distributions/mucommander-$(${{github.workspace}}/gradlew -q printVersionName).dmg"
+          asset_path: echo "build/distributions/mucommander-${{env.version_name}}.dmg"
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
