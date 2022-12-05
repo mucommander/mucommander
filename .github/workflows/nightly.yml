@@ -33,6 +33,42 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  release-macos-artifacts:
+
+    runs-on: macos-latest
+    needs: create-release
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: dmg
+
+      - name : Retrieve Version
+        run: |
+          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
+        id: mucommander_version
+
+      - name: Get version
+        run: |
+          echo "version_name=${{steps.mucommander_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
+
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{env.version_name}}.dmg"
+          asset_name: mucommander-snapshot.dmg
+          asset_content_type: application/octet-stream
+
   release-linux-artifacts:
 
     runs-on: ubuntu-latest
@@ -78,42 +114,6 @@ jobs:
           asset_path: ${{ steps.find_tgz.outputs.found }}
           asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
-
-  release-macos-artifacts:
-
-    runs-on: macos-latest
-    needs: create-release
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: dmg
-
-      - name : Retrieve Version
-        run: |
-          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
-        id: mucommander_version
-
-      - name: Get version
-        run: |
-          echo "version_name=${{steps.mucommander_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
-
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{env.version_name}}.dmg"
-          asset_name: mucommander-snapshot.dmg
-          asset_content_type: application/octet-stream
 
   publish-release:
 
