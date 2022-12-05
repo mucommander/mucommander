@@ -52,8 +52,6 @@ import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JScrollPane;
 
