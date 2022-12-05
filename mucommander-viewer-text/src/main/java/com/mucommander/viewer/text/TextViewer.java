@@ -25,11 +25,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-import javax.swing.JCheckBoxMenuItem;
+import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentListener;
 
@@ -261,21 +262,18 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         int tabSize = textEditorImpl.getTabSize();
         JMenu tabSizeMenu = new JMenu(Translator.get("text_viewer.tab_size"));
 
-        Map<Integer, JCheckBoxMenuItem> tabCheckers = new HashMap<>();
+        ButtonGroup group = new ButtonGroup();
         for (int i : new int[]{2, 4, 8}) {
-            JCheckBoxMenuItem check = MenuToolkit.addCheckBoxMenuItem(tabSizeMenu, Integer.toString(i),
-                    menuItemMnemonicHelper, null,
+            JRadioButtonMenuItem radio = new JRadioButtonMenuItem(Integer.toString(i), tabSize == i);
+            radio.addActionListener(
                     e -> {
-                        for (Integer key : tabCheckers.keySet()) {
-                            if (key.intValue() != i) {
-                                tabCheckers.get(key).setSelected(false);
-                            }
-                        }
                         textEditorImpl.setTabSize(i);
-                        MuSnapshot.getSnapshot().setVariable(TEXT_FILE_PRESENTER_SECTION + ".tab_size", i);
-                    });
-            check.setSelected(tabSize == i);
-            tabCheckers.put(i, check);
+                        MuSnapshot.getSnapshot().setVariable(
+                                TEXT_FILE_PRESENTER_SECTION + ".tab_size", i);
+                    }
+            );
+            group.add(radio);
+            tabSizeMenu.add(radio);
         }
         viewMenu.add(tabSizeMenu);
     }
