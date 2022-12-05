@@ -124,4 +124,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          release_id: ${{ needs.create-new-release..outputs.release_id }}
+          release_id: ${{ needs.create-new-release.outputs.release_id }}
