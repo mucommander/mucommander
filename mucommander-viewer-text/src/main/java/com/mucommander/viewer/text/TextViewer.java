@@ -51,6 +51,10 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.event.ActionListener;
 
 import javax.swing.JScrollPane;
@@ -63,6 +67,8 @@ import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESEN
  * @author Maxence Bernard, Arik Hadas
  */
 public class TextViewer implements FileViewer, EncodingListener, ActionListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextViewer.class);
 
     private JScrollPane ui = new JScrollPane();
     private ViewerPresenter presenter;
@@ -128,14 +134,14 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
                 try {
                     in = file.getRandomAccessInputStream();
                 } catch (IOException e) {
+                    LOGGER.debug("There was an exception", e);
                     // In that case we simply get an InputStream
+                    in = file.getInputStream();
                 }
             }
 
-            if (in == null) {
-                in = file.getInputStream();
-            }
-
+            /* TODO this will return ISO-8859-1 for a normal text... which could have been
+               OKeyish sometime ago, but now UTF-8 should be set (emoticons etc) */
             String encoding = EncodingDetector.detectEncoding(in);
 
             if (in instanceof RandomAccessInputStream) {
