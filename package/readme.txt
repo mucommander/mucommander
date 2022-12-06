@@ -114,7 +114,7 @@ muCommander uses the following great third party works :
  JUnRar can be found at http://sourceforge.net/projects/java-unrar .
 
 - the RSyntaxTextArea library under the terms of BSD 3-Clause "New" or "Revised" License
- RSyntaxTextArea can be found at https://github.com/bobbylight/RSyntaxTextArea .
+ RSyntaxTextArea can be found at https://bobbylight.github.io/RSyntaxTextArea .
 
 - the Yanfs library released under the BSD license.
  Yanfs can be found at http://yanfs.dev.java.net .
