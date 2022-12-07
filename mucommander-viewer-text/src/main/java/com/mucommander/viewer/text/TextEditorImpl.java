@@ -81,7 +81,7 @@ class TextEditorImpl implements ThemeListener {
         textArea = new RSyntaxTextArea() {
             @Override
             public Insets getInsets() {
-                return new Insets(4, 3, 4, 3);
+                return new Insets(0, 3, 4, 3);
             }
         };
 
