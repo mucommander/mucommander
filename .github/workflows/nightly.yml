@@ -115,7 +115,7 @@ jobs:
           asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
 
-   release-windows-artifacts:
+  release-windows-artifacts:
 
     runs-on: windows-latest
     needs: create-release
