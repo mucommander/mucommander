@@ -1,0 +1,24 @@
+name: Nightly - win
+
+on: 
+  workflow_dispatch:
+
+jobs:
+
+  release-windows-artifacts:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: msi
+
