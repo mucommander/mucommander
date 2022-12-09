@@ -12,6 +12,7 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       release_id: ${{ steps.create_release.outputs.id }}
+      version_name: ${{ steps.mucommander_version.outputs.VERSION_NAME }}
 
     steps:
       - name: Remove previous tag and release
@@ -33,6 +34,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: actions/checkout@v3
+
+      - name : Retrieve Version
+        id: mucommander_version
+        run: |
+          echo "VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName) >> $GITHUB_OUTPUT"
+
+
   release-macos-artifacts:
 
     runs-on: macos-latest
@@ -51,24 +60,15 @@ jobs:
         with:
           arguments: dmg
 
-      - name : Retrieve Version
-        run: |
-          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
-        id: mucommander_version
-
-      - name: Get version
-        run: |
-          echo "version_name=${{steps.mucommander_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
-
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{env.version_name}}.dmg"
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.dmg"
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
-
+OA
   release-linux-artifacts:
 
     runs-on: ubuntu-latest
@@ -136,24 +136,15 @@ jobs:
         with:
           arguments: msi
 
-      - name : Retrieve Version
-        run: |
-          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
-        id: mucommander_version
-
-      - name: Get version
-        run: |
-          echo "version_name=${{steps.mucommander_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
-
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{env.version_name}}.msi"
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.msi"
           asset_name: mucommander-snapshot.msi
           asset_content_type: application/octet-stream
-
+[[O
   publish-release:
 
     runs-on: ubuntu-latest
