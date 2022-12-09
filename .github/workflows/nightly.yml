@@ -144,7 +144,7 @@ OA
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.msi"
           asset_name: mucommander-snapshot.msi
           asset_content_type: application/octet-stream
-[[O
+
   publish-release:
 
     runs-on: ubuntu-latest
