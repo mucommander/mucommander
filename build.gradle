@@ -31,6 +31,10 @@ task printVersionName {
   println project.version + '-' + project.ext.release
 }
 
+task printVersion {
+  println project.version
+}
+
 repositories.mavenCentral()
 
 subprojects {

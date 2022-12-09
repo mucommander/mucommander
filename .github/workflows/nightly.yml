@@ -13,6 +13,7 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       release_id: ${{ steps.create_release.outputs.id }}
       version_name: ${{ steps.mucommander_version.outputs.VERSION_NAME }}
+      version: ${{ steps.mucommander_version.outputs.VERSION }}
 
     steps:
       - name: Remove previous tag and release
@@ -39,6 +40,7 @@ jobs:
       - name : Get version
         id: mucommander_version
         run: |
+          echo "VERSION=$(${{github.workspace}}/gradlew -q printVersion)" >> $GITHUB_OUTPUT
           echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
 
@@ -141,7 +143,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.msi"
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version }}.msi"
           asset_name: mucommander-snapshot.msi
           asset_content_type: application/octet-stream
 
