@@ -111,12 +111,18 @@ jobs:
           asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
 
+      - uses: DovnarAlexander/github-action-file-detection@master
+        id: find_deb
+        with:
+          wildcard: '*.deb'
+          base_path: build/distributions
+
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}_amd64.deb"
+          asset_path: ${{ steps.find_deb.outputs.found }}
           asset_name: mucommander-snapshot_amd64.deb
           asset_content_type: application/octet-stream
 
