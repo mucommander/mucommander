@@ -79,42 +79,33 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'adopt'
+
       - uses: gradle/wrapper-validation-action@v1
+
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: portable tgz
 
-      - uses: DovnarAlexander/github-action-file-detection@master
-        id: find_portable
-        with:
-          wildcard: '*-portable.zip'
-          base_path: build/distributions
-
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.find_portable.outputs.found }}
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}-portable.zip"
           asset_name: mucommander-snapshot-portable.zip
           asset_content_type: application/zip
 
-      - uses: DovnarAlexander/github-action-file-detection@master
-        id: find_tgz
-        with:
-          wildcard: '*.tgz'
-          base_path: build/distributions
-
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.find_tgz.outputs.found }}
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.tgz"
           asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
 
