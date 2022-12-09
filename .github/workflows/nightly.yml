@@ -68,7 +68,7 @@ jobs:
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.dmg"
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
-OA
+
   release-linux-artifacts:
 
     runs-on: ubuntu-latest
