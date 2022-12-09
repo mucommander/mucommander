@@ -79,6 +79,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - uses: actions/setup-java@v3
         with:
@@ -89,7 +91,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: portable tgz
+          arguments: portable tgz deb
 
       - uses: actions/upload-release-asset@v1
         env:
@@ -108,6 +110,15 @@ jobs:
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.tgz"
           asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
+
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}_amd64.deb"
+          asset_name: mucommander-snapshot_amd64.deb
+          asset_content_type: application/octet-stream
 
   upload-windows-artifacts:
 
