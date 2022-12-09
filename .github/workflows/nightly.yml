@@ -55,7 +55,7 @@ jobs:
     needs: create-release
 
     steps:
-      - uses: actions/checkout@v3OA
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
       - uses: actions/setup-java@v3
