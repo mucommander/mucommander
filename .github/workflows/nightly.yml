@@ -12,7 +12,7 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       release_id: ${{ steps.create_release.outputs.id }}
-      version_name: ${{ steps.mucommander_full_version.outputs.VERSION_NAME }}
+      version_name: ${{ steps.mucommander_version.outputs.VERSION_NAME }}
       version: ${{ steps.mucommander_version.outputs.VERSION }}
 
     steps:
@@ -37,14 +37,10 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name : Get full version
-        id: mucommander_full_version
-        run: |
-          echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
-
       - name : Get version
         id: mucommander_version
         run: |
+          echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
 
