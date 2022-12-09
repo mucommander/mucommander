@@ -115,10 +115,49 @@ jobs:
           asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
 
+   release-windows-artifacts:
+
+    runs-on: windows-latest
+    needs: create-release
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - uses: gradle/wrapper-validation-action@v1
+
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: msi
+
+      - name : Retrieve Version
+        run: |
+          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
+        id: mucommander_version
+
+      - name: Get version
+        run: |
+          echo "version_name=${{steps.mucommander_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV 
+
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{env.version_name}}.msi"
+          asset_name: mucommander-snapshot.msi
+          asset_content_type: application/octet-stream
+
   publish-release:
 
     runs-on: ubuntu-latest
-    needs: [ create-release, release-linux-artifacts, release-macos-artifacts ]
+    needs: [ create-release, release-linux-artifacts, release-macos-artifacts, release-windows-artifacts ]
 
     steps:
       - uses: eregon/publish-release@v1
