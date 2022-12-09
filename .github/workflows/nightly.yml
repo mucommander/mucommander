@@ -40,12 +40,12 @@ jobs:
       - name : Get full version
         id: mucommander_full_version
         run: |
-          echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
+          echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
 
       - name : Get version
         id: mucommander_version
         run: |
-          echo "VERSION=$(${{github.workspace}}/gradlew -q printVersion)" >> $GITHUB_OUTPUT
+          echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
 
 

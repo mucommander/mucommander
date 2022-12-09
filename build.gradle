@@ -27,12 +27,12 @@ allprojects {
     }
 }
 
-task printVersionName {
-  println project.version + '-' + project.ext.release
+task printFullVersionName {
+  doLast { println project.version + '-' + project.ext.release }
 }
 
-task printVersion {
-  println project.version
+task printVersionName {
+  doLast { println project.version }
 }
 
 repositories.mavenCentral()
