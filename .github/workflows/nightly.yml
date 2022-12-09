@@ -39,7 +39,7 @@ jobs:
       - name : Get version
         id: mucommander_version
         run: |
-          echo "VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
+          echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
 
   release-macos-artifacts:
