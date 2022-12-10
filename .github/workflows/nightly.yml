@@ -33,16 +33,14 @@ jobs:
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
       - name: Create a new release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         id: create_release
         with:
+          name: Nightly
           tag_name: nightly
-          release_name: Nightly
           prerelease: true
           draft: true
           body: "Snapshot of v${{ steps.mucommander_version.outputs.VERSION }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-macos-artifacts:
 
