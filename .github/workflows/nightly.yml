@@ -32,7 +32,8 @@ jobs:
           echo "FULL_VERSION=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
-      - uses: actions/create-release@v1
+      - name: Create a new release
+        uses: actions/create-release@v1
         id: create_release
         with:
           tag_name: nightly
@@ -58,11 +59,13 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - uses: gradle/gradle-build-action@v2
+      - name: Build dmg
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: dmg
 
-      - uses: actions/upload-release-asset@v1
+      - name: Upload dmg
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -86,9 +89,10 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - uses: gradle/gradle-build-action@v2
+      - name: Build portable, tgz, deb, and rpm
+        uses: gradle/gradle-build-action@v2
         with:
-          arguments: portable tgz deb rpm
+          arguments: tgz portable deb rpm
 
       - name: Upload portable
         uses: actions/upload-release-asset@v1
@@ -158,11 +162,13 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - uses: gradle/gradle-build-action@v2
+      - name: Build msi
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: msi
 
-      - uses: actions/upload-release-asset@v1
+      - name: Upload msi
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -177,7 +183,8 @@ jobs:
     needs: [ create-release, upload-linux-artifacts, upload-macos-artifacts, upload-windows-artifacts ]
 
     steps:
-      - uses: eregon/publish-release@v1
+      - name: Publish the new release
+        uses: eregon/publish-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
