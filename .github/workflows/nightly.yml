@@ -24,17 +24,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/create-release@v1
-        id: create_release
-        with:
-          tag_name: nightly
-          release_name: Nightly
-          prerelease: true
-          draft: true
-          body: ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: actions/checkout@v3
 
       - name : Get version
@@ -43,7 +32,16 @@ jobs:
           echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
-
+      - uses: actions/create-release@v1
+        id: create_release
+        with:
+          tag_name: nightly
+          release_name: Nightly
+          prerelease: true
+          draft: true
+          body: "Snapshot of v${{ steps.mucommander_version.outputs.VERSION }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-macos-artifacts:
 
