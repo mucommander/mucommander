@@ -12,8 +12,8 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       release_id: ${{ steps.create_release.outputs.id }}
-      version_name: ${{ steps.mucommander_version.outputs.VERSION_NAME }}
       version: ${{ steps.mucommander_version.outputs.VERSION }}
+      full_version: ${{ steps.mucommander_version.outputs.FULL_VERSION }}
 
     steps:
       - name: Remove previous tag and release
@@ -29,7 +29,7 @@ jobs:
       - name : Get version
         id: mucommander_version
         run: |
-          echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
+          echo "FULL_VERSION=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
       - uses: actions/create-release@v1
@@ -66,7 +66,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.dmg"
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.dmg"
           asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
@@ -97,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}-portable.zip"
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-portable.zip"
           asset_name: mucommander-snapshot-portable.zip
           asset_content_type: application/zip
 
@@ -107,7 +107,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.tgz"
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.tgz"
           asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
 
