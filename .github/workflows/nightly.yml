@@ -91,7 +91,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: portable tgz deb
+          arguments: portable tgz deb rpm
 
       - uses: actions/upload-release-asset@v1
         env:
