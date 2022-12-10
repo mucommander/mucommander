@@ -63,9 +63,7 @@ jobs:
           arguments: dmg
 
       - name: Upload dmg
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.dmg"
@@ -93,9 +91,7 @@ jobs:
           arguments: tgz portable deb rpm
 
       - name: Upload portable
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-portable.zip"
@@ -103,9 +99,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload tgz
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.tgz"
@@ -119,9 +113,7 @@ jobs:
           base_path: build/distributions
 
       - name: Upload deb
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ${{ steps.find_deb.outputs.found }}
@@ -135,9 +127,7 @@ jobs:
           base_path: build/distributions
 
       - name: Upload rpm
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ${{ steps.find_rpm.outputs.found }}
@@ -166,9 +156,7 @@ jobs:
           arguments: msi
 
       - name: Upload msi
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version }}.msi"
