@@ -130,6 +130,16 @@ jobs:
           asset_name: mucommander-snapshot_amd64.deb
           asset_content_type: application/octet-stream
 
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version_name }}.x86_64.rpm"
+          asset_name: mucommander-snapshot.x86_64.rpm
+          asset_content_type: application/octet-stream
+
+
   upload-windows-artifacts:
 
     runs-on: windows-latest
