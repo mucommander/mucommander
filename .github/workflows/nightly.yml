@@ -126,7 +126,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.find_deb.outputs.found }}
+          asset_path: "./build/distributions/mucommander_${{ needs.create-release.outputs.version_name }}_amd64.deb"
           asset_name: mucommander-snapshot_amd64.deb
           asset_content_type: application/octet-stream
 
