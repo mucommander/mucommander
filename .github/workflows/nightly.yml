@@ -93,7 +93,8 @@ jobs:
         with:
           arguments: portable tgz deb rpm
 
-      - uses: actions/upload-release-asset@v1
+      - name: Upload portable
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -102,7 +103,8 @@ jobs:
           asset_name: mucommander-snapshot-portable.zip
           asset_content_type: application/zip
 
-      - uses: actions/upload-release-asset@v1
+      - name: Upload tgz
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -117,7 +119,8 @@ jobs:
           wildcard: '*.deb'
           base_path: build/distributions
 
-      - uses: actions/upload-release-asset@v1
+      - name: Upload deb
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -132,7 +135,8 @@ jobs:
           wildcard: '*.rpm'
           base_path: build/distributions
 
-      - uses: actions/upload-release-asset@v1
+      - name: Upload rpm
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
