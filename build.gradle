@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.athaydes.osgi-run' version '2.0'
+    id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
     id 'org.ajoberstar.grgit' version '5.0.0'
     id 'edu.sc.seis.launch4j' version '2.5.4'
