@@ -43,22 +43,7 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchBuilder implements com.mucommander.commons.file.protocol.search.SearchBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchBuilder.class);
 
-    public static final String SEARCH_IN_ARCHIVES = "archives";
-    public static final String SEARCH_IN_HIDDEN = "hidden";
-    public static final String SEARCH_IN_SYMLINKS = "symlinks";
-    public static final String SEARCH_IN_SUBFOLDERS = "subfolders";
-    public static final String SEARCH_FOR_ARCHIVES = "filter_archives";
-    public static final String SEARCH_FOR_HIDDEN = "filter_hidden";
-    public static final String SEARCH_FOR_SYMLINKS = "filter_symlinks";
-    public static final String SEARCH_FOR_SUBFOLDERS = "filter_subfolders";
-    public static final String SEARCH_DEPTH = "depth";
-    public static final String SEARCH_THREADS = "threads";
-    public static final String MATCH_CASESENSITIVE = "case_sensitive";
-    public static final String MATCH_REGEX = "regex";
     public static final String SEARCH_TEXT = "text";
-    public static final String TEXT_CASESENSITIVE = "text-case_sensitive";
-    public static final String TEXT_MATCH_REGEX= "text-regex";
-    public static final String SEARCH_SIZE = "size";
     public static final int DEFAULT_THREADS = 2;
 
     private AbstractFile entrypoint;
@@ -133,7 +118,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchInArchives(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_IN_ARCHIVES);
+        String value = SearchProperty.SEARCH_IN_ARCHIVES.update(properties);
         if (value != null)
             searchInArchives = Boolean.parseBoolean(value);
         return this;
@@ -141,7 +126,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchInHidden(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_IN_HIDDEN);
+        String value = SearchProperty.SEARCH_IN_HIDDEN.update(properties);
         if (value != null)
             searchInHidden = Boolean.parseBoolean(value);
         return this;
@@ -149,7 +134,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchInSymlinks(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_IN_SYMLINKS);
+        String value = SearchProperty.SEARCH_IN_SYMLINKS.update(properties);
         if (value != null)
             searchInSymlinks = Boolean.parseBoolean(value);
         return this;
@@ -157,7 +142,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchInSubfolders(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_IN_SUBFOLDERS);
+        String value = SearchProperty.SEARCH_IN_SUBFOLDERS.update(properties);
         if (value != null)
             searchInSubfolders = Boolean.parseBoolean(value);
         return this;
@@ -165,7 +150,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchForArchives(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_FOR_ARCHIVES);
+        String value = SearchProperty.SEARCH_FOR_ARCHIVES.update(properties);
         if (value != null)
             searchForArchives = Boolean.parseBoolean(value);
         return this;
@@ -173,7 +158,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchForHidden(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_FOR_HIDDEN);
+        String value = SearchProperty.SEARCH_FOR_HIDDEN.update(properties);
         if (value != null)
             searchForHidden = Boolean.parseBoolean(value);
         return this;
@@ -181,7 +166,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchForSymlinks(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_FOR_SYMLINKS);
+        String value = SearchProperty.SEARCH_FOR_SYMLINKS.update(properties);
         if (value != null)
             searchForSymlinks = Boolean.parseBoolean(value);
         return this;
@@ -189,7 +174,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchForSubfolders(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_FOR_SUBFOLDERS);
+        String value = SearchProperty.SEARCH_FOR_SUBFOLDERS.update(properties);
         if (value != null)
             searchForSubfolders = Boolean.parseBoolean(value);
         return this;
@@ -197,7 +182,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchDepth(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_DEPTH);
+        String value = SearchProperty.SEARCH_DEPTH.update(properties);
         if (value != null)
             searchDepth = Integer.parseInt(value);
         return this;
@@ -205,7 +190,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchThreads(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_THREADS);
+        String value = SearchProperty.SEARCH_THREADS.update(properties);
         if (value != null)
             searchThreads = Integer.parseInt(value);
         return this;
@@ -213,7 +198,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder matchCaseInsensitive(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.MATCH_CASESENSITIVE);
+        String value = SearchProperty.MATCH_CASESENSITIVE.update(properties);
         if (value != null)
             matchCaseSensitive = Boolean.parseBoolean(value);
         return this;
@@ -221,7 +206,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder matchRegex(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.MATCH_REGEX);
+        String value = SearchProperty.MATCH_REGEX.update(properties);
         if (value != null)
             matchRegex = Boolean.parseBoolean(value);
         return this;
@@ -232,8 +217,8 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         String value = getProperty(properties, SearchBuilder.SEARCH_TEXT);
         if (value != null) {
             searchText = value;
-            textCaseSensitive = Boolean.parseBoolean(getProperty(properties, SearchBuilder.TEXT_CASESENSITIVE));
-            textMatchRegex = Boolean.parseBoolean(getProperty(properties, SearchBuilder.TEXT_MATCH_REGEX));
+            textCaseSensitive = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.update(properties));
+            textMatchRegex = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.update(properties));
         }
         return this;
     }
@@ -241,7 +226,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     @Override
     public SearchBuilder searchSize(List<Pair<String, String>> properties) {
         properties.stream()
-        .filter(p -> p.first.equals(SearchBuilder.SEARCH_SIZE))
+        .filter(p -> p.first.equals(SearchProperty.SEARCH_SIZE.getKey()))
         .map(p -> p.second)
         .forEach(value -> {
             String[] sizeProperties = SearchUtils.splitSearchSizeClause(value);
