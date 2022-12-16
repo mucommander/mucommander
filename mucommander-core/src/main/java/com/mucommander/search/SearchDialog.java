@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -65,7 +64,6 @@ import com.mucommander.commons.util.ui.spinner.IntEditor;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.FindAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.SelectAllOnFocusTextField;

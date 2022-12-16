@@ -611,11 +611,13 @@ public class MuSnapshot {
     	
     	setGlobalHistory();
 
-        for (MuSnapshotable handler : snapshotables) {
-            handler.write(configuration);
-        }
+        snapshotables.forEach(this::write);
 
         configuration.write();
+    }
+
+    private void write(MuSnapshotable snapshotable) {
+        snapshotable.write(configuration);
     }
 
     private void setFrameAttributes(MainFrame mainFrame, int index) {

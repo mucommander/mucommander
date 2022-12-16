@@ -17,8 +17,6 @@
 package com.mucommander.viewer.text;
 
 import com.mucommander.commons.conf.Configuration;
-import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
-
 import com.mucommander.snapshot.MuSnapshotable;
 
 /**
