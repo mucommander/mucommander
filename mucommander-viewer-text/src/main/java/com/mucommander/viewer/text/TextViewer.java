@@ -25,10 +25,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentListener;
 
@@ -49,8 +51,15 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.event.ActionListener;
+
 import javax.swing.JScrollPane;
+
+import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
 
 /**
  * A simple text viewer. Most of the implementation is located in {@link TextEditorImpl}.
@@ -59,15 +68,12 @@ import javax.swing.JScrollPane;
  */
 public class TextViewer implements FileViewer, EncodingListener, ActionListener {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextViewer.class);
+
     private JScrollPane ui = new JScrollPane();
     private ViewerPresenter presenter;
     private TextEditorImpl textEditorImpl;
     private AbstractFile currentFile;
-
-    private static boolean lineWrap = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_WRAP, TextViewerSnapshot.DEFAULT_LINE_WRAP);
-
-    private static boolean lineNumbers = MuSnapshot.getSnapshot().getVariable(TextViewerSnapshot.TEXT_FILE_PRESENTER_LINE_NUMBERS, TextViewerSnapshot.DEFAULT_LINE_NUMBERS);
-
     private TextLineNumbersPanel lineNumbersPanel;
 
     /** Menu items */
@@ -80,7 +86,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleLineWrapItem;
     private JMenuItem toggleLineNumbersItem;
 
     private String encoding;
@@ -98,10 +103,15 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         attachView();
 
         initLineNumbersPanel();
-        showLineNumbers(lineNumbers);
+        showLineNumbers(TextViewerPreferences.LINE_NUMBERS.getValue());
 
-        textEditorImpl.wrap(lineWrap);
-
+        for (TextViewerPreferences pref : TextViewerPreferences.values()) {
+            if (pref.isTextEditorPref()) {
+                pref.setValue(textEditorImpl, pref.getValue());
+            }
+        }
+        textEditorImpl.setTabSize(MuSnapshot.getSnapshot().getVariable(
+                TEXT_FILE_PRESENTER_SECTION + ".tab_size", 4));
         initMenuBarItems();
     }
     
@@ -109,20 +119,8 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         ui.getViewport().setView(textEditorImpl.getTextArea());
     }
 
-    static void setLineWrap(boolean lineWrap) {
-        TextViewer.lineWrap = lineWrap;
-    }
-
-    public static boolean isLineWrap() {
-        return lineWrap;
-    }
-
     static void setLineNumbers(boolean lineNumbers) {
-        TextViewer.lineNumbers = lineNumbers;
-    }
-
-    public static boolean isLineNumbers() {
-        return lineNumbers;
+        TextViewerPreferences.LINE_NUMBERS.setValue(lineNumbers);
     }
 
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
@@ -136,14 +134,14 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
                 try {
                     in = file.getRandomAccessInputStream();
                 } catch (IOException e) {
+                    LOGGER.debug("There was an exception", e);
                     // In that case we simply get an InputStream
+                    in = file.getInputStream();
                 }
             }
 
-            if (in == null) {
-                in = file.getInputStream();
-            }
-
+            /* TODO this will return ISO-8859-1 for a normal text... which could have been
+               OKeyish sometime ago, but now UTF-8 should be set (emoticons etc) */
             String encoding = EncodingDetector.detectEncoding(in);
 
             if (in instanceof RandomAccessInputStream) {
@@ -160,7 +158,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
             }
 
             // Load the file into the text area
-            loadDocument(in, encoding, documentListener);
+            loadDocument(file, in, encoding, documentListener);
         } finally {
             if (in != null) {
                 try {
@@ -172,7 +170,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         }
     }
 
-    void loadDocument(InputStream in, final String encoding, DocumentListener documentListener) throws IOException {
+    void loadDocument(AbstractFile file, InputStream in, final String encoding, DocumentListener documentListener) throws IOException {
         // If the encoding is UTF-something, wrap the stream in a BOMInputStream to filter out the byte-order mark
         // (see ticket #245)
         if (encoding != null && encoding.toLowerCase().startsWith("utf")) {
@@ -183,10 +181,14 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         this.encoding = encoding == null || !Charset.isSupported(encoding) ? "UTF-8" : encoding;
 
         textEditorImpl.read(new BufferedReader(new InputStreamReader(in, this.encoding)));
+        textEditorImpl.setSyntaxHighlighting(file);
+        // TODO it doesn't work - should it be invoked somewhere else?
+        textEditorImpl.setFocusAndCursorOnFirstLine();
 
         // Listen to document changes
-        if(documentListener!=null)
+        if (documentListener!=null) {
             textEditorImpl.addDocumentListener(documentListener);
+        }
     }
 
     @Override
@@ -219,16 +221,11 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         setLineNumbers(show);
     }
 
-    protected void wrapLines(boolean wrap) {
-        textEditorImpl.wrap(wrap);
-        setLineWrap(wrap);
-    }
-
     protected void initLineNumbersPanel() {
         lineNumbersPanel = new TextLineNumbersPanel(textEditorImpl.getTextArea());
     }
 
-    protected void initMenuBarItems() {
+    protected void initMenuBarItems() { // TODO code dup with TextEditor, fix it
         // Edit menu
         editMenu = new JMenu(Translator.get("text_viewer.edit"));
         MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
@@ -242,13 +239,47 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), this);
         findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
 
+        viewMenu = new JMenu(Translator.get("text_editor.view"));
+
         // View menu
         viewMenu = new JMenu(Translator.get("text_viewer.view"));
 
-        toggleLineWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.line_wrap"), menuItemMnemonicHelper, null, this);
-        toggleLineWrapItem.setSelected(textEditorImpl.isWrap());
-        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_viewer.line_numbers"), menuItemMnemonicHelper, null, this);
+        JMenuItem item;
+
+        for (TextViewerPreferences pref : TextViewerPreferences.values()) {
+            if (pref.isTextEditorPref() && !pref.isEditorOnly()) {
+                item = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                        Translator.get(pref.getI18nKey()), menuItemMnemonicHelper,
+                        null,  e -> pref.setValue(textEditorImpl, ((JMenuItem)e.getSource()).isSelected()));
+                item.setSelected(pref.getValue()); // the last known (or the most current) value
+            }
+        }
+
+        viewMenu.addSeparator();
+
+        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),
+                menuItemMnemonicHelper, null, this);
         toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
+
+        viewMenu.addSeparator();
+        int tabSize = textEditorImpl.getTabSize();
+        JMenu tabSizeMenu = new JMenu(Translator.get("text_viewer.tab_size"));
+
+        ButtonGroup group = new ButtonGroup();
+        for (int i : new int[]{2, 4, 8}) {
+            JRadioButtonMenuItem radio = new JRadioButtonMenuItem(Integer.toString(i), tabSize == i);
+            radio.addActionListener(
+                    e -> {
+                        textEditorImpl.setTabSize(i);
+                        MuSnapshot.getSnapshot().setVariable(
+                                TEXT_FILE_PRESENTER_SECTION + ".tab_size", i);
+                    }
+            );
+            group.add(radio);
+            tabSizeMenu.add(radio);
+        }
+        viewMenu.add(tabSizeMenu);
     }
 
     ///////////////////////////////
@@ -273,7 +304,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-
+        // TODO declare inline action handlers instead of those ifs
         if(source == copyItem)
             textEditorImpl.copy();
         else if(source == selectAllItem)
@@ -284,8 +315,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
             textEditorImpl.findNext();
         else if(source == findPreviousItem)
             textEditorImpl.findPrevious();
-        else if(source == toggleLineWrapItem)
-            wrapLines(toggleLineWrapItem.isSelected());
         else if(source == toggleLineNumbersItem)
             showLineNumbers(toggleLineNumbersItem.isSelected());
     }
@@ -299,7 +328,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         try {
             // Reload the file using the new encoding
             // Note: loadDocument closes the InputStream
-            loadDocument(currentFile.getInputStream(), newEncoding, null);
+            loadDocument(currentFile, currentFile.getInputStream(), newEncoding, null);
         } catch (IOException ex) {
             InformationDialog.showErrorDialog(presenter.getWindowFrame(), Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", currentFile.getName()));
         }

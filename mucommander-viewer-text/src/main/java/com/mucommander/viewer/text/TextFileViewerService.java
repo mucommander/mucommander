@@ -36,6 +36,11 @@ import com.mucommander.viewer.FileViewer;
  */
 public class TextFileViewerService implements FileViewerService, FileEditorService {
 
+    /**
+     * Max file size the editor can open.
+     */
+    private static final int MAX_FILE_SIZE_FOR_EDIT = 1024*1024;
+
     @Override
     public String getName() {
         return "Text";
@@ -61,7 +66,7 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
                 return false;
             }
         } catch (IOException e) {
-            // Not much too do
+            // Not much to do
         } finally {
             if (in != null) {
                 try {
@@ -73,7 +78,7 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
 
         // Warn the user if the file is large that a certain size as the whole file is loaded into memory
         // (in a JTextArea)
-        if (file.getSize() > 1048576) {
+        if (file.getSize() > MAX_FILE_SIZE_FOR_EDIT) {
             throw new WarnUserException(Translator.get("file_viewer.large_file_warning"));
         }
 

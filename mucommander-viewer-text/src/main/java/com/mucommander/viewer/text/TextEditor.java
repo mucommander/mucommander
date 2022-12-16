@@ -23,10 +23,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -42,17 +44,19 @@ import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.CloseCancelledException;
-import com.mucommander.viewer.EditorPresenter;
 
 
 import java.awt.event.ActionListener;
 
 import javax.swing.JScrollPane;
+
+import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
 
 
 /**
@@ -80,7 +84,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleLineWrapItem;
     private JMenuItem toggleLineNumbersItem;
 
     private final TextEditorImpl textEditorImpl;
@@ -105,7 +108,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
             }
 
             @Override
-            protected void initMenuBarItems() {
+            protected void initMenuBarItems() { // TODO code dup with TextViewer, fix it
                 // Edit menu
                 ActionListener listener = TextEditor.this;
                 editMenu = new JMenu(Translator.get("text_editor.edit"));
@@ -123,18 +126,52 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                 findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), listener);
                 findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), listener);
 
+                editMenu.addSeparator();
+
+                MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.spaces_to_tabs"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertSpacesToTabs());
+                MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.tabs_to_spaces"), menuItemMnemonicHelper, null, e -> textEditorImpl.convertTabsToSpaces());
+
                 viewMenu = new JMenu(Translator.get("text_editor.view"));
 
-                toggleLineWrapItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_wrap"), menuItemMnemonicHelper, null, listener);
-                toggleLineWrapItem.setSelected(textEditorImpl.isWrap());
-                toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, Translator.get("text_editor.line_numbers"), menuItemMnemonicHelper, null, listener);
+                JMenuItem item;
+                for (TextViewerPreferences pref : TextViewerPreferences.values()) {
+                    if (pref.isTextEditorPref()) {
+                        item = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                                Translator.get(pref.getI18nKey()), menuItemMnemonicHelper,
+                                null,  e -> pref.setValue(textEditorImpl, ((JMenuItem)e.getSource()).isSelected()));
+                        item.setSelected(pref.getValue()); // the last known (or current) value
+                    }
+                }
+                viewMenu.addSeparator();
+                toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                        Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),
+                        menuItemMnemonicHelper, null, listener);
                 toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
+
+                viewMenu.addSeparator();
+                int tabSize = textEditorImpl.getTabSize();
+                JMenu tabSizeMenu = new JMenu(Translator.get("text_editor.tab_size"));
+
+                ButtonGroup group = new ButtonGroup();
+                for (int i : new int[]{2, 4, 8}) {
+                    JRadioButtonMenuItem radio = new JRadioButtonMenuItem(Integer.toString(i), tabSize == i);
+                    radio.addActionListener(
+                                e -> {
+                                    textEditorImpl.setTabSize(i);
+                                    MuSnapshot.getSnapshot().setVariable(
+                                        TEXT_FILE_PRESENTER_SECTION + ".tab_size", i);
+                                }
+                    );
+                    group.add(radio);
+                    tabSizeMenu.add(radio);
+                }
+                viewMenu.add(tabSizeMenu);
             }
         };
     }
 
     void loadDocument(InputStream in, String encoding, DocumentListener documentListener) throws IOException {
-        textViewerDelegate.loadDocument(in, encoding, documentListener);
+        textViewerDelegate.loadDocument(getCurrentFile(), in, encoding, documentListener);
     }
 
     private void write(OutputStream out) throws IOException {
@@ -250,8 +287,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
             textEditorImpl.findNext();
         else if (source == findPreviousItem)
             textEditorImpl.findPrevious();
-        else if (source == toggleLineWrapItem)
-            textViewerDelegate.wrapLines(toggleLineWrapItem.isSelected());
         else if (source == toggleLineNumbersItem)
             textViewerDelegate.showLineNumbers(toggleLineNumbersItem.isSelected());
     }

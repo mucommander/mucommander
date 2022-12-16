@@ -24,6 +24,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -35,6 +36,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.job.impl.SearchJob;
 import com.mucommander.ui.theme.ColorChangedEvent;
@@ -42,6 +44,10 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
+
+import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
@@ -52,7 +58,7 @@ class TextEditorImpl implements ThemeListener {
 
     private JFrame frame;
 
-    private JTextArea textArea;
+    private RSyntaxTextArea textArea;
 
     /**
      * Indicates whether there is a line separator in the original file
@@ -72,12 +78,20 @@ class TextEditorImpl implements ThemeListener {
     }
 
     private void initTextArea(boolean isEditable) {
-        textArea = new JTextArea() {
+        textArea = new RSyntaxTextArea() {
             @Override
             public Insets getInsets() {
-                return new Insets(4, 3, 4, 3);
+                return new Insets(0, 3, 4, 3);
             }
         };
+
+        // TODO add this pref when https://github.com/bobbylight/RSyntaxTextArea/issues/469 is resolved
+        //textArea.setClearWhitespaceLinesEnabled(true);
+        // TODO should we allow opening links directly from editor/viewer?
+        textArea.setHyperlinksEnabled(false); // @see #addHyperlinkListener(HyperlinkListener)
+
+        // TODO Should be overridable by user?
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
 
         textArea.setEditable(isEditable);
         // Use theme colors and font
@@ -86,6 +100,8 @@ class TextEditorImpl implements ThemeListener {
         textArea.setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR));
         textArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR));
         textArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR));
+        // TODO by default I guess, at least on macOS in SolarizedDark theme, the editor font is not-monospaced!
+        // tabs may not be shown properly in length (dots are much smaller than letters).
         textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
 
         textArea.setWrapStyleWord(true);
@@ -131,17 +147,21 @@ class TextEditorImpl implements ThemeListener {
         }
     }
 
-
     void findNext() {
-        if (StringUtils.isNullOrEmpty(SearchJob.lastSearchString))
+        if (StringUtils.isNullOrEmpty(SearchJob.lastSearchString)) {
             find();
-        else
+        } else {
             doSearch(textArea.getSelectionEnd(), true);
+        }
     }
 
     void findPrevious() {
         doSearch(textArea.getSelectionStart() - 1, false);
     }
+
+    void convertTabsToSpaces() { textArea.convertTabsToSpaces(); }
+
+    void convertSpacesToTabs() { textArea.convertSpacesToTabs(); }
 
     private String getTextLC() {
         return textArea.getText().toLowerCase();
@@ -149,8 +169,9 @@ class TextEditorImpl implements ThemeListener {
 
     private void doSearch(int startPos, boolean forward) {
         String searchString = SearchJob.lastSearchString;
-        if (StringUtils.isNullOrEmpty(searchString))
+        if (StringUtils.isNullOrEmpty(searchString)) {
             return;
+        }
 
         textArea.requestFocus();
 
@@ -173,10 +194,6 @@ class TextEditorImpl implements ThemeListener {
         }
     }
 
-    public boolean isWrap() {
-        return textArea.getLineWrap();
-    }
-
     ////////////////////////////
     // Package-access methods //
     ////////////////////////////
@@ -184,6 +201,82 @@ class TextEditorImpl implements ThemeListener {
     void wrap(boolean isWrap) {
         textArea.setLineWrap(isWrap);
         textArea.repaint();
+    }
+
+    void animateBracketMatching(boolean aBool) {
+        textArea.setAnimateBracketMatching(aBool);
+    }
+
+    void antiAliasing(boolean aBool) {
+        textArea.setAntiAliasingEnabled(aBool);
+    }
+
+    void autoIndent(boolean aBool) {
+        textArea.setAutoIndentEnabled(aBool);
+    }
+
+    void bracketMatching(boolean aBool) {
+        textArea.setBracketMatchingEnabled(aBool);
+    }
+
+    void closeCurlyBraces(boolean aBool) {
+        textArea.setCloseCurlyBraces(aBool);
+    }
+
+    void closeMarkupTags(boolean aBool) {
+        textArea.setCloseMarkupTags(aBool);
+    }
+
+    void codeFolding(boolean aBool) {
+        textArea.setCodeFoldingEnabled(aBool);
+    }
+
+    void dragEnabled(boolean aBool) {
+        textArea.setDragEnabled(aBool);
+    }
+
+    void eolMarkersVisible(boolean aBool) {
+        textArea.setEOLMarkersVisible(aBool);
+    }
+
+    void fadeCurrentLineHighlight(boolean aBool) {
+        textArea.setFadeCurrentLineHighlight(aBool);
+    }
+
+    void highlightCurrentLine(boolean aBool) {
+        textArea.setHighlightCurrentLine(aBool);
+    }
+
+    void markOccurrences(boolean aBool) {
+        textArea.setMarkOccurrences(aBool);
+    }
+
+    void paintTabLines(boolean aBool) {
+        textArea.setPaintTabLines(aBool);
+    }
+
+    void roundedSelectionEdges(boolean aBool) {
+        textArea.setRoundedSelectionEdges(aBool);
+    }
+
+    void showMatchedBracketPopup(boolean aBool) {
+        textArea.setShowMatchedBracketPopup(aBool);
+    }
+
+    void tabsEmulated(boolean aBool) {
+        textArea.setTabsEmulated(aBool);
+    }
+
+    void whitespaceVisible(boolean aBool) {
+        textArea.setWhitespaceVisible(aBool);
+    }
+
+    int getTabSize() {
+        return textArea.getTabSize();
+    }
+
+    void setTabSize(int size) {
+        textArea.setTabSize(size);
     }
 
     void copy() {
@@ -230,14 +323,25 @@ class TextEditorImpl implements ThemeListener {
 
         // According to the documentation in DefaultEditorKit, the line separator is set to be as the system property
         // if no other line separator exists in the file, but in practice it is not, so this is a workaround for it
-        if (!lineSeparatorExists)
+        if (!lineSeparatorExists) {
             document.putProperty(DefaultEditorKit.EndOfLineStringProperty, System.getProperty("line.separator"));
-
+        }
         try {
             textArea.getUI().getEditorKit(textArea).write(new BufferedWriter(writer), document, 0, document.getLength());
         } catch (BadLocationException e) {
             throw new IOException(e.getMessage());
         }
+    }
+
+    public void setSyntaxHighlighting(AbstractFile file) {
+        String mimeType = FileTypeUtil.get().guessContentType(
+                new File(file.getCanonicalPath()), true);
+        textArea.setSyntaxEditingStyle(mimeType);
+    }
+
+    public void setFocusAndCursorOnFirstLine() {
+        textArea.requestFocusInWindow();
+        textArea.setCaretPosition(0);
     }
 
     //////////////////////////////////
@@ -271,7 +375,8 @@ class TextEditorImpl implements ThemeListener {
      * Receives theme font changes notifications.
      */
     public void fontChanged(FontChangedEvent event) {
-        if (event.getFontId() == Theme.EDITOR_FONT)
+        if (event.getFontId() == Theme.EDITOR_FONT) {
             textArea.setFont(event.getFont());
+        }
     }
 }
