@@ -38,6 +38,7 @@ import javax.swing.text.Document;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.StringUtils;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.SearchJob;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
@@ -48,6 +49,8 @@ import com.mucommander.ui.theme.ThemeManager;
 import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
@@ -55,6 +58,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Maxence Bernard, Mariusz Jakubowski, Nicolas Rinaudo, Arik Hadas
  */
 class TextEditorImpl implements ThemeListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextEditorImpl.class);
 
     private JFrame frame;
 
@@ -87,8 +92,19 @@ class TextEditorImpl implements ThemeListener {
 
         // TODO add this pref when https://github.com/bobbylight/RSyntaxTextArea/issues/469 is resolved
         //textArea.setClearWhitespaceLinesEnabled(true);
-        // TODO should we allow opening links directly from editor/viewer?
-        textArea.setHyperlinksEnabled(false); // @see #addHyperlinkListener(HyperlinkListener)
+
+        if (DesktopManager.canBrowse()) {
+            textArea.addHyperlinkListener((event) -> {
+                try {
+                    DesktopManager.browse(event.getURL());
+                } catch (IOException e) {
+                    LOGGER.error("Error opening link in a browser", e);
+                }
+            });
+            textArea.setHyperlinksEnabled(true);
+        } else {
+            textArea.setHyperlinksEnabled(false);
+        }
 
         // TODO Should be overridable by user?
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
