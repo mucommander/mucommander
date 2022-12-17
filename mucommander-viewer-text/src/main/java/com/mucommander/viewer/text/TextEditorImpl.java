@@ -28,6 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -105,8 +108,6 @@ class TextEditorImpl implements ThemeListener {
         } else {
             textArea.setHyperlinksEnabled(false);
         }
-
-        // TODO Should be overridable by user?
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
 
         textArea.setEditable(isEditable);
@@ -311,8 +312,42 @@ class TextEditorImpl implements ThemeListener {
         textArea.selectAll();
     }
 
-    void requestFocus() {
-        textArea.requestFocus();
+    List<String> getSyntaxStyles() {
+        List<String> syntaxList = new ArrayList<>();
+        // TODO remove reflection when/if https://github.com/bobbylight/RSyntaxTextArea/issues/479 implemented
+        Field[] fields = SyntaxConstants.class.getFields();
+        for (Field field : fields) {
+            String name = field.getName();
+            if (name.startsWith("SYNTAX_STYLE_")) {
+                String[] parts = name.substring("SYNTAX_STYLE_".length()).split("_");
+                StringBuilder prettyName = new StringBuilder(parts[0]);
+                if (parts.length > 1) {
+                    for (int i = 1; i < parts.length; i++) {
+                        prettyName.append(" ");
+                        prettyName.append(parts[i].toLowerCase());
+                    }
+                }
+                syntaxList.add(prettyName.toString());
+            }
+        }
+        return syntaxList;
+    }
+
+    void setSyntaxStyle(String syntaxStyleHuman) {
+        // TODO use enum when/if https://github.com/bobbylight/RSyntaxTextArea/issues/479 implemented
+        String normalizedNAme = "SYNTAX_STYLE_" + syntaxStyleHuman.replace(" ", "_").toUpperCase();
+        Field[] fields = SyntaxConstants.class.getFields();
+        for (Field field : fields) {
+            String name = field.getName();
+            if (normalizedNAme.equals(name)) {
+                try {
+                    textArea.setSyntaxEditingStyle((String)field.get(null));
+                    break;
+                } catch (IllegalAccessException e) {
+                    LOGGER.error("Ooops while trying to set syntax style", e);
+                }
+            }
+        }
     }
 
     JTextArea getTextArea() {
