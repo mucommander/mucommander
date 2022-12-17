@@ -43,8 +43,6 @@ import com.mucommander.ui.main.MainFrame;
 public class SearchBuilder implements com.mucommander.commons.file.protocol.search.SearchBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchBuilder.class);
 
-    public static final String SEARCH_TEXT = "text";
-
     private AbstractFile entrypoint;
     private String searchStr;
     private SearchListener listener;
@@ -212,7 +210,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchText(List<Pair<String, String>> properties) {
-        String value = getProperty(properties, SearchBuilder.SEARCH_TEXT);
+        String value = SearchProperty.SEARCH_TEXT.update(properties);
         if (value != null) {
             searchText = value;
             textCaseSensitive = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.update(properties));
