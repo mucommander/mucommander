@@ -64,7 +64,7 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     }
 
     public void setDepth(int depth) {
-        this.depth = depth;
+        this.depth = depth == 0 ? Integer.MAX_VALUE : depth;
     }
 
     public void setThreads(int threads) {

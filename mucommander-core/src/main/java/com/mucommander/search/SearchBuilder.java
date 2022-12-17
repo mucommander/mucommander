@@ -74,7 +74,6 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         searchForHidden = true;
         searchForSymlinks = true;
         searchForSubfolders = true;
-        searchDepth = Integer.MAX_VALUE;
         searchThreads = Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue());
     }
 
