@@ -67,12 +67,6 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private SearchJob searchJob;
 
     private SearchBuilder() {
-        searchInSubfolders = true;
-        searchForArchives = true;
-        searchForHidden = true;
-        searchForSymlinks = true;
-        searchForSubfolders = true;
-        searchThreads = Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue());
     }
 
     public static SearchBuilder newSearch() {
@@ -114,121 +108,109 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
 
     @Override
     public SearchBuilder searchInArchives(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_IN_ARCHIVES.update(properties);
-        if (value != null)
-            searchInArchives = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_IN_ARCHIVES.get(properties);
+        searchInArchives = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchInHidden(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_IN_HIDDEN.update(properties);
-        if (value != null)
-            searchInHidden = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_IN_HIDDEN.get(properties);
+        searchInHidden = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchInSymlinks(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_IN_SYMLINKS.update(properties);
-        if (value != null)
-            searchInSymlinks = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_IN_SYMLINKS.get(properties);
+        searchInSymlinks = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchInSubfolders(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_IN_SUBFOLDERS.update(properties);
-        if (value != null)
-            searchInSubfolders = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_IN_SUBFOLDERS.get(properties);
+        searchInSubfolders = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchForArchives(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_FOR_ARCHIVES.update(properties);
-        if (value != null)
-            searchForArchives = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_FOR_ARCHIVES.get(properties);
+        searchForArchives = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchForHidden(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_FOR_HIDDEN.update(properties);
-        if (value != null)
-            searchForHidden = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_FOR_HIDDEN.get(properties);
+        searchForHidden = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchForSymlinks(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_FOR_SYMLINKS.update(properties);
-        if (value != null)
-            searchForSymlinks = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_FOR_SYMLINKS.get(properties);
+        searchForSymlinks = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchForSubfolders(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_FOR_SUBFOLDERS.update(properties);
-        if (value != null)
-            searchForSubfolders = Boolean.parseBoolean(value);
+        String value = SearchProperty.SEARCH_FOR_SUBFOLDERS.get(properties);
+        searchForSubfolders = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchDepth(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_DEPTH.update(properties);
-        if (value != null)
-            searchDepth = Integer.parseInt(value);
+        String value = SearchProperty.SEARCH_DEPTH.get(properties);
+        searchDepth = Integer.parseInt(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchThreads(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_THREADS.update(properties);
-        if (value != null)
-            searchThreads = Integer.parseInt(value);
+        String value = SearchProperty.SEARCH_THREADS.get(properties);
+        searchThreads = Integer.parseInt(value);
         return this;
     }
 
     @Override
     public SearchBuilder matchCaseInsensitive(List<Pair<String, String>> properties) {
-        String value = SearchProperty.MATCH_CASESENSITIVE.update(properties);
-        if (value != null)
-            matchCaseSensitive = Boolean.parseBoolean(value);
+        String value = SearchProperty.MATCH_CASESENSITIVE.get(properties);
+        matchCaseSensitive = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder matchRegex(List<Pair<String, String>> properties) {
-        String value = SearchProperty.MATCH_REGEX.update(properties);
-        if (value != null)
-            matchRegex = Boolean.parseBoolean(value);
+        String value = SearchProperty.MATCH_REGEX.get(properties);
+        matchRegex = Boolean.parseBoolean(value);
         return this;
     }
 
     @Override
     public SearchBuilder searchText(List<Pair<String, String>> properties) {
-        String value = SearchProperty.SEARCH_TEXT.update(properties);
-        if (value != null) {
+        String value = SearchProperty.SEARCH_TEXT.get(properties);
+        if (value.length() > 0) {
             searchText = value;
-            textCaseSensitive = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.update(properties));
-            textMatchRegex = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.update(properties));
+            textCaseSensitive = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.get(properties));
+            textMatchRegex = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.get(properties));
         }
         return this;
     }
 
     @Override
     public SearchBuilder searchSize(List<Pair<String, String>> properties) {
+        var sizeKeys = new String[] { SearchProperty.SEARCH_SIZE.getKey(), SearchProperty.SEARCH_SIZE2.getKey() };
         properties.stream()
-        .filter(p -> p.first.equals(SearchProperty.SEARCH_SIZE.getKey()))
+        .filter(p -> p.first.equals(sizeKeys[0]) || p.first.equals(sizeKeys[1]))
         .map(p -> p.second)
         .forEach(value -> {
-            String[] sizeProperties = SearchUtils.splitSearchSizeClause(value);
-            SizeRelation searchSizeRelation = SizeRelation.valueOf(sizeProperties[0]);
-            long searchSize = Long.parseLong(sizeProperties[1]);
-            SizeUnit searchSizeUnit = SizeUnit.valueOf(sizeProperties[2]);
+            SizeRelation searchSizeRelation = SearchUtils.getSizeRelation(value);
+            long searchSize = SearchUtils.getSize(value);
+            SizeUnit searchSizeUnit = SearchUtils.getSizeUnit(value);
             Predicate<AbstractFile> predicate = file -> searchSizeRelation.matches(file.getSize(), searchSize, searchSizeUnit);
             sizePredicate = sizePredicate == null ? predicate : sizePredicate.and(predicate);
         });

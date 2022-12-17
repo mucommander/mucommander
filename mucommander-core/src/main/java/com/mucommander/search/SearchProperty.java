@@ -18,6 +18,7 @@
 package com.mucommander.search;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.mucommander.commons.util.Pair;
 import com.mucommander.text.Translator;
@@ -38,16 +39,19 @@ enum SearchProperty {
     TEXT_CASESENSITIVE("text-case_sensitive", "search_dialog.text_case_sensitive", Boolean.FALSE.toString()),
     TEXT_MATCH_REGEX("text-regex", "search_dialog.text_matches_regexp", Boolean.FALSE.toString()),
     SEARCH_SIZE("size", "search_dialog.size", null),
-    SEARCH_TEXT("text", "search_dialog.search_text", null);
+    SEARCH_SIZE2("size-2", "search_dialog.size", null),
+    SEARCH_TEXT("text", "search_dialog.search_text", "");
 
     private String key;
     private String i18nKey;
     private String defaultValue;
+    private String currentValue;
 
     SearchProperty(String key, String i18nKey, String defaultValue) {
         this.key = key;
         this.i18nKey = i18nKey;
         this.defaultValue = defaultValue;
+        this.currentValue = defaultValue;
     }
 
     public String getKey() {
@@ -62,11 +66,27 @@ enum SearchProperty {
         return defaultValue;
     }
 
-    public String update(List<Pair<String, String>> properties) {
+    public String get(List<Pair<String, String>> properties) {
         return properties.stream()
                 .filter(p -> p.first.equals(key))
                 .map(p -> p.second)
                 .findAny()
-                .orElse(null);
+                .orElse(defaultValue);
+    }
+
+    public void update(String value) {
+        currentValue = value;
+    }
+
+    public String getCurrentValue() {
+        return currentValue;
+    }
+
+    public boolean isDefault() {
+        return Objects.equals(defaultValue, currentValue);
+    }
+
+    public String toString() {
+        return key + "=" + currentValue;
     }
 }
