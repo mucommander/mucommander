@@ -27,10 +27,6 @@ import com.mucommander.snapshot.MuSnapshotable;
 public final class TextViewerSnapshot implements MuSnapshotable {
 
     @Override
-    public void read(Configuration configuration) {
-    }
-
-    @Override
     public void write(Configuration configuration) {
         for (TextViewerPreferences pref : TextViewerPreferences.values()) {
             if (pref.getPrefKey() != null) {

@@ -14,29 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package com.mucommander.snapshot;
+package com.mucommander.search;
 
 import com.mucommander.commons.conf.Configuration;
+import com.mucommander.snapshot.MuSnapshot;
+import com.mucommander.snapshot.MuSnapshotable;
 
-/**
- * Configuration snapshoting support for modules.
- *
- * @author Miroslav Hajda
- */
-public interface MuSnapshotable {
-    
-    /**
-     * Performs loading/reading of snapshot preferences.
-     * 
-     * @param configuration configuration
-     */
-    default void read(Configuration configuration) {}
-    
-    /**
-     * Performs storing/writing of snapshot preferences.
-     * 
-     * @param configuration configuration
-     */
-    void write(Configuration configuration);
+public class SearchSnapshot implements MuSnapshotable {
+
+    @Override
+    public void write(Configuration configuration) {
+        for (var searchProperty : SearchProperty.values()) {
+            if (!searchProperty.isDefault())
+                configuration.setVariable(MuSnapshot.SEARCH_SECTION + "." + searchProperty.getKey(), searchProperty.getCurrentValue());
+        }
+    }
+
 }
