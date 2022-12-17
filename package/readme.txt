@@ -41,6 +41,7 @@ Improvements:
 - The 'commons-net' library that is used for connecting to FTP servers has been upgraded to version 3.8.0
 - The timeout for showing 'quick search' results is configurable via the 'Preferences' dialog.
 - Set alternative keyboard shortcuts that don't require numeric keypad for Mark/Unmark actions.
+- The configuration of the last file search is restored (from 'snapshot.xml') on startup.
 
 Localization:
 -

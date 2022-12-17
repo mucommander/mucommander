@@ -39,6 +39,8 @@ import com.mucommander.os.api.CoreService;
 import com.mucommander.osgi.FileEditorServiceTracker;
 import com.mucommander.osgi.FileViewerServiceTracker;
 import com.mucommander.osgi.OperatingSystemServiceTracker;
+import com.mucommander.search.SearchSnapshot;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.TranslationTracker;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.about.AboutDialog;
@@ -80,6 +82,7 @@ public class Activator implements BundleActivator {
         LOGGER.debug("starting");
         this.context = context;
         portable = "portable".equals(context.getProperty("app_mode"));
+        MuSnapshot.registerHandler(new SearchSnapshot());
         // Register the application-specific 'bookmark' protocol.
         FileProtocolService bookmarksService = createBookmarkProtocolService();
         bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);

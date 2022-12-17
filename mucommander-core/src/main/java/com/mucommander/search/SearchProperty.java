@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.mucommander.commons.util.Pair;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.text.Translator;
 
 enum SearchProperty {
@@ -51,7 +52,7 @@ enum SearchProperty {
         this.key = key;
         this.i18nKey = i18nKey;
         this.defaultValue = defaultValue;
-        this.currentValue = defaultValue;
+        this.currentValue = MuSnapshot.getSnapshot().getVariable(MuSnapshot.SEARCH_SECTION + "." + key, defaultValue);
     }
 
     public String getKey() {

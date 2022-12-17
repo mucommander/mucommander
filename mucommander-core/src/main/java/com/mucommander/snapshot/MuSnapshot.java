@@ -174,7 +174,10 @@ public class MuSnapshot {
     private static final String SELECTED_TAB                       = "selection";
     /** Describes the title that was set for the tab */
     private static final String TAB_TITLE                          = "title";
-    
+
+    /** Section describing last used file search properties. */
+    public static final String SEARCH_SECTION                     = "search";
+
 	/** Cache the screen's size. this value isn't computed during the shutdown process since it cause a deadlock then */
 	private Dimension screenSize;
 	
@@ -575,9 +578,11 @@ public class MuSnapshot {
         XmlConfigurationReader reader = new XmlConfigurationReader();
         configuration.read(reader);
     
-        for (MuSnapshotable handler : snapshotables) {
-            handler.read(configuration);
-        }
+        snapshotables.forEach(this::read);
+    }
+
+    private void read(MuSnapshotable handler) {
+        handler.read(configuration);
     }
 
     /**
