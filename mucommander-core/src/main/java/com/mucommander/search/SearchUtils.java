@@ -68,11 +68,28 @@ public class SearchUtils {
         return convert ? s.toString() : wildcard;
     }
 
-    public static String buildSeachSizeClause(SizeRelation relation, long size, SizeUnit unit) {
-        return String.format("%s:%s:%s", relation.name(), size, unit);
+    public static String buildSeachSizeClause(SizeRelation relation, Long size, SizeUnit unit) {
+        return size != null ? String.format("%s:%s:%s", relation.name(), size, unit) : null;
     }
 
-    public static String[] splitSearchSizeClause(String sizeClause) {
-        return sizeClause.split(":");
+    public static SizeRelation getSizeRelation(String sizeClause) {
+        if (sizeClause == null)
+            return SizeRelation.eq;
+        var relation = sizeClause.substring(0, sizeClause.indexOf(':'));
+        return SizeRelation.valueOf(relation);
+    }
+
+    public static Long getSize(String sizeClause) {
+        if (sizeClause == null)
+            return null;
+        var size = sizeClause.split(":")[1];
+        return Long.parseLong(size);
+    }
+
+    public static SizeUnit getSizeUnit(String sizeClause) {
+        if (sizeClause == null)
+            return SizeUnit.kB;
+        var unit = sizeClause.substring(sizeClause.lastIndexOf(':') + 1);
+        return SizeUnit.valueOf(unit);
     }
 }

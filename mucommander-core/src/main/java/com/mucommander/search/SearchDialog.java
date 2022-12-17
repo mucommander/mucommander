@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -103,29 +104,6 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JComboBox<String> secondSizeUnit;
     private JTextField secondSize = new SelectAllOnFocusTextField(8);
 
-    // Store last values, initialized to the default values
-    private static boolean lastSearchInSubfolders = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SUBFOLDERS.getDefaultValue());
-    private static boolean lastSearchInArchives = Boolean.parseBoolean(SearchProperty.SEARCH_IN_ARCHIVES.getDefaultValue());
-    private static boolean lastSearchInHidden = Boolean.parseBoolean(SearchProperty.SEARCH_IN_HIDDEN.getDefaultValue());
-    private static boolean lastSearchInSymlinks = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SYMLINKS.getDefaultValue());
-    private static boolean lastSearchForSubfolders = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SUBFOLDERS.getDefaultValue());
-    private static boolean lastSearchForArchives = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_ARCHIVES.getDefaultValue());
-    private static boolean lastSearchForHidden = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_HIDDEN.getDefaultValue());
-    private static boolean lastSearchForSymlinks = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SYMLINKS.getDefaultValue());
-    private static boolean lastMatchCase = Boolean.parseBoolean(SearchProperty.MATCH_CASESENSITIVE.getDefaultValue());
-    private static boolean lastMatchRegex = Boolean.parseBoolean(SearchProperty.MATCH_REGEX.getDefaultValue());
-    private static int lastDepth = Integer.parseInt(SearchProperty.SEARCH_DEPTH.getDefaultValue());
-    private static int lastThreads = Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue());
-    private static String lastText = "";
-    private static boolean lastTextCase = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.getDefaultValue());
-    private static boolean lastTextRegex = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.getDefaultValue());
-    private static Long lastFirstSize;
-    private static SizeRelation lastFirstSizeRel = SizeRelation.eq;
-    private static SizeUnit lastFirstSizeUnit = SizeUnit.kB;
-    private static Long lastSecondSize;
-    private static SizeRelation lastSecondSizeRel = SizeRelation.gt;
-    private static SizeUnit lastSecondSizeUnit = SizeUnit.kB;
-
     private JButton searchButton;
     private JButton cancelButton;
 
@@ -162,6 +140,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         l.setLabelFor(searchFilesField);
         l.setDisplayedMnemonic('n');
 
+        boolean lastMatchRegex = Boolean.parseBoolean(SearchProperty.MATCH_REGEX.getCurrentValue());
         wildcards = new JLabel(!lastMatchRegex ? Translator.get("search_dialog.wildcards") : " ");
         compPanel.addRow("", wildcards, 10);
 
@@ -169,6 +148,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         gbc.weightx = 1.0;
         JPanel groupingPanel = new ProportionalGridPanel(2, gbc);
 
+        boolean lastMatchCase = Boolean.parseBoolean(SearchProperty.MATCH_CASESENSITIVE.getCurrentValue());
         matchCase = new JCheckBox(SearchProperty.MATCH_CASESENSITIVE.getTranslation(), lastMatchCase);
         groupingPanel.add(matchCase);
 
@@ -210,24 +190,32 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
         groupingPanel = new ProportionalGridPanel(2, gbc);
 
-        searchInSubfolders = new JCheckBox(SearchProperty.SEARCH_IN_SUBFOLDERS.getTranslation(), lastSearchInSubfolders);
+        boolean value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SUBFOLDERS.getCurrentValue());
+        searchInSubfolders = new JCheckBox(SearchProperty.SEARCH_IN_SUBFOLDERS.getTranslation(), value);
         groupingPanel.add(searchInSubfolders);
-        searchForSubfolders = new JCheckBox(SearchProperty.SEARCH_FOR_SUBFOLDERS.getTranslation(), lastSearchForSubfolders);
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SUBFOLDERS.getCurrentValue());
+        searchForSubfolders = new JCheckBox(SearchProperty.SEARCH_FOR_SUBFOLDERS.getTranslation(), value);
         groupingPanel.add(searchForSubfolders);
 
-        searchInArchives = new JCheckBox(SearchProperty.SEARCH_IN_ARCHIVES.getTranslation(), lastSearchInArchives);
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_ARCHIVES.getCurrentValue());
+        searchInArchives = new JCheckBox(SearchProperty.SEARCH_IN_ARCHIVES.getTranslation(), value);
         groupingPanel.add(searchInArchives);
-        searchForArchives = new JCheckBox(SearchProperty.SEARCH_FOR_ARCHIVES.getTranslation(), lastSearchForArchives);
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_ARCHIVES.getCurrentValue());
+        searchForArchives = new JCheckBox(SearchProperty.SEARCH_FOR_ARCHIVES.getTranslation(), value);
         groupingPanel.add(searchForArchives);
 
-        searchInHidden = new JCheckBox(Translator.get("search_dialog.search_in_hidden_files"), lastSearchInHidden);
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_HIDDEN.getCurrentValue());
+        searchInHidden = new JCheckBox(SearchProperty.SEARCH_IN_HIDDEN.getTranslation(), value);
         groupingPanel.add(searchInHidden);
-        searchForHidden = new JCheckBox(Translator.get("search_dialog.search_for_hidden_files"), lastSearchForHidden);
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_HIDDEN.getCurrentValue());
+        searchForHidden = new JCheckBox(SearchProperty.SEARCH_FOR_HIDDEN.getTranslation(), value);
         groupingPanel.add(searchForHidden);
 
-        searchInSymlinks = new JCheckBox(Translator.get("search_dialog.search_in_symlinks"), lastSearchInSymlinks);
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SYMLINKS.getCurrentValue());
+        searchInSymlinks = new JCheckBox(SearchProperty.SEARCH_IN_SYMLINKS.getTranslation(), value);
         groupingPanel.add(searchInSymlinks);
-        searchForSymlinks = new JCheckBox(Translator.get("search_dialog.search_for_symlinks"), lastSearchForSymlinks);
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SYMLINKS.getCurrentValue());
+        searchForSymlinks = new JCheckBox(SearchProperty.SEARCH_FOR_SYMLINKS.getTranslation(), value);
         groupingPanel.add(searchForSymlinks);
 
         compPanel.addRow("", groupingPanel, 10);
@@ -238,14 +226,14 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         IntEditor editor = new IntEditor(depth, "#####", UNLIMITED_DEPTH);
         depth.setEditor(editor);
         depth.setModel(new SpinnerNumberModel(0, 0, null, 1));
-        depth.setValue(lastDepth);
+        depth.setValue(Integer.parseInt(SearchProperty.SEARCH_DEPTH.getCurrentValue()));
         compPanel.addRow(SearchProperty.SEARCH_DEPTH.getTranslation(), depth, 5);
 
         threads = new JSpinner();
         editor = new IntEditor(threads, "#####", MAX_THREADS);
         threads.setEditor(editor);
         threads.setModel(new SpinnerNumberModel(0, 0, MAX_NUM_OF_SEARCH_THREADS, 1));
-        threads.setValue(lastThreads);
+        threads.setValue(Integer.parseInt(SearchProperty.SEARCH_THREADS.getCurrentValue()));
         compPanel.addRow(SearchProperty.SEARCH_THREADS.getTranslation(), threads, 5);
 
         fileSearchPanel.add(compPanel);
@@ -256,16 +244,19 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Text search (Optional)")));
         compPanel = new XAlignedComponentPanel(5);
 
+        String lastText = SearchProperty.SEARCH_TEXT.getCurrentValue();
         searchTextField = new SelectAllOnFocusTextField(lastText);
         l = compPanel.addRow(SearchProperty.SEARCH_TEXT.getTranslation(), searchTextField, 10);
         l.setLabelFor(searchTextField);
         l.setDisplayedMnemonic('t');
 
         groupingPanel = new ProportionalGridPanel(2, gbc);
-        textCase = new JCheckBox(SearchProperty.TEXT_CASESENSITIVE.getTranslation(), lastTextCase);
+        value = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.getCurrentValue());
+        textCase = new JCheckBox(SearchProperty.TEXT_CASESENSITIVE.getTranslation(), value);
         groupingPanel.add(textCase);
 
-        textRegex = new JCheckBox(SearchProperty.TEXT_MATCH_REGEX.getTranslation(), lastTextRegex);
+        value = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.getCurrentValue());
+        textRegex = new JCheckBox(SearchProperty.TEXT_MATCH_REGEX.getTranslation(), value);
         groupingPanel.add(textRegex);
         compPanel.addRow("", groupingPanel, 5);
 
@@ -292,25 +283,32 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     }
 
     void addSizePanel(XAlignedComponentPanel compPanel) {
+        var firstSizeClause = SearchProperty.SEARCH_SIZE.getCurrentValue();
         JPanel firstSizePanel = new JPanel(new FlowLayout());
-        firstSizeRel.setSelectedItem(lastFirstSizeRel);
+
+        var firstSizeRelation = SearchUtils.getSizeRelation(firstSizeClause);
+        firstSizeRel.setSelectedItem(firstSizeRelation);
         firstSizePanel.add(firstSizeRel);
 
-        firstSize.setText(lastFirstSize == null ? "" : lastFirstSize.toString());
+        var firstSizeValue = SearchUtils.getSize(firstSizeClause);
+        firstSize.setText(firstSizeValue != null ? firstSizeValue.toString() : "");
         firstSizePanel.add(firstSize);
 
         firstSizeUnit = new JComboBox<>(getSizeUnitDisplayStrings());
-        firstSizeUnit.setSelectedIndex(lastFirstSizeUnit.ordinal());
+        firstSizeUnit.setSelectedIndex(SearchUtils.getSizeUnit(firstSizeClause).ordinal());
         firstSizePanel.add(firstSizeUnit);
 
+        var secondSizeClause = SearchProperty.SEARCH_SIZE2.getCurrentValue();
         JPanel secondSizePanel = new JPanel(new FlowLayout());
+
         secondSizePanel.add(secondSizeRel);
 
-        secondSize.setText(lastSecondSize == null ? "" : lastSecondSize.toString());
+        var secondSizeValue = SearchUtils.getSize(secondSizeClause);
+        secondSize.setText(secondSizeValue != null ? secondSizeValue.toString() : "");
         secondSizePanel.add(secondSize);
 
         secondSizeUnit = new JComboBox<>(getSizeUnitDisplayStrings());
-        secondSizeUnit.setSelectedIndex(lastSecondSizeUnit.ordinal());
+        secondSizeUnit.setSelectedIndex(SearchUtils.getSizeUnit(secondSizeClause).ordinal());
         secondSizePanel.add(secondSizeUnit);
 
         Runnable updater = () -> {
@@ -412,52 +410,58 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
      * @return true on success, false on input validation error
      */
     private boolean validateAndUpdateValues() {
-        lastSearchInSubfolders = searchInSubfolders.isSelected();
-        lastSearchInArchives = searchInArchives.isSelected();
-        lastSearchInHidden = searchInHidden.isSelected();
-        lastSearchInSymlinks = searchInSymlinks.isSelected();
-        lastSearchForSubfolders = searchForSubfolders.isSelected();
-        lastSearchForArchives = searchForArchives.isSelected();
-        lastSearchForHidden = searchForHidden.isSelected();
-        lastSearchForSymlinks = searchForSymlinks.isSelected();
-        lastMatchCase = matchCase.isSelected();
-        lastMatchRegex = matchRegex.isSelected();
-        lastDepth = ((Number) depth.getValue()).intValue();
-        lastThreads = ((Number) threads.getValue()).intValue();
-        lastText = searchTextField.getText();
-        lastTextCase = textCase.isSelected();
-        lastTextRegex = textRegex.isSelected();
+        var firstSizeRelation = (SizeRelation) firstSizeRel.getSelectedItem();
+        var firstSizeUnit = SizeUnit.VALUES[this.firstSizeUnit.getSelectedIndex()];
 
-        lastFirstSizeRel = (SizeRelation) firstSizeRel.getSelectedItem();
-        lastFirstSizeUnit = SizeUnit.VALUES[firstSizeUnit.getSelectedIndex()];
+        Long firstSize, secondSize;
+        SizeRelation secondSizeRelation = null;
+        SizeUnit secondSizeUnit = null;
 
-        String size = firstSize.getText();
+        String size = this.firstSize.getText();
         if (StringUtils.isNullOrEmpty(size)) {
-            lastFirstSize = null;
-            lastSecondSize = null;
+            firstSize = null;
+            secondSize = null;
         } else {
             try {
-                lastFirstSize = Long.parseLong(size);
+                firstSize = Long.parseLong(size);
             } catch (NumberFormatException nfe) {
                 InformationDialog.showErrorDialog(this, Translator.get("search_dialog.size_error"));
-                firstSize.requestFocus();
+                this.firstSize.requestFocus();
                 return false;
             }
-            size = secondSize.getText();
+            size = this.secondSize.getText();
             if (StringUtils.isNullOrEmpty(size))
-                lastSecondSize = null;
+                secondSize = null;
             else {
                 try {
-                    lastSecondSize = Long.parseLong(size);
+                    secondSize = Long.parseLong(size);
                 } catch (NumberFormatException nfe) {
                     InformationDialog.showErrorDialog(this, Translator.get("search_dialog.size_error"));
-                    secondSize.requestFocus();
+                    this.secondSize.requestFocus();
                     return false;
                 }
-                lastSecondSizeRel = lastFirstSizeRel == SizeRelation.gt ? SizeRelation.lt : SizeRelation.gt;
-                lastSecondSizeUnit = SizeUnit.VALUES[secondSizeUnit.getSelectedIndex()];
+                secondSizeRelation = firstSizeRelation == SizeRelation.gt ? SizeRelation.lt : SizeRelation.gt;
+                secondSizeUnit = SizeUnit.VALUES[this.secondSizeUnit.getSelectedIndex()];
             }
         }
+
+        SearchProperty.SEARCH_IN_SUBFOLDERS.update(String.valueOf(searchInSubfolders.isSelected()));
+        SearchProperty.SEARCH_IN_ARCHIVES.update(String.valueOf(searchInArchives.isSelected()));
+        SearchProperty.SEARCH_IN_HIDDEN.update(String.valueOf(searchInHidden.isSelected()));
+        SearchProperty.SEARCH_IN_SYMLINKS.update(String.valueOf(searchInSymlinks.isSelected()));
+        SearchProperty.SEARCH_FOR_SUBFOLDERS.update(String.valueOf(searchForSubfolders.isSelected()));
+        SearchProperty.SEARCH_FOR_ARCHIVES.update(String.valueOf(searchForArchives.isSelected()));
+        SearchProperty.SEARCH_FOR_HIDDEN.update(String.valueOf(searchForHidden.isSelected()));
+        SearchProperty.SEARCH_FOR_SYMLINKS.update(String.valueOf(searchForSymlinks.isSelected()));
+        SearchProperty.MATCH_CASESENSITIVE.update(String.valueOf(matchCase.isSelected()));
+        SearchProperty.MATCH_REGEX.update(String.valueOf(matchRegex.isSelected()));
+        SearchProperty.SEARCH_DEPTH.update(String.valueOf(((Number) depth.getValue()).intValue()));
+        SearchProperty.SEARCH_THREADS.update(String.valueOf(((Number) threads.getValue()).intValue()));
+        SearchProperty.TEXT_CASESENSITIVE.update(String.valueOf(textCase.isSelected()));
+        SearchProperty.TEXT_MATCH_REGEX.update(String.valueOf(textRegex.isSelected()));
+        SearchProperty.SEARCH_SIZE.update(buildSeachSizeClause(firstSizeRelation, firstSize, firstSizeUnit));
+        SearchProperty.SEARCH_SIZE2.update(buildSeachSizeClause(secondSizeRelation, secondSize, secondSizeUnit));
+        SearchProperty.SEARCH_TEXT.update(searchTextField.getText());
 
         return true;
     }
@@ -469,45 +473,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
      * @return the properties of the search as a query string
      */
     private String getSearchQuery() {
-        List<Pair<String, String>> properties = new ArrayList<>();
-        if (!lastSearchInSubfolders)
-            properties.add(new Pair<>(SearchProperty.SEARCH_IN_SUBFOLDERS.getKey(), Boolean.FALSE.toString()));
-        if (lastSearchInArchives)
-            properties.add(new Pair<>(SearchProperty.SEARCH_IN_ARCHIVES.getKey(), Boolean.TRUE.toString()));
-        if (lastSearchInHidden)
-            properties.add(new Pair<>(SearchProperty.SEARCH_IN_HIDDEN.getKey(), Boolean.TRUE.toString()));
-        if (lastSearchInSymlinks)
-            properties.add(new Pair<>(SearchProperty.SEARCH_IN_SYMLINKS.getKey(), Boolean.TRUE.toString()));
-        if (!lastSearchForSubfolders)
-            properties.add(new Pair<>(SearchProperty.SEARCH_FOR_SUBFOLDERS.getKey(), Boolean.FALSE.toString()));
-        if (!lastSearchForArchives)
-            properties.add(new Pair<>(SearchProperty.SEARCH_FOR_ARCHIVES.getKey(), Boolean.FALSE.toString()));
-        if (!lastSearchForHidden)
-            properties.add(new Pair<>(SearchProperty.SEARCH_FOR_HIDDEN.getKey(), Boolean.FALSE.toString()));
-        if (!lastSearchForSymlinks)
-            properties.add(new Pair<>(SearchProperty.SEARCH_FOR_SYMLINKS.getKey(), Boolean.FALSE.toString()));
-        if (lastMatchCase)
-            properties.add(new Pair<>(SearchProperty.MATCH_CASESENSITIVE.getKey(), Boolean.TRUE.toString()));
-        if (lastMatchRegex)
-            properties.add(new Pair<>(SearchProperty.MATCH_REGEX.getKey(), Boolean.TRUE.toString()));
-        if (lastDepth > 0)
-            properties.add(new Pair<>(SearchProperty.SEARCH_DEPTH.getKey(), String.valueOf(lastDepth)));
-        if (lastThreads != Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue()))
-            properties.add(new Pair<>(SearchProperty.SEARCH_THREADS.getKey(), String.valueOf(lastThreads)));
-        if (!lastText.isEmpty()) {
-            properties.add(new Pair<>(SearchProperty.SEARCH_TEXT.getKey(), lastText));
-            if (lastTextCase)
-                properties.add(new Pair<>(SearchProperty.TEXT_CASESENSITIVE.getKey(), Boolean.TRUE.toString()));
-            if (lastTextRegex)
-                properties.add(new Pair<>(SearchProperty.TEXT_MATCH_REGEX.getKey(), Boolean.TRUE.toString()));
-        }
-        if (lastFirstSize != null) {
-            properties.add(new Pair<>(SearchProperty.SEARCH_SIZE.getKey(), buildSeachSizeClause(lastFirstSizeRel, lastFirstSize, lastFirstSizeUnit)));
-            if (lastSecondSize != null)
-                properties.add(new Pair<>(SearchProperty.SEARCH_SIZE.getKey(), buildSeachSizeClause(lastSecondSizeRel, lastSecondSize, lastSecondSizeUnit)));
-        }
-        return properties.stream()
-                .map(pair -> pair.first + "=" + pair.second)
+        return Stream.of(SearchProperty.values())
+                .filter(property -> !property.isDefault())
+                .map(SearchProperty::toString)
                 .collect(Collectors.joining("&"));
     }
 
