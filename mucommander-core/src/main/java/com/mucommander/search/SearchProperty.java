@@ -37,7 +37,8 @@ enum SearchProperty {
     MATCH_REGEX("regex", "search_dialog.matches_regexp", Boolean.FALSE.toString()),
     TEXT_CASESENSITIVE("text-case_sensitive", "search_dialog.text_case_sensitive", Boolean.FALSE.toString()),
     TEXT_MATCH_REGEX("text-regex", "search_dialog.text_matches_regexp", Boolean.FALSE.toString()),
-    SEARCH_SIZE("size", "search_dialog.size", null);
+    SEARCH_SIZE("size", "search_dialog.size", null),
+    SEARCH_TEXT("text", "search_dialog.search_text", null);
 
     private String key;
     private String i18nKey;

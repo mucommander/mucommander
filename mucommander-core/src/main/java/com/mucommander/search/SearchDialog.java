@@ -257,7 +257,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         compPanel = new XAlignedComponentPanel(5);
 
         searchTextField = new SelectAllOnFocusTextField(lastText);
-        l = compPanel.addRow(Translator.get("search_dialog.search_text"), searchTextField, 10);
+        l = compPanel.addRow(SearchProperty.SEARCH_TEXT.getTranslation(), searchTextField, 10);
         l.setLabelFor(searchTextField);
         l.setDisplayedMnemonic('t');
 
@@ -495,7 +495,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         if (lastThreads != Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue()))
             properties.add(new Pair<>(SearchProperty.SEARCH_THREADS.getKey(), String.valueOf(lastThreads)));
         if (!lastText.isEmpty()) {
-            properties.add(new Pair<>(SearchBuilder.SEARCH_TEXT, lastText));
+            properties.add(new Pair<>(SearchProperty.SEARCH_TEXT.getKey(), lastText));
             if (lastTextCase)
                 properties.add(new Pair<>(SearchProperty.TEXT_CASESENSITIVE.getKey(), Boolean.TRUE.toString()));
             if (lastTextRegex)
