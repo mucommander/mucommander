@@ -23,28 +23,30 @@ import com.mucommander.commons.util.Pair;
 import com.mucommander.text.Translator;
 
 enum SearchProperty {
-    SEARCH_IN_ARCHIVES("archives", "search_dialog.search_in_archives"),
-    SEARCH_IN_HIDDEN("hidden", "search_dialog.search_in_hidden_files"),
-    SEARCH_IN_SYMLINKS("symlinks", "search_dialog.search_in_symlinks"),
-    SEARCH_IN_SUBFOLDERS("subfolders", "search_dialog.search_in_subfolders"),
-    SEARCH_FOR_ARCHIVES("filter_archives", "search_dialog.search_for_archives"),
-    SEARCH_FOR_HIDDEN("filter_hidden", "search_dialog.search_for_hidden_files"),
-    SEARCH_FOR_SYMLINKS("filter_symlinks", "search_dialog.search_for_symlinks"),
-    SEARCH_FOR_SUBFOLDERS("filter_subfolders", "search_dialog.search_for_folders"),
-    SEARCH_DEPTH("depth", "search_dialog.search_depth"),
-    SEARCH_THREADS("threads", "search_dialog.search_threads"),
-    MATCH_CASESENSITIVE("case_sensitive", "search_dialog.case_sensitive"),
-    MATCH_REGEX("regex", "search_dialog.matches_regexp"),
-    TEXT_CASESENSITIVE("text-case_sensitive", "search_dialog.text_case_sensitive"),
-    TEXT_MATCH_REGEX("text-regex", "search_dialog.text_matches_regexp"),
-    SEARCH_SIZE("size", "search_dialog.size");
+    SEARCH_IN_ARCHIVES("archives", "search_dialog.search_in_archives", Boolean.FALSE.toString()),
+    SEARCH_IN_HIDDEN("hidden", "search_dialog.search_in_hidden_files", Boolean.FALSE.toString()),
+    SEARCH_IN_SYMLINKS("symlinks", "search_dialog.search_in_symlinks", Boolean.FALSE.toString()),
+    SEARCH_IN_SUBFOLDERS("subfolders", "search_dialog.search_in_subfolders", Boolean.TRUE.toString()),
+    SEARCH_FOR_ARCHIVES("filter_archives", "search_dialog.search_for_archives", Boolean.TRUE.toString()),
+    SEARCH_FOR_HIDDEN("filter_hidden", "search_dialog.search_for_hidden_files", Boolean.TRUE.toString()),
+    SEARCH_FOR_SYMLINKS("filter_symlinks", "search_dialog.search_for_symlinks", Boolean.TRUE.toString()),
+    SEARCH_FOR_SUBFOLDERS("filter_subfolders", "search_dialog.search_for_folders", Boolean.TRUE.toString()),
+    SEARCH_DEPTH("depth", "search_dialog.search_depth", "0"),
+    SEARCH_THREADS("threads", "search_dialog.search_threads", "2"),
+    MATCH_CASESENSITIVE("case_sensitive", "search_dialog.case_sensitive", Boolean.FALSE.toString()),
+    MATCH_REGEX("regex", "search_dialog.matches_regexp", Boolean.FALSE.toString()),
+    TEXT_CASESENSITIVE("text-case_sensitive", "search_dialog.text_case_sensitive", Boolean.FALSE.toString()),
+    TEXT_MATCH_REGEX("text-regex", "search_dialog.text_matches_regexp", Boolean.FALSE.toString()),
+    SEARCH_SIZE("size", "search_dialog.size", null);
 
     private String key;
     private String i18nKey;
+    private String defaultValue;
 
-    SearchProperty(String key, String i18nKey) {
+    SearchProperty(String key, String i18nKey, String defaultValue) {
         this.key = key;
         this.i18nKey = i18nKey;
+        this.defaultValue = defaultValue;
     }
 
     public String getKey() {
@@ -53,6 +55,10 @@ enum SearchProperty {
 
     public String getTranslation() {
         return Translator.get(i18nKey);
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
     }
 
     public String update(List<Pair<String, String>> properties) {

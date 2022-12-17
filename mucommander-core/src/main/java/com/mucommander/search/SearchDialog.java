@@ -104,21 +104,21 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private JTextField secondSize = new SelectAllOnFocusTextField(8);
 
     // Store last values, initialized to the default values
-    private static boolean lastSearchInSubfolders = true;
-    private static boolean lastSearchInArchives;
-    private static boolean lastSearchInHidden;
-    private static boolean lastSearchInSymlinks;
-    private static boolean lastSearchForSubfolders = true;
-    private static boolean lastSearchForArchives = true;
-    private static boolean lastSearchForHidden = true;
-    private static boolean lastSearchForSymlinks = true;
-    private static boolean lastMatchCase;
-    private static boolean lastMatchRegex;
-    private static int lastDepth = 0;
-    private static int lastThreads = SearchBuilder.DEFAULT_THREADS;
+    private static boolean lastSearchInSubfolders = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SUBFOLDERS.getDefaultValue());
+    private static boolean lastSearchInArchives = Boolean.parseBoolean(SearchProperty.SEARCH_IN_ARCHIVES.getDefaultValue());
+    private static boolean lastSearchInHidden = Boolean.parseBoolean(SearchProperty.SEARCH_IN_HIDDEN.getDefaultValue());
+    private static boolean lastSearchInSymlinks = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SYMLINKS.getDefaultValue());
+    private static boolean lastSearchForSubfolders = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SUBFOLDERS.getDefaultValue());
+    private static boolean lastSearchForArchives = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_ARCHIVES.getDefaultValue());
+    private static boolean lastSearchForHidden = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_HIDDEN.getDefaultValue());
+    private static boolean lastSearchForSymlinks = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SYMLINKS.getDefaultValue());
+    private static boolean lastMatchCase = Boolean.parseBoolean(SearchProperty.MATCH_CASESENSITIVE.getDefaultValue());
+    private static boolean lastMatchRegex = Boolean.parseBoolean(SearchProperty.MATCH_REGEX.getDefaultValue());
+    private static int lastDepth = Integer.parseInt(SearchProperty.SEARCH_DEPTH.getDefaultValue());
+    private static int lastThreads = Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue());
     private static String lastText = "";
-    private static boolean lastTextCase;
-    private static boolean lastTextRegex;
+    private static boolean lastTextCase = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.getDefaultValue());
+    private static boolean lastTextRegex = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.getDefaultValue());
     private static Long lastFirstSize;
     private static SizeRelation lastFirstSizeRel = SizeRelation.eq;
     private static SizeUnit lastFirstSizeUnit = SizeUnit.kB;
@@ -492,7 +492,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             properties.add(new Pair<>(SearchProperty.MATCH_REGEX.getKey(), Boolean.TRUE.toString()));
         if (lastDepth > 0)
             properties.add(new Pair<>(SearchProperty.SEARCH_DEPTH.getKey(), String.valueOf(lastDepth)));
-        if (lastThreads != SearchBuilder.DEFAULT_THREADS)
+        if (lastThreads != Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue()))
             properties.add(new Pair<>(SearchProperty.SEARCH_THREADS.getKey(), String.valueOf(lastThreads)));
         if (!lastText.isEmpty()) {
             properties.add(new Pair<>(SearchBuilder.SEARCH_TEXT, lastText));

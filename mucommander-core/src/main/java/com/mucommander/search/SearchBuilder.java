@@ -44,7 +44,6 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchBuilder.class);
 
     public static final String SEARCH_TEXT = "text";
-    public static final int DEFAULT_THREADS = 2;
 
     private AbstractFile entrypoint;
     private String searchStr;
@@ -76,7 +75,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         searchForSymlinks = true;
         searchForSubfolders = true;
         searchDepth = Integer.MAX_VALUE;
-        searchThreads = DEFAULT_THREADS;
+        searchThreads = Integer.parseInt(SearchProperty.SEARCH_THREADS.getDefaultValue());
     }
 
     public static SearchBuilder newSearch() {
