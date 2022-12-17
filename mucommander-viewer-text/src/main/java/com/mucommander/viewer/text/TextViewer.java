@@ -239,12 +239,27 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         findNextItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_next"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), this);
         findPreviousItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_viewer.find_previous"), menuItemMnemonicHelper, KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK), this);
 
-        viewMenu = new JMenu(Translator.get("text_editor.view"));
-
         // View menu
         viewMenu = new JMenu(Translator.get("text_viewer.view"));
 
         JMenuItem item;
+
+        JMenu tabSyntaxMenu = new JMenu(Translator.get("text_viewer.syntax_style"));
+
+        ButtonGroup group = new ButtonGroup();
+        for (String syntaxStyle : textEditorImpl.getSyntaxStyles()) {
+            // TODO reflect the current style (that was automagically set on open)
+            JRadioButtonMenuItem radio = new JRadioButtonMenuItem(syntaxStyle, false);
+            radio.addActionListener(
+                    e -> {
+                        textEditorImpl.setSyntaxStyle(syntaxStyle);
+                    }
+            );
+            group.add(radio);
+            tabSyntaxMenu.add(radio);
+        }
+        viewMenu.add(tabSyntaxMenu);
+        viewMenu.addSeparator();
 
         for (TextViewerPreferences pref : TextViewerPreferences.values()) {
             if (pref.isTextEditorPref() && !pref.isEditorOnly()) {
@@ -266,7 +281,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         int tabSize = textEditorImpl.getTabSize();
         JMenu tabSizeMenu = new JMenu(Translator.get("text_viewer.tab_size"));
 
-        ButtonGroup group = new ButtonGroup();
+        group = new ButtonGroup();
         for (int i : new int[]{2, 4, 8}) {
             JRadioButtonMenuItem radio = new JRadioButtonMenuItem(Integer.toString(i), tabSize == i);
             radio.addActionListener(

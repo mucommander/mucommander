@@ -124,6 +124,10 @@ public abstract class BasicFileEditor implements FileEditor {
         this.currentFile = currentFile;
     }
 
+    protected boolean isSaveNeeded(){
+        return saveNeeded;
+    }
+
     protected void setSaveNeeded(boolean saveNeeded) {
         if (getFrame() != null && this.saveNeeded != saveNeeded) {
             this.saveNeeded = saveNeeded;
