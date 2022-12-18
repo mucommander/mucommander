@@ -17,6 +17,7 @@
 
 package com.mucommander.viewer.text;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -117,11 +118,15 @@ class TextEditorImpl implements ThemeListener {
         textArea.setForeground(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
         textArea.setCaretColor(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
         textArea.setBackground(ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR));
-        textArea.setSelectedTextColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR));
-        textArea.setSelectionColor(ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR));
+        Color selFgColor = ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_FOREGROUND_COLOR);
+        // Override Alpha to make selection visible across almost all L&Fs.
+        int alpha = 170;
+        textArea.setSelectedTextColor(new Color(selFgColor.getRed(), selFgColor.getGreen(), selFgColor.getBlue(), alpha));
+        Color selBgColor = ThemeManager.getCurrentColor(Theme.EDITOR_SELECTED_BACKGROUND_COLOR);
+        textArea.setSelectionColor(new Color(selBgColor.getRed(), selBgColor.getGreen(), selBgColor.getBlue(), alpha));
         // TODO by default I guess, at least on macOS in SolarizedDark theme, the editor font is not-monospaced!
         // tabs may not be shown properly in length (dots are much smaller than letters).
-        textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
+        //textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
 
         textArea.setWrapStyleWord(true);
 
