@@ -335,7 +335,7 @@ class TextEditorImpl implements ThemeListener {
         Field[] fields = SyntaxConstants.class.getFields();
         for (Field field : fields) {
             String name = field.getName();
-            if (normalizedNAme.equals(name)) {
+            if (normalizedName.equals(name)) {
                 try {
                     textArea.setSyntaxEditingStyle((String)field.get(null));
                     break;
