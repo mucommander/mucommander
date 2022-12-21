@@ -31,6 +31,8 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -320,14 +322,8 @@ class TextEditorImpl implements ThemeListener {
             String name = field.getName();
             if (name.startsWith("SYNTAX_STYLE_")) {
                 String[] parts = name.substring("SYNTAX_STYLE_".length()).split("_");
-                StringBuilder prettyName = new StringBuilder(parts[0]);
-                if (parts.length > 1) {
-                    for (int i = 1; i < parts.length; i++) {
-                        prettyName.append(" ");
-                        prettyName.append(parts[i].toLowerCase());
-                    }
-                }
-                syntaxList.add(prettyName.toString());
+                String prettyName = Stream.of(parts).map(String::toLowerCase).collect(Collectors.joining(" "));
+                syntaxList.add(prettyName);
             }
         }
         return syntaxList;
