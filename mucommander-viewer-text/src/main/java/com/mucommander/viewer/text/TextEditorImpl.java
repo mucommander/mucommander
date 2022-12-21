@@ -335,7 +335,7 @@ class TextEditorImpl implements ThemeListener {
 
     void setSyntaxStyle(String syntaxStyleHuman) {
         // TODO use enum when/if https://github.com/bobbylight/RSyntaxTextArea/issues/479 implemented
-        String normalizedNAme = "SYNTAX_STYLE_" + syntaxStyleHuman.replace(" ", "_").toUpperCase();
+        String normalizedName = "SYNTAX_STYLE_" + syntaxStyleHuman.replace(" ", "_").toUpperCase();
         Field[] fields = SyntaxConstants.class.getFields();
         for (Field field : fields) {
             String name = field.getName();
