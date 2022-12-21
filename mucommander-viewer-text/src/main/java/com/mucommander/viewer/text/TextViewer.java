@@ -250,11 +250,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         for (String syntaxStyle : textEditorImpl.getSyntaxStyles()) {
             // TODO reflect the current style (that was automagically set on open)
             JRadioButtonMenuItem radio = new JRadioButtonMenuItem(syntaxStyle, false);
-            radio.addActionListener(
-                    e -> {
-                        textEditorImpl.setSyntaxStyle(syntaxStyle);
-                    }
-            );
+            radio.addActionListener(e -> textEditorImpl.setSyntaxStyle(syntaxStyle));
             group.add(radio);
             tabSyntaxMenu.add(radio);
         }
