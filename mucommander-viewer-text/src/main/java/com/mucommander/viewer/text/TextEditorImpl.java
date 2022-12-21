@@ -126,7 +126,7 @@ class TextEditorImpl implements ThemeListener {
         textArea.setSelectionColor(new Color(selBgColor.getRed(), selBgColor.getGreen(), selBgColor.getBlue(), alpha));
         // TODO by default I guess, at least on macOS in SolarizedDark theme, the editor font is not-monospaced!
         // tabs may not be shown properly in length (dots are much smaller than letters).
-        //textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
+        textArea.setFont(ThemeManager.getCurrentFont(Theme.EDITOR_FONT));
 
         textArea.setWrapStyleWord(true);
 
