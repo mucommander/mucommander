@@ -96,9 +96,6 @@ class TextEditorImpl implements ThemeListener {
             }
         };
 
-        // TODO add this pref when https://github.com/bobbylight/RSyntaxTextArea/issues/469 is resolved
-        //textArea.setClearWhitespaceLinesEnabled(true);
-
         if (DesktopManager.canBrowse()) {
             textArea.addHyperlinkListener((event) -> {
                 try {
@@ -241,6 +238,10 @@ class TextEditorImpl implements ThemeListener {
 
     void bracketMatching(boolean aBool) {
         textArea.setBracketMatchingEnabled(aBool);
+    }
+
+    void clearWhitespaceLines(boolean aBool) {
+        textArea.setClearWhitespaceLinesEnabled(aBool);
     }
 
     void closeCurlyBraces(boolean aBool) {
