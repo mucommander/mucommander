@@ -47,6 +47,10 @@ enum TextViewerPreferences {
     // Whether to match brackets
     BRACKET_MATCHING("bracket_matching", "text_viewer.bracket_matching", true,
             (textEditorImpl, aBoolean) -> textEditorImpl.bracketMatching(aBoolean)),
+    // Whether to clear lines with whitespaces
+    CLEAR_WHITE_SPACE("clear_whitespace_lines", "text_viewer.clear_whitespace_lines", true,
+            (textEditorImpl, aBoolean) ->
+                    textEditorImpl.clearWhitespaceLines(aBoolean), EditorViewerMode.EDITOR),
     // Whether to close curly braces
     CLOSE_CURLY_BRACES("close_curly_braces", "text_viewer.close_curly_braces", true,
             (textEditorImpl, aBoolean) -> textEditorImpl.closeCurlyBraces(aBoolean), EditorViewerMode.EDITOR),
