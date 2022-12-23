@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +38,9 @@ import java.util.stream.Stream;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
@@ -101,10 +104,15 @@ class TextEditorImpl implements ThemeListener {
 
         if (DesktopManager.canBrowse()) {
             textArea.addHyperlinkListener((event) -> {
-                try {
-                    DesktopManager.browse(event.getURL());
-                } catch (IOException e) {
-                    LOGGER.error("Error opening link in a browser", e);
+                URL url = event.getURL();
+                if (url != null && event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                    SwingUtilities.invokeLater(() -> {
+                        try {
+                            DesktopManager.browse(url);
+                        } catch (IOException e) {
+                            LOGGER.error("Error opening link in a browser", e);
+                        }
+                    });
                 }
             });
             textArea.setHyperlinksEnabled(true);
