@@ -124,7 +124,7 @@ muCommander uses the following great third party works :
  JCommander can be found at http://jcommander.org .
 
 - the ICEpdf library released under the Apache License.
- ICEpdf can be found at http://www.icesoft.com/icepdf .
+ ICEpdf can be found at https://github.com/pcorless/icepdf .
 
 - the Unix4j library released under the MIT License.
  Unix4j can be found at http://unix4j.org/.
