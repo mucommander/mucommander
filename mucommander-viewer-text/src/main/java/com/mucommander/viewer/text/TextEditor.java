@@ -197,6 +197,11 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
         textEditorImpl.write(new BOMWriter(out, textViewerDelegate.getEncoding()));
     }
 
+    @Override
+    public void requestFocus() {
+        textEditorImpl.setFocusAndCursorOnFirstLine();
+    }
+
     ///////////////////////////////
     // FileEditor implementation //
     ///////////////////////////////
