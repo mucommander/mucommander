@@ -67,4 +67,9 @@ public interface FileViewer {
      *            menu bar
      */
     void extendMenu(JMenuBar menuBar);
+
+    /**
+     * Enables to customize focus handling
+     */
+    default void requestFocus() {}
 }

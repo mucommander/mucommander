@@ -52,7 +52,7 @@ import java.awt.event.ActionEvent;
  */
 public class FileEditorPresenter extends FilePresenter implements EditorPresenter {
 
-    private FileEditor fileEditor = null;
+    private FileEditor fileEditor;
     private final JMenuBar menuBar;
     private final JMenu editorMenu;
     private final ButtonGroup editorsButtonGroup;
@@ -202,5 +202,10 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
         menuBar.repaint();
         setComponentToPresent(editorComponent);
         activeEditor = index;
+    }
+
+    @Override
+    public void requestFocus() {
+        fileEditor.requestFocus();
     }
 }

@@ -52,7 +52,7 @@ import java.awt.event.ActionEvent;
  */
 public class FileViewerPresenter extends FilePresenter implements ViewerPresenter {
 
-    private FileViewer fileViewer = null;
+    private FileViewer fileViewer;
     private final JMenuBar menuBar;
     private final JMenu viewerMenu;
     private final ButtonGroup viewersButtonGroup;
@@ -202,5 +202,10 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         menuBar.revalidate();
         menuBar.repaint();
         setComponentToPresent(viewerComponent);
+    }
+
+    @Override
+    public void requestFocus() {
+        fileViewer.requestFocus();
     }
 }

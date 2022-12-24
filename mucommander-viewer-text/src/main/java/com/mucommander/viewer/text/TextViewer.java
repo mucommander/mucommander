@@ -182,8 +182,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
 
         textEditorImpl.read(new BufferedReader(new InputStreamReader(in, this.encoding)));
         textEditorImpl.setSyntaxHighlighting(file);
-        // TODO it doesn't work - should it be invoked somewhere else?
-        textEditorImpl.setFocusAndCursorOnFirstLine();
 
         // Listen to document changes
         if (documentListener!=null) {
@@ -291,6 +289,11 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
             tabSizeMenu.add(radio);
         }
         viewMenu.add(tabSizeMenu);
+    }
+
+    @Override
+    public void requestFocus() {
+        textEditorImpl.setFocusAndCursorOnFirstLine();
     }
 
     ///////////////////////////////
