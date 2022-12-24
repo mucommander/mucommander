@@ -3,44 +3,20 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
-    comprise group: 'com.levigo.jbig2', name: 'levigo-jbig2-imageio', version: '2.0'
-    comprise group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.57'
-    comprise group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on', version: '1.57'
-    comprise group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.57'
-    comprise group: 'batik', name: 'batik-awt-util', version: '1.6'
-    comprise group: 'batik', name: 'batik-dom', version: '1.6'
-    comprise group: 'batik', name: 'batik-svg-dom', version: '1.6'
-    comprise group: 'batik', name: 'batik-svggen', version: '1.6'
-    comprise group: 'batik', name: 'batik-util', version: '1.6'
-    comprise group: 'batik', name: 'batik-xml', version: '1.6'
-    comprise group: 'batik', name: 'batik-gui-util', version: '1.6'
-    comprise group: 'batik', name: 'batik-css', version: '1.6'
-    comprise group: 'batik', name: 'batik-parser', version: '1.6'
-    comprise group: 'javax.media.jai', name: 'com.springsource.javax.media.jai.codec', version: '1.1.3'
-    comprise group: 'javax.media.jai', name: 'com.springsource.javax.media.jai.core', version: '1.1.3'
-    comprise group: 'org.jpedal', name: 'jpedal-lgpl', version: '4.74b27'
-    comprise group: 'org.apache.xmlcommons', name: 'com.springsource.org.apache.xmlcommons', version: '1.3.4'
-    comprise group: 'sax', name: 'sax', version: '2.0.1'
-    comprise files('libs/w3c.jar')
+    comprise 'com.github.pcorless.icepdf:icepdf-viewer:7.0.0'
+    comprise 'log4j:log4j:1.2.17'
+    comprise 'com.twelvemonkeys.imageio:imageio-psd:3.9.4'
+    comprise 'avalon-framework:avalon-framework:4.1.5'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
 
-repositories {
-    maven {
-        // for jpedal-lgpl
-        url 'https://clojars.org/repo'
-    }
-    maven {
-        // for jai.core and dai.codec
-        url 'https://maven.ceon.pl/artifactory/repo/'
-    }
-    mavenCentral()
-}
+repositories.mavenCentral()
 
 jar {
-   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it)}
+   bnd('-fixupmessages': '^Classes found in the wrong directory: .*')
+   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }
    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
    bnd ('Bundle-Name': 'muCommander-viewer-pdf',
         'Bundle-Vendor': 'muCommander',
@@ -48,10 +24,12 @@ jar {
         'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package': 'com.mucommander.viewer.pdf',
         'Import-Package': 
-          '!org.icepdf.core.pobjects.fonts.nfont,' +
           '!com.sun.*,' +
-          '!com.apple.*,' +
           '!javax.media.*,' +
+          '!com.ibm.uvm.tools,' +
+          '!magick,' +
+          '!com.inet.jortho,' +
+          '!org.apache.log.*,' +
           '*',
         'Bundle-Activator': 'com.mucommander.viewer.pdf.Activator',
         'Specification-Title': "muCommander",
