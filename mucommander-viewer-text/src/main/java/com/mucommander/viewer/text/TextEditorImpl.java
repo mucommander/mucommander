@@ -20,8 +20,12 @@ package com.mucommander.viewer.text;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.BufferedWriter;
@@ -45,7 +49,14 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 
+import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.SearchJob;
@@ -54,12 +65,6 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
-
-import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Text editor implementation used by {@link TextViewer} and {@link TextEditor}.
@@ -100,6 +105,28 @@ class TextEditorImpl implements ThemeListener {
         };
 
         if (DesktopManager.canBrowse()) {
+            int linkScanningMask = OsFamily.MAC_OS.isCurrent() ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
+            textArea.setLinkScanningMask(linkScanningMask);
+            textArea.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if ((e.getModifiersEx() & linkScanningMask) == linkScanningMask)
+                        fakeMouseMove(e);
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    fakeMouseMove(e);
+                }
+
+                private void fakeMouseMove(KeyEvent e) {
+                    Point mousePosition = textArea.getMousePosition();
+                    if (mousePosition != null) {
+                        MouseEvent mouseEvent = new MouseEvent(textArea, e.getID(), e.getWhen(), e.getModifiersEx(), mousePosition.x, mousePosition.y, 0, false);
+                        Stream.of(textArea.getMouseMotionListeners()).forEach(listener -> listener.mouseMoved(mouseEvent));
+                    }
+                }
+            });
             textArea.addHyperlinkListener((event) -> {
                 URL url = event.getURL();
                 if (url != null && event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
