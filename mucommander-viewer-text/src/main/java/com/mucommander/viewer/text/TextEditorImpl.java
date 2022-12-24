@@ -18,6 +18,7 @@
 package com.mucommander.viewer.text;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Point;
@@ -190,6 +191,9 @@ class TextEditorImpl implements ThemeListener {
                 }
             }
         });
+        // Setting TEXT_CURSOR for text area regardless if it is editable or readonly - for both it makes sense.
+        // TODO still not ideal - initially most often it opens with DEFAULT_CURSOR, moving to line numbers panel and back to editor it shows TEXT_CURSOR properly
+        textArea.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
 
     /////////////////
