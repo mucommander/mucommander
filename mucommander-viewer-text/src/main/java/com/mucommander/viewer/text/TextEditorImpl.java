@@ -35,8 +35,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -83,6 +84,11 @@ class TextEditorImpl implements ThemeListener {
      * Indicates whether there is a line separator in the original file
      */
     private boolean lineSeparatorExists;
+
+    /**
+     * A listener that is being called when syntax style has been changed.
+     */
+    private Consumer<String> syntaxChangeListener;
 
     ////////////////////
     // Initialization //
@@ -355,8 +361,13 @@ class TextEditorImpl implements ThemeListener {
         textArea.selectAll();
     }
 
-    List<String> getSyntaxStyles() {
-        List<String> syntaxList = new ArrayList<>();
+    /**
+     * Returns the map of supported syntax styles, where key is mime-type and value is
+     * human-readable name of the style.
+     * @return the map, won't be null.
+     */
+    Map<String, String> getSyntaxStyles() {
+        Map<String, String> syntaxMap = new LinkedHashMap<>();
         // TODO remove reflection when/if https://github.com/bobbylight/RSyntaxTextArea/issues/479 implemented
         Field[] fields = SyntaxConstants.class.getFields();
         for (Field field : fields) {
@@ -364,27 +375,31 @@ class TextEditorImpl implements ThemeListener {
             if (name.startsWith("SYNTAX_STYLE_")) {
                 String[] parts = name.substring("SYNTAX_STYLE_".length()).split("_");
                 String prettyName = Stream.of(parts).map(String::toLowerCase).collect(Collectors.joining(" "));
-                syntaxList.add(prettyName);
-            }
-        }
-        return syntaxList;
-    }
-
-    void setSyntaxStyle(String syntaxStyleHuman) {
-        // TODO use enum when/if https://github.com/bobbylight/RSyntaxTextArea/issues/479 implemented
-        String normalizedName = "SYNTAX_STYLE_" + syntaxStyleHuman.replace(" ", "_").toUpperCase();
-        Field[] fields = SyntaxConstants.class.getFields();
-        for (Field field : fields) {
-            String name = field.getName();
-            if (normalizedName.equals(name)) {
                 try {
-                    textArea.setSyntaxEditingStyle((String)field.get(null));
-                    break;
+                    syntaxMap.put((String) field.get(null), prettyName);
                 } catch (IllegalAccessException e) {
-                    LOGGER.error("Ooops while trying to set syntax style", e);
+                    LOGGER.error("Ooops while trying to get syntax style mime-type", e);
                 }
             }
         }
+        return syntaxMap;
+    }
+
+    void setSyntaxStyle(String syntaxStyleMimeType) {
+        textArea.setSyntaxEditingStyle(syntaxStyleMimeType);
+    }
+
+    public void setSyntaxStyle(AbstractFile file) {
+        String mimeType = FileTypeUtil.get().guessContentType(
+                new File(file.getCanonicalPath()), true);
+        textArea.setSyntaxEditingStyle(mimeType);
+        if (syntaxChangeListener != null) {
+            syntaxChangeListener.accept(mimeType);
+        }
+    }
+
+    public void setSyntaxStyleChangeListener(Consumer<String> syntaxChangeListener) {
+        this.syntaxChangeListener = syntaxChangeListener;
     }
 
     JTextArea getTextArea() {
@@ -419,12 +434,6 @@ class TextEditorImpl implements ThemeListener {
         } catch (BadLocationException e) {
             throw new IOException(e.getMessage());
         }
-    }
-
-    public void setSyntaxHighlighting(AbstractFile file) {
-        String mimeType = FileTypeUtil.get().guessContentType(
-                new File(file.getCanonicalPath()), true);
-        textArea.setSyntaxEditingStyle(mimeType);
     }
 
     public void setFocusAndCursorOnFirstLine() {
@@ -467,4 +476,5 @@ class TextEditorImpl implements ThemeListener {
             textArea.setFont(event.getFont());
         }
     }
+
 }
