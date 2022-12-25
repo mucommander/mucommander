@@ -139,7 +139,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
 
                 ButtonGroup syntaxGroup = new ButtonGroup();
                 for (Map.Entry<String, String> syntaxStyle : textEditorImpl.getSyntaxStyles().entrySet()) {
-                    // TODO reflect the current style (that was automagically set on open)
                     JRadioButtonMenuItem radio = new JRadioButtonMenuItem(syntaxStyle.getValue(), false);
                     radio.setName(syntaxStyle.getKey());
                     radio.addActionListener(
