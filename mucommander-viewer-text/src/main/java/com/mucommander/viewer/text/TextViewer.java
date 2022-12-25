@@ -56,6 +56,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Map;
 
 import javax.swing.JScrollPane;
 
@@ -183,7 +185,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         this.encoding = encoding == null || !Charset.isSupported(encoding) ? "UTF-8" : encoding;
 
         textEditorImpl.read(new BufferedReader(new InputStreamReader(in, this.encoding)));
-        textEditorImpl.setSyntaxHighlighting(file);
+        textEditorImpl.setSyntaxStyle(file);
 
         // Listen to document changes
         if (documentListener!=null) {
@@ -246,14 +248,20 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
 
         JMenu tabSyntaxMenu = new JMenu(Translator.get("text_viewer.syntax_style"));
 
-        ButtonGroup group = new ButtonGroup();
-        for (String syntaxStyle : textEditorImpl.getSyntaxStyles()) {
+        ButtonGroup syntaxGroup = new ButtonGroup();
+        for (Map.Entry<String, String> syntaxStyle : textEditorImpl.getSyntaxStyles().entrySet()) {
             // TODO reflect the current style (that was automagically set on open)
-            JRadioButtonMenuItem radio = new JRadioButtonMenuItem(syntaxStyle, false);
-            radio.addActionListener(e -> textEditorImpl.setSyntaxStyle(syntaxStyle));
-            group.add(radio);
+            JRadioButtonMenuItem radio = new JRadioButtonMenuItem(syntaxStyle.getValue(), false);
+            radio.setName(syntaxStyle.getKey());
+            radio.addActionListener(e -> textEditorImpl.setSyntaxStyle(syntaxStyle.getKey()));
+            syntaxGroup.add(radio);
             tabSyntaxMenu.add(radio);
         }
+        textEditorImpl.setSyntaxStyleChangeListener(syntaxMime ->
+            Collections.list(syntaxGroup.getElements()).stream()
+                    .filter(radio -> syntaxMime.equals(radio.getName()))
+                    .findFirst().ifPresent(radio -> radio.setSelected(true))
+        );
         viewMenu.add(tabSyntaxMenu);
         viewMenu.addSeparator();
 
@@ -277,7 +285,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         int tabSize = textEditorImpl.getTabSize();
         JMenu tabSizeMenu = new JMenu(Translator.get("text_viewer.tab_size"));
 
-        group = new ButtonGroup();
+        ButtonGroup tabGroup = new ButtonGroup();
         for (int i : new int[]{2, 4, 8}) {
             JRadioButtonMenuItem radio = new JRadioButtonMenuItem(Integer.toString(i), tabSize == i);
             radio.addActionListener(
@@ -287,7 +295,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
                                 TEXT_FILE_PRESENTER_SECTION + ".tab_size", i);
                     }
             );
-            group.add(radio);
+            tabGroup.add(radio);
             tabSizeMenu.add(radio);
         }
         viewMenu.add(tabSizeMenu);

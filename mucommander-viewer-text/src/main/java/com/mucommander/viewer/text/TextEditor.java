@@ -53,6 +53,8 @@ import com.mucommander.viewer.CloseCancelledException;
 
 
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Map;
 
 import javax.swing.JScrollPane;
 
@@ -135,20 +137,26 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
 
                 JMenu tabSyntaxMenu = new JMenu(Translator.get("text_editor.syntax_style"));
 
-                ButtonGroup group = new ButtonGroup();
-                for (String syntaxStyle : textEditorImpl.getSyntaxStyles()) {
+                ButtonGroup syntaxGroup = new ButtonGroup();
+                for (Map.Entry<String, String> syntaxStyle : textEditorImpl.getSyntaxStyles().entrySet()) {
                     // TODO reflect the current style (that was automagically set on open)
-                    JRadioButtonMenuItem radio = new JRadioButtonMenuItem(syntaxStyle, false);
+                    JRadioButtonMenuItem radio = new JRadioButtonMenuItem(syntaxStyle.getValue(), false);
+                    radio.setName(syntaxStyle.getKey());
                     radio.addActionListener(
                             e -> {
                                 boolean saveNeededKeeper = isSaveNeeded();
-                                textEditorImpl.setSyntaxStyle(syntaxStyle);
+                                textEditorImpl.setSyntaxStyle(syntaxStyle.getKey());
                                 setSaveNeeded(saveNeededKeeper);
                             }
                     );
-                    group.add(radio);
+                    syntaxGroup.add(radio);
                     tabSyntaxMenu.add(radio);
                 }
+                textEditorImpl.setSyntaxStyleChangeListener(syntaxMime ->
+                    Collections.list(syntaxGroup.getElements()).stream()
+                            .filter(radio -> syntaxMime.equals(radio.getName()))
+                            .findFirst().ifPresent(radio -> radio.setSelected(true))
+                );
                 viewMenu.add(tabSyntaxMenu);
                 viewMenu.addSeparator();
 
@@ -171,7 +179,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                 int tabSize = textEditorImpl.getTabSize();
                 JMenu tabSizeMenu = new JMenu(Translator.get("text_editor.tab_size"));
 
-                group = new ButtonGroup();
+                ButtonGroup tabGroup = new ButtonGroup();
                 for (int i : new int[]{2, 4, 8}) {
                     JRadioButtonMenuItem radio = new JRadioButtonMenuItem(Integer.toString(i), tabSize == i);
                     radio.addActionListener(
@@ -181,7 +189,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                                         TEXT_FILE_PRESENTER_SECTION + ".tab_size", i);
                                 }
                     );
-                    group.add(radio);
+                    tabGroup.add(radio);
                     tabSizeMenu.add(radio);
                 }
                 viewMenu.add(tabSizeMenu);
