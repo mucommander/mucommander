@@ -140,9 +140,11 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
                 }
             }
 
-            /* TODO this will return ISO-8859-1 for a normal text... which could have been
-               OKeyish sometime ago, but now UTF-8 should be set (emoticons etc) */
             String encoding = EncodingDetector.detectEncoding(in);
+            if ("ISO-8859-1".equalsIgnoreCase(encoding)) {
+                // Override encoding to ensure UTF-8 chars that user may enter are saved correctly.
+                encoding = "UTF-8";
+            }
 
             if (in instanceof RandomAccessInputStream) {
                 // Seek to the beginning of the file and reuse the stream
