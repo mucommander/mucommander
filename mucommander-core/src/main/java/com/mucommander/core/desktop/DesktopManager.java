@@ -607,4 +607,28 @@ public class DesktopManager {
         if (actionShortcuts != null)
             DesktopManager.actionShortcuts = actionShortcuts;
     }
+
+    /**
+     * Sets badge number on Dock/TaskBar app icon. To remove the badge provide the negative value.
+     * @param number a number to be displayed over app icon
+     */
+    public static void setIconBadgeNumber(int number) {
+        desktop.setIconBadgeNumber(number);
+    }
+
+    /**
+     * Sets progress bar on Dock/Taskbar app icon. To remove the progress bar, provider number
+     * outside of 1-100 range.
+     * @param progress the progress to display
+     */
+    public static void setIconProgress(int progress) {
+        desktop.setIconProgress(progress);
+    }
+
+    /**
+     * Requests users attention, for example on macOS by bouncing dock icon.
+     */
+    public static void requestUserAttention() {
+        desktop.requestUserAttention();
+    }
 }

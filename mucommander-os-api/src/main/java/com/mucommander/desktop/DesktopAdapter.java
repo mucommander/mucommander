@@ -172,4 +172,25 @@ public interface DesktopAdapter {
     default void customizeMainFrame(Window window) {}
     default List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) { return Collections.emptyList(); }
     ActionShortcuts getActionShortcuts();
+
+    /**
+     * Sets badge number on Dock/TaskBar app icon. To remove the badge provide the negative value.
+     * @param number a number to be displayed over app icon
+     * @return true if operation was supported by platform
+     */
+    boolean setIconBadgeNumber(int number);
+
+    /**
+     * Sets progress bar on Dock/Taskbar app icon. To remove the progress bar, provider number
+     * outside of 1-100 range.
+     * @param progress the progress to display
+     * @return true if operation was supported by platform
+     */
+    boolean setIconProgress(int progress);
+
+    /**
+     * Requests users attention, for example on macOS by bouncing dock icon.
+     * @return true if operation was supported by platform
+     */
+    boolean requestUserAttention();
 }

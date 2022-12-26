@@ -98,6 +98,7 @@ public class NotifierProvider {
                 return;
             }
 
+            DesktopManager.requestUserAttention();  // bounce app icon if supported by OS
             if(!getNotifier().displayNotification(notificationType, title, description))
                 LOGGER.debug("Notification failed to be displayed");
         });

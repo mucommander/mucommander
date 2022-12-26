@@ -27,7 +27,8 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import javax.swing.JFrame;
@@ -46,6 +47,9 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.job.FileJob;
+import com.mucommander.job.JobListener;
+import com.mucommander.job.JobsManager;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
@@ -70,6 +74,7 @@ import com.mucommander.ui.main.toolbar.ToolBar;
  * @author Maxence Bernard
  */
 public class MainFrame extends JFrame implements LocationListener {
+
     private ProportionalSplitPane splitPane;
 
     private FolderPanel leftFolderPanel;
@@ -114,24 +119,58 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     private void setWindowIcon() {
         // TODO: this code should probably be moved to the desktop API
-
         // - Mac OS X completely ignores calls to #setIconImage/setIconImages, no need to waste time
-        if(OsFamily.MAC_OS.isCurrent())
-            return;
+        if(!OsFamily.MAC_OS.isCurrent()) {
 
-        java.util.List<Image> icons = new Vector<Image>();
+            List<Image> icons = new ArrayList<>();
 
-        // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.
-        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_8.png").getImage());
+            // Start by adding a 16x16 image with 1-bit transparency, any OS should support that.
+            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_8.png").getImage());
 
-        // Add PNG 24 images (8-bit transparency)
-        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_24.png").getImage());
-        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon32_24.png").getImage());
-        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon48_24.png").getImage());
-        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png").getImage());
-        icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon256_24.png").getImage());
+            // Add PNG 24 images (8-bit transparency)
+            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon16_24.png").getImage());
+            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon32_24.png").getImage());
+            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon48_24.png").getImage());
+            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png").getImage());
+            icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon256_24.png").getImage());
 
-        setIconImages(icons);
+            setIconImages(icons);
+        }
+
+        JobsManager.getInstance().addJobListener(new JobListener() {
+            long lastUpdate;
+
+            // TODO abusing #jobProgress & #jobRemoved to get events to trigger desktop/taskbar icon updates
+            @Override
+            public void jobProgress(FileJob source, boolean fullUpdate) {
+                updateAppIcon();
+            }
+
+            @Override
+            public void jobRemoved(FileJob source) {
+                updateAppIcon();
+            }
+
+            private void updateAppIcon() {
+                List<FileJob> jobs = JobsManager.getInstance().getAllJobs();
+                if (jobs.size() > 0) {
+                    if (lastUpdate + 1000L < System.currentTimeMillis()) {
+                        lastUpdate = System.currentTimeMillis();
+                        long sum = 0;
+                        int jobsCount = 0;
+                        for (FileJob job : jobs) {
+                            sum += job.getJobProgress().getFilePercentInt();
+                            jobsCount++;
+                        }
+                        DesktopManager.setIconBadgeNumber(jobs.size());
+                        DesktopManager.setIconProgress((int) sum / jobsCount);
+                    }
+                } else {
+                    DesktopManager.setIconBadgeNumber(-1); // turn off progress bar on icon
+                    DesktopManager.setIconProgress(-1); // turn off badge on icon
+                }
+            }
+        });
     }
 
     private void init(FolderPanel leftFolderPanel, FolderPanel rightFolderPanel) {

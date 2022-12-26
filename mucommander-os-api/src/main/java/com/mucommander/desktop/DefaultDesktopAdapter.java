@@ -17,6 +17,7 @@
 
 package com.mucommander.desktop;
 
+import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 
@@ -154,5 +155,47 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
      */
     public ActionShortcuts getActionShortcuts() {
         return new ActionShortcuts();
+    }
+
+    @Override
+    public boolean setIconBadgeNumber(int number) {
+        boolean opSuccessful = false;
+        if (Taskbar.isTaskbarSupported() &&
+                Taskbar.getTaskbar().isSupported(Taskbar.Feature.ICON_BADGE_TEXT)) {
+            if (number >= 0) {
+                Taskbar.getTaskbar().setIconBadge(Integer.toString(number));
+            } else {
+                Taskbar.getTaskbar().setIconBadge(null);
+            }
+            opSuccessful = true;
+        }
+        return opSuccessful;
+    }
+
+    @Override
+    public boolean setIconProgress(int progress) {
+        boolean opSuccessful = false;
+        if (Taskbar.isTaskbarSupported() &&
+                Taskbar.getTaskbar().isSupported(Taskbar.Feature.PROGRESS_VALUE)) {
+            if (progress >= 0 && progress <= 100) {
+                Taskbar.getTaskbar().setProgressValue(progress);
+            } else {
+                Taskbar.getTaskbar().setProgressValue(-1);
+            }
+            opSuccessful = true;
+        }
+        return opSuccessful;
+    }
+
+    @Override
+    public boolean requestUserAttention() {
+        boolean opSuccessful = false;
+        if (Taskbar.isTaskbarSupported() &&
+                Taskbar.getTaskbar().isSupported(Taskbar.Feature.USER_ATTENTION)) {
+            // TODO check if we need to "unrequest" attention
+            Taskbar.getTaskbar().requestUserAttention(true, false);
+            opSuccessful = true;
+        }
+        return opSuccessful;
     }
 }

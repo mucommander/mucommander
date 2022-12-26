@@ -19,6 +19,7 @@ package com.mucommander.job;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -211,18 +212,15 @@ public class JobsManager implements FileJobListener {
 	            .filter(FileJob::isRunInBackground)
 	            .collect(Collectors.toList());
 	}
-	
+
 	/**
-	 * Returns a progress of a job with specified index.
-	 * @param rowIndex an index of a job
-	 * @return a progress information or null if job doesn't exists
+	 * Returns jobs that are running either in the foreground or background.
+	 * @return jobs that are running either in the foreground or background.
 	 */
-	public JobProgress getJobProgres(int rowIndex) {
-		if (rowIndex < jobs.size()) {
-			FileJob job = jobs.get(rowIndex);
-			return job.getJobProgress();
-		}
-		return null;
+	public List<FileJob> getAllJobs() {
+		return jobs.stream()
+				.filter(job -> job.getState() != FileJobState.FINISHED)
+				.collect(Collectors.toList());
 	}
 
 	/**
