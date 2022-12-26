@@ -35,6 +35,7 @@ import javax.swing.SwingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.apple.eawt.Application;
 import com.apple.eawt.FullScreenUtilities;
 import com.apple.eio.FileManager;
 import com.dd.plist.BinaryPropertyListParser;
@@ -241,5 +242,41 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             LOGGER.error("Error finding default shell for user, going to use a default one", e);
         }
         return result;
+    }
+
+    @Override
+    public boolean setIconBadgeNumber(int number) {
+        // Hmm, Taskbar.isTaskbarSupported returns false on my macOS 10.15.7 and java 14.0.2
+        if (super.setIconBadgeNumber(number)) {
+            return true;
+        }
+        if (number >= 0) {
+            Application.getApplication().setDockIconBadge(Integer.toString(number));
+        } else {
+            Application.getApplication().setDockIconBadge(null);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean setIconProgress(int progress) {
+        // Hmm, Taskbar.isTaskbarSupported returns false on my macOS 10.15.7 and java 14.0.2
+        if (super.setIconProgress(progress)) {
+            return true;
+        }
+        if (progress >= 0 || progress <= 100) {
+            Application.getApplication().setDockIconProgress(progress);
+        } else {
+            Application.getApplication().setDockIconProgress(-1);
+        }
+        return true;
+    }
+
+    public boolean requestUserAttention() {
+        if (super.requestUserAttention()) {
+            return true;
+        }
+        Application.getApplication().requestUserAttention(false);
+        return true;
     }
 }
