@@ -17,13 +17,19 @@
 
 package com.mucommander.viewer.text;
 
+import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
+
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
@@ -31,8 +37,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
@@ -51,17 +61,6 @@ import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.Map;
-
-import javax.swing.JScrollPane;
-
-import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
 
 /**
  * A simple text viewer. Most of the implementation is located in {@link TextEditorImpl}.
@@ -144,12 +143,13 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
                 in = file.getInputStream();
             }
 
-            String encoding = EncodingDetector.detectEncoding(in);
-            /* FIXME https://github.com/mucommander/mucommander/issues/824
-            if ("ISO-8859-1".equalsIgnoreCase(encoding)) {
-                // Override encoding to ensure UTF-8 chars that user may enter are saved correctly.
+            AtomicBoolean is8bit = new AtomicBoolean(false);
+            String encoding = EncodingDetector.detectEncoding(snoopStreamFor8bitChar(in, is8bit));
+
+            // Override 7-bit ISO-8859-1 encoding to ensure UTF-8 chars that user may enter are saved correctly.
+            if (!is8bit.get() && "ISO-8859-1".equalsIgnoreCase(encoding)) {
                 encoding = "UTF-8";
-            }*/
+            }
 
             if (in instanceof RandomAccessInputStream) {
                 // Seek to the beginning of the file and reuse the stream
@@ -359,5 +359,72 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         } catch (IOException ex) {
             InformationDialog.showErrorDialog(presenter.getWindowFrame(), Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", currentFile.getName()));
         }
+    }
+
+    /**
+     * Wraps/Proxies a given InputStream to snoop if any read characters were 8bit to distinguish
+     * ISO-8859-1 (and others) from 7-bit ASCII (US-ASCII).
+     * See: https://github.com/mucommander/mucommander/issues/824
+     * As it comes to overriding InputStream per se, would be better to use sth like this:
+     * org.apache.commons.io.input.TeeInputStream but muC doesn't have it as dependency.
+     *
+     * @param in input stream to be snooped
+     * @param streamIs8bit atomic boolean to be set to true if a byte with 8th bit set was found
+     * @return wrapped input stream
+     */
+    private InputStream snoopStreamFor8bitChar(InputStream in, AtomicBoolean streamIs8bit) {
+        return new InputStream() {
+
+            boolean was8bitSet = false;
+
+            @Override
+            public int read() throws IOException {
+                int b = in.read();
+                if (check8Bit(b)) {
+                    streamIs8bit.set(true);
+                }
+                return b;
+            }
+
+            @Override
+            public int read(byte[] bytes) throws IOException {
+                int ret = in.read(bytes);
+                if (ret > 0) {
+                    for (byte b : bytes) {
+                        if (check8Bit(b)) {
+                            streamIs8bit.set(true);
+                            break;
+                        }
+                    }
+                }
+                return ret;
+            }
+
+            @Override
+            public int read(byte[] b, int off, int len) throws IOException {
+                int ret = in.read(b, off, len);
+                if (ret > 0) {
+                    for (int i = off; i < off + ret; i++) {
+                        if (check8Bit(b[i])) {
+                            streamIs8bit.set(true);
+                            break;
+                        }
+                    }
+                }
+                return ret;
+            }
+
+            @Override
+            public void close() throws IOException {
+                in.close();
+            }
+
+            private boolean check8Bit(int b) {
+                if (!was8bitSet) {
+                    was8bitSet = (b & 0x80) != 0;
+                }
+                return was8bitSet;
+            }
+        };
     }
 }
