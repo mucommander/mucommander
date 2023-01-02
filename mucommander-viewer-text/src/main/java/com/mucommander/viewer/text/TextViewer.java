@@ -140,13 +140,16 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
                     // In that case we simply get an InputStream
                     in = file.getInputStream();
                 }
+            } else {
+                in = file.getInputStream();
             }
 
             String encoding = EncodingDetector.detectEncoding(in);
+            /* FIXME https://github.com/mucommander/mucommander/issues/824
             if ("ISO-8859-1".equalsIgnoreCase(encoding)) {
                 // Override encoding to ensure UTF-8 chars that user may enter are saved correctly.
                 encoding = "UTF-8";
-            }
+            }*/
 
             if (in instanceof RandomAccessInputStream) {
                 // Seek to the beginning of the file and reuse the stream
