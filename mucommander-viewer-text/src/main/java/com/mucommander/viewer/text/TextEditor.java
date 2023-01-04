@@ -201,7 +201,13 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     }
 
     private void write(OutputStream out) throws IOException {
-        textEditorImpl.write(new BOMWriter(out, textViewerDelegate.getEncoding()));
+        boolean isUtf8 = "UTF-8".equalsIgnoreCase(textViewerDelegate.getEncoding());
+        textEditorImpl.write(new BOMWriter(out, textViewerDelegate.getEncoding()) {
+            {
+                // Don't write BOM for utf-8 - see: https://github.com/mucommander/mucommander/issues/835
+                bomWriteChecked = isUtf8;
+            }
+        });
     }
 
     @Override

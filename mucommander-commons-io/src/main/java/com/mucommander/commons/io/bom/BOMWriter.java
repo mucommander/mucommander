@@ -76,8 +76,8 @@ public class BOMWriter extends OutputStreamWriter {
      * subsequently encode characters in the specified encoding.
      *
      * @param out the <code>OutputStream</code> to write the encoded data to
-     * @param bom the byte-order mark to write at the beginning of the stream.
      * @param encoding character encoding to use for encoding characters.
+     * @param bom the byte-order mark to write at the beginning of the stream.
      * @throws UnsupportedEncodingException if the specified encoding is not a character encoding supported by the Java runtime.
      */
     protected BOMWriter(OutputStream out, String encoding, BOM bom) throws UnsupportedEncodingException {
