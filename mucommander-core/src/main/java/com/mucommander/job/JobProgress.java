@@ -145,6 +145,7 @@ public class JobProgress {
 		// Total job percent is based on the *number* of files remaining, not
 		// their actual size.
 		// So this is very approximate.
+		// TODO make it more accurate: https://github.com/mucommander/mucommander/issues/565
 		float totalPercentFloat = job.getTotalPercentDone();
 		totalPercentInt = (int) (100 * totalPercentFloat);
 
