@@ -101,6 +101,7 @@ public interface FileJob extends Runnable {
 
     /**
      * Returns this job's percentage of completion, as a float comprised between 0 and 1.
+     * TODO make it more accurate: https://github.com/mucommander/mucommander/issues/565
      *
      * @return this job's percentage of completion, as a float comprised between 0 and 1
      */

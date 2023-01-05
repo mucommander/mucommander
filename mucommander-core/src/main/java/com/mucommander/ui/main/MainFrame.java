@@ -154,12 +154,13 @@ public class MainFrame extends JFrame implements LocationListener {
             private void updateAppIcon() {
                 List<FileJob> jobs = JobsManager.getInstance().getAllJobs();
                 if (jobs.size() > 0) {
+                    // Update icon every 1s
                     if (lastUpdate + 1000L < System.currentTimeMillis()) {
                         lastUpdate = System.currentTimeMillis();
                         long sum = 0;
                         int jobsCount = 0;
                         for (FileJob job : jobs) {
-                            sum += job.getJobProgress().getFilePercentInt();
+                            sum += job.getJobProgress().getTotalPercentInt();
                             jobsCount++;
                         }
                         DesktopManager.setIconBadgeNumber(jobs.size());
@@ -288,7 +289,7 @@ public class MainFrame extends JFrame implements LocationListener {
     	             ConfFileTableTab rightTab, FileTableConfiguration rightTableConf) {
     	this(new ConfFileTableTab[] {leftTab}, 0, leftTableConf, new ConfFileTableTab[] {rightTab}, 0, rightTableConf);
     }
-    
+
     /**
      * Creates a new main frame set to the given initial folders.
      *
