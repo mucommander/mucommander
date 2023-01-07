@@ -235,6 +235,8 @@ class TextEditorImpl implements ThemeListener {
             return;
         }
 
+        // All the search is being done in lower case (https://github.com/mucommander/mucommander/issues/838)
+        searchString = searchString.toLowerCase();
         textArea.requestFocus();
 
         int pos;
