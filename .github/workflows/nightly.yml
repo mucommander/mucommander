@@ -26,19 +26,6 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Checkout 'release'
-        uses: actions/checkout@v3
-        with:
-          repository: mucommander/release
-          path: release
-          token: ${{ secrets.RELEASE_REPO_TOKEN }}
-
-      - name: Apply 'release' patches
-        run: |
-          git config --global user.name gh-action
-          git config --global user.email gh-action
-          git am release/0001-set-credentials-to-Google-Drive.patch
-
       - name : Get version
         id: mucommander_version
         run: |
@@ -64,6 +51,19 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
+
+      - name: Checkout 'release'
+        uses: actions/checkout@v3
+        with:
+          repository: mucommander/release
+          path: release
+          token: ${{ secrets.RELEASE_REPO_TOKEN }}
+
+      - name: Apply 'release' patches
+        run: |
+          git config --global user.name gh-action
+          git config --global user.email gh-action
+          git am release/0001-set-credentials-to-Google-Drive.patch
 
       - uses: actions/setup-java@v3
         with:
