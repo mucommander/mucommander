@@ -310,14 +310,17 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public void delete() throws IOException, UnsupportedFileOperationException {
-        try(GoogleDriveConnHandler connHandler = getConnHandler()) {
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             connHandler.getConnection().files().delete(file.getId()).execute();
         }
     }
 
     @Override
     public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
-        
+        try (GoogleDriveConnHandler connHandler = getConnHandler()) {
+            connHandler.getConnection().files().update(file.getId(), new File().setName(destFile.getName())).execute();
+            file.setName(destFile.getName());
+        }
     }
 
     @Override
