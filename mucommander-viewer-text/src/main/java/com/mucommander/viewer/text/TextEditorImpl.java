@@ -200,7 +200,7 @@ class TextEditorImpl implements ThemeListener {
         FindDialog findDialog = new FindDialog(frame);
 
         if (findDialog.wasValidated()) {
-            String searchString = findDialog.getSearchString().toLowerCase();
+            String searchString = findDialog.getSearchString();
 
             if (!StringUtils.isNullOrEmpty(searchString)) {
                 SearchJob.lastSearchString = searchString;
@@ -235,8 +235,9 @@ class TextEditorImpl implements ThemeListener {
             return;
         }
 
-        // All the search is being done in lower case (https://github.com/mucommander/mucommander/issues/838)
+        // The search is case-insensitive at the moment
         searchString = searchString.toLowerCase();
+
         textArea.requestFocus();
 
         int pos;
@@ -254,7 +255,7 @@ class TextEditorImpl implements ThemeListener {
             // the end of the file is reached, and we don't want those beeps to played one after the other as to:
             // 1/ not lock the event thread
             // 2/ have those beeps to end rather sooner than later
-            new Thread(() -> Toolkit.getDefaultToolkit().beep()).start();
+            new Thread(Toolkit.getDefaultToolkit()::beep).start();
         }
     }
 
