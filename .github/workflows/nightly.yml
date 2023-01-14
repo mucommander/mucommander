@@ -98,6 +98,19 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Checkout 'release'
+        uses: actions/checkout@v3
+        with:
+          repository: mucommander/release
+          path: release
+          token: ${{ secrets.RELEASE_REPO_TOKEN }}
+
+      - name: Apply 'release' patches
+        run: |
+          git config --global user.name gh-action
+          git config --global user.email gh-action
+          git am release/0001-set-credentials-to-Google-Drive.patch
+
       - name: Build portable, tgz, deb, and rpm
         uses: gradle/gradle-build-action@v2
         with:
@@ -151,7 +164,20 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Build msi
+      - name: Checkout 'release'
+        uses: actions/checkout@v3
+        with:
+          repository: mucommander/release
+          path: release
+          token: ${{ secrets.RELEASE_REPO_TOKEN }}
+
+      - name: Apply 'release' patches
+        run: |
+          git config --global user.name gh-action
+          git config --global user.email gh-action
+          git am release/0001-set-credentials-to-Google-Drive.patch
+
+     - name: Build msi
         uses: gradle/gradle-build-action@v2
         with:
           arguments: msi
