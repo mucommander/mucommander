@@ -177,7 +177,7 @@ jobs:
           git config --global user.email gh-action
           git am release/0001-set-credentials-to-Google-Drive.patch
 
-     - name: Build msi
+      - name: Build msi
         uses: gradle/gradle-build-action@v2
         with:
           arguments: msi
