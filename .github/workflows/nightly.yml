@@ -31,7 +31,7 @@ jobs:
         with:
           repository: mucommander/release
           path: release
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_REPO_TOKEN }}
 
       - name: Apply 'release' patches
         run: |
