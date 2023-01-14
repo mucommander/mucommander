@@ -35,6 +35,8 @@ jobs:
 
       - name: Apply 'release' patches
         run: |
+          git config --global user.name gh-action
+          git config --global user.email gh-action
           git am release/0001-set-credentials-to-Google-Drive.patch
 
       - name : Get version
