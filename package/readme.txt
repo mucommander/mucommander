@@ -33,6 +33,7 @@ What's new since v1.1.0 ?
 
 New features:
 - Syntax Highlighting in both text Viewer and Editor
+- Renaming files in Google Drive.
 
 Improvements:
 - 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.
