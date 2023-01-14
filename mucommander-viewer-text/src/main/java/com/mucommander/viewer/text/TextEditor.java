@@ -53,6 +53,7 @@ import com.mucommander.viewer.CloseCancelledException;
 
 
 import java.awt.event.ActionListener;
+import java.io.OutputStreamWriter;
 import java.util.Collections;
 import java.util.Map;
 
@@ -201,13 +202,9 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     }
 
     private void write(OutputStream out) throws IOException {
-        boolean isUtf8 = "UTF-8".equalsIgnoreCase(textViewerDelegate.getEncoding());
-        textEditorImpl.write(new BOMWriter(out, textViewerDelegate.getEncoding()) {
-            {
-                // Don't write BOM for utf-8 - see: https://github.com/mucommander/mucommander/issues/835
-                bomWriteChecked = isUtf8;
-            }
-        });
+        var isUtf8 = "UTF-8".equalsIgnoreCase(textViewerDelegate.getEncoding());
+        textEditorImpl.write(isUtf8 ?
+                new OutputStreamWriter(out) : new BOMWriter(out, textViewerDelegate.getEncoding()));
     }
 
     @Override

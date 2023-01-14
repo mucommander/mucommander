@@ -25,6 +25,10 @@ package com.mucommander.commons.io.bom;
 public interface BOMConstants {
 
     /** UTF-8 BOM: EF BB BF */
+    /**
+     * @deprecated BOM is not usually set for UTF-8 - see: https://github.com/mucommander/mucommander/issues/835
+     */
+    @Deprecated
     public final static BOM UTF8_BOM = new BOM(
             new byte[]{(byte)0xEF, (byte)0xBB, (byte)0xBF},
             "UTF-8",
