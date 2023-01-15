@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.mucommander.ui.viewer.EditorSnapshot;
+import com.mucommander.ui.viewer.ViewerSnapshot;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -83,6 +85,8 @@ public class Activator implements BundleActivator {
         this.context = context;
         portable = "portable".equals(context.getProperty("app_mode"));
         MuSnapshot.registerHandler(new SearchSnapshot());
+        MuSnapshot.registerHandler(new ViewerSnapshot());
+        MuSnapshot.registerHandler(new EditorSnapshot());
         // Register the application-specific 'bookmark' protocol.
         FileProtocolService bookmarksService = createBookmarkProtocolService();
         bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);

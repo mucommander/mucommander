@@ -16,56 +16,57 @@
  */
 package com.mucommander.viewer.image;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.io.StreamUtils;
+import com.mucommander.commons.util.ui.dialog.DialogToolkit;
+import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.commons.util.ui.helper.MnemonicHelper;
+import com.mucommander.text.Translator;
+import com.mucommander.viewer.FileViewer;
+import com.mucommander.viewer.ViewerPresenter;
+import com.mucommander.viewer.image.ui.ImageStatusPanel;
+import com.mucommander.viewer.image.ui.ImageViewerPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.AbstractAction;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.KeyStroke;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.io.StreamUtils;
-import com.mucommander.commons.util.ui.helper.MenuToolkit;
-import com.mucommander.commons.util.ui.helper.MnemonicHelper;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
-import com.mucommander.viewer.FileViewer;
-import com.mucommander.viewer.ViewerPresenter;
+import javax.swing.SwingUtilities;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.function.Function;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A simple image viewer, capable of displaying <code>PNG</code>, <code>GIF</code> and <code>JPEG</code> images.
@@ -81,18 +82,19 @@ class ImageViewer implements FileViewer, ActionListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageViewer.class);
 
     private ViewerPresenter presenter;
-    private JScrollPane ui = new JScrollPane();
+    private JPanel ui = new JPanel(new BorderLayout());
+    private JScrollPane scrollPane = new JScrollPane();
+    private ImageStatusPanel statusPanel = new ImageStatusPanel();
 
-    private InitialViewMode initialViewMode = InitialViewMode.RESIZE_WINDOW;
-    private Image image;
-    private int imageWidth;
-    private int imageHeight;
-    private double zoomFactor;
+    private InitialZoom initialZoom = InitialZoom.RESIZE_WINDOW;
+    private boolean firstZoomPerformed = false;
 
     /** Menu bar */
     // Menus //
     private JMenu viewMenu;
     private JMenu controlsMenu;
+    private JMenu viewInitialZoomMenu;
+
     // Items //
     private JMenuItem prevImageItem;
     private JMenuItem nextImageItem;
@@ -100,20 +102,136 @@ class ImageViewer implements FileViewer, ActionListener {
     private JMenuItem zoomToFit;
     private JMenuItem zoomInItem;
     private JMenuItem zoomOutItem;
+    private JRadioButtonMenuItem viewAsNativeMenuItem;
+    private JRadioButtonMenuItem viewAsFitToViewMenuItem;
+    private JRadioButtonMenuItem viewAsResizeWindowMenuItem;
+    private AbstractAction viewStatusBarAction;
+    private JCheckBoxMenuItem viewStatusBarMenuItem;
 
-    private ImageViewerImpl imageViewerImpl;
+    private ImageViewerPanel imageViewerPanel;
     private ImageFileViewerService imageFileViewerService;
 
     public ImageViewer(ImageFileViewerService imageFileViewerService) {
         this.imageFileViewerService = imageFileViewerService;
-        imageViewerImpl = new ImageViewerImpl();
+        imageViewerPanel = new ImageViewerPanel();
+        ui.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (firstZoomPerformed) {
+                    return;
+                }
 
-        ui.setWheelScrollingEnabled(false);
-        ui.getViewport().setView(imageViewerImpl);
+                if (ui.getWidth() > 0) {
+                    initialZoom();
+                    firstZoomPerformed = true;
+                    ui.removeComponentListener(this);
+                }
+            }
+        });
 
-        // Create Go menu
+        init();
+    }
+
+    private void init() {
+        ui.add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setWheelScrollingEnabled(false);
+        scrollPane.getViewport().setView(imageViewerPanel);
+
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+
+            private Point origin;
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.isControlDown()) {
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        double zoomFactor = imageViewerPanel.getZoomFactor();
+                        zoom(Math.min(zoomFactor * ZOOM_RATE, MAX_ZOOM), e.getPoint());
+                    } else if (e.getButton() == MouseEvent.BUTTON3) {
+                        double zoomFactor = imageViewerPanel.getZoomFactor();
+                        zoom(Math.max(zoomFactor / ZOOM_RATE, MIN_ZOOM), e.getPoint());
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    origin = new Point(e.getPoint());
+                    imageViewerPanel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    origin = null;
+                    imageViewerPanel.setCursor(Cursor.getDefaultCursor());
+                }
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (origin != null) {
+                    JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
+                            imageViewerPanel);
+                    if (viewPort != null) {
+                        int deltaX = origin.x - e.getX();
+                        int deltaY = origin.y - e.getY();
+
+                        Rectangle view = viewPort.getViewRect();
+                        view.x += deltaX;
+                        view.y += deltaY;
+
+                        imageViewerPanel.scrollRectToVisible(view);
+                    }
+                }
+            }
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                double rotation = e.getPreciseWheelRotation();
+                if (rotation == 0) {
+                    return;
+                }
+
+                if (rotation > 0) {
+                    double scaleDiff = rotation * ZOOM_RATE;
+                    double zoomFactor = imageViewerPanel.getZoomFactor();
+                    zoom(Math.max(zoomFactor / scaleDiff, MIN_ZOOM), e.getPoint());
+                } else {
+                    double scaleDiff = (-rotation) * ZOOM_RATE;
+                    double zoomFactor = imageViewerPanel.getZoomFactor();
+                    zoom(Math.min(zoomFactor * scaleDiff, MAX_ZOOM), e.getPoint());
+                }
+                e.consume();
+            }
+        };
+
+        imageViewerPanel.addMouseListener(mouseAdapter);
+        imageViewerPanel.addMouseMotionListener(mouseAdapter);
+        imageViewerPanel.addMouseWheelListener(mouseAdapter);
+
         MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
+        viewInitialZoomMenu =
+                MenuToolkit.addMenu(Translator.get("image_viewer.initial_zoom_menu"), menuMnemonicHelper, null);
+        viewAsNativeMenuItem = new JRadioButtonMenuItem(Translator.get("image_viewer.initial_zoom_as_native"));
+        viewAsNativeMenuItem.addActionListener(e -> switchInitialZoomMode(InitialZoom.NATIVE_SIZE));
+        viewAsFitToViewMenuItem = new JRadioButtonMenuItem(Translator.get("image_viewer.initial_zoom_fit_to_view"));
+        viewAsFitToViewMenuItem.addActionListener(e -> switchInitialZoomMode(InitialZoom.FIT_TO_WINDOW));
+        viewAsResizeWindowMenuItem =
+                new JRadioButtonMenuItem(Translator.get("image_viewer.initial_zoom_resize_window"));
+        viewAsResizeWindowMenuItem.addActionListener(e -> switchInitialZoomMode(InitialZoom.RESIZE_WINDOW));
+        ButtonGroup viewAsButtonGroup = new ButtonGroup();
+        viewAsButtonGroup.add(viewAsNativeMenuItem);
+        viewAsButtonGroup.add(viewAsFitToViewMenuItem);
+        viewAsButtonGroup.add(viewAsResizeWindowMenuItem);
+        viewInitialZoomMenu.add(viewAsNativeMenuItem);
+        viewInitialZoomMenu.add(viewAsFitToViewMenuItem);
+        viewInitialZoomMenu.add(viewAsResizeWindowMenuItem);
+
         viewMenu = MenuToolkit.addMenu(Translator.get("image_viewer.view_menu"), menuMnemonicHelper, null);
+        viewMenu.add(viewInitialZoomMenu);
         zoomToActualSize = MenuToolkit.addMenuItem(viewMenu,
                 Translator.get("image_viewer.zoom_to_actual_size"),
                 menuMnemonicHelper,
@@ -134,6 +252,14 @@ class ImageViewer implements FileViewer, ActionListener {
                 menuMnemonicHelper,
                 KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0),
                 this);
+        viewMenu.addSeparator();
+        viewStatusBarAction = new AbstractAction(Translator.get("image_viewer.view_status_bar")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchShowStatusBar(viewStatusBarMenuItem.isSelected());
+            }
+        };
+        viewStatusBarMenuItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, viewStatusBarAction, menuMnemonicHelper);
 
         controlsMenu = MenuToolkit.addMenu(Translator.get("image_viewer.controls_menu"), menuMnemonicHelper, null);
         nextImageItem = MenuToolkit.addMenuItem(controlsMenu,
@@ -146,6 +272,21 @@ class ImageViewer implements FileViewer, ActionListener {
                 menuMnemonicHelper,
                 KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0),
                 this);
+
+        String initialZoomValue = ImageViewerPreferences.INITIAL_ZOOM.getValue();
+        if (InitialZoom.FIT_TO_WINDOW.getKey().equals(initialZoomValue)) {
+            viewAsFitToViewMenuItem.setSelected(true);
+            switchInitialZoomMode(InitialZoom.FIT_TO_WINDOW);
+        } else if (InitialZoom.RESIZE_WINDOW.getKey().equals(initialZoomValue)) {
+            viewAsResizeWindowMenuItem.setSelected(true);
+            switchInitialZoomMode(InitialZoom.RESIZE_WINDOW);
+        } else {
+            viewAsNativeMenuItem.setSelected(true);
+            switchInitialZoomMode(InitialZoom.NATIVE_SIZE);
+        }
+        boolean showStatusBar = Boolean.parseBoolean(ImageViewerPreferences.SHOW_STATUS_BAR.getValue());
+        viewStatusBarMenuItem.setSelected(showStatusBar);
+        switchShowStatusBar(showStatusBar);
     }
 
     @Nonnull
@@ -168,23 +309,28 @@ class ImageViewer implements FileViewer, ActionListener {
     private synchronized void loadImage(AbstractFile file) throws IOException {
         presenter.getWindowFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
+        Image image;
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
             try (InputStream in = file.getInputStream()) {
                 StreamUtils.copyStream(in, bout);
-                this.image = imageViewerImpl.getToolkit().createImage(bout.toByteArray());
+                image = imageViewerPanel.getToolkit().createImage(bout.toByteArray());
             }
         }
 
         waitForImage(image);
+        imageViewerPanel.setImage(image);
+        initialZoom();
+    }
 
-        imageWidth = image.getWidth(null);
-        imageHeight = image.getHeight(null);
+    private void initialZoom() {
+        int imageWidth = imageViewerPanel.getImageWidth();
+        int imageHeight = imageViewerPanel.getImageHeight();
         presenter.getWindowFrame().setCursor(Cursor.getDefaultCursor());
 
-        switch (initialViewMode) {
+        switch (initialZoom) {
         case RESIZE_WINDOW:
             // Fit to screen size / autozoom and resize window
-            zoomFactor = 1;
+            double zoomFactor = 1;
             Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
             while (imageWidth * zoomFactor > d.width || imageHeight * zoomFactor > d.height) {
                 zoomFactor = zoomFactor / ZOOM_RATE;
@@ -193,14 +339,16 @@ class ImageViewer implements FileViewer, ActionListener {
                     break;
                 }
             }
-            zoom(zoomFactor, null);
+            setZoomFactor(zoomFactor);
+            imageViewerPanel.setSize(imageViewerPanel.getPreferredSize());
             presenter.getWindowFrame().pack();
+            DialogToolkit.centerOnScreen(presenter.getWindowFrame());
             break;
         case FIT_TO_WINDOW:
             zoomToFit();
             break;
         default:
-            zoom(1.0, null);
+            setZoomFactor(1.0);
         }
 
         ui.revalidate();
@@ -210,7 +358,7 @@ class ImageViewer implements FileViewer, ActionListener {
 
     private void waitForImage(Image image) {
         // AppLogger.finest("Waiting for image to load "+image);
-        MediaTracker tracker = new MediaTracker(imageViewerImpl);
+        MediaTracker tracker = new MediaTracker(imageViewerPanel);
         tracker.addImage(image, 0);
         try {
             tracker.waitForID(0);
@@ -221,13 +369,12 @@ class ImageViewer implements FileViewer, ActionListener {
     }
 
     private synchronized void zoom(double factor, @Nullable Point focusPoint) {
+        double zoomFactor = imageViewerPanel.getZoomFactor();
         if (factor == zoomFactor) {
             return;
         }
 
-        double oldFactor = zoomFactor;
-
-        JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, imageViewerImpl);
+        JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, imageViewerPanel);
         Rectangle view;
         Point targetViewportPos = new Point();
         if (viewPort != null) {
@@ -235,39 +382,49 @@ class ImageViewer implements FileViewer, ActionListener {
             if (focusPoint != null) {
                 int offsetX = focusPoint.x - view.x;
                 int offsetY = focusPoint.y - view.y;
-                targetViewportPos.x = (int) (Math.round(focusPoint.x / oldFactor * factor)) - offsetX;
-                targetViewportPos.y = (int) (Math.round(focusPoint.y / oldFactor * factor)) - offsetY;
+                targetViewportPos.x = (int) Math.round(focusPoint.x / zoomFactor * factor) - offsetX;
+                targetViewportPos.y = (int) Math.round(focusPoint.y / zoomFactor * factor) - offsetY;
             } else {
                 // Focus center of the viewport instead
                 int offsetX = (view.width / 2);
                 int offsetY = (view.height / 2);
-                targetViewportPos.x = (int) (Math.round(view.x + offsetX) / oldFactor * factor) - offsetX;
-                targetViewportPos.y = (int) (Math.round(view.y + offsetY) / oldFactor * factor) - offsetY;
+                targetViewportPos.x = (int) Math.round((view.x + offsetX) / zoomFactor * factor) - offsetX;
+                targetViewportPos.y = (int) Math.round((view.y + offsetY) / zoomFactor * factor) - offsetY;
             }
         }
 
-        this.zoomFactor = factor;
+        imageViewerPanel.setZoomFactor(factor);
 
         if (viewPort != null) {
-            view = viewPort.getViewRect();
-            view.x = targetViewportPos.x;
-            view.y = targetViewportPos.y;
-
-            imageViewerImpl.setSize(imageViewerImpl.getPreferredSize());
-            ui.getViewport().setViewPosition(targetViewportPos);
+            imageViewerPanel.setSize(imageViewerPanel.getPreferredSize());
+            scrollPane.getViewport().setViewPosition(targetViewportPos);
+        } else {
+            imageViewerPanel.revalidate();
         }
 
-        imageViewerImpl.invalidate();
-        ui.invalidate();
+        ui.revalidate();
+        ui.repaint();
+
+        updateStatus();
+    }
+
+    private synchronized void setZoomFactor(double factor) {
+        imageViewerPanel.setZoomFactor(factor);
+        imageViewerPanel.revalidate();
+
+        ui.revalidate();
         ui.repaint();
 
         updateStatus();
     }
 
     private void updateStatus() {
+        double zoomFactor = imageViewerPanel.getZoomFactor();
         presenter.extendTitle(this.getTitleExt());
         zoomInItem.setEnabled(zoomFactor < MAX_ZOOM);
         zoomOutItem.setEnabled(zoomFactor > MIN_ZOOM);
+        statusPanel.setZoomFactor(zoomFactor);
+        statusPanel.setImageSize(imageViewerPanel.getImageWidth(), imageViewerPanel.getImageHeight());
     }
 
     private void goToImage(Function<Integer, Integer> advance) {
@@ -293,6 +450,9 @@ class ImageViewer implements FileViewer, ActionListener {
 
     @Nonnull
     public String getTitleExt() {
+        double zoomFactor = imageViewerPanel.getZoomFactor();
+        int imageWidth = imageViewerPanel.getImageWidth();
+        int imageHeight = imageViewerPanel.getImageHeight();
         return " - " + imageWidth + "x" + imageHeight + " - " + ((int) (zoomFactor * 100)) + "%";
     }
 
@@ -313,30 +473,18 @@ class ImageViewer implements FileViewer, ActionListener {
         } else if (source == zoomToFit) {
             zoomToFit();
         } else if (source == zoomInItem && zoomInItem.isEnabled()) {
-            zoom(zoomFactor * ZOOM_RATE < MAX_ZOOM ? zoomFactor * ZOOM_RATE : MAX_ZOOM, getMousePoint());
+            double zoomFactor = imageViewerPanel.getZoomFactor();
+            zoom(Math.min(zoomFactor * ZOOM_RATE, MAX_ZOOM), getMousePoint());
         } else if (source == zoomOutItem && zoomOutItem.isEnabled()) {
-            zoom(zoomFactor / ZOOM_RATE > MIN_ZOOM ? zoomFactor / ZOOM_RATE : MIN_ZOOM, getMousePoint());
+            double zoomFactor = imageViewerPanel.getZoomFactor();
+            zoom(Math.max(zoomFactor / ZOOM_RATE, MIN_ZOOM), getMousePoint());
         }
-    }
-
-    private int getScaledWidth() {
-        if (image == null) {
-            return 0;
-        }
-        return (int) (zoomFactor * imageWidth);
-    }
-
-    private int getScaledHeight() {
-        if (image == null) {
-            return 0;
-        }
-        return (int) (zoomFactor * imageHeight);
     }
 
     @Nullable
     private Point getMousePoint() {
         Point mousePoint = MouseInfo.getPointerInfo().getLocation();
-        JViewport viewport = ui.getViewport();
+        JViewport viewport = scrollPane.getViewport();
         SwingUtilities.convertPointFromScreen(mousePoint, viewport);
         if (viewport.contains(mousePoint)) {
             Point viewPosition = viewport.getViewPosition();
@@ -346,8 +494,28 @@ class ImageViewer implements FileViewer, ActionListener {
         return null;
     }
 
+    private void switchInitialZoomMode(InitialZoom mode) {
+        initialZoom = mode;
+        ImageViewerPreferences.INITIAL_ZOOM.setValue(mode.key);
+    }
+
+    private void switchShowStatusBar(boolean showStatusBar) {
+        if ((statusPanel.getParent() == ui) != showStatusBar) {
+            ImageViewerPreferences.SHOW_STATUS_BAR.setValue(Boolean.toString(showStatusBar));
+            if (showStatusBar) {
+                ui.add(statusPanel, BorderLayout.SOUTH);
+            } else {
+                ui.remove(statusPanel);
+            }
+            ui.revalidate();
+            ui.repaint();
+        }
+    }
+
     private void zoomToFit() {
-        JViewport viewport = ui.getViewport();
+        JViewport viewport = scrollPane.getViewport();
+        int imageWidth = imageViewerPanel.getImageWidth();
+        int imageHeight = imageViewerPanel.getImageHeight();
         double zoomToWidth = (double) viewport.getWidth() / imageWidth;
         double zoomToHeight = (double) viewport.getHeight() / imageHeight;
         double zoom = Math.min(zoomToWidth, zoomToHeight);
@@ -357,143 +525,23 @@ class ImageViewer implements FileViewer, ActionListener {
         if (zoom > MAX_ZOOM) {
             zoom = MAX_ZOOM;
         }
-        zoom(zoom, getMousePoint());
+        setZoomFactor(zoom);
     }
 
-    @ParametersAreNonnullByDefault
-    private class ImageViewerImpl extends JPanel implements ThemeListener {
+    public enum InitialZoom {
+        NATIVE_SIZE("native"),
+        FIT_TO_WINDOW("fit_to_window"),
+        RESIZE_WINDOW("resize_window");
 
-        private Color backgroundColor;
+        private String key;
 
-        ImageViewerImpl() {
-            backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
-            ThemeManager.addCurrentThemeListener(this);
-
-            MouseAdapter mouseAdapter = new MouseAdapter() {
-
-                private Point origin;
-
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.isControlDown() || e.isMetaDown()) {
-                        if (e.getButton() == MouseEvent.BUTTON1) {
-                            zoom(zoomFactor * ZOOM_RATE < MAX_ZOOM ? zoomFactor * ZOOM_RATE : MAX_ZOOM, e.getPoint());
-                        } else if (e.getButton() == MouseEvent.BUTTON3) {
-                            zoom(zoomFactor / ZOOM_RATE > MIN_ZOOM ? zoomFactor / ZOOM_RATE : MIN_ZOOM, e.getPoint());
-                        }
-                    }
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    if (e.getButton() == MouseEvent.BUTTON1) {
-                        origin = new Point(e.getPoint());
-                        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-                    }
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    if (e.getButton() == MouseEvent.BUTTON1) {
-                        origin = null;
-                        setCursor(Cursor.getDefaultCursor());
-                    }
-                }
-
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    if (origin != null) {
-                        JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
-                                ImageViewerImpl.this);
-                        if (viewPort != null) {
-                            int deltaX = origin.x - e.getX();
-                            int deltaY = origin.y - e.getY();
-
-                            Rectangle view = viewPort.getViewRect();
-                            view.x += deltaX;
-                            view.y += deltaY;
-
-                            scrollRectToVisible(view);
-                        }
-                    }
-                }
-
-                @Override
-                public void mouseWheelMoved(MouseWheelEvent e) {
-                    double rotation = e.getPreciseWheelRotation();
-                    if (rotation == 0) {
-                        return;
-                    }
-
-                    if (rotation > 0) {
-                        double scaleDiff = rotation * ZOOM_RATE;
-                        zoom(zoomFactor / scaleDiff > MIN_ZOOM ? zoomFactor / scaleDiff : MIN_ZOOM, e.getPoint());
-                    } else {
-                        double scaleDiff = (-rotation) * ZOOM_RATE;
-                        zoom(zoomFactor * scaleDiff < MAX_ZOOM ? zoomFactor * scaleDiff : MAX_ZOOM, e.getPoint());
-                    }
-                    e.consume();
-                }
-            };
-
-            addMouseListener(mouseAdapter);
-            addMouseMotionListener(mouseAdapter);
-            addMouseWheelListener(mouseAdapter);
-        }
-
-        ////////////////////////
-        // Overridden methods //
-        ////////////////////////
-
-        @Override
-        public void paint(Graphics g) {
-            int frameWidth = getWidth();
-            int frameHeight = getHeight();
-
-            g.setColor(backgroundColor);
-            g.fillRect(0, 0, frameWidth, frameHeight);
-
-            final int scaledWidth = getScaledWidth();
-            final int scaledHeight = getScaledHeight();
-            final int offsetX = Math.max(0, (frameWidth - scaledWidth) / 2);
-            final int offsetY = Math.max(0, (frameHeight - scaledHeight) / 2);
-
-            g.drawImage(image, offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight,
-                    0, 0, imageWidth, imageHeight, null, null);
+        InitialZoom(@Nonnull String key) {
+            this.key = key;
         }
 
         @Nonnull
-        @Override
-        public synchronized Dimension getPreferredSize() {
-            return image == null ? new Dimension(320, 200) : new Dimension(getScaledWidth(), getScaledHeight());
+        public String getKey() {
+            return key;
         }
-
-        //////////////////////////////////
-        // ThemeListener implementation //
-        //////////////////////////////////
-
-        /**
-         * Receives theme color changes notifications.
-         */
-        @Override
-        public void colorChanged(ColorChangedEvent event) {
-            if (event.getColorId() == Theme.EDITOR_BACKGROUND_COLOR) {
-                backgroundColor = event.getColor();
-                repaint();
-            }
-        }
-
-        /**
-         * Not used, implemented as a no-op.
-         */
-        @Override
-        public void fontChanged(FontChangedEvent event) {
-        }
-    }
-
-    public static enum InitialViewMode {
-        NATIVE_SIZE,
-        FIT_TO_WINDOW,
-        RESIZE_WINDOW
     }
 }

@@ -17,7 +17,11 @@
 package com.mucommander.ui.viewer;
 
 import java.awt.Cursor;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +41,12 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
+import com.mucommander.text.Translator;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.ViewerPresenter;
 import com.mucommander.viewer.WarnUserException;
-import com.mucommander.text.Translator;
-import java.awt.event.ActionEvent;
 
 /**
  * File viewer presenter to handle multiple file viewers.
@@ -52,11 +55,11 @@ import java.awt.event.ActionEvent;
  */
 public class FileViewerPresenter extends FilePresenter implements ViewerPresenter {
 
-    private FileViewer fileViewer;
     private final JMenuBar menuBar;
     private final JMenu viewerMenu;
     private final ButtonGroup viewersButtonGroup;
     private final List<FileViewerService> services = new ArrayList<>();
+    private FileViewer fileViewer;
     private int viewersCount = 0;
     private JMenuItem fullScreenMenuItem;
     private JMenuItem closeMenuItem;
@@ -69,9 +72,8 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     }
 
     /**
-     * Returns the menu bar that controls the viewer's frame. The menu bar
-     * should be retrieved using this method and not by calling
-     * {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
+     * Returns the menu bar that controls the viewer's frame. The menu bar should be retrieved using this method and not
+     * by calling {@link JFrame#getJMenuBar()}, which may return <code>null</code>.
      *
      * @return the menu bar that controls the viewer's frame.
      */
@@ -152,6 +154,18 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     protected void show(AbstractFile file) throws IOException {
         setCurrentFile(file);
         if (fileViewer == null) {
+            getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            getFrame().addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    if (fileViewer != null) {
+                        fileViewer.close();
+                    }
+
+                    close();
+                }
+            });
+
             MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
             viewerMenu.addSeparator();
 
@@ -161,11 +175,24 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
                     KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK),
                     (e) -> {
                         boolean fullScreen = getFrame().isFullScreen();
-                        getFrame().setFullScreen(!fullScreen);
-                        fullScreenMenuItem.setSelected(!fullScreen);
-                    }
-            );
-            fullScreenMenuItem.setSelected(getFrame().isFullScreen());
+                        switchFullScreenMode(!fullScreen);
+                    });
+
+            String windowWidthValue = ViewerPreferences.WINDOW_WIDTH.getValue();
+            if (!"".equals(windowWidthValue)) {
+                int windowX = Integer.parseInt(ViewerPreferences.WINDOW_POSITION_X.getValue());
+                int windowY = Integer.parseInt(ViewerPreferences.WINDOW_POSITION_Y.getValue());
+                int windowWidth = Integer.parseInt(windowWidthValue);
+                int windowHeight = Integer.parseInt(ViewerPreferences.WINDOW_HEIGHT.getValue());
+                getFrame().setBounds(windowX, windowY, windowWidth, windowHeight);
+            } else {
+                getFrame().setDefaultBounds();
+            }
+
+            String showFullScreenValue = ViewerPreferences.SHOW_FULLSCREEN.getValue();
+            if (Boolean.TRUE.toString().equals(showFullScreenValue)) {
+                switchFullScreenMode(true);
+            }
             viewerMenu.add(fullScreenMenuItem);
 
             closeMenuItem = MenuToolkit.addMenuItem(viewerMenu,
@@ -173,13 +200,23 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
                     menuItemMnemonicHelper,
                     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                     (e) -> {
-                        fileViewer.close();
-                        getFrame().dispose();
+                        getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING));
                     });
             viewerMenu.add(closeMenuItem);
 
             switchFileViewer(0);
         }
+    }
+
+    private void close() {
+        FileFrame frame = getFrame();
+        Rectangle bounds = frame.getBounds();
+        ViewerPreferences.WINDOW_POSITION_X.setValue(Integer.toString(bounds.x));
+        ViewerPreferences.WINDOW_POSITION_Y.setValue(Integer.toString(bounds.y));
+        ViewerPreferences.WINDOW_WIDTH.setValue(Integer.toString(bounds.width));
+        ViewerPreferences.WINDOW_HEIGHT.setValue(Integer.toString(bounds.height));
+
+        frame.dispose();
     }
 
     private void switchFileViewer(int index) throws IOException {
@@ -202,6 +239,12 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         menuBar.revalidate();
         menuBar.repaint();
         setComponentToPresent(viewerComponent);
+    }
+
+    private void switchFullScreenMode(boolean showFullScreen) {
+        getFrame().setFullScreen(showFullScreen);
+        fullScreenMenuItem.setSelected(showFullScreen);
+        ViewerPreferences.SHOW_FULLSCREEN.setValue(Boolean.toString(showFullScreen));
     }
 
     @Override

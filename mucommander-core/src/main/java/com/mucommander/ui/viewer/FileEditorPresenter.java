@@ -17,6 +17,8 @@
 package com.mucommander.ui.viewer;
 
 import java.awt.Cursor;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -38,12 +40,11 @@ import javax.swing.KeyStroke;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
+import com.mucommander.text.Translator;
 import com.mucommander.viewer.CloseCancelledException;
 import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
 import com.mucommander.viewer.FileEditorService;
-import com.mucommander.text.Translator;
-import java.awt.event.ActionEvent;
 
 /**
  * File editor presenter to handle multiple file editors.
@@ -52,11 +53,11 @@ import java.awt.event.ActionEvent;
  */
 public class FileEditorPresenter extends FilePresenter implements EditorPresenter {
 
-    private FileEditor fileEditor;
     private final JMenuBar menuBar;
     private final JMenu editorMenu;
     private final ButtonGroup editorsButtonGroup;
     private final List<FileEditorService> services = new ArrayList<>();
+    private FileEditor fileEditor;
     private int editorsCount = 0;
     private int activeEditor = 0;
 
@@ -135,11 +136,12 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
                         try {
                             fileEditor.close();
                         } catch (CloseCancelledException ex) {
+                            // cancelled
                             return;
                         }
-                    }
 
-                    getFrame().dispose();
+                        close();
+                    }
                 }
             });
 
@@ -152,11 +154,24 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
                     KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK),
                     (e) -> {
                         boolean fullScreen = getFrame().isFullScreen();
-                        getFrame().setFullScreen(!fullScreen);
-                        fullScreenMenuItem.setSelected(!fullScreen);
-                    }
-            );
-            fullScreenMenuItem.setSelected(getFrame().isFullScreen());
+                        switchFullScreenMode(!fullScreen);
+                    });
+
+            String windowWidthValue = EditorPreferences.WINDOW_WIDTH.getValue();
+            if (!"".equals(windowWidthValue)) {
+                int windowX = Integer.parseInt(EditorPreferences.WINDOW_POSITION_X.getValue());
+                int windowY = Integer.parseInt(EditorPreferences.WINDOW_POSITION_Y.getValue());
+                int windowWidth = Integer.parseInt(windowWidthValue);
+                int windowHeight = Integer.parseInt(EditorPreferences.WINDOW_HEIGHT.getValue());
+                getFrame().setBounds(windowX, windowY, windowWidth, windowHeight);
+            } else {
+                getFrame().setDefaultBounds();
+            }
+
+            String showFullscreenValue = EditorPreferences.SHOW_FULLSCREEN.getValue();
+            if (Boolean.TRUE.toString().equals(showFullscreenValue)) {
+                switchFullScreenMode(true);
+            }
             editorMenu.add(fullScreenMenuItem);
 
             closeMenuItem = MenuToolkit.addMenuItem(editorMenu,
@@ -164,12 +179,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
                     menuItemMnemonicHelper,
                     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                     (e) -> {
-                        try {
-                            fileEditor.close();
-                            getFrame().dispose();
-                        } catch (CloseCancelledException ex) {
-                            // cancelled
-                        }
+                        getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING));
                     });
             editorMenu.add(closeMenuItem);
 
@@ -179,6 +189,18 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
                 Logger.getLogger(FileEditorPresenter.class.getName()).log(Level.SEVERE, "Unexpected cancellation", ex);
             }
         }
+    }
+
+    private void close() {
+        FileFrame frame = getFrame();
+        frame.revalidate();
+        Rectangle bounds = frame.getBounds();
+        EditorPreferences.WINDOW_POSITION_X.setValue(Integer.toString(bounds.x));
+        EditorPreferences.WINDOW_POSITION_Y.setValue(Integer.toString(bounds.y));
+        EditorPreferences.WINDOW_WIDTH.setValue(Integer.toString(bounds.width));
+        EditorPreferences.WINDOW_HEIGHT.setValue(Integer.toString(bounds.height));
+
+        frame.dispose();
     }
 
     private void switchFileEditor(int index) throws IOException, CloseCancelledException {
@@ -202,6 +224,12 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
         menuBar.repaint();
         setComponentToPresent(editorComponent);
         activeEditor = index;
+    }
+
+    private void switchFullScreenMode(boolean showFullScreen) {
+        getFrame().setFullScreen(showFullScreen);
+        fullScreenMenuItem.setSelected(showFullScreen);
+        EditorPreferences.SHOW_FULLSCREEN.setValue(Boolean.toString(showFullScreen));
     }
 
     @Override

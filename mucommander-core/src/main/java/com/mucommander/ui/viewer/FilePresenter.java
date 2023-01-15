@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.AbstractAction;
@@ -65,7 +66,7 @@ public abstract class FilePresenter extends JPanel {
             getActionMap().put(CUSTOM_DISPOSE_EVENT, new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    getFrame().dispose();
+                    getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING));
                 }
             });
         }
