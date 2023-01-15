@@ -64,6 +64,7 @@ jobs:
           git config --global user.name gh-action
           git config --global user.email gh-action
           git am release/0001-set-credentials-to-Google-Drive.patch
+          git am release/0002-set-credentials-to-Dropbox.patch
 
       - uses: actions/setup-java@v3
         with:
@@ -110,6 +111,7 @@ jobs:
           git config --global user.name gh-action
           git config --global user.email gh-action
           git am release/0001-set-credentials-to-Google-Drive.patch
+          git am release/0002-set-credentials-to-Dropbox.patch
 
       - name: Build portable, tgz, deb, and rpm
         uses: gradle/gradle-build-action@v2
@@ -176,6 +178,7 @@ jobs:
           git config --global user.name gh-action
           git config --global user.email gh-action
           git am release/0001-set-credentials-to-Google-Drive.patch
+          git am release/0002-set-credentials-to-Dropbox.patch
 
       - name: Build msi
         uses: gradle/gradle-build-action@v2
