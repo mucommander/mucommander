@@ -74,14 +74,13 @@ public abstract class FileFrame extends JFrame {
                 try {
                     // Ask the presenter to present the file
                     filePresenter.open(file);
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     LOGGER.debug("Exception caught", e);
 
                     showGenericErrorDialog();
 
                     dispose();
-                    return filePresenter==null?new JPanel():filePresenter;
+                    return filePresenter == null ? new JPanel() : filePresenter;
                 }
 
                 setJMenuBar(filePresenter.getMenuBar());
@@ -91,11 +90,6 @@ public abstract class FileFrame extends JFrame {
 
             @Override
             protected void updateLayout() {
-                super.updateLayout();
-
-                // Sets panel to preferred size, without exceeding a maximum size and with a minimum size
-                pack();
-
                 // Request focus on the viewer when it is visible
                 FocusRequester.requestFocus(filePresenter);
             }
@@ -117,36 +111,28 @@ public abstract class FileFrame extends JFrame {
     }
 
     /**
-     * Sets this file presenter to full screen
-     */
-    public void setFullScreen(boolean on) {
-        int currentExtendedState = getExtendedState();
-        setExtendedState(on ? currentExtendedState | Frame.MAXIMIZED_BOTH : currentExtendedState & ~Frame.MAXIMIZED_BOTH);
-    }
-
-    /**
      * Returns whether this frame is set to be displayed in full screen mode
-     * 
+     *
      * @return true if the frame is set to full screen, false otherwise
      */
     public boolean isFullScreen() {
         return (getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH;
     }
 
-    ////////////////////////
-    // Overridden methods //
-    ////////////////////////
+    /**
+     * Sets this file presenter to full screen
+     */
+    public void setFullScreen(boolean on) {
+        int currentExtendedState = getExtendedState();
+        setExtendedState(
+                on ? currentExtendedState | Frame.MAXIMIZED_BOTH : currentExtendedState & ~Frame.MAXIMIZED_BOTH);
+    }
 
-    @Override
-    public void pack() {
-        if (!isFullScreen()) {
-            super.pack();
+    public void setDefaultBounds() {
+        DialogToolkit.fitToScreen(this);
+        DialogToolkit.fitToMinDimension(this, getMinimumSize());
 
-            DialogToolkit.fitToScreen(this);
-            DialogToolkit.fitToMinDimension(this, getMinimumSize());
-
-            DialogToolkit.centerOnWindow(this, mainFrame);
-        }
+        DialogToolkit.centerOnWindow(this, mainFrame);
     }
 
     //////////////////////

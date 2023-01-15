@@ -16,6 +16,7 @@
  */
 package com.mucommander.viewer.image;
 
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.viewer.FileViewerService;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.osgi.framework.BundleActivator;
@@ -32,6 +33,8 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
+        MuSnapshot.registerHandler(new ImageViewerSnapshot());
+
         viewerRegistration = context.registerService(FileViewerService.class, new ImageFileViewerService(), null);
     }
 

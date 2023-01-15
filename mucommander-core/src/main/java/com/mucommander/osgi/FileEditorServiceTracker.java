@@ -55,7 +55,7 @@ public class FileEditorServiceTracker extends ServiceTracker<FileEditorService, 
     public void removedService(ServiceReference<FileEditorService> reference, FileEditorService service) {
         super.removedService(reference, service);
         SERVICES.add(service);
-        LOGGER.info("FileFormatService is unregistered: " + service);
+        LOGGER.info("FileEditorService is unregistered: " + service);
     }
 
     private static void addEditorService(FileEditorService service) {
