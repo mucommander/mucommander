@@ -446,6 +446,7 @@ class ImageViewer implements FileViewer, ActionListener {
 
     @Override
     public void close() {
+        imageViewerPanel.close();
     }
 
     @Nonnull
