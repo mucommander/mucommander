@@ -13,7 +13,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.ImageObserver;
 
 /**
  * Image viewer UI.
@@ -26,8 +25,6 @@ public class ImageViewerPanel extends JPanel implements ThemeListener {
     private int imageHeight;
     private double zoomFactor;
     private Color backgroundColor;
-
-    private final ImageObserver imageObserver = (img, infoflags, x, y, width, height) -> true;
 
     public ImageViewerPanel() {
         backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
@@ -51,10 +48,19 @@ public class ImageViewerPanel extends JPanel implements ThemeListener {
     }
 
     public void setImage(Image image) {
+        if (this.image != null) {
+            this.image.flush();
+        }
         this.image = image;
         imageWidth = image.getWidth(null);
         imageHeight = image.getHeight(null);
         setSize(getPreferredSize());
+    }
+
+    public void close() {
+        if (this.image != null) {
+            this.image.flush();
+        }
     }
 
     ////////////////////////
@@ -66,16 +72,13 @@ public class ImageViewerPanel extends JPanel implements ThemeListener {
         int frameWidth = getWidth();
         int frameHeight = getHeight();
 
-        g.setColor(backgroundColor);
-        g.fillRect(0, 0, frameWidth, frameHeight);
-
         final int scaledWidth = getScaledWidth();
         final int scaledHeight = getScaledHeight();
 
         final int offsetX = Math.max(0, (frameWidth - scaledWidth) / 2);
         final int offsetY = Math.max(0, (frameHeight - scaledHeight) / 2);
         g.drawImage(image, offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight,
-                0, 0, imageWidth, imageHeight, null, imageObserver);
+                0, 0, imageWidth, imageHeight, backgroundColor, this);
     }
 
     @Nonnull
