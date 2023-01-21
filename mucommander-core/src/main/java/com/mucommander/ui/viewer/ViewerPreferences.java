@@ -25,29 +25,23 @@ import com.mucommander.snapshot.MuSnapshot;
  */
 public enum ViewerPreferences {
 
-    SHOW_FULLSCREEN("show_fullscreen", "file_viewer.fullscreen", "false"),
-    WINDOW_POSITION_X("window_position_x", "file_viewer.window_position_x", ""),
-    WINDOW_POSITION_Y("window_position_y", "file_viewer.window_position_y", ""),
-    WINDOW_WIDTH("window_width", "file_viewer.window_width", ""),
-    WINDOW_HEIGHT("window_height", "file_viewer.window_height", "")
+    SHOW_FULLSCREEN("show_fullscreen", "false"),
+    WINDOW_POSITION_X("window_position_x", ""),
+    WINDOW_POSITION_Y("window_position_y", ""),
+    WINDOW_WIDTH("window_width", ""),
+    WINDOW_HEIGHT("window_height", "")
     ;
 
     private String prefKey;
-    private String i18nKey;
     private String currentValue;
 
-    ViewerPreferences(String prefKey, String i18nKey, String defaultValue) {
+    ViewerPreferences(String prefKey, String defaultValue) {
         this.prefKey =  FILE_PRESENTER_SECTION + "." + prefKey;
-        this.i18nKey = i18nKey;
         this.currentValue = MuSnapshot.getSnapshot().getVariable(this.prefKey, defaultValue);
     }
 
     public String getPrefKey() {
         return prefKey;
-    }
-
-    public String getI18nKey() {
-        return i18nKey;
     }
 
     public String getValue() {

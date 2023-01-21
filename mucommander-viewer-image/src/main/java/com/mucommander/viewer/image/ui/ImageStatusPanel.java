@@ -39,12 +39,12 @@ public class ImageStatusPanel extends javax.swing.JPanel {
 
         imageSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageSizeLabel.setText("-");
-        imageSizeLabel.setToolTipText(Translator.get("binary_viewer.status.documentSizeLabel.toolTipText"));
+        imageSizeLabel.setToolTipText(Translator.get("image_viewer.status.imageSizeLabel.toolTipText"));
         imageSizeLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         zoomLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         zoomLabel.setText("-");
-        zoomLabel.setToolTipText(Translator.get("binary_viewer.status.encodingLabel.toolTipText"));
+        zoomLabel.setToolTipText(Translator.get("image_viewer.status.zoomLabel.toolTipText"));
         zoomLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
