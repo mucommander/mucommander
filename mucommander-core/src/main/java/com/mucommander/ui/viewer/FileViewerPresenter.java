@@ -179,7 +179,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
                     });
 
             String windowWidthValue = ViewerPreferences.WINDOW_WIDTH.getValue();
-            if (!"".equals(windowWidthValue)) {
+            if (!windowWidthValue.isEmpty()) {
                 int windowX = Integer.parseInt(ViewerPreferences.WINDOW_POSITION_X.getValue());
                 int windowY = Integer.parseInt(ViewerPreferences.WINDOW_POSITION_Y.getValue());
                 int windowWidth = Integer.parseInt(windowWidthValue);
@@ -199,9 +199,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
                     Translator.get("file_viewer.close"),
                     menuItemMnemonicHelper,
                     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                    (e) -> {
-                        getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING));
-                    });
+                    e -> getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING)));
             viewerMenu.add(closeMenuItem);
 
             switchFileViewer(0);

@@ -1,3 +1,19 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.mucommander.viewer.image.ui;
 
 import com.mucommander.ui.theme.ColorChangedEvent;
@@ -21,12 +37,12 @@ import java.awt.image.ImageObserver;
 @ParametersAreNonnullByDefault
 public class ImageViewerPanel extends JComponent implements ThemeListener {
 
+    private final ScallingImageObserver imageObserver = new ScallingImageObserver();
     private Image image;
     private int imageWidth;
     private int imageHeight;
     private double zoomFactor;
     private Color backgroundColor;
-    private final ScallingImageObserver imageObserver = new ScallingImageObserver();
 
     public ImageViewerPanel() {
         backgroundColor = ThemeManager.getCurrentColor(Theme.EDITOR_BACKGROUND_COLOR);
@@ -37,16 +53,16 @@ public class ImageViewerPanel extends JComponent implements ThemeListener {
         return zoomFactor;
     }
 
+    public void setZoomFactor(double zoomFactor) {
+        this.zoomFactor = zoomFactor;
+    }
+
     public int getImageWidth() {
         return imageWidth;
     }
 
     public int getImageHeight() {
         return imageHeight;
-    }
-
-    public void setZoomFactor(double zoomFactor) {
-        this.zoomFactor = zoomFactor;
     }
 
     public void setImage(Image image) {
@@ -79,8 +95,17 @@ public class ImageViewerPanel extends JComponent implements ThemeListener {
 
         final int offsetX = Math.max(0, (frameWidth - scaledWidth) / 2);
         final int offsetY = Math.max(0, (frameHeight - scaledHeight) / 2);
-        g.drawImage(image, offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight,
-                0, 0, imageWidth, imageHeight, backgroundColor, imageObserver);
+        g.drawImage(image,
+                offsetX,
+                offsetY,
+                offsetX + scaledWidth,
+                offsetY + scaledHeight,
+                0,
+                0,
+                imageWidth,
+                imageHeight,
+                backgroundColor,
+                imageObserver);
     }
 
     @Nonnull
@@ -131,7 +156,8 @@ public class ImageViewerPanel extends JComponent implements ThemeListener {
 
     private class ScallingImageObserver implements ImageObserver {
 
-        @Override public boolean imageUpdate(Image img, int infoFlags, int x, int y, int width, int height) {
+        @Override
+        public boolean imageUpdate(Image img, int infoFlags, int x, int y, int width, int height) {
             // Update image size when changed during GIF animation
             if ((infoFlags & ImageObserver.WIDTH) > 0) {
                 imageWidth = image.getWidth(null);

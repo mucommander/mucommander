@@ -158,7 +158,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
                     });
 
             String windowWidthValue = EditorPreferences.WINDOW_WIDTH.getValue();
-            if (!"".equals(windowWidthValue)) {
+            if (!windowWidthValue.isEmpty()) {
                 int windowX = Integer.parseInt(EditorPreferences.WINDOW_POSITION_X.getValue());
                 int windowY = Integer.parseInt(EditorPreferences.WINDOW_POSITION_Y.getValue());
                 int windowWidth = Integer.parseInt(windowWidthValue);
@@ -178,9 +178,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
                     Translator.get("file_editor.close"),
                     menuItemMnemonicHelper,
                     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                    (e) -> {
-                        getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING));
-                    });
+                    e -> getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING)));
             editorMenu.add(closeMenuItem);
 
             try {
