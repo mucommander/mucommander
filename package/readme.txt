@@ -45,7 +45,7 @@ Improvements:
 - The configuration of the last file search is restored (from 'snapshot.xml') on startup.
 
 Localization:
--
+- Korean translation updated
 
 Bug fixes:
 - The modification timestamp of folders is preserved when they are moved to a different file system.
