@@ -232,6 +232,8 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
 
     @Override
     public void requestFocus() {
-        fileEditor.requestFocus();
+        if (fileEditor != null) {
+            fileEditor.requestFocus();
+        }
     }
 }

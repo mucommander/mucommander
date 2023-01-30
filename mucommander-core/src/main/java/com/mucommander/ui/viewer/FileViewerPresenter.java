@@ -247,6 +247,8 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
 
     @Override
     public void requestFocus() {
-        fileViewer.requestFocus();
+        if (fileViewer != null) {
+            fileViewer.requestFocus();
+        }
     }
 }

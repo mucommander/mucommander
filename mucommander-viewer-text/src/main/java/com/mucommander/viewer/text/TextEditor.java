@@ -70,8 +70,7 @@ import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESEN
 class TextEditor extends BasicFileEditor implements DocumentListener, EncodingListener, ActionListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(TextEditor.class);
 
-    private final JScrollPane ui = new JScrollPane();
-    private TextLineNumbersPanel lineNumbersPanel;
+    private JScrollPane ui;
 
     /**
      * Menu bar
@@ -87,7 +86,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleLineNumbersItem;
 
     private final TextEditorImpl textEditorImpl;
     private final TextViewer textViewerDelegate;
@@ -96,18 +94,13 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
         textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true)) {
             @Override
             protected void attachView() {
-                ui.getViewport().setView(textEditorImpl.getTextArea());
+                ui = textEditorImpl.getScrollPane();
             }
 
             @Override
             protected void showLineNumbers(boolean show) {
-                ui.setRowHeaderView(show ? lineNumbersPanel : null);
+                textEditorImpl.showLineNumbers(show);
                 setLineNumbers(show);
-            }
-
-            @Override
-            protected void initLineNumbersPanel() {
-                lineNumbersPanel = new TextLineNumbersPanel(textEditorImpl.getTextArea());
             }
 
             @Override
@@ -170,10 +163,12 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                     }
                 }
                 viewMenu.addSeparator();
-                toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+                JMenuItem toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
                         Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),
                         menuItemMnemonicHelper, null, listener);
-                toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
+                toggleLineNumbersItem.setSelected(textEditorImpl.getLineNumbersEnabled());
+                toggleLineNumbersItem.addActionListener(e ->
+                        textViewerDelegate.showLineNumbers(toggleLineNumbersItem.isSelected()));
 
                 viewMenu.addSeparator();
                 int tabSize = textEditorImpl.getTabSize();
@@ -252,7 +247,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     public void open(AbstractFile file) throws IOException {
         setCurrentFile(file);
         textViewerDelegate.startEditing(file, this);
-        lineNumbersPanel.setPreferredWidth();
     }
 
     @Override
@@ -321,8 +315,6 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
             textEditorImpl.findNext();
         else if (source == findPreviousItem)
             textEditorImpl.findPrevious();
-        else if (source == toggleLineNumbersItem)
-            textViewerDelegate.showLineNumbers(toggleLineNumbersItem.isSelected());
     }
 
     /////////////////////////////////////

@@ -72,11 +72,10 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TextViewer.class);
 
-    private JScrollPane ui = new JScrollPane();
+    private JScrollPane ui;
     private ViewerPresenter presenter;
     private TextEditorImpl textEditorImpl;
     private AbstractFile currentFile;
-    private TextLineNumbersPanel lineNumbersPanel;
 
     /** Menu items */
     // Menus //
@@ -88,7 +87,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     private JMenuItem findItem;
     private JMenuItem findNextItem;
     private JMenuItem findPreviousItem;
-    private JMenuItem toggleLineNumbersItem;
 
     private String encoding;
 
@@ -104,7 +102,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     private void init() {
         attachView();
 
-        initLineNumbersPanel();
         showLineNumbers(TextViewerPreferences.LINE_NUMBERS.getValue());
 
         for (TextViewerPreferences pref : TextViewerPreferences.values()) {
@@ -118,11 +115,12 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     }
     
     protected void attachView() {
-        ui.getViewport().setView(textEditorImpl.getTextArea());
+        ui = textEditorImpl.getScrollPane();
     }
 
-    static void setLineNumbers(boolean lineNumbers) {
+    void setLineNumbers(boolean lineNumbers) {
         TextViewerPreferences.LINE_NUMBERS.setValue(lineNumbers);
+        textEditorImpl.showLineNumbers(lineNumbers);
     }
 
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
@@ -267,12 +265,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     }
 
     protected void showLineNumbers(boolean show) {
-        ui.setRowHeaderView(show ? lineNumbersPanel : null);
         setLineNumbers(show);
-    }
-
-    protected void initLineNumbersPanel() {
-        lineNumbersPanel = new TextLineNumbersPanel(textEditorImpl.getTextArea());
     }
 
     protected void initMenuBarItems() { // TODO code dup with TextEditor, fix it
@@ -324,10 +317,12 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
 
         viewMenu.addSeparator();
 
-        toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
+        JMenuItem toggleLineNumbersItem = MenuToolkit.addCheckBoxMenuItem(viewMenu,
                 Translator.get(TextViewerPreferences.LINE_NUMBERS.getI18nKey()),
                 menuItemMnemonicHelper, null, this);
-        toggleLineNumbersItem.setSelected(ui.getRowHeader().getView() != null);
+        toggleLineNumbersItem.setSelected(textEditorImpl.getLineNumbersEnabled());
+        toggleLineNumbersItem.addActionListener(e ->
+                showLineNumbers(toggleLineNumbersItem.isSelected()));
 
         viewMenu.addSeparator();
         int tabSize = textEditorImpl.getTabSize();
@@ -362,7 +357,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     public void open(AbstractFile file) throws IOException {
         currentFile = file;
         startEditing(file, null);
-        lineNumbersPanel.setPreferredWidth();
     }
     
     @Override
@@ -387,8 +381,6 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
             textEditorImpl.findNext();
         else if(source == findPreviousItem)
             textEditorImpl.findPrevious();
-        else if(source == toggleLineNumbersItem)
-            showLineNumbers(toggleLineNumbersItem.isSelected());
     }
 
     /////////////////////////////////////
