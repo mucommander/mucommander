@@ -63,6 +63,7 @@ public abstract class FileFrame extends JFrame {
 
         // If not suitable presenter was found for the given file
         if (filePresenter == null) {
+            LOGGER.debug("FilePresenter was null i.e. not suitable presenter was found for a given file!");
             showGenericErrorDialog();
             return;
         }
@@ -74,11 +75,9 @@ public abstract class FileFrame extends JFrame {
                 try {
                     // Ask the presenter to present the file
                     filePresenter.open(file);
-                } catch (Exception e) {
-                    LOGGER.debug("Exception caught", e);
-
+                } catch(Exception e) {
+                    LOGGER.error("Exception caught", e);
                     showGenericErrorDialog();
-
                     dispose();
                     return filePresenter == null ? new JPanel() : filePresenter;
                 }

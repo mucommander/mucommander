@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
@@ -54,6 +54,7 @@ import javax.swing.text.Document;
 import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +81,8 @@ class TextEditorImpl implements ThemeListener {
     private JFrame frame;
 
     private RSyntaxTextArea textArea;
+
+    private RTextScrollPane scrollPane;
 
     /**
      * Indicates whether there is a line separator in the original file
@@ -110,6 +113,7 @@ class TextEditorImpl implements ThemeListener {
                 return new Insets(0, 3, 4, 3);
             }
         };
+        scrollPane = new RTextScrollPane(textArea, TextViewerPreferences.LINE_NUMBERS.getValue());
 
         if (DesktopManager.canBrowse()) {
             int linkScanningMask = OsFamily.MAC_OS.isCurrent() ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
@@ -187,7 +191,7 @@ class TextEditorImpl implements ThemeListener {
                         textArea.setFont(newFont);
                     }
                 } else {
-                    textArea.getParent().dispatchEvent(e);
+                    scrollPane.dispatchEvent(e);
                 }
             }
         });
@@ -368,6 +372,15 @@ class TextEditorImpl implements ThemeListener {
         textArea.selectAll();
     }
 
+    public void showLineNumbers(boolean show) {
+        scrollPane.setFoldIndicatorEnabled(true);
+        scrollPane.setLineNumbersEnabled(show);
+    }
+
+    public boolean getLineNumbersEnabled() {
+        return scrollPane.getLineNumbersEnabled();
+    }
+
     /**
      * Returns the map of supported syntax styles, where key is mime-type and value is
      * human-readable name of the style.
@@ -409,8 +422,8 @@ class TextEditorImpl implements ThemeListener {
         this.syntaxChangeListener = syntaxChangeListener;
     }
 
-    JTextArea getTextArea() {
-        return textArea;
+    JScrollPane getScrollPane() {
+        return scrollPane;
     }
 
     void addDocumentListener(DocumentListener documentListener) {
@@ -483,5 +496,4 @@ class TextEditorImpl implements ThemeListener {
             textArea.setFont(event.getFont());
         }
     }
-
 }
