@@ -3,7 +3,7 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
-    comprise 'com.github.pcorless.icepdf:icepdf-viewer:7.0.0'
+    comprise 'com.github.pcorless.icepdf:icepdf-viewer:7.0.1'
     comprise 'log4j:log4j:1.2.17'
     comprise 'com.twelvemonkeys.imageio:imageio-psd:3.9.4'
     comprise 'avalon-framework:avalon-framework:4.1.5'
