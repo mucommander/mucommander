@@ -208,7 +208,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
     public GoogleDriveFile[] ls() throws IOException, UnsupportedFileOperationException {
         try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             FileList result = connHandler.getConnection().files().list()
-                    .setFields("files(id,name,parents,size,modifiedTime,mimeType)")
+                    .setFields("files(id,name,parents,size,modifiedTime,mimeType,trashed)")
                     .setQ(String.format("'%s' in parents", getId()))
                     .execute();
             List<File> files = result.getFiles();
@@ -219,6 +219,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
             return files.stream()
                     .filter(file -> file.getSize() != null || isFolder(file))
+                    .filter(file -> !file.getTrashed())
                     .map(this::toFile)
                     .toArray(GoogleDriveFile[]::new);
         }
