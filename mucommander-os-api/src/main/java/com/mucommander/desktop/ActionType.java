@@ -121,6 +121,7 @@ public enum ActionType {
     RecallWindow7("RecallWindow7"),
     RecallWindow8("RecallWindow8"),
     RecallWindow9("RecallWindow9"),
+    Redo("Redo"),
     Refresh("Refresh"),
     Rename("Rename"),
     ReportBug("ReportBug"),
@@ -185,6 +186,7 @@ public enum ActionType {
     UnmarkAll("UnmarkAll"),
     UnmarkGroup("UnmarkGroup"),
     Unpack("Unpack"),
+    Undo("Undo"),
     View("View");
     
 

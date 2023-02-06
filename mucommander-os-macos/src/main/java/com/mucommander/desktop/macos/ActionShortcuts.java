@@ -119,6 +119,8 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_8, KeyEvent.META_DOWN_MASK);
         case RecallWindow9:
             return KeyStroke.getKeyStroke(KeyEvent.VK_9, KeyEvent.META_DOWN_MASK);
+        case Redo:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.META_DOWN_MASK);
         case RevealInDesktop:
             return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.META_DOWN_MASK);
         case RunCommand:
@@ -157,6 +159,8 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.META_DOWN_MASK);
         case Unpack:
             return KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.META_DOWN_MASK);
+        case Undo:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.META_DOWN_MASK);
         default:
             return super.getDefaultKeystroke(actionId);
         }
