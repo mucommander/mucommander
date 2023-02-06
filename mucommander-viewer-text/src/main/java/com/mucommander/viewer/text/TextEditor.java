@@ -58,6 +58,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import javax.swing.JScrollPane;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
 
@@ -109,6 +111,16 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
                 ActionListener listener = TextEditor.this;
                 editMenu = new JMenu(Translator.get("text_editor.edit"));
                 MnemonicHelper menuItemMnemonicHelper = new MnemonicHelper();
+
+                JMenuItem undoItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.undo"), menuItemMnemonicHelper, DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Undo), listener);
+                undoItem.addActionListener(e -> textEditorImpl.undo());
+                JMenuItem redoItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.redo"), menuItemMnemonicHelper, DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Redo), listener);
+                redoItem.addActionListener(e -> textEditorImpl.redo());
+                editMenu.addMenuListener(menuSelectedListener(() -> {
+                    undoItem.setEnabled(textEditorImpl.canUndo());
+                    redoItem.setEnabled(textEditorImpl.canRedo());
+                }));
+                editMenu.addSeparator();
 
                 copyItem = MenuToolkit.addMenuItem(editMenu, Translator.get("text_editor.copy"), menuItemMnemonicHelper, null, listener);
 
@@ -333,5 +345,22 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
         } catch (IOException ex) {
             InformationDialog.showErrorDialog(presenter.getWindowFrame(), Translator.get("read_error"), Translator.get("file_editor.cannot_read_file", getCurrentFile().getName()));
         }
+    }
+
+    private MenuListener menuSelectedListener(Runnable r) {
+        return new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                r.run();
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+            }
+        };
     }
 }

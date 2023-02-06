@@ -183,6 +183,8 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_8, KeyEvent.CTRL_DOWN_MASK);
         case RecallWindow9:
             return KeyStroke.getKeyStroke(KeyEvent.VK_9, KeyEvent.CTRL_DOWN_MASK);
+        case Redo:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
         case Refresh:
             return KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0);
         case Rename:
@@ -261,6 +263,8 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, 0);
         case Unpack:
             return KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
+        case Undo:
+            return KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
         case View:
             return KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0);
         default:

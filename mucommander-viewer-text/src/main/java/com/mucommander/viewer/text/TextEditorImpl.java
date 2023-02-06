@@ -356,6 +356,22 @@ class TextEditorImpl implements ThemeListener {
         textArea.setTabSize(size);
     }
 
+    public void undo() {
+        textArea.undoLastAction();
+    }
+
+    public boolean canUndo() {
+        return textArea.canUndo();
+    }
+
+    public void redo() {
+        textArea.redoLastAction();
+    }
+
+    public boolean canRedo() {
+        return textArea.canRedo();
+    }
+
     void copy() {
         textArea.copy();
     }
