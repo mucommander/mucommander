@@ -53,5 +53,6 @@ include 'mucommander-viewer-binary'
 include 'apache-bzip2'
 include 'jetbrains-jediterm'
 include 'sevenzipjbindings'
+include 'sun-net-www'
 
 rootProject.name = 'mucommander'

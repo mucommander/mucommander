@@ -2,8 +2,7 @@ dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
-
-    implementation files('libs/yanfs-1.4.jar')
+    api project(':sun-net-www')
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
