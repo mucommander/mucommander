@@ -1,0 +1,88 @@
+
+#pragma ident   "@(#)README 1.3     98/11/12 SMI"
+
+
+System
+------
+	Solaris
+	Install the dummy mechanism package on the server.
+
+
+Server Setup
+------------
+
+Before running the client java test program, the C server program
+has to be invoked first:
+
+/home/lling/test/rpcsec_gss/C/list_svc [-l] -n <service name> -m <mech_number>
+
+Check README in /home/lling/test/rpcsec_gss/C for server program usage.
+
+	Example: % ./list_svc -n nfs -m 2&
+
+
+
+Client Setup
+------------
+
+o  Set CLASSPATH as follows:
+
+ 	client% setenv CLASSPATH /usr/java/lib/classes.zip:/home/lling/test/rpcsec_gss/java/classes.jar:.
+
+
+
+How to run
+----------
+
+client% cd /home/lling/test/rpcsec_gss/java
+
+client% java RPCGSSClient host service -m mech#
+
+	-m 1 is for kerberos_v5
+	-m 2 is for dummy
+	default is dummy
+
+	Example: % java RPCGSSClient jaywing nfs -m 2
+
+
+How to test
+-----------
+
+commands are:
+        set <name> <value>
+        get <name>
+        del <name>
+        service (integrity | privacy | none)
+        create-context
+        destroy-context
+	loop n
+        quit
+enter cmd -> 
+	
+
+*NOTE: context must be created before performing set/get/del commands
+
+	create-context 
+		to create a secure context
+	
+	service (integrity | privacy | none)
+		to change the service level
+		(Only works without -l option on server)
+
+	set <name> <value> 
+		to add an value to the server's list
+		e.g. enter cmd -> set foo 80
+
+	get <name>
+		to fetch an value from the server's list:
+		e.g. enter cmd -> get foo
+
+	del <name>
+		to delete an value from the server's list
+		e.g. enter cmd -> del foo
+
+	destroy-context
+		to destroy a secure context:
+
+	loop n
+		Create/destroy context n times.
