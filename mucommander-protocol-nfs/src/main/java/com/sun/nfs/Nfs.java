@@ -476,7 +476,7 @@ public abstract class Nfs {
              */
             Buffer b = bufferList[index];
             if (b == null) {
-                b = new Buffer(this, index * wsize, wsize);
+                b = new Buffer(this, (long) index * wsize, wsize);
                 bufferList[index] = b;
             }
 

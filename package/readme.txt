@@ -43,6 +43,7 @@ Improvements:
 - The timeout for showing 'quick search' results is configurable via the 'Preferences' dialog.
 - Set alternative keyboard shortcuts that don't require numeric keypad for Mark/Unmark actions.
 - The configuration of the last file search is restored (from 'snapshot.xml') on startup.
+- Enable uploads of files that are bigger than 2GB to NFS share.
 
 Localization:
 - Korean translation updated
