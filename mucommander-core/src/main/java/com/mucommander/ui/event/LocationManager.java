@@ -26,8 +26,10 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.MonitoredFile;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.core.FolderChangeMonitor;
 import com.mucommander.core.GlobalLocationHistory;
+import com.mucommander.ui.dialog.file.ArchivePasswordDialog;
 import com.mucommander.ui.main.ConfigurableFolderFilter;
 import com.mucommander.ui.main.FolderPanel;
 
@@ -83,16 +85,27 @@ public class LocationManager {
         MonitoredFile newCurrentFile = folder.toMonitoredFile();
         newCurrentFile.startWatch();
 
-    	AbstractFile[] children = emptyAbstractFilesArray;
-    	try {
-    	    children = folder.ls(configurableFolderFilter);
-    	    firstRun = false;
-    	} catch (Exception e) {
-    	    LOGGER.debug("Couldn't ls children of " + folder.getAbsolutePath() + ", error: " + e.getMessage());
-    	    if (!firstRun) {
-    	        throw new RuntimeException(e.getMessage());
-    	    }
-    	}
+        AbstractFile[] children = emptyAbstractFilesArray;
+        do {
+            try {
+                children = folder.ls(configurableFolderFilter);
+                firstRun = false;
+            } catch (Exception e) {
+                LOGGER.debug("Couldn't ls children of " + folder.getAbsolutePath() + ", error: " + e.getMessage());
+                if (folder.isArchive()) {
+                    ArchivePasswordDialog dialog = new ArchivePasswordDialog(folderPanel.getMainFrame());
+                    String password = (String) dialog.getUserInput();
+                    if (password != null) {
+                        ((AbstractArchiveFile) folder).setPassword(password);
+                        continue;
+                    }
+                }
+                if (!firstRun) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
+            break;
+        } while (true);
 
     	folderPanel.setCurrentFolder(folder, children, fileToSelect, changeLockedTab);
 

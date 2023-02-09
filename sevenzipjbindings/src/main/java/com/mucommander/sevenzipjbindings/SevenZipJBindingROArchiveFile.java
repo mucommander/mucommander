@@ -80,7 +80,7 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
     private IInArchive openInArchive() throws IOException {
         if (inArchive == null) {
             SignatureCheckedRandomAccessFile in = new SignatureCheckedRandomAccessFile(file, formatSignature);
-            inArchive = SevenZip.openInArchive(sevenZipJBindingFormat, in);
+            inArchive = SevenZip.openInArchive(sevenZipJBindingFormat, in, password);
         }
         return inArchive;
     }
@@ -120,16 +120,16 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
                             }
                             return data.length; // Return amount of proceed data
                         };
-                        sevenZipFile.extractSlow((Integer) entry.getEntryObject(),outStream);
+                        sevenZipFile.extractSlow((Integer) entry.getEntryObject(), outStream, password);
                     }
                 } catch (IOException e) {
-                    LOGGER.warn("failed to extract entry from archive " + e.getMessage());
+                    LOGGER.warn("failed to extract entry from archive: " + e.getMessage());
                     LOGGER.debug("failed to extract entry from archive", e);
                 } finally {
                     try {
                         cbb.getOutputStream().close();
                     } catch (IOException e) {
-                        System.err.println("Error in closing outputstream: " + e.getMessage());
+                        LOGGER.info("Error in closing outputstream: " + e.getMessage());
                     }
                     inArchive = null;
                 }

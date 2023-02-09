@@ -31,6 +31,7 @@ import com.mucommander.job.FileJobState;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.DialogAction;
+import com.mucommander.ui.dialog.file.ArchivePasswordDialog;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -316,7 +317,21 @@ public class UnpackJob extends AbstractCopyJob {
 
                 return true;
             } catch (IOException e) {
-                DialogAction action = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", archiveFile.getName()));
+                DialogAction action = null;
+                if (archiveFile.getPassword() == null) {
+                    ArchivePasswordDialog dialog = new ArchivePasswordDialog(getMainFrame());
+                    String password = (String) dialog.getUserInput();
+                    if (password != null) {
+                        archiveFile.setPassword(password);
+                        action = FileJobAction.RETRY;
+                    }
+                }
+
+                if (action != FileJobAction.RETRY) {
+                    action = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", archiveFile.getName()));
+                    archiveFile.setPassword(null);
+                }
+
                 if (action == FileJobAction.RETRY)
                     continue;
             }

@@ -93,6 +93,9 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * need to be reloaded */
     protected long entryTreeDate;
 
+    /** The password to use for a password-protected archive */
+    protected String password;
+
     /** Caches {@link AbstractArchiveEntryFile} instances so that there is only one AbstractArchiveEntryFile
      * corresponding to the same entry at any given time, to avoid attribute inconsistencies. The key is the
      * corresponding ArchiveEntry. */
@@ -142,7 +145,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * underlying file protocol.
      */
     protected void checkEntriesTree() throws IOException, UnsupportedFileOperationException {
-        if(this.entryTreeRoot==null || getDate()!=this.entryTreeDate)
+        if (this.entryTreeRoot==null || getDate()!=this.entryTreeDate)
             createEntriesTree();
     }
 
@@ -393,6 +396,14 @@ public abstract class AbstractArchiveFile extends ProxyFile {
                     ?this
                     :getArchiveEntryFile(parentNode)
         );
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     
