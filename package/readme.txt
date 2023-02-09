@@ -32,7 +32,8 @@ What's new since v1.1.0 ?
 -----------------------
 
 New features:
-- Syntax Highlighting in both text Viewer and Editor
+- Syntax highlighting and other visual enhancements in text viewer/editor
+- New operations in text editor: Undo, Redo, Replace spaces with tabs, Replace tabs with spaces
 - Renaming files in Google Drive.
 
 Improvements:
