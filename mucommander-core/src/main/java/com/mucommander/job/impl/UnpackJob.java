@@ -187,136 +187,141 @@ public class UnpackJob extends AbstractCopyJob {
 
         String destSeparator = destFolder.getSeparator();
 
-        // Unpack the archive, copying entries one by one, in the iterator's order
-        try (ArchiveEntryIterator iterator = archiveFile.getEntryIterator()) {
-            ArchiveEntry entry;
-            while ((entry = iterator.nextEntry()) != null && getState() != FileJobState.INTERRUPTED) {
-                String entryPath = entry.getPath();
+        do {
+            // Unpack the archive, copying entries one by one, in the iterator's order
+            try (ArchiveEntryIterator iterator = archiveFile.getEntryIterator()) {
+                ArchiveEntry entry;
+                while ((entry = iterator.nextEntry()) != null && getState() != FileJobState.INTERRUPTED) {
+                    String entryPath = entry.getPath();
 
-                boolean processEntry = false;
-                if (selectedEntries == null) {    // Entries are processed
-                    processEntry = true;
-                } else {                          // We need to determine if the entry should be processed or not
-                    // Process this entry if the selectedEntries set contains this entry, or a parent of this entry
-                    int nbSelectedEntries = selectedEntries.size();
-                    for (int i = 0; i < nbSelectedEntries; i++) {
-                        ArchiveEntry selectedEntry = selectedEntries.get(i);
-                        // Note: paths of directory entries must end with '/', so this compares whether
-                        // selectedEntry is a parent of the current entry.
-                        if (selectedEntry.isDirectory()) {
-                            if (entryPath.startsWith(selectedEntry.getPath())) {
+                    boolean processEntry = false;
+                    if (selectedEntries == null) {    // Entries are processed
+                        processEntry = true;
+                    } else {                          // We need to determine if the entry should be processed or not
+                        // Process this entry if the selectedEntries set contains this entry, or a parent of this entry
+                        int nbSelectedEntries = selectedEntries.size();
+                        for (int i = 0; i < nbSelectedEntries; i++) {
+                            ArchiveEntry selectedEntry = selectedEntries.get(i);
+                            // Note: paths of directory entries must end with '/', so this compares whether
+                            // selectedEntry is a parent of the current entry.
+                            if (selectedEntry.isDirectory()) {
+                                if (entryPath.startsWith(selectedEntry.getPath())) {
+                                    processEntry = true;
+                                    break;
+                                    // Note: we can't remove selectedEntryPath from the set, we still need it
+                                }
+                            } else if (entryPath.equals(selectedEntry.getPath())) {
+                                // If the (regular file) entry is in the set, remove it as we no longer need it (will speed up
+                                // subsequent searches)
                                 processEntry = true;
+                                selectedEntries.remove(i);
                                 break;
-                                // Note: we can't remove selectedEntryPath from the set, we still need it
                             }
-                        } else if (entryPath.equals(selectedEntry.getPath())) {
-                            // If the (regular file) entry is in the set, remove it as we no longer need it (will speed up
-                            // subsequent searches)
-                            processEntry = true;
-                            selectedEntries.remove(i);
-                            break;
                         }
                     }
-                }
 
-                if (!processEntry)
-                    continue;
-
-                // Resolve the entry file
-                AbstractFile entryFile = archiveFile.getArchiveEntryFile(entryPath);
-
-                // Notify the job that we're starting to process this file
-                nextFile(entryFile);
-
-                // Figure out the destination file's path, relatively to the base destination folder
-                String relDestPath = baseArchiveDepth == 0
-                        ? entry.getPath()
-                        : PathUtils.removeLeadingFragments(entry.getPath(), "/", baseArchiveDepth);
-
-                if (newName != null)
-                    relDestPath = newName + (PathUtils.getDepth(relDestPath, "/") <= 1 ? "" : "/" + PathUtils.removeLeadingFragments(relDestPath, "/", 1));
-
-                if (!"/".equals(destSeparator))
-                    relDestPath = relDestPath.replace("/", destSeparator);
-
-                // Create destination AbstractFile instance
-                AbstractFile destFile = destFolder.getChild(relDestPath);
-
-                // Check for ZipSlip (see https://snyk.io/research/zip-slip-vulnerability)
-                do {
-                    if (destFolder.isParentOf(destFile))
-                        break;
-
-                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.entry_out_of_target_dir", destFile.getName()));
-                    // Retry loops
-                    if (ret == FileJobAction.RETRY)
+                    if (!processEntry)
                         continue;
-                    // Cancel, skip or close dialog returns false
-                    return false;
-                } while (true);
 
-                // Check if the file does not already exist in the destination
-                destFile = checkForCollision(entryFile, destFolder, destFile, false);
-                if (destFile == null) {
-                    // A collision occurred and either the file was skipped, or the user cancelled the job
-                    continue;
-                }
+                    // Resolve the entry file
+                    AbstractFile entryFile = archiveFile.getArchiveEntryFile(entryPath);
 
-                // It is noteworthy that the iterator returns entries in no particular order (consider it random).
-                // For that reason, we cannot assume that the parent directory of an entry will be processed
-                // before the entry itself.
+                    // Notify the job that we're starting to process this file
+                    nextFile(entryFile);
 
-                // If the entry is a directory ...
-                if (entryFile.isDirectory()) {
-                    // Create the directory in the destination, if it doesn't already exist
-                    if (!(destFile.exists() && destFile.isDirectory())) {
-                        // Loop for retry
-                        do {
-                            try {
-                                // Use mkdirs() instead of mkdir() to create any parent folder that doesn't exist yet
-                                destFile.mkdirs();
-                            } catch (IOException e) {
-                                // Unable to create folder
-                                DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", entryFile.getName()));
-                                // Retry loops
-                                if (ret == FileJobAction.RETRY)
-                                    continue;
-                                // Cancel or close dialog return false
-                                return false;
-                                // Skip continues
-                            }
+                    // Figure out the destination file's path, relatively to the base destination folder
+                    String relDestPath = baseArchiveDepth == 0
+                            ? entry.getPath()
+                                    : PathUtils.removeLeadingFragments(entry.getPath(), "/", baseArchiveDepth);
+
+                    if (newName != null)
+                        relDestPath = newName + (PathUtils.getDepth(relDestPath, "/") <= 1 ? "" : "/" + PathUtils.removeLeadingFragments(relDestPath, "/", 1));
+
+                    if (!"/".equals(destSeparator))
+                        relDestPath = relDestPath.replace("/", destSeparator);
+
+                    // Create destination AbstractFile instance
+                    AbstractFile destFile = destFolder.getChild(relDestPath);
+
+                    // Check for ZipSlip (see https://snyk.io/research/zip-slip-vulnerability)
+                    do {
+                        if (destFolder.isParentOf(destFile))
                             break;
-                        } while (true);
-                    }
-                }
-                // The entry is a regular file, copy it
-                else {
-                    // Create the file's parent directory(s) if it doesn't already exist
-                    AbstractFile destParentFile = destFile.getParent();
-                    if (!destParentFile.exists()) {
-                        // Use mkdirs() instead of mkdir() to create any parent folder that doesn't exist yet
-                        destParentFile.mkdirs();
-                    }
 
-                    if (entry.isSymlink()) {
-                        Files.createSymbolicLink(
-                                FileSystems.getDefault().getPath(destFile.getAbsolutePath()),
-                                FileSystems.getDefault().getPath(entry.getLinkTarget()));
+                        DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("unpack.entry_out_of_target_dir", destFile.getName()));
+                        // Retry loops
+                        if (ret == FileJobAction.RETRY)
+                            continue;
+                        // Cancel, skip or close dialog returns false
+                        return false;
+                    } while (true);
+
+                    // Check if the file does not already exist in the destination
+                    destFile = checkForCollision(entryFile, destFolder, destFile, false);
+                    if (destFile == null) {
+                        // A collision occurred and either the file was skipped, or the user cancelled the job
                         continue;
                     }
 
-                    // The entry is wrapped in a ProxyFile to override #getInputStream() and delegate it to
-                    // ArchiveFile#getEntryInputStream in order to take advantage of the ArchiveEntryIterator, which for
-                    // some archive file implementations (such as TAR) can speed things by an order of magnitude.
-                    if (!tryCopyFile(new ProxiedEntryFile(entryFile, entry, archiveFile, iterator), destFile, append, errorDialogTitle))
-                        return false;
-                }
-            }
+                    // It is noteworthy that the iterator returns entries in no particular order (consider it random).
+                    // For that reason, we cannot assume that the parent directory of an entry will be processed
+                    // before the entry itself.
 
-            return true;
-        } catch (IOException e) {
-            showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", archiveFile.getName()));
-        }
+                    // If the entry is a directory ...
+                    if (entryFile.isDirectory()) {
+                        // Create the directory in the destination, if it doesn't already exist
+                        if (!(destFile.exists() && destFile.isDirectory())) {
+                            // Loop for retry
+                            do {
+                                try {
+                                    // Use mkdirs() instead of mkdir() to create any parent folder that doesn't exist yet
+                                    destFile.mkdirs();
+                                } catch (IOException e) {
+                                    // Unable to create folder
+                                    DialogAction ret = showErrorDialog(errorDialogTitle, Translator.get("cannot_create_folder", entryFile.getName()));
+                                    // Retry loops
+                                    if (ret == FileJobAction.RETRY)
+                                        continue;
+                                    // Cancel or close dialog return false
+                                    return false;
+                                    // Skip continues
+                                }
+                                break;
+                            } while (true);
+                        }
+                    }
+                    // The entry is a regular file, copy it
+                    else {
+                        // Create the file's parent directory(s) if it doesn't already exist
+                        AbstractFile destParentFile = destFile.getParent();
+                        if (!destParentFile.exists()) {
+                            // Use mkdirs() instead of mkdir() to create any parent folder that doesn't exist yet
+                            destParentFile.mkdirs();
+                        }
+
+                        if (entry.isSymlink()) {
+                            Files.createSymbolicLink(
+                                    FileSystems.getDefault().getPath(destFile.getAbsolutePath()),
+                                    FileSystems.getDefault().getPath(entry.getLinkTarget()));
+                            continue;
+                        }
+
+                        // The entry is wrapped in a ProxyFile to override #getInputStream() and delegate it to
+                        // ArchiveFile#getEntryInputStream in order to take advantage of the ArchiveEntryIterator, which for
+                        // some archive file implementations (such as TAR) can speed things by an order of magnitude.
+                        if (!tryCopyFile(new ProxiedEntryFile(entryFile, entry, archiveFile, iterator), destFile, append, errorDialogTitle))
+                            return false;
+                    }
+                }
+
+                return true;
+            } catch (IOException e) {
+                DialogAction action = showErrorDialog(errorDialogTitle, Translator.get("cannot_read_file", archiveFile.getName()));
+                if (action == FileJobAction.RETRY)
+                    continue;
+            }
+            break;
+        } while(true);
 
         return false;
     }
