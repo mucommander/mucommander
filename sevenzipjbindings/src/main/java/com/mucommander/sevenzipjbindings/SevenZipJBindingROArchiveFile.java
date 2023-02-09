@@ -37,6 +37,7 @@ import com.mucommander.commons.util.StringUtils;
 
 import net.sf.sevenzipjbinding.ArchiveFormat;
 import net.sf.sevenzipjbinding.IInArchive;
+import net.sf.sevenzipjbinding.ISequentialOutStream;
 import net.sf.sevenzipjbinding.PropID;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
@@ -112,28 +113,29 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
 
     @Override
     public InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) {
-        final int[] in = new int[1];
-        in[0] = (Integer)entry.getEntryObject();
         final CircularByteBuffer cbb = new CircularByteBuffer(CircularByteBuffer.INFINITE_SIZE);
         new Thread(() -> {
             synchronized (SevenZipJBindingROArchiveFile.this) {
                 try {
-                    final IInArchive sevenZipFile = openInArchive();
-                    sevenZipFile.extract(in, false, new ExtractCallback(inArchive, cbb.getOutputStream()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (inArchive != null) {
-                        try {
-                            inArchive.close();
-                        } catch (SevenZipException e) {
-                            e.printStackTrace();
-                        }
+                    try (IInArchive sevenZipFile = openInArchive()) {
+                        ISequentialOutStream outStream = data -> {
+                            try {
+                                cbb.getOutputStream().write(data);
+                            } catch (IOException e) {
+                                throw new SevenZipException(e);
+                            }
+                            return data.length; // Return amount of proceed data
+                        };
+                        sevenZipFile.extractSlow((Integer) entry.getEntryObject(),outStream);
                     }
+                } catch (IOException e) {
+                    LOGGER.warn("failed to extract entry from archive " + e.getMessage());
+                    LOGGER.debug("failed to extract entry from archive", e);
+                } finally {
                     try {
                         cbb.getOutputStream().close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.err.println("Error in closing outputstream: " + e.getMessage());
                     }
                     inArchive = null;
                 }
