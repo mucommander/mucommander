@@ -88,25 +88,19 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
     @Override
     public ArchiveEntryIterator getEntryIterator() throws IOException {
         try {
-            final IInArchive sevenZipFile = openInArchive();
-            int nbEntries = sevenZipFile.getNumberOfItems();
-            List<ArchiveEntry> entries = new ArrayList<>();
-            for (int i = 0; i < nbEntries; i++) {
-                entries.add(createArchiveEntry(i));
+            try (IInArchive sevenZipFile = openInArchive()) {
+                int nbEntries = sevenZipFile.getNumberOfItems();
+                List<ArchiveEntry> entries = new ArrayList<>();
+                for (int i = 0; i < nbEntries; i++) {
+                    entries.add(createArchiveEntry(i, sevenZipFile));
+                }
+                return new WrapperArchiveEntryIterator(entries.iterator());
             }
-            return new WrapperArchiveEntryIterator(entries.iterator());
         } catch (SevenZipException e) {
-            LOGGER.warn("failed to list archive: %s", e.getMessage());
+            LOGGER.warn("failed to list archive: " + e.getMessage());
             LOGGER.debug("failed to list archive", e);
             throw new IOException(e);
         } finally {
-            try {
-                if (inArchive != null) {
-                    inArchive.close();
-                }
-            } catch (SevenZipException e) {
-                System.err.println("Error closing archive: " + e);
-            }
             inArchive = null;
         }
     }
@@ -149,10 +143,10 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
      * Creates and return an {@link ArchiveEntry()} whose attributes are fetched from the given {@link com.mucommander.commons.file.impl.sevenzip.provider.SevenZip.Archive.SevenZipEntry}
      *
      * @param i the index of entry
+     * @param sevenZipFile the archive file
      * @return an ArchiveEntry whose attributes are fetched from the given SevenZipEntry
      */
-    private ArchiveEntry createArchiveEntry(int i) throws IOException {
-        final IInArchive sevenZipFile = openInArchive();
+    private ArchiveEntry createArchiveEntry(int i, IInArchive sevenZipFile) throws IOException {
         String path = sevenZipFile.getStringProperty(i, PropID.PATH);
         boolean isDirectory = (Boolean)sevenZipFile.getProperty(i, PropID.IS_FOLDER);
         Date time = (Date) sevenZipFile.getProperty(i, PropID.LAST_MODIFICATION_TIME);
