@@ -20,6 +20,9 @@ package com.mucommander.job.impl;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.FileJobState;
 import com.mucommander.ui.main.MainFrame;
 
@@ -84,6 +87,9 @@ public class PropertiesJob extends FileJob {
         // Stop if interrupted
         if (getState() == FileJobState.INTERRUPTED)
             return false;
+
+        if (file.isHidden() && !MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES))
+            return true;
 
         // If file is a directory, increase folder counter and recurse
         if (file.isDirectory() && !file.isSymlink()) {
