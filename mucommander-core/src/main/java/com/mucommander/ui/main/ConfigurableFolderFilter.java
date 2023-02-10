@@ -54,17 +54,17 @@ public class ConfigurableFolderFilter extends AndFileFilter implements Configura
 
     private void configureFilters() {
         // Filters out hidden files, null when 'show hidden files' option is enabled
-        if(!MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES)) {
+        if (!MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES)) {
             // This filter is inverted and matches non-hidden files            
             addFileFilter(hiddenFileFilter);
         }
 
         // Filters out Mac OS X .DS_Store files, null when 'show DS_Store files' option is enabled
-        if(!MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_DS_STORE_FILES, MuPreferences.DEFAULT_SHOW_DS_STORE_FILES))
+        if (!MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_DS_STORE_FILES, MuPreferences.DEFAULT_SHOW_DS_STORE_FILES))
             addFileFilter(dsFileFilter);
 
         /** Filters out Mac OS X system folders, null when 'show system folders' option is enabled */
-        if(!MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SYSTEM_FOLDERS, MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS))
+        if (!MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_SYSTEM_FOLDERS, MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS))
             addFileFilter(systemFileFilter);
     }
 

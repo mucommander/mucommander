@@ -46,6 +46,7 @@ Improvements:
 - Set alternative keyboard shortcuts that don't require numeric keypad for Mark/Unmark actions.
 - The configuration of the last file search is restored (from 'snapshot.xml') on startup.
 - Enable uploads of files that are bigger than 2GB to NFS share.
+- The 'Contents' field in the 'Properties' dialog includes hidden files only when the filter 'Show hidden files' is set.
 
 Localization:
 - Korean translation updated

@@ -53,7 +53,7 @@ public abstract class SelectedFilesAction extends SelectedFileAction {
     public final void performAction() {
         FileSet files = mainFrame.getActiveTable().getSelectedFiles();
         // Perform the action only if at least one file is selected/marked
-        if(files.size()>0)
+        if (!files.isEmpty())
             performAction(files);
     }
 
