@@ -217,14 +217,13 @@ public class Theme extends ThemeData {
     public String toString() {return getName();}
     private static void addThemeListener(ThemeListener listener) {listeners.put(listener, null);}
     private static void removeThemeListener(ThemeListener listener) {listeners.remove(listener);}
+
     private static void triggerFontEvent(FontChangedEvent event) {
-        for(ThemeListener listener : listeners.keySet())
-            listener.fontChanged(event);
+        listeners.keySet().forEach(listener -> listener.fontChanged(event));
     }
 
     private static void triggerColorEvent(ColorChangedEvent event) {
-        for(ThemeListener listener : listeners.keySet())
-            listener.colorChanged(event);
+        listeners.keySet().forEach(listener -> listener.colorChanged(event));
     }
 
     private class DefaultValuesListener implements ThemeListener {

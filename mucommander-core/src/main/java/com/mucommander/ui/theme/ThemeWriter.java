@@ -188,6 +188,25 @@ class ThemeWriter implements ThemeXmlConstants {
         out.endElement(ELEMENT_SELECTED);
         out.endElement(ELEMENT_SYMLINK);
 
+        // Read-only files
+        out.startElement(ELEMENT_READ_ONLY);
+        out.println();
+        out.startElement(ELEMENT_NORMAL);
+        out.println();
+        if(theme.isColorSet(Theme.READ_ONLY_INACTIVE_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_INACTIVE_FOREGROUND, getColorAttributes(theme.getColor(Theme.READ_ONLY_INACTIVE_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.READ_ONLY_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.READ_ONLY_FOREGROUND_COLOR)));
+        out.endElement(ELEMENT_NORMAL);
+        out.startElement(ELEMENT_SELECTED);
+        out.println();
+        if(theme.isColorSet(Theme.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_INACTIVE_FOREGROUND, getColorAttributes(theme.getColor(Theme.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.READ_ONLY_SELECTED_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.READ_ONLY_SELECTED_FOREGROUND_COLOR)));
+        out.endElement(ELEMENT_SELECTED);
+        out.endElement(ELEMENT_READ_ONLY);
+
         // Marked files.
         out.startElement(ELEMENT_MARKED);
         out.println();

@@ -142,6 +142,11 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         if (file.isHidden())
             return ThemeCache.HIDDEN_FILE;
 
+        // Read-only file
+        int maskedPermissions = file.getPermissions().getIntValue() & 292; // 292 => 100100100
+        if (file.getPermissions().getIntValue() == maskedPermissions && maskedPermissions > 0)
+            return ThemeCache.READ_ONLY;
+
         // Directory.
         if (file.isDirectory())
             return ThemeCache.FOLDER;

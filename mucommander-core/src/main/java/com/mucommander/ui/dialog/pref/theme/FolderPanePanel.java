@@ -56,17 +56,15 @@ class FolderPanePanel extends ThemeEditorPanel {
      * Initialises the panel's UI.
      */
     private void initUI() {
-        FontChooser fontChooser;
-        FilePanel   filePanel;
-
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Adds the general panel.
+        FontChooser fontChooser = createFontChooser(ThemeData.FILE_TABLE_FONT);
         tabbedPane.add(Translator.get("theme_editor.general"),
-                       createScrollPane(createGeneralPanel(fontChooser = createFontChooser(ThemeData.FILE_TABLE_FONT))));
+                createScrollPane(createGeneralPanel(fontChooser)));
 
         // Adds the active panel.
-        filePanel = new FilePanel(parent, true, themeData, fontChooser);
+        FilePanel filePanel = new FilePanel(parent, true, themeData, fontChooser);
         tabbedPane.add(filePanel.getTitle(), createScrollPane(filePanel));
 
         // Adds the inactive panel.

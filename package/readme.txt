@@ -36,6 +36,7 @@ New features:
 - New operations in text editor: Undo, Redo, Replace spaces with tabs, Replace tabs with spaces
 - Renaming files in Google Drive.
 - Password-protected 7z archives can be browsed and unpacked.
+- Enable custom color configurations for read-only files/folders.
 
 Improvements:
 - 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.

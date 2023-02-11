@@ -102,6 +102,9 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     private static final int STATE_QUICK_LIST_ITEM          = 40;
     private static final int STATE_QUICK_LIST_ITEM_NORMAL   = 41;
     private static final int STATE_QUICK_LIST_ITEM_SELECTED = 42;
+    private static final int STATE_READ_ONLY                = 43;
+    private static final int STATE_READ_ONLY_NORMAL         = 44;
+    private static final int STATE_READ_ONLY_SELECTED       = 45;
 
 
     // - Instance variables --------------------------------------------------------------
@@ -227,6 +230,12 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
             state = STATE_SYMLINK;
         }
 
+        else if(qName.equals(ELEMENT_READ_ONLY)) {
+            if(state != STATE_TABLE)
+                traceIllegalDeclaration(qName);
+            state = STATE_READ_ONLY;
+        }
+
         else if(qName.equals(ELEMENT_MARKED)) {
             if(state != STATE_TABLE)
                 traceIllegalDeclaration(qName);
@@ -279,6 +288,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_ARCHIVE_NORMAL;
             else if(state == STATE_SYMLINK)
                 state = STATE_SYMLINK_NORMAL;
+            else if(state == STATE_READ_ONLY)
+                state = STATE_READ_ONLY_NORMAL;
             else if(state == STATE_MARKED)
                 state = STATE_MARKED_NORMAL;
             else if(state == STATE_FILE)
@@ -309,6 +320,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_ARCHIVE_SELECTED;
             else if(state == STATE_SYMLINK)
                 state = STATE_SYMLINK_SELECTED;
+            else if(state == STATE_READ_ONLY)
+                state = STATE_READ_ONLY_SELECTED;
             else if(state == STATE_MARKED)
                 state = STATE_MARKED_SELECTED;
             else if(state == STATE_FILE)
@@ -383,6 +396,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 template.setColor(ThemeData.ARCHIVE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SYMLINK_NORMAL)
                 template.setColor(ThemeData.SYMLINK_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_READ_ONLY_NORMAL)
+                template.setColor(ThemeData.READ_ONLY_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_HIDDEN_NORMAL)
                 template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_MARKED_NORMAL)
@@ -395,6 +410,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 template.setColor(ThemeData.ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SYMLINK_SELECTED)
                 template.setColor(ThemeData.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_READ_ONLY_SELECTED)
+                template.setColor(ThemeData.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_HIDDEN_SELECTED)
                 template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_MARKED_SELECTED)
@@ -549,6 +566,11 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
             else if(state == STATE_SYMLINK_SELECTED)
                 template.setColor(ThemeData.SYMLINK_SELECTED_FOREGROUND_COLOR, createColor(attributes));
 
+            else if(state == STATE_READ_ONLY_NORMAL)
+                template.setColor(ThemeData.READ_ONLY_FOREGROUND_COLOR, createColor(attributes));
+            else if(state == STATE_READ_ONLY_SELECTED)
+                template.setColor(ThemeData.READ_ONLY_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+
             else if(state == STATE_MARKED_NORMAL)
                 template.setColor(ThemeData.MARKED_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_MARKED_SELECTED)
@@ -638,6 +660,9 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         else if(qName.equals(ELEMENT_SYMLINK))
             state = STATE_TABLE;
 
+        else if(qName.equals(ELEMENT_READ_ONLY))
+            state = STATE_TABLE;
+
         else if(qName.equals(ELEMENT_MARKED))
             state = STATE_TABLE;
 
@@ -694,6 +719,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_ARCHIVE;
             else if(state == STATE_SYMLINK_NORMAL)
                 state = STATE_SYMLINK;
+            else if(state == STATE_READ_ONLY_NORMAL)
+                state = STATE_READ_ONLY;
             else if(state == STATE_MARKED_NORMAL)
                 state = STATE_MARKED;
             else if(state == STATE_FILE_NORMAL)
@@ -722,6 +749,8 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 state = STATE_ARCHIVE;
             else if(state == STATE_SYMLINK_SELECTED)
                 state = STATE_SYMLINK;
+            else if(state == STATE_READ_ONLY_SELECTED)
+                state = STATE_READ_ONLY;
             else if(state == STATE_MARKED_SELECTED)
                 state = STATE_MARKED;
             else if(state == STATE_FILE_SELECTED)
