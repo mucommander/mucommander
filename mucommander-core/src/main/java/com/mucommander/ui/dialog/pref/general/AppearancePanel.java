@@ -71,6 +71,7 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.Theme.ThemeType;
 import com.mucommander.ui.theme.ThemeManager;
 
 /**
@@ -435,7 +436,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 else
                     label.setText(theme.getName());
 
-                if (theme.getType() != Theme.CUSTOM_THEME)
+                if (theme.getType() != ThemeType.CUSTOM_THEME)
                     label.setIcon(lockIcon);
                 else
                     label.setIcon(transparentIcon);
@@ -896,9 +897,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     private void setTypeLabel(Theme theme) {
         String label;
 
-        if (theme.getType() == Theme.USER_THEME)
+        if (theme.getType() == ThemeType.USER_THEME)
             label = Translator.get("theme.custom");
-        else if (theme.getType() == Theme.PREDEFINED_THEME)
+        else if (theme.getType() == ThemeType.PREDEFINED_THEME)
             label = Translator.get("theme.built_in");
         else
             label = Translator.get("theme.add_on");
@@ -912,7 +913,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         setTypeLabel(theme);
 
-        if (theme.getType() != Theme.CUSTOM_THEME) {
+        if (theme.getType() != ThemeType.CUSTOM_THEME) {
             renameThemeButton.setEnabled(false);
             deleteThemeButton.setEnabled(false);
         } else {

@@ -26,16 +26,14 @@ import java.util.WeakHashMap;
  * @author Nicolas Rinaudo
  */
 public class Theme extends ThemeData {
-    // - Theme types ---------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    /** Describes the user defined theme. */
-    public static final int USER_THEME                         = 0;
-    /** Describes predefined muCommander themes. */
-    public static final int PREDEFINED_THEME                   = 1;
-    /** Describes custom muCommander themes. */
-    public static final int CUSTOM_THEME                       = 2;
-
-
+    public enum ThemeType {
+        /** Describes the user defined theme. */
+        USER_THEME,
+        /** Describes predefined muCommander themes. */
+        PREDEFINED_THEME,
+        /** Describes custom muCommander themes. */
+        CUSTOM_THEME;
+    }
 
     // - Theme listeners -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -46,9 +44,9 @@ public class Theme extends ThemeData {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Theme name. */
-    private String  name;
+    private String name;
     /** Theme type. */
-    private int     type;
+    private ThemeType type;
 
     // While this field might look useless, it's actually critical for proper event notification:
     // ThemeData uses a weak hashmap to store its listeners, meaning that each listener must be 'linked'
@@ -66,25 +64,25 @@ public class Theme extends ThemeData {
      */
     Theme(ThemeListener listener) {
         super();
-        init(listener, USER_THEME, null);
+        init(listener, ThemeType.USER_THEME, null);
     }
 
-    Theme(ThemeListener listener, int type, String name) {
+    Theme(ThemeListener listener, ThemeType type, String name) {
         super();
         init(listener, type, name);
     }
 
     Theme(ThemeListener listener, ThemeData template) {
         super(template);
-        init(listener, USER_THEME, null);
+        init(listener, ThemeType.USER_THEME, null);
     }
 
-    Theme(ThemeListener listener, ThemeData template, int type, String name) {
+    Theme(ThemeListener listener, ThemeData template, ThemeType type, String name) {
         super(template);
         init(listener, type, name);
     }
 
-    private void init(ThemeListener listener, int type, String name) {
+    private void init(ThemeListener listener, ThemeType type, String name) {
         // This might seem like a roundabout way of doing things, but it's actually necessary.
         // If we didn't explicitly call a defaultValuesListener method, proGuard would 'optimise'
         // the instance out with catastrophic results (the listener would become a weak reference,
@@ -113,13 +111,13 @@ public class Theme extends ThemeData {
      * </p>
      * @return <code>true</code> if the theme is modifiable, <code>false</code> otherwise.
      */
-    public boolean canModify() {return type == USER_THEME;}
+    public boolean canModify() {return type == ThemeType.USER_THEME;}
 
     /**
      * Returns the theme's type.
      * @return the theme's type.
      */
-    public int getType() {return type;}
+    public ThemeType getType() {return type;}
 
     /**
      * Returns the theme's name.
@@ -145,7 +143,7 @@ public class Theme extends ThemeData {
     @Override
     public boolean setFont(int id, Font font) {
         // Makes sure we're not trying to modify a non-user theme.
-        if(type != USER_THEME)
+        if(type != ThemeType.USER_THEME)
             throw new IllegalStateException("Trying to modify a non user theme.");
 
         if(super.setFont(id, font)) {
@@ -170,7 +168,7 @@ public class Theme extends ThemeData {
     @Override
     public boolean setColor(int id, Color color) {
         // Makes sure we're not trying to modify a non-user theme.
-        if(type != USER_THEME)
+        if(type != ThemeType.USER_THEME)
             throw new IllegalStateException("Trying to modify a non user theme.");
 
         if(super.setColor(id, color)) {
@@ -189,11 +187,11 @@ public class Theme extends ThemeData {
      * </p>
      * @param type theme's type.
      */
-    void setType(int type) {
+    void setType(ThemeType type) {
         checkType(type);
 
         this.type = type;
-        if(type == USER_THEME)
+        if (type == ThemeType.USER_THEME)
             setName(Translator.get("theme.custom_theme"));
     }
 
@@ -207,8 +205,8 @@ public class Theme extends ThemeData {
 
     // - Misc. ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    static void checkType(int type) {
-        if(type != USER_THEME && type != PREDEFINED_THEME && type != CUSTOM_THEME)
+    static void checkType(ThemeType type) {
+        if(type != ThemeType.USER_THEME && type != ThemeType.PREDEFINED_THEME && type != ThemeType.CUSTOM_THEME)
             throw new IllegalArgumentException("Illegal theme type: " + type);
     }
 
