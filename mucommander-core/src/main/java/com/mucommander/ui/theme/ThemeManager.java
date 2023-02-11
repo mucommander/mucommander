@@ -50,6 +50,7 @@ import com.mucommander.conf.PlatformManager;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.theme.Theme.ThemeType;
 
 /**
  * Offers methods for accessing and modifying themes.
@@ -111,7 +112,7 @@ public class ThemeManager {
      * </p>
      */
     public static void loadCurrentTheme() {
-        int     type;               // Current theme's type.
+        ThemeType type;             // Current theme's type.
         String  name;               // Current theme's name.
         boolean wasUserThemeLoaded; // Whether we have tried loading the user theme or not.
 
@@ -120,7 +121,7 @@ public class ThemeManager {
         catch(Exception e) {type = getThemeTypeFromLabel(MuPreferences.DEFAULT_THEME_TYPE);}
 
         // Loads the current theme name as defined in configuration.
-        if(type != Theme.USER_THEME) {
+        if(type != ThemeType.USER_THEME) {
             wasUserThemeLoaded = false;
             name               = MuConfigurations.getPreferences().getVariable(MuPreference.THEME_NAME, MuPreferences.DEFAULT_THEME_NAME);
         }
@@ -136,7 +137,7 @@ public class ThemeManager {
             type = getThemeTypeFromLabel(MuPreferences.DEFAULT_THEME_TYPE);
             name = MuPreferences.DEFAULT_THEME_NAME;
 
-            if(type == Theme.USER_THEME)
+            if(type == ThemeType.USER_THEME)
                 wasUserThemeLoaded = true;
 
             // If the default theme can be loaded, tries to load the user theme if we haven't done so yet.
@@ -144,7 +145,7 @@ public class ThemeManager {
             try {currentTheme = readTheme(type, name);}
             catch(Exception e2) {
                 if(!wasUserThemeLoaded) {
-                    try {currentTheme = readTheme(Theme.USER_THEME, null);}
+                    try {currentTheme = readTheme(ThemeType.USER_THEME, null);}
                     catch(Exception e3) {}
                 }
                 if(currentTheme == null) {
@@ -199,14 +200,14 @@ public class ThemeManager {
         themes = new Vector<Theme>();
 
         // Tries to load the user theme. If it's corrupt, uses an empty user theme.
-        try {themes.add(readTheme(Theme.USER_THEME, null));}
+        try {themes.add(readTheme(ThemeType.USER_THEME, null));}
         catch(Exception e) {themes.add(new Theme(listener));}
 
         // Loads predefined themes.
         iterator = predefinedThemeNames();
         while(iterator.hasNext()) {
             name = iterator.next();
-            try {themes.add(readTheme(Theme.PREDEFINED_THEME, name));}
+            try {themes.add(readTheme(ThemeType.PREDEFINED_THEME, name));}
             catch(Exception e) {
                 LOGGER.warn("Failed to load predefined theme " + name, e);
             }
@@ -217,7 +218,7 @@ public class ThemeManager {
             iterator = customThemeNames();
             while(iterator.hasNext()) {
                 name = iterator.next();
-                try {themes.add(readTheme(Theme.CUSTOM_THEME, name));}
+                try {themes.add(readTheme(ThemeType.CUSTOM_THEME, name));}
                 catch(Exception e) {
                     LOGGER.warn("Failed to load custom theme " + name, e);
                 }
@@ -362,7 +363,7 @@ public class ThemeManager {
         AbstractFile file;
 
         // Makes sure the specified theme is not the current one.
-        if(isCurrentTheme(Theme.CUSTOM_THEME, name))
+        if(isCurrentTheme(ThemeType.CUSTOM_THEME, name))
             throw new IllegalArgumentException("Cannot delete current theme.");
 
         // Deletes the theme.
@@ -372,7 +373,7 @@ public class ThemeManager {
     }
 
     public static void renameCustomTheme(Theme theme, String name) throws IOException {
-        if(theme.getType() != Theme.CUSTOM_THEME)
+        if(theme.getType() != ThemeType.CUSTOM_THEME)
             throw new IllegalArgumentException("Cannot rename non-custom themes.");
 
         // Makes sure the operation is necessary.
@@ -429,18 +430,18 @@ public class ThemeManager {
      * @return             an output stream on the requested theme.
      * @throws IOException if an I/O related error occurs.
      */
-    private static BackupOutputStream getOutputStream(int type, String name) throws IOException {
+    private static BackupOutputStream getOutputStream(ThemeType type, String name) throws IOException {
         switch(type) {
             // Predefined themes.
-        case Theme.PREDEFINED_THEME:
+        case PREDEFINED_THEME:
             throw new IllegalArgumentException("Can not open output streams on predefined themes.");
 
             // Custom themes.
-        case Theme.CUSTOM_THEME:
+        case CUSTOM_THEME:
             return getCustomThemeOutputStream(name);
 
             // User theme.
-        case Theme.USER_THEME:
+        case USER_THEME:
             return getUserThemeOutputStream();
         }
 
@@ -517,7 +518,7 @@ public class ThemeManager {
      * @throws IllegalArgumentException if <code>theme</code> is a predefined theme.
      * @see                             #writeTheme(Theme)
      */
-    public static void writeTheme(ThemeData data, int type, String name) throws IOException {
+    public static void writeTheme(ThemeData data, ThemeType type, String name) throws IOException {
         OutputStream out;
 
         out = null;
@@ -545,10 +546,10 @@ public class ThemeManager {
      * @param  name        name of the theme to export.
      * @param  out         where to write the theme.
      * @throws IOException if any I/O related error occurs.
-     * @see                #exportTheme(int,String,File)
+     * @see                #exportTheme(ThemeType,String,File)
      * @see                #writeThemeData(ThemeData,OutputStream)
      */
-    public static void exportTheme(int type, String name, OutputStream out) throws IOException {
+    public static void exportTheme(ThemeType type, String name, OutputStream out) throws IOException {
         InputStream in; // Where to read the theme from.
 
         in = null;
@@ -575,10 +576,10 @@ public class ThemeManager {
      * @param  name        name of the theme to export.
      * @param  file        where to write the theme.
      * @throws IOException if any I/O related error occurs
-     * @see                #exportTheme(int,String,OutputStream)
+     * @see                #exportTheme(ThemeType,String,OutputStream)
      * @see                #writeThemeData(ThemeData,File).
      */
-    public static void exportTheme(int type, String name, File file) throws IOException {
+    public static void exportTheme(ThemeType type, String name, File file) throws IOException {
         OutputStream out; // Where to write the data to.
 
         out = null;
@@ -595,7 +596,7 @@ public class ThemeManager {
      * Exports the specified theme to the specified output stream.
      * <p>
      * This is a convenience method only and is strictly equivalent to calling
-     * <code>{@link #exportTheme(int,String,OutputStream) exportTheme(}theme.getType(), theme.getName(), out);</code>
+     * <code>{@link #exportTheme(ThemeType,String,OutputStream) exportTheme(}theme.getType(), theme.getName(), out);</code>
      * </p>
      * @param  theme       theme to export.
      * @param  out         where to write the theme.
@@ -659,8 +660,8 @@ public class ThemeManager {
     public static Theme duplicateTheme(Theme theme) throws IOException, Exception {return importTheme(theme.cloneData(), theme.getName());}
 
     public static Theme importTheme(ThemeData data, String name) throws IOException, Exception {
-        writeTheme(data, Theme.CUSTOM_THEME, name = getAvailableCustomThemeName(name));
-        return new Theme(listener, data, Theme.CUSTOM_THEME, name);
+        writeTheme(data, ThemeType.CUSTOM_THEME, name = getAvailableCustomThemeName(name));
+        return new Theme(listener, data, ThemeType.CUSTOM_THEME, name);
     }
 
     public static Theme importTheme(File file) throws IOException, Exception {
@@ -692,7 +693,7 @@ public class ThemeManager {
             }
         }
 
-        return new Theme(listener, data, Theme.CUSTOM_THEME, name);
+        return new Theme(listener, data, ThemeType.CUSTOM_THEME, name);
     }
 
 
@@ -740,18 +741,18 @@ public class ThemeManager {
      * @throws IOException              thrown if an IO related error occurs.
      * @throws IllegalArgumentException thrown if <code>type</code> is not a legal theme type.
      */
-    private static InputStream getInputStream(int type, String name) throws IOException {
+    private static InputStream getInputStream(ThemeType type, String name) throws IOException {
         switch(type) {
             // User theme.
-        case Theme.USER_THEME:
+        case USER_THEME:
             return getUserThemeInputStream();
 
             // Predefined theme.
-        case Theme.PREDEFINED_THEME:
+        case PREDEFINED_THEME:
             return getPredefinedThemeInputStream(name);
 
             // Custom theme.
-        case Theme.CUSTOM_THEME:
+        case CUSTOM_THEME:
             return getCustomThemeInputStream(name);
         }
 
@@ -765,7 +766,7 @@ public class ThemeManager {
      * @param  name name of the theme to retrieve.
      * @return the requested theme.
      */
-    public static Theme readTheme(int type, String name) throws Exception {
+    public static Theme readTheme(ThemeType type, String name) throws Exception {
         ThemeData   data; // Buffer for the theme data.
         InputStream in;   // Where to read the theme from.
 
@@ -830,23 +831,23 @@ public class ThemeManager {
 
     // - Current theme access ------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    private static void setConfigurationTheme(int type, String name) {
+    private static void setConfigurationTheme(ThemeType type, String name) {
         // Sets configuration depending on the new theme's type.
         switch(type) {
             // User defined theme.
-        case Theme.USER_THEME:
+        case USER_THEME:
             MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_USER);
             MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, null);
             break;
 
             // Predefined themes.
-        case Theme.PREDEFINED_THEME:
+        case PREDEFINED_THEME:
         	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
         	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
 
             // Custom themes.
-        case Theme.CUSTOM_THEME:
+        case CUSTOM_THEME:
         	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_CUSTOM);
         	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
@@ -874,7 +875,7 @@ public class ThemeManager {
             return;
 
         // Saves the user theme if it's the current one.
-        if(currentTheme.getType() == Theme.USER_THEME && wasUserThemeModified) {
+        if(currentTheme.getType() == ThemeType.USER_THEME && wasUserThemeModified) {
             writeTheme(currentTheme);
             wasUserThemeModified = false;
         }
@@ -917,14 +918,14 @@ public class ThemeManager {
 
     public synchronized static Theme overwriteUserTheme(ThemeData themeData) throws IOException {
         // If the current theme is the user one, we just need to import the new data.
-        if(currentTheme.getType() == Theme.USER_THEME) {
+        if(currentTheme.getType() == ThemeType.USER_THEME) {
             currentTheme.importData(themeData);
             writeTheme(currentTheme);
             return currentTheme;
         }
 
         else {
-            writeTheme(themeData, Theme.USER_THEME, null);
+            writeTheme(themeData, ThemeType.USER_THEME, null);
             return new Theme(listener, themeData);
         }
     }
@@ -938,7 +939,7 @@ public class ThemeManager {
      */
     public synchronized static boolean willOverwriteUserTheme(int fontId, Font font) {
         if(currentTheme.isFontDifferent(fontId, font))
-            return currentTheme.getType() != Theme.USER_THEME;
+            return currentTheme.getType() != ThemeType.USER_THEME;
         return false;
     }
 
@@ -951,7 +952,7 @@ public class ThemeManager {
      */
     public synchronized static boolean willOverwriteUserTheme(int colorId, Color color) {
         if(currentTheme.isColorDifferent(colorId, color))
-            return currentTheme.getType() != Theme.USER_THEME;
+            return currentTheme.getType() != ThemeType.USER_THEME;
         return false;
     }
 
@@ -970,8 +971,8 @@ public class ThemeManager {
         // Only updates if necessary.
         if(currentTheme.isFontDifferent(id, font)) {
             // Checks whether we need to overwrite the user theme to perform this action.
-            if(currentTheme.getType() != Theme.USER_THEME) {
-                currentTheme.setType(Theme.USER_THEME);
+            if(currentTheme.getType() != ThemeType.USER_THEME) {
+                currentTheme.setType(ThemeType.USER_THEME);
                 setConfigurationTheme(currentTheme);
             }
 
@@ -996,8 +997,8 @@ public class ThemeManager {
         // Only updates if necessary.
         if(currentTheme.isColorDifferent(id, color)) {
             // Checks whether we need to overwrite the user theme to perform this action.
-            if(currentTheme.getType() != Theme.USER_THEME) {
-                currentTheme.setType(Theme.USER_THEME);
+            if(currentTheme.getType() != ThemeType.USER_THEME) {
+                currentTheme.setType(ThemeType.USER_THEME);
                 setConfigurationTheme(currentTheme);
             }
 
@@ -1015,10 +1016,10 @@ public class ThemeManager {
      */
     public static boolean isCurrentTheme(Theme theme) {return theme == currentTheme;}
 
-    private static boolean isCurrentTheme(int type, String name) {
+    private static boolean isCurrentTheme(ThemeType type, String name) {
         if(type != currentTheme.getType())
             return false;
-        if(type == Theme.USER_THEME)
+        if(type == ThemeType.USER_THEME)
             return true;
         return name.equals(currentTheme.getName());
     }
@@ -1118,15 +1119,15 @@ public class ThemeManager {
     /**
      * Returns a valid type identifier from the specified configuration type definition.
      * @param  label label of the theme type as defined in {@link MuPreferences}.
-     * @return       a valid theme type identifier.
+     * @return a valid theme type identifier.
      */
-    private static int getThemeTypeFromLabel(String label) {
+    private static ThemeType getThemeTypeFromLabel(String label) {
         if(label.equals(MuPreferences.THEME_USER))
-            return Theme.USER_THEME;
+            return ThemeType.USER_THEME;
         else if(label.equals(MuPreferences.THEME_PREDEFINED))
-            return Theme.PREDEFINED_THEME;
+            return ThemeType.PREDEFINED_THEME;
         else if(label.equals(MuPreferences.THEME_CUSTOM))
-            return Theme.CUSTOM_THEME;
+            return ThemeType.CUSTOM_THEME;
         throw new IllegalStateException("Unknown theme type: " + label);
     }
 
@@ -1143,7 +1144,7 @@ public class ThemeManager {
      */
     private static class CurrentThemeListener implements ThemeListener {
         public void fontChanged(FontChangedEvent event) {
-            if(event.getSource().getType() == Theme.USER_THEME)
+            if(event.getSource().getType() == ThemeType.USER_THEME)
                 wasUserThemeModified = true;
 
             if(event.getSource() == currentTheme)
@@ -1151,7 +1152,7 @@ public class ThemeManager {
         }
 
         public void colorChanged(ColorChangedEvent event) {
-            if(event.getSource().getType() == Theme.USER_THEME)
+            if(event.getSource().getType() == ThemeType.USER_THEME)
                 wasUserThemeModified = true;
 
             if(event.getSource() == currentTheme)
