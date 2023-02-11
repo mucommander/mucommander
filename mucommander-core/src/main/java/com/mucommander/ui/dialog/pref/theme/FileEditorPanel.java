@@ -65,11 +65,8 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
      * @return the JPanel that contains all of the color configuration elements.
      */
     private JPanel createColorsPanel(FontChooser fontChooser) {
-        ProportionalGridPanel gridPanel;   // Contains all the color buttons.
-        JPanel                colorsPanel; // Used to wrap the colors panel in a flow layout.
-
-        // Initialisation.
-        gridPanel = new ProportionalGridPanel(3);
+        // Contains all the color buttons.
+        ProportionalGridPanel gridPanel = new ProportionalGridPanel(3);
 
         // Header.
         addLabelRow(gridPanel, false);
@@ -81,7 +78,7 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
                         ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR).addPropertyChangeListener(this);
 
         // Wraps everything in a flow layout.
-        colorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel colorsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         colorsPanel.add(gridPanel);
         colorsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
 
@@ -92,18 +89,14 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
      * Initialises the panel's UI.
      */
     private void initUI() {
-        YBoxPanel   configurationPanel; // Contains all the configuration elements.
-        FontChooser fontChooser;        // Used to select a font.
-        JPanel      mainPanel;          // Main panel.
-
         // Font chooser and preview initialisation.
-        mainPanel   = new JPanel(new BorderLayout());
-        fontChooser = createFontChooser(ThemeData.EDITOR_FONT);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        FontChooser fontChooser = createFontChooser(ThemeData.EDITOR_FONT);
         mainPanel.add(createPreviewPanel(), BorderLayout.EAST);
         addFontChooserListener(fontChooser, preview);
 
         // Configuration panel initialisation.
-        configurationPanel = new YBoxPanel();
+        YBoxPanel configurationPanel = new YBoxPanel(); // Contains all the configuration elements.
         configurationPanel.add(fontChooser);
         configurationPanel.addSpace(10);
         configurationPanel.add(createColorsPanel(fontChooser));
@@ -119,9 +112,6 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
      * @return the file editor preview panel.
      */
     private JPanel createPreviewPanel() {
-        JPanel      panel;  // Preview panel.
-        JScrollPane scroll; // Wraps the preview text are.
-
         // Initialises the preview text area.
         preview = new JTextArea(15, 15);
 
@@ -130,28 +120,32 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
         setForegroundColors();
 
         // Creates the panel.
-        panel = new JPanel(new BorderLayout());
-        panel.add(scroll = new JScrollPane(preview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+        JPanel previewPanel = new JPanel(new BorderLayout());
+        JScrollPane scroll= new JScrollPane(preview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); // Wraps the preview text.
+        previewPanel.add(scroll, BorderLayout.CENTER);
         scroll.getViewport().setPreferredSize(preview.getPreferredSize());
-        panel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
+        previewPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
 
         loadText();
         preview.setCaretPosition(0);
 
-        return panel;
+        return previewPanel;
     }
 
     /**
      * Listens on changes on the foreground and background colors.
      */
     public void propertyChange(PropertyChangeEvent event) {
+        switch(event.getPropertyName()) {
         // Background color changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
+        case PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME:
             setBackgroundColors();
-
-        // Foreground color changed.
-        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
+            break;
+         // Foreground color changed.
+        case PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME:
             setForegroundColors();
+            break;
+        }
     }
 
     private void setBackgroundColors() {
@@ -170,25 +164,14 @@ class FileEditorPanel extends ThemeEditorPanel implements PropertyChangeListener
     // - Misc. ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     private void loadText() {
-        char[]            buffer; // Buffer for each chunk of data read from the license file.
-        int               count;  // Number of characters read from the last read operation.
-        InputStreamReader in;     // Stream on the license file.
+        try (InputStreamReader in = new InputStreamReader(FileEditorPanel.class.getResourceAsStream(RuntimeConstants.LICENSE))){
+            char[] buffer = new char[2048];
 
-        in   = null;
-        try {
-            in     = new InputStreamReader(FileEditorPanel.class.getResourceAsStream(RuntimeConstants.LICENSE));
-            buffer = new char[2048];
-
-            while((count = in.read(buffer)) != -1)
+            int count; // Number of characters read from the last read operation.
+            while ((count = in.read(buffer)) != -1)
                 preview.append(new String(buffer, 0, count));
         }
         catch(Exception e) {}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
-        }
     }
 
 

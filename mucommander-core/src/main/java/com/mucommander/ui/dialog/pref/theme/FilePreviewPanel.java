@@ -40,12 +40,13 @@ import java.beans.PropertyChangeListener;
 class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
     // - Row identifiers ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    private static final int FOLDER      = 0;
-    private static final int PLAIN_FILE  = 1;
-    private static final int ARCHIVE     = 2;
-    private static final int HIDDEN_FILE = 3;
-    private static final int SYMLINK     = 4;
-    private static final int MARKED_FILE = 5;
+    private static final int FOLDER         = 0;
+    private static final int PLAIN_FILE     = 1;
+    private static final int ARCHIVE        = 2;
+    private static final int HIDDEN_FILE    = 3;
+    private static final int SYMLINK        = 4;
+    private static final int READ_ONLY_FILE = 5;
+    private static final int MARKED_FILE    = 6;
 
 
 
@@ -136,6 +137,7 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
                                   {"", Translator.get("theme_editor.archive_file")},
                                   {"", Translator.get("theme_editor.hidden_file")},
                                   {"", Translator.get("theme_editor.symbolic_link")},
+                                  {"", Translator.get("theme_editor.read_only_file")},
                                   {"", Translator.get("theme_editor.marked_file")}},
                 new String[] {"", Translator.get("preview")});
 
@@ -291,6 +293,13 @@ class FilePreviewPanel extends JScrollPane implements PropertyChangeListener {
                 return FilePreviewPanel.this.data.getColor(isSelected ? ThemeData.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR :
                                                            ThemeData.SYMLINK_INACTIVE_FOREGROUND_COLOR);
 
+                // Read-only
+            case READ_ONLY_FILE:
+                if (FilePreviewPanel.this.isActive)
+                    return FilePreviewPanel.this.data.getColor(isSelected ? ThemeData.READ_ONLY_SELECTED_FOREGROUND_COLOR :
+                                                               ThemeData.READ_ONLY_FOREGROUND_COLOR);
+                return FilePreviewPanel.this.data.getColor(isSelected ? ThemeData.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR :
+                                                           ThemeData.READ_ONLY_INACTIVE_FOREGROUND_COLOR);
                 // Marked files.
             case MARKED_FILE:
                 if(FilePreviewPanel.this.isActive)

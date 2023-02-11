@@ -93,7 +93,7 @@ public class ThemeData {
      * by an instance of theme data by looping from 0 to this color.
      * </p>
      */
-    public static final int COLOR_COUNT = 68;
+    public static final int COLOR_COUNT = 72;
 
 
 
@@ -683,7 +683,39 @@ public class ThemeData {
      */
     public static final int QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR = 67;
 
+    /**
+     * Color used to paint read-only files text in the folder panels.
+     * <p>
+     * This defaults to the current <code>JTable</code> foreground color.
+     * </p>
+     */
+    public static final int READ_ONLY_FOREGROUND_COLOR = 68;
 
+    /**
+     * Color used to paint read-only files text in the folder panels when they don't have the focus.
+     * <p>
+     * This behaves in exactly the same fashion as {@link #READ_ONLY_FOREGROUND_COLOR}, and defaults
+     * to the same value.
+     * </p>
+     */
+    public static final int READ_ONLY_INACTIVE_FOREGROUND_COLOR = 69;
+
+    /**
+     * Color used to paint selected read-only files text in the folder panels.
+     * <p>
+     * This defaults to the current <code>JTable</code> selection foreground color.
+     * </p>
+     */
+    public static final int READ_ONLY_SELECTED_FOREGROUND_COLOR = 70;
+
+    /**
+     * Color used to paint selected read-only files text in the folder panels when they don't have the focus.
+     * <p>
+     * This behaves in exactly the same fashion as {@link #READ_ONLY_SELECTED_FOREGROUND_COLOR}, and defaults
+     * to the same value.
+     * </p>
+     */
+    public static final int READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR = 71;
 
 
     // - Default fonts -------------------------------------------------------------------------------------------------
@@ -747,6 +779,8 @@ public class ThemeData {
     private Color[] colors;
     /** All the fonts contained by the theme. */
     private Font[]  fonts;
+
+
 
 
 
@@ -924,20 +958,24 @@ public class ThemeData {
         registerColor(FOLDER_FOREGROUND_COLOR,                        DEFAULT_TABLE_FOREGROUND);
         registerColor(ARCHIVE_FOREGROUND_COLOR,                       DEFAULT_TABLE_FOREGROUND);
         registerColor(SYMLINK_FOREGROUND_COLOR,                       DEFAULT_TABLE_FOREGROUND);
+        registerColor(READ_ONLY_FOREGROUND_COLOR,                     DEFAULT_TABLE_FOREGROUND);
         registerColor(FILE_INACTIVE_FOREGROUND_COLOR,                 DEFAULT_TABLE_FOREGROUND);
         registerColor(HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR,          Color.GRAY);
         registerColor(FOLDER_INACTIVE_FOREGROUND_COLOR,               DEFAULT_TABLE_FOREGROUND);
         registerColor(ARCHIVE_INACTIVE_FOREGROUND_COLOR,              DEFAULT_TABLE_FOREGROUND);
         registerColor(SYMLINK_INACTIVE_FOREGROUND_COLOR,              DEFAULT_TABLE_FOREGROUND);
+        registerColor(READ_ONLY_INACTIVE_FOREGROUND_COLOR,            DEFAULT_TABLE_FOREGROUND);
         registerColor(FILE_FOREGROUND_COLOR,                          DEFAULT_TABLE_FOREGROUND);
         registerColor(HIDDEN_FILE_SELECTED_FOREGROUND_COLOR,          DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(FOLDER_SELECTED_FOREGROUND_COLOR,               DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(ARCHIVE_SELECTED_FOREGROUND_COLOR,              DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(SYMLINK_SELECTED_FOREGROUND_COLOR,              DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(READ_ONLY_SELECTED_FOREGROUND_COLOR,            DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR,      DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR,     DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR,     DEFAULT_TABLE_SELECTION_FOREGROUND);
+        registerColor(READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR,   DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(FILE_INACTIVE_SELECTED_FOREGROUND_COLOR,        DEFAULT_TABLE_SELECTION_FOREGROUND);
         registerColor(FILE_SELECTED_FOREGROUND_COLOR,                 DEFAULT_TABLE_SELECTION_FOREGROUND);
 

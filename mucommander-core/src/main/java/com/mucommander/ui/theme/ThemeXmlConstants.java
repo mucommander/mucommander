@@ -42,6 +42,8 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_QUICK_LIST           = "quick_list";
 
 
+    // File table element
+    public static final String ELEMENT_READ_ONLY            = "read_only";
 
     // - Status element ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------

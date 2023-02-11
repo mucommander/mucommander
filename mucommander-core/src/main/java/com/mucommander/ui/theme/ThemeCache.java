@@ -48,6 +48,7 @@ public class ThemeCache implements ThemeListener {
     public static final int SYMLINK              = 3;
     public static final int MARKED               = 4;
     public static final int PLAIN_FILE           = 5;
+    public static final int READ_ONLY            = 6;
 
     // - Font definitions ------------------------------------------------------------
     // -------------------------------------------------------------------------------
@@ -59,7 +60,7 @@ public class ThemeCache implements ThemeListener {
     // - Initialisation --------------------------------------------------------------
     // -------------------------------------------------------------------------------
     static {
-        foregroundColors = new Color[2][2][6];
+        foregroundColors = new Color[2][2][7];
         backgroundColors = new Color[2][4];
 
         // Active background colors.
@@ -76,6 +77,7 @@ public class ThemeCache implements ThemeListener {
 
         // Normal foreground foregroundColors.
         foregroundColors[ACTIVE][NORMAL][HIDDEN_FILE]     = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_FOREGROUND_COLOR);
+        foregroundColors[ACTIVE][NORMAL][READ_ONLY]       = ThemeManager.getCurrentColor(Theme.READ_ONLY_FOREGROUND_COLOR);
         foregroundColors[ACTIVE][NORMAL][FOLDER]          = ThemeManager.getCurrentColor(Theme.FOLDER_FOREGROUND_COLOR);
         foregroundColors[ACTIVE][NORMAL][ARCHIVE]         = ThemeManager.getCurrentColor(Theme.ARCHIVE_FOREGROUND_COLOR);
         foregroundColors[ACTIVE][NORMAL][SYMLINK]         = ThemeManager.getCurrentColor(Theme.SYMLINK_FOREGROUND_COLOR);
@@ -84,6 +86,7 @@ public class ThemeCache implements ThemeListener {
 
         // Normal unfocused foreground foregroundColors.
         foregroundColors[INACTIVE][NORMAL][HIDDEN_FILE]    = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR);
+        foregroundColors[INACTIVE][NORMAL][READ_ONLY]      = ThemeManager.getCurrentColor(Theme.READ_ONLY_INACTIVE_FOREGROUND_COLOR);
         foregroundColors[INACTIVE][NORMAL][FOLDER]         = ThemeManager.getCurrentColor(Theme.FOLDER_INACTIVE_FOREGROUND_COLOR);
         foregroundColors[INACTIVE][NORMAL][ARCHIVE]        = ThemeManager.getCurrentColor(Theme.ARCHIVE_INACTIVE_FOREGROUND_COLOR);
         foregroundColors[INACTIVE][NORMAL][SYMLINK]        = ThemeManager.getCurrentColor(Theme.SYMLINK_INACTIVE_FOREGROUND_COLOR);
@@ -92,6 +95,7 @@ public class ThemeCache implements ThemeListener {
 
         // Selected foreground foregroundColors.
         foregroundColors[ACTIVE][SELECTED][HIDDEN_FILE]   = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR);
+        foregroundColors[ACTIVE][SELECTED][READ_ONLY]     = ThemeManager.getCurrentColor(Theme.READ_ONLY_SELECTED_FOREGROUND_COLOR);
         foregroundColors[ACTIVE][SELECTED][FOLDER]        = ThemeManager.getCurrentColor(Theme.FOLDER_SELECTED_FOREGROUND_COLOR);
         foregroundColors[ACTIVE][SELECTED][ARCHIVE]       = ThemeManager.getCurrentColor(Theme.ARCHIVE_SELECTED_FOREGROUND_COLOR);
         foregroundColors[ACTIVE][SELECTED][SYMLINK]       = ThemeManager.getCurrentColor(Theme.SYMLINK_SELECTED_FOREGROUND_COLOR);
@@ -100,6 +104,7 @@ public class ThemeCache implements ThemeListener {
 
         // Selected unfocused foreground foregroundColors.
         foregroundColors[INACTIVE][SELECTED][HIDDEN_FILE]  = ThemeManager.getCurrentColor(Theme.HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR);
+        foregroundColors[INACTIVE][SELECTED][READ_ONLY]    = ThemeManager.getCurrentColor(Theme.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR);
         foregroundColors[INACTIVE][SELECTED][FOLDER]       = ThemeManager.getCurrentColor(Theme.FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR);
         foregroundColors[INACTIVE][SELECTED][ARCHIVE]      = ThemeManager.getCurrentColor(Theme.ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR);
         foregroundColors[INACTIVE][SELECTED][SYMLINK]      = ThemeManager.getCurrentColor(Theme.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR);
@@ -198,6 +203,16 @@ public class ThemeCache implements ThemeListener {
             foregroundColors[ACTIVE][SELECTED][SYMLINK] = event.getColor();
             break;
 
+            // Read-only
+        case Theme.READ_ONLY_FOREGROUND_COLOR:
+            foregroundColors[ACTIVE][NORMAL][READ_ONLY] = event.getColor();
+            break;
+
+            // Selected read-only
+        case Theme.READ_ONLY_SELECTED_FOREGROUND_COLOR:
+            foregroundColors[ACTIVE][SELECTED][READ_ONLY] = event.getColor();
+            break;
+
             // Marked files.
         case Theme.MARKED_FOREGROUND_COLOR:
             foregroundColors[ACTIVE][NORMAL][MARKED] = event.getColor();
@@ -256,6 +271,16 @@ public class ThemeCache implements ThemeListener {
             // Selected symlinks.
         case Theme.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR:
             foregroundColors[INACTIVE][SELECTED][SYMLINK] = event.getColor();
+            break;
+
+            // Read-only
+        case Theme.READ_ONLY_INACTIVE_FOREGROUND_COLOR:
+            foregroundColors[INACTIVE][NORMAL][READ_ONLY] = event.getColor();
+            break;
+
+            // Selected read-only
+        case Theme.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR:
+            foregroundColors[INACTIVE][SELECTED][READ_ONLY] = event.getColor();
             break;
 
             // Marked files.

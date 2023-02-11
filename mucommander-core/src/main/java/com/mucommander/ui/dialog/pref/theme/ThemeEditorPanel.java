@@ -85,9 +85,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
      * @return               a caption label containing the specified localised entry.
      */
     protected JLabel createCaptionLabel(String dictionaryKey) {
-        JLabel captionLabel;
-
-        captionLabel = new JLabel(Translator.get(dictionaryKey));
+        JLabel captionLabel = new JLabel(Translator.get(dictionaryKey));
         captionLabel.setFont(captionLabelFont);
         captionLabel.setForeground(captionTextColor);
 
@@ -125,7 +123,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
         panel.add(createCaptionLabel("theme_editor.background"));
 
         // Adds the preview label if requested.
-        if(includePreview)
+        if (includePreview)
             panel.add(createCaptionLabel("preview"));
     }
 
@@ -138,13 +136,11 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
      * @param fontId identifier of the font this chooser will be editing.
      */
     protected FontChooser createFontChooser(int fontId) {
-        FontChooser    fontChooser; // Font chooser that will be returned.
-        ChangeListener listener;    // Internal listener.
-
         // Initialises the font chooser.
-        fontChooser = new FontChooser(themeData.getFont(fontId));
+        FontChooser fontChooser = new FontChooser(themeData.getFont(fontId));
         fontChooser.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.font")));
-        fontChooser.addChangeListener(listener = new ThemeFontChooserListener(themeData, fontId, parent));
+        ChangeListener listener = new ThemeFontChooserListener(themeData, fontId, parent);
+        fontChooser.addChangeListener(listener);
 
         // Hold a reference to this listener to prevent garbage collection
         listenerReferences.add(listener);
@@ -163,7 +159,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
      */
     protected void addFontChooserListener(FontChooser fontChooser, JComponent previewComponent) {
         // Update button font when a new font has been chosen in the FontChooser
-        if(fontChooser!=null) {
+        if (fontChooser!=null) {
             ChangeListener listener;
             fontChooser.addChangeListener(listener = new PreviewFontChooserListener(previewComponent));
             previewComponent.setFont(fontChooser.getCurrentFont());
@@ -185,9 +181,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
      * @param panel panel to wrap in a <code>JScrollPane</code>.
      */
     protected JComponent createScrollPane(JPanel panel) {
-        JScrollPane scrollPane;
-
-        scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
 
         return scrollPane;
@@ -228,25 +222,24 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
      * @param comp         component to register as a listener on the color buttons.
      */
     protected PreviewLabel addColorButtons(ProportionalGridPanel gridPanel, FontChooser fontChooser, String label, int foregroundId, int backgroundId, JComponent comp) {
-        ColorButton  colorButton;
-        PreviewLabel previewLabel;
-
         // Adds the row's caption label.
         gridPanel.add(createCaptionLabel(label));
 
         // Initialises the color buttons' preview label.
-        previewLabel = new PreviewLabel();
+        PreviewLabel previewLabel = new PreviewLabel();
         previewLabel.setTextPainted(true);
         addFontChooserListener(fontChooser, previewLabel);
 
         // Creates the foreground color button.
-        gridPanel.add(colorButton = new ColorButton(parent, themeData, foregroundId, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewLabel));
-        if(comp != null)
+        ColorButton colorButton = new ColorButton(parent, themeData, foregroundId, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewLabel);
+        gridPanel.add(colorButton);
+        if (comp != null)
             colorButton.addUpdatedPreviewComponent(comp);
 
         // Creates the background color button.
-        gridPanel.add(colorButton = new ColorButton(parent, themeData, backgroundId, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel));
-        if(comp != null)
+        colorButton = new ColorButton(parent, themeData, backgroundId, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel);
+        gridPanel.add(colorButton);
+        if (comp != null)
             colorButton.addUpdatedPreviewComponent(comp);
 
         return previewLabel;
