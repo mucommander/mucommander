@@ -143,10 +143,10 @@ public class Theme extends ThemeData {
     @Override
     public boolean setFont(int id, Font font) {
         // Makes sure we're not trying to modify a non-user theme.
-        if(type != ThemeType.USER_THEME)
+        if (type != ThemeType.USER_THEME)
             throw new IllegalStateException("Trying to modify a non user theme.");
 
-        if(super.setFont(id, font)) {
+        if (super.setFont(id, font)) {
             // We're using getFont here to make sure that no event is propagated with a null value.
             triggerFontEvent(new FontChangedEvent(this, id, getFont(id)));
             return true;
@@ -168,10 +168,10 @@ public class Theme extends ThemeData {
     @Override
     public boolean setColor(int id, Color color) {
         // Makes sure we're not trying to modify a non-user theme.
-        if(type != ThemeType.USER_THEME)
+        if (type != ThemeType.USER_THEME)
             throw new IllegalStateException("Trying to modify a non user theme.");
 
-        if(super.setColor(id, color)) {
+        if (super.setColor(id, color)) {
             // We're using getColor here to make sure that no event is propagated with a null value.
             triggerColorEvent(new ColorChangedEvent(this, id, getColor(id)));
             return true;
@@ -206,7 +206,7 @@ public class Theme extends ThemeData {
     // - Misc. ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     static void checkType(ThemeType type) {
-        if(type != ThemeType.USER_THEME && type != ThemeType.PREDEFINED_THEME && type != ThemeType.CUSTOM_THEME)
+        if (type != ThemeType.USER_THEME && type != ThemeType.PREDEFINED_THEME && type != ThemeType.CUSTOM_THEME)
             throw new IllegalArgumentException("Illegal theme type: " + type);
     }
 
@@ -235,12 +235,12 @@ public class Theme extends ThemeData {
         public void setTheme(Theme theme) {this.theme = theme;}
 
         public void colorChanged(ColorChangedEvent event) {
-            if(!theme.isColorSet(event.getColorId()))
+            if (!theme.isColorSet(event.getColorId()))
                 Theme.triggerColorEvent(new ColorChangedEvent(theme, event.getColorId(), getColor(event.getColorId())));
         }
 
         public void fontChanged(FontChangedEvent event) {
-            if(!theme.isFontSet(event.getFontId()))
+            if (!theme.isFontSet(event.getFontId()))
                 Theme.triggerFontEvent(new FontChangedEvent(theme, event.getFontId(), getFont(event.getFontId())));
         }
     }

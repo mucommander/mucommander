@@ -170,14 +170,12 @@ public class FontChooser extends YBoxPanel implements ActionListener {
      * Called when the font description has been changed.
      */
     public void actionPerformed(ActionEvent e) {
-        ChangeEvent event;
-
         font = createFont();
         updatePreview();
 
         // Notifies listeners.
-        event    = new ChangeEvent(this);
-        for(ChangeListener listener : listeners.keySet())
+        ChangeEvent event = new ChangeEvent(this);
+        for (ChangeListener listener : listeners.keySet())
             listener.stateChanged(event);
     }
 

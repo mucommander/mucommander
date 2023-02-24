@@ -17,11 +17,18 @@
 
  package com.mucommander.ui.theme;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import javax.swing.JComponent;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * Base class for all things Theme.
@@ -1045,17 +1052,14 @@ public class ThemeData {
      * @see                   #cloneData()
      */
     public ThemeData cloneData(boolean freezeDefaults) {
-        ThemeData data; // New data.
-        int       i;    // Used to browse the fonts and colors.
-
-        data = new ThemeData();
+        ThemeData data = new ThemeData();
 
         // Clones the theme's colors.
-        for(i = 0; i < COLOR_COUNT; i++)
+        for (int i = 0; i < COLOR_COUNT; i++)
             data.colors[i] = freezeDefaults ? getColor(i) : colors[i];
 
         // Clones the theme's fonts.
-        for(i = 0; i < FONT_COUNT; i++)
+        for (int i = 0; i < FONT_COUNT; i++)
             data.fonts[i] = freezeDefaults ? getFont(i) : fonts[i];
 
         return data;
@@ -1088,14 +1092,12 @@ public class ThemeData {
      * @param data data to import.
      */
     public void importData(ThemeData data) {
-        int i;
-
         // Imports the theme's colors.
-        for(i = 0; i < COLOR_COUNT; i++)
+        for (int i = 0; i < COLOR_COUNT; i++)
             setColor(i, data.colors[i]);
 
         // Imports the theme's fonts.
-        for(i = 0; i < FONT_COUNT; i++)
+        for (int i = 0; i < FONT_COUNT; i++)
             setFont(i, data.fonts[i]);
     }
 
@@ -1156,9 +1158,7 @@ public class ThemeData {
      * @return      <code>true</code> if the call actually changed the data, <code>false</code> otherwise.
      */
     public synchronized boolean setFont(int id, Font font) {
-        boolean buffer; // Used to store the result of isFontDifferent.
-
-        buffer = isFontDifferent(id, font);
+        boolean buffer = isFontDifferent(id, font);
         fonts[id] = font;
 
         return buffer;
@@ -1269,15 +1269,13 @@ public class ThemeData {
      * @see                   #isColorDifferent(int,Color,boolean)
      */
     public boolean isIdentical(ThemeData data, boolean ignoreDefaults) {
-        int i;
-
         // Compares the colors.
-        for(i = 0; i < COLOR_COUNT; i++)
+        for (int i = 0; i < COLOR_COUNT; i++)
             if(isColorDifferent(i, data.colors[i] , ignoreDefaults))
                 return false;
 
         // Compares the fonts.
-        for(i = 0; i < FONT_COUNT; i++)
+        for (int i = 0; i < FONT_COUNT; i++)
             if(isFontDifferent(i, data.fonts[i], ignoreDefaults))
                 return false;
 

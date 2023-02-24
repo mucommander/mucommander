@@ -17,15 +17,19 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.theme.ThemeData;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
@@ -52,11 +56,10 @@ class FolderPanePanel extends ThemeEditorPanel {
      * Initialises the panel's UI.
      */
     private void initUI() {
-        JTabbedPane tabbedPane;
         FontChooser fontChooser;
         FilePanel   filePanel;
 
-        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Adds the general panel.
         tabbedPane.add(Translator.get("theme_editor.general"),
@@ -79,28 +82,23 @@ class FolderPanePanel extends ThemeEditorPanel {
      * Creates the 'general' theme.
      */
     private JPanel createGeneralPanel(FontChooser chooser) {
-        YBoxPanel             mainPanel;
-        JPanel                quickSearchPanel;
-        ProportionalGridPanel panel;
-        JPanel                wrapper;
-
         // Initialises the quicksearch panel.
-        panel = new ProportionalGridPanel(4);
+        ProportionalGridPanel panel = new ProportionalGridPanel(4);
         addLabelRow(panel);
         panel.add(addColorButtons(panel, chooser, "theme_editor.quick_search.unmatched_file", ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR,
                                   ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR));
-        quickSearchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel quickSearchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         quickSearchPanel.add(panel);
         quickSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.quick_search")));
 
         // Initialises the panel.
-        mainPanel = new YBoxPanel();
+        YBoxPanel mainPanel = new YBoxPanel();
         mainPanel.add(chooser);
         mainPanel.addSpace(10);
         mainPanel.add(quickSearchPanel);
 
         // Wraps everything in a border layout.
-        wrapper = new JPanel(new BorderLayout());
+        JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.add(mainPanel, BorderLayout.NORTH);
         return wrapper;
     }

@@ -163,8 +163,8 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
     ///////////////////////////////////
 
     public void actionPerformed(ActionEvent e) {
-        ColorChooser chooser;
-        ColorChooser.createDialog(parent, chooser = createColorChooser()).showDialog();
+        ColorChooser chooser = createColorChooser();
+        ColorChooser.createDialog(parent, chooser).showDialog();
 
         setCurrentColor(chooser.getColor(), true);
     }
