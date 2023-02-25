@@ -29,17 +29,19 @@ public class SearchSnapshot implements MuSnapshotable {
     @Override
     public void read(Configuration configuration) {
         LOGGER.info("Loading snapshot configuration for " + SearchSnapshot.class);
-        for (var searchProperty : SearchProperty.values()) {
-            var prefKey = MuSnapshot.SEARCH_SECTION + "." + searchProperty.getKey();
-            searchProperty.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, searchProperty.getDefaultValue()));
+        for (var property : SearchProperty.values()) {
+            var prefKey = MuSnapshot.SEARCH_SECTION + "." + property.getKey();
+            property.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, property.getValue()));
         }
     }
 
     @Override
     public void write(Configuration configuration) {
-        for (var searchProperty : SearchProperty.values()) {
-            if (!searchProperty.isDefault())
-                configuration.setVariable(MuSnapshot.SEARCH_SECTION + "." + searchProperty.getKey(), searchProperty.getCurrentValue());
+        for (var property : SearchProperty.values()) {
+            if (!property.isDefault()) {
+                var prefKey = MuSnapshot.SEARCH_SECTION + "." + property.getKey();
+                configuration.setVariable(prefKey, property.getValue());
+            }
         }
     }
 
