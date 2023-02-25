@@ -45,13 +45,13 @@ enum SearchProperty {
     private String key;
     private String i18nKey;
     private String defaultValue;
-    private String currentValue;
+    private String value;
 
     SearchProperty(String key, String i18nKey, String defaultValue) {
         this.key = key;
         this.i18nKey = i18nKey;
         this.defaultValue = defaultValue;
-        this.currentValue = defaultValue;
+        value = defaultValue;
     }
 
     public String getKey() {
@@ -74,23 +74,19 @@ enum SearchProperty {
                 .orElse(defaultValue);
     }
 
-    public void update(String value) {
-        currentValue = value;
-    }
-
-    public String getCurrentValue() {
-        return currentValue;
-    }
-
     public void setValue(String value) {
-        currentValue = value;
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public boolean isDefault() {
-        return Objects.equals(defaultValue, currentValue);
+        return Objects.equals(defaultValue, value);
     }
 
     public String toString() {
-        return key + "=" + currentValue;
+        return key + "=" + value;
     }
 }

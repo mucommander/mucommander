@@ -140,7 +140,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         l.setLabelFor(searchFilesField);
         l.setDisplayedMnemonic('n');
 
-        boolean lastMatchRegex = Boolean.parseBoolean(SearchProperty.MATCH_REGEX.getCurrentValue());
+        boolean lastMatchRegex = Boolean.parseBoolean(SearchProperty.MATCH_REGEX.getValue());
         wildcards = new JLabel(!lastMatchRegex ? Translator.get("search_dialog.wildcards") : " ");
         compPanel.addRow("", wildcards, 10);
 
@@ -148,7 +148,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         gbc.weightx = 1.0;
         JPanel groupingPanel = new ProportionalGridPanel(2, gbc);
 
-        boolean lastMatchCase = Boolean.parseBoolean(SearchProperty.MATCH_CASESENSITIVE.getCurrentValue());
+        boolean lastMatchCase = Boolean.parseBoolean(SearchProperty.MATCH_CASESENSITIVE.getValue());
         matchCase = new JCheckBox(SearchProperty.MATCH_CASESENSITIVE.getTranslation(), lastMatchCase);
         groupingPanel.add(matchCase);
 
@@ -190,31 +190,31 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
         groupingPanel = new ProportionalGridPanel(2, gbc);
 
-        boolean value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SUBFOLDERS.getCurrentValue());
+        boolean value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SUBFOLDERS.getValue());
         searchInSubfolders = new JCheckBox(SearchProperty.SEARCH_IN_SUBFOLDERS.getTranslation(), value);
         groupingPanel.add(searchInSubfolders);
-        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SUBFOLDERS.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SUBFOLDERS.getValue());
         searchForSubfolders = new JCheckBox(SearchProperty.SEARCH_FOR_SUBFOLDERS.getTranslation(), value);
         groupingPanel.add(searchForSubfolders);
 
-        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_ARCHIVES.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_ARCHIVES.getValue());
         searchInArchives = new JCheckBox(SearchProperty.SEARCH_IN_ARCHIVES.getTranslation(), value);
         groupingPanel.add(searchInArchives);
-        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_ARCHIVES.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_ARCHIVES.getValue());
         searchForArchives = new JCheckBox(SearchProperty.SEARCH_FOR_ARCHIVES.getTranslation(), value);
         groupingPanel.add(searchForArchives);
 
-        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_HIDDEN.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_HIDDEN.getValue());
         searchInHidden = new JCheckBox(SearchProperty.SEARCH_IN_HIDDEN.getTranslation(), value);
         groupingPanel.add(searchInHidden);
-        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_HIDDEN.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_HIDDEN.getValue());
         searchForHidden = new JCheckBox(SearchProperty.SEARCH_FOR_HIDDEN.getTranslation(), value);
         groupingPanel.add(searchForHidden);
 
-        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SYMLINKS.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_IN_SYMLINKS.getValue());
         searchInSymlinks = new JCheckBox(SearchProperty.SEARCH_IN_SYMLINKS.getTranslation(), value);
         groupingPanel.add(searchInSymlinks);
-        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SYMLINKS.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.SEARCH_FOR_SYMLINKS.getValue());
         searchForSymlinks = new JCheckBox(SearchProperty.SEARCH_FOR_SYMLINKS.getTranslation(), value);
         groupingPanel.add(searchForSymlinks);
 
@@ -226,14 +226,14 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         IntEditor editor = new IntEditor(depth, "#####", UNLIMITED_DEPTH);
         depth.setEditor(editor);
         depth.setModel(new SpinnerNumberModel(0, 0, null, 1));
-        depth.setValue(Integer.parseInt(SearchProperty.SEARCH_DEPTH.getCurrentValue()));
+        depth.setValue(Integer.parseInt(SearchProperty.SEARCH_DEPTH.getValue()));
         compPanel.addRow(SearchProperty.SEARCH_DEPTH.getTranslation(), depth, 5);
 
         threads = new JSpinner();
         editor = new IntEditor(threads, "#####", MAX_THREADS);
         threads.setEditor(editor);
         threads.setModel(new SpinnerNumberModel(0, 0, MAX_NUM_OF_SEARCH_THREADS, 1));
-        threads.setValue(Integer.parseInt(SearchProperty.SEARCH_THREADS.getCurrentValue()));
+        threads.setValue(Integer.parseInt(SearchProperty.SEARCH_THREADS.getValue()));
         compPanel.addRow(SearchProperty.SEARCH_THREADS.getTranslation(), threads, 5);
 
         fileSearchPanel.add(compPanel);
@@ -244,18 +244,18 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Text search (Optional)")));
         compPanel = new XAlignedComponentPanel(5);
 
-        String lastText = SearchProperty.SEARCH_TEXT.getCurrentValue();
+        String lastText = SearchProperty.SEARCH_TEXT.getValue();
         searchTextField = new SelectAllOnFocusTextField(lastText);
         l = compPanel.addRow(SearchProperty.SEARCH_TEXT.getTranslation(), searchTextField, 10);
         l.setLabelFor(searchTextField);
         l.setDisplayedMnemonic('t');
 
         groupingPanel = new ProportionalGridPanel(2, gbc);
-        value = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.TEXT_CASESENSITIVE.getValue());
         textCase = new JCheckBox(SearchProperty.TEXT_CASESENSITIVE.getTranslation(), value);
         groupingPanel.add(textCase);
 
-        value = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.getCurrentValue());
+        value = Boolean.parseBoolean(SearchProperty.TEXT_MATCH_REGEX.getValue());
         textRegex = new JCheckBox(SearchProperty.TEXT_MATCH_REGEX.getTranslation(), value);
         groupingPanel.add(textRegex);
         compPanel.addRow("", groupingPanel, 5);
@@ -283,7 +283,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     }
 
     void addSizePanel(XAlignedComponentPanel compPanel) {
-        var firstSizeClause = SearchProperty.SEARCH_SIZE.getCurrentValue();
+        var firstSizeClause = SearchProperty.SEARCH_SIZE.getValue();
         JPanel firstSizePanel = new JPanel(new FlowLayout());
 
         var firstSizeRelation = SearchUtils.getSizeRelation(firstSizeClause);
@@ -298,7 +298,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         firstSizeUnit.setSelectedIndex(SearchUtils.getSizeUnit(firstSizeClause).ordinal());
         firstSizePanel.add(firstSizeUnit);
 
-        var secondSizeClause = SearchProperty.SEARCH_SIZE2.getCurrentValue();
+        var secondSizeClause = SearchProperty.SEARCH_SIZE2.getValue();
         JPanel secondSizePanel = new JPanel(new FlowLayout());
 
         secondSizePanel.add(secondSizeRel);
@@ -445,23 +445,23 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             }
         }
 
-        SearchProperty.SEARCH_IN_SUBFOLDERS.update(String.valueOf(searchInSubfolders.isSelected()));
-        SearchProperty.SEARCH_IN_ARCHIVES.update(String.valueOf(searchInArchives.isSelected()));
-        SearchProperty.SEARCH_IN_HIDDEN.update(String.valueOf(searchInHidden.isSelected()));
-        SearchProperty.SEARCH_IN_SYMLINKS.update(String.valueOf(searchInSymlinks.isSelected()));
-        SearchProperty.SEARCH_FOR_SUBFOLDERS.update(String.valueOf(searchForSubfolders.isSelected()));
-        SearchProperty.SEARCH_FOR_ARCHIVES.update(String.valueOf(searchForArchives.isSelected()));
-        SearchProperty.SEARCH_FOR_HIDDEN.update(String.valueOf(searchForHidden.isSelected()));
-        SearchProperty.SEARCH_FOR_SYMLINKS.update(String.valueOf(searchForSymlinks.isSelected()));
-        SearchProperty.MATCH_CASESENSITIVE.update(String.valueOf(matchCase.isSelected()));
-        SearchProperty.MATCH_REGEX.update(String.valueOf(matchRegex.isSelected()));
-        SearchProperty.SEARCH_DEPTH.update(String.valueOf(((Number) depth.getValue()).intValue()));
-        SearchProperty.SEARCH_THREADS.update(String.valueOf(((Number) threads.getValue()).intValue()));
-        SearchProperty.TEXT_CASESENSITIVE.update(String.valueOf(textCase.isSelected()));
-        SearchProperty.TEXT_MATCH_REGEX.update(String.valueOf(textRegex.isSelected()));
-        SearchProperty.SEARCH_SIZE.update(buildSeachSizeClause(firstSizeRelation, firstSize, firstSizeUnit));
-        SearchProperty.SEARCH_SIZE2.update(buildSeachSizeClause(secondSizeRelation, secondSize, secondSizeUnit));
-        SearchProperty.SEARCH_TEXT.update(searchTextField.getText());
+        SearchProperty.SEARCH_IN_SUBFOLDERS.setValue(String.valueOf(searchInSubfolders.isSelected()));
+        SearchProperty.SEARCH_IN_ARCHIVES.setValue(String.valueOf(searchInArchives.isSelected()));
+        SearchProperty.SEARCH_IN_HIDDEN.setValue(String.valueOf(searchInHidden.isSelected()));
+        SearchProperty.SEARCH_IN_SYMLINKS.setValue(String.valueOf(searchInSymlinks.isSelected()));
+        SearchProperty.SEARCH_FOR_SUBFOLDERS.setValue(String.valueOf(searchForSubfolders.isSelected()));
+        SearchProperty.SEARCH_FOR_ARCHIVES.setValue(String.valueOf(searchForArchives.isSelected()));
+        SearchProperty.SEARCH_FOR_HIDDEN.setValue(String.valueOf(searchForHidden.isSelected()));
+        SearchProperty.SEARCH_FOR_SYMLINKS.setValue(String.valueOf(searchForSymlinks.isSelected()));
+        SearchProperty.MATCH_CASESENSITIVE.setValue(String.valueOf(matchCase.isSelected()));
+        SearchProperty.MATCH_REGEX.setValue(String.valueOf(matchRegex.isSelected()));
+        SearchProperty.SEARCH_DEPTH.setValue(String.valueOf(((Number) depth.getValue()).intValue()));
+        SearchProperty.SEARCH_THREADS.setValue(String.valueOf(((Number) threads.getValue()).intValue()));
+        SearchProperty.TEXT_CASESENSITIVE.setValue(String.valueOf(textCase.isSelected()));
+        SearchProperty.TEXT_MATCH_REGEX.setValue(String.valueOf(textRegex.isSelected()));
+        SearchProperty.SEARCH_SIZE.setValue(buildSeachSizeClause(firstSizeRelation, firstSize, firstSizeUnit));
+        SearchProperty.SEARCH_SIZE2.setValue(buildSeachSizeClause(secondSizeRelation, secondSize, secondSizeUnit));
+        SearchProperty.SEARCH_TEXT.setValue(searchTextField.getText());
 
         return true;
     }
