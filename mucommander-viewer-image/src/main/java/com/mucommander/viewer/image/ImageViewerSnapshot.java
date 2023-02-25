@@ -16,22 +16,48 @@
  */
 package com.mucommander.viewer.image;
 
-import com.mucommander.commons.conf.Configuration;
-import com.mucommander.snapshot.MuSnapshotable;
+import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.conf.Configuration;
+import com.mucommander.snapshot.MuSnapshot;
+import com.mucommander.snapshot.MuSnapshotable;
 
 /**
  * Snapshot preferences for image viewer.
  */
 @ParametersAreNonnullByDefault
 public final class ImageViewerSnapshot implements MuSnapshotable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageViewerSnapshot.class);
+
+    /**
+     * Section describing information specific to image file presenter.
+     */
+    public static final String IMAGE_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "image";
+
+    @Override
+    public void read(Configuration configuration) {
+        LOGGER.info("Loading snapshot configuration for " + ImageViewerSnapshot.class);
+        for (var pref : ImageViewerPreferences.values()) {
+            var prefKey = pref.getPrefKey();
+            if (prefKey != null) {
+                prefKey = IMAGE_FILE_PRESENTER_SECTION + "." + prefKey;
+                pref.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, pref.getValue()));
+            }
+        }
+    }
 
     @Override
     public void write(Configuration configuration) {
-        for (ImageViewerPreferences pref : ImageViewerPreferences.values()) {
-            if (pref.getPrefKey() != null) {
-                configuration.setVariable(pref.getPrefKey(), pref.getValue());
+        for (var pref : ImageViewerPreferences.values()) {
+            var prefKey = pref.getPrefKey();
+            if (prefKey != null) {
+                prefKey = IMAGE_FILE_PRESENTER_SECTION + "." + prefKey;
+                configuration.setVariable(prefKey, pref.getValue());
             }
         }
     }

@@ -16,19 +16,40 @@
  */
 package com.mucommander.ui.viewer;
 
+import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.conf.Configuration;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.snapshot.MuSnapshotable;
 
 /**
  * Snapshot preferences for viewer.
  */
 public final class ViewerSnapshot implements MuSnapshotable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ViewerSnapshot.class);
+
+    @Override
+    public void read(Configuration configuration) {
+        LOGGER.info("Loading snapshot configuration for " + ViewerSnapshot.class);
+        for (var pref : ViewerPreferences.values()) {
+            var prefKey = pref.getPrefKey();
+            if (prefKey != null) {
+                prefKey = FILE_PRESENTER_SECTION + "." + prefKey;
+                pref.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, pref.getValue()));
+            }
+        }
+    }
 
     @Override
     public void write(Configuration configuration) {
-        for (ViewerPreferences pref : ViewerPreferences.values()) {
-            if (pref.getPrefKey() != null) {
-                configuration.setVariable(pref.getPrefKey(), pref.getValue());
+        for (var pref : ViewerPreferences.values()) {
+            var prefKey = pref.getPrefKey();
+            if (prefKey != null) {
+                prefKey = FILE_PRESENTER_SECTION + "." + prefKey;
+                configuration.setVariable(prefKey, pref.getValue());
             }
         }
     }

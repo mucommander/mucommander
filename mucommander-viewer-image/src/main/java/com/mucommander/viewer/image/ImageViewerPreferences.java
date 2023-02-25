@@ -16,12 +16,8 @@
  */
 package com.mucommander.viewer.image;
 
-import com.mucommander.snapshot.MuSnapshot;
-
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
 
 /**
  * Image viewer preferences.
@@ -33,19 +29,14 @@ public enum ImageViewerPreferences {
     SHOW_STATUS_BAR("show_status_bar", "image_viewer.show_status_bar", Boolean.TRUE.toString())
     ;
 
-    /**
-     * Section describing information specific to image file presenter.
-     */
-    public static final String IMAGE_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "image";
-
     private String prefKey;
     private String i18nKey;
-    private String currentValue;
+    private String value;
 
     ImageViewerPreferences(String prefKey, String i18nKey, String defaultValue) {
-        this.prefKey = IMAGE_FILE_PRESENTER_SECTION + "." + prefKey;
+        this.prefKey = prefKey;
         this.i18nKey = i18nKey;
-        this.currentValue = MuSnapshot.getSnapshot().getVariable(this.prefKey, defaultValue);
+        value = defaultValue;
     }
 
     @Nonnull
@@ -60,10 +51,10 @@ public enum ImageViewerPreferences {
 
     @Nonnull
     public String getValue() {
-        return currentValue;
+        return value;
     }
 
     public void setValue(String value) {
-        currentValue = value;
+        this.value = value;
     }
 }
