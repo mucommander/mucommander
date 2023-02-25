@@ -16,6 +16,8 @@
  */
 package com.mucommander.viewer.text;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -29,45 +31,65 @@ import java.util.function.Function;
 enum TextViewerPreferences {
 
     // Whether to wrap long lines.
-    LINE_WRAP("line_wrap", "text_viewer.line_wrap", false, t -> t::wrap),
+    @Metadata(false)
+    LINE_WRAP("line_wrap", "text_viewer.line_wrap", t -> t::wrap),
     // Whether to show line numbers.
-    LINE_NUMBERS("line_numbers", "text_viewer.line_numbers", true),
+    @Metadata
+    LINE_NUMBERS("line_numbers", "text_viewer.line_numbers"),
     // Whether to animate bracket matching
-    ANIMATE_BRACKET_MATCHING("animate_bracket_matching", "text_viewer.animate_bracket_matching", true, t -> t::animateBracketMatching),
+    @Metadata
+    ANIMATE_BRACKET_MATCHING("animate_bracket_matching", "text_viewer.animate_bracket_matching", t -> t::animateBracketMatching),
     // Whether to use anti-aliasing
-    ANTI_ALIASING("anti_aliasing", "text_viewer.anti_aliasing", true, t -> t::antiAliasing),
+    @Metadata
+    ANTI_ALIASING("anti_aliasing", "text_viewer.anti_aliasing", t -> t::antiAliasing),
     // Whether to use auto-indent
-    AUTO_INDENT("auto_indent", "text_viewer.auto_indent", false, t -> t::autoIndent, EditorViewerMode.EDITOR),
+    @Metadata(value = false, mode = EditorViewerMode.EDITOR)
+    AUTO_INDENT("auto_indent", "text_viewer.auto_indent", t -> t::autoIndent),
     // Whether to match brackets
-    BRACKET_MATCHING("bracket_matching", "text_viewer.bracket_matching", true, t -> t::bracketMatching),
+    @Metadata
+    BRACKET_MATCHING("bracket_matching", "text_viewer.bracket_matching", t -> t::bracketMatching),
     // Whether to clear lines with whitespaces
-    CLEAR_WHITE_SPACE("clear_whitespace_lines", "text_viewer.clear_whitespace_lines", true, t -> t::clearWhitespaceLines, EditorViewerMode.EDITOR),
+    @Metadata(mode = EditorViewerMode.EDITOR)
+    CLEAR_WHITE_SPACE("clear_whitespace_lines", "text_viewer.clear_whitespace_lines", t -> t::clearWhitespaceLines),
     // Whether to close curly braces
-    CLOSE_CURLY_BRACES("close_curly_braces", "text_viewer.close_curly_braces", true, t -> t::closeCurlyBraces, EditorViewerMode.EDITOR),
+    @Metadata(mode = EditorViewerMode.EDITOR)
+    CLOSE_CURLY_BRACES("close_curly_braces", "text_viewer.close_curly_braces", t -> t::closeCurlyBraces),
     // Whether to markup tags (only honored for markup languages, such as HTML, XML and PHP)
-    CLOSE_MARKUP_TAGS("close_markup_tags", "text_viewer.close_markup_tags", true, t -> t::closeMarkupTags, EditorViewerMode.EDITOR),
+    @Metadata(mode = EditorViewerMode.EDITOR)
+    CLOSE_MARKUP_TAGS("close_markup_tags", "text_viewer.close_markup_tags", t -> t::closeMarkupTags),
     // Whether to use code folding
-    CODE_FOLDING("code_folding", "text_viewer.code_folding", true, t -> t::codeFolding),
+    @Metadata
+    CODE_FOLDING("code_folding", "text_viewer.code_folding", t -> t::codeFolding),
     // Whether text drag-n-drop is enabled
-    DRAG_ENABLED("drag_n_drop", "text_viewer.drag_n_drop", true, t -> t::dragEnabled),
+    @Metadata
+    DRAG_ENABLED("drag_n_drop", "text_viewer.drag_n_drop", t -> t::dragEnabled),
     // Whether to show EOL markers
-    EOL_MARKERS("eol_markers", "text_viewer.eol_markers", false, t -> t::eolMarkersVisible),
+    @Metadata(false)
+    EOL_MARKERS("eol_markers", "text_viewer.eol_markers", t -> t::eolMarkersVisible),
     // Whether to slightly fade current line highlight
-    FADE_CURRENT_LINE_HL("fade_current_line", "text_viewer.fade_current_line", true, t -> t::fadeCurrentLineHighlight),
+    @Metadata
+    FADE_CURRENT_LINE_HL("fade_current_line", "text_viewer.fade_current_line", t -> t::fadeCurrentLineHighlight),
     // Whether to highlight a current line
-    HIGHLIGHT_CURRENT_LINE("highlight_current_line", "text_viewer.highlight_current_line", true, t -> t::highlightCurrentLine),
+    @Metadata
+    HIGHLIGHT_CURRENT_LINE("highlight_current_line", "text_viewer.highlight_current_line", t -> t::highlightCurrentLine),
     // Whether to mark occurrences
-    MARK_OCCURRENCES("mark_occurrences", "text_viewer.mark_occurrences", true, t -> t::markOccurrences),
+    @Metadata
+    MARK_OCCURRENCES("mark_occurrences", "text_viewer.mark_occurrences", t -> t::markOccurrences),
     // Whether to paint tab lines
-    PAINT_TAB_LINES("tab_lines", "text_viewer.tab_lines", true, t -> t::paintTabLines),
+    @Metadata
+    PAINT_TAB_LINES("tab_lines", "text_viewer.tab_lines", t -> t::paintTabLines),
     // Whether to paint rounded edges of selection
-    ROUNDED_SELECTION("rounded_selection", "text_viewer.rounded_selection", true, t -> t::roundedSelectionEdges),
+    @Metadata
+    ROUNDED_SELECTION("rounded_selection", "text_viewer.rounded_selection", t -> t::roundedSelectionEdges),
     // Whether to show popup with matched end-bracket (when off-screen)
-    SHOW_MATCHED_BRACKET("show_matched_bracket_popup", "text_viewer.show_matched_bracket_popup", true, t -> t::showMatchedBracketPopup),
+    @Metadata
+    SHOW_MATCHED_BRACKET("show_matched_bracket_popup", "text_viewer.show_matched_bracket_popup", t -> t::showMatchedBracketPopup),
     // Whether to emulated tabs with spaces
-    TABS_EMULATED("tabs_emulated", "text_viewer.tabs_emulated", true, t -> t::tabsEmulated, EditorViewerMode.EDITOR),
+    @Metadata(mode = EditorViewerMode.EDITOR)
+    TABS_EMULATED("tabs_emulated", "text_viewer.tabs_emulated", t -> t::tabsEmulated),
     // Whether to show whitespace chars
-    WHITESPACE_VISIBLE("whitespace_visible", "text_viewer.whitespace_visible", false, t -> t::whitespaceVisible),
+    @Metadata(false)
+    WHITESPACE_VISIBLE("whitespace_visible", "text_viewer.whitespace_visible", t -> t::whitespaceVisible),
 
     ; // end of prefs (syntax sugar aka developer vanity marker)
 
@@ -78,27 +100,35 @@ enum TextViewerPreferences {
 
     String prefKey;
     String i18nKey;
-    boolean value;
-    EditorViewerMode mode;
-
     Function<TextEditorImpl, Consumer<Boolean>> textEditorSetter;
 
-    TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue) {
-        this(prefKey, i18nKey, defaultValue, null, EditorViewerMode.BOTH);
+    boolean value = true;
+    EditorViewerMode mode = EditorViewerMode.BOTH;
+
+    @Retention(RetentionPolicy.RUNTIME)
+    private @interface Metadata {
+        // Default value
+        boolean value() default true;
+        EditorViewerMode mode() default EditorViewerMode.BOTH;
     }
 
-    TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue,
-            Function<TextEditorImpl, Consumer<Boolean>> textEditorSetter) {
-        this(prefKey, i18nKey, defaultValue, textEditorSetter, EditorViewerMode.BOTH);
+    TextViewerPreferences(String prefKey, String i18nKey) {
+        this(prefKey, i18nKey, null);
     }
 
-    TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue,
-            Function<TextEditorImpl, Consumer<Boolean>> textEditorSetter, EditorViewerMode mode) {
+    TextViewerPreferences(String prefKey, String i18nKey, Function<TextEditorImpl, Consumer<Boolean>> textEditorSetter) {
         this.prefKey = prefKey;
         this.i18nKey = i18nKey;
         this.textEditorSetter = textEditorSetter;
-        this.value = defaultValue;
-        this.mode = mode;
+
+        Metadata metadata;
+        try {
+            metadata = getDeclaringClass().getDeclaredField(this.name()).getDeclaredAnnotation(Metadata.class);
+            mode = metadata.mode();
+            value = metadata.value();
+        } catch (NoSuchFieldException | SecurityException e) {
+            // ignore, the properties are initialized with the annotation's default values
+        }
     }
 
     public String getPrefKey() {
