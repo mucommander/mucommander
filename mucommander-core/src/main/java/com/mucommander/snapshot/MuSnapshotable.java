@@ -31,7 +31,7 @@ public interface MuSnapshotable {
      * 
      * @param configuration configuration
      */
-    default void read(Configuration configuration) {}
+    void read(Configuration configuration);
     
     /**
      * Performs storing/writing of snapshot preferences.
