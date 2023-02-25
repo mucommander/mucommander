@@ -17,7 +17,7 @@
 
 package com.mucommander.viewer.text;
 
-import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
+import static com.mucommander.viewer.text.TextViewerSnapshot.TEXT_FILE_PRESENTER_SECTION;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

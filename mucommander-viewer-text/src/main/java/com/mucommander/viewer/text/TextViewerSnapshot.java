@@ -16,7 +16,13 @@
  */
 package com.mucommander.viewer.text;
 
+import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.conf.Configuration;
+import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.snapshot.MuSnapshotable;
 
 /**
@@ -25,12 +31,32 @@ import com.mucommander.snapshot.MuSnapshotable;
  * @author Miroslav Hajda, Piotr Skowronek
  */
 public final class TextViewerSnapshot implements MuSnapshotable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextViewerSnapshot.class);
+
+    /**
+     * Section describing information specific to text file presenter.
+     */
+    public static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
+
+    @Override
+    public void read(Configuration configuration) {
+        LOGGER.info("Loading snapshot configuration for " + TextViewerPreferences.class);
+        for (var pref : TextViewerPreferences.values()) {
+            var prefKey = pref.getPrefKey();
+            if (prefKey != null) {
+                prefKey = TEXT_FILE_PRESENTER_SECTION + "." + prefKey;
+                pref.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, pref.getValue()));
+            }
+        }
+    }
 
     @Override
     public void write(Configuration configuration) {
-        for (TextViewerPreferences pref : TextViewerPreferences.values()) {
-            if (pref.getPrefKey() != null) {
-                configuration.setVariable(pref.getPrefKey(), pref.getValue());
+        for (var pref : TextViewerPreferences.values()) {
+            var prefKey = pref.getPrefKey();
+            if (prefKey != null) {
+                prefKey = TEXT_FILE_PRESENTER_SECTION + "." + prefKey;
+                configuration.setVariable(prefKey, pref.getValue());
             }
         }
     }

@@ -16,10 +16,6 @@
  */
 package com.mucommander.ui.viewer;
 
-import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
-
-import com.mucommander.snapshot.MuSnapshot;
-
 /**
  * Editor preferences.
  */
@@ -33,11 +29,11 @@ public enum EditorPreferences {
     ;
 
     private String prefKey;
-    private String currentValue;
+    private String value;
 
     EditorPreferences(String prefKey, String defaultValue) {
-        this.prefKey =  FILE_PRESENTER_SECTION + "." + prefKey;
-        this.currentValue = MuSnapshot.getSnapshot().getVariable(this.prefKey, defaultValue);
+        this.prefKey =  prefKey;
+        this.value = defaultValue;
     }
 
     public String getPrefKey() {
@@ -45,10 +41,10 @@ public enum EditorPreferences {
     }
 
     public String getValue() {
-        return currentValue;
+        return value;
     }
 
     public void setValue(String value) {
-        currentValue = value;
+        this.value = value;
     }
 }

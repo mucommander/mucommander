@@ -61,7 +61,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import static com.mucommander.viewer.text.TextViewerPreferences.TEXT_FILE_PRESENTER_SECTION;
+import static com.mucommander.viewer.text.TextViewerSnapshot.TEXT_FILE_PRESENTER_SECTION;
 
 
 /**

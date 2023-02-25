@@ -16,11 +16,24 @@
  */
 package com.mucommander.search;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.conf.Configuration;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.snapshot.MuSnapshotable;
 
 public class SearchSnapshot implements MuSnapshotable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchSnapshot.class);
+
+    @Override
+    public void read(Configuration configuration) {
+        LOGGER.info("Loading snapshot configuration for " + SearchSnapshot.class);
+        for (var searchProperty : SearchProperty.values()) {
+            var prefKey = MuSnapshot.SEARCH_SECTION + "." + searchProperty.getKey();
+            searchProperty.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, searchProperty.getDefaultValue()));
+        }
+    }
 
     @Override
     public void write(Configuration configuration) {

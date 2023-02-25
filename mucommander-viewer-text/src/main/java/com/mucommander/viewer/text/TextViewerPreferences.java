@@ -16,11 +16,8 @@
  */
 package com.mucommander.viewer.text;
 
-import com.mucommander.snapshot.MuSnapshot;
-
 import java.util.function.BiConsumer;
 
-import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
 
 /**
  * TextEditor preferences gluing visual aspects (like i18n, source of menu generation),
@@ -93,11 +90,6 @@ enum TextViewerPreferences {
 
     ; // end of prefs (syntax sugar aka developer vanity marker)
 
-    /**
-     * Section describing information specific to text file presenter.
-     */
-    public static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
-
     enum EditorViewerMode {
         BOTH,
         EDITOR
@@ -121,11 +113,10 @@ enum TextViewerPreferences {
 
     TextViewerPreferences(String prefKey, String i18nKey, boolean defaultValue,
                           BiConsumer<TextEditorImpl, Boolean> textEditorSetter, EditorViewerMode mode) {
-        this.prefKey = prefKey != null ? TEXT_FILE_PRESENTER_SECTION + "." + prefKey : null;
+        this.prefKey = prefKey;
         this.i18nKey = i18nKey;
         this.textEditorSetter = textEditorSetter;
-        this.currentValue = prefKey != null ?
-                MuSnapshot.getSnapshot().getVariable(this.prefKey, defaultValue) : false;
+        this.currentValue = defaultValue;
         this.mode = mode;
     }
 
