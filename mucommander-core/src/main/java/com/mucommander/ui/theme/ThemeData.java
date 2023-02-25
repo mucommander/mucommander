@@ -1124,9 +1124,7 @@ public class ThemeData {
      * @return       <code>true</code> if the call actually changed the data, <code>false</code> otherwise.
      */
     public synchronized boolean setColor(int id, Color color) {
-        boolean buffer; // Used to store the result of isColorDifferent.
-
-        buffer = isColorDifferent(id, color);
+        boolean buffer = isColorDifferent(id, color);
         colors[id] = color;
         switch(id) {
         case FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR:
@@ -1271,12 +1269,12 @@ public class ThemeData {
     public boolean isIdentical(ThemeData data, boolean ignoreDefaults) {
         // Compares the colors.
         for (int i = 0; i < COLOR_COUNT; i++)
-            if(isColorDifferent(i, data.colors[i] , ignoreDefaults))
+            if (isColorDifferent(i, data.colors[i] , ignoreDefaults))
                 return false;
 
         // Compares the fonts.
         for (int i = 0; i < FONT_COUNT; i++)
-            if(isFontDifferent(i, data.fonts[i], ignoreDefaults))
+            if (isFontDifferent(i, data.fonts[i], ignoreDefaults))
                 return false;
 
         return true;
@@ -1325,12 +1323,12 @@ public class ThemeData {
 
         // If the specified font is null, the only way for both fonts to be equal is for fonts[id]
         // to be null as well.
-        if(font == null)
+        if (font == null)
             return fonts[id] != null;
 
         // If fonts[id] is null and we're set to ignore defaults, both fonts are different.
         // If we're set to use defaults, we must compare font and the default value for id.
-        if(fonts[id] == null)
+        if (fonts[id] == null)
             return ignoreDefaults || !getDefaultFont(id, this).equals(font);
 
         // 'Standard' case: both fonts are set, compare them normally.
@@ -1370,12 +1368,12 @@ public class ThemeData {
 
         // If the specified color is null, the only way for both colors to be equal is for colors[id]
         // to be null as well.
-        if(color == null)
+        if (color == null)
             return colors[id] != null;
 
         // If colors[id] is null and we're set to ignore defaults, both colors are different.
         // If we're set to use defaults, we must compare color and the default value for id.
-        if(colors[id] == null)
+        if (colors[id] == null)
             return ignoreDefaults || !getDefaultColor(id, this).equals(color);
 
         // 'Standard' case: both colors are set, compare them normally.
@@ -1424,14 +1422,11 @@ public class ThemeData {
      * @param font new value for the font that changed.
      */
     static void triggerFontEvent(int id, Font font) {
-        FontChangedEvent event;    // Event that will be dispatched.
-
         // Creates the event.
-        event = new FontChangedEvent(null, id, font);
+        FontChangedEvent event = new FontChangedEvent(null, id, font);
 
         // Dispatches it.
-        for(ThemeListener listener : listeners.keySet())
-            listener.fontChanged(event);
+        listeners.keySet().forEach(listener -> listener.fontChanged(event));
     }
 
     /**
@@ -1440,14 +1435,11 @@ public class ThemeData {
      * @param color new value for the color that changed.
      */
     static void triggerColorEvent(int id, Color color) {
-        ColorChangedEvent event;    // Event that will be dispatched.
-
         // Creates the event.
-        event = new ColorChangedEvent(null, id, color);
+        ColorChangedEvent event = new ColorChangedEvent(null, id, color);
 
         // Dispatches it.
-        for(ThemeListener listener : listeners.keySet())
-            listener.colorChanged(event);
+        listeners.keySet().forEach(listener -> listener.colorChanged(event));
     }
 
 
@@ -1460,7 +1452,7 @@ public class ThemeData {
      * @throws IllegalArgumentException if <code>id</code> is not a legal color identifier.
      */
     private static void checkColorIdentifier(int id) {
-        if(id < 0 || id >= COLOR_COUNT)
+        if (id < 0 || id >= COLOR_COUNT)
             throw new IllegalArgumentException("Illegal color identifier: " + id);
     }
 
@@ -1470,7 +1462,7 @@ public class ThemeData {
      * @throws IllegalArgumentException if <code>id</code> is not a legal font identifier.
      */
     private static void checkFontIdentifier(int id) {
-        if(id < 0 || id >= FONT_COUNT)
+        if (id < 0 || id >= FONT_COUNT)
             throw new IllegalArgumentException("Illegal font identifier: " + id);
     }
 }
