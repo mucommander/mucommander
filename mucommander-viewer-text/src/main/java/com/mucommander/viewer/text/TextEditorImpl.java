@@ -305,6 +305,7 @@ class TextEditorImpl implements ThemeListener {
     }
 
     void codeFolding(boolean aBool) {
+        scrollPane.setFoldIndicatorEnabled(aBool);
         textArea.setCodeFoldingEnabled(aBool);
     }
 
@@ -389,7 +390,6 @@ class TextEditorImpl implements ThemeListener {
     }
 
     public void showLineNumbers(boolean show) {
-        scrollPane.setFoldIndicatorEnabled(true);
         scrollPane.setLineNumbersEnabled(show);
     }
 
