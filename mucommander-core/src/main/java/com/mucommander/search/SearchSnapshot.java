@@ -16,33 +16,27 @@
  */
 package com.mucommander.search;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.mucommander.snapshot.MuSnapshot.SEARCH_SECTION;
 
 import com.mucommander.commons.conf.Configuration;
-import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.snapshot.MuSnapshotable;
 
-public class SearchSnapshot implements MuSnapshotable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchSnapshot.class);
-
-    @Override
-    public void read(Configuration configuration) {
-        LOGGER.info("Loading snapshot configuration for " + SearchSnapshot.class);
-        for (var property : SearchProperty.values()) {
-            var prefKey = MuSnapshot.SEARCH_SECTION + "." + property.getKey();
-            property.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, property.getValue()));
-        }
+/**
+ * Snapshot preferences for file-search
+ * @author Arik Hadas
+ */
+public class SearchSnapshot extends MuSnapshotable<SearchProperty> {
+    public SearchSnapshot() {
+        super(SearchProperty::values,
+                SearchProperty::getValue,
+                SearchProperty::setValue,
+                pref -> pref.getKey() != null ? SEARCH_SECTION + "." + pref.getKey() : null);
     }
 
     @Override
-    public void write(Configuration configuration) {
-        for (var property : SearchProperty.values()) {
-            if (!property.isDefault()) {
-                var prefKey = MuSnapshot.SEARCH_SECTION + "." + property.getKey();
-                configuration.setVariable(prefKey, property.getValue());
-            }
-        }
+    protected void write(Configuration configuration, SearchProperty pref) {
+        // do not persist properties that are set with their default value
+        if (!pref.isDefault())
+            super.write(configuration, pref);
     }
-
 }

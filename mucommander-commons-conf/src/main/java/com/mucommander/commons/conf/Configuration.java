@@ -216,7 +216,7 @@ public class Configuration {
      */
     public ConfigurationReaderFactory getReaderFactory() {
         synchronized(readerLock) {
-            if(readerFactory == null)
+            if (readerFactory == null)
                 return XmlConfigurationReader.FACTORY;
             return readerFactory;
         }
@@ -250,7 +250,7 @@ public class Configuration {
      */
     public ConfigurationWriterFactory getWriterFactory() {
         synchronized(writerLock) {
-            if(writerFactory == null)
+            if (writerFactory == null)
                 return XmlConfigurationWriter.FACTORY;
             return writerFactory;
         }
@@ -336,19 +336,17 @@ public class Configuration {
      * @see                                    #read(Reader,ConfigurationReader)
      */
     public void read(ConfigurationReader reader) throws IOException, ConfigurationException {
-        Reader              in;     // Input stream on the configuration source.
-        ConfigurationSource source; // Configuration source.
+        Reader in = null; // Input stream on the configuration source.
 
-        in = null;
-
+        ConfigurationSource source = getSource();
         // Makes sure the configuration source has been properly set.
-        if((source = getSource()) == null)
+        if (source == null)
             throw new SourceConfigurationException("Configuration source hasn't been set.");
 
         // Reads the configuration data.
         try {read(in = source.getReader(), reader);}
         finally {
-            if(in != null) {
+            if (in != null) {
                 try {in.close();}
                 catch(Exception e) {}
             }
@@ -417,19 +415,17 @@ public class Configuration {
      * @see                                    #write()
      */
     public void write() throws IOException, ConfigurationException {
-        Writer              out;    // Where to write the configuration data.
-        ConfigurationSource source; // Configuration source.
+        Writer out = null; // Where to write the configuration data.
 
-        out = null;
-
+        ConfigurationSource source = getSource();
         // Makes sure the source has been set.
-        if((source = getSource()) == null)
+        if (source == null)
             throw new SourceConfigurationException("No configuration source has been set");
 
         // Writes the configuration data.
         try {write(out = source.getWriter());}
         finally {
-            if(out != null) {
+            if (out != null) {
                 try {out.close();}
                 catch(Exception e) {
                     // Ignores errors here, nothing we can do about them.
@@ -460,23 +456,21 @@ public class Configuration {
      * @throws ConfigurationException if any error occurs.
      */
     private synchronized void build(ConfigurationBuilder builder, ConfigurationSection root) throws ConfigurationException {
-        Iterator<String>     enumeration; // Enumeration on the section's variables, then subsections.
-        String               name;        // Name of the current variable, then section.
-        ConfigurationSection section;     // Current section.
+        String name; // Name of the current variable, then section.
 
         // Explores the section's variables.
-        enumeration = root.variableNames();
-        while(enumeration.hasNext())
+        Iterator<String> enumeration = root.variableNames();
+        while (enumeration.hasNext())
             builder.addVariable(name = enumeration.next(), root.getVariable(name));
 
         // Explores the section's subsections.
         enumeration = root.sectionNames();
-        while(enumeration.hasNext()) {
-            name    = enumeration.next();
-            section = root.getSection(name);
+        while (enumeration.hasNext()) {
+            name = enumeration.next();
+            ConfigurationSection section = root.getSection(name);
 
             // We only go through subsections if contain either variables or subsections of their own.
-            if(section.hasSections() || section.hasVariables()) {
+            if (section.hasSections() || section.hasVariables()) {
                 builder.startSection(name);
                 build(builder, section);
                 builder.endSection(name);
@@ -529,14 +523,13 @@ public class Configuration {
      * @see          #getVariable(String,String)
      */
     public synchronized boolean setVariable(String name, String value) {
-        ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
-        String                buffer;   // Buffer for the variable's name trimmed of section information.
+        ConfigurationExplorer explorer = new ConfigurationExplorer(root);
 
         // Moves to the parent section.
-        buffer = moveToParent(explorer = new ConfigurationExplorer(root), name, true);
+        String buffer = moveToParent(explorer, name, true);
 
         // If the variable's value was actually modified, triggers an event.
-        if(explorer.getSection().setVariable(buffer, value)) {
+        if (explorer.getSection().setVariable(buffer, value)) {
             triggerEvent(new ConfigurationEvent(this, name, value));
             return true;
         }
@@ -684,10 +677,10 @@ public class Configuration {
      * @see         #getVariable(String,String)
      */
     public synchronized String getVariable(String name) {
-        ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
+        ConfigurationExplorer explorer = new ConfigurationExplorer(root);
 
         // If the variable's 'path' doesn't exist, return null.
-        if((name = moveToParent(explorer = new ConfigurationExplorer(root), name, false)) == null)
+        if ((name = moveToParent(explorer, name, false)) == null)
             return null;
         return explorer.getSection().getVariable(name);
     }
@@ -781,20 +774,17 @@ public class Configuration {
      * @param explorer used to backtrack through the configuration tree.
      */
     private void prune(BufferedConfigurationExplorer explorer) {
-        ConfigurationSection current;
-        ConfigurationSection parent;
-
         // If we're at the root level, nothing to prune.
-        if(!explorer.hasSections())
+        if (!explorer.hasSections())
             return;
 
-        current = explorer.popSection();
+        ConfigurationSection current = explorer.popSection();
 
         // Look for branches to prune until we've either found a non-empty one
         // or reached the root of the three.
-        while(current.isEmpty() && current != root) {
+        while (current.isEmpty() && current != root) {
             // Gets the current section's parent and prune.
-            parent = explorer.hasSections() ? explorer.popSection() : root;
+            ConfigurationSection parent = explorer.hasSections() ? explorer.popSection() : root;
             parent.removeSection(current);
             current = parent;
         }
@@ -810,15 +800,15 @@ public class Configuration {
      * @return      the variable's old value, or <code>null</code> if it wasn't set.
      */
     public synchronized String removeVariable(String name) {
-        BufferedConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
-        String                        buffer;   // Buffer for the variable's name trimmed of section information.
+        BufferedConfigurationExplorer explorer = new BufferedConfigurationExplorer(root);
+        String buffer = moveToParent(explorer , name, false);
 
         // If the variable's 'path' doesn't exist, return null.
-        if((buffer = moveToParent(explorer = new BufferedConfigurationExplorer(root), name, false)) == null)
+        if (buffer == null)
             return null;
 
         // If the variable was actually set, triggers an event.
-        if((buffer = explorer.getSection().removeVariable(buffer)) != null) {
+        if ((buffer = explorer.getSection().removeVariable(buffer)) != null) {
             prune(explorer);
             triggerEvent(new ConfigurationEvent(this, name, null));
         }
@@ -929,16 +919,17 @@ public class Configuration {
      * @see                 #getVariable(String)
      */
     public synchronized String getVariable(String name, String defaultValue) {
-        ConfigurationExplorer explorer; // Used to navigate to the variable's parent section.
-        String                value;    // Buffer for the variable's value.
-        String                buffer;   // Buffer for the variable's name trimmed of section information.
+        // Used to navigate to the variable's parent section.
+        ConfigurationExplorer explorer = new ConfigurationExplorer(root);
 
         // Navigates to the parent section. We do not have to check for null values here,
         // as the section will be created if it doesn't exist.
-        buffer = moveToParent(explorer = new ConfigurationExplorer(root), name, true);
+        String buffer = moveToParent(explorer, name, true);
+        // Buffer for the variable's value.
+        String value = explorer.getSection().getVariable(buffer);
 
         // If the variable isn't set, set it to defaultValue and triggers an event.
-        if((value = explorer.getSection().getVariable(buffer)) == null) {
+        if (value == null) {
             explorer.getSection().setVariable(buffer, defaultValue);
             triggerEvent(new ConfigurationEvent(this, name, defaultValue));
             return defaultValue;
