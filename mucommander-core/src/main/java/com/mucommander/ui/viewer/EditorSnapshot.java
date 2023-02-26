@@ -18,39 +18,16 @@ package com.mucommander.ui.viewer;
 
 import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.conf.Configuration;
-import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.snapshot.MuSnapshotable;
 
 /**
  * Snapshot preferences for editor.
  */
-public final class EditorSnapshot implements MuSnapshotable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EditorSnapshot.class);
-
-    @Override
-    public void read(Configuration configuration) {
-        LOGGER.info("Loading snapshot configuration for " + EditorSnapshot.class);
-        for (var pref : EditorPreferences.values()) {
-            var prefKey = pref.getPrefKey();
-            if (pref != null) {
-                prefKey = FILE_PRESENTER_SECTION + "." + prefKey;
-                pref.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, pref.getValue()));
-            }
-        }
-    }
-
-    @Override
-    public void write(Configuration configuration) {
-        for (var pref : EditorPreferences.values()) {
-            var prefKey = pref.getPrefKey();
-            if (prefKey != null) {
-                prefKey = FILE_PRESENTER_SECTION + "." + prefKey;
-                configuration.setVariable(pref.getPrefKey(), pref.getValue());
-            }
-        }
+public final class EditorSnapshot extends MuSnapshotable<EditorPreferences> {
+    public EditorSnapshot() {
+        super(EditorPreferences::values,
+                EditorPreferences::getValue,
+                EditorPreferences::setValue,
+                pref -> pref.getPrefKey() != null ? FILE_PRESENTER_SECTION + "." + pref.getPrefKey() : null);
     }
 }

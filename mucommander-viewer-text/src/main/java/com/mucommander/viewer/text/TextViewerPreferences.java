@@ -21,6 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * TextEditor preferences gluing visual aspects (like i18n, source of menu generation),
@@ -128,6 +131,8 @@ enum TextViewerPreferences {
             value = metadata.value();
         } catch (NoSuchFieldException | SecurityException e) {
             // ignore, the properties are initialized with the annotation's default values
+            Logger LOGGER = LoggerFactory.getLogger(TextViewerPreferences.class);
+            LOGGER.trace("Failed to parse metadata of " + name(), e);
         }
     }
 
@@ -158,6 +163,5 @@ enum TextViewerPreferences {
         return textEditorSetter != null;
     }
 
-    public boolean isEditorOnly() { return mode == EditorViewerMode.EDITOR; };
-
+    public boolean isEditorOnly() { return mode == EditorViewerMode.EDITOR; }
 }

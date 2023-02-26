@@ -17,26 +17,75 @@
 
 package com.mucommander.snapshot;
 
+import java.util.Arrays;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.conf.Configuration;
 
 /**
  * Configuration snapshoting support for modules.
  *
- * @author Miroslav Hajda
+ * @author Miroslav Hajda, Arik Hadas
  */
-public interface MuSnapshotable {
-    
+public abstract class MuSnapshotable<T>{
+    final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+    /** lists the snapshot properties */
+    private Supplier<T[]> ls;
+    /** get the value of a snapshot property */
+    private Function<T, String> get;
+    /** set the value of a snapshot property */
+    private BiConsumer<T,String> set;
+    /** returns the key in the snapshot.xml file of a snapshot property */
+    private Function<T, String> key;
+
+    /**
+     * @param ls lists the snapshot properties
+     * @param get get the value of a snapshot property
+     * @param set set the value of a snapshot property
+     * @param key returns the key in the snapshot.xml file of a snapshot property
+     */
+    protected MuSnapshotable(Supplier<T[]> ls, Function<T, String> get, BiConsumer<T,String> set, Function<T, String> key) {
+        this.ls = ls;
+        this.get = get;
+        this.set = set;
+        this.key = key;
+    }
+
     /**
      * Performs loading/reading of snapshot preferences.
      * 
      * @param configuration configuration
      */
-    void read(Configuration configuration);
+    public void read(Configuration configuration) {
+        var values = ls.get();
+        LOGGER.info("Loading snapshot configuration for: {}", values[0].getClass());
+        for (T pref : values) {
+            var prefKey = key.apply(pref);
+            if (prefKey != null) {
+                set.accept(pref, configuration.getVariable(prefKey, get.apply(pref)));
+            }
+        }
+    }
     
     /**
      * Performs storing/writing of snapshot preferences.
      * 
      * @param configuration configuration
      */
-    void write(Configuration configuration);
+    public void write(Configuration configuration) {
+        Arrays.stream(ls.get()).forEach(pref -> write(configuration, pref));
+    }
+
+    protected void write(Configuration configuration, T pref) {
+        var prefKey = key.apply(pref);
+        if (prefKey != null) {
+            configuration.setVariable(prefKey, get.apply(pref));
+        }
+    }
 }

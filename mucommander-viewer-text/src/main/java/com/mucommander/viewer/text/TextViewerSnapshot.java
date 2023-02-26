@@ -18,46 +18,23 @@ package com.mucommander.viewer.text;
 
 import static com.mucommander.snapshot.MuSnapshot.FILE_PRESENTER_SECTION;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.conf.Configuration;
-import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.snapshot.MuSnapshotable;
 
 /**
  * Snapshot preferences for text editor & viewer.
  *
- * @author Miroslav Hajda, Piotr Skowronek
+ * @author Miroslav Hajda, Piotr Skowronek, Arik Hadas
  */
-public final class TextViewerSnapshot implements MuSnapshotable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TextViewerSnapshot.class);
-
+public final class TextViewerSnapshot extends MuSnapshotable<TextViewerPreferences> {
     /**
      * Section describing information specific to text file presenter.
      */
     public static final String TEXT_FILE_PRESENTER_SECTION = FILE_PRESENTER_SECTION + "." + "text";
 
-    @Override
-    public void read(Configuration configuration) {
-        LOGGER.info("Loading snapshot configuration for " + TextViewerPreferences.class);
-        for (var pref : TextViewerPreferences.values()) {
-            var prefKey = pref.getPrefKey();
-            if (prefKey != null) {
-                prefKey = TEXT_FILE_PRESENTER_SECTION + "." + prefKey;
-                pref.setValue(MuSnapshot.getSnapshot().getVariable(prefKey, pref.getValue()));
-            }
-        }
-    }
-
-    @Override
-    public void write(Configuration configuration) {
-        for (var pref : TextViewerPreferences.values()) {
-            var prefKey = pref.getPrefKey();
-            if (prefKey != null) {
-                prefKey = TEXT_FILE_PRESENTER_SECTION + "." + prefKey;
-                configuration.setVariable(prefKey, pref.getValue());
-            }
-        }
+    TextViewerSnapshot() {
+        super(TextViewerPreferences::values,
+                pref -> Boolean.toString(pref.getValue()),
+                (pref, value) -> pref.setValue(Boolean.parseBoolean(value)),
+                pref -> pref.getPrefKey() != null ? TEXT_FILE_PRESENTER_SECTION + "." + pref.getPrefKey() : null);
     }
 }
