@@ -23,7 +23,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.mucommander.sevenzipjbindings.multivolume.InArchiveWrapper;
+import com.mucommander.sevenzipjbindings.multivolume.SevenZipRarMultiVolumeCallbackHandler;
+import net.sf.sevenzipjbinding.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,18 +40,13 @@ import com.mucommander.commons.file.archive.WrapperArchiveEntryIterator;
 import com.mucommander.commons.util.CircularByteBuffer;
 import com.mucommander.commons.util.StringUtils;
 
-import net.sf.sevenzipjbinding.ArchiveFormat;
-import net.sf.sevenzipjbinding.IInArchive;
-import net.sf.sevenzipjbinding.ISequentialOutStream;
-import net.sf.sevenzipjbinding.PropID;
-import net.sf.sevenzipjbinding.SevenZip;
-import net.sf.sevenzipjbinding.SevenZipException;
-
 /**
  * @author Oleg Trifonov, Arik Hadas
  */
 public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(SevenZipJBindingROArchiveFile.class);
+
+    private static final Pattern MULTI_PART_RAR_PATTERN = Pattern.compile("[.]part\\d+[.]rar");
 
     protected IInArchive inArchive;
     private ArchiveFormat sevenZipJBindingFormat;
@@ -79,8 +79,19 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
 
     private IInArchive openInArchive() throws IOException {
         if (inArchive == null) {
-            SignatureCheckedRandomAccessFile in = new SignatureCheckedRandomAccessFile(file, formatSignature);
-            inArchive = SevenZip.openInArchive(sevenZipJBindingFormat, in, password);
+            Matcher matcher = MULTI_PART_RAR_PATTERN.matcher(file.getName());
+
+            if (matcher.find()) {
+                SevenZipRarMultiVolumeCallbackHandler handler = new SevenZipRarMultiVolumeCallbackHandler(formatSignature, password);
+                IInStream firstStream = handler.getStream(file.getAbsolutePath());
+                IInArchive tmpInArchive = SevenZip.openInArchive(sevenZipJBindingFormat, firstStream, handler);
+                inArchive = new InArchiveWrapper(tmpInArchive, handler);
+            } else {
+                SignatureCheckedRandomAccessFile in = new SignatureCheckedRandomAccessFile(file, formatSignature);
+                IInArchive tmpInArchive = SevenZip.openInArchive(sevenZipJBindingFormat, in, password);
+                inArchive = new InArchiveWrapper(tmpInArchive, in);
+            }
+
         }
         return inArchive;
     }
@@ -101,6 +112,7 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
             LOGGER.debug("failed to list archive", e);
             throw new IOException(e);
         } finally {
+            inArchive.close();
             inArchive = null;
         }
     }
@@ -130,6 +142,11 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
                         cbb.getOutputStream().close();
                     } catch (IOException e) {
                         LOGGER.info("Error in closing outputstream: " + e.getMessage());
+                    }
+                    try {
+                        inArchive.close();
+                    } catch (SevenZipException e) {
+                        LOGGER.warn("Error closing inArchive: {}", inArchive, e);
                     }
                     inArchive = null;
                 }
