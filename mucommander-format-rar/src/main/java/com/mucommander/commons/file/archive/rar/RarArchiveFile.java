@@ -64,7 +64,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
         long currentDate = file.getDate();
         
         if (rarFile==null || currentDate != lastRarFileDate) {
-        	rarFile = new RarFile(file);
+            rarFile = new RarFile(file, password);
             declareRarFileUpToDate(currentDate);
         }
     }
