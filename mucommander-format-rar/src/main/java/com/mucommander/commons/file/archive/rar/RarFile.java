@@ -28,6 +28,7 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.util.CircularByteBuffer;
 
 /**
+ * RAR 4 and lower
  * @author Arik Hadas
  */
 public class RarFile {
@@ -36,9 +37,11 @@ public class RarFile {
     private Archive archive;
     
 
-    public RarFile(AbstractFile file) throws IOException, UnsupportedFileOperationException, RarException {
+    public RarFile(AbstractFile file, String password) throws IOException, UnsupportedFileOperationException, RarException {
         try (InputStream fileIn = file.getInputStream()) {
-            archive = new Archive(fileIn);
+            archive = new Archive(fileIn, password);
+            if (archive.isPasswordProtected() && password == null)
+                throw new IOException("RAR archive is password-protected and no password was specified");
         }
     }
 
