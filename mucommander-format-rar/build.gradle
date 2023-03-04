@@ -11,7 +11,7 @@ dependencies {
     api 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
 
     implementation 'org.apache.commons:commons-vfs2:2.3'
-    implementation 'com.github.junrar:junrar:7.5.1'
+    implementation 'com.github.junrar:junrar:7.5.4'
 
     testImplementation 'org.testng:testng:6.11'
 }
