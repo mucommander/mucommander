@@ -36,7 +36,7 @@ New features:
 - New operations in text editor: Undo, Redo, Replace spaces with tabs, Replace tabs with spaces
 - Renaming files in Google Drive.
 - Password-protected 7z archives can be browsed and unpacked.
-- Enable custom color configurations for read-only files/folders.
+- Custom color configurations for read-only files/folders.
 
 Improvements:
 - 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.
@@ -46,7 +46,6 @@ Improvements:
 - The timeout for showing 'quick search' results is configurable via the 'Preferences' dialog.
 - Set alternative keyboard shortcuts that don't require numeric keypad for Mark/Unmark actions.
 - The configuration of the last file search is restored (from 'snapshot.xml') on startup.
-- Enable uploads of files that are bigger than 2GB to NFS share.
 - The 'Contents' field in the 'Properties' dialog includes hidden files only when the filter 'Show hidden files' is set.
 
 Localization:
@@ -56,6 +55,7 @@ Bug fixes:
 - The modification timestamp of folders is preserved when they are moved to a different file system.
 - 'Open command prompt' action now works on Xfce.
 - Filter out trashed files in Google Drive.
+- It is now possible to upload files that are bigger than 2GB to NFS share.
 
 Known issues:
 - Some translations may not be up-to-date.
