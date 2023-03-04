@@ -56,6 +56,7 @@ Bug fixes:
 - 'Open command prompt' action now works on Xfce.
 - Filter out trashed files in Google Drive.
 - It is now possible to upload files that are bigger than 2GB to NFS share.
+- It is now possible to extract files that are bigger than 2GB from RAR 4 and lower archives.
 
 Known issues:
 - Some translations may not be up-to-date.

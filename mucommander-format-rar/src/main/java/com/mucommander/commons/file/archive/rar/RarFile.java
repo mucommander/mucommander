@@ -48,7 +48,7 @@ public class RarFile {
     
     public InputStream getEntryInputStream(String path) throws IOException, RarException {
         final FileHeader header = archive.getFileHeaders().stream()
-                .filter(h -> h.getFileNameString().equals(path))
+                .filter(h -> h.getFileName().equals(path))
                 .findFirst()
                 .orElse(null);
 
