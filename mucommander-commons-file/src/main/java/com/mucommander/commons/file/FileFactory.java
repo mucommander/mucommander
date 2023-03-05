@@ -489,8 +489,9 @@ public class FileFactory {
                     currentFile = filePool.get(clonedURL);
                     if (currentFile==null) {
                         currentFile = wrapArchive(createRawFile(clonedURL, authenticator, instantiationParams));
-                        // Add the intermediate file instance to the cache
-                        filePool.put(clonedURL, currentFile);
+                        // Add the intermediate file instance to the cache if it exists
+                        if (currentFile.exists())
+                            filePool.put(clonedURL, currentFile);
                     }
 
                     lastFileResolved = true;
