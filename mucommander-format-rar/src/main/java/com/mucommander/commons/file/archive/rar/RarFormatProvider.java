@@ -18,6 +18,14 @@
 
 package com.mucommander.commons.file.archive.rar;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.junrar.exception.UnsupportedRarV5Exception;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveFormatProvider;
@@ -26,13 +34,6 @@ import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.sevenzipjbindings.SevenZipJBindingROArchiveFile;
 
 import net.sf.sevenzipjbinding.ArchiveFormat;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class is the provider for the 'Rar' archive format implemented by {@link RarArchiveFile}.
@@ -50,15 +51,17 @@ public class RarFormatProvider implements ArchiveFormatProvider {
 
     @Override
     public AbstractArchiveFile getFile(AbstractFile file) throws IOException {
-        // trying RAR 5+ first as it has been the default for quite a while
-        SevenZipJBindingROArchiveFile archive = new SevenZipJBindingROArchiveFile(file, ArchiveFormat.RAR5, RAR5_SIGNATURE);
+        RarArchiveFile rar4 = new RarArchiveFile(file);
+        AbstractArchiveFile rar = rar4;
         try {
-            return archive.check();
-        } catch(Exception e) {
-            // fall back to older versions (1.5 - 4.0)
-            LOGGER.info("failed to open archive as RAR 5+, trying older versions");
-            return new RarArchiveFile(file);
+            rar4.check();
+        } catch (UnsupportedRarV5Exception e) {
+            LOGGER.info("failed to open RAR file with junrar, trying as RAR 5+");
+            rar = new SevenZipJBindingROArchiveFile(file, ArchiveFormat.RAR5, RAR5_SIGNATURE);
+        } catch (Exception e) {
+            // no-op, failures will be thrown when browsing/extracting the file
         }
+        return rar;
     }
 
     @Override
