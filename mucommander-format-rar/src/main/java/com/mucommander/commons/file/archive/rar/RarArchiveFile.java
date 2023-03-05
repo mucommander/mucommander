@@ -20,16 +20,15 @@ package com.mucommander.commons.file.archive.rar;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 
+import com.github.junrar.exception.RarException;
+import com.github.junrar.rarfile.FileHeader;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
 import com.mucommander.commons.file.archive.WrapperArchiveEntryIterator;
-import com.github.junrar.exception.RarException;
-import com.github.junrar.rarfile.FileHeader;
 
 /**
  * RarArchiveFile provides read-only access to archives in the Rar format.
@@ -84,13 +83,12 @@ public class RarArchiveFile extends AbstractROArchiveFile {
      * @return an ArchiveEntry whose attributes are fetched from the given FileHeader
      */
     private ArchiveEntry createArchiveEntry(FileHeader header) {
-    	return new ArchiveEntry(
-    			header.getFileNameString().replace('\\', '/'),
-    			header.isDirectory(),
-    			header.getMTime().getTime(),
-    			header.getFullUnpackSize(),
-                true
-    	);
+        return new ArchiveEntry(
+                header.getFileName().replace('\\', '/'),
+                header.isDirectory(),
+                header.getMTime().getTime(),
+                header.getFullUnpackSize(),
+                true);
     }
 
     
@@ -106,11 +104,11 @@ public class RarArchiveFile extends AbstractROArchiveFile {
 			throw new IOException();
 		}
 
-        Vector<ArchiveEntry> entries = new Vector<ArchiveEntry>();
-        for (Object o : rarFile.getEntries())
-            entries.add(createArchiveEntry((FileHeader)o));
+        var iterator = rarFile.getEntries().stream()
+                .map(this::createArchiveEntry)
+                .iterator();
 
-        return new WrapperArchiveEntryIterator(entries.iterator());
+        return new WrapperArchiveEntryIterator(iterator);
     }
 
     @Override
