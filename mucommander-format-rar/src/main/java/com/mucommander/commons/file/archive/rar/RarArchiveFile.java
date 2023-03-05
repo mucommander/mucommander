@@ -20,6 +20,7 @@ package com.mucommander.commons.file.archive.rar;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.github.junrar.exception.RarException;
 import com.github.junrar.rarfile.FileHeader;
@@ -45,7 +46,7 @@ public class RarArchiveFile extends AbstractROArchiveFile {
 	private long lastRarFileDate;	
 	
     
-	public RarArchiveFile(AbstractFile file) throws IOException {		
+	public RarArchiveFile(AbstractFile file) {
 		super(file);
 	}
 	
@@ -59,10 +60,10 @@ public class RarArchiveFile extends AbstractROArchiveFile {
      * or is not implemented.
 	 * @throws RarException 
      */
-    private void checkRarFile() throws IOException, UnsupportedFileOperationException, RarException {
+    void check() throws IOException, UnsupportedFileOperationException, RarException {
         long currentDate = file.getDate();
         
-        if (rarFile==null || currentDate != lastRarFileDate) {
+        if (rarFile == null || !Objects.equals(rarFile.getPassword(), password) || currentDate != lastRarFileDate) {
             rarFile = new RarFile(file, password);
             declareRarFileUpToDate(currentDate);
         }
@@ -99,30 +100,23 @@ public class RarArchiveFile extends AbstractROArchiveFile {
     @Override
     public synchronized ArchiveEntryIterator getEntryIterator() throws IOException, UnsupportedFileOperationException {
         try {
-			checkRarFile();
-		} catch (RarException e) {
-			throw new IOException();
-		}
-
+            check();
+        } catch (RarException e) {
+            throw new IOException(e);
+        }
         var iterator = rarFile.getEntries().stream()
                 .map(this::createArchiveEntry)
                 .iterator();
-
         return new WrapperArchiveEntryIterator(iterator);
     }
 
     @Override
     public synchronized InputStream getEntryInputStream(ArchiveEntry entry, ArchiveEntryIterator entryIterator) throws IOException, UnsupportedFileOperationException {
-		try {
-			checkRarFile();
-		} catch (RarException e) {
-			throw new IOException();
-		}
-		
-		try {
-			return rarFile.getEntryInputStream(entry.getPath().replace('/', '\\'));
-		} catch (RarException e) {
-			throw new IOException();
-		}
-	}
+        try {
+            check();
+            return rarFile.getEntryInputStream(entry.getPath().replace('/', '\\'));
+        } catch (RarException e) {
+            throw new IOException(e);
+        }
+    }
 }

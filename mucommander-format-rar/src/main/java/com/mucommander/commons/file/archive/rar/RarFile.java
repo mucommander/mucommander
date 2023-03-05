@@ -35,14 +35,18 @@ public class RarFile {
 	
     /** Interface to junrar library */
     private Archive archive;
-    
 
     public RarFile(AbstractFile file, String password) throws IOException, UnsupportedFileOperationException, RarException {
         try (InputStream fileIn = file.getInputStream()) {
             archive = new Archive(fileIn, password);
-            if (archive.isPasswordProtected() && password == null)
-                throw new IOException("RAR archive is password-protected and no password was specified");
         }
+
+        if (archive.isPasswordProtected() && password == null)
+            throw new IOException("RAR archive is password-protected and no password was specified");
+    }
+
+    public String getPassword() {
+        return archive.getPassword();
     }
 
     public Collection<FileHeader> getEntries() {
