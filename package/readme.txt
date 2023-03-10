@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.2.0
+muCommander v1.3.0
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,35 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v1.1.0 ?
+What's new since v1.2.0 ?
 -----------------------
 
 New features:
-- Syntax highlighting and other visual enhancements in text viewer/editor
-- New operations in text editor: Undo, Redo, Replace spaces with tabs, Replace tabs with spaces
-- Renaming files in Google Drive.
-- Password-protected 7z and RAR archives can be browsed and unpacked.
-- Custom color configurations for read-only files/folders.
+-
 
 Improvements:
-- 'Show in enclosing folder' action no longer opens a new tab but changes the current tab instead.
-- The free space indicator within the status bar is updated quicker for 'ext4' and 'btrfs' UNIX file systems.
-- The trash icon and free space indicator remain visible in the status bar when a file with a long name is selected.
-- The 'commons-net' library that is used for connecting to FTP servers has been upgraded to version 3.8.0
-- The timeout for showing 'quick search' results is configurable via the 'Preferences' dialog.
-- Set alternative keyboard shortcuts that don't require numeric keypad for Mark/Unmark actions.
-- The configuration of the last file search is restored (from 'snapshot.xml') on startup.
-- The 'Contents' field in the 'Properties' dialog includes hidden files only when the filter 'Show hidden files' is set.
+-
 
 Localization:
-- Korean translation updated
+-
 
 Bug fixes:
-- The modification timestamp of folders is preserved when they are moved to a different file system.
-- 'Open command prompt' action now works on Xfce.
-- Filter out trashed files in Google Drive.
-- It is now possible to upload files that are bigger than 2GB to NFS share.
-- It is now possible to extract files that are bigger than 2GB from RAR 4 and lower archives.
+-
 
 Known issues:
 - Some translations may not be up-to-date.

@@ -287,7 +287,7 @@ public class muCommander
         configProps.computeIfAbsent("mucommander.app.dir", key -> new File(codeParentFolder, "app").getAbsolutePath());
 
         final String appDir = configProps.get("mucommander.app.dir");
-        configProps.computeIfAbsent("felix.auto.start.2", key -> "file:" + new File(appDir, "mucommander-core-1.2.0.jar").getAbsolutePath());
+        configProps.computeIfAbsent("felix.auto.start.2", key -> "file:" + new File(appDir, "mucommander-core-1.3.0.jar").getAbsolutePath());
 
         Path cacheDir = Paths.get(System.getProperty("java.io.tmpdir"), "mucommander-felix-cache-"+System.getProperty("user.name"));
         configProps.put(Constants.FRAMEWORK_STORAGE, cacheDir.toFile().getAbsolutePath());
