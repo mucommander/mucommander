@@ -21,7 +21,7 @@ allprojects {
 
     group = 'org.mucommander'
     version = '1.2.0'
-    ext.release = 'snapshot'
+    ext.release = '1'
     configurations {
         compileOnly.extendsFrom comprise
     }
