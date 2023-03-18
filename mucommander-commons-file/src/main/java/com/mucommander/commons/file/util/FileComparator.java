@@ -25,6 +25,8 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * FileComparator compares {@link AbstractFile} instances using a comparison criterion order (ascending or descending).
@@ -139,31 +141,16 @@ public class FileComparator implements Comparator<AbstractFile> {
     }
 
     /**
-     * Compare the specified strings, following the contract of {@link Comparator#compare(Object, Object)}.
+     * Compare the specified files by their names, following the contract of {@link Comparator#compare(Object, Object)}.
      *
-     * @param s1 first string to compare
-     * @param s2 second string to compare.
-     * @param ignoreCase <code>true</code> to perform a case-insensitive string comparison, <code>false</code> to take
-     * the case into account.
-     * @param nullProtection <code>true</code> if any of s1 or s2 can be <code>null</code>, <code>false</code>
-     * if strings cannot be <code>null</code>.
+     * @param file1 first file to compare
+     * @param file2 second file to compare.
      * @return a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater
      * than the second.
      */
-    private int compareStrings(String s1, String s2, boolean ignoreCase, boolean nullProtection) {
-        // Protect against null values, only if requested
-        if(nullProtection) {
-            if(s1==null && s2!=null)	    // s1 is null, s2 isn't
-                return -1;
-            else if(s1!=null && s2==null)	// s2 is null, s1 isn't
-                return 1;
-            // At this point, either both strings are null, or none of them are
-            else {
-                if (s1==null)		        // Both strings are null
-                    return 0;
-                // else: Both strings are not null, go on with the comparison
-            }
-        }
+    private int compareByFilename(AbstractFile file1, AbstractFile file2) {
+        String s1 = nameFunc.apply(file1);
+        String s2 = nameFunc.apply(file2);
 
         // Special treatment for strings that contain a number, so they are ordered by the number's value, e.g.:
         // 1 < 1a < 2 < 10, like Mac OS X Finder and Windows Explorer do.
@@ -199,35 +186,17 @@ public class FileComparator implements Comparator<AbstractFile> {
             }
         }
 
-        int n1 = s1.length();
-        int n2 = s2.length();
+        int diff = s1.compareToIgnoreCase(s2);
+        if (diff == 0) {
+            // This should never happen unless the current filesystem allows a directory to have
+            // several files with different case variations of the same name.
+            // AFAIK, no OS/filesystem allows this, but just to be safe.
 
-        for (int i=0; i<n1 && i<n2; i++) {
-            int c1 = s1.charAt(i);
-            int c2 = s2.charAt(i);
-
-            if (c1 != c2) {
-                if (ignoreCase) {
-                    c1 = Character.toUpperCase(c1);
-                    c2 = Character.toUpperCase(c2);
-                    if (c1 != c2) {
-                        // Quote from String#regionsMatches:
-                        // "Unfortunately, conversion to uppercase does not work properly for the Georgian alphabet, which
-                        // has strange rules about case conversion. So we need to make one last check before exiting."
-                        c1 = Character.toLowerCase(c1);
-                        c2 = Character.toLowerCase(c2);
-
-                        if (c1 != c2)
-                            return getCharacterValue(c1) -  getCharacterValue(c2);
-                    }
-                }
-                else {
-                    return getCharacterValue(c1) -  getCharacterValue(c2);
-                }
-            }
+            // Case-sensitive name comparison
+            diff = s1.compareTo(s2);
         }
 
-        return n1 - n2;
+        return diff;
     }
 
 
@@ -249,7 +218,7 @@ public class FileComparator implements Comparator<AbstractFile> {
             // At this point, either both files are directories or none of them are
         }
 
-        long diff;
+        long diff = 0;
         switch(criterion) {
         case SIZE:
             // Consider that directories have a size of 0
@@ -266,32 +235,20 @@ public class FileComparator implements Comparator<AbstractFile> {
             diff = f1.getPermissions().getIntValue() - f2.getPermissions().getIntValue();
             break;
         case EXTENSION:
-            diff = compareStrings(f1.getExtension(), f2.getExtension(), true, true);
+            diff = StringUtils.compareIgnoreCase(f1.getExtension(), f2.getExtension());
             break;
         case OWNER:
-            diff = compareStrings(f1.getOwner(), f2.getOwner(), true, true);
+            diff = StringUtils.compareIgnoreCase(f1.getOwner(), f2.getOwner());
             break;
         case GROUP:
-            diff = compareStrings(f1.getGroup(), f2.getGroup(), true, true);
+            diff = StringUtils.compareIgnoreCase(f1.getGroup(), f2.getGroup());
             break;
         case NAME:
         default:
-            String f1Name = nameFunc.apply(f1);
-            String f2Name = nameFunc.apply(f2);
-            diff = compareStrings(f1Name, f2Name, true, false);
-
-            if (diff==0) {
-                // This should never happen unless the current filesystem allows a directory to have
-                // several files with different case variations of the same name.
-                // AFAIK, no OS/filesystem allows this, but just to be safe.
-
-                // Case-sensitive name comparison
-                diff = compareStrings(f1Name, f2Name, false, false);
-            }
         }
 
-        if (criterion != CRITERION.NAME && diff==0)	// If both files have the same criterion's value, compare names
-            diff = compareStrings(nameFunc.apply(f1), nameFunc.apply(f2), true, false);
+        if (diff == 0)	// If both files have the same criterion's value, compare names
+            diff = compareByFilename(f1, f2);
 
         // Cast long value to int, without overflowing the int if the long value exceeds the min or max int value
         int intValue;
