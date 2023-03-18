@@ -17,6 +17,8 @@
 
 package com.mucommander.ui.main.table;
 
+import static com.mucommander.commons.file.util.FileComparator.CRITERION;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -32,13 +34,13 @@ import com.mucommander.text.Translator;
  */
 public enum Column {
 
-    EXTENSION(true, true, FileComparator.EXTENSION_CRITERION, ActionType.ToggleExtensionColumn, ActionType.SortByExtension),
-    NAME(false, true, FileComparator.NAME_CRITERION, null, ActionType.SortByName),
-    SIZE(true, true, FileComparator.SIZE_CRITERION, ActionType.ToggleSizeColumn, ActionType.SortBySize),
-    DATE(true, true, FileComparator.DATE_CRITERION, ActionType.ToggleDateColumn, ActionType.SortByDate),
-    PERMISSIONS(true, true, FileComparator.PERMISSIONS_CRITERION, ActionType.TogglePermissionsColumn, ActionType.SortByPermissions),
-    OWNER(true, false, FileComparator.OWNER_CRITERION, ActionType.ToggleOwnerColumn, ActionType.SortByOwner),
-    GROUP(true, false, FileComparator.GROUP_CRITERION, ActionType.ToggleGroupColumn, ActionType.SortByGroup);
+    EXTENSION(true, true, CRITERION.EXTENSION, ActionType.ToggleExtensionColumn, ActionType.SortByExtension),
+    NAME(false, true, CRITERION.NAME, null, ActionType.SortByName),
+    SIZE(true, true, CRITERION.SIZE, ActionType.ToggleSizeColumn, ActionType.SortBySize),
+    DATE(true, true, CRITERION.DATE, ActionType.ToggleDateColumn, ActionType.SortByDate),
+    PERMISSIONS(true, true, CRITERION.PERMISSIONS, ActionType.TogglePermissionsColumn, ActionType.SortByPermissions),
+    OWNER(true, false, CRITERION.OWNER, ActionType.ToggleOwnerColumn, ActionType.SortByOwner),
+    GROUP(true, false, CRITERION.GROUP, ActionType.ToggleGroupColumn, ActionType.SortByGroup);
 
     private static final Map<Integer, Column> ORDINAL_TO_ENUM_MAPPING = new HashMap<>(){{
         Stream.of(Column.values()).forEach(column -> put(column.ordinal(), column));
@@ -50,11 +52,11 @@ public enum Column {
     private String label;
     private int minimumWidth;
     private boolean showByDefault;
-    private int fileComparatorCriterion;
+    private FileComparator.CRITERION fileComparatorCriterion;
     private ActionType toggleActionId;
     private ActionType sortByActionId;
 
-    private Column(boolean hasMinimumWidth, boolean showByDefault, int fileComparatorCriterion, ActionType toggleActionId, ActionType sortByActionId) {
+    private Column(boolean hasMinimumWidth, boolean showByDefault, FileComparator.CRITERION fileComparatorCriterion, ActionType toggleActionId, ActionType sortByActionId) {
         this.label = Translator.get(toString().toLowerCase());
         this.minimumWidth = hasMinimumWidth?STANDARD_MINIMUM_WIDTH:0;
         this.showByDefault = showByDefault;
@@ -95,7 +97,7 @@ public enum Column {
      *
      * @return the {@link FileComparator} criterion used for sorting column values.
      */
-    public int getFileComparatorCriterion() {
+    public CRITERION getFileComparatorCriterion() {
         return fileComparatorCriterion;
     }
 

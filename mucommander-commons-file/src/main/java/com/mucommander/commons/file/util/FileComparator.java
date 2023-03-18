@@ -35,39 +35,43 @@ import java.util.regex.Pattern;
  *
  * <p>The following criteria are available:
  * <ul>
- * <li>{@link #NAME_CRITERION}: compares filenames returned by {@link AbstractFile#getName()}
- * <li>{@link #SIZE_CRITERION}: compares file sizes returned by {@link AbstractFile#getSize()}. Note: size for
+ * <li>{@link CRITERION#NAME}: compares filenames returned by {@link AbstractFile#getName()}
+ * <li>{@link CRITERION#SIZE}: compares file sizes returned by {@link AbstractFile#getSize()}. Note: size for
  * directories is always considered as 0, even if {@link AbstractFile#getSize()} returns something else. 
- * <li>{@link #DATE_CRITERION}: compares file dates returned by {@link AbstractFile#getDate()}
- * <li>{@link #EXTENSION_CRITERION}: compares file extensions returned by {@link AbstractFile#getExtension()}
- * <li>{@link #PERMISSIONS_CRITERION}: compares file permissions returned by {@link AbstractFile#getPermissions()}
+ * <li>{@link CRITERION#DATE}: compares file dates returned by {@link AbstractFile#getDate()}
+ * <li>{@link CRITERION#EXTENSION}: compares file extensions returned by {@link AbstractFile#getExtension()}
+ * <li>{@link CRITERION#PERMISSIONS}: compares file permissions returned by {@link AbstractFile#getPermissions()}
+ * <li>{@link CRITERION#OWNER}: compares file owners returned by {@link AbstractFile#getOwner()}
+ * <li>{@link CRITERION#GROUP}: compares file groups returned by {@link AbstractFile#getGroup()}
  * </ul>
  *
- * @author Maxence Bernard
+ * @author Maxence Bernard, Arik Hadas
  */
 public class FileComparator implements Comparator<AbstractFile> {
 
     /** Comparison criterion */
-    private int criterion;
+    private CRITERION criterion;
     /** Ascending or descending order ? */
     private boolean ascending;
     /** Specifies whether directories should precede files or be handled as regular files */
     private boolean directoriesFirst;
 
-    /** Criterion for filename comparison. */
-    public final static int NAME_CRITERION = 0;
-    /** Criterion for file size comparison. */
-    public final static int SIZE_CRITERION = 1;
-    /** Criterion for file date comparison. */
-    public final static int DATE_CRITERION = 2;
-    /** Criterion for file extension comparison. */
-    public final static int EXTENSION_CRITERION = 3;
-    /** Criterion for file permissions comparison. */
-    public final static int PERMISSIONS_CRITERION = 4;
-    /** Criterion for owner comparison. */
-    public final static int OWNER_CRITERION = 5;
-    /** Criterion for group comparison. */
-    public final static int GROUP_CRITERION = 6;
+    public enum CRITERION {
+        /** Criterion for filename comparison. */
+        NAME,
+        /** Criterion for file size comparison. */
+        SIZE,
+        /** Criterion for file date comparison. */
+        DATE,
+        /** Criterion for file extension comparison. */
+        EXTENSION,
+        /** Criterion for file permissions comparison. */
+        PERMISSIONS,
+        /** Criterion for owner comparison. */
+        OWNER,
+        /** Criterion for group comparison. */
+        GROUP
+    }
 
     /** Matches filenames that contain a number, like "01 - Do the Joy.mp3" */
     private final static Pattern FILENAME_WITH_NUMBER_PATTERN = Pattern.compile("\\d+");
@@ -83,7 +87,7 @@ public class FileComparator implements Comparator<AbstractFile> {
      * @param ascending if true, ascending order will be used, descending order otherwise
      * @param directoriesFirst specifies whether directories should precede files or be handled as regular files
      */
-    public FileComparator(int criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc) {
+    public FileComparator(CRITERION criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc) {
         this.criterion = criterion;
         this.ascending = ascending;
         this.directoriesFirst = directoriesFirst;
@@ -247,7 +251,7 @@ public class FileComparator implements Comparator<AbstractFile> {
 
         long diff;
         switch(criterion) {
-        case SIZE_CRITERION:
+        case SIZE:
             // Consider that directories have a size of 0
             long fileSize1 = f1.isDirectory() ? 0 : f1.getSize();
             long fileSize2 = f2.isDirectory() ? 0 : f2.getSize();
@@ -255,22 +259,22 @@ public class FileComparator implements Comparator<AbstractFile> {
             // Returns file1 size - file2 size, file size of -1 (unavailable) is considered as enormous (max long value)
             diff = (fileSize1==-1?Long.MAX_VALUE:fileSize1)-(fileSize2==-1?Long.MAX_VALUE:fileSize2);
             break;
-        case DATE_CRITERION:
+        case DATE:
             diff = f1.getDate()-f2.getDate();
             break;
-        case PERMISSIONS_CRITERION:
+        case PERMISSIONS:
             diff = f1.getPermissions().getIntValue() - f2.getPermissions().getIntValue();
             break;
-        case EXTENSION_CRITERION:
+        case EXTENSION:
             diff = compareStrings(f1.getExtension(), f2.getExtension(), true, true);
             break;
-        case OWNER_CRITERION:
+        case OWNER:
             diff = compareStrings(f1.getOwner(), f2.getOwner(), true, true);
             break;
-        case GROUP_CRITERION:
+        case GROUP:
             diff = compareStrings(f1.getGroup(), f2.getGroup(), true, true);
             break;
-        case NAME_CRITERION:
+        case NAME:
         default:
             String f1Name = nameFunc.apply(f1);
             String f2Name = nameFunc.apply(f2);
@@ -286,7 +290,7 @@ public class FileComparator implements Comparator<AbstractFile> {
             }
         }
 
-        if (criterion != NAME_CRITERION && diff==0)	// If both files have the same criterion's value, compare names
+        if (criterion != CRITERION.NAME && diff==0)	// If both files have the same criterion's value, compare names
             diff = compareStrings(nameFunc.apply(f1), nameFunc.apply(f2), true, false);
 
         // Cast long value to int, without overflowing the int if the long value exceeds the min or max int value
