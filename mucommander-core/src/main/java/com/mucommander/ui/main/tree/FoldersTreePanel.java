@@ -54,7 +54,6 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.RefreshAction;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.ConfigurableFolderFilter;
@@ -112,7 +111,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             new ConfigurableFolderFilter()
         );
 
-        FileComparator sort = new FileComparator(FileComparator.NAME_CRITERION, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc());
+        FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc());
         model = new FilesTreeModel(treeFileFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
