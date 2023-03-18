@@ -28,14 +28,14 @@ import java.net.MalformedURLException;
  */
 public class TestFile extends DummyFile {
     
-    private boolean isDir;
+    private boolean directory;
     private long size;
     private long date;
     private AbstractFile parent;
 
-    public TestFile(String name, boolean isdir, long size, long date, AbstractFile parent) throws MalformedURLException {
+    public TestFile(String name, boolean directory, long size, long date, AbstractFile parent) throws MalformedURLException {
         super(FileURL.getFileURL(name));
-        this.isDir = isdir;
+        this.directory = directory;
         this.size = size;
         this.date = date;
         this.parent = parent;
@@ -43,7 +43,7 @@ public class TestFile extends DummyFile {
     
     @Override
     public boolean isDirectory() {
-        return isDir;
+        return directory;
     }
     
     @Override
