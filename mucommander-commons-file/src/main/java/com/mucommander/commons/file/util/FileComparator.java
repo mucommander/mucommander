@@ -202,8 +202,8 @@ public class FileComparator implements Comparator<AbstractFile> {
             int c1 = s1.charAt(i);
             int c2 = s2.charAt(i);
 
-            if(ignoreCase) {
-                if (c1 != c2) {
+            if (c1 != c2) {
+                if (ignoreCase) {
                     c1 = Character.toUpperCase(c1);
                     c2 = Character.toUpperCase(c2);
                     if (c1 != c2) {
@@ -217,9 +217,9 @@ public class FileComparator implements Comparator<AbstractFile> {
                             return getCharacterValue(c1) -  getCharacterValue(c2);
                     }
                 }
-            }
-            else if (c1 != c2) {
-                return getCharacterValue(c1) -  getCharacterValue(c2);
+                else {
+                    return getCharacterValue(c1) -  getCharacterValue(c2);
+                }
             }
         }
 
@@ -232,49 +232,51 @@ public class FileComparator implements Comparator<AbstractFile> {
     ///////////////////////////////
     
     public int compare(AbstractFile f1, AbstractFile f2) {
-        long diff;
+        if (directoriesFirst) {
+            boolean is1Directory = f1.isDirectory();
+            boolean is2Directory = f2.isDirectory();
 
-        boolean is1Directory = f1.isDirectory();
-        boolean is2Directory = f2.isDirectory();
-
-        if(directoriesFirst) {
-            if(is1Directory && !is2Directory)
+            if (is1Directory && !is2Directory)
                 return -1;	// ascending has no effect on the result (a directory is always first) so let's return
-            else if(is2Directory && !is1Directory)
+
+            if (is2Directory && !is1Directory)
                 return 1;	// ascending has no effect on the result (a directory is always first) so let's return
 
             // At this point, either both files are directories or none of them are
         }
 
-        if (criterion == SIZE_CRITERION)  {
+        long diff;
+        switch(criterion) {
+        case SIZE_CRITERION:
             // Consider that directories have a size of 0
-            long fileSize1 = is1Directory?0:f1.getSize();
-            long fileSize2 = is2Directory?0:f2.getSize();
+            long fileSize1 = f1.isDirectory() ? 0 : f1.getSize();
+            long fileSize2 = f2.isDirectory() ? 0 : f2.getSize();
 
             // Returns file1 size - file2 size, file size of -1 (unavailable) is considered as enormous (max long value)
             diff = (fileSize1==-1?Long.MAX_VALUE:fileSize1)-(fileSize2==-1?Long.MAX_VALUE:fileSize2);
-        }
-        else if (criterion == DATE_CRITERION) {
+            break;
+        case DATE_CRITERION:
             diff = f1.getDate()-f2.getDate();
-        }
-        else if (criterion == PERMISSIONS_CRITERION) {
+            break;
+        case PERMISSIONS_CRITERION:
             diff = f1.getPermissions().getIntValue() - f2.getPermissions().getIntValue();
-        }
-        else if (criterion == EXTENSION_CRITERION) {
+            break;
+        case EXTENSION_CRITERION:
             diff = compareStrings(f1.getExtension(), f2.getExtension(), true, true);
-        }
-        else if (criterion == OWNER_CRITERION) {
+            break;
+        case OWNER_CRITERION:
             diff = compareStrings(f1.getOwner(), f2.getOwner(), true, true);
-        }
-        else if (criterion == GROUP_CRITERION) {
+            break;
+        case GROUP_CRITERION:
             diff = compareStrings(f1.getGroup(), f2.getGroup(), true, true);
-        }
-        else {      // criterion == NAME_CRITERION
+            break;
+        case NAME_CRITERION:
+        default:
             String f1Name = nameFunc.apply(f1);
             String f2Name = nameFunc.apply(f2);
             diff = compareStrings(f1Name, f2Name, true, false);
 
-            if(diff==0) {
+            if (diff==0) {
                 // This should never happen unless the current filesystem allows a directory to have
                 // several files with different case variations of the same name.
                 // AFAIK, no OS/filesystem allows this, but just to be safe.
@@ -284,7 +286,7 @@ public class FileComparator implements Comparator<AbstractFile> {
             }
         }
 
-        if(criterion!=NAME_CRITERION && diff==0)	// If both files have the same criterion's value, compare names
+        if (criterion != NAME_CRITERION && diff==0)	// If both files have the same criterion's value, compare names
             diff = compareStrings(nameFunc.apply(f1), nameFunc.apply(f2), true, false);
 
         // Cast long value to int, without overflowing the int if the long value exceeds the min or max int value
