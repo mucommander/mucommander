@@ -20,6 +20,7 @@ package com.mucommander.commons.file.util;
 
 import com.mucommander.commons.file.AbstractFile;
 
+import java.text.Collator;
 import java.util.Comparator;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -186,14 +187,17 @@ public class FileComparator implements Comparator<AbstractFile> {
             }
         }
 
-        int diff = s1.compareToIgnoreCase(s2);
+        var collator = Collator.getInstance();
+        collator.setStrength(Collator.TERTIARY);
+        int diff = collator.compare(s1, s2);
         if (diff == 0) {
             // This should never happen unless the current filesystem allows a directory to have
             // several files with different case variations of the same name.
             // AFAIK, no OS/filesystem allows this, but just to be safe.
 
             // Case-sensitive name comparison
-            diff = s1.compareTo(s2);
+            collator.setStrength(Collator.PRIMARY);
+            diff = collator.compare(s1, s2);
         }
 
         return diff;
