@@ -28,7 +28,6 @@ import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
@@ -65,7 +64,6 @@ import com.mucommander.ui.icon.IconManager;
 class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListener, DocumentListener {
 
     // Language
-    private List<Locale> languages;
     private PrefComboBox<Locale> languageComboBox;
 
     // Date/time format
@@ -126,9 +124,9 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         // Language
         JPanel languagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         languagePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.language")));
-        this.languages = Translator.getAvailableLanguages();
+        var languages = Translator.getAvailableLanguages();
         Locale currentLang = Locale.forLanguageTag(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
-        languageComboBox = new PrefComboBox<Locale>() {
+        languageComboBox = new PrefComboBox<>() {
 			public boolean hasChanged() {
 				return !languages.get(getSelectedIndex()).toLanguageTag().equals(MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE));
 			}
@@ -151,9 +149,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         languageComboBox.setRenderer(new LanguageComboBoxRenderer());
 
         // Add combo items and select current language (defaults to EN if current language can't be found)
-        for(Locale language : languages) {
-            languageComboBox.addItem(language);
-        }
+        languages.forEach(languageComboBox::addItem);
         languageComboBox.setSelectedItem(currentLang);
 
         languagePanel.add(languageComboBox);
