@@ -30,6 +30,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * A tree model for files.
@@ -57,9 +58,15 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
     /** icon used to show that a children of a directory are being cached */
     private SpinningDial spinningIcon = new SpinningDial(16, 16, false);
 
+    /** filter out the files that appear in the tree view */
+    private FileFilter filter;
 
     public FilesTreeModel(FileFilter filter, FileComparator sort) {
-        super();
+        this.filter = filter;
+        setFilenameLocale(sort);
+    }
+
+    void setFilenameLocale(FileComparator sort) {
         this.sort = sort;
         cache = new DirectoryCache(filter, sort);
         cache.addCachedDirectoryListener(this);
@@ -116,6 +123,7 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
         return 0;
     }
 
+    @Override
     public int getIndexOfChild(Object parent, Object child) {
         AbstractFile[] children = getChildren((AbstractFile) parent);
         if (children != null) {

@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.WeakHashMap;
 
 import javax.swing.BorderFactory;
@@ -58,6 +59,7 @@ import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
+import com.mucommander.commons.util.LocaleUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -190,6 +192,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         tableModel = (FileTableModel)getModel();
         tableModel.setSortInfo(sortInfo);
+        var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
+        var locale = LocaleUtils.forLanguageTag(languageTag);
+        tableModel.setFilenameLocale(locale);
 
         ThemeManager.addCurrentThemeListener(this);
 
@@ -1472,14 +1477,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * Listens to certain configuration variables.
      */
     public void configurationChanged(ConfigurationEvent event) {
-        String var = event.getVariable();
-
-        if (var.equals(MuPreferences.DISPLAY_COMPACT_FILE_SIZE)) {
-        	FileTableModel.setSizeFormat(event.getBooleanValue());
-        	tableModel.fillCellCache();
-        	resizeAndRepaint();
-        }
-        else if (var.equals(MuPreferences.DATE_FORMAT) || var.equals(MuPreferences.DATE_SEPARATOR) || var.equals(MuPreferences.TIME_FORMAT)) {
+        switch(event.getVariable()) {
+        case MuPreferences.DISPLAY_COMPACT_FILE_SIZE:
+            FileTableModel.setSizeFormat(event.getBooleanValue());
+            tableModel.fillCellCache();
+            resizeAndRepaint();
+            break;
+        case MuPreferences.DATE_FORMAT:
+        case MuPreferences.DATE_SEPARATOR:
+        case MuPreferences.TIME_FORMAT:
             // Note: for the update to work properly, CustomDateFormat's configurationChanged() method has to be called
             // before FileTable's, so that CustomDateFormat gets notified of date format first.
             // Since listeners are stored by MuConfiguration in a hash map, order is pretty much random.
@@ -1487,15 +1493,22 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             CustomDateFormat.updateDateFormat();
             tableModel.fillCellCache();
             resizeAndRepaint();
-        }
+            break;
         // Repaint file icons if their size has changed
-        else if (var.equals(MuPreferences.TABLE_ICON_SCALE)) {
+        case MuPreferences.TABLE_ICON_SCALE:
             // Recalculate row height, revalidate and repaint the table
             setRowHeight();
-        }
+            break;
         // Repaint file icons if the system file icons policy has changed
-        else if (var.equals(MuPreferences.USE_SYSTEM_FILE_ICONS))
+        case MuPreferences.USE_SYSTEM_FILE_ICONS:
             repaint();
+            break;
+        case MuPreferences.FILENAME_LOCALE:
+            var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
+            tableModel.setFilenameLocale(LocaleUtils.forLanguageTag(languageTag));
+            sortTable();
+            break;
+        }
     }
 
     /**

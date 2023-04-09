@@ -35,7 +35,7 @@ New features:
 -
 
 Improvements:
--
+- When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
 
 Localization:
 -

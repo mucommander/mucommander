@@ -25,6 +25,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Locale;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -50,7 +51,9 @@ import com.mucommander.commons.file.filter.AndFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
 import com.mucommander.commons.file.filter.AttributeFileFilter.FileAttribute;
 import com.mucommander.commons.file.util.FileComparator;
+import com.mucommander.commons.util.LocaleUtils;
 import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionProperties;
@@ -111,7 +114,9 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
             new ConfigurableFolderFilter()
         );
 
-        FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc());
+        var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
+        var locale = LocaleUtils.forLanguageTag(languageTag);
+        FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale);
         model = new FilesTreeModel(treeFileFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
@@ -179,10 +184,17 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      * Listens to certain configuration variables.
      */
     public void configurationChanged(ConfigurationEvent event) {
-        String var = event.getVariable();
-        if (var.equals(MuPreferences.SHOW_HIDDEN_FILES) ||
-                var.equals(MuPreferences.SHOW_DS_STORE_FILES) ||
-                var.equals(MuPreferences.SHOW_SYSTEM_FOLDERS)) {
+        switch(event.getVariable()) {
+        case MuPreferences.FILENAME_LOCALE:
+            var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
+            var locale = LocaleUtils.forLanguageTag(languageTag);
+            FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale);
+            model.setFilenameLocale(sort);
+            updateSelectedFolder();
+            break;
+        case MuPreferences.SHOW_HIDDEN_FILES:
+        case MuPreferences.SHOW_DS_STORE_FILES:
+        case MuPreferences.SHOW_SYSTEM_FOLDERS:
             Object root = model.getRoot();
             if (root != null) {
                 TreePath path = new TreePath(root);

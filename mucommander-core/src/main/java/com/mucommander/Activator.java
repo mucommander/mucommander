@@ -19,6 +19,7 @@ package com.mucommander;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import com.mucommander.ui.viewer.EditorSnapshot;
 import com.mucommander.ui.viewer.ViewerSnapshot;
@@ -36,6 +37,8 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.SchemeHandler;
 import com.mucommander.commons.file.osgi.FileProtocolService;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.os.api.CoreService;
 import com.mucommander.osgi.FileEditorServiceTracker;
@@ -110,6 +113,12 @@ public class Activator implements BundleActivator {
         coreRegistration = context.registerService(CoreService.class, coreService, null);
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
+
+        // Make sure the filename locale is set in the preferences
+        var filenameLocale = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
+        if (filenameLocale == null)
+            MuConfigurations.getPreferences().setVariable(MuPreference.FILENAME_LOCALE, Locale.getDefault().toLanguageTag());
+
         Application.run(this);
     }
 
