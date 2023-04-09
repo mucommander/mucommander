@@ -18,15 +18,16 @@
 
 package com.mucommander.commons.file.util;
 
-import com.mucommander.commons.file.AbstractFile;
-
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.mucommander.commons.file.AbstractFile;
 
 
 /**
@@ -58,6 +59,10 @@ public class FileComparator implements Comparator<AbstractFile> {
     private boolean ascending;
     /** Specifies whether directories should precede files or be handled as regular files */
     private boolean directoriesFirst;
+    /** Returns the value for the 'name' column for a file */
+    private Function<AbstractFile, String> nameFunc;
+    /** Locale that is used to sort by filenames */
+    private Locale locale;
 
     public enum CRITERION {
         /** Criterion for filename comparison. */
@@ -79,9 +84,6 @@ public class FileComparator implements Comparator<AbstractFile> {
     /** Matches filenames that contain a number, like "01 - Do the Joy.mp3" */
     private final static Pattern FILENAME_WITH_NUMBER_PATTERN = Pattern.compile("\\d+");
 
-    /** Returns the content within the name column of a given file */
-    private Function<AbstractFile, String> nameFunc;
-
     /**
      * Creates a new FileComparator using the specified comparison criterion, order (ascending or descending) and
      * directory handling rule.
@@ -89,12 +91,15 @@ public class FileComparator implements Comparator<AbstractFile> {
      * @param criterion comparison criterion, see constant fields
      * @param ascending if true, ascending order will be used, descending order otherwise
      * @param directoriesFirst specifies whether directories should precede files or be handled as regular files
+     * @param nameFunc function that returns the value for the 'name' column for a file
+     * @param locale the local by which filenames are sorted
      */
-    public FileComparator(CRITERION criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc) {
+    public FileComparator(CRITERION criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc, Locale locale) {
         this.criterion = criterion;
         this.ascending = ascending;
         this.directoriesFirst = directoriesFirst;
         this.nameFunc = nameFunc;
+        this.locale = locale;
     }
 
 
@@ -187,7 +192,7 @@ public class FileComparator implements Comparator<AbstractFile> {
             }
         }
 
-        var collator = Collator.getInstance();
+        var collator = Collator.getInstance(locale);
         collator.setStrength(Collator.TERTIARY);
         int diff = collator.compare(s1, s2);
         if (diff == 0) {

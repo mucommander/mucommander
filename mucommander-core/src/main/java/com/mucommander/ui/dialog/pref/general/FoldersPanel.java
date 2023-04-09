@@ -19,6 +19,7 @@ package com.mucommander.ui.dialog.pref.general;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -30,19 +31,27 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.LocaleUtils;
 import com.mucommander.commons.util.ui.layout.SpringUtilities;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
@@ -54,6 +63,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
+import com.mucommander.ui.dialog.pref.component.PrefComboBox;
 import com.mucommander.ui.dialog.pref.component.PrefFilePathField;
 import com.mucommander.ui.dialog.pref.component.PrefRadioButton;
 import com.mucommander.ui.dialog.pref.component.PrefSpinner;
@@ -97,6 +107,9 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 
     // Timeout for quick searches
     private PrefSpinner quickSearchTimeoutSpinner;
+
+    // Locale that is used to sort by filenames
+    private PrefComboBox<Locale> localeComboBox;
 
     public FoldersPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.folders_tab"));
@@ -192,7 +205,46 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         YBoxPanel northPanel = new YBoxPanel();
         northPanel.add(startupFolderPanel);
         northPanel.addSpace(5);
-		
+
+        JPanel localePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        localePanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.filename_language")));
+        Function<Locale, String> localeToDisplayName = locale -> {
+            var languageTag = locale.toLanguageTag();
+            var language = Translator.get(languageTag);
+            // if there's no translation for the language tag, use the "display string" of the locale
+            if (languageTag.equals(language))
+                language = locale.getDisplayLanguage();
+            return String.format("%s (%s)", language, languageTag);
+        };
+        var locales = Stream.of(Locale.getAvailableLocales())
+                .filter(locale -> !locale.getLanguage().isEmpty())
+                .sorted(Comparator.comparing(localeToDisplayName))
+                .toArray(Locale[]::new);
+        Supplier<String> currentLanguageTag = () -> MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE, Locale.getDefault().toLanguageTag());
+        localeComboBox = new PrefComboBox<>() {
+            public boolean hasChanged() {
+                return !locales[getSelectedIndex()].toLanguageTag().equals(currentLanguageTag.get());
+            }
+        };
+        localeComboBox.setRenderer(new BasicComboBoxRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                Locale locale = (Locale)value;
+                label.setText(localeToDisplayName.apply(locale));
+
+                return label;
+            }
+        });
+        localeComboBox.addDialogListener(parent);
+        Stream.of(locales).forEach(localeComboBox::addItem);
+        localeComboBox.setSelectedItem(LocaleUtils.forLanguageTag(currentLanguageTag.get()));
+
+        localePanel.add(localeComboBox);
+        northPanel.add(localePanel);
+        northPanel.addSpace(10);
+
         showHiddenFilesCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_hidden_files"), () -> MuConfigurations.getPreferences().getVariable(
                 MuPreference.SHOW_HIDDEN_FILES,
                 MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
@@ -273,19 +325,14 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 
     @Override
     protected void commit() {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.STARTUP_FOLDERS, lastFoldersRadioButton.isSelected() ? MuPreferences.STARTUP_FOLDERS_LAST : MuPreferences.STARTUP_FOLDERS_CUSTOM);
-    	
-    	MuConfigurations.getPreferences().setVariable(MuPreference.LEFT_CUSTOM_FOLDER, leftCustomFolderTextField.getFilePath());
-		
-    	MuConfigurations.getPreferences().setVariable(MuPreference.RIGHT_CUSTOM_FOLDER, rightCustomFolderTextField.getFilePath());
-
-    	MuConfigurations.getPreferences().setVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE, compactSizeCheckBox.isSelected());
-
-    	MuConfigurations.getPreferences().setVariable(MuPreference.CD_FOLLOWS_SYMLINKS, followSymlinksCheckBox.isSelected());
-    	
-    	MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_TAB_HEADER, showTabHeaderCheckBox.isSelected());
-
-    	MuConfigurations.getPreferences().setVariable(MuPreference.QUICK_SEARCH_TIMEOUT, (int) quickSearchTimeoutSpinner.getValue());
+        MuConfigurations.getPreferences().setVariable(MuPreference.STARTUP_FOLDERS, lastFoldersRadioButton.isSelected() ? MuPreferences.STARTUP_FOLDERS_LAST : MuPreferences.STARTUP_FOLDERS_CUSTOM);
+        MuConfigurations.getPreferences().setVariable(MuPreference.LEFT_CUSTOM_FOLDER, leftCustomFolderTextField.getFilePath());
+        MuConfigurations.getPreferences().setVariable(MuPreference.RIGHT_CUSTOM_FOLDER, rightCustomFolderTextField.getFilePath());
+        MuConfigurations.getPreferences().setVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE, compactSizeCheckBox.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreference.CD_FOLLOWS_SYMLINKS, followSymlinksCheckBox.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_TAB_HEADER, showTabHeaderCheckBox.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreference.QUICK_SEARCH_TIMEOUT, (int) quickSearchTimeoutSpinner.getValue());
+        MuConfigurations.getPreferences().setVariable(MuPreference.FILENAME_LOCALE, localeComboBox.getSelectedItem().toLanguageTag());
 
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
         boolean refreshFolders = MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());

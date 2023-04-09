@@ -25,6 +25,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.util.LocaleUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 
@@ -84,7 +85,7 @@ public class Activator implements BundleActivator {
         }
 
         LOGGER.info("Using language set in preferences: "+localeNameFromConf);
-        return Locale.forLanguageTag(localeNameFromConf.replace('_', '-'));
+        return LocaleUtils.forLanguageTag(localeNameFromConf);
     }
 
     static ResourceBundle getDictionaryBundle(Locale locale) {

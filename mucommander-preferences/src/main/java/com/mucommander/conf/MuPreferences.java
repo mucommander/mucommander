@@ -58,6 +58,8 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final String  DEFAULT_TIME_FORMAT               = "hh:mm a";
 	/** Language muCommander should use when looking for text.. */
 	public static final String  LANGUAGE                          = "language";
+    /** Language that is used when sorting by filenames */
+	public static final String  FILENAME_LOCALE                   = "filename_locale";
 	/** Whether or not to display compact file sizes. */
 	public static final String  DISPLAY_COMPACT_FILE_SIZE         = "display_compact_file_size";
 	/** Default file size display behavior. */

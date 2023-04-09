@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -81,6 +82,9 @@ public class FileTableModel extends AbstractTableModel {
 
     /** Contains sort-related variables */
     private SortInfo sortInfo;
+
+    /** Locale that is used when sorting filenames */
+    private Locale filenameLocale;
 
     /** True if the name column is temporarily editable */
     private boolean nameColumnEditable;
@@ -160,6 +164,10 @@ public class FileTableModel extends AbstractTableModel {
      */
     void setSortInfo(SortInfo sortInfo) {
         this.sortInfo = sortInfo;
+    }
+
+    void setFilenameLocale(Locale filenameLocale) {
+        this.filenameLocale = filenameLocale;
     }
 
     /**
@@ -440,7 +448,7 @@ public class FileTableModel extends AbstractTableModel {
         int right = getRowCount()-1;
         int mid;
         AbstractFile midFile;
-        FileComparator fc = getFileComparator(sortInfo);
+        FileComparator fc = getFileComparator(sortInfo, filenameLocale);
 
         while(left<=right) {
             mid = (right-left)/2 + left;
@@ -670,11 +678,12 @@ public class FileTableModel extends AbstractTableModel {
     // Sort methods //
     //////////////////
 
-    private FileComparator getFileComparator(SortInfo sortInfo) {
+    private FileComparator getFileComparator(SortInfo sortInfo, Locale locale) {
         return new FileComparator(sortInfo.getCriterion().getFileComparatorCriterion(),
                 sortInfo.getAscendingOrder(),
                 sortInfo.getFoldersFirst(),
-                getNameFunc());
+                getNameFunc(),
+                locale);
     }
 
 
@@ -682,7 +691,7 @@ public class FileTableModel extends AbstractTableModel {
      * Sorts rows by the current criterion, ascending/descending order and 'folders first' value.
      */
     synchronized void sortRows()  {
-        sort(getFileComparator(sortInfo), 0, fileArrayIndex.length-1);
+        sort(getFileComparator(sortInfo, filenameLocale), 0, fileArrayIndex.length-1);
     }
 
 
