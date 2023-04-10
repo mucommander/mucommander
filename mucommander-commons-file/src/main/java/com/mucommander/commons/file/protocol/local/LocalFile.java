@@ -65,6 +65,7 @@ import com.mucommander.commons.file.util.Kernel32API;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.file.util.PathUtils.ResolvedDestination;
 import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.FileUtils;
 import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
@@ -108,11 +109,11 @@ import com.mucommander.commons.runtime.OsFamily;
 public class LocalFile extends ProtocolFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalFile.class);
 
-    protected File file;
+    final protected File file;
     private FilePermissions permissions;
 
     /** Absolute file path, free of trailing separator */
-    protected String absPath;
+    final protected String absPath;
 
     /** Caches the parent folder, initially null until getParent() gets called */
     protected AbstractFile parent;
@@ -186,8 +187,12 @@ public class LocalFile extends ProtocolFile {
     protected LocalFile(FileURL fileURL, File file) throws IOException {
         super(fileURL);
 
+        String absPath;
         if (file == null) {
             String path = fileURL.getPath();
+            // see https://github.com/mucommander/mucommander/issues/898
+            if (OsFamily.MAC_OS.isCurrent())
+                path = FileUtils.normalizeWithNFD(path);
 
             // Remove the leading '/' for Windows-like paths
             if (USES_ROOT_DRIVES)
@@ -207,13 +212,17 @@ public class LocalFile extends ProtocolFile {
         // the java.io.File instance was created by ls(), no need to re-create it or call the costly
         // File#getAbsolutePath()
         else {
-            this.absPath = fileURL.getPath();
+            absPath = fileURL.getPath();
+            // see https://github.com/mucommander/mucommander/issues/898
+            if (OsFamily.MAC_OS.isCurrent())
+                absPath = FileUtils.normalizeWithNFD(absPath);
 
             // Remove the leading '/' for Windows-like paths
             if (USES_ROOT_DRIVES)
                 absPath = absPath.substring(1, absPath.length());
         }
 
+        this.absPath = absPath;
         this.file = file;
         this.permissions = new LocalFilePermissions(file);
     }
