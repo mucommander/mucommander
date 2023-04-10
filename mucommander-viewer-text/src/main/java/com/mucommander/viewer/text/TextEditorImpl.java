@@ -55,6 +55,8 @@ import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.SearchContext;
+import org.fife.ui.rtextarea.SearchEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,10 +203,6 @@ class TextEditorImpl implements ThemeListener {
         textArea.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
 
-    /////////////////
-    // Search code //
-    /////////////////
-
     void find() {
         FindDialog findDialog = new FindDialog(frame);
 
@@ -213,7 +211,9 @@ class TextEditorImpl implements ThemeListener {
 
             if (!StringUtils.isNullOrEmpty(searchString)) {
                 SearchProperty.SEARCH_TEXT.setValue(searchString);
-                doSearch(0, true);
+                SearchJob.lastSearchCaseSensitive = findDialog.getCaseSensitivity();
+                SearchJob.lastSearchMatchRegex = findDialog.getRegexMatch();
+                doSearch(true);
             }
         }
     }
@@ -222,42 +222,36 @@ class TextEditorImpl implements ThemeListener {
         if (StringUtils.isNullOrEmpty(SearchProperty.SEARCH_TEXT.getValue())) {
             find();
         } else {
-            doSearch(textArea.getSelectionEnd(), true);
+            doSearch(true);
         }
     }
 
     void findPrevious() {
-        doSearch(textArea.getSelectionStart() - 1, false);
+        doSearch(false);
     }
 
     void convertTabsToSpaces() { textArea.convertTabsToSpaces(); }
 
     void convertSpacesToTabs() { textArea.convertSpacesToTabs(); }
 
-    private String getTextLC() {
-        return textArea.getText().toLowerCase();
-    }
-
-    private void doSearch(int startPos, boolean forward) {
+    private void doSearch(boolean forward) {
         String searchString = SearchProperty.SEARCH_TEXT.getValue();
         if (StringUtils.isNullOrEmpty(searchString)) {
             return;
         }
 
-        // The search is case-insensitive at the moment
-        searchString = searchString.toLowerCase();
+        SearchContext context = new SearchContext();
+        context.setMarkAll(true);
+        context.setMatchCase(SearchJob.lastSearchCaseSensitive);
+        context.setRegularExpression(SearchJob.lastSearchMatchRegex);
+        context.setSearchFor(searchString);
+        context.setSearchForward(forward);
+        context.setSearchSelectionOnly(false); // TODO
+        context.setWholeWord(false);
 
-        textArea.requestFocus();
+        boolean found = SearchEngine.find(textArea, context).wasFound();
 
-        int pos;
-        if (forward) {
-            pos = getTextLC().indexOf(searchString, startPos);
-        } else {
-            pos = getTextLC().lastIndexOf(searchString, startPos);
-        }
-        if (pos >= 0) {
-            textArea.select(pos, pos + searchString.length());
-        } else {
+        if (!found) {
             // Beep when no match has been found.
             // The beep method is called from a separate thread because this method seems to lock until the beep has
             // been played entirely. If the 'Find next' shortcut is left pressed, a series of beeps will be played when

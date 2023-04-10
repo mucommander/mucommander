@@ -19,12 +19,26 @@ package com.mucommander.viewer.text;
 
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
+import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
+import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
+import com.mucommander.commons.util.ui.layout.YBoxPanel;
+import com.mucommander.job.impl.SearchJob;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.text.SelectAllOnFocusTextField;
 
-import javax.swing.*;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  * This dialog allows the user to enter a string to be searched for in the text editor.
@@ -34,16 +48,22 @@ import java.awt.event.ActionListener;
 public class FindDialog extends FocusDialog implements ActionListener {
 
     /** The text field where a search string can be entered */
-    private JTextField findField;
+    private final JTextField findField;
+
+    /** Find case-sensitivity setting */
+    private final JCheckBox textCase;
+
+    /** Find regex match */
+    private final JCheckBox textRegex;
 
     /** The 'OK' button */
-    private JButton okButton;
+    private final JButton okButton;
 
     /** true if the dialog was validated by the user */
     private boolean wasValidated;
 
     /**
-     * Creates a new FindDialog and shows it to the screen.
+     * Creates a new FindDialog and shows it on the screen.
      *
      * @param editorFrame the parent editor frame
      */
@@ -51,11 +71,31 @@ public class FindDialog extends FocusDialog implements ActionListener {
         super(editorFrame, Translator.get("text_viewer.find"), editorFrame);
 
         Container contentPane = getContentPane();
-        contentPane.add(new JLabel(Translator.get("text_viewer.find")+":"), BorderLayout.NORTH);
 
-        findField = new JTextField(20);
-        findField.addActionListener(this);
-        contentPane.add(findField, BorderLayout.CENTER);
+        YBoxPanel textSearchPanel = new YBoxPanel(10);
+        // TODO FIXME "Text search (Optional)" - not in dictionary?
+        textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("text_viewer.find_text")));
+        XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
+
+        findField = new SelectAllOnFocusTextField(SearchJob.lastSearchString);
+        JLabel findLabel = compPanel.addRow(Translator.get("text_viewer.find") + ":", findField, 10);
+        findLabel.setLabelFor(findField);
+        findLabel.setDisplayedMnemonic('t');
+
+        GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
+        gbc.weightx = 1.0;
+        ProportionalGridPanel groupingPanel = new ProportionalGridPanel(2, gbc);
+        textCase = new JCheckBox(Translator.get("text_viewer.find.case_sensitive") + ":",
+                SearchJob.lastSearchCaseSensitive);
+        groupingPanel.add(textCase);
+
+        textRegex = new JCheckBox(Translator.get("text_viewer.find.regexp_match") + ":",
+                SearchJob.lastSearchMatchRegex);
+        groupingPanel.add(textRegex);
+        compPanel.addRow("", groupingPanel, 5);
+
+        textSearchPanel.add(compPanel);
+        contentPane.add(textSearchPanel, BorderLayout.NORTH);
 
         okButton = new JButton(Translator.get("ok"));
         JButton cancelButton = new JButton(Translator.get("cancel"));
@@ -86,16 +126,25 @@ public class FindDialog extends FocusDialog implements ActionListener {
         return findField.getText();
     }
 
+    /**
+     * Returns whether search should be case-sensitive.
+     * @return whether search should be case-sensitive.
+     */
+    public boolean getCaseSensitivity() {
+        return textCase.isSelected();
+    }
 
-    ///////////////////////////////////
-    // ActionListener implementation //
-    ///////////////////////////////////
+    /**
+     * Returns whether search should use regex.
+     * @return whether search should use regex.
+     */
+    public boolean getRegexMatch() {
+        return textRegex.isSelected();
+    }
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-
-        wasValidated = source== okButton || source==findField;
-
+        wasValidated = source == okButton || source == findField;
         dispose();
     }
 }

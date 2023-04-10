@@ -93,18 +93,10 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
         return this;
     }
 
-    public SearchBuilder depth(int searchDepth) {
+    public SearchBuilder depth(int searchDepth) { // TODO not used?
         this.searchDepth = searchDepth;
         return this;
     }
-
-//    public SearchBuilder fromDate(Date date) {
-//        return this;
-//    }
-//
-//    public SearchBuilder toDate(Date date) {
-//        return this;
-//    }
 
     @Override
     public SearchBuilder searchInArchives(List<Pair<String, String>> properties) {
