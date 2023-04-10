@@ -49,10 +49,14 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     private List<AbstractFile> findings;
     private SearchListener listener;
     private int depth, threads;
+    private boolean searchTextCaseSensitive;
+    private boolean searchTextMatchRegex;
 
     private ExecutorService customThreadPool;
 
     public static String lastSearchString;
+    public static boolean lastSearchCaseSensitive;
+    public static boolean lastSearchMatchRegex;
 
     private static final SearchListener nullListener = () -> {};
 

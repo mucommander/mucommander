@@ -75,6 +75,7 @@ jar {
             'com.mucommander.ui.dialog.file,' +
             'com.mucommander.ui.dialog.server,' +
             'com.mucommander.ui.encoding,' +
+            'com.mucommander.ui.text,' +
             'com.mucommander.ui.theme,' +
             'com.mucommander.snapshot,' +
             'com.mucommander.ui.viewer,' +

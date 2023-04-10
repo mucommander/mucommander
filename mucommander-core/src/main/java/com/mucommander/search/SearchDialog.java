@@ -27,9 +27,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,7 +52,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.util.Pair;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
@@ -241,6 +238,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         mainPanel.addSpace(10);
 
         YBoxPanel textSearchPanel = new YBoxPanel(10);
+        // TODO FIXME "Text search (Optional)" - not in dictionary?
         textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Text search (Optional)")));
         compPanel = new XAlignedComponentPanel(5);
 
