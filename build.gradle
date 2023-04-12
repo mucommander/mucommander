@@ -80,6 +80,7 @@ dependencies {
     osgiRuntime project('mucommander-format-rar')
     osgiRuntime project('mucommander-protocol-http')
     osgiRuntime project('mucommander-protocol-dropbox')
+    osgiRuntime project('mucommander-protocol-gcs')
     osgiRuntime project('mucommander-protocol-gdrive')
     osgiRuntime project('mucommander-protocol-nfs')
     osgiRuntime project('mucommander-protocol-smb')
