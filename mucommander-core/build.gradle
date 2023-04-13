@@ -68,7 +68,6 @@ jar {
             'com.mucommander.job,' +
             'com.mucommander.job.impl,' +
             'com.mucommander.process,' +
-            'com.mucommander.text,' +
             'com.mucommander.osgi,' +
             'com.mucommander.search,' +
             'com.mucommander.ui.dialog,' +
@@ -78,6 +77,8 @@ jar {
             'com.mucommander.ui.text,' +
             'com.mucommander.ui.theme,' +
             'com.mucommander.snapshot,' +
+            'com.mucommander.search,' +
+            'com.mucommander.text,' +
             'com.mucommander.ui.viewer,' +
             'com.mucommander.ui.main,' +
             'com.mucommander.ui.main.table',

@@ -22,7 +22,7 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
-import com.mucommander.job.impl.SearchJob;
+import com.mucommander.search.LastSearchQuery;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.text.SelectAllOnFocusTextField;
 
@@ -34,10 +34,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /**
@@ -56,8 +58,16 @@ public class FindDialog extends FocusDialog implements ActionListener {
     /** Find regex match */
     private final JCheckBox textRegex;
 
+    /** Find whole words */
+    private final JCheckBox wholeWords;
+
     /** The 'OK' button */
     private final JButton okButton;
+
+    /**
+     * Forward or backward find direction.
+     */
+    private boolean forwardFindDirection = true;
 
     /** true if the dialog was validated by the user */
     private boolean wasValidated;
@@ -72,30 +82,57 @@ public class FindDialog extends FocusDialog implements ActionListener {
 
         Container contentPane = getContentPane();
 
-        YBoxPanel textSearchPanel = new YBoxPanel(10);
-        // TODO FIXME "Text search (Optional)" - not in dictionary?
-        textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("text_viewer.find_text")));
-        XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
+        YBoxPanel textFindPanel = new YBoxPanel(10);
+        XAlignedComponentPanel compPanel = new XAlignedComponentPanel(0);
 
-        findField = new SelectAllOnFocusTextField(SearchJob.lastSearchString);
+        findField = new SelectAllOnFocusTextField(LastSearchQuery.getInstance().getSearchString());
         JLabel findLabel = compPanel.addRow(Translator.get("text_viewer.find") + ":", findField, 10);
         findLabel.setLabelFor(findField);
-        findLabel.setDisplayedMnemonic('t');
 
         GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
         gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.fill = GridBagConstraints.VERTICAL;
         ProportionalGridPanel groupingPanel = new ProportionalGridPanel(2, gbc);
-        textCase = new JCheckBox(Translator.get("text_viewer.find.case_sensitive") + ":",
-                SearchJob.lastSearchCaseSensitive);
-        groupingPanel.add(textCase);
 
-        textRegex = new JCheckBox(Translator.get("text_viewer.find.regexp_match") + ":",
-                SearchJob.lastSearchMatchRegex);
-        groupingPanel.add(textRegex);
-        compPanel.addRow("", groupingPanel, 5);
+        YBoxPanel optionsPanel = new YBoxPanel(5);
+        optionsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("text_viewer.find_replace.options")));
 
-        textSearchPanel.add(compPanel);
-        contentPane.add(textSearchPanel, BorderLayout.NORTH);
+        textCase = new JCheckBox(Translator.get("text_viewer.find_replace.case_sensitive"),
+                LastSearchQuery.getInstance().isSearchCaseSensitive());
+        optionsPanel.add(textCase);
+
+        textRegex = new JCheckBox(Translator.get("text_viewer.find_replace.regex_match"),
+                LastSearchQuery.getInstance().isSearchMatchRegex());
+        optionsPanel.add(textRegex);
+
+        wholeWords = new JCheckBox(Translator.get("text_viewer.find_replace.whole_words"),
+                LastSearchQuery.getInstance().isWholeWords());
+        optionsPanel.add(wholeWords);
+
+        groupingPanel.add(optionsPanel);
+
+        YBoxPanel directionPanel = new YBoxPanel(5);
+        directionPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("text_viewer.find_replace.direction")));
+
+        ButtonGroup directionGroup = new ButtonGroup();
+
+        JRadioButton fwdFind = new JRadioButton(Translator.get("text_viewer.find_replace.forward"), LastSearchQuery.getInstance().isForward());
+        fwdFind.addActionListener(e -> forwardFindDirection = true );
+        directionPanel.add(fwdFind);
+        directionGroup.add(fwdFind);
+
+        JRadioButton bkwdFind = new JRadioButton(Translator.get("text_viewer.find_replace.backward"), !LastSearchQuery.getInstance().isForward());
+        bkwdFind.addActionListener(e -> forwardFindDirection = false );
+        directionPanel.add(bkwdFind);
+        directionGroup.add(bkwdFind);
+
+        groupingPanel.add(directionPanel);
+
+        compPanel.addRow(groupingPanel, 5);
+
+        textFindPanel.add(compPanel);
+        contentPane.add(textFindPanel, BorderLayout.NORTH);
 
         okButton = new JButton(Translator.get("ok"));
         JButton cancelButton = new JButton(Translator.get("cancel"));
@@ -140,6 +177,22 @@ public class FindDialog extends FocusDialog implements ActionListener {
      */
     public boolean getRegexMatch() {
         return textRegex.isSelected();
+    }
+
+    /**
+     * Returns whether search should use whole words.
+     * @return whether search should use whole words.
+     */
+    public boolean isWholeWords() {
+        return wholeWords.isSelected();
+    }
+
+    /**
+     * Returns whether search should use forward direction.
+     * @return whether search should use forward direction.
+     */
+    public boolean isForwardDirection() {
+        return forwardFindDirection;
     }
 
     public void actionPerformed(ActionEvent e) {
