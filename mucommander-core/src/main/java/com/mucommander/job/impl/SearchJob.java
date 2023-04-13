@@ -34,6 +34,7 @@ import com.mucommander.commons.file.protocol.search.SearchListener;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.job.FileJobState;
+import com.mucommander.search.LastSearchQuery;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -53,10 +54,6 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     private boolean searchTextMatchRegex;
 
     private ExecutorService customThreadPool;
-
-    public static String lastSearchString;
-    public static boolean lastSearchCaseSensitive;
-    public static boolean lastSearchMatchRegex;
 
     private static final SearchListener nullListener = () -> {};
 

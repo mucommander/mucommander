@@ -64,7 +64,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.job.impl.SearchJob;
+import com.mucommander.search.LastSearchQuery;
 import com.mucommander.search.SearchProperty;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
@@ -96,10 +96,6 @@ class TextEditorImpl implements ThemeListener {
      * A listener that is being called when syntax style has been changed.
      */
     private Consumer<String> syntaxChangeListener;
-
-    ////////////////////
-    // Initialization //
-    ////////////////////
 
     public TextEditorImpl(boolean isEditable) {
         // Initialize text area
@@ -210,10 +206,14 @@ class TextEditorImpl implements ThemeListener {
             String searchString = findDialog.getSearchString();
 
             if (!StringUtils.isNullOrEmpty(searchString)) {
+                LastSearchQuery last = LastSearchQuery.getInstance();
                 SearchProperty.SEARCH_TEXT.setValue(searchString);
-                SearchJob.lastSearchCaseSensitive = findDialog.getCaseSensitivity();
-                SearchJob.lastSearchMatchRegex = findDialog.getRegexMatch();
-                doSearch(true);
+                last.setSearchString(searchString);
+                last.setSearchCaseSensitive(findDialog.getCaseSensitivity());
+                last.setSearchMatchRegex(findDialog.getRegexMatch());
+                last.setForward(findDialog.isForwardDirection());
+                last.setWholeWords(findDialog.isWholeWords());
+                doSearch(findDialog.isForwardDirection());
             }
         }
     }
@@ -242,12 +242,13 @@ class TextEditorImpl implements ThemeListener {
 
         SearchContext context = new SearchContext();
         context.setMarkAll(true);
-        context.setMatchCase(SearchJob.lastSearchCaseSensitive);
-        context.setRegularExpression(SearchJob.lastSearchMatchRegex);
+        context.setMatchCase(LastSearchQuery.getInstance().isSearchCaseSensitive());
+        context.setRegularExpression(LastSearchQuery.getInstance().isSearchMatchRegex());
         context.setSearchFor(searchString);
         context.setSearchForward(forward);
-        context.setSearchSelectionOnly(false); // TODO
-        context.setWholeWord(false);
+        context.setSearchSelectionOnly(false); // TODO currently not supported by library (https://github.com/bobbylight/RSyntaxTextArea/blob/9097e51fc5e289d761dca139a3a08459bf12614a/RSyntaxTextArea/src/main/java/org/fife/ui/rtextarea/SearchContext.java#L382)
+        context.setWholeWord(LastSearchQuery.getInstance().isWholeWords());
+        context.setSearchWrap(true);
 
         boolean found = SearchEngine.find(textArea, context).wasFound();
 
