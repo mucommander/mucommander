@@ -70,6 +70,7 @@ jar {
             'com.mucommander.process,' +
             'com.mucommander.text,' +
             'com.mucommander.osgi,' +
+            'com.mucommander.search,' +
             'com.mucommander.ui.dialog,' +
             'com.mucommander.ui.dialog.file,' +
             'com.mucommander.ui.dialog.server,' +

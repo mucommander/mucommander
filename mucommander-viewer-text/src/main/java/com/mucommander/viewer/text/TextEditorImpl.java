@@ -63,6 +63,7 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.impl.SearchJob;
+import com.mucommander.search.SearchProperty;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
@@ -211,14 +212,14 @@ class TextEditorImpl implements ThemeListener {
             String searchString = findDialog.getSearchString();
 
             if (!StringUtils.isNullOrEmpty(searchString)) {
-                SearchJob.lastSearchString = searchString;
+                SearchProperty.SEARCH_TEXT.setValue(searchString);
                 doSearch(0, true);
             }
         }
     }
 
     void findNext() {
-        if (StringUtils.isNullOrEmpty(SearchJob.lastSearchString)) {
+        if (StringUtils.isNullOrEmpty(SearchProperty.SEARCH_TEXT.getValue())) {
             find();
         } else {
             doSearch(textArea.getSelectionEnd(), true);
@@ -238,7 +239,7 @@ class TextEditorImpl implements ThemeListener {
     }
 
     private void doSearch(int startPos, boolean forward) {
-        String searchString = SearchJob.lastSearchString;
+        String searchString = SearchProperty.SEARCH_TEXT.getValue();
         if (StringUtils.isNullOrEmpty(searchString)) {
             return;
         }

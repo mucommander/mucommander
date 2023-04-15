@@ -49,7 +49,6 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     private List<AbstractFile> findings;
     private SearchListener listener;
     private int depth, threads;
-    private String searchText;
 
     private ExecutorService customThreadPool;
 
@@ -69,10 +68,6 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
 
     public void setThreads(int threads) {
         this.threads = threads;
-    }
-
-    public void setSearchText(String searchText) {
-        this.searchText = searchText;
     }
 
     public void setFileMatcher(Predicate<AbstractFile> fileMatcher) {
@@ -159,12 +154,6 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
             customThreadPool.shutdown();
         }
         return true;
-    }
-
-    @Override
-    public void start() {
-        SearchJob.lastSearchString = searchText;
-        super.start();
     }
 
     @Override

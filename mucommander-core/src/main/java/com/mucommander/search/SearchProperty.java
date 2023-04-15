@@ -23,7 +23,7 @@ import java.util.Objects;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.text.Translator;
 
-enum SearchProperty {
+public enum SearchProperty {
     SEARCH_IN_ARCHIVES("archives", "search_dialog.search_in_archives", Boolean.FALSE.toString()),
     SEARCH_IN_HIDDEN("hidden", "search_dialog.search_in_hidden_files", Boolean.FALSE.toString()),
     SEARCH_IN_SYMLINKS("symlinks", "search_dialog.search_in_symlinks", Boolean.FALSE.toString()),
