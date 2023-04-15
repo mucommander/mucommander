@@ -236,6 +236,7 @@ class TextEditorImpl implements ThemeListener {
 
     private void doSearch(boolean forward) {
         String searchString = SearchProperty.SEARCH_TEXT.getValue();
+        String searchString = SearchProperty.SEARCH_TEXT.getValue();
         if (StringUtils.isNullOrEmpty(searchString)) {
             return;
         }

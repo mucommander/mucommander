@@ -23,7 +23,7 @@ jar {
         'Bundle-Description': 'Library for textual viewer/editor',
         'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package': 'com.mucommander.viewer.text',
-        'Import-Package': 'com.mucommander.search,org.fife.ui.rsyntaxtextarea;resolution:=dynamic,*',
+        'Import-Package': 'com.mucommander.ui.text,com.mucommander.search,org.fife.ui.rsyntaxtextarea;resolution:=dynamic,*',
         'Bundle-Activator': 'com.mucommander.viewer.text.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
