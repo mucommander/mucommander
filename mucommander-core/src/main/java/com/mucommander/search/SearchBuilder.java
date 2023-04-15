@@ -230,7 +230,7 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
             Predicate<AbstractFile> lsFilter = createListFilter();
             searchJob.setListFilter(lsFilter);
 
-            searchJob.setSearchText(searchText);
+            SearchProperty.SEARCH_TEXT.setValue(searchText);
         }
         return searchJob;
     }
