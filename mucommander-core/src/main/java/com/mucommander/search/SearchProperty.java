@@ -40,7 +40,10 @@ public enum SearchProperty {
     TEXT_MATCH_REGEX("text-regex", "search_dialog.text_matches_regexp", Boolean.FALSE.toString()),
     SEARCH_SIZE("size", "search_dialog.size", null),
     SEARCH_SIZE2("size-2", "search_dialog.size", null),
-    SEARCH_TEXT("text", "search_dialog.search_text", "");
+    SEARCH_TEXT("text", "search_dialog.search_text", ""),
+    TEXT_WHOLE_WORDS("whole-words", "used-via-find-dialog", null),
+    TEXT_SEARCH_FORWARD("forward", "used-via-find-dialog", Boolean.toString(true)),
+    ;
 
     private String key;
     private String i18nKey;
@@ -78,8 +81,16 @@ public enum SearchProperty {
         this.value = value;
     }
 
+    public void setValue(boolean value) {
+        this.value = Boolean.toString(value);
+    }
+
     public String getValue() {
         return value;
+    }
+
+    public boolean getBoolValue() {
+        return Boolean.parseBoolean(value);
     }
 
     public boolean isDefault() {

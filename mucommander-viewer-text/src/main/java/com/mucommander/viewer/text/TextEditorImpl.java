@@ -64,7 +64,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.search.LastSearchQuery;
 import com.mucommander.search.SearchProperty;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
@@ -206,13 +205,11 @@ class TextEditorImpl implements ThemeListener {
             String searchString = findDialog.getSearchString();
 
             if (!StringUtils.isNullOrEmpty(searchString)) {
-                LastSearchQuery last = LastSearchQuery.getInstance();
                 SearchProperty.SEARCH_TEXT.setValue(searchString);
-                last.setSearchString(searchString);
-                last.setSearchCaseSensitive(findDialog.getCaseSensitivity());
-                last.setSearchMatchRegex(findDialog.getRegexMatch());
-                last.setForward(findDialog.isForwardDirection());
-                last.setWholeWords(findDialog.isWholeWords());
+                SearchProperty.TEXT_CASESENSITIVE.setValue(findDialog.getCaseSensitivity());
+                SearchProperty.TEXT_MATCH_REGEX.setValue(findDialog.getRegexMatch());
+                SearchProperty.TEXT_WHOLE_WORDS.setValue(findDialog.isWholeWords());
+                SearchProperty.TEXT_SEARCH_FORWARD.setValue(findDialog.isForwardDirection());
                 doSearch(findDialog.isForwardDirection());
             }
         }
@@ -243,12 +240,12 @@ class TextEditorImpl implements ThemeListener {
         SearchContext context = new SearchContext();
         context.setMarkAll(true);
         // TODO LastSearchQuery -> SearchProperty
-        context.setMatchCase(LastSearchQuery.getInstance().isSearchCaseSensitive());
-        context.setRegularExpression(LastSearchQuery.getInstance().isSearchMatchRegex());
+        context.setMatchCase(SearchProperty.TEXT_CASESENSITIVE.getBoolValue());
+        context.setRegularExpression(SearchProperty.TEXT_MATCH_REGEX.getBoolValue());
         context.setSearchFor(searchString);
         context.setSearchForward(forward);
         context.setSearchSelectionOnly(false); // TODO currently not supported by library (https://github.com/bobbylight/RSyntaxTextArea/blob/9097e51fc5e289d761dca139a3a08459bf12614a/RSyntaxTextArea/src/main/java/org/fife/ui/rtextarea/SearchContext.java#L382)
-        context.setWholeWord(LastSearchQuery.getInstance().isWholeWords());
+        context.setWholeWord(SearchProperty.TEXT_WHOLE_WORDS.getBoolValue());
         context.setSearchWrap(true);
 
         boolean found = SearchEngine.find(textArea, context).wasFound();

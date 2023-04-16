@@ -218,6 +218,10 @@ public class SearchBuilder implements com.mucommander.commons.file.protocol.sear
             searchJob.setListFilter(lsFilter);
 
             SearchProperty.SEARCH_TEXT.setValue(searchText);
+            SearchProperty.MATCH_CASESENSITIVE.setValue(textCaseSensitive);
+            SearchProperty.MATCH_REGEX.setValue(textMatchRegex);
+            SearchProperty.TEXT_WHOLE_WORDS.setValue(false);
+            SearchProperty.TEXT_SEARCH_FORWARD.setValue(true);
         }
         return searchJob;
     }
