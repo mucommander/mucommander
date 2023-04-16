@@ -129,8 +129,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel(5);
 
         String searchFor = PathUtils.removeLeadingSeparator(searchURL.getPath());
-        if (searchFor.isEmpty())
+        if (searchFor.isEmpty()) {
             searchFor = "*";
+        }
         searchFilesField = new SelectAllOnFocusTextField(searchFor);
         searchFilesField.getDocument().addDocumentListener(this);
         JLabel l = compPanel.addRow(Translator.get("search_dialog.search_files"), searchFilesField, 5);
@@ -238,8 +239,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         mainPanel.addSpace(10);
 
         YBoxPanel textSearchPanel = new YBoxPanel(10);
-        // TODO FIXME "Text search (Optional)" - not in dictionary?
-        textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("Text search (Optional)")));
+        textSearchPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("search_dialog.search_text_optional")));
         compPanel = new XAlignedComponentPanel(5);
 
         String lastText = SearchProperty.SEARCH_TEXT.getValue();
@@ -364,11 +364,13 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
      */
     private void checkInputs() {
         if (searchFilesField.getText().trim().isEmpty() || searchInField.getText().trim().isEmpty()) {
-            if (searchButton.isEnabled())
+            if (searchButton.isEnabled()) {
                 searchButton.setEnabled(false);
+            }
         } else {
-            if (!searchButton.isEnabled())
+            if (!searchButton.isEnabled()) {
                 searchButton.setEnabled(true);
+            }
         }
     }
 
@@ -384,8 +386,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             return;
         }
         // otherwise, searchButton was pressed
-        if (!validateAndUpdateValues())
+        if (!validateAndUpdateValues()) {
             return;
+        }
 
         String searchIn = searchInField.getText();
         AbstractFile file = FileFactory.getFile(searchIn);
@@ -397,8 +400,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         FileURL fileURL = SearchUtils.toSearchURL(file);
         fileURL.setPath(searchFilesField.getText());
         String searchQuery = getSearchQuery();
-        if (!searchQuery.isEmpty())
+        if (!searchQuery.isEmpty()) {
             fileURL.setQuery(searchQuery);
+        }
         dispose();
         mainFrame.getActivePanel().tryChangeCurrentFolder(fileURL);
     }
@@ -428,9 +432,9 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
                 return false;
             }
             size = this.secondSize.getText();
-            if (StringUtils.isNullOrEmpty(size))
+            if (StringUtils.isNullOrEmpty(size)) {
                 secondSize = null;
-            else {
+            } else {
                 try {
                     secondSize = Long.parseLong(size);
                 } catch (NumberFormatException nfe) {
