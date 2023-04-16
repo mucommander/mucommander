@@ -41,8 +41,8 @@ public enum SearchProperty {
     SEARCH_SIZE("size", "search_dialog.size", null),
     SEARCH_SIZE2("size-2", "search_dialog.size", null),
     SEARCH_TEXT("text", "search_dialog.search_text", ""),
-    TEXT_WHOLE_WORDS("whole-words", "used-via-find-dialog", null),
-    TEXT_SEARCH_FORWARD("forward", "used-via-find-dialog", Boolean.toString(true)),
+    TEXT_WHOLE_WORDS("whole-words", "used-via-find-dialog1", Boolean.toString(false)),
+    TEXT_SEARCH_FORWARD("forward", "used-via-find-dialog2", Boolean.toString(true)),
     ;
 
     private String key;
