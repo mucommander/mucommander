@@ -39,6 +39,7 @@ import com.mucommander.ui.main.MainFrame;
 
 /**
  * This job executes a file search.
+ * The search details are defined via SearchProperty.
  *
  * @author Arik Hadas
  */
@@ -50,8 +51,6 @@ public class SearchJob extends FileJob implements com.mucommander.commons.file.p
     private List<AbstractFile> findings;
     private SearchListener listener;
     private int depth, threads;
-    private boolean searchTextCaseSensitive;
-    private boolean searchTextMatchRegex;
 
     private ExecutorService customThreadPool;
 

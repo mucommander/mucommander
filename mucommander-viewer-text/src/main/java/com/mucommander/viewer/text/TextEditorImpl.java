@@ -236,13 +236,13 @@ class TextEditorImpl implements ThemeListener {
 
     private void doSearch(boolean forward) {
         String searchString = SearchProperty.SEARCH_TEXT.getValue();
-        String searchString = SearchProperty.SEARCH_TEXT.getValue();
         if (StringUtils.isNullOrEmpty(searchString)) {
             return;
         }
 
         SearchContext context = new SearchContext();
         context.setMarkAll(true);
+        // TODO LastSearchQuery -> SearchProperty
         context.setMatchCase(LastSearchQuery.getInstance().isSearchCaseSensitive());
         context.setRegularExpression(LastSearchQuery.getInstance().isSearchMatchRegex());
         context.setSearchFor(searchString);
