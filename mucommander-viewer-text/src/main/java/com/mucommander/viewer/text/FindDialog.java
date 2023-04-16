@@ -22,7 +22,7 @@ import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
-import com.mucommander.search.LastSearchQuery;
+import com.mucommander.search.SearchProperty;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.text.SelectAllOnFocusTextField;
 
@@ -85,7 +85,7 @@ public class FindDialog extends FocusDialog implements ActionListener {
         YBoxPanel textFindPanel = new YBoxPanel(10);
         XAlignedComponentPanel compPanel = new XAlignedComponentPanel(0);
 
-        findField = new SelectAllOnFocusTextField(LastSearchQuery.getInstance().getSearchString());
+        findField = new SelectAllOnFocusTextField(SearchProperty.SEARCH_TEXT.getValue());
         JLabel findLabel = compPanel.addRow(Translator.get("text_viewer.find") + ":", findField, 10);
         findLabel.setLabelFor(findField);
 
@@ -99,15 +99,15 @@ public class FindDialog extends FocusDialog implements ActionListener {
         optionsPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("text_viewer.find_replace.options")));
 
         textCase = new JCheckBox(Translator.get("text_viewer.find_replace.case_sensitive"),
-                LastSearchQuery.getInstance().isSearchCaseSensitive());
+                SearchProperty.TEXT_CASESENSITIVE.getBoolValue());
         optionsPanel.add(textCase);
 
         textRegex = new JCheckBox(Translator.get("text_viewer.find_replace.regex_match"),
-                LastSearchQuery.getInstance().isSearchMatchRegex());
+                SearchProperty.TEXT_MATCH_REGEX.getBoolValue());
         optionsPanel.add(textRegex);
 
         wholeWords = new JCheckBox(Translator.get("text_viewer.find_replace.whole_words"),
-                LastSearchQuery.getInstance().isWholeWords());
+                SearchProperty.TEXT_WHOLE_WORDS.getBoolValue());
         optionsPanel.add(wholeWords);
 
         groupingPanel.add(optionsPanel);
@@ -117,12 +117,12 @@ public class FindDialog extends FocusDialog implements ActionListener {
 
         ButtonGroup directionGroup = new ButtonGroup();
 
-        JRadioButton fwdFind = new JRadioButton(Translator.get("text_viewer.find_replace.forward"), LastSearchQuery.getInstance().isForward());
+        JRadioButton fwdFind = new JRadioButton(Translator.get("text_viewer.find_replace.forward"), SearchProperty.TEXT_SEARCH_FORWARD.getBoolValue());
         fwdFind.addActionListener(e -> forwardFindDirection = true );
         directionPanel.add(fwdFind);
         directionGroup.add(fwdFind);
 
-        JRadioButton bkwdFind = new JRadioButton(Translator.get("text_viewer.find_replace.backward"), !LastSearchQuery.getInstance().isForward());
+        JRadioButton bkwdFind = new JRadioButton(Translator.get("text_viewer.find_replace.backward"), !SearchProperty.TEXT_SEARCH_FORWARD.getBoolValue());
         bkwdFind.addActionListener(e -> forwardFindDirection = false );
         directionPanel.add(bkwdFind);
         directionGroup.add(bkwdFind);

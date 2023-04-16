@@ -34,12 +34,11 @@ import com.mucommander.commons.file.protocol.search.SearchListener;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.job.FileJobState;
-import com.mucommander.search.LastSearchQuery;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * This job executes a file search.
- * The search details are defined via SearchProperty.
+ * The search details are defined in SearchProperty via SearchBuilder.
  *
  * @author Arik Hadas
  */
