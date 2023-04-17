@@ -24,9 +24,11 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.filter.FileOperationFilter;
-import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.commons.file.protocol.search.SearchFile;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.job.impl.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
+import com.mucommander.search.SearchProperty;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
@@ -63,6 +65,11 @@ abstract class AbstractViewerAction extends SelectedFileAction {
     public synchronized void performAction() {
         AbstractFile file;
         Command      customCommand;
+
+        boolean inSearch = mainFrame.getActivePanel().getCurrentFolder().getPath().startsWith(
+                SearchFile.SCHEMA + "://");
+        SearchProperty.OPEN_WITH_FOUND_SELECTED.setValue(
+                inSearch && !StringUtils.isNullOrEmpty(SearchProperty.SEARCH_TEXT.getValue()));
 
         file = mainFrame.getActiveTable().getSelectedFile(false, true);
 
