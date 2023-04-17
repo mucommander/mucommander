@@ -489,7 +489,14 @@ class TextEditorImpl implements ThemeListener {
 
     public void setFocusAndCursorOnFirstLine() {
         textArea.requestFocusInWindow();
-        textArea.setCaretPosition(0);
+
+        // Check if opened file is from Search with content if so, then try to show the found string,
+        // otherwise set caret on the first line.
+        if (SearchProperty.OPEN_WITH_FOUND_SELECTED.getBoolValue()) {
+            findNext();
+        } else {
+            textArea.setCaretPosition(0);
+        }
     }
 
     //////////////////////////////////
