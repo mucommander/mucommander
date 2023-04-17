@@ -37,7 +37,6 @@ public abstract class FilePresenter extends JPanel {
     private AbstractFile file;
     private JComponent component;
 
-    protected final static String CUSTOM_FULL_SCREEN_EVENT = "CUSTOM_FULL_SCREEN_EVENT";
     private final static String CUSTOM_DISPOSE_EVENT = "CUSTOM_DISPOSE_EVENT";
 
     public FilePresenter() {
