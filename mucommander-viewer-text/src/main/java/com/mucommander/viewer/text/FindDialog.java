@@ -32,6 +32,7 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -51,6 +52,12 @@ public class FindDialog extends FocusDialog implements ActionListener {
 
     /** The text field where a search string can be entered */
     private final JTextField findField;
+
+    /** The text field where a replace string can be entered */
+    private final JTextField replaceField;
+
+    /** Whether replace operation should be done */
+    private final JCheckBox doReplace;
 
     /** Find case-sensitivity setting */
     private final JCheckBox textCase;
@@ -76,8 +83,9 @@ public class FindDialog extends FocusDialog implements ActionListener {
      * Creates a new FindDialog and shows it on the screen.
      *
      * @param editorFrame the parent editor frame
+     * @param showReplace whether to show replace-related fields
      */
-    public FindDialog(JFrame editorFrame) {
+    public FindDialog(JFrame editorFrame, boolean showReplace) {
         super(editorFrame, Translator.get("text_viewer.find"), editorFrame);
 
         Container contentPane = getContentPane();
@@ -88,6 +96,10 @@ public class FindDialog extends FocusDialog implements ActionListener {
         findField = new SelectAllOnFocusTextField(SearchProperty.SEARCH_TEXT.getValue());
         JLabel findLabel = compPanel.addRow(Translator.get("text_viewer.find") + ":", findField, 10);
         findLabel.setLabelFor(findField);
+
+        XAlignedComponentPanel replacePanel = new XAlignedComponentPanel(0);
+        replaceField = new SelectAllOnFocusTextField("");
+        doReplace = new JCheckBox(Translator.get("text_viewer.find_replace.replace") + ":", false);
 
         GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
         gbc.weightx = 1.0;
@@ -129,6 +141,17 @@ public class FindDialog extends FocusDialog implements ActionListener {
 
         groupingPanel.add(directionPanel);
 
+        if (showReplace) {
+            replacePanel.addRow(doReplace, replaceField, 10);
+            compPanel.addRow(replacePanel, 5);
+            doReplace.addItemListener(e -> {
+                boolean selected = e.getStateChange() == ItemEvent.SELECTED;
+                // due to nature of RSyntaxTextArea these don't matter for replaceAll operation.
+                directionPanel.setEnabled(!selected);
+                fwdFind.setEnabled(!selected);
+                bkwdFind.setEnabled(!selected);
+            });
+        } // else - simply don't show them
         compPanel.addRow(groupingPanel, 5);
 
         textFindPanel.add(compPanel);
@@ -161,6 +184,15 @@ public class FindDialog extends FocusDialog implements ActionListener {
      */
     public String getSearchString() {
         return findField.getText();
+    }
+
+    /**
+     * Returns the reaplce string if 'replace' check box was selected, null otherwise.
+     *
+     * @return the reaplce string if 'replace' check box was selected, null otherwise.
+     */
+    public String getReplaceString() {
+        return doReplace.isSelected() ? replaceField.getText() : null;
     }
 
     /**
