@@ -199,7 +199,8 @@ class TextEditorImpl implements ThemeListener {
     }
 
     void find() {
-        FindDialog findDialog = new FindDialog(frame);
+        boolean isEditable = textArea.isEditable();
+        FindDialog findDialog = new FindDialog(frame, isEditable);
 
         if (findDialog.wasValidated()) {
             String searchString = findDialog.getSearchString();
@@ -210,7 +211,8 @@ class TextEditorImpl implements ThemeListener {
                 SearchProperty.TEXT_MATCH_REGEX.setValue(findDialog.getRegexMatch());
                 SearchProperty.TEXT_WHOLE_WORDS.setValue(findDialog.isWholeWords());
                 SearchProperty.TEXT_SEARCH_FORWARD.setValue(findDialog.isForwardDirection());
-                doSearch(findDialog.isForwardDirection());
+
+                doSearchAndReplace(findDialog.isForwardDirection(), isEditable ? findDialog.getReplaceString() : null);
             }
         }
     }
@@ -232,23 +234,42 @@ class TextEditorImpl implements ThemeListener {
     void convertSpacesToTabs() { textArea.convertSpacesToTabs(); }
 
     private void doSearch(boolean forward) {
+        doSearchAndReplace(forward, null);
+    }
+
+    /**
+     * Does Search or Replace if replaceWith is not null.
+     *
+     * @param forward search/replace forward
+     * @param replaceWith replace string, if null then only search is being done
+     */
+    private void doSearchAndReplace(boolean forward, String replaceWith) {
         String searchString = SearchProperty.SEARCH_TEXT.getValue();
         if (StringUtils.isNullOrEmpty(searchString)) {
             return;
         }
 
         SearchContext context = new SearchContext();
-        context.setMarkAll(true);
-        // TODO LastSearchQuery -> SearchProperty
         context.setMatchCase(SearchProperty.TEXT_CASESENSITIVE.getBoolValue());
         context.setRegularExpression(SearchProperty.TEXT_MATCH_REGEX.getBoolValue());
         context.setSearchFor(searchString);
-        context.setSearchForward(forward);
         context.setSearchSelectionOnly(false); // TODO currently not supported by library (https://github.com/bobbylight/RSyntaxTextArea/blob/9097e51fc5e289d761dca139a3a08459bf12614a/RSyntaxTextArea/src/main/java/org/fife/ui/rtextarea/SearchContext.java#L382)
         context.setWholeWord(SearchProperty.TEXT_WHOLE_WORDS.getBoolValue());
-        context.setSearchWrap(true);
 
-        boolean found = SearchEngine.find(textArea, context).wasFound();
+        var found = false;
+        try {
+            if (replaceWith != null) {
+                context.setReplaceWith(replaceWith);
+                found = SearchEngine.replaceAll(textArea, context).wasFound();
+            } else {
+                context.setMarkAll(true);
+                context.setSearchWrap(true);
+                context.setSearchForward(forward);
+                found = SearchEngine.find(textArea, context).wasFound();
+            }
+        } catch(Exception e) { // precisely PatternSyntaxException | IndexOutOfBoundsException
+            LOGGER.error("Error while running search/replace", e);
+        }
 
         if (!found) {
             // Beep when no match has been found.
