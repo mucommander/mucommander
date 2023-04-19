@@ -99,6 +99,7 @@ public class FindDialog extends FocusDialog implements ActionListener {
 
         XAlignedComponentPanel replacePanel = new XAlignedComponentPanel(0);
         replaceField = new SelectAllOnFocusTextField("");
+        replaceField.setEnabled(false);
         doReplace = new JCheckBox(Translator.get("text_viewer.find_replace.replace") + ":", false);
 
         GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
@@ -146,6 +147,7 @@ public class FindDialog extends FocusDialog implements ActionListener {
             compPanel.addRow(replacePanel, 5);
             doReplace.addItemListener(e -> {
                 boolean selected = e.getStateChange() == ItemEvent.SELECTED;
+                replaceField.setEnabled(selected);
                 // due to nature of RSyntaxTextArea these don't matter for replaceAll operation.
                 directionPanel.setEnabled(!selected);
                 fwdFind.setEnabled(!selected);
