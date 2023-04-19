@@ -33,10 +33,17 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import org.exbin.auxiliary.paged_data.BinaryData;
 import org.exbin.auxiliary.paged_data.PagedData;
+import org.exbin.bined.operation.BinaryDataCommand;
+import org.exbin.bined.operation.BinaryDataOperationException;
+import org.exbin.bined.operation.swing.CodeAreaOperationCommandHandler;
+import org.exbin.bined.operation.swing.CodeAreaUndoHandler;
+import org.exbin.bined.operation.undo.BinaryDataUndoHandler;
+import org.exbin.bined.operation.undo.BinaryDataUndoUpdateListener;
 import org.exbin.bined.swing.basic.CodeArea;
 
 import com.mucommander.commons.file.AbstractFile;
@@ -47,6 +54,8 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
+import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogAction;
@@ -66,6 +75,7 @@ import com.mucommander.viewer.FileEditor;
 @ParametersAreNonnullByDefault
 class BinaryEditor extends BinaryBase implements FileEditor {
 
+    @ParametersAreNonnullByDefault
     public enum BinaryEditorAction implements DialogAction {
         YES("save"),
         NO("dont_save"),
@@ -78,6 +88,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
             this.actionName = Translator.get(actionKey);
         }
 
+        @Nonnull
         @Override
         public String getActionName() {
             return actionName;
@@ -86,15 +97,19 @@ class BinaryEditor extends BinaryBase implements FileEditor {
 
     private EditorPresenter presenter;
     private AbstractFile currentFile;
-    private boolean saveNeeded;
+    private BinaryDataUndoHandler undoHandler;
 
     private JMenu fileMenu;
 
     private JMenuItem saveMenuItem;
     private JMenuItem saveAsMenuItem;
+    private JMenuItem undoMenuItem;
+    private JMenuItem redoMenuItem;
     private JMenuItem cutMenuItem;
     private JMenuItem pasteMenuItem;
     private JMenuItem deleteMenuItem;
+    private JMenuItem undoPopupMenuItem;
+    private JMenuItem redoPopupMenuItem;
     private JMenuItem cutPopupMenuItem;
     private JMenuItem copyPopupMenuItem;
     private JMenuItem pastePopupMenuItem;
@@ -139,8 +154,63 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         editMenu.add(pasteMenuItem, copyMenuItemPosition + 2);
         editMenu.add(deleteMenuItem, copyMenuItemPosition + 3);
 
+        undoMenuItem = MenuToolkit.createMenuItem(
+                Translator.get("binary_editor.undo"),
+                menuItemMnemonicHelper,
+                DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Undo),
+                e -> {
+                    try {
+                        undoHandler.performUndo();
+                    } catch (BinaryDataOperationException ex) {
+                        Logger.getLogger(BinaryEditor.class.getName())
+                                .log(Level.FINE, "Undo operation failed", ex);
+                    }
+                });
+        redoMenuItem = MenuToolkit.createMenuItem(
+                Translator.get("binary_editor.redo"),
+                menuItemMnemonicHelper,
+                DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Redo),
+                e -> {
+                    try {
+                        undoHandler.performRedo();
+                    } catch (BinaryDataOperationException ex) {
+                        Logger.getLogger(BinaryEditor.class.getName())
+                                .log(Level.FINE, "Redo operation failed", ex);
+                    }
+                });
+        editMenu.add(undoMenuItem, 0);
+        editMenu.add(redoMenuItem, 1);
+        editMenu.add(new JSeparator(), 2);
+
         JPopupMenu popupMenu = new JPopupMenu();
 
+        undoPopupMenuItem = MenuToolkit.createMenuItem(
+                Translator.get("binary_editor.undo"),
+                menuItemMnemonicHelper,
+                DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Undo),
+                e -> {
+                    try {
+                        undoHandler.performUndo();
+                    } catch (BinaryDataOperationException ex) {
+                        Logger.getLogger(BinaryEditor.class.getName())
+                                .log(Level.FINE, "Undo operation failed", ex);
+                    }
+                });
+        popupMenu.add(undoPopupMenuItem);
+        redoPopupMenuItem = MenuToolkit.createMenuItem(
+                Translator.get("binary_editor.redo"),
+                menuItemMnemonicHelper,
+                DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Redo),
+                e -> {
+                    try {
+                        undoHandler.performRedo();
+                    } catch (BinaryDataOperationException ex) {
+                        Logger.getLogger(BinaryEditor.class.getName())
+                                .log(Level.FINE, "Redo operation failed", ex);
+                    }
+                });
+        popupMenu.add(redoPopupMenuItem);
+        popupMenu.addSeparator();
         cutPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.cut"),
                 menuItemMnemonicHelper,
                 KeyStroke.getKeyStroke(KeyEvent.VK_X, metaMask),
@@ -171,9 +241,36 @@ class BinaryEditor extends BinaryBase implements FileEditor {
 
     private void init() {
         CodeArea codeArea = binaryComponent.getCodeArea();
-        codeArea.addDataChangedListener(() -> setSaveNeeded(true));
         codeArea.addSelectionChangedListener(this::updateClipboardActionsStatus);
+
+        undoHandler = new CodeAreaUndoHandler(codeArea);
+        codeArea.setCommandHandler(new CodeAreaOperationCommandHandler(codeArea, undoHandler));
+        undoHandler.addUndoUpdateListener(new BinaryDataUndoUpdateListener() {
+            @Override
+            public void undoCommandPositionChanged() {
+                updateUndoStatus();
+            }
+
+            @Override
+            public void undoCommandAdded(BinaryDataCommand command) {
+                updateUndoStatus();
+            }
+        });
+        updateUndoStatus();
+
         updateClipboardActionsStatus();
+    }
+
+    private void updateUndoStatus() {
+        undoMenuItem.setEnabled(undoHandler.canUndo());
+        redoMenuItem.setEnabled(undoHandler.canRedo());
+        undoPopupMenuItem.setEnabled(undoHandler.canUndo());
+        redoPopupMenuItem.setEnabled(undoHandler.canRedo());
+
+        // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
+        if (OsFamily.MAC_OS.isCurrent()) {
+            windowFrame.getRootPane().putClientProperty("windowModified", isSaveNeeded());
+        }
     }
 
     private void updateClipboardActionsStatus() {
@@ -208,7 +305,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
 
                 currentFile = file;
                 binaryComponent.getCodeArea().setContentData(data);
-                setSaveNeeded(false);
+                undoHandler.setSyncPoint();
                 notifyOrigFileChanged();
                 binaryComponent.updateCurrentMemoryMode();
             } catch (IOException ex) {
@@ -227,7 +324,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                 BinaryData data = Objects.requireNonNull(binaryComponent.getCodeArea().getContentData());
                 data.saveToStream(out);
                 currentFile = file;
-                setSaveNeeded(false);
+                undoHandler.setSyncPoint();
                 notifyOrigFileChanged();
 
                 // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh
@@ -300,15 +397,8 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         loadFile(file);
     }
 
-    protected void setSaveNeeded(boolean saveNeeded) {
-        if (windowFrame != null && this.saveNeeded != saveNeeded) {
-            this.saveNeeded = saveNeeded;
-
-            // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
-            if (OsFamily.MAC_OS.isCurrent()) {
-                windowFrame.getRootPane().putClientProperty("windowModified", saveNeeded);
-            }
-        }
+    protected boolean isSaveNeeded() {
+        return undoHandler.getSyncPoint() != undoHandler.getCommandPosition();
     }
 
     /**
@@ -318,7 +408,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
      *         user canceled the dialog or the save failed.
      */
     public boolean canClose() {
-        if (!saveNeeded) {
+        if (!isSaveNeeded()) {
             return true;
         }
 
@@ -332,7 +422,6 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         DialogAction ret = dialog.getActionValue();
 
         if (ret == BinaryEditorAction.YES && trySave(currentFile) || ret == BinaryEditorAction.NO) {
-            setSaveNeeded(false);
             return true;
         }
 
