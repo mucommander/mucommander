@@ -75,26 +75,7 @@ import com.mucommander.viewer.FileEditor;
 @ParametersAreNonnullByDefault
 class BinaryEditor extends BinaryBase implements FileEditor {
 
-    @ParametersAreNonnullByDefault
-    public enum BinaryEditorAction implements DialogAction {
-        YES("save"),
-        NO("dont_save"),
-        CANCEL("cancel");
-
-        private final String actionName;
-
-        BinaryEditorAction(String actionKey) {
-            // here or when in #getActionName
-            this.actionName = Translator.get(actionKey);
-        }
-
-        @Nonnull
-        @Override
-        public String getActionName() {
-            return actionName;
-        }
-    }
-
+    private static final Logger LOGGER = Logger.getLogger(BinaryEditor.class.getName());
     private EditorPresenter presenter;
     private AbstractFile currentFile;
     private BinaryDataUndoHandler undoHandler;
@@ -158,26 +139,12 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                 Translator.get("binary_editor.undo"),
                 menuItemMnemonicHelper,
                 DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Undo),
-                e -> {
-                    try {
-                        undoHandler.performUndo();
-                    } catch (BinaryDataOperationException ex) {
-                        Logger.getLogger(BinaryEditor.class.getName())
-                                .log(Level.FINE, "Undo operation failed", ex);
-                    }
-                });
+                e -> performUndo());
         redoMenuItem = MenuToolkit.createMenuItem(
                 Translator.get("binary_editor.redo"),
                 menuItemMnemonicHelper,
                 DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Redo),
-                e -> {
-                    try {
-                        undoHandler.performRedo();
-                    } catch (BinaryDataOperationException ex) {
-                        Logger.getLogger(BinaryEditor.class.getName())
-                                .log(Level.FINE, "Redo operation failed", ex);
-                    }
-                });
+                e -> performRedo());
         editMenu.add(undoMenuItem, 0);
         editMenu.add(redoMenuItem, 1);
         editMenu.add(new JSeparator(), 2);
@@ -188,27 +155,13 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                 Translator.get("binary_editor.undo"),
                 menuItemMnemonicHelper,
                 DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Undo),
-                e -> {
-                    try {
-                        undoHandler.performUndo();
-                    } catch (BinaryDataOperationException ex) {
-                        Logger.getLogger(BinaryEditor.class.getName())
-                                .log(Level.FINE, "Undo operation failed", ex);
-                    }
-                });
+                e -> performUndo());
         popupMenu.add(undoPopupMenuItem);
         redoPopupMenuItem = MenuToolkit.createMenuItem(
                 Translator.get("binary_editor.redo"),
                 menuItemMnemonicHelper,
                 DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Redo),
-                e -> {
-                    try {
-                        undoHandler.performRedo();
-                    } catch (BinaryDataOperationException ex) {
-                        Logger.getLogger(BinaryEditor.class.getName())
-                                .log(Level.FINE, "Redo operation failed", ex);
-                    }
-                });
+                e -> performRedo());
         popupMenu.add(redoPopupMenuItem);
         popupMenu.addSeparator();
         cutPopupMenuItem = MenuToolkit.createMenuItem(Translator.get("binary_editor.cut"),
@@ -259,6 +212,22 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         updateUndoStatus();
 
         updateClipboardActionsStatus();
+    }
+
+    private void performUndo() {
+        try {
+            undoHandler.performUndo();
+        } catch (BinaryDataOperationException ex) {
+            LOGGER.log(Level.FINE, "Undo operation failed", ex);
+        }
+    }
+
+    private void performRedo() {
+        try {
+            undoHandler.performRedo();
+        } catch (BinaryDataOperationException ex) {
+            LOGGER.log(Level.FINE, "Redo operation failed", ex);
+        }
     }
 
     private void updateUndoStatus() {
@@ -333,8 +302,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                         file.getParent().changeDate(System.currentTimeMillis());
                     } catch (IOException e) {
                         // Fail silently
-                        Logger.getLogger(BinaryEditor.class.getName())
-                                .log(Level.FINE, "failed to change the date of " + file, e);
+                        LOGGER.log(Level.FINE, "failed to change the date of " + file, e);
                     }
                 }
             } catch (IOException ex) {
@@ -465,5 +433,24 @@ class BinaryEditor extends BinaryBase implements FileEditor {
     public void setPresenter(EditorPresenter presenter) {
         setWindowFrame(presenter.getWindowFrame());
         this.presenter = presenter;
+    }
+
+    public enum BinaryEditorAction implements DialogAction {
+        YES("save"),
+        NO("dont_save"),
+        CANCEL("cancel");
+
+        private final String actionName;
+
+        BinaryEditorAction(@Nonnull String actionKey) {
+            // here or when in #getActionName
+            this.actionName = Translator.get(actionKey);
+        }
+
+        @Nonnull
+        @Override
+        public String getActionName() {
+            return actionName;
+        }
     }
 }
