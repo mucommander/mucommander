@@ -148,7 +148,7 @@ public class FindDialog extends FocusDialog implements ActionListener {
             doReplace.addItemListener(e -> {
                 boolean selected = e.getStateChange() == ItemEvent.SELECTED;
                 replaceField.setEnabled(selected);
-                // due to nature of RSyntaxTextArea these don't matter for replaceAll operation.
+                // due to the nature of RSyntaxTextArea these don't matter for replaceAll operation.
                 directionPanel.setEnabled(!selected);
                 fwdFind.setEnabled(!selected);
                 bkwdFind.setEnabled(!selected);
@@ -189,9 +189,9 @@ public class FindDialog extends FocusDialog implements ActionListener {
     }
 
     /**
-     * Returns the reaplce string if 'replace' check box was selected, null otherwise.
+     * Returns the replace string if 'replace' check box was selected, null otherwise.
      *
-     * @return the reaplce string if 'replace' check box was selected, null otherwise.
+     * @return the replace string if 'replace' check box was selected, null otherwise.
      */
     public String getReplaceString() {
         return doReplace.isSelected() ? replaceField.getText() : null;

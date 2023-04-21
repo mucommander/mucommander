@@ -96,9 +96,9 @@ class TextEditorImpl implements ThemeListener {
      */
     private Consumer<String> syntaxChangeListener;
 
-    public TextEditorImpl(boolean isEditable) {
+    public TextEditorImpl(boolean editable) {
         // Initialize text area
-        initTextArea(isEditable);
+        initTextArea(editable);
 
         // Listen to theme changes to update the text area if it is visible
         ThemeManager.addCurrentThemeListener(this);
@@ -238,9 +238,9 @@ class TextEditorImpl implements ThemeListener {
     }
 
     /**
-     * Does Search or Replace if replaceWith is not null.
+     * Does Search or Replace All if replaceWith is not null.
      *
-     * @param forward search/replace forward
+     * @param forward search forward if 'true' or backward otherwise, ignored when replaceWith is not null
      * @param replaceWith replace string, if null then only search is being done
      */
     private void doSearchAndReplace(boolean forward, String replaceWith) {

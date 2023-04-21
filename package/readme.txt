@@ -32,7 +32,7 @@ What's new since v1.2.0 ?
 -----------------------
 
 New features:
--
+- Added Replace All functionality to Text Editor
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
