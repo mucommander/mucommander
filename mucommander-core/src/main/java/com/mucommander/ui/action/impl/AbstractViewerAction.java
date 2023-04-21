@@ -66,8 +66,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
         AbstractFile file;
         Command      customCommand;
 
-        boolean inSearch = mainFrame.getActivePanel().getCurrentFolder().getPath().startsWith(
-                SearchFile.SCHEMA + "://");
+        boolean inSearch = mainFrame.getActivePanel().getCurrentFolder().getURL().getScheme().equals(SearchFile.SCHEMA);
         SearchProperty.OPEN_WITH_FOUND_SELECTED.setValue(
                 inSearch && !StringUtils.isNullOrEmpty(SearchProperty.SEARCH_TEXT.getValue()));
 

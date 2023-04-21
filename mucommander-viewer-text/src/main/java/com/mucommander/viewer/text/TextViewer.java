@@ -346,7 +346,7 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
 
     @Override
     public void requestFocus() {
-        textEditorImpl.setFocusAndCursorOnFirstLine();
+        textEditorImpl.setInitialFocusAndCursor();
     }
 
     ///////////////////////////////

@@ -487,7 +487,7 @@ class TextEditorImpl implements ThemeListener {
         }
     }
 
-    public void setFocusAndCursorOnFirstLine() {
+    public void setInitialFocusAndCursor() {
         textArea.requestFocusInWindow();
 
         // Check if opened file is from Search with content if so, then try to show the found string,

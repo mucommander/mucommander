@@ -216,7 +216,7 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
 
     @Override
     public void requestFocus() {
-        textEditorImpl.setFocusAndCursorOnFirstLine();
+        textEditorImpl.setInitialFocusAndCursor();
     }
 
     ///////////////////////////////
