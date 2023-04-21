@@ -120,13 +120,16 @@ muCommander uses the following great third party works :
  ICEpdf can be found at https://github.com/pcorless/icepdf .
 
 - the Unix4j library released under the MIT License.
- Unix4j can be found at http://unix4j.org/.
+ Unix4j can be found at http://unix4j.org/ .
 
 - the FlatLaf library released under the Apache License.
- FlatLaf cab be found at https://www.formdev.com/flatlaf.
+ FlatLaf can be found at https://www.formdev.com/flatlaf .
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .
+
+- the BinEd library released under the Apache License.
+ BinEd can be found at https://bined.exbin.org/library/ .
 
 
 Credits
