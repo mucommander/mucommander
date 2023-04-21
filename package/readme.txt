@@ -36,6 +36,7 @@ New features:
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
+- Added undo/redo support for internal binary editor.
 
 Localization:
 -
@@ -127,9 +128,6 @@ muCommander uses the following great third party works :
 
 - Icons by Mark James released under the Creative Commons Attribution License.
  Mark James can be found at http://famfamfam.com .
-
-- the BinEd library released under the Apache License.
- BinEd can be found at https://bined.exbin.org/library/ .
 
 
 Credits
