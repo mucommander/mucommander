@@ -443,7 +443,6 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         private final String actionName;
 
         BinaryEditorAction(@Nonnull String actionKey) {
-            // here or when in #getActionName
             this.actionName = Translator.get(actionKey);
         }
 
