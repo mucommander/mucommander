@@ -33,10 +33,10 @@ What's new since v1.2.0 ?
 
 New features:
 - Added Replace All functionality to Text Editor
+- Added undo/redo support for internal binary editor.
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
-- Added undo/redo support for internal binary editor.
 
 Localization:
 -
