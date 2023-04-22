@@ -63,7 +63,7 @@ public class ImageFileViewerService implements FileViewerService {
 
     @Nonnull
     @Override
-    public FileViewer createFileViewer() {
+    public FileViewer createFileViewer(boolean fromSearchWithContent) {
         return new ImageViewer(this);
     }
 }

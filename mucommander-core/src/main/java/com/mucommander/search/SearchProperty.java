@@ -43,7 +43,6 @@ public enum SearchProperty {
     SEARCH_TEXT("text", "search_dialog.search_text", ""),
     TEXT_WHOLE_WORDS("whole-words", "used-via-find-dialog1", Boolean.toString(false)),
     TEXT_SEARCH_FORWARD("forward", "used-via-find-dialog2", Boolean.toString(true)),
-    OPEN_WITH_FOUND_SELECTED(null,"not-used-in-ui", Boolean.toString(false)),
 
     ;
 

@@ -90,8 +90,8 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
 
     private String encoding;
 
-    TextViewer() {
-        this(new TextEditorImpl(false));
+    TextViewer(boolean fromSearchWithContent) {
+        this(new TextEditorImpl(false, fromSearchWithContent));
     }
 
     TextViewer(TextEditorImpl textEditorImpl) {

@@ -46,6 +46,8 @@ import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
 import com.mucommander.viewer.FileEditorService;
 
+import org.slf4j.LoggerFactory;
+
 /**
  * File editor presenter to handle multiple file editors.
  *
@@ -109,7 +111,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
         final int serviceIndex = editorsCount;
         editorMenuItem.addActionListener((e) -> {
             try {
-                switchFileEditor(serviceIndex);
+                switchFileEditor(serviceIndex, false);
             } catch (IOException ex) {
                 Logger.getLogger(FileEditorPresenter.class.getName()).log(Level.SEVERE, null, ex);
             } catch (CloseCancelledException ex) {
@@ -125,7 +127,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
     }
 
     @Override
-    protected void show(AbstractFile file) throws IOException {
+    protected void show(AbstractFile file, boolean fromSearchWithContent) throws IOException {
         setCurrentFile(file);
         if (fileEditor == null) {
             getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -182,7 +184,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
             editorMenu.add(closeMenuItem);
 
             try {
-                switchFileEditor(0);
+                switchFileEditor(0, fromSearchWithContent);
             } catch (CloseCancelledException ex) {
                 Logger.getLogger(FileEditorPresenter.class.getName()).log(Level.SEVERE, "Unexpected cancellation", ex);
             }
@@ -201,7 +203,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
         frame.dispose();
     }
 
-    private void switchFileEditor(int index) throws IOException, CloseCancelledException {
+    private void switchFileEditor(int index, boolean fromSearchWithContent) throws IOException, CloseCancelledException {
         if (fileEditor != null) {
             fileEditor.close();
             clearComponentToPresent();
@@ -212,7 +214,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
         menuBar.add(editorMenu);
 
         FileEditorService service = services.get(index);
-        fileEditor = service.createFileEditor();
+        fileEditor = service.createFileEditor(fromSearchWithContent);
         fileEditor.setPresenter(this);
 
         JComponent editorComponent = fileEditor.getUI();

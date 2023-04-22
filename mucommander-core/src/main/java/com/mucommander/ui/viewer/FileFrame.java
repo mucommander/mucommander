@@ -36,7 +36,7 @@ public abstract class FileFrame extends JFrame {
     // The main frame from which this frame was initiated
     private MainFrame mainFrame;
 
-    FileFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
+    FileFrame(MainFrame mainFrame, AbstractFile file, boolean fromSearchWithContent, Image icon) {
         this.mainFrame = mainFrame;
 
         setIconImage(icon);
@@ -46,14 +46,14 @@ public abstract class FileFrame extends JFrame {
 
         setResizable(true);
 
-        initContentPane(file);
+        initContentPane(file, fromSearchWithContent);
     }
 
     public MainFrame getMainFrame() {
         return mainFrame;
     }
 
-    protected void initContentPane(final AbstractFile file) {
+    protected void initContentPane(final AbstractFile file, final boolean fromSearchWithContent) {
         try {
             filePresenter = createFilePresenter(file);
         } catch (UserCancelledException e) {
@@ -74,7 +74,7 @@ public abstract class FileFrame extends JFrame {
             public JComponent getTargetComponent() {
                 try {
                     // Ask the presenter to present the file
-                    filePresenter.open(file);
+                    filePresenter.open(file, fromSearchWithContent);
                 } catch(Exception e) {
                     LOGGER.error("Exception caught", e);
                     showGenericErrorDialog();

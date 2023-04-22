@@ -52,7 +52,8 @@ public class BinaryFileViewerService implements FileViewerService, FileEditorSer
 
     @Nonnull
     @Override
-    public FileViewer createFileViewer() {
+    public FileViewer createFileViewer(boolean fromSearchWithContent) {
+        // TODO find first occurrence of text when file is from File Search with Content?
         return new BinaryViewer();
     }
 
@@ -63,7 +64,8 @@ public class BinaryFileViewerService implements FileViewerService, FileEditorSer
 
     @Nonnull
     @Override
-    public FileEditor createFileEditor() {
+    public FileEditor createFileEditor(boolean fromSearchWithContent) {
+        // TODO find first occurrence of string when file is from File Search with Content?
         return new BinaryEditor();
     }
 }

@@ -70,11 +70,12 @@ public class ViewerRegistrar {
      *
      * @param mainFrame the parent MainFrame instance
      * @param file the file that will be displayed by the returned ViewerFrame
+     * @param fromSearchWithContent whether the file is from File Search with Content
      * @param icon window's icon.
      * @return the created ViewerFrame
      */
-    public static FileFrame createViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
-        ViewerFrame frame = new ViewerFrame(mainFrame, file, icon);
+    public static FileFrame createViewerFrame(MainFrame mainFrame, AbstractFile file, boolean fromSearchWithContent, Image icon) {
+        ViewerFrame frame = new ViewerFrame(mainFrame, file, fromSearchWithContent, icon);
 
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
         if (OsFamily.MAC_OS.isCurrent()) {

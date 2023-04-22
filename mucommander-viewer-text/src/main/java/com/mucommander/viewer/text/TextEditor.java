@@ -92,8 +92,8 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
     private final TextEditorImpl textEditorImpl;
     private final TextViewer textViewerDelegate;
 
-    public TextEditor() {
-        textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true)) {
+    public TextEditor(boolean fromSearchWithContent) {
+        textViewerDelegate = new TextViewer(textEditorImpl = new TextEditorImpl(true, fromSearchWithContent)) {
             @Override
             protected void attachView() {
                 ui = textEditorImpl.getScrollPane();
