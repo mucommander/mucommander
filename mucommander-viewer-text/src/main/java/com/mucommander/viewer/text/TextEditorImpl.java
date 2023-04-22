@@ -104,7 +104,7 @@ class TextEditorImpl implements ThemeListener {
         ThemeManager.addCurrentThemeListener(this);
     }
 
-    private void initTextArea(boolean isEditable) {
+    private void initTextArea(boolean editable) {
         textArea = new RSyntaxTextArea() {
             @Override
             public Insets getInsets() {
@@ -154,7 +154,7 @@ class TextEditorImpl implements ThemeListener {
         }
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
 
-        textArea.setEditable(isEditable);
+        textArea.setEditable(editable);
         // Use theme colors and font
         textArea.setForeground(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
         textArea.setCaretColor(ThemeManager.getCurrentColor(Theme.EDITOR_FOREGROUND_COLOR));
@@ -199,8 +199,8 @@ class TextEditorImpl implements ThemeListener {
     }
 
     void find() {
-        boolean isEditable = textArea.isEditable();
-        FindDialog findDialog = new FindDialog(frame, isEditable);
+        boolean editable = textArea.isEditable();
+        FindDialog findDialog = new FindDialog(frame, editable);
 
         if (findDialog.wasValidated()) {
             String searchString = findDialog.getSearchString();
@@ -212,7 +212,7 @@ class TextEditorImpl implements ThemeListener {
                 SearchProperty.TEXT_WHOLE_WORDS.setValue(findDialog.isWholeWords());
                 SearchProperty.TEXT_SEARCH_FORWARD.setValue(findDialog.isForwardDirection());
 
-                doSearchAndReplace(findDialog.isForwardDirection(), isEditable ? findDialog.getReplaceString() : null);
+                doSearchAndReplace(findDialog.isForwardDirection(), editable ? findDialog.getReplaceString() : null);
             }
         }
     }
