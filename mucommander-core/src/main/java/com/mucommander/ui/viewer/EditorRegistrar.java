@@ -71,11 +71,12 @@ public class EditorRegistrar {
      *
      * @param mainFrame the parent MainFrame instance
      * @param file the file that will be displayed by the returned EditorFrame
+     * @param fromSearchWithContent whether the opened file is from File Search with Content
      * @param icon editor frame's icon.
      * @return the created EditorFrame
      */
-    public static FileFrame createEditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
-        EditorFrame frame = new EditorFrame(mainFrame, file, icon);
+    public static FileFrame createEditorFrame(MainFrame mainFrame, AbstractFile file, boolean fromSearchWithContent, Image icon) {
+        EditorFrame frame = new EditorFrame(mainFrame, file, fromSearchWithContent, icon);
 
         if (OsFamily.MAC_OS.isCurrent()) {
             // Displays the document icon in the window title bar, works only for local files

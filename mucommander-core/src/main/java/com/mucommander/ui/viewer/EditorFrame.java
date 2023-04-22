@@ -36,14 +36,18 @@ public class EditorFrame extends FileFrame {
 
     /**
      * Creates a new EditorFrame to start viewing the given file.
-     *
+     * @param mainFrame the main frame
+     * @param file the file to open
+     * @param fromSearchWithContent whether opened file is from File Search with Content
+     * @param icon the icon
      * <p>
      * This constructor has package access only, EditorFrame can to be created
-     * by
-     * {@link EditorRegistrar#createEditorFrame(MainFrame,AbstractFile,Image)}.
+     * by {@link EditorRegistrar#createEditorFrame(MainFrame, AbstractFile, boolean, Image)}.
+     * </p>
+     *
      */
-    EditorFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
-        super(mainFrame, file, icon);
+    EditorFrame(MainFrame mainFrame, AbstractFile file, boolean fromSearchWithContent, Image icon) {
+        super(mainFrame, file, fromSearchWithContent, icon);
     }
 
     ////////////////////////

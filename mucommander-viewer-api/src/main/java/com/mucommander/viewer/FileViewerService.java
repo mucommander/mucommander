@@ -65,8 +65,9 @@ public interface FileViewerService {
     /**
      * Returns a new instance of {@link FileViewer}.
      *
+     * @param fromSearchWithContent whether opened file is from File Search with Content
      * @return a new instance of {@link FileViewer}.
      */
     @Nonnull
-    FileViewer createFileViewer();
+    FileViewer createFileViewer(boolean fromSearchWithContent);
 }

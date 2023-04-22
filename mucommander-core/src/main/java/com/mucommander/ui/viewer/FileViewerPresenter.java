@@ -137,7 +137,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         final int serviceIndex = viewersCount;
         viewerMenuItem.addActionListener((e) -> {
             try {
-                switchFileViewer(serviceIndex);
+                switchFileViewer(serviceIndex, false);
             } catch (IOException ex) {
                 Logger.getLogger(FileViewerPresenter.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -151,7 +151,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     }
 
     @Override
-    protected void show(AbstractFile file) throws IOException {
+    protected void show(AbstractFile file, boolean fromSearchWithContent) throws IOException {
         setCurrentFile(file);
         if (fileViewer == null) {
             getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -202,7 +202,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
                     e -> getFrame().dispatchEvent(new WindowEvent(getFrame(), WindowEvent.WINDOW_CLOSING)));
             viewerMenu.add(closeMenuItem);
 
-            switchFileViewer(0);
+            switchFileViewer(0, fromSearchWithContent);
         }
     }
 
@@ -217,7 +217,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         frame.dispose();
     }
 
-    private void switchFileViewer(int index) throws IOException {
+    private void switchFileViewer(int index, boolean fromSearchWithContent) throws IOException {
         if (fileViewer != null) {
             clearComponentToPresent();
             fileViewer.close();
@@ -228,7 +228,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         menuBar.add(viewerMenu);
 
         FileViewerService service = services.get(index);
-        fileViewer = service.createFileViewer();
+        fileViewer = service.createFileViewer(fromSearchWithContent);
         fileViewer.setPresenter(this);
 
         JComponent viewerComponent = fileViewer.getUI();

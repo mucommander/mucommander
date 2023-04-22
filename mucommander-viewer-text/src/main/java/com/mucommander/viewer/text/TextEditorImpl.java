@@ -92,11 +92,18 @@ class TextEditorImpl implements ThemeListener {
     private boolean lineSeparatorExists;
 
     /**
+     * Whether the opened file is from File Search with Content (to initiate findNext() to move the caret).
+     */
+    private final boolean fromSearchWithContent;
+
+    /**
      * A listener that is being called when syntax style has been changed.
      */
     private Consumer<String> syntaxChangeListener;
 
-    public TextEditorImpl(boolean editable) {
+    public TextEditorImpl(boolean editable, boolean fromSearchWithContent) {
+        this.fromSearchWithContent = fromSearchWithContent;
+
         // Initialize text area
         initTextArea(editable);
 
@@ -492,7 +499,7 @@ class TextEditorImpl implements ThemeListener {
 
         // Check if opened file is from Search with content if so, then try to show the found string,
         // otherwise set caret on the first line.
-        if (SearchProperty.OPEN_WITH_FOUND_SELECTED.getBoolValue()) {
+        if (fromSearchWithContent) {
             findNext();
         } else {
             textArea.setCaretPosition(0);

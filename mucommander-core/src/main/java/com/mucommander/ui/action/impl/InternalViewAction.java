@@ -57,13 +57,13 @@ public class InternalViewAction extends AbstractViewerAction {
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    protected void performInternalAction(AbstractFile file) {
+    protected void performInternalAction(AbstractFile file, boolean fromSearchWithContent) {
         if (file.isDirectory()) {
             FileTable activeTable = mainFrame.getActiveTable();
             FileTableModel fileTableModel = (FileTableModel)activeTable.getModel();
             fileTableModel.startDirectorySizeCalculation(activeTable, file);
         } else {
-            ViewerRegistrar.createViewerFrame(mainFrame, file, getIcon().getImage());
+            ViewerRegistrar.createViewerFrame(mainFrame, file, fromSearchWithContent, getIcon().getImage());
         }
     }
 

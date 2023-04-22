@@ -46,7 +46,7 @@ public class PdfFileViewer implements FileViewerService {
     }
 
     @Override
-    public FileViewer createFileViewer() {
+    public FileViewer createFileViewer(boolean fromSearchWithContent) {
         return new PdfViewer();
     }
 }

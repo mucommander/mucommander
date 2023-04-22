@@ -39,11 +39,17 @@ public class ViewerFrame extends FileFrame {
     /**
      * Creates a new ViewerFrame to start viewing the given file.
      *
+     * @param mainFrame the main frame
+     * @param file the file to open
+     * @param fromSearchWithContent whether opened file is from File Search with Content
+     * @param icon the icon for the file
+     *
      * <p>This constructor has package access only, ViewerFrame need to be created can
-     * {@link ViewerRegistrar#createViewerFrame(MainFrame,AbstractFile,Image)}.
+     * {@link ViewerRegistrar#createViewerFrame(MainFrame, AbstractFile, boolean, Image)}.
+     * </p>
      */
-    ViewerFrame(MainFrame mainFrame, AbstractFile file, Image icon) {
-        super(mainFrame, file, icon);
+    ViewerFrame(MainFrame mainFrame, AbstractFile file, boolean fromSearchWithContent, Image icon) {
+        super(mainFrame, file, fromSearchWithContent, icon);
     }
 
     ////////////////////////

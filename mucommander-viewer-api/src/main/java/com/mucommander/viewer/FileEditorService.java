@@ -64,8 +64,9 @@ public interface FileEditorService {
     /**
      * Returns a new instance of {@link FileEditor}.
      *
+     * @param fromSearchWithContent whether opened file is from File Search with Content
      * @return a new instance of {@link FileEditor}.
      */
     @Nonnull
-    FileEditor createFileEditor();
+    FileEditor createFileEditor(boolean fromSearchWithContent);
 }

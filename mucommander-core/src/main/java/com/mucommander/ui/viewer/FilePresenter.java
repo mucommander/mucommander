@@ -154,10 +154,11 @@ public abstract class FilePresenter extends JPanel {
      * Open a given AbstractFile for display.
      *
      * @param file the file to be presented
+     * @param fromSearchWithContent whether file is from File Search with Content
      * @throws IOException in case of an I/O problem
      */
-    public void open(AbstractFile file) throws IOException {
-        show(file);
+    public void open(AbstractFile file, boolean fromSearchWithContent) throws IOException {
+        show(file, fromSearchWithContent);
         setCurrentFile(file);
     }
 
@@ -170,9 +171,10 @@ public abstract class FilePresenter extends JPanel {
      * component can be displayed.
      *
      * @param file the file that is about to be viewed.
+     * @param fromSearchWithContent whether file is from File Search with Content
      * @throws IOException if an I/O error occurs.
      */
-    protected abstract void show(AbstractFile file) throws IOException;
+    protected abstract void show(AbstractFile file, boolean fromSearchWithContent) throws IOException;
 
     /**
      * Returns the menu bar that controls the presenter's frame. The menu bar

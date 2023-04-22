@@ -66,52 +66,47 @@ abstract class AbstractViewerAction extends SelectedFileAction {
         AbstractFile file;
         Command      customCommand;
 
-        boolean inSearch = mainFrame.getActivePanel().getCurrentFolder().getURL().getScheme().equals(SearchFile.SCHEMA);
-        SearchProperty.OPEN_WITH_FOUND_SELECTED.setValue(
-                inSearch && !StringUtils.isNullOrEmpty(SearchProperty.SEARCH_TEXT.getValue()));
-
         file = mainFrame.getActiveTable().getSelectedFile(false, true);
 
         // At this stage, no assumption should be made on the type of file that is allowed to be viewed/edited:
         // viewer/editor implementations will decide whether they allow a particular file or not.
-        if(file != null) {
+        if (file != null) {
             customCommand = getCustomCommand();
 
-
             // If we're using a custom command...
-            if(customCommand != null) {
+            if (customCommand != null) {
                 // If it's local, run the custom editor on it.
-                if(file.hasAncestor(LocalFile.class)) {
+                if (file.hasAncestor(LocalFile.class)) {
                     try {
                         InformationDialog.showErrorDialogIfNeeded(getMainFrame(), ProcessRunner.executeAsync(customCommand.getTokens(file), file));
                     }
                     catch(Exception e) {
                         InformationDialog.showErrorDialog(mainFrame);
                     }
-                }
-
-                // If it's distant, copies it locally before running the custom editor on it.
-                else {
+                } else {
+                    // If it's distant, copies it locally before running the custom editor on it.
                     ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
                     TempOpenWithJob job = new TempOpenWithJob(progressDialog, mainFrame, file, customCommand);
                     progressDialog.start(job);
                 }
+            } else {
+                // If we're not using a custom editor, this action behaves exactly like its parent.
+
+                boolean fromSearchWithContent = mainFrame.getActivePanel().getCurrentFolder().getURL().getScheme().equals(SearchFile.SCHEMA) &&
+                        !StringUtils.isNullOrEmpty(SearchProperty.SEARCH_TEXT.getValue());
+                performInternalAction(file, fromSearchWithContent);
             }
-            // If we're not using a custom editor, this action behaves exactly like its parent.
-            else
-                performInternalAction(file);
         }
     }
-
-
 
     // - Abstract methods ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
      * Opens the specified file without a custom command.
      * @param file file to open.
+     * @param fromSearchWithContent whether file is opened from File Search with Content
      */
-    protected abstract void performInternalAction(AbstractFile file);
+    protected abstract void performInternalAction(AbstractFile file, boolean fromSearchWithContent);
 
     protected abstract Command getCustomCommand();
 }

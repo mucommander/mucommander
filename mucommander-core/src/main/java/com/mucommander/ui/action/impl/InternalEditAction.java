@@ -61,21 +61,16 @@ public class InternalEditAction extends AbstractViewerAction {
             setIcon(icon);
     }
 
-
     // - AbstractViewerAction implementation ---------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * Opens the internal editor on the specified file.
-     * @param file file to edit.
-     */
     @Override
-    protected void performInternalAction(AbstractFile file) {
+    protected void performInternalAction(AbstractFile file, boolean fromSearchWithContent) {
         if (file.isDirectory()) {
             FileSet fileSet = new FileSet();
             fileSet.add(file);
             new ChangePermissionsDialog(mainFrame, fileSet).showDialog();
         } else {
-            EditorRegistrar.createEditorFrame(mainFrame, file, getIcon().getImage());
+            EditorRegistrar.createEditorFrame(mainFrame, file, fromSearchWithContent, getIcon().getImage());
         }
     }
 

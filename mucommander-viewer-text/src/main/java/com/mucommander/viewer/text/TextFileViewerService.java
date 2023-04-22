@@ -91,12 +91,12 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
     }
 
     @Override
-    public FileViewer createFileViewer() {
-        return new TextViewer();
+    public FileViewer createFileViewer(boolean fromSearchWithContent) {
+        return new TextViewer(fromSearchWithContent);
     }
 
     @Override
-    public FileEditor createFileEditor() {
-        return new TextEditor();
+    public FileEditor createFileEditor(boolean fromSearchWithContent) {
+        return new TextEditor(fromSearchWithContent);
     }
 }
