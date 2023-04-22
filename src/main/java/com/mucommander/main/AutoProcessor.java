@@ -27,11 +27,6 @@ public class AutoProcessor
 {
     /**
      * The property name used for the bundle directory.
-     * @deprecated use {@link AutoProcessor#AUTO_DEPLOY_DIR_PROPERTY}
-    **/
-    public static final String AUTO_DEPLOY_DIR_PROPERY = "felix.auto.deploy.dir";
-    /**
-     * The property name used for the bundle directory.
     **/
     public static final String AUTO_DEPLOY_DIR_PROPERTY = "felix.auto.deploy.dir";
     /**
@@ -40,18 +35,8 @@ public class AutoProcessor
     public static final String AUTO_DEPLOY_DIR_VALUE = "bundle";
     /**
      * The property name used to specify auto-deploy actions.
-     * @deprecated use {@link AutoProcessor#AUTO_DEPLOY_ACTION_PROPERTY}
-    **/
-    public static final String AUTO_DEPLOY_ACTION_PROPERY = "felix.auto.deploy.action";
-    /**
-     * The property name used to specify auto-deploy actions.
     **/
     public static final String AUTO_DEPLOY_ACTION_PROPERTY = "felix.auto.deploy.action";
-    /**
-     * The property name used to specify auto-deploy start level.
-     * @deprecated use {@link AutoProcessor#AUTO_DEPLOY_STARTLEVEL_PROPERTY}
-    **/
-    public static final String AUTO_DEPLOY_STARTLEVEL_PROPERY = "felix.auto.deploy.startlevel";
     /**
      * The property name used to specify auto-deploy start level.
     **/
