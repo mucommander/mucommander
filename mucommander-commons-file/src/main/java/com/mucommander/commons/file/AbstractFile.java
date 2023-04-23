@@ -212,6 +212,7 @@ public abstract class AbstractFile implements FileAttributes {
         try {
             FileURL canonicalURL = FileURL.getFileURL(canonicalPath);
             canonicalURL.setCredentials(fileURL.getCredentials());
+            canonicalURL.importProperties(fileURL);
 
             return FileFactory.getFile(canonicalURL);
         }
