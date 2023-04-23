@@ -32,7 +32,7 @@ What's new since v1.2.0 ?
 -----------------------
 
 New features:
-- Added Replace All functionality to Text Editor
+- Added Replace All functionality to Text Editor.
 - Added undo/redo support for internal binary editor.
 
 Improvements:
@@ -42,7 +42,7 @@ Localization:
 -
 
 Bug fixes:
--
+- Fixed connection to SFTP servers using a private key.
 
 Known issues:
 - Some translations may not be up-to-date.
@@ -85,7 +85,7 @@ muCommander uses the following great third party works :
  the ICU project can be found at http://icu-project.org .
 
 - the JSCH library released under the BSD license.
- JSCH can be found at http://www.jcraft.com/jsch/ .
+ JSCH can be found at https://github.com/mwiede/jsch .
 
 - the 7-Zip-JBinding library released under the GNU LGPL.
  7-Zip-JBinding can be found at http://sevenzipjbind.sourceforge.net .
