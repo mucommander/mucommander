@@ -46,8 +46,6 @@ import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
 import com.mucommander.viewer.FileEditorService;
 
-import org.slf4j.LoggerFactory;
-
 /**
  * File editor presenter to handle multiple file editors.
  *

@@ -34,10 +34,11 @@ What's new since v1.2.0 ?
 New features:
 - Added Replace All functionality to Text Editor.
 - Added undo/redo support for internal binary editor.
+- Added the following search options to the internal viewer/editor: case-sensitive, whole words, regexp, forward/backward.
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
-- More search options to Editor/Viewer, synchronize search options from File Search and set caret on the first occurrence
+- When opening a result of a file search with text search using the internal viewer/editor, the caret is set on the first occurrence of the searched text.
 
 Localization:
 -
