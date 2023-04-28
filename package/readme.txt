@@ -32,9 +32,9 @@ What's new since v1.2.0 ?
 -----------------------
 
 New features:
-- Added Replace All functionality to Text Editor.
-- Added undo/redo support for internal binary editor.
-- Added the following search options to the internal viewer/editor: case-sensitive, whole words, regexp, forward/backward.
+- Replace-all functionality for the internal text editor.
+- Undo and redo actions for the internal binary editor.
+- Additional search options for the internal text viewer/editor: case-sensitivity, whole-words, regular expressions, forward/backward.
 - Browsing and extracting multi-volume RAR 5+ files.
 
 Improvements:
