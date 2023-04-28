@@ -1,11 +1,43 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.mucommander.sevenzipjbindings.multivolume;
 
-import net.sf.sevenzipjbinding.*;
-import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
+import java.io.Closeable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Closeable;
+import net.sf.sevenzipjbinding.ArchiveFormat;
+import net.sf.sevenzipjbinding.ExtractOperationResult;
+import net.sf.sevenzipjbinding.IArchiveExtractCallback;
+import net.sf.sevenzipjbinding.IInArchive;
+import net.sf.sevenzipjbinding.IOutItemAllFormats;
+import net.sf.sevenzipjbinding.IOutUpdateArchive;
+import net.sf.sevenzipjbinding.IOutUpdateArchive7z;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveBZip2;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveGZip;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveTar;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveZip;
+import net.sf.sevenzipjbinding.ISequentialOutStream;
+import net.sf.sevenzipjbinding.PropID;
+import net.sf.sevenzipjbinding.PropertyInfo;
+import net.sf.sevenzipjbinding.SevenZipException;
+import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 
 public class InArchiveWrapper implements IInArchive {
 

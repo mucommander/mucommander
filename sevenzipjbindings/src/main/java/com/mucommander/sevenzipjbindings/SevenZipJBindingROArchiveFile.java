@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.mucommander.sevenzipjbindings.multivolume.InArchiveWrapper;
-import com.mucommander.sevenzipjbindings.multivolume.SevenZipRarMultiVolumeCallbackHandler;
-import net.sf.sevenzipjbinding.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +36,16 @@ import com.mucommander.commons.file.archive.ArchiveEntryIterator;
 import com.mucommander.commons.file.archive.WrapperArchiveEntryIterator;
 import com.mucommander.commons.util.CircularByteBuffer;
 import com.mucommander.commons.util.StringUtils;
+import com.mucommander.sevenzipjbindings.multivolume.InArchiveWrapper;
+import com.mucommander.sevenzipjbindings.multivolume.SevenZipRarMultiVolumeCallbackHandler;
+
+import net.sf.sevenzipjbinding.ArchiveFormat;
+import net.sf.sevenzipjbinding.IInArchive;
+import net.sf.sevenzipjbinding.IInStream;
+import net.sf.sevenzipjbinding.ISequentialOutStream;
+import net.sf.sevenzipjbinding.PropID;
+import net.sf.sevenzipjbinding.SevenZip;
+import net.sf.sevenzipjbinding.SevenZipException;
 
 /**
  * @author Oleg Trifonov, Arik Hadas

@@ -1,17 +1,41 @@
-package com.mucommander.sevenzipjbindings.multivolume;
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.sevenzipjbindings.SignatureCheckedRandomAccessFile;
-import net.sf.sevenzipjbinding.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.mucommander.sevenzipjbindings.multivolume;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.sevenzipjbindings.SignatureCheckedRandomAccessFile;
+
+import net.sf.sevenzipjbinding.IArchiveOpenCallback;
+import net.sf.sevenzipjbinding.IArchiveOpenVolumeCallback;
+import net.sf.sevenzipjbinding.ICryptoGetTextPassword;
+import net.sf.sevenzipjbinding.IInStream;
+import net.sf.sevenzipjbinding.ISeekableStream;
+import net.sf.sevenzipjbinding.PropID;
+import net.sf.sevenzipjbinding.SevenZipException;
 
 public class SevenZipRarMultiVolumeCallbackHandler implements
         IArchiveOpenVolumeCallback, IArchiveOpenCallback, ICryptoGetTextPassword, Closeable {
