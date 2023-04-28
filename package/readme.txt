@@ -35,6 +35,7 @@ New features:
 - Added Replace All functionality to Text Editor.
 - Added undo/redo support for internal binary editor.
 - Added the following search options to the internal viewer/editor: case-sensitive, whole words, regexp, forward/backward.
+- Browsing and extracting multi-volume RAR 5+ files.
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
