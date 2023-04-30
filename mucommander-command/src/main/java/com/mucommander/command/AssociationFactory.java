@@ -41,8 +41,9 @@ class AssociationFactory implements AssociationBuilder {
     public void endAssociation() throws CommandException {
         // Skip empty file filters as they will break the whole
         // association mechanism.
-        if(!filter.isEmpty())
+        if (!filter.isEmpty()) {
             CommandManager.registerAssociation(command, filter);
+        }
     }
 
     public void setMask(String mask, boolean isCaseSensitive) {filter.addFileFilter(new RegexpFilenameFilter(mask, isCaseSensitive));}
