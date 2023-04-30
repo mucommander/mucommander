@@ -54,17 +54,19 @@ public class OpenWithMenu extends JMenu {
      */
     private synchronized void populate() {
         for (Command command : CommandManager.commands()) {
-            if(command.getType() == CommandType.NORMAL_COMMAND)
-            	add(ActionManager.getActionInstance(command, mainFrame));
+            if (command.getType() == CommandType.NORMAL_COMMAND) {
+                add(ActionManager.getActionInstance(command, mainFrame));
+            }
         }
-        if(getItemCount() == 0)
+        if (getItemCount() == 0) {
             setEnabled(false);
+        }
     }
 
     @Override
     public final JMenuItem add(Action a) {
-    	JMenuItem item = super.add(a);
-    	MenuToolkit.configureActionMenuItem(item);
-    	return item;
+        JMenuItem item = super.add(a);
+        MenuToolkit.configureActionMenuItem(item);
+        return item;
     }
 }

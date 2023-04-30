@@ -40,8 +40,8 @@ import org.slf4j.LoggerFactory;
  * @author Nicolas Rinaudo
  */
 public class CommandAction extends MuAction {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CommandAction.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandAction.class);
+
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Command to run. */
@@ -95,26 +95,26 @@ public class CommandAction extends MuAction {
     }
 
     @Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor(command);
-	}
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor(command);
+    }
 
     public static class Descriptor extends AbstractActionDescriptor {
-    	private static final String ACTION_ID_PREFIX = "OpenWith_";
-    	private String ACTION_ID;
-    	private String label;
+        private static final String ACTION_ID_PREFIX = "OpenWith_";
+        private String ACTION_ID;
+        private String label;
 
-    	public Descriptor(Command command) {
-    		ACTION_ID = ACTION_ID_PREFIX + command.getAlias();
-    		label = String.format("%s %s", 
-    				Translator.get("file_menu.open_with"),
-    				command.getDisplayName());
-    	}
+        public Descriptor(Command command) {
+            ACTION_ID = ACTION_ID_PREFIX + command.getAlias();
+            label = String.format("%s %s",
+                    Translator.get("file_menu.open_with"),
+                    command.getDisplayName());
+        }
 
-    	public String getId() { return ACTION_ID; }
+        public String getId() { return ACTION_ID; }
 
-    	public String getLabel() { return label; }
+        public String getLabel() { return label; }
 
-    	public ActionCategory getCategory() { return ActionCategory.COMMANDS; }
+        public ActionCategory getCategory() { return ActionCategory.COMMANDS; }
     }
 }
