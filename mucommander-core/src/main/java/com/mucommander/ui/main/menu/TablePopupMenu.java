@@ -72,9 +72,10 @@ public class TablePopupMenu extends MuActionsPopupMenu {
         if (clickedFile != null || parentFolderClicked) {
             addAction(ActionType.Open);
             addAction(ActionType.OpenNatively);
-            add(new OpenWithMenu(mainFrame));
-            if (clickedFile != null && !clickedFile.isDirectory())
+            add(new OpenWithMenu(mainFrame, clickedFile));
+            if (!clickedFile.isDirectory()) {
                 add(new OpenAsMenu(mainFrame));
+            }
 
             addAction(ActionType.OpenInNewTab);
             if (SearchFile.SCHEMA.equals(currentFolder.getURL().getScheme()))

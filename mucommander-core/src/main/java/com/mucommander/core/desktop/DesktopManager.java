@@ -37,8 +37,8 @@ import javax.swing.JTabbedPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.runtime.JavaVersion;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.ActionShortcuts;
@@ -52,7 +52,7 @@ import com.mucommander.os.notifier.AbstractNotifier;
 /**
  * @author Nicolas Rinaudo
  */
-public class DesktopManager {
+public final class DesktopManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(DesktopManager.class);
 
     // - Predefined operation types --------------------------------------
@@ -155,7 +155,7 @@ public class DesktopManager {
     // - Initialisation --------------------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Prevents instanciation of the class.
+     * Prevents instantiation of the class.
      */
     private DesktopManager() {}
 
@@ -606,6 +606,14 @@ public class DesktopManager {
     public static void setActionShortcuts(ActionShortcuts actionShortcuts) {
         if (actionShortcuts != null)
             DesktopManager.actionShortcuts = actionShortcuts;
+    }
+
+    public static boolean isOpenWithAvailable() {
+        return desktop.isOpenWithAvailable();
+    }
+
+    public static List<Command> getCommandsForOpenWith(AbstractFile file) {
+        return desktop.getCommandsForOpenWith(file);
     }
 
     /**

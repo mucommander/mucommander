@@ -60,13 +60,13 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ActionManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ActionManager.class);
-	
+
     /** MuAction id -> factory map */
     private static Map<String, ActionFactory> actionFactories = new Hashtable<String, ActionFactory>();
-    
+
     /** MainFrame -> MuAction map */
     private static WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>> mainFrameActionsMap = new WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>>();
-    
+
     /** Pattern to resolve the action ID from action class path */
     private final static Pattern pattern = Pattern.compile(".*\\.(.*)?Action");
 
@@ -147,7 +147,6 @@ public class ActionManager {
     	registerAction(new OpenInBothPanelsAction.Descriptor(),             OpenInBothPanelsAction::new);
     	registerAction(new OpenInNewTabAction.Descriptor(),					OpenInNewTabAction::new);
     	registerAction(new OpenInOtherPanelAction.Descriptor(),             OpenInOtherPanelAction::new);
-//    	registerAction(new OpenLocationAction.Descriptor(),          	    OpenLocationAction::new);
     	registerAction(new OpenNativelyAction.Descriptor(),       		    OpenNativelyAction::new);
     	registerAction(new OpenTrashAction.Descriptor(),           	        OpenTrashAction::new);
     	registerAction(new OpenURLInBrowserAction.Descriptor(),             OpenURLInBrowserAction::new);
@@ -251,7 +250,7 @@ public class ActionManager {
 
     /**
      * Registration method for MuActions.
-     * 
+     *
      * @param actionDescriptor - ActionDescriptor instance of the action.
      * @param actionFactory - ActionFactory instance of the action.
      */
@@ -259,39 +258,39 @@ public class ActionManager {
     	actionFactories.put(actionDescriptor.getId(), actionFactory);
     	ActionProperties.addActionDescriptor(actionDescriptor);
     }
-    
+
     /**
      * Return all ids of the registered actions.
-     * 
+     *
      * @return List of all registered actions' ids.
      */
     public static List<String> getActionIds() {
         return new ArrayList<>(actionFactories.keySet());
     }
-    
+
     /**
      * Return the id of MuAction in a given path.
-     * 
+     *
      * @param actionClassPath - path to MuAction class.
      * @return String representing the id of the MuAction in the specified path. null is returned if the given path is invalid.
      */
     public static String extrapolateId(String actionClassPath) {
     	if (actionClassPath == null)
     		return null;
-    	
+
     	Matcher matcher = pattern.matcher(actionClassPath);
-    	return matcher.matches() ? 
+    	return matcher.matches() ?
     			matcher.group(1)
     			: actionClassPath;
     }
-    
+
     /**
      * Checks whether an MuAction is registered.
-     * 
+     *
      * @param actionId - id of MuAction.
      * @return true if an MuAction which is represented by the given id is registered, otherwise return false.
      */
-    public static boolean isActionExist(String actionId) {    	
+    public static boolean isActionExist(String actionId) {
     	return actionId != null && actionFactories.containsKey(actionId);
     }
 
@@ -387,7 +386,7 @@ public class ActionManager {
             if(action.getLabel()==null) {
                 // Retrieve the standard label entry from the dictionary and use it as this action's label
                 String label = ActionProperties.getActionLabel(actionId);
-                
+
                 // Append '...' to the label if this action invokes a dialog when performed
                 if(action.getClass().isAnnotationPresent(InvokesDialog.class))
                     label += "...";
@@ -399,7 +398,7 @@ public class ActionManager {
                 if(tooltip!=null)
                     action.setToolTipText(tooltip);
             }
-            
+
             // If the action's accelerators have not been set yet, use the ones from ActionKeymap
             if(action.getAccelerator()==null) {
                 // Retrieve the standard accelerator (if any) and use it as this action's accelerator
@@ -412,7 +411,7 @@ public class ActionManager {
                 if(accelerator!=null)
                     action.setAlternateAccelerator(accelerator);
             }
-            
+
             // If the action's icon has not been set yet, use the action descriptor's
             if(action.getIcon()==null) {
                 // Retrieve the standard icon image (if any) and use it as the action's icon
@@ -420,7 +419,7 @@ public class ActionManager {
                 if(icon!=null)
                     action.setIcon(icon);
             }
-            
+
             return action;
         }
     }
@@ -492,21 +491,21 @@ public class ActionManager {
 
         return true;
     }
-    
+
     /**
      *  Helper class to represent a pair of instance and id of MuAction.
      */
     private static class ActionAndIdPair {
     	private MuAction action;
     	private String id;
-    	
+
     	public ActionAndIdPair(MuAction action, String id) {
     		this.action = action;
     		this.id = id;
     	}
-    	
+
     	public MuAction getAction() { return action; }
-    	
+
     	public String getId() { return id; }
     }
 }

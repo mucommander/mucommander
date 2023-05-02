@@ -22,10 +22,17 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -49,6 +56,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.Pair;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.commons.util.ui.text.MultiLineLabel;
 import com.mucommander.desktop.ActionShortcuts;
 import com.mucommander.desktop.DefaultDesktopAdapter;
@@ -218,28 +226,150 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
      * Tries to figure out a default shell for a current user under macOS.
      * @return a shell path
      */
-    private static String getMacOsUserShell() {
-        String result = DEFAULT_MACOS_SHELL;
+    private String getMacOsUserShell() {
+        StringBuilder result = new StringBuilder(DEFAULT_MACOS_SHELL);
+        boolean success = runCommand(
+                new String[]{"dscl", ".", "-read" , System.getProperty("user.home"), "UserShell"},
+                false, 0, s -> {
+            String prefix = "UserShell: ";
+            if (s.startsWith(prefix)) {
+                result.setLength(0);
+                result.append(s.substring(prefix.length()));
+                return true;    // we're good, no further searching needed
+            }
+            return false;       // continue searching
+        });
+        if (success) {
+            LOGGER.info("Going to use the following shell: {}", result);
+        } else {
+            LOGGER.error("Error finding default shell for user, going to use a default one");
+        }
+        return result.toString();
+    }
+
+    @Override
+    public boolean isOpenWithAvailable() {
+        AtomicBoolean result = new AtomicBoolean(false);
+        runCommand(new String[]{"duti", "-h"}, true,1, s -> {
+            // a simple sanity check of 'duti' command output
+            if (s.contains("bundle_id")) {
+                result.set(true);
+                return true;    // we're good, no further searching needed
+            }
+            return false;       // continue searching
+        });
+        LOGGER.info("Command 'duti' found in the system? {}", result);
+        return result.get();
+    }
+
+    @Override
+    public List<Command> getCommandsForOpenWith(AbstractFile file) {
+        List<Command> result = new ArrayList<>();
+        Set<Command> sorted = new TreeSet<>(Comparator.comparing(o -> o.getDisplayName().toLowerCase()));
+        var ext = file.getExtension();
+        if (ext != null && !ext.isEmpty()) {
+            runCommand(new String[]{"duti", "-e", ext}, false,0, s -> {
+                String typeIdentifier = "UTTypeIdentifier = ";
+                int idx = s.indexOf(typeIdentifier);
+                if (idx >= 0) {
+                    String uti = s.substring(idx + typeIdentifier.length()).trim();
+                    if (!uti.isEmpty()) {
+                        for (String bundleId : getAppBundleIdsForUTI(uti)) {
+                            // Tried to fight with quotes around such bundle ids in Command and ProcessBuilder,
+                            // but I finally lost my patience - probably due to:
+                            // Command behavior: "It is important to remember that <code>"</code> characters are <b>not</b> removed from the resulting tokens."
+                            if (bundleId.contains(" ")) {
+                                LOGGER.error("Going to ignore {} as it contains spaces...", bundleId);
+                                continue;
+                            }
+                            String appName = getAppNameForBundleId(bundleId);
+                            Command cmd = new Command(
+                                    appName,
+                                    "open -b " + bundleId + " $f",
+                                    CommandType.NORMAL_COMMAND,
+                                    appName
+                            );
+                            // default is first, the rest is alpha sorted (mimicking Finder behavior)
+                            if (result.isEmpty()) {
+                                result.add(cmd);
+                            } else {
+                                sorted.add(cmd);
+                            }
+
+                        }
+                    }
+                    return true;    // we're good, no further searching needed
+                }
+                return false;       // continue searching
+            });
+        }
+        result.addAll(sorted);
+        LOGGER.error("For file: {} found the following commands: {}", file, result);
+        return result;
+    }
+
+    private String getAppNameForBundleId(String bundleId) {
+        StringBuilder result = new StringBuilder();
+        runCommand(new String[]{"mdfind", "kMDItemCFBundleIdentifier", "=", bundleId}, false,0, s -> {
+            // a simple sanity check whether it is bundle id
+            if (s.endsWith(".app")) {
+                result.append(s, s.lastIndexOf("/") + 1, s.lastIndexOf(".app"));
+                return true;        // we're good, no further searching needed
+            }
+            return false;           // continue searching
+        });
+        if (result.length() == 0) {
+            // if mdfind didn't work, try silly conversion of bundle id to app name
+            result.append(StringUtils.capitalize(bundleId.substring(bundleId.lastIndexOf(".") + 1)));
+        }
+        return result.toString();
+    }
+
+    private List<String> getAppBundleIdsForUTI(String uti) {
+        List<String> result = new ArrayList<>();
+        runCommand(new String[]{"duti", "-l", uti}, false,0, s -> {
+            // a simple sanity check whether it is bundle id
+            if (s.contains(".")) {
+                result.add(s.trim());
+            }
+            return false;           // continue searching
+        });
+        LOGGER.info("For UTI: {} found the following bundle ids: {}", uti, result);
+        return result;
+    }
+
+    /**
+     * A helper method to run a command with parameters.
+     * @param commands command and its parameters
+     * @param useStdErr whether to use Standard Error instead of Standard Input Stream
+     * @param expectedExitCode the expected exit code
+     * @param line a predicate receives a next line from the output, when it returns true no further line reading is done
+     * @return true if command executed successfully
+     */
+    private boolean runCommand(String[] commands, boolean useStdErr, int expectedExitCode, Predicate<String> line) {
+        if (commands == null || commands.length == 0) {
+            throw new IllegalArgumentException("Given commands value is null or empty");
+        }
+        boolean result = false;
+        String command = commands[0];
         try {
             Runtime rt = Runtime.getRuntime();
-            String[] commands = {"dscl", ".", "-read" , System.getProperty("user.home"), "UserShell"};
             Process proc = rt.exec(commands);
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            if (!proc.waitFor(500, TimeUnit.MILLISECONDS) || proc.exitValue() != 0) {
-                LOGGER.error("Error finding a default shell for a user, going to use a default one");
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(
+                    useStdErr ? proc.getErrorStream() : proc.getInputStream()));
+            if (!proc.waitFor(500, TimeUnit.MILLISECONDS) || proc.exitValue() != expectedExitCode) {
+                LOGGER.error("Unexpected result from running: '{}'", command);
                 return result;
             }
-            String s = null;
-            String prefix = "UserShell: ";
+            String s;
             while ((s = stdInput.readLine()) != null) {
-                if (s.startsWith(prefix)) {
-                    result = s.substring(prefix.length());
+                if (line.test(s)) {
                     break;
                 }
             }
-            LOGGER.info("Going to use the following shell: {}", result);
+            result = true;
         } catch (Exception e) {
-            LOGGER.error("Error finding default shell for user, going to use a default one", e);
+            LOGGER.error("Error executing command: {}", command, e);
         }
         return result;
     }
