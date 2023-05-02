@@ -17,6 +17,7 @@
 
 package com.mucommander.desktop;
 
+import com.mucommander.command.Command;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.util.Pair;
@@ -63,7 +64,7 @@ public interface DesktopAdapter {
     // - Detection / Initialisation --------------------------------------
     // -------------------------------------------------------------------
     /**
-     * Checks whether or not the desktop is available on the current platform.
+     * Checks whether the desktop is available on the current platform.
      * @return <code>true</code> if the desktop is available on the current platform, <code>false</code> otherwise.
      */
     public boolean isAvailable();
@@ -171,10 +172,27 @@ public interface DesktopAdapter {
     default void postCopy(AbstractFile source, AbstractFile target) {}
     default void customizeMainFrame(Window window) {}
     default List<Pair<JLabel, JComponent>> getExtendedFileProperties(AbstractFile file) { return Collections.emptyList(); }
+
     ActionShortcuts getActionShortcuts();
 
     /**
-     * Sets badge number on Dock/TaskBar app icon. To remove the badge provide a negative value or zero.
+     * Whether the list of apps that can open a file is available of a given platform?
+     * @return true if so, false otherwise
+     */
+    default boolean isOpenWithAvailable() {
+        return false;
+    }
+
+    /**
+     * Returns the list of commands that a given file can be opened with.
+     * @param file a file, must not be null
+     * @return the list of commands, can be empty, never null.
+     */
+    default List<Command> getCommandsForOpenWith(AbstractFile file) {
+        return Collections.emptyList();
+    }
+
+    /* Sets badge number on Dock/TaskBar app icon. To remove the badge provide a negative value or zero.
      * @param numberOfJobs a number to be displayed over app icon
      * @return true if operation was supported by platform
      */
