@@ -369,7 +369,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             result = true;
         } catch (Exception e) {
-            LOGGER.error("Error executing command: {}", command, e);
+            LOGGER.error("Error executing command: {}. Error msg: {}", command, e.getMessage(), e);
         }
         return result;
     }
