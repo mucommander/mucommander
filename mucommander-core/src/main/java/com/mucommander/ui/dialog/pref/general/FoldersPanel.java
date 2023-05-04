@@ -59,7 +59,9 @@ import com.mucommander.commons.util.ui.spinner.IntEditor;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.dialog.pref.component.PrefCheckBox;
@@ -104,6 +106,9 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     
     // Always show single tab's header ?
     private PrefCheckBox showTabHeaderCheckBox;
+
+    // Show apps in Open With contextual menu?
+    private PrefCheckBox openWithAppsCheckBox;
 
     // Timeout for quick searches
     private PrefSpinner quickSearchTimeoutSpinner;
@@ -292,6 +297,20 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         showTabHeaderCheckBox.addDialogListener(parent);
         northPanel.add(showTabHeaderCheckBox);
 
+        if (OsFamily.MAC_OS.isCurrent()) {
+            openWithAppsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.open_with_apps"), () -> MuConfigurations.getPreferences().getVariable(
+                    MuPreference.OPEN_WITH_APPS,
+                    MuPreferences.DEFAULT_OPEN_WITH_APPS));
+            openWithAppsCheckBox.addDialogListener(parent);
+            openWithAppsCheckBox.addActionListener(action -> {
+                if (openWithAppsCheckBox.isSelected() && !DesktopManager.isOpenWithAvailable()) {
+                    openWithAppsCheckBox.setSelected(false); // revert back to false
+                    InformationDialog.showErrorDialog(parent.getOwner(), Translator.get("prefs_dialog.open_with_apps_macos_tip"));
+                }
+            });
+            northPanel.add(openWithAppsCheckBox);
+        }
+
         JPanel quickSearchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         quickSearchPanel.setBorder(BorderFactory.createEmptyBorder());
         quickSearchTimeoutSpinner = new PrefSpinner(0, 999, 1, () -> MuConfigurations.getPreferences().getVariable(
@@ -331,6 +350,9 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         MuConfigurations.getPreferences().setVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE, compactSizeCheckBox.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.CD_FOLLOWS_SYMLINKS, followSymlinksCheckBox.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_TAB_HEADER, showTabHeaderCheckBox.isSelected());
+        if (OsFamily.MAC_OS.isCurrent()) {
+            MuConfigurations.getPreferences().setVariable(MuPreference.OPEN_WITH_APPS, openWithAppsCheckBox.isSelected());
+        }
         MuConfigurations.getPreferences().setVariable(MuPreference.QUICK_SEARCH_TIMEOUT, (int) quickSearchTimeoutSpinner.getValue());
         MuConfigurations.getPreferences().setVariable(MuPreference.FILENAME_LOCALE, localeComboBox.getSelectedItem().toLanguageTag());
 

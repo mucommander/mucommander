@@ -227,6 +227,11 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final String SHOW_SINGLE_TAB_HEADER			   = FILE_TABLE_SECTION + '.' + "show_single_tab_header";
 	/** Default value for 'Always show single tab header" */
 	public static final boolean DEFAULT_SHOW_TAB_HEADER            = false;
+	/** Whether to always show compatible apps in Open With context menu */
+	public static final String OPEN_WITH_APPS					   = FILE_TABLE_SECTION + '.' + "open_with_apps";
+	/** Default value for 'Show apps in Open With" */
+	public static final boolean DEFAULT_OPEN_WITH_APPS             = false;
+
 	/** Quick search timeout in seconds */
 	public static final String QUICK_SEARCH_TIMEOUT                = FILE_TABLE_SECTION + '.' + "quick_search_timeout";
 	/** Default value for 'Quick search timeout' */
