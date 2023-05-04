@@ -79,8 +79,9 @@ jar {
             'com.mucommander.snapshot,' +
             'com.mucommander.search,' +
             'com.mucommander.text,' +
-            'com.mucommander.ui.viewer,' +
+            'com.mucommander.ui.icon,' +
             'com.mucommander.ui.main,' +
-            'com.mucommander.ui.main.table',
+            'com.mucommander.ui.main.table,' +
+            'com.mucommander.ui.viewer',
         'Bundle-Activator': 'com.mucommander.Activator')
 }

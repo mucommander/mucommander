@@ -25,15 +25,17 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -50,9 +52,11 @@ import com.dd.plist.NSString;
 import com.dd.plist.PropertyListFormatException;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
+import com.mucommander.command.CommandExtended;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.Pair;
@@ -64,6 +68,7 @@ import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.TrashProvider;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.macos.AppleScript;
 import com.mucommander.ui.macos.OSXIntegration;
 import com.mucommander.ui.macos.TabbedPaneUICustomizer;
@@ -86,11 +91,18 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     private static final String DEFAULT_SHELL_INTERACTIVE = "--login";
 
+    // cached values
+    private String dutiCmdPath = null;
+
+    private Map<String, List<Command>> openWithCommands = new HashMap<>();
+
     /** The key of the comment attribute in file metadata */
     public static final String COMMENT_PROPERTY_NAME = "com.apple.metadata:kMDItemFinderComment";
     public static final String TAGS_PROPERTY_NAME = "com.apple.metadata:_kMDItemUserTags";
 
-    public String toString() {return "macOS Desktop";}
+    public String toString() {
+        return "macOS Desktop";
+    }
 
     @Override
     public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.MAC_OS);}
@@ -250,7 +262,12 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     @Override
     public boolean isOpenWithAvailable() {
         AtomicBoolean result = new AtomicBoolean(false);
-        runCommand(new String[]{"duti", "-h"}, true,1, s -> {
+        var dutiCmdPath = getPathOfDutiCmd();
+        if (dutiCmdPath == null) {
+            return result.get();
+        }
+        // additional checking if 'duty' a) works b) is what it should be
+        runCommand(new String[]{dutiCmdPath, "-h"}, true,1, s -> {
             // a simple sanity check of 'duti' command output
             if (s.contains("bundle_id")) {
                 result.set(true);
@@ -258,76 +275,97 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             return false;       // continue searching
         });
-        LOGGER.info("Command 'duti' found in the system? {}", result);
+        LOGGER.error("Command 'duti' found in the system? {}", result);
         return result.get();
     }
 
     @Override
     public List<Command> getCommandsForOpenWith(AbstractFile file) {
         List<Command> result = new ArrayList<>();
-        Set<Command> sorted = new TreeSet<>(Comparator.comparing(o -> o.getDisplayName().toLowerCase()));
+        var dutiCmdPath = getPathOfDutiCmd();
         var ext = file.getExtension();
-        if (ext != null && !ext.isEmpty()) {
-            runCommand(new String[]{"duti", "-e", ext}, false,0, s -> {
-                String typeIdentifier = "UTTypeIdentifier = ";
-                int idx = s.indexOf(typeIdentifier);
-                if (idx >= 0) {
-                    String uti = s.substring(idx + typeIdentifier.length()).trim();
-                    if (!uti.isEmpty()) {
-                        for (String bundleId : getAppBundleIdsForUTI(uti)) {
-                            // Tried to fight with quotes around such bundle ids in Command and ProcessBuilder,
-                            // but I finally lost my patience - probably due to:
-                            // Command behavior: "It is important to remember that <code>"</code> characters are <b>not</b> removed from the resulting tokens."
-                            if (bundleId.contains(" ")) {
-                                LOGGER.error("Going to ignore {} as it contains spaces...", bundleId);
-                                continue;
-                            }
-                            String appName = getAppNameForBundleId(bundleId);
-                            Command cmd = new Command(
-                                    appName,
-                                    "open -b " + bundleId + " $f",
-                                    CommandType.NORMAL_COMMAND,
-                                    appName
-                            );
-                            // default is first, the rest is alpha sorted (mimicking Finder behavior)
-                            if (result.isEmpty()) {
-                                result.add(cmd);
-                            } else {
-                                sorted.add(cmd);
-                            }
-
-                        }
-                    }
-                    return true;    // we're good, no further searching needed
-                }
-                return false;       // continue searching
-            });
+        if (dutiCmdPath == null || ext == null || ext.isEmpty()) {
+            return result;
         }
+        // using cache (probably it would be nice to have time-bound cache (guava, apache?) or size limited
+        if (openWithCommands.containsKey(ext)) {
+            return openWithCommands.get(ext);
+        }
+        Set<Command> sorted = new TreeSet<>(Comparator.comparing(o -> o.getDisplayName().toLowerCase()));
+
+        runCommand(new String[]{dutiCmdPath, "-e", ext}, false,0, s -> {
+            String typeIdentifier = "UTTypeIdentifier = ";
+            int idx = s.indexOf(typeIdentifier);
+            if (idx >= 0) {
+                String uti = s.substring(idx + typeIdentifier.length()).trim();
+                if (!uti.isEmpty()) {
+                    for (String bundleId : getAppBundleIdsForUTI(uti)) {
+                        // Tried to fight with quotes around such bundle ids in Command and ProcessBuilder,
+                        // but I finally lost my patience - probably due to:
+                        // Command behavior: "It is important to remember that <code>"</code> characters are <b>not</b> removed from the resulting tokens."
+                        if (bundleId.contains(" ")) {
+                            LOGGER.error("Going to ignore {} as it contains spaces...", bundleId);
+                            continue;
+                        }
+                        Pair<String, String> appPair = getAppNameAndPathForBundleId(bundleId);
+                        String appName = appPair.first;
+                        Command cmd = new CommandExtended(
+                                appName,
+                                "open -b " + bundleId + " $f",
+                                CommandType.NORMAL_COMMAND,
+                                appName,
+                                appPair.second != null ? FileIcons.getFileIcon(FileFactory.getFile(appPair.second)) : null
+                        );
+                        // default is the first, the rest is alpha sorted (mimicking Finder behavior)
+                        if (result.isEmpty()) {
+                            result.add(cmd);
+                        } else {
+                            sorted.add(cmd);
+                        }
+
+                    }
+                }
+                return true;    // we're good, no further searching needed
+            }
+            return false;       // continue searching
+        });
+
         result.addAll(sorted);
-        LOGGER.error("For file: {} found the following commands: {}", file, result);
+        openWithCommands.put(ext, result);
+        LOGGER.info("For file: {} found the following commands: {}", file, result);
         return result;
     }
 
-    private String getAppNameForBundleId(String bundleId) {
-        StringBuilder result = new StringBuilder();
+    /**
+     * Method tries to find app name and its path from a given bundle id.
+     * @param bundleId the bundle id
+     * @return a pair, first is app name, second is its path (this can be null)
+     */
+    private Pair<String, String> getAppNameAndPathForBundleId(String bundleId) {
+        Pair result = new Pair();
         runCommand(new String[]{"mdfind", "kMDItemCFBundleIdentifier", "=", bundleId}, false,0, s -> {
             // a simple sanity check whether it is bundle id
             if (s.endsWith(".app")) {
-                result.append(s, s.lastIndexOf("/") + 1, s.lastIndexOf(".app"));
+                result.first = s.substring(s.lastIndexOf("/") + 1, s.lastIndexOf(".app"));
+                result.second = s;
                 return true;        // we're good, no further searching needed
             }
             return false;           // continue searching
         });
-        if (result.length() == 0) {
-            // if mdfind didn't work, try silly conversion of bundle id to app name
-            result.append(StringUtils.capitalize(bundleId.substring(bundleId.lastIndexOf(".") + 1)));
+        if (result.first == null) {
+            // if mdfind way didn't work, try silly conversion of bundle id to app name
+            result.first = StringUtils.capitalize(bundleId.substring(bundleId.lastIndexOf(".") + 1));
         }
-        return result.toString();
+        return result;
     }
 
     private List<String> getAppBundleIdsForUTI(String uti) {
         List<String> result = new ArrayList<>();
-        runCommand(new String[]{"duti", "-l", uti}, false,0, s -> {
+        var dutiCmdPath = getPathOfDutiCmd();
+        if (dutiCmdPath == null) {
+            return result;
+        }
+        runCommand(new String[]{dutiCmdPath, "-l", uti}, false,0, s -> {
             // a simple sanity check whether it is bundle id
             if (s.contains(".")) {
                 result.add(s.trim());
@@ -336,6 +374,30 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         });
         LOGGER.info("For UTI: {} found the following bundle ids: {}", uti, result);
         return result;
+    }
+
+    /**
+     * Tries to locate 'duty' command by invoking 'which', the result is cached.
+     * @return the path of 'duty' command, or null if not located
+     */
+    private String getPathOfDutiCmd() {
+        if (dutiCmdPath != null) {
+            return dutiCmdPath;
+        }
+        runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, s -> {
+            // a simple sanity check of 'duti' command output
+            if (s.contains("duti")) {
+                dutiCmdPath = s;
+                return true;    // we're good, no further searching needed
+            }
+            return false;       // continue searching
+        });
+        if (dutiCmdPath != null && dutiCmdPath.length() > 0) {
+            LOGGER.info("Command 'duti' found here: {}", dutiCmdPath);
+        } else {
+            LOGGER.error("Command 'duti' not found");
+        }
+        return dutiCmdPath;
     }
 
     /**
