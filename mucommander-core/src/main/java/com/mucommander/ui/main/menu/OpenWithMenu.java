@@ -28,6 +28,9 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
@@ -88,7 +91,10 @@ public class OpenWithMenu extends JMenu {
                 add(ActionManager.getActionInstance(command, mainFrame));
             }
         }
-        if (clickedFile != null && !clickedFile.isDirectory() && DesktopManager.isOpenWithAvailable()) {
+
+        if (clickedFile != null && !clickedFile.isDirectory() &&
+                MuConfigurations.getPreferences().getVariable(MuPreference.OPEN_WITH_APPS, MuPreferences.DEFAULT_OPEN_WITH_APPS) &&
+                DesktopManager.isOpenWithAvailable()) {
             JMenuItem loadingItem = super.add(Translator.get("file_menu.loading") + "...");
             loadingItem.setEnabled(false);
             // going to run getCommandsForOpenWith in background as it may take some time to complete
