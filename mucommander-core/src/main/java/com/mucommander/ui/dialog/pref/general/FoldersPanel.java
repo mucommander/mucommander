@@ -83,9 +83,9 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     
     private PrefFilePathFieldWithDefaultValue leftCustomFolderTextField;
     private JButton leftCustomFolderButton;
-	
+
     private PrefFilePathFieldWithDefaultValue rightCustomFolderTextField;
-	private JButton rightCustomFolderButton;
+    private JButton rightCustomFolderButton;
 
     // Show hidden files?
     private PrefCheckBox showHiddenFilesCheckBox;
@@ -98,7 +98,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
 
     // Display compact file size ?
     private PrefCheckBox compactSizeCheckBox;
-	
+
     // Follow symlinks when changing directory ?
     private PrefCheckBox followSymlinksCheckBox;
     
@@ -120,21 +120,21 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         // Startup folders panel
         YBoxPanel startupFolderPanel = new YBoxPanel();
         startupFolderPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.startup_folders")));
-		
+
         // Last folders or custom folders selections
         lastFoldersRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.last_folder")) {
-			public boolean hasChanged() {
-				return !(isSelected() ? 
-						MuPreferences.STARTUP_FOLDERS_LAST	: MuPreferences.STARTUP_FOLDERS_CUSTOM).equals(
-								MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS));
-			}
-		};
-		customFoldersRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.custom_folder")) {
-			public boolean hasChanged() {
-				return !(isSelected() ? 
-						MuPreferences.STARTUP_FOLDERS_CUSTOM : MuPreferences.STARTUP_FOLDERS_LAST).equals(
-								MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS));
-			}
+            public boolean hasChanged() {
+                return !(isSelected() ?
+                        MuPreferences.STARTUP_FOLDERS_LAST	: MuPreferences.STARTUP_FOLDERS_CUSTOM).equals(
+                                MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS));
+            }
+        };
+        customFoldersRadioButton = new PrefRadioButton(Translator.get("prefs_dialog.custom_folder")) {
+            public boolean hasChanged() {
+                return !(isSelected() ?
+                        MuPreferences.STARTUP_FOLDERS_CUSTOM : MuPreferences.STARTUP_FOLDERS_LAST).equals(
+                                MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS));
+            }
         };
         startupFolderPanel.add(lastFoldersRadioButton);
         startupFolderPanel.addSpace(5);
@@ -271,7 +271,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
                     MuPreference.SHOW_SYSTEM_FOLDERS,
                     MuPreferences.DEFAULT_SHOW_SYSTEM_FOLDERS));
             showSystemFoldersCheckBox.addDialogListener(parent);
-        	northPanel.add(showSystemFoldersCheckBox);        	
+            northPanel.add(showSystemFoldersCheckBox);
         }
 
         compactSizeCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.compact_file_size"), () -> MuConfigurations.getPreferences().getVariable(
@@ -342,7 +342,7 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         }
 
         if(OsFamily.MAC_OS.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
-        	refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());	
+            refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SYSTEM_FOLDERS, showSystemFoldersCheckBox.isSelected());
         }
 
         if(refreshFolders)
@@ -376,16 +376,16 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
      */
     public void keyTyped(KeyEvent e) {
         Object source = e.getSource();
-		
+
         if(source==leftCustomFolderTextField || source==rightCustomFolderTextField) {
             if(!customFoldersRadioButton.isSelected())
                 customFoldersRadioButton.setSelected(true);
         }
     }
-	
+
     public void keyPressed(KeyEvent e) {
     }
-	
+
     public void keyReleased(KeyEvent e) {
     }
 
@@ -400,8 +400,8 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-    	JFileChooser chooser = new JFileChooser();
-    	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle(Translator.get("choose_folder"));
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         if(chooser.showDialog(parent, Translator.get("choose")) == JFileChooser.APPROVE_OPTION) {
@@ -417,118 +417,118 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
                     customFoldersRadioButton.setSelected(true);
             }
         }
-	}
+    }
     
     public class PrefFilePathFieldWithDefaultValue extends PrefFilePathField {
-    	
-    	private boolean isLeft;
-    	private final String HOME_FOLDER_PATH = System.getProperty("user.home");
-    	
-    	public PrefFilePathFieldWithDefaultValue(boolean isLeft) {
-    		super(isLeft ? MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER, "") : MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER, ""));
-    		this.isLeft = isLeft;
-    		
+
+        private boolean isLeft;
+        private final String HOME_FOLDER_PATH = System.getProperty("user.home");
+
+        public PrefFilePathFieldWithDefaultValue(boolean isLeft) {
+            super(isLeft ? MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER, "") : MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER, ""));
+            this.isLeft = isLeft;
+
 //    		setUI(new HintTextFieldUI(HOME_FOLDER_PATH, true));
-    	}
-    	
-		public boolean hasChanged() {
-			return isLeft ? 
-					!getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER)) :
-					!getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER));
-		}
-		
-		public String getFilePath() {
-			String text = super.getText();
-			
-			return text.trim().isEmpty() ? HOME_FOLDER_PATH : text;
-		}
+        }
 
-    	private class HintTextFieldUI extends BasicTextFieldUI implements FocusListener {
+        public boolean hasChanged() {
+            return isLeft ?
+                    !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.LEFT_CUSTOM_FOLDER)) :
+                    !getText().equals(MuConfigurations.getPreferences().getVariable(MuPreference.RIGHT_CUSTOM_FOLDER));
+        }
 
-    	    private String hint;
-    	    private boolean hideOnFocus;
-    	    private Color color;
+        public String getFilePath() {
+            String text = super.getText();
 
-    	    public Color getColor() {
-    	        return color;
-    	    }
+            return text.trim().isEmpty() ? HOME_FOLDER_PATH : text;
+        }
 
-    	    public void setColor(Color color) {
-    	        this.color = color;
-    	        repaint();
-    	    }
+        private class HintTextFieldUI extends BasicTextFieldUI implements FocusListener {
 
-    	    private void repaint() {
-    	        if(getComponent() != null) {
-    	            getComponent().repaint();           
-    	        }
-    	    }
+            private String hint;
+            private boolean hideOnFocus;
+            private Color color;
 
-    	    public boolean isHideOnFocus() {
-    	        return hideOnFocus;
-    	    }
+            public Color getColor() {
+                return color;
+            }
 
-    	    public void setHideOnFocus(boolean hideOnFocus) {
-    	        this.hideOnFocus = hideOnFocus;
-    	        repaint();
-    	    }
+            public void setColor(Color color) {
+                this.color = color;
+                repaint();
+            }
 
-    	    public String getHint() {
-    	        return hint;
-    	    }
+            private void repaint() {
+                if(getComponent() != null) {
+                    getComponent().repaint();
+                }
+            }
 
-    	    public void setHint(String hint) {
-    	        this.hint = hint;
-    	        repaint();
-    	    }
-    	    public HintTextFieldUI(String hint) {
-    	        this(hint,false);
-    	    }
+            public boolean isHideOnFocus() {
+                return hideOnFocus;
+            }
 
-    	    public HintTextFieldUI(String hint, boolean hideOnFocus) {
-    	        this(hint,hideOnFocus, Color.gray);
-    	    }
+            public void setHideOnFocus(boolean hideOnFocus) {
+                this.hideOnFocus = hideOnFocus;
+                repaint();
+            }
 
-    	    public HintTextFieldUI(String hint, boolean hideOnFocus, Color color) {
-    	        this.hint = hint;
-    	        this.hideOnFocus = hideOnFocus;
-    	        this.color = color;
-    	    }
+            public String getHint() {
+                return hint;
+            }
 
-    	    @Override
-    	    protected void paintSafely(Graphics g) {
-    	        super.paintSafely(g);
-    	        JTextComponent comp = getComponent();
-    	        if(hint!=null && comp.getText().length() == 0 && (!(hideOnFocus && comp.hasFocus()))){
-    	            if(color != null) {
-    	                g.setColor(color);
-    	            } else {
-    	                g.setColor(comp.getForeground().brighter().brighter().brighter());              
-    	            }
-    	            int padding = (comp.getHeight() - comp.getFont().getSize())/2;
-    	            g.drawString(hint, 3, comp.getHeight()-padding-1);          
-    	        }
-    	    }
+            public void setHint(String hint) {
+                this.hint = hint;
+                repaint();
+            }
+            public HintTextFieldUI(String hint) {
+                this(hint,false);
+            }
 
-    	    public void focusGained(FocusEvent e) {
-    	        if(hideOnFocus) repaint();
+            public HintTextFieldUI(String hint, boolean hideOnFocus) {
+                this(hint,hideOnFocus, Color.gray);
+            }
 
-    	    }
+            public HintTextFieldUI(String hint, boolean hideOnFocus, Color color) {
+                this.hint = hint;
+                this.hideOnFocus = hideOnFocus;
+                this.color = color;
+            }
 
-    	    public void focusLost(FocusEvent e) {
-    	        if(hideOnFocus) repaint();
-    	    }
-    	    
-    	    @Override
-    	    protected void installListeners() {
-    	        super.installListeners();
-    	        getComponent().addFocusListener(this);
-    	    }
-    	    @Override
-    	    protected void uninstallListeners() {
-    	        super.uninstallListeners();
-    	        getComponent().removeFocusListener(this);
-    	    }
-    	}
+            @Override
+            protected void paintSafely(Graphics g) {
+                super.paintSafely(g);
+                JTextComponent comp = getComponent();
+                if(hint!=null && comp.getText().length() == 0 && (!(hideOnFocus && comp.hasFocus()))){
+                    if(color != null) {
+                        g.setColor(color);
+                    } else {
+                        g.setColor(comp.getForeground().brighter().brighter().brighter());
+                    }
+                    int padding = (comp.getHeight() - comp.getFont().getSize())/2;
+                    g.drawString(hint, 3, comp.getHeight()-padding-1);
+                }
+            }
+
+            public void focusGained(FocusEvent e) {
+                if(hideOnFocus) repaint();
+
+            }
+
+            public void focusLost(FocusEvent e) {
+                if(hideOnFocus) repaint();
+            }
+
+            @Override
+            protected void installListeners() {
+                super.installListeners();
+                getComponent().addFocusListener(this);
+            }
+            @Override
+            protected void uninstallListeners() {
+                super.uninstallListeners();
+                getComponent().removeFocusListener(this);
+            }
+        }
     }
 }
