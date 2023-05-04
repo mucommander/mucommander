@@ -20,7 +20,7 @@ package com.mucommander.commons.util;
 /**
  * Simple structure of two elements.
  * 
- * Note that this class does not support concurrent usage, and does not exposes setters and 
+ * Note that this class does not support concurrent usage, and does not expose setters and
  * getters methods, on purpose in order to expose simple API similar to C++ pair structure.
  * 
  * @author Arik Hadas

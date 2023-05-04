@@ -18,16 +18,15 @@
 package com.mucommander.ui.main.menu;
 
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import com.mucommander.command.Command;
+import com.mucommander.command.CommandExtended;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.process.ProcessRunner;
@@ -36,7 +35,6 @@ import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.CommandAction;
-import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
@@ -105,9 +103,9 @@ public class OpenWithMenu extends JMenu {
                 for (Command cmd : commands) {
                     MuAction action = createMuAction(cmd);
                     action.setLabel(cmd.getDisplayName());
-                    // TODO - add Icon to Command? to avoid building the path here....
-                    Icon icon = FileIcons.getFileIcon(FileFactory.getFile("/Applications/" + cmd.getDisplayName() + ".app"));
-                    add(action).setIcon(icon);
+                    if (cmd instanceof CommandExtended) {
+                        add(action).setIcon(((CommandExtended)cmd).getIcon());
+                    }
                     if (separateDefault) {
                         add(new JSeparator());
                         separateDefault = false;
