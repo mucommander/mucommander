@@ -38,6 +38,7 @@ New features:
 - Browsing and extracting multi-volume RAR 5+ files.
 - Dock/TaskBar icon shows the number of active jobs and their progress.
 - Open With contextual menu shows compatible apps on macOS.
+- Support for Android Debug Bridge (adb).
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
