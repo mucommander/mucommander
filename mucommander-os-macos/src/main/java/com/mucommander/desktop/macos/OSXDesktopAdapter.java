@@ -25,10 +25,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -74,6 +74,7 @@ import com.mucommander.ui.macos.TabbedPaneUICustomizer;
 import com.mucommander.ui.notifier.GrowlNotifier;
 import com.sun.jna.platform.mac.XAttrUtils;
 
+
 /**
  * @author Nicolas Rinaudo, Arik Hadas
  */
@@ -93,7 +94,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     // cached values
     private String dutiCmdPath = null;
 
-    private Map<String, List<Command>> openWithCommands = new HashMap<>();
+    private Map<String, List<Command>> openWithCommands = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     /** The key of the comment attribute in file metadata */
     public static final String COMMENT_PROPERTY_NAME = "com.apple.metadata:kMDItemFinderComment";
