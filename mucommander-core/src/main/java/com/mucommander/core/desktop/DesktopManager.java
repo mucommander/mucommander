@@ -618,7 +618,7 @@ public class DesktopManager {
 
     /**
      * Sets progress bar on Dock/Taskbar app icon. To remove the progress bar, provider number
-     * outside of 1-100 range.
+     * outside 1-100 range.
      * @param progress the progress to display
      */
     public static void setIconProgress(int progress) {

@@ -36,8 +36,9 @@ public class NotifierProvider {
 
     static {
         // Finds and creates a suitable AbstractNotifier instance for the platform, if there is one
-        if (SystemTray.isSupported())
+        if (SystemTray.isSupported()) {
             defaultNotifier = new SystemTrayNotifier();
+        }
     }
 
     /**
@@ -47,7 +48,7 @@ public class NotifierProvider {
      * @return true if an AbstractNotifier instance is available
      */
     public static boolean isAvailable() {
-        return getNotifier()!=null;
+        return getNotifier() != null;
     }
 
     /**
@@ -60,8 +61,9 @@ public class NotifierProvider {
      */
     public static AbstractNotifier getNotifier() {
         AbstractNotifier notifier = DesktopManager.getNotifier();
-        if (notifier != null)
+        if (notifier != null) {
             return notifier;
+        }
         return defaultNotifier;
     }
 
@@ -83,8 +85,8 @@ public class NotifierProvider {
      * <p>
      * Note that this method is executed in a separate thread after all pending Swing events have been processed,
      * to ensure in the event of a window being made inactive that the notification will not be triggered. This method
-     * immediately return s(i.e. does not wait for pending events) and thus is not be able to return if the notification
-     * was displayed or not, unlike {@link #displayNotification(NotificationType, String, String)}.
+     * immediately returns (i.e. does not wait for pending events) and thus is not be able to return if the notification
+     * was displayed or not, unlike {@link SystemTrayNotifier#displayNotification(NotificationType, String, String)}.
      * </p>
      *
      * @param notificationType one of the available notification types, see {@link NotificationType} for possible values
@@ -93,14 +95,17 @@ public class NotifierProvider {
      */
     public static void displayBackgroundNotification(final NotificationType notificationType, final String title, final String description) {
         SwingUtilities.invokeLater(() -> {
-            if(WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
+            if (WindowManager.getCurrentMainFrame().isAncestorOfActiveWindow()) {
                 LOGGER.debug("Ignoring notification, application is in foreground");
                 return;
             }
 
-            DesktopManager.requestUserAttention();  // bounce app icon if supported by OS
-            if(!getNotifier().displayNotification(notificationType, title, description))
+            // bounce app icon if supported by OS
+            DesktopManager.requestUserAttention();
+
+            if (!getNotifier().displayNotification(notificationType, title, description)) {
                 LOGGER.debug("Notification failed to be displayed");
+            }
         });
     }
 }
