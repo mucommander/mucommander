@@ -39,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.bonjour.BonjourMenu;
-import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
@@ -376,12 +375,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         }
 
         // Add Bonjour services menu
-        setMnemonic(popupMenu.add(new BonjourMenu() {
-            @Override
-            public MuAction getMenuItemAction(BonjourService bs) {
-                return new CustomOpenLocationAction(mainFrame, new Hashtable<>(), bs);
-            }
-        }), mnemonicHelper);
+        setMnemonic(popupMenu.add(new BonjourMenu(mainFrame)), mnemonicHelper);
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts
@@ -573,8 +567,8 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             super(mainFrame, properties, file);
         }
 
-        public CustomOpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, BonjourService bs) {
-            super(mainFrame, properties, bs);
+        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, FileURL url, String label) {
+            super(mainFrame, properties, url, label);
         }
 
         ////////////////////////

@@ -17,14 +17,19 @@
 
 package com.mucommander.bonjour;
 
+import java.util.Hashtable;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import com.mucommander.ui.main.MainFrame;
 
 /**
  * An abstract JMenu that contains an item for each Bonjour service available
@@ -36,14 +41,16 @@ import javax.swing.event.MenuListener;
  *
  * @author Maxence Bernard
  */
-public abstract class BonjourMenu extends JMenu implements MenuListener {
+public class BonjourMenu extends JMenu implements MenuListener {
+
+    private MainFrame mainFrame;
 
     /**
      * Creates a new instance of <code>BonjourMenu</code>.
      */
-    public BonjourMenu() {
+    public BonjourMenu(MainFrame mainFrame) {
         super(Translator.get("bonjour.bonjour_services"));
-
+        this.mainFrame = mainFrame;
         setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "bonjour.png"));
 
         // Menu items will be added when menu gets selected
@@ -58,8 +65,9 @@ public abstract class BonjourMenu extends JMenu implements MenuListener {
      * @param bs the BonjourService
      * @return the action to perform for the given BonjourService
      */
-    public abstract MuAction getMenuItemAction(BonjourService bs);
-
+    private MuAction getMenuItemAction(BonjourService bs) {
+        return new OpenLocationAction(mainFrame, new Hashtable<>(), bs.getURL(), bs.getNameWithProtocol());
+    }
 
     /////////////////////////////////
     // MenuListener implementation //

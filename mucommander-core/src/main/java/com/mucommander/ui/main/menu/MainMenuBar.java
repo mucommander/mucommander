@@ -35,8 +35,6 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import com.mucommander.bonjour.BonjourMenu;
-import com.mucommander.bonjour.BonjourService;
-import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
@@ -283,12 +281,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // Add Bonjour services menu
         goMenu.add(new JSeparator());
-        BonjourMenu bonjourMenu = new BonjourMenu() {
-            @Override
-            public MuAction getMenuItemAction(BonjourService bs) {
-                return new OpenLocationAction(MainMenuBar.this.mainFrame, new Hashtable<>(), bs);
-            }
-        };
+        BonjourMenu bonjourMenu = new BonjourMenu(MainMenuBar.this.mainFrame);
         char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
         if(mnemonic!=0)
             bonjourMenu.setMnemonic(mnemonic);
