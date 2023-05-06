@@ -174,11 +174,11 @@ public interface DesktopAdapter {
     ActionShortcuts getActionShortcuts();
 
     /**
-     * Sets badge number on Dock/TaskBar app icon. To remove the badge provide the negative value.
-     * @param number a number to be displayed over app icon
+     * Sets badge number on Dock/TaskBar app icon. To remove the badge provide a negative value or zero.
+     * @param numberOfJobs a number to be displayed over app icon
      * @return true if operation was supported by platform
      */
-    boolean setIconBadgeNumber(int number);
+    boolean setIconBadgeNumber(int numberOfJobs);
 
     /**
      * Sets progress bar on Dock/Taskbar app icon. To remove the progress bar, provider number

@@ -245,13 +245,13 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     @Override
-    public boolean setIconBadgeNumber(int number) {
+    public boolean setIconBadgeNumber(int numberOfJobs) {
         // Hmm, Taskbar.isTaskbarSupported returns false on my macOS 10.15.7 and java 14.0.2
-        if (super.setIconBadgeNumber(number)) {
+        if (super.setIconBadgeNumber(numberOfJobs)) {
             return true;
         }
-        if (number >= 0) {
-            Application.getApplication().setDockIconBadge(Integer.toString(number));
+        if (numberOfJobs > 0) {
+            Application.getApplication().setDockIconBadge(Integer.toString(numberOfJobs));
         } else {
             Application.getApplication().setDockIconBadge(null);
         }
