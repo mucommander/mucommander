@@ -448,16 +448,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 bookmarksMenu.remove(bookmarksOffset);
 
             // Add bookmarks menu items
-            java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
-            int nbBookmarks = bookmarks.size();
-            if(nbBookmarks>0) {
-                for(int i=0; i<nbBookmarks; i++)
-                    MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<>(), bookmarks.get(i)), null);
-            }
-            else {
+            var bookmarks = BookmarkManager.getBookmarks();
+            if (bookmarks.isEmpty()) {
                 // Show 'No bookmark' as a disabled menu item instead showing nothing
                 JMenuItem noBookmarkItem = MenuToolkit.addMenuItem(bookmarksMenu, Translator.get("bookmarks_menu.no_bookmark"), null, null, null);
                 noBookmarkItem.setEnabled(false);
+            }
+            else {
+                bookmarks.forEach(bookmark -> MenuToolkit.addMenuItem(bookmarksMenu, new OpenLocationAction(mainFrame, new Hashtable<>(), bookmark), null));
             }
         }
         else if(source==windowMenu) {
