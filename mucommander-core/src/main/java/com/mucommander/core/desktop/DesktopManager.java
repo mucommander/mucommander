@@ -609,11 +609,11 @@ public class DesktopManager {
     }
 
     /**
-     * Sets badge number on Dock/TaskBar app icon. To remove the badge provide the negative value.
-     * @param number a number to be displayed over app icon
+     * Sets badge number on Dock/TaskBar app icon. To remove the badge provide a negative value or zero.
+     * @param numberOfJobs a number to be displayed over app icon
      */
-    public static void setIconBadgeNumber(int number) {
-        desktop.setIconBadgeNumber(number);
+    public static void setIconBadgeNumber(int numberOfJobs) {
+        desktop.setIconBadgeNumber(numberOfJobs);
     }
 
     /**

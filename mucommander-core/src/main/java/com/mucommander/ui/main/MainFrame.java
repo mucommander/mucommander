@@ -153,7 +153,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
             private void updateAppIcon() {
                 List<FileJob> jobs = JobsManager.getInstance().getAllJobs();
-                if (jobs.size() > 0) {
+                if (!jobs.isEmpty()) {
                     // Update icon every 1s
                     if (lastUpdate + 1000L < System.currentTimeMillis()) {
                         lastUpdate = System.currentTimeMillis();
@@ -163,7 +163,7 @@ public class MainFrame extends JFrame implements LocationListener {
                             sum += job.getJobProgress().getTotalPercentInt();
                             jobsCount++;
                         }
-                        DesktopManager.setIconBadgeNumber(jobs.size());
+                        DesktopManager.setIconBadgeNumber(jobsCount);
                         DesktopManager.setIconProgress((int) sum / jobsCount);
                     }
                 } else {

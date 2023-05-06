@@ -158,12 +158,12 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
     }
 
     @Override
-    public boolean setIconBadgeNumber(int number) {
+    public boolean setIconBadgeNumber(int numberOfJobs) {
         boolean opSuccessful = false;
         if (Taskbar.isTaskbarSupported() &&
                 Taskbar.getTaskbar().isSupported(Taskbar.Feature.ICON_BADGE_TEXT)) {
-            if (number >= 0) {
-                Taskbar.getTaskbar().setIconBadge(Integer.toString(number));
+            if (numberOfJobs > 0) {
+                Taskbar.getTaskbar().setIconBadge(Integer.toString(numberOfJobs));
             } else {
                 Taskbar.getTaskbar().setIconBadge(null);
             }
