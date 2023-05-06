@@ -19,7 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import com.mucommander.bonjour.BonjourService;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
@@ -109,14 +108,6 @@ public class OpenLocationAction extends ActiveTabAction {
         this(mainFrame, properties, bookmark.getLocation(), bookmark.getName());
     }
 
-
-    /**
-     * Convenience constructor, same effect as calling {@link #OpenLocationAction(MainFrame, Map, FileURL, String)} with
-     * {@link BonjourService#getURL()} and {@link BonjourService#getNameWithProtocol()} ()}.
-     */
-    public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, BonjourService bonjourService) {
-        this(mainFrame, properties, bonjourService.getURL(), bonjourService.getNameWithProtocol());
-    }
 
     /**
      * Returns the {@link FolderPanel} on which to change the current folder. This method returns the currently active
