@@ -40,7 +40,7 @@ public class MuPreferences implements MuPreferencesAPI {
 
 	// - Misc. variables -----------------------------------------------------
 	// -----------------------------------------------------------------------
-	/** Whether or not to automatically check for updates on startup. */
+	/** Whether to automatically check for updates on startup. */
 	public static final String  CHECK_FOR_UPDATE                  = "check_for_updates_on_startup";
 	/** Default automated update behavior. */
 	public static final boolean DEFAULT_CHECK_FOR_UPDATE          = true;
@@ -227,11 +227,6 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final String SHOW_SINGLE_TAB_HEADER			   = FILE_TABLE_SECTION + '.' + "show_single_tab_header";
 	/** Default value for 'Always show single tab header" */
 	public static final boolean DEFAULT_SHOW_TAB_HEADER            = false;
-	/** Whether to always show compatible apps in Open With context menu */
-	public static final String OPEN_WITH_APPS					   = FILE_TABLE_SECTION + '.' + "open_with_apps";
-	/** Default value for 'Show apps in Open With" */
-	public static final boolean DEFAULT_OPEN_WITH_APPS             = false;
-
 	/** Quick search timeout in seconds */
 	public static final String QUICK_SEARCH_TIMEOUT                = FILE_TABLE_SECTION + '.' + "quick_search_timeout";
 	/** Default value for 'Quick search timeout' */
@@ -246,7 +241,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	// -----------------------------------------------------------------------
 	/** Section describing muCommander's macOS integration. */
 	public static final String  MAC_OSX_SECTION                   = "macosx";
-	/** Whether or not to use a macOS style menu bar. */
+	/** Whether to use a macOS style menu bar. */
 	public static final String  USE_SCREEN_MENU_BAR               = MAC_OSX_SECTION + '.' + "screen_menu_bar";
 	/** Default menu bar type. */
 	public static final boolean DEFAULT_USE_SCREEN_MENU_BAR       = true;

@@ -17,6 +17,7 @@
 
 package com.mucommander.desktop.macos;
 
+import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -67,6 +68,7 @@ import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.TrashProvider;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.macos.AppleScript;
 import com.mucommander.ui.macos.OSXIntegration;
@@ -260,7 +262,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     @Override
-    public boolean isOpenWithAvailable() {
+    public boolean isOpenWithAppsAvailable() {
         AtomicBoolean result = new AtomicBoolean(false);
         var dutiCmdPath = getPathOfDutiCmd();
         if (dutiCmdPath == null) {
@@ -280,7 +282,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     @Override
-    public List<Command> getCommandsForOpenWith(AbstractFile file) {
+    public List<Command> getAppsForOpenWith(AbstractFile file) {
         List<Command> result = new ArrayList<>();
         var dutiCmdPath = getPathOfDutiCmd();
         var ext = file.getExtension();
@@ -334,6 +336,20 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         openWithCommands.put(ext, result);
         LOGGER.info("For file: {} found the following commands: {}", file, result);
         return result;
+    }
+
+    @Override
+    public boolean canOpenWithAppsBeEnabled() {
+        return true;
+    }
+
+    @Override
+    public void howToEnableOpenWithApps(Component parent) {
+        if (canOpenWithAppsBeEnabled()) {
+            InformationDialog.showDialog(InformationDialog.INFORMATION_DIALOG_TYPE, parent,
+                    Translator.get("open_with_apps_dialog.title"),
+                    Translator.get("open_with_apps_dialog.msg_macos"), null,null);
+        }
     }
 
     /**
@@ -473,4 +489,5 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         Application.getApplication().requestUserAttention(false);
         return true;
     }
+
 }
