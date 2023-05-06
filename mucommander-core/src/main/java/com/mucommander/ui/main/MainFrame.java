@@ -79,7 +79,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
     private FolderPanel leftFolderPanel;
     private FolderPanel rightFolderPanel;
-	
+
     private FileTable leftTable;
     private FileTable rightTable;
     
@@ -97,10 +97,10 @@ public class MainFrame extends JFrame implements LocationListener {
 
     /** Status bar instance */
     private StatusBar statusBar;
-	
+
     /** Command bar instance */
     private CommandBar commandBar;
-	
+
     /** Is no events mode enabled ? */
     private boolean noEventsMode;
 
@@ -227,22 +227,24 @@ public class MainFrame extends JFrame implements LocationListener {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
         splitPane = new ProportionalSplitPane(this,
-                MuSnapshot.getSnapshot().getVariable(MuSnapshot.getSplitOrientation(0), MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
-                                              	JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
-                                              false,
-                                              MainFrame.this.leftFolderPanel,
-                                              MainFrame.this.rightFolderPanel) {
-        	// We don't want any extra space around split pane
-        	@Override
-        	public Insets getInsets() {
-        		return new Insets(0, 0, 0, 0);
-        	}
+                MuSnapshot.getSnapshot().getVariable(
+                        MuSnapshot.getSplitOrientation(0),
+                        MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
+                        JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
+                        false,
+                        MainFrame.this.leftFolderPanel,
+                        MainFrame.this.rightFolderPanel) {
+            // We don't want any extra space around split pane
+            @Override
+            public Insets getInsets() {
+                return new Insets(0, 0, 0, 0);
+            }
         };
 
         // Remove any default border the split pane has
         splitPane.setBorder(null);
 
-        // Adds buttons that allow to collapse and expand the split pane in both directions
+        // Add buttons that allow to collapse and expand the split pane in both directions
         splitPane.setOneTouchExpandable(true);
 
         // Disable all the JSplitPane accessibility shortcuts that are registered by default, as some of them
@@ -259,7 +261,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Add status bar
         this.statusBar = new StatusBar(this);
         southPanel.add(statusBar);
-		
+
         // Show command bar only if it hasn't been disabled in the preferences
         this.commandBar = new CommandBar(this);
         // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
@@ -286,35 +288,31 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     public MainFrame(ConfFileTableTab leftTab, FileTableConfiguration leftTableConf,
-    	             ConfFileTableTab rightTab, FileTableConfiguration rightTableConf) {
-    	this(new ConfFileTableTab[] {leftTab}, 0, leftTableConf, new ConfFileTableTab[] {rightTab}, 0, rightTableConf);
+                     ConfFileTableTab rightTab, FileTableConfiguration rightTableConf) {
+        this(new ConfFileTableTab[] {leftTab}, 0, leftTableConf, new ConfFileTableTab[] {rightTab}, 0, rightTableConf);
     }
 
     /**
      * Creates a new main frame set to the given initial folders.
-     *
-     * @param leftInitialFolders the initial folders to display in the left panel's tabs
-     * @param rightInitialFolders the initial folders to display in the right panel's tabs
      */
     public MainFrame(ConfFileTableTab[] leftTabs, int indexOfLeftSelectedTab, FileTableConfiguration leftTableConf,
-    		         ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
-    		/*AbstractFile[] leftInitialFolders, AbstractFile[] rightInitialFolders,
-    				 int indexOfLeftSelectedTab, int indexOfRightSelectedTab,
-    			     FileURL[] leftLocationHistory, FileURL[] rightLocationHistory) { */
+                     ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
+
         init(new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf), 
-        	 new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf));
+             new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf));
 
         for (boolean isLeft = true; ; isLeft=false) {
-        	FileTable fileTable = isLeft ? leftTable : rightTable;
-        	fileTable.sortBy(Column.valueOf(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
+            FileTable fileTable = isLeft ? leftTable : rightTable;
+            fileTable.sortBy(Column.valueOf(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
                     !MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
-        	
-        	FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
-        	folderPanel.setTreeWidth(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
-        	folderPanel.setTreeVisible(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(0, isLeft), false));
-        	
-        	if (!isLeft)
-        		break;
+
+            FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
+            folderPanel.setTreeWidth(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
+            folderPanel.setTreeVisible(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getTreeVisiblityVariable(0, isLeft), false));
+
+            if (!isLeft) {
+                break;
+            }
         }
     }
 
@@ -322,15 +320,15 @@ public class MainFrame extends JFrame implements LocationListener {
      * Copy constructor
      */
     public MainFrame(MainFrame mainFrame) {
-    	FolderPanel leftFolderPanel = mainFrame.getLeftPanel(); 
-    	FolderPanel rightFolderPanel = mainFrame.getRightPanel();
-    	FileTable leftFileTable = leftFolderPanel.getFileTable();
-    	FileTable rightFileTable = rightFolderPanel.getFileTable();
+        FolderPanel leftFolderPanel = mainFrame.getLeftPanel();
+        FolderPanel rightFolderPanel = mainFrame.getRightPanel();
+        FileTable leftFileTable = leftFolderPanel.getFileTable();
+        FileTable rightFileTable = rightFolderPanel.getFileTable();
 
-    	init(new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())}, 0, leftFileTable.getConfiguration()),
+        init(new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())}, 0, leftFileTable.getConfiguration()),
              new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(rightFolderPanel.getCurrentFolder().getURL())}, 0, rightFileTable.getConfiguration()));
 
-    	// TODO: Sorting should be part of the FileTable configuration
+        // TODO: Sorting should be part of the FileTable configuration
         this.leftTable.sortBy(leftFileTable.getSortInfo());
         this.rightTable.sortBy(rightFileTable.getSortInfo());
     }
@@ -371,7 +369,7 @@ public class MainFrame extends JFrame implements LocationListener {
     public boolean getNoEventsMode() {
         return this.noEventsMode;
     }
-	
+
     /**
      * Enables/disables the 'no events mode' which prevents mouse and keyboard events from being received
      * by the application (MainFrame, its subcomponents and the menu bar).
@@ -380,12 +378,12 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public void setNoEventsMode(boolean enabled) {
         // Piece of code used in 0.8 beta1 and removed after because it's way too slow, kept here for the record 
-        //		// Glass pane has empty mouse and key adapters (created in the constructor)
-        //		// which will catch all mouse and keyboard events 
-        //		getGlassPane().setVisible(enabled);
-        //		getJMenuBar().setEnabled(!enabled);
-        //		// Remove focus from whatever component in FolderPanel which had focus
-        //		getGlassPane().requestFocus();
+        //  // Glass pane has empty mouse and key adapters (created in the constructor)
+        //  // which will catch all mouse and keyboard events
+        //  getGlassPane().setVisible(enabled);
+        //  getJMenuBar().setEnabled(!enabled);
+        //  // Remove focus from whatever component in FolderPanel which had focus
+        //  getGlassPane().requestFocus();
 
         this.noEventsMode = enabled;
     }
@@ -471,7 +469,7 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     void setActiveTable(FileTable table) {
         boolean activeTableChanged = activeTable != table;
-        if(activeTableChanged) {
+        if (activeTableChanged) {
             this.activeTable = table;
 
             // Update window title to reflect new active table
@@ -482,7 +480,7 @@ public class MainFrame extends JFrame implements LocationListener {
         }
     }
 
-	
+
     /**
      * Returns the inactive table, i.e. the complement of {@link #getActiveTable()}.
      *
@@ -647,15 +645,18 @@ public class MainFrame extends JFrame implements LocationListener {
      * @return <code>true</code> if this MainFrame is active, or is an ancestor of a Window that is currently active
      */
     public boolean isAncestorOfActiveWindow() {
-        if(isActive())
+        if (isActive()) {
             return true;
+        }
 
         Window ownedWindows[] = getOwnedWindows();
 
         int nbWindows = ownedWindows.length;
-        for(int i=0; i<nbWindows; i++)
-            if(ownedWindows[i].isActive())
+        for (int i = 0; i < nbWindows; i++) {
+            if (ownedWindows[i].isActive()) {
                 return true;
+            }
+        }
 
         return false;
     }
@@ -668,28 +669,30 @@ public class MainFrame extends JFrame implements LocationListener {
         // Update window title
         String title = activeTable.getFolderPanel().getCurrentFolder().getAbsolutePath();
 
-	// Add the application name to window title on all OSs except MAC
-        if (!OsFamily.MAC_OS.isCurrent())
-        	title += " - muCommander";
+        // Add the application name to window title on all OSs except MAC
+        if (!OsFamily.MAC_OS.isCurrent()) {
+            title += " - muCommander";
+        }
 
         java.util.List<MainFrame> mainFrames = WindowManager.getMainFrames();
-        if(mainFrames.size()>1)
-            title += " ["+(mainFrames.indexOf(this)+1)+"]";
+        if (mainFrames.size() > 1) {
+            title += " [" + (mainFrames.indexOf(this) + 1) + "]";
+        }
         setTitle(title);
 
-        if(OsFamily.MAC_OS.isCurrent()) {
+        if (OsFamily.MAC_OS.isCurrent()) {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getFolderPanel().getCurrentFolder();
             Object javaIoFile;
-            if(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA)) {
+            if (currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA)) {
                 // If the current folder is an archive entry, display the archive file, this is the closest we can get
                 // with a java.io.File
-                if(currentFolder.hasAncestor(AbstractArchiveEntryFile.class))
+                if (currentFolder.hasAncestor(AbstractArchiveEntryFile.class)) {
                     javaIoFile = currentFolder.getParentArchive().getUnderlyingFileObject();
-                else
+                } else {
                     javaIoFile = currentFolder.getUnderlyingFileObject();
-            }
-            else {
+                }
+            } else {
                 // If the current folder is not a local file, use the special /Network directory which is sort of
                 // 'Network Neighborhood'.
                 javaIoFile = new java.io.File("/Network");
@@ -700,8 +703,6 @@ public class MainFrame extends JFrame implements LocationListener {
             getRootPane().putClientProperty("Window.documentFile", javaIoFile);
         }
     }
-    
-
 
     /**
      * Returns <code>true</code> if only one panel is show
@@ -723,7 +724,6 @@ public class MainFrame extends JFrame implements LocationListener {
         return singlePanel;
     }
 
-
     ///////////////////////
     // Overridden methods //
     ///////////////////////
@@ -738,8 +738,6 @@ public class MainFrame extends JFrame implements LocationListener {
         super.toFront();
     }
 
-
-
     ///////////////////
     // Inner classes //
     ///////////////////
@@ -753,16 +751,21 @@ public class MainFrame extends JFrame implements LocationListener {
 
         @Override
         public Component getComponentAfter(Container container, Component component) {
-        	if (component==leftFolderPanel.getFoldersTreePanel().getTree())
-		        return leftTable;
-		    if (component==rightFolderPanel.getFoldersTreePanel().getTree())
-		        return rightTable;
-		    if(component== leftFolderPanel.getLocationTextField())
+            if (component == leftFolderPanel.getFoldersTreePanel().getTree()) {
                 return leftTable;
-            if(component== leftTable)
+            }
+            if (component == rightFolderPanel.getFoldersTreePanel().getTree()) {
                 return rightTable;
-            if(component== rightFolderPanel.getLocationTextField())
+            }
+            if (component == leftFolderPanel.getLocationTextField()) {
+                return leftTable;
+            }
+            if (component == leftTable) {
                 return rightTable;
+            }
+            if (component== rightFolderPanel.getLocationTextField()) {
+                return rightTable;
+            }
             // otherwise (component==table2)
             return leftTable;
         }
@@ -771,7 +774,7 @@ public class MainFrame extends JFrame implements LocationListener {
         public Component getComponentBefore(Container container, Component component) {
             // Completely symmetrical with getComponentAfter
             return getComponentAfter(container, component);
-       }
+        }
 
         @Override
         public Component getFirstComponent(Container container) {
@@ -799,7 +802,7 @@ public class MainFrame extends JFrame implements LocationListener {
     }
 
     /**
-     * Update the header renderer of both tables according to {@link FileTable#createHeaderRenderer}
+     * Update the header renderer of both tables according to {@link FileTable#createHeaderRenderer()}}
      */
     public void updateFileTablesHeaderRenderer() {
         leftTable.updateHeaderRenderer();
@@ -807,8 +810,8 @@ public class MainFrame extends JFrame implements LocationListener {
     }
     
     /**********************************
-	 * LocationListener Implementation
-	 **********************************/
+     * LocationListener Implementation
+     **********************************/
 
     public void locationChanged(LocationEvent e) {
         // Update window title to reflect the new current folder
