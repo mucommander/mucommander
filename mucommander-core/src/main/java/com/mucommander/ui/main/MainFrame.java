@@ -47,9 +47,6 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.job.FileJob;
-import com.mucommander.job.JobListener;
-import com.mucommander.job.JobsManager;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
@@ -67,6 +64,7 @@ import com.mucommander.ui.main.table.FileTableConfiguration;
 import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.tabs.ConfFileTableTab;
 import com.mucommander.ui.main.toolbar.ToolBar;
+import com.mucommander.ui.notifier.NotifierProvider;
 
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
@@ -136,47 +134,13 @@ public class MainFrame extends JFrame implements LocationListener {
 
             setIconImages(icons);
         }
-
-        JobsManager.getInstance().addJobListener(new JobListener() {
-            long lastUpdate;
-
-            // TODO abusing #jobProgress & #jobRemoved to get events to trigger desktop/taskbar icon updates
-            @Override
-            public void jobProgress(FileJob source, boolean fullUpdate) {
-                updateAppIcon();
-            }
-
-            @Override
-            public void jobRemoved(FileJob source) {
-                updateAppIcon();
-            }
-
-            private void updateAppIcon() {
-                List<FileJob> jobs = JobsManager.getInstance().getAllJobs();
-                if (!jobs.isEmpty()) {
-                    // Update icon every 1s
-                    if (lastUpdate + 1000L < System.currentTimeMillis()) {
-                        lastUpdate = System.currentTimeMillis();
-                        long sum = 0;
-                        int jobsCount = 0;
-                        for (FileJob job : jobs) {
-                            sum += job.getJobProgress().getTotalPercentInt();
-                            jobsCount++;
-                        }
-                        DesktopManager.setIconBadgeNumber(jobsCount);
-                        DesktopManager.setIconProgress((int) sum / jobsCount);
-                    }
-                } else {
-                    DesktopManager.setIconBadgeNumber(-1); // turn off progress bar on icon
-                    DesktopManager.setIconProgress(-1); // turn off badge on icon
-                }
-            }
-        });
     }
 
     private void init(FolderPanel leftFolderPanel, FolderPanel rightFolderPanel) {
         // Set the window icon
         setWindowIcon();
+        // Register jobs listeners for UI notification purposes
+        NotifierProvider.registerJobsListeners();
 
         DesktopManager.customizeMainFrame(this);
 

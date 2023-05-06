@@ -18,6 +18,8 @@
 package com.mucommander.ui.notifier;
 
 import java.awt.SystemTray;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.SwingUtilities;
 
@@ -25,6 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.job.FileJob;
+import com.mucommander.job.JobListener;
+import com.mucommander.job.JobsManager;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.ui.main.WindowManager;
@@ -33,6 +38,8 @@ public class NotifierProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotifierProvider.class);
 
     private static AbstractNotifier defaultNotifier;
+
+    private static AtomicBoolean jobsRegistered = new AtomicBoolean();
 
     static {
         // Finds and creates a suitable AbstractNotifier instance for the platform, if there is one
@@ -107,5 +114,46 @@ public class NotifierProvider {
                 LOGGER.debug("Notification failed to be displayed");
             }
         });
+    }
+
+    public static void registerJobsListeners() {
+        // register only once
+        if (jobsRegistered.compareAndSet(false, true)) {
+            JobsManager.getInstance().addJobListener(new JobListener() {
+                long lastUpdate;
+
+                // TODO abusing #jobProgress & #jobRemoved to get events to trigger desktop/taskbar icon updates
+                @Override
+                public void jobProgress(FileJob source, boolean fullUpdate) {
+                    updateAppIcon();
+                }
+
+                @Override
+                public void jobRemoved(FileJob source) {
+                    updateAppIcon();
+                }
+
+                private void updateAppIcon() {
+                    List<FileJob> jobs = JobsManager.getInstance().getAllJobs();
+                    if (!jobs.isEmpty()) {
+                        // Update icon every 1s
+                        if (lastUpdate + 1000L < System.currentTimeMillis()) {
+                            lastUpdate = System.currentTimeMillis();
+                            long sum = 0;
+                            int jobsCount = 0;
+                            for (FileJob job : jobs) {
+                                sum += job.getJobProgress().getTotalPercentInt();
+                                jobsCount++;
+                            }
+                            DesktopManager.setIconBadgeNumber(jobsCount);
+                            DesktopManager.setIconProgress((int) sum / jobsCount);
+                        }
+                    } else {
+                        DesktopManager.setIconBadgeNumber(-1); // turn off progress bar on icon
+                        DesktopManager.setIconProgress(-1); // turn off badge on icon
+                    }
+                }
+            });
+        }
     }
 }

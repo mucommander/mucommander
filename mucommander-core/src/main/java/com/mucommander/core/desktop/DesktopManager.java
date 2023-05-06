@@ -626,7 +626,7 @@ public class DesktopManager {
     }
 
     /**
-     * Requests users attention, for example on macOS by bouncing dock icon.
+     * Requests user attention, for example on macOS by bouncing dock icon.
      */
     public static void requestUserAttention() {
         desktop.requestUserAttention();
