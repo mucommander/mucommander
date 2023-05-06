@@ -23,6 +23,7 @@ import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.util.Pair;
 import com.mucommander.os.notifier.AbstractNotifier;
 
+import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -179,17 +180,33 @@ public interface DesktopAdapter {
      * Whether the list of apps that can open a file is available of a given platform?
      * @return true if so, false otherwise
      */
-    default boolean isOpenWithAvailable() {
+    default boolean isOpenWithAppsAvailable() {
         return false;
     }
 
     /**
-     * Returns the list of commands that a given file can be opened with.
+     * Returns the list of apps (commands) that a given file can be opened with.
      * @param file a file, must not be null
      * @return the list of commands, can be empty, never null.
      */
-    default List<Command> getCommandsForOpenWith(AbstractFile file) {
+    default List<Command> getAppsForOpenWith(AbstractFile file) {
         return Collections.emptyList();
+    }
+
+    /**
+     * States whether apps in Open With contextual menu can be made possible on a given platform
+     * @return true if so, false otherwise
+     */
+    default boolean canOpenWithAppsBeEnabled() {
+        return false;
+    }
+
+    /**
+     * Shows the Information Dialog with details how to enable apps in Open With contextual menu.
+     * Works only if canOpenWithAppsBeEnabled() returns true, no-op otherwise
+     * @param parent a parent for a dialog
+     */
+    default void howToEnableOpenWithApps(Component parent) {
     }
 
     /* Sets badge number on Dock/TaskBar app icon. To remove the badge provide a negative value or zero.

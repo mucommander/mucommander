@@ -28,9 +28,6 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
-import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.text.Translator;
@@ -38,6 +35,7 @@ import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.CommandAction;
+import com.mucommander.ui.icon.SpinningDial;
 import com.mucommander.ui.main.MainFrame;
 
 import java.io.IOException;
@@ -92,41 +90,54 @@ public class OpenWithMenu extends JMenu {
             }
         }
 
-        if (clickedFile != null && !clickedFile.isDirectory() &&
-                MuConfigurations.getPreferences().getVariable(MuPreference.OPEN_WITH_APPS, MuPreferences.DEFAULT_OPEN_WITH_APPS) &&
-                DesktopManager.isOpenWithAvailable()) {
-            JMenuItem loadingItem = super.add(Translator.get("file_menu.loading") + "...");
-            loadingItem.setEnabled(false);
-            // going to run getCommandsForOpenWith in background as it may take some time to complete
-            // especially if a given file has a lot of apps that can be opened with...
-            new Thread(() -> {
+        if (clickedFile != null && !clickedFile.isDirectory()) {
+            if (DesktopManager.isOpenWithAppsAvailable()) {
+                var loadingItem = super.add(Translator.get("file_menu.loading") + "...");
+                var spinningIcon = new SpinningDial();
+                loadingItem.setEnabled(false);
+                loadingItem.setDisabledIcon(spinningIcon);
+                spinningIcon.setAnimated(true);
+                // going to run getCommandsForOpenWith in background as it may take some time to complete
+                // especially if a given file has a lot of apps that can be opened with...
+                new Thread(() -> {
 
-                var commands = DesktopManager.getCommandsForOpenWith(clickedFile);
-                if (!commands.isEmpty() && getItemCount() > 1) {
-                    add(new JSeparator());
-                }
-                var separateDefault = commands.size() > 1;
-                for (Command cmd : commands) {
-                    MuAction action = createMuAction(cmd);
-                    action.setLabel(cmd.getDisplayName());
-                    if (cmd instanceof CommandExtended) {
-                        add(action).setIcon(((CommandExtended)cmd).getIcon());
-                    }
-                    if (separateDefault) {
+                    var commands = DesktopManager.getAppsForOpenWith(clickedFile);
+                    if (!commands.isEmpty() && getItemCount() > 1) {
                         add(new JSeparator());
-                        separateDefault = false;
                     }
+                    var separateDefault = commands.size() > 1;
+                    for (Command cmd : commands) {
+                        MuAction action = createMuAction(cmd);
+                        action.setLabel(cmd.getDisplayName());
+                        if (cmd instanceof CommandExtended) {
+                            add(action).setIcon(((CommandExtended)cmd).getIcon());
+                        }
+                        if (separateDefault) {
+                            add(new JSeparator());
+                            separateDefault = false;
+                        }
+                    }
+                    spinningIcon.setAnimated(false);
+                    super.remove(loadingItem);
+                    if (getItemCount() == 0) {
+                        setEnabled(false);
+                    }
+                    super.getPopupMenu().pack();
+                }).start();
+            } else {
+                if (DesktopManager.canOpenWithAppsBeEnabled()) {
+                    if (getItemCount() > 1) {
+                        add(new JSeparator());
+                    }
+                    var howToEnable = super.add(
+                            Translator.get("file_menu.open_with_apps_tip") + "...");
+                    howToEnable.addActionListener(e ->
+                            DesktopManager.howToEnableOpenWithApps(mainFrame));
                 }
-                super.remove(loadingItem);
-                if (getItemCount() == 0) {
-                    setEnabled(false);
-                }
-                super.getPopupMenu().pack();;
-            }).start();
-        } else {
-            if (getItemCount() == 0) {
-                setEnabled(false);
             }
+        }
+        if (getItemCount() == 0) {
+            setEnabled(false);
         }
     }
 

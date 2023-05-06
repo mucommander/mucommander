@@ -17,6 +17,7 @@
 
 package com.mucommander.core.desktop;
 
+import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -608,12 +609,20 @@ public final class DesktopManager {
             DesktopManager.actionShortcuts = actionShortcuts;
     }
 
-    public static boolean isOpenWithAvailable() {
-        return desktop.isOpenWithAvailable();
+    public static boolean isOpenWithAppsAvailable() {
+        return desktop.isOpenWithAppsAvailable();
     }
 
-    public static List<Command> getCommandsForOpenWith(AbstractFile file) {
-        return desktop.getCommandsForOpenWith(file);
+    public static List<Command> getAppsForOpenWith(AbstractFile file) {
+        return desktop.getAppsForOpenWith(file);
+    }
+
+    public static boolean canOpenWithAppsBeEnabled() {
+        return desktop.canOpenWithAppsBeEnabled();
+    }
+
+    public static void howToEnableOpenWithApps(Component parent) {
+        desktop.howToEnableOpenWithApps(parent);
     }
 
     /**
