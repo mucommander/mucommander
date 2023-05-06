@@ -159,7 +159,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
 
     @Override
     public boolean setIconBadgeNumber(int numberOfJobs) {
-        boolean opSuccessful = false;
+        boolean opSupportedByAwt = false;
         if (Taskbar.isTaskbarSupported() &&
                 Taskbar.getTaskbar().isSupported(Taskbar.Feature.ICON_BADGE_TEXT)) {
             if (numberOfJobs > 0) {
@@ -167,14 +167,14 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
             } else {
                 Taskbar.getTaskbar().setIconBadge(null);
             }
-            opSuccessful = true;
+            opSupportedByAwt = true;
         }
-        return opSuccessful;
+        return opSupportedByAwt;
     }
 
     @Override
     public boolean setIconProgress(int progress) {
-        boolean opSuccessful = false;
+        boolean opSupportedByAwt = false;
         if (Taskbar.isTaskbarSupported() &&
                 Taskbar.getTaskbar().isSupported(Taskbar.Feature.PROGRESS_VALUE)) {
             if (progress >= 0 && progress <= 100) {
@@ -182,20 +182,20 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
             } else {
                 Taskbar.getTaskbar().setProgressValue(-1);
             }
-            opSuccessful = true;
+            opSupportedByAwt = true;
         }
-        return opSuccessful;
+        return opSupportedByAwt;
     }
 
     @Override
     public boolean requestUserAttention() {
-        boolean opSuccessful = false;
+        boolean opSupportedByAwt = false;
         if (Taskbar.isTaskbarSupported() &&
                 Taskbar.getTaskbar().isSupported(Taskbar.Feature.USER_ATTENTION)) {
             // TODO check if we need to "unrequest" attention
             Taskbar.getTaskbar().requestUserAttention(true, false);
-            opSuccessful = true;
+            opSupportedByAwt = true;
         }
-        return opSuccessful;
+        return opSupportedByAwt;
     }
 }
