@@ -36,6 +36,7 @@ New features:
 - Undo and redo actions for the internal binary editor.
 - Additional search options for the internal text viewer/editor: case-sensitivity, whole-words, regular expressions, forward/backward.
 - Browsing and extracting multi-volume RAR 5+ files.
+- Dock/TaskBar icon showing jobs' progress updates
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.

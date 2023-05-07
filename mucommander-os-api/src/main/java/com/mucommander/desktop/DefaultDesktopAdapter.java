@@ -17,6 +17,7 @@
 
 package com.mucommander.desktop;
 
+import java.awt.EventQueue;
 import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -182,6 +183,18 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
             } else {
                 Taskbar.getTaskbar().setProgressValue(-1);
             }
+
+            // Apparently there's a problem with AWT with above code on macOS (https://bugs.openjdk.org/browse/JDK-8300037), so:
+            // work around starts:
+            EventQueue.invokeLater(() -> {
+                Taskbar.getTaskbar().setIconImage(Taskbar.getTaskbar().getIconImage());
+                if (progress >= 0 && progress <= 100) {
+                    Taskbar.getTaskbar().setProgressValue(progress);
+                } else {
+                    Taskbar.getTaskbar().setProgressValue(-1);
+                }
+            });
+            // work around ends
             opSupportedByAwt = true;
         }
         return opSupportedByAwt;
