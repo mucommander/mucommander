@@ -246,7 +246,8 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     @Override
     public boolean setIconBadgeNumber(int numberOfJobs) {
-        // Hmm, Taskbar.isTaskbarSupported returns false on my macOS 10.15.7 and java 14.0.2
+        // Hmm, Taskbar.isTaskbarSupported returns false on my macOS 10.15.7 and java 14.0.2,
+        // however on java 20 it works
         if (super.setIconBadgeNumber(numberOfJobs)) {
             return true;
         }
@@ -260,7 +261,8 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     @Override
     public boolean setIconProgress(int progress) {
-        // Hmm, Taskbar.isTaskbarSupported returns false on my macOS 10.15.7 and java 14.0.2
+        // Hmm, Taskbar.isTaskbarSupported returns false on my macOS 10.15.7 and java 14.0.2,
+        // however on java 20 it works
         if (super.setIconProgress(progress)) {
             return true;
         }
