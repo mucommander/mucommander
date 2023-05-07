@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -98,10 +99,16 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     private Map<String, List<Command>> openWithCommands = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
+    private Map<String, List<String>> bundleIdsForUti = createSizeLimitedMap(20);
+
+    private Map<String, Pair<String, String>> appPathsForBundleId = createSizeLimitedMap(50);
+    // /cached values
+
     /** The key of the comment attribute in file metadata */
     public static final String COMMENT_PROPERTY_NAME = "com.apple.metadata:kMDItemFinderComment";
     public static final String TAGS_PROPERTY_NAME = "com.apple.metadata:_kMDItemUserTags";
 
+    @Override
     public String toString() {
         return "macOS Desktop";
     }
@@ -353,11 +360,16 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     /**
-     * Method tries to find app name and its path from a given bundle id.
+     * Method tries to find app name and its path from a given bundle id (the results are cached).
      * @param bundleId the bundle id
      * @return a pair, first is app name, second is its path (this can be null)
      */
     private Pair<String, String> getAppNameAndPathForBundleId(String bundleId) {
+        Pair<String, String> cached = appPathsForBundleId.get(bundleId);
+        if (cached != null) {
+            return cached;
+        }
+
         Pair result = new Pair();
         runCommand(new String[]{"mdfind", "kMDItemCFBundleIdentifier", "=", bundleId}, false,0, s -> {
             // a simple sanity check whether it is bundle id
@@ -372,10 +384,21 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             // if mdfind way didn't work, try silly conversion of bundle id to app name
             result.first = StringUtils.capitalize(bundleId.substring(bundleId.lastIndexOf(".") + 1));
         }
+        appPathsForBundleId.put(bundleId, result);
         return result;
     }
 
+    /**
+     * Returns the list of bundle ids for a given UTI (the results are cached).
+     * @param uti the uti
+     * @return the list of bundle ids
+     */
     private List<String> getAppBundleIdsForUTI(String uti) {
+        List<String> cached = bundleIdsForUti.get(uti);
+        if (cached != null) {
+            return cached;
+        }
+
         List<String> result = new ArrayList<>();
         var dutiCmdPath = getPathOfDutiCmd();
         if (dutiCmdPath == null) {
@@ -389,6 +412,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             return false;           // continue searching
         });
         LOGGER.info("For UTI: {} found the following bundle ids: {}", uti, result);
+        bundleIdsForUti.put(uti, result);
         return result;
     }
 
@@ -489,5 +513,24 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         Application.getApplication().requestUserAttention(false);
         return true;
     }
+
+    /**
+     * Creates size limited map.
+     * Idea taken from: https://stackoverflow.com/a/11469731/1715521
+     *
+     * @param maxSize max size
+     * @return the size limited map
+     * @param <K> key type
+     * @param <V> value type
+     */
+    private static <K, V> Map<K, V> createSizeLimitedMap(int maxSize) {
+        return new LinkedHashMap<K, V>(maxSize * 10 / 7, 0.7f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+                return size() > maxSize;
+            }
+        };
+    }
+
 
 }
