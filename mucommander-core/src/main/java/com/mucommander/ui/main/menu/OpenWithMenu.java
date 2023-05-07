@@ -94,8 +94,9 @@ public class OpenWithMenu extends JMenu {
             if (DesktopManager.isOpenWithAppsAvailable()) {
                 var loadingItem = super.add(Translator.get("file_menu.loading") + "...");
                 var spinningIcon = new SpinningDial();
-                loadingItem.setEnabled(false);
                 loadingItem.setDisabledIcon(spinningIcon);
+                loadingItem.setIcon(spinningIcon);  // need to set both disabled and normal, otherwise it doesn't appear
+                loadingItem.setEnabled(false);
                 spinningIcon.setAnimated(true);
                 // going to run getCommandsForOpenWith in background as it may take some time to complete
                 // especially if a given file has a lot of apps that can be opened with...
