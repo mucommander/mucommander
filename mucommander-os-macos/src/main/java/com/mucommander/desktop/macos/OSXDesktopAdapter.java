@@ -30,7 +30,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -97,11 +96,11 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     // cached values
     private String dutiCmdPath = null;
 
-    private Map<String, List<Command>> openWithCommands = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private Map<String, String> utiForExt = createSizeLimitedMap(200);
 
-    private Map<String, List<String>> bundleIdsForUti = createSizeLimitedMap(20);
+    private Map<String, List<String>> bundleIdsForUti = createSizeLimitedMap(100);
 
-    private Map<String, Pair<String, String>> appPathsForBundleId = createSizeLimitedMap(50);
+    private Map<String, Pair<String, String>> appPathsForBundleId = createSizeLimitedMap(100);
     // /cached values
 
     /** The key of the comment attribute in file metadata */
@@ -291,56 +290,37 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     @Override
     public List<Command> getAppsForOpenWith(AbstractFile file) {
         List<Command> result = new ArrayList<>();
-        var dutiCmdPath = getPathOfDutiCmd();
-        var ext = file.getExtension();
-        if (dutiCmdPath == null || ext == null || ext.isEmpty()) {
+        if (getPathOfDutiCmd() == null) {
             return result;
         }
-        // using cache (probably it would be nice to have time-bound cache (guava, apache?) or size limited
-        if (openWithCommands.containsKey(ext)) {
-            return openWithCommands.get(ext);
-        }
+        String uti = getUtiForExtension(file.getExtension());
         Set<Command> sorted = new TreeSet<>(Comparator.comparing(o -> o.getDisplayName().toLowerCase()));
-
-        runCommand(new String[]{dutiCmdPath, "-e", ext}, false,0, s -> {
-            String typeIdentifier = "UTTypeIdentifier = ";
-            int idx = s.indexOf(typeIdentifier);
-            if (idx >= 0) {
-                String uti = s.substring(idx + typeIdentifier.length()).trim();
-                if (!uti.isEmpty()) {
-                    for (String bundleId : getAppBundleIdsForUTI(uti)) {
-                        // Tried to fight with quotes around such bundle ids in Command and ProcessBuilder,
-                        // but I finally lost my patience - probably due to:
-                        // Command behavior: "It is important to remember that <code>"</code> characters are <b>not</b> removed from the resulting tokens."
-                        if (bundleId.contains(" ")) {
-                            LOGGER.error("Going to ignore {} as it contains spaces...", bundleId);
-                            continue;
-                        }
-                        Pair<String, String> appPair = getAppNameAndPathForBundleId(bundleId);
-                        String appName = appPair.first;
-                        Command cmd = new CommandExtended(
-                                appName,
-                                "open -b " + bundleId + " $f",
-                                CommandType.NORMAL_COMMAND,
-                                appName,
-                                appPair.second != null ? FileIcons.getFileIcon(FileFactory.getFile(appPair.second)) : null
-                        );
-                        // default is the first, the rest is alpha sorted (mimicking Finder behavior)
-                        if (result.isEmpty()) {
-                            result.add(cmd);
-                        } else {
-                            sorted.add(cmd);
-                        }
-
-                    }
-                }
-                return true;    // we're good, no further searching needed
+        for (String bundleId : getAppBundleIdsForUTI(uti)) {
+            // Tried to fight with quotes around such bundle ids in Command and ProcessBuilder,
+            // but I finally lost my patience - probably due to:
+            // Command behavior: "It is important to remember that <code>"</code> characters are <b>not</b> removed from the resulting tokens."
+            if (bundleId.contains(" ")) {
+                LOGGER.error("Going to ignore {} as it contains spaces...", bundleId);
+                continue;
             }
-            return false;       // continue searching
-        });
+            Pair<String, String> appPair = getAppNameAndPathForBundleId(bundleId);
+            String appName = appPair.first;
+            Command cmd = new CommandExtended(
+                    appName,
+                    "open -b " + bundleId + " $f",
+                    CommandType.NORMAL_COMMAND,
+                    appName,
+                    appPair.second != null ? FileIcons.getFileIcon(FileFactory.getFile(appPair.second)) : null
+            );
+            // default is the first, the rest is alpha sorted (mimicking Finder behavior)
+            if (result.isEmpty()) {
+                result.add(cmd);
+            } else {
+                sorted.add(cmd);
+            }
+        }
 
         result.addAll(sorted);
-        openWithCommands.put(ext, result);
         LOGGER.info("For file: {} found the following commands: {}", file, result);
         return result;
     }
@@ -357,6 +337,45 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
                     Translator.get("open_with_apps_dialog.title"),
                     Translator.get("open_with_apps_dialog.msg_macos"), null,null);
         }
+    }
+
+    /**
+     * Returns UTI (https://en.wikipedia.org/wiki/Uniform_Type_Identifier) for a given extension (case insensitive).
+     * @param ext the extension, can be null or empty
+     * @return the UTI, never empty (will default to "public.data" for unknown or empty/null extension)
+     */
+    private String getUtiForExtension(String ext) {
+        StringBuilder result = new StringBuilder("public.data");
+        if (ext == null || ext.isBlank()) {
+            return result.toString();
+        }
+        var dutiCmdPath = getPathOfDutiCmd();
+        if (dutiCmdPath == null) {
+            return result.toString();
+        }
+        ext = ext.toLowerCase();
+        // tempted to use Map#computeIfAbsent, but it could introduce concurrency issues
+        var cachedUti = utiForExt.get(ext);
+        if (cachedUti != null) {
+            result.setLength(0);
+            result.append(cachedUti);
+        } else {
+            runCommand(new String[]{dutiCmdPath, "-e", ext}, false,0, s -> {
+                String typeIdentifier = "UTTypeIdentifier = ";
+                int idx = s.indexOf(typeIdentifier);
+                if (idx >= 0) {
+                    String uti = s.substring(idx + typeIdentifier.length()).trim();
+                    if (!uti.isBlank()) {
+                        result.setLength(0);
+                        result.append(uti);
+                        return true;    // we're good, no further searching needed
+                    }
+                }
+                return false;           // continue searching
+            });
+        }
+        utiForExt.put(ext, result.toString());
+        return result.toString();
     }
 
     /**
@@ -381,7 +400,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             return false;           // continue searching
         });
         if (result.first == null) {
-            // if mdfind way didn't work, try silly conversion of bundle id to app name
+            // if 'mdfind' way didn't work, try silly conversion of bundle id to app name
             result.first = StringUtils.capitalize(bundleId.substring(bundleId.lastIndexOf(".") + 1));
         }
         appPathsForBundleId.put(bundleId, result);
@@ -459,8 +478,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             Process proc = rt.exec(commands);
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(
                     useStdErr ? proc.getErrorStream() : proc.getInputStream()));
-            if (!proc.waitFor(500, TimeUnit.MILLISECONDS) || proc.exitValue() != expectedExitCode) {
-                LOGGER.error("Unexpected result from running: '{}'", command);
+            int exitCode = Integer.MIN_VALUE;
+            boolean timedOut;
+            if (!(timedOut = proc.waitFor(500, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
+                LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", command, timedOut, exitCode);
                 return result;
             }
             String s;
@@ -524,7 +545,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
      * @param <V> value type
      */
     private static <K, V> Map<K, V> createSizeLimitedMap(int maxSize) {
-        return new LinkedHashMap<K, V>(maxSize * 10 / 7, 0.7f, true) {
+        return new LinkedHashMap<K, V>(maxSize * 10 / 7, 0.7f, false) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
                 return size() > maxSize;
