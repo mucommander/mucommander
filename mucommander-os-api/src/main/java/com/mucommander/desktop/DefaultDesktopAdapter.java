@@ -188,11 +188,7 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
             // work around starts:
             EventQueue.invokeLater(() -> {
                 Taskbar.getTaskbar().setIconImage(Taskbar.getTaskbar().getIconImage());
-                if (progress >= 0 && progress <= 100) {
-                    Taskbar.getTaskbar().setProgressValue(progress);
-                } else {
-                    Taskbar.getTaskbar().setProgressValue(-1);
-                }
+                Taskbar.getTaskbar().setProgressValue(progress);
             });
             // work around ends
             opSupportedByAwt = true;
