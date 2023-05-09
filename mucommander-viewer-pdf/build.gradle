@@ -7,6 +7,7 @@ dependencies {
     comprise 'log4j:log4j:1.2.17'
     comprise 'com.twelvemonkeys.imageio:imageio-psd:3.9.4'
     comprise 'avalon-framework:avalon-framework:4.1.5'
+    implementation 'org.jmdns:jmdns:3.5.5'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

@@ -29,6 +29,7 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
@@ -38,7 +39,6 @@ import javax.swing.filechooser.FileSystemView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkListener;
 import com.mucommander.bookmark.BookmarkManager;
@@ -58,6 +58,7 @@ import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.text.Translator;
@@ -374,8 +375,11 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             setMnemonic(popupMenu.add(action), mnemonicHelper);
         }
 
-        // Add Bonjour services menu
-        setMnemonic(popupMenu.add(new BonjourMenu(mainFrame)), mnemonicHelper);
+        // Add service menus, like Bonjour service menu
+        BrowsableItemsMenuServiceTracker.getMenuServices().forEach(service -> {
+            JMenu menu = service.getMenu(mainFrame, folderPanel);
+            setMnemonic(popupMenu.add(menu), mnemonicHelper);
+        });
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts
@@ -565,10 +569,6 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
         public CustomOpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, AbstractFile file) {
             super(mainFrame, properties, file);
-        }
-
-        public CustomOpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, FileURL url, String label) {
-            super(mainFrame, properties, url, label);
         }
 
         ////////////////////////

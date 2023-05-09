@@ -29,6 +29,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -44,13 +45,15 @@ import com.mucommander.ui.main.MainFrame;
 public class BonjourMenu extends JMenu implements MenuListener {
 
     private MainFrame mainFrame;
+    private FolderPanel folderPanel;
 
     /**
      * Creates a new instance of <code>BonjourMenu</code>.
      */
-    public BonjourMenu(MainFrame mainFrame) {
+    public BonjourMenu(MainFrame mainFrame, FolderPanel folderPanel) {
         super(Translator.get("bonjour.bonjour_services"));
         this.mainFrame = mainFrame;
+        this.folderPanel = folderPanel;
         setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "bonjour.png"));
 
         // Menu items will be added when menu gets selected
@@ -66,7 +69,12 @@ public class BonjourMenu extends JMenu implements MenuListener {
      * @return the action to perform for the given BonjourService
      */
     private MuAction getMenuItemAction(BonjourService bs) {
-        return new OpenLocationAction(mainFrame, new Hashtable<>(), bs.getURL(), bs.getNameWithProtocol());
+        return new OpenLocationAction(mainFrame, new Hashtable<>(), bs.getURL(), bs.getNameWithProtocol()) {
+            @Override
+            protected FolderPanel getFolderPanel() {
+                return folderPanel != null ? folderPanel : super.getFolderPanel();
+            }
+        };
     }
 
     /////////////////////////////////

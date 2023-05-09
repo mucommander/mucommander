@@ -26,7 +26,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
-import com.mucommander.bonjour.BonjourDirectory;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
@@ -215,9 +214,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         MuConfigurations.getPreferences().setVariable(MuPreference.VIEW_ON_ERROR, viewOnErrorDiscoveryCheckBox.isSelected());
 
-        enabled = bonjourDiscoveryCheckBox.isSelected();
-        MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, enabled);
-        BonjourDirectory.setActive(enabled);
+        MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, bonjourDiscoveryCheckBox.isSelected());
 
         MuConfigurations.getPreferences().setVariable(MuPreference.SET_DROP_ACTION_TO_COPY, setDropActionToCopyCheckBox.isSelected());
     }

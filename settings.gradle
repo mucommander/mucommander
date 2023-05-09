@@ -49,6 +49,7 @@ include 'mucommander-viewer-text'
 include 'mucommander-viewer-image'
 include 'mucommander-viewer-pdf'
 include 'mucommander-viewer-binary'
+include 'mucommander-bonjour'
 
 include 'apache-bzip2'
 include 'jetbrains-jediterm'

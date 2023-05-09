@@ -41,6 +41,8 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.os.api.CoreService;
+import com.mucommander.osgi.BrowsableItemsMenuService;
+import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
 import com.mucommander.osgi.FileEditorServiceTracker;
 import com.mucommander.osgi.FileViewerServiceTracker;
 import com.mucommander.osgi.OperatingSystemServiceTracker;
@@ -71,6 +73,7 @@ public class Activator implements BundleActivator {
     private FileViewerServiceTracker viewersTracker;
     private FileEditorServiceTracker editorsTracker;
     private OperatingSystemServiceTracker osTracker;
+    private BrowsableItemsMenuServiceTracker menuTracker;
 
     private ServiceRegistration<CoreService> coreRegistration;
     private ServiceRegistration<FileProtocolService> bookmarksRegistration;
@@ -108,6 +111,8 @@ public class Activator implements BundleActivator {
         // Listen to operating system services
         osTracker = new OperatingSystemServiceTracker(context);
         osTracker.open();
+        menuTracker = new BrowsableItemsMenuServiceTracker(context);
+        menuTracker.open();
         // Register core functionality service
         CoreService coreService = createCoreService();
         coreRegistration = context.registerService(CoreService.class, coreService, null);
@@ -130,6 +135,7 @@ public class Activator implements BundleActivator {
         viewersTracker.close();
         editorsTracker.close();
         osTracker.close();
+        menuTracker.close();
         coreRegistration.unregister();
         bookmarksRegistration.unregister();
         // if the activator performs the shutdown tasks, no need for the shutdown-hook
