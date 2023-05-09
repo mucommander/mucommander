@@ -30,7 +30,6 @@ dependencies {
 
     implementation 'ch.qos.logback:logback-core:1.2.3'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
-    implementation 'org.jmdns:jmdns:3.5.5'
     implementation 'commons-collections:commons-collections:3.2.2'
 
     comprise 'org.unix4j:unix4j-command:0.6'
@@ -70,10 +69,13 @@ jar {
             'com.mucommander.process,' +
             'com.mucommander.osgi,' +
             'com.mucommander.search,' +
+            'com.mucommander.ui.action,' +
+            'com.mucommander.ui.action.impl,' +
             'com.mucommander.ui.dialog,' +
             'com.mucommander.ui.dialog.file,' +
             'com.mucommander.ui.dialog.server,' +
             'com.mucommander.ui.encoding,' +
+            'com.mucommander.ui.icon,' +
             'com.mucommander.ui.text,' +
             'com.mucommander.ui.theme,' +
             'com.mucommander.snapshot,' +

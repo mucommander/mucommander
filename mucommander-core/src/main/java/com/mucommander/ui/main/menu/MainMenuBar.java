@@ -34,7 +34,6 @@ import javax.swing.JSeparator;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import com.mucommander.bonjour.BonjourMenu;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
@@ -46,6 +45,7 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
@@ -279,14 +279,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowTabsQL, mainFrame), menuItemMnemonicHelper2);
         goMenu.add(quickListMenu);
 
-        // Add Bonjour services menu
+        // Add service menus, like Bonjour
         goMenu.add(new JSeparator());
-        BonjourMenu bonjourMenu = new BonjourMenu(MainMenuBar.this.mainFrame);
-        char mnemonic = menuItemMnemonicHelper.getMnemonic(bonjourMenu.getName());
-        if(mnemonic!=0)
-            bonjourMenu.setMnemonic(mnemonic);
-        bonjourMenu.setIcon(null);
-        goMenu.add(bonjourMenu);
+        BrowsableItemsMenuServiceTracker.getMenuServices().forEach(service -> {
+            JMenu menu = service.getMenu(mainFrame, null);
+            char mnemonic = menuItemMnemonicHelper.getMnemonic(menu.getName());
+            if (mnemonic != 0)
+                menu.setMnemonic(mnemonic);
+            menu.setIcon(null);
+            goMenu.add(menu);
+        });
 
         // Volumes will be added when the menu is selected
         goMenu.add(new JSeparator());

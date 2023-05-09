@@ -106,6 +106,8 @@ dependencies {
     osgiRuntime project('mucommander-viewer-pdf')
     osgiRuntime project('mucommander-viewer-binary')
 
+    osgiRuntime project('mucommander-bonjour')
+
     osgiRuntime project('mucommander-os-api')
     osgiRuntime project('mucommander-os-macos')
     // osgiRuntime project('mucommander-os-macos-java8')

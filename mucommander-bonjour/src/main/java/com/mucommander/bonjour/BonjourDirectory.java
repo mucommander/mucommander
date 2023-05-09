@@ -32,8 +32,13 @@ import javax.jmdns.ServiceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 
 /**
  * Collects and maintains a list of available Bonjour/Zeroconf services using the JmDNS library.
@@ -44,11 +49,11 @@ import com.mucommander.commons.file.protocol.FileProtocols;
  * @author Maxence Bernard
  * @see BonjourMenu
  */
-public class BonjourDirectory implements ServiceListener {
+public class BonjourDirectory implements ServiceListener, ConfigurationListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(BonjourDirectory.class);
 
     /** Singleton instance held to prevent garbage collection and also used for synchronization */
-    private final static BonjourDirectory instance = new BonjourDirectory();
+    private static BonjourDirectory instance;
     /** Does all the hard work */
     private static JmDNS jmDNS;
 
@@ -71,11 +76,16 @@ public class BonjourDirectory implements ServiceListener {
     /** Number of milliseconds to wait for service info resolution before giving up */
     private final static int SERVICE_RESOLUTION_TIMEOUT = 10000;
 
+    static void init() {
+        if (instance == null)
+            instance = new BonjourDirectory();
+    }
 
     /**
      * No-arg contructor made private so that only one instance can exist.
      */
     private BonjourDirectory() {
+        MuConfigurations.addPreferencesListener(this);
     }
 
 
@@ -254,5 +264,13 @@ public class BonjourDirectory implements ServiceListener {
             LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
         }
         starting = false;
+    }
+
+
+    @Override
+    public void configurationChanged(ConfigurationEvent event) {
+        if (event.getVariable().equals(MuPreferences.ENABLE_BONJOUR_DISCOVERY)) {
+            setActive(event.getBooleanValue());
+        }
     }
 }

@@ -388,13 +388,6 @@ public class Application {
             printStartupMessage("Loading theme...");
             com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
 
-            // Starts Bonjour services discovery (only if enabled in prefs)
-            boolean bonjourEnabled = MuConfigurations.getPreferences().getVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY);
-            if (bonjourEnabled) {
-                printStartupMessage("Starting Bonjour services discovery...");
-            }
-            com.mucommander.bonjour.BonjourDirectory.setActive(bonjourEnabled);
-
             // Creates the initial main frame using any initial path specified by the command line.
             printStartupMessage("Initializing window...");
             List<String> folders = activator.getInitialFolders();
