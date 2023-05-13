@@ -190,7 +190,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 
         final JComboBox<ActionCategory> combo = new JComboBox<>();
         combo.addItem(ActionCategory.ALL);
-        for(ActionCategory category : ActionProperties.getActionCategory())
+        for(ActionCategory category : ActionProperties.getNonEmptyActionCategories())
             combo.addItem(category);
 
 
