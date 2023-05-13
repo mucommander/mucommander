@@ -23,7 +23,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import com.mucommander.command.Command;
-import com.mucommander.command.CommandExtended;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
@@ -110,9 +109,7 @@ public class OpenWithMenu extends JMenu {
                     for (Command cmd : commands) {
                         MuAction action = createMuAction(cmd);
                         action.setLabel(cmd.getDisplayName());
-                        if (cmd instanceof CommandExtended) {
-                            add(action).setIcon(((CommandExtended)cmd).getIcon());
-                        }
+                        add(action).setIcon(cmd.getIcon());
                         if (separateDefault) {
                             add(new JSeparator());
                             separateDefault = false;
