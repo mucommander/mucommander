@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -190,9 +191,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 
         final JComboBox<ActionCategory> combo = new JComboBox<>();
         combo.addItem(ActionCategory.ALL);
-        for(ActionCategory category : ActionProperties.getNonEmptyActionCategories())
-            combo.addItem(category);
-
+        ActionProperties.getNonEmptyActionCategories().stream().sorted(Comparator.comparing(ActionCategory::toString)).forEach(combo::addItem);
 
         final ActionListener filterActionListener = new ActionListener() {
             @Override
