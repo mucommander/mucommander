@@ -51,7 +51,7 @@ public class OpenURLInBrowserAction extends MuAction {
     public void performAction() {
         Object url = getValue(URL_PROPERTY_KEY);
 
-        if(url instanceof String) {
+        if (url instanceof String) {
             try {
                 InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.browse(new URL((String)url)));
             }
@@ -61,15 +61,15 @@ public class OpenURLInBrowserAction extends MuAction {
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenURLInBrowser.toString(); }
+        public String getId() { return ActionType.OpenURLInBrowser.toString(); }
 
-		public ActionCategory getCategory() { return null; }
+        public ActionCategory getCategory() { return null; }
 
         @Override
         public boolean isParameterized() { return true; }
