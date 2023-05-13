@@ -41,6 +41,7 @@ New features:
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
 - When opening a result of a file search with text search using the internal viewer/editor, the caret is set on the first occurrence of the searched text.
+- The action categoties that are displayed in the shortcuts preferences tab are sorted by their name.
 
 Localization:
 -
