@@ -24,6 +24,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.Icon;
+
 /**
  * Compiled shell commands.
  * <p>
@@ -101,8 +103,26 @@ public class Command implements Comparable<Command> {
     private final String      displayName;
     /** Command type. */
     private final CommandType type;
+    /** Icon associated with command */
+    private final Icon icon;
 
-
+    // - Initialisation ------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Creates a new command.
+     * @param alias       alias of the command.
+     * @param command     command that will be executed.
+     * @param type        type of the command.
+     * @param displayName name of the command as seen by users (if <code>null</code>, defaults to <code>alias</code>).
+     * @param icon        icon to be associated with this command, can be null.
+     */
+    public Command(String alias, String command, CommandType type, String displayName, Icon icon) {
+        this.alias       = alias;
+        this.type        = type;
+        this.displayName = displayName;
+        this.command     = command;
+        this.icon        = icon;
+    }
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -114,40 +134,35 @@ public class Command implements Comparable<Command> {
      * @param displayName name of the command as seen by users (if <code>null</code>, defaults to <code>alias</code>).
      */
     public Command(String alias, String command, CommandType type, String displayName) {
-        this.alias       = alias;
-        this.type        = type;
-        this.displayName = displayName;
-        this.command     = command;
+        this(alias, command, type, displayName, null);
     }
 
     /**
      * Creates a new command.
      * <p>
      * This is a convenience constructor and is strictly equivalent to calling
-     * <code>{@link #Command(String,String,int,String) Command(}alias, command, {@link #NORMAL_COMMAND}, null)</code>.
+     * <code>{@link #Command(String,String,int,String,Icon) Command(}alias, command, {@link #NORMAL_COMMAND}, null, null)</code>.
      * </p>
      * @param alias   alias of the command.
      * @param command command that will be executed.
      */
     public Command(String alias, String command) {
-    	this(alias, command, CommandType.NORMAL_COMMAND, null);
+        this(alias, command, CommandType.NORMAL_COMMAND, null, null);
     }
 
     /**
      * Creates a new command.
      * <p>
      * This is a convenience constructor and is strictly equivalent to calling
-     * <code>{@link #Command(String,String,int,String) Command(}alias, command, type, null)</code>.
+     * <code>{@link #Command(String,String,int,String,Icon) Command(}alias, command, type, null, null)</code>.
      * </p>
      * @param alias   alias of the command.
      * @param command command that will be executed.
      * @param type    type of the command.
      */
     public Command(String alias, String command, CommandType type) {
-    	this(alias, command, type, null);
+        this(alias, command, type, null);
     }
-
-
 
     // - Token retrieval -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -156,7 +171,7 @@ public class Command implements Comparable<Command> {
      * @return this command's tokens without performing keyword substitution.
      */
     public synchronized String[] getTokens() {
-    	return getTokens(command, (AbstractFile[])null);
+        return getTokens(command, (AbstractFile[])null);
     }
 
     /**
@@ -165,7 +180,7 @@ public class Command implements Comparable<Command> {
      * @return      this command's tokens, replacing keywords by the corresponding values from the specified file.
      */
     public synchronized String[] getTokens(AbstractFile file) {
-    	return getTokens(command, file);
+        return getTokens(command, file);
     }
 
     /**
@@ -174,7 +189,7 @@ public class Command implements Comparable<Command> {
      * @return       this command's tokens, replacing keywords by the corresponding values from the specified fileset.
      */
     public synchronized String[] getTokens(FileSet files) {
-    	return getTokens(command, files);
+        return getTokens(command, files);
     }
 
     /**
@@ -183,7 +198,7 @@ public class Command implements Comparable<Command> {
      * @return       this command's tokens, replacing keywords by the corresponding values from the specified files.
      */
     public synchronized String[] getTokens(AbstractFile[] files) {
-    	return getTokens(command, files);
+        return getTokens(command, files);
     }
 
     /**
@@ -202,7 +217,7 @@ public class Command implements Comparable<Command> {
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified file.
      */
     public String[] getTokens(String command, AbstractFile file) {
-    	return getTokens(command, new AbstractFile[] {file});
+        return getTokens(command, new AbstractFile[] {file});
     }
 
     /**
@@ -212,7 +227,7 @@ public class Command implements Comparable<Command> {
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified fileset.
      */
     public String[] getTokens(String command, FileSet files) {
-    	return getTokens(command, files.toArray(new AbstractFile[files.size()]));
+        return getTokens(command, files.toArray(new AbstractFile[files.size()]));
     }
 
     /**
@@ -330,7 +345,7 @@ public class Command implements Comparable<Command> {
      * @return whether this command contains keywords referencing selected file.
      */
     public synchronized boolean hasSelectedFileKeyword() {
-    	String[] tokens = getTokens();
+        String[] tokens = getTokens();
         for (String token : tokens) {
             // Not using regexp because it depends on the definition of KEYWORD_*
             if (token.startsWith("" + KEYWORD_HEADER + KEYWORD_PATH)
@@ -427,7 +442,7 @@ public class Command implements Comparable<Command> {
      * @return the original, un-tokenised command.
      */
     public synchronized String getCommand() {
-    	return command;
+        return command;
     }
 
     /**
@@ -435,7 +450,7 @@ public class Command implements Comparable<Command> {
      * @return this command's alias.
      */
     public synchronized String getAlias() {
-    	return alias;
+        return alias;
     }
 
     /**
@@ -443,7 +458,7 @@ public class Command implements Comparable<Command> {
      * @return the command's type.
      */
     public synchronized CommandType getType() {
-    	return type;
+        return type;
     }
 
     /**
@@ -454,7 +469,7 @@ public class Command implements Comparable<Command> {
      * @return the command's display name.
      */
     public synchronized String getDisplayName() {
-    	return displayName != null ? displayName : alias;
+        return displayName != null ? displayName : alias;
     }
 
     /**
@@ -462,11 +477,19 @@ public class Command implements Comparable<Command> {
      * @return <code>true</code> if the command's display name has been set, <code>false</code> otherwise.
      */
     synchronized boolean isDisplayNameSet() {
-    	return displayName != null;
+        return displayName != null;
+    }
+
+    /**
+     * Returns an icon associated with this command.
+     * @return an icon, or null;
+     */
+    public Icon getIcon() {
+        return icon;
     }
 
     @Override
     public String toString() {
-    	return alias + (displayName == null ? "" : ":" + displayName) + ":" + command;
+        return alias + (displayName == null ? "" : ":" + displayName) + ":" + command;
     }
 }

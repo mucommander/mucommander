@@ -52,7 +52,6 @@ import com.dd.plist.NSString;
 import com.dd.plist.PropertyListFormatException;
 import com.mucommander.command.Command;
 import com.mucommander.command.CommandException;
-import com.mucommander.command.CommandExtended;
 import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.commons.file.AbstractFile;
@@ -305,7 +304,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             Pair<String, String> appPair = getAppNameAndPathForBundleId(bundleId);
             String appName = appPair.first;
-            Command cmd = new CommandExtended(
+            Command cmd = new Command(
                     appName,
                     "open -b " + bundleId + " $f",
                     CommandType.NORMAL_COMMAND,
