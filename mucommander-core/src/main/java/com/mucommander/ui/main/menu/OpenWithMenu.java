@@ -83,7 +83,7 @@ public class OpenWithMenu extends JMenu {
     /**
      * Refreshes the content of the menu.
      */
-    private synchronized void populate() {  // why synchronized btw?
+    private void populate() {
         for (Command command : CommandManager.commands()) {
             if (command.getType() == CommandType.NORMAL_COMMAND) {
                 add(ActionManager.getActionInstance(command, mainFrame));
@@ -126,7 +126,7 @@ public class OpenWithMenu extends JMenu {
                     super.getPopupMenu().pack();
                 }).start();
             } else {
-                if (DesktopManager.canOpenWithAppsBeEnabled()) {
+                if (DesktopManager.canEnableOpenWithApps()) {
                     if (getItemCount() > 1) {
                         add(new JSeparator());
                     }

@@ -617,8 +617,8 @@ public final class DesktopManager {
         return desktop.getAppsForOpenWith(file);
     }
 
-    public static boolean canOpenWithAppsBeEnabled() {
-        return desktop.canOpenWithAppsBeEnabled();
+    public static boolean canEnableOpenWithApps() {
+        return desktop.canEnableOpenWithApps();
     }
 
     public static void howToEnableOpenWithApps(Component parent) {
