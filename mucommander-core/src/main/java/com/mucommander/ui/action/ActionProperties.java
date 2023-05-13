@@ -34,17 +34,17 @@ import java.util.*;
 public class ActionProperties {
 	
 	/* Maps action id -> action descriptor */
-	private static Map<String, ActionDescriptor> actionDescriptors = new Hashtable<String, ActionDescriptor>();
+	private static Map<String, ActionDescriptor> actionDescriptors = new Hashtable<>();
 
 	private static ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
 	
 	/* Contains all used action categories (i.e for each category at least one action is registered) */
-	private static TreeSet<ActionCategory> ActionCategory = new TreeSet<ActionCategory>();
+	private static TreeSet<ActionCategory> nonEmptyActionCategories = new TreeSet<>();
 
 	/* Maps action id -> primary shortcut */
-	private static HashMap<String, KeyStroke> defaultPrimaryActionKeymap = new HashMap<String, KeyStroke>();
+	private static HashMap<String, KeyStroke> defaultPrimaryActionKeymap = new HashMap<>();
 	/* Maps action id -> alternative shortcut */
-	private static HashMap<String, KeyStroke> defaultAlternateActionKeymap = new HashMap<String, KeyStroke>();
+	private static HashMap<String, KeyStroke> defaultAlternateActionKeymap = new HashMap<>();
 	/* Maps shortcut -> action id */
 	private static AcceleratorMap defaultAcceleratorMap = new AcceleratorMap();
 	
@@ -62,7 +62,7 @@ public class ActionProperties {
 		// Add the category in the descriptor to the categories pool
 		ActionCategory category = actionDescriptor.getCategory();
 		if (category != null)
-			ActionCategory.add(category);
+		    nonEmptyActionCategories.add(category);
 		
 		// Add the shortcuts in the descriptor to the default keymap
 		KeyStroke defaultActionKeyStroke = actionDescriptor.getDefaultKeyStroke();
@@ -218,15 +218,15 @@ public class ActionProperties {
     }
 
 	/**
-	 * Getter for all existed categories.
-	 * Existed category means an actions category which at least one of its actions is registered.
+	 * Getter for all non-empty categories.
+	 * Non-empty category means an actions category which at least one of its actions is registered.
 	 * 
 	 * The categories are ordered based on the alphabet order of their descriptions (labels).
 	 * 
 	 * @return Set of existed action categories.
 	 */
-	public static Set<ActionCategory> getActionCategory() {
-		return ActionCategory;
+	public static Set<ActionCategory> getNonEmptyActionCategories() {
+		return nonEmptyActionCategories;
 	}
 	
 	private static ActionDescriptor getNullSafeActionDescriptor(String actionId) {
