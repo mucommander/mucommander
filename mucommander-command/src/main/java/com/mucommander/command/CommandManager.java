@@ -301,29 +301,29 @@ public class CommandManager implements CommandBuilder {
 
             attributeFilter = (AttributeFileFilter)filter;
             switch (attributeFilter.getAttribute()) {
-                case HIDDEN:
-                    builder.setIsHidden(!attributeFilter.isInverted());
-                    break;
+            case HIDDEN:
+                builder.setIsHidden(!attributeFilter.isInverted());
+                break;
 
-                case SYMLINK:
-                    builder.setIsSymlink(!attributeFilter.isInverted());
-                    break;
+            case SYMLINK:
+                builder.setIsSymlink(!attributeFilter.isInverted());
+                break;
             }
         } else if (filter instanceof PermissionsFileFilter) {
             PermissionsFileFilter permissionFilter = (PermissionsFileFilter)filter;
 
             switch (permissionFilter.getPermission()) {
-                case READ:
-                    builder.setIsReadable(permissionFilter.getFilter());
-                    break;
+            case READ:
+                builder.setIsReadable(permissionFilter.getFilter());
+                break;
 
-                case WRITE:
-                    builder.setIsWritable(permissionFilter.getFilter());
-                    break;
+            case WRITE:
+                builder.setIsWritable(permissionFilter.getFilter());
+                break;
 
-                case EXECUTE:
-                    builder.setIsExecutable(permissionFilter.getFilter());
-                    break;
+            case EXECUTE:
+                builder.setIsExecutable(permissionFilter.getFilter());
+                break;
             }
         } else if (filter instanceof RegexpFilenameFilter) {
             RegexpFilenameFilter regexpFilter = (RegexpFilenameFilter)filter;
