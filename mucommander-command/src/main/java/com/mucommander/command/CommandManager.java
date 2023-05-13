@@ -490,17 +490,11 @@ public class CommandManager implements CommandBuilder {
 
         // Tries to load the associations file.
         // Associations are not considered to be modified by this. 
-        InputStream in = null;
-        try {AssociationReader.read(in = new BackupInputStream(file), new AssociationFactory());}
+        try (InputStream in = new BackupInputStream(file)) {
+            AssociationReader.read(in, new AssociationFactory());
+        }
         finally {
             wereAssociationsModified = false;
-            // Makes sure the input stream is closed.
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {
-                    // Ignores this.
-                }
-            }
         }
     }
 
@@ -524,23 +518,12 @@ public class CommandManager implements CommandBuilder {
     public static void writeAssociations() throws CommandException, IOException {
         // Do not save the associations if they were not modified.
         if(wereAssociationsModified) {
-            BackupOutputStream out;    // Where to write the associations.
-
             LOGGER.debug("Writing associations to file: " + getAssociationFile());
 
             // Writes the associations.
-            out = null;
-            try {
-                buildAssociations(new AssociationWriter(out = new BackupOutputStream(getAssociationFile())));
+            try (BackupOutputStream out = new BackupOutputStream(getAssociationFile())) {
+                buildAssociations(new AssociationWriter(out));
                 wereAssociationsModified = false;
-            }
-            finally {
-                if(out != null) {
-                    try {out.close();}
-                    catch(Exception e) {
-                        // Ignores this.
-                    }
-                }
             }
         }
         else
