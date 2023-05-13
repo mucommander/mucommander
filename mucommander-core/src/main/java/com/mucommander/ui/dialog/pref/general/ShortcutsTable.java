@@ -125,6 +125,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     public static final int ACTION_DESCRIPTION_COLUMN_INDEX = 0;
     public static final int ACCELERATOR_COLUMN_INDEX = 1;
     public static final int ALTERNATE_ACCELERATOR_COLUMN_INDEX = 2;
+    public static final int ACTION_TOOLTIP_COLUMN_INDEX = 3;
 
     /** Number of columns in the table */
     private static final int NUM_OF_COLUMNS = 3;
@@ -687,6 +688,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                 case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
                     final KeyStroke key = (KeyStroke) colValue;
                     rowTextValue = key == null ? "" : KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(key);
+                    break;
+                case ACTION_TOOLTIP_COLUMN_INDEX:
+                    rowTextValue = (String) colValue;
                     break;
                 }
                 rowText.append(" ");
