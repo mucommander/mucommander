@@ -326,13 +326,13 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     @Override
-    public boolean canOpenWithAppsBeEnabled() {
+    public boolean canEnableOpenWithApps() {
         return true;
     }
 
     @Override
     public void howToEnableOpenWithApps(Component parent) {
-        if (canOpenWithAppsBeEnabled()) {
+        if (canEnableOpenWithApps()) {
             InformationDialog.showDialog(InformationDialog.INFORMATION_DIALOG_TYPE, parent,
                     Translator.get("open_with_apps_dialog.title"),
                     Translator.get("open_with_apps_dialog.msg_macos"), null,null);

@@ -73,7 +73,7 @@ public class TablePopupMenu extends MuActionsPopupMenu {
             addAction(ActionType.Open);
             addAction(ActionType.OpenNatively);
             add(new OpenWithMenu(mainFrame, clickedFile));
-            if (!clickedFile.isDirectory()) {
+            if (clickedFile != null && !clickedFile.isDirectory()) {
                 add(new OpenAsMenu(mainFrame));
             }
 

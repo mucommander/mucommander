@@ -177,7 +177,7 @@ public interface DesktopAdapter {
     ActionShortcuts getActionShortcuts();
 
     /**
-     * Whether the list of apps that can open a file is available of a given platform?
+     * Whether the list of apps that can open a file is available.
      * @return true if so, false otherwise
      */
     default boolean isOpenWithAppsAvailable() {
@@ -194,10 +194,10 @@ public interface DesktopAdapter {
     }
 
     /**
-     * States whether apps in Open With contextual menu can be made possible on a given platform
+     * States whether apps in Open With contextual menu can be made possible on a given platform.
      * @return true if so, false otherwise
      */
-    default boolean canOpenWithAppsBeEnabled() {
+    default boolean canEnableOpenWithApps() {
         return false;
     }
 

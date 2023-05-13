@@ -177,7 +177,7 @@ public class CommandManager implements CommandBuilder {
      */
     public static Collection<Command> commands() {
         // Copy the registered commands to a new list
-        List<Command> list = new Vector<Command>(commands.values());
+        List<Command> list = new Vector<>(commands.values());
         // Sorts the list.
         Collections.sort(list);
         
@@ -300,7 +300,7 @@ public class CommandManager implements CommandBuilder {
             AttributeFileFilter attributeFilter;
 
             attributeFilter = (AttributeFileFilter)filter;
-            switch(attributeFilter.getAttribute()) {
+            switch (attributeFilter.getAttribute()) {
                 case HIDDEN:
                     builder.setIsHidden(!attributeFilter.isInverted());
                     break;
@@ -312,7 +312,7 @@ public class CommandManager implements CommandBuilder {
         } else if (filter instanceof PermissionsFileFilter) {
             PermissionsFileFilter permissionFilter = (PermissionsFileFilter)filter;
 
-            switch(permissionFilter.getPermission()) {
+            switch (permissionFilter.getPermission()) {
                 case READ:
                     builder.setIsReadable(permissionFilter.getFilter());
                     break;
@@ -474,7 +474,6 @@ public class CommandManager implements CommandBuilder {
         // Associations are not considered to be modified by this. 
         try (InputStream in = new BackupInputStream(file)) {
             AssociationReader.read(in, new AssociationFactory());
-        }
         } finally {
             wereAssociationsModified = false;
         }
