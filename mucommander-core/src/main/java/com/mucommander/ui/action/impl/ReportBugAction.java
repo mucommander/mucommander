@@ -38,8 +38,8 @@ public class ReportBugAction extends OpenURLInBrowserAction {
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ReportBug.toString(); }
+        public String getId() { return ActionType.ReportBug.toString(); }
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public ActionCategory getCategory() { return ActionCategory.MISC; }
     }
 }
