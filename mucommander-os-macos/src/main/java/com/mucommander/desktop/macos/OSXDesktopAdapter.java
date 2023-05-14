@@ -93,7 +93,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     private static final String DEFAULT_SHELL_INTERACTIVE = "--login";
 
     // cached values
-    private String dutiCmdPath = null;
+    private String dutiCmdPath;
 
     private Map<String, String> utiForExt = createSizeLimitedMap(200);
 
@@ -450,9 +450,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             return false;       // continue searching
         });
-        if (dutiCmdPath != null && dutiCmdPath.length() > 0) {
+        if (dutiCmdPath != null && !dutiCmdPath.isEmpty()) {
             LOGGER.info("Command 'duti' found here: {}", dutiCmdPath);
         } else {
+            dutiCmdPath = null; // nullify if was empty
             LOGGER.error("Command 'duti' not found");
         }
         return dutiCmdPath;
