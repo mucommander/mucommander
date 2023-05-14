@@ -124,7 +124,7 @@ public class OpenWithMenu extends JMenu {
                 }).start();
             } else {
                 if (DesktopManager.canEnableOpenWithApps()) {
-                    if (getItemCount() > 1) {
+                    if (getItemCount() > 0) {
                         add(new JSeparator());
                     }
                     var howToEnable = super.add(
