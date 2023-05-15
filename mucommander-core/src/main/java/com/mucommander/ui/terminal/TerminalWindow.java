@@ -87,9 +87,28 @@ public final class TerminalWindow {
 
     private static DefaultSettingsProvider getDefaultSettings(TerminalColor background, TerminalColor foreground) {
         return new DefaultSettingsProvider() {
+
+            // see: https://github.com/mucommander/mucommander/issues/933
+            private final boolean altSendsEscape = shouldSendEscape();
+
             @Override
             public TextStyle getDefaultStyle() {
                 return new TextStyle(foreground, background);
+            }
+
+            @Override
+            public boolean altSendsEscape() {
+                return altSendsEscape;
+            }
+
+            private boolean shouldSendEscape() {
+                if (OsFamily.MAC_OS.isCurrent()) {
+                    return MuConfigurations.getPreferences().getVariable(
+                                MuPreference.USE_OPTION_AS_META_KEY,
+                                MuPreferences.DEFAULT_USE_OPTION_AS_META_KEY);
+                } else {
+                    return super.altSendsEscape();
+                }
             }
         };
     }
