@@ -26,6 +26,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.conf.MuConfigurations;
@@ -75,6 +76,9 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** 'Set default file drag and drop action to COPY' checkbox */
     private PrefCheckBox setDropActionToCopyCheckBox;
 
+    /** 'Use Option as Meta key in Terminal' checkbox */
+    private PrefCheckBox useOptionAsMetaKey;
+
     public MiscPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.misc_tab"));
 
@@ -90,10 +94,11 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         };
 
         // Use system default or custom shell ?
-        if(MuConfigurations.getPreferences().getVariable(MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL))
+        if (MuConfigurations.getPreferences().getVariable(MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL)) {
             useCustomShellRadioButton.setSelected(true);
-        else
+        } else {
             useDefaultShellRadioButton.setSelected(true);
+        }
 
         useCustomShellRadioButton.addItemListener(this);
 
@@ -116,6 +121,14 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         shellPanel.addRow(useDefaultShellRadioButton, new JLabel(DesktopManager.getDefaultShell()), 5);
         shellPanel.addRow(useCustomShellRadioButton, customShellField, 10);
+
+        if (OsFamily.MAC_OS.isCurrent()) {
+            useOptionAsMetaKey = new PrefCheckBox(Translator.get("prefs_dialog.use_option_as_meta_key"), () -> MuConfigurations.getPreferences().getVariable(
+                    MuPreference.USE_OPTION_AS_META_KEY,
+                    MuPreferences.DEFAULT_USE_OPTION_AS_META_KEY));
+            useOptionAsMetaKey.addDialogListener(parent);
+            shellPanel.add(useOptionAsMetaKey);
+        }
 
         northPanel.add(shellPanel, 5);
 
@@ -165,13 +178,13 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         bonjourDiscoveryCheckBox.addDialogListener(parent);
         northPanel.add(bonjourDiscoveryCheckBox);
 
-        add(northPanel, BorderLayout.NORTH);
-
         setDropActionToCopyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.set_drop_action_to_copy"), () -> MuConfigurations.getPreferences().getVariable(
                 MuPreference.SET_DROP_ACTION_TO_COPY,
                 MuPreferences.DEFAULT_SET_DROP_ACTION_TO_COPY));
         setDropActionToCopyCheckBox.addDialogListener(parent);
         northPanel.add(setDropActionToCopyCheckBox);
+
+        add(northPanel, BorderLayout.NORTH);
 
         customShellField.addDialogListener(parent);
         useCustomShellRadioButton.addDialogListener(parent);
@@ -206,7 +219,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SPLASH_SCREEN, showSplashScreenCheckBox.isSelected());
 
         boolean enabled;
-        if(systemNotificationsCheckBox!=null) {
+        if (systemNotificationsCheckBox != null) {
             enabled = systemNotificationsCheckBox.isSelected();
             MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS, enabled);
             NotifierProvider.getNotifier().setEnabled(enabled);
@@ -217,5 +230,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, bonjourDiscoveryCheckBox.isSelected());
 
         MuConfigurations.getPreferences().setVariable(MuPreference.SET_DROP_ACTION_TO_COPY, setDropActionToCopyCheckBox.isSelected());
+        if (OsFamily.MAC_OS.isCurrent()) {
+            MuConfigurations.getPreferences().setVariable(MuPreference.USE_OPTION_AS_META_KEY, useOptionAsMetaKey.isSelected());
+        }
     }
 }

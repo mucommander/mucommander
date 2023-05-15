@@ -39,6 +39,7 @@ public enum MuPreference {
 	LOG_BUFFER_SIZE(MuPreferences.LOG_BUFFER_SIZE),
 	CUSTOM_SHELL(MuPreferences.CUSTOM_SHELL),
 	USE_CUSTOM_SHELL(MuPreferences.USE_CUSTOM_SHELL),
+	USE_OPTION_AS_META_KEY(MuPreferences.USE_OPTION_AS_META_KEY),
 	SMTP_SERVER(MuPreferences.SMTP_SERVER),
 	SMTP_PORT(MuPreferences.SMTP_PORT),
 	MAIL_SENDER_NAME(MuPreferences.MAIL_SENDER_NAME),
@@ -74,7 +75,9 @@ public enum MuPreference {
 	SMB_USE_EXTENDED_SECURITY(MuPreferences.SMB_USE_EXTENDED_SECURITY),
 	SHOW_TAB_HEADER(MuPreferences.SHOW_SINGLE_TAB_HEADER),
 	SET_DROP_ACTION_TO_COPY(MuPreferences.SET_DROP_ACTION_TO_COPY),
-	QUICK_SEARCH_TIMEOUT(MuPreferences.QUICK_SEARCH_TIMEOUT);
+	QUICK_SEARCH_TIMEOUT(MuPreferences.QUICK_SEARCH_TIMEOUT),
+	;
+
 	private String label;
 	
 	private MuPreference(String label) {

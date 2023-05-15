@@ -91,7 +91,6 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Default file drag and drop behavior */
 	public static final boolean DEFAULT_SET_DROP_ACTION_TO_COPY   =  true;
 
-
 	// - Log variables -------------------------------------------------------
 	// -----------------------------------------------------------------------
 	/** Section describing the log CONFIGURATION. */
@@ -117,6 +116,10 @@ public class MuPreferences implements MuPreferencesAPI {
 	public static final String  USE_CUSTOM_SHELL                  = SHELL_SECTION + '.' + "use_custom_shell";
 	/** Default custom shell behavior. */
 	public static final boolean DEFAULT_USE_CUSTOM_SHELL          = false;
+	/** Whether to treat Option as Meta key in Terminal */
+	public static final String USE_OPTION_AS_META_KEY             = SHELL_SECTION + "." + "use_option_as_meta_key";
+	/** Default settings for Use Option as Meta key */
+	public static final boolean DEFAULT_USE_OPTION_AS_META_KEY    =  false;
 
 	// - Mail variables ------------------------------------------------------
 	// -----------------------------------------------------------------------
@@ -232,7 +235,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Default value for 'Quick search timeout' */
 	public static final int DEFAULT_QUICK_SEARCH_TIMEOUT           = 2;
 
-	/** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
+    /** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
 	static final String VERSION_ATTRIBUTE = "version";
 
 
