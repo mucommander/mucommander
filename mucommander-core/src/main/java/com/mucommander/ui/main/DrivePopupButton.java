@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -315,7 +316,16 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         ArrayList<JMenuItem> itemsV = new ArrayList<JMenuItem>();
 
         for (int i = 0; i < nbVolumes; i++) {
-            action = new CustomOpenLocationAction(mainFrame, new Hashtable<>(), volumes[i]);
+            action = new OpenLocationAction(mainFrame, Collections.emptyMap(), volumes[i]) {
+                /**
+                 * Changes the current folder on the {@link FolderPanel} that contains this
+                 * button, instead of the currently active {@link FolderPanel}
+                 */
+                @Override
+                protected FolderPanel getFolderPanel() {
+                    return folderPanel;
+                }
+            };
             volumeName = volumes[i].getName();
 
             // If several volumes have the same filename, use the volume's path for the action's label instead of the
@@ -351,12 +361,20 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         popupMenu.add(new JSeparator());
 
         // Add boookmarks
-        java.util.List<Bookmark> bookmarks = BookmarkManager.getBookmarks();
-
+        var bookmarks = BookmarkManager.getBookmarks();
         if (!bookmarks.isEmpty()) {
             for (Bookmark bookmark : bookmarks) {
-                item = popupMenu
-                        .add(new CustomOpenLocationAction(mainFrame, new Hashtable<>(), bookmark));
+                action = new OpenLocationAction(mainFrame, Collections.emptyMap(), bookmark) {
+                    /**
+                     * Changes the current folder on the {@link FolderPanel} that contains this
+                     * button, instead of the currently active {@link FolderPanel}
+                     */
+                    @Override
+                    protected FolderPanel getFolderPanel() {
+                        return folderPanel;
+                    }
+                };
+                item = popupMenu.add(action);
                 setMnemonic(item, mnemonicHelper);
             }
         } else {
@@ -368,9 +386,17 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
         // Add 'Network shares' shortcut
         if (FileFactory.isRegisteredProtocol(FileProtocols.SMB)) {
-            action = new CustomOpenLocationAction(mainFrame,
-                    new Hashtable<>(),
-                    new Bookmark(Translator.get("drive_popup.network_shares"), "smb:///"));
+            var bookmark = new Bookmark(Translator.get("drive_popup.network_shares"), "smb:///");
+            action = new OpenLocationAction(mainFrame, Collections.emptyMap(), bookmark) {
+                /**
+                 * Changes the current folder on the {@link FolderPanel} that contains this
+                 * button, instead of the currently active {@link FolderPanel}
+                 */
+                @Override
+                protected FolderPanel getFolderPanel() {
+                    return folderPanel;
+                }
+            };
             action.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NETWORK_ICON_NAME));
             setMnemonic(popupMenu.add(action), mnemonicHelper);
         }
@@ -554,30 +580,6 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
 
         public void actionPerformed(ActionEvent actionEvent) {
             new ServerConnectDialog(folderPanel, serverPanelClass).showDialog();
-        }
-    }
-
-    /**
-     * This modified {@link OpenLocationAction} changes the current folder on the {@link FolderPanel} that contains this
-     * button, instead of the currently active {@link FolderPanel}.
-     */
-    private class CustomOpenLocationAction extends OpenLocationAction {
-
-        public CustomOpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, Bookmark bookmark) {
-            super(mainFrame, properties, bookmark);
-        }
-
-        public CustomOpenLocationAction(MainFrame mainFrame, Map<String, Object> properties, AbstractFile file) {
-            super(mainFrame, properties, file);
-        }
-
-        ////////////////////////
-        // Overridden methods //
-        ////////////////////////
-
-        @Override
-        protected FolderPanel getFolderPanel() {
-            return folderPanel;
         }
     }
 
