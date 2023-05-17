@@ -235,7 +235,7 @@ public class MuPreferences implements MuPreferencesAPI {
 	/** Default value for 'Quick search timeout' */
 	public static final int DEFAULT_QUICK_SEARCH_TIMEOUT           = 2;
 
-    /** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
+	/** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
 	static final String VERSION_ATTRIBUTE = "version";
 
 
